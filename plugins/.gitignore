@@ -25,8 +25,8 @@
 !solve_fsm/**/*
 !verilog_parser*
 !verilog_parser/**/*
-!vhdl_verilog_parsers*
-!vhdl_verilog_parsers/**/*
+!vhdl_parser*
+!vhdl_parser/**/*
 !vhdl_verilog_writers*
 !vhdl_verilog_writers/**/*
 !z3_utils*

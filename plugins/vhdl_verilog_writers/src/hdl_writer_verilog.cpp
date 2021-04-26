@@ -1,17 +1,16 @@
 #include "vhdl_verilog_writers/hdl_writer_verilog.h"
 
-#include "hal_core/utilities/log.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
-
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
     bool HDLWriterVerilog::write(Netlist* netlist, std::stringstream& stream)
     {
         m_netlist = netlist;
-        m_stream = &stream;
+        m_stream  = &stream;
 
         this->prepare_signal_names();
 
@@ -91,36 +90,36 @@ namespace hal
             m_only_wire_names_str_to_net.erase(this->get_net_name(it));
         }
 
-        //vcc gates
-        for (auto n : m_netlist->get_vcc_gates())
-        {
-            for (auto e : n->get_fan_out_nets())
-            {
-                if (e->get_name() == "'1'")
-                {
-                    continue;
-                }
-                m_vcc_names[e]                                = this->get_net_name(e);
-                m_vcc_names_str_to_net[this->get_net_name(e)] = e;
-                m_only_wire_names.erase(e);
-                m_only_wire_names_str_to_net.erase(this->get_net_name(e));
-            }
-        }
-        //gnd gates
-        for (auto n : m_netlist->get_gnd_gates())
-        {
-            for (auto e : n->get_fan_out_nets())
-            {
-                if (e->get_name() == "'0'")
-                {
-                    continue;
-                }
-                m_gnd_names[e]                                = this->get_net_name(e);
-                m_gnd_names_str_to_net[this->get_net_name(e)] = e;
-                m_only_wire_names.erase(e);
-                m_only_wire_names_str_to_net.erase(this->get_net_name(e));
-            }
-        }
+        // //vcc gates
+        // for (auto n : m_netlist->get_vcc_gates())
+        // {
+        //     for (auto e : n->get_fan_out_nets())
+        //     {
+        //         if (e->get_name() == "'1'")
+        //         {
+        //             continue;
+        //         }
+        //         m_vcc_names[e]                                = this->get_net_name(e);
+        //         m_vcc_names_str_to_net[this->get_net_name(e)] = e;
+        //         m_only_wire_names.erase(e);
+        //         m_only_wire_names_str_to_net.erase(this->get_net_name(e));
+        //     }
+        // }
+        // //gnd gates
+        // for (auto n : m_netlist->get_gnd_gates())
+        // {
+        //     for (auto e : n->get_fan_out_nets())
+        //     {
+        //         if (e->get_name() == "'0'")
+        //         {
+        //             continue;
+        //         }
+        //         m_gnd_names[e]                                = this->get_net_name(e);
+        //         m_gnd_names_str_to_net[this->get_net_name(e)] = e;
+        //         m_only_wire_names.erase(e);
+        //         m_only_wire_names_str_to_net.erase(this->get_net_name(e));
+        //     }
+        // }
     }
 
     static void replace(std::string& str, const std::string& from, const std::string& to)
@@ -146,14 +145,14 @@ namespace hal
     {
         std::string name = n->get_name();
 
-        if (name == "'1'")
-        {
-            name = "1'b1";
-        }
-        if (name == "'0'")
-        {
-            name = "1'b0";
-        }
+        // if (name == "'1'")
+        // {
+        //     name = "1'b1";
+        // }
+        // if (name == "'0'")
+        // {
+        //     name = "1'b0";
+        // }
 
         replace(name, "(", "_");
         remove(name, ")");
@@ -292,20 +291,20 @@ namespace hal
         }
         for (auto name : m_only_wire_names_str_to_net)
         {
-            if (name.second->get_name() == "'1'" || name.second->get_name() == "'0'")
-            {
-                continue;
-            }
+            // if (name.second->get_name() == "'1'" || name.second->get_name() == "'0'")
+            // {
+            //     continue;
+            // }
             *m_stream << "  wire " << name.first << " ;" << std::endl;
         }
-        for (auto name : m_vcc_names_str_to_net)
-        {
-            *m_stream << "  wire " << name.first << " = 1'h1 ;" << std::endl;
-        }
-        for (auto name : m_gnd_names_str_to_net)
-        {
-            *m_stream << "  wire " << name.first << " = 1'h0 ;" << std::endl;
-        }
+        // for (auto name : m_vcc_names_str_to_net)
+        // {
+        //     *m_stream << "  wire " << name.first << " ;" << std::endl;
+        // }
+        // for (auto name : m_gnd_names_str_to_net)
+        // {
+        //     *m_stream << "  wire " << name.first << " ;" << std::endl;
+        // }
     }
 
     void HDLWriterVerilog::print_gate_definitions_verilog()
@@ -313,11 +312,11 @@ namespace hal
         auto gates = m_netlist->get_gates();
         for (auto&& gate : gates)
         {
-            // TODO ugly bad bad bad
-            if (gate->get_type()->get_name() == "HAL_GND" || gate->get_type()->get_name() == "HAL_VCC")
-            {
-                continue;
-            }
+            // // TODO ugly bad bad bad
+            // if (gate->get_type()->get_name() == "HAL_GND" || gate->get_type()->get_name() == "HAL_VCC")
+            // {
+            //     continue;
+            // }
             *m_stream << gate->get_type()->get_name() << " ";
 
             this->print_generic_map_verilog(gate);
