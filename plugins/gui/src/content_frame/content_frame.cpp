@@ -75,16 +75,6 @@ namespace hal
             setParent(nullptr);
             deleteLater();
         }
-
-        if (event->FocusIn != 0)
-        {
-            // add debug code to show focus
-        }
-
-        if (event->FocusOut != 0)
-        {
-            // add debug code to show focus
-        }
     }
 
     ContentWidget* ContentFrame::content()
@@ -104,11 +94,10 @@ namespace hal
         mWidget->reattach();
     }
 
-    void ContentFrame::handleNameChanged(const QString &name)
+    void ContentFrame::handleNameChanged(const QString& name)
     {
         mNameLabel->setText(name);
         setWindowTitle(name);
-        //mNameLabel->update();
     }
 
     void ContentFrame::closeEvent(QCloseEvent* event)

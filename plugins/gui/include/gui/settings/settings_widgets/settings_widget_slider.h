@@ -24,6 +24,7 @@
 #pragma once
 
 #include "gui/settings/settings_widgets/settings_widget.h"
+
 #include <QSlider>
 #include <QStringList>
 
@@ -36,14 +37,15 @@ namespace hal
         Q_OBJECT
 
     public:
-        SettingsWidgetSlider(SettingsItemSlider* item, QWidget* parent = 0);
+        SettingsWidgetSlider(SettingsItemSlider* item, QWidget* parent = nullptr);
 
-        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-        virtual QVariant value() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) override;
+        virtual QVariant value() override;
 
     private:
+        void onSliderValueChanged(int value);
+
         QSlider* mSlider;
         QLabel* mNumber;
-        void onSliderValueChanged(int value);
     };
 }

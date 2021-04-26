@@ -623,6 +623,16 @@ namespace hal
         return mNewGroupingIconStyle;
     }
 
+    QString GroupingManagerWidget::toolboxIconPath() const
+    {
+        return mToolboxIconPath;
+    }
+
+    QString GroupingManagerWidget::toolboxIconStyle() const
+    {
+        return mToolboxIconStyle;
+    }
+
     QString GroupingManagerWidget::renameGroupingIconPath() const
     {
         return mRenameGroupingIconPath;
@@ -676,6 +686,16 @@ namespace hal
     void GroupingManagerWidget::setNewGroupingIconStyle(const QString& style)
     {
         mNewGroupingIconStyle = style;
+    }
+
+    void GroupingManagerWidget::setToolboxIconPath(const QString& path)
+    {
+        mToolboxIconPath = path;
+    }
+
+    void GroupingManagerWidget::setToolboxIconStyle(const QString& style)
+    {
+        mToolboxIconStyle = style;
     }
 
     void GroupingManagerWidget::setRenameGroupingIconPath(const QString& path)

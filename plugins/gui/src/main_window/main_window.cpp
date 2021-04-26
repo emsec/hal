@@ -9,11 +9,7 @@
 #include "gui/gui_globals.h"
 #include "gui/logger/logger_widget.h"
 #include "gui/main_window/about_dialog.h"
-#include "gui/notifications/notification.h"
-#include "gui/overlay/reminder_overlay.h"
 #include "gui/plugin_access_manager/plugin_access_manager.h"
-#include "gui/plugin_management/plugin_schedule_manager.h"
-#include "gui/plugin_management/plugin_schedule_widget.h"
 #include "gui/plugin_manager/plugin_manager_widget.h"
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/python/python_editor.h"
@@ -52,9 +48,7 @@ namespace hal
 {
     SettingsItemDropdown* MainWindow::sSettingStyle = nullptr;
 
-    MainWindow::MainWindow(QWidget* parent) : QWidget(parent), mScheduleWidget(new PluginScheduleWidget())
-      // , mActionSchedule(new Action(this))
-      // , mActionContent(new Action(this))
+    MainWindow::MainWindow(QWidget* parent) : QWidget(parent)
     {
         ensurePolished();    // ADD REPOLISH METHOD
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &MainWindow::handleFileOpened);
@@ -93,8 +87,6 @@ namespace hal
         mStackedWidget = new QStackedWidget();
         mLayout->addWidget(mStackedWidget);
 
-        mStackedWidget->addWidget(mScheduleWidget);
-
         mSettings = new MainSettingsWidget;
         mStackedWidget->addWidget(mSettings);
 
@@ -131,8 +123,6 @@ namespace hal
         mActionOpen         = new Action(this);
         mActionSave         = new Action(this);
         mActionAbout        = new Action(this);
-        //mActionRunSchedule = new Action(this);
-        //mActionContent      = new Action(this);
 
         mActionStartRecording = new Action(this);
         mActionStopRecording  = new Action(this);
@@ -171,9 +161,6 @@ namespace hal
         mActionOpen->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
-//        mActionSchedule->setIcon(gui_utility::getStyledSvgIcon(mScheduleIconStyle, mScheduleIconPath));
-//        mActionRunSchedule->setIcon(gui_utility::getStyledSvgIcon(mRunIconStyle, mRunIconPath));
-//        mActionContent->setIcon(gui_utility::getStyledSvgIcon(mContentIconStyle, mContentIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
 
         mMenuFile = new QMenu(mMenuBar);
@@ -201,12 +188,6 @@ namespace hal
         mLeftToolBar->addAction(mActionOpen);
         mLeftToolBar->addAction(mActionSave);
         mLeftToolBar->addAction(mActionUndo);
-        //    mLeftToolBar->addSeparator();
-//        mLeftToolBar->addAction(mActionSchedule);
-//        mLeftToolBar->addAction(mActionRunSchedule);
-//        mLeftToolBar->addAction(mActionContent);
-        //    mLeftToolBar->addSeparator();
-        //    mRightToolBar->addSeparator();
         mRightToolBar->addAction(mActionSettings);
 
         mActionStartRecording->setText("Start recording");
@@ -223,9 +204,6 @@ namespace hal
         mActionSave->setText("Save");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
-//        mActionSchedule->setText("Edit Schedule");
-//        mActionRunSchedule->setText("Run Schedule");
-//        mActionContent->setText("Content (Disabled)");
         mActionSettings->setText("Settings");
         mActionClose->setText("Close Document");
         mMenuFile->setTitle("File");
@@ -328,11 +306,11 @@ namespace hal
 
         switch(istyle)
         {
-        case StyleSheetOption::Darcula:
-            styleSheetToOpen = ":/style/darcula";
+        case StyleSheetOption::Dark:
+            styleSheetToOpen = ":/style/dark";
             break;
-        case StyleSheetOption::Sunny:
-            styleSheetToOpen = ":/style/sunny";
+        case StyleSheetOption::Light:
+            styleSheetToOpen = ":/style/light";
             break;
         default:
             return;
@@ -380,36 +358,6 @@ namespace hal
     QString MainWindow::saveIconStyle() const
     {
         return mSaveIconStyle;
-    }
-
-    QString MainWindow::scheduleIconPath() const
-    {
-        return mScheduleIconPath;
-    }
-
-    QString MainWindow::scheduleIconStyle() const
-    {
-        return mScheduleIconStyle;
-    }
-
-    QString MainWindow::runIconPath() const
-    {
-        return mRunIconPath;
-    }
-
-    QString MainWindow::runIconStyle() const
-    {
-        return mRunIconStyle;
-    }
-
-    QString MainWindow::contentIconPath() const
-    {
-        return mContentIconPath;
-    }
-
-    QString MainWindow::contentIconStyle() const
-    {
-        return mContentIconStyle;
     }
 
     QString MainWindow::settingsIconPath() const
@@ -470,36 +418,6 @@ namespace hal
     void MainWindow::setSaveIconStyle(const QString& style)
     {
         mSaveIconStyle = style;
-    }
-
-    void MainWindow::setScheduleIconPath(const QString& path)
-    {
-        mScheduleIconPath = path;
-    }
-
-    void MainWindow::setScheduleIconStyle(const QString& style)
-    {
-        mScheduleIconStyle = style;
-    }
-
-    void MainWindow::setRunIconPath(const QString& path)
-    {
-        mRunIconPath = path;
-    }
-
-    void MainWindow::setRunIconStyle(const QString& style)
-    {
-        mRunIconStyle = style;
-    }
-
-    void MainWindow::setContentIconPath(const QString& path)
-    {
-        mContentIconPath = path;
-    }
-
-    void MainWindow::setContentIconStyle(const QString& style)
-    {
-        mContentIconStyle = style;
     }
 
     void MainWindow::setSettingsIconPath(const QString& path)
@@ -564,20 +482,6 @@ namespace hal
 
         auto args            = plugin_access_manager::requestArguments(name.toStdString());
         QFuture<void> future = QtConcurrent::run(plugin_access_manager::runPlugin, name.toStdString(), &args);
-    }
-
-    // GENERALIZE TOGGLE METHODS
-    void MainWindow::toggleSchedule()
-    {
-        if (mStackedWidget->currentWidget() == mScheduleWidget)
-        {
-            if (FileManager::get_instance()->fileOpen())
-                mStackedWidget->setCurrentWidget(mLayoutArea);
-            else
-                mStackedWidget->setCurrentWidget(mWelcomeScreen);
-        }
-        else
-            mStackedWidget->setCurrentWidget(mScheduleWidget);
     }
 
     void MainWindow::onActionCloseDocumentTriggered()

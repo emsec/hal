@@ -29,12 +29,10 @@
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/netlist_relay/netlist_relay.h"
-#include "gui/notifications/notification_manager.h"
-#include "gui/plugin_management/plugin_relay.h"
+#include "gui/plugin_relay/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/thread_pool/thread_pool.h"
-#include "gui/window_manager/window_manager.h"
 #include "gui/gui_api/gui_api.h"
 
 #include <QSettings>
@@ -43,11 +41,7 @@ namespace hal
 {
     class Netlist;
 
-
-
     extern QSettings* gGuiState;
-    extern WindowManager* gWindowManager;
-    extern NotificationManager* gNotificationManager;
     extern ContentManager* gContentManager;
     extern std::shared_ptr<Netlist> gNetlistOwner;
     extern Netlist* gNetlist;

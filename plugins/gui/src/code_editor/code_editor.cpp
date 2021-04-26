@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QTextBlock>
+
 namespace hal
 {
 
@@ -109,7 +110,6 @@ namespace hal
 
     int CodeEditor::lineNumberAreaWidth()
     {
-        // ADD MID SPACE FOR COLOR INDICATORS ?
         // WARNING FUNCTION ONLY RETURNS CORRECT VALUES FOR MONOSPACE FONTS !
         QFontMetrics fm(mLineNumberFont);
         return mLineNumberArea->leftOffset() + fm.width(QString::number(blockCount())) + mLineNumberArea->rightOffset();
@@ -117,33 +117,12 @@ namespace hal
 
     int CodeEditor::minimapWidth()
     {
-        // SET VIA STYLESHEET OR DYNAMICALLY ?
         return 160;
     }
 
     void CodeEditor::resizeEvent(QResizeEvent* event)
     {
         updateLayout();
-
-        //    QTextBlock block = firstVisibleBlock();
-        //    int first_visible_block = block.blockNumber();
-        //    int additional_blocks = 0;
-
-        //    int block_top = (int)blockBoundingGeometry(block).translated(contentOffset()).top();
-        //    int viewport_height = viewport()->height();
-
-        //    block = block.next();
-        //    while (block.isValid() && block_top <= viewport_height)
-        //    {
-        //        block = block.next();
-        //        additional_blocks++;
-
-        //        if (block.isVisible())
-        //            block_top = (int)blockBoundingGeometry(block).translated(contentOffset()).top();
-        //    }
-
-        //    // ADJUST TO PERCENTAGE OF LAST BLOCK ?
-        //    mMinimap->adjustSliderHeight(first_visible_block, first_visible_block + additional_blocks);
 
         qreal ratio = viewport()->height() / blockBoundingGeometry(document()->firstBlock()).height();
         mMinimap->adjustSliderHeight(ratio);
@@ -217,11 +196,9 @@ namespace hal
 
     void CodeEditor::search(const QString& string)
     {
-        // THREAD ?
         QList<QTextEdit::ExtraSelection> extraSelections;
 
         moveCursor(QTextCursor::Start);
-        // SET COLORS VIA STYLESHEET ?
         QColor color            = QColor(12, 15, 19);
         QColor mBackgroundColor = QColor(255, 255, 0);
 
@@ -265,19 +242,6 @@ namespace hal
 
         if (number < 0 || number >= total)
             return;
-
-        //    int hidden = verticalScrollBar()->maximum() - verticalScrollBar()->minimum();
-        //    int mVisible = total - hidden;
-
-        //    int value = number - (mVisible / 2);
-
-        //    if (value < 0)
-        //        value = 0;
-
-        //    if (value >= hidden)
-        //        value = hidden;
-
-        //verticalScrollBar()->setValue(number); // CENTER ?
 
         if (mAnimation->state() == QPropertyAnimation::Running)
             mAnimation->stop();

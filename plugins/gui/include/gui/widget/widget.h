@@ -32,10 +32,8 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit Widget(QWidget* parent = 0);
+        explicit Widget(QWidget* parent = nullptr);
 
-        //virtual void paintEvent(QPaintEvent*) override;
-        //overshadowed functions
         void setParent(QWidget* parent);
 
     Q_SIGNALS:
@@ -44,7 +42,6 @@ namespace hal
         void shown();
 
     public Q_SLOTS:
-        //overshadowed functions (slots)
         void hide();
         void show();
     };

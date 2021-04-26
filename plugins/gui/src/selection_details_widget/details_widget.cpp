@@ -3,7 +3,7 @@
 
 namespace hal
 {
-    DetailsWidget::DetailsWidget(DetailsType tp, QWidget *parent)
+    DetailsWidget::DetailsWidget(DetailsType tp, QWidget* parent)
         : QWidget(parent), mDetailsType(tp), mCurrentId(0), mHideEmptySections(false)
     {
         mKeyFont = QFont("Iosevka");

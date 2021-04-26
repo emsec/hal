@@ -1,4 +1,4 @@
-#include "gui/plugin_management/plugin_relay.h"
+#include "gui/plugin_relay/plugin_relay.h"
 
 #include "hal_core/plugin_system/plugin_manager.h"
 

@@ -1,10 +1,11 @@
 #include "gui/selection_details_widget/details_table_utilities.h"
+
 #include <QTableWidget>
 #include <QHeaderView>
 
 namespace hal {
 
-    QSize DetailsTableUtilities::tableWidgetSize(const QTableWidget *table)
+    QSize DetailsTableUtilities::tableWidgetSize(const QTableWidget* table)
     {
         return tableViewSize(table, table->rowCount(), table->columnCount());
     }

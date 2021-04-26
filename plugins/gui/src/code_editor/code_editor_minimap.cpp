@@ -37,14 +37,8 @@ namespace hal
 
     void CodeEditorMinimap::adjustSliderHeight(int viewport_height)
     {
-        //mScrollbar->setSliderHeight(viewport_height * 0.25f);
-
-        //    qreal doc_height = mEditor->document()->documentLayout()->documentSize().height();
-        //    qreal ratio = doc_height / mEditor->viewport()->contentsRect().height();
-
-        //    doc_height = mDocument->documentLayout()->documentSize().height();
-        //    mScrollbar->setSliderHeight(std::round(doc_height / ratio));
         Q_UNUSED(viewport_height);
+
         qDebug() << "editor " << mEditor->document()->documentLayout()->documentSize().height();
         qDebug() << "mini " << mDocument->documentLayout()->documentSize().height();
 
@@ -103,19 +97,8 @@ namespace hal
         QPainter painter(this);
         style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
 
-        painter.setClipping(true);      // UNCERTAIN IF NECESSARY
-        painter.setClipRect(rect());    // UNCERTAIN IF NECESSARY
-
-        //    int block_number = mEditor->first_visible_block();
-        //    int sliderPosition = mScrollbar->sliderPosition();
-        //    qreal offset = mDocument->documentLayout()->blockBoundingRect(mDocument->findBlockByNumber(block_number)).top() - sliderPosition;
-        //    painter.translate(0, -offset);
-
-        //    QAbstractTextDocumentLayout::PaintContext ctx;
-        //    ctx.palette.setColor(QPalette::Text, QColor("yellow")); // USE STYLESHEET COLOR ?
-        //    ctx.clip = QRectF(0, offset, width(), height());
-
-        //    mDocument->documentLayout()->draw(&painter, ctx);
+        painter.setClipping(true);
+        painter.setClipRect(rect());
 
         QAbstractTextDocumentLayout::PaintContext ctx;
         ctx.palette.setColor(QPalette::Text, palette().text().color());

@@ -43,7 +43,7 @@ namespace hal
         Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
 
     public:
-        ExpandingListButton(int levl, QWidget* parent = 0);
+        ExpandingListButton(int levl, QWidget* parent = nullptr);
 
         void enterEvent(QEvent* event) override;
         void leaveEvent(QEvent* event) override;

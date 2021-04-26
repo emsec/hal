@@ -46,7 +46,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        SelectionTreeModel(QObject* parent = 0);
+        SelectionTreeModel(QObject* parent = nullptr);
         ~SelectionTreeModel();
 
         //information access

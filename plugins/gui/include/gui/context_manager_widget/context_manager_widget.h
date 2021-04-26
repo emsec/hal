@@ -98,6 +98,7 @@ namespace hal
         void setSearchIconStyle(const QString &style);
 
         void handleOpenContextClicked();
+
     public Q_SLOTS:
         //void handleContextCreated(GraphContext* context);
         //void handleContextRenamed(GraphContext* context);
@@ -143,7 +144,7 @@ namespace hal
         void handleDeleteContextClicked();
 
         void handleContextMenuRequest(const QPoint& point);
-        void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+        void handleSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
         void handleFilterTextChanged(const QString& filter_text);
 
         void setToolbarButtonsEnabled(bool enabled);
