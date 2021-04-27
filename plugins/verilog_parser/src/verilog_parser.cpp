@@ -1348,7 +1348,11 @@ namespace hal
             {
                 b = alias_it->second;
             }
-            else if (b != "'0'" && b != "'1'" && b != "'Z'")
+            else if(b == "'Z'" || b == "'X'") 
+            {
+                continue;
+            }
+            else if (b != "'0'" && b != "'1'")
             {
                 log_error("verilog_parser", "cannot find alias for net '{}' of instance '{}' of type '{}'.", b, instance_identifier, instance_type);
                 return nullptr;
@@ -1386,11 +1390,11 @@ namespace hal
                             {
                                 instance_assignments[port] = alias_it->second;
                             }
-                            else if (assignment == "'0'" || assignment == "'1'" || assignment == "'Z'")
+                            else if (assignment == "'0'" || assignment == "'1'")
                             {
                                 instance_assignments[port] = assignment;
                             }
-                            else
+                            else if(assignment != "'Z'" && assignment != "'X'")
                             {
                                 log_error("verilog_parser", "port assignment \"{} = {}\" is invalid for instance '{}' of type '{}'.", port, assignment, inst_identifier, inst_type);
                                 return nullptr;
@@ -1440,7 +1444,7 @@ namespace hal
                     // cache pin directions
                     std::unordered_map<std::string, PinDirection> pin_to_direction = gate_type_it->second->get_pin_directions();
 
-                    // expand port assignments
+                    // expand pin assignments
                     for (const auto& [pin, assignment] : inst_it->second)
                     {
                         std::string signal;
@@ -1453,9 +1457,13 @@ namespace hal
                         {
                             signal = alias_it->second;
                         }
-                        else if (assignment == "'0'" || assignment == "'1'" || assignment == "'Z'")
+                        else if (assignment == "'0'" || assignment == "'1'")
                         {
                             signal = assignment;
+                        }
+                        else if(assignment == "'Z'" || assignment == "'X'")
+                        {
+                            continue;
                         }
                         else
                         {
@@ -1818,7 +1826,7 @@ namespace hal
                 for (auto it = number.rbegin(); it != number.rend(); it++)
                 {
                     const char c = *it;
-                    if (c == '0' || c == '1' || c == 'Z')
+                    if (c == '0' || c == '1' || c == 'Z' || c == 'X')
                     {
                         result.push_back("'" + std::string(1, c) + "'");
                     }

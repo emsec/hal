@@ -37,108 +37,102 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VerilogParserTest, check_main_example) {
+    TEST_F(VerilogParserTest, check_main_example) 
+    {
         TEST_START
-            {
-                std::string netlist_input("module top ("
-                                        "  net_global_in,"
-                                        "  net_global_out "
-                                        " ) ;"
-                                        "  input net_global_in ;"
-                                        "  output net_global_out ;"
-                                        "  wire net_0 ;"
-                                        "  wire net_1 ;"
-                                        "gate_1_to_1 gate_0 ("
-                                        "  .I (net_global_in ),"
-                                        "  .O (net_0 )"
-                                        " ) ;"
-                                        "gate_2_to_1 gate_1 ("
-                                        "  .I0 (net_global_in ),"
-                                        "  .I1 (net_global_in ),"
-                                        "  .O (net_1 )"
-                                        " ) ;"
-                                        "gate_3_to_1 gate_2 ("
-                                        "  .I0 (net_0 ),"
-                                        "  .I1 (net_1 ),"
-                                        "  .O (net_global_out )"
-                                        " ) ;"
-                                        "endmodule");
-                test_def::capture_stdout();
-                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+        {
+            std::string netlist_input("module top ("
+                                    "  net_global_in,"
+                                    "  net_global_out "
+                                    " ) ;"
+                                    "  input net_global_in ;"
+                                    "  output net_global_out ;"
+                                    "  wire net_0 ;"
+                                    "  wire net_1 ;"
+                                    "gate_1_to_1 gate_0 ("
+                                    "  .I (net_global_in ),"
+                                    "  .O (net_0 )"
+                                    " ) ;"
+                                    "gate_2_to_1 gate_1 ("
+                                    "  .I0 (net_global_in ),"
+                                    "  .I1 (net_global_in ),"
+                                    "  .O (net_1 )"
+                                    " ) ;"
+                                    "gate_3_to_1 gate_2 ("
+                                    "  .I0 (net_0 ),"
+                                    "  .I1 (net_1 ),"
+                                    "  .O (net_global_out )"
+                                    " ) ;"
+                                    "endmodule");
+            std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            ASSERT_NE(nl, nullptr);
 
-                ASSERT_NE(nl, nullptr);
+            // Check if the gates are parsed correctly
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
+            Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).size(), 1);
+            Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).size(), 1);
+            Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
 
-                // Check if the gates are parsed correctly
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).size(), 1);
-                Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).size(), 1);
-                Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
+            ASSERT_NE(gate_0, nullptr);
+            EXPECT_EQ(gate_0->get_name(), "gate_0");
 
-                ASSERT_NE(gate_0, nullptr);
-                EXPECT_EQ(gate_0->get_name(), "gate_0");
+            ASSERT_NE(gate_1, nullptr);
+            EXPECT_EQ(gate_1->get_name(), "gate_1");
 
-                ASSERT_NE(gate_1, nullptr);
-                EXPECT_EQ(gate_1->get_name(), "gate_1");
+            ASSERT_NE(gate_2, nullptr);
+            EXPECT_EQ(gate_2->get_name(), "gate_2");
 
-                ASSERT_NE(gate_2, nullptr);
-                EXPECT_EQ(gate_2->get_name(), "gate_2");
+            // Check if the nets are parsed correctly
+            Net* net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
+            Net* net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
+            Net*
+                net_global_in = *(nl->get_nets(test_utils::net_name_filter("net_global_in")).begin());
+            Net*
+                net_global_out = *(nl->get_nets(test_utils::net_name_filter("net_global_out")).begin());
 
-                // Check if the nets are parsed correctly
-                Net* net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
-                Net* net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
-                Net*
-                    net_global_in = *(nl->get_nets(test_utils::net_name_filter("net_global_in")).begin());
-                Net*
-                    net_global_out = *(nl->get_nets(test_utils::net_name_filter("net_global_out")).begin());
+            ASSERT_NE(net_0, nullptr);
+            EXPECT_EQ(net_0->get_name(), "net_0");
+            ASSERT_EQ(net_0->get_sources().size(), 1);
+            EXPECT_EQ(net_0->get_sources()[0], test_utils::get_endpoint(gate_0, "O"));
+            std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(),
+                                                                std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
+                                                                                                                "I0")})));
 
-                ASSERT_NE(net_0, nullptr);
-                EXPECT_EQ(net_0->get_name(), "net_0");
-                ASSERT_EQ(net_0->get_sources().size(), 1);
-                EXPECT_EQ(net_0->get_sources()[0], test_utils::get_endpoint(gate_0, "O"));
-                std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(),
-                                                                  std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
-                                                                                                                   "I0")})));
+            ASSERT_NE(net_1, nullptr);
+            EXPECT_EQ(net_1->get_name(), "net_1");
+            ASSERT_EQ(net_1->get_sources().size(), 1);
+            EXPECT_EQ(net_1->get_sources()[0], test_utils::get_endpoint(gate_1, "O"));
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(),
+                                                                std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
+                                                                                                                "I1")})));
 
-                ASSERT_NE(net_1, nullptr);
-                EXPECT_EQ(net_1->get_name(), "net_1");
-                ASSERT_EQ(net_1->get_sources().size(), 1);
-                EXPECT_EQ(net_1->get_sources()[0], test_utils::get_endpoint(gate_1, "O"));
-                EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(),
-                                                                  std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
-                                                                                                                   "I1")})));
+            ASSERT_NE(net_global_in, nullptr);
+            EXPECT_EQ(net_global_in->get_name(), "net_global_in");
+            EXPECT_EQ(net_global_in->get_sources().size(), 0);
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(),
+                                                                std::vector<Endpoint*>({test_utils::get_endpoint(gate_0,
+                                                                                                                "I"),
+                                                                                        test_utils::get_endpoint(gate_1,
+                                                                                                                "I0"),
+                                                                                        test_utils::get_endpoint(gate_1,
+                                                                                                                "I1")})));
+            EXPECT_TRUE(nl->is_global_input_net(net_global_in));
 
-                ASSERT_NE(net_global_in, nullptr);
-                EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-                EXPECT_EQ(net_global_in->get_sources().size(), 0);
-                EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(),
-                                                                  std::vector<Endpoint*>({test_utils::get_endpoint(gate_0,
-                                                                                                                   "I"),
-                                                                                          test_utils::get_endpoint(gate_1,
-                                                                                                                   "I0"),
-                                                                                          test_utils::get_endpoint(gate_1,
-                                                                                                                   "I1")})));
-                EXPECT_TRUE(nl->is_global_input_net(net_global_in));
+            ASSERT_NE(net_global_out, nullptr);
+            EXPECT_EQ(net_global_out->get_name(), "net_global_out");
+            ASSERT_EQ(net_global_out->get_sources().size(), 1);
+            EXPECT_EQ(net_global_out->get_sources()[0], test_utils::get_endpoint(gate_2, "O"));
+            EXPECT_TRUE(net_global_out->get_destinations().empty());
+            EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
-                ASSERT_NE(net_global_out, nullptr);
-                EXPECT_EQ(net_global_out->get_name(), "net_global_out");
-                ASSERT_EQ(net_global_out->get_sources().size(), 1);
-                EXPECT_EQ(net_global_out->get_sources()[0], test_utils::get_endpoint(gate_2, "O"));
-                EXPECT_TRUE(net_global_out->get_destinations().empty());
-                EXPECT_TRUE(nl->is_global_output_net(net_global_out));
-
-                EXPECT_EQ(nl->get_global_input_nets().size(), 1);
-                EXPECT_EQ(nl->get_global_output_nets().size(), 1);
-            }
+            EXPECT_EQ(nl->get_global_input_nets().size(), 1);
+            EXPECT_EQ(nl->get_global_output_nets().size(), 1);
+        }
         TEST_END
     }
 
@@ -147,99 +141,82 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VerilogParserTest, check_whitespace_chaos) {
-
+    TEST_F(VerilogParserTest, check_whitespace_chaos) 
+    {
         TEST_START
-            {
-                std::string netlist_input("module top(net_global_in,net_global_out);input net_global_in;\n"
-                                        "  output net_global_out;wire net_0;wire net_1;gate_1_to_1 gate_0 (\n"
-                                        "  .I (net_global_in),\n"
-                                        "\n"
-                                        " \t.O (net_0 )\n"
-                                        " );\n"
-                                        "gate_2_to_1 gate_1 (.I0\n\t"
-                                        "  (\n"
-                                        "    net_global_in\n"
-                                        "   \t)\n"
-                                        "    ,\n"
-                                        "  .I1 (net_global_in),.O (net_1));\n"
-                                        "gate_3_to_1 gate_2 (.I0 (net_0 ),.I1 (net_1 ),.O (net_global_out ));endmodule");
-                test_def::capture_stdout();
-                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+        {
+            std::string netlist_input("module top(net_global_in,net_global_out);input net_global_in;\n"
+                                    "  output net_global_out;wire net_0;wire net_1;gate_1_to_1 gate_0 (\n"
+                                    "  .I (net_global_in),\n"
+                                    "\n"
+                                    " \t.O (net_0 )\n"
+                                    " );\n"
+                                    "gate_2_to_1 gate_1 (.I0\n\t"
+                                    "  (\n"
+                                    "    net_global_in\n"
+                                    "   \t)\n"
+                                    "    ,\n"
+                                    "  .I1 (net_global_in),.O (net_1));\n"
+                                    "gate_3_to_1 gate_2 (.I0 (net_0 ),.I1 (net_1 ),.O (net_global_out ));endmodule");
+            std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            ASSERT_NE(nl, nullptr);
 
-                ASSERT_NE(nl, nullptr);
+            // Check if the gates are parsed correctly
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
+            Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).size(), 1);
+            Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).size(), 1);
+            Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
 
-                // Check if the gates are parsed correctly
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).size(), 1);
-                Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
-                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).size(), 1);
-                Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
+            ASSERT_NE(gate_0, nullptr);
+            EXPECT_EQ(gate_0->get_name(), "gate_0");
 
-                ASSERT_NE(gate_0, nullptr);
-                EXPECT_EQ(gate_0->get_name(), "gate_0");
+            ASSERT_NE(gate_1, nullptr);
+            EXPECT_EQ(gate_1->get_name(), "gate_1");
 
-                ASSERT_NE(gate_1, nullptr);
-                EXPECT_EQ(gate_1->get_name(), "gate_1");
+            ASSERT_NE(gate_2, nullptr);
+            EXPECT_EQ(gate_2->get_name(), "gate_2");
 
-                ASSERT_NE(gate_2, nullptr);
-                EXPECT_EQ(gate_2->get_name(), "gate_2");
+            // Check if the nets are parsed correctly
+            Net* net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
+            Net* net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
+            Net* net_global_in = *(nl->get_nets(test_utils::net_name_filter("net_global_in")).begin());
+            Net* net_global_out = *(nl->get_nets(test_utils::net_name_filter("net_global_out")).begin());
 
-                // Check if the nets are parsed correctly
-                Net* net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
-                Net* net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
-                Net*
-                    net_global_in = *(nl->get_nets(test_utils::net_name_filter("net_global_in")).begin());
-                Net*
-                    net_global_out = *(nl->get_nets(test_utils::net_name_filter("net_global_out")).begin());
+            ASSERT_NE(net_0, nullptr);
+            EXPECT_EQ(net_0->get_name(), "net_0");
+            ASSERT_EQ(net_0->get_sources().size(), 1);
+            EXPECT_EQ(net_0->get_sources()[0], test_utils::get_endpoint(gate_0, "O"));
+            std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(), std::vector<Endpoint*>({test_utils::get_endpoint(gate_2, "I0")})));
 
-                ASSERT_NE(net_0, nullptr);
-                EXPECT_EQ(net_0->get_name(), "net_0");
-                ASSERT_EQ(net_0->get_sources().size(), 1);
-                EXPECT_EQ(net_0->get_sources()[0], test_utils::get_endpoint(gate_0, "O"));
-                std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(),
-                                                                  std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
-                                                                                                                   "I0")})));
+            ASSERT_NE(net_1, nullptr);
+            EXPECT_EQ(net_1->get_name(), "net_1");
+            ASSERT_EQ(net_1->get_sources().size(), 1);
+            EXPECT_EQ(net_1->get_sources()[0], test_utils::get_endpoint(gate_1, "O"));
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(), std::vector<Endpoint*>({test_utils::get_endpoint(gate_2, "I1")})));
 
-                ASSERT_NE(net_1, nullptr);
-                EXPECT_EQ(net_1->get_name(), "net_1");
-                ASSERT_EQ(net_1->get_sources().size(), 1);
-                EXPECT_EQ(net_1->get_sources()[0], test_utils::get_endpoint(gate_1, "O"));
-                EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(),
-                                                                  std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
-                                                                                                                   "I1")})));
+            ASSERT_NE(net_global_in, nullptr);
+            EXPECT_EQ(net_global_in->get_name(), "net_global_in");
+            EXPECT_EQ(net_global_in->get_sources().size(), 0);
+            EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(), std::vector<Endpoint*>({test_utils::get_endpoint(gate_0, "I"),
+                                                                                                                            test_utils::get_endpoint(gate_1, "I0"),
+                                                                                                                            test_utils::get_endpoint(gate_1, "I1")})));
+            EXPECT_TRUE(nl->is_global_input_net(net_global_in));
 
-                ASSERT_NE(net_global_in, nullptr);
-                EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-                EXPECT_EQ(net_global_in->get_sources().size(), 0);
-                EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(),
-                                                                  std::vector<Endpoint*>({test_utils::get_endpoint(gate_0,
-                                                                                                                   "I"),
-                                                                                          test_utils::get_endpoint(gate_1,
-                                                                                                                   "I0"),
-                                                                                          test_utils::get_endpoint(gate_1,
-                                                                                                                   "I1")})));
-                EXPECT_TRUE(nl->is_global_input_net(net_global_in));
+            ASSERT_NE(net_global_out, nullptr);
+            EXPECT_EQ(net_global_out->get_name(), "net_global_out");
+            ASSERT_EQ(net_global_out->get_sources().size(), 1);
+            EXPECT_EQ(net_global_out->get_sources()[0], test_utils::get_endpoint(gate_2, "O"));
+            EXPECT_TRUE(net_global_out->get_destinations().empty());
+            EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
-                ASSERT_NE(net_global_out, nullptr);
-                EXPECT_EQ(net_global_out->get_name(), "net_global_out");
-                ASSERT_EQ(net_global_out->get_sources().size(), 1);
-                EXPECT_EQ(net_global_out->get_sources()[0], test_utils::get_endpoint(gate_2, "O"));
-                EXPECT_TRUE(net_global_out->get_destinations().empty());
-                EXPECT_TRUE(nl->is_global_output_net(net_global_out));
-
-                EXPECT_EQ(nl->get_global_input_nets().size(), 1);
-                EXPECT_EQ(nl->get_global_output_nets().size(), 1);
-            }
+            EXPECT_EQ(nl->get_global_input_nets().size(), 1);
+            EXPECT_EQ(nl->get_global_output_nets().size(), 1);
+        }
         TEST_END
     }
 
@@ -249,68 +226,53 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VerilogParserTest, check_generic_map) {
-
+    TEST_F(VerilogParserTest, check_generic_map) 
+    {
         TEST_START
-            {
-                // Store an instance of all possible data types in one Gate + some special cases
-                std::string netlist_input("module top ("
-                                        "  global_in,"
-                                        "  global_out"
-                                        " ) ;"
-                                        "  input global_in ;"
-                                        "  output global_out ;"
-                                        "gate_1_to_1 #("
-                                        ".key_integer(1234),"
-                                        ".key_floating_point(1.234),"
-                                        ".key_string(\"test_string\"),"
-                                        ".key_bit_vector_hex('habc),"    // All values are 'ABC' in hex
-                                        ".key_bit_vector_dec('d2748),"
-                                        ".key_bit_vector_oct('o5274),"
-                                        ".key_bit_vector_bin('b1010_1011_1100),"
-                                        // special characters in '"'
-                                        ".key_negative_comma_string(\"test,1,2,3\"),"
-                                        ".key_negative_float_string(\"1.234\")) "
-                                        "gate_0 ("
-                                        "  .I (global_in ),"
-                                        "  .O (global_out )"
-                                        " ) ;"
-                                        "endmodule");
-                test_def::capture_stdout();
-                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+        {
+            // Store an instance of all possible data types in one Gate + some special cases
+            std::string netlist_input("module top ("
+                                    "  global_in,"
+                                    "  global_out"
+                                    " ) ;"
+                                    "  input global_in ;"
+                                    "  output global_out ;"
+                                    "gate_1_to_1 #("
+                                    ".key_integer(1234),"
+                                    ".key_floating_point(1.234),"
+                                    ".key_string(\"test_string\"),"
+                                    ".key_bit_vector_hex('habc),"    // All values are 'ABC' in hex
+                                    ".key_bit_vector_dec('d2748),"
+                                    ".key_bit_vector_oct('o5274),"
+                                    ".key_bit_vector_bin('b1010_1011_1100),"
+                                    ".key_negative_comma_string(\"test,1,2,3\"),"
+                                    ".key_negative_float_string(\"1.234\")) "
+                                    "gate_0 ("
+                                    "  .I (global_in ),"
+                                    "  .O (global_out )"
+                                    " ) ;"
+                                    "endmodule");
+            std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
+            ASSERT_NE(nl, nullptr);
 
-                ASSERT_NE(nl, nullptr);
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
+            Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
 
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
-                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+            // Integers are stored in their hex representation
+            EXPECT_EQ(gate_0->get_data("generic", "key_integer"), std::make_tuple("integer", "1234"));
+            EXPECT_EQ(gate_0->get_data("generic", "key_floating_point"), std::make_tuple("floating_point", "1.234"));
+            EXPECT_EQ(gate_0->get_data("generic", "key_string"), std::make_tuple("string", "test_string"));
+            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_hex"), std::make_tuple("bit_vector", "ABC"));
+            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_dec"), std::make_tuple("bit_vector", "ABC"));
+            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_oct"), std::make_tuple("bit_vector", "ABC"));
+            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_bin"), std::make_tuple("bit_vector", "ABC"));
 
-                // Integers are stored in their hex representation
-                EXPECT_EQ(gate_0->get_data("generic", "key_integer"), std::make_tuple("integer", "1234"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_floating_point"),
-                          std::make_tuple("floating_point", "1.234"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_string"), std::make_tuple("string", "test_string"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_hex"),
-                          std::make_tuple("bit_vector", "ABC"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_dec"),
-                          std::make_tuple("bit_vector", "ABC"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_oct"),
-                          std::make_tuple("bit_vector", "ABC"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_bin"),
-                          std::make_tuple("bit_vector", "ABC"));
-                // Special Characters
-                EXPECT_EQ(gate_0->get_data("generic", "key_negative_comma_string"),
-                          std::make_tuple("string", "test,1,2,3"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_negative_float_string"),
-                          std::make_tuple("string", "1.234"));
-            }
-
+            // Special Characters
+            EXPECT_EQ(gate_0->get_data("generic", "key_negative_comma_string"), std::make_tuple("string", "test,1,2,3"));
+            EXPECT_EQ(gate_0->get_data("generic", "key_negative_float_string"), std::make_tuple("string", "1.234"));
+        }
         TEST_END
     }
 
@@ -367,16 +329,9 @@ namespace hal {
                                         "    .O (global_out ) "
                                         "   ) ; "
                                         "endmodule");
-                test_def::capture_stdout();
-                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
-
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -388,10 +343,8 @@ namespace hal {
                 }
                 for (unsigned i = 0; i < 4; i++) {
                     std::string i_str = std::to_string(i);
-                    Net*
-                        n_vec_1_i = *nl->get_nets(test_utils::net_name_filter("n_vec_1(" + i_str + ")")).begin();
-                    Net*
-                        n_vec_2_i = *nl->get_nets(test_utils::net_name_filter("n_vec_2(" + i_str + ")")).begin();
+                    Net* n_vec_1_i = *nl->get_nets(test_utils::net_name_filter("n_vec_1(" + i_str + ")")).begin();
+                    Net* n_vec_2_i = *nl->get_nets(test_utils::net_name_filter("n_vec_2(" + i_str + ")")).begin();
                     ASSERT_EQ(n_vec_1_i->get_sources().size(), 1);
                     EXPECT_EQ(n_vec_1_i->get_sources()[0]->get_pin(), "O" + i_str);
                     EXPECT_EQ((*n_vec_1_i->get_destinations().begin())->get_pin(), "I" + i_str);
@@ -424,16 +377,9 @@ namespace hal {
                                         "  .O (global_out ) "
                                         " ) ; "
                                         "endmodule");
-                test_def::capture_stdout();
-                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
-
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -480,15 +426,9 @@ namespace hal {
                                         "  .O (global_out ) "
                                         " ) ; "
                                         "endmodule");
-                test_def::capture_stdout();
-                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -509,21 +449,24 @@ namespace hal {
     }
 
     /**
-     * Testing the port assigment of the nets '0' and '1' (by 'b0 and 'b1), that are connected to gnd/vcc gates.
+     * Testing assignment of '0', '1', 'Z', and 'X'.
      *
      * Functions: parse
      */
-    TEST_F(VerilogParserTest, check_zero_and_one_nets) {
+    TEST_F(VerilogParserTest, check_special_nets) {
 
         TEST_START
             {
-                // Use zero and one as inputs (via 'b0 and 'b1)
                 std::string netlist_input("module top ("
                                         "  global_out_0,"
-                                        "  global_out_1 "
+                                        "  global_out_1,"
+                                        "  global_out_2,"
+                                        "  global_out_3 "
                                         " ) ;"
                                         "  output global_out_0 ;"
                                         "  output global_out_1 ;"
+                                        "  output global_out_2 ;"
+                                        "  output global_out_3 ;"
                                         "gate_1_to_1 gate_0 ("
                                         "  .I ('b0 ),"
                                         "  .O (global_out_0)"
@@ -532,38 +475,50 @@ namespace hal {
                                         "  .I ('b1 ),"
                                         "  .O (global_out_1)"
                                         " ) ;"
+                                        "gate_1_to_1 gate_2 ("
+                                        "  .I ('bZ ),"
+                                        "  .O (global_out_2)"
+                                        " ) ;"
+                                        "gate_1_to_1 gate_3 ("
+                                        "  .I ('bX ),"
+                                        "  .O (global_out_3)"
+                                        " ) ;"
                                         "endmodule");
-                // test_def::capture_stdout();
-                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-                // if (nl == nullptr) {
-                //     std::cout << test_def::get_captured_stdout();
-                // } else {
-                //     test_def::get_captured_stdout();
-                // }
-
                 ASSERT_NE(nl, nullptr);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).size(), 1);
+
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+                ASSERT_NE(gate_0, nullptr);
                 Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
+                ASSERT_NE(gate_1, nullptr);
+                Gate* gate_2 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_2")).begin();
+                ASSERT_NE(gate_2, nullptr);
+                Gate* gate_3 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_3")).begin();
+                ASSERT_NE(gate_3, nullptr);
 
-                // Test that the nets '0' and '1' are created and connected
+                // check whether net '0' was created and is connected to a GND gate through input pin "I"
                 Net* net_gnd = gate_0->get_fan_in_net("I");
-                Net* net_vcc = gate_1->get_fan_in_net("I");
                 ASSERT_NE(net_gnd, nullptr);
-                ASSERT_NE(net_vcc, nullptr);
                 EXPECT_EQ(net_gnd->get_name(), "'0'");
-                EXPECT_EQ(net_vcc->get_name(), "'1'");
-
-                // Test that the nets '0' and '1' are connected to a created global gnd/vcc Gate
                 ASSERT_EQ(net_gnd->get_sources().size(), 1);
                 ASSERT_NE(net_gnd->get_sources()[0]->get_gate(), nullptr);
+                EXPECT_TRUE(net_gnd->get_sources()[0]->get_gate()->is_gnd_gate());
+
+                // check whether net '1' was created and is connected to a VCC gate through input pin "I"
+                Net* net_vcc = gate_1->get_fan_in_net("I");
+                ASSERT_NE(net_vcc, nullptr);
+                EXPECT_EQ(net_vcc->get_name(), "'1'");
                 ASSERT_EQ(net_vcc->get_sources().size(), 1);
                 ASSERT_NE(net_vcc->get_sources()[0]->get_gate(), nullptr);
-                EXPECT_TRUE(net_gnd->get_sources()[0]->get_gate()->is_gnd_gate());
                 EXPECT_TRUE(net_vcc->get_sources()[0]->get_gate()->is_vcc_gate());
+
+                // check whether input pin "I" remains unconnected for 'Z' assignment
+                ASSERT_EQ(gate_2->get_fan_in_net("I"), nullptr);
+
+                // check whether input pin "I" remains unconnected for 'X' assignment
+                ASSERT_EQ(gate_2->get_fan_in_net("I"), nullptr);
             }
         TEST_END
     }
