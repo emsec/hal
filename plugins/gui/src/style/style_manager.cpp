@@ -39,4 +39,9 @@ namespace hal
     {
         return mVhdlSyntaxHighlighter;
     }
+
+    void StyleManager::repolish()
+    {
+        mGraphicsQssAdapter->repolish();
+    }
 }

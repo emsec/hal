@@ -9,8 +9,11 @@
 #include "gui/gui_def.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/user_action/user_action_manager.h"
+#include "gui/style/style_manager.h"
 #include <QVector>
 #include <QJsonArray>
+#include "gui/main_window/main_window.h"
+#include "gui/settings/settings_items/settings_item_dropdown.h"
 
 namespace hal
 {
@@ -30,6 +33,7 @@ namespace hal
     {
         mTimestamp = QDateTime::currentDateTime();
         UserActionManager::instance()->clearWaitCount();
+        connect(MainWindow::sSettingStyle,&SettingsItemDropdown::intChanged,this,&GraphContext::handleStyleChanged);
     }
 
     GraphContext::~GraphContext()
@@ -548,6 +552,13 @@ namespace hal
     //    gThreadPool->queueTask(task);
 
         mLayouter->layout();
+        handleLayouterFinished();
+    }
+
+    void GraphContext::handleStyleChanged(int istyle)
+    {
+        Q_UNUSED(istyle);
+        StyleManager::get_instance()->repolish();
         handleLayouterFinished();
     }
 

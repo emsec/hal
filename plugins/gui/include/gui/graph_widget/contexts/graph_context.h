@@ -311,6 +311,7 @@ namespace hal
         void handleLayouterUpdate(const int percent);
         void handleLayouterUpdate(const QString& message);
         void handleLayouterFinished();
+        void handleStyleChanged(int istyle);
 
     private:
         void evaluateChanges();
