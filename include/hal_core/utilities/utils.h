@@ -132,6 +132,18 @@ namespace hal
         }
 
         /**
+         * Checks whether a string contains only digits.
+         *
+         * @param[in] s - The string to analyze.
+         * @returns True if \p s contains only digits, false otherwise.
+         */
+        template<typename T>
+        CORE_API bool is_digits(const T& s)
+        {
+            return std::all_of(s.begin(), s.end(), ::isdigit);
+        }
+
+        /**
          * Checks whether a string represents an integer.
          *
          * @param[in] s - The string to analyze.

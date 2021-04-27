@@ -337,7 +337,10 @@ namespace hal
                 {
                     for (auto& gate_node : val["gates"].GetArray())
                     {
-                        sm->assign_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                        if(!sm->is_top_module()) 
+                        {
+                            sm->assign_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                        }
                     }
                 }
 

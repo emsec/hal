@@ -273,6 +273,24 @@ namespace hal
         }
 
         /**
+         * Consume the entire current line and returns the last consumed token.
+         *
+         * @returns The last consumed token or the last token of the stream.
+         */
+        Token<T> consume_current_line()
+        {
+            u32 line = at(m_pos).number;
+
+            u32 i = m_pos;
+            while (++i < size() && at(i).number == line)
+            {
+            }
+            m_pos = i;
+
+            return at(m_pos - 1);
+        }
+
+        /**
          * Consume the next tokens in the stream until a token matches the given \p expected string.<br>
          * This final token is not consumed, i.e., it is now the next token in the stream.<br>
          * All consumed tokens are returned as a new token stream.<br>
