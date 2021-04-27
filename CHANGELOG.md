@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * existing modules can be selected from a table, tree-view, or using a module picker within the graph view
   * enables searching for existing modules
   * added cursor to indicate that user is in module pick mode
+* improved netlist parsers
+  * split VHDL and Verilog parsers into two independent plugins
+  * netlist parsers now take path to netlist file as input instead of `std::stringstream`
+  * fixed netlist parsers assigning wrong order of inputs for some multi-bit signals
 * added `remove from view` action to context menu for gates and modules
 * added grouping toolbox feature to highlight successors or predecessors
 * added an indicator showing whether views have been modified
@@ -33,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * fixed list of navigation targets containing duplicates and/or loops
 * fixed drag'n'drop bug related to negative coordinates
 * fixed liberty parser aborting on unknown `pg_type`
+* fixed stylesheets
 
 ## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`
