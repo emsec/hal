@@ -43,7 +43,7 @@ if(BUILD_TESTS)
 
     add_executable(runTest-netlist_simulator simulator_test.cpp)
 
-    target_link_libraries(runTest-netlist_simulator netlist_simulator verilog_parser vhdl_parser test_utils gtest ${LINK_LIBS})
+    target_link_libraries(runTest-netlist_simulator netlist_simulator test_utils gtest ${LINK_LIBS})
 
     add_test(runTest-netlist_simulator ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-netlist_simulator --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runTest-netlist_simulator.xml)
 

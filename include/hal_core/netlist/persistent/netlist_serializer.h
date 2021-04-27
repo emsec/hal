@@ -40,20 +40,18 @@ namespace hal
     namespace netlist_serializer
     {
         /**
-         * Serializes a netlist into a .hal file.<br>
-         * Invokes the hal_file_manager and all associated callbacks.
+         * Serializes a netlist into a .hal file.
          *
-         * @param[in] nl - The netlist to serialize.
-         * @param[in] hal_file - The file to serialize to.
-         * @returns True on success.
+         * @param[in] netlist - The netlist to serialize.
+         * @param[in] hal_file - The destination .hal file.
+         * @returns True on success, false otherwise.
          */
-        NETLIST_API bool serialize_to_file(Netlist* nl, const std::filesystem::path& hal_file);
+        NETLIST_API bool serialize_to_file(Netlist* netlist, const std::filesystem::path& hal_file);
 
         /**
-         * Deserializes a netlist from a .hal file.<br>
-         * Invokes the hal_file_manager and all associated callbacks.
+         * Deserializes a netlist from a .hal file.
          *
-         * @param[in] hal_file - The file to deserialize from.
+         * @param[in] hal_file - The source .hal file.
          * @returns The deserialized netlist.
          */
         NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file);

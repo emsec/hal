@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * improved netlist parsers
   * split VHDL and Verilog parsers into two independent plugins
   * netlist parsers now take path to netlist file as input instead of `std::stringstream`
+  * added support for `Z` and `X` assignments to Verilog and VHDL parsers
   * fixed netlist parsers assigning wrong order of inputs for some multi-bit signals
 * expanded `netlist_utils`
   * added function `get_common_inputs` to `netlist_utils` to get inputs that are common across multiple gates
@@ -32,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added grouping toolbox feature to highlight successors or predecessors
 * added an indicator showing whether views have been modified
 * added function `is_top_module` to class `Module` to determin whether the current module is the top module of the netlist
+* added Python bindings for `netlist_serializer`
 * when trying to create a view for a module that is already associated with an (unchanged) view, the existing view is activated instead of creating a new view
 * fixed selection details not being updated immediately when renaming or or changing a type
 * fixed navigation bug where ports and nets did not match for modules
