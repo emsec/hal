@@ -12,7 +12,7 @@ var indexSectionsWithContent =
   9: "gmno",
   10: "acdeijlnprsu",
   11: "eghnpu",
-  12: "d"
+  12: "dw"
 };
 
 var indexSectionNames =

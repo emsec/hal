@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type &mdash; hal_py v3.2.6-124-g199238ac7 documentation</title>
+  <title>Gate Type &mdash; hal_py v3.2.6-169-g09bc51b82 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.6-124-g199238ac7
+                v3.2.6-169-g09bc51b82
               </div>
             
           
@@ -348,7 +348,7 @@
 
 <dl class="method">
 <dt id="hal_py.GateType.assign_pin_group">
-<code class="descname">assign_pin_group</code><span class="sig-paren">(</span><em>self: hal_py.GateType, group: str, index_to_pin: Dict[int, str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.assign_pin_group" title="Permalink to this definition">¶</a></dt>
+<code class="descname">assign_pin_group</code><span class="sig-paren">(</span><em>self: hal_py.GateType, group: str, pins: List[Tuple[int, str]]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.assign_pin_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assign existing pins to a pin group.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -356,7 +356,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the pin group.</li>
-<li><strong>index_to_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – A dict from pin index to pin.</li>
+<li><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>)</em><em>]</em>) – The pins to be added to the group including their indices.</li>
 </ul>
 </td>
 </tr>
@@ -624,15 +624,39 @@
 
 <dl class="method">
 <dt id="hal_py.GateType.get_pin_groups">
-<code class="descname">get_pin_groups</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[int, str]]<a class="headerlink" href="#hal_py.GateType.get_pin_groups" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_pin_groups</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Dict[str, List[Tuple[int, str]]]<a class="headerlink" href="#hal_py.GateType.get_pin_groups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all pin groups of the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin group names to a dict from pin index to pin.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin group names to the pins of each group including their indices.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>)]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_pin_of_group_at_index">
+<code class="descname">get_pin_of_group_at_index</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>group: str</em>, <em>index: int</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.GateType.get_pin_of_group_at_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin at the specified index of the given group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the pin group.</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The index of the pin.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The pin.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -708,7 +732,7 @@
 
 <dl class="method">
 <dt id="hal_py.GateType.get_pins_of_group">
-<code class="descname">get_pins_of_group</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>group: str</em><span class="sig-paren">)</span> &#x2192; Dict[int, str]<a class="headerlink" href="#hal_py.GateType.get_pins_of_group" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_pins_of_group</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>group: str</em><span class="sig-paren">)</span> &#x2192; List[Tuple[int, str]]<a class="headerlink" href="#hal_py.GateType.get_pins_of_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all pins of the specified pin group including their indices.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -716,9 +740,9 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the pin group.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A map from pin index to pin.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pins including their indices.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>)]</td>
 </tr>
 </tbody>
 </table>
@@ -878,12 +902,12 @@
 <dl class="attribute">
 <dt id="hal_py.GateType.pin_groups">
 <code class="descname">pin_groups</code><a class="headerlink" href="#hal_py.GateType.pin_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>All pin groups of the gate type as a dict from pin group names to a dict from pin index to pin.</p>
+<dd><p>All pin groups of the gate type as a dict from pin group names to the pins of each group including their indices.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>)]]</td>
 </tr>
 </tbody>
 </table>

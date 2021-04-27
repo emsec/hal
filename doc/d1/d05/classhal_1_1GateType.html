@@ -83,7 +83,7 @@ Collaboration diagram for hal::GateType:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/dbe/classhal_1_1GateType__coll__graph.png" border="0" usemap="#hal_1_1GateType_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1GateType_coll__map" id="hal_1_1GateType_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,224,625"/>
+<area shape="rect" title=" " alt="" coords="5,5,224,655"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -151,12 +151,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7d6e8de214a2d343516b833a89f6402c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a190a58de9dce12097dcd77b56c1992d8"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#a190a58de9dce12097dcd77b56c1992d8">get_pins_of_type</a> (<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> pin_type) const</td></tr>
 <tr class="separator:a190a58de9dce12097dcd77b56c1992d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24c60656977819687c31035fd0af2206"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#a24c60656977819687c31035fd0af2206">assign_pin_group</a> (const std::string &amp;group, const std::map&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &amp;index_to_pin)</td></tr>
-<tr class="separator:a24c60656977819687c31035fd0af2206"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5479a309dd2b3dfc4513a724e9621473"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::map&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#a5479a309dd2b3dfc4513a724e9621473">get_pin_groups</a> () const</td></tr>
-<tr class="separator:a5479a309dd2b3dfc4513a724e9621473"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee4204862472f4bb7811dce0ebd33b4b"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#aee4204862472f4bb7811dce0ebd33b4b">get_pins_of_group</a> (const std::string &amp;group) const</td></tr>
-<tr class="separator:aee4204862472f4bb7811dce0ebd33b4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63d024e86e3229f92749a20749ad4e4c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#a63d024e86e3229f92749a20749ad4e4c">assign_pin_group</a> (const std::string &amp;group, const std::vector&lt; std::pair&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt;&gt; &amp;pins)</td></tr>
+<tr class="separator:a63d024e86e3229f92749a20749ad4e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa2d0c6d6a39b2bca0b78425a017303c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::vector&lt; std::pair&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#afa2d0c6d6a39b2bca0b78425a017303c">get_pin_groups</a> () const</td></tr>
+<tr class="separator:afa2d0c6d6a39b2bca0b78425a017303c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d6c35298a5297a223617dece72bc084"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#a3d6c35298a5297a223617dece72bc084">get_pins_of_group</a> (const std::string &amp;group) const</td></tr>
+<tr class="separator:a3d6c35298a5297a223617dece72bc084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3af6b20626f5c83c416879a0ad8c410"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#ae3af6b20626f5c83c416879a0ad8c410">get_pin_of_group_at_index</a> (const std::string &amp;group, const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> index) const</td></tr>
+<tr class="separator:ae3af6b20626f5c83c416879a0ad8c410"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2f8b389eecd39975b9ada96ae18cf3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#aa2f8b389eecd39975b9ada96ae18cf3e">add_boolean_function</a> (std::string name, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a> function)</td></tr>
 <tr class="separator:aa2f8b389eecd39975b9ada96ae18cf3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2c99cd64ec542bfb38b17225d5af901"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#ac2c99cd64ec542bfb38b17225d5af901">add_boolean_functions</a> (const std::unordered_map&lt; std::string, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a> &gt; &amp;functions)</td></tr>
@@ -893,8 +895,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a24c60656977819687c31035fd0af2206"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24c60656977819687c31035fd0af2206">&#9670;&nbsp;</a></span>assign_pin_group()</h2>
+<a id="a63d024e86e3229f92749a20749ad4e4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63d024e86e3229f92749a20749ad4e4c">&#9670;&nbsp;</a></span>assign_pin_group()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -908,8 +910,8 @@ Friends</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::map&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>index_to_pin</em>&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::pair&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>pins</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -922,7 +924,7 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">group</td><td>- The name of the pin group. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">index_to_pin</td><td>- A map from pin index to pin. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pins</td><td>- The pins to be added to the group including their indices. </td></tr>
   </table>
   </dd>
 </dl>
@@ -934,14 +936,14 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a5479a309dd2b3dfc4513a724e9621473"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5479a309dd2b3dfc4513a724e9621473">&#9670;&nbsp;</a></span>get_pin_groups()</h2>
+<a id="afa2d0c6d6a39b2bca0b78425a017303c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa2d0c6d6a39b2bca0b78425a017303c">&#9670;&nbsp;</a></span>get_pin_groups()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt; std::string, std::map&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &gt; hal::GateType::get_pin_groups </td>
+          <td class="memname">std::unordered_map&lt; std::string, std::vector&lt; std::pair&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &gt; &gt; hal::GateType::get_pin_groups </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -949,20 +951,20 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Get all pin groups of the gate type.</p>
-<dl class="section return"><dt>Returns</dt><dd>A map from pin group names to a map from pin index to pin. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A map from pin group names to the pins of each group including their indices. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gad09c61daaa174b451b0519d0f54a2382">hal::gate_type_init()</a>.</p>
 
 </div>
 </div>
-<a id="aee4204862472f4bb7811dce0ebd33b4b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee4204862472f4bb7811dce0ebd33b4b">&#9670;&nbsp;</a></span>get_pins_of_group()</h2>
+<a id="a3d6c35298a5297a223617dece72bc084"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d6c35298a5297a223617dece72bc084">&#9670;&nbsp;</a></span>get_pins_of_group()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::map&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; hal::GateType::get_pins_of_group </td>
+          <td class="memname">std::vector&lt; std::pair&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &gt; hal::GateType::get_pins_of_group </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>group</em></td><td>)</td>
@@ -977,7 +979,50 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A map from pin index to pin. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The pins including their indices. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gad09c61daaa174b451b0519d0f54a2382">hal::gate_type_init()</a>.</p>
+
+</div>
+</div>
+<a id="ae3af6b20626f5c83c416879a0ad8c410"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3af6b20626f5c83c416879a0ad8c410">&#9670;&nbsp;</a></span>get_pin_of_group_at_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string hal::GateType::get_pin_of_group_at_index </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>group</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the pin at the specified index of the given group.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group</td><td>- The name of the pin group. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>- The index of the pin. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pin. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gad09c61daaa174b451b0519d0f54a2382">hal::gate_type_init()</a>.</p>
 
@@ -1347,7 +1392,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 23 2021 08:58:50 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Apr 27 2021 08:28:07 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -83,7 +83,7 @@ Collaboration diagram for hal::TokenStream&lt; T &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d8/d9f/classhal_1_1TokenStream__coll__graph.png" border="0" usemap="#hal_1_1TokenStream_3_01T_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1TokenStream_3_01T_01_4_coll__map" id="hal_1_1TokenStream_3_01T_01_4_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,177,361"/>
+<area shape="rect" title=" " alt="" coords="5,5,196,376"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -108,6 +108,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a95f8c575e74c1ba56b1699278611791a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a182e918c3841294d1e3faf71556c6c41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d9d/classhal_1_1TokenStream.html#a182e918c3841294d1e3faf71556c6c41">consume_until</a> (const T &amp;expected, <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> end=<a class="el" href="../../db/d9d/classhal_1_1TokenStream.html#a059d296b9805d98e33992dd8b44c7139">END_OF_STREAM</a>, bool level_aware=true, bool throw_on_error=false)</td></tr>
 <tr class="separator:a182e918c3841294d1e3faf71556c6c41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34c3196764083342ecc1bd5ac8f65a57"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d9d/classhal_1_1TokenStream.html#a34c3196764083342ecc1bd5ac8f65a57">consume_current_line</a> ()</td></tr>
+<tr class="separator:a34c3196764083342ecc1bd5ac8f65a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abeb97a5ae00e35a6ce00d4fa211de61a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/d9d/classhal_1_1TokenStream.html">TokenStream</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d9d/classhal_1_1TokenStream.html#abeb97a5ae00e35a6ce00d4fa211de61a">extract_until</a> (const T &amp;expected, <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> end=<a class="el" href="../../db/d9d/classhal_1_1TokenStream.html#a059d296b9805d98e33992dd8b44c7139">END_OF_STREAM</a>, bool level_aware=true, bool throw_on_error=false)</td></tr>
 <tr class="separator:abeb97a5ae00e35a6ce00d4fa211de61a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cd436414ae5483c8cb37b24fffd88e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d9d/classhal_1_1TokenStream.html#a8cd436414ae5483c8cb37b24fffd88e2">join_until</a> (const T &amp;match, const T &amp;joiner, <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> end=<a class="el" href="../../db/d9d/classhal_1_1TokenStream.html#a059d296b9805d98e33992dd8b44c7139">END_OF_STREAM</a>, bool level_aware=true, bool throw_on_error=false)</td></tr>
@@ -467,6 +469,35 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The last consumed token or the last token of the stream. </dd></dl>
+
+</div>
+</div>
+<a id="a34c3196764083342ecc1bd5ac8f65a57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34c3196764083342ecc1bd5ac8f65a57">&#9670;&nbsp;</a></span>consume_current_line()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a>&lt;T&gt; <a class="el" href="../../db/d9d/classhal_1_1TokenStream.html">hal::TokenStream</a>&lt; T &gt;::consume_current_line </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Consume the entire current line and returns the last consumed token.</p>
 <dl class="section return"><dt>Returns</dt><dd>The last consumed token or the last token of the stream. </dd></dl>
 
 </div>
@@ -1035,7 +1066,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 23 2021 08:58:50 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Apr 27 2021 08:28:07 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
