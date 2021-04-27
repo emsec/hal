@@ -127,7 +127,14 @@ namespace hal
     void netlist_init(py::module& m);
 
     /**
-     * Initializes Python bindings for the HAL netlist in a python module.
+     * Initializes Python bindings for the HAL netlist serializer in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void netlist_serializer_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL netlist utils in a python module.
      *
      * @param[in] m - the python module
      */
