@@ -54,7 +54,7 @@ namespace hal
          * @param parentButton - The button to wrap.
          * @param parent - The parent widget.
          */
-        ExpandingListItem(ExpandingListButton* but, QWidget* parent = 0);
+        ExpandingListItem(ExpandingListButton* but, QWidget* parent = nullptr);
 
         /**
          * Overwritten Qt-function. Returns the recommended minimum size for the item.

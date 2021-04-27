@@ -36,7 +36,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit PreviewWidget(QWidget* parent = 0);
+        explicit PreviewWidget(QWidget* parent = nullptr);
 
         virtual void update(const QVariant& value) = 0;
 

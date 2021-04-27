@@ -90,8 +90,9 @@ namespace hal
         void setShortcut(const QKeySequence &shortcut);
 
     private:
+	void updateTooltip(const QKeySequence& seq);
+
         QString mDescriptionText;
-        void updateTooltip(const QKeySequence& seq);
         bool mTooltipModified;
 
     };

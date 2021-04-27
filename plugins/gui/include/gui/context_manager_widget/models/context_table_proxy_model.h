@@ -39,7 +39,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        ContextTableProxyModel(QObject* parent = 0);
+        ContextTableProxyModel(QObject* parent = nullptr);
         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 
     public Q_SLOTS:

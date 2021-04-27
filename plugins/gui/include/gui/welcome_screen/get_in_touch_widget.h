@@ -90,9 +90,5 @@ namespace hal
         GetInTouchItem* mCppDocumentationItem;
         GetInTouchItem* mPyDocumentationItem;
         GetInTouchItem* mTicketItem;
-
-        //    QFrame* m_line;
-        QLabel* mCoreVersionLabel;
-        QLabel* mGuiVersionLabel;
     };
 }

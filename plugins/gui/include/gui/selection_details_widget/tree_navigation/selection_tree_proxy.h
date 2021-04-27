@@ -47,7 +47,7 @@ namespace hal
          *
          * @param parent - The model's parent.
          */
-        SelectionTreeProxyModel(QObject* parent = 0);
+        SelectionTreeProxyModel(QObject* parent = nullptr);
 
         /**
          * Calls the suppressedByFilter() function to get all items that should not be displayed

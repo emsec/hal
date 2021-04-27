@@ -24,6 +24,7 @@
 #pragma once
 
 #include "gui/settings/settings_widgets/settings_widget.h"
+
 #include <QComboBox>
 #include <QStringList>
 
@@ -39,16 +40,17 @@ namespace hal
         Q_OBJECT
 
     public:
-        SettingsWidgetDropdown(SettingsItemDropdown* item, QWidget* parent = 0);
+        SettingsWidgetDropdown(SettingsItemDropdown* item, QWidget* parent = nullptr);
 
-        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-        virtual QVariant value() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) override;
+        virtual QVariant value() override;
 
     private:
+        void on_index_changed(QString text);
+
         SettingsItemDropdown* mSettingsItem;
         QStringList mOptions;
         QComboBox* mComboBox;
-        void on_index_changed(QString text);
 
     };
 }

@@ -49,8 +49,8 @@ namespace hal
         int columnCount(const QModelIndex& parent = QModelIndex()) const override;
         QVariant data(const QModelIndex& inddex, int role = Qt::DisplayRole) const override;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-        void addContext(GraphContext* gc);
-        void removeContext(GraphContext* gc);
+        void addContext(GraphContext* context);
+        void removeContext(GraphContext* context);
 
         GraphContext* getContext(const QModelIndex& index) const;
         QModelIndex getIndex(GraphContext* context) const;

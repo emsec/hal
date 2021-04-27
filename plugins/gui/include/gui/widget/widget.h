@@ -45,7 +45,7 @@ namespace hal
          *
          * @param parent - The parent widget
          */
-        explicit Widget(QWidget* parent = 0);
+        explicit Widget(QWidget* parent = nullptr);
 
         /**
          * Sets the parent of the widget to the specified widget. Overrides QWidget::setParent to emit the signal

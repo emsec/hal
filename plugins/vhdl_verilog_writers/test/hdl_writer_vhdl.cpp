@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "netlist_test_utils.h"
 #include "hal_core/netlist/netlist_factory.h"
-#include "vhdl_verilog_parsers/hdl_parser_vhdl.h"
+#include "vhdl_parser/vhdl_parser.h"
 #include "vhdl_verilog_writers/hdl_writer_vhdl.h"
 
 namespace hal {
@@ -27,7 +27,7 @@ namespace hal {
 
     /**
      * Testing to write a given netlist in a sstream and parses it after, with
-     * the HDLParserVHDL.
+     * the VHDLParser.
      * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
      * the issue isn't within the parser, but in the writer...
      *
@@ -55,10 +55,11 @@ namespace hal {
 
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser;
+                VHDLParser vhdl_parser;
 
                 // Parse the .vhdl file
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -115,9 +116,10 @@ namespace hal {
                 bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser;
+                VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -149,9 +151,10 @@ namespace hal {
                 bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser;
+                VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -170,7 +173,7 @@ namespace hal {
     /**
      * Testing the storage of generic data within gates
      *
-     * IMPORTANT: If an error occurs, first run the HDLParserVHDL test to check, that
+     * IMPORTANT: If an error occurs, first run the VHDLParser test to check, that
      * the issue isn't within the parser, but in the writer...
      *
      * Functions: write, parse
@@ -223,10 +226,10 @@ namespace hal {
                 global_in->add_destination(test_gate_6, "I");
 
                 // Store some data in the test_gate
-                test_gate_0->set_data("generic", "1_key_bit_vector", "bit_vector", "123abc");
-                test_gate_0->set_data("generic", "2_key_bit_vector", "bit_vector", "456def");
+                test_gate_0->set_data("generic", "1_key_bit_vector", "bit_vector", "123ABC");
+                test_gate_0->set_data("generic", "2_key_bit_vector", "bit_vector", "456DEF");
 
-                test_gate_1->set_data("generic", "0_key_bit_vector", "bit_vector", "123abc");
+                test_gate_1->set_data("generic", "0_key_bit_vector", "bit_vector", "123ABC");
                 test_gate_1->set_data("generic", "1_key_string", "string", "one_two_three");
 
                 test_gate_2->set_data("generic", "0_key_string", "string", "one_two_three");
@@ -239,10 +242,10 @@ namespace hal {
                 // test_gate_4->set_data("generic", "1_key_time", "time", "123s"); //ISSUE: generic, time can't be stored
 
                 test_gate_5->set_data("generic", "0_key_invalid", "invalid", "ignore_me"); // Should be ignored
-                test_gate_5->set_data("generic", "1_key_bit_vector", "bit_vector", "1");
+                test_gate_5->set_data("generic", "0_key_bit_value", "bit_value", "1");
 
-                //test_gate_6->set_data("generic", "0_key_bit_value", "bit_value", "10101100");// ISSUE: bit_values are not stored correctly?
-                //test_gate_6->set_data("generic", "1_key_bit_value", "bit_value", "01010011");// ISSUE: bit_values are not stored correctly?
+                test_gate_6->set_data("generic", "0_key_bit_vector", "bit_vector", "10101100");// ISSUE: bit_values are not stored correctly?
+                test_gate_6->set_data("generic", "0_key_bit_vector", "bit_vector", "01010011");// ISSUE: bit_values are not stored correctly?
 
                 // Write and parse the netlist
                 std::stringstream parser_input;
@@ -252,10 +255,11 @@ namespace hal {
                 bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser;
+                VHDLParser vhdl_parser;
 
                 // Parse the .vhdl file
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -296,7 +300,7 @@ namespace hal {
     /**
      * Testing the handling of Net names which contains only digits (i.e. 123 should become NET_123)
      *
-     * IMPORTANT: If an error occurs, first run the HDLParserVHDL test to check, that
+     * IMPORTANT: If an error occurs, first run the VHDLParser test to check, that
      * the issue isn't within the parser, but in the writer...
      *
      * Functions: write, parse
@@ -318,10 +322,11 @@ namespace hal {
                 bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser;
+                VHDLParser vhdl_parser;
 
                 // Parse the .vhdl file
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -339,7 +344,7 @@ namespace hal {
      * Special characters: '(', ')', ',', ', ', '/', '\', '[', ']', '<', '>', '__', '_'
      * Other special cases: only digits, '_' at the beginning or at the end
      *
-     * IMPORTANT: If an error occurs, first run the HDLParserVHDL test to check, that
+     * IMPORTANT: If an error occurs, first run the VHDLParser test to check, that
      * the issue isn't within the parser, but in the writer...
      *
      * Functions: write, parse
@@ -392,9 +397,10 @@ namespace hal {
                 bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser;
+                VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -462,9 +468,10 @@ namespace hal {
                 bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser;
+                VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -486,7 +493,7 @@ namespace hal {
     /**
      * Testing the handling of collisions with Gate and Net names
      *
-     * IMPORTANT: If an error occurs, first run the HDLParserVHDL test to check, that
+     * IMPORTANT: If an error occurs, first run the VHDLParser test to check, that
      * the issue isn't within the parser, but in the writer...
      *
      * Functions: write, parse
@@ -512,10 +519,11 @@ namespace hal {
                 bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser;
+                VHDLParser vhdl_parser;
 
                 // Parse the .vhdl file
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -530,7 +538,7 @@ namespace hal {
     /**
      * Testing the handling of vcc and gnd gates (ONE and ZERO)
      *
-     * IMPORTANT: If an error occurs, first run the HDLParserVHDL test to check, that
+     * IMPORTANT: If an error occurs, first run the VHDLParser test to check, that
      * the issue isn't within the parser, but in the writer...
      *
      * Functions: write, parse
@@ -567,9 +575,10 @@ namespace hal {
                 bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser;
+                VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -624,9 +633,10 @@ namespace hal {
                 bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser;
+                VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
                 Gate* global_gnd = test_utils::get_gate_by_subname(parsed_nl.get(), "global_gnd");

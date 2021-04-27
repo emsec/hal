@@ -53,7 +53,7 @@ namespace hal
          *
          * @param parent - The widget's parent.
          */
-        FileModifiedBar(QWidget* parent = 0);
+        FileModifiedBar(QWidget* parent = nullptr);
 
         /**
          * Not implemented. Probably intented to show custom messages when the underlying

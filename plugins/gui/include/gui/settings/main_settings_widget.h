@@ -66,7 +66,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit MainSettingsWidget(QWidget* parent = 0);
+        explicit MainSettingsWidget(QWidget* parent = nullptr);
         bool handleAboutToClose();
         void activate();
         void showAllSettings();

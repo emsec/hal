@@ -53,6 +53,9 @@ namespace hal
     class DockButton : public QToolButton
     {
         Q_OBJECT
+        Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor)
+        Q_PROPERTY(QColor checkedColor READ checkedColor WRITE setCheckedColor)
+        Q_PROPERTY(QColor hoverColor READ hoverColor WRITE setHoverColor)
 
     public:
         /**
@@ -66,6 +69,39 @@ namespace hal
         DockButton(ContentWidget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent);
 
         void paintEvent(QPaintEvent* event) override;
+
+        /**
+         * Returns the text color
+         */
+        QColor textColor();
+
+        /**
+         * Returns the checked color
+         */
+        QColor checkedColor();
+
+        /**
+         * Returns the hover color
+         */
+        QColor hoverColor();
+
+        /**
+         * Set the text color
+         * @param color -  The new color.
+         */
+        void setTextColor(const QColor& color);
+
+        /**
+         * Set the checked color
+         * @param color -  The new color.
+         */
+        void setCheckedColor(const QColor& color);
+
+        /**
+         * Set the hover color
+         * @param color -  The new color.
+         */
+        void setHoverColor(const QColor& color);
 
         /**
          * Calculates its size and sets the height and width as fixed values.
@@ -152,5 +188,9 @@ namespace hal
         int mHeightPadding;
         bool mHidden;
         bool mAvailable = true;
+
+        QColor mTextColor;
+        QColor mCheckedColor;
+        QColor mHoverColor;
     };
 }

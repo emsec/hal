@@ -60,7 +60,7 @@ namespace hal
          *
          * @param parent - The model's parent.
          */
-        SelectionTreeModel(QObject* parent = 0);
+        SelectionTreeModel(QObject* parent = nullptr);
 
         /**
           * The destructor.

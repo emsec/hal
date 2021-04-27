@@ -50,19 +50,14 @@ namespace hal
         {
         }
 
-        const std::string mMsg;    // USE QSTRING HERE
+        const std::string mMsg;
         const spdlog::level::level_enum mMsgType;
     };
 
     static const int sMaxEntries = 1000;
 
-    // Does not serve any moment as of this moment.
     struct LogChannel
     {
-        //    LogChannel(const QString& name) : mName(name)
-        //    {
-        //    }
-
         const QString mName;
 
         ChannelEntry mEntries[sMaxEntries];

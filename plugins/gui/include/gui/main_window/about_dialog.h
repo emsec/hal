@@ -47,7 +47,7 @@ namespace hal
          *
          * @param parent - The parent widget.
          */
-        explicit AboutDialog(QWidget* parent = 0);
+        explicit AboutDialog(QWidget* parent = nullptr);
 
     private:
         QVBoxLayout mContentLayout;

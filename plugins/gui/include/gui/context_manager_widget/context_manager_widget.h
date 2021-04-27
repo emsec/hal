@@ -173,7 +173,7 @@ namespace hal
         void handleDeleteContextClicked();
 
         void handleContextMenuRequest(const QPoint& point);
-        void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+        void handleSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
         void handleFilterTextChanged(const QString& filter_text);
 
         void setToolbarButtonsEnabled(bool enabled);

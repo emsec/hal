@@ -31,6 +31,16 @@
  */
 
 /**
+ * @defgroup netlist_parser Netlist Parser
+ * @ingroup netlist
+ */
+
+/**
+ * @defgroup netlist_writer Netlist Writer
+ * @ingroup netlist
+ */
+
+/**
  * @defgroup gate_lib Gate Library
  * @ingroup netlist
  */
@@ -52,16 +62,6 @@
 
 /**
  * @defgroup events Event System
- * @ingroup netlist
- */
-
-/**
- * @defgroup netlist_parser Netlist Parser
- * @ingroup netlist
- */
-
-/**
- * @defgroup netlist_writer Netlist Writer
  * @ingroup netlist
  */
 

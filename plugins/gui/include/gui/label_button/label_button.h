@@ -45,7 +45,7 @@ namespace hal
          * @param parent - The parent widget
          * @param f - The WindowFlags that are passed to the QWidget constructor
          */
-        explicit LabelButton(QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+        explicit LabelButton(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
         /**
          * Constructor.
@@ -54,7 +54,7 @@ namespace hal
          * @param parent - The parent widget
          * @param f - The WindowFlags that are passed to the QWidget constructor
          */
-        explicit LabelButton(const QString& text, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+        explicit LabelButton(const QString& text, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
     Q_SIGNALS:
         /**

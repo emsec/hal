@@ -17,8 +17,7 @@ namespace hal
           mForumItem(new GetInTouchItem("Get in touch", "Check out the forum and so on and so on i dont know what to write here")),
           mCppDocumentationItem(new GetInTouchItem("Open C++ Documentation", "Check out the C++ documentation of the HAL core to develop your own plugins")),
           mPyDocumentationItem(new GetInTouchItem("Open Python Documentation", "Check out the Python documentation of HAL")),
-          mTicketItem(new GetInTouchItem("Found a bug ?", "Submit a bug report or feature request to our public tracker")), mCoreVersionLabel(new QLabel()),
-          mGuiVersionLabel(new QLabel())
+          mTicketItem(new GetInTouchItem("Found a bug ?", "Submit a bug report or feature request to our public tracker"))
     {
         connect(mAboutItem, &GetInTouchItem::clicked, this, &GetInTouchWidget::handleAboutItemClicked);
         connect(mCppDocumentationItem, &GetInTouchItem::clicked, this, &GetInTouchWidget::handleCppDocumentationItemClicked);
@@ -46,18 +45,6 @@ namespace hal
         mTicketItem->setObjectName("ticket_item");
         mTicketItem->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-        // LOOKS DUMB THINK OF SOMETHING BETTER OR DISCARD
-        mCoreVersionLabel->setObjectName("core-version-label");
-        mCoreVersionLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        mCoreVersionLabel->setAlignment(Qt::AlignCenter);
-        //mCoreVersionLabel->setText("HAL Core Version 1.36.14 - <font color='#84d300'>89 Days old</font>");
-        mCoreVersionLabel->setText("<font color='#292b2d'>HAL Core Version 1.36.14 - 03.08.2018</font>");
-
-        mGuiVersionLabel->setObjectName("gui-version-label");
-        mGuiVersionLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        mGuiVersionLabel->setAlignment(Qt::AlignCenter);
-        mGuiVersionLabel->setText("<font color='#292b2d'>HAL GUI Version 1.33.7 - 03.08.2018</font>");
-
         setLayout(mLayout);
         mLayout->addWidget(mAboutItem);
         //    mLayout->addWidget(mNewsItem);
@@ -65,9 +52,6 @@ namespace hal
         mLayout->addWidget(mCppDocumentationItem);
         mLayout->addWidget(mPyDocumentationItem);
         mLayout->addWidget(mTicketItem);
-        //    mLayout->addWidget(mCoreVersionLabel, Qt::AlignBottom);
-        //    mLayout->setAlignment(mCoreVersionLabel, Qt::AlignBottom);
-        //    mLayout->addWidget(mGuiVersionLabel);
 
         repolish();
     }
@@ -103,7 +87,6 @@ namespace hal
 
     void GetInTouchWidget::handleAboutItemClicked()
     {
-
     }
 
     void GetInTouchWidget::handleCppDocumentationItemClicked()

@@ -53,7 +53,7 @@ namespace hal
          * @param edit - The QPlainTextEdit of the LoggerWidget this LoggerMarshall should belong to.
          * @param parent - The parent widget
          */
-        explicit LoggerMarshall(QPlainTextEdit* edit, QObject* parent = 0);
+        explicit LoggerMarshall(QPlainTextEdit* edit, QObject* parent = nullptr);
 
     Q_SIGNALS:
 

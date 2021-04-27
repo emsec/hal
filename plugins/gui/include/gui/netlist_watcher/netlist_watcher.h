@@ -48,7 +48,7 @@ namespace hal
          *
          * @param parent - The parent object
          */
-        NetlistWatcher(QObject* parent = 0);
+        NetlistWatcher(QObject* parent = nullptr);
 
         /**
          * Destructor.
