@@ -32,8 +32,8 @@ namespace hal
         Q_OBJECT
 
     public:
-        LineEdit(QWidget* parent = 0);
-        LineEdit(const QString& contents, QWidget* parent = 0);
+        LineEdit(QWidget* parent = nullptr);
+        LineEdit(const QString& contents, QWidget* parent = nullptr);
 
     public Q_SLOTS:
         void handleTextChanged(const QString& text);

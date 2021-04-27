@@ -37,7 +37,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit PluginManagerWidget(QWidget* parent = 0);
+        explicit PluginManagerWidget(QWidget* parent = nullptr);
         void setPluginModel(PluginModel* mPluginModel);
         virtual void setupToolbar(Toolbar* Toolbar);
 

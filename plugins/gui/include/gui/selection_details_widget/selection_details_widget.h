@@ -72,7 +72,7 @@ namespace hal
          *
          * @param parent - The widget's parent.
          */
-        SelectionDetailsWidget(QWidget* parent = 0);
+        SelectionDetailsWidget(QWidget* parent = nullptr);
         void clear(); //delete later, does not even exist in the cpp...
 
         /**

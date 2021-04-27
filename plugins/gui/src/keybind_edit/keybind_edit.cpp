@@ -15,10 +15,7 @@ namespace hal
 
     void KeybindEdit::setHasGrab(bool isgrab)
     {
-        if (isgrab==mGrab) return;
         mGrab = isgrab;
-
-        setStyleSheet(QString("background: rgb(0,0,%1);").arg(mGrab ? 40 : 0));
 
         QStyle* s = style();
         s->unpolish(this);

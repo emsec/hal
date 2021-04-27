@@ -33,8 +33,8 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit LabelButton(QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
-        explicit LabelButton(const QString& text, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+        explicit LabelButton(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+        explicit LabelButton(const QString& text, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
     Q_SIGNALS:
         void clicked();

@@ -40,7 +40,7 @@ namespace hal
         Q_PROPERTY(int fixedHeight READ fixedHeight WRITE setFixedHeight)
 
     public:
-        ExpandingListItem(ExpandingListButton* but, QWidget* parent = 0);
+        ExpandingListItem(ExpandingListButton* but, QWidget* parent = nullptr);
 
         virtual QSize minimumSizeHint() const override;
         virtual QSize sizeHint() const override;

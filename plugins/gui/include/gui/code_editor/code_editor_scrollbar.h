@@ -24,6 +24,7 @@
 #pragma once
 
 #include <QScrollBar>
+
 namespace hal
 {
     class MinimapScrollbar;

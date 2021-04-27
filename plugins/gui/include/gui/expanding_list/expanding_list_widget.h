@@ -50,7 +50,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        ExpandingListWidget(QWidget* parent = 0);
+        ExpandingListWidget(QWidget* parent = nullptr);
 
         //    bool eventFilter(QObject* object, QEvent* event) override;
 

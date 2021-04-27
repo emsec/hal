@@ -1,11 +1,12 @@
 #pragma once
 
+#include "hal_core/defines.h"
+
 #include <QPoint>
 #include <QHash>
 #include <QSet>
 #include <map>
 #include <limits.h>
-#include "hal_core/defines.h"
 
 uint qHash(const QPoint& pnt);
 

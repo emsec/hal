@@ -33,7 +33,7 @@ namespace hal
     {
         Q_OBJECT
     public:
-        NetlistWatcher(QObject* parent = 0);
+        NetlistWatcher(QObject* parent = nullptr);
         ~NetlistWatcher();
 
         void reset();

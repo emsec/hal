@@ -38,7 +38,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        FileModifiedBar(QWidget* parent = 0);
+        FileModifiedBar(QWidget* parent = nullptr);
 
         void setMessage(QString message);
 

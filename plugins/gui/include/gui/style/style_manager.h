@@ -30,7 +30,6 @@ class QApplication;
 namespace hal
 {
     class GraphicsQssAdapter;
-    class NotificationManagerQssAdapter;
     class PythonQssAdapter;
     class SharedPropertiesQssAdapter;
     class VhdlQssAdapter;
@@ -42,25 +41,18 @@ namespace hal
     public:
         static StyleManager* get_instance();
 
-        ~StyleManager();
-
         StyleManager(StyleManager const&) = delete;
         void operator=(StyleManager const&) = delete;
 
-        void updateStyle();
-
         const SharedPropertiesQssAdapter* sharedProperties() const;
-        const NotificationManagerQssAdapter* NotificationManager() const;
         const PythonQssAdapter* PythonSyntaxHighlighter() const;
         const VhdlQssAdapter* VhdlSyntaxHighlighter() const;
 
     private:
         explicit StyleManager(QObject* parent = nullptr);
-        void setDefault(QApplication* app);
 
         GraphicsQssAdapter* mGraphicsQssAdapter;
         SharedPropertiesQssAdapter* mSharedProperties;
-        NotificationManagerQssAdapter* mNotificationManager;
         PythonQssAdapter* mPythonSyntaxHighlighter;
         VhdlQssAdapter* mVhdlSyntaxHighlighter;
     };

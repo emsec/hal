@@ -2,16 +2,16 @@
 
 #include <QStyledItemDelegate>
 
-namespace hal {
+namespace hal
+{
     class GroupingColorDelegate : public QStyledItemDelegate
     {
         Q_OBJECT
 
-
     public:
-        GroupingColorDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) {;}
+        GroupingColorDelegate(QObject* parent = nullptr) : QStyledItemDelegate(parent) {;}
 
-        void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-        QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+        void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+        QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override;
     };
 }

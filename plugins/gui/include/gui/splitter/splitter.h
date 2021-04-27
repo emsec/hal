@@ -32,7 +32,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit Splitter(Qt::Orientation orientation, QWidget* parent = 0);
+        explicit Splitter(Qt::Orientation orientation, QWidget* parent = nullptr);
 
         bool unused();
     };

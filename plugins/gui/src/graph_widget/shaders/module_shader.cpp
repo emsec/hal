@@ -7,9 +7,16 @@
 
 namespace hal
 {
+    QColor ModuleShader::sDebugNetColor = QColor(200, 200, 200);
+
     ModuleShader::ModuleShader(const GraphContext* const context) : GraphShader(context),
         mColorGates(true) // INITIALIZE WITH DEFAULT VALUE FROM SETTINGS
     {
+    }
+
+    void ModuleShader::debugSetNetColor(const QColor& color)
+    {
+        sDebugNetColor = color;
     }
 
     void ModuleShader::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
@@ -60,7 +67,7 @@ namespace hal
         // DEBUG CODE
         for (const u32& id : mContext->nets())
         {
-            GraphicsNet::Visuals v{true, QColor(200, 200, 200), Qt::SolidLine, true, QColor(100, 100, 100), Qt::SolidPattern};
+            GraphicsNet::Visuals v{true, sDebugNetColor, Qt::SolidLine, true, QColor(100, 100, 100), Qt::SolidPattern};
             mShading.mNetVisuals.insert(id, v);
         }
     }

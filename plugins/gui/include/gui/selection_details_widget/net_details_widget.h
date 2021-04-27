@@ -64,7 +64,7 @@ namespace hal
          *
          * @param parent - The widget's parent.
          */
-        NetDetailsWidget(QWidget* parent = 0);
+        NetDetailsWidget(QWidget* parent = nullptr);
 
         /**
           * The destructor.

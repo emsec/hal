@@ -1,6 +1,6 @@
+#include "gui/gui_globals.h"
 #include "gui/selection_details_widget/disputed_big_icon.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
-#include "gui/gui_globals.h"
 
 namespace hal
 {
@@ -13,7 +13,7 @@ namespace hal
                 "Specifies wheter an big icon representing the current selection is shown in the Selection Details Widget."
                 );
 
-    DisputedBigIcon::DisputedBigIcon(const QString &iconName, QWidget *parent)
+    DisputedBigIcon::DisputedBigIcon(const QString& iconName, QWidget* parent)
         : QLabel(parent)
     {
         mIsVisible = sShowIconSetting->value().toBool();
