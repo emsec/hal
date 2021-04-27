@@ -559,7 +559,9 @@ namespace hal
 
                 ports_stream.consume("(", true);
 
-                module.m_port_ident_to_expr[port_identifier] = ports_stream.consume().string;
+                std::string port_expression = ports_stream.consume().string;
+                module.m_port_expressions.insert(port_expression);
+                module.m_port_ident_to_expr[port_identifier] = port_expression;
 
                 ports_stream.consume(")", true);
             }
@@ -696,7 +698,7 @@ namespace hal
         do
         {
             Token<std::string> signal_name = signal_stream.consume();
-            if (signal_stream.peek() == "=")
+            if (signal_stream.remaining() > 0 && signal_stream.peek() == "=")
             {
                 TokenStream<std::string> left_stream(std::vector<Token<std::string>>({signal_name}));
                 signal_stream.consume("=", true);

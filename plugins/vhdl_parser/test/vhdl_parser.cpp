@@ -612,18 +612,18 @@ namespace hal {
                   */
 
                 std::string netlist_input("-- Device\t: device_name\n"
-                                        "entity ENT_CHILD is "
-                                        "  attribute child_attri : string; "
-                                        "  attribute child_attri of ENT_CHILD : entity is \"child_attribute\"; "
+                                        "entity MODULE_CHILD is "
+                                        "  attribute child_attribute : string; "
+                                        "  attribute child_attribute of MODULE_CHILD : entity is \"child_attribute_value\"; "
                                         "  port ( "
                                         "    child_in : in STD_LOGIC; "
                                         "    child_out : out STD_LOGIC "
                                         "  ); "
-                                        "end ENT_CHILD; "
-                                        "architecture STRUCTURE_CHILD of ENT_CHILD is "
+                                        "end MODULE_CHILD; "
+                                        "architecture STRUCTURE_CHILD of MODULE_CHILD is "
                                         "  signal net_0_child : STD_LOGIC; "
-                                        "  attribute child_net_attri : string; "
-                                        "  attribute child_net_attri of child_in : signal is \"child_net_attribute\"; "
+                                        "  attribute child_net_attribute : string; "
+                                        "  attribute child_net_attribute of child_in : signal is \"child_net_attribute_value\"; "
                                         "begin "
                                         "  gate_0_child : gate_1_to_1 "
                                         "    port map ( "
@@ -637,13 +637,13 @@ namespace hal {
                                         "    ); "
                                         "end STRUCTURE_CHILD; "
                                         ""
-                                        "entity ENT_TOP is "
+                                        "entity MODULE_TOP is "
                                         "  port ( "
                                         "    net_global_in : in STD_LOGIC; "
                                         "    net_global_out : out STD_LOGIC "
                                         "  ); "
-                                        "end ENT_TOP; "
-                                        "architecture STRUCTURE of ENT_TOP is "
+                                        "end MODULE_TOP; "
+                                        "architecture STRUCTURE of MODULE_TOP is "
                                         "  signal net_0 : STD_LOGIC; "
                                         "  signal net_1 : STD_LOGIC; "
                                         " "
@@ -653,7 +653,7 @@ namespace hal {
                                         "      I => net_global_in, "
                                         "      O => net_0 "
                                         "    ); "
-                                        "  child_mod : ENT_CHILD "
+                                        "  child_mod : MODULE_CHILD "
                                         "    port map ( "
                                         "      child_in => net_0, "
                                         "      child_out => net_1 "
@@ -664,24 +664,22 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end ENT_TOP;");
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
                 std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                // Test that all gates are created
                 ASSERT_NE(nl, nullptr);
+
+                // check gates
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).size(), 1);
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
                 Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
-                Gate*
-                    gate_0_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).begin();
-                Gate*
-                    gate_1_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).begin();
+                Gate* gate_0_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).begin();
+                Gate* gate_1_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).begin();
 
-                // Test that all nets are created
+                // check nets
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_1")).size(), 1);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_global_in")).size(), 1);
@@ -689,13 +687,11 @@ namespace hal {
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0_child")).size(), 1);
                 Net* net_0 = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
                 Net* net_1 = *nl->get_nets(test_utils::net_name_filter("net_1")).begin();
-                Net*
-                    net_global_in = *nl->get_nets(test_utils::net_name_filter("net_global_in")).begin();
-                Net*
-                    net_global_out = *nl->get_nets(test_utils::net_name_filter("net_global_out")).begin();
+                Net* net_global_in = *nl->get_nets(test_utils::net_name_filter("net_global_in")).begin();
+                Net* net_global_out = *nl->get_nets(test_utils::net_name_filter("net_global_out")).begin();
                 Net* net_0_child = *nl->get_nets(test_utils::net_name_filter("net_0_child")).begin();
 
-                // Test that all nets are connected correctly
+                // check connections
                 EXPECT_EQ(gate_0->get_fan_in_net("I"), net_global_in);
                 EXPECT_EQ(gate_0->get_fan_out_net("O"), net_0);
                 EXPECT_EQ(gate_1->get_fan_in_net("I"), net_1);
@@ -704,19 +700,24 @@ namespace hal {
                 EXPECT_EQ(gate_0_child->get_fan_out_net("O"), net_0_child);
                 EXPECT_EQ(gate_1_child->get_fan_in_net("I"), net_0_child);
                 EXPECT_EQ(gate_1_child->get_fan_out_net("O"), net_1);
-                // Check that the attributes of the child entities port are inherit correctly to the connecting Net
-                EXPECT_EQ(net_0->get_data("attribute", "child_net_attri"),
-                          std::make_tuple("string", "child_net_attribute"));
 
-                // Test that the modules are created and assigned correctly
+                // check modules
                 Module* top_mod = nl->get_top_module();
+                ASSERT_NE(top_mod, nullptr);
+                EXPECT_TRUE(top_mod->is_top_module());
+                EXPECT_EQ(top_mod->get_name(), "top_module");
+                EXPECT_EQ(top_mod->get_type(), "MODULE_TOP");
                 ASSERT_EQ(top_mod->get_submodules().size(), 1);
                 Module* child_mod = *top_mod->get_submodules().begin();
+                ASSERT_NE(child_mod, nullptr);
                 EXPECT_EQ(child_mod->get_name(), "child_mod");
+                EXPECT_EQ(child_mod->get_type(), "MODULE_CHILD");
                 EXPECT_EQ(top_mod->get_gates(), std::vector<Gate*>({gate_0, gate_1}));
                 EXPECT_EQ(child_mod->get_gates(), std::vector<Gate*>({gate_0_child, gate_1_child}));
-                EXPECT_EQ(child_mod->get_data("attribute", "child_attri"),
-                          std::make_tuple("string", "child_attribute"));
+
+                // check attributes
+                EXPECT_EQ(net_0->get_data("attribute", "child_net_attribute"), std::make_tuple("string", "child_net_attribute_value"));
+                EXPECT_EQ(child_mod->get_data("attribute", "child_attribute"), std::make_tuple("string", "child_attribute_value"));
             }
             {
                 // Create a netlist with the following MODULE hierarchy (assigned gates in '()'):
