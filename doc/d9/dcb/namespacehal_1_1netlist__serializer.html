@@ -76,14 +76,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:af85c01794d3aaf5f25f970e2465d69b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dcb/namespacehal_1_1netlist__serializer.html#af85c01794d3aaf5f25f970e2465d69b9">serialize_to_file</a> (<a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> *nl, const std::filesystem::path &amp;hal_file)</td></tr>
-<tr class="separator:af85c01794d3aaf5f25f970e2465d69b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63249f21dc5a85566aa6537c4d7bbdb3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dcb/namespacehal_1_1netlist__serializer.html#a63249f21dc5a85566aa6537c4d7bbdb3">serialize_to_file</a> (<a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> *netlist, const std::filesystem::path &amp;hal_file)</td></tr>
+<tr class="separator:a63249f21dc5a85566aa6537c4d7bbdb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae74f82d776171fbdf0d63e3f8b918eb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> std::unique_ptr&lt; <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dcb/namespacehal_1_1netlist__serializer.html#ae74f82d776171fbdf0d63e3f8b918eb1">deserialize_from_file</a> (const std::filesystem::path &amp;hal_file)</td></tr>
 <tr class="separator:ae74f82d776171fbdf0d63e3f8b918eb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="af85c01794d3aaf5f25f970e2465d69b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af85c01794d3aaf5f25f970e2465d69b9">&#9670;&nbsp;</a></span>serialize_to_file()</h2>
+<a id="a63249f21dc5a85566aa6537c4d7bbdb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63249f21dc5a85566aa6537c4d7bbdb3">&#9670;&nbsp;</a></span>serialize_to_file()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -92,7 +92,7 @@ Functions</h2></td></tr>
           <td class="memname">bool hal::netlist_serializer::serialize_to_file </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> *&#160;</td>
-          <td class="paramname"><em>nl</em>, </td>
+          <td class="paramname"><em>netlist</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -107,18 +107,19 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Serializes a netlist into a .hal file.<br  />
- Invokes the <a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html">hal_file_manager</a> and all associated callbacks.</p>
+<p>Serializes a netlist into a .hal file.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist to serialize. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">hal_file</td><td>- The file to serialize to. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">netlist</td><td>- The netlist to serialize. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hal_file</td><td>- The destination .hal file. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d4/d84/netlist__serializer_8cpp.html#a2abf3f6130ba2e37b47ff418fe01ec3e">DURATION</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, and <a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a9b47eacaed4789f9b59edfff7653b78c">hal::hal_file_manager::serialize()</a>.</p>
+<p class="reference">References <a class="el" href="../../d1/d8e/netlist_2persistent_2netlist__serializer_8cpp.html#a2abf3f6130ba2e37b47ff418fe01ec3e">DURATION</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, and <a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a9b47eacaed4789f9b59edfff7653b78c">hal::hal_file_manager::serialize()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga4294dbde61031dc6505415b4c0efd3f9">hal::netlist_serializer_init()</a>.</p>
 
 </div>
 </div>
@@ -137,26 +138,25 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Deserializes a netlist from a .hal file.<br  />
- Invokes the <a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html">hal_file_manager</a> and all associated callbacks.</p>
+<p>Deserializes a netlist from a .hal file.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hal_file</td><td>- The file to deserialize from. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hal_file</td><td>- The source .hal file. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The deserialized netlist. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">hal::buffer</a>, <a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a3e315518469b1dc3a7a28df27fcb03f6">hal::hal_file_manager::deserialize()</a>, <a class="el" href="../../d4/d84/netlist__serializer_8cpp.html#a2abf3f6130ba2e37b47ff418fe01ec3e">DURATION</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, and <a class="el" href="../../dc/d39/group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>.</p>
+<p class="reference">References <a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">hal::buffer</a>, <a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a3e315518469b1dc3a7a28df27fcb03f6">hal::hal_file_manager::deserialize()</a>, <a class="el" href="../../d1/d8e/netlist_2persistent_2netlist__serializer_8cpp.html#a2abf3f6130ba2e37b47ff418fe01ec3e">DURATION</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, and <a class="el" href="../../dc/d39/group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="../../d6/dee/namespacehal_1_1netlist__factory.html#aa862529dfde4a86b0880d2ae42aece08">hal::netlist_factory::load_netlist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d6/dee/namespacehal_1_1netlist__factory.html#aa862529dfde4a86b0880d2ae42aece08">hal::netlist_factory::load_netlist()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#ga4294dbde61031dc6505415b4c0efd3f9">hal::netlist_serializer_init()</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Apr 27 2021 13:52:34 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Apr 27 2021 15:51:49 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -24,5 +24,5 @@ var searchData=
   ['dsp_108',['dsp',['../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caaa9bfcbd77aed59d33d77710050ce42d6',1,'hal']]],
   ['dst_5fadded_109',['dst_added',['../da/ddd/namespacehal_1_1net__event__handler.html#afd5006dc61f74916461dc0647567fed9a6c17badd2f9cb7e22a76cdff6eef71ed',1,'hal::net_event_handler']]],
   ['dst_5fremoved_110',['dst_removed',['../da/ddd/namespacehal_1_1net__event__handler.html#afd5006dc61f74916461dc0647567fed9abfac9037041348606e61b6147fbe024a',1,'hal::net_event_handler']]],
-  ['duration_111',['DURATION',['../d4/d84/netlist__serializer_8cpp.html#a2abf3f6130ba2e37b47ff418fe01ec3e',1,'netlist_serializer.cpp']]]
+  ['duration_111',['DURATION',['../d1/d8e/netlist_2persistent_2netlist__serializer_8cpp.html#a2abf3f6130ba2e37b47ff418fe01ec3e',1,'netlist_serializer.cpp']]]
 ];
