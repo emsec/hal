@@ -1484,7 +1484,11 @@ namespace hal
             {
                 b = alias_it->second;
             }
-            else if (b != "'0'" && b != "'1'" && b != "'Z'")
+            else if(b == "'Z'" || b == "'X'") 
+            {
+                continue;
+            }
+            else if (b != "'0'" && b != "'1'")
             {
                 log_error("vhdl_parser", "cannot find alias for net '{}' of instance '{}' of type '{}'.", b, instance_identifier, instance_type);
                 return nullptr;
@@ -1522,11 +1526,11 @@ namespace hal
                             {
                                 instance_assignments[port] = alias_it->second;
                             }
-                            else if (assignment == "'0'" || assignment == "'1'" || assignment == "'Z'")
+                            else if (assignment == "'0'" || assignment == "'1'")
                             {
                                 instance_assignments[port] = assignment;
                             }
-                            else
+                            else if(assignment != "'Z'" && assignment != "'X'")
                             {
                                 log_error("vhdl_parser", "port assignment \"{} = {}\" is invalid for instance '{}' of type '{}'", port, assignment, inst_identifier, inst_type);
                                 return nullptr;
@@ -1580,7 +1584,7 @@ namespace hal
                         pin_to_direction[core_strings::convert_string<std::string, ci_string>(pin)] = direction;
                     }
 
-                    // expand port assignments
+                    // expand pin assignments
                     for (const auto& [pin, assignment] : inst_it->second)
                     {
                         ci_string signal;
@@ -1592,9 +1596,13 @@ namespace hal
                         {
                             signal = alias_it->second;
                         }
-                        else if (assignment == "'0'" || assignment == "'1'" || assignment == "'Z'")
+                        else if (assignment == "'0'" || assignment == "'1'")
                         {
                             signal = assignment;
+                        }
+                        else if(assignment == "'Z'" || assignment == "'X'")
+                        {
+                            continue;
                         }
                         else
                         {
@@ -1841,7 +1849,7 @@ namespace hal
                 }
                 result.insert(result.end(), binary_vector.begin(), binary_vector.end());
             }
-            else if (signal_name == "'0'" || signal_name == "'1'")
+            else if (signal_name == "'0'" || signal_name == "'1'" || signal_name == "'Z'" || signal_name == "'X'")
             {
                 if (is_left)
                 {
@@ -1951,7 +1959,7 @@ namespace hal
                 for (auto it = number.rbegin(); it != number.rend(); it++)
                 {
                     const char c = *it;
-                    if (c == '0' || c == '1' || c == 'Z')
+                    if (c == '0' || c == '1' || c == 'Z' || c == 'X')
                     {
                         result.push_back("'" + ci_string(1, c) + "'");
                     }
