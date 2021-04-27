@@ -416,7 +416,7 @@ namespace hal
     {
         // return;
         TEST_START
-        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("libnetlist_simulator");
+        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
         auto sim    = plugin->create_simulator();
 
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/halfaddernetlist_flattened_by_hal.v";
@@ -488,7 +488,7 @@ namespace hal
         // return;
         TEST_START
 
-        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("libnetlist_simulator");
+        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
         auto sim    = plugin->create_simulator();
 
         //path to netlist
@@ -573,7 +573,7 @@ namespace hal
         // return;
         TEST_START
 
-        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("libnetlist_simulator");
+        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
         auto sim    = plugin->create_simulator();
 
         //path to netlist
@@ -703,7 +703,7 @@ namespace hal
         // return;
         TEST_START
 
-        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("libnetlist_simulator");
+        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
         auto sim    = plugin->create_simulator();
 
         //path to netlist
