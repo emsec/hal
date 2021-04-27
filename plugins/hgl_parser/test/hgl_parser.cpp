@@ -109,7 +109,7 @@ namespace hal
                     EXPECT_EQ(gt->get_pin_type("O"), PinType::none);
 
                     // pin groups
-                    std::unordered_map<std::string, std::map<u32, std::string>> expected_groups({{"A", {{0, "A(0)"}, {1, "A(1)"}}}, {"B", {{0, "B(0)"}, {1, "B(1)"}}}, {"C", {{0, "C(0)"}, {1, "C(1)"}}}});
+                    std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> expected_groups({{"A", {{0, "A(0)"}, {1, "A(1)"}}}, {"B", {{0, "B(0)"}, {1, "B(1)"}}}, {"C", {{0, "C(0)"}, {1, "C(1)"}}}});
                     EXPECT_EQ(gt->get_pin_groups(), expected_groups);
 
                     // Boolean functions
@@ -320,7 +320,7 @@ namespace hal
                     EXPECT_EQ(gt->get_pin_type("DO(2)"), PinType::data);
 
                     // pin groups
-                    std::unordered_map<std::string, std::map<u32, std::string>> expected_groups({{"DI", {{0, "DI(0)"}, {1, "DI(1)"}, {2, "DI(2)"}}}, {"A", {{0, "A(0)"}, {1, "A(1)"}, {2, "A(2)"}}}, {"DO", {{0, "DO(0)"}, {1, "DO(1)"}, {2, "DO(2)"}}}});
+                    std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> expected_groups({{"DI", {{0, "DI(0)"}, {1, "DI(1)"}, {2, "DI(2)"}}}, {"A", {{0, "A(0)"}, {1, "A(1)"}, {2, "A(2)"}}}, {"DO", {{0, "DO(0)"}, {1, "DO(1)"}, {2, "DO(2)"}}}});
                     EXPECT_EQ(gt->get_pin_groups(), expected_groups);
 
                     // Boolean functions

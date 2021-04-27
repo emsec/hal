@@ -1,10 +1,10 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
-#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 #include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
@@ -435,7 +435,7 @@ namespace hal
         std::unique_ptr<Netlist> nl;
         {
             NO_COUT_BLOCK;
-            nl = hdl_parser_manager::parse(path_netlist, lib);
+            nl = netlist_parser_manager::parse(path_netlist, lib);
             if (nl == nullptr)
             {
                 FAIL() << "netlist couldn't be parsed";
@@ -506,7 +506,7 @@ namespace hal
         std::unique_ptr<Netlist> nl;
         {
             NO_COUT_BLOCK;
-            nl = hdl_parser_manager::parse(path_netlist, lib);
+            nl = netlist_parser_manager::parse(path_netlist, lib);
             if (nl == nullptr)
             {
                 FAIL() << "netlist couldn't be parsed";
@@ -591,7 +591,7 @@ namespace hal
         std::unique_ptr<Netlist> nl;
         {
             NO_COUT_BLOCK;
-            nl = hdl_parser_manager::parse(path_netlist, lib);
+            nl = netlist_parser_manager::parse(path_netlist, lib);
             if (nl == nullptr)
             {
                 FAIL() << "netlist couldn't be parsed";
@@ -731,7 +731,7 @@ namespace hal
             else
             {
                 NO_COUT_BLOCK;
-                nl = hdl_parser_manager::parse(path_netlist, lib);
+                nl = netlist_parser_manager::parse(path_netlist, lib);
                 netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
             }
             if (nl == nullptr)

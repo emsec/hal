@@ -237,7 +237,7 @@ namespace hal
         return {};
     }
 
-    bool GateType::assign_pin_group(const std::string& group, const std::map<u32, std::string>& index_to_pin)
+    bool GateType::assign_pin_group(const std::string& group, const std::vector<std::pair<u32, std::string>>& pins)
     {
         if (m_pin_groups.find(group) != m_pin_groups.end())
         {
@@ -245,7 +245,7 @@ namespace hal
             return false;
         }
 
-        for (const auto& pin : index_to_pin)
+        for (const auto& pin : pins)
         {
             if (m_pins_set.find(pin.second) == m_pins_set.end())
             {
@@ -254,23 +254,50 @@ namespace hal
             }
         }
 
-        m_pin_groups.emplace(group, index_to_pin);
+        m_pin_groups[group] = pins;
+
+        std::unordered_map<u32, std::string> index_to_pin;
+        for (const auto& [index, pin] : pins)
+        {
+            index_to_pin[index] = pin;
+        }
+
+        m_pin_group_indices[group] = index_to_pin;
         return true;
     }
 
-    std::unordered_map<std::string, std::map<u32, std::string>> GateType::get_pin_groups() const
+    std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> GateType::get_pin_groups() const
     {
         return m_pin_groups;
     }
 
-    std::map<u32, std::string> GateType::get_pins_of_group(const std::string& group) const
+    std::vector<std::pair<u32, std::string>> GateType::get_pins_of_group(const std::string& group) const
     {
         if (const auto it = m_pin_groups.find(group); it != m_pin_groups.end())
         {
             return it->second;
         }
 
+        log_error("gate_library", "pin group with name '{}' does not exist.", group);
         return {};
+    }
+
+    std::string GateType::get_pin_of_group_at_index(const std::string& group, const u32 index) const
+    {
+        if (const auto group_it = m_pin_group_indices.find(group); group_it != m_pin_group_indices.end())
+        {
+            const std::unordered_map<u32, std::string>& index_to_pin = group_it->second;
+            if (const auto index_it = index_to_pin.find(index); index_it != index_to_pin.end())
+            {
+                return index_it->second;
+            }
+
+            log_error("gate_library", "pin group with name '{}' does not have a pin with index {}.", group, index);
+            return "";
+        }
+
+        log_error("gate_library", "pin group with name '{}' does not exist.", group);
+        return "";
     }
 
     void GateType::add_boolean_function(std::string pin_name, BooleanFunction bf)
