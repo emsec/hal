@@ -31,17 +31,11 @@ namespace hal
     {
     public:
         virtual void add(ContentWidget* widget, int index) = 0;
-
         virtual void remove(ContentWidget* widget) = 0;
-
         virtual void detach(ContentWidget* widget) = 0;
-
         virtual void reattach(ContentWidget* widget) = 0;
-
         virtual void open(ContentWidget* widget) = 0;
-
         virtual void close(ContentWidget* widget) = 0;
-
         virtual inline ~ContentAnchor() = 0;
     };
 

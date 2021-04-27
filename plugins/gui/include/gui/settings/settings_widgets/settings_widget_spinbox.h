@@ -24,6 +24,7 @@
 #pragma once
 
 #include "gui/settings/settings_widgets/settings_widget.h"
+
 #include <QSpinBox>
 
 namespace hal
@@ -35,14 +36,14 @@ namespace hal
         Q_OBJECT
 
     public:
-        SettingsWidgetSpinbox(SettingsItemSpinbox* item, QWidget* parent = 0);
+        SettingsWidgetSpinbox(SettingsItemSpinbox* item, QWidget* parent = nullptr);
 
-        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-        virtual QVariant value()                 Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) override;
+        virtual QVariant value() override;
 
     private:
-        QSpinBox* mSpinbox;
         void on_spinbox_value_changed(int value);
 
+        QSpinBox* mSpinbox;
     };
 }

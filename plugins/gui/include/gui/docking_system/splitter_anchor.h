@@ -52,7 +52,7 @@ namespace hal
          * @param Splitter - The actual splitter to represent the dockbar's area.
          * @param parent - The parent of the splitter anchor.
          */
-        SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent = 0);
+        SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent = nullptr);
 
         /**
          * Adds a contentwidget at the given position to the splitter area and tells the dockbar to

@@ -3,19 +3,20 @@
 #include "gui/content_manager/content_manager.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_status_manager/file_status_manager.h"
+#include "gui/focus_logger/focus_logger.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/gui_api/gui_api.h"
 #include "gui/main_window/main_window.h"
 #include "gui/netlist_relay/netlist_relay.h"
-#include "gui/notifications/notification_manager.h"
-#include "gui/plugin_management/plugin_relay.h"
+#include "gui/plugin_relay/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
-#include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
-#include "gui/window_manager/window_manager.h"
 #include "gui/user_action/user_action_manager.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
+#include "gui/style/style.h"
+#include "gui/style/style_manager.h"
+
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/plugin_system/plugin_manager.h"
@@ -32,9 +33,9 @@
 #include <QSettings>
 #include <QString>
 #include <QDebug>
-#include <gui/focus_logger/focus_logger.h>
-#include <signal.h>
 #include <QDebug>
+
+#include <signal.h>
 
 namespace hal
 {
@@ -43,25 +44,19 @@ namespace hal
         return std::make_unique<PluginGui>();
     }
 
-    QSettings* mGSettings                           = nullptr;
+    QSettings* mGSettings                         = nullptr;
     QSettings* gGuiState                          = nullptr;
-    WindowManager* gWindowManager                 = nullptr;
-    NotificationManager* gNotificationManager     = nullptr;
     ContentManager* gContentManager               = nullptr;
     std::shared_ptr<Netlist> gNetlistOwner        = nullptr;
-    Netlist* gNetlist                              = nullptr;
+    Netlist* gNetlist                             = nullptr;
     NetlistRelay* gNetlistRelay                   = nullptr;
     PluginRelay* gPluginRelay                     = nullptr;
     SelectionRelay* gSelectionRelay               = nullptr;
-    FileStatusManager* gFileStatusManager        = nullptr;
+    FileStatusManager* gFileStatusManager         = nullptr;
     ThreadPool* gThreadPool                       = nullptr;
-    GraphContextManager* gGraphContextManager    = nullptr;
+    GraphContextManager* gGraphContextManager     = nullptr;
     GuiApi* gGuiApi                               = nullptr;
     std::unique_ptr<PythonContext> gPythonContext = nullptr;
-
-    // NOTE
-    // ORDER = LOGGER -> SETTINGS -> (STYLE / RELAYS / OTHER STUFF) -> MAINWINDOW (= EVERYTHING ELSE & DATA)
-    // USE POINTERS FOR EVERYTHING ?
 
     static void handleProgramArguments(const ProgramArguments& args)
     {
@@ -82,8 +77,6 @@ namespace hal
         delete gNetlistRelay;
         delete gPluginRelay;
         delete gSelectionRelay;
-        delete gNotificationManager;
-        //    delete gWindowManager;
     }
 
     static void mCleanup(int sig)
@@ -117,7 +110,7 @@ namespace hal
         QApplication::setOrganizationName("Chair for Embedded Security - Ruhr University Bochum");
         QApplication::setOrganizationDomain("emsec.rub.de");
 
-// Non native dialogs does not work on macOS. Therefore do net set AA_DontUseNativeDialogs!
+// Non native dialogs do not work on macOS. Therefore do net set AA_DontUseNativeDialogs!
 #ifdef __linux__
         a.setAttribute(Qt::AA_DontUseNativeDialogs, true);
 #endif
@@ -147,13 +140,7 @@ namespace hal
         QFontDatabase::addApplicationFont(":/fonts/Montserrat/Montserrat-Black");
         QFontDatabase::addApplicationFont(":/fonts/Source Code Pro/SourceCodePro-Black");
 
-        // LOGGER HERE
         gate_library_manager::load_all();
-
-        // TEST
-        //    mGSettings->setValue("stylesheet/base", ":/style/test base");
-        //    mGSettings->setValue("stylesheet/definitions", ":/style/test definitions2");
-        //    a.setStyleSheet(style::getStylesheet());
 
         //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
         //this settingsobject is currently neccessary to read from the settings from here, because the mGSettings are not yet initialized(?)
@@ -162,23 +149,19 @@ namespace hal
         MainWindow::sSettingStyle = new SettingsItemDropdown(
             "Theme",
             "main_style/theme",
-            MainWindow::StyleSheetOption::Darcula,
+            MainWindow::StyleSheetOption::Dark,
             "Appearance:Style",
-            "Specifies which theme should be used. Light style 'Sunny' is designed to print screenshots and not recommended for regular use."
+            "Specifies which theme should be used. Light style is designed to print screenshots and not recommended for regular use."
         );
         MainWindow::sSettingStyle->setValueNames<MainWindow::StyleSheetOption>();
-
-//        QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory().string()));
-//        QSettings tempSettingsToReadFrom(userConfigDir.absoluteFilePath("guisettings.ini"), QSettings::IniFormat);
-
         MainWindow::StyleSheetOption theme = static_cast<MainWindow::StyleSheetOption>(MainWindow::sSettingStyle->value().toInt());
 
         switch(theme)
         {
-            case MainWindow::StyleSheetOption::Darcula : styleSheetToOpen =  ":/style/darcula"; break;
-            case MainWindow::StyleSheetOption::Sunny : styleSheetToOpen =  ":/style/sunny"; break;
+            case MainWindow::StyleSheetOption::Dark : styleSheetToOpen = ":/style/dark"; break;
+            case MainWindow::StyleSheetOption::Light : styleSheetToOpen = ":/style/light"; break;
 
-            default: styleSheetToOpen =  ":/style/darcula";
+            default: styleSheetToOpen = ":/style/dark";
         }
 
         QFile stylesheet(styleSheetToOpen);
@@ -187,20 +170,18 @@ namespace hal
         stylesheet.close();
         //##############END OF TEMPORARY TESTING TO SWITCH BETWEEN STYLESHEETS
 
+        StyleManager::get_instance();
         style::debugUpdate();
 
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
-        mGSettings              = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
-        gGuiState             = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
-        gNetlistRelay         = new NetlistRelay();
-        gPluginRelay          = new PluginRelay();
-        gSelectionRelay       = new SelectionRelay();
+        mGSettings           = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
+        gGuiState            = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
+        gNetlistRelay        = new NetlistRelay();
+        gPluginRelay         = new PluginRelay();
+        gSelectionRelay      = new SelectionRelay();
         gFileStatusManager   = new FileStatusManager();
         gGraphContextManager = new GraphContextManager();
-
-        //gWindowManager       = new WindowManager();
-        gNotificationManager = new NotificationManager();
 
         gThreadPool = new ThreadPool();
 

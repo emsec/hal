@@ -6,7 +6,6 @@ namespace hal
 {
     ContextTableModel::ContextTableModel(QObject* parent) : QAbstractTableModel(parent)
     {
-
     }
 
     int ContextTableModel::rowCount(const QModelIndex& parent) const
@@ -113,15 +112,15 @@ namespace hal
         endResetModel();
     }
 
-    void ContextTableModel::addContext(GraphContext* gc)
+    void ContextTableModel::addContext(GraphContext* context)
     {
-        mContextList.append(gc);
-        connect(gc,&GraphContext::dataChanged,this,&ContextTableModel::handleDataChanged);
+        mContextList.append(context);
+        connect(context,&GraphContext::dataChanged,this,&ContextTableModel::handleDataChanged);
     }
 
-    void ContextTableModel::removeContext(GraphContext *gc)
+    void ContextTableModel::removeContext(GraphContext *context)
     {
-        mContextList.removeAll(gc);
+        mContextList.removeAll(context);
     }
 
     void ContextTableModel::handleDataChanged()

@@ -1,8 +1,10 @@
+#include "hal_core/utilities/log.h"
+
 #include "gui/docking_system/dock_button.h"
 #include "gui/content_widget/content_widget.h"
-#include "hal_core/utilities/log.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
+
 #include <QPainter>
 
 namespace hal
@@ -11,7 +13,7 @@ namespace hal
     {
         setText(mWidget->name());
         setCheckable(true);
-        setStyleSheet("QToolButton { font-family                : \"Iosevka\";padding: 0; margin: 0; }");
+        setStyleSheet("QToolButton { font-family : \"Iosevka\";padding: 0; margin: 0; }");
         setIcon(mWidget->icon());
         installEventFilter(eventFilter);
 
@@ -30,14 +32,14 @@ namespace hal
         auto font = property("font").value<QFont>();
         QPainter painter(this);
         painter.setFont(font);
-        painter.setPen(Qt::white);
+        painter.setPen(mTextColor);
         if (underMouse())
         {
-            painter.fillRect(0, 0, mWidth, mHeight, QColor("#666769"));
+            painter.fillRect(0, 0, mWidth, mHeight, mHoverColor);
         }
         else if (isChecked())
         {
-            painter.fillRect(0, 0, mWidth, mHeight, QColor("#808080"));
+            painter.fillRect(0, 0, mWidth, mHeight, mCheckedColor);
         }
 
         switch (mOrientation)
@@ -56,6 +58,36 @@ namespace hal
         }
         icon().paint(&painter, 0, (mRelativeHeight / 2) - (mIconSize / 2), mIconSize, (mRelativeHeight / 2) - (mIconSize / 2) + mIconSize);
         painter.drawText(QRectF(QRect(mIconSize, 0, mRelativeWidth, mRelativeHeight)), Qt::AlignVCenter, text());
+    }
+
+    QColor DockButton::textColor()
+    {
+        return mTextColor;
+    }
+
+    QColor DockButton::checkedColor()
+    {
+        return mCheckedColor;
+    }
+
+    QColor DockButton::hoverColor()
+    {
+        return mHoverColor;
+    }
+
+    void DockButton::setTextColor(const QColor& color)
+    {
+        mTextColor = color;
+    }
+
+    void DockButton::setCheckedColor(const QColor& color)
+    {
+        mCheckedColor = color;
+    }
+
+    void DockButton::setHoverColor(const QColor& color)
+    {
+        mHoverColor = color;
     }
 
     void DockButton::adjustSize()

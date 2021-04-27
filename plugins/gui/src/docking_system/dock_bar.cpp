@@ -5,6 +5,7 @@
 #include "gui/docking_system/dock_mime_data.h"
 #include "gui/gui_globals.h"
 #include "gui/content_anchor/content_anchor.h"
+
 #include <QApplication>
 #include <QDrag>
 #include <QDragEnterEvent>
@@ -21,7 +22,7 @@ namespace hal
     DockButton* DockBar::sDragButton = nullptr;
     int DockBar::sBeginDropRange     = 0;
     int DockBar::sEndDropRange       = 0;
-    int DockBar::sDropSpacing         = 0;
+    int DockBar::sDropSpacing        = 0;
     DockButton* DockBar::sMoveMarker = nullptr;
 
     DockBar::DockBar(Qt::Orientation orientation, button_orientation b_orientation, QWidget* parent) : QFrame(parent), mButtonOrientation(b_orientation)
@@ -29,8 +30,6 @@ namespace hal
         mOrientation = orientation;
 
         setAcceptDrops(true);
-
-        //USE CONTENTSRECT / FRAMEWIDTH TO CALCULATE CORRECT BUTTON POSITIONS
     }
 
     void DockBar::mouseMoveEvent(QMouseEvent* event)
@@ -101,7 +100,7 @@ namespace hal
                     if (button_position + (*button_iterator)->relativeWidth() < cursor_position)
                     {
                         if (*button_iterator == sMoveMarker)
-                            move_marker_reached = true;    //executed once at max
+                            move_marker_reached = true;
 
                         if (move_marker_reached)
                         {

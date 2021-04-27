@@ -37,15 +37,15 @@ namespace hal
         QAction::setToolTip(tooltip);
     }
 
-    void Action::updateTooltip(const QKeySequence& seq)
+    void Action::updateTooltip(const QKeySequence& sequence)
     {
         if (mTooltipModified)
             return;
 
         // automatically add the keyboard shortcut to the tooltip
-        if (!seq.isEmpty())
+        if (!sequence.isEmpty())
         {
-            QAction::setToolTip(text() + " '" + seq.toString(QKeySequence::NativeText) + "'");
+            QAction::setToolTip(text() + " '" + sequence.toString(QKeySequence::NativeText) + "'");
         }
         else
         {

@@ -32,43 +32,43 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit ShadowEffect(QObject* parent = 0);
+        explicit ShadowEffect(QObject* parent = nullptr);
 
         void draw(QPainter* painter);
         QRectF boundingRectFor(const QRectF& rect) const;
 
         inline void setDistance(qreal distance)
         {
-            _distance = distance;
+            mDistance = distance;
             updateBoundingRect();
         }
         inline qreal distance() const
         {
-            return _distance;
+            return mDistance;
         }
 
         inline void setBlurRadius(qreal blurRadius)
         {
-            _blurRadius = blurRadius;
+            mBlurRadius = blurRadius;
             updateBoundingRect();
         }
         inline qreal blurRadius() const
         {
-            return _blurRadius;
+            return mBlurRadius;
         }
 
         inline void setColor(const QColor& color)
         {
-            _color = color;
+            mColor = color;
         }
         inline QColor color() const
         {
-            return _color;
+            return mColor;
         }
 
     private:
-        qreal _distance;
-        qreal _blurRadius;
-        QColor _color;
+        qreal mDistance;
+        qreal mBlurRadius;
+        QColor mColor;
     };
 }

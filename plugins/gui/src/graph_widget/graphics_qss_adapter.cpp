@@ -1,5 +1,8 @@
 #include "gui/graph_widget/graphics_qss_adapter.h"
 
+#include "gui/graph_widget/graphics_scene.h"
+#include "gui/graph_widget/shaders/module_shader.h"
+
 #include <QStyle>
 
 namespace hal
@@ -15,6 +18,7 @@ namespace hal
         mGridClusterDotColor(255, 200, 0)
     {
         ensurePolished();
+        repolish();
     }
 
     void GraphicsQssAdapter::repolish()
@@ -24,7 +28,13 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        // SET STATICS OR ADRESS ADAPTER MEMBERS DIRECTLY
+        GraphicsScene::setGridBaseLineColor(mGridBaseLineColor);
+        GraphicsScene::setGridClusterLineColor(mGridClusterLineColor);
+
+        GraphicsScene::setGridBaseDotColor(mGridBaseDotColor);
+        GraphicsScene::setGridClusterDotColor(mGridClusterDotColor);
+
+        ModuleShader::debugSetNetColor(mNetBaseColor);
     }
 
     QColor GraphicsQssAdapter::gateBaseColor() const

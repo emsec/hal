@@ -24,13 +24,15 @@
 
 #pragma once
 
-#include <QAbstractTableModel>
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/grouping.h"
+
 #include "gui/gui_globals.h"
 #include "gui/user_action/user_action_object.h"
+
+#include <QAbstractTableModel>
 #include <QStringList>
 #include <QPair>
 

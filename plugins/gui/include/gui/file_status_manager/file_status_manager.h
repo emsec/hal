@@ -36,7 +36,7 @@ namespace hal
     {
         Q_OBJECT
     public:
-        FileStatusManager(QObject* parent = 0);
+        FileStatusManager(QObject* parent = nullptr);
         ~FileStatusManager();
 
         bool modifiedFilesExisting() const;

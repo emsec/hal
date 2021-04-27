@@ -15,8 +15,7 @@ namespace hal
         : QFrame(parent), m_layout(new QVBoxLayout()),
           mContainer(new QBoxLayout(QBoxLayout::TopToBottom)), m_top_bar(new QHBoxLayout()),
           mNameLabel(new QLabel(this)), mRevertButton(new QToolButton()),
-          mDefaultButton(new QToolButton()), mSettingsItem(item),
-          mHighlightColor(52, 56, 57)
+          mDefaultButton(new QToolButton()), mSettingsItem(item)
     {
         connect(mSettingsItem,&SettingsItem::destroyed,this,&SettingsWidget::handleItemDestroyed);
         setFrameStyle(QFrame::NoFrame);
@@ -54,16 +53,6 @@ namespace hal
         m_layout->addLayout(mContainer);
 
         hide();
-    }
-
-    QColor SettingsWidget::highlightColor()
-    {
-        return mHighlightColor;
-    }
-
-    void SettingsWidget::setHighlightColor(const QColor& color)
-    {
-        mHighlightColor = color;
     }
 
     void SettingsWidget::reset_labels()

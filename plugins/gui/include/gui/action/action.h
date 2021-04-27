@@ -32,20 +32,21 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit Action(QObject *parent = nullptr);
-        explicit Action(const QString &text, QObject *parent = nullptr);
-        explicit Action(const QIcon &icon, const QString &text, QObject *parent = nullptr);
+        explicit Action(QObject* parent = nullptr);
+        explicit Action(const QString& text, QObject* parent = nullptr);
+        explicit Action(const QIcon& icon, const QString& text, QObject* parent = nullptr);
 
         // hides non-virtual methods in QAction
         void setText(const QString& text);        
         void setToolTip(const QString& tooltip);
 
     public Q_SLOTS:
-        void setShortcut(const QKeySequence &shortcut);
+        void setShortcut(const QKeySequence& shortcut);
 
     private:
+        void updateTooltip(const QKeySequence& sequence);
+
         QString mDescriptionText;
-        void updateTooltip(const QKeySequence& seq);
         bool mTooltipModified;
 
     };

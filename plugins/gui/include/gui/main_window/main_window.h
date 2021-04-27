@@ -43,7 +43,6 @@ namespace hal
 {
     class PluginModel;
     class plugin_manager_dialog;
-    class PluginScheduleWidget;
     class PythonEditor;
     class FileManager;
     class ContentManager;
@@ -72,12 +71,6 @@ namespace hal
         Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
         Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath)
         Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
-        Q_PROPERTY(QString scheduleIconPath READ scheduleIconPath WRITE setScheduleIconPath)
-        Q_PROPERTY(QString scheduleIconStyle READ scheduleIconStyle WRITE setScheduleIconStyle)
-        Q_PROPERTY(QString runIconPath READ runIconPath WRITE setRunIconPath)
-        Q_PROPERTY(QString runIconStyle READ runIconStyle WRITE setRunIconStyle)
-        Q_PROPERTY(QString contentIconPath READ contentIconPath WRITE setContentIconPath)
-        Q_PROPERTY(QString contentIconStyle READ contentIconStyle WRITE setContentIconStyle)
         Q_PROPERTY(QString settingsIconPath READ settingsIconPath WRITE setSettingsIconPath)
         Q_PROPERTY(QString settingsIconStyle READ settingsIconStyle WRITE setSettingsIconStyle)
         Q_PROPERTY(QString undoIconPath READ undoIconPath WRITE setUndoIconPath)
@@ -85,7 +78,7 @@ namespace hal
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
 
     public:
-        enum StyleSheetOption {Darcula, Sunny};
+        enum StyleSheetOption {Dark, Light};
         Q_ENUM(StyleSheetOption)
 		
         /**
@@ -154,46 +147,6 @@ namespace hal
          * @returns the 'Save File'-icon style
          */
         QString saveIconStyle() const;
-
-        /**
-         * Q_PROPERTY READ function for the 'Schedule'-icon path.
-         *
-         * @returns the 'Schedule'-icon path
-         */
-        QString scheduleIconPath() const;
-        /**
-         * Q_PROPERTY READ function for the 'Schedule'-icon style.
-         *
-         * @returns the 'Schedule'-icon style
-         */
-        QString scheduleIconStyle() const;
-
-        /**
-         * Q_PROPERTY READ function for the 'Run Script'-icon path.
-         *
-         * @returns the 'Run Script'-icon path
-         */
-        QString runIconPath() const;
-        /**
-         * Q_PROPERTY READ function for the 'Run Script'-icon style.
-         *
-         * @returns the 'Run Script'-icon style
-         */
-        QString runIconStyle() const;
-
-        /**
-         * Q_PROPERTY READ function for the 'Duplicate'-icon path.
-         *
-         * @returns the 'Duplicate'-icon path
-         */
-        QString contentIconPath() const;
-        /**
-         * Q_PROPERTY READ function for the 'Duplicate'-icon style.
-         *
-         * @returns the 'Duplicate'-icon style
-         */
-        QString contentIconStyle() const;
-
         /**
          * Q_PROPERTY READ function for the 'Settings'-icon path.
          *
@@ -365,11 +318,6 @@ namespace hal
         void runPluginTriggered(const QString& name);
 
         /**
-         * Q_SLOT to open (toggle to the) plugin schedule menu. (Currently unused)
-         */
-        void toggleSchedule();
-
-        /**
          * Q_SLOT to open (toggle to the) settings menu.
          */
         void toggleSettings();
@@ -443,7 +391,6 @@ namespace hal
         QMenuBar* mMenuBar;
         QStackedWidget* mStackedWidget;
 
-        PluginScheduleWidget* mScheduleWidget;
         MainSettingsWidget* mSettings;
         WelcomeScreen* mWelcomeScreen;
         QHBoxLayout* mToolBarLayout;
@@ -456,9 +403,6 @@ namespace hal
         Action* mActionSave;
         Action* mActionSaveAs;
         Action* mActionAbout;
-   //     Action* mActionSchedule;
-   //     Action* mActionRunSchedule;
-   //     Action* mActionContent;
         Action* mActionStartRecording;
         Action* mActionStopRecording;
         Action* mActionPlayMacro;
@@ -487,15 +431,6 @@ namespace hal
 
         QString mSaveIconPath;
         QString mSaveIconStyle;
-
-        QString mScheduleIconPath;
-        QString mScheduleIconStyle;
-
-        QString mRunIconPath;
-        QString mRunIconStyle;
-
-        QString mContentIconPath;
-        QString mContentIconStyle;
 
         QString mSettingsIconPath;
         QString mSettingsIconStyle;

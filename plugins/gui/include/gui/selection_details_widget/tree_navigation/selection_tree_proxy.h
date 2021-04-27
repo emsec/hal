@@ -34,7 +34,7 @@ namespace hal
     {
         Q_OBJECT
     public:
-        SelectionTreeProxyModel(QObject* parent = 0);
+        SelectionTreeProxyModel(QObject* parent = nullptr);
         void applyFilterOnGraphics();
         bool isGraphicsBusy() const { return mGraphicsBusy > 0; }
 

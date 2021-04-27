@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/utilities/log.h"
+
 #include <QMutex>
 #include <QObject>
 #include <QPlainTextEdit>
@@ -39,7 +40,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit LoggerMarshall(QPlainTextEdit* edit, QObject* parent = 0);
+        explicit LoggerMarshall(QPlainTextEdit* edit, QObject* parent = nullptr);
 
     Q_SIGNALS:
 
@@ -52,7 +53,6 @@ namespace hal
     private:
         int mMaxLineCount;
 
-        //will be deleted within the logger_widgets destrcutor (is the parent of the textedit)
         QPlainTextEdit* mEdit;
     };
 }

@@ -43,11 +43,11 @@ namespace hal
         Q_OBJECT
 
     public:
-        SettingsWidgetKeybind(SettingsItemKeybind* item, QWidget* parent = 0);
+        SettingsWidgetKeybind(SettingsItemKeybind* item, QWidget* parent = nullptr);
 
-        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-        virtual QVariant value() Q_DECL_OVERRIDE;
-        virtual void clearEditor() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) override;
+        virtual QVariant value() override;
+        virtual void clearEditor() override;
 
     private:
         KeybindEdit* mKeybindEdit;
@@ -56,8 +56,8 @@ namespace hal
         bool isKeybindUsed(const QVariant& testValue);
 
     public Q_SLOTS:
-        void handleRevertModification() Q_DECL_OVERRIDE;
-        void handleSetDefaultValue(bool setAll=false) Q_DECL_OVERRIDE;
+        void handleRevertModification() override;
+        void handleSetDefaultValue(bool setAll = false) override;
 
     private Q_SLOTS:
         void clearErrorMessage();

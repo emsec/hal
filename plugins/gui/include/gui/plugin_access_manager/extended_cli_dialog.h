@@ -44,7 +44,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        ExtendedCliDialog(QString plugin_name, QWidget* parent = 0);
+        ExtendedCliDialog(QString plugin_name, QWidget* parent = nullptr);
 
         ProgramArguments getArgs();
 
