@@ -190,8 +190,7 @@ namespace hal
 
         connect(model, &PluginModel::runPlugin, mMainWindow, &MainWindow::runPluginTriggered);
 
-        mWindowTitle = "HAL - " + QString::fromStdString(std::filesystem::path(fileName.toStdString()).stem().string());
-        mMainWindow->setWindowTitle(mWindowTitle);
+        setWindowTitle(fileName);
 
 #ifdef HAL_STUDY
         //log_info("gui", "HAL_STUDY activated");
@@ -230,6 +229,12 @@ namespace hal
     void ContentManager::handleFilsystemDocChanged(const QString& fileName)
     {
         Q_UNUSED(fileName)
+    }
+
+    void ContentManager::setWindowTitle(const QString &filename)
+    {
+        mWindowTitle = "HAL - " + QString::fromStdString(std::filesystem::path(filename.toStdString()).stem().string());
+        mMainWindow->setWindowTitle(mWindowTitle);
     }
 
     void ContentManager::handleSaveTriggered()

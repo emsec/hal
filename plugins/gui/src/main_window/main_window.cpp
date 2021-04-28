@@ -118,6 +118,7 @@ namespace hal
         mActionNew          = new Action(this);
         mActionOpen         = new Action(this);
         mActionSave         = new Action(this);
+        mActionSaveAs       = new Action(this);
         mActionAbout        = new Action(this);
 
         mActionStartRecording = new Action(this);
@@ -156,6 +157,7 @@ namespace hal
         mActionNew->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
         mActionOpen->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
+        mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
 
@@ -172,6 +174,7 @@ namespace hal
         mMenuFile->addAction(mActionOpen);
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
+        mMenuFile->addAction(mActionSaveAs);
         mMenuEdit->addAction(mActionUndo);
         mMenuEdit->addSeparator();
         mMenuEdit->addAction(mActionSettings);
@@ -198,6 +201,7 @@ namespace hal
         mActionNew->setText("New Netlist");
         mActionOpen->setText("Open");
         mActionSave->setText("Save");
+        mActionSaveAs->setText("Save As");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
@@ -246,6 +250,7 @@ namespace hal
         connect(mActionSettings, &Action::triggered, this, &MainWindow::toggleSettings);
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
+        connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
         //debug
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
 
@@ -576,37 +581,56 @@ namespace hal
         gPythonContext->updateNetlist();
     }
 
+    void MainWindow::handleSaveAsTriggered()
+    {
+        QString filename = saveHandler();
+        if (!filename.isEmpty())
+            gContentManager->setWindowTitle(filename);
+    }
+
     void MainWindow::handleSaveTriggered()
     {
-        if (gNetlist)
+        saveHandler(FileManager::get_instance()->fileName());
+    }
+
+    QString MainWindow::saveHandler(const QString &filename)
+    {
+        if (!gNetlist) return QString();
+
+        std::filesystem::path path;
+        QString newName;
+
+        if (filename.isEmpty())
         {
-            std::filesystem::path path = FileManager::get_instance()->fileName().toStdString();
+            QString title = "Save File";
+            QString text  = "HAL Progress Files (*.hal)";
 
-            if (path.empty())
+            // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
+            newName = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr);
+            if (!newName.isNull())
             {
-                QString title = "Save File";
-                QString text  = "HAL Progress Files (*.hal)";
-
-                // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
-                QString fileName = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr);
-                if (!fileName.isNull())
-                {
-                    path = fileName.toStdString();
-                }
-                else
-                {
-                    return;
-                }
+                path = newName.toStdString();
             }
-
-            path.replace_extension(".hal");
-            netlist_serializer::serialize_to_file(gNetlist, path);
-
-            gFileStatusManager->netlistSaved();
-            FileManager::get_instance()->watchFile(QString::fromStdString(path.string()));
-
-            Q_EMIT saveTriggered();
+            else
+            {
+                return QString();
+            }
         }
+        else
+        {
+            path = filename.toStdString();
+        }
+
+
+        path.replace_extension(".hal");
+        netlist_serializer::serialize_to_file(gNetlist, path);
+
+        gFileStatusManager->netlistSaved();
+        FileManager::get_instance()->watchFile(QString::fromStdString(path.string()));
+
+        Q_EMIT saveTriggered();
+
+        return newName;
     }
 
     void MainWindow::handleActionStartRecording()
