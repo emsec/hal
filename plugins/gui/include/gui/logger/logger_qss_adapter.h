@@ -27,6 +27,12 @@
 
 namespace hal
 {
+    /**
+     * @ingroup logging
+     * @brief Connects the stylesheet properties to the log designs.
+     *
+     * QSS Adapter that provide the color configurations used for the different channel types of the logger.
+     */
     class LoggerQssAdapter : public QWidget
     {
         Q_OBJECT
@@ -48,8 +54,15 @@ namespace hal
         Q_PROPERTY(QColor defaultHighlight READ defaultHighlight WRITE setDefaultHighlight)
 
     public:
+        /**
+         * Gets the instance of this singleton class.
+         *
+         * @returns the instance of the LoggerQssAdapter
+         */
         static LoggerQssAdapter* instance();
 
+        /// @name Q_PROPERTY READ Functions
+        ///@{
         QColor traceColor() const;
         QColor debugColor() const;
         QColor infoColor() const;
@@ -66,7 +79,10 @@ namespace hal
         QColor errorHighlight() const;
         QColor criticalHighlight() const;
         QColor defaultHighlight() const;
+        ///@}
 
+        /// @name Q_PROPERTY WRITE Functions
+        ///@{
         void setTraceColor(const QColor& color);
         void setDebugColor(const QColor& color);
         void setInfoColor(const QColor& color);
@@ -83,6 +99,7 @@ namespace hal
         void setErrorHighlight(const QColor& color);
         void setCriticalHighlight(const QColor& color);
         void setDefaultHighlight(const QColor& color);
+        ///@}
 
     private:
         explicit LoggerQssAdapter(QWidget* parent = nullptr);

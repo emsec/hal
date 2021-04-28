@@ -37,10 +37,13 @@ namespace hal
     class GraphContextSubscriber;
 
     /**
-     * The GraphContext is a container that holds all elements (modules, gates, nets) that should be drawn in the
-     * scene. It uses a GraphLayouter to layout its elements and creates a scene with the corresponding graphic items.
-     * Afterwards this scene can be shown in a GraphWidgets GraphGraphicsView. <br>
-     * Moreover the context may be changed (e.g. add/remove gates or modules). In this case the scene will be adapted
+     * @ingroup graph-contexts
+     * @brief Logical container for modules, gates, and nets.
+     *
+     * The GraphContext is a container that holds all elements (Module%s, Gate%s, Net%s) that should be drawn in the
+     * scene. It uses a GraphLayouter to layout its elements and creates a scene with the corresponding GraphicsItem%s.
+     * Afterwards this scene can be shown in the GraphWidget's GraphGraphicsView. <br>
+     * Moreover the context may be changed (e.g. add/remove Gate%s or Module%s). In this case the scene will be adapted
      * as well. <br>
      * This class implements an observer pattern to notify subscribers (currently only GraphWidget objects) about
      * certain events.
@@ -95,18 +98,18 @@ namespace hal
         void endChange();
 
         /**
-         * Add gates and/or modules to the context. The scene will be updated afterwards
-         * (if no in a beginChanges-endChanges-block). Moreover a placement hint may be passed that can be used by the
+         * Add Gate%s and/or Module%s to the context. The scene will be updated afterwards
+         * (if not in a beginChanges-endChanges-block). Moreover a placement hint may be passed that can be used by the
          * GraphLayouter.
          *
-         * @param modules - A set of ids of the modules to be added
-         * @param gates - A set of ids of the gates to be added
+         * @param modules - A set of ids of the Module%s to be added
+         * @param gates - A set of ids of the Gate%s to be added
          * @param placement - A placement hint (leave empty for no hint)
          */
         void add(const QSet<u32>& modules, const QSet<u32>& gates, PlacementHint placement = PlacementHint());
 
         /**
-         * Remove gates and/or modules from the context. The scene will be updated afterwards
+         * Remove Gate%s and/or Module%s from the context. The scene will be updated afterwards
          * (if no in a beginChanges-endChanges-block).
          *
          * @param modules - A set of ids of the modules to be removed
@@ -115,12 +118,12 @@ namespace hal
         void remove(const QSet<u32>& modules, const QSet<u32>& gates);
 
         /**
-         * Clear the context. All gates and modules as well as their placement hints will be removed.
+         * Clear the context. All Gate%s and Module%s as well as their placement hints will be removed.
          */
         void clear();
 
         /**
-         * Fold the parent module of a specific gate. The specified gate as well as all other gates and submodules of the parent
+         * Fold the parent module of a specific gate. The specified gate as well as all other Gate%s and Submodule%s of the parent
          * module are removed from the context and replaced by the module itself.
          *
          * @param id - The id of the gate
@@ -128,7 +131,7 @@ namespace hal
         bool isGateUnfolded(u32 gateId) const;
         bool foldModuleAction(u32 moduleId, const PlacementHint& plc);
         /**
-         * Unfold a specific module. The specified module is removed from the context and replaced by its gates and
+         * Unfold a specific module. The specified module is removed from the context and replaced by its Gate%s and
          * submodules.
          *
          * @param id - The id of the module to unfold
@@ -136,7 +139,7 @@ namespace hal
         void unfoldModule(const u32 id);
 
         /**
-         * Check if the context is empty i.e. does not contain modules or gates.
+         * Check if the context is empty i.e. does not contain Module%s or Gate%s.
          *
          * @returns <b>true</b> if the context is empty.
          */
@@ -157,22 +160,22 @@ namespace hal
          * netlist but the context does not contain the gate yet, this function will falsely return <b>false</b> even
          * on the right GraphContexts. Therefore the new gate must be manually removed from the comparison by passing
          * it in the minus_gates list. <br>
-         * Accordingly, it is also possible to add gates to the comparison (e.g. after removing them from the module)
-         * as well as adding and removing modules (i.e. submodules).
+         * Accordingly, it is also possible to add Gate%s to the comparison (e.g. after removing them from the module)
+         * as well as adding and removing Module%s (i.e. submodules).
          *
          * @param id - The id of the module
-         * @param minus_modules - The ids of the modules that are removed for comparison
-         * @param minus_gates - The ids of the gates that are removed for comparison
-         * @param plus_modules - The ids of the modules that are added for comparison
-         * @param plus_gates - The ids of the gates that are added for comparison
-         * @returns <b>true</b> if the context shows the content of the module.
+         * @param minus_modules - The ids of the Module%s that are removed for comparison
+         * @param minus_gates - The ids of the Gate%s that are removed for comparison
+         * @param plus_modules - The ids of the Module%s that are added for comparison
+         * @param plus_gates - The ids of the Gate%s that are added for comparison
+         * @returns <b>true</b> if the context Show%s the content of the module.
          */
         bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
 	void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
 
         /**
-         * Given a net, this functions checks if any of the nets source gates appear in the context.
+         * Given a net, this function checks if any of the Net's source Gate%s appear in the context.
          *
          * @param mNetId - The id of the net
          * @returns <b>true</b> if a source gate of the net is shown
@@ -180,7 +183,7 @@ namespace hal
         bool isShowingNetSource(const u32 mNetId) const;
 
         /**
-         * Given a net, this functions checks if any of the nets destination gates appear in the context.
+         * Given a net, this functions checks if any of the Net's destination gates appear in the context.
          *
          * @param mNetId - The id of the net
          * @returns <b>true</b> if a destination gate of the net is shown
@@ -188,21 +191,21 @@ namespace hal
         bool isShowingNetDestination(const u32 mNetId) const;
 
         /**
-         * Get the ids of the modules of the context.
+         * Get the ids of the Module%s of the context.
          *
-         * @returns a set of module ids.
+         * @returns a set of Module ids.
          */
         const QSet<u32>& modules() const;
 
         /**
-         * Get the ids of the gates of the context.
+         * Get the ids of the Gates of the context.
          *
          * @returns a set of gate ids.
          */
         const QSet<u32>& gates() const;
 
         /**
-         * Get the ids of the nets of the context.
+         * Get the ids of the Net%s of the context.
          *
          * @returns a set of net ids.
          */
@@ -218,7 +221,7 @@ namespace hal
         /**
          * Get the name of the context.
          *
-         * @returns the contexts name.
+         * @returns the context's name.
          */
         QString name() const;
 
@@ -270,13 +273,13 @@ namespace hal
         void scheduleSceneUpdate();
 
         /**
-         * Get a Node that contains a specific gate. <br>
-         * If the context contains the gate, the node of this gate is returned. <br>
-         * If the context only contains a parent module of the gate (or the parents parent and so on...), the node of
-         * this module is returned. <br>
+         * Get a Node that contains a specific Gate. <br>
+         * If the context contains the Gate, the node of this gate is returned. <br>
+         * If the context only contains a parent module of the gate (or the parent's parent and so on...), the node of
+         * this Module is returned. <br>
          * Else an empty node is returned.
          *
-         * @param id - The gates id
+         * @param id - The Gate's id
          * @returns the Node that contains the gate
          */
         Node nodeForGate(const u32 id) const;

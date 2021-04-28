@@ -49,6 +49,9 @@ namespace hal
 
 
     /**
+     * @ingroup gui
+     * @brief Manages all ContentWidget%s
+     *
      * The ContentManager class manages the creation and deletion of hal's subwidgets such as the python editor or the
      * selection details widget. There should only be one content manager at any time.
      */
@@ -58,8 +61,8 @@ namespace hal
 
     public:
         /**
-         * The constructor of the class. The content manager's parent is the mainwindow of hal.
-         * The mainwindow must be known to the content manager so it can place the subwidgets in it.
+         * The constructor of the class. The content manager's parent is the MainwWndow of hal.
+         * The MainWindow must be known to the content manager so it can place the subwidgets in it.
          *
          * @param parent - The content manager's parent.
          */

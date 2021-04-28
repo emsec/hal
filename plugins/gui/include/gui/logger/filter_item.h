@@ -28,15 +28,43 @@
 
 namespace hal
 {
+    /**
+     * @ingroup logging
+     * @brief Item to filter different message types.
+     *
+     * A filter for message types of the logger. Every message type is assigned one of the following rules: <br>
+     * <b> ShowAll, HideAll, Process </b> <br>
+     * The following message types are distinguished: <br>
+     * <b> trace, debug, info, warning, error, critical, default </b> <br>
+     * Moreover a FilterItem contains a keywords list. If the rule is set to <b>Process</b> the messages of the
+     * respective type were scanned for these keywords. Such messages are only shown if they contain at
+     * least one of these keywords.
+     */
     struct FilterItem
     {
         enum class Rule
         {
+            /// All messages of this type should be shown.
             ShowAll = 0,
+            /// No messages of this type should be shown.
             HideAll = 1,
+            /// Messages are only shown if they contain at least one keyword of the passed keyword list.
             Process = 2
         };
 
+        /**
+         * Constructor. Initializes the filter rules for all message types and stores the passed keyword list.
+         *
+         * @param trace - Filter rule for message type 'trace'
+         * @param debug - Filter rule for message type 'debug'
+         * @param info - Filter rule for message type 'info'
+         * @param warning - Filter rule for message type 'warning'
+         * @param error - Filter rule for message type 'error'
+         * @param critical - Filter rule for message type 'critical'
+         * @param default_rule - Filter rule for a default message type
+         * @param keywords - The keyword list used for the <b>Process</b> filter rule
+         * @param reg_ex - A regular expression (TODO: unused)
+         */
         FilterItem(Rule trace, Rule debug, Rule info, Rule warning, Rule error, Rule critical, Rule default_rule, QStringList& keywords, QRegularExpression& reg_ex)
             : mTrace(trace), mDebug(debug), mInfo(info), mWarning(warning), mError(error), mCritical(critical), mDefault(default_rule), mKeywords(keywords), mRegEx(reg_ex)
         {

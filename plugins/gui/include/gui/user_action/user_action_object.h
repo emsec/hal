@@ -31,10 +31,11 @@
 
 namespace hal {
 
-     /**
+    /**
+     * @ingroup user_action
      * @brief The UserActionObjectType class provides the type for UserActionObject
      *
-     * There are conversation methods to conveniently convert the type for persistance
+     * There are conversation methods to conveniently convert the type for persistence
      * to xml file and for graphics ItemType
      */
     class UserActionObjectType : public QObject

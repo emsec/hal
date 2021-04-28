@@ -29,6 +29,9 @@
 namespace hal
 {
     /**
+     * @ingroup unused
+     * @brief A loading wheel.
+     *
      * This widget represents a loading wheel that appears while the layouter is in progress. <br>
      * <i>Currently unused...</i>
      */

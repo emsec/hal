@@ -1,6 +1,6 @@
-
 # Welcome to HAL! <a name="introduction"></a>
 [![Ubuntu 20.04](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml)  [![macOS](https://github.com/emsec/hal/actions/workflows/macOS.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/macOS.yml) [![Doc: C++](https://img.shields.io/badge/doc-c%2B%2B-orange)](https://emsec.github.io/hal/doc/) [![Doc: Python](https://img.shields.io/badge/doc-python-red)](https://emsec.github.io/hal/pydoc/) [![deployment](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) 
+
 
 HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation framework.
 
@@ -56,14 +56,16 @@ A comprehensive documentation of HAL's features from a user perspective is avail
 For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@csp.mpg.de](mailto:hal@csp.mpg.de). To receive an invite to our dedicated hal-support Slack workspace, please write us an e-mail as well.
 
 
-# Install Instructions <a name="install-instructions"></a>
+<a name="install-instructions"></a>
+# Install Instructions 
 
 ## Ubuntu 20.04
 
 HAL releases are available via it's own ppa, which can be found here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal)
 
 
-# Build Instructions <a name="build-instructions"></a>
+<a name="build-instructions"></a>
+# Build Instructions 
 
 ## Ubuntu 18.04
 
@@ -102,7 +104,8 @@ This also builds all tests of plugins that are built.
 
 If you do not specify `CMAKE_BUILD_TYPE`, it defaults to `Release`.
 
-# Quickstart Guide <a name="quickstart"></a>
+<a name="quickstart"></a>
+# Quickstart Guide 
 
 Install HAL or build HAL and start the GUI via `hal -g`. You can list all available options via `hal [--help|-h]`.
 We included some example netlists in `examples` together with the implementation of the respective example gate library in `plugins/example_gate_library`.
@@ -167,7 +170,8 @@ Start Docker build via:
 
 `git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges`
 
-# Academic Context <a name="academic-context"></a>
+<a name="academic-context"></a>
+# Academic Context 
 
 If you use HAL in an academic context, please cite the framework using the reference below:
 ```latex

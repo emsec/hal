@@ -31,6 +31,9 @@ namespace hal
 {
     class SettingsItemText;
 
+    /**
+     * @ingroup settings
+     */
     class SettingsWidgetText : public SettingsWidget
     {
         Q_OBJECT

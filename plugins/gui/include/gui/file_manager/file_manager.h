@@ -35,7 +35,10 @@ namespace hal
     class SettingsItemCheckbox;
     class SettingsItemSpinbox;
    /**
-     * The filemanager handles the status and information of the currently opened netlist file
+    * @ingroup file_management
+    * @brief Stores information about the currently opened netlist.
+    *
+     * The FileManager handles the status and information of the currently opened netlist file
      * including whether a file is opened or not. This class is implemented with a singleton pattern.
      */
     class FileManager : public QObject

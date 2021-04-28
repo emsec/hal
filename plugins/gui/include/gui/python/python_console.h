@@ -33,6 +33,9 @@ namespace hal
     class PythonConsoleHistory;
 
     /**
+     * @ingroup python-console
+     * @brief An interactable python console.
+     *
      * A widget that represents a simple python console with various features that most python consoles provide.
      */
     class PythonConsole : public QTextEdit, public PythonContextSubscriber

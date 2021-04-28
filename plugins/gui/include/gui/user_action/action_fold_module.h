@@ -6,6 +6,9 @@ namespace hal
     class Module;
     class GraphContext;
 
+    /**
+     * @ingroup user_action
+     */
     class ActionFoldModule : public UserAction
     {
         u32 mContextId;
@@ -18,6 +21,9 @@ namespace hal
         void setPlacementHint(PlacementHint hint) { mPlacementHint = hint; }
     };
 
+    /**
+     * @ingroup user_action
+     */
     class ActionFoldModuleFactory : public UserActionFactory
     {
     public:

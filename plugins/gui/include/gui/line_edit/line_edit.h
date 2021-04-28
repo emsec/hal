@@ -27,6 +27,10 @@
 
 namespace hal
 {
+    /**
+     * @ingroup unused
+     * TODO: Unused class. Remove me?
+     */
     class LineEdit : public QLineEdit
     {
         Q_OBJECT

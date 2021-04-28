@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -133,7 +133,7 @@ namespace hal
         // helper functions
         std::vector<u32> parse_range(TokenStream<ci_string>& range_stream) const;
         std::optional<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<ci_string>& signal_stream) const;
-        
+
         std::vector<ci_string> get_bin_from_literal(const Token<ci_string>& value_token) const;
         ci_string get_hex_from_literal(const Token<ci_string>& value_token) const;
         bool is_in_bounds(const std::vector<std::pair<i32, i32>>& bounds, const std::vector<std::pair<i32, i32>>& reference_bounds) const;

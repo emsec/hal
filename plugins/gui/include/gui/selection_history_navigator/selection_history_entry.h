@@ -30,6 +30,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup unused
+     */
     class SelectionHistoryEntry
     {
 

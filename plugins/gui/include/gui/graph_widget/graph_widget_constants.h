@@ -28,6 +28,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup graph
+     */
     namespace graph_widget_constants
     {
         Q_NAMESPACE

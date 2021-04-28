@@ -30,8 +30,13 @@
 
 namespace hal
 {
+    /**
+     * @ingroup unused
+     * TODO: Plugin management is disabled in the current version
+     */
     namespace plugin_access_manager
     {
+
         ProgramArguments requestArguments(const std::string plugin_name);
         int runPlugin(const std::string plugin_name, ProgramArguments* args);
     }    // namespace plugin_access_manager

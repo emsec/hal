@@ -30,6 +30,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup settings
+     */
     class SettingsItemCheckbox : public SettingsItem
     {
         Q_OBJECT

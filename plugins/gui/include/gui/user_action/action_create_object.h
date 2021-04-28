@@ -3,6 +3,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup user_action
+     */
     class ActionCreateObject : public UserAction
     {
         QString mObjectName;
@@ -18,6 +21,9 @@ namespace hal
         void setParentId(u32 pid) {mParentId = pid;}
     };
 
+    /**
+     * @ingroup user_action
+     */
     class ActionCreateObjectFactory : public UserActionFactory
     {
     public:

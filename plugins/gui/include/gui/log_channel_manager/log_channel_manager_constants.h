@@ -25,6 +25,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup unused
+     */
     namespace LogChannelManager_constants
     {
         static const int sMaxChannels = 50;

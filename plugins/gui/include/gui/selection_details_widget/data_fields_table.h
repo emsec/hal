@@ -34,7 +34,10 @@ namespace hal
     class DataContainer;
 
     /**
-     * A specific tablewidget to display the data fields of gate, net or module (or any data that is given to
+     * @ingroup utility_widgets-selection_details
+     * @brief Displays commonly shared fields.
+     *
+     * A specific tablewidget to display the data fields of a gate, net or module (or any data that is given to
      * the updateData function).
      */
     class DataFieldsTable : public QTableWidget

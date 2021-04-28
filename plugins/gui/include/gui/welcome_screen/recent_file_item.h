@@ -33,6 +33,13 @@ class QToolButton;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * @brief One item in the welcome screen's RecentFiles section.
+     *
+     * One entry in the RecentFileWidget. It represents one recently used file and can be clicked to open the netlist
+     * (i.e. parse hdl file or open .hal file) of the file.
+     */
     class RecentFileItem : public QFrame
     {
         Q_OBJECT
@@ -42,30 +49,88 @@ namespace hal
         Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param file - The file this RecentFileItem represents
+         * @param parent - The parent widget
+         */
         explicit RecentFileItem(const QString& file, QWidget* parent = nullptr);
 
+        /**
+         * Handles that the mouse enters the widget.
+         *
+         * @param event - The QEvent
+         */
         void enterEvent(QEvent* event) override;
+
+        /**
+         * Handles that the mouse leaves the widget.
+         *
+         * @param event - The QEvent
+         */
         void leaveEvent(QEvent* event) override;
+
+        /**
+         * Handles that the mouse was pressed within the widget.
+         *
+         * @param event
+         */
         void mousePressEvent(QMouseEvent* event) override;
 
+        /**
+         * Gets the size hint of the stored widget.
+         *
+         * @returns the size hint of the widget
+         */
         virtual QSize sizeHint() const override;
+
+        /**
+         * Captures the resize event so that if the file path does not fit in the widget anymore it is shortened.
+         *
+         * @param object - The object of the event
+         * @param event -
+         * @return
+         */
         virtual bool eventFilter(QObject* object, QEvent* event) override;
 
+        /**
+         * The file this RecentFileItem represents.
+         *
+         * @returns the file
+         */
         QString file() const;
 
+        /**
+         * (Re-)Initializes the appearance of the widget.
+         */
         void repolish();
 
+        /** @name Q_PROPERTY READ Functions
+         */
+        ///@{
         bool hover();
         bool disabled();
+
         QString iconPath();
         QString iconStyle();
+        ///@}
 
+        /** @name Q_PROPERTY WRITE Functions
+         */
+        ///@{
         void setHoverActive(bool active);
         void setDisabled(bool disable);
         void setIconPath(const QString& path);
         void setIconStyle(const QString& style);
+        ///@}
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL to notify that this item should be removed. Emitted after clicking the 'x'-button of the item.
+         *
+         * @param item - The item to remove.
+         */
         void removeRequested(RecentFileItem* item);
 
     private:
