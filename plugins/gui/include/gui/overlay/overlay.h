@@ -29,15 +29,27 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief The Overlay overlays its parent.
+     *
+     * The Overlay's parent will be overlayed by this QFrame if it is shown (Overlay:show). To hide the Overlay use
+     * Overlay::hide. This class is used as an abstract class for diverse overlay contents.
      */
     class Overlay : public QFrame
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The QWidget to overlay
+         */
         explicit Overlay(QWidget* parent = nullptr);
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted whenever a click withing the overlay was registered.
+         */
         void clicked();
 
     protected:

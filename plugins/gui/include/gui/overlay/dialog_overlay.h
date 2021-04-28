@@ -32,6 +32,7 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * TODO: Currently unused (only used by unused WindowManager). Remove me?
      */
     class DialogOverlay : public Overlay
     {

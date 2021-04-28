@@ -31,18 +31,29 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief Container for a QWidget that overlays another one.
+     *
+     * The overlaying widget can be configures via setWidget. If the WidgetOverly is set to shown (WidgetOverly::show),
+     * the configured QWidget will overlay the parent widget.
      */
     class WidgetOverlay : public Overlay
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The QWidget to overlay
+         */
         WidgetOverlay(QWidget* parent = nullptr);
 
+        /**
+         * Configures the widget that should overlay the WidgetOverlay's parent.
+         *
+         * @param widget - The overlay widget
+         */
         void setWidget(QWidget* widget);
-
-    //protected:
-    //    void resizeEvent(QResizeEvent* event) override;
 
     private:
         QVBoxLayout* mLayout;

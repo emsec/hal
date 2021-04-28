@@ -33,6 +33,7 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * TODO: Currently unused. Remove me?
      */
     class ReminderOverlay : public Overlay
     {
