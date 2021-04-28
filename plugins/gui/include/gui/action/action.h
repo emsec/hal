@@ -29,22 +29,62 @@ namespace hal
 {
     /**
      * @ingroup gui
-     * TODO
+     * @brief Extension for the QAction class.
+     *
+     * This extension supports the automatic display of shortcuts within the QAction's Tooltip.
      */
     class Action : public QAction
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent object (can be an action group)
+         */
         explicit Action(QObject *parent = nullptr);
+
+        /**
+         * Constructor.
+         *
+         * @param text - The Action's description
+         * @param parent - The parent object (can be an action group)
+         */
         explicit Action(const QString &text, QObject *parent = nullptr);
+
+        /**
+         * Constructor.
+         *
+         * @param icon - The icon of the Action
+         * @param text - The Action's description
+         * @param parent - The parent object (can be an action group)
+         */
         explicit Action(const QIcon &icon, const QString &text, QObject *parent = nullptr);
 
-        // hides non-virtual methods in QAction
-        void setText(const QString& text);        
+        // Hides non-virtual methods in QAction:
+        /**
+         * Sets the description of the Action. Also updates the Action's tooltip.
+         *
+         * @param text - The new description
+         */
+        void setText(const QString& text);
+
+        /**
+         * Changes the tooltip to the specified string. If the tooltip is changed once by this function, the
+         * tooltip won't be automatically extended by the Action's shortcut any longer. Therefore, using this function
+         * one can create custom tooltips without shortcuts using this function.
+         *
+         * @param tooltip - The new tooltip
+         */
         void setToolTip(const QString& tooltip);
 
     public Q_SLOTS:
+        /**
+         * Configures a shortcut for this Action.
+         *
+         * @param shortcut - The shortcut to configure
+         */
         void setShortcut(const QKeySequence &shortcut);
 
     private:
