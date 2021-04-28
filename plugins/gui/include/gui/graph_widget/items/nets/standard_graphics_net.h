@@ -33,6 +33,9 @@ namespace hal
     class Net;
 
     /**
+     * @ingroup graph-visuals-net
+     * @brief The most basic net to display the standard nets.
+     *
      * The GraphicsNet that is (currently) used to display nets in the scene. It provides functions to build up a net
      * line by line (using the Lines struct).
      */

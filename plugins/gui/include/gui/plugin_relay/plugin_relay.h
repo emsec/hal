@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup unused
+     */
     class PluginRelay : public QObject
     {
         Q_OBJECT

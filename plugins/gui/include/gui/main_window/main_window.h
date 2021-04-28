@@ -52,7 +52,8 @@ namespace hal
     class SettingsItemDropdown;
 
     /**
-     * The top level widget
+     * @ingroup gui
+     * @brief The top level widget.
      *
      * <i>One widget to rule them all, <br>
      *   one widget to create them, <br>

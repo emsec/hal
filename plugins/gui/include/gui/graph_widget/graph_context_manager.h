@@ -44,9 +44,12 @@ namespace hal
 
     class SettingsItemCheckbox;
     /**
-     * The GraphContextManager is a manager class that contains and manages all GraphContexts. <br>
-     * It can be used to create, delete or rename GraphContexts.  <br>
-     * Moreover it is responsible for applying changes of the netlist to the contexts. Therefore it inspects which
+     * @ingroup graph-contexts
+     * @brief User interface to manage all GraphContext%s.
+     *
+     * The GraphContextManager is a manager class that contains and manages all GraphContext%s. <br>
+     * It can be used to create, delete or rename GraphContext%s.  <br>
+     * Moreover it is responsible for applying changes of the Netlist to the contexts. Therefore it inspects which
      * contexts are affected by the corresponding changes to only adjust the relevant contexts.
      */
     class GraphContextManager : public QObject
@@ -60,7 +63,7 @@ namespace hal
         GraphContextManager();
 
         /**
-         * Creates a new context with the given name. The context is initialized with the default GrapgLayouter and
+         * Creates a new context with the given name. The context is initialized with the default GraphLayouter and
          * GraphShader. <br>
          * Emits the signal contextCreated.
          *
@@ -70,7 +73,7 @@ namespace hal
         GraphContext* createNewContext(const QString& name);
 
         /**
-         * Renames a graph context. <br>
+         * Renames a GraphContext. <br>
          * Emits the signal contextRenamed.
          *
          * @param ctx - The graph context to rename. Must not be a <i>nullptr</i>.
@@ -87,9 +90,9 @@ namespace hal
         void deleteGraphContext(GraphContext* ctx);
 
         /**
-         * Gets a list of all current GraphContexts.
+         * Gets a list of all current GraphContext%s.
          *
-         * @returns a list of all GrapgContexts.
+         * @returns a list of all GrapgContext%s.
          */
         QVector<GraphContext*> getContexts() const;
         GraphContext* getCleanContext(const QString& name) const;
@@ -113,21 +116,21 @@ namespace hal
         void handleModuleRemoved(Module* m);
 
         /**
-         * Handler to be called after a modules name has been changed. Used to apply the changes in the affected contexts.
+         * Handler to be called after a module's name has been changed. Used to apply the changes in the affected contexts.
          *
          * @param m - The module that has been changed
          */
         void handleModuleNameChanged(Module* m) const;
 
         /**
-         * Handler to be called after a modules type has been changed. Used to apply the changes in the affected contexts.
+         * Handler to be called after a module's type has been changed. Used to apply the changes in the affected contexts.
          *
          * @param m - The module that has been changed
          */
         void handleModuleTypeChanged(Module* m) const;
 
         /**
-         * Handler to be called after a modules color has been changed. Used to apply the changes in the affected contexts.
+         * Handler to be called after a module's color has been changed. Used to apply the changes in the affected contexts.
          *
          * @param m - The module which color has been changed
          */

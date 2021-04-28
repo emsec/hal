@@ -28,6 +28,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup settings
+     */
     class SettingsItemSpinbox : public SettingsItem
     {
         Q_OBJECT

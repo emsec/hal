@@ -31,6 +31,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup unused
+     */
     class PluginModel : public QAbstractItemModel
     {
         Q_OBJECT

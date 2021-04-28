@@ -45,6 +45,9 @@ namespace hal
     class GraphicsNet;
 
     /**
+     * @ingroup graph
+     * @brief Container for a GraphGraphicsView containing gates, nets, and modules.
+     *
      * The GraphicsScene is the scene where the GraphicsItems of the gates, nets and modules are placed in by the layouter.
      * Besides the functions that are provided by its parent class QGraphicScene, it offers functions to work on a grid,
      * to support drag-and-drop on the grid, to access the contained GraphicItems and to handle certain events like

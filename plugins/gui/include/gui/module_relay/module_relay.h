@@ -38,6 +38,11 @@
 
 namespace hal
 {
+
+    /**
+     * @ingroup unused
+     * TODO: Legacy?
+     */
     class ModuleRelay : public QObject
     {
         Q_OBJECT

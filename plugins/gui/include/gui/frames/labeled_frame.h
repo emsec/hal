@@ -31,13 +31,32 @@ class QVBoxLayout;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * @brief A QFrame with a label.
+     *
+     * The LabeledFrame is a QFrame that has a label at the top. The label can be configured in the qss file.
+     *
+     * In HAL it is used for the three frames in the welcome screen.
+     */
     class LabeledFrame : public QFrame
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         * Creates an empty LabeledFrame with a label. The labels content is taken from the used qss file.
+         *
+         * @param parent - The parent widget
+         */
         LabeledFrame(QWidget* parent = nullptr);
 
+        /**
+         * Adds a widget to the LabeledFrames layout.
+         *
+         * @param content
+         */
         void addContent(QWidget* content);
 
     protected:

@@ -54,6 +54,9 @@ namespace hal
     class SettingsItemSpinbox;
  
     /**
+     * @ingroup python-editor
+     * @brief Main widget that combines all neccessary functionality to develop in python (for hal).
+     *
      * Widget that contains the python editor. It manages all CodeEditor objects (open tabs). The logic to save, open
      * and execute scripts as well as the automatically creation of snapshot files (backups) is handles by this class.
      */
@@ -70,6 +73,7 @@ namespace hal
         Q_PROPERTY(QString runIconStyle READ runIconStyle WRITE setRunIconStyle)
         Q_PROPERTY(QString newFileIconPath READ newFileIconPath WRITE setNewFileIconPath)
         Q_PROPERTY(QString newFileIconStyle READ newFileIconStyle WRITE setNewFileIconStyle)
+        // TODO: In my opinion the toggle minimap icon is unintuitive. It looks like a debugger icon...
         Q_PROPERTY(QString toggleMinimapIconPath READ toggleMinimapIconPath WRITE setToggleMinimapIconPath)
         Q_PROPERTY(QString toggleMinimapIconStyle READ toggleMinimapIconStyle WRITE setToggleMinimapIconStyle)
 

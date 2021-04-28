@@ -4,6 +4,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup user_action
+     */
     class ActionSetSelectionFocus : public UserAction
     {
         friend class SelectionRelay;
@@ -27,6 +30,9 @@ namespace hal
         void setObject(const UserActionObject &obj) override;
     };
 
+    /**
+     * @ingroup user_action
+     */
     class ActionSetSelectionFocusFactory : public UserActionFactory
     {
     public:

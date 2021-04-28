@@ -27,6 +27,10 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * TODO: Unused...
+     */
     class Task : public QObject
     {
         Q_OBJECT

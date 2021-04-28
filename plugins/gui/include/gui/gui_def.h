@@ -31,6 +31,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * @brief The ItemType enum provides the enum type to classify graphic items
      * into <b>Module</b>s, <b>Gate</b>s or <b>Net</b>s. The ItemType <b>None</b> indicates that the ItemType
      * has not been initialized or that a function could not determine the ItemType.

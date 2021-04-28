@@ -44,6 +44,14 @@ namespace hal
     class GroupingProxyModel;
     class Searchbar;
 
+    /**
+     * @ingroup utility_widgets-grouping
+     * @brief User interface for Groupings.
+     *
+     * Groupings are disjoint subsets of Gate%s, Module%s and Net%s that can be used to categorize these objects. In the
+     * GUI the groupings are drawn in their specified color. The objects of one grouping can be easily selected
+     * all together to simplify the work with gates/modules/nets that share a certain property.
+     */
     class GroupingManagerWidget : public ContentWidget
     {
         Q_OBJECT
@@ -64,11 +72,31 @@ namespace hal
         Q_PROPERTY(QString toSelectionIconStyle READ toSelectionIconStyle WRITE setToSelectionIconStyle)
 
     public:
+        /**
+        * Constructor.
+        *
+        * @param tab_view - A GraphTabWidget (TODO: Unused?)
+        * @param parent - The parent widget
+        */
         GroupingManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
 
+        /**
+         * Setups the toolbar with the actions that are supported by the grouping.
+         *
+         * @param toolbar - The toolbar to set up
+         */
         virtual void setupToolbar(Toolbar* toolbar) override;
+
+        /**
+         * Create and connect the shortcuts that were provided by the GroupingsManagerWidget
+         *
+         * @returns the list of created shortcuts.
+         */
         virtual QList<QShortcut*> createShortcuts() override;
 
+        /** @name Q_PROPERTY READ Functions
+         */
+        ///@{
         QString newGroupingIconPath() const;
         QString newGroupingIconStyle() const;
         QString toolboxIconPath() const;
@@ -84,7 +112,11 @@ namespace hal
         QString toSelectionIconPath() const;
         QString toSelectionIconStyle() const;
         QString disabledIconStyle() const;
+        ///@}
 
+        /** @name Q_PROPERTY WRITE Functions
+         */
+        ///@{
         void setDisabledIconStyle(const QString& style);
         void setNewGroupingIconPath(const QString& path);
         void setNewGroupingIconStyle(const QString& style);
@@ -100,31 +132,99 @@ namespace hal
         void setColorSelectIconStyle(const QString& style);
         void setToSelectionIconPath(const QString& path);
         void setToSelectionIconStyle(const QString& style);
+        ///@}
 
+        /**
+         * Accesses the underlying table model of this GroupingManagerWidget.
+         *
+         * @returns the GroupingTableModel of this GroupingManagerWidget
+         */
         GroupingTableModel* getModel() const { return mGroupingTableModel; }
         GroupingProxyModel* getProxyModel() const {return mProxyModel; }
 
     public Q_SLOTS:
+        /**
+         * Q_SLOT to handle that the last entry of GroupingTableModel was deleted.
+         */
         void handleLastEntryDeleted();
+
+        /**
+         * Q_SLOT to handle that a new entry was added to the GroupingsTableModel.
+         *
+         * @param modelIndex - The index of the new entry withing the GroupingsTableModel
+         */
         void handleNewEntryAdded(const QModelIndex& modelIndex);
+
+        /**
+         * TODO: Unused (Unconnected)?
+         * Q_SLOT to handle that the selection has been changed.
+         *
+         * @param selected - The newly selected items
+         * @param deselected - The newly deselected items
+         */
         void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
+        /**
+         * Q_SLOT to handle that the current item of the table views selection model has been changed.
+         *
+         * @param current - The index of the newly current item.
+         * @param previous - The index of the previous current item.
+         */
         void handleCurrentChanged(const QModelIndex &current = QModelIndex(), const QModelIndex &previous = QModelIndex());
         void handleGraphSelectionChanged(void* sender);
 
     private Q_SLOTS:
+        /**
+         * Q_SLOT to toggle the searchbar. If the searchbar was hidden it will be shown. If it was shown it will be hidden.
+         */
         void toggleSearchbar();
+
+        /**
+         * Q_SLOT to filter the groupings by a string. Used while using the searchbar in the groupings manager widget (CTRL+F).
+         *
+         * @param text - The filter string
+         */
         void filter(const QString& text);
+
+        /**
+         * Q_SLOT to create a new grouping. Called when the 'Create Grouping'-buttons was clicked.
+         */
         void handleCreateGroupingClicked();
-        void handleToolboxClicked();
+
+        /**
+         * Q_SLOT to rename a grouping. Called when the 'Rename Grouping'-buttons was clicked.
+         */
         void handleRenameGroupingClicked();
+
+        /**
+         * Q_SLOT to change the color of a grouping. Called when the color icon was clicked.
+         */
         void handleColorSelectClicked();
+
+        /**
+         * Q_SLOT to handle that the 'Add to selection'-button was clicked. Used to select the objects of the
+         * selected grouping.
+         */
         void handleToSelectionClicked();
+
+        /**
+         * Q_SLOT to delete a grouping. Called when a grouping was deleted.
+         */
         void handleDeleteGroupingClicked();
+
+        /**
+         * Q_SLOT to open the right-click-menu within the grouping manager widget.
+         *
+         * @param point - The click position
+         */
+        void handleContextMenuRequest(const QPoint& point);
+
+        // TODO: DOCUMENT!
+        void handleToolboxClicked();
         void handleToolboxPredecessor();
         void handleToolboxSuccessor();
         void handleToolboxPredecessorDistance();
         void handleToolboxSuccessorDistance();
-        void handleContextMenuRequest(const QPoint& point);
 
     private:
         class ToolboxModuleHash

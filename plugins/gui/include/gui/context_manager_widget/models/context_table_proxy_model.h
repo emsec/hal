@@ -30,6 +30,10 @@
 
 namespace hal
 {
+    /**
+     * @ingroup utility_widgets-context
+     * @brief A proxy model to filter the ContextTableModel by a given string.
+     */
     class ContextTableProxyModel : public QSortFilterProxyModel
     {
         Q_OBJECT

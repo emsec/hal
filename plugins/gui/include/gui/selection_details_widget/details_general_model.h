@@ -39,6 +39,9 @@
 namespace hal {
 
     /**
+     * @ingroup utility_widgets-selection_details
+     * @brief Single entry in the GeneralDetailsModel.
+     *
      * The item class that is used by the GeneralDetailsModel to store and display its entries. It consists
      * of a key(label) and a value string that are both displayed in the view. Furthermore this item class
      * stores (if available) python code as a string to access it later (e.g. via a contextmenu).
@@ -123,6 +126,9 @@ namespace hal {
     };
 
     /**
+     * @ingroup utility_widgets-selection_details
+     * @brief Helper wrapper class.
+     *
      * A convenience class used to gather and extract the commonly shared information
      * (such as name, type, id) of a module, gate and net in a single place. It functions
      * as sort of a wrapper class.
@@ -262,6 +268,9 @@ namespace hal {
     };
 
     /**
+     * @ingroup utility_widgets-selection_details
+     * @brief Model to manage the commonly shared information.
+     *
      * The DetailsGeneralModel manages the general information about all 3 item types (gate, module, net)
      * so that these model can be used for each type. It behaves accordingly based on the given item type
      * in the setDummyContent (that functions as sort of a init() function that should be called after the

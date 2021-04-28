@@ -28,6 +28,9 @@
 namespace hal
 {
     /**
+     * @ingroup graph-visuals-gate
+     * @brief The standard gate to visualize netlist gates.
+     *
      * The GraphicsGate that is (currently) used to display gates in the scene.
      */
     class StandardGraphicsGate final : public GraphicsGate
@@ -67,7 +70,7 @@ namespace hal
          *
          * @param mNetId - The net id
          * @param pin_type - The input pin type
-         * @returns The pins position in the scene
+         * @returns The pin's position in the scene
          */
         QPointF getInputScenePosition(const u32 mNetId, const QString& pin_type) const override;
 
@@ -77,7 +80,7 @@ namespace hal
          *
          * @param mNetId - The net id
          * @param pin_type - The output pin type
-         * @returns The pins position in the scene
+         * @returns The pin's position in the scene
          */
         QPointF getOutputScenePosition(const u32 mNetId, const QString& pin_type) const override;
 

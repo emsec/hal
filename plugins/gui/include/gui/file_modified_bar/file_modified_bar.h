@@ -33,21 +33,61 @@
 
 namespace hal
 {
+    /**
+     * @ingroup file_management
+     * @brief A dialog in form of a bar to let the user decide how to handle file changes outside of HAL.
+     *
+     * The FileModifiedBar class is a utility class for every widget that (might) interacts with
+     * files on the disk. It provides a basic window with 3 situation dependent buttons
+     * (Ok, Reload, Ignore). This class should be connected to a file watcher object so that
+     * this classes handleFileChanged method can be correctly invoked.
+     */
     class FileModifiedBar : public QFrame
     {
         Q_OBJECT
 
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param parent - The widget's parent.
+         */
         FileModifiedBar(QWidget* parent = nullptr);
 
+        /**
+         * Not implemented. Probably intented to show custom messages when the underlying
+         * file is modified, moved, or deleted.
+         *
+         * @param message - The message to show (probably).
+         */
         void setMessage(QString message);
 
     Q_SIGNALS:
+
+        /**
+         * Q_SIGNAL that is emitted when the reload button is clicked.
+         */
         void reloadClicked();
+
+        /**
+         * Q_SIGNAL that is emitted when the ignore button is clicked.
+         */
         void ignoreClicked();
+
+        /**
+         * Q_SIGNAL that is emitted when the ok button is clicked.
+         */
         void okClicked();
 
     public Q_SLOTS:
+
+        /**
+         * Checks if the file that is specified with the given path exists and enables/disables
+         * its buttons accordingly. This function should be connected to a file watcher object.
+         *
+         * @param path - The path of the file that was either modified, moved, or deleted.
+         */
         void handleFileChanged(QString path);
 
     private:

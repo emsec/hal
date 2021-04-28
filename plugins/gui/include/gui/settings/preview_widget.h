@@ -28,6 +28,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup settings
+     */
     class PreviewWidget : public QFrame
     {
         Q_OBJECT

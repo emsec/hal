@@ -32,6 +32,9 @@ namespace hal
     class SettingsItemCheckbox;
     class SettingsItemNew;
 
+    /**
+     * @ingroup settings
+     */
     class SettingsWidgetCheckbox : public SettingsWidget
     {
         Q_OBJECT

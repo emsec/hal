@@ -27,6 +27,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class Overlay : public QFrame
     {
         Q_OBJECT

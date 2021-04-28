@@ -33,6 +33,9 @@ class QToolButton;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class Searchbar : public QFrame
     {
         Q_OBJECT

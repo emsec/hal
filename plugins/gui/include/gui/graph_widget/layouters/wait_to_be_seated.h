@@ -11,6 +11,9 @@ namespace hal
    class WaitToBeSeatedList;
    class WaitToBeSeatedWaiting;
 
+   /**
+    * @ingroup graph-layouter
+    */
    class WaitToBeSeatedEntry
    {
        friend class WaitToBeSeatedList;
@@ -35,6 +38,9 @@ namespace hal
 
    };
 
+   /**
+    * @ingroup graph-layouter
+    */
    class WaitToBeSeatedList : public QList<WaitToBeSeatedEntry*>
    {
        QMap<u32,WaitToBeSeatedEntry*> mGateMap;
