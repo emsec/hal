@@ -134,6 +134,7 @@ buttons.jsonc
 # Documentation
 Doxyfile
 html/
+documentation/DoxygenOutput/
 
 HAL_DEPLOYMENT_KEY
 HAL_GPG_KEY

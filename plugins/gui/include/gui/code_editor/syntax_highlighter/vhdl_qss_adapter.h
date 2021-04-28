@@ -28,6 +28,10 @@
 
 namespace hal
 {
+    /**
+     * @ingroup unused
+     * @brief QSS Adapter to provide the color configurations used by the VhdlSyntaxHighlighter.
+     */
     class VhdlQssAdapter : public QWidget
     {
         Q_OBJECT

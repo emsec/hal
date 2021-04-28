@@ -31,17 +31,44 @@ namespace hal
 {
     class RecentFileItem;
 
+    /**
+     * @ingroup gui
+     * @brief The welcome screen's RecentFiles section.
+     *
+     * The widget in the welcome screen that shows the recently used files.
+     */
     class RecentFilesWidget : public QFrame
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor. <br>
+         * The list of recently used files are drawn from the settings in the constructor.
+         *
+         * @param parent - The parent widget
+         */
         RecentFilesWidget(QWidget* parent = nullptr);
 
+        /**
+         * Initializes the appearance of the widget.
+         */
         void repolish();
 
     public Q_SLOTS:
+        /**
+         * Q_SLOT to handle that a file has been opened. Used to append the file to the list of recently used files.
+         * The updated list is persisted by updating the settings.
+         *
+         * @param fileName - The path of the opened file
+         */
         void handleFileOpened(const QString& fileName);
+
+        /**
+         * Handles that a recentFileItem should be removed (by clicking the 'x'). It removed the item from the widget.
+         *
+         * @param item - The item to remove
+         */
         void handleRemoveRequested(RecentFileItem* item);
 
     private:

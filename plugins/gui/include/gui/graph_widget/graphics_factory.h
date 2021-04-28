@@ -34,6 +34,9 @@
 namespace hal
 {
     /**
+     * @ingroup graph
+     * @brief Contains utility factory functions.
+     *
      * The GraphicsFactory namespace provides functions to create GraphicsModules and GraphicsGates
      */
     namespace GraphicsFactory

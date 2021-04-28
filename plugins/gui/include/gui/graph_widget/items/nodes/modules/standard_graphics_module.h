@@ -29,6 +29,9 @@
 namespace hal
 {
     /**
+     * @ingroup graph-visuals-module
+     * @brief The standard module to visualize netlist modules.
+     *
      * The GraphicsModule that is (currently) used to display modules in the scene.
      */
     class StandardGraphicsModule final : public GraphicsModule

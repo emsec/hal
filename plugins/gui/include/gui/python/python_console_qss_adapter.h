@@ -29,6 +29,9 @@
 namespace hal
 {
     /**
+     * @ingroup python-console
+     * @brief Connects the stylesheet properties to the console code.
+     *
      * Singleton class that provides access to the style sheets configuration of the python console.
      */
     class PythonConsoleQssAdapter : public QWidget

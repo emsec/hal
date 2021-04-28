@@ -54,6 +54,10 @@ namespace hal
         int mUnreadSuccesses;
     };
 
+    /**
+     * @ingroup unused
+     * TODO: Unused class. Remove me?
+     */
     class LogChannelManager
     {
     public:

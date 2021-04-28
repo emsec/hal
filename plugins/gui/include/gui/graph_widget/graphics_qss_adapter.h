@@ -28,6 +28,9 @@
 namespace hal
 {
     /**
+     * @ingroup graph
+     * @brief Connects the stylesheet properties with the code.
+     *
      * Class to capsule all QSS Property functions used for Graphics
      */
     class GraphicsQssAdapter : public QWidget

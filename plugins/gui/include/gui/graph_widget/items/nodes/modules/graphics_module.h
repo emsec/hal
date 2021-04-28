@@ -33,6 +33,9 @@ namespace hal
     class Module;
 
     /**
+     * @ingroup graph-visuals-module
+     * @brief Abstract base class for modules.
+     *
      * Abstract base class for GraphicsModules. Besides the functionality already given by its superclass GraphicsNode
      * it stores the list of input and output pins in a unique struct.
      */

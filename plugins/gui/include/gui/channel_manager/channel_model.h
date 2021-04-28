@@ -34,9 +34,12 @@
 namespace hal
 {
     /**
-     * This model handels incoming callbacks from the core's logmanager. It creates new channels and updates existing ones and is
+     * @ingroup logging
+     * @brief Table model for log channels.
+     *
+     * This model handles incoming callbacks from the core's log manager. It creates new channels and updates existing ones and is
      * realized through a singleton pattern.
-     * It is implemeted as a ’standard’ Qt tablemodle overwriting the necessary functions. Pleaser refer to the Qt documentation
+     * It is implemented as a ’standard’ Qt tablemodel overwriting the necessary functions. Please refer to the Qt documentation
      * for further details as to how to implement models.
      */
     class ChannelModel : public QAbstractTableModel

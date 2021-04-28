@@ -27,6 +27,10 @@
 
 namespace hal
 {
+    /**
+     * @ingroup graph-layouter
+     * @brief The standard layouter used to layout netlists.
+     */
     class StandardGraphLayouter final : public GraphLayouter
     {
     public:

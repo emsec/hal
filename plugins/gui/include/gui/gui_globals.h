@@ -41,20 +41,75 @@ namespace hal
 {
     class Netlist;
 
+    /** @name GUI Globals
+     * Interface to access the globals of the gui defined in src/plugin_gui.cpp
+     */
+    ///@{
+    /**
+     * Is used to persist the list of recent files and the previously opened file in the 'open file' dialog
+     */
     extern QSettings* gGuiState;
+
+    /**
+     * The global ContentManager (see doc)
+     */
     extern ContentManager* gContentManager;
+
+    /**
+     * TODO: Make unique_ptr?
+     * This shared_ptr contains and owns the netlist after a file was opened. To access the Netlist data structure with
+     * its functions, it is intended to use the raw pointer gNetlist instead.
+     */
     extern std::shared_ptr<Netlist> gNetlistOwner;
+
+    /**
+     * The netlist that is currently loaded. It is a pointer to the netlist owned by gNetlistOwner.
+     */
     extern Netlist* gNetlist;
+
+    /**
+     * The global NetlistRelay (see doc)
+     */
     extern NetlistRelay* gNetlistRelay;
+
+    /**
+     * The global PluginRelay. Plugin management is not available in this version. Therefore it is currently unused.
+     */
     extern PluginRelay* gPluginRelay;
+
+    /**
+     * The global SelectionRelay (see doc)
+     */
     extern SelectionRelay* gSelectionRelay;
+
+    /**
+     * The global FileStatusManager (see doc)
+     */
     extern FileStatusManager* gFileStatusManager;
+
+    /**
+     * The global GraphContextManager (see doc)
+     */
     extern GraphContextManager* gGraphContextManager;
+
+    /**
+     * The global ThreadPool. Currently unused.
+     */
     extern ThreadPool* gThreadPool;
+
+    /**
+     * The global PythonContext (see doc)
+     */
     extern std::unique_ptr<PythonContext> gPythonContext;
+
+    /**
+     * The global GuiApi (see doc)
+     */
     extern GuiApi* gGuiApi;
 
+    ///@}
+
     // Comment this out to not compile the debug code for the graph grid.
-    // This will also hide the respective debug setting from the settings page.
+    // This will also hide the respective debug setting from the settings page. TODO: Quite hacky...
     #define GUI_DEBUG_GRID
 }

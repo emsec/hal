@@ -28,6 +28,9 @@
 namespace hal
 {
     /**
+     * @ingroup graph-visuals-net
+     * @brief Used to display all nets which destinations are not in the current view.
+     *
      * A type of separated nets with circles as in- and output symbols. Currently unused.
      */
     class CircleSeparatedNet : public SeparatedGraphicsNet

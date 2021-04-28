@@ -29,13 +29,38 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * @brief Observes changes of the netlist and notifies the FileStatusManager.
+     *
+     * The NetlistWatcher observes changes of the netlist. Its main purpose is to notify the FileStatusManager about
+     * any changes that occur (especially outside the gui). Afterwards the FileStatusManager marks the netlist as
+     * modified until the next save.
+     * TODO: Why does the FileStatusManager not use the NetlistRelay instead?
+     */
     class NetlistWatcher : public QObject
     {
         Q_OBJECT
     public:
+        /**
+         * Constructor.
+         * Its registers all its callbacks to the core.
+         *
+         * @param parent - The parent object
+         */
         NetlistWatcher(QObject* parent = nullptr);
+
+        /**
+         * Destructor.
+         * Unregisters all registered callbacks.
+         */
         ~NetlistWatcher();
 
+        /**
+         * The FileStatusManager is only notified once. Afterwards this function has to be called to enable the
+         * notification again.
+         * TODO: Only one notification ever? (Only called by constructor...)
+         */
         void reset();
 
     private:

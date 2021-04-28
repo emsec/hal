@@ -4,6 +4,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup user_action
+     */
     class ActionSetObjectColor : public UserAction
     {
         QColor mColor;
@@ -16,6 +19,9 @@ namespace hal
         void addToHash(QCryptographicHash& cryptoHash) const override;
     };
 
+    /**
+     * @ingroup user_action
+     */
     class ActionSetObjectColorFactory : public UserActionFactory
     {
     public:

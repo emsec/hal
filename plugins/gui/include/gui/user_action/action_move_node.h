@@ -5,6 +5,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup user_action
+     */
     class ActionMoveNode : public UserAction
     {
         QPoint mFrom, mTo;
@@ -20,6 +23,9 @@ namespace hal
         void addToHash(QCryptographicHash& cryptoHash) const override;
     };
 
+    /**
+     * @ingroup user_action
+     */
     class ActionMoveNodeFactory : public UserActionFactory
     {
     public:

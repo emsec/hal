@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     namespace gui_utility
     {
         Q_NAMESPACE
@@ -48,6 +51,7 @@ namespace hal
         };
 
         /**
+         * TODO: Rename me...
          * An enum for convenience purposes. Used in the compare function to determine which compare
          * criteria should be used.
          */
@@ -99,9 +103,9 @@ namespace hal
         int numericStringCompare(QString a_num, QString b_num);
 
         /**
-         * Compares to string by the preferred compare critera.
+         * Compares two strings using a specific comparison criteria.
          *
-         * @param mechanism - The critera by which the 2 strings should be compared with.
+         * @param mechanism - The criteria by which the 2 strings should be compared with.
          * @param a - The first string to compare.
          * @param b - The second string to compare.
          * @return True if a < b, false otherwise.

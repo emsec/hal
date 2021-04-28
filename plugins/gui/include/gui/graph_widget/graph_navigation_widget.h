@@ -41,9 +41,12 @@ namespace hal {
     class GraphNavigationWidget;
 
     /**
+     * @ingroup graph
+     * @brief A widget used to select destinations when traversing through the graph.
+     *
      * A QTableWidget that is used to navigate from a pin with multiple adjacent pins. The table shows information about
-     * the gates/modules that are connected to the starting pin, such as name, id, type, the adjacent input/ouput pin
-     * and the parent modules name. <br>
+     * the Gate%s/Module%s that are connected to the starting pin, such as name, id, type, the adjacent input/ouput pin
+     * and the parent Module's name. <br>
      * The user can select one of these destination gates/modules to navigate to.
      */
     class GraphNavigationTableWidget : public QTableWidget
@@ -283,7 +286,7 @@ namespace hal {
         /// module visible in view (might be implicitly as parent of gate or module)
         QSet<Module*> mModulesInView;
 
-        /// gates or modulues connected with endpoint not shown in current view
+        /// gates or modules connected with endpoint not shown in current view
         QList<Endpoint*> mEndpointNotInView;
 
         QHash<Module*, QTreeWidgetItem*> mListedModules;

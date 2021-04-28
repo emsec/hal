@@ -36,9 +36,8 @@ namespace hal {
     class GraphicsNode;
 
     /**
+     * @ingroup graph-layouter
      * @brief The NodeBox class represents a node placed at a grid position within a hal view.
-     *
-     * @ingroup gui
      *
      * The constructur of NodeBox creates the box item derived from GraphicsNode/QGraphicsItem.
      * Constructor should be called by layouter since scene position needs to be assigned to
@@ -132,7 +131,7 @@ namespace hal {
     /**
      * @brief The NodeBoxes class owns all NodeBox'es from hal view.
      *
-     * @ingroup gui
+     * @ingroup graph-layouter
      *
      * Several index members (QHash) allow fast access by grid position, node id,
      * mouse click in graphics, or net endpoint.

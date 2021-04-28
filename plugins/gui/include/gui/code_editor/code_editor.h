@@ -38,6 +38,13 @@ namespace hal
     class CodeEditorScrollbar;
     class LineNumberArea;
 
+    /**
+     * @ingroup python-editor
+     * @brief A plain text edit widget that is intended for editing code.
+     *
+     * Therefore it has numbered lines and provides a code minimap for easier navigation in larger files.
+     * Moreover it supports a search function to mark all occurrences of a specified string.
+     */
     class CodeEditor : public QPlainTextEdit
     {
         Q_OBJECT
@@ -49,25 +56,92 @@ namespace hal
         Q_PROPERTY(QColor currentLineBackground READ currentLineBackground WRITE setCurrentLineBackground)
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget
+         */
         explicit CodeEditor(QWidget* parent = nullptr);
 
+        /**
+         * TODO: Does not work! (eventFilter never installed?)
+         * Captures the mouse scroll event to zoom in and out via CTRL+SCROLL UP/DOWN.
+         *
+         * @param object - The object this filter is applied on.
+         * @param event - The event to filter
+         * @returns true if the event is handled by this filter and shouldn't be processed any further by the target
+         *          object. Returns false to pass the event to the target object.
+         */
         virtual bool eventFilter(QObject* object, QEvent* event) override;
 
+        /**
+         * Paint event handler to paint the line numbers. This function is called when an paint event of the line
+         * number area occurs. It draws the necessary line numbers in the line number area.
+         *
+         * @param event - The paint event
+         */
         void lineNumberAreaPaintEvent(QPaintEvent* event);
+
+        /**
+         * Paint event handler to paint the line numbers.
+         *
+         * @param event - The paint event
+         */
         void minimapPaintEvent(QPaintEvent* event);
 
+        /**
+         * Gets the width of area where the line numbers are drawn.
+         *
+         * @returns the line number area width.
+         */
         int lineNumberAreaWidth();
+
+        /**
+         * Gets the width of the minimap.
+         *
+         * @returns the width of the minimap.
+         */
         int minimapWidth();
 
+        /**
+         * Returns the index of the first visible block.
+         *
+         * @returns the index of the first visible block
+         */
         int first_visible_block();
+
+        /**
+         * TODO: Unused and wrong?
+         * Returns always 0.
+         *
+         * @returns 0
+         */
         int visibleBlockCount();
 
+        /**
+         * Scrolls to the specified line number using a scroll animation.
+         *
+         * @param number - The number to scroll to
+         */
         void centerOnLine(const int number);
 
+        /**
+         * This function can be used to pass a wheel event to the code editor. It is necessary for widgets that are
+         * associated with the code editor but are not part of it (e.g. the line number area or the minimap).
+         *
+         * @param event - The wheel event to pass to the code editor
+         */
         void handleWheelEvent(QWheelEvent* event);
 
+        /**
+         * Accesses the code editors minimap.
+         *
+         * @returns the code editors minimap.
+         */
         CodeEditorMinimap* minimap();
 
+        /** @name Q_PROPERTY READ Functions */
+        ///@{
         QFont lineNumberFont() const;
         QColor lineNumberColor() const;
         QColor lineNumberBackground() const;
@@ -75,6 +149,9 @@ namespace hal
         QColor lineNumberHighlightBackground() const;
         QColor currentLineBackground() const;
 
+        ///@}
+        /** @name Q_PROPERTY WRITE Functions */
+        ///@{
         void setLineNumberFont(const QFont& font);
         void setLineNumberColor(QColor& color);
         void setLineNumberBackground(QColor& color);
@@ -82,26 +159,83 @@ namespace hal
         void setLineNumberHighlightBackground(QColor& color);
         void setCurrentLineBackground(QColor& color);
 
-        void setLineNumberEnabled(bool enabled);
+	void setLineNumberEnabled(bool enabled);
         void setHighlightCurrentLineEnabled(bool enabled);
         void setLineWrapEnabled(bool enabled);
         void setMinimapEnabled(bool enabled);
+        ///@}
 
     public Q_SLOTS:
+        /**
+         * Marks all occurrences of the specified string in the code editor.
+         *
+         * @param string - The string to mark
+         */
         void search(const QString& string);
 
+        /**
+         * Shows/Hides the line numbers at the left side of the code editor.
+         */
         void toggleLineNumbers();
+
+        /**
+         * Shows/Hides the minimap of the code editor.
+         */
         void toggleMinimap();
-        void setFontSize(int pt);
+
+        /**
+         * Configures the font size of the code editor.
+         *
+         * @param pt - The new font size
+         */
+	    void setFontSize(int pt);
 
     protected:
+        /**
+         * Captures the resize event to adjust the slider size of the minimap.
+         *
+         * @param event  - The resize event
+         */
         virtual void resizeEvent(QResizeEvent* event) override;
 
     private Q_SLOTS:
+        /**
+         * Highlights the line (block if in line wrap mode) where the cursor is currently in.
+         */
         void highlightCurrentLine();
+
+        /**
+         * Handles that the line (block if in line wrap mode) count has been changed. Used to adjust the slider height.
+         *
+         * @param new_block_count - The new amount of blocks
+         */
         void handleBlockCountChanged(int new_block_count);
+
+        /**
+         * Handles the code editors update request for the line number area.
+         *
+         * @param rect - The rectangle the document need an update of (unused)
+         * @param dy - The amount of pixels the viewport was vertically scrolled (unused)
+         */
         void updateLineNumberArea(const QRect& rect, int dy);
+
+        /**
+         * Handles the code editors update request for the minimap.
+         *
+         * @param rect - The rectangle the document need an update of (unused)
+         * @param dy - The amount of pixels the viewport was vertically scrolled (unused)
+         */
         void updateMinimap(const QRect& rect, int dy);
+
+        /**
+         * TODO: Move logic in PythonCodeEditor class?
+         * Handles that the global settings that affect the code editor has been changed.
+         *
+         * @param sender - The object that sent the signal
+         * @param key - The settings key that has been changed
+         * @param value - The new value of of the setting
+         */
+        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         void updateLayout();

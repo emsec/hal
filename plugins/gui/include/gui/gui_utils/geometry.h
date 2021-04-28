@@ -27,9 +27,15 @@
 
 namespace hal
 {
+    /**
+    * @ingroup gui
+    */
     namespace gui_utility
     {
         /**
+         * @ingroup gui
+         * @brief (Fully) displays the widget by moving it.
+         *
          * Tries to display the given widget completely on the screen (e.g. when its partially out of bounds).
          * It checks the geometry (size) of the screen and the widget and moves the widget accordingly,
          * prioritizing the widget's top side and left side to be seen.

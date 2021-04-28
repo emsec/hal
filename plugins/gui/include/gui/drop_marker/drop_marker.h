@@ -29,6 +29,10 @@ class QPropertyAnimation;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * TODO: Only used by the plugin management. The plugin management is currently disabled...
+     */
     class DropMarker : public QFrame
     {
         Q_OBJECT

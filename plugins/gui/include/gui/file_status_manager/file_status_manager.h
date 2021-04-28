@@ -32,23 +32,76 @@
 
 namespace hal
 {
+    /**
+     * @ingroup file_management
+     * @brief Holds information about the state (e.g. saved/unsaved) of all laded files (i.e. .hal/.python files).
+     *
+     * The FileStatusManager class is the central point to store the status of any file
+     * (or element) that can be modified, such as the modifications to the current netlist
+     * or (yet to be created /saved) python tabs / files.
+     */
     class FileStatusManager : public QObject
     {
         Q_OBJECT
     public:
+        /**
+         * The constructor.
+         *
+         * @param parent - The manager's parent.
+         */
         FileStatusManager(QObject* parent = nullptr);
+
+        /**
+         * The destructor.
+         */
         ~FileStatusManager();
 
+        /**
+         * Checks if either the netlist is modified (in the case a netlist is opened) or
+         * any files are registered to this manager.
+         *
+         * @return True if registered files are present. False otherwise.
+         */
         bool modifiedFilesExisting() const;
 
+        /**
+         * Registers a tuple consisting of an unique id (e.g. the id of a PythonCodeEditor
+         * that basically represents a file) and its description (e.g. the name of the file or tab).
+         *
+         * @param uuid - The unique id.
+         * @param descriptor - The description of the file / object.
+         */
         void fileChanged(const QUuid uuid, const QString& descriptor);
+
+        /**
+         * Removes a registered element.
+         *
+         * @param uuid - The id of the element that is to be removed.
+         */
         void fileSaved(const QUuid uuid);
 
+        /**
+         * Sets the netlist-modified flag that affects the modifiedFilesExisting() method.
+         */
         void netlistChanged();
+
+        /**
+         * Unsets the netlist-modified flag that affects the modifiedFilesExisting() method.
+         */
         void netlistSaved();
 
+        /**
+         * Removes all registered files and unsets every modified-flag, effectively resetting
+         * the state of the manager.
+         */
         void flushUnsavedChanges();
 
+        /**
+         * Get a list of the descriptions of all modified files that are registered to this manager.
+         * Appends "Netlist modifications"  to the list if the netlist-modified flag is set.
+         *
+         * @return The list of the descriptions.
+         */
         QList<QString> getUnsavedChangeDescriptors() const;
 
     private:

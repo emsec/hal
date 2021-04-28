@@ -30,6 +30,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup settings
+     */
     class SettingsItemDropdown : public SettingsItem
     {
         Q_OBJECT

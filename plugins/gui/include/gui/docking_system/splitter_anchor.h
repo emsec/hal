@@ -36,8 +36,11 @@ namespace hal
     class ContentWidget;
 
     /**
-     * The SplitterAnchor class provides with the TabWidget the functionality to add content widgets to hal's main content area on the "lowest"
-     * level as well as the area (via the Splitter) to do so. It is the bridge between the dockbar and its corresponding area (the splitter)
+     * @ingroup docking
+     * @brief Adds specific ContentWidget%s to HALs main content area
+     *
+     * The SplitterAnchor class provides with the TabWidget the functionality to add ContentWidget%s to hal's main content area on the "lowest"
+     * level as well as the area (via the Splitter) to do so. It is the bridge between the DockBar and its corresponding area (the splitter)
      * and manages/synchronizes the information between them.
      */
     class SplitterAnchor : public QObject, public ContentAnchor

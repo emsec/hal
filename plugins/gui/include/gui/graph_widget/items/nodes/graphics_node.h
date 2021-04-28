@@ -30,6 +30,9 @@
 namespace hal
 {
     /**
+     * @ingroup graph-visuals
+     * @brief Abstract base class for nodes (e.g. gates, modules)
+     *
      * Abstract base class of every node in the netlist graph, i.e. GraphicsGates and GraphicsModules.
      */
     class GraphicsNode : public GraphicsItem
@@ -83,7 +86,7 @@ namespace hal
          *
          * @param mNetId - The net id
          * @param pin_type - The input pin type
-         * @returns The pins position in the scene
+         * @returns The pin's position in the scene
          */
         virtual QPointF getInputScenePosition(const u32 mNetId, const QString& pin_type) const = 0;
 
@@ -93,7 +96,7 @@ namespace hal
          *
          * @param mNetId - The net id
          * @param pin_type - The output pin type
-         * @returns The pins position in the scene
+         * @returns The pin's position in the scene
          */
         virtual QPointF getOutputScenePosition(const u32 mNetId, const QString& pin_type) const = 0;
 
