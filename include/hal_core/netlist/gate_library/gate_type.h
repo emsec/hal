@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -97,7 +97,7 @@ namespace hal
 
     template<>
     std::vector<std::string> EnumStrings<PinType>::data;
-    
+
     /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
      *
@@ -315,25 +315,34 @@ namespace hal
          * Assign existing pins to a pin group.
          *
          * @param[in] group - The name of the pin group.
-         * @param[in] index_to_pin - A map from pin index to pin.
+         * @param[in] pins - The pins to be added to the group including their indices.
          * @returns True on success, false otherwise.
          */
-        bool assign_pin_group(const std::string& group, const std::map<u32, std::string>& index_to_pin);
+        bool assign_pin_group(const std::string& group, const std::vector<std::pair<u32, std::string>>& pins);
 
         /**
          * Get all pin groups of the gate type.
          *
-         * @returns A map from pin group names to a map from pin index to pin.
+         * @returns A map from pin group names to the pins of each group including their indices.
          */
-        std::unordered_map<std::string, std::map<u32, std::string>> get_pin_groups() const;
+        std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> get_pin_groups() const;
 
         /**
          * Get all pins of the specified pin group including their indices.
          *
          * @param[in] group - The name of the pin group.
-         * @returns A map from pin index to pin.
+         * @returns The pins including their indices.
          */
-        std::map<u32, std::string> get_pins_of_group(const std::string& group) const;
+        std::vector<std::pair<u32, std::string>> get_pins_of_group(const std::string& group) const;
+
+        /**
+         * Get the pin at the specified index of the given group.
+         *
+         * @param[in] group - The name of the pin group.
+         * @param[in] index - The index of the pin.
+         * @returns The pin.
+         */
+        std::string get_pin_of_group_at_index(const std::string& group, const u32 index) const;
 
         /**
          * Add a Boolean function with the specified name to the gate type.
@@ -436,7 +445,8 @@ namespace hal
         static const std::unordered_map<PinDirection, std::unordered_set<PinType>> m_direction_to_types;
 
         // pin groups
-        std::unordered_map<std::string, std::map<u32, std::string>> m_pin_groups;
+        std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> m_pin_groups;
+        std::unordered_map<std::string, std::unordered_map<u32, std::string>> m_pin_group_indices;
 
         // Boolean functions
         std::unordered_map<std::string, BooleanFunction> m_functions;

@@ -29,7 +29,7 @@ namespace hal
 {
     /**
      * @ingroup graph-visuals
-     * TODO
+     * @brief An item that is drawn when a node is dragged through the scene.
      */
     class NodeDragShadow : public QGraphicsObject
     {

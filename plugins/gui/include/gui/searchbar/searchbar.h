@@ -57,7 +57,7 @@ namespace hal
          *
          * @param parent - The parent widget
          */
-        Searchbar(QWidget* parent = 0);
+        Searchbar(QWidget* parent = nullptr);
 
         /// @name Q_PROPERTY READ Functions
         ///@{

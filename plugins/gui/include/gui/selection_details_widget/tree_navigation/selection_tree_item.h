@@ -35,6 +35,8 @@ namespace hal
 {
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief Basic item for the SelectionTreeModel.
+     *
      * The basic tree item class for the SelectionTreeModel. It is the base class for every other
      * subitem (except for SelectionTreeItemRoot) as it provides all commonly shared and necessary
      * functions for the model and related events.
@@ -181,6 +183,8 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief Tree item that represents a module.
+     *
      * A subclass of the basic tree item class that represents a module of the netlist.
      * It adds new hierarchical functionality since the module type item is the only item that
      * can have children (and thus building the tree structure).
@@ -279,6 +283,8 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief Tree item that represent the root.
+     *
      * A special case of the module type tree item. It has the fixed id 0.
      */
     class SelectionTreeItemRoot : public SelectionTreeItemModule
@@ -292,6 +298,8 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief Tree item that represents a gate.
+     *
      * A subclass of the basic tree item class that represents a gate of the netlist.
      * It implements the necessary commonly shared inherited functions as well as the
      * gate specific function gateType().
@@ -350,6 +358,8 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief Tree item that represents a net.
+     *
      * A subclass of the basic tree item class that represents a net of the netlist.
      * It implements the necessary commonly shared inherited functions.
      */

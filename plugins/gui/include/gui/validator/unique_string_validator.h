@@ -31,7 +31,9 @@ namespace hal
 {
     /**
      * @ingroup gui
-     * The UniqueStringValidator is a Validator which validate function returns <b>true</b> iff the candidate string does not
+     * @brief Checks if a given string is unique compared to other given strings.
+     *
+     * The UniqueStringValidator is a Validator which validate function returns <b>true</b> if the candidate string does not
      * appear in the list of unique strings passed in the constructor.
      * It should be used whenever an input must not contain an already used identifier.
      */

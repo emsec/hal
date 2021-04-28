@@ -36,6 +36,8 @@ namespace hal
 
     /**
      * @ingroup gui
+     * @brief Generic input dialog for user input.
+     *
      * The InputDialog is a dialog that requires an input from the user.
      *
      * The return value of the exec-function is QDialog::Accepted if the user clicked 'Ok'. It is QDialog::Rejected if

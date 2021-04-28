@@ -215,26 +215,28 @@ namespace hal
             cell.AddMember("pins", pins, allocator);
 
             // groups
-            std::vector<GroupCtx> group_data = get_groups(gt);
-            if (!group_data.empty())
+            std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> pin_groups = gt->get_pin_groups();
+            if (!pin_groups.empty())
             {
                 rapidjson::Value groups(rapidjson::kArrayType);
 
-                for (const auto& group_ctx : group_data)
+                for (const auto& [name, group_pins] : pin_groups)
                 {
                     rapidjson::Value group(rapidjson::kObjectType);
 
-                    group.AddMember("name", group_ctx.name, allocator);
+                    group.AddMember("name", name, allocator);
 
-                    rapidjson::Value group_pins(rapidjson::kObjectType);
-                    for (const auto& [index, group_pin] : group_ctx.index_to_pin)
+                    rapidjson::Value group_pin_array(rapidjson::kArrayType);
+                    for (const auto& [index, pin] : group_pins)
                     {
+                        rapidjson::Value group_pin(rapidjson::kObjectType);
                         std::string s = std::to_string(index);
                         rapidjson::Value v_index(s.c_str(), s.size(), allocator);
-                        rapidjson::Value v_pin(group_pin.c_str(), group_pin.size(), allocator);
-                        group_pins.AddMember(v_index, v_pin, allocator);
+                        rapidjson::Value v_pin(pin.c_str(), pin.size(), allocator);
+                        group_pin.AddMember(v_index, v_pin, allocator);
+                        group_pin_array.PushBack(group_pin, allocator);
                     }
-                    group.AddMember("pins", group_pins, allocator);
+                    group.AddMember("pins", group_pin_array, allocator);
 
                     groups.PushBack(group, allocator);
                 }
@@ -294,22 +296,6 @@ namespace hal
             }
 
             res.push_back(res_pin);
-        }
-
-        return res;
-    }
-
-    std::vector<HGLWriter::GroupCtx> HGLWriter::get_groups(GateType* gt)
-    {
-        std::vector<GroupCtx> res;
-        std::unordered_map<std::string, std::map<u32, std::string>> groups = gt->get_pin_groups();
-
-        for (const auto& [group, index_to_pin] : groups)
-        {
-            GroupCtx res_group;
-            res_group.name         = group;
-            res_group.index_to_pin = index_to_pin;
-            res.push_back(res_group);
         }
 
         return res;

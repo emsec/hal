@@ -43,6 +43,8 @@ namespace hal
 
     /**
      * @ingroup graph-visuals
+     * @brief A view to display the rendered graph (needs a GraphicsScene).
+     *
      * The GraphGraphicsView is the GraphicsView for a GraphicsScene. (Its like the camera that shows a section of
      * the scene)
      */

@@ -33,6 +33,8 @@ namespace hal
 
     /**
      * @ingroup gui
+     * @brief The welcome screen's RecentFiles section.
+     *
      * The widget in the welcome screen that shows the recently used files.
      */
     class RecentFilesWidget : public QFrame

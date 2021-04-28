@@ -46,7 +46,8 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-grouping
-     * The ContentWidget that manages the groupings. <br>
+     * @brief User interface for Groupings.
+     *
      * Groupings are disjoint subsets of Gate%s, Module%s and Net%s that can be used to categorize these objects. In the
      * GUI the groupings are drawn in their specified color. The objects of one grouping can be easily selected
      * all together to simplify the work with gates/modules/nets that share a certain property.
@@ -57,6 +58,8 @@ namespace hal
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
         Q_PROPERTY(QString newGroupingIconPath READ newGroupingIconPath WRITE setNewGroupingIconPath)
         Q_PROPERTY(QString newGroupingIconStyle READ newGroupingIconStyle WRITE setNewGroupingIconStyle)
+        Q_PROPERTY(QString toolboxIconPath READ toolboxIconPath WRITE setToolboxIconPath)
+        Q_PROPERTY(QString toolboxIconStyle READ toolboxIconStyle WRITE setToolboxIconStyle)
         Q_PROPERTY(QString renameGroupingIconPath READ renameGroupingIconPath WRITE setRenameGroupingIconPath)
         Q_PROPERTY(QString renameGroupingIconStyle READ renameGroupingIconStyle WRITE setRenameGroupingIconStyle)
         Q_PROPERTY(QString deleteIconPath READ deleteIconPath WRITE setDeleteIconPath)
@@ -96,6 +99,8 @@ namespace hal
         ///@{
         QString newGroupingIconPath() const;
         QString newGroupingIconStyle() const;
+        QString toolboxIconPath() const;
+        QString toolboxIconStyle() const;
         QString renameGroupingIconPath() const;
         QString renameGroupingIconStyle() const;
         QString deleteIconPath() const;
@@ -112,19 +117,21 @@ namespace hal
         /** @name Q_PROPERTY WRITE Functions
          */
         ///@{
-        void setDisabledIconStyle(const QString &style);
-        void setNewGroupingIconPath(const QString &path);
-        void setNewGroupingIconStyle(const QString &style);
-        void setRenameGroupingIconPath(const QString &path);
-        void setRenameGroupingIconStyle(const QString &style);
-        void setDeleteIconPath(const QString &path);
-        void setDeleteIconStyle(const QString &style);
-        // void setOpenIconPath(const QString &path);
-        // void setOpenIconStyle(const QString &style);
-        void setColorSelectIconPath(const QString &path);
-        void setColorSelectIconStyle(const QString &style);
-        void setToSelectionIconPath(const QString &path);
-        void setToSelectionIconStyle(const QString &style);
+        void setDisabledIconStyle(const QString& style);
+        void setNewGroupingIconPath(const QString& path);
+        void setNewGroupingIconStyle(const QString& style);
+        void setToolboxIconPath(const QString& path);
+        void setToolboxIconStyle(const QString& style);
+        void setRenameGroupingIconPath(const QString& path);
+        void setRenameGroupingIconStyle(const QString& style);
+        void setDeleteIconPath(const QString& path);
+        void setDeleteIconStyle(const QString& style);
+        // void setOpenIconPath(const QString& path);
+        // void setOpenIconStyle(const QString& style);
+        void setColorSelectIconPath(const QString& path);
+        void setColorSelectIconStyle(const QString& style);
+        void setToSelectionIconPath(const QString& path);
+        void setToSelectionIconStyle(const QString& style);
         ///@}
 
         /**
@@ -249,6 +256,9 @@ namespace hal
         QString mNewGroupingIconStyle;
 
         QAction* mToolboxAction;
+        QString mToolboxIconPath;
+        QString mToolboxIconStyle;
+
         QAction* mRenameAction;
         QString mRenameGroupingIconPath;
         QString mRenameGroupingIconStyle;

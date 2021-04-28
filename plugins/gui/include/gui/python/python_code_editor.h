@@ -31,7 +31,9 @@ namespace hal
 {
     /**
      * @ingroup python-editor
-     * A Code Editor that is extended to be used as a python editor. <br>
+     * @brief Code editor to write python code.
+     *
+     * A Code editor that is extended to be used as a python editor. <br>
      * The editor can be used to work on existing python files and provides functionality to stay in sync with the
      * original file. <br>
      * Moreover it provides python specific tools for improving the coding experience like auto indentation and

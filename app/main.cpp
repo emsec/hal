@@ -1,10 +1,10 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
-#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 #include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/plugin_system/plugin_interface_cli.h"
@@ -51,8 +51,8 @@ void initialize_cli_options(ProgramOptions& cli_options)
     generic_options.add("--volatile-mode", "[cli only] prevents hal from creating a .hal progress file (e.g. cluster use)");
     generic_options.add("--no-log", "prevents hal from creating a .log file");
 
-    /* initialize hdl parser options */
-    generic_options.add(hdl_parser_manager::get_cli_options());
+    /* initialize netlist parser options */
+    generic_options.add(netlist_parser_manager::get_cli_options());
 
     /* initialize hdl writer options */
     generic_options.add(hdl_writer_manager::get_cli_options());
@@ -86,7 +86,7 @@ int main(int argc, const char* argv[])
     lm.add_channel("module", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("grouping", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
 
-    lm.add_channel("hdl_parser", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("netlist_parser", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("hdl_writer", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("python_context", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
 

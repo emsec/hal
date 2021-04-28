@@ -46,7 +46,11 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-context
-     * TODO
+     * @brief Provides the user with an interface to manage GraphContext%s.
+     *
+     * The ContextManagerWidget provides the user with the functionality to create, delete,
+     * and modify GraphContext%s. It furthermore displays the Context's (in the widget
+     * reffered to as a View) name and timestamp of creation in a table-like manner.
      */
     class ContextManagerWidget : public ContentWidget
     {
@@ -66,10 +70,33 @@ namespace hal
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
 
     public:
+        /**
+         * The constructor. The GraphTabWidget is neccessary so this widget can communicate
+         * with the tab_view to open (display) a specific context.
+         *
+         * @param tab_view - Hal's GraphTabWidget that displays the views.
+         * @param parent - The widget's parent.
+         */
         ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
 
+        /**
+         * Selects the given context if possible (if it is indeed in the widget's ContextTableModel).
+         *
+         * @param context - The context to select.
+         */
         void selectViewContext(GraphContext* context);
+
+        /**
+         * Get the currently selected GraphContext in the table.
+         *
+         * @return The GraphContext.
+         */
         GraphContext* getCurrentContext();
+
+        /**
+         * Opens the currently selected GraphContext in hal's GraphTabWidget
+         */
+        void handleOpenContextClicked();
 
         virtual void setupToolbar(Toolbar* toolbar) override;
 
@@ -101,7 +128,6 @@ namespace hal
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
 
-        void handleOpenContextClicked();
     public Q_SLOTS:
         //void handleContextCreated(GraphContext* context);
         //void handleContextRenamed(GraphContext* context);
@@ -147,7 +173,7 @@ namespace hal
         void handleDeleteContextClicked();
 
         void handleContextMenuRequest(const QPoint& point);
-        void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+        void handleSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
         void handleFilterTextChanged(const QString& filter_text);
 
         void setToolbarButtonsEnabled(bool enabled);

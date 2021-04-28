@@ -35,6 +35,8 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief One item in the welcome screen's RecentFiles section.
+     *
      * One entry in the RecentFileWidget. It represents one recently used file and can be clicked to open the netlist
      * (i.e. parse hdl file or open .hal file) of the file.
      */

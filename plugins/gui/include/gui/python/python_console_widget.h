@@ -31,6 +31,8 @@ namespace hal
 
     /**
      * @ingroup python-console
+     * @brief Wraps the PythonConsole.
+     *
      * The ContentWidget that wraps the PythonConsole.
      */
     class PythonConsoleWidget : public ContentWidget

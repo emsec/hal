@@ -36,6 +36,8 @@ namespace hal
 
     /**
      * @ingroup gui
+     * @brief Hal's welcome screen.
+     *
      * The welcome screen shown at the start of the gui.
      */
     class WelcomeScreen : public QFrame

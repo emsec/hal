@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -54,20 +54,20 @@ namespace hal
         /**
          * Create a netlist from the given file using the specified gate library file.
          *
-         * @param[in] hdl_file - Path to the file.
+         * @param[in] netlist_file - Path to the netlist file.
          * @param[in] gate_library_file - Path to the gate library file.
          * @returns The netlist on success, nullptr otherwise.
          */
-        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file);
 
         /**
          * Create a netlist from the given '.hal' file.
          *
-         * @param[in] hal_file - Path to the '.hal' file.
+         * @param[in] netlist_file - Path to the '.hal' file.
          * file.
          * @returns The netlist on success, nullptr otherwise.
          */
-        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& hal_file);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file);
 
         /**
          * Create a netlist using information specified in command line arguments on startup.<br>
@@ -81,9 +81,9 @@ namespace hal
         /**
           * Create a netlist from a given file for each matching pre-loaded gate library.
           *
-          * @param[in] hdl_file - Path to the file.
+          * @param[in] netlist_file - Path to the netlist file.
           * @returns A vector of netlists.
           */
-        NETLIST_API std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& hdl_file);
+        NETLIST_API std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& netlist_file);
     }    // namespace netlist_factory
 }    // namespace hal

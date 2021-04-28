@@ -29,6 +29,8 @@ namespace hal
 {
     /**
      * @ingroup graph-visuals-net
+     * @brief Nets whose output and input can be labeled (e.g. from GND/VCC)
+     *
      * The SeparatedGraphicsNet that is used to visualize constant inputs (and outputs from GND/VCC gates).
      * The inputs and outputs of the net are displayed as a small box that contains the constant's value as a text.
      */

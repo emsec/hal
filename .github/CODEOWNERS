@@ -2,21 +2,31 @@
 #
 #   - https://github.com/blog/2392-introducing-code-owners
 
-* @swallat @SJulianS @devhoffmann
+* @joern274 @SJulianS @nils1603 @swallat @SimonKlx
 
-/packaging/ @swallat
-/deps/ @swallat
-/cmake/ @swallat
-*.cmake @swallat
-*/CMakeLists.txt @swallat
-CMakeLists.txt @swallat
-*.in @swallat
+/packaging/ @nils1603
+/deps/ @nils1603
+/cmake/ @nils1603
+*.cmake @nils1603
+*/CMakeLists.txt @nils1603
+CMakeLists.txt @nils1603
+*.in @nils1603
 
-/include/core/ @swallat @SJulianS @devhoffmann
-/src/core/ @swallat @SJulianS @devhoffmann
+/include/ @SJulianS
+/src/ @SJulianS
 
-/include/netlist/ @swallat @SJulianS @devhoffmann
-/src/netlist/ @swallat @SJulianS @devhoffmann
-
-/include/python-binding/ @swallat
-/src/python-binding/ @swallat
+/plugins/gui/ @joern274
+/plugins/boolean_influence/  @nils1603 @SimonKlx
+/plugins/dataflow_analysis/  @nils1603
+/plugins/gate_libraries/  @nils1603 @SJulianS
+/plugins/graph_algorithm/ @nils1603
+/plugins/hgl_parser/  @SJulianS
+/plugins/hgl_writer/  @SJulianS
+/plugins/liberty_parser/ @SJulianS
+/plugins/netlist_simulator/  @SJulianS
+/plugins/python_shell/  @SJulianS
+/plugins/solve_fsm/  @SimonKlx  @nils1603
+/plugins/verilog_parser/  @SJulianS
+/plugins/vhdl_parser/ @SJulianS
+/plugins/vhdl_verilog_writer/ @SJulianS
+/plugins/z3_utils/  @SimonKlx  @nils1603

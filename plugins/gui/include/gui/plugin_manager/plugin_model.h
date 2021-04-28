@@ -23,9 +23,11 @@
 
 #pragma once
 
-#include "gui/plugin_manager/plugin_item.h"
-#include <QAbstractItemModel>
 #include "hal_core/defines.h"
+
+#include "gui/plugin_manager/plugin_item.h"
+
+#include <QAbstractItemModel>
 
 namespace hal
 {
@@ -37,20 +39,22 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit PluginModel(QObject* parent = 0);
+        explicit PluginModel(QObject* parent = nullptr);
         ~PluginModel();
+
+        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+        int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+        QModelIndex parent(const QModelIndex& child) const override;
+        QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+        QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+        bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent, int destinationChild) override;
+        bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) override;
+        Qt::DropActions supportedDropActions() const override;
+        Qt::ItemFlags flags(const QModelIndex& index) const override;
+        bool setData(const QModelIndex& index, const QVariant& value, int role) override;
+
         bool isValidIndex(const QModelIndex& idx);
-        virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-        virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-        virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-        virtual QModelIndex parent(const QModelIndex& child) const;
-        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-        virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-        virtual bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent, int destinationChild);
-        virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
-        virtual Qt::DropActions supportedDropActions() const;
-        virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-        virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
         void pluginManagerCallback(bool is_load, std::string const& plugin_name, std::string const& plugin_path);
         void requestLoadPlugin(const QString& name, const QString& path);
         void requestUnloadPlugin(QModelIndexList idx);

@@ -32,6 +32,8 @@ namespace hal {
 
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief Helper class consisting of usefull details-related functions.
+     *
      * A utility class used to gather details-tables related helperfunctions.
      */
     class DetailsTableUtilities

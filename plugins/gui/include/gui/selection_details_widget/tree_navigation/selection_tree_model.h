@@ -43,6 +43,8 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief A model that contains the current selection.
+     *
      * A model that manages the current selection in a tree-styled fashion.
      * Its most important function is fetchSelection that automatically updates
      * the model's internal data.
@@ -58,7 +60,7 @@ namespace hal
          *
          * @param parent - The model's parent.
          */
-        SelectionTreeModel(QObject* parent = 0);
+        SelectionTreeModel(QObject* parent = nullptr);
 
         /**
           * The destructor.
@@ -162,6 +164,8 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief Deletes the current SelectionTreeModel.
+     *
      * A utility class to delete the current model. The current root item of the
      * model is given to the disposer and deleted when dispose is called.
      */

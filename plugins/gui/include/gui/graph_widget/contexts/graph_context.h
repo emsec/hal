@@ -38,6 +38,8 @@ namespace hal
 
     /**
      * @ingroup graph-contexts
+     * @brief Logical container for modules, gates, and nets.
+     *
      * The GraphContext is a container that holds all elements (Module%s, Gate%s, Net%s) that should be drawn in the
      * scene. It uses a GraphLayouter to layout its elements and creates a scene with the corresponding GraphicsItem%s.
      * Afterwards this scene can be shown in the GraphWidget's GraphGraphicsView. <br>

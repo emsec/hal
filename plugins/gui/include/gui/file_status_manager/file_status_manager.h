@@ -49,7 +49,7 @@ namespace hal
          *
          * @param parent - The manager's parent.
          */
-        FileStatusManager(QObject* parent = 0);
+        FileStatusManager(QObject* parent = nullptr);
 
         /**
          * The destructor.

@@ -65,6 +65,6 @@ namespace hal
         void dragEnd();
 
     private:
-        ContentDragRelay(QObject* parent = 0);
+        ContentDragRelay(QObject* parent = nullptr);
     };
 }

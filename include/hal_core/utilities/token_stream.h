@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -273,6 +273,24 @@ namespace hal
         }
 
         /**
+         * Consume the entire current line and returns the last consumed token.
+         *
+         * @returns The last consumed token or the last token of the stream.
+         */
+        Token<T> consume_current_line()
+        {
+            u32 line = at(m_pos).number;
+
+            u32 i = m_pos;
+            while (++i < size() && at(i).number == line)
+            {
+            }
+            m_pos = i;
+
+            return at(m_pos - 1);
+        }
+
+        /**
          * Consume the next tokens in the stream until a token matches the given \p expected string.<br>
          * This final token is not consumed, i.e., it is now the next token in the stream.<br>
          * All consumed tokens are returned as a new token stream.<br>
@@ -394,7 +412,7 @@ namespace hal
          */
         Token<T>& at(u32 position)
         {
-            if (position > m_data.size())
+            if (position >= m_data.size())
             {
                 throw TokenStreamException({"reached the end of the stream", get_current_line_number()});
             }
@@ -406,7 +424,7 @@ namespace hal
          */
         const Token<T>& at(u32 position) const
         {
-            if (position > m_data.size())
+            if (position >= m_data.size())
             {
                 throw TokenStreamException({"reached the end of the stream", get_current_line_number()});
             }

@@ -42,6 +42,8 @@ namespace hal {
 
     /**
      * @ingroup graph
+     * @brief A widget used to select destinations when traversing through the graph.
+     *
      * A QTableWidget that is used to navigate from a pin with multiple adjacent pins. The table shows information about
      * the Gate%s/Module%s that are connected to the starting pin, such as name, id, type, the adjacent input/ouput pin
      * and the parent Module's name. <br>

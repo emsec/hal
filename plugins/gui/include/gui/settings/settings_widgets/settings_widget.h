@@ -44,14 +44,10 @@ namespace hal
     class SettingsWidget : public QFrame
     {
         Q_OBJECT
-        Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setHighlightColor)
         Q_PROPERTY(bool dirty READ dirty WRITE setDirty)
 
     public:
-        explicit SettingsWidget(SettingsItem* item, QWidget* parent = 0);
-
-        QColor highlightColor();
-        void setHighlightColor(const QColor& color);
+        explicit SettingsWidget(SettingsItem* item, QWidget* parent = nullptr);
 
         void reset_labels();
         bool matchLabel(const QString& needle);
@@ -94,7 +90,6 @@ namespace hal
         SettingsItem* mSettingsItem;
 
     private:
-        QColor mHighlightColor;
         bool mDirty = false;
     };
 }

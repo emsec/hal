@@ -214,7 +214,7 @@ namespace hal
         QString mName;
         QIcon mIcon;
         ContentAnchor* mAnchor = nullptr;
-        int mIndexPriority         = 0;
+        int mIndexPriority = 0;
 
         QString mIconStyle;
         QString mIconPath;

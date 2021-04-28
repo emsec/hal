@@ -29,7 +29,9 @@ namespace hal
 {
     /**
      * @ingroup gui
-     * The Toolbar is a QToolBar that is used in the ContentFrame of all ContentWidgets.
+     * @brief Toolbar for all ContentFrame%s and ContentWidget%s.
+     *
+     * The Toolbar is a QToolBar that is used in the ContentFrame of all ContentWidget%s.
      */
     class Toolbar : public QToolBar
     {

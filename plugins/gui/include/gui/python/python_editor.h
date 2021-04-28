@@ -55,6 +55,8 @@ namespace hal
  
     /**
      * @ingroup python-editor
+     * @brief Main widget that combines all neccessary functionality to develop in python (for hal).
+     *
      * Widget that contains the python editor. It manages all CodeEditor objects (open tabs). The logic to save, open
      * and execute scripts as well as the automatically creation of snapshot files (backups) is handles by this class.
      */

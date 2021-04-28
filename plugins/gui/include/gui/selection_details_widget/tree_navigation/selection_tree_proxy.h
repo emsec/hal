@@ -32,6 +32,8 @@ namespace hal
 {
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief Enables filtering of the SelectionTreeModel.
+     *
      * A proxy model to filter the SelectionTreeModel. This allows to search efficiently through the
      * model and the results can be displayed within the view in a tree-styled fashion.
      */
@@ -45,7 +47,7 @@ namespace hal
          *
          * @param parent - The model's parent.
          */
-        SelectionTreeProxyModel(QObject* parent = 0);
+        SelectionTreeProxyModel(QObject* parent = nullptr);
 
         /**
          * Calls the suppressedByFilter() function to get all items that should not be displayed

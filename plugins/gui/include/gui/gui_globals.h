@@ -29,13 +29,10 @@
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/netlist_relay/netlist_relay.h"
-#include "gui/notifications/notification_manager.h"
-#include "gui/plugin_management/plugin_relay.h"
+#include "gui/plugin_relay/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
-#include "gui/settings/settings_manager.h"
 #include "gui/thread_pool/thread_pool.h"
-#include "gui/window_manager/window_manager.h"
 #include "gui/gui_api/gui_api.h"
 
 #include <QSettings>
@@ -52,14 +49,6 @@ namespace hal
      * Is used to persist the list of recent files and the previously opened file in the 'open file' dialog
      */
     extern QSettings* gGuiState;
-    /**
-     * TODO: Currently unused. Remove me?
-     */
-    extern WindowManager* gWindowManager;
-    /**
-     * TODO: Currently unused. Remove me?
-     */
-    extern NotificationManager* gNotificationManager;
 
     /**
      * The global ContentManager (see doc)

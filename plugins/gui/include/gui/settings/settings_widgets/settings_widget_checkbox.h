@@ -24,6 +24,7 @@
 #pragma once
 
 #include "gui/settings/settings_widgets/settings_widget.h"
+
 #include <QCheckBox>
 
 namespace hal
@@ -39,15 +40,15 @@ namespace hal
         Q_OBJECT
 
     public:
-        SettingsWidgetCheckbox(SettingsItemCheckbox* item, QWidget* parent = 0);
+        SettingsWidgetCheckbox(SettingsItemCheckbox* item, QWidget* parent = nullptr);
 
-        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-        virtual QVariant value()                 Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) override;
+        virtual QVariant value() override;
 
     private:
-        QCheckBox* m_check_box;
         void on_state_changed(bool checked);
-        
+
+        QCheckBox* m_check_box;
         SettingsItemNew* mSettingsItem;
     };
 }

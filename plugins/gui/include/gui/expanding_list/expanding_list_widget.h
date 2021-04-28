@@ -37,6 +37,10 @@ namespace hal
     class ExpandingListButton;
     class ExpandingListItem;
 
+    /**
+     * @ingroup settings
+     * @brief A helpter class to group related list items (buttons).
+     */
     class ExpandingListGroup : public QList<ExpandingListItem*>
     {
     public:
@@ -66,7 +70,7 @@ namespace hal
          *
          * @param parent - The widget's parent.
          */
-        ExpandingListWidget(QWidget* parent = 0);
+        ExpandingListWidget(QWidget* parent = nullptr);
 
         /**
          * Appends a button to the list. If an optional parent button is specified, the button
@@ -135,7 +139,6 @@ namespace hal
         QMap<QString,ExpandingListItem*> mItemMap;
 
         ExpandingListButton* mSelectedButton;
-        //ExpandingListItem* mExtendedItem;
 
         int mItemWidth;
         int mOffset;

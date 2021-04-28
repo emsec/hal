@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -56,7 +56,7 @@ namespace hal
         struct PinCtx
         {
             std::vector<std::string> pins;
-            std::unordered_map<std::string,PinType> pin_to_type;
+            std::unordered_map<std::string, PinType> pin_to_type;
             std::unordered_map<std::string, PinDirection> pin_to_direction;
             std::unordered_map<std::string, std::string> boolean_functions;
         };
@@ -69,7 +69,7 @@ namespace hal
         bool parse_gate_library(const rapidjson::Document& document);
         bool parse_gate_type(const rapidjson::Value& gate_type);
         bool parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin, const std::string& gt_name);
-        std::optional<std::pair<std::string, std::map<u32, std::string>>> parse_group(const rapidjson::Value& group, const std::string& gt_name);
+        bool parse_group(GateType* gt, const rapidjson::Value& group, const std::string& gt_name);
         bool parse_lut_config(GateType* gt_lut, const rapidjson::Value& lut_config);
         bool parse_ff_config(GateType* gt_ff, const rapidjson::Value& ff_config);
         bool parse_latch_config(GateType* gt_latch, const rapidjson::Value& latch_config);

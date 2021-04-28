@@ -29,6 +29,7 @@ namespace hal
 {
     /**
      * @ingroup graph-layouter
+     * @brief A specific implementation of a layouter.
      */
     class PhysicalGraphLayouter final : public GraphLayouter
     {

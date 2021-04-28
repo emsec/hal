@@ -29,9 +29,12 @@ namespace hal
 {
     /**
      * @ingroup gui
-     * @brief Extension for the QAction class.
+     * @brief Provides an interface for triggerable functionality that can be inserted into widgets
+     * and also connected to shortcuts.
      *
-     * This extension supports the automatic display of shortcuts within the QAction's Tooltip.
+     * The Action class encapsulates the functionality of a button than can be put into menus and can
+     * can also be triggered via shortcuts. Common examples for actions are the "open" or "save" options
+     * in the top bar of the main widget as well as all icons in the python editor.
      */
     class Action : public QAction
     {
@@ -39,57 +42,57 @@ namespace hal
 
     public:
         /**
-         * Constructor.
+         * The default constructor.
          *
-         * @param parent - The parent object (can be an action group)
+         * @param parent - The action's parent.
          */
         explicit Action(QObject *parent = nullptr);
 
         /**
-         * Constructor.
+         * Second constructor where one can also set the descriptive text.
          *
-         * @param text - The Action's description
-         * @param parent - The parent object (can be an action group)
+         * @param text - The text.
+         * @param parent - The action's parent.
          */
         explicit Action(const QString &text, QObject *parent = nullptr);
 
         /**
-         * Constructor.
+         * Third constructor where one can set the descriptive text as well as the displayed icon.
          *
-         * @param icon - The icon of the Action
-         * @param text - The Action's description
-         * @param parent - The parent object (can be an action group)
+         * @param icon - The displayed icon.
+         * @param text - The descriptive text.
+         * @param parent - The action's parent.
          */
         explicit Action(const QIcon &icon, const QString &text, QObject *parent = nullptr);
 
-        // Hides non-virtual methods in QAction:
+        // hides non-virtual methods in QAction
         /**
-         * Sets the description of the Action. Also updates the Action's tooltip.
+         * Sets the descriptive text of the action.
          *
-         * @param text - The new description
+         * @param text - The text to set.
          */
         void setText(const QString& text);
 
         /**
-         * Changes the tooltip to the specified string. If the tooltip is changed once by this function, the
-         * tooltip won't be automatically extended by the Action's shortcut any longer. Therefore, using this function
-         * one can create custom tooltips without shortcuts using this function.
+         * Sets the tooltip of the action.
          *
-         * @param tooltip - The new tooltip
+         * @param tooltip - The tooltip
          */
         void setToolTip(const QString& tooltip);
 
     public Q_SLOTS:
+
         /**
-         * Configures a shortcut for this Action.
+         * Sets the shortcut with which one can trigger the action.
          *
-         * @param shortcut - The shortcut to configure
+         * @param shortcut - The shortcut.
          */
         void setShortcut(const QKeySequence &shortcut);
 
     private:
+	void updateTooltip(const QKeySequence& seq);
+
         QString mDescriptionText;
-        void updateTooltip(const QKeySequence& seq);
         bool mTooltipModified;
 
     };

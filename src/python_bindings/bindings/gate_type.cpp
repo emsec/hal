@@ -293,32 +293,41 @@ namespace hal
             :rtype: set[str]
         )");
 
-        py_gate_type.def("assign_pin_group", &GateType::assign_pin_group, py::arg("group"), py::arg("index_to_pin"), R"(
+        py_gate_type.def("assign_pin_group", &GateType::assign_pin_group, py::arg("group"), py::arg("pins"), R"(
             Assign existing pins to a pin group.
 
             :param str group: The name of the pin group.
-            :param dict[int,str] index_to_pin: A dict from pin index to pin.
+            :param list[tuple(int,str)] pins: The pins to be added to the group including their indices.
         )");
 
         py_gate_type.def_property_readonly("pin_groups", &GateType::get_pin_groups, R"(
-            All pin groups of the gate type as a dict from pin group names to a dict from pin index to pin.
+            All pin groups of the gate type as a dict from pin group names to the pins of each group including their indices.
 
-            :type: dict[str,dict[int,str]]
+            :type: dict[str,list[tuple(int,str)]]
         )");
 
         py_gate_type.def("get_pin_groups", &GateType::get_pin_groups, R"(
             Get all pin groups of the gate type.
 
-            :returns: A dict from pin group names to a dict from pin index to pin.
-            :rtype: dict[str,dict[int,str]]
+            :returns: A dict from pin group names to the pins of each group including their indices.
+            :rtype: dict[str,list[tuple(int,str)]]
         )");
 
         py_gate_type.def("get_pins_of_group", &GateType::get_pins_of_group, py::arg("group"), R"(
             Get all pins of the specified pin group including their indices.
          
             :param str group: The name of the pin group.
-            :returns: A map from pin index to pin.
-            :rtype: dict[int,str]
+            :returns: The pins including their indices.
+            :rtype: list[tuple(int,str)]
+        )");
+
+        py_gate_type.def("get_pin_of_group_at_index", &GateType::get_pin_of_group_at_index, py::arg("group"), py::arg("index"), R"(
+            Get the pin at the specified index of the given group.
+
+            :param str group: The name of the pin group.
+            :param int index: The index of the pin.
+            :returns: The pin.
+            :rtype: str
         )");
 
         py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("pin_name"), py::arg("function"), R"(

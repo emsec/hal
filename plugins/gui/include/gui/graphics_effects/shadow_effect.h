@@ -30,6 +30,8 @@ namespace hal
 
     /**
      * @ingroup graph-visuals
+     * @brief Creates a shadow effect around QObject%s.
+     *
      * The ShadowEffect is a graphics effect that simulates a small shadow around the outline of the object
      * it is applied on.
      */
@@ -43,7 +45,7 @@ namespace hal
          *
          * @param parent - The parent widget.
          */
-        explicit ShadowEffect(QObject* parent = 0);
+        explicit ShadowEffect(QObject* parent = nullptr);
 
         /**
          * Draws the effect.
@@ -68,7 +70,7 @@ namespace hal
          */
         inline void setDistance(qreal distance)
         {
-            _distance = distance;
+            mDistance = distance;
             updateBoundingRect();
         }
 
@@ -79,7 +81,7 @@ namespace hal
          */
         inline qreal distance() const
         {
-            return _distance;
+            return mDistance;
         }
 
         /**
@@ -89,7 +91,7 @@ namespace hal
          */
         inline void setBlurRadius(qreal blurRadius)
         {
-            _blurRadius = blurRadius;
+            mBlurRadius = blurRadius;
             updateBoundingRect();
         }
 
@@ -100,7 +102,7 @@ namespace hal
          */
         inline qreal blurRadius() const
         {
-            return _blurRadius;
+            return mBlurRadius;
         }
 
         /**
@@ -110,7 +112,7 @@ namespace hal
          */
         inline void setColor(const QColor& color)
         {
-            _color = color;
+            mColor = color;
         }
 
         /**
@@ -120,12 +122,12 @@ namespace hal
          */
         inline QColor color() const
         {
-            return _color;
+            return mColor;
         }
 
     private:
-        qreal _distance;
-        qreal _blurRadius;
-        QColor _color;
+        qreal mDistance;
+        qreal mBlurRadius;
+        QColor mColor;
     };
 }

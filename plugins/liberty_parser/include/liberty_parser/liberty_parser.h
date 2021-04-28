@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -91,7 +91,8 @@ namespace hal
             PinDirection direction = PinDirection::none;
             std::vector<std::string> pin_names;
             std::vector<pin_group> pins;
-            std::map<u32, std::string> index_to_pin_name;
+            std::vector<std::pair<u32, std::string>> pin_indices;
+            std::unordered_map<u32, std::string> index_to_pin;
         };
 
         struct ff_group

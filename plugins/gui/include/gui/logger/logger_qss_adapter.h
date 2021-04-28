@@ -29,6 +29,8 @@ namespace hal
 {
     /**
      * @ingroup logging
+     * @brief Connects the stylesheet properties to the log designs.
+     *
      * QSS Adapter that provide the color configurations used for the different channel types of the logger.
      */
     class LoggerQssAdapter : public QWidget

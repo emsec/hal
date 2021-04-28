@@ -24,6 +24,7 @@
 #pragma once
 
 #include "gui/settings/settings_widgets/settings_widget.h"
+
 #include <QLineEdit>
 
 namespace hal
@@ -38,14 +39,14 @@ namespace hal
         Q_OBJECT
 
     public:
-        SettingsWidgetText(SettingsItemText* item, QWidget* parent = 0);
+        SettingsWidgetText(SettingsItemText* item, QWidget* parent = nullptr);
 
-        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-        virtual QVariant value() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) override;
+        virtual QVariant value() override;
 
     private:
-        QLineEdit* m_textfield;
         void on_text_changed();
 
+        QLineEdit* m_textfield;
     };
 }

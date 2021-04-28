@@ -23,8 +23,10 @@
 !python_shell/**/*
 !solve_fsm*
 !solve_fsm/**/*
-!vhdl_verilog_parsers*
-!vhdl_verilog_parsers/**/*
+!verilog_parser*
+!verilog_parser/**/*
+!vhdl_parser*
+!vhdl_parser/**/*
 !vhdl_verilog_writers*
 !vhdl_verilog_writers/**/*
 !z3_utils*
