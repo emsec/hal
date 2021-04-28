@@ -303,7 +303,7 @@ $(function() {
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160; </div>
 <div class="line"><a name="l00413"></a><span class="lineno"><a class="line" href="../../db/d9d/classhal_1_1TokenStream.html#a41a6a977f6adbbacf250be5ad1b78b83">  413</a></span>&#160;        <a class="code" href="../../d7/d7a/structhal_1_1Token.html">Token&lt;T&gt;</a>&amp; <a class="code" href="../../db/d9d/classhal_1_1TokenStream.html#a41a6a977f6adbbacf250be5ad1b78b83">at</a>(<a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> position)</div>
 <div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        {</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;            <span class="keywordflow">if</span> (position &gt; m_data.size())</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;            <span class="keywordflow">if</span> (position &gt;= m_data.size())</div>
 <div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;            {</div>
 <div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="../../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html">TokenStreamException</a>({<span class="stringliteral">&quot;reached the end of the stream&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;            }</div>
@@ -312,7 +312,7 @@ $(function() {
 <div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160; </div>
 <div class="line"><a name="l00425"></a><span class="lineno"><a class="line" href="../../db/d9d/classhal_1_1TokenStream.html#ac8a53a3f0e7d1ae97c22dee7dbaf7a04">  425</a></span>&#160;        <span class="keyword">const</span> <a class="code" href="../../d7/d7a/structhal_1_1Token.html">Token&lt;T&gt;</a>&amp; <a class="code" href="../../db/d9d/classhal_1_1TokenStream.html#ac8a53a3f0e7d1ae97c22dee7dbaf7a04">at</a>(<a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> position)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;            <span class="keywordflow">if</span> (position &gt; m_data.size())</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;            <span class="keywordflow">if</span> (position &gt;= m_data.size())</div>
 <div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;            {</div>
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="../../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html">TokenStreamException</a>({<span class="stringliteral">&quot;reached the end of the stream&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;            }</div>
@@ -429,7 +429,7 @@ $(function() {
 <div class="ttc" id="aclasshal_1_1TokenStream_html_aa392c95edbe32bc27ed99c8cc56339c8"><div class="ttname"><a href="../../db/d9d/classhal_1_1TokenStream.html#aa392c95edbe32bc27ed99c8cc56339c8">hal::TokenStream::TokenStream</a></div><div class="ttdeci">TokenStream(const std::vector&lt; Token&lt; T &gt;&gt; &amp;init, const std::vector&lt; T &gt; &amp;increase_level_tokens={&quot;(&quot;}, const std::vector&lt; T &gt; &amp;decrease_level_tokens={&quot;)&quot;})</div><div class="ttdef"><b>Definition:</b> token_stream.h:171</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Apr 27 2021 15:57:46 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 28 2021 10:37:58 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
