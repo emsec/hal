@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    class PLUGIN_API VhdlVerilogParsersPlugin : public BasePluginInterface
+    class PLUGIN_API VHDLParserPlugin : public BasePluginInterface
     {
     public:
         std::string get_name() const override;

@@ -356,13 +356,13 @@ namespace hal
 
         GateLibrary gl("no_path", "example_gl");
 
-        std::map<u32, std::string> index_to_pin_a = {{0, "A(0)"}, {1, "A(1)"}};
-        std::map<u32, std::string> index_to_pin_b = {{0, "B(0)"}, {1, "B(1)"}};
-        std::map<u32, std::string> index_to_pin_c = {{0, "C(0)"}, {1, "C(1)"}};
-        std::unordered_map<std::string, std::map<u32, std::string>> groups_a = {{"A", index_to_pin_a}};
-        std::unordered_map<std::string, std::map<u32, std::string>> groups_ab = {{"A", index_to_pin_a}, {"B", index_to_pin_b}};
-        std::unordered_map<std::string, std::map<u32, std::string>> groups_bc = {{"B", index_to_pin_b}, {"C", index_to_pin_c}};
-        std::unordered_map<std::string, std::map<u32, std::string>> groups_abc = {{"A", index_to_pin_a}, {"B", index_to_pin_b}, {"C", index_to_pin_c}};
+        std::vector<std::pair<u32, std::string>> index_to_pin_a = {{0, "A(0)"}, {1, "A(1)"}};
+        std::vector<std::pair<u32, std::string>> index_to_pin_b = {{0, "B(0)"}, {1, "B(1)"}};
+        std::vector<std::pair<u32, std::string>> index_to_pin_c = {{0, "C(0)"}, {1, "C(1)"}};
+        std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> groups_a = {{"A", index_to_pin_a}};
+        std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> groups_ab = {{"A", index_to_pin_a}, {"B", index_to_pin_b}};
+        std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> groups_bc = {{"B", index_to_pin_b}, {"C", index_to_pin_c}};
+        std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> groups_abc = {{"A", index_to_pin_a}, {"B", index_to_pin_b}, {"C", index_to_pin_c}};
         
         // pin groups
         {   
@@ -374,6 +374,8 @@ namespace hal
             EXPECT_TRUE(gt->assign_pin_group("B", index_to_pin_b));
             EXPECT_EQ(gt->get_pin_groups(), groups_ab);
             EXPECT_EQ(gt->get_pins_of_group("A"), index_to_pin_a);
+            EXPECT_EQ(gt->get_pin_of_group_at_index("A", 0), "A(0)");
+            EXPECT_EQ(gt->get_pin_of_group_at_index("B", 1), "B(1)");
         }
 
         // add already existing pin group
@@ -395,6 +397,18 @@ namespace hal
 
             EXPECT_FALSE(gt->assign_pin_group("A", index_to_pin_a));
             EXPECT_TRUE(gt->get_pin_groups().empty());
+        }
+
+        // querry invalid groups or indices
+        {
+            GateType* gt = gl.create_gate_type("dummy4", {GateTypeProperty::combinational});
+            ASSERT_NE(gt, nullptr);
+
+            EXPECT_TRUE(gt->add_pins({"A(0)", "A(1)"}, PinDirection::input));
+            EXPECT_TRUE(gt->assign_pin_group("A", index_to_pin_a));
+            EXPECT_TRUE(gt->get_pins_of_group("B").empty());
+            EXPECT_EQ(gt->get_pin_of_group_at_index("B", 0), "");
+            EXPECT_EQ(gt->get_pin_of_group_at_index("A", 2), "");
         }
 
         TEST_END

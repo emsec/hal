@@ -1,4 +1,4 @@
-#include "vhdl_verilog_parsers/hdl_parser_vhdl.h"
+#include "vhdl_parser/vhdl_parser.h"
 
 #include "netlist_test_utils.h"
 
@@ -6,13 +6,14 @@
 
 namespace hal {
 
-    class HDLParserVHDLTest : public ::testing::Test {
+    class VHDLParserTest : public ::testing::Test {
     protected:
         GateLibrary* m_gl;
 
         virtual void SetUp() {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
+            test_utils::create_sandbox_directory();
             m_gl = test_utils::get_testing_gate_library();
         }
 
@@ -35,9 +36,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_main_example) {
+    TEST_F(VHDLParserTest, check_main_example) {
         TEST_START
-            std::stringstream input("-- Device\t: device_name\n"
+            std::string netlist_input("-- Device\t: device_name\n"
                                     "library IEEE;\n"
                                     "use IEEE.STD_LOGIC_1164.ALL;\n"
                                     "library SIMPRIM;\n"
@@ -74,15 +75,9 @@ namespace hal {
                                     "    );\n"
                                     "end STRUCTURE;\n"
                                     "");
-            test_def::capture_stdout();
-            HDLParserVHDL vhdl_parser;
-            std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-            if (nl == nullptr) {
-                std::cout << test_def::get_captured_stdout();
-            } else {
-                test_def::get_captured_stdout();
-            }
-
+            std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VHDLParser vhdl_parser;
+            std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
             ASSERT_NE(nl, nullptr);
 
             // Check if the device name is parsed correctly
@@ -159,11 +154,11 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_whitespace_chaos_) {
+    TEST_F(VHDLParserTest, check_whitespace_chaos_) {
 
         TEST_START
             {
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "library IEEE;use IEEE.STD_LOGIC_1164.ALL;library SIMPRIM;\n"
                                         "use SIMPRIM.VCOMPONENTS.ALL;use SIMPRIM.VPKG.ALL;\n"
                                         "entity TEST_Comp is port(net_global_in:in STD_LOGIC := 'X';net_global_out\n"
@@ -182,15 +177,9 @@ namespace hal {
                                         "      \t,\n"
                                         "      I1 => net_global_in,O => net_1);\n"
                                         "gate_2:gate_3_to_1 port map(I0 => net_0,I1 => net_1,O => net_global_out);end STRUCTURE;");
-                test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
-
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 ASSERT_NE(nl, nullptr);
 
                 // Check if the gates are parsed correctly
@@ -265,12 +254,12 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_generic_map) {
+    TEST_F(VHDLParserTest, check_generic_map) {
 
         TEST_START
             {
                 // Store an instance of all possible data types in one Gate + some special cases
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
                                         "    net_global_input : in STD_LOGIC := 'X'; "
@@ -300,15 +289,9 @@ namespace hal {
                                         "      I => net_global_input "
                                         "    ); "
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
-
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 ASSERT_NE(nl, nullptr);
 
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
@@ -320,13 +303,13 @@ namespace hal {
                           std::make_tuple("floating_point", "1.234"));
                 EXPECT_EQ(gate_0->get_data("generic", "key_string"), std::make_tuple("string", "test_string"));
                 EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_hex"),
-                          std::make_tuple("bit_vector", "abc"));
+                          std::make_tuple("bit_vector", "ABC"));
                 EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_dec"),
-                          std::make_tuple("bit_vector", "abc"));
+                          std::make_tuple("bit_vector", "ABC"));
                 EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_oct"),
-                          std::make_tuple("bit_vector", "abc"));
+                          std::make_tuple("bit_vector", "ABC"));
                 EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_bin"),
-                          std::make_tuple("bit_vector", "abc"));
+                          std::make_tuple("bit_vector", "ABC"));
                 // Special Characters
                 EXPECT_EQ(gate_0->get_data("generic", "key_negative_comma_string"),
                           std::make_tuple("string", "test,1,2,3"));
@@ -345,7 +328,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_net_vectors) {
+    TEST_F(VHDLParserTest, check_net_vectors) {
         TEST_START
             {
                 // Use two logic vectors with dimension 1. One uses the 'downto' the other the 'to' statement
@@ -357,7 +340,7 @@ namespace hal {
                  *                        =-----------=        =-----------=
                  *
                  */
-                std::stringstream input("-- Device\t: device_name \n"
+                std::string netlist_input("-- Device\t: device_name \n"
                                         "entity TEST_Comp is "
                                         "  port ( "
                                         "    net_global_in : in STD_LOGIC := 'X'; "
@@ -396,15 +379,9 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
-
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -430,7 +407,7 @@ namespace hal {
             }
             {
                 // Use a logic vector of dimension two
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
                                         "    net_global_in : in STD_LOGIC := 'X'; "
@@ -457,15 +434,9 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
-
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -482,7 +453,7 @@ namespace hal {
             }
             {
                 // Use a Net vector of dimension three
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
                                         "    net_global_in : in STD_LOGIC := 'X'; "
@@ -517,14 +488,9 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -545,65 +511,81 @@ namespace hal {
     }
 
     /**
-     * Testing the port assigment of the nets '0' and '1', that are connected to gnd/vcc gates.
+     * Testing assignment of '0', '1', 'Z', and 'X'.
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_zero_and_one_nets) {
+    TEST_F(VHDLParserTest, check_special_nets) {
 
         TEST_START
             {
-                // Use zero and one as inputs (via '0' and '1')
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
-                                        "    net_global_out_0 : out STD_LOGIC := 'X'; "
-                                        "    net_global_out_1 : out STD_LOGIC := 'X'; "
+                                        "    net_global_out_0 : out STD_LOGIC; "
+                                        "    net_global_out_1 : out STD_LOGIC; "
+                                        "    net_global_out_2 : out STD_LOGIC; "
+                                        "    net_global_out_3 : out STD_LOGIC "
                                         "  ); "
                                         "end TEST_Comp; "
                                         "architecture STRUCTURE of TEST_Comp is "
                                         "begin "
                                         "  gate_0 : gate_1_to_1 "
                                         "    port map ( "
-                                        "      I => '0' "
+                                        "      I => '0', "
                                         "      O => net_global_out_0 "
                                         "    ); "
                                         "  gate_1 : gate_1_to_1 "
                                         "    port map ( "
-                                        "      I => '1' "
-                                        "      0 => net_global_out_1 "
+                                        "      I => '1', "
+                                        "      O => net_global_out_1 "
+                                        "    ); "
+                                        "  gate_2 : gate_1_to_1 "
+                                        "    port map ( "
+                                        "      I => 'Z', "
+                                        "      O => net_global_out_2 "
+                                        "    ); "
+                                        "  gate_3 : gate_1_to_1 "
+                                        "    port map ( "
+                                        "      I => 'X', "
+                                        "      O => net_global_out_3 "
                                         "    ); "
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
-
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 ASSERT_NE(nl, nullptr);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
-                ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).size(), 1);
+
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+                ASSERT_NE(gate_0, nullptr);
                 Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
+                ASSERT_NE(gate_1, nullptr);
+                Gate* gate_2 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_2")).begin();
+                ASSERT_NE(gate_2, nullptr);
+                Gate* gate_3 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_3")).begin();
+                ASSERT_NE(gate_3, nullptr);
 
-                // Test that the nets '0' and '1' are created and connected
+                // check whether net '0' was created and is connected to a GND gate through input pin "I"
                 Net* net_gnd = gate_0->get_fan_in_net("I");
-                Net* net_vcc = gate_1->get_fan_in_net("I");
                 ASSERT_NE(net_gnd, nullptr);
-                ASSERT_NE(net_vcc, nullptr);
-                EXPECT_EQ(net_gnd->get_name(), "\'0\'");
-                EXPECT_EQ(net_vcc->get_name(), "\'1\'");
-
-                // Test that the nets '0' and '1' are connected to a created global gnd/vcc Gate
+                EXPECT_EQ(net_gnd->get_name(), "'0'");
                 ASSERT_EQ(net_gnd->get_sources().size(), 1);
                 ASSERT_NE(net_gnd->get_sources()[0]->get_gate(), nullptr);
+                EXPECT_TRUE(net_gnd->get_sources()[0]->get_gate()->is_gnd_gate());
+
+                // check whether net '1' was created and is connected to a VCC gate through input pin "I"
+                Net* net_vcc = gate_1->get_fan_in_net("I");
+                ASSERT_NE(net_vcc, nullptr);
+                EXPECT_EQ(net_vcc->get_name(), "'1'");
                 ASSERT_EQ(net_vcc->get_sources().size(), 1);
                 ASSERT_NE(net_vcc->get_sources()[0]->get_gate(), nullptr);
-                EXPECT_TRUE(net_gnd->get_sources()[0]->get_gate()->is_gnd_gate());
                 EXPECT_TRUE(net_vcc->get_sources()[0]->get_gate()->is_vcc_gate());
+
+                // check whether input pin "I" remains unconnected for 'Z' assignment
+                ASSERT_EQ(gate_2->get_fan_in_net("I"), nullptr);
+
+                // check whether input pin "I" remains unconnected for 'X' assignment
+                ASSERT_EQ(gate_2->get_fan_in_net("I"), nullptr);
             }
         TEST_END
     }
@@ -616,7 +598,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_multiple_entities) {
+    TEST_F(VHDLParserTest, check_multiple_entities) {
 
         TEST_START
             {
@@ -629,19 +611,19 @@ namespace hal {
                   *                              '---------------------------------------------'
                   */
 
-                std::stringstream input("-- Device\t: device_name\n"
-                                        "entity ENT_CHILD is "
-                                        "  attribute child_attri : string; "
-                                        "  attribute child_attri of ENT_CHILD : entity is \"child_attribute\"; "
+                std::string netlist_input("-- Device\t: device_name\n"
+                                        "entity MODULE_CHILD is "
+                                        "  attribute child_attribute : string; "
+                                        "  attribute child_attribute of MODULE_CHILD : entity is \"child_attribute_value\"; "
                                         "  port ( "
-                                        "    child_in : in STD_LOGIC := 'X'; "
-                                        "    child_out : out STD_LOGIC := 'X'; "
+                                        "    child_in : in STD_LOGIC; "
+                                        "    child_out : out STD_LOGIC "
                                         "  ); "
-                                        "end ENT_CHILD; "
-                                        "architecture STRUCTURE_CHILD of ENT_CHILD is "
+                                        "end MODULE_CHILD; "
+                                        "architecture STRUCTURE_CHILD of MODULE_CHILD is "
                                         "  signal net_0_child : STD_LOGIC; "
-                                        "  attribute child_net_attri : string; "
-                                        "  attribute child_net_attri of child_in : signal is \"child_net_attribute\"; "
+                                        "  attribute child_net_attribute : string; "
+                                        "  attribute child_net_attribute of child_in : signal is \"child_net_attribute_value\"; "
                                         "begin "
                                         "  gate_0_child : gate_1_to_1 "
                                         "    port map ( "
@@ -655,13 +637,13 @@ namespace hal {
                                         "    ); "
                                         "end STRUCTURE_CHILD; "
                                         ""
-                                        "entity ENT_TOP is "
+                                        "entity MODULE_TOP is "
                                         "  port ( "
-                                        "    net_global_in : in STD_LOGIC := 'X'; "
-                                        "    net_global_out : out STD_LOGIC := 'X'; "
+                                        "    net_global_in : in STD_LOGIC; "
+                                        "    net_global_out : out STD_LOGIC "
                                         "  ); "
-                                        "end ENT_TOP; "
-                                        "architecture STRUCTURE of ENT_TOP is "
+                                        "end MODULE_TOP; "
+                                        "architecture STRUCTURE of MODULE_TOP is "
                                         "  signal net_0 : STD_LOGIC; "
                                         "  signal net_1 : STD_LOGIC; "
                                         " "
@@ -671,7 +653,7 @@ namespace hal {
                                         "      I => net_global_in, "
                                         "      O => net_0 "
                                         "    ); "
-                                        "  child_mod : ENT_CHILD "
+                                        "  child_mod : MODULE_CHILD "
                                         "    port map ( "
                                         "      child_in => net_0, "
                                         "      child_out => net_1 "
@@ -682,29 +664,22 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end ENT_TOP;");
-                test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
-
-                // Test that all gates are created
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 ASSERT_NE(nl, nullptr);
+
+                // check gates
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).size(), 1);
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
                 Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
-                Gate*
-                    gate_0_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).begin();
-                Gate*
-                    gate_1_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).begin();
+                Gate* gate_0_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).begin();
+                Gate* gate_1_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).begin();
 
-                // Test that all nets are created
+                // check nets
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_1")).size(), 1);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_global_in")).size(), 1);
@@ -712,13 +687,11 @@ namespace hal {
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0_child")).size(), 1);
                 Net* net_0 = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
                 Net* net_1 = *nl->get_nets(test_utils::net_name_filter("net_1")).begin();
-                Net*
-                    net_global_in = *nl->get_nets(test_utils::net_name_filter("net_global_in")).begin();
-                Net*
-                    net_global_out = *nl->get_nets(test_utils::net_name_filter("net_global_out")).begin();
+                Net* net_global_in = *nl->get_nets(test_utils::net_name_filter("net_global_in")).begin();
+                Net* net_global_out = *nl->get_nets(test_utils::net_name_filter("net_global_out")).begin();
                 Net* net_0_child = *nl->get_nets(test_utils::net_name_filter("net_0_child")).begin();
 
-                // Test that all nets are connected correctly
+                // check connections
                 EXPECT_EQ(gate_0->get_fan_in_net("I"), net_global_in);
                 EXPECT_EQ(gate_0->get_fan_out_net("O"), net_0);
                 EXPECT_EQ(gate_1->get_fan_in_net("I"), net_1);
@@ -727,19 +700,24 @@ namespace hal {
                 EXPECT_EQ(gate_0_child->get_fan_out_net("O"), net_0_child);
                 EXPECT_EQ(gate_1_child->get_fan_in_net("I"), net_0_child);
                 EXPECT_EQ(gate_1_child->get_fan_out_net("O"), net_1);
-                // Check that the attributes of the child entities port are inherit correctly to the connecting Net
-                EXPECT_EQ(net_0->get_data("attribute", "child_net_attri"),
-                          std::make_tuple("string", "child_net_attribute"));
 
-                // Test that the modules are created and assigned correctly
+                // check modules
                 Module* top_mod = nl->get_top_module();
+                ASSERT_NE(top_mod, nullptr);
+                EXPECT_TRUE(top_mod->is_top_module());
+                EXPECT_EQ(top_mod->get_name(), "top_module");
+                EXPECT_EQ(top_mod->get_type(), "MODULE_TOP");
                 ASSERT_EQ(top_mod->get_submodules().size(), 1);
                 Module* child_mod = *top_mod->get_submodules().begin();
+                ASSERT_NE(child_mod, nullptr);
                 EXPECT_EQ(child_mod->get_name(), "child_mod");
+                EXPECT_EQ(child_mod->get_type(), "MODULE_CHILD");
                 EXPECT_EQ(top_mod->get_gates(), std::vector<Gate*>({gate_0, gate_1}));
                 EXPECT_EQ(child_mod->get_gates(), std::vector<Gate*>({gate_0_child, gate_1_child}));
-                EXPECT_EQ(child_mod->get_data("attribute", "child_attri"),
-                          std::make_tuple("string", "child_attribute"));
+
+                // check attributes
+                EXPECT_EQ(net_0->get_data("attribute", "child_net_attribute"), std::make_tuple("string", "child_net_attribute_value"));
+                EXPECT_EQ(child_mod->get_data("attribute", "child_attribute"), std::make_tuple("string", "child_attribute_value"));
             }
             {
                 // Create a netlist with the following MODULE hierarchy (assigned gates in '()'):
@@ -760,11 +738,11 @@ namespace hal {
                 // Testing the correct build of the Module hierarchy. Moreover the correct substitution of Gate and Net names,
                 // which would be added twice (because an entity can be used multiple times) is tested as well.
 
-                std::stringstream input("-- Device\t: device_name \n"
+                std::string netlist_input("-- Device\t: device_name \n"
                                         "entity ENT_CHILD_TWO is "
                                         "  port ( "
-                                        "    I_c2 : in STD_LOGIC := 'X'; "
-                                        "    O_c2 : out STD_LOGIC := 'X'; "
+                                        "    I_c2 : in STD_LOGIC; "
+                                        "    O_c2 : out STD_LOGIC "
                                         "  ); "
                                         "end ENT_CHILD_TWO; "
                                         "architecture STRUCTURE_CHILD_TWO of ENT_CHILD_TWO is "
@@ -778,10 +756,10 @@ namespace hal {
                                         "  "
                                         "entity ENT_CHILD_ONE is "
                                         "  port ( "
-                                        "    I_c1 : in STD_LOGIC := 'X'; "
-                                        "    O_c1 : out STD_LOGIC := 'X'; "
+                                        "    I_c1 : in STD_LOGIC; "
+                                        "    O_c1 : out STD_LOGIC"
                                         "  ); "
-                                        "end ENT_ONE; "
+                                        "end ENT_CHILD_ONE; "
                                         "architecture STRUCTURE_CHILD_ONE of ENT_CHILD_ONE is "
                                         "  signal net_child_0 : STD_LOGIC; "
                                         "  signal net_child_1 : STD_LOGIC; "
@@ -805,8 +783,8 @@ namespace hal {
                                         "  "
                                         "entity ENT_TOP is "
                                         "  port ( "
-                                        "    net_global_in : in STD_LOGIC := 'X'; "
-                                        "    net_global_out : out STD_LOGIC := 'X'; "
+                                        "    net_global_in : in STD_LOGIC; "
+                                        "    net_global_out : out STD_LOGIC "
                                         "  ); "
                                         "end ENT_TOP; "
                                         "architecture STRUCTURE of ENT_TOP is "
@@ -829,14 +807,9 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end ENT_TOP;");
-                test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 // Test if all modules are created and assigned correctly
                 ASSERT_NE(nl, nullptr);
@@ -902,7 +875,7 @@ namespace hal {
                  *                    '                                            '
                  *                    '- - - - - - - - - - - - - - - - - - - - - - '
                 */
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity ENT_MODULE is "
                                         "  port ( "
                                         "    mod_in : in STD_LOGIC := 'X'; "
@@ -944,14 +917,9 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE_TOP;");
-                test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 // Test if all modules are created and assigned correctly
                 ASSERT_NE(nl, nullptr);
@@ -1008,7 +976,7 @@ namespace hal {
                  *               ... --- =  ...  =-------=| gate_top |=--- net_global_out
                  *                       ' -  -  '
                  */
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity MODULE_A is\n"
                                         "  port (\n"
                                         "    I_A : in STD_LOGIC := 'X';\n"
@@ -1089,8 +1057,9 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE_TOP;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 // Test if all modules are created and assigned correctly
                 ASSERT_NE(nl, nullptr);
@@ -1154,7 +1123,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_direct_assignment) {
+    TEST_F(VHDLParserTest, check_direct_assignment) {
         TEST_START
             {
                 // Build up a master-slave hierarchy as follows:
@@ -1164,7 +1133,7 @@ namespace hal {
                  */
                 // Testing the correct creation of the master Net by considering the inheritance of the attributes and connections
                 // of its slaves (vhdl specific)
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
                                         "    net_global_in : in STD_LOGIC := 'X'; "
@@ -1202,8 +1171,9 @@ namespace hal {
                                         "    ); "
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1242,7 +1212,7 @@ namespace hal {
             }
             {
                 //Testing the assignment of logic vectors
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
                                         "    net_global_in : in STD_LOGIC := 'X'; "
@@ -1269,8 +1239,9 @@ namespace hal {
                                         "    ); "
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1303,12 +1274,12 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_pin_group_port_assignment) {
+    TEST_F(VHDLParserTest, check_pin_group_port_assignment) {
 
         TEST_START
             {
                 // Connect an entire output pin group with global input nets by using a binary string (B"0101")
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "  );\n"
@@ -1321,8 +1292,9 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1335,29 +1307,29 @@ namespace hal {
 
                 Net* net_0 = gate_0->get_fan_in_net("I(0)");
                 ASSERT_NE(net_0, nullptr);
-                EXPECT_EQ(net_0->get_name(), "'0'");
+                EXPECT_EQ(net_0->get_name(), "'1'");
 
                 Net* net_1 = gate_0->get_fan_in_net("I(1)");
                 ASSERT_NE(net_1, nullptr);
-                EXPECT_EQ(net_1->get_name(), "'1'");
+                EXPECT_EQ(net_1->get_name(), "'0'");
 
                 Net* net_2 = gate_0->get_fan_in_net("I(2)");
                 ASSERT_NE(net_2, nullptr);
-                EXPECT_EQ(net_2->get_name(), "'0'");
+                EXPECT_EQ(net_2->get_name(), "'1'");
 
                 Net* net_3 = gate_0->get_fan_in_net("I(3)");
                 ASSERT_NE(net_3, nullptr);
-                EXPECT_EQ(net_3->get_name(), "'1'");
+                EXPECT_EQ(net_3->get_name(), "'0'");
             }
             {
                 // Connect a vector of output pins with a vector of nets (O(0) with l_vec(0),...,O(4) with l_vec(4))
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "  );\n"
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
-                                        "  signal l_vec : STD_LOGIC_VECTOR ( 0 to 3 );\n"
+                                        "  signal l_vec : STD_LOGIC_VECTOR ( 3 downto 0 );\n"
                                         "begin\n"
                                         "  gate_0 : pin_group_gate_4_to_4\n"
                                         "    port map (\n"
@@ -1365,8 +1337,9 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1398,22 +1371,23 @@ namespace hal {
             // ---- Vhdl specific: Pin ranges  ----
             {
                 // Connect a vector of output pins with a vector of nets by using the to and the downto statment
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "  );\n"
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
-                                        "  signal l_vec : STD_LOGIC_VECTOR ( 0 to 3 );\n"
+                                        "  signal l_vec : STD_LOGIC_VECTOR ( 3 downto 0 );\n"
                                         "begin\n"
                                         "  gate_0 : pin_group_gate_4_to_4\n"
                                         "    port map (\n"
-                                        "      O(3 downto 2) => l_vec(1 to 2)\n"
+                                        "      O(3 downto 2) => l_vec(2 downto 1)\n"
                                         "    );\n"
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1428,21 +1402,21 @@ namespace hal {
 
                 Net* net_1 = gate_0->get_fan_out_net("O(3)");
                 ASSERT_NE(net_1, nullptr);
-                EXPECT_EQ(net_1->get_name(), "l_vec(1)");
+                EXPECT_EQ(net_1->get_name(), "l_vec(2)");
 
                 Net* net_2 = gate_0->get_fan_out_net("O(2)");
                 ASSERT_NE(net_2, nullptr);
-                EXPECT_EQ(net_2->get_name(), "l_vec(2)");
+                EXPECT_EQ(net_2->get_name(), "l_vec(1)");
             }
             {
                 // Connect a vector of output pins with a vector of nets by using the to and the downto statment (flipped around)
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "  );\n"
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
-                                        "  signal l_vec : STD_LOGIC_VECTOR ( 0 to 3 );\n"
+                                        "  signal l_vec : STD_LOGIC_VECTOR ( 3 downto 0 );\n"
                                         "begin\n"
                                         "  gate_0 : pin_group_gate_4_to_4\n"
                                         "    port map (\n"
@@ -1450,8 +1424,9 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1484,12 +1459,12 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_comments) {
+    TEST_F(VHDLParserTest, check_comments) {
 
         TEST_START
             {
                 // Store an instance of all possible data types in one Gate
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
                                         "    net_global_input : in STD_LOGIC := 'X'; "
@@ -1509,8 +1484,9 @@ namespace hal {
                                         "    ); "
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1546,12 +1522,12 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_attributes) {
+    TEST_F(VHDLParserTest, check_attributes) {
 
         TEST_START
             {
                 // Add a custom attribute for a Gate
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_in : in STD_LOGIC := 'X';\n"
@@ -1568,8 +1544,9 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
@@ -1579,7 +1556,7 @@ namespace hal {
             }
             {
                 // Add a custom attribute for a Net
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_in : in STD_LOGIC := 'X';\n"
@@ -1602,8 +1579,9 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
@@ -1614,7 +1592,7 @@ namespace hal {
             }
             {
                 // Use atrribute strings with special characters (',','.')
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_in : in STD_LOGIC := 'X';\n"
@@ -1639,8 +1617,9 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
@@ -1664,10 +1643,10 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_lib_prefix) {
+    TEST_F(VHDLParserTest, check_lib_prefix) {
         TEST_START
             // The prefix of the library SIMPRIM.VCOMPONENTS should be removed from the INV Gate type
-            std::stringstream input("-- Device\t: device_name\n"
+            std::string netlist_input("-- Device\t: device_name\n"
                                     "library SIMPRIM;\n"
                                     "use SIMPRIM.VCOMPONENTS.ALL;\n"
                                     "entity TEST_Comp is\n"
@@ -1683,8 +1662,9 @@ namespace hal {
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            HDLParserVHDL vhdl_parser;
-            std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+            auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
             if (nl == nullptr) {
                 std::cout << test_def::get_captured_stdout();
             } else {
@@ -1703,12 +1683,12 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_component) {
+    TEST_F(VHDLParserTest, check_component) {
 
         TEST_START
             /*{ // NOTE: Currently Unsupported
                 // Add a component in the architecture header and instantiate a Gate of it
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_in : in STD_LOGIC := 'X';\n"
@@ -1731,7 +1711,7 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
+                VHDLParser vhdl_parser;
                 std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(g_lib_name);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
@@ -1743,7 +1723,7 @@ namespace hal {
                 Gate* comp_gate = *nl->get_gates(gate_type_filter("COMP_GATE")).begin();
                 EXPECT_NE(comp_gate->get_fan_in_net("COMP_IN"), nullptr);
                 EXPECT_NE(comp_gate->get_fan_out_net("COMP_OUT"), nullptr);
-                // EXPECT_EQ(comp_gate->get_inout_pin_types(), std::vector<std::string>({"COMP_INOUT"})); FIXME
+                // EXPECT_EQ(comp_gate->get_inout_pin_types(), std::vector<std::string>({"COMP_INOUT"})); 
             }*/
 
         TEST_END
@@ -1754,13 +1734,13 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserVHDLTest, check_invalid_input) {
+    TEST_F(VHDLParserTest, check_invalid_input) {
         TEST_START
             // ------ Tests that are present in booth parsers ------
             {
                 // Try to connect to a pin, that does not exist
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    global_in: in STD_LOGIC := 'X';\n"
@@ -1773,14 +1753,15 @@ namespace hal {
                                         "      NON_EXISTING_PIN => global_in\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 ASSERT_EQ(nl, nullptr);
             }
             {
                 // Use an unknown Gate type (not in Gate library)
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_in : in STD_LOGIC := 'X';\n"
@@ -1795,24 +1776,26 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
             {
                 // The input does not contain any entity (is empty)
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                std::string netlist_input("");
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
             {
                 // Create a non-used entity (should not create any problems...)
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity IGNORE_ME is\n"
                                         "  port (\n"
                                         "    min : in STD_LOGIC := 'X';\n"
@@ -1842,15 +1825,16 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 EXPECT_NE(nl, nullptr);
             }
             {
                 // Create a cyclic master-slave Net hierarchy
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
                                         "    net_global_in : in STD_LOGIC := 'X'; "
@@ -1874,36 +1858,38 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
             if(test_utils::known_issue_tests_active())
             {
-                    // Use non-numeric ranges (invalid) (ISSUE: stoi failure l.827)
-                    std::stringstream input("-- Device\t: device_name\n"
-                                            "entity TEST_Comp is\n"
-                                            "  port (\n"
-                                            "  );\n"
-                                            "end TEST_Comp;\n"
-                                            "architecture STRUCTURE of TEST_Comp is\n"
-                                            "  signal l_vec : STD_LOGIC_VECTOR ( 4 downto 0 );\n"
-                                            "begin\n"
-                                            "  gate_0 : pin_group_gate_4_to_4\n"
-                                            "    port map (\n"
-                                            "      O(p downto q) => l_vec(p downto q)\n" // <- fails booth independently (l.827)
-                                            "    );\n"
-                                            "end STRUCTURE;");
-                    HDLParserVHDL vhdl_parser;
-                    std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                    EXPECT_EQ(nl, nullptr);
+                // Use non-numeric ranges (invalid) (ISSUE: stoi failure l.827)
+                std::string netlist_input("-- Device\t: device_name\n"
+                                        "entity TEST_Comp is\n"
+                                        "  port (\n"
+                                        "  );\n"
+                                        "end TEST_Comp;\n"
+                                        "architecture STRUCTURE of TEST_Comp is\n"
+                                        "  signal l_vec : STD_LOGIC_VECTOR ( 4 downto 0 );\n"
+                                        "begin\n"
+                                        "  gate_0 : pin_group_gate_4_to_4\n"
+                                        "    port map (\n"
+                                        "      O(p downto q) => l_vec(p downto q)\n" // <- fails booth independently (l.827)
+                                        "    );\n"
+                                        "end STRUCTURE;");
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                EXPECT_EQ(nl, nullptr);
             }
             // ------ VHDL specific tests ------
             {
                 // The entity contains unknown direction keywords (neither 'in', 'out' nor 'inout')
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_input : invalid_direction STD_LOGIC := 'X';\n"    // <- invalid direction
@@ -1916,15 +1902,16 @@ namespace hal {
                                         "      O => net_global_input\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
             {
                 // The architecture contains an invalid keyword (neither 'signal' nor 'attribute')
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_input : in STD_LOGIC := 'X';\n"
@@ -1938,15 +1925,16 @@ namespace hal {
                                         "      O => net_global_input\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
             {
                 // Testing incorrect data_types in the "generic map" block
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_input : in STD_LOGIC := 'X';\n"
@@ -1962,14 +1950,15 @@ namespace hal {
                                         "      I => net_global_input\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 EXPECT_EQ(nl, nullptr);
             }
             {
                 // Leave the 'port map' block empty (Gate is not connected)
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_input : in STD_LOGIC := 'X';\n"
@@ -1981,8 +1970,9 @@ namespace hal {
                                         "    port map (\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).empty());
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
@@ -1992,7 +1982,7 @@ namespace hal {
             {
                 // Use an undeclared attribute (an attribute of type 'unknown' should be created)
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_in : in STD_LOGIC := 'X';\n"
@@ -2008,8 +1998,9 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 EXPECT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
@@ -2020,7 +2011,7 @@ namespace hal {
             {
                 // Use the 'attribute'-keyword in an unexpected way
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_in : in STD_LOGIC := 'X';\n"
@@ -2036,15 +2027,16 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
             {
                 // The amount of bounds does not match with the vector dimension (vhdl specific)
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "    net_global_input : in STD_LOGIC := 'X';\n"
@@ -2058,15 +2050,16 @@ namespace hal {
                                         "      O => net_global_input\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 if (nl != nullptr) {
                     EXPECT_EQ(nl->get_nets().size(), 1);
                 }
             }
             {
                 // The ranges of the pin vectors do not match in size
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "  );\n"
@@ -2080,9 +2073,10 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr)
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                if (nl != nullptr)
                 {
                     std::cout << test_def::get_captured_stdout();
                 }
@@ -2091,18 +2085,12 @@ namespace hal {
                     test_def::get_captured_stdout();
                 }
 
-                ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
-                EXPECT_EQ(gate_0->get_fan_out_nets().size(), 3);
-                EXPECT_EQ(gate_0->get_fan_out_endpoint("O(0)")->get_net()->get_name(), "l_vec(0)");
-                EXPECT_EQ(gate_0->get_fan_out_endpoint("O(1)")->get_net()->get_name(), "l_vec(1)");
-                EXPECT_EQ(gate_0->get_fan_out_endpoint("O(2)")->get_net()->get_name(), "l_vec(2)");
+                ASSERT_EQ(nl, nullptr);
             }
             {
                 // The right side of a pin assignment does no match any vector format
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("-- Device\t: device_name\n"
+                std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
                                         "  );\n"
@@ -2114,8 +2102,9 @@ namespace hal {
                                         "      I(1 to 3) => Unkn0wn_Format\n"    // <- unknown format
                                         "    );\n"
                                         "end STRUCTURE;");
-                HDLParserVHDL vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+                auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
 
                 ASSERT_EQ(nl, nullptr);
             }

@@ -24,52 +24,52 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/netlist.h"
 
 #include <sstream>
 
 namespace hal
 {
     /* forward declaration*/
-    class Netlist;
     class GateLibrary;
 
     /**
      * @ingroup netlist_parser
      */
-    class NETLIST_API HDLParser
+    class NETLIST_API NetlistParser
     {
     public:
-        HDLParser()          = default;
-        virtual ~HDLParser() = default;
+        NetlistParser()          = default;
+        virtual ~NetlistParser() = default;
 
         /**
-         * Parses a netlist into an internal intermediate format.
+         * Parse a netlist into an internal intermediate format.
          *
-         * @param[in] stream - The string stream filled with the hdl code.
+         * @param[in] file_path - Path to the netlist file.
          * @returns True on success, false otherwise.
          */
-        virtual bool parse(std::stringstream& stream) = 0;
+        virtual bool parse(const std::filesystem::path& file_path) = 0;
 
         /**
-         * Instantiates the parsed netlist using a specific gate library.
+         * Instantiate the parsed netlist using the specified gate library.
          *
-         * @param[in] gl - The gate library.
+         * @param[in] gate_library - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        virtual std::unique_ptr<Netlist> instantiate(const GateLibrary* gl) = 0;
+        virtual std::unique_ptr<Netlist> instantiate(const GateLibrary* gate_library) = 0;
 
         /**
-         * Parses and instantiates a netlist using the specified gate library.
+         * Parse and instantiate a netlist using the specified gate library.
          *
-         * @param[in] stream - The string stream filled with the hdl code.
-         * @param[in] gl - The gate library.
+         * @param[in] file_path - Path to the netlist file.
+         * @param[in] gate_library - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        std::unique_ptr<Netlist> parse_and_instantiate(std::stringstream& stream, const GateLibrary* gl)
+        std::unique_ptr<Netlist> parse_and_instantiate(const std::filesystem::path& file_path, const GateLibrary* gate_library)
         {
-            if (parse(stream))
+            if (parse(file_path))
             {
-                return instantiate(gl);
+                return instantiate(gate_library);
             }
             return nullptr;
         }

@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added `save as` action to file menu
 * added user action system to enable recording and reverting actions within the GUI
   * moved most GUI actions to the new user action system, including interactions with the graph view and view management
   * user actions can be recorded and exported as a macro file allowing easier debugging and crash reporting
@@ -20,19 +21,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * existing modules can be selected from a table, tree-view, or using a module picker within the graph view
   * enables searching for existing modules
   * added cursor to indicate that user is in module pick mode
+* improved netlist parsers
+  * split VHDL and Verilog parsers into two independent plugins
+  * netlist parsers now take path to netlist file as input instead of `std::stringstream`
+  * added support for `Z` and `X` assignments to Verilog and VHDL parsers
+  * fixed netlist parsers assigning wrong order of inputs for some multi-bit signals
+* expanded `netlist_utils`
+  * added function `get_common_inputs` to `netlist_utils` to get inputs that are common across multiple gates
+  * added function `replace_gate` to `netlist_utils` to replace a gate with an instance of another gate type
+  * added function `get_gate_chain` to `netlist_utils` to find gates that are arranged in a chain 
 * added `remove from view` action to context menu for gates and modules
 * added grouping toolbox feature to highlight successors or predecessors
 * added an indicator showing whether views have been modified
 * added function `is_top_module` to class `Module` to determin whether the current module is the top module of the netlist
-* added function `get_common_inputs` to `netlist_utils` to get inputs that are common across multiple gates
-* added function `replace_gate` to `netlist_utils` to replace a gate with an instance of another gate type
-* added function `get_gate_chain` to `netlist_utils` to find gates that are arranged in a chain 
+* added Python bindings for `netlist_serializer`
 * when trying to create a view for a module that is already associated with an (unchanged) view, the existing view is activated instead of creating a new view
 * fixed selection details not being updated immediately when renaming or or changing a type
 * fixed navigation bug where ports and nets did not match for modules
 * fixed list of navigation targets containing duplicates and/or loops
 * fixed drag'n'drop bug related to negative coordinates
 * fixed liberty parser aborting on unknown `pg_type`
+* fixed stylesheets
 
 ## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`

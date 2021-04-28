@@ -1,16 +1,16 @@
-#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
+#include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
-#include "hal_core/netlist/hdl_parser/hdl_parser.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_parser/netlist_parser.h"
 #include "hal_core/utilities/log.h"
 
 #include <fstream>
 
 namespace hal
 {
-    namespace hdl_parser_manager
+    namespace netlist_parser_manager
     {
         namespace
         {
@@ -27,42 +27,28 @@ namespace hal
 
                 if (auto it = m_extension_to_parser.find(extension); it != m_extension_to_parser.end())
                 {
-                    log_info("hdl_parser", "selected parser: {}", it->second.first);
+                    log_info("netlist_parser", "selected parser: {}", it->second.first);
                     return it->second.second;
                 }
 
-                log_error("hdl_parser", "no hdl parser registered for file type '{}'", extension);
+                log_error("netlist_parser", "no hdl parser registered for file type '{}'", extension);
                 return ParserFactory();
             }
 
             std::vector<std::unique_ptr<Netlist>>
-                dispatch_parse(const std::filesystem::path& file_name, std::unique_ptr<HDLParser> parser, const GateLibrary* gate_library = nullptr, bool break_on_match = true)
+                dispatch_parse(const std::filesystem::path& file_name, std::unique_ptr<NetlistParser> parser, const GateLibrary* gate_library = nullptr, bool break_on_match = true)
             {
                 auto begin_time = std::chrono::high_resolution_clock::now();
 
-                log_info("hdl_parser", "parsing '{}'...", file_name.string());
+                log_info("netlist_parser", "parsing '{}'...", file_name.string());
 
-                // read file into stringstream
-                std::stringstream stream;
+                if (!parser->parse(file_name))
                 {
-                    std::ifstream ifs;
-                    ifs.open(file_name.c_str(), std::ifstream::in);
-                    if (!ifs.is_open())
-                    {
-                        log_error("hdl_parser", "could not open file '{}'", file_name.string());
-                        return {};
-                    }
-                    stream << ifs.rdbuf();
-                    ifs.close();
-                }
-
-                if (!parser->parse(stream))
-                {
-                    log_error("hdl_parser", "could not parse file '{}'.", file_name.string());
+                    log_error("netlist_parser", "could not parse file '{}'.", file_name.string());
                     return {};
                 }
 
-                log_info("hdl_parser",
+                log_info("netlist_parser",
                          "finished parsing in {:2.2f} seconds.",
                          (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
 
@@ -72,18 +58,18 @@ namespace hal
                 {
                     begin_time = std::chrono::high_resolution_clock::now();
 
-                    log_info("hdl_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), gate_library->get_name());
+                    log_info("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), gate_library->get_name());
 
                     std::unique_ptr<Netlist> netlist = parser->instantiate(gate_library);
                     if (netlist == nullptr)
                     {
-                        log_error("hdl_parser", "could not instantiate file '{}' using gate library '{}'.", file_name.string(), gate_library->get_name());
+                        log_error("netlist_parser", "could not instantiate file '{}' using gate library '{}'.", file_name.string(), gate_library->get_name());
                         return {};
                     }
 
                     netlist->set_input_filename(file_name.string());
 
-                    log_info("hdl_parser",
+                    log_info("netlist_parser",
                              "instantiated '{}' in {:2.2f} seconds.",
                              file_name.string(),
                              (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
@@ -92,25 +78,25 @@ namespace hal
                 }
                 else
                 {
-                    log_warning("hdl_parser", "no (valid) gate library specified, trying to auto-detect gate library...");
+                    log_warning("netlist_parser", "no (valid) gate library specified, trying to auto-detect gate library...");
                     gate_library_manager::load_all();
 
                     for (GateLibrary* lib_it : gate_library_manager::get_gate_libraries())
                     {
                         begin_time = std::chrono::high_resolution_clock::now();
 
-                        log_info("hdl_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), lib_it->get_name());
+                        log_info("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), lib_it->get_name());
 
                         std::unique_ptr<Netlist> netlist = parser->instantiate(lib_it);
                         if (netlist == nullptr)
                         {
-                            log_error("hdl_parser", "could not instantiate file '{}' using gate library '{}'.", file_name.string(), lib_it->get_name());
+                            log_error("netlist_parser", "could not instantiate file '{}' using gate library '{}'.", file_name.string(), lib_it->get_name());
                             continue;
                         }
 
                         netlist->set_input_filename(file_name.string());
 
-                        log_info("hdl_parser",
+                        log_info("netlist_parser",
                                  "instantiated '{}' in {:2.2f} seconds.",
                                  file_name.string(),
                                  (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
@@ -125,7 +111,7 @@ namespace hal
 
                     if (netlists.empty())
                     {
-                        log_error("hdl_parser", "could not find suitable gate library.");
+                        log_error("netlist_parser", "could not find suitable gate library.");
                         return {};
                     }
                 }
@@ -228,5 +214,5 @@ namespace hal
 
             return dispatch_parse(file_name, factory(), nullptr, false);
         }
-    }    // namespace hdl_parser_manager
+    }    // namespace netlist_parser_manager
 }    // namespace hal

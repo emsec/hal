@@ -531,7 +531,7 @@ namespace hal
             Net* n3 = connect(nl.get(), g0, "O", g1, "I1");
             Net* n4 = connect(nl.get(), g1, "O", g2, "I0");
 
-            netlist_utils::remove_buffers(nl.get());
+            netlist_utils::remove_buffers(nl.get(), true);
 
             ASSERT_EQ(nl->get_gates().size(), 4);
             ASSERT_EQ(nl->get_nets().size(), 6);

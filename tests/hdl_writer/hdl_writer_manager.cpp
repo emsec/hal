@@ -1,7 +1,7 @@
 #include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
+#include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "netlist_test_utils.h"
@@ -97,8 +97,8 @@ namespace hal {
                 EXPECT_TRUE(suc);
 
                 // Verify the correctness of the output by parsing it
-                auto parsed_nl_vhdl = hdl_parser_manager::parse(out_path_vhdl, m_gl);
-                auto parsed_nl_verilog = hdl_parser_manager::parse(out_path_verilog, m_gl);
+                auto parsed_nl_vhdl = netlist_parser_manager::parse(out_path_vhdl, m_gl);
+                auto parsed_nl_verilog = netlist_parser_manager::parse(out_path_verilog, m_gl);
 
                 parsed_nl_vhdl->get_top_module()->set_type("top_module_type");
                 parsed_nl_verilog->get_top_module()->set_type("top_module_type");
@@ -128,8 +128,8 @@ namespace hal {
                 EXPECT_TRUE(suc_verilog);
 
                 // Verify the correctness of the output by parsing it
-                auto parsed_nl_vhdl = hdl_parser_manager::parse(out_path_vhdl, m_gl);
-                auto parsed_nl_verilog = hdl_parser_manager::parse(out_path_verilog, m_gl);
+                auto parsed_nl_vhdl = netlist_parser_manager::parse(out_path_vhdl, m_gl);
+                auto parsed_nl_verilog = netlist_parser_manager::parse(out_path_verilog, m_gl);
 
                 parsed_nl_vhdl->get_top_module()->set_type("top_module_type");
                 parsed_nl_verilog->get_top_module()->set_type("top_module_type");
@@ -170,8 +170,8 @@ namespace hal {
                 std::filesystem::path out_path_verilog = test_utils::create_sandbox_file("writer_out_verilog.v", out_ss_verilog.str());
 
                 // Verify the correctness of the output by parsing it
-                auto parsed_nl_vhdl = hdl_parser_manager::parse(out_path_vhdl, m_gl);
-                auto parsed_nl_verilog = hdl_parser_manager::parse(out_path_verilog, m_gl);
+                auto parsed_nl_vhdl = netlist_parser_manager::parse(out_path_vhdl, m_gl);
+                auto parsed_nl_verilog = netlist_parser_manager::parse(out_path_verilog, m_gl);
 
                 parsed_nl_vhdl->get_top_module()->set_type("top_module_type");
                 parsed_nl_verilog->get_top_module()->set_type("top_module_type");

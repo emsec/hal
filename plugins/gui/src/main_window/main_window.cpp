@@ -13,26 +13,24 @@
 #include "gui/plugin_manager/plugin_manager_widget.h"
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/python/python_editor.h"
-#include "gui/welcome_screen/welcome_screen.h"
-#include "gui/settings/settings_items/settings_item_keybind.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
-
+#include "gui/settings/settings_items/settings_item_keybind.h"
+#include "gui/settings/settings_manager.h"
+#include "gui/user_action/action_open_netlist_file.h"
+#include "gui/welcome_screen/welcome_screen.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_controls.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
-#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
-#include "gui/settings/settings_manager.h"
-
-#include "gui/user_action/action_open_netlist_file.h"
 
 #include <QApplication>
 #include <QCloseEvent>
+#include <QDebug>
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QFuture>
@@ -41,8 +39,6 @@
 #include <QPushButton>
 #include <QShortcut>
 #include <QtConcurrent>
-
-#include <QDebug>
 
 namespace hal
 {
@@ -122,6 +118,7 @@ namespace hal
         mActionNew          = new Action(this);
         mActionOpen         = new Action(this);
         mActionSave         = new Action(this);
+        mActionSaveAs       = new Action(this);
         mActionAbout        = new Action(this);
 
         mActionStartRecording = new Action(this);
@@ -160,13 +157,14 @@ namespace hal
         mActionNew->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
         mActionOpen->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
+        mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
 
-        mMenuFile = new QMenu(mMenuBar);
-        mMenuEdit = new QMenu(mMenuBar);
+        mMenuFile  = new QMenu(mMenuBar);
+        mMenuEdit  = new QMenu(mMenuBar);
         mMenuMacro = new QMenu(mMenuBar);
-        mMenuHelp = new QMenu(mMenuBar);
+        mMenuHelp  = new QMenu(mMenuBar);
 
         mMenuBar->addAction(mMenuFile->menuAction());
         mMenuBar->addAction(mMenuEdit->menuAction());
@@ -176,6 +174,7 @@ namespace hal
         mMenuFile->addAction(mActionOpen);
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
+        mMenuFile->addAction(mActionSaveAs);
         mMenuEdit->addAction(mActionUndo);
         mMenuEdit->addSeparator();
         mMenuEdit->addAction(mActionSettings);
@@ -202,6 +201,7 @@ namespace hal
         mActionNew->setText("New Netlist");
         mActionOpen->setText("Open");
         mActionSave->setText("Save");
+        mActionSaveAs->setText("Save As");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
@@ -211,47 +211,24 @@ namespace hal
         mMenuMacro->setTitle("Macro");
         mMenuHelp->setTitle("Help");
 
-        mAboutDialog  = new AboutDialog(this);
+        mAboutDialog = new AboutDialog(this);
         mPluginModel = new PluginModel(this);
 
         gPythonContext = std::make_unique<PythonContext>();
 
         gContentManager = new ContentManager(this);
 
-
         mSettingCreateFile = new SettingsItemKeybind(
-            "HAL Shortcut 'Create Empty Netlist'",
-            "keybinds/project_create_file",
-            QKeySequence("Ctrl+N"),
-            "Keybindings:Global",
-            "Keybind for creating a new and empty netlist in HAL."
-        );
+            "HAL Shortcut 'Create Empty Netlist'", "keybinds/project_create_file", QKeySequence("Ctrl+N"), "Keybindings:Global", "Keybind for creating a new and empty netlist in HAL.");
 
-        mSettingOpenFile = new SettingsItemKeybind(
-            "HAL Shortcut 'Open File'",
-            "keybinds/project_open_file",
-            QKeySequence("Ctrl+O"),
-            "Keybindings:Global",
-            "Keybind for opening a new File in HAL."
-        );
+        mSettingOpenFile = new SettingsItemKeybind("HAL Shortcut 'Open File'", "keybinds/project_open_file", QKeySequence("Ctrl+O"), "Keybindings:Global", "Keybind for opening a new File in HAL.");
 
-        mSettingSaveFile = new SettingsItemKeybind(
-            "HAL Shortcut 'Save File'",
-            "keybinds/project_save_file",
-            QKeySequence("Ctrl+S"),
-            "Keybindings:Global",
-            "Keybind for saving the currently opened file."
-        );
+        mSettingSaveFile =
+            new SettingsItemKeybind("HAL Shortcut 'Save File'", "keybinds/project_save_file", QKeySequence("Ctrl+S"), "Keybindings:Global", "Keybind for saving the currently opened file.");
 
-        mSettingUndoLast = new SettingsItemKeybind(
-            "Undo Last Action",
-            "keybinds/action_undo",
-            QKeySequence("Ctrl+Z"),
-            "Keybindings:Global",
-            "Keybind for having last user interaction undone."
-        );
+        mSettingUndoLast = new SettingsItemKeybind("Undo Last Action", "keybinds/action_undo", QKeySequence("Ctrl+Z"), "Keybindings:Global", "Keybind for having last user interaction undone.");
 
-        QShortcut* shortCutNewFile = new QShortcut(mSettingCreateFile->value().toString(), this);
+        QShortcut* shortCutNewFile  = new QShortcut(mSettingCreateFile->value().toString(), this);
         QShortcut* shortCutOpenFile = new QShortcut(mSettingOpenFile->value().toString(), this);
         QShortcut* shortCutSaveFile = new QShortcut(mSettingSaveFile->value().toString(), this);
         QShortcut* shortCutUndoLast = new QShortcut(mSettingUndoLast->value().toString(), this);
@@ -269,17 +246,21 @@ namespace hal
         connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
         connect(mActionOpen, &Action::triggered, this, &MainWindow::handleActionOpen);
         connect(mActionAbout, &Action::triggered, mAboutDialog, &AboutDialog::exec);
-//        connect(mActionSchedule, &Action::triggered, this, &MainWindow::toggleSchedule);
+        //        connect(mActionSchedule, &Action::triggered, this, &MainWindow::toggleSchedule);
         connect(mActionSettings, &Action::triggered, this, &MainWindow::toggleSettings);
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
+        connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
         //debug
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
 
         connect(mActionStartRecording, &Action::triggered, this, &MainWindow::handleActionStartRecording);
         connect(mActionStopRecording, &Action::triggered, this, &MainWindow::handleActionStopRecording);
         connect(mActionPlayMacro, &Action::triggered, this, &MainWindow::handleActionPlayMacro);
-        connect(mActionUndo, &Action::triggered, this, &MainWindow::handleActionUndo);//        connect(mActionRunSchedule, &Action::triggered, PluginScheduleManager::get_instance(), &PluginScheduleManager::runSchedule);
+        connect(mActionUndo,
+                &Action::triggered,
+                this,
+                &MainWindow::handleActionUndo);    //        connect(mActionRunSchedule, &Action::triggered, PluginScheduleManager::get_instance(), &PluginScheduleManager::runSchedule);
 
         connect(this, &MainWindow::saveTriggered, gContentManager, &ContentManager::handleSaveTriggered);
         connect(this, &MainWindow::saveTriggered, gGraphContextManager, &GraphContextManager::handleSaveTriggered);
@@ -304,7 +285,7 @@ namespace hal
     {
         QString styleSheetToOpen;
 
-        switch(istyle)
+        switch (istyle)
         {
         case StyleSheetOption::Dark:
             styleSheetToOpen = ":/style/dark";
@@ -543,8 +524,8 @@ namespace hal
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(false);
             auto selected_lib = libraries[items.indexOf(selected)];
-            gNetlistOwner   = netlist_factory::create_netlist(selected_lib);
-            gNetlist         = gNetlistOwner.get();
+            gNetlistOwner     = netlist_factory::create_netlist(selected_lib);
+            gNetlist          = gNetlistOwner.get();
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(true);
             Q_EMIT FileManager::get_instance()->fileOpened("new netlist");
@@ -600,37 +581,56 @@ namespace hal
         gPythonContext->updateNetlist();
     }
 
+    void MainWindow::handleSaveAsTriggered()
+    {
+        QString filename = saveHandler();
+        if (!filename.isEmpty())
+            gContentManager->setWindowTitle(filename);
+    }
+
     void MainWindow::handleSaveTriggered()
     {
-        if (gNetlist)
+        saveHandler(FileManager::get_instance()->fileName());
+    }
+
+    QString MainWindow::saveHandler(const QString &filename)
+    {
+        if (!gNetlist) return QString();
+
+        std::filesystem::path path;
+        QString newName;
+
+        if (filename.isEmpty())
         {
-            std::filesystem::path path = FileManager::get_instance()->fileName().toStdString();
+            QString title = "Save File";
+            QString text  = "HAL Progress Files (*.hal)";
 
-            if (path.empty())
+            // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
+            newName = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr);
+            if (!newName.isNull())
             {
-                QString title = "Save File";
-                QString text  = "HAL Progress Files (*.hal)";
-
-                // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
-                QString fileName = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr);
-                if (!fileName.isNull())
-                {
-                    path = fileName.toStdString();
-                }
-                else
-                {
-                    return;
-                }
+                path = newName.toStdString();
             }
-
-            path.replace_extension(".hal");
-            netlist_serializer::serialize_to_file(gNetlist, path);
-
-            gFileStatusManager->netlistSaved();
-            FileManager::get_instance()->watchFile(QString::fromStdString(path.string()));
-
-            Q_EMIT saveTriggered();
+            else
+            {
+                return QString();
+            }
         }
+        else
+        {
+            path = filename.toStdString();
+        }
+
+
+        path.replace_extension(".hal");
+        netlist_serializer::serialize_to_file(gNetlist, path);
+
+        gFileStatusManager->netlistSaved();
+        FileManager::get_instance()->watchFile(QString::fromStdString(path.string()));
+
+        Q_EMIT saveTriggered();
+
+        return newName;
     }
 
     void MainWindow::handleActionStartRecording()
@@ -650,7 +650,7 @@ namespace hal
         QString macroFile;
         if (uam->hasRecorded())
         {
-            macroFile = QFileDialog::getSaveFileName(this,"Save macro to file",".");
+            macroFile = QFileDialog::getSaveFileName(this, "Save macro to file", ".");
             if (!macroFile.isEmpty() && !macroFile.contains(QChar('.')))
                 macroFile += ".xml";
         }
@@ -659,8 +659,7 @@ namespace hal
 
     void MainWindow::handleActionPlayMacro()
     {
-        QString macroFile = QFileDialog::getOpenFileName(this, "Load macro file", ".",
-                                                         "Macro files (*.xml);;All files(*)");
+        QString macroFile = QFileDialog::getOpenFileName(this, "Load macro file", ".", "Macro files (*.xml);;All files(*)");
         if (!macroFile.isEmpty())
             UserActionManager::instance()->playMacro(macroFile);
     }
@@ -672,11 +671,9 @@ namespace hal
 
     void MainWindow::enableUndo(bool enable)
     {
-        QString iconStyle = enable
-                ? mUndoIconStyle
-                : mDisabledIconStyle;
+        QString iconStyle = enable ? mUndoIconStyle : mDisabledIconStyle;
         mActionUndo->setEnabled(enable);
-        mActionUndo->setIcon(gui_utility::getStyledSvgIcon(iconStyle,mUndoIconPath));
+        mActionUndo->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mUndoIconPath));
     }
 
     void MainWindow::handleActionCloseFile()

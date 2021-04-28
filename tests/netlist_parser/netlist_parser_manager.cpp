@@ -1,4 +1,4 @@
-#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
+#include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 
 #include "hal_core/netlist/netlist.h"
 #include "netlist_test_utils.h"
@@ -82,7 +82,7 @@ namespace hal {
     TEST_F(hdl_parser_managerTest, check_cli_options) {
         TEST_START
             {// Access the cli-options (should be empty)
-                EXPECT_TRUE(hdl_parser_manager::get_cli_options().get_options().empty());
+                EXPECT_TRUE(netlist_parser_manager::get_cli_options().get_options().empty());
             }
         TEST_END
     }
@@ -114,8 +114,8 @@ namespace hal {
                 std::unique_ptr<Netlist> nl_verilog;
                 {
                     NO_COUT_BLOCK;
-                    nl_vhdl = hdl_parser_manager::parse(vhdl_file_with_extension, p_args_empty);
-                    nl_verilog = hdl_parser_manager::parse(verilog_file_with_extension, p_args_empty);
+                    nl_vhdl = netlist_parser_manager::parse(vhdl_file_with_extension, p_args_empty);
+                    nl_verilog = netlist_parser_manager::parse(verilog_file_with_extension, p_args_empty);
                 }
 
                 EXPECT_NE(nl_vhdl, nullptr);
@@ -129,7 +129,7 @@ namespace hal {
                 std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = hdl_parser_manager::parse("this/path/does/not/exist.v", p_args);
+                    nl = netlist_parser_manager::parse("this/path/does/not/exist.v", p_args);
                 }
                 EXPECT_EQ(nl, nullptr);
             }
@@ -140,7 +140,7 @@ namespace hal {
                 std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = hdl_parser_manager::parse(vhdl_file_with_extension, p_args);
+                    nl = netlist_parser_manager::parse(vhdl_file_with_extension, p_args);
                 }
                 EXPECT_EQ(nl, nullptr);
             }
@@ -151,7 +151,7 @@ namespace hal {
                 std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = hdl_parser_manager::parse(file_with_unknown_extension, p_args);
+                    nl = netlist_parser_manager::parse(file_with_unknown_extension, p_args);
                 }
                 EXPECT_EQ(nl, nullptr);
             }
@@ -162,7 +162,7 @@ namespace hal {
                 std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = hdl_parser_manager::parse(file_without_extension, p_args);
+                    nl = netlist_parser_manager::parse(file_without_extension, p_args);
                 }
                 EXPECT_EQ(nl, nullptr);
             }
@@ -194,8 +194,8 @@ namespace hal {
                 std::unique_ptr<Netlist> nl_verilog;
                 {
                     NO_COUT_BLOCK;
-                    nl_vhdl = hdl_parser_manager::parse(vhdl_file, min_gl);
-                    nl_verilog = hdl_parser_manager::parse(verilog_file, min_gl);
+                    nl_vhdl = netlist_parser_manager::parse(vhdl_file, min_gl);
+                    nl_verilog = netlist_parser_manager::parse(verilog_file, min_gl);
                 }
 
                 EXPECT_NE(nl_vhdl, nullptr);
@@ -207,7 +207,7 @@ namespace hal {
                 std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = hdl_parser_manager::parse("this/path/does/not/exist.v", min_gl);
+                    nl = netlist_parser_manager::parse("this/path/does/not/exist.v", min_gl);
                 }
 
                 EXPECT_EQ(nl, nullptr);
@@ -217,7 +217,7 @@ namespace hal {
                 std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = hdl_parser_manager::parse(file_with_unknown_extension, min_gl);
+                    nl = netlist_parser_manager::parse(file_with_unknown_extension, min_gl);
                 }
 
                 EXPECT_EQ(nl, nullptr);
@@ -227,7 +227,7 @@ namespace hal {
                 std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = hdl_parser_manager::parse(file_without_extension, min_gl);
+                    nl = netlist_parser_manager::parse(file_without_extension, min_gl);
                 }
 
                 EXPECT_EQ(nl, nullptr);
