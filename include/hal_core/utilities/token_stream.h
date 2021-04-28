@@ -412,7 +412,7 @@ namespace hal
          */
         Token<T>& at(u32 position)
         {
-            if (position > m_data.size())
+            if (position >= m_data.size())
             {
                 throw TokenStreamException({"reached the end of the stream", get_current_line_number()});
             }
@@ -424,7 +424,7 @@ namespace hal
          */
         const Token<T>& at(u32 position) const
         {
-            if (position > m_data.size())
+            if (position >= m_data.size())
             {
                 throw TokenStreamException({"reached the end of the stream", get_current_line_number()});
             }
