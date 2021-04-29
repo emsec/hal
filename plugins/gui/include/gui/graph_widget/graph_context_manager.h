@@ -215,7 +215,6 @@ namespace hal
          * @param n - The removed net
          */
         void handleNetRemoved(Net* n) const;
-        // TODO: IN_PROGRESS: Documentation of the remaining functions
         /**
          * Handler to be called after a net has been renamed. <br>
          * Used to apply the changes in the affected contexts.

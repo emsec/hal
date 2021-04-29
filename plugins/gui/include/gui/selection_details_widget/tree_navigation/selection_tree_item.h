@@ -158,7 +158,7 @@ namespace hal
          * @param regex -  The regex to match against the item.
          * @return True if a match in either of the categories was found. False otherwise.
          */
-        virtual bool     match(const QRegularExpression& regex) const;
+        virtual bool match(const QRegularExpression& regex) const;
 
         /**
          * A function that fills the modIds, gateIds, and netIds lists with the respective ids if the

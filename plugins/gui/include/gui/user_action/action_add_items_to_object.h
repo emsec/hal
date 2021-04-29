@@ -31,7 +31,7 @@ namespace hal
     };
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionAddItemsToObjectFactory : public UserActionFactory
     {

@@ -98,6 +98,11 @@ namespace hal
          */
         void handleOpenContextClicked();
 
+        /**
+         * Initializes the Toolbar of the ContextManagerWidget.
+         *
+         * @param toolbar - The ContextManagerWidget's Toolbar
+         */
         virtual void setupToolbar(Toolbar* toolbar) override;
 
         QString disabledIconStyle() const;

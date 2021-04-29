@@ -35,8 +35,8 @@ namespace hal
 {
     /**
      * @ingroup graph-visuals
-     * Superclass for all graphic items used in the GraphicsScene. It contains information about the underlying objects
-     * that are represented, i.e. the type and the id.
+     * @brief Superclass for all graphic items used ins the GraphicsScene.
+     * It contains information about the underlying objects that are represented, i.e. the type and the id.
      */
     class GraphicsItem : public QGraphicsItem
     {

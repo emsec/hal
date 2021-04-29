@@ -206,6 +206,13 @@ namespace hal
          * Closes (hides) the widget in its anchor (related to the docking system).
          */
         void close();
+
+        /**
+         * Q_SLOT to handle that the settings for the search key sequence (default: 'Ctrl+F') has been changed.
+         * Configures the new search key sequence for the ContentWidget.
+         *
+         * @param seq - The new search key sequence
+         */
         void handleSearchKeysequenceChanged(QKeySequence seq);
 
     private:

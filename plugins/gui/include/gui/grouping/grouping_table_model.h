@@ -251,10 +251,11 @@ namespace hal {
         void deleteGroupingEvent(Grouping* grp);
 
         /**
-         * TODO: DOCUMENT!
-         * @param id
-         * @param groupingColor
-         * @return
+         * Changes the color of the grouping with the specified id to the specified color.
+         *
+         * @param id - The grouping id
+         * @param groupingColor - The new color
+         * @returns the color BEFORE the recoloring. If the grouping id is unknown an empty color (QColor()) is returned
          */
         QColor recolorGrouping(u32 id, const QColor& groupingColor);
 

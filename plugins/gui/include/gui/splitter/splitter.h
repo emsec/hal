@@ -29,14 +29,29 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief A QSplitter that can be checked if it is unused or not
+     *
+     * Extends the QSplitter class by the function unused.
      */
     class Splitter : public QSplitter
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param orientation - The Splitter's orientation
+         * @param parent - The parent widget
+         */
         explicit Splitter(Qt::Orientation orientation, QWidget* parent = nullptr);
 
+        /**
+         * Returns true if the Splitter is currently unused, i.e. if all Widget%s of the Splitter are hidden. Returns
+         * false otherwise.
+         *
+         * @returns <b>true</b> iff the Splitter is unused.
+         */
         bool unused();
     };
 }

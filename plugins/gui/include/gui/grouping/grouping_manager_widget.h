@@ -219,7 +219,6 @@ namespace hal
          */
         void handleContextMenuRequest(const QPoint& point);
 
-        // TODO: DOCUMENT!
         void handleToolboxClicked();
         void handleToolboxPredecessor();
         void handleToolboxSuccessor();

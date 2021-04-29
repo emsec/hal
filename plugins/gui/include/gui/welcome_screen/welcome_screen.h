@@ -53,7 +53,7 @@ namespace hal
         explicit WelcomeScreen(QWidget* parent = nullptr);
 
         /**
-         * Initializes the appearance of the widget and its children.
+         * Reinitializes the appearance of the widget and its children.
          */
         void repolish();
 
