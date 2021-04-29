@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Utils &mdash; hal_py v3.2.6-246-gba6b383a2 documentation</title>
+  <title>Netlist Utils &mdash; hal_py v3.2.6-247-g740e7bed0 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.6-246-gba6b383a2
+                v3.2.6-247-g740e7bed0
               </div>
             
           
@@ -222,19 +222,51 @@ If the theshold value is set to 0, a net must be input to all gates to be consid
 </dd></dl>
 
 <dl class="function">
-<dt id="hal_py.NetlistUtils.get_gate_chain">
-<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_gate_chain</code><span class="sig-paren">(</span><em>start_gate: hal::Gate, pin: str, filter: Callable[[hal::Gate], bool]</em><span class="sig-paren">)</span> &#x2192; List[hal::Gate]<a class="headerlink" href="#hal_py.NetlistUtils.get_gate_chain" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find a chain of identical gates within the netlist.
-The start gate may be any gate within a chain, it is not reuired to be the first or last gate.
-A pin must be specified through which the gates are expected to be connected.
-A user-defined filter is evaluated in every candidate gate before it is added to the chain.</p>
+<dt id="hal_py.NetlistUtils.get_complex_gate_chain">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_complex_gate_chain</code><span class="sig-paren">(</span><em>start_gate: hal::Gate, chain_types: List[Tuple[hal_py.GateType, str, str]], filter: Callable[[hal::Gate], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal::Gate]<a class="headerlink" href="#hal_py.NetlistUtils.get_complex_gate_chain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins.
+The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
+However, the start gate must be of the first gate type of the repeating sequence.
+For every gate type, a pair of input and output pins can be specified through which the gates are interconnected.
+If a None is given for a gate type, any gate fulfilling the other properties will be considered.
+If the connection pins are irrelevant, an empty string may be passed to the function.
+Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate at which to start the chain detection.</li>
-<li><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The pin through which the gates are connected.</li>
+<li><strong>chain_types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>(</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>)</em><em>]</em>) – A list of gate types that need to appear in order and be connected through the input and output pins specified in the tuple.</li>
+<li><strong>filter</strong> (<em>lambda</em>) – A filter that is evaluated on all candidates.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of gates that form a chain.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistUtils.get_gate_chain">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_gate_chain</code><span class="sig-paren">(</span><em>start_gate: hal::Gate, pins: Tuple[str, str], filter: Callable[[hal::Gate], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal::Gate]<a class="headerlink" href="#hal_py.NetlistUtils.get_gate_chain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find a repeating sequence of identical gates that connect through the specified pins.
+The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
+A pair of input and output pins can be specified through which the gates are interconnected.
+If the connection pins are irrelevant, an empty string may be passed to the function.
+Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate at which to start the chain detection.</li>
+<li><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>)</em>) – The input and output pins through which the gates are connected.</li>
 <li><strong>filter</strong> (<em>lambda</em>) – A filter that is evaluated on all candidates.</li>
 </ul>
 </td>

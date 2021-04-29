@@ -110,8 +110,10 @@ Functions</h2></td></tr>
 <tr class="separator:aea70c3bec835e4f88d4e208c59f5edee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a6599c0e0034abb437a5ba1b9f15493"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a2a6599c0e0034abb437a5ba1b9f15493">replace_gate</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate, <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *target_type, std::map&lt; std::string, std::string &gt; pin_map)</td></tr>
 <tr class="separator:a2a6599c0e0034abb437a5ba1b9f15493"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57d221d7303ed6d87d2685926ff2b830"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a57d221d7303ed6d87d2685926ff2b830">get_gate_chain</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *start_gate, const std::string &amp;pin, const std::function&lt; bool(const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;filter)</td></tr>
-<tr class="separator:a57d221d7303ed6d87d2685926ff2b830"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2964ee64226f227f2270e364e52d10e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#ab2964ee64226f227f2270e364e52d10e">get_gate_chain</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *start_gate, const std::pair&lt; std::string, std::string &gt; &amp;pins, const std::function&lt; bool(const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;filter=nullptr)</td></tr>
+<tr class="separator:ab2964ee64226f227f2270e364e52d10e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28cd2a52d58598ceb159c503fb501e8b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a28cd2a52d58598ceb159c503fb501e8b">get_complex_gate_chain</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *start_gate, const std::vector&lt; std::tuple&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *, std::string, std::string &gt;&gt; &amp;chain_types, const std::function&lt; bool(const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;filter=nullptr)</td></tr>
+<tr class="separator:a28cd2a52d58598ceb159c503fb501e8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a4951c274ab6c15d1ccc06acc83d28335"></a>
@@ -836,8 +838,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a57d221d7303ed6d87d2685926ff2b830"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57d221d7303ed6d87d2685926ff2b830">&#9670;&nbsp;</a></span>get_gate_chain()</h2>
+<a id="ab2964ee64226f227f2270e364e52d10e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2964ee64226f227f2270e364e52d10e">&#9670;&nbsp;</a></span>get_gate_chain()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -851,14 +853,14 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pin</em>, </td>
+          <td class="paramtype">const std::pair&lt; std::string, std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pins</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::function&lt; bool(const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;&#160;</td>
-          <td class="paramname"><em>filter</em>&#160;</td>
+          <td class="paramname"><em>filter</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -867,18 +869,66 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Find a chain of identical gates within the netlist. The start gate may be any gate within a chain, it is not reuired to be the first or last gate. A pin must be specified through which the gates are expected to be connected. A user-defined filter is evaluated in every candidate gate before it is added to the chain.</p>
+<p>Find a repeating sequence of identical gates that connect through the specified pins. The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate. A pair of input and output pins can be specified through which the gates are interconnected. If the connection pins are irrelevant, an empty string may be passed to the function. Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">start_gate</td><td>- The gate at which to start the chain detection. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The pin through which the gates are connected. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pins</td><td>- The input and output pins through which the gates are connected. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- A filter that is evaluated on all candidates. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of gates that form a chain. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a7dc3f04d8b357b25fc129bf85b3b2dec">hal::Netlist::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">hal::Gate::get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ae77f8b10587bddd7b80fe0ab008953e3">hal::Gate::get_netlist()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ac59ae4de6cdb8ef057245594fa03758e">hal::Gate::get_predecessor()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a753a06f17fa224adea5887cdb3e7ee5b">hal::Gate::get_successors()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a24e1a29c3fc812588acb673c214af128">hal::Gate::get_type()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
+<p class="reference">References <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">hal::Endpoint::get_gate()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a7dc3f04d8b357b25fc129bf85b3b2dec">hal::Netlist::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">hal::Gate::get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ae77f8b10587bddd7b80fe0ab008953e3">hal::Gate::get_netlist()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a753a06f17fa224adea5887cdb3e7ee5b">hal::Gate::get_successors()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a24e1a29c3fc812588acb673c214af128">hal::Gate::get_type()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, and <a class="el" href="../../dc/d39/group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1">hal::netlist_utils_init()</a>.</p>
+
+</div>
+</div>
+<a id="a28cd2a52d58598ceb159c503fb501e8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28cd2a52d58598ceb159c503fb501e8b">&#9670;&nbsp;</a></span>get_complex_gate_chain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; hal::netlist_utils::get_complex_gate_chain </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>start_gate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::tuple&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *, std::string, std::string &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>chain_types</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>filter</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins. The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate. However, the start gate must be of the first gate type of the repeating sequence. For every gate type, a pair of input and output pins can be specified through which the gates are interconnected. If a nullptr is given for a gate type, any gate fulfilling the other properties will be considered. If the connection pins are irrelevant, an empty string may be passed to the function. Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_gate</td><td>- The gate at which to start the chain detection. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chain_types</td><td>- A vector of gate types that need to appear in order and be connected through the input and output pins specified in the tuple. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- A filter that is evaluated on all candidates. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector of gates that form a chain. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">hal::Endpoint::get_gate()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a7dc3f04d8b357b25fc129bf85b3b2dec">hal::Netlist::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">hal::Gate::get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ae77f8b10587bddd7b80fe0ab008953e3">hal::Gate::get_netlist()</a>, <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#abb701e971149c5bf2eea49c8a1dd9d4d">hal::Endpoint::get_pin()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ae9a40e0c855882d3904c7251b2d48996">hal::Gate::get_predecessors()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a753a06f17fa224adea5887cdb3e7ee5b">hal::Gate::get_successors()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a24e1a29c3fc812588acb673c214af128">hal::Gate::get_type()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1">hal::netlist_utils_init()</a>.</p>
 
@@ -887,7 +937,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 28 2021 20:19:02 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 29 2021 15:26:04 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
