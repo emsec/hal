@@ -210,14 +210,31 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist_utils.def("get_gate_chain", netlist_utils::get_gate_chain, py::arg("start_gate"), py::arg("pin"), py::arg("filter"), R"(
-            Find a chain of identical gates within the netlist.
-            The start gate may be any gate within a chain, it is not reuired to be the first or last gate.
-            A pin must be specified through which the gates are expected to be connected.
-            A user-defined filter is evaluated in every candidate gate before it is added to the chain.
+        py_netlist_utils.def("get_gate_chain", netlist_utils::get_gate_chain, py::arg("start_gate"), py::arg("pins"), py::arg("filter") = nullptr, R"(
+            Find a repeating sequence of identical gates that connect through the specified pins.
+            The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
+            A pair of input and output pins can be specified through which the gates are interconnected.
+            If the connection pins are irrelevant, an empty string may be passed to the function.
+            Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
 
             :param hal_py.Gate start_gate: The gate at which to start the chain detection.
-            :param str pin: The pin through which the gates are connected.
+            :param tuple(str,str) pins: The input and output pins through which the gates are connected.
+            :param lambda filter: A filter that is evaluated on all candidates.
+            :returns: A list of gates that form a chain.
+            :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist_utils.def("get_complex_gate_chain", netlist_utils::get_complex_gate_chain, py::arg("start_gate"), py::arg("chain_types"), py::arg("filter") = nullptr, R"(
+            Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins.
+            The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
+            However, the start gate must be of the first gate type of the repeating sequence.
+            For every gate type, a pair of input and output pins can be specified through which the gates are interconnected.
+            If a None is given for a gate type, any gate fulfilling the other properties will be considered.
+            If the connection pins are irrelevant, an empty string may be passed to the function.
+            Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
+
+            :param hal_py.Gate start_gate: The gate at which to start the chain detection.
+            :param list[tuple(hal_py.GateType,str,str)] chain_types: A list of gate types that need to appear in order and be connected through the input and output pins specified in the tuple.
             :param lambda filter: A filter that is evaluated on all candidates.
             :returns: A list of gates that form a chain.
             :rtype: list[hal_py.Gate]

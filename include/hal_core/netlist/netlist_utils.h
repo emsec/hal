@@ -234,16 +234,34 @@ namespace hal
         bool replace_gate(Gate* gate, GateType* target_type, std::map<std::string, std::string> pin_map);
 
         /**
-         * Find a chain of identical gates within the netlist.
-         * The start gate may be any gate within a chain, it is not reuired to be the first or last gate.
-         * A pin must be specified through which the gates are expected to be connected.
-         * A user-defined filter is evaluated in every candidate gate before it is added to the chain.
+         * Find a repeating sequence of identical gates that connect through the specified pins.
+         * The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
+         * A pair of input and output pins can be specified through which the gates are interconnected.
+         * If the connection pins are irrelevant, an empty string may be passed to the function.
+         * Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
          * 
          * @param[in] start_gate - The gate at which to start the chain detection.
-         * @param[in] pin - The pin through which the gates are connected.
+         * @param[in] pins - The input and output pins through which the gates are connected.
          * @param[in] filter - A filter that is evaluated on all candidates.
          * @returns A vector of gates that form a chain.
          */
-        std::vector<Gate*> get_gate_chain(Gate* start_gate, const std::string& pin, const std::function<bool(const Gate*)>& filter);
+        std::vector<Gate*> get_gate_chain(Gate* start_gate, const std::pair<std::string, std::string>& pins, const std::function<bool(const Gate*)>& filter = nullptr);
+
+        /**
+         * Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins.
+         * The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
+         * However, the start gate must be of the first gate type of the repeating sequence.
+         * For every gate type, a pair of input and output pins can be specified through which the gates are interconnected.
+         * If a nullptr is given for a gate type, any gate fulfilling the other properties will be considered.
+         * If the connection pins are irrelevant, an empty string may be passed to the function.
+         * Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
+         * 
+         * @param[in] start_gate - The gate at which to start the chain detection.
+         * @param[in] chain_types - A vector of gate types that need to appear in order and be connected through the input and output pins specified in the tuple.
+         * @param[in] filter - A filter that is evaluated on all candidates.
+         * @returns A vector of gates that form a chain.
+         */
+        std::vector<Gate*>
+            get_complex_gate_chain(Gate* start_gate, const std::vector<std::tuple<GateType*, std::string, std::string>>& chain_types, const std::function<bool(const Gate*)>& filter = nullptr);
     }    // namespace netlist_utils
 }    // namespace hal
