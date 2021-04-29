@@ -353,13 +353,36 @@ namespace hal
         void handleSaveTriggered();
 
         /**
+         * Q_SLOT to save the current project as a new .hal file.
+         * Will query for new name.
+         * Emits saveTriggered().
+         */
+        void handleSaveAsTriggered();
+
+        /**
          * Q_SLOT to provide a logic for the close action. (Currently unused)
          */
         void handleActionCloseFile();
 
+        /**
+         * Q_SLOT to start macro recording. Internally only a marker is set
+         * since user interactions are recorded anyhow.
+         */
         void handleActionStartRecording();
+
+        /**
+         * Q_SLOT to end macro recording saving user interactions to XML file
+         */
         void handleActionStopRecording();
+
+        /**
+         * Q_SLOT to play recorded macro. Will query for XML file name.
+         */
         void handleActionPlayMacro();
+
+        /**
+         * Q_SLOT to undo last interaction if it can be undone
+         */
         void handleActionUndo();
 
         void enableUndo(bool enable=true);
@@ -375,7 +398,16 @@ namespace hal
          */
         void closeEvent(QCloseEvent* event);
 
-	bool tryToCloseFile();
+        bool tryToCloseFile();
+
+        /**
+         * Internal handler for "save" and "save as" commands. If neccessary a new-file dialog
+         * will query for output file name.
+         *
+         * @param filename, might be empty
+         * @return file name from new-file dialog (if any)
+         */
+        QString saveHandler(const QString& filename = QString());
 
         /**
          * Restores the window geometry of the MainWindow and all its children, configured with saveState().

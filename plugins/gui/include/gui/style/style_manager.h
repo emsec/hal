@@ -51,6 +51,7 @@ namespace hal
         const SharedPropertiesQssAdapter* sharedProperties() const;
         const PythonQssAdapter* PythonSyntaxHighlighter() const;
         const VhdlQssAdapter* VhdlSyntaxHighlighter() const;
+        void repolish();
 
     private:
         explicit StyleManager(QObject* parent = nullptr);

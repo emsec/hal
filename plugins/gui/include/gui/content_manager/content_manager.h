@@ -116,6 +116,12 @@ namespace hal
          */
         ModuleWidget* getModuleWidget();
 
+        /**
+         * Set main window title
+         * @param filename name of netlist filename
+         */
+        void setWindowTitle(const QString& filename);
+
     public Q_SLOTS:
 
         /**
