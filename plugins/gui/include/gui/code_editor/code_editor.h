@@ -235,7 +235,7 @@ namespace hal
          * @param key - The settings key that has been changed
          * @param value - The new value of of the setting
          */
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
+       // void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         void updateLayout();
