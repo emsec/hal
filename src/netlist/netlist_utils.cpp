@@ -889,153 +889,32 @@ namespace hal
             return true;
         }
 
-        std::vector<Gate*> get_gate_chain(Gate* start_gate, const std::pair<std::string, std::string>& pins, const std::function<bool(const Gate*)>& filter)
+        std::vector<Gate*> get_gate_chain(Gate* start_gate, const std::set<std::string>& input_pins, const std::set<std::string>& output_pins, const std::function<bool(const Gate*)>& filter)
         {
+            // check filter on start gate
             if (filter && !filter(start_gate))
             {
                 return {};
             }
 
-            std::deque<Gate*> gate_chain = {start_gate};
+            std::deque<Gate*> gate_chain            = {start_gate};
             std::unordered_set<Gate*> visited_gates = {start_gate};
-
-            const GateType* target_type = start_gate->get_type();
+            const GateType* target_type             = start_gate->get_type();
+            bool found_next_gate;
 
             // move forward
-            bool found_next_gate;
             const Gate* current_gate = start_gate;
             do
             {
                 found_next_gate = false;
 
-                // check all successors of current gate
-                std::vector<Endpoint*> successors = current_gate->get_successors([pins, target_type, filter](const std::string& ep_pin, Endpoint* ep) {
+                // check all eligable successors of current gate
+                std::vector<Endpoint*> successors = current_gate->get_successors([input_pins, output_pins, target_type, filter](const std::string& ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {
-                        if (pins.second.empty() || ep_pin == pins.second)
+                        if (output_pins.empty() || output_pins.find(ep_pin) != output_pins.end())
                         {
-                            if (pins.first.empty() || ep->get_pin() == pins.first)
-                            {
-                                if (!filter || filter(ep->get_gate()))
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    return false;
-                });
-
-                if (successors.size() > 1)
-                {
-                    log_debug("netlist_utils",
-                                "detected more than one valid successor gate for gate '{}' with ID {} in netlist with ID {}.",
-                                current_gate->get_name(),
-                                current_gate->get_id(),
-                                current_gate->get_netlist()->get_id());
-                    break;
-                }
-                else if (!successors.empty())
-                {
-                    Gate* suc_gate = successors.at(0)->get_gate();
-
-                    if(visited_gates.find(suc_gate) != visited_gates.end()) 
-                    {
-                        break;
-                    }
-
-                    gate_chain.push_back(suc_gate);
-                    visited_gates.insert(suc_gate);
-                    current_gate    = suc_gate;
-                    found_next_gate = true;
-                    log_debug("netlist_utils", "found successor gate with ID {}.", suc_gate->get_id());
-                }
-            } while (found_next_gate);
-
-            // move backwards
-            current_gate = start_gate;
-            do
-            {
-                found_next_gate = false;
-
-                // check all predecessors of current gate
-                std::vector<Endpoint*> predecessors = current_gate->get_predecessors([pins, target_type, filter](const std::string& ep_pin, Endpoint* ep) {
-                    if (ep->get_gate()->get_type() == target_type)
-                    {
-                        if (pins.first.empty() || ep_pin == pins.first)
-                        {
-                            if (pins.second.empty() || ep->get_pin() == pins.second)
-                            {
-                                if (!filter || filter(ep->get_gate()))
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    return false;
-                });
-
-                if (predecessors.size() > 1)
-                {
-                    log_debug("netlist_utils",
-                                "detected more than one valid predecessor gate for gate '{}' with ID {} in netlist with ID {}.",
-                                current_gate->get_name(),
-                                current_gate->get_id(),
-                                current_gate->get_netlist()->get_id());
-                    break;
-                }
-                else if (!predecessors.empty())
-                {
-                    Gate* pred_gate = predecessors.at(0)->get_gate();
-
-                    if(visited_gates.find(pred_gate) != visited_gates.end()) 
-                    {
-                        break;
-                    }
-
-                    gate_chain.push_front(pred_gate);
-                    visited_gates.insert(pred_gate);
-                    current_gate    = pred_gate;
-                    found_next_gate = true;
-                    log_debug("netlist_utils", "found predecessor gate with ID {}.", pred_gate->get_id());
-                }
-            } while (found_next_gate);
-
-            return std::vector<Gate*>(gate_chain.begin(), gate_chain.end());
-        }
-
-        std::vector<Gate*> get_complex_gate_chain(Gate* start_gate, const std::vector<std::tuple<GateType*, std::string, std::string>>& chain_types, const std::function<bool(const Gate*)>& filter)
-        {
-            if (start_gate->get_type() != std::get<0>(chain_types.at(0)) || (filter && !filter(start_gate)))
-            {
-                return {};
-            }
-
-            std::deque<Gate*> gate_chain = {start_gate};
-            std::unordered_set<Gate*> visited_gates;
-
-            u32 last_index = 0;
-            u32 current_index = 1;
-
-            // move forward
-            bool found_next_gate;
-            const Gate* current_gate = start_gate;
-            do
-            {
-                found_next_gate = false;
-
-                // check all successors of current gate
-                std::vector<Endpoint*> successors = current_gate->get_successors([chain_types, last_index, current_index, filter](const std::string& ep_pin, Endpoint* ep) {
-                    GateType* target_type         = std::get<0>(chain_types.at(current_index));
-                    const std::string& input_pin  = std::get<1>(chain_types.at(current_index));
-                    const std::string& output_pin = std::get<2>(chain_types.at(last_index));
-
-                    if (ep->get_gate()->get_type() == target_type)
-                    {
-                        if (output_pin.empty() || ep_pin == output_pin)
-                        {
-                            if (input_pin.empty() || ep->get_pin() == input_pin)
+                            if (input_pins.empty() || input_pins.find(ep->get_pin()) != input_pins.end())
                             {
                                 if (!filter || filter(ep->get_gate()))
                                 {
@@ -1060,7 +939,7 @@ namespace hal
                 {
                     Gate* suc_gate = successors.at(0)->get_gate();
 
-                    if (visited_gates.find(suc_gate) != visited_gates.end()) 
+                    if (visited_gates.find(suc_gate) != visited_gates.end())
                     {
                         break;
                     }
@@ -1068,33 +947,24 @@ namespace hal
                     gate_chain.push_back(suc_gate);
                     visited_gates.insert(suc_gate);
                     current_gate    = suc_gate;
-                    last_index      = current_index;
-                    current_index   = (current_index + 1) % chain_types.size();
                     found_next_gate = true;
                     log_debug("netlist_utils", "found successor gate with ID {}.", suc_gate->get_id());
                 }
             } while (found_next_gate);
 
-            current_gate  = start_gate;
-            last_index    = 0;
-            current_index = chain_types.size() - 1;
-
             // move backwards
+            current_gate = start_gate;
             do
             {
                 found_next_gate = false;
 
-                // check all predecessors of current gate
-                std::vector<Endpoint*> predecessors = current_gate->get_predecessors([chain_types, last_index, current_index, filter](const std::string& ep_pin, Endpoint* ep) {
-                    GateType* target_type         = std::get<0>(chain_types.at(current_index));
-                    const std::string& input_pin  = std::get<1>(chain_types.at(last_index));
-                    const std::string& output_pin = std::get<2>(chain_types.at(current_index));
-
+                // check all eligable predecessors of current gate
+                std::vector<Endpoint*> predecessors = current_gate->get_predecessors([input_pins, output_pins, target_type, filter](const std::string& ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {
-                        if (input_pin.empty() || ep_pin == input_pin)
+                        if (input_pins.empty() || input_pins.find(ep_pin) != input_pins.end())
                         {
-                            if (output_pin.empty() || ep->get_pin() == output_pin)
+                            if (input_pins.empty() || input_pins.find(ep->get_pin()) != input_pins.end())
                             {
                                 if (!filter || filter(ep->get_gate()))
                                 {
@@ -1119,7 +989,146 @@ namespace hal
                 {
                     Gate* pred_gate = predecessors.at(0)->get_gate();
 
-                    if (visited_gates.find(pred_gate) != visited_gates.end()) 
+                    if (visited_gates.find(pred_gate) != visited_gates.end())
+                    {
+                        break;
+                    }
+
+                    gate_chain.push_front(pred_gate);
+                    visited_gates.insert(pred_gate);
+                    current_gate    = pred_gate;
+                    found_next_gate = true;
+                    log_debug("netlist_utils", "found predecessor gate with ID {}.", pred_gate->get_id());
+                }
+            } while (found_next_gate);
+
+            return std::vector<Gate*>(gate_chain.begin(), gate_chain.end());
+        }
+
+        std::vector<Gate*> get_complex_gate_chain(Gate* start_gate,
+                                                  const std::vector<GateType*>& chain_types,
+                                                  const std::map<GateType*, std::set<std::string>>& input_pins,
+                                                  const std::map<GateType*, std::set<std::string>>& output_pins,
+                                                  const std::function<bool(const Gate*)>& filter)
+        {
+            if (start_gate->get_type() != chain_types.at(0) || (filter && !filter(start_gate)))
+            {
+                return {};
+            }
+
+            std::deque<Gate*> gate_chain = {start_gate};
+            std::unordered_set<Gate*> visited_gates;
+
+            u32 last_index    = 0;
+            u32 current_index = (last_index + 1) % chain_types.size();
+
+            // move forward
+            bool found_next_gate;
+            const Gate* current_gate = start_gate;
+            do
+            {
+                found_next_gate = false;
+
+                // check all successors of current gate
+                GateType* target_type                = chain_types.at(current_index);
+                const std::set<std::string>& inputs  = input_pins.at(target_type);
+                const std::set<std::string>& outputs = output_pins.at(chain_types.at(last_index));
+                std::vector<Endpoint*> successors    = current_gate->get_successors([target_type, inputs, outputs, filter](const std::string& ep_pin, Endpoint* ep) {
+                    if (ep->get_gate()->get_type() == target_type)
+                    {
+                        if (outputs.empty() || outputs.find(ep_pin) != outputs.end())
+                        {
+                            if (inputs.empty() || inputs.find(ep->get_pin()) != inputs.end())
+                            {
+                                if (!filter || filter(ep->get_gate()))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    return false;
+                });
+
+                if (successors.size() > 1)
+                {
+                    log_debug("netlist_utils",
+                              "detected more than one valid successor gate for gate '{}' with ID {} in netlist with ID {}.",
+                              current_gate->get_name(),
+                              current_gate->get_id(),
+                              current_gate->get_netlist()->get_id());
+                    break;
+                }
+                else if (!successors.empty())
+                {
+                    Gate* suc_gate = successors.at(0)->get_gate();
+
+                    if (visited_gates.find(suc_gate) != visited_gates.end())
+                    {
+                        break;
+                    }
+
+                    gate_chain.push_back(suc_gate);
+                    visited_gates.insert(suc_gate);
+                    current_gate    = suc_gate;
+                    last_index      = current_index;
+                    current_index   = (current_index + 1) % chain_types.size();
+                    found_next_gate = true;
+                    log_debug("netlist_utils", "found successor gate with ID {}.", suc_gate->get_id());
+                }
+            } while (found_next_gate);
+
+            // remove partial sequences at the end of the chain
+            while (current_index != 0)
+            {
+                gate_chain.pop_back();
+                current_index--;
+            }
+
+            current_gate  = start_gate;
+            last_index    = 0;
+            current_index = chain_types.size() - 1;
+
+            // move backwards
+            do
+            {
+                found_next_gate = false;
+
+                // check all predecessors of current gate
+                GateType* target_type                = chain_types.at(current_index);
+                const std::set<std::string>& inputs  = input_pins.at(chain_types.at(last_index));
+                const std::set<std::string>& outputs = output_pins.at(target_type);
+                std::vector<Endpoint*> predecessors  = current_gate->get_predecessors([target_type, inputs, outputs, filter](const std::string& ep_pin, Endpoint* ep) {
+                    if (ep->get_gate()->get_type() == target_type)
+                    {
+                        if (inputs.empty() || inputs.find(ep_pin) != inputs.end())
+                        {
+                            if (outputs.empty() || outputs.find(ep->get_pin()) != outputs.end())
+                            {
+                                if (!filter || filter(ep->get_gate()))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    return false;
+                });
+
+                if (predecessors.size() > 1)
+                {
+                    log_debug("netlist_utils",
+                              "detected more than one valid predecessor gate for gate '{}' with ID {} in netlist with ID {}.",
+                              current_gate->get_name(),
+                              current_gate->get_id(),
+                              current_gate->get_netlist()->get_id());
+                    break;
+                }
+                else if (!predecessors.empty())
+                {
+                    Gate* pred_gate = predecessors.at(0)->get_gate();
+
+                    if (visited_gates.find(pred_gate) != visited_gates.end())
                     {
                         break;
                     }
@@ -1133,6 +1142,13 @@ namespace hal
                     log_debug("netlist_utils", "found predecessor gate with ID {}.", pred_gate->get_id());
                 }
             } while (found_next_gate);
+
+            // remove partial sequences at the beginning of the chain
+            while (last_index != 0)
+            {
+                gate_chain.pop_front();
+                last_index--;
+            }
 
             return std::vector<Gate*>(gate_chain.begin(), gate_chain.end());
         }
