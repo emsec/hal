@@ -897,6 +897,7 @@ namespace hal
             }
 
             std::deque<Gate*> gate_chain = {start_gate};
+            std::unordered_set<Gate*> visited_gates = {start_gate};
 
             const GateType* target_type = start_gate->get_type();
 
@@ -932,13 +933,19 @@ namespace hal
                                 current_gate->get_name(),
                                 current_gate->get_id(),
                                 current_gate->get_netlist()->get_id());
-                    return {};
+                    break;
                 }
                 else if (!successors.empty())
                 {
                     Gate* suc_gate = successors.at(0)->get_gate();
 
+                    if(visited_gates.find(suc_gate) != visited_gates.end()) 
+                    {
+                        break;
+                    }
+
                     gate_chain.push_back(suc_gate);
+                    visited_gates.insert(suc_gate);
                     current_gate    = suc_gate;
                     found_next_gate = true;
                     log_debug("netlist_utils", "found successor gate with ID {}.", suc_gate->get_id());
@@ -976,13 +983,19 @@ namespace hal
                                 current_gate->get_name(),
                                 current_gate->get_id(),
                                 current_gate->get_netlist()->get_id());
-                    return {};
+                    break;
                 }
                 else if (!predecessors.empty())
                 {
                     Gate* pred_gate = predecessors.at(0)->get_gate();
 
+                    if(visited_gates.find(pred_gate) != visited_gates.end()) 
+                    {
+                        break;
+                    }
+
                     gate_chain.push_front(pred_gate);
+                    visited_gates.insert(pred_gate);
                     current_gate    = pred_gate;
                     found_next_gate = true;
                     log_debug("netlist_utils", "found predecessor gate with ID {}.", pred_gate->get_id());
@@ -1000,6 +1013,7 @@ namespace hal
             }
 
             std::deque<Gate*> gate_chain = {start_gate};
+            std::unordered_set<Gate*> visited_gates;
 
             u32 last_index = 0;
             u32 current_index = 1;
@@ -1040,13 +1054,19 @@ namespace hal
                               current_gate->get_name(),
                               current_gate->get_id(),
                               current_gate->get_netlist()->get_id());
-                    return {};
+                    break;
                 }
                 else if (!successors.empty())
                 {
                     Gate* suc_gate = successors.at(0)->get_gate();
 
+                    if (visited_gates.find(suc_gate) != visited_gates.end()) 
+                    {
+                        break;
+                    }
+
                     gate_chain.push_back(suc_gate);
+                    visited_gates.insert(suc_gate);
                     current_gate    = suc_gate;
                     last_index      = current_index;
                     current_index   = (current_index + 1) % chain_types.size();
@@ -1093,13 +1113,19 @@ namespace hal
                               current_gate->get_name(),
                               current_gate->get_id(),
                               current_gate->get_netlist()->get_id());
-                    return {};
+                    break;
                 }
                 else if (!predecessors.empty())
                 {
                     Gate* pred_gate = predecessors.at(0)->get_gate();
 
+                    if (visited_gates.find(pred_gate) != visited_gates.end()) 
+                    {
+                        break;
+                    }
+
                     gate_chain.push_front(pred_gate);
+                    visited_gates.insert(pred_gate);
                     current_gate    = pred_gate;
                     last_index      = current_index;
                     current_index   = (current_index == 0) ? chain_types.size() - 1 : current_index - 1;
