@@ -182,15 +182,15 @@ Functions</h2></td></tr>
 <tr class="separator:aea70c3bec835e4f88d4e208c59f5edee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a6599c0e0034abb437a5ba1b9f15493"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a2a6599c0e0034abb437a5ba1b9f15493">hal::netlist_utils::replace_gate</a> (Gate *gate, GateType *target_type, std::map&lt; std::string, std::string &gt; pin_map)</td></tr>
 <tr class="separator:a2a6599c0e0034abb437a5ba1b9f15493"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2964ee64226f227f2270e364e52d10e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#ab2964ee64226f227f2270e364e52d10e">hal::netlist_utils::get_gate_chain</a> (Gate *start_gate, const std::pair&lt; std::string, std::string &gt; &amp;pins, const std::function&lt; bool(const Gate *)&gt; &amp;filter=nullptr)</td></tr>
-<tr class="separator:ab2964ee64226f227f2270e364e52d10e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28cd2a52d58598ceb159c503fb501e8b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a28cd2a52d58598ceb159c503fb501e8b">hal::netlist_utils::get_complex_gate_chain</a> (Gate *start_gate, const std::vector&lt; std::tuple&lt; GateType *, std::string, std::string &gt;&gt; &amp;chain_types, const std::function&lt; bool(const Gate *)&gt; &amp;filter=nullptr)</td></tr>
-<tr class="separator:a28cd2a52d58598ceb159c503fb501e8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42120b05f3abe3a4b75f33f67a73e141"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a42120b05f3abe3a4b75f33f67a73e141">hal::netlist_utils::get_gate_chain</a> (Gate *start_gate, const std::set&lt; std::string &gt; &amp;input_pins={}, const std::set&lt; std::string &gt; &amp;output_pins={}, const std::function&lt; bool(const Gate *)&gt; &amp;filter=nullptr)</td></tr>
+<tr class="separator:a42120b05f3abe3a4b75f33f67a73e141"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0875f5c8245c404e549e7f85511d69f3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a0875f5c8245c404e549e7f85511d69f3">hal::netlist_utils::get_complex_gate_chain</a> (Gate *start_gate, const std::vector&lt; GateType * &gt; &amp;chain_types, const std::map&lt; GateType *, std::set&lt; std::string &gt;&gt; &amp;input_pins={}, const std::map&lt; GateType *, std::set&lt; std::string &gt;&gt; &amp;output_pins={}, const std::function&lt; bool(const Gate *)&gt; &amp;filter=nullptr)</td></tr>
+<tr class="separator:a0875f5c8245c404e549e7f85511d69f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 30 2021 14:05:23 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 30 2021 16:29:20 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

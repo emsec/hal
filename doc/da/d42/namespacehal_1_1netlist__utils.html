@@ -110,10 +110,10 @@ Functions</h2></td></tr>
 <tr class="separator:aea70c3bec835e4f88d4e208c59f5edee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a6599c0e0034abb437a5ba1b9f15493"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a2a6599c0e0034abb437a5ba1b9f15493">replace_gate</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate, <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *target_type, std::map&lt; std::string, std::string &gt; pin_map)</td></tr>
 <tr class="separator:a2a6599c0e0034abb437a5ba1b9f15493"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2964ee64226f227f2270e364e52d10e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#ab2964ee64226f227f2270e364e52d10e">get_gate_chain</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *start_gate, const std::pair&lt; std::string, std::string &gt; &amp;pins, const std::function&lt; bool(const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;filter=nullptr)</td></tr>
-<tr class="separator:ab2964ee64226f227f2270e364e52d10e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28cd2a52d58598ceb159c503fb501e8b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a28cd2a52d58598ceb159c503fb501e8b">get_complex_gate_chain</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *start_gate, const std::vector&lt; std::tuple&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *, std::string, std::string &gt;&gt; &amp;chain_types, const std::function&lt; bool(const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;filter=nullptr)</td></tr>
-<tr class="separator:a28cd2a52d58598ceb159c503fb501e8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42120b05f3abe3a4b75f33f67a73e141"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a42120b05f3abe3a4b75f33f67a73e141">get_gate_chain</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *start_gate, const std::set&lt; std::string &gt; &amp;input_pins={}, const std::set&lt; std::string &gt; &amp;output_pins={}, const std::function&lt; bool(const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;filter=nullptr)</td></tr>
+<tr class="separator:a42120b05f3abe3a4b75f33f67a73e141"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0875f5c8245c404e549e7f85511d69f3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a0875f5c8245c404e549e7f85511d69f3">get_complex_gate_chain</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *start_gate, const std::vector&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt; &amp;chain_types, const std::map&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *, std::set&lt; std::string &gt;&gt; &amp;input_pins={}, const std::map&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *, std::set&lt; std::string &gt;&gt; &amp;output_pins={}, const std::function&lt; bool(const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;filter=nullptr)</td></tr>
+<tr class="separator:a0875f5c8245c404e549e7f85511d69f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a4951c274ab6c15d1ccc06acc83d28335"></a>
@@ -838,8 +838,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab2964ee64226f227f2270e364e52d10e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2964ee64226f227f2270e364e52d10e">&#9670;&nbsp;</a></span>get_gate_chain()</h2>
+<a id="a42120b05f3abe3a4b75f33f67a73e141"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42120b05f3abe3a4b75f33f67a73e141">&#9670;&nbsp;</a></span>get_gate_chain()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -853,8 +853,14 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::pair&lt; std::string, std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>pins</em>, </td>
+          <td class="paramtype">const std::set&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>input_pins</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::set&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>output_pins</em> = <code>{}</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -873,7 +879,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">start_gate</td><td>- The gate at which to start the chain detection. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pins</td><td>- The input and output pins through which the gates are connected. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_pins</td><td>- The input pins through which the gates are allowed to be connected. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">output_pins</td><td>- The output pins through which the gates are allowed to be connected. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- A filter that is evaluated on all candidates. </td></tr>
   </table>
   </dd>
@@ -886,8 +893,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a28cd2a52d58598ceb159c503fb501e8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28cd2a52d58598ceb159c503fb501e8b">&#9670;&nbsp;</a></span>get_complex_gate_chain()</h2>
+<a id="a0875f5c8245c404e549e7f85511d69f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0875f5c8245c404e549e7f85511d69f3">&#9670;&nbsp;</a></span>get_complex_gate_chain()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -901,8 +908,20 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; std::tuple&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *, std::string, std::string &gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt; &amp;&#160;</td>
           <td class="paramname"><em>chain_types</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::map&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *, std::set&lt; std::string &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>input_pins</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::map&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *, std::set&lt; std::string &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>output_pins</em> = <code>{}</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -917,11 +936,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins. The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate. However, the start gate must be of the first gate type of the repeating sequence. For every gate type, a pair of input and output pins can be specified through which the gates are interconnected. If a nullptr is given for a gate type, any gate fulfilling the other properties will be considered. If the connection pins are irrelevant, an empty string may be passed to the function. Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.</p>
+<p>Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins. The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate. However, the start gate must be of the first gate type of the repeating sequence. For every gate type, a pair of input and output pins can be specified through which the gates are interconnected. If a nullptr is given for a gate type, any gate fulfilling the other properties will be considered. If an empty set is given for input or output pins, every pin of the respective gate will be considered. Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">start_gate</td><td>- The gate at which to start the chain detection. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">chain_types</td><td>- A vector of gate types that need to appear in order and be connected through the input and output pins specified in the tuple. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chain_types</td><td>- The sequence of gate types that is expected to make up the gate chain. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_pins</td><td>- The input pins through which the gates are allowed to be connected. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">output_pins</td><td>- The output pins through which the gates are allowed to be connected. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- A filter that is evaluated on all candidates. </td></tr>
   </table>
   </dd>
@@ -937,7 +958,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 30 2021 14:05:23 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 30 2021 16:29:20 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
