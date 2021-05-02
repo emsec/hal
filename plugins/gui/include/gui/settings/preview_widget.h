@@ -30,6 +30,7 @@ namespace hal
 {
     /**
      * @ingroup settings
+     * @brief unused.
      */
     class PreviewWidget : public QFrame
     {

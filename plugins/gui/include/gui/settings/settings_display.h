@@ -31,6 +31,7 @@ namespace hal
 {
     /**
      * @ingroup settings
+     * @brief unused.
      */
     class SettingsDisplay : public QScrollArea
     {
