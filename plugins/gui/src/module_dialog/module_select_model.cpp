@@ -1,25 +1,28 @@
 #include "gui/module_dialog/module_select_model.h"
-#include "gui/module_dialog/module_dialog.h"
-#include "gui/gui_globals.h"
-#include "gui/gui_utils/graphics.h"
-#include "gui/searchbar/searchbar.h"
-#include "gui/user_action/action_add_items_to_object.h"
-#include "gui/graph_tab_widget/graph_tab_widget.h"
-#include "hal_core/netlist/module.h"
+
 #include "gui/content_manager/content_manager.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/gui_globals.h"
+#include "gui/gui_utils/graphics.h"
+#include "gui/module_dialog/module_dialog.h"
+#include "gui/searchbar/searchbar.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "hal_core/netlist/module.h"
+
+#include <QApplication>
 #include <QHeaderView>
 #include <QMessageBox>
-#include <QApplication>
+#include <QSortFilterProxyModel>
 
-namespace hal {
-
+namespace hal
+{
     //---------------- HISTORY ----------------------------------------
     ModuleSelectHistory* ModuleSelectHistory::inst = nullptr;
 
     ModuleSelectHistory* ModuleSelectHistory::instance()
     {
-        if (!inst) inst = new ModuleSelectHistory;
+        if (!inst)
+            inst = new ModuleSelectHistory;
         return inst;
     }
 
@@ -32,9 +35,9 @@ namespace hal {
     //---------------- ENTRY ------------------------------------------
     ModuleSelectEntry::ModuleSelectEntry(Module* m)
     {
-        mId = m->get_id();
-        mName = QString::fromStdString(m->get_name());
-        mType = QString::fromStdString(m->get_type());
+        mId    = m->get_id();
+        mName  = QString::fromStdString(m->get_name());
+        mType  = QString::fromStdString(m->get_type());
         mColor = gNetlistRelay->getModuleColor(mId);
     }
 
@@ -42,17 +45,20 @@ namespace hal {
     {
         switch (icol)
         {
-        case 0: return mColor;
-        case 1: return mId;
-        case 2: return mName;
-        case 3: return mType;
+            case 0:
+                return mColor;
+            case 1:
+                return mId;
+            case 2:
+                return mName;
+            case 3:
+                return mType;
         }
         return QVariant();
     }
 
     //---------------- MODEL ------------------------------------------
-    ModuleSelectModel::ModuleSelectModel(bool history, QObject* parent)
-        : QAbstractTableModel(parent)
+    ModuleSelectModel::ModuleSelectModel(bool history, QObject* parent) : QAbstractTableModel(parent)
     {
         ModuleSelectExclude excl;
         if (history)
@@ -72,14 +78,14 @@ namespace hal {
         }
     }
 
-    int ModuleSelectModel::rowCount(const QModelIndex &parent) const
+    int ModuleSelectModel::rowCount(const QModelIndex& parent) const
     {
         Q_UNUSED(parent);
 
         return mEntries.size();
     }
 
-    int ModuleSelectModel::columnCount(const QModelIndex &parent) const
+    int ModuleSelectModel::columnCount(const QModelIndex& parent) const
     {
         Q_UNUSED(parent);
 
@@ -88,38 +94,42 @@ namespace hal {
 
     QVariant ModuleSelectModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
-        if (role != Qt::DisplayRole || orientation != Qt::Horizontal) return QVariant();
+        if (role != Qt::DisplayRole || orientation != Qt::Horizontal)
+            return QVariant();
         switch (section)
         {
-        case 1: return "ID";
-        case 2: return "Name";
-        case 3: return "Type";
+            case 1:
+                return "ID";
+            case 2:
+                return "Name";
+            case 3:
+                return "Type";
         }
         return QVariant();
     }
 
-    QVariant ModuleSelectModel::data(const QModelIndex &index, int role) const
+    QVariant ModuleSelectModel::data(const QModelIndex& index, int role) const
     {
-        if (!index.isValid() || index.row() >= mEntries.size()) return QVariant();
+        if (!index.isValid() || index.row() >= mEntries.size())
+            return QVariant();
         const ModuleSelectEntry& mod = mEntries.at(index.row());
 
         switch (role)
         {
-        case Qt::DecorationRole:
-        {
-            if (index.column() == 0)
-            {
-                QString runIconStyle = "all->" + mod.color().name();
-                QString runIconPath  = ":/icons/filled-circle";
+            case Qt::DecorationRole: {
+                if (index.column() == 0)
+                {
+                    QString runIconStyle = "all->" + mod.color().name();
+                    QString runIconPath  = ":/icons/filled-circle";
 
-                return gui_utility::getStyledSvgIcon(runIconStyle, runIconPath);
+                    return gui_utility::getStyledSvgIcon(runIconStyle, runIconPath);
+                }
+                break;
             }
-            break;
-        }
-        case Qt::DisplayRole:
-            if (index.column() > 0)
-                return mod.data(index.column());
-            break;
+            case Qt::DisplayRole:
+                if (index.column() > 0)
+                    return mod.data(index.column());
+                break;
         }
 
         return QVariant();
@@ -136,9 +146,10 @@ namespace hal {
     }
 
     //---------------- PROXY ------------------------------------------
-    ModuleSelectProxy::ModuleSelectProxy(QObject* parent)
-        : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::numerated)
-    {;}
+    ModuleSelectProxy::ModuleSelectProxy(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::numerated)
+    {
+        ;
+    }
 
     void ModuleSelectProxy::setSortMechanism(gui_utility::mSortMechanism sortMechanism)
     {
@@ -147,21 +158,25 @@ namespace hal {
 
     bool ModuleSelectProxy::lessThan(const QColor& a, const QColor& b)
     {
-        if (a.hue() < b.hue()) return true;
-        if (a.hue() > b.hue()) return false;
-        if (a.saturation() < b.saturation()) return true;
-        if (a.saturation() > b.saturation()) return false;
+        if (a.hue() < b.hue())
+            return true;
+        if (a.hue() > b.hue())
+            return false;
+        if (a.saturation() < b.saturation())
+            return true;
+        if (a.saturation() > b.saturation())
+            return false;
         return (a.value() < b.value());
     }
 
-    bool ModuleSelectProxy::lessThan(const QModelIndex &sourceLeft, const QModelIndex &sourceRight) const
+    bool ModuleSelectProxy::lessThan(const QModelIndex& sourceLeft, const QModelIndex& sourceRight) const
     {
         if (!sourceLeft.column() && !sourceRight.column())
         {
             const ModuleSelectModel* modl = static_cast<const ModuleSelectModel*>(sourceModel());
-            QColor cLeft  = modl->moduleColor(sourceLeft.row());
-            QColor cRight = modl->moduleColor(sourceRight.row());
-            return lessThan(cLeft,cRight);
+            QColor cLeft                  = modl->moduleColor(sourceLeft.row());
+            QColor cRight                 = modl->moduleColor(sourceRight.row());
+            return lessThan(cLeft, cRight);
         }
         QString sLeft  = sourceModel()->data(sourceLeft).toString();
         QString sRight = sourceModel()->data(sourceRight).toString();
@@ -183,7 +198,8 @@ namespace hal {
         for (u32 gid : mGates)
         {
             Gate* g = gNetlist->get_gate_by_id(gid);
-            if (!g) continue;
+            if (!g)
+                continue;
             mExclude.insert(g->get_module()->get_id());
         }
 
@@ -191,10 +207,12 @@ namespace hal {
         {
             mExclude.insert(mid);
             Module* m = gNetlist->get_module_by_id(mid);
-            if (!m) continue;
+            if (!m)
+                continue;
             Module* pm = m->get_parent_module();
-            if (pm) mExclude.insert(pm->get_id());
-            for (Module* sm : m->get_submodules(nullptr,true))
+            if (pm)
+                mExclude.insert(pm->get_id());
+            for (Module* sm : m->get_submodules(nullptr, true))
                 mExclude.insert(sm->get_id());
         }
     }
@@ -205,22 +223,27 @@ namespace hal {
         if (!mModules.isEmpty())
         {
             retval += "module";
-            if (mModules.size()>1) retval += 's';
+            if (mModules.size() > 1)
+                retval += 's';
             for (u32 modId : mModules)
             {
                 Module* m = gNetlist->get_module_by_id(modId);
-                if (m) retval += QString(" '%1'[%2]").arg(m->get_name().c_str()).arg(m->get_id());
+                if (m)
+                    retval += QString(" '%1'[%2]").arg(m->get_name().c_str()).arg(m->get_id());
             }
         }
-        if (!retval.isEmpty()) retval += ", ";
+        if (!retval.isEmpty())
+            retval += ", ";
         if (!mGates.isEmpty())
         {
             retval += "gate";
-            if (mGates.size()>1) retval += 's';
+            if (mGates.size() > 1)
+                retval += 's';
             for (u32 modId : mGates)
             {
                 Gate* g = gNetlist->get_gate_by_id(modId);
-                if (g) retval += QString(" '%1'[%2]").arg(g->get_name().c_str()).arg(g->get_id());
+                if (g)
+                    retval += QString(" '%1'[%2]").arg(g->get_name().c_str()).arg(g->get_id());
             }
         }
         return retval;
@@ -231,8 +254,9 @@ namespace hal {
 
     ModuleSelectPicker::ModuleSelectPicker()
     {
-        if (sCurrentPicker) sCurrentPicker->deleteLater();
-        connect(this,&ModuleSelectPicker::triggerModuleCursor,gContentManager->getGraphTabWidget(),&GraphTabWidget::setModuleSelectCursor);
+        if (sCurrentPicker)
+            sCurrentPicker->deleteLater();
+        connect(this, &ModuleSelectPicker::triggerModuleCursor, gContentManager->getGraphTabWidget(), &GraphTabWidget::setModuleSelectCursor);
         sCurrentPicker = this;
         Q_EMIT(triggerModuleCursor(true));
     }
@@ -242,8 +266,8 @@ namespace hal {
         Q_UNUSED(sender);
 
         Module* firstAccepted = nullptr;
-        u32 notAccepted = 0;
-        bool terminate = true;
+        u32 notAccepted       = 0;
+        bool terminate        = true;
 
         for (u32 modId : gSelectionRelay->selectedModulesList())
         {
@@ -258,57 +282,54 @@ namespace hal {
             }
             else
             {
-                if (!notAccepted) notAccepted = modId;
+                if (!notAccepted)
+                    notAccepted = modId;
             }
         }
 
         if (firstAccepted)
         {
             u32 moduleId = firstAccepted->get_id();
-            if (QMessageBox::question(qApp->activeWindow(),"Confirm:",
-                                  QString("Ok to move %1 into module '%2'[%3]")
-                                  .arg(mSelectExclude.selectionToString())
-                                  .arg(QString::fromStdString(firstAccepted->get_name()))
-                                  .arg(moduleId),
-                                  QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok)
+            if (QMessageBox::question(qApp->activeWindow(),
+                                      "Confirm:",
+                                      QString("Ok to move %1 into module '%2'[%3]").arg(mSelectExclude.selectionToString()).arg(QString::fromStdString(firstAccepted->get_name())).arg(moduleId),
+                                      QMessageBox::Ok | QMessageBox::Cancel)
+                == QMessageBox::Ok)
             {
                 ActionAddItemsToObject* act = new ActionAddItemsToObject(mSelectExclude.modules(), mSelectExclude.gates());
-                act->setObject(UserActionObject(moduleId,UserActionObjectType::Module));
+                act->setObject(UserActionObject(moduleId, UserActionObjectType::Module));
                 act->exec();
                 gSelectionRelay->clear();
                 gSelectionRelay->addModule(moduleId);
-                gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,moduleId);
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Module, moduleId);
                 gSelectionRelay->relaySelectionChanged(this);
                 gContentManager->getGraphTabWidget()->ensureSelectionVisible();
 
                 ModuleSelectHistory::instance()->add(moduleId);
             }
-
         }
         else if (notAccepted)
-            QMessageBox::warning(qApp->activeWindow(),"Warning",
-                                 QString("Cannot move %1 into module [%2]")
-                                 .arg(mSelectExclude.selectionToString())
-                                 .arg(notAccepted));
+            QMessageBox::warning(qApp->activeWindow(), "Warning", QString("Cannot move %1 into module [%2]").arg(mSelectExclude.selectionToString()).arg(notAccepted));
         else
             terminate = false;
 
-        if (terminate) terminateCurrentPicker();
+        if (terminate)
+            terminateCurrentPicker();
     }
 
     void ModuleSelectPicker::terminateCurrentPicker()
     {
-        if (!sCurrentPicker) return;
+        if (!sCurrentPicker)
+            return;
         ModuleSelectPicker* toDelete = sCurrentPicker;
-        sCurrentPicker = nullptr;
+        sCurrentPicker               = nullptr;
         toDelete->triggerModuleCursor(false);
         disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, toDelete, &ModuleSelectPicker::handleSelectionChanged);
         toDelete->deleteLater();
     }
 
     //---------------- VIEW -------------------------------------------
-    ModuleSelectView::ModuleSelectView(bool history, Searchbar *sbar, QWidget* parent)
-        : QTableView(parent)
+    ModuleSelectView::ModuleSelectView(bool history, Searchbar* sbar, QWidget* parent) : QTableView(parent)
     {
         setSelectionBehavior(QAbstractItemView::SelectRows);
         setSelectionMode(QAbstractItemView::SingleSelection);
@@ -320,10 +341,10 @@ namespace hal {
         prox->setSourceModel(modl);
         setModel(prox);
 
-        connect(selectionModel(),&QItemSelectionModel::currentChanged,this,&ModuleSelectView::handleCurrentChanged);
-        connect(this,&QTableView::doubleClicked,this,&ModuleSelectView::handleDoubleClick);
+        connect(selectionModel(), &QItemSelectionModel::currentChanged, this, &ModuleSelectView::handleCurrentChanged);
+        connect(this, &QTableView::doubleClicked, this, &ModuleSelectView::handleDoubleClick);
         setSortingEnabled(true);
-        sortByColumn(history ? -1 : 2,Qt::AscendingOrder);
+        sortByColumn(history ? -1 : 2, Qt::AscendingOrder);
         resizeColumnsToContents();
         horizontalHeader()->setStretchLastSection(true);
         verticalHeader()->hide();
@@ -335,9 +356,9 @@ namespace hal {
         const ModuleSelectProxy* prox = static_cast<const ModuleSelectProxy*>(model());
         Q_ASSERT(prox);
         const ModuleSelectModel* modl = static_cast<const ModuleSelectModel*>(prox->sourceModel());
-        QModelIndex sourceIndex = prox->mapToSource(current);
-        u32 selModId = modl->moduleId(sourceIndex.row());
-        Q_EMIT(moduleSelected(selModId,false));
+        QModelIndex sourceIndex       = prox->mapToSource(current);
+        u32 selModId                  = modl->moduleId(sourceIndex.row());
+        Q_EMIT(moduleSelected(selModId, false));
     }
 
     void ModuleSelectView::handleDoubleClick(const QModelIndex& index)
@@ -345,10 +366,9 @@ namespace hal {
         const ModuleSelectProxy* prox = static_cast<const ModuleSelectProxy*>(model());
         Q_ASSERT(prox);
         const ModuleSelectModel* modl = static_cast<const ModuleSelectModel*>(prox->sourceModel());
-        QModelIndex sourceIndex = prox->mapToSource(index);
-        u32 selModId = modl->moduleId(sourceIndex.row());
-        Q_EMIT(moduleSelected(selModId,true));
+        QModelIndex sourceIndex       = prox->mapToSource(index);
+        u32 selModId                  = modl->moduleId(sourceIndex.row());
+        Q_EMIT(moduleSelected(selModId, true));
     }
 
-}
-
+}    // namespace hal
