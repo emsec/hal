@@ -54,16 +54,18 @@ namespace hal
     void ActionSetSelectionFocus::readFromXml(QXmlStreamReader& xmlIn)
     {
         QStringRef sfocAttribute = xmlIn.attributes().value("subfocus");
-        if (sfocAttribute.isNull() || sfocAttribute.isEmpty()) return;
-        if (sfocAttribute == "Left")
+        if (!sfocAttribute.isNull() && !sfocAttribute.isEmpty())
         {
-            mSubfocus = SelectionRelay::Subfocus::Left;
-            mSubfocusIndex = xmlIn.attributes().value("subfocusIndex").toInt();
-        }
-        else if (sfocAttribute == "Right")
-        {
-            mSubfocus = SelectionRelay::Subfocus::Right;
-            mSubfocusIndex = xmlIn.attributes().value("subfocusIndex").toInt();
+            if (sfocAttribute == "Left")
+            {
+                mSubfocus = SelectionRelay::Subfocus::Left;
+                mSubfocusIndex = xmlIn.attributes().value("subfocusIndex").toInt();
+            }
+            else if (sfocAttribute == "Right")
+            {
+                mSubfocus = SelectionRelay::Subfocus::Right;
+                mSubfocusIndex = xmlIn.attributes().value("subfocusIndex").toInt();
+            }
         }
 
         while (xmlIn.readNextStartElement())

@@ -210,14 +210,47 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist_utils.def("get_gate_chain", netlist_utils::get_gate_chain, py::arg("start_gate"), py::arg("pin"), py::arg("filter"), R"(
-            Find a chain of identical gates within the netlist.
-            The start gate may be any gate within a chain, it is not reuired to be the first or last gate.
-            A pin must be specified through which the gates are expected to be connected.
-            A user-defined filter is evaluated in every candidate gate before it is added to the chain.
+        py_netlist_utils.def("get_gate_chain",
+                             netlist_utils::get_gate_chain,
+                             py::arg("start_gate"),
+                             py::arg("input_pins")  = std::set<std::string>(),
+                             py::arg("output_pins") = std::set<std::string>(),
+                             py::arg("filter")      = nullptr,
+                             R"(
+            Find a repeating sequence of identical gates that connect through the specified pins.
+            The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
+            A pair of input and output pins can be specified through which the gates are interconnected.
+            If an empty set is given for input or output pins, every pin of the respective gate will be considered.
+            Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
 
             :param hal_py.Gate start_gate: The gate at which to start the chain detection.
-            :param str pin: The pin through which the gates are connected.
+            :param set[str] input_pins: The input pins through which the gates are allowed to be connected.
+            :param set[str] output_pins: The output pins through which the gates are allowed to be connected.
+            :param lambda filter: A filter that is evaluated on all candidates.
+            :returns: A list of gates that form a chain.
+            :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist_utils.def("get_complex_gate_chain",
+                             netlist_utils::get_complex_gate_chain,
+                             py::arg("start_gate"),
+                             py::arg("chain_types"),
+                             py::arg("input_pins")  = std::map<GateType*, std::set<std::string>>(),
+                             py::arg("output_pins") = std::map<GateType*, std::set<std::string>>(),
+                             py::arg("filter")      = nullptr,
+                             R"(
+            Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins.
+            The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
+            However, the start gate must be of the first gate type of the repeating sequence.
+            For every gate type, a pair of input and output pins can be specified through which the gates are interconnected.
+            If a None is given for a gate type, any gate fulfilling the other properties will be considered.
+            If an empty set is given for input or output pins, every pin of the respective gate will be considered.
+            Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.
+
+            :param hal_py.Gate start_gate: The gate at which to start the chain detection.
+            :param list[hal_py.GateType] chain_types: The sequence of gate types that is expected to make up the gate chain.
+            :param dict[hal_py.GateType,set[str]] input_pins: The input pins through which the gates are allowed to be connected.
+            :param dict[hal_py.GateType,set[str]] output_pins: The output pins through which the gates are allowed to be connected.
             :param lambda filter: A filter that is evaluated on all candidates.
             :returns: A list of gates that form a chain.
             :rtype: list[hal_py.Gate]
