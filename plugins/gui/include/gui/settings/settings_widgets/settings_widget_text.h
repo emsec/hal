@@ -33,15 +33,33 @@ namespace hal
 
     /**
      * @ingroup settings
+     * @brief A SettingsWidget representing a textfield.
      */
     class SettingsWidgetText : public SettingsWidget
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param item - The underlying settings item.
+         * @param parent - The widget's parent.
+         */
         SettingsWidgetText(SettingsItemText* item, QWidget* parent = nullptr);
 
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @param value - The value to load into the widget.
+         */
         virtual void load(const QVariant& value) override;
+
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @return The visual value of the texfield.
+         */
         virtual QVariant value() override;
 
     private:

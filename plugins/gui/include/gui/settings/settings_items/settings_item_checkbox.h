@@ -32,12 +32,23 @@ namespace hal
 {
     /**
      * @ingroup settings
+     * @brief A SettingsItem representing a Checkbox.
      */
     class SettingsItemCheckbox : public SettingsItem
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param label - The label.
+         * @param tag - The tag (key).
+         * @param defVal - The default value.
+         * @param cat - The category.
+         * @param descr - The description.
+         * @param isGlobal - The isGlobal flag.
+         */
         SettingsItemCheckbox(const QString& label, const QString& tag, bool defVal, const QString& cat = QString(), const QString& descr = QString(), bool isGlobal = true);
 
         virtual QVariant value() const override;
@@ -47,6 +58,9 @@ namespace hal
         virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted when the value changes.
+         */
         void boolChanged(bool);
 
     private:

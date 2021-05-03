@@ -40,27 +40,56 @@ namespace hal
 
     /**
      * @ingroup settings
+     * @brief A setting to configure keybinds.
      */
     class SettingsWidgetKeybind : public SettingsWidget
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param item - The underlying keybind item.
+         * @param parent - The widget's parent.
+         */
         SettingsWidgetKeybind(SettingsItemKeybind* item, QWidget* parent = nullptr);
 
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @param value - The value (keysquence) to load into the widget.
+         */
         virtual void load(const QVariant& value) override;
+
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @return The currently visual configured keybind value.
+         */
         virtual QVariant value() override;
+
+        /**
+         * Overwritten SettingsWidget function.
+         * Removes the current value of the underlying KeybindEdit.
+         */
         virtual void clearEditor() override;
+
+        /**
+         * Overwritten SettingsWidget function.
+         */
+        void handleRevertModification() override;
+
+        /**
+         * Overwritten SettingsWidget function.
+         */
+        void handleSetDefaultValue(bool setAll = false) override;
 
     private:
         KeybindEdit* mKeybindEdit;
         QLabel* mErrorMessage;
 
         bool isKeybindUsed(const QVariant& testValue);
-
-    public Q_SLOTS:
-        void handleRevertModification() override;
-        void handleSetDefaultValue(bool setAll = false) override;
 
     private Q_SLOTS:
         void clearErrorMessage();

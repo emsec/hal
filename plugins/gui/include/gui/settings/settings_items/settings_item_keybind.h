@@ -35,12 +35,24 @@ namespace hal
 
     /**
      * @ingroup settings
+     * @brief A SettingsItem to modify keybinds.
      */
     class SettingsItemKeybind : public SettingsItem
     {
         Q_OBJECT
 
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param label - The label.
+         * @param tag - The tag (key).
+         * @param defVal - The default value.
+         * @param cat - The category.
+         * @param descr - The description.
+         * @param isGlobal - The isGlobal flag.
+         */
         SettingsItemKeybind(const QString& label, const QString& tag, const QKeySequence& defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
 
         virtual QVariant value() const override;
@@ -50,6 +62,12 @@ namespace hal
         virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
 
     Q_SIGNALS:
+
+        /**
+         * Q_SIGNAL that is emitted when the keysequence (value) changes.
+         *
+         * @param value - The new sequence.
+         */
         void keySequenceChanged(QKeySequence value);
 
     private:

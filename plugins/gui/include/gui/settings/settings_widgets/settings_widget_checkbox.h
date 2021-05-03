@@ -34,15 +34,33 @@ namespace hal
 
     /**
      * @ingroup settings
+     * @brief A SettingsWidget representing a checkbox.
      */
     class SettingsWidgetCheckbox : public SettingsWidget
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param item - The underlying checkbox item.
+         * @param parent - The widget's parent.
+         */
         SettingsWidgetCheckbox(SettingsItemCheckbox* item, QWidget* parent = nullptr);
 
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @param value - The value to load into the widget.
+         */
         virtual void load(const QVariant& value) override;
+
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @return The current visual value of the SettingsWidgetCheckbox.
+         */
         virtual QVariant value() override;
 
     private:

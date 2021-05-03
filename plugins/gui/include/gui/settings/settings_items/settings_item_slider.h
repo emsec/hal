@@ -30,12 +30,24 @@ namespace hal
 {
     /**
      * @ingroup settings
+     * @brief A SettingsItem representing a slider.
      */
     class SettingsItemSlider : public SettingsItem
     {
         Q_OBJECT
 
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param label - The label.
+         * @param tag - The tag (key).
+         * @param defVal - The default value.
+         * @param cat - The category.
+         * @param descr - The description.
+         * @param isGlobal - The isGlobal flag.
+         */
         SettingsItemSlider(const QString& label, const QString& tag, int defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
 
         virtual QVariant value() const override;
@@ -44,19 +56,41 @@ namespace hal
         virtual void setDefaultValue(const QVariant& dv) override;
         virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
 
+        /**
+         * Sets the minimum and maximum value of the slider.
+         *
+         * @param min - The minimum value.
+         * @param max - The maximum value.
+         */
         void setRange(int min, int max);
 
+        /**
+         * Get the minimum value.
+         *
+         * @return The minimum value.
+         */
         int minimum() const
         {
             return mMinimum;
         }
 
+        /**
+         * Get the maximum value.
+         *
+         * @return The maximum value.
+         */
         int maximum() const
         {
             return mMaximum;
         }
 
     Q_SIGNALS:
+
+        /**
+         * Q_SIGNAL that is emitted when the value changes.
+         *
+         * @param value - The new value.
+         */
         void intChanged(int value);
 
     private:

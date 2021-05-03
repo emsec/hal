@@ -32,12 +32,24 @@ namespace hal
 {
     /**
      * @ingroup settings
+     * @brief A SettingsItem that represents a dropdown menu.
      */
     class SettingsItemDropdown : public SettingsItem
     {
         Q_OBJECT
 
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param label - The label.
+         * @param tag - The tag (key).
+         * @param defVal - The default value.
+         * @param cat - The category.
+         * @param descr - The description.
+         * @param isGlobal - The isGlobal flag.
+         */
         SettingsItemDropdown(const QString& label, const QString& tag, int defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
 
         virtual QVariant value() const override;
@@ -49,11 +61,19 @@ namespace hal
         virtual QVariant persistToSettings() const override;
         virtual void restoreFromSettings(const QVariant& val) override;
 
+        /**
+         * Get all values in the dropdown menu.
+         *
+         * @return The values.
+         */
         const QStringList& valueNames() const
         {
             return mValueNames;
         }
 
+        /**
+         * Sets the values specified by the enumytype T.
+         */
         template <typename T> void setValueNames()
         {
             mValueNames.clear();
@@ -67,6 +87,12 @@ namespace hal
         }
 
     Q_SIGNALS:
+
+        /**
+         * Q_SIGNAL that is emitted when the value changes.
+         *
+         * @param value - The new value.
+         */
         void intChanged(int value);
 
     private:

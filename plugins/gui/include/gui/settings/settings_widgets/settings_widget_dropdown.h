@@ -34,15 +34,33 @@ namespace hal
 
     /**
      * @ingroup settings
+     * @brief A SettingsWidget representing a dropdown menu.
      */
     class SettingsWidgetDropdown : public SettingsWidget
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param item - The underlying dropdown item.
+         * @param parent - The widget's parent.
+         */
         SettingsWidgetDropdown(SettingsItemDropdown* item, QWidget* parent = nullptr);
 
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @param value - The value(s) to load into the widget.
+         */
         virtual void load(const QVariant& value) override;
+
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @return The currently selected visual value of the menu.
+         */
         virtual QVariant value() override;
 
     private:

@@ -34,15 +34,34 @@ namespace hal
 
     /**
      * @ingroup settings
+     * @brief A SettingsWidget representing a slider.
      */
     class SettingsWidgetSlider : public SettingsWidget
     {
         Q_OBJECT
 
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param item - The underlying slider item.
+         * @param parent - The widget's parent.
+         */
         SettingsWidgetSlider(SettingsItemSlider* item, QWidget* parent = nullptr);
 
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @param value - The value(s) to load into the widget.
+         */
         virtual void load(const QVariant& value) override;
+
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @return The currently selected visual value of the slider.
+         */
         virtual QVariant value() override;
 
     private:

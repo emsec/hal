@@ -30,12 +30,23 @@ namespace hal
 {
     /**
      * @ingroup settings
+     * @brief A SettingsItem that represents a textfield.
      */
     class SettingsItemText : public SettingsItem
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param label - The label.
+         * @param tag - The tag (key).
+         * @param defVal - The default value.
+         * @param cat - The category.
+         * @param descr - The description.
+         * @param isGlobal - The isGlobal flag.
+         */
         SettingsItemText(const QString& label, const QString& tag, const QString& defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
 
         virtual QVariant value() const override;
@@ -45,6 +56,11 @@ namespace hal
         virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted when the value changes.
+         *
+         * @param text - The new value.
+         */
         void stringChanged(const QString& text);
 
     private:
