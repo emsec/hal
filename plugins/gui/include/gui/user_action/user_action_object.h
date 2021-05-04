@@ -57,31 +57,59 @@ namespace hal {
 
 
     /**
-    * @brief The UserActionObject class represents a single object used in UserAction
-    *
-    * An object is identified by unique id and type
-    */
+     * @ingroup user_action
+     * @brief The UserActionObject class represents a single object used in UserAction
+     *
+     * An object is identified by unique id and type
+     */
     class UserActionObject
     {
     public:
-        /// object constructor, without arguments object of type None gets constructed
+
+        /**
+         * Object constructor, without arguments object of type None gets constructed.
+         *
+         * @param i - The id.
+         * @param t - The type.
+         */
         UserActionObject(u32 i=0, UserActionObjectType::ObjectType t=UserActionObjectType::None)
             : mId(i), mType(t) {;}
 
-        /// id of object
+        /**
+         * Get the object's id.
+         *
+         * @return The id.
+         */
         u32 id() const { return mId; }
 
-        /// type of object
+        /**
+         * Get the object's type.
+         *
+         * @return The type.
+         */
         UserActionObjectType::ObjectType type() const { return mType; }
 
-        /// persist object to xml attributes "id" and "type"
+        /**
+         * Persist object to xml attributes "id" and "type".
+         *
+         * @param xmlOut - The file to write to.
+         */
         void writeToXml(QXmlStreamWriter& xmlOut) const;
 
-        /// reads object member variables from xml attributes "id" and "type"
+        /**
+         * Reads object member variables from xml attributes "id" and "type".
+         *
+         * @param xmlIn - The file to read from.
+         */
         void readFromXml(QXmlStreamReader& xmlIn);
 
-        /// short code for debugging purpose
+        /**
+         * Short code for debugging purpose.
+         *
+         * @return - The debug string.
+         */
         QString debugDump() const;
+
     private:
         u32 mId;
         UserActionObjectType::ObjectType mType;
