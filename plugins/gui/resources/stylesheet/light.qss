@@ -1144,6 +1144,9 @@ hal--MainWindow
     qproperty-saveIconStyle: "all->#FFFFFF";
     qproperty-saveIconPath: ":/icons/folder-down";
 
+    qproperty-saveAsIconStyle: "all->#FFFFFF";
+    qproperty-saveAsIconPath: ":/icons/save-as";
+
     qproperty-settingsIconStyle: "all->#FFFFFF";
     qproperty-settingsIconPath: ":/icons/settings";
 

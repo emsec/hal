@@ -46,7 +46,6 @@ namespace hal
     class PythonEditor;
     class FileManager;
     class ContentManager;
-    class AboutDialog;
     class WelcomeScreen;
     class SettingsItemKeybind;
     class SettingsItemDropdown;
@@ -72,6 +71,8 @@ namespace hal
         Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
         Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath)
         Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
+        Q_PROPERTY(QString saveAsIconPath READ saveAsIconPath WRITE setSaveAsIconPath)
+        Q_PROPERTY(QString saveAsIconStyle READ saveAsIconStyle WRITE setSaveAsIconStyle)
         Q_PROPERTY(QString settingsIconPath READ settingsIconPath WRITE setSettingsIconPath)
         Q_PROPERTY(QString settingsIconStyle READ settingsIconStyle WRITE setSettingsIconStyle)
         Q_PROPERTY(QString undoIconPath READ undoIconPath WRITE setUndoIconPath)
@@ -148,6 +149,20 @@ namespace hal
          * @returns the 'Save File'-icon style
          */
         QString saveIconStyle() const;
+
+        /**
+         * Q_PROPERTY READ function for the 'SaveAs File'-icon path.
+         *
+         * @returns the 'SaveAsFile'-icon path
+         */
+        QString saveAsIconPath() const;
+        /**
+         * Q_PROPERTY READ function for the 'SaveAs File'-icon style.
+         *
+         * @returns the 'SaveAs File'-icon style
+         */
+        QString saveAsIconStyle() const;
+
         /**
          * Q_PROPERTY READ function for the 'Settings'-icon path.
          *
@@ -216,6 +231,19 @@ namespace hal
          * @param style - The new style
          */
         void setSaveIconStyle(const QString& style);
+
+        /**
+         * Q_PROPERTY WRITE function for the 'SaveAs File'-icon path.
+         *
+         * @param path - The new path
+         */
+        void setSaveAsIconPath(const QString& path);
+        /**
+         * Q_PROPERTY WRITE function for the 'SaveAs File'-icon style.
+         *
+         * @param style - The new style
+         */
+        void setSaveAsIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Schedule'-icon path.
@@ -385,6 +413,11 @@ namespace hal
          */
         void handleActionUndo();
 
+        /**
+         * Q_SLOT to show information about hal version and license
+         */
+        void handleActionAbout();
+
         void enableUndo(bool enable=true);
 
         void reloadStylsheet(int istyle);
@@ -449,8 +482,6 @@ namespace hal
         QMenu* mMenuMacro;
         QMenu* mMenuHelp;
 
-        AboutDialog* mAboutDialog;
-
         PluginModel* mPluginModel;
 
         QString mHalIconStyle;
@@ -464,6 +495,9 @@ namespace hal
 
         QString mSaveIconPath;
         QString mSaveIconStyle;
+
+        QString mSaveAsIconPath;
+        QString mSaveAsIconStyle;
 
         QString mSettingsIconPath;
         QString mSettingsIconStyle;

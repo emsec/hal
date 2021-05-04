@@ -1,6 +1,7 @@
 #include "gui/welcome_screen/get_in_touch_widget.h"
 
 #include "gui/welcome_screen/get_in_touch_item.h"
+#include "gui/main_window/about_dialog.h"
 
 #include <QDesktopServices>
 #include <QLabel>
@@ -87,6 +88,8 @@ namespace hal
 
     void GetInTouchWidget::handleAboutItemClicked()
     {
+        AboutDialog ad;
+        ad.exec();
     }
 
     void GetInTouchWidget::handleCppDocumentationItemClicked()

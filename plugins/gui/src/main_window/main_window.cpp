@@ -157,7 +157,7 @@ namespace hal
         mActionNew->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
         mActionOpen->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
-        mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
+        mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
 
@@ -186,6 +186,7 @@ namespace hal
         mLeftToolBar->addAction(mActionNew);
         mLeftToolBar->addAction(mActionOpen);
         mLeftToolBar->addAction(mActionSave);
+        mLeftToolBar->addAction(mActionSaveAs);
         mLeftToolBar->addAction(mActionUndo);
         mRightToolBar->addAction(mActionSettings);
 
@@ -211,7 +212,6 @@ namespace hal
         mMenuMacro->setTitle("Macro");
         mMenuHelp->setTitle("Help");
 
-        mAboutDialog = new AboutDialog(this);
         mPluginModel = new PluginModel(this);
 
         gPythonContext = std::make_unique<PythonContext>();
@@ -245,7 +245,7 @@ namespace hal
 
         connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
         connect(mActionOpen, &Action::triggered, this, &MainWindow::handleActionOpen);
-        connect(mActionAbout, &Action::triggered, mAboutDialog, &AboutDialog::exec);
+        connect(mActionAbout, &Action::triggered, this, &MainWindow::handleActionAbout);
         //        connect(mActionSchedule, &Action::triggered, this, &MainWindow::toggleSchedule);
         connect(mActionSettings, &Action::triggered, this, &MainWindow::toggleSettings);
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
@@ -341,6 +341,16 @@ namespace hal
         return mSaveIconStyle;
     }
 
+    QString MainWindow::saveAsIconPath() const
+    {
+        return mSaveAsIconPath;
+    }
+
+    QString MainWindow::saveAsIconStyle() const
+    {
+        return mSaveAsIconStyle;
+    }
+
     QString MainWindow::settingsIconPath() const
     {
         return mSettingsIconPath;
@@ -399,6 +409,16 @@ namespace hal
     void MainWindow::setSaveIconStyle(const QString& style)
     {
         mSaveIconStyle = style;
+    }
+
+    void MainWindow::setSaveAsIconPath(const QString& path)
+    {
+        mSaveAsIconPath = path;
+    }
+
+    void MainWindow::setSaveAsIconStyle(const QString& style)
+    {
+        mSaveAsIconStyle = style;
     }
 
     void MainWindow::setSettingsIconPath(const QString& path)
@@ -662,6 +682,12 @@ namespace hal
         QString macroFile = QFileDialog::getOpenFileName(this, "Load macro file", ".", "Macro files (*.xml);;All files(*)");
         if (!macroFile.isEmpty())
             UserActionManager::instance()->playMacro(macroFile);
+    }
+
+    void MainWindow::handleActionAbout()
+    {
+        AboutDialog ad;
+        ad.exec();
     }
 
     void MainWindow::handleActionUndo()

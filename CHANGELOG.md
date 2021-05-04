@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added an indicator showing whether views have been modified
 * added function `is_top_module` to class `Module` to determin whether the current module is the top module of the netlist
 * added Python bindings for `netlist_serializer`
+* added hal version number to `about` info
 * when trying to create a view for a module that is already associated with an (unchanged) view, the existing view is activated instead of creating a new view
 * fixed selection details not being updated immediately when renaming or or changing a type
 * fixed navigation bug where ports and nets did not match for modules

@@ -50,10 +50,8 @@ namespace hal
         explicit AboutDialog(QWidget* parent = nullptr);
 
     private:
-        QVBoxLayout mContentLayout;
-        QLabel mPlaceholder;
-        QLabel mLicensesLabel;
-        QPlainTextEdit mTextedit;
+        QVBoxLayout* mLayout;
+        QPlainTextEdit* mTextedit;
     };
 }
 
