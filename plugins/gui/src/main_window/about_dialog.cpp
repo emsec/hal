@@ -7,6 +7,10 @@ namespace hal
 {
     AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent)
     {
+        setWindowTitle("About:");
+
+        // remove questionmark from title bar, it is not implemented and only confusing
+        setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
         mLayout = new QVBoxLayout(this);
         mLayout->addWidget(new QLabel(QString("hal %1.%2.%3 (%4)")
                                       .arg(hal_version::major)
