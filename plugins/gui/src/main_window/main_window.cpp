@@ -18,6 +18,7 @@
 #include "gui/settings/settings_manager.h"
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/welcome_screen/welcome_screen.h"
+#include "gui/export/export_gexf.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_controls.h"
 #include "hal_core/netlist/gate.h"
@@ -119,6 +120,7 @@ namespace hal
         mActionOpen         = new Action(this);
         mActionSave         = new Action(this);
         mActionSaveAs       = new Action(this);
+        mActionExportGexf   = new Action(this);
         mActionAbout        = new Action(this);
 
         mActionStartRecording = new Action(this);
@@ -175,6 +177,11 @@ namespace hal
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
         mMenuFile->addAction(mActionSaveAs);
+
+        QMenu* menuExport = new QMenu("Export …", this);
+        menuExport->addAction(mActionExportGexf);
+        mMenuFile->addMenu(menuExport);
+
         mMenuEdit->addAction(mActionUndo);
         mMenuEdit->addSeparator();
         mMenuEdit->addAction(mActionSettings);
@@ -203,6 +210,7 @@ namespace hal
         mActionOpen->setText("Open");
         mActionSave->setText("Save");
         mActionSaveAs->setText("Save As");
+        mActionExportGexf->setText("Export as GEXF");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
@@ -251,6 +259,7 @@ namespace hal
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
+        connect(mActionExportGexf, &Action::triggered, this, &MainWindow::handleActionExportGexf);
         //debug
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
 
@@ -599,6 +608,14 @@ namespace hal
             mWelcomeScreen->close();
         }
         gPythonContext->updateNetlist();
+    }
+
+    void MainWindow::handleActionExportGexf()
+    {
+        if (!gNetlist) return;
+        ExportGexf exGexf;
+        if (exGexf.queryFilename())
+            exGexf.exportNetlist();
     }
 
     void MainWindow::handleSaveAsTriggered()

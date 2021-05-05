@@ -418,6 +418,11 @@ namespace hal
          */
         void handleActionAbout();
 
+        /**
+         * Q_SLOT to export netlist to gexf file
+         */
+        void handleActionExportGexf();
+
         void enableUndo(bool enable=true);
 
         void reloadStylsheet(int istyle);
@@ -468,6 +473,7 @@ namespace hal
         Action* mActionOpen;
         Action* mActionSave;
         Action* mActionSaveAs;
+        Action* mActionExportGexf;
         Action* mActionAbout;
         Action* mActionStartRecording;
         Action* mActionStopRecording;
