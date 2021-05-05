@@ -1,18 +1,6 @@
 if(BUILD_DOCUMENTATION)
     find_package(Doxygen REQUIRED)
 
-    #set(doxyfile "Doxyfile")
-
-
-    #configure_file(${doxyfile} ${doxyfile} @ONLY)
-
-    #add_custom_target(doc
-                      #COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
-                      #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                      #COMMENT "Generating API documentation with Doxygen"
-                      #VERBATIM)
-
-    #New Doxygen Logic
     set(DOXYGEN_IN ${CMAKE_SOURCE_DIR}/documentation/Doxyfile.in)
     set(DOXYGEN_OUT ${CMAKE_BINARY_DIR}/documentation/Doxyfile)
 
