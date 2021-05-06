@@ -35,7 +35,6 @@ namespace hal
     class PythonQssAdapter : public QWidget
     {
         Q_OBJECT
-        Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor) // TODO: Unused?
         Q_PROPERTY(QColor keywordColor READ keywordColor WRITE setKeywordColor)
         Q_PROPERTY(QColor operator_color READ operator_color WRITE setOperatorColor)
         Q_PROPERTY(QColor braceColor READ braceColor WRITE setBraceColor)
@@ -53,7 +52,6 @@ namespace hal
 
         void repolish();
 
-        QColor textColor() const;
         QColor keywordColor() const;
         QColor operator_color() const;
         QColor braceColor() const;
@@ -64,7 +62,6 @@ namespace hal
         QColor doubleQuotedStringColor() const;
         QColor commentColor() const;
 
-        void setTextColor(const QColor& color);
         void setKeywordColor(const QColor& color);
         void setOperatorColor(const QColor& color);
         void setBraceColor(const QColor& color);
@@ -87,7 +84,7 @@ namespace hal
         QTextCharFormat mCommentFormat;
 
     private:
-        QColor mTextColor;
+        //QColor mTextColor;
         QColor mKeywordColor;
         QColor mOperatorColor;
         QColor mBraceColor;
