@@ -134,7 +134,6 @@ buttons.jsonc
 # Documentation
 Doxyfile
 html/
-documentation/DoxygenOutput/
 documentation/Doxyfile
 
 HAL_DEPLOYMENT_KEY
