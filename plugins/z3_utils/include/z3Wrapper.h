@@ -54,11 +54,6 @@ namespace hal
              */
             z3Wrapper(std::unique_ptr<z3::context> ctx, std::unique_ptr<z3::expr> expr);
 
-            /** 
-             * TODO document this shit
-             */
-            bool operator==(const z3Wrapper& other) const;
-            bool oldeq(const z3Wrapper& other) const;
 
             /**
              * Specifc Function used to optimize z3 epxr with the help of the logic synthesis tool ABC - CURRENTLY NOT IMPLEMENTED
