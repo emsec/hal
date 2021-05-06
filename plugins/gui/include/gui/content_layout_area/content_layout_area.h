@@ -60,7 +60,7 @@ namespace hal
      *   <li> <i>mSecondLevelLayout</i> <ul>
      *      <li> mLeftDock (the docker bar on the far left)
      *      <li> <i>mThirdLevelLayout</i> <ul>
-     *          <li> <i>mFourthLevelLayout</i> (TODO: 3rd and 4th level layout unnecessary?) <ul>
+     *          <li> <i>mFourthLevelLayout</i> <ul>
      *              <li> <i>mVerticalSplitter</i> <ul>
      *                  <li> <i>mHorizontalSplitter</i> <ul>
      *                      <li> mLeftSplitter (contains the content widgets docked and opened left)
@@ -98,7 +98,7 @@ namespace hal
         void addContent(ContentWidget* widget, int index, content_anchor anchor);
 
         /**
-         * Not yet implemented. TODO: Remove me?/Disable me?
+         * Not yet implemented. TODO: Implement me
          *
          * @param widget
          */
@@ -135,7 +135,6 @@ namespace hal
         void updateBottomDockBar();
 
         /**
-         * TODO (old): needed to fix a bug where the bottom dockbar does not reappear after dragging every widget out of it
          * Q_SLOT to handle that a docker button was dragged out of its bar. All hidden docker bars are temporarily shown
          * while dragging a docker button.
          */

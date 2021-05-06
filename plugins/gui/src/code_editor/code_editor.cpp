@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QTextBlock>
+#include <QDebug>
 
 namespace hal
 {
@@ -47,13 +48,14 @@ namespace hal
         ensurePolished();
         updateLayout();
 
-        //installEventFilter(this);
+        installEventFilter(this);
 
         document()->setDocumentMargin(0);
     }
 
     bool CodeEditor::eventFilter(QObject* object, QEvent* event)
     {
+
         Q_UNUSED(object)
 
         if (event->type() == QEvent::Wheel)
@@ -62,9 +64,9 @@ namespace hal
             if (wheel->modifiers() == Qt::ControlModifier)
             {
                 if (wheel->delta() > 0)
-                    zoomIn(1);
+                    zoomIn(2);
                 else
-                    zoomOut(1);
+                    zoomOut(2);
 
                 return true;
             }
@@ -228,12 +230,6 @@ namespace hal
     int CodeEditor::first_visible_block()
     {
         return firstVisibleBlock().blockNumber();
-    }
-
-    int CodeEditor::visibleBlockCount()
-    {
-        // MIGHT BE NEEDED LATER, ADDED RETURN VALUE TO AVOID WARNING
-        return 0;
     }
 
     void CodeEditor::centerOnLine(const int number)

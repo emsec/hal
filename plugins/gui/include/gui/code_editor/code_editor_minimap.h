@@ -81,7 +81,6 @@ namespace hal
         void adjustSliderHeight(qreal ratio);
 
         /**
-         * TODO: Unused. Remove me?
          * Sets the height of the minimap slider based on a block (line) range.
          *
          * @param first_visible_block - The first element of the block range (inclusive)

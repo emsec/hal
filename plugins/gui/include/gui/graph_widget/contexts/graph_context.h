@@ -252,7 +252,7 @@ namespace hal
          *
          * @returns the used GraphLayouter
          */
-        const GraphLayouter* getLayouter() const { return mLayouter; }
+        GraphLayouter* getLayouter() const { return mLayouter; }
 
         /**
 		 * Move node to antother grid location
@@ -283,15 +283,6 @@ namespace hal
          * @returns the Node that contains the gate
          */
         Node nodeForGate(const u32 id) const;
-
-        /**
-         * TODO: remove?
-         * Get the used GraphLayouter. Originally used for debug purposes.
-         * \deprecated Please use getLayouter() instead.
-         *
-         * @returns the used GraphLayouter
-         */
-        GraphLayouter* debugGetLayouter() const;
 
         /**
          * Returns the timestamp of this context. The timestamp is generated in the constructor.

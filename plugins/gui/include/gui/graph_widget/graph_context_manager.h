@@ -190,8 +190,6 @@ namespace hal
          */
         void handleModuleOutputPortNameChanged(Module* m, const u32 net);
 
-        //void handle_gate_created(Gate* g) const;
-        //void handleGateRemoved(Gate* g) const;
         /**
          * Handler to be called after a gate has been renamed. <br>
          * Used to apply the changes in the affected contexts.
@@ -300,8 +298,9 @@ namespace hal
         void setContextId(GraphContext* ctx, u32 ctxId);
 
         /**
-         * TODO: Memory leak? Better name: 'createDefaultLayouter'? Use smart pointer instead?
          * Creates an instance of the StandardGraphLayouter used for a certain GraphContext.
+         *
+         * Note: The calling party must assure that the layouter is delegated to the context using GraphContext::setLayouter
          *
          * @param context - The context the layouter works on
          * @returns a pointer to the new GraphLayouter
@@ -309,8 +308,9 @@ namespace hal
         GraphLayouter* getDefaultLayouter(GraphContext* const context) const;
 
         /**
-         * TODO: Memory leak? Better name: 'createDefaultShader'? Use smart pointer instead?
          * Creates an instance of ModuleShader used for a certain GraphContext.
+         *
+         * Note: The calling party must assure that the shader is delegated to the context using GraphContext::setShader
          *
          * @param context - The context the shader works on
          * @returns a pointer to the new GraphShader

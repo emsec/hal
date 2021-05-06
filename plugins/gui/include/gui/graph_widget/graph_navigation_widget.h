@@ -107,8 +107,8 @@ namespace hal {
         void focusInEvent(QFocusEvent* event) override;
 
         /**
-         * TODO: Put this in keyPressEvent?
          * Overridden event. Used to toggle the navigation widget when pressing <i>TAB</i>.
+         * Note: It seems that this piece of code can't be put in the keyPressEvent. I won't work then.
          *
          * @param ev - The QEvent
          * @returns true if the event e was recognized and processed (see Qt documentation)
@@ -192,7 +192,6 @@ namespace hal {
          */
         void setup(Node origin, Net* via_net, SelectionRelay::Subfocus dir);
 
-        // TODO: Why are GraphNavigationTableWidget and GraphNavigationTreeWidget not using their friendship for this?
         /**
          * Gets the direction to navigate along. The direction is set in the <i>setup</i>-function. <br>
          * This function is internally used by both managed navigation widgets but should be irrelevant to

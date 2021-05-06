@@ -64,7 +64,6 @@ namespace hal
         explicit CodeEditor(QWidget* parent = nullptr);
 
         /**
-         * TODO: Does not work! (eventFilter never installed?)
          * Captures the mouse scroll event to zoom in and out via CTRL+SCROLL UP/DOWN.
          *
          * @param object - The object this filter is applied on.
@@ -109,14 +108,6 @@ namespace hal
          * @returns the index of the first visible block
          */
         int first_visible_block();
-
-        /**
-         * TODO: Unused and wrong?
-         * Returns always 0.
-         *
-         * @returns 0
-         */
-        int visibleBlockCount();
 
         /**
          * Scrolls to the specified line number using a scroll animation.
@@ -226,16 +217,6 @@ namespace hal
          * @param dy - The amount of pixels the viewport was vertically scrolled (unused)
          */
         void updateMinimap(const QRect& rect, int dy);
-
-        /**
-         * TODO: Move logic in PythonCodeEditor class?
-         * Handles that the global settings that affect the code editor has been changed.
-         *
-         * @param sender - The object that sent the signal
-         * @param key - The settings key that has been changed
-         * @param value - The new value of of the setting
-         */
-       // void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         void updateLayout();

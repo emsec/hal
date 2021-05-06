@@ -118,7 +118,6 @@ namespace hal
         void handleContextRemoved(GraphContext* context);
 
         /**
-         * TODO: Unused?
          *
          * @param index - The index of the tab within the QTabWidget
          */

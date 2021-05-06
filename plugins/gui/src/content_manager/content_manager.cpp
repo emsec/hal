@@ -12,7 +12,6 @@
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_utils/graphics.h"
-#include "gui/graphics/graphics_view.h"
 #include "gui/logger/logger_widget.h"
 #include "gui/module_widget/module_widget.h"
 #include "gui/python/python_console_widget.h"
