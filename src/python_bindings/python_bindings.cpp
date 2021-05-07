@@ -45,7 +45,7 @@ namespace hal
 
         netlist_factory_init(m);
 
-        hdl_writer_manager_init(m);
+        netlist_writer_manager_init(m);
 
         plugin_manager_init(m);
 

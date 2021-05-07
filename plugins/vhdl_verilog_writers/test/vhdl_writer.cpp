@@ -2,26 +2,29 @@
 #include "netlist_test_utils.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "vhdl_parser/vhdl_parser.h"
-#include "vhdl_verilog_writers/hdl_writer_vhdl.h"
+#include "vhdl_verilog_writers/vhdl_writer.h"
 
 namespace hal {
     using test_utils::MIN_GATE_ID;
     using test_utils::MIN_NET_ID;
 
-    class HDLWriterVHDLTest : public ::testing::Test {
+    class VHDLWriterTest : public ::testing::Test {
     protected:
 
         const std::string m_gate_suffix = "";
         GateLibrary* m_gl;
 
-        virtual void SetUp() {
+        virtual void SetUp() 
+        {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
+            test_utils::create_sandbox_directory();
             m_gl = test_utils::get_testing_gate_library();
         }
 
-        virtual void TearDown() {
-
+        virtual void TearDown() 
+        {
+            test_utils::remove_sandbox_directory();
         }
     };
 
@@ -33,11 +36,13 @@ namespace hal {
      *
      * Functions: write, parse
      */
-    TEST_F(HDLWriterVHDLTest, check_write_and_parse_main_example) {
+    TEST_F(VHDLWriterTest, check_write_and_parse_main_example) {
         TEST_START
             {
                 // Write and parse the example netlist (with some additions) and compare the result with the original netlist
                 std::unique_ptr<Netlist> nl = test_utils::create_example_parse_netlist(0);
+
+                std::filesystem::path path_netlist = test_utils::create_sandbox_path("test.vhd");
 
                 // Mark the global gates as such
                 nl->mark_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID + 1));
@@ -47,19 +52,17 @@ namespace hal {
                 nl->get_gate_by_id(MIN_GATE_ID + 2)->set_name("global_vcc");
 
                 // Write and parse the netlist
-                std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer;
+                VHDLWriter vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
+                bool writer_suc = vhdl_writer.write(nl.get(), path_netlist);
 
                 ASSERT_TRUE(writer_suc);
 
                 VHDLParser vhdl_parser;
 
                 // Parse the .vhdl file
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(path_netlist, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -96,11 +99,13 @@ namespace hal {
      *
      * Functions: write, parse
      */
-    TEST_F(HDLWriterVHDLTest, check_global_nets) {
+    TEST_F(VHDLWriterTest, check_global_nets) {
         TEST_START
             {
                 // Add 2 global input nets to an empty netlist
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+
+                std::filesystem::path path_netlist = test_utils::create_sandbox_path("test.vhd");
 
                 Net* global_in_0 = nl->create_net(MIN_NET_ID + 0, "0_global_in");
                 Net* global_in_1 = nl->create_net(MIN_NET_ID + 1, "1_global_in");
@@ -109,17 +114,15 @@ namespace hal {
                 nl->mark_global_input_net(global_in_1);
 
                 // Write and parse the netlist
-                std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer;
+                VHDLWriter vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
+                bool writer_suc = vhdl_writer.write(nl.get(), path_netlist);
                 ASSERT_TRUE(writer_suc);
 
                 VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(path_netlist, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -137,6 +140,8 @@ namespace hal {
                 // Add 2 global output nets to an empty netlist
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
+                std::filesystem::path path_netlist = test_utils::create_sandbox_path("test.vhd");
+
                 Net* global_out_0 = nl->create_net(MIN_NET_ID + 0, "0_global_out");
                 Net* global_out_1 = nl->create_net(MIN_NET_ID + 1, "1_global_out");
 
@@ -144,17 +149,15 @@ namespace hal {
                 nl->mark_global_output_net(global_out_1);
 
                 // Write and parse the netlist
-                std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer;
+                VHDLWriter vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
+                bool writer_suc = vhdl_writer.write(nl.get(), path_netlist);
                 ASSERT_TRUE(writer_suc);
 
                 VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(path_netlist, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -178,11 +181,13 @@ namespace hal {
      *
      * Functions: write, parse
      */
-    TEST_F(HDLWriterVHDLTest, check_generic_data_storage) {
+    TEST_F(VHDLWriterTest, check_generic_data_storage) {
         TEST_START
             {
                 // Add a Gate to the netlist and store some data
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+
+                std::filesystem::path path_netlist = test_utils::create_sandbox_path("test.vhd");
 
                 Net* global_in = nl->create_net(MIN_NET_ID + 0, "global_in");
                 nl->mark_global_input_net(global_in);
@@ -248,18 +253,16 @@ namespace hal {
                 test_gate_6->set_data("generic", "0_key_bit_vector", "bit_vector", "01010011");// ISSUE: bit_values are not stored correctly?
 
                 // Write and parse the netlist
-                std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer;
+                VHDLWriter vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
+                bool writer_suc = vhdl_writer.write(nl.get(), path_netlist);
                 ASSERT_TRUE(writer_suc);
 
                 VHDLParser vhdl_parser;
 
                 // Parse the .vhdl file
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(path_netlist, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -305,28 +308,28 @@ namespace hal {
      *
      * Functions: write, parse
      */
-    TEST_F(HDLWriterVHDLTest, check_digit_net_name) {
+    TEST_F(VHDLWriterTest, check_digit_net_name) {
         TEST_START
             {
                 // Add a Gate to the netlist and store some data
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
+                std::filesystem::path path_netlist = test_utils::create_sandbox_path("test.vhd");
+
                 Net* global_in = nl->create_net(MIN_NET_ID + 0, "123");
                 nl->mark_global_input_net(global_in);
 
                 // Write and parse the netlist
-                std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer;
+                VHDLWriter vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
+                bool writer_suc = vhdl_writer.write(nl.get(), path_netlist);
                 ASSERT_TRUE(writer_suc);
 
                 VHDLParser vhdl_parser;
 
                 // Parse the .vhdl file
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(path_netlist, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -349,11 +352,13 @@ namespace hal {
      *
      * Functions: write, parse
      */
-    TEST_F(HDLWriterVHDLTest, check_special_net_names) {
+    TEST_F(VHDLWriterTest, check_special_net_names) {
         TEST_START
             {
                 // Testing the handling of special Net names
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+
+                std::filesystem::path path_netlist = test_utils::create_sandbox_path("test.vhd");
 
                 Net* bracket_net = nl->create_net(MIN_NET_ID + 0, "net(0)");
                 Net* comma_net = nl->create_net(MIN_NET_ID + 1, "net,1");
@@ -390,17 +395,15 @@ namespace hal {
                 }
 
                 // Write and parse the netlist
-                std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer;
+                VHDLWriter vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
+                bool writer_suc = vhdl_writer.write(nl.get(), path_netlist);
                 ASSERT_TRUE(writer_suc);
 
                 VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(path_netlist, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -419,6 +422,8 @@ namespace hal {
             {
                 // Testing the handling of special Gate names
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+
+                std::filesystem::path path_netlist = test_utils::create_sandbox_path("test.vhd");
 
                 // Create various gates with special Gate name characters
                 Gate*
@@ -461,17 +466,15 @@ namespace hal {
                 }
 
                 // Write and parse the netlist
-                std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer;
+                VHDLWriter vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
+                bool writer_suc = vhdl_writer.write(nl.get(), path_netlist);
                 ASSERT_TRUE(writer_suc);
 
                 VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(path_netlist, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -498,11 +501,13 @@ namespace hal {
      *
      * Functions: write, parse
      */
-    TEST_F(HDLWriterVHDLTest, check_gate_net_name_collision) {
+    TEST_F(VHDLWriterTest, check_gate_net_name_collision) {
         TEST_START
             {
                 // Testing the handling of two gates with the same name
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+
+                std::filesystem::path path_netlist = test_utils::create_sandbox_path("test.vhd");
 
                 Net* test_net = nl->create_net(MIN_NET_ID + 0, "gate_net_name");
                 Gate*
@@ -512,18 +517,16 @@ namespace hal {
                 test_net->add_destination(test_gate, "I");
 
                 // Write and parse the netlist
-                std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer;
+                VHDLWriter vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
+                bool writer_suc = vhdl_writer.write(nl.get(), path_netlist);
                 ASSERT_TRUE(writer_suc);
 
                 VHDLParser vhdl_parser;
 
                 // Parse the .vhdl file
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(path_netlist, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -543,11 +546,13 @@ namespace hal {
      *
      * Functions: write, parse
      */
-    TEST_F(HDLWriterVHDLTest, check_vcc_and_gnd_gates) {
+    TEST_F(VHDLWriterTest, check_vcc_and_gnd_gates) {
         TEST_START
             {
                 // Two nets with individual names connect a test_gate with a gnd/vcc Gate
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+
+                std::filesystem::path path_netlist = test_utils::create_sandbox_path("test.vhd");
 
                 // Add the gates
                 Gate*
@@ -568,17 +573,15 @@ namespace hal {
                 one_net->add_destination(test_gate, "I1");
 
                 // Write and parse the netlist
-                std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer;
+                VHDLWriter vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
+                bool writer_suc = vhdl_writer.write(nl.get(), path_netlist);
                 ASSERT_TRUE(writer_suc);
 
                 VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(path_netlist, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
 
@@ -611,9 +614,10 @@ namespace hal {
                 // should be created.
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
+                std::filesystem::path path_netlist = test_utils::create_sandbox_path("test.vhd");    
+
                 // Add the gate
-                Gate* test_gate =
-                    nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("gate_2_to_1"), "test_gate");
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("gate_2_to_1"), "test_gate");
 
                 // Add and connect the nets
                 Net* zero_net = nl->create_net(MIN_NET_ID + 0, "'0'");
@@ -626,17 +630,15 @@ namespace hal {
                 one_net->add_destination(test_gate, "I1");
 
                 // Write and parse the netlist
-                std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer;
+                VHDLWriter vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
+                bool writer_suc = vhdl_writer.write(nl.get(), path_netlist);
                 ASSERT_TRUE(writer_suc);
 
                 VHDLParser vhdl_parser;
                 // Parse the .vhdl file
-                auto vhdl_file = test_utils::create_sandbox_file("netlist.vhd", parser_input.str());
-                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(path_netlist, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
                 Gate* global_gnd = test_utils::get_gate_by_subname(parsed_nl.get(), "global_gnd");

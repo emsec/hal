@@ -7,9 +7,9 @@ namespace hal
 {
     namespace
     {
-        static std::unique_ptr<GateLibrary> create_gate_library()
+        static std::unique_ptr<GateLibrary> create_gate_library(const std::filesystem::path& file_path)
         {
-            std::unique_ptr<GateLibrary> gl = std::make_unique<GateLibrary>(utils::get_base_directory().string() + "/bin/hal_plugins/test-files/hgl_writer/test.hgl", "example_library");
+            auto gl = std::make_unique<GateLibrary>(file_path, "example_library");
 
             {
                 GateType* gt = gl->create_gate_type("gt_combinational", {GateTypeProperty::combinational});
@@ -145,10 +145,12 @@ namespace hal
         virtual void SetUp()
         {
             test_utils::init_log_channels();
+            test_utils::create_sandbox_directory();
         }
 
         virtual void TearDown()
         {
+            test_utils::remove_sandbox_directory();
         }
     };
 
@@ -161,9 +163,9 @@ namespace hal
     {
         TEST_START
 
-        std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/hgl_writer/test.hgl";
+        std::string path_lib = test_utils::create_sandbox_path("test.hgl");
 
-        std::unique_ptr<GateLibrary> gl_original = create_gate_library();
+        std::unique_ptr<GateLibrary> gl_original = create_gate_library(path_lib);
 
         HGLWriter writer;
         ASSERT_TRUE(writer.write(gl_original.get(), path_lib));

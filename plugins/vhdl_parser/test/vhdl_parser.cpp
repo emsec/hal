@@ -13,7 +13,6 @@ namespace hal {
         virtual void SetUp() {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
-            test_utils::create_sandbox_directory();
             m_gl = test_utils::get_testing_gate_library();
         }
 

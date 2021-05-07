@@ -24,68 +24,30 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/hdl_writer/hdl_writer.h"
 
-#include <functional>
-#include <map>
-#include <unordered_set>
-#include <vector>
+#include <filesystem>
 
 namespace hal
 {
-    /* forward declaration */
+    /* forward declaration*/
     class Netlist;
-    class Net;
-    class Gate;
 
     /**
-     * @ingroup hdl_writers
+     * @ingroup netlist_writer
      */
-    class NETLIST_API HDLWriterVHDL : public HDLWriter
+    class NETLIST_API NetlistWriter
     {
     public:
-        HDLWriterVHDL() = default;
-        ~HDLWriterVHDL() = default;
+        NetlistWriter()          = default;
+        virtual ~NetlistWriter() = default;
 
         /**
-         * Serializes the netlist into hdl code.
+         * Write the netlist to a file at the provided location.
          *
          * @param[in] netlist - The netlist.
-         * @param[out] stream - The string stream which will be filled with the hdl code.
-         * @returns True on success.
+         * @param[in] file_path - The output path.
+         * @returns True on success, false otherwise.
          */
-        bool write(Netlist* netlist, std::stringstream& stream) override;
-
-    private:
-        Netlist* m_netlist;
-        std::stringstream* m_stream;
-
-        void print_module_interface_vhdl();
-
-        void print_signal_definition_vhdl();
-
-        void print_gate_definitions_vhdl();
-
-        void print_generic_map_vhdl(Gate* n);
-
-        bool print_gate_signal_list_vhdl(Gate* n, std::vector<std::string> port_types, bool is_first, std::function<Net*(std::string)> get_net_fkt);
-
-        void prepare_signal_names();
-
-        std::string get_net_name(Net* n);
-
-        std::string get_gate_name(Gate* g);
-
-        std::string get_port_name(std::string pin);
-
-        /**
-         * Following maps saves prepared net names used internally.
-         */
-        std::map<Net*, std::string> m_printable_signal_names;
-
-        std::map<std::string, Net*> m_printable_signal_names_str_to_net;
-
-        std::vector<std::string> m_input_net_names;
-        std::vector<std::string> m_output_net_names;
+        virtual bool write(Netlist* netlist, const std::filesystem::path& file_path) = 0;
     };
 }    // namespace hal

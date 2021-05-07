@@ -1,10 +1,9 @@
 #include "gui/vhdl_editor/vhdl_editor.h"
 
-#include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
-
 #include "gui/code_editor/syntax_highlighter/vhdl_syntax_highlighter.h"
 #include "gui/gui_globals.h"
 #include "gui/searchbar/searchbar.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 
 #include <QShortcut>
 #include <QVBoxLayout>
@@ -22,7 +21,8 @@ namespace hal
         new VhdlSyntaxHighlighter(mCodeEditor->minimap()->document());
 
         std::stringstream stream;
-        hdl_writer_manager::write(gNetlist, ".vhd", stream);
+        // TODO does not work anymore, but the VHDL editor is deprecated anyway
+        // netlist_writer_manager::write(gNetlist, ".vhd", stream);
         QString string = QString::fromStdString(stream.str());
         mCodeEditor->setPlainText(string);
 
@@ -30,7 +30,10 @@ namespace hal
         mContentLayout->addWidget(mSearchbar);
     }
 
-    void VhdlEditor::setupToolbar(Toolbar* Toolbar){Q_UNUSED(Toolbar)}
+    void VhdlEditor::setupToolbar(Toolbar* Toolbar)
+    {
+        Q_UNUSED(Toolbar)
+    }
 
     QList<QShortcut*> VhdlEditor::createShortcuts()
     {
@@ -50,4 +53,4 @@ namespace hal
         else
             mSearchbar->hide();
     }
-}
+}    // namespace hal
