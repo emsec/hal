@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added cursor to indicate that user is in module pick mode
 * improved netlist parsers
   * split VHDL and Verilog parsers into two independent plugins
-  * netlist parsers now take path to netlist file as input instead of `std::stringstream`
+  * netlist parsers now take the path to the netlist file as input instead of a `std::stringstream`
   * added support for `Z` and `X` assignments to Verilog and VHDL parsers
   * fixed netlist parsers assigning wrong order of inputs for some multi-bit signals
 * expanded `netlist_utils`
@@ -35,9 +35,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added an indicator showing whether views have been modified
 * added function `is_top_module` to class `Module` to determin whether the current module is the top module of the netlist
 * added Python bindings for `netlist_serializer`
-* added hal version number to `about` info
+* added HAL version number to the info shown in `About`
 * when trying to create a view for a module that is already associated with an (unchanged) view, the existing view is activated instead of creating a new view
-* fixed selection details not being updated immediately when renaming or or changing a type
+* netlist writers now take the output path as input instead of a `std::stringstream`
+* fixed selection details not being updated immediately when renaming or changing a type
 * fixed navigation bug where ports and nets did not match for modules
 * fixed list of navigation targets containing duplicates and/or loops
 * fixed drag'n'drop bug related to negative coordinates
