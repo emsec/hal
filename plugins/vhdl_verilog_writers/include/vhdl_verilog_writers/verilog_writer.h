@@ -28,6 +28,7 @@
 
 #include <functional>
 #include <map>
+#include <sstream>
 
 namespace hal
 {
@@ -56,7 +57,6 @@ namespace hal
 
     private:
         Netlist* m_netlist;
-
         std::stringstream m_stream;
 
         void print_module_interface_verilog();
