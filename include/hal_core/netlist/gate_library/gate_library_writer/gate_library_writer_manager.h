@@ -35,7 +35,7 @@ namespace hal
     class GateLibraryWriter;
 
     /**
-     * The gate library writer manager keeps track of all gate library writers that are available within HAL. Further, it is used to dispatch writing tasks to the respective writers.
+     * The gate library writer manager keeps track of all gate library writers that are available within HAL. It is used to dispatch writing tasks to the respective writers.
      * 
      * @ingroup gate_library_writer
      */
@@ -44,8 +44,8 @@ namespace hal
         using WriterFactory = std::function<std::unique_ptr<GateLibraryWriter>()>;
 
         /**
-         * Registers a new gate library writer for a selection of file types.<br>
-         * If writers for some of the extensions already exist, they remain changed and only new ones are registered.
+         * Register a new gate library writer for a selection of file types.<br>
+         * If writers for some of the extensions already exist, they remain unchanged and the new parser is not registered at all.
          *
          * @param[in] name - The name of the writer.
          * @param[in] writer_factory - A factory function that constructs a new writer instance.
@@ -54,14 +54,14 @@ namespace hal
         NETLIST_API void register_writer(const std::string& name, const WriterFactory& writer_factory, const std::vector<std::string>& supported_file_extensions);
 
         /**
-         * Unregisters a specific writer.
+         * Unregister the specified writer.
          *
          * @param[in] name - The name of the writer.
          */
         NETLIST_API void unregister_writer(const std::string& name);
 
         /**
-         * Writes the gate library into a file depending on its file extension.
+         * Write the gate library into a file at the given location.
          * 
          * @param[in] gate_lib - The gate library.
          * @param[in] file_path - The output path.

@@ -1,4 +1,4 @@
-#include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
@@ -69,7 +69,7 @@ namespace hal {
     TEST_F(hdl_writer_managerTest, check_cli_options) {
         TEST_START
             {// Access the gui-options and the cli-options (shouldn't  be empty)
-                EXPECT_FALSE(hdl_writer_manager::get_cli_options().get_options().empty());
+                EXPECT_FALSE(netlist_writer_manager::get_cli_options().get_options().empty());
             }
         TEST_END
     }
@@ -91,9 +91,9 @@ namespace hal {
 
                 auto simple_nl = create_simple_netlist();
                 // Write the two files
-                bool suc = hdl_writer_manager::write(simple_nl.get(), p_args_vhdl);
+                bool suc = netlist_writer_manager::write(simple_nl.get(), p_args_vhdl);
                 EXPECT_TRUE(suc);
-                suc = hdl_writer_manager::write(simple_nl.get(), p_args_verilog);
+                suc = netlist_writer_manager::write(simple_nl.get(), p_args_verilog);
                 EXPECT_TRUE(suc);
 
                 // Verify the correctness of the output by parsing it
@@ -122,8 +122,8 @@ namespace hal {
 
                 auto simple_nl = create_simple_netlist();
                 // Write the two files
-                bool suc_vhdl = hdl_writer_manager::write(simple_nl.get(), out_path_vhdl);
-                bool suc_verilog = hdl_writer_manager::write(simple_nl.get(), out_path_verilog);
+                bool suc_vhdl = netlist_writer_manager::write(simple_nl.get(), out_path_vhdl);
+                bool suc_verilog = netlist_writer_manager::write(simple_nl.get(), out_path_verilog);
                 EXPECT_TRUE(suc_vhdl);
                 EXPECT_TRUE(suc_verilog);
 
@@ -143,7 +143,7 @@ namespace hal {
 
                 auto simple_nl = create_simple_netlist();
                 // Write the two files
-                EXPECT_FALSE(hdl_writer_manager::write(simple_nl.get(), out_path));
+                EXPECT_FALSE(netlist_writer_manager::write(simple_nl.get(), out_path));
             }
         TEST_END
     }
@@ -160,31 +160,30 @@ namespace hal {
                 // Write the two files
                 std::stringstream out_ss_vhdl;
                 std::stringstream out_ss_verilog;
-                bool suc_vhdl = hdl_writer_manager::write(simple_nl.get(), ".vhdl", out_ss_vhdl);
-                bool suc_verilog = hdl_writer_manager::write(simple_nl.get(), ".v", out_ss_verilog);
 
-                EXPECT_TRUE(suc_vhdl);
-                EXPECT_TRUE(suc_verilog);
-
-                std::filesystem::path out_path_vhdl = test_utils::create_sandbox_file("writer_out_vhdl.vhd", out_ss_vhdl.str());
-                std::filesystem::path out_path_verilog = test_utils::create_sandbox_file("writer_out_verilog.v", out_ss_verilog.str());
-
-                // Verify the correctness of the output by parsing it
-                auto parsed_nl_vhdl = netlist_parser_manager::parse(out_path_vhdl, m_gl);
-                auto parsed_nl_verilog = netlist_parser_manager::parse(out_path_verilog, m_gl);
-
+                std::filesystem::path vhdl_path = test_utils::create_sandbox_path("vhdl_netlist.vhd");
+                bool suc_vhdl = netlist_writer_manager::write(simple_nl.get(), vhdl_path);
+                ASSERT_TRUE(suc_vhdl);
+                std::unique_ptr<Netlist> parsed_nl_vhdl = netlist_parser_manager::parse(vhdl_path, m_gl);
+                ASSERT_NE(parsed_nl_vhdl, nullptr);
                 parsed_nl_vhdl->get_top_module()->set_type("top_module_type");
-                parsed_nl_verilog->get_top_module()->set_type("top_module_type");
                 EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_vhdl.get(), simple_nl.get(), true));
+                
+                std::filesystem::path verilog_path = test_utils::create_sandbox_path("verilog_netlist.v");
+                bool suc_verilog = netlist_writer_manager::write(simple_nl.get(), verilog_path);
+                ASSERT_TRUE(suc_verilog);
+                std::unique_ptr<Netlist> parsed_nl_verilog = netlist_parser_manager::parse(verilog_path, m_gl);
+                ASSERT_NE(parsed_nl_verilog, nullptr);
+                parsed_nl_verilog->get_top_module()->set_type("top_module_type");
                 EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_verilog.get(), simple_nl.get(), true));
             }
-            // NEAGTIVE
+            // NEGATIVE
             {
                 // The type extension is unknown
                 NO_COUT_TEST_BLOCK;
                 auto simple_nl = create_simple_netlist();
-                std::stringstream dummy_ss;
-                EXPECT_FALSE(hdl_writer_manager::write(simple_nl.get(), ".unknown_extension",dummy_ss));
+                std::filesystem::path invalid_path = test_utils::create_sandbox_path("invalid_netlist.xyz");
+                EXPECT_FALSE(netlist_writer_manager::write(simple_nl.get(), invalid_path));
             }
         TEST_END
     }

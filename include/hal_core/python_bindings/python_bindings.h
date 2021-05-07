@@ -32,12 +32,12 @@
 #include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer_manager.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/grouping.h"
-#include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_utils.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/plugin_system/plugin_interface_gui.h"
 #include "hal_core/plugin_system/plugin_manager.h"
@@ -199,11 +199,11 @@ namespace hal
     void netlist_factory_init(py::module& m);
 
     /**
-     * Initializes Python bindings for the HAL hdl writer manager in a python module.
+     * Initializes Python bindings for the HAL netlist writer manager in a python module.
      *
      * @param[in] m - the python module
      */
-    void hdl_writer_manager_init(py::module& m);
+    void netlist_writer_manager_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL plugin manager in a python module.

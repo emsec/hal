@@ -24,10 +24,11 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/hdl_writer/hdl_writer.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer.h"
 
 #include <functional>
 #include <map>
+#include <sstream>
 
 namespace hal
 {
@@ -37,26 +38,26 @@ namespace hal
     class Gate;
 
     /**
-     * @ingroup hdl_writers
+     * @ingroup netlist_writer
      */
-    class NETLIST_API HDLWriterVerilog : public HDLWriter
+    class NETLIST_API VerilogWriter : public NetlistWriter
     {
     public:
-        HDLWriterVerilog()  = default;
-        ~HDLWriterVerilog() = default;
+        VerilogWriter()  = default;
+        ~VerilogWriter() = default;
 
         /**
-         * Serializes the netlist into hdl code.
+         * Write the netlist to a Verilog file at the provided location.
          *
          * @param[in] netlist - The netlist.
-         * @param[out] stream - The string stream which will be filled with the hdl code.
-         * @returns True on success.
+         * @param[in] file_path - The output path.
+         * @returns True on success, false otherwise.
          */
-        bool write(Netlist* netlist, std::stringstream& stream) override;
+        bool write(Netlist* netlist, const std::filesystem::path& file_path) override;
 
     private:
         Netlist* m_netlist;
-        std::stringstream* m_stream;
+        std::stringstream m_stream;
 
         void print_module_interface_verilog();
 
