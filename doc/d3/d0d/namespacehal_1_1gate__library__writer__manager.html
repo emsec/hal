@@ -90,7 +90,7 @@ Functions</h2></td></tr>
 <tr class="separator:ae6689e41c89a95d37b36cf8deb680d5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The gate library writer manager keeps track of all gate library writers that are available within HAL. Further, it is used to dispatch writing tasks to the respective writers. </p>
+<div class="textblock"><p>The gate library writer manager keeps track of all gate library writers that are available within HAL. It is used to dispatch writing tasks to the respective writers. </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
 <a id="a92363bf0588ef91ae7dda26d8db34403"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a92363bf0588ef91ae7dda26d8db34403">&#9670;&nbsp;</a></span>WriterFactory</h2>
@@ -138,8 +138,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Registers a new gate library writer for a selection of file types.<br  />
- If writers for some of the extensions already exist, they remain changed and only new ones are registered.</p>
+<p>Register a new gate library writer for a selection of file types.<br  />
+ If writers for some of the extensions already exist, they remain unchanged and the new parser is not registered at all.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the writer. </td></tr>
@@ -168,7 +168,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Unregisters a specific writer.</p>
+<p>Unregister the specified writer.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the writer. </td></tr>
@@ -205,7 +205,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes the gate library into a file depending on its file extension.</p>
+<p>Write the gate library into a file at the given location.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate_lib</td><td>- The gate library. </td></tr>
@@ -224,7 +224,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 6 2021 16:32:54 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 7 2021 13:46:42 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

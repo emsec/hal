@@ -22,7 +22,7 @@ var searchData=
   ['unregister_5fon_5fdeserialize_5fcallback_703',['unregister_on_deserialize_callback',['../d7/d09/namespacehal_1_1hal__file__manager.html#a21e15d2eb9ddbc3e429a5df8bafda532',1,'hal::hal_file_manager']]],
   ['unregister_5fon_5fserialize_5fcallback_704',['unregister_on_serialize_callback',['../d7/d09/namespacehal_1_1hal__file__manager.html#a4e1225189163b21b43fe1dec9e702a53',1,'hal::hal_file_manager']]],
   ['unregister_5fparser_705',['unregister_parser',['../df/dfa/namespacehal_1_1gate__library__parser__manager.html#af2881fc58f6a027d0b47becca8dcfd4e',1,'hal::gate_library_parser_manager::unregister_parser()'],['../d0/d5d/namespacehal_1_1netlist__parser__manager.html#ad31d29eb845c61a4ae5edcf7c0d029dd',1,'hal::netlist_parser_manager::unregister_parser()']]],
-  ['unregister_5fwriter_706',['unregister_writer',['../d3/d0d/namespacehal_1_1gate__library__writer__manager.html#af05a232ee18c16cc9c32fca18f86f14e',1,'hal::gate_library_writer_manager::unregister_writer()'],['../db/d60/namespacehal_1_1hdl__writer__manager.html#a3ba5b2fc407475ecd596d33d57f4c0a9',1,'hal::hdl_writer_manager::unregister_writer()']]],
+  ['unregister_5fwriter_706',['unregister_writer',['../d3/d0d/namespacehal_1_1gate__library__writer__manager.html#af05a232ee18c16cc9c32fca18f86f14e',1,'hal::gate_library_writer_manager::unregister_writer()'],['../db/d5a/namespacehal_1_1netlist__writer__manager.html#af7b52e05f6057be89accc4bdbc7eedd0',1,'hal::netlist_writer_manager::unregister_writer()']]],
   ['unused_707',['UNUSED',['../d8/db0/defines_8h.html#aea1d71af1a30c261dbd16745c82e94ba',1,'defines.h']]],
   ['utilities_708',['Utilities',['../dc/d39/group__utilities.html',1,'']]],
   ['utils_2ecpp_709',['utils.cpp',['../de/d06/utils_8cpp.html',1,'']]],
