@@ -1,16 +1,17 @@
-#include "vhdl_verilog_writers/hdl_writer_verilog.h"
+#include "vhdl_verilog_writers/verilog_writer.h"
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 
+#include <fstream>
+
 namespace hal
 {
-    bool HDLWriterVerilog::write(Netlist* netlist, std::stringstream& stream)
+    bool VerilogWriter::write(Netlist* netlist, const std::filesystem::path& file_path)
     {
         m_netlist = netlist;
-        m_stream  = &stream;
 
         this->prepare_signal_names();
 
@@ -20,12 +21,24 @@ namespace hal
 
         this->print_gate_definitions_verilog();
 
-        *m_stream << "endmodule" << std::endl;
+        m_stream << "endmodule" << std::endl;
+
+        {
+            std::ofstream file;
+            file.open(file_path.string(), std::ofstream::out);
+            if (!file.is_open())
+            {
+                log_error("verilog_writer", "unable to open '{}'.", file_path.string());
+                return false;
+            }
+            file << m_stream.str();
+            file.close();
+        }
 
         return true;
     }
 
-    void HDLWriterVerilog::prepare_signal_names()
+    void VerilogWriter::prepare_signal_names()
     {
         //Generate all signal names
 
@@ -141,7 +154,7 @@ namespace hal
         }
     }
 
-    std::string HDLWriterVerilog::get_net_name(Net* n)
+    std::string VerilogWriter::get_net_name(Net* n)
     {
         std::string name = n->get_name();
 
@@ -182,7 +195,7 @@ namespace hal
         return name;
     }
 
-    std::string HDLWriterVerilog::get_gate_name(Gate* g)
+    std::string VerilogWriter::get_gate_name(Gate* g)
     {
         std::string name = g->get_name();
 
@@ -214,7 +227,7 @@ namespace hal
         return name + "_inst";
     }
 
-    std::string HDLWriterVerilog::get_port_name(std::string pin)
+    std::string VerilogWriter::get_port_name(std::string pin)
     {
         std::string pin_temp = pin;
         std::size_t found;
@@ -240,24 +253,24 @@ namespace hal
         return pin_temp;
     }
 
-    void HDLWriterVerilog::print_module_interface_verilog()
+    void VerilogWriter::print_module_interface_verilog()
     {
         std::string entity_name = m_netlist->get_design_name();
 
         //Print module interface
-        *m_stream << "module " << entity_name << " (" << std::endl;
-        *m_stream << "  ";
+        m_stream << "module " << entity_name << " (" << std::endl;
+        m_stream << "  ";
         bool begin = true;
         for (auto in_name : m_in_names_str_to_net)
         {
             if (begin)
             {
-                *m_stream << in_name.first.c_str();
+                m_stream << in_name.first.c_str();
                 begin = false;
             }
             else
             {
-                *m_stream << ", " << std::endl << "  " << in_name.first.c_str();
+                m_stream << ", " << std::endl << "  " << in_name.first.c_str();
             }
         }
 
@@ -265,29 +278,29 @@ namespace hal
         {
             if (begin)
             {
-                *m_stream << out_name.first.c_str();
+                m_stream << out_name.first.c_str();
                 begin = false;
             }
             else
             {
-                *m_stream << ", " << std::endl << "  " << out_name.first.c_str();
+                m_stream << ", " << std::endl << "  " << out_name.first.c_str();
             }
         }
 
-        *m_stream << std::endl;
-        *m_stream << " ) ;" << std::endl;
+        m_stream << std::endl;
+        m_stream << " ) ;" << std::endl;
     }
 
-    void HDLWriterVerilog::print_signal_definition_verilog()
+    void VerilogWriter::print_signal_definition_verilog()
     {
         //Declare all wires
         for (auto in_name : m_in_names_str_to_net)
         {
-            *m_stream << "  input " << in_name.first << " ;" << std::endl;
+            m_stream << "  input " << in_name.first << " ;" << std::endl;
         }
         for (auto out_name : m_out_names_str_to_net)
         {
-            *m_stream << "  output " << out_name.first << " ;" << std::endl;
+            m_stream << "  output " << out_name.first << " ;" << std::endl;
         }
         for (auto name : m_only_wire_names_str_to_net)
         {
@@ -295,19 +308,19 @@ namespace hal
             // {
             //     continue;
             // }
-            *m_stream << "  wire " << name.first << " ;" << std::endl;
+            m_stream << "  wire " << name.first << " ;" << std::endl;
         }
         // for (auto name : m_vcc_names_str_to_net)
         // {
-        //     *m_stream << "  wire " << name.first << " ;" << std::endl;
+        //     m_stream << "  wire " << name.first << " ;" << std::endl;
         // }
         // for (auto name : m_gnd_names_str_to_net)
         // {
-        //     *m_stream << "  wire " << name.first << " ;" << std::endl;
+        //     m_stream << "  wire " << name.first << " ;" << std::endl;
         // }
     }
 
-    void HDLWriterVerilog::print_gate_definitions_verilog()
+    void VerilogWriter::print_gate_definitions_verilog()
     {
         auto gates = m_netlist->get_gates();
         for (auto&& gate : gates)
@@ -317,29 +330,29 @@ namespace hal
             // {
             //     continue;
             // }
-            *m_stream << gate->get_type()->get_name() << " ";
+            m_stream << gate->get_type()->get_name() << " ";
 
             this->print_generic_map_verilog(gate);
 
-            *m_stream << get_gate_name(gate);
+            m_stream << get_gate_name(gate);
 
             // Search for collision of gate name with a net name
             auto search_it = m_printable_signal_names_str_to_net.find(gate->get_name());
             if (search_it != m_printable_signal_names_str_to_net.end())
             {
-                *m_stream << "_inst";
+                m_stream << "_inst";
             }
-            *m_stream << " (" << std::endl;
+            m_stream << " (" << std::endl;
 
             bool begin_signal_list = true;
             begin_signal_list      = this->print_gate_signal_list_verilog(gate, gate->get_input_pins(), begin_signal_list, std::bind(&Gate::get_fan_in_net, gate, std::placeholders::_1));
             begin_signal_list      = this->print_gate_signal_list_verilog(gate, gate->get_output_pins(), begin_signal_list, std::bind(&Gate::get_fan_out_net, gate, std::placeholders::_1));
 
-            *m_stream << std::endl << " ) ;" << std::endl;
+            m_stream << std::endl << " ) ;" << std::endl;
         }
     }
 
-    void HDLWriterVerilog::print_generic_map_verilog(Gate* n)
+    void VerilogWriter::print_generic_map_verilog(Gate* n)
     {
         // Map init value
         auto data          = n->get_data_map();
@@ -377,76 +390,76 @@ namespace hal
                 std::string bit_string = std::to_string(len) + "'h" + content;
                 if (first_generic)
                 {
-                    *m_stream << "#(";
+                    m_stream << "#(";
                     first_generic = false;
                 }
                 else
                 {
-                    *m_stream << "," << std::endl;
+                    m_stream << "," << std::endl;
                 }
-                *m_stream << "." << std::get<1>(d.first) << "(" << bit_string << ")";
+                m_stream << "." << std::get<1>(d.first) << "(" << bit_string << ")";
             }
             else if (type == "string")
             {
                 if (first_generic)
                 {
-                    *m_stream << "#(";
+                    m_stream << "#(";
                     first_generic = false;
                 }
                 else
                 {
-                    *m_stream << "," << std::endl;
+                    m_stream << "," << std::endl;
                 }
-                *m_stream << "." << std::get<1>(d.first) << "(\"" << content << "\")";
+                m_stream << "." << std::get<1>(d.first) << "(\"" << content << "\")";
             }
             else if (type == "bit_value")
             {
                 if (first_generic)
                 {
-                    *m_stream << "#(";
+                    m_stream << "#(";
                     first_generic = false;
                 }
                 else
                 {
-                    *m_stream << "," << std::endl;
+                    m_stream << "," << std::endl;
                 }
-                *m_stream << "." << std::get<1>(d.first) << "(1\'b" << content << ")";
+                m_stream << "." << std::get<1>(d.first) << "(1\'b" << content << ")";
             }
             else if (type == "boolean")
             {
                 if (first_generic)
                 {
-                    *m_stream << "#(";
+                    m_stream << "#(";
                     first_generic = false;
                 }
                 else
                 {
-                    *m_stream << "," << std::endl;
+                    m_stream << "," << std::endl;
                 }
                 std::string val = (content == "TRUE") ? "1" : "0";
-                *m_stream << "." << std::get<1>(d.first) << "(" << val << ")";
+                m_stream << "." << std::get<1>(d.first) << "(" << val << ")";
             }
             else if (type == "integer")
             {
                 if (first_generic)
                 {
-                    *m_stream << "#(";
+                    m_stream << "#(";
                     first_generic = false;
                 }
                 else
                 {
-                    *m_stream << "," << std::endl;
+                    m_stream << "," << std::endl;
                 }
-                *m_stream << "." << std::get<1>(d.first) << "(" << content << ")";
+                m_stream << "." << std::get<1>(d.first) << "(" << content << ")";
             }
         }
         if (!first_generic)
         {
-            *m_stream << ")" << std::endl;
+            m_stream << ")" << std::endl;
         }
     }
 
-    bool HDLWriterVerilog::print_gate_signal_list_verilog(Gate* n, std::vector<std::string> port_types, bool is_first, std::function<Net*(std::string)> get_net_fkt)
+    bool VerilogWriter::print_gate_signal_list_verilog(Gate* n, std::vector<std::string> port_types, bool is_first, std::function<Net*(std::string)> get_net_fkt)
     {
         std::vector<std::string> port_types_sorted;
         auto port_types_normalized = this->get_gate_signal_buses_verilog(port_types);
@@ -493,7 +506,7 @@ namespace hal
                 tmp << " })";
                 is_first = false;
                 if (!skip)
-                    *m_stream << tmp.str();
+                    m_stream << tmp.str();
             }
             else
             {
@@ -506,10 +519,10 @@ namespace hal
                 {
                     if (!is_first)
                     {
-                        *m_stream << "," << std::endl;
+                        m_stream << "," << std::endl;
                     }
                     // !! The space between port type and ( is important and must not be removed !!
-                    *m_stream << "  .\\" << this->get_port_name(port_type) << " (" << m_printable_signal_names.find(e)->second << " )";
+                    m_stream << "  .\\" << this->get_port_name(port_type) << " (" << m_printable_signal_names.find(e)->second << " )";
                     is_first = false;
                 }
             }
@@ -517,7 +530,7 @@ namespace hal
         return is_first;
     }
 
-    std::map<std::string, std::vector<std::string>> HDLWriterVerilog::get_gate_signal_buses_verilog(std::vector<std::string> port_types)
+    std::map<std::string, std::vector<std::string>> VerilogWriter::get_gate_signal_buses_verilog(std::vector<std::string> port_types)
     {
         std::map<std::string, std::vector<std::string>> collected_port_types;
         for (const auto& port_type : port_types)

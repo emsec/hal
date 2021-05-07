@@ -75,7 +75,6 @@ namespace hal
         using ci_string          = core_strings::CaseInsensitiveString;
         using attribute_buffer_t = std::map<AttributeTarget, std::map<ci_string, std::tuple<u32, std::string, std::string, std::string>>>;
 
-        std::filesystem::path m_path;
         std::stringstream m_fs;
 
         // temporary netlist

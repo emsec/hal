@@ -18,14 +18,12 @@ namespace hal
     {
         m_modules.clear();
 
-        m_path = file_path;
-
         {
             std::ifstream ifs;
-            ifs.open(m_path.string(), std::ifstream::in);
+            ifs.open(file_path.string(), std::ifstream::in);
             if (!ifs.is_open())
             {
-                log_error("verilog_parser", "unable to open '{}'.", m_path.string());
+                log_error("verilog_parser", "unable to open '{}'.", file_path.string());
                 return false;
             }
             m_fs << ifs.rdbuf();
@@ -1350,7 +1348,7 @@ namespace hal
             {
                 b = alias_it->second;
             }
-            else if(b == "'Z'" || b == "'X'") 
+            else if (b == "'Z'" || b == "'X'")
             {
                 continue;
             }
@@ -1396,7 +1394,7 @@ namespace hal
                             {
                                 instance_assignments[port] = assignment;
                             }
-                            else if(assignment != "'Z'" && assignment != "'X'")
+                            else if (assignment != "'Z'" && assignment != "'X'")
                             {
                                 log_error("verilog_parser", "port assignment \"{} = {}\" is invalid for instance '{}' of type '{}'.", port, assignment, inst_identifier, inst_type);
                                 return nullptr;
@@ -1463,7 +1461,7 @@ namespace hal
                         {
                             signal = assignment;
                         }
-                        else if(assignment == "'Z'" || assignment == "'X'")
+                        else if (assignment == "'Z'" || assignment == "'X'")
                         {
                             continue;
                         }
