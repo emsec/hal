@@ -1,6 +1,5 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
-#include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
@@ -739,8 +738,6 @@ namespace hal
                 FAIL() << "netlist couldn't be parsed";
             }
         }
-
-        // hdl_writer_manager::write(nl.get(), "sha256_flat.vhd");
 
         //path to vcd
         std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/dump.vcd";
