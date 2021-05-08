@@ -49,11 +49,11 @@ namespace hal
         ~HGLWriter() = default;
 
         /**
-         * Write the gate library to a file at the provided location.
+         * Write the gate library to a HGL file at the provided location.
          *
          * @param[in] gate_lib - The gate library.
          * @param[in] file_path - The output path.
-         * @returns True on success.
+         * @returns True on success, false otherwise.
          */
         bool write(const GateLibrary* gate_lib, const std::filesystem::path& file_path) override;
 

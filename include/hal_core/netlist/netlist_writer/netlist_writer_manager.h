@@ -35,24 +35,27 @@ namespace hal
 {
     /** forward declaration */
     class Netlist;
-    class HDLWriter;
+    class NetlistWriter;
 
     /**
+     * The netlist writer manager keeps track of all netlist writers that are available within HAL. It is used to dispatch writing tasks to the respective writers.
+     * 
      * @ingroup netlist_writer
      */
-    namespace hdl_writer_manager
+    namespace netlist_writer_manager
     {
-        using WriterFactory = std::function<std::unique_ptr<HDLWriter>()>;
+        using WriterFactory = std::function<std::unique_ptr<NetlistWriter>()>;
 
         /**
-         * Returns the command line interface options of the hdl writer dispatcher
+         * Return the command line interface options of the netlist writer dispatcher.
+         * 
          * @returns The options.
          */
         ProgramOptions get_cli_options();
 
         /**
-         * Registers a new HDL writer for a selection of file types.
-         * If writers for some of the extensions already exist, they are not changed, only the new ones are registered.
+         * Register a new netlist writer for a selection of file types.
+         * If writers for some of the extensions already exist, they remain unchanged and the new parser is not registered at all.
          *
          * @param[in] name - The name of the writer.
          * @param[in] writer_factory - A factory function that constructs a new writer instance.
@@ -61,35 +64,28 @@ namespace hal
         NETLIST_API void register_writer(const std::string& name, const WriterFactory& writer_factory, const std::vector<std::string>& supported_file_extensions);
 
         /**
-         * Unregisters a specific writer.
+         * Unregister the specified writer.
          *
          * @param[in] name - The name of the writer.
          */
         NETLIST_API void unregister_writer(const std::string& name);
 
         /**
-         * Writes the netlist into a file specified in command line options.
+         * Write the given netlist into a file at the location specified by command line options.
+         * 
          * @param[in] netlist - The netlist.
          * @param[in] args - The command line options.
-         * @returns True on success.
+         * @returns True on success, false otherwise.
          */
         bool write(Netlist* netlist, const ProgramArguments& args);
 
         /**
-         * Writes the netlist into a file with a defined format
+         * Write the given netlist into a file at the given location.
+         * 
          * @param[in] netlist - The netlist.
-         * @param[in] file_name - The output file name.
-         * @returns True on success.
+         * @param[in] file_path - The output path.
+         * @returns True on success, false otherwise.
          */
-        bool write(Netlist* netlist, const std::filesystem::path& file_name);
-
-        /**
-         * Writes the netlist into a stringstream with a defined format
-         * @param[in] netlist - The netlist.
-         * @param[in] type_extension - The file extension of the output format
-         * @param[out] stream - The output stream.
-         * @returns True on success.
-         */
-        bool write(Netlist* netlist, const std::string& type_extension, std::stringstream& stream);
-    }    // namespace hdl_writer_manager
+        bool write(Netlist* netlist, const std::filesystem::path& file_path);
+    }    // namespace netlist_writer_manager
 }    // namespace hal

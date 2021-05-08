@@ -65,7 +65,6 @@ namespace hal
         std::unique_ptr<Netlist> instantiate(const GateLibrary* gate_library) override;
 
     private:
-        std::filesystem::path m_path;
         std::stringstream m_fs;
 
         // temporary netlist

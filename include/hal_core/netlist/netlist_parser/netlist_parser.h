@@ -26,7 +26,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/netlist.h"
 
-#include <sstream>
+#include <filesystem>
 
 namespace hal
 {

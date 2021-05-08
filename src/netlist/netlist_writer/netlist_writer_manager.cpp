@@ -1,16 +1,16 @@
-#include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 
-#include "hal_core/utilities/log.h"
-#include "hal_core/netlist/hdl_writer/hdl_writer.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer.h"
+#include "hal_core/utilities/log.h"
 
 #include <chrono>
 #include <fstream>
 
 namespace hal
 {
-    namespace hdl_writer_manager
+    namespace netlist_writer_manager
     {
         namespace
         {
@@ -19,7 +19,7 @@ namespace hal
 
             WriterFactory get_writer_factory_for_file(const std::filesystem::path& file_name)
             {
-                auto extension = utils::to_lower(file_name.extension().string());
+                std::string extension = utils::to_lower(file_name.extension().string());
                 if (!extension.empty() && extension[0] != '.')
                 {
                     extension = "." + extension;
@@ -27,11 +27,11 @@ namespace hal
 
                 if (auto it = m_extension_to_writer.find(extension); it != m_extension_to_writer.end())
                 {
-                    log_info("hdl_writer", "selected writer: {}", it->second.first);
+                    log_info("netlist_writer", "selected writer: {}", it->second.first);
                     return it->second.second;
                 }
 
-                log_error("hdl_writer", "no hdl writer registered for file type '{}'", extension);
+                log_error("netlist_writer", "no netlist writer registered for file extension '{}'.", extension);
                 return WriterFactory();
             }
         }    // namespace
@@ -39,13 +39,13 @@ namespace hal
         ProgramOptions get_cli_options()
         {
             ProgramOptions description;
-            description.add("--write-hdl", "Write netlist to HDL file", {ProgramOptions::A_REQUIRED_PARAMETER});
+            description.add("--write-hdl", "Write netlist to file.", {ProgramOptions::A_REQUIRED_PARAMETER});
             return description;
         }
 
         void register_writer(const std::string& name, const WriterFactory& writer_factory, const std::vector<std::string>& supported_file_extensions)
         {
-            for (auto ext : supported_file_extensions)
+            for (std::string ext : supported_file_extensions)
             {
                 ext = utils::trim(utils::to_lower(ext));
                 if (!ext.empty() && ext[0] != '.')
@@ -54,13 +54,13 @@ namespace hal
                 }
                 if (auto it = m_extension_to_writer.find(ext); it != m_extension_to_writer.end())
                 {
-                    log_warning("hdl_writer", "file type '{}' already has associated writer '{}', it remains unchanged", ext, it->second.first);
+                    log_warning("netlist_writer", "writer '{}' cannot be registered as file extension '{}' is already associated with writer '{}'.", name, ext, it->second.first);
                     continue;
                 }
                 m_extension_to_writer.emplace(ext, std::make_pair(name, writer_factory));
                 m_writer_to_extensions[name].push_back(ext);
 
-                log_info("hdl_writer", "registered gate library writer '{}' for file type '{}'", name, ext);
+                log_info("netlist_writer", "registered netlist writer '{}' for file extension '{}'.", name, ext);
             }
         }
 
@@ -73,7 +73,7 @@ namespace hal
                     if (auto rm_it = m_extension_to_writer.find(ext); rm_it != m_extension_to_writer.end())
                     {
                         m_extension_to_writer.erase(rm_it);
-                        log_info("hdl_writer", "unregistered gate library writer '{}' which was registered for file type '{}'", name, ext);
+                        log_info("netlist_writer", "unregistered netlist writer '{}' for file extension '{}'.", name, ext);
                     }
                 }
                 m_writer_to_extensions.erase(it);
@@ -91,54 +91,32 @@ namespace hal
             return true;
         }
 
-        bool write(Netlist* netlist, const std::filesystem::path& file_name)
+        bool write(Netlist* netlist, const std::filesystem::path& file_path)
         {
-            auto factory = get_writer_factory_for_file(file_name);
+            auto factory = get_writer_factory_for_file(file_path);
             if (!factory)
             {
                 return false;
             }
 
-            std::stringstream stream;
+            std::unique_ptr<NetlistWriter> writer = factory();
 
-            std::ofstream file;
-            file.open(file_name.string());
-            if (file.fail())
-            {
-                log_error("hdl_writer", "Cannot open or create file {}. Please verify that the file and the containing directory is writable!", file_name.string());
-                return false;
-            }
+            log_info("netlist_writer", "writing netlist '{}' to file '{}'...", netlist->get_design_name(), file_path.string());
 
             auto begin_time = std::chrono::high_resolution_clock::now();
-
-            auto writer = factory();
-            if (!writer->write(netlist, stream))
+            if (!writer->write(netlist, file_path))
             {
+                log_error("netlist", "failed to write netlist '{}' to file '{}'.", netlist->get_design_name(), file_path.string());
                 return false;
             }
 
-            // done
-            file << stream.str();
-            file.close();
-
-            log_info("hdl_writer",
-                     "wrote '{}' to '{}' in {:2.2f} seconds.",
+            log_info("netlist_writer",
+                     "wrote netlist '{}' to file '{}' in {:2.2f} seconds.",
                      netlist->get_design_name(),
-                     file_name.string(),
+                     file_path.string(),
                      (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
 
             return true;
         }
-
-        bool write(Netlist* netlist, const std::string& type_extension, std::stringstream& stream)
-        {
-            auto factory = get_writer_factory_for_file("fake_file." + type_extension);
-            if (!factory)
-            {
-                return false;
-            }
-            auto writer = factory();
-            return writer->write(netlist, stream);
-        }
-    }    // namespace hdl_writer_manager
+    }    // namespace netlist_writer_manager
 }    // namespace hal

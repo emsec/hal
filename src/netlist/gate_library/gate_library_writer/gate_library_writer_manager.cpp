@@ -19,7 +19,7 @@ namespace hal
 
             WriterFactory get_writer_factory_for_file(const std::filesystem::path& file_name)
             {
-                auto extension = utils::to_lower(file_name.extension().string());
+                std::string extension = utils::to_lower(file_name.extension().string());
                 if (!extension.empty() && extension[0] != '.')
                 {
                     extension = "." + extension;
@@ -38,7 +38,7 @@ namespace hal
 
         void register_writer(const std::string& name, const WriterFactory& writer_factory, const std::vector<std::string>& supported_file_extensions)
         {
-            for (auto ext : supported_file_extensions)
+            for (std::string ext : supported_file_extensions)
             {
                 ext = utils::trim(utils::to_lower(ext));
                 if (!ext.empty() && ext[0] != '.')
@@ -47,7 +47,7 @@ namespace hal
                 }
                 if (auto it = m_extension_to_writer.find(ext); it != m_extension_to_writer.end())
                 {
-                    log_warning("gate_library_writer", "file extension '{}' is already associated with writer '{}'.", ext, it->second.first);
+                    log_warning("gate_library_writer", "writer '{}' cannot be registered as file extension '{}' is already associated with writer '{}'.", name, ext, it->second.first);
                     continue;
                 }
                 m_extension_to_writer.emplace(ext, std::make_pair(name, writer_factory));
@@ -81,7 +81,7 @@ namespace hal
                 return false;
             }
 
-            auto writer = factory();
+            std::unique_ptr<GateLibraryWriter> writer = factory();
 
             log_info("gate_library_writer", "writing gate library '{}' to file '{}'...", gate_lib->get_name(), file_path.string());
 
