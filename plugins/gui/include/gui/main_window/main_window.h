@@ -419,9 +419,9 @@ namespace hal
         void handleActionAbout();
 
         /**
-         * Q_SLOT to export netlist to gexf file
+         * Q_SLOT to export netlist to file. Exporter will be determined by file extension
          */
-        void handleActionExportGexf();
+        void handleActionExport();
 
         void enableUndo(bool enable=true);
 
@@ -473,7 +473,6 @@ namespace hal
         Action* mActionOpen;
         Action* mActionSave;
         Action* mActionSaveAs;
-        Action* mActionExportGexf;
         Action* mActionAbout;
         Action* mActionStartRecording;
         Action* mActionStopRecording;

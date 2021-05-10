@@ -87,5 +87,13 @@ namespace hal
          * @returns True on success, false otherwise.
          */
         bool write(Netlist* netlist, const std::filesystem::path& file_path);
+
+        /**
+         * @brief Retrieve the extensions for which extensions have been registered
+         * @return Vector of registered extensions
+         */
+        std::vector<std::string> registered_extensions();
+
+
     }    // namespace netlist_writer_manager
 }    // namespace hal

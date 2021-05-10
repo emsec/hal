@@ -3,6 +3,7 @@
 #include "gui/action/action.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
+#include "gui/export/export_registered_format.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/graphics_effects/overlay_effect.h"
 #include "gui/gui_def.h"
@@ -18,7 +19,6 @@
 #include "gui/settings/settings_manager.h"
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/welcome_screen/welcome_screen.h"
-#include "gui/export/export_gexf.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_controls.h"
 #include "hal_core/netlist/gate.h"
@@ -26,6 +26,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
 
@@ -120,7 +121,6 @@ namespace hal
         mActionOpen         = new Action(this);
         mActionSave         = new Action(this);
         mActionSaveAs       = new Action(this);
-        mActionExportGexf   = new Action(this);
         mActionAbout        = new Action(this);
 
         mActionStartRecording = new Action(this);
@@ -178,9 +178,17 @@ namespace hal
         mMenuFile->addAction(mActionSave);
         mMenuFile->addAction(mActionSaveAs);
 
-        QMenu* menuExport = new QMenu("Export …", this);
-        menuExport->addAction(mActionExportGexf);
-        mMenuFile->addMenu(menuExport);
+        QMenu* menuExport = nullptr;
+        for (std::string extension : netlist_writer_manager::registered_extensions())
+        {
+            QString ext = QString::fromStdString(extension);
+            if (!menuExport) menuExport = new QMenu("Export …", this);
+            Action* action = new Action("Export as " + ext.toUpper(), this);
+            action->setData(ext);
+            connect(action, &QAction::triggered, this, &MainWindow::handleActionExport);
+            menuExport->addAction(action);
+        }
+        if (menuExport) mMenuFile->addMenu(menuExport);
 
         mMenuEdit->addAction(mActionUndo);
         mMenuEdit->addSeparator();
@@ -210,7 +218,6 @@ namespace hal
         mActionOpen->setText("Open");
         mActionSave->setText("Save");
         mActionSaveAs->setText("Save As");
-        mActionExportGexf->setText("Export as GEXF");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
@@ -259,7 +266,6 @@ namespace hal
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
-        connect(mActionExportGexf, &Action::triggered, this, &MainWindow::handleActionExportGexf);
         //debug
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
 
@@ -610,12 +616,17 @@ namespace hal
         gPythonContext->updateNetlist();
     }
 
-    void MainWindow::handleActionExportGexf()
+    void MainWindow::handleActionExport()
     {
         if (!gNetlist) return;
-        ExportGexf exGexf;
-        if (exGexf.queryFilename())
-            exGexf.exportNetlist();
+        QAction* act = static_cast<QAction*>(sender());
+        if (!act || act->data().isNull()) return;
+
+        qDebug() << "xport to" << act->data().toString();
+        ExportRegisteredFormat erf(act->data().toString());
+        if (erf.queryFilename())
+            erf.exportNetlist();
+
     }
 
     void MainWindow::handleSaveAsTriggered()

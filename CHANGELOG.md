@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added function `replace_gate` to `netlist_utils` to replace a gate with an instance of another gate type
   * added function `get_gate_chain` and `get_complex_gate_chain` to `netlist_utils` to find gates that are arranged in a chain
 * added `Save As...` option to save `.hal` files under a different name
-* added export to GEXF feature
+* added export menu for registered netlist writer
 * added `remove from view` action to context menu for gates and modules
 * added grouping toolbox feature to highlight successors or predecessors
 * added an indicator showing whether views have been modified
