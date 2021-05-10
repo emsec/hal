@@ -4,8 +4,8 @@
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
-#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/grouping.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
@@ -16,17 +16,14 @@
 #include <math.h>
 #include <stack>
 
-/*
-namespace hal
-{
-
-
-}    // namespace test_utils
-*/
 namespace hal
 {
     namespace test_utils
     {
+        Net* connect(Netlist* nl, Gate* src, std::string src_pin, Gate* dst, std::string dst_pin);
+
+        // TODO clean up everything below
+
         /*********************************************************
          *                      Constants                        *
          *********************************************************/

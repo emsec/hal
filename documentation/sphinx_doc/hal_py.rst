@@ -5,21 +5,21 @@ HAL Core Documentation
    :maxdepth: 1
 
    core_utils
-   data_container
+   boolean_function
+   path
+   gate_type
    gate_library
    gate_library_manager
-   endpoint
-   netlist
-   netlist_utils
-   boolean_function
-   gate_type
+   data_container
    gate
    net
    module
    grouping
-   path
+   endpoint
+   netlist
+   netlist_utils
    base_plugin_interface
    gui_plugin_interface
    plugin_manager
    netlist_factory
-   hdl_writer_manager
+   netlist_writer_manager

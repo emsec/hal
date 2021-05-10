@@ -3,10 +3,33 @@
 
 #include "hal_core/netlist/gate_library/gate_type.h"
 
-//using namespace hal;
-//namespace test_utils = hal;
 namespace hal
 {
+    namespace test_utils 
+    {   
+        Net* connect(Netlist* nl, Gate* src, std::string src_pin, Gate* dst, std::string dst_pin)
+        {
+            Net* n;
+            if (n = src->get_fan_out_net(src_pin); n != nullptr)
+            {
+                n->add_destination(dst, dst_pin);
+            }
+            else if (n = dst->get_fan_in_net(dst_pin); n != nullptr)
+            {
+                n->add_source(src, src_pin);
+            }
+            else
+            {
+                n = nl->create_net("net_" + std::to_string(src->get_id()) + "_" + std::to_string(dst->get_id()));
+                n->add_source(src, src_pin);
+                n->add_destination(dst, dst_pin);
+            }
+            return n;
+        }
+    }
+
+    // TODO clean up everything below
+
     bool run_known_issue_tests = false;
 
     bool test_utils::known_issue_tests_active()
@@ -45,8 +68,23 @@ namespace hal
         static bool already_init = false;
         if (!already_init)
         {
-            std::vector<std::string> channel_ids = {
-                "core", "gate_library_parser", "gate_library_writer", "gate_library_manager", "gate_library", "netlist", "netlist_utils", "netlist_internal", "netlist_persistent", "gate", "net", "module", "grouping", "netlist_parser", "netlist_writer", "python_context", "test_utils"};
+            std::vector<std::string> channel_ids = {"core",
+                                                    "gate_library_parser",
+                                                    "gate_library_writer",
+                                                    "gate_library_manager",
+                                                    "gate_library",
+                                                    "netlist",
+                                                    "netlist_utils",
+                                                    "netlist_internal",
+                                                    "netlist_persistent",
+                                                    "gate",
+                                                    "net",
+                                                    "module",
+                                                    "grouping",
+                                                    "netlist_parser",
+                                                    "netlist_writer",
+                                                    "python_context",
+                                                    "test_utils"};
 
             LogManager& lm = LogManager::get_instance();
             for (std::string ch_id : channel_ids)
