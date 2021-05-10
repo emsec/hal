@@ -964,7 +964,7 @@ namespace hal
                     {
                         if (input_pins.empty() || input_pins.find(ep_pin) != input_pins.end())
                         {
-                            if (input_pins.empty() || input_pins.find(ep->get_pin()) != input_pins.end())
+                            if (output_pins.empty() || output_pins.find(ep->get_pin()) != output_pins.end())
                             {
                                 if (!filter || filter(ep->get_gate()))
                                 {
