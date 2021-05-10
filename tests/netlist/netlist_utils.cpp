@@ -1,5 +1,7 @@
 #include "hal_core/netlist/netlist_utils.h"
 
+#include "gate_library_test_utils.h"
+#include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
 
 namespace hal
@@ -21,67 +23,6 @@ namespace hal
         }
     };
 
-    namespace 
-    {
-        Net* connect(Netlist* nl, Gate* src, std::string src_pin, Gate* dst, std::string dst_pin) 
-        {
-            Net* n;
-            if (n = src->get_fan_out_net(src_pin); n != nullptr)
-            {
-                n->add_destination(dst, dst_pin);
-            }
-            else if (n = dst->get_fan_in_net(dst_pin); n != nullptr)
-            {
-                n->add_source(src, src_pin);
-            }
-            else
-            {
-                n = nl->create_net("net_" + std::to_string(src->get_id()) + "_" + std::to_string(dst->get_id()));
-                n->add_source(src, src_pin);
-                n->add_destination(dst, dst_pin);
-            }
-            return n;
-        }
-
-        std::unique_ptr<GateLibrary> create_buffer_lib() 
-        {
-            std::unique_ptr<GateLibrary> lib = std::unique_ptr<GateLibrary>(new GateLibrary("dummy_path", "dummy_name"));
-            GateType* gnd = lib->create_gate_type("GND", {GateTypeProperty::combinational, GateTypeProperty::ground});
-            gnd->add_pin("O", PinDirection::output);
-            gnd->add_boolean_function("O", BooleanFunction::from_string("0"));
-            lib->mark_gnd_gate_type(gnd);
-
-            GateType* vcc = lib->create_gate_type("VCC", {GateTypeProperty::combinational, GateTypeProperty::power});
-            vcc->add_pin("O", PinDirection::output);
-            vcc->add_boolean_function("O", BooleanFunction::from_string("1"));
-            lib->mark_vcc_gate_type(vcc);
-
-            GateType* and2 = lib->create_gate_type("AND2", {GateTypeProperty::combinational});
-            and2->add_pins({"I0", "I1"}, PinDirection::input);
-            and2->add_pin("O", PinDirection::output);
-            and2->add_boolean_function("O", BooleanFunction::from_string("I0 & I1"));
-
-            GateType* lut2 = lib->create_gate_type("LUT2", {GateTypeProperty::combinational, GateTypeProperty::lut});
-            lut2->add_pins({"I0", "I1"}, PinDirection::input);
-            lut2->add_pin("O", PinDirection::output, PinType::lut);
-            lut2->set_config_data_category("generic");
-            lut2->set_config_data_identifier("INIT");
-
-            GateType* lut4 = lib->create_gate_type("LUT4", {GateTypeProperty::combinational, GateTypeProperty::lut});
-            lut4->add_pins({"I0", "I1", "I2", "I3"}, PinDirection::input);
-            lut4->add_pin("O", PinDirection::output, PinType::lut);
-            lut4->set_config_data_category("generic");
-            lut4->set_config_data_identifier("INIT");
-
-            GateType* buf = lib->create_gate_type("BUF", {GateTypeProperty::combinational});
-            buf->add_pin("I", PinDirection::input);
-            buf->add_pin("O", PinDirection::output);
-            buf->add_boolean_function("O", BooleanFunction::from_string("I"));
-
-            return std::move(lib);
-        }
-    }
-
     /**
      * Testing the get_subgraph_function
      *
@@ -92,6 +33,7 @@ namespace hal
         TEST_START
         // Use the example netlist, that is filled with boolean functions for this test
         // (3) becomes a NOT gate, (0) an AND gate, (7) a NOT gate
+        // TODO do not use example netlist anymore
         std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
 
         // -- Set the boolean functions for these gates
@@ -194,10 +136,10 @@ namespace hal
             // The netlist contains a cycle
             // -- create such a netlist:
             /*   .-=|gate_0|=----.
-                 *    '------------.  |
-                 *    .-=|gate_1|=-'  |
-                 *    '---------------'
-                 */
+            *    '------------.  |
+            *    .-=|gate_1|=-'  |
+            *    '---------------'
+            */
             std::unique_ptr<Netlist> cyclic_nl = test_utils::create_empty_netlist();
             Gate* cy_gate_0                    = cyclic_nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
             Gate* cy_gate_1                    = cyclic_nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_1");
@@ -238,26 +180,23 @@ namespace hal
     {
         TEST_START
         // Create an example netlist that should be copied
+        // TODO do not use example netlist anymore
         std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
 
         // -- Add some modules to the example netlist
-        Module* mod_0 = test_nl->create_module(test_utils::MIN_MODULE_ID + 0,
-                                               "mod_0",
-                                               test_nl->get_top_module(),
-                                               std::vector<Gate*>{test_nl->get_gate_by_id(MIN_GATE_ID + 0),
-                                                                  test_nl->get_gate_by_id(MIN_GATE_ID + 1),
-                                                                  test_nl->get_gate_by_id(MIN_GATE_ID + 2),
-                                                                  test_nl->get_gate_by_id(MIN_GATE_ID + 3),
-                                                                  test_nl->get_gate_by_id(MIN_GATE_ID + 4),
-                                                                  test_nl->get_gate_by_id(MIN_GATE_ID + 5)});
-        Module* mod_1 = test_nl->create_module(test_utils::MIN_MODULE_ID + 1,
-                                               "mod_1",
-                                               mod_0,
-                                               std::vector<Gate*>{
-                                                   test_nl->get_gate_by_id(MIN_GATE_ID + 0),
-                                                   test_nl->get_gate_by_id(MIN_GATE_ID + 4),
-                                                   test_nl->get_gate_by_id(MIN_GATE_ID + 5),
-                                               });
+        Module* mod_0 = test_nl->create_module(test_utils::MIN_MODULE_ID + 0, "mod_0", test_nl->get_top_module(), std::vector<Gate*>{
+                                                                                                                      test_nl->get_gate_by_id(MIN_GATE_ID + 0),
+                                                                                                                      test_nl->get_gate_by_id(MIN_GATE_ID + 1),
+                                                                                                                      test_nl->get_gate_by_id(MIN_GATE_ID + 2),
+                                                                                                                      test_nl->get_gate_by_id(MIN_GATE_ID + 3),
+                                                                                                                      test_nl->get_gate_by_id(MIN_GATE_ID + 4),
+                                                                                                                      test_nl->get_gate_by_id(MIN_GATE_ID + 5)
+                                                                                                                  });
+        Module* mod_1 = test_nl->create_module(test_utils::MIN_MODULE_ID + 1, "mod_1", mod_0, std::vector<Gate*>{
+                                                                                                  test_nl->get_gate_by_id(MIN_GATE_ID + 0),
+                                                                                                  test_nl->get_gate_by_id(MIN_GATE_ID + 4),
+                                                                                                  test_nl->get_gate_by_id(MIN_GATE_ID + 5),
+                                                                                              });
 
         // -- Add some groupings to the netlist
         Grouping* prime_grouping = test_nl->create_grouping("prime_gates");
@@ -298,74 +237,77 @@ namespace hal
     TEST_F(NetlistUtilsTest, check_get_next_sequential_gates)
     {
         TEST_START
-        // Create an example netlist that should be copied
-        std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(1);
-        GateLibrary* gl             = test_utils::get_testing_gate_library();
-
-        Gate* gate_0     = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gnd"), "gate_0");
-        Gate* gate_1     = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_types().at("vcc"), "gate_1");
-        Gate* gate_2     = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_types().at("gate_1_to_1"), "gate_2");
-        Gate* gate_3     = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_types().at("gate_2_to_1"), "gate_3");
-        Gate* gate_4_seq = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_types().at("gate_2_to_1_sequential"), "gate_4_seq");
-        Gate* gate_5_seq = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_types().at("gate_2_to_1_sequential"), "gate_5_seq");
-        Gate* gate_6     = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_types().at("gate_2_to_1"), "gate_6");
-
-        connect(nl.get(), gate_0, "O", gate_2, "I");
-        connect(nl.get(), gate_0, "O", gate_3, "I1");
-        connect(nl.get(), gate_1, "O", gate_3, "I0");
-        connect(nl.get(), gate_3, "O", gate_4_seq, "I0");
-        connect(nl.get(), gate_4_seq, "O", gate_4_seq, "I1");
-        connect(nl.get(), gate_4_seq, "O", gate_5_seq, "I0");
-        connect(nl.get(), gate_0, "O", gate_5_seq, "I1");
-        connect(nl.get(), gate_4_seq, "O", gate_6, "I0");
-        connect(nl.get(), gate_5_seq, "O", gate_6, "I1");
-
-        std::map<Gate*, std::vector<Gate*>> test_successors = {
-            {gate_0, {gate_4_seq, gate_5_seq}},
-            {gate_1, {gate_4_seq}},
-            {gate_2, {}},
-            {gate_3, {gate_4_seq}},
-            {gate_4_seq, {gate_4_seq, gate_5_seq}},
-            {gate_5_seq, {}},
-            {gate_6, {}},
-        };
-
-        std::map<Gate*, std::vector<Gate*>> test_predecessors = {
-            {gate_0, {}},
-            {gate_1, {}},
-            {gate_2, {}},
-            {gate_3, {}},
-            {gate_4_seq, {gate_4_seq}},
-            {gate_5_seq, {gate_4_seq}},
-            {gate_6, {gate_5_seq, gate_4_seq}},
-        };
-
-        for (auto [start, expected] : test_successors)
         {
-            auto successors = netlist_utils::get_next_sequential_gates(start, true);
-            std::unordered_map<u32, std::vector<Gate*>> cache;
-            auto successors_cached = netlist_utils::get_next_sequential_gates(start, true, cache);
-            EXPECT_EQ(successors, successors_cached);
-            EXPECT_TRUE(test_utils::vectors_have_same_content(successors, expected));
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            ASSERT_NE(nl, nullptr);
 
-            // std::cout << "successors of: " << start->get_name() << std::endl;
-            // std::cout << "computed: " << utils::join(", ", successors, [](auto x) { return x->get_name(); }) << std::endl;
-            // std::cout << "expected: " << utils::join(", ", expected, [](auto x) { return x->get_name(); }) << std::endl;
+            Gate* gate_0     = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("GND"), "gate_0");
+            Gate* gate_1     = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_type_by_name("VCC"), "gate_1");
+            Gate* gate_2     = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_type_by_name("BUF"), "gate_2");
+            Gate* gate_3     = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_type_by_name("AND2"), "gate_3");
+            Gate* gate_4_seq = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_type_by_name("DFFE"), "gate_4_seq");
+            Gate* gate_5_seq = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_type_by_name("DFFE"), "gate_5_seq");
+            Gate* gate_6     = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_type_by_name("AND2"), "gate_6");
+
+            test_utils::connect(nl.get(), gate_0, "O", gate_2, "I");
+            test_utils::connect(nl.get(), gate_0, "O", gate_3, "I1");
+            test_utils::connect(nl.get(), gate_1, "O", gate_3, "I0");
+            test_utils::connect(nl.get(), gate_3, "O", gate_4_seq, "D");
+            test_utils::connect(nl.get(), gate_4_seq, "Q", gate_4_seq, "EN");
+            test_utils::connect(nl.get(), gate_4_seq, "Q", gate_5_seq, "EN");
+            test_utils::connect(nl.get(), gate_0, "O", gate_5_seq, "D");
+            test_utils::connect(nl.get(), gate_4_seq, "Q", gate_6, "I0");
+            test_utils::connect(nl.get(), gate_5_seq, "Q", gate_6, "I1");
+
+            std::map<Gate*, std::vector<Gate*>> test_successors = 
+            {
+                {gate_0, {gate_4_seq, gate_5_seq}},
+                {gate_1, {gate_4_seq}},
+                {gate_2, {}},
+                {gate_3, {gate_4_seq}},
+                {gate_4_seq, {gate_4_seq, gate_5_seq}},
+                {gate_5_seq, {}},
+                {gate_6, {}},
+            };
+
+            std::map<Gate*, std::vector<Gate*>> test_predecessors = 
+            {
+                {gate_0, {}},
+                {gate_1, {}},
+                {gate_2, {}},
+                {gate_3, {}},
+                {gate_4_seq, {gate_4_seq}},
+                {gate_5_seq, {gate_4_seq}},
+                {gate_6, {gate_5_seq, gate_4_seq}},
+            };
+
+            for (const auto& [start, expected] : test_successors)
+            {
+                auto successors = netlist_utils::get_next_sequential_gates(start, true);
+                std::unordered_map<u32, std::vector<Gate*>> cache;
+                auto successors_cached = netlist_utils::get_next_sequential_gates(start, true, cache);
+                EXPECT_EQ(successors, successors_cached);
+                EXPECT_TRUE(test_utils::vectors_have_same_content(successors, expected));
+
+                // std::cout << "successors of: " << start->get_name() << std::endl;
+                // std::cout << "computed: " << utils::join(", ", successors, [](auto x) { return x->get_name(); }) << std::endl;
+                // std::cout << "expected: " << utils::join(", ", expected, [](auto x) { return x->get_name(); }) << std::endl;
+            }
+
+            for (const auto& [start, expected] : test_predecessors)
+            {
+                auto predecessors = netlist_utils::get_next_sequential_gates(start, false);
+                std::unordered_map<u32, std::vector<Gate*>> cache;
+                auto predecessors_cached = netlist_utils::get_next_sequential_gates(start, false, cache);
+                EXPECT_EQ(predecessors, predecessors_cached);
+                EXPECT_TRUE(test_utils::vectors_have_same_content(predecessors, expected));
+
+                // std::cout << "predecessors of: " << start->get_name() << std::endl;
+                // std::cout << "computed: " << utils::join(", ", predecessors, [](auto x) { return x->get_name(); }) << std::endl;
+                // std::cout << "expected: " << utils::join(", ", expected, [](auto x) { return x->get_name(); }) << std::endl;
+            }
         }
-
-        for (auto [start, expected] : test_predecessors)
-        {
-            auto predecessors = netlist_utils::get_next_sequential_gates(start, false);
-            std::unordered_map<u32, std::vector<Gate*>> cache;
-            auto predecessors_cached = netlist_utils::get_next_sequential_gates(start, false, cache);
-            EXPECT_EQ(predecessors, predecessors_cached);
-            EXPECT_TRUE(test_utils::vectors_have_same_content(predecessors, expected));
-
-            // std::cout << "predecessors of: " << start->get_name() << std::endl;
-            // std::cout << "computed: " << utils::join(", ", predecessors, [](auto x) { return x->get_name(); }) << std::endl;
-            // std::cout << "expected: " << utils::join(", ", expected, [](auto x) { return x->get_name(); }) << std::endl;
-        }
-
         TEST_END
     }
 
@@ -377,29 +319,28 @@ namespace hal
     TEST_F(NetlistUtilsTest, check_get_nets_at_pins)
     {
         TEST_START
+        {
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            ASSERT_NE(nl, nullptr);
 
-        std::unique_ptr<GateLibrary> lib = create_buffer_lib();
+            Gate* l0 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l0");
+            Gate* l1 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l1");
+            Gate* l2 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l2");
+            Gate* l3 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l3");
+            Gate* l4 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l4");
 
-        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
-        ASSERT_NE(nl, nullptr);
+            Net* n0 = test_utils::connect(nl.get(), l0, "O", l4, "I0");
+            Net* n1 = test_utils::connect(nl.get(), l1, "O", l4, "I1");
+            Net* n2 = test_utils::connect(nl.get(), l2, "O", l4, "I2");
+            Net* n3 = test_utils::connect(nl.get(), l3, "O", l4, "I3");
 
-        Gate* l0 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l0");
-        Gate* l1 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l1");
-        Gate* l2 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l2");
-        Gate* l3 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l3");
-        Gate* l4 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
-
-        Net* n0 = connect(nl.get(), l0, "O", l4, "I0");
-        Net* n1 = connect(nl.get(), l1, "O", l4, "I1");
-        Net* n2 = connect(nl.get(), l2, "O", l4, "I2");
-        Net* n3 = connect(nl.get(), l3, "O", l4, "I3");
-
-        EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I0", "I2"}, true), std::unordered_set<Net*>({n0, n2}));
-        EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I1", "I2", "I4"}, true), std::unordered_set<Net*>({n1, n2}));
-        EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I1", "I2", "I3"}, true), std::unordered_set<Net*>({n1, n2, n3}));
-        EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {"O"}, false), std::unordered_set<Net*>({n0}));
-        EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {"A", "B", "C"}, true), std::unordered_set<Net*>());
-
+            EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I0", "I2"}, true), std::unordered_set<Net*>({n0, n2}));
+            EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I1", "I2", "I4"}, true), std::unordered_set<Net*>({n1, n2}));
+            EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I1", "I2", "I3"}, true), std::unordered_set<Net*>({n1, n2, n3}));
+            EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {"O"}, false), std::unordered_set<Net*>({n0}));
+            EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {"A", "B", "C"}, true), std::unordered_set<Net*>());
+        }
         TEST_END
     }
 
@@ -411,25 +352,23 @@ namespace hal
     TEST_F(NetlistUtilsTest, check_remove_buffers)
     {
         TEST_START
-
-        std::unique_ptr<GateLibrary> lib = create_buffer_lib();
-
         {
-            std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
             ASSERT_NE(nl, nullptr);
 
-            Gate* gnd_gate = nl->create_gate(lib->get_gate_type_by_name("GND"), "gnd");
+            Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
             nl->mark_gnd_gate(gnd_gate);
             Net* gnd_net = nl->create_net("gnd");
             gnd_net->add_source(gnd_gate, "O");
-            Gate* vcc_gate = nl->create_gate(lib->get_gate_type_by_name("VCC"), "vcc");
+            Gate* vcc_gate = nl->create_gate(gl->get_gate_type_by_name("VCC"), "vcc");
             nl->mark_vcc_gate(vcc_gate);
             Net* vcc_net = nl->create_net("vcc");
             vcc_net->add_source(vcc_gate, "O");
 
-            Gate* g0 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g0");
-            Gate* g1 = nl->create_gate(lib->get_gate_type_by_name("BUF"), "g1");
-            Gate* g2 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g2");
+            Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g0");
+            Gate* g1 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "g1");
+            Gate* g2 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g2");
 
             Net* n0 = nl->create_net("n0");
             n0->add_destination(g0, "I0");
@@ -443,8 +382,8 @@ namespace hal
             n2->add_destination(g2, "I1");
             n2->mark_global_input_net();
 
-            Net* n3 = connect(nl.get(), g0, "O", g1, "I");
-            Net* n4 = connect(nl.get(), g1, "O", g2, "I0");
+            Net* n3 = test_utils::connect(nl.get(), g0, "O", g1, "I");
+            Net* n4 = test_utils::connect(nl.get(), g1, "O", g2, "I0");
 
             netlist_utils::remove_buffers(nl.get());
 
@@ -453,24 +392,24 @@ namespace hal
 
             EXPECT_EQ(g0->get_successor("O")->get_gate(), g2);
         }
-
         {
-            std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
             ASSERT_NE(nl, nullptr);
 
-            Gate* gnd_gate = nl->create_gate(lib->get_gate_type_by_name("GND"), "gnd");
+            Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
             nl->mark_gnd_gate(gnd_gate);
             Net* gnd_net = nl->create_net("gnd");
             gnd_net->add_source(gnd_gate, "O");
-            Gate* vcc_gate = nl->create_gate(lib->get_gate_type_by_name("VCC"), "vcc");
+            Gate* vcc_gate = nl->create_gate(gl->get_gate_type_by_name("VCC"), "vcc");
             nl->mark_vcc_gate(vcc_gate);
             Net* vcc_net = nl->create_net("vcc");
             vcc_net->add_source(vcc_gate, "O");
 
-            Gate* g0 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g0");
-            Gate* g1 = nl->create_gate(lib->get_gate_type_by_name("LUT2"), "g1");
+            Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g0");
+            Gate* g1 = nl->create_gate(gl->get_gate_type_by_name("LUT2"), "g1");
             g1->add_boolean_function("O", BooleanFunction::from_string("I1"));
-            Gate* g2 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g2");
+            Gate* g2 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g2");
 
             Net* n0 = nl->create_net("n0");
             n0->add_destination(g0, "I0");
@@ -486,8 +425,8 @@ namespace hal
 
             gnd_net->add_destination(g1, "I0");
 
-            Net* n3 = connect(nl.get(), g0, "O", g1, "I1");
-            Net* n4 = connect(nl.get(), g1, "O", g2, "I0");
+            Net* n3 = test_utils::connect(nl.get(), g0, "O", g1, "I1");
+            Net* n4 = test_utils::connect(nl.get(), g1, "O", g2, "I0");
 
             netlist_utils::remove_buffers(nl.get());
 
@@ -496,23 +435,23 @@ namespace hal
 
             EXPECT_EQ(g0->get_successor("O")->get_gate(), g2);
         }
-
         {
-            std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
             ASSERT_NE(nl, nullptr);
 
-            Gate* gnd_gate = nl->create_gate(lib->get_gate_type_by_name("GND"), "gnd");
+            Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
             nl->mark_gnd_gate(gnd_gate);
             Net* gnd_net = nl->create_net("gnd");
             gnd_net->add_source(gnd_gate, "O");
-            Gate* vcc_gate = nl->create_gate(lib->get_gate_type_by_name("VCC"), "vcc");
+            Gate* vcc_gate = nl->create_gate(gl->get_gate_type_by_name("VCC"), "vcc");
             nl->mark_vcc_gate(vcc_gate);
             Net* vcc_net = nl->create_net("vcc");
             vcc_net->add_source(vcc_gate, "O");
 
-            Gate* g0 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g0");
-            Gate* g1 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g1");
-            Gate* g2 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g2");
+            Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g0");
+            Gate* g1 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g1");
+            Gate* g2 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g2");
 
             Net* n0 = nl->create_net("n0");
             n0->add_destination(g0, "I0");
@@ -528,8 +467,8 @@ namespace hal
 
             vcc_net->add_destination(g1, "I0");
 
-            Net* n3 = connect(nl.get(), g0, "O", g1, "I1");
-            Net* n4 = connect(nl.get(), g1, "O", g2, "I0");
+            Net* n3 = test_utils::connect(nl.get(), g0, "O", g1, "I1");
+            Net* n4 = test_utils::connect(nl.get(), g1, "O", g2, "I0");
 
             netlist_utils::remove_buffers(nl.get(), true);
 
@@ -538,7 +477,7 @@ namespace hal
 
             EXPECT_EQ(g0->get_successor("O")->get_gate(), g2);
         }
-        
+
         TEST_END
     }
 
@@ -550,60 +489,59 @@ namespace hal
     TEST_F(NetlistUtilsTest, check_remove_unused_lut_endpoints)
     {
         TEST_START
+        {
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            ASSERT_NE(nl, nullptr);
 
-        std::unique_ptr<GateLibrary> lib = create_buffer_lib();
+            Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
+            nl->mark_gnd_gate(gnd_gate);
+            Net* gnd_net = nl->create_net("gnd");
+            gnd_net->add_source(gnd_gate, "O");
 
-        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
-        ASSERT_NE(nl, nullptr);
+            Gate* l0 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l0");
+            Gate* l1 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l1");
+            Gate* l2 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l2");
+            Gate* l3 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l3");
+            Gate* l4 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l4");
+            Gate* l5 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l5");
+            l4->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2 & I3"));
+            l5->add_boolean_function("O", BooleanFunction::from_string("I2"));
 
-        Gate* gnd_gate = nl->create_gate(lib->get_gate_type_by_name("GND"), "gnd");
-        nl->mark_gnd_gate(gnd_gate);
-        Net* gnd_net = nl->create_net("gnd");
-        gnd_net->add_source(gnd_gate, "O");
+            test_utils::connect(nl.get(), l0, "O", l4, "I0");
+            test_utils::connect(nl.get(), l1, "O", l4, "I1");
+            test_utils::connect(nl.get(), l2, "O", l4, "I2");
+            test_utils::connect(nl.get(), l3, "O", l4, "I3");
 
-        Gate* l0 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l0");
-        Gate* l1 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l1");
-        Gate* l2 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l2");
-        Gate* l3 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l3");
-        Gate* l4 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
-        Gate* l5 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l5");
-        l4->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2 & I3"));
-        l5->add_boolean_function("O", BooleanFunction::from_string("I2"));
+            test_utils::connect(nl.get(), l0, "O", l5, "I0");
+            test_utils::connect(nl.get(), l1, "O", l5, "I1");
+            test_utils::connect(nl.get(), l2, "O", l5, "I2");
+            test_utils::connect(nl.get(), l3, "O", l5, "I3");
 
-        connect(nl.get(), l0, "O", l4, "I0");
-        connect(nl.get(), l1, "O", l4, "I1");
-        connect(nl.get(), l2, "O", l4, "I2");
-        connect(nl.get(), l3, "O", l4, "I3");
+            EXPECT_EQ(l4->get_predecessor("I0")->get_gate(), l0);
+            EXPECT_EQ(l4->get_predecessor("I1")->get_gate(), l1);
+            EXPECT_EQ(l4->get_predecessor("I2")->get_gate(), l2);
+            EXPECT_EQ(l4->get_predecessor("I3")->get_gate(), l3);
 
-        connect(nl.get(), l0, "O", l5, "I0");
-        connect(nl.get(), l1, "O", l5, "I1");
-        connect(nl.get(), l2, "O", l5, "I2");
-        connect(nl.get(), l3, "O", l5, "I3");
+            EXPECT_EQ(l5->get_predecessor("I0")->get_gate(), l0);
+            EXPECT_EQ(l5->get_predecessor("I1")->get_gate(), l1);
+            EXPECT_EQ(l5->get_predecessor("I2")->get_gate(), l2);
+            EXPECT_EQ(l5->get_predecessor("I3")->get_gate(), l3);
 
-        EXPECT_EQ(l4->get_predecessor("I0")->get_gate(), l0);
-        EXPECT_EQ(l4->get_predecessor("I1")->get_gate(), l1);
-        EXPECT_EQ(l4->get_predecessor("I2")->get_gate(), l2);
-        EXPECT_EQ(l4->get_predecessor("I3")->get_gate(), l3);
+            netlist_utils::remove_unused_lut_endpoints(nl.get());
 
-        EXPECT_EQ(l5->get_predecessor("I0")->get_gate(), l0);
-        EXPECT_EQ(l5->get_predecessor("I1")->get_gate(), l1);
-        EXPECT_EQ(l5->get_predecessor("I2")->get_gate(), l2);
-        EXPECT_EQ(l5->get_predecessor("I3")->get_gate(), l3);
+            EXPECT_EQ(l4->get_predecessor("I0")->get_gate(), l0);
+            EXPECT_EQ(l4->get_predecessor("I1")->get_gate(), l1);
+            EXPECT_EQ(l4->get_predecessor("I2")->get_gate(), l2);
+            EXPECT_EQ(l4->get_predecessor("I3")->get_gate(), l3);
 
-        netlist_utils::remove_unused_lut_endpoints(nl.get());
-
-        EXPECT_EQ(l4->get_predecessor("I0")->get_gate(), l0);
-        EXPECT_EQ(l4->get_predecessor("I1")->get_gate(), l1);
-        EXPECT_EQ(l4->get_predecessor("I2")->get_gate(), l2);
-        EXPECT_EQ(l4->get_predecessor("I3")->get_gate(), l3);
-
-        EXPECT_EQ(l5->get_predecessor("I0")->get_gate(), gnd_gate);
-        EXPECT_EQ(l5->get_predecessor("I1")->get_gate(), gnd_gate);
-        EXPECT_EQ(l5->get_predecessor("I2")->get_gate(), l2);
-        EXPECT_EQ(l5->get_predecessor("I3")->get_gate(), gnd_gate);
-
+            EXPECT_EQ(l5->get_predecessor("I0")->get_gate(), gnd_gate);
+            EXPECT_EQ(l5->get_predecessor("I1")->get_gate(), gnd_gate);
+            EXPECT_EQ(l5->get_predecessor("I2")->get_gate(), l2);
+            EXPECT_EQ(l5->get_predecessor("I3")->get_gate(), gnd_gate);
+        }
         TEST_END
-    } 
+    }
 
     /**
      * Testing detection of common inputs of gates.
@@ -613,45 +551,98 @@ namespace hal
     TEST_F(NetlistUtilsTest, check_get_common_inputs)
     {
         TEST_START
+        {
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            ASSERT_NE(nl, nullptr);
 
-        std::unique_ptr<GateLibrary> lib = create_buffer_lib();
+            Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
+            nl->mark_gnd_gate(gnd_gate);
 
-        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
-        ASSERT_NE(nl, nullptr);
+            Gate* l0 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l0");
+            Gate* l1 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l1");
+            Gate* l2 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l2");
+            Gate* l3 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l3");
+            Gate* l4 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l4");
+            Gate* l5 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l4");
 
-        Gate* gnd_gate = nl->create_gate(lib->get_gate_type_by_name("GND"), "gnd");
-        nl->mark_gnd_gate(gnd_gate);
+            Net* gnd_net = test_utils::connect(nl.get(), gnd_gate, "O", l2, "I0");
+            test_utils::connect(nl.get(), gnd_gate, "O", l3, "I0");
+            test_utils::connect(nl.get(), gnd_gate, "O", l4, "I0");
+            test_utils::connect(nl.get(), gnd_gate, "O", l5, "I0");
+            Net* common_net4 = test_utils::connect(nl.get(), l0, "O", l2, "I2");
+            test_utils::connect(nl.get(), l0, "O", l3, "I2");
+            test_utils::connect(nl.get(), l0, "O", l4, "I2");
+            test_utils::connect(nl.get(), l0, "O", l5, "I2");
+            Net* common_net2 = test_utils::connect(nl.get(), l1, "O", l2, "I1");
+            test_utils::connect(nl.get(), l1, "O", l3, "I1");
 
-        Gate* l0 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l0");
-        Gate* l1 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l1");
-        Gate* l2 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l2");
-        Gate* l3 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l3");
-        Gate* l4 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
-        Gate* l5 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
+            std::vector<Gate*> gates       = {l2, l3, l4, l5};
+            std::vector<Net*> common_nets4 = netlist_utils::get_common_inputs(gates);
+            std::vector<Net*> common_nets2 = netlist_utils::get_common_inputs(gates, 2);
 
-        Net* gnd_net = connect(nl.get(), gnd_gate, "O", l2, "I0");
-        connect(nl.get(), gnd_gate, "O", l3, "I0");
-        connect(nl.get(), gnd_gate, "O", l4, "I0");
-        connect(nl.get(), gnd_gate, "O", l5, "I0");
-        Net* common_net4 = connect(nl.get(), l0, "O", l2, "I2");
-        connect(nl.get(), l0, "O", l3, "I2");
-        connect(nl.get(), l0, "O", l4, "I2");
-        connect(nl.get(), l0, "O", l5, "I2");
-        Net* common_net2 = connect(nl.get(), l1, "O", l2, "I1");
-        connect(nl.get(), l1, "O", l3, "I1");
+            ASSERT_EQ(common_nets4.size(), 1);
+            EXPECT_TRUE(std::find(common_nets4.begin(), common_nets4.end(), common_net4) != common_nets4.end());
 
-        std::vector<Gate*> gates = {l2, l3, l4, l5};
-        std::vector<Net*> common_nets4 = netlist_utils::get_common_inputs(gates);
-        std::vector<Net*> common_nets2 = netlist_utils::get_common_inputs(gates, 2);
-
-        ASSERT_EQ(common_nets4.size(), 1);
-        EXPECT_TRUE(std::find(common_nets4.begin(), common_nets4.end(), common_net4) != common_nets4.end());
-
-        ASSERT_EQ(common_nets2.size(), 2);
-        EXPECT_TRUE(std::find(common_nets2.begin(), common_nets2.end(), common_net2) != common_nets2.end());
-        EXPECT_TRUE(std::find(common_nets2.begin(), common_nets2.end(), common_net4) != common_nets2.end());
-
+            ASSERT_EQ(common_nets2.size(), 2);
+            EXPECT_TRUE(std::find(common_nets2.begin(), common_nets2.end(), common_net2) != common_nets2.end());
+            EXPECT_TRUE(std::find(common_nets2.begin(), common_nets2.end(), common_net4) != common_nets2.end());
+        }
         TEST_END
-    } 
+    }
+
+    /**
+     * Testing replacement of gate.
+     *
+     * Functions: replace_gate
+     */
+    TEST_F(NetlistUtilsTest, check_replace_gate)
+    {
+        TEST_START
+        {
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            ASSERT_NE(nl, nullptr);
+
+            // TODO implement test
+        }
+        TEST_END
+    }
+
+    /**
+     * Testing detection of gate chains.
+     *
+     * Functions: get_gate_chain
+     */
+    TEST_F(NetlistUtilsTest, check_get_gate_chain)
+    {
+        TEST_START
+        {
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            ASSERT_NE(nl, nullptr);
+
+            // TODO implement test
+        }
+        TEST_END
+    }
+
+    /**
+     * Testing detection of complex gate chains.
+     *
+     * Functions: get_complex_gate_chain
+     */
+    TEST_F(NetlistUtilsTest, check_get_complex_gate_chain)
+    {
+        TEST_START
+        {
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            ASSERT_NE(nl, nullptr);
+
+            // TODO implement test
+        }
+        TEST_END
+    }
 
 }    //namespace hal
