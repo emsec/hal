@@ -189,12 +189,13 @@ var searchData=
   ['get_5fvcc_5fgate_5ftypes_329',['get_vcc_gate_types',['../d7/daf/classhal_1_1GateLibrary.html#a4f3f32d464c6cc8bc93704d317e86428',1,'hal::GateLibrary']]],
   ['get_5fvcc_5fgates_330',['get_vcc_gates',['../dc/d06/classhal_1_1Netlist.html#a1cb3ca0ff11e42f596f6a4fda2e13a73',1,'hal::Netlist']]],
   ['get_5fversion_331',['get_version',['../d5/ddc/classhal_1_1BasePluginInterface.html#ab231f8112b0ed2264498d9c70c03c01a',1,'hal::BasePluginInterface']]],
-  ['ground_332',['ground',['../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa578552719239a72a2d45ad422f67d24d',1,'hal::ground()'],['../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba578552719239a72a2d45ad422f67d24d',1,'hal::ground()']]],
-  ['grouping_333',['Grouping',['../d2/d20/classhal_1_1Grouping.html',1,'hal::Grouping'],['../d1/d1b/classhal_1_1NetlistInternalManager.html#ab61c4d8e4b1799e5578ebdd78701c76c',1,'hal::NetlistInternalManager::Grouping()']]],
-  ['grouping_2ecpp_334',['grouping.cpp',['../df/d22/netlist_2grouping_8cpp.html',1,'(Global Namespace)'],['../df/dc8/python__bindings_2bindings_2grouping_8cpp.html',1,'(Global Namespace)']]],
-  ['grouping_2eh_335',['grouping.h',['../d2/d8d/grouping_8h.html',1,'']]],
-  ['grouping_5fevent_5fhandler_2ecpp_336',['grouping_event_handler.cpp',['../dc/d4f/grouping__event__handler_8cpp.html',1,'']]],
-  ['grouping_5fevent_5fhandler_2eh_337',['grouping_event_handler.h',['../d4/dad/grouping__event__handler_8h.html',1,'']]],
-  ['grouping_5finit_338',['grouping_init',['../db/d7c/group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821',1,'hal']]],
-  ['guiplugininterface_339',['GUIPluginInterface',['../d6/d19/classhal_1_1GUIPluginInterface.html',1,'hal::GUIPluginInterface'],['../d6/d19/classhal_1_1GUIPluginInterface.html#a2f70ba1043c75e34c90c0c05b7c52ca9',1,'hal::GUIPluginInterface::GUIPluginInterface()']]]
+  ['get_5fwriter_5fextensions_332',['get_writer_extensions',['../db/d5a/namespacehal_1_1netlist__writer__manager.html#a69b04c9bcb90a1aa9ff6743c8b38d68d',1,'hal::netlist_writer_manager']]],
+  ['ground_333',['ground',['../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa578552719239a72a2d45ad422f67d24d',1,'hal::ground()'],['../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba578552719239a72a2d45ad422f67d24d',1,'hal::ground()']]],
+  ['grouping_334',['Grouping',['../d2/d20/classhal_1_1Grouping.html',1,'hal::Grouping'],['../d1/d1b/classhal_1_1NetlistInternalManager.html#ab61c4d8e4b1799e5578ebdd78701c76c',1,'hal::NetlistInternalManager::Grouping()']]],
+  ['grouping_2ecpp_335',['grouping.cpp',['../df/d22/netlist_2grouping_8cpp.html',1,'(Global Namespace)'],['../df/dc8/python__bindings_2bindings_2grouping_8cpp.html',1,'(Global Namespace)']]],
+  ['grouping_2eh_336',['grouping.h',['../d2/d8d/grouping_8h.html',1,'']]],
+  ['grouping_5fevent_5fhandler_2ecpp_337',['grouping_event_handler.cpp',['../dc/d4f/grouping__event__handler_8cpp.html',1,'']]],
+  ['grouping_5fevent_5fhandler_2eh_338',['grouping_event_handler.h',['../d4/dad/grouping__event__handler_8h.html',1,'']]],
+  ['grouping_5finit_339',['grouping_init',['../db/d7c/group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821',1,'hal']]],
+  ['guiplugininterface_340',['GUIPluginInterface',['../d6/d19/classhal_1_1GUIPluginInterface.html',1,'hal::GUIPluginInterface'],['../d6/d19/classhal_1_1GUIPluginInterface.html#a2f70ba1043c75e34c90c0c05b7c52ca9',1,'hal::GUIPluginInterface::GUIPluginInterface()']]]
 ];

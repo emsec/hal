@@ -92,6 +92,9 @@ Functions</h2></td></tr>
 <tr class="separator:ab4c58af2ca2dfd952511f978dafec685"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bb87c0a35221bb18a28e97611b71a12"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d5a/namespacehal_1_1netlist__writer__manager.html#a1bb87c0a35221bb18a28e97611b71a12">write</a> (<a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> *netlist, const std::filesystem::path &amp;file_path)</td></tr>
 <tr class="separator:a1bb87c0a35221bb18a28e97611b71a12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, std::vector&lt; std::string &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d5a/namespacehal_1_1netlist__writer__manager.html#a69b04c9bcb90a1aa9ff6743c8b38d68d">get_writer_extensions</a> ()</td></tr>
+<tr class="memdesc:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the extensions for which extensions have been registered.  <a href="../../db/d5a/namespacehal_1_1netlist__writer__manager.html#a69b04c9bcb90a1aa9ff6743c8b38d68d">More...</a><br /></td></tr>
+<tr class="separator:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The netlist writer manager keeps track of all netlist writers that are available within HAL. It is used to dispatch writing tasks to the respective writers. </p>
@@ -284,10 +287,30 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a69b04c9bcb90a1aa9ff6743c8b38d68d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69b04c9bcb90a1aa9ff6743c8b38d68d">&#9670;&nbsp;</a></span>get_writer_extensions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::unordered_map&lt; std::string, std::vector&lt; std::string &gt; &gt; &amp; hal::netlist_writer_manager::get_writer_extensions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve the extensions for which extensions have been registered. </p>
+<dl class="section return"><dt>Returns</dt><dd>Vector of extensions for each registered writer </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue May 11 2021 12:56:41 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue May 11 2021 16:53:42 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
