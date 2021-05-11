@@ -44,7 +44,7 @@ if(PL_GEXF_WRITER OR BUILD_ALL_PLUGINS)
     endif(APPLE AND CMAKE_HOST_APPLE)
 
     target_link_libraries(gexf_writer
-                          PUBLIC hal::core hal::netlist
+                          PUBLIC gui
                           Qt5::Core
                           Qt5::Gui
                           Qt5::Widgets
