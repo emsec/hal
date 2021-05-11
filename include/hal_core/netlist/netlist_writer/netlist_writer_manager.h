@@ -30,6 +30,7 @@
 #include <set>
 #include <string>
 #include <tuple>
+#include <unordered_map>
 
 namespace hal
 {
@@ -87,5 +88,12 @@ namespace hal
          * @returns True on success, false otherwise.
          */
         bool write(Netlist* netlist, const std::filesystem::path& file_path);
+
+        /**
+         * @brief Retrieve the extensions for which extensions have been registered
+         * @return Vector of extensions for each registered writer
+         */
+        const std::unordered_map<std::string, std::vector<std::string>>& get_writer_extensions();
+
     }    // namespace netlist_writer_manager
 }    // namespace hal

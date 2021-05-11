@@ -418,6 +418,11 @@ namespace hal
          */
         void handleActionAbout();
 
+        /**
+         * Q_SLOT to export netlist to file. Exporter will be determined by file extension
+         */
+        void handleActionExport();
+
         void enableUndo(bool enable=true);
 
         void reloadStylsheet(int istyle);
