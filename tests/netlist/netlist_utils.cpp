@@ -618,11 +618,135 @@ namespace hal
     {
         TEST_START
         {
+            // test default functionality
             const GateLibrary* gl       = test_utils::get_gate_library();
             std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
             ASSERT_NE(nl, nullptr);
 
-            // TODO implement test
+            Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
+            Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
+            Gate* c2 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c2");
+            Gate* c3 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c3");
+
+            Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "g0");
+            Gate* g1 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "g1");
+
+            test_utils::connect(nl.get(), c0, "CO", c1, "CI");
+            test_utils::connect(nl.get(), c1, "CO", c2, "CI");
+            test_utils::connect(nl.get(), c2, "CO", c3, "CI");
+
+            test_utils::connect(nl.get(), g0, "O", c0, "CI");
+            test_utils::connect(nl.get(), c3, "CO", g1, "I");
+
+            std::vector<Gate*> expected_chain = {c0, c1, c2, c3};
+
+            std::vector<Gate*> chain_0 = netlist_utils::get_gate_chain(c0, {"CI"}, {"CO"});
+            EXPECT_EQ(chain_0, expected_chain);
+
+            std::vector<Gate*> chain_1 = netlist_utils::get_gate_chain(c1, {"CI"}, {"CO"});
+            EXPECT_EQ(chain_1, expected_chain);
+
+            std::vector<Gate*> chain_2 = netlist_utils::get_gate_chain(c2, {"CI"}, {"CO"});
+            EXPECT_EQ(chain_2, expected_chain);
+
+            std::vector<Gate*> chain_3 = netlist_utils::get_gate_chain(c3, {"CI"}, {"CO"});
+            EXPECT_EQ(chain_3, expected_chain);
+
+            std::vector<Gate*> chain_4 = netlist_utils::get_gate_chain(g0, {"CI"}, {"CO"}, [](const Gate* g) {
+                return g->get_type()->has_property(GateTypeProperty::carry);
+            });
+            EXPECT_EQ(chain_4, std::vector<Gate*>());
+        }
+        {
+            // test connection through unspecified pins
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            ASSERT_NE(nl, nullptr);
+
+            Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
+            Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
+            Gate* c2 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c2");
+            Gate* c3 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c3");
+
+            Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "g0");
+            Gate* g1 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "g1");
+
+            test_utils::connect(nl.get(), c0, "CO", c1, "I0");
+            test_utils::connect(nl.get(), c1, "CO", c2, "CI");
+            test_utils::connect(nl.get(), c2, "CO", c3, "I1");
+
+            test_utils::connect(nl.get(), g0, "O", c0, "CI");
+            test_utils::connect(nl.get(), c3, "CO", g1, "I");
+
+            std::vector<Gate*> expected_chain = {c0, c1, c2, c3};
+
+            std::vector<Gate*> chain_0 = netlist_utils::get_gate_chain(c0);
+            EXPECT_EQ(chain_0, expected_chain);
+
+            std::vector<Gate*> chain_1 = netlist_utils::get_gate_chain(c1);
+            EXPECT_EQ(chain_1, expected_chain);
+
+            std::vector<Gate*> chain_2 = netlist_utils::get_gate_chain(c2);
+            EXPECT_EQ(chain_2, expected_chain);
+
+            std::vector<Gate*> chain_3 = netlist_utils::get_gate_chain(c3);
+            EXPECT_EQ(chain_3, expected_chain);
+        }
+        {
+            // test loop
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            ASSERT_NE(nl, nullptr);
+
+            Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
+            Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
+            Gate* c2 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c2");
+            Gate* c3 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c3");
+
+            test_utils::connect(nl.get(), c0, "CO", c1, "CI");
+            test_utils::connect(nl.get(), c1, "CO", c2, "CI");
+            test_utils::connect(nl.get(), c2, "CO", c3, "CI");
+            test_utils::connect(nl.get(), c3, "CO", c0, "CI");
+
+            std::vector<Gate*> chain = netlist_utils::get_gate_chain(c0);
+            EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c2, c3}));
+        }
+        {
+            // test multiple successors
+            const GateLibrary* gl       = test_utils::get_gate_library();
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            ASSERT_NE(nl, nullptr);
+
+            Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
+            Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
+            Gate* c2 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c2");
+            Gate* c3 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c3");
+            Gate* c4 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c4");
+            Gate* c5 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c5");
+
+            test_utils::connect(nl.get(), c0, "CO", c1, "CI");
+            test_utils::connect(nl.get(), c1, "CO", c2, "CI");
+            test_utils::connect(nl.get(), c2, "CO", c3, "CI");
+            test_utils::connect(nl.get(), c1, "CO", c4, "CI");
+            test_utils::connect(nl.get(), c4, "CO", c5, "CI");
+
+            std::vector<Gate*> chain_0 = netlist_utils::get_gate_chain(c0);
+            EXPECT_EQ(chain_0, std::vector<Gate*>({c0, c1}));
+
+            std::vector<Gate*> chain_1 = netlist_utils::get_gate_chain(c1);
+            EXPECT_EQ(chain_1, std::vector<Gate*>({c0, c1}));
+
+            std::vector<Gate*> chain_2 = netlist_utils::get_gate_chain(c2);
+            EXPECT_EQ(chain_2, std::vector<Gate*>({c0, c1, c2, c3}));
+
+            std::vector<Gate*> chain_3 = netlist_utils::get_gate_chain(c3);
+            EXPECT_EQ(chain_3, std::vector<Gate*>({c0, c1, c2, c3}));
+
+            std::vector<Gate*> chain_4 = netlist_utils::get_gate_chain(c4);
+            EXPECT_EQ(chain_4, std::vector<Gate*>({c0, c1, c4, c5}));
+
+            std::vector<Gate*> chain_5 = netlist_utils::get_gate_chain(c5);
+            EXPECT_EQ(chain_5, std::vector<Gate*>({c0, c1, c4, c5}));
         }
         TEST_END
     }
