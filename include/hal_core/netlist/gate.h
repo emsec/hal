@@ -248,15 +248,14 @@ namespace hal
         std::vector<std::string> get_output_pins() const;
 
         /**
-         * Get a list of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.
+         * Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
          *
          * @returns A vector of all connected input nets.
          */
         std::vector<Net*> get_fan_in_nets() const;
 
         /**
-         * Get a list of all fan-in endpoints of the gate,
-         * i.e. all connected endpoints that represent an input pin of this gate.
+         * Get a list of all fan-in endpoints of the gate, i.e., all connected endpoints that represent an input pin of this gate.
          *
          * @returns A vector of all connected input endpoints.
          */
@@ -281,15 +280,14 @@ namespace hal
         Endpoint* get_fan_in_endpoint(const std::string& pin) const;
 
         /**
-         * Get a list of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.
+         * Get a list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
          *
          * @returns A vector of all connected output nets.
          */
         std::vector<Net*> get_fan_out_nets() const;
 
         /**
-         * Get a list of all fan-out endpoints of the gate,
-         * i.e. all connected endpoints that represent an output pin of this gate.
+         * Get a list of all fan-out endpoints of the gate, i.e., all connected endpoints that represent an output pin of this gate.
          *
          * @returns A vector of all connected output endpoints.
          */
