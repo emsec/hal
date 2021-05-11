@@ -941,6 +941,7 @@ namespace hal
 
                     if (visited_gates.find(suc_gate) != visited_gates.end())
                     {
+                        log_debug("netlist_utils", "detected a loop at gate with ID {}.", suc_gate->get_id());
                         break;
                     }
 
@@ -948,7 +949,6 @@ namespace hal
                     visited_gates.insert(suc_gate);
                     current_gate    = suc_gate;
                     found_next_gate = true;
-                    log_debug("netlist_utils", "found successor gate with ID {}.", suc_gate->get_id());
                 }
             } while (found_next_gate);
 
@@ -991,6 +991,7 @@ namespace hal
 
                     if (visited_gates.find(pred_gate) != visited_gates.end())
                     {
+                        log_debug("netlist_utils", "detected a loop at gate with ID {}.", pred_gate->get_id());
                         break;
                     }
 
@@ -1065,6 +1066,7 @@ namespace hal
 
                     if (visited_gates.find(suc_gate) != visited_gates.end())
                     {
+                        log_debug("netlist_utils", "detected a loop at gate with ID {}.", suc_gate->get_id());
                         break;
                     }
 
@@ -1074,7 +1076,6 @@ namespace hal
                     last_index      = current_index;
                     current_index   = (current_index + 1) % chain_types.size();
                     found_next_gate = true;
-                    log_debug("netlist_utils", "found successor gate with ID {}.", suc_gate->get_id());
                 }
             } while (found_next_gate);
 
@@ -1130,6 +1131,7 @@ namespace hal
 
                     if (visited_gates.find(pred_gate) != visited_gates.end())
                     {
+                        log_debug("netlist_utils", "detected a loop at gate with ID {}.", pred_gate->get_id());
                         break;
                     }
 
@@ -1139,7 +1141,6 @@ namespace hal
                     last_index      = current_index;
                     current_index   = (current_index == 0) ? chain_types.size() - 1 : current_index - 1;
                     found_next_gate = true;
-                    log_debug("netlist_utils", "found predecessor gate with ID {}.", pred_gate->get_id());
                 }
             } while (found_next_gate);
 
