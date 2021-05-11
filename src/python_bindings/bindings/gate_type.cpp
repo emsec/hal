@@ -197,8 +197,8 @@ namespace hal
             Add a pin of the specified direction and type to the gate type.
         
             :param str pin: The pin.
-            :param hal_py.GateType.PinDirection direction: The pin direction to be assigned.
-            :param hal_py.GateType.PinType pin_type: The pin type to be assigned.
+            :param hal_py.PinDirection direction: The pin direction to be assigned.
+            :param hal_py.PinType pin_type: The pin type to be assigned.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
@@ -207,8 +207,8 @@ namespace hal
             Add a list of pin of the specified direction and type to the gate type.
         
             :param list[str] pins: The pins.
-            :param hal_py.GateType.PinDirection direction: The pin direction to be assigned.
-            :param hal_py.GateType.PinType pin_type: The pin type to be assigned.
+            :param hal_py.PinDirection direction: The pin direction to be assigned.
+            :param hal_py.PinType pin_type: The pin type to be assigned.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
@@ -231,26 +231,26 @@ namespace hal
         
             :param str pin: The pin.
             :returns: The pin direction.
-            :rtype: hal_py.GateType.PinDirection
+            :rtype: hal_py.PinDirection
         )");
 
         py_gate_type.def("get_pin_directions", &GateType::get_pin_directions, R"(
             Get the pin directions of all pins as a dict.
          
             :returns: A dict from pin to pin direction.
-            :rtype: dict[std,hal_py.GateType.PinDirection]
+            :rtype: dict[std,hal_py.PinDirection]
         )");
 
         py_gate_type.def_property_readonly("pin_directions", &GateType::get_pin_directions, R"(
             The pin directions of all pins as a dict.
          
-            :type: dict[str,hal_py.GateType.PinDirection]
+            :type: dict[str,hal_py.PinDirection]
         )");
 
         py_gate_type.def("get_pins_of_direction", &GateType::get_pins_of_direction, py::arg("direction"), R"(
             Get all pins of the specified pin direction.
         
-            :param hal_py.GateType.PinDirection direction: The pin direction.
+            :param hal_py.PinDirection direction: The pin direction.
             :returns: A set of pins.
             :rtype: set[str]
         )");
@@ -259,7 +259,7 @@ namespace hal
             Assign a pin type to the given pin. The pin must have been added to the gate type beforehand.
     
             :param str pin: The pin.
-            :param hal_py.GateType.PinType pin_type: The pin type to be assigned.
+            :param hal_py.PinType pin_type: The pin type to be assigned.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
@@ -269,26 +269,26 @@ namespace hal
         
             :param str pin: The pin.
             :returns: The pin type.
-            :rtype: hal_py.GateType.PinType
+            :rtype: hal_py.PinType
         )");
 
         py_gate_type.def("get_pin_types", &GateType::get_pin_types, R"(
             Get the pin types of all pins as a dict.
          
             :returns: A dict from pin to pin type.
-            :rtype: dict[str,hal_py.GateType.PinType]
+            :rtype: dict[str,hal_py.PinType]
         )");
 
         py_gate_type.def_property_readonly("pin_types", &GateType::get_pin_types, R"(
             The pin types of all pins as a dict.
          
-            :type: dict[str,hal_py.GateType.PinType]
+            :type: dict[str,hal_py.PinType]
         )");
 
         py_gate_type.def("get_pins_of_type", &GateType::get_pins_of_type, py::arg("pin_type"), R"(
             Get all pins of the specified pin type.
         
-            :param hal_py.GateType.PinType pin_type: The pin type.
+            :param hal_py.PinType pin_type: The pin type.
             :returns: A set of pins.
             :rtype: set[str]
         )");
@@ -298,6 +298,14 @@ namespace hal
 
             :param str group: The name of the pin group.
             :param list[tuple(int,str)] pins: The pins to be added to the group including their indices.
+        )");
+
+        py_gate_type.def("get_pin_group", &GateType::get_pin_group, py::arg("pin"), R"(
+            Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin is not in a group or the does not exist, an empty string will be returned.
+        
+            :param str pin: The pin.
+            :returns: The pin group.
+            :rtype: str
         )");
 
         py_gate_type.def_property_readonly("pin_groups", &GateType::get_pin_groups, R"(

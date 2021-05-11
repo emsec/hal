@@ -321,6 +321,14 @@ namespace hal
         bool assign_pin_group(const std::string& group, const std::vector<std::pair<u32, std::string>>& pins);
 
         /**
+         * Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin is not in a group or the does not exist, an empty string will be returned.
+         *
+         * @param[in] pin - The pin.
+         * @returns The pin group.
+         */
+        std::string get_pin_group(const std::string& pin) const;
+
+        /**
          * Get all pin groups of the gate type.
          *
          * @returns A map from pin group names to the pins of each group including their indices.
@@ -445,6 +453,7 @@ namespace hal
         static const std::unordered_map<PinDirection, std::unordered_set<PinType>> m_direction_to_types;
 
         // pin groups
+        std::unordered_map<std::string, std::string> m_pin_to_group;
         std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> m_pin_groups;
         std::unordered_map<std::string, std::unordered_map<u32, std::string>> m_pin_group_indices;
 
