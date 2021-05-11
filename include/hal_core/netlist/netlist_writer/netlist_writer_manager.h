@@ -90,9 +90,9 @@ namespace hal
 
         /**
          * @brief Retrieve the extensions for which extensions have been registered
-         * @return Vector of registered extensions
+         * @return Vector of extensions for each registered writer
          */
-        std::vector<std::string> registered_extensions();
+        const std::unordered_map<std::string, std::vector<std::string>>& get_writer_extensions();
 
 
     }    // namespace netlist_writer_manager

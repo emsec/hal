@@ -32,7 +32,6 @@
 
 #include <QApplication>
 #include <QCloseEvent>
-#include <QDebug>
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QFuture>
@@ -41,6 +40,8 @@
 #include <QPushButton>
 #include <QShortcut>
 #include <QtConcurrent>
+#include <QRegExp>
+#include <QStringList>
 
 namespace hal
 {
@@ -179,12 +180,24 @@ namespace hal
         mMenuFile->addAction(mActionSaveAs);
 
         QMenu* menuExport = nullptr;
-        for (std::string extension : netlist_writer_manager::registered_extensions())
+        for (auto it : netlist_writer_manager::get_writer_extensions())
         {
-            QString ext = QString::fromStdString(extension);
+            if (it.second.empty()) continue; // no extensions registered
+
+            QString label = QString::fromStdString(it.first);
+            QRegExp re("Default (.*) Writer", Qt::CaseInsensitive);
+            QString txt = (re.indexIn(label) < 0)
+                    ? label.remove(QChar(':'))
+                    : QString("Export as ") + re.cap(1);
+
+            QStringList extensions;
+            extensions.append(txt);
+            for (std::string ex : it.second)
+                extensions.append(QString::fromStdString(ex));
+
             if (!menuExport) menuExport = new QMenu("Export …", this);
-            Action* action = new Action("Export as " + ext.toUpper(), this);
-            action->setData(ext);
+            Action* action = new Action(txt, this);
+            action->setData(extensions);
             connect(action, &QAction::triggered, this, &MainWindow::handleActionExport);
             menuExport->addAction(action);
         }
@@ -622,8 +635,7 @@ namespace hal
         QAction* act = static_cast<QAction*>(sender());
         if (!act || act->data().isNull()) return;
 
-        qDebug() << "xport to" << act->data().toString();
-        ExportRegisteredFormat erf(act->data().toString());
+        ExportRegisteredFormat erf(act->data().toStringList());
         if (erf.queryFilename())
             erf.exportNetlist();
 

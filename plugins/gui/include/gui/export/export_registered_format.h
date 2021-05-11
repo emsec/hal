@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QString>
+#include <QStringList>
 #include <QXmlStreamWriter>
 
 namespace hal {
@@ -9,12 +9,12 @@ namespace hal {
 
     class ExportRegisteredFormat
     {
-        QString mExtension;
+        QStringList mExtensions;
         QString mFilename;
 
 
     public:
-        ExportRegisteredFormat(const QString& extension, const QString& filename = QString());
+        ExportRegisteredFormat(const QStringList& exts, const QString& filename = QString());
         bool queryFilename();
         void exportNetlist() const;
         QString filename() const { return mFilename; }

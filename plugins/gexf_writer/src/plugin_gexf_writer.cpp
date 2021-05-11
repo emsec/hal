@@ -2,7 +2,6 @@
 
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "gexf_writer/gexf_writer.h"
-#include <QDebug>
 
 namespace hal
 {
@@ -24,7 +23,6 @@ namespace hal
     void GexfWriterPlugin::on_load()
     {
         netlist_writer_manager::register_writer("Default GEXF Writer", []() { return std::make_unique<GexfWriter>(); }, {".gexf"});
-        qDebug() << "gexf plugin loaded";
     }
 
     void GexfWriterPlugin::on_unload()

@@ -44,13 +44,9 @@ namespace hal
             return description;
         }
 
-        std::vector<std::string> registered_extensions()
+        const std::unordered_map<std::string, std::vector<std::string>>& get_writer_extensions()
         {
-            std::vector<std::string> retval;
-            retval.reserve(m_extension_to_writer.size());
-            for (auto it : m_extension_to_writer)
-                retval.push_back(it.first);
-            return retval;
+            return m_writer_to_extensions;
         }
 
         void register_writer(const std::string& name, const WriterFactory& writer_factory, const std::vector<std::string>& supported_file_extensions)
