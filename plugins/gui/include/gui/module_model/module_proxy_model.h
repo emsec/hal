@@ -68,6 +68,7 @@ namespace hal
          * expression stored by setFilterRegExp.<br>
          * Returns <b>true</b> if the item in the row indicated by <i>sourceRow</i> and <i>sourceParent</i> should be included
          * in the model.
+         * TODO: Filtering seems to be broken. Can't search for submodules. Works only for the topmodule.
          *
          * @param sourceRow - The row in the source model
          * @param sourceParent - the source parent

@@ -75,10 +75,9 @@ namespace hal
         /**
         * Constructor.
         *
-        * @param tab_view - A GraphTabWidget (TODO: Unused?)
         * @param parent - The parent widget
         */
-        GroupingManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
+        GroupingManagerWidget(QWidget* parent = nullptr);
 
         /**
          * Setups the toolbar with the actions that are supported by the grouping.
@@ -155,14 +154,6 @@ namespace hal
          */
         void handleNewEntryAdded(const QModelIndex& modelIndex);
 
-        /**
-         * TODO: Unused (Unconnected)?
-         * Q_SLOT to handle that the selection has been changed.
-         *
-         * @param selected - The newly selected items
-         * @param deselected - The newly deselected items
-         */
-        void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
         /**
          * Q_SLOT to handle that the current item of the table views selection model has been changed.
@@ -171,6 +162,12 @@ namespace hal
          * @param previous - The index of the previous current item.
          */
         void handleCurrentChanged(const QModelIndex &current = QModelIndex(), const QModelIndex &previous = QModelIndex());
+
+        /**
+         * Q_SLOT to handle the change of the graph selection.
+         *
+         * @param sender - The sender that emitted the change.
+         */
         void handleGraphSelectionChanged(void* sender);
 
     private Q_SLOTS:
@@ -244,7 +241,7 @@ namespace hal
         };
 
         QIcon toolboxIcon() const;
-        GraphTabWidget* mTabView;
+        //GraphTabWidget* mTabView;
         QTableView* mGroupingTableView;
         GroupingTableModel* mGroupingTableModel;
         GroupingProxyModel* mProxyModel;

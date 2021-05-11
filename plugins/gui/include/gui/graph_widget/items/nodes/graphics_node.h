@@ -128,7 +128,7 @@ namespace hal
         /**
          * Given a net by its id, this function returns the index of a pin that is a destination of the net. If no
          * pin of this gate is a destination of this net -1 is returned. <br>
-         * Note(TODO): Undefined behaviour if there are multiple destinations on this gate! Unused/deprecated?
+         * Note(TODO): Undefined behaviour if there are multiple destinations on this gate!
          *
          * @param netId - The id of the net
          * @returns the index of a pin that is connected to the net.
@@ -138,7 +138,7 @@ namespace hal
         /**
          * Given a net by its id, this function returns the index of a pin that is a source of the net. If no
          * pin of this gate is a source of this net -1 is returned. <br>
-         * Note(TODO): Undefined behaviour if there are multiple sources on this gate! Unused/deprecated?
+         * Note(TODO): Undefined behaviour if there are multiple sources on this gate!
          *
          * @param netId - The id of the net
          * @returns the index of a pin that is connected to the net.
@@ -202,15 +202,6 @@ namespace hal
     //    qreal yOffset() const;
 
     protected:
-        /**
-         * TODO: Unused?
-         *
-         * @param change
-         * @param value
-         * @return
-         */
-        QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
-
         /**
          * The text in the center of the GraphicsNode. Each index stores one line of text. Therefore there is a maximum
          * of 3 lines in total.

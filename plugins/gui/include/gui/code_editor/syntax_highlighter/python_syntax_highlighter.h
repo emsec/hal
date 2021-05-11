@@ -33,7 +33,6 @@ namespace hal
      * @ingroup python
      * @brief A syntax highlighter that fits for python code.
      *
-     * TODO: Belongs in the python directory?
      * The following sections are distinguished and their color can be
      * configured in the qss file: <ul>
      *   <li> Python Keywords (e.g. if, and, break, class, True, ...)
@@ -42,7 +41,7 @@ namespace hal
      *   <li> Single Quoted String ('string')
      *   <li> Double Quoted String ("string")
      *   <li> Keyword: self
-     *   <li> Numbers (e.g. 42, 3.5, 0xDEADBEAF, 0765) TODO: add complex numbers, python3 octal syntax (0o765)
+     *   <li> Numbers (e.g. 42, 3.5, 0xDEADBEAF, 0765)
      *   <li> Comments (single- and multiline)
      */
     class PythonSyntaxHighlighter : public QSyntaxHighlighter

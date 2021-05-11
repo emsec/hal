@@ -41,7 +41,7 @@ namespace hal {
 
     /**
      * @ingroup graph-layouter
-     * TODO
+     * @brief Utility class that extracts (if possible) x and y coordinates contained in the netlist.
      */
     class CoordinateFromData : public QPoint
     {
@@ -55,7 +55,7 @@ namespace hal {
 
     /**
      * @ingroup graph-layouter
-     * TODO
+     * @brief Utility class that stores the nodes that contained existing x and y coordinates.
      */
     class CoordinateFromDataMap : public QHash<hal::Node,CoordinateFromData>
     {

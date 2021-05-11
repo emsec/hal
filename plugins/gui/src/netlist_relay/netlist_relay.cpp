@@ -77,7 +77,7 @@ namespace hal
         return mModuleModel;
     }
 
-    void NetlistRelay::debugChangeModuleName(const u32 id)
+    void NetlistRelay::changeModuleName(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -95,7 +95,7 @@ namespace hal
         }
     }
 
-    void NetlistRelay::debugChangeModuleType(const u32 id)
+    void NetlistRelay::changeModuleType(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -113,7 +113,7 @@ namespace hal
         }
     }
 
-    void NetlistRelay::debugChangeModuleColor(const u32 id)
+    void NetlistRelay::changeModuleColor(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -132,7 +132,7 @@ namespace hal
         Q_EMIT moduleColorChanged(m);
     }
 
-    void NetlistRelay::debugAddSelectionToModule(const u32 id)
+    void NetlistRelay::addSelectionToModule(const u32 id)
     {
         // NOT THREADSAFE
         // DECIDE HOW TO HANDLE MODULES
@@ -142,7 +142,7 @@ namespace hal
         act->exec();
     }
 
-    void NetlistRelay::debugAddChildModule(const u32 id)
+    void NetlistRelay::addChildModule(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -162,7 +162,7 @@ namespace hal
         act->exec();
     }
 
-    void NetlistRelay::debugDeleteModule(const u32 id)
+    void NetlistRelay::deleteModule(const u32 id)
     {
         ActionDeleteObject* act = new ActionDeleteObject;
         act->setObject(UserActionObject(id,UserActionObjectType::Module));
@@ -362,7 +362,7 @@ namespace hal
             gGraphContextManager->handleModuleRemoved(object);
             gSelectionRelay->handleModuleRemoved(object->get_id());
 
-            Q_EMIT module_removed(object);
+            Q_EMIT moduleRemoved(object);
             break;
         }
         case module_event_handler::event::name_changed:
@@ -480,7 +480,7 @@ namespace hal
 
             gSelectionRelay->handleGateRemoved(object->get_id());
 
-            Q_EMIT gate_removed(object);
+            Q_EMIT gateRemoved(object);
             break;
         }
         case gate_event_handler::name_changed:
@@ -526,7 +526,7 @@ namespace hal
             gGraphContextManager->handleNetRemoved(object);
             gSelectionRelay->handleNetRemoved(object->get_id());
 
-            Q_EMIT net_removed(object);
+            Q_EMIT netRemoved(object);
             break;
         }
         case net_event_handler::event::name_changed:

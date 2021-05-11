@@ -66,12 +66,6 @@ namespace hal
         ~NetlistRelay();
 
         /**
-         * TODO: Why not private?
-         * Adds the relay functions of the NetlistRelay as callbacks for hal-core events.
-         */
-        void registerCallbacks();
-
-        /**
          * Gets the color that is assigned to a module.
          *
          * @param id - The id of the module
@@ -86,76 +80,53 @@ namespace hal
          */
         ModuleModel* getModuleModel();
 
-        // TODO: Why named "debug..."?
         /**
          * Changes the name of a specific module by asking the user for a new name in a 'Rename'-dialogue.
          *
          * @param id - The id of the module to rename
          */
-        void debugChangeModuleName(const u32 id);
+        void changeModuleName(const u32 id);
 
         /**
          * Changes the type of a specific module by asking the user for a new name in a 'New Type'-dialogue.
          *
          * @param id - The id of the module whose type is to be changed
          */
-        void debugChangeModuleType(const u32 id);
+        void changeModuleType(const u32 id);
 
         /**
          * Changes the type of a specific module by asking the user to select a new color in a color dialogue.
          *
          * @param id - The id of the module whose color is to be changed
          */
-        void debugChangeModuleColor(const u32 id);
+        void changeModuleColor(const u32 id);
 
         /**
-         * TODO: Only works for gates. Modules were ignored...
          * Adds the current selection to a specific module.
          *
          * @param id - The id of the module that should be appended
          */
-        void debugAddSelectionToModule(const u32 id);
+        void addSelectionToModule(const u32 id);
 
         /**
          * Adds an empty child module to the specified module.
          *
          * @param id - The id of the module that becomes the parent of the empty child module
          */
-        void debugAddChildModule(const u32 id);
+        void addChildModule(const u32 id);
 
         /**
          * Deletes the specified module from the netlist.
          *
          * @param id - The id of the module to remove
          */
-        void debugDeleteModule(const u32 id);
+        void deleteModule(const u32 id);
 
     Q_SIGNALS:
-        // PROBABLY OBSOLETE
-        /**
-         * TODO: Unused (Never Emitted)
-         */
-        void netlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data) const;
-
-        /**
-         * TODO: Unused (Never Emitted)
-         */
-        void moduleEvent(module_event_handler::event ev, Module* object, u32 associated_data) const;
-
-        /**
-         * TODO: Unused (Never Emitted)
-         */
-        void gateEvent(gate_event_handler::event ev, Gate* object, u32 associated_data) const;
-
-        /**
-         * TODO: Unused (Never Emitted)
-         */
-        void netEvent(net_event_handler::event ev, Net* object, u32 associated_data) const;
 
         /*=======================================
            Netlist Event Signals
          ========================================*/
-        // TODO: Rename associated_data parameters with meaningful names.
 
         /**
          * Q_SIGNAL to notify that the netlists id has been changed. <br>
@@ -244,7 +215,6 @@ namespace hal
          */
         void netlistMarkedGlobalOutput(Netlist* n, const u32 associated_data) const;
 
-        // TODO: inout nets do not exist anymore... Remove event from gui and core?
         /**
          * Q_SIGNAL to notify that a gate has been marked as a global input net. <br>
          * Relays the following hal-core event: <i>netlist_event_handler::event::marked_global_inout</i>
@@ -274,7 +244,6 @@ namespace hal
          */
         void netlistUnmarkedGlobalOutput(Netlist* n, const u32 associated_data) const;
 
-        // TODO: inout nets do not exist anymore... Remove event from gui and core?
         /**
          * Q_SIGNAL to notify that a net has been unmarked from being a global inout net. <br>
          * Relays the following hal-core event: <i>netlist_event_handler::event::unmarked_global_inout</i>
@@ -298,7 +267,6 @@ namespace hal
          */
         void moduleCreated(Module* m) const;
 
-        //TODO: Refactor to camelCase?
         /**
          * Q_SIGNAL to notify that a module has been removed from the netlist. <br>
          * Relays the following hal-core event: <i>module_event_handler::event::created</i>
@@ -308,7 +276,7 @@ namespace hal
          *
          * @param m - The removed module
          */
-        void module_removed(Module* m) const;
+        void moduleRemoved(Module* m) const;
 
         /**
          * Q_SIGNAL to notify that a module has been renamed. <br>
@@ -400,7 +368,6 @@ namespace hal
          */
         void gateCreated(Gate* g) const;
 
-        // TODO: Refactor to camelCase?
         /**
          * Q_SIGNAL to notify that a gate has been removed from the netlist. <br>
          * Relays the following hal-core event: <i>gate_event_handler::event::removed</i>
@@ -410,7 +377,7 @@ namespace hal
          *
          * @param g - The removed gate
          */
-        void gate_removed(Gate* g) const;
+        void gateRemoved(Gate* g) const;
 
         /**
          * Q_SIGNAL to notify that a gate has been renamed. <br>
@@ -432,7 +399,6 @@ namespace hal
          */
         void netCreated(Net* n) const;
 
-        //TODO: Refactor to camelCase
         /**
          * Q_SIGNAL to notify that a net has been removed from the netlist. <br>
          * Relays the following hal-core event: <i>net_event_handler::event::removed</i>
@@ -442,7 +408,7 @@ namespace hal
          *
          * @param n - The removed net
          */
-        void net_removed(Net* n) const;
+        void netRemoved(Net* n) const;
 
         /**
          * Q_SIGNAL to notify that a net has been renamed. <br>
@@ -452,7 +418,6 @@ namespace hal
          */
         void netNameChanged(Net* n) const;
 
-        // TODO: Refactor 'dest_gate_id' to 'src_gate_id'. Same for netSourceRemoved.
         /**
          * Q_SIGNAL to notify that a source has been added to a net. <br>
          * Relays the following hal-core event: <i>net_event_handler::event::src_added</i>
@@ -460,7 +425,7 @@ namespace hal
          * @param n - The net with a new source
          * @param dst_gate_id - The id of the source gate
          */
-        void netSourceAdded(Net* n, const u32 dst_gate_id) const;
+        void netSourceAdded(Net* n, const u32 src_gate_id) const;
 
         /**
          * Q_SIGNAL to notify that a source has been removed from a net. <br>
@@ -469,7 +434,7 @@ namespace hal
          * @param n - The net with the removed source
          * @param dst_gate_id - The id of the gate at the removed source
          */
-        void netSourceRemoved(Net* n, const u32 dst_gate_id) const;
+        void netSourceRemoved(Net* n, const u32 src_gate_id) const;
 
         /**
          * Q_SIGNAL to notify that a destination has been added to a net. <br>
@@ -603,13 +568,9 @@ namespace hal
         void relayGateEvent(gate_event_handler::event ev, Gate* object, u32 associated_data);
         void relayNetEvent(net_event_handler::event ev, Net* object, u32 associated_data);
         void relayGroupingEvent(grouping_event_handler::event ev, Grouping* object, u32 associated_data);
+        void registerCallbacks();
 
         QMap<u32, QColor> mModuleColors;
-
-        // TODO: Unused. Can be removed?
-        QMap<u32, QString> mGateAliases;
-        QMap<u32, QString> mNetAliases;
-
         ModuleModel* mModuleModel;
     };
 }

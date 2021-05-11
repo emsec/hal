@@ -134,7 +134,7 @@ namespace hal
         mMainWindow->addContent(mContextManagerWidget, 1, content_anchor::left);
         mContextManagerWidget->open();
 
-        mGroupingManagerWidget = new GroupingManagerWidget(mGraphTabWidget);
+        mGroupingManagerWidget = new GroupingManagerWidget();
         mMainWindow->addContent(mGroupingManagerWidget, 2, content_anchor::left);
         mGroupingManagerWidget->open();
 

@@ -34,7 +34,6 @@ namespace hal
 
     /**
      * @ingroup unused
-     * TODO: Unused?
      */
     class FilterTabBar : public QTabBar
     {

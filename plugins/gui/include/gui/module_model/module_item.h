@@ -49,15 +49,6 @@ namespace hal
         ModuleItem(const u32 id);
 
         /**
-         * Constructor.
-         * TODO: Since the module name is accessible in the netlist passing the name (without a check) seems to be wrong... Remove me?
-         *
-         * @param name - The name of the module item
-         * @param id - The id of the module this item represents
-         */
-        ModuleItem(const QString& name, const u32 id);
-
-        /**
          * Appends a child ModuleItem to this ModuleItem.
          *
          * @param row - The index of the childs of this ModuleItem the new child should be moved to
@@ -183,7 +174,6 @@ namespace hal
         void setParent(ModuleItem* parent);
 
         /**
-         * TODO: Why not access the module directly via 'gNetlist->get_module_by_id(id)->get_name()/set_name()'. To expensive?
          * Sets the name of this ModuleItem (not the underlying module).
          *
          * @param name - The new name

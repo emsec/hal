@@ -44,7 +44,6 @@ namespace hal
         QStringList graphicsModuleTypes();
         QStringList graphicsGateTypes();
 
-        // TODO: enum for GraphicsModule/GraphicsGate type? type necessary or legacy?
         /**
          * Creates a GraphicsModule for a certain module on the heap.
          *

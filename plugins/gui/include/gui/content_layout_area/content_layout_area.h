@@ -98,7 +98,7 @@ namespace hal
         void addContent(ContentWidget* widget, int index, content_anchor anchor);
 
         /**
-         * Not yet implemented. TODO: Implement me
+         * Not yet implemented.
          *
          * @param widget
          */

@@ -32,7 +32,8 @@ namespace hal {
      * @ingroup graph-visuals-net
      * @brief A standard net that has parts of a separated net.
      *
-     * The GraphicsNet that can be used to display nets in the scene. TODO: Purpose?
+     * The GraphicsNet that can be used to display nets in the scene.
+     * Currently only used in GraphLayouter::alternateLayout().
      */
     class StandardArrowNet : public StandardGraphicsNet
     {

@@ -87,7 +87,6 @@ namespace hal
         void toggleSearchbar();
 
         /**
-         * TODO: Filtering seems to be broken. Can't search for submodules. Works only for the topmodule.
          * Q_SLOT to overwrite the filter with the regular expression given in <i>text</i>.
          *
          * @param text - Contains the regular expression filter as a string

@@ -56,7 +56,6 @@ namespace hal
     extern ContentManager* gContentManager;
 
     /**
-     * TODO: Make unique_ptr?
      * This shared_ptr contains and owns the netlist after a file was opened. To access the Netlist data structure with
      * its functions, it is intended to use the raw pointer gNetlist instead.
      */
@@ -110,6 +109,6 @@ namespace hal
     ///@}
 
     // Comment this out to not compile the debug code for the graph grid.
-    // This will also hide the respective debug setting from the settings page. TODO: Quite hacky...
+    // This will also hide the respective debug setting from the settings page.
     #define GUI_DEBUG_GRID
 }

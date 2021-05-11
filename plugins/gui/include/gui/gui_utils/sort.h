@@ -51,7 +51,6 @@ namespace hal
         };
 
         /**
-         * TODO: Rename me...
          * An enum for convenience purposes. Used in the compare function to determine which compare
          * criteria should be used.
          */

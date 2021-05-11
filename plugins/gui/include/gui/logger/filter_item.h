@@ -63,7 +63,7 @@ namespace hal
          * @param critical - Filter rule for message type 'critical'
          * @param default_rule - Filter rule for a default message type
          * @param keywords - The keyword list used for the <b>Process</b> filter rule
-         * @param reg_ex - A regular expression (TODO: unused)
+         * @param reg_ex - A regular expression
          */
         FilterItem(Rule trace, Rule debug, Rule info, Rule warning, Rule error, Rule critical, Rule default_rule, QStringList& keywords, QRegularExpression& reg_ex)
             : mTrace(trace), mDebug(debug), mInfo(info), mWarning(warning), mError(error), mCritical(critical), mDefault(default_rule), mKeywords(keywords), mRegEx(reg_ex)

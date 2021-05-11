@@ -71,7 +71,7 @@ namespace hal
         void appendLog(spdlog::level::level_enum log_type, QString const& msg, FilterItem* filter);
 
         /**
-         * TODO: Does nothing. (Remove me?)
+         * Highlights the current line.
          */
         void highlightCurrentLine();
 
