@@ -32,7 +32,6 @@ namespace hal
     class GraphicsQssAdapter;
     class PythonQssAdapter;
     class SharedPropertiesQssAdapter;
-    class VhdlQssAdapter;
 
     /**
      * @ingroup unused
@@ -50,7 +49,6 @@ namespace hal
 
         const SharedPropertiesQssAdapter* sharedProperties() const;
         const PythonQssAdapter* PythonSyntaxHighlighter() const;
-        const VhdlQssAdapter* VhdlSyntaxHighlighter() const;
         void repolish();
 
     private:
@@ -59,6 +57,5 @@ namespace hal
         GraphicsQssAdapter* mGraphicsQssAdapter;
         SharedPropertiesQssAdapter* mSharedProperties;
         PythonQssAdapter* mPythonSyntaxHighlighter;
-        VhdlQssAdapter* mVhdlSyntaxHighlighter;
     };
-}
+}    // namespace hal
