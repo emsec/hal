@@ -1,12 +1,10 @@
 #include "gui/style/style_manager.h"
 
-#include "hal_core/utilities/log.h"
-
-#include "gui/graph_widget/graphics_qss_adapter.h"
 #include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"
-#include "gui/code_editor/syntax_highlighter/vhdl_qss_adapter.h"
-#include "gui/style/shared_properties_qss_adapter.h"
+#include "gui/graph_widget/graphics_qss_adapter.h"
 #include "gui/gui_globals.h"
+#include "gui/style/shared_properties_qss_adapter.h"
+#include "hal_core/utilities/log.h"
 
 #include <QApplication>
 #include <QFile>
@@ -14,8 +12,7 @@
 namespace hal
 {
     StyleManager::StyleManager(QObject* parent)
-        : QObject(parent), mGraphicsQssAdapter(new GraphicsQssAdapter()), mSharedProperties(new SharedPropertiesQssAdapter()),
-          mPythonSyntaxHighlighter(new PythonQssAdapter()), mVhdlSyntaxHighlighter(new VhdlQssAdapter())
+        : QObject(parent), mGraphicsQssAdapter(new GraphicsQssAdapter()), mSharedProperties(new SharedPropertiesQssAdapter()), mPythonSyntaxHighlighter(new PythonQssAdapter())
     {
     }
 
@@ -35,13 +32,8 @@ namespace hal
         return mPythonSyntaxHighlighter;
     }
 
-    const VhdlQssAdapter* StyleManager::VhdlSyntaxHighlighter() const
-    {
-        return mVhdlSyntaxHighlighter;
-    }
-
     void StyleManager::repolish()
     {
         mGraphicsQssAdapter->repolish();
     }
-}
+}    // namespace hal

@@ -1168,13 +1168,6 @@ hal--PythonQssAdapter
     qproperty-commentColor: #629755;
 }
 
-hal--VhdlQssAdapter
-{
-    qproperty-keywordColor: #CC7832;
-    qproperty-numberColor: #6897BB;
-    qproperty-commentColor: #629755;
-}
-
 hal--LoggerQssAdapter
 {
     qproperty-traceColor: #90C023;

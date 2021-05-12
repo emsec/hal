@@ -89,6 +89,12 @@ namespace hal
                 lut6->set_config_data_identifier("INIT");
             }
             {
+                GateType* carry = lib->create_gate_type("CARRY", {GateTypeProperty::combinational, GateTypeProperty::carry});
+                carry->add_pins({"CI", "I0", "I1"}, PinDirection::input);
+                carry->add_pin("CO", PinDirection::output);
+                carry->add_boolean_function("CO", BooleanFunction::from_string("(I0 & I1) | ((I0 | I1) & CI)"));
+            }
+            {
                 GateType* dff = lib->create_gate_type("DFF", {GateTypeProperty::sequential, GateTypeProperty::ff});
                 dff->add_pin("CLK", PinDirection::input, PinType::clock);
                 dff->add_pin("D", PinDirection::input, PinType::data);

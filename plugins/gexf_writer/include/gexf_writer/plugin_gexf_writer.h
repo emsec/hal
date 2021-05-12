@@ -23,39 +23,17 @@
 
 #pragma once
 
-#include <QObject>
-
-class QApplication;
+#include "hal_core/plugin_system/plugin_interface_base.h"
 
 namespace hal
 {
-    class GraphicsQssAdapter;
-    class PythonQssAdapter;
-    class SharedPropertiesQssAdapter;
-
-    /**
-     * @ingroup unused
-     * TODO: Unused class. Remove me?
-     */
-    class StyleManager : public QObject
+    class PLUGIN_API GexfWriterPlugin : public BasePluginInterface
     {
-        Q_OBJECT
-
     public:
-        static StyleManager* get_instance();
+        std::string get_name() const override;
+        std::string get_version() const override;
 
-        StyleManager(StyleManager const&) = delete;
-        void operator=(StyleManager const&) = delete;
-
-        const SharedPropertiesQssAdapter* sharedProperties() const;
-        const PythonQssAdapter* PythonSyntaxHighlighter() const;
-        void repolish();
-
-    private:
-        explicit StyleManager(QObject* parent = nullptr);
-
-        GraphicsQssAdapter* mGraphicsQssAdapter;
-        SharedPropertiesQssAdapter* mSharedProperties;
-        PythonQssAdapter* mPythonSyntaxHighlighter;
+        void on_load() override;
+        void on_unload() override;
     };
 }    // namespace hal

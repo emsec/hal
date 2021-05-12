@@ -1,5 +1,5 @@
 Netlist Writer Manager
-=====================
+======================
 
-.. automodule:: hal_py.netlist_writer_manager
+.. automodule:: hal_py.NetlistWriterManager
    :members:
