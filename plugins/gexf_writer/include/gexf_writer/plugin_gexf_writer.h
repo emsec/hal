@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,39 +23,17 @@
 
 #pragma once
 
-#include <QObject>
-
-class QApplication;
+#include "hal_core/plugin_system/plugin_interface_base.h"
 
 namespace hal
 {
-    class GraphicsQssAdapter;
-    class PythonQssAdapter;
-    class SharedPropertiesQssAdapter;
-
-    /**
-     * @ingroup unused
-     * TODO: Unused class. Remove me?
-     */
-    class StyleManager : public QObject
+    class PLUGIN_API GexfWriterPlugin : public BasePluginInterface
     {
-        Q_OBJECT
-
     public:
-        static StyleManager* get_instance();
+        std::string get_name() const override;
+        std::string get_version() const override;
 
-        StyleManager(StyleManager const&) = delete;
-        void operator=(StyleManager const&) = delete;
-
-        const SharedPropertiesQssAdapter* sharedProperties() const;
-        const PythonQssAdapter* PythonSyntaxHighlighter() const;
-        void repolish();
-
-    private:
-        explicit StyleManager(QObject* parent = nullptr);
-
-        GraphicsQssAdapter* mGraphicsQssAdapter;
-        SharedPropertiesQssAdapter* mSharedProperties;
-        PythonQssAdapter* mPythonSyntaxHighlighter;
+        void on_load() override;
+        void on_unload() override;
     };
 }    // namespace hal

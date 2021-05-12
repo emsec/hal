@@ -7,6 +7,8 @@
 !example_gate_library/**/*
 !gate_libraries*
 !gate_libraries/**/*
+!gexf_writer*
+!gexf_writer/**/*
 !graph_algorithm*
 !graph_algorithm/**/*
 !gui*

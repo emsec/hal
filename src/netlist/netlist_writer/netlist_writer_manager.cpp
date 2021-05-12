@@ -7,6 +7,7 @@
 
 #include <chrono>
 #include <fstream>
+#include <vector>
 
 namespace hal
 {
@@ -41,6 +42,11 @@ namespace hal
             ProgramOptions description;
             description.add("--write-hdl", "Write netlist to file.", {ProgramOptions::A_REQUIRED_PARAMETER});
             return description;
+        }
+
+        const std::unordered_map<std::string, std::vector<std::string>>& get_writer_extensions()
+        {
+            return m_writer_to_extensions;
         }
 
         void register_writer(const std::string& name, const WriterFactory& writer_factory, const std::vector<std::string>& supported_file_extensions)

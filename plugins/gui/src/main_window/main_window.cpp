@@ -3,6 +3,7 @@
 #include "gui/action/action.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
+#include "gui/export/export_registered_format.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/graphics_effects/overlay_effect.h"
 #include "gui/gui_def.h"
@@ -25,12 +26,12 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
 
 #include <QApplication>
 #include <QCloseEvent>
-#include <QDebug>
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QFuture>
@@ -39,6 +40,8 @@
 #include <QPushButton>
 #include <QShortcut>
 #include <QtConcurrent>
+#include <QRegExp>
+#include <QStringList>
 
 namespace hal
 {
@@ -175,6 +178,31 @@ namespace hal
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
         mMenuFile->addAction(mActionSaveAs);
+
+        QMenu* menuExport = nullptr;
+        for (auto it : netlist_writer_manager::get_writer_extensions())
+        {
+            if (it.second.empty()) continue; // no extensions registered
+
+            QString label = QString::fromStdString(it.first);
+            QRegExp re("Default (.*) Writer", Qt::CaseInsensitive);
+            QString txt = (re.indexIn(label) < 0)
+                    ? label.remove(QChar(':'))
+                    : QString("Export as ") + re.cap(1);
+
+            QStringList extensions;
+            extensions.append(txt);
+            for (std::string ex : it.second)
+                extensions.append(QString::fromStdString(ex));
+
+            if (!menuExport) menuExport = new QMenu("Export …", this);
+            Action* action = new Action(txt, this);
+            action->setData(extensions);
+            connect(action, &QAction::triggered, this, &MainWindow::handleActionExport);
+            menuExport->addAction(action);
+        }
+        if (menuExport) mMenuFile->addMenu(menuExport);
+
         mMenuEdit->addAction(mActionUndo);
         mMenuEdit->addSeparator();
         mMenuEdit->addAction(mActionSettings);
@@ -599,6 +627,18 @@ namespace hal
             mWelcomeScreen->close();
         }
         gPythonContext->updateNetlist();
+    }
+
+    void MainWindow::handleActionExport()
+    {
+        if (!gNetlist) return;
+        QAction* act = static_cast<QAction*>(sender());
+        if (!act || act->data().isNull()) return;
+
+        ExportRegisteredFormat erf(act->data().toStringList());
+        if (erf.queryFilename())
+            erf.exportNetlist();
+
     }
 
     void MainWindow::handleSaveAsTriggered()

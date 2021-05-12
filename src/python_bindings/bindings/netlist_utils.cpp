@@ -45,7 +45,7 @@ namespace hal
         
             :param hal_py.Gate gate: The initial gate.
             :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
-            :param dict[int, list[hal_py.Gate]] cache - The cache. 
+            :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All sequential successors or predecessors of the gate.
             :rtype: list[hal_py.Gate]
         )");
@@ -75,7 +75,7 @@ namespace hal
 
             :param hal_py.Net net: The initial net.
             :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
-            :param dict[int, list[hal_py.Gate]] cache - The cache. 
+            :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All sequential successors or predecessors of the net.
             :rtype: list[hal_py.Net]
         )");
@@ -107,7 +107,7 @@ namespace hal
             :param hal_py.Gate gate: The initial gate.
             :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
             :param set[hal_py.GateTypeProperty] stop_properties: Stop recursion when reaching a gate of a type with one of the specified properties.
-            :param dict[int, list[hal_py.Gate]] cache - The cache. 
+            :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All gates on the predecessor or successor path of the gate.
             :rtype: list[hal_py.Gate]
         )");
@@ -141,7 +141,7 @@ namespace hal
             :param hal_py.Net net: The initial net.
             :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
             :param set[hal_py.GateTypeProperty] stop_properties: Stop recursion when reaching a gate of a type with one of the specified properties.
-            :param dict[int, list[hal_py.Gate]] cache - The cache. 
+            :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All gates on the predecessor or successor path of the net.
             :rtype: list[hal_py.Net]
         )");
