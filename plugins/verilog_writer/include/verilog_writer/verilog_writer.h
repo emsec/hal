@@ -55,9 +55,13 @@ namespace hal
         bool write(Netlist* netlist, const std::filesystem::path& file_path) override;
 
     private:
+        std::unordered_map<std::string, u32> m_signal_name_occurrences;
+        std::unordered_map<std::string, u32> m_instance_name_occurrences;
+
         bool write_module_declaration(std::stringstream& res_stream, const Module* module) const;
         bool write_gate_instance(std::stringstream& res_stream, const Gate* gate) const;
         bool write_module_instance(std::stringstream& res_stream, const Module* module) const;
         bool write_generic_assignments(std::stringstream& res_stream, const DataContainer* container) const;
+        std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
     };
 }    // namespace hal

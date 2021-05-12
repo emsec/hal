@@ -106,9 +106,17 @@ namespace hal
         }
 
         // write pin assignments
-        for (auto pin_it = pin_assignments.begin(); pin_it != pin_assignments.end();)
+        bool first_pin = true;
+        for (const auto& [pin, nets] : pin_assignments)
         {
-            const auto& [pin, nets] = *pin_it;
+            if (first_pin)
+            {
+                first_pin = false;
+            }
+            else
+            {
+                res_stream << "," << std::endl;
+            }
 
             res_stream << "\t\t.\\" << pin << " (";
             if (nets.size() > 1)
@@ -139,17 +147,10 @@ namespace hal
                 res_stream << "\\" << nets.front()->get_name() << " ";
             }
 
-            if (++pin_it != pin_assignments.end())
-            {
-                res_stream << "),\n";
-            }
-            else
-            {
-                res_stream << ")\n";
-            }
+            res_stream << ")";
         }
 
-        res_stream << "\t);\n";
+        res_stream << std::endl << "\t);" << std::endl;
     }
 
     bool VerilogWriter::write_module_instance(std::stringstream& res_stream, const Module* module) const
@@ -160,7 +161,83 @@ namespace hal
 
     bool VerilogWriter::write_generic_assignments(std::stringstream& res_stream, const DataContainer* container) const
     {
-        // TODO implement
+        const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data = container->get_data_map();
+
+        static const std::set<std::string> valid_types = {"string", "integer", "floating_point", "bit_value", "bit_vector"};
+
+        bool first_generic = true;
+
+        for (const auto& [first, second] : data)
+        {
+            const auto& [category, key] = first;
+            const auto& [type, value]   = second;
+
+            if (category != "generic" || valid_types.find(type) == valid_types.end())
+            {
+                continue;
+            }
+
+            if (first_generic)
+            {
+                res_stream << " #(" << std::endl;
+                first_generic = false;
+            }
+            else
+            {
+                res_stream << "," << std::endl;
+            }
+
+            if (type == "string")
+            {
+                res_stream << "\t\t." << key << "(\"" << value << "\")";
+            }
+            else if (type == "integer" || type == "floating_point")
+            {
+                res_stream << "\t\t." << key << "(" << value << ")";
+            }
+            else if (type == "floating_point")
+            {
+                res_stream << "\t\t." << key << "(\"" << value << "\")";
+            }
+            else if (type == "bit_value")
+            {
+                res_stream << "\t\t." << key << "(1'b" << value << ")";
+            }
+            else if (type == "bit_vector")
+            {
+                u32 len = value.size() * 4;
+                if (value.at(0) == '0' || value.at(0) == '1')
+                {
+                    len -= 3;
+                }
+                else if (value.at(0) == '2' || value.at(0) == '3')
+                {
+                    len -= 2;
+                }
+                else if (value.at(0) >= '4' && value.at(0) <= '7')
+                {
+                    len -= 1;
+                }
+                res_stream << "\t\t." << key << "(" << len << "'h" << value << ")";
+            }
+        }
+
+        res_stream << std::endl << "\t);" << std::endl;
+
         return true;
+    }
+
+    std::string VerilogWriter::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
+    {
+        // if the name only appears once, we don't have to suffix it
+        if (name_occurrences[name] < 2)
+        {
+            return name;
+        }
+
+        name_occurrences[name]++;
+
+        // otherwise, add a unique string to the name
+        return name + "__[" + std::to_string(name_occurrences[name]) + "]__";
     }
 }    // namespace hal
