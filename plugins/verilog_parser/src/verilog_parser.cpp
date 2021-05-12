@@ -866,7 +866,7 @@ namespace hal
                         skip = true;
                     }
 
-                    if (value.size() == 1)
+                    if (value == "0" || value == "1")
                     {
                         data_type = "bit_value";
                     }
