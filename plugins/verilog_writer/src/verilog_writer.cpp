@@ -14,8 +14,7 @@ namespace hal
     {
         std::stringstream res_stream;
 
-        // TODO make sure that all identifiers are unique (signals within a module, instances within a module, module identifiers)
-        // TODO ensure escaping of identifiers whereever neccessary
+        // TODO make sure that module type identifiers are unique
         // TODO take care of 1 and 0 nets (probably rework their handling within the core to supply a "is_gnd_net" and "is_vcc_net" function)
 
         // TODO figure out order of declaration for all modules and declare in a loop
@@ -40,7 +39,7 @@ namespace hal
         std::unordered_map<const DataContainer*, std::string> aliases;
         std::unordered_map<std::string, u32> identifier_occurrences;
 
-        res_stream << "module " << module->get_type();    // TODO alias+escape
+        res_stream << "module " << escape(module->get_type());    // TODO alias
 
         // TODO generics
 
@@ -134,15 +133,15 @@ namespace hal
         res_stream << " " << aliases.at(gate);
 
         // collect all endpoints (i.e., pins that are actually in use)
-        std::unordered_map<std::string, Net*> endpoints;
+        std::unordered_map<std::string, Net*> connections;
         for (const Endpoint* ep : gate->get_fan_in_endpoints())
         {
-            endpoints[ep->get_pin()] = ep->get_net();
+            connections[ep->get_pin()] = ep->get_net();
         }
 
         for (const Endpoint* ep : gate->get_fan_out_endpoints())
         {
-            endpoints[ep->get_pin()] = ep->get_net();
+            connections[ep->get_pin()] = ep->get_net();
         }
 
         // extract pin assignments (in order, respecting pin groups)
@@ -164,7 +163,7 @@ namespace hal
                 {
                     visited_pins.insert(group_pin);
 
-                    if (const auto ep_it = endpoints.find(group_pin); ep_it != endpoints.end())
+                    if (const auto ep_it = connections.find(group_pin); ep_it != connections.end())
                     {
                         nets.push_back(ep_it->second);
                     }
@@ -183,7 +182,7 @@ namespace hal
             else
             {
                 // append all connected pins
-                if (const auto ep_it = endpoints.find(pin); ep_it != endpoints.end())
+                if (const auto ep_it = connections.find(pin); ep_it != connections.end())
                 {
                     pin_assignments.push_back(std::make_pair(pin, std::vector<const Net*>({ep_it->second})));
                 }
@@ -205,7 +204,34 @@ namespace hal
                                               std::unordered_map<const DataContainer*, std::string>& aliases,
                                               std::unordered_map<std::string, u32>& identifier_occurrences) const
     {
-        // TODO implement
+        res_stream << "    " << escape(module->get_type());    // TODO respect alias
+        if (!write_generic_assignments(res_stream, module))
+        {
+            return false;
+        }
+        aliases[module] = escape(get_unique_alias(identifier_occurrences, module->get_name()));
+        res_stream << " " << aliases.at(module);
+
+        // extract port assignments
+        std::vector<std::pair<std::string, std::vector<const Net*>>> port_assignments;
+
+        for (const auto& [net, port] : module->get_input_port_names())
+        {
+            port_assignments.push_back(std::make_pair(port, std::vector<const Net*>({net})));
+        }
+
+        for (const auto& [net, port] : module->get_output_port_names())
+        {
+            port_assignments.push_back(std::make_pair(port, std::vector<const Net*>({net})));
+        }
+
+        if (!write_pin_assignments(res_stream, port_assignments, aliases))
+        {
+            return false;
+        }
+
+        res_stream << ";" << std::endl;
+
         return true;
     }
 
@@ -216,7 +242,6 @@ namespace hal
         static const std::set<std::string> valid_types = {"string", "integer", "floating_point", "bit_value", "bit_vector"};
 
         bool first_generic = true;
-
         for (const auto& [first, second] : data)
         {
             const auto& [category, key] = first;
@@ -272,7 +297,10 @@ namespace hal
             res_stream << ")";
         }
 
-        res_stream << std::endl << "    )";
+        if (!first_generic)
+        {
+            res_stream << std::endl << "    )";
+        }
 
         return true;
     }
@@ -360,7 +388,21 @@ namespace hal
 
     std::string VerilogWriter::escape(const std::string& s) const
     {
-        // TODO implement
+        if (s.empty())
+        {
+            return "";
+        }
+
+        const char first = s.at(0);
+        if (!(first >= 'a' && first <= 'z') && !(first >= 'A' && first <= 'Z') && first != '_')
+        {
+            return "\\" + s + " ";
+        }
+        else if (std::any_of(s.begin(), s.end(), [](const char c) { return (!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9') && c != '_' && c != '$'); }))
+        {
+            return "\\" + s + " ";
+        }
+
         return s;
     }
 }    // namespace hal
