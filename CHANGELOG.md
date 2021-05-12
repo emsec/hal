@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added a warning when attempting to assign a keybinding that is already in use
   * added incremental search for settings
   * added setting to enable/disable extra window to list all executed instances from UserAction
-* added new 'Move to module ...' dialog 
+* added new `Move to module ... dialog 
   * allows to create new module or select from existing modules
   * existing modules can be selected from a table, tree-view, or using a module picker within the graph view
   * enables searching for existing modules
@@ -29,9 +29,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added function `get_common_inputs` to `netlist_utils` to get inputs that are common across multiple gates
   * added function `replace_gate` to `netlist_utils` to replace a gate with an instance of another gate type
   * added function `get_gate_chain` and `get_complex_gate_chain` to `netlist_utils` to find gates that are arranged in a chain
-* added `Save As...` option to save `.hal` files under a different name
-* added export menu for registered netlist writer
-* added `remove from view` action to context menu for gates and modules
+* improved save and export functionality within the GUI
+  * added `Save As...` option to save `.hal` files under a different name
+  * added `Export ...` menu to export the netlist using any of the registered netlist writers
+  * added `GEXF` netlist writer, e.g., for netlist analysis within Gephi
+* added `Remove from view` action to context menu for gates and modules
 * added grouping toolbox feature to highlight successors or predecessors
 * added an indicator showing whether views have been modified
 * added function `is_top_module` to class `Module` to determin whether the current module is the top module of the netlist
