@@ -148,48 +148,55 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
+        py_module.def_property_readonly("nets", &Module::get_nets, R"(
+            A sorted list of all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
+
+            :type: list[hal_py.Net]
+        )");
+
+        py_module.def("get_nets", &Module::get_nets, R"(
+            Get all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
+
+            :returns: A sorted list of nets.
+            :rtype: list[hal_py.Net]
+        )");
+
         py_module.def_property_readonly("input_nets", &Module::get_input_nets, R"(
-            The sorted list of input nets of this module.
-            An input net is either a global input to the netlist or has a source outside of the module.
+            A sorted list of all nets that are either a global input to the netlist or have at least one source outside of the module.
 
             :type: list[hal_py.Net]
         )");
 
         py_module.def("get_input_nets", &Module::get_input_nets, R"(
-            Get the input nets of this module.
-            An input net is either a global input to the netlist or has a source outside of the module.
+            Get all nets that are either a global input to the netlist or have at least one source outside of the module.
 
-            :returns: The sorted list of input nets.
+            :returns: A sorted list of input nets.
             :rtype: list[hal_py.Net]
         )");
 
         py_module.def_property_readonly("output_nets", &Module::get_output_nets, R"(
-            The sorted list of output nets of this module.
-            An output net is either a global output to the netlist or has a destination outside of the module.
+            A sorted list of all nets that are either a global output to the netlist or have at least one destination outside of the module.
 
             :type: set[hal_py.Net]
         )");
 
         py_module.def("get_output_nets", &Module::get_output_nets, R"(
-            Get the output nets of this module.
-            An output net is either a global output to the netlist or has a destination outside of the module.
+            Get all nets that are either a global output to the netlist or have at least one destination outside of the module.
 
-            :returns: The sorted list of output nets.
+            :returns: A sorted list of output nets.
             :rtype: list[hal_py.Net]
         )");
 
         py_module.def_property_readonly("internal_nets", &Module::get_internal_nets, R"(
-            The sorted list of internal nets of this module.
+            A sorted list of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
 
             :type: list[hal_py.Net]
         )");
 
         py_module.def("get_internal_nets", &Module::get_internal_nets, R"(
-            Get the internal nets of this module.
-            An internal net has at least one source and one destination within the module.
-            Therefore it may contain some nets that are also regarded as input or output nets.
+            Get all nets that have at least one source and one destination within the module. The result may contain nets that are also regarded as input or output nets.
 
-            :returns: The sorted list of internal nets.
+            :returns: A sorted list of internal nets.
             :rtype: list[hal_py.Net]
         )");
 

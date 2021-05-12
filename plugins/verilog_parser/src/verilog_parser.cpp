@@ -1365,7 +1365,7 @@ namespace hal
             const std::string& inst_type = verilog_module.m_instance_types.at(inst_identifier);
 
             // will later hold either module or gate, so attributes can be assigned properly
-            DataContainer* container;
+            DataContainer* container = nullptr;
 
             // assign actual signal names to ports
             std::unordered_map<std::string, std::string> instance_assignments;

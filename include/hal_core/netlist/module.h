@@ -148,29 +148,32 @@ namespace hal
         Netlist* get_netlist() const;
 
         /**
-         * Get the input nets of this module.<br>
-         * An input net is either a global input to the netlist or has a source outside of the module.
+         * Get all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
          *
-         * @returns The sorted vector of input nets.
+         * @returns A sorted vector of nets.
          */
-        std::vector<Net*> get_input_nets() const;
+        const std::vector<Net*>& get_nets() const;
 
         /**
-         * Get the output nets of this module.<br>
-         * An output net is either a global output to the netlist or has a destination outside of the module.
+         * Get all nets that are either a global input to the netlist or have at least one source outside of the module.
          *
-         * @returns The sorted vector of output nets.
+         * @returns A sorted vector of input nets.
          */
-        std::vector<Net*> get_output_nets() const;
+        const std::vector<Net*>& get_input_nets() const;
 
         /**
-         * Get the internal nets of this module.<br>
-         * An internal net has at least one source and one destination within the module.<br>
-         * Therefore it may contain some nets that are also regarded as input or output nets.
+         * Get all nets that are either a global output to the netlist or have at least one destination outside of the module.
          *
-         * @returns The sorted vector of internal nets.
+         * @returns A sorted vector of output nets.
          */
-        std::vector<Net*> get_internal_nets() const;
+        const std::vector<Net*>& get_output_nets() const;
+
+        /**
+         * Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
+         *
+         * @returns A sorted vector of internal nets.
+         */
+        const std::vector<Net*>& get_internal_nets() const;
 
         /**
          * Set the name of the port corresponding to the specified input net.
@@ -349,6 +352,8 @@ namespace hal
         std::unordered_map<u32, Gate*> m_gates_map;
         std::vector<Gate*> m_gates;
 
+        mutable bool m_nets_dirty;
+        mutable std::vector<Net*> m_nets;
         mutable bool m_input_nets_dirty;
         mutable std::vector<Net*> m_input_nets;
         mutable bool m_output_nets_dirty;

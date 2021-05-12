@@ -301,6 +301,7 @@ namespace hal
 
         for (Module* m : affected_modules)
         {
+            m->m_nets_dirty          = true;
             m->m_input_nets_dirty    = true;
             m->m_output_nets_dirty   = true;
             m->m_internal_nets_dirty = true;
@@ -337,6 +338,7 @@ namespace hal
 
         for (Module* m : affected_modules)
         {
+            m->m_nets_dirty          = true;
             m->m_input_nets_dirty    = true;
             m->m_output_nets_dirty   = true;
             m->m_internal_nets_dirty = true;
@@ -429,6 +431,7 @@ namespace hal
 
         for (Module* m : affected_modules)
         {
+            m->m_nets_dirty          = true;
             m->m_input_nets_dirty    = true;
             m->m_output_nets_dirty   = true;
             m->m_internal_nets_dirty = true;
@@ -464,6 +467,7 @@ namespace hal
 
         for (Module* m : affected_modules)
         {
+            m->m_nets_dirty          = true;
             m->m_input_nets_dirty    = true;
             m->m_output_nets_dirty   = true;
             m->m_internal_nets_dirty = true;
@@ -651,9 +655,11 @@ namespace hal
         }
 
         // mark caches as dirty
+        m->m_nets_dirty                    = true;
         m->m_input_nets_dirty              = true;
         m->m_output_nets_dirty             = true;
         m->m_internal_nets_dirty           = true;
+        prev_module->m_nets_dirty          = true;
         prev_module->m_input_nets_dirty    = true;
         prev_module->m_output_nets_dirty   = true;
         prev_module->m_internal_nets_dirty = true;

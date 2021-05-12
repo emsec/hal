@@ -222,9 +222,23 @@ namespace hal
 )");
 
         py_net.def("is_unrouted", &Net::is_unrouted, R"(
-        Check whether the net is unrouted, i.e. it has no source or no destination.
+        Check whether the net is unrouted, i.e., it has no source or no destination.
 
-        :returns: True if the net is unrouted.
+        :returns: True if the net is unrouted, false otherwise.
+        :rtype: bool
+)");
+
+        py_net.def("is_gnd_net", &Net::is_gnd_net, R"(
+        Check whether the net is connected to GND.
+
+        :returns: True if the net is connected to GND, false otherwise.
+        :rtype: bool
+)");
+
+        py_net.def("is_vcc_net", &Net::is_vcc_net, R"(
+        Check whether the net is connected to VCC.
+
+        :returns: True if the net is connected to VCC, false otherwise.
         :rtype: bool
 )");
 

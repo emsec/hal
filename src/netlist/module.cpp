@@ -103,6 +103,7 @@ namespace hal
         m_parent->m_submodules_map.erase(m_id);
         m_parent->m_submodules.erase(std::find(m_parent->m_submodules.begin(), m_parent->m_submodules.end(), this));
 
+        m_parent->m_nets_dirty          = true;
         m_parent->m_input_nets_dirty    = true;
         m_parent->m_output_nets_dirty   = true;
         m_parent->m_internal_nets_dirty = true;
@@ -114,6 +115,7 @@ namespace hal
         m_parent->m_submodules_map[m_id] = this;
         m_parent->m_submodules.push_back(this);
 
+        m_parent->m_nets_dirty          = true;
         m_parent->m_input_nets_dirty    = true;
         m_parent->m_output_nets_dirty   = true;
         m_parent->m_internal_nets_dirty = true;
@@ -281,7 +283,61 @@ namespace hal
         return res;
     }
 
-    std::vector<Net*> Module::get_input_nets() const
+    const std::vector<Net*>& Module::get_nets() const
+    {
+        if (m_nets_dirty)
+        {
+            std::unordered_set<const Net*> seen;
+            m_nets.clear();
+
+            for (const Gate* gate : get_gates())
+            {
+                for (Net* net : gate->get_fan_in_nets())
+                {
+                    if (seen.find(net) == seen.end())
+                    {
+                        m_nets.push_back(net);
+                    }
+                }
+
+                for (Net* net : gate->get_fan_out_nets())
+                {
+                    if (seen.find(net) == seen.end())
+                    {
+                        m_nets.push_back(net);
+                    }
+                }
+            }
+
+            for (const Module* module : get_submodules())
+            {
+                for (Net* net : module->get_input_nets())
+                {
+                    if (seen.find(net) == seen.end())
+                    {
+                        seen.insert(net);
+                        m_nets.push_back(net);
+                    }
+                }
+
+                for (Net* net : module->get_output_nets())
+                {
+                    if (seen.find(net) == seen.end())
+                    {
+                        seen.insert(net);
+                        m_nets.push_back(net);
+                    }
+                }
+            }
+
+            std::sort(m_nets.begin(), m_nets.end());
+            m_nets_dirty = false;
+        }
+
+        return m_nets;
+    }
+
+    const std::vector<Net*>& Module::get_input_nets() const
     {
         if (m_input_nets_dirty)
         {
@@ -316,7 +372,7 @@ namespace hal
         return m_input_nets;
     }
 
-    std::vector<Net*> Module::get_output_nets() const
+    const std::vector<Net*>& Module::get_output_nets() const
     {
         if (m_output_nets_dirty)
         {
@@ -351,7 +407,7 @@ namespace hal
         return m_output_nets;
     }
 
-    std::vector<Net*> Module::get_internal_nets() const
+    const std::vector<Net*>& Module::get_internal_nets() const
     {
         if (m_internal_nets_dirty)
         {

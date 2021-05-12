@@ -16,6 +16,9 @@ namespace hal
 
         // TODO make sure that all identifiers are unique (signals within a module, instances within a module, module identifiers)
         // TODO ensure escaping of identifiers whereever neccessary
+        // TODO take care of 1 and 0 nets (probably rework their handling within the core to supply a "is_gnd_net" and "is_vcc_net" function)
+
+        // TODO figure out order of declaration for all modules and declare in a loop
         write_module_declaration(res_stream, netlist->get_top_module());
 
         // write to file
@@ -34,13 +37,16 @@ namespace hal
 
     bool VerilogWriter::write_module_declaration(std::stringstream& res_stream, const Module* module) const
     {
+        std::unordered_map<const DataContainer*, std::string> aliases;
+        std::unordered_map<std::string, u32> identifier_occurrences;
+
         res_stream << "module " << module->get_type();    // TODO alias+escape
 
         // TODO generics
 
         bool first_port = true;
         std::stringstream tmp_stream;
-        std::unordered_map<const Net*, std::string> net_to_port_signal;
+
         res_stream << "(";
         for (const auto& [net, port] : module->get_input_port_names())
         {
@@ -53,10 +59,11 @@ namespace hal
                 res_stream << ",";
             }
 
-            res_stream << port;    // TODO alias+escape
+            aliases[net] = escape(get_unique_alias(identifier_occurrences, port));
 
-            tmp_stream << "\tinput " << port << ";" << std::endl;    // TODO alias+escape
-            net_to_port_signal[net] = port;
+            res_stream << aliases.at(net);
+
+            tmp_stream << "    input " << aliases.at(net) << ";" << std::endl;
         }
 
         for (const auto& [net, port] : module->get_output_port_names())
@@ -70,26 +77,29 @@ namespace hal
                 res_stream << ",";
             }
 
-            res_stream << port;    // TODO alias+escape
+            aliases[net] = escape(get_unique_alias(identifier_occurrences, port));
 
-            tmp_stream << "\toutput " << port << ";" << std::endl;    // TODO alias+escape
-            net_to_port_signal[net] = port;
+            res_stream << aliases.at(net);
+
+            tmp_stream << "    output " << aliases.at(net) << ";" << std::endl;
         }
         res_stream << ");" << std::endl;
         res_stream << tmp_stream.str();
 
-        for (Net* net : module->get_internal_nets())
+        for (Net* net : module->get_nets())
         {
-            if (net_to_port_signal.find(net) == net_to_port_signal.end())
+            if (aliases.find(net) == aliases.end())
             {
-                res_stream << "\twire " << net->get_name() << ";" << std::endl;
+                aliases[net] = escape(get_unique_alias(identifier_occurrences, net->get_name()));
+                res_stream << "    wire " << aliases.at(net) << ";" << std::endl;
             }
         }
 
         // write gate instances
         for (const Gate* gate : module->get_gates())
         {
-            if (!write_gate_instance(res_stream, gate, net_to_port_signal))
+            res_stream << std::endl;
+            if (!write_gate_instance(res_stream, gate, aliases, identifier_occurrences))
             {
                 return false;
             }
@@ -98,7 +108,8 @@ namespace hal
         // write module instances
         for (const Module* sub_module : module->get_submodules())
         {
-            if (!write_module_instance(res_stream, sub_module))
+            res_stream << std::endl;
+            if (!write_module_instance(res_stream, sub_module, aliases, identifier_occurrences))
             {
                 return false;
             }
@@ -107,17 +118,20 @@ namespace hal
         return true;
     }
 
-    bool VerilogWriter::write_gate_instance(std::stringstream& res_stream, const Gate* gate, const std::unordered_map<const Net*, std::string>& net_to_alias) const
+    bool VerilogWriter::write_gate_instance(std::stringstream& res_stream,
+                                            const Gate* gate,
+                                            std::unordered_map<const DataContainer*, std::string>& aliases,
+                                            std::unordered_map<std::string, u32>& identifier_occurrences) const
     {
         const GateType* gate_type = gate->get_type();
 
-        // module header
-        res_stream << "\t" << gate_type->get_name();    // TODO alias+escape
+        res_stream << "    " << escape(gate_type->get_name());
         if (!write_generic_assignments(res_stream, gate))
         {
             return false;
         }
-        res_stream << " \\" << gate->get_name();
+        aliases[gate] = escape(get_unique_alias(identifier_occurrences, gate->get_name()));
+        res_stream << " " << aliases.at(gate);
 
         // collect all endpoints (i.e., pins that are actually in use)
         std::unordered_map<std::string, Net*> endpoints;
@@ -176,7 +190,7 @@ namespace hal
             }
         }
 
-        if (!write_pin_assignments(res_stream, pin_assignments, net_to_alias))
+        if (!write_pin_assignments(res_stream, pin_assignments, aliases))
         {
             return false;
         }
@@ -186,7 +200,10 @@ namespace hal
         return true;
     }
 
-    bool VerilogWriter::write_module_instance(std::stringstream& res_stream, const Module* module) const
+    bool VerilogWriter::write_module_instance(std::stringstream& res_stream,
+                                              const Module* module,
+                                              std::unordered_map<const DataContainer*, std::string>& aliases,
+                                              std::unordered_map<std::string, u32>& identifier_occurrences) const
     {
         // TODO implement
         return true;
@@ -220,21 +237,19 @@ namespace hal
                 res_stream << "," << std::endl;
             }
 
+            res_stream << "        ." << escape(key) << "(";
+
             if (type == "string")
             {
-                res_stream << "\t\t." << key << "(\"" << value << "\")";
+                res_stream << "\"" << value << "\"";
             }
             else if (type == "integer" || type == "floating_point")
             {
-                res_stream << "\t\t." << key << "(" << value << ")";
-            }
-            else if (type == "floating_point")
-            {
-                res_stream << "\t\t." << key << "(\"" << value << "\")";
+                res_stream << value;
             }
             else if (type == "bit_value")
             {
-                res_stream << "\t\t." << key << "(1'b" << value << ")";
+                res_stream << "1'b" << value;
             }
             else if (type == "bit_vector")
             {
@@ -251,18 +266,20 @@ namespace hal
                 {
                     len -= 1;
                 }
-                res_stream << "\t\t." << key << "(" << len << "'h" << value << ")";
+                res_stream << len << "'h" << value;
             }
+
+            res_stream << ")";
         }
 
-        res_stream << std::endl << "\t);" << std::endl;
+        res_stream << std::endl << "    )";
 
         return true;
     }
 
     bool VerilogWriter::write_pin_assignments(std::stringstream& res_stream,
                                               const std::vector<std::pair<std::string, std::vector<const Net*>>>& pin_assignments,
-                                              const std::unordered_map<const Net*, std::string>& net_to_alias) const
+                                              std::unordered_map<const DataContainer*, std::string>& aliases) const
     {
         res_stream << " (" << std::endl;
         bool first_pin = true;
@@ -277,54 +294,52 @@ namespace hal
                 res_stream << "," << std::endl;
             }
 
-            res_stream << "\t\t.\\" << pin << " (";
+            res_stream << "        ." << escape(pin) << "(";
             if (nets.size() > 1)
             {
                 res_stream << "{";
-                for (auto net_it = nets.begin(); net_it != nets.end();)
+            }
+
+            bool first_net = true;
+            for (const Net* net : nets)
+            {
+                if (net != nullptr)
                 {
-                    const Net* net = *net_it;
-                    if (net != nullptr)
+                    if (first_net)
                     {
-                        if (const auto port_it = net_to_alias.find(net); port_it == net_to_alias.end())
-                        {
-                            res_stream << "\\" << net->get_name() << " ";
-                        }
-                        else
-                        {
-                            res_stream << "\\" << port_it->second << " ";
-                        }
+                        first_net = false;
                     }
                     else
                     {
-                        // unconnected pin of a group with at least one connection
-                        res_stream << "1'bz";
+                        res_stream << "," << std::endl;
                     }
 
-                    if (++net_it != nets.end())
+                    if (const auto alias_it = aliases.find(net); alias_it != aliases.end())
                     {
-                        res_stream << ",";
+                        res_stream << alias_it->second;
                     }
-                }
-                res_stream << "}";
-            }
-            else
-            {
-                const Net* net = nets.front();
-                if (const auto port_it = net_to_alias.find(net); port_it == net_to_alias.end())
-                {
-                    res_stream << "\\" << net->get_name() << " ";
+                    else
+                    {
+                        log_error("verilog_writer", "no alias for net '{}' with ID {} found.", net->get_name(), net->get_id());
+                        return false;
+                    }
                 }
                 else
                 {
-                    res_stream << "\\" << port_it->second << " ";
+                    // unconnected pin of a group with at least one connection
+                    res_stream << "1'bz";
                 }
+            }
+
+            if (nets.size() > 1)
+            {
+                res_stream << "}";
             }
 
             res_stream << ")";
         }
 
-        res_stream << std::endl << "\t)";
+        res_stream << std::endl << "    )";
 
         return true;
     }
@@ -341,5 +356,11 @@ namespace hal
 
         // otherwise, add a unique string to the name
         return name + "__[" + std::to_string(name_occurrences[name]) + "]__";
+    }
+
+    std::string VerilogWriter::escape(const std::string& s) const
+    {
+        // TODO implement
+        return s;
     }
 }    // namespace hal
