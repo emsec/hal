@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Utils &mdash; hal_py v3.2.6-283-ge9a281844 documentation</title>
+  <title>Netlist Utils &mdash; hal_py v3.2.6-284-g774c1cfeb documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.6-283-ge9a281844
+                v3.2.6-284-g774c1cfeb
               </div>
             
           
@@ -332,11 +332,15 @@ Different caches for different values of get_successors shall be used.</p>
 <tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">If true, sequential successors are returned, otherwise sequential predecessors are returned.</td>
 </tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param dict[int, list[hal_py.Gate]] cache:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The cache.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All sequential successors or predecessors of the gate.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Gate]</td>
+</tr>
 </tbody>
 </table>
-<p>:param dict[int, list[hal_py.Gate]] cache - The cache. 
-:returns: All sequential successors or predecessors of the gate.
-:rtype: list[hal_py.Gate]</p>
 </div></blockquote>
 </li>
 <li><p class="first">get_next_sequential_gates(gate: hal::Gate, get_successors: bool) -&gt; List[hal::Gate]</p>
@@ -379,11 +383,15 @@ Different caches for different values of get_successors shall be used.</p>
 <tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">If true, sequential successors are returned, otherwise sequential predecessors are returned.</td>
 </tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param dict[int, list[hal_py.Gate]] cache:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The cache.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All sequential successors or predecessors of the net.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Net]</td>
+</tr>
 </tbody>
 </table>
-<p>:param dict[int, list[hal_py.Gate]] cache - The cache. 
-:returns: All sequential successors or predecessors of the net.
-:rtype: list[hal_py.Net]</p>
 </div></blockquote>
 </li>
 <li><p class="first">get_next_sequential_gates(net: hal::Net, get_successors: bool) -&gt; List[hal::Gate]</p>
@@ -437,11 +445,15 @@ Different caches for different values of get_successors shall be used.</p>
 <tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateTypeProperty] stop_properties:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">Stop recursion when reaching a gate of a type with one of the specified properties.</td>
 </tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param dict[int, list[hal_py.Gate]] cache:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The cache.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">All gates on the predecessor or successor path of the gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Gate]</td>
+</tr>
 </tbody>
 </table>
-<p>:param dict[int, list[hal_py.Gate]] cache - The cache. 
-:returns: All gates on the predecessor or successor path of the gate.
-:rtype: list[hal_py.Gate]</p>
 </div></blockquote>
 </li>
 <li><p class="first">get_path(gate: hal::Gate, get_successors: bool, stop_properties: Set[hal_py.GateTypeProperty]) -&gt; List[hal::Gate]</p>
@@ -490,11 +502,15 @@ Different caches for different values of get_successors shall be used.</p>
 <tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateTypeProperty] stop_properties:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">Stop recursion when reaching a gate of a type with one of the specified properties.</td>
 </tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param dict[int, list[hal_py.Gate]] cache:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The cache.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">All gates on the predecessor or successor path of the net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Net]</td>
+</tr>
 </tbody>
 </table>
-<p>:param dict[int, list[hal_py.Gate]] cache - The cache. 
-:returns: All gates on the predecessor or successor path of the net.
-:rtype: list[hal_py.Net]</p>
 </div></blockquote>
 </li>
 <li><p class="first">get_path(net: hal::Net, get_successors: bool, stop_properties: Set[hal_py.GateTypeProperty]) -&gt; List[hal::Gate]</p>
