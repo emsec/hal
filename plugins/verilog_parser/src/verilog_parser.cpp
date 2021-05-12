@@ -453,6 +453,7 @@ namespace hal
         // parse parameter list
         if (m_token_stream.consume("#("))
         {
+            // TODO add support for parameter parsing
             m_token_stream.consume_until(")");
             m_token_stream.consume(")", true);
             log_warning("verilog_parser", "cannot parse parameter list provided for module '{}'.", module_name);
@@ -1194,9 +1195,6 @@ namespace hal
     {
         std::unordered_map<std::string, std::string> signal_alias;
         std::unordered_map<std::string, std::string> instance_alias;
-
-        // const auto& e              = m_entities.at(entity_inst_type);
-        // const auto& entity_signals = e.get_signals();
 
         // TODO check parent module assignments for port aliases
 
