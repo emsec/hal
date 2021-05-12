@@ -83,7 +83,7 @@ namespace hal
          *
          * @returns The stored data as a map.
          */
-        std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> get_data_map() const;
+        const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& get_data_map() const;
 
         /**
          * Overwrite the existing data with a new map from ((1) category, (2) key) to ((1) type, (2) value).
