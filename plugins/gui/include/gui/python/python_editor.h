@@ -73,7 +73,6 @@ namespace hal
         Q_PROPERTY(QString runIconStyle READ runIconStyle WRITE setRunIconStyle)
         Q_PROPERTY(QString newFileIconPath READ newFileIconPath WRITE setNewFileIconPath)
         Q_PROPERTY(QString newFileIconStyle READ newFileIconStyle WRITE setNewFileIconStyle)
-        // TODO: In my opinion the toggle minimap icon is unintuitive. It looks like a debugger icon...
         Q_PROPERTY(QString toggleMinimapIconPath READ toggleMinimapIconPath WRITE setToggleMinimapIconPath)
         Q_PROPERTY(QString toggleMinimapIconStyle READ toggleMinimapIconStyle WRITE setToggleMinimapIconStyle)
 

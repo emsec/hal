@@ -41,7 +41,6 @@ namespace hal
     class ModuleDetailsWidget;
     class GateDetailsWidget;
     class NetDetailsWidget;
-    class SelectionHistoryNavigator;
     class UserAction;
     class UserActionObject;
     class SettingsItemCheckbox;
@@ -76,7 +75,6 @@ namespace hal
          * @param parent - The widget's parent.
          */
         SelectionDetailsWidget(QWidget* parent = nullptr);
-        void clear(); //delete later, does not even exist in the cpp...
 
         /**
          * Overrides the ContentWidget's setupToolbar method. Adds its specific actions to the given toolbar

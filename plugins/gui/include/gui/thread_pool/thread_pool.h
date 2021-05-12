@@ -34,7 +34,6 @@ namespace hal
 
     /**
      * @ingroup unused
-     * TODO: Global ThreadPool is not used (yet?)...
      */
     class ThreadPool : public QObject
     {

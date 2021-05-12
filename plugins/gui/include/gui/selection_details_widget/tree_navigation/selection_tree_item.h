@@ -127,15 +127,7 @@ namespace hal
          *
          * @return The item's name.
          */
-        virtual QVariant name() const = 0; // implemented in subclass
-
-        /**
-         * A specific function for the SelectionTreeItemGate subclass. It returns the name of
-         * the gate's type (e.g. LUT5 or FF).
-         *
-         * @return The gate type.
-         */
-        //virtual QVariant gateType() const;
+        virtual QVariant name() const = 0;
 
         /**
          * Get the icon for either the module, gate, or net item. Must be implemented by
@@ -145,9 +137,12 @@ namespace hal
          */
         virtual const QIcon& icon() const = 0;
 
+
         /**
-         * TODO: DOCUMENT!
-         * @return
+         * Returns the appropriate type of either a gate or module (not a net).
+         * Must be implemented in the subclass.
+         *
+         * @return The name of the type.
          */
         virtual QVariant boxType() const;
 
@@ -235,8 +230,9 @@ namespace hal
         virtual const QIcon& icon() const;
 
         /**
-         * TODO: Implement
-         * @return
+         * Returns the name of the module's type.
+         *
+         * @return The name of the module's type.
          */
         virtual QVariant boxType() const;
 
@@ -328,12 +324,6 @@ namespace hal
          * @return The gate specific icon.
          */
         virtual const QIcon& icon() const;
-        /**
-         * Get the name of the gate's type (e.g. LUT5 or FF).
-         *
-         * @return The gate type.
-         */
-        //virtual QVariant gateType() const;
 
         /**
          * Matches itself against the given regex. If no match was found it appends itself (its id)
@@ -348,8 +338,9 @@ namespace hal
                                                  const QRegularExpression& regex) const;
 
         /**
-         * TODO: DOCUMENT!
-         * @return
+         * Get the name of the gate's type (e.g. LUT5 or FF).
+         *
+         * @return The gate type (QString).
          */
         virtual QVariant boxType() const;
     private:

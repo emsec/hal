@@ -59,7 +59,6 @@ namespace hal
     public Q_SLOTS:
         /**
          * Q_SLOT to handle that the 'About' field has been clicked.
-         * TODO: It does nothing
          */
         void handleAboutItemClicked();
 

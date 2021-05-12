@@ -42,7 +42,6 @@ namespace hal
         std::string get_name() const override;
 
         /**
-         * TODO: I don't think the current state of the GUI deserves the version number '0.1' ;)
          * Returns the current version of the plugin.
          *
          * @returns the current version number of the plugin

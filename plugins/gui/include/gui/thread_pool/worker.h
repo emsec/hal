@@ -31,7 +31,6 @@ namespace hal
 
     /**
      * @ingroup unused
-     * TODO: ThreadPool is not used (yet?)...
      */
     class Worker : public QThread
     {

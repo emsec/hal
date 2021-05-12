@@ -67,7 +67,7 @@ namespace hal
         mPythonWidget = new PythonEditor();
 
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &ContentManager::handleOpenDocument);
-        connect(FileManager::get_instance(), &FileManager::fileChanged, this, &ContentManager::handleFilsystemDocChanged);
+        //connect(FileManager::get_instance(), &FileManager::fileChanged, this, &ContentManager::handleFilsystemDocChanged);
     }
 
     ContentManager::~ContentManager()
@@ -224,18 +224,9 @@ namespace hal
         sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
     }
 
-    void ContentManager::handleFilsystemDocChanged(const QString& fileName)
-    {
-        Q_UNUSED(fileName)
-    }
-
     void ContentManager::setWindowTitle(const QString &filename)
     {
         mWindowTitle = "HAL - " + QString::fromStdString(std::filesystem::path(filename.toStdString()).stem().string());
         mMainWindow->setWindowTitle(mWindowTitle);
-    }
-
-    void ContentManager::handleSaveTriggered()
-    {
     }
 }

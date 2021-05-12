@@ -197,7 +197,11 @@ namespace hal
 
     void NetDetailsWidget::handleNetRemoved(Net* n)
     {
-        Q_UNUSED(n)
+        if (mCurrentId == n->get_id())
+        {
+            mGeneralView->setHidden(true);
+            mScrollArea->setHidden(true);
+        }
     }
 
     void NetDetailsWidget::handleNetNameChanged(Net* n)

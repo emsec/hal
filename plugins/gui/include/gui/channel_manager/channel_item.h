@@ -56,21 +56,6 @@ namespace hal
 
     static const int sMaxEntries = 1000;
 
-    struct LogChannel
-    {
-        const QString mName;
-
-        ChannelEntry mEntries[sMaxEntries];
-
-        int mEntryCount;
-        int mFirstEntry;
-
-        int mUnreadEntries;
-        int mUnreadWarnings;
-        int mUnreadErrors;
-        int mUnreadSuccesses;
-    };
-
     /**
      * @ingroup logging
      * @brief This class represents a channel in the channel model. It primarily holds the channel

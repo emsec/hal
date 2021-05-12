@@ -6,7 +6,6 @@
 #include "gui/selection_details_widget/module_details_widget.h"
 #include "gui/module_dialog/module_dialog.h"
 #include "gui/grouping/grouping_manager_widget.h"
-#include "gui/selection_history_navigator/selection_history_navigator.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"

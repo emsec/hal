@@ -34,8 +34,8 @@ namespace hal
     class SharedPropertiesQssAdapter;
 
     /**
-     * @ingroup unused
-     * TODO: Unused class. Remove me?
+     * @ingroup gui
+     * @brief Manager for stylesheet properties adaption.
      */
     class StyleManager : public QObject
     {

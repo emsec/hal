@@ -84,16 +84,6 @@ namespace hal
         };
 
         /**
-         * Unused? TODO: Remove?
-         */
-        enum class Mode
-        {
-            Override = 0,
-            Add      = 1,
-            Remove   = 2
-        };
-
-        /**
          * Constructor.
          *
          * @param parent - The parent QObject
@@ -286,7 +276,6 @@ namespace hal
         void subfocusChanged(void* sender);
 
     public:
-        // TODO: encapsulate public members?
         /**
          * Contains the currently selected gates. <br>
          * Please call relaySelectionChanged after manipulations of this member.

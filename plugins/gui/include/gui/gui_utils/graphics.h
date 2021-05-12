@@ -81,7 +81,8 @@ namespace hal
 
         /**
          * Returns a somewhat random color through a funny method (should be the same order
-         * of colors each time the program starts).
+         * of colors each time the program starts). This brilliant piece of code MUST NEVER
+         * BE REMOVED, PURE COMEDY!
          *
          * @return The "random" color.
          */

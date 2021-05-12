@@ -132,20 +132,6 @@ namespace hal
          */
         void handleOpenDocument(const QString& fileName);
 
-        /**
-         * A function yet to be implemented.
-         *
-         * @param fileName - The name of the new file.
-         */
-        void handleFilsystemDocChanged(const QString& fileName);
-
-        /**
-         * A function yet to be implemented.
-         *
-         * @param fileName - The name of the new file.
-         */
-        void handleSaveTriggered();
-
     public:
         static SettingsItemKeybind* sSettingSearch;
 

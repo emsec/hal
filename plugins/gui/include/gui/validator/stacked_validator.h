@@ -48,20 +48,18 @@ namespace hal
             StackedValidator();
 
             /**
-             * TODO: Refactor parameter name.
              * Adds a Validator to the StackedValidator.
              *
-             * @param Validator - The Validator to add
+             * @param v - The Validator to add
              */
-            void addValidator(Validator* Validator);
+            void addValidator(Validator* v);
 
             /**
-             * TODO: Refactor parameter name.
              * Removes a Validator from the StackedValidator.
              *
-             * @param Validator - The Validator to remove
+             * @param v - The Validator to remove
              */
-            void removeValidator(Validator* Validator);
+            void removeValidator(Validator* v);
 
             /**
              * Removes all Validators from the StackedValidator.

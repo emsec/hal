@@ -34,7 +34,7 @@ namespace hal
 
     /**
      * @ingroup unused
-     * TODO: The plugin manager widget is disabled in the current version.
+     * NOTE: The plugin manager widget is disabled in the current version.
      */
     class PluginManagerWidget : public ContentWidget
     {

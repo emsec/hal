@@ -46,7 +46,6 @@ namespace hal
         Toolbar(QWidget* parent = nullptr);
 
         /**
-         * TODO: Unused (and hacky?). Remove me?
          * Adds a dummy widget to create some space between two toolbar actions.
          */
         void addSpacer();
