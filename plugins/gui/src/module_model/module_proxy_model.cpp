@@ -16,32 +16,26 @@ namespace hal
 
     bool ModuleProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
     {
-        if(!filterRegExp().isEmpty())
+        if(filterRegExp().isEmpty())
+            return true;
+
+        QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+        if(sourceIndex.isValid())
         {
-            //QModelIndex source_index = sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent);
-            QModelIndex source_index = sourceModel()->index(sourceRow, 0, sourceParent);
-            if(source_index.isValid())
+            auto item = static_cast<ModuleItem*>(sourceIndex.internalPointer());
+            if(item->childCount() == 0)
+                return sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegExp());
+
+            bool shouldBeDisplayed = sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegExp());;
+            //go through all children and return the check of itself and the check of the children
+            for(int i = 0; i < item->childCount(); i++)
             {
-                if (sourceModel()->data(source_index, filterRole()).toString().contains(filterRegExp()))
-                {
-                    static_cast<ModuleItem*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->setHighlighted(true);
-                    return true;
-                }
-                else
-                {
-                    static_cast<ModuleItem*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->setHighlighted(false);
-                    return false;
-                }
+                shouldBeDisplayed = shouldBeDisplayed || filterAcceptsRow(i, sourceIndex);
             }
+
+            return shouldBeDisplayed;
         }
-
-        void* internal = sourceModel()->index(sourceRow, 0, sourceParent).internalPointer();
-
-        if (internal)
-            static_cast<ModuleItem*>(internal)->setHighlighted(false);
-
         return true;
-        //return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
     }
 
     bool ModuleProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
