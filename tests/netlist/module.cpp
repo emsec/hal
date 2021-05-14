@@ -13,107 +13,90 @@ namespace hal {
 
     class ModuleTest : public ::testing::Test {
     protected:
-        virtual void SetUp() {
+        virtual void SetUp() 
+        {
             test_utils::init_log_channels();
         }
 
-        virtual void TearDown() {
+        virtual void TearDown() 
+        {
         }
     };
 
     /**
-     * Testing the access on the id, the type and the stored netlist after calling the constructor
+     * Test basic functionality.
      *
      * Functions: constructor, get_id, get_name, is_top_module
      */
     TEST_F(ModuleTest, check_constructor) {
         TEST_START
             {
-                // Creating a Module of id 123 and type "test Module"
-                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
-                Module* top_module = nl->get_top_module();
+                std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+                
+                Module* top_module = netlist->get_top_module();
+                ASSERT_NE(top_module, nullptr);
                 EXPECT_EQ(top_module->get_id(), 1);
+                EXPECT_EQ(top_module->get_name(), "top module");
                 EXPECT_TRUE(top_module->is_top_module());
-                Module* test_module = nl->create_module(MIN_MODULE_ID + 123, "test Module", top_module);
-                EXPECT_FALSE(test_module->is_top_module());
-                EXPECT_EQ(test_module->get_id(), (u32) (MIN_MODULE_ID + 123));
-                EXPECT_EQ(test_module->get_name(), "test Module");
-                EXPECT_EQ(test_module->get_netlist(), nl.get());
+                EXPECT_TRUE(top_module->get_type().empty());
+                EXPECT_EQ(top_module->get_parent_module(), nullptr);
+
+                Module* dummy_module = netlist->create_module(12, "dummy_module", top_module);
+                ASSERT_NE(dummy_module, nullptr);
+                EXPECT_FALSE(dummy_module->is_top_module());
+                EXPECT_EQ(dummy_module->get_id(), 12);
+                EXPECT_EQ(dummy_module->get_name(), "dummy_module");
+                EXPECT_EQ(dummy_module->get_netlist(), netlist.get());
+                EXPECT_TRUE(dummy_module->get_type().empty());
+                EXPECT_EQ(dummy_module->get_parent_module(), top_module);
             }
         TEST_END
     }
 
     /**
-     * Testing the set_name function of Module
+     * Test changing a module's name.
      *
      * Functions: set_name
      */
     TEST_F(ModuleTest, check_set_id) {
         TEST_START
             {
-                // Set a new name for Module
-                auto nl = test_utils::create_empty_netlist();
-                Module*
-                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+                Module* dummy_module = netlist->create_module("dummy_module", netlist->get_top_module());
+                ASSERT_NE(dummy_module, nullptr);
 
-                test_module->set_name("new_name");
-                EXPECT_EQ(test_module->get_name(), "new_name");
-            }
-            {
-                // Set an already set name
-                auto nl = test_utils::create_empty_netlist();
-                Module*
-                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                dummy_module->set_name("new_name");
+                EXPECT_EQ(dummy_module->get_name(), "new_name");
 
-                test_module->set_name("test_module");
-                EXPECT_EQ(test_module->get_name(), "test_module");
-            }
-            {
-                // Set an empty name
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist();
-                Module*
-                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
-
-                test_module->set_name("");
-                EXPECT_EQ(test_module->get_name(), "test_module");
+                dummy_module->set_name("");
+                EXPECT_EQ(dummy_module->get_name(), "new_name");
             }
         TEST_END
     }
 
     /**
-     * Testing the access on the modules type
+     * Test setting a module's type.
      *
      * Functions: set_type, get_type
      */
     TEST_F(ModuleTest, check_module_type) {
         TEST_START
             {
-                // Set a new type for Module
-                auto nl = test_utils::create_empty_netlist();
-                Module*
-                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+                Module* dummy_module = netlist->create_module("dummy_module", netlist->get_top_module());
+                ASSERT_NE(dummy_module, nullptr);
 
-                test_module->set_type("new_type");
-                EXPECT_EQ(test_module->get_type(), "new_type");
-            }
-            {
-                // Set an already set type
-                auto nl = test_utils::create_empty_netlist();
-                Module*
-                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
-
-                test_module->set_type("new_type");
-                test_module->set_type("new_type");
-                EXPECT_EQ(test_module->get_type(), "new_type");
+                EXPECT_TRUE(dummy_module->get_type().empty());
+                dummy_module->set_type("new_type");
+                EXPECT_EQ(dummy_module->get_type(), "new_type");
             }
         TEST_END
     }
 
     /**
-     * Testing the set_parent_module function
+     * Test changing the parent module.
      *
-     * Functions: set_parent_module
+     * Functions: set_parent_module, get_parent_module, get_submodules
      */
     TEST_F(ModuleTest, check_set_parent_module) {
         TEST_START
@@ -121,26 +104,34 @@ namespace hal {
             {
                 /*  Consider the Module scheme below. We set the parent_module of m_0 from the top_module to m_1
                  *
-                 *                  .--> m_2
-                 *        .--> m_0 -|
-                 *   top -|         '--> m_3     ==>      top-.                 .--> m_2
-                 *        '--> m_1                            '-> m_1 --> m_0 --|
-                 *                                                              '--> m_3
+                 *                  .--> d_3
+                 *        .--> d_1 -|
+                 *   top -|         '--> d_4     ==>      top-.                 .--> d_3
+                 *        '--> d_2                            '-> d_2 --> d_1 --|
+                 *                                                              '--> d_4
                  *
                  */
-                auto nl = test_utils::create_empty_netlist();
-                Module*
-                    m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module_0", nl->get_top_module());
-                Module*
-                    m_1 = nl->create_module(MIN_MODULE_ID + 1, "test_module_1", nl->get_top_module());
-                Module* m_2 = nl->create_module(MIN_MODULE_ID + 2, "test_module_2", m_0);
-                Module* m_3 = nl->create_module(MIN_MODULE_ID + 3, "test_module_3", m_0);
+                std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+                Module* dummy_module_1 = netlist->create_module("dummy_module_1", netlist->get_top_module());
+                ASSERT_NE(dummy_module_1, nullptr);
+                Module* dummy_module_2 = netlist->create_module("dummy_module_2", netlist->get_top_module());
+                ASSERT_NE(dummy_module_2, nullptr);
+                Module* dummy_module_3 = netlist->create_module("dummy_module_3", dummy_module_1);
+                ASSERT_NE(dummy_module_3, nullptr);
+                Module* dummy_module_4 = netlist->create_module("dummy_module_4", dummy_module_1);
+                ASSERT_NE(dummy_module_4, nullptr);
 
-                m_0->set_parent_module(m_1);
-                EXPECT_EQ(m_0->get_parent_module(), m_1);
-                EXPECT_FALSE(m_1->get_submodules(test_utils::module_name_filter("test_module_0"), false).empty());
-                EXPECT_FALSE(m_1->get_submodules(test_utils::module_name_filter("test_module_2"), true).empty());
-                EXPECT_FALSE(m_1->get_submodules(test_utils::module_name_filter("test_module_3"), true).empty());
+                dummy_module_1->set_parent_module(dummy_module_2);
+                EXPECT_EQ(dummy_module_1->get_parent_module(), dummy_module_2);
+                EXPECT_EQ(dummy_module_3->get_parent_module(), dummy_module_1);
+                EXPECT_EQ(dummy_module_4->get_parent_module(), dummy_module_1);
+                EXPECT_EQ(dummy_module_2->get_submodules([](const Module* module){ return module->get_name() == "dummy_module_1";}, false).size(), 1);
+                EXPECT_TRUE(dummy_module_2->get_submodules([](const Module* module){ return module->get_name() == "dummy_module_3";}, false).empty());
+                EXPECT_TRUE(dummy_module_2->get_submodules([](const Module* module){ return module->get_name() == "dummy_module_4";}, false).empty());
+                EXPECT_EQ(dummy_module_2->get_submodules([](const Module* module){ return module->get_name() == "dummy_module_3";}, true).size(), 1);
+                EXPECT_EQ(dummy_module_2->get_submodules([](const Module* module){ return module->get_name() == "dummy_module_4";}, true).size(), 1);
+                EXPECT_EQ(dummy_module_1->get_submodules([](const Module* module){ return module->get_name() == "dummy_module_3";}, false).size(), 1);
+                EXPECT_EQ(dummy_module_1->get_submodules([](const Module* module){ return module->get_name() == "dummy_module_4";}, false).size(), 1);
             }
             {
                 /*  Hang m_0 to one of its childs (m_1). m_1 should be connected to the top_module afterwards
@@ -151,59 +142,56 @@ namespace hal {
                  *               '--- m_2
                  *
                  */
-                auto nl = test_utils::create_empty_netlist();
-                Module*
-                    m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module_0", nl->get_top_module());
-                Module* m_1 = nl->create_module(MIN_MODULE_ID + 1, "test_module_1", m_0);
-                Module* m_2 = nl->create_module(MIN_MODULE_ID + 2, "test_module_2", m_0);
+                std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+                Module* m_0 = netlist->create_module("test_module_0", netlist->get_top_module());
+                Module* m_1 = netlist->create_module("test_module_1", m_0);
+                Module* m_2 = netlist->create_module("test_module_2", m_0);
 
                 m_0->set_parent_module(m_1);
-                EXPECT_EQ(m_1->get_parent_module(), nl->get_top_module());
+                EXPECT_EQ(m_1->get_parent_module(), netlist->get_top_module());
                 EXPECT_EQ(m_0->get_parent_module(), m_1);
                 EXPECT_EQ(m_2->get_parent_module(), m_0);
             }
             // NEGATIVE
             {
-                // Hang a Module to itself
+                // make module parent module of itself
                 NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+                std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+                Module* m_0 = netlist->create_module("test_module_0", netlist->get_top_module());
 
                 m_0->set_parent_module(m_0);
-                EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
+                EXPECT_EQ(m_0->get_parent_module(), netlist->get_top_module());
             }
             {
-                // Try to change the parent of the top_module
+                // assign a parent module to the top_module
                 NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist();
-                Module*
-                    m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module_0", nl->get_top_module());
+                std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+                Module* m_0 = netlist->create_module("test_module_0", netlist->get_top_module());
 
-                nl->get_top_module()->set_parent_module(m_0);
-                EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
-                EXPECT_EQ(nl->get_top_module()->get_parent_module(), nullptr);
+                netlist->get_top_module()->set_parent_module(m_0);
+                EXPECT_EQ(m_0->get_parent_module(), netlist->get_top_module());
+                EXPECT_EQ(netlist->get_top_module()->get_parent_module(), nullptr);
             }
             {
-                // new_parent is a nullptr
+                // assign nullptr as parent module
                 NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+                std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+                Module* m_0 = netlist->create_module("test_module_0", netlist->get_top_module());
 
                 m_0->set_parent_module(nullptr);
-                nl->get_top_module()->set_parent_module(m_0);
-                EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
+                netlist->get_top_module()->set_parent_module(m_0);
+                EXPECT_EQ(m_0->get_parent_module(), netlist->get_top_module());
             }
             {
-                // new_parent not part of the netlist (anymore)
+                // assign module that is (no longer) part of the netlist
                 NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist();
-                auto nl_other = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
-                Module* m_1 = nl->create_module(MIN_MODULE_ID+1, "test_module_1", nl->get_top_module());
-                nl->delete_module(m_0); // m_0 is removed from the netlist
+                std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+                Module* m_0 = netlist->create_module("test_module_0", netlist->get_top_module());
+                Module* m_1 = netlist->create_module("test_module_1", netlist->get_top_module());
+                netlist->delete_module(m_0); // m_0 is removed from the netlist
 
                 m_1->set_parent_module(m_0);
-                EXPECT_EQ(m_1->get_parent_module(), nl->get_top_module());
+                EXPECT_EQ(m_1->get_parent_module(), netlist->get_top_module());
             }
         TEST_END
     }
@@ -219,48 +207,38 @@ namespace hal {
             {
                 // Check a Gate, that is part of the Module (not recursive)
                 auto nl = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
-                Gate*
-                    gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                Module* m_0 = nl->create_module("test_module", nl->get_top_module());
+                ASSERT_NE(m_0, nullptr);
+                Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+                ASSERT_NE(gate_0, nullptr);
                 m_0->assign_gate(gate_0);
 
-                EXPECT_TRUE(m_0->contains_gate(gate_0));
+                EXPECT_TRUE(m_0->contains_gate(gate_0, false));
+                EXPECT_TRUE(m_0->contains_gate(gate_0, true));
             }
             {
                 // Check a Gate, that isn't part of the Module (not recursive)
                 auto nl = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
-                Gate*
-                    gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                Module* m_0 = nl->create_module("test_module", nl->get_top_module());
+                ASSERT_NE(m_0, nullptr);
+                Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+                ASSERT_NE(gate_0, nullptr);
 
-                EXPECT_FALSE(m_0->contains_gate(gate_0));
+                EXPECT_FALSE(m_0->contains_gate(gate_0, false));
+                EXPECT_FALSE(m_0->contains_gate(gate_0, true));
             }
             {
                 // Check a Gate, that isn't part of the Module, but of a submodule (not recursive)
                 auto nl = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
-                Module* submodule = nl->create_module(MIN_MODULE_ID + 1, "test_module", m_0);
+                Module* m_0 = nl->create_module("test_module", nl->get_top_module());
+                ASSERT_NE(m_0, nullptr);
+                Module* submodule = nl->create_module("test_module", m_0);
                 ASSERT_NE(submodule, nullptr);
-                Gate*
-                    gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+                ASSERT_NE(gate_0, nullptr);
                 submodule->assign_gate(gate_0);
 
-                EXPECT_FALSE(m_0->contains_gate(gate_0));
-            }
-            {
-                // Check a Gate, that isn't part of the Module, but of a submodule (recursive)
-                auto nl = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
-                Module* submodule = nl->create_module(MIN_MODULE_ID + 1, "test_module", m_0);
-                ASSERT_NE(submodule, nullptr);
-                Gate*
-                    gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
-                submodule->assign_gate(gate_0);
-
+                EXPECT_FALSE(m_0->contains_gate(gate_0, false));
                 EXPECT_TRUE(m_0->contains_gate(gate_0, true));
             }
         TEST_END
@@ -277,19 +255,13 @@ namespace hal {
             {
                 // Add some gates to the Module
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
-                Gate*
-                    gate_1 =
-                    nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_1");
-                // this Gate is not part of the Module
-                Gate* gate_not_in_m =
-                    nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_not_in_m");
+                Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+                Gate* gate_1 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_1");
+                // this gate is not part of the Module
+                Gate* gate_not_in_m = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_not_in_m");
 
                 // Add gate_0 and gate_1 to a Module
-                Module*
-                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
+                Module* test_module = nl->create_module("test Module", nl->get_top_module());
                 test_module->assign_gate(gate_0);
                 test_module->assign_gate(gate_1);
 
@@ -304,19 +276,14 @@ namespace hal {
                 // Add the same Gate twice to the Module
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
 
                 // Add gate_0 twice
-                Module*
-                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
+                Module* test_module = nl->create_module("test Module", nl->get_top_module());
                 test_module->assign_gate(gate_0);
                 test_module->assign_gate(gate_0);
 
-                std::vector<Gate*> expRes = {
-                    gate_0,
-                };
+                std::vector<Gate*> expRes = {gate_0};
 
                 EXPECT_EQ(test_module->get_gates(), expRes);
                 EXPECT_TRUE(test_module->contains_gate(gate_0));
@@ -325,22 +292,17 @@ namespace hal {
                 // Insert a Gate owned by a submodule
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
 
-                Module*
-                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
-                Module* submodule = nl->create_module(MIN_MODULE_ID + 1, "submodule", test_module);
+                Module* test_module = nl->create_module("test Module", nl->get_top_module());
+                Module* submodule = nl->create_module("submodule", test_module);
                 submodule->assign_gate(gate_0);
                 ASSERT_TRUE(submodule->contains_gate(gate_0));
                 ASSERT_FALSE(test_module->contains_gate(gate_0));
 
                 test_module->assign_gate(gate_0);
 
-                std::vector<Gate*> expRes = {
-                    gate_0
-                };
+                std::vector<Gate*> expRes = {gate_0};
 
                 EXPECT_EQ(test_module->get_gates(), expRes);
                 EXPECT_FALSE(submodule->contains_gate(gate_0));
@@ -351,8 +313,7 @@ namespace hal {
                 // Assigned Gate is a nullptr
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
-                Module*
-                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
+                Module* test_module = nl->create_module("test Module", nl->get_top_module());
                 test_module->assign_gate(nullptr);
                 EXPECT_TRUE(test_module->get_gates().empty());
             }
@@ -360,8 +321,7 @@ namespace hal {
                 // Call contains_gate with a nullptr
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
-                Module*
-                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
+                Module* test_module = nl->create_module("test Module", nl->get_top_module());
                 EXPECT_FALSE(test_module->contains_gate(nullptr));
             }
         TEST_END
@@ -377,10 +337,8 @@ namespace hal {
             {
                 // Delete a Gate from a Module (Gate owned by the modules)
                 auto nl = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
-                Gate*
-                    gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                Module* m_0 = nl->create_module("test_module", nl->get_top_module());
+                Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
                 m_0->assign_gate(gate_0);
 
                 ASSERT_TRUE(m_0->contains_gate(gate_0));
@@ -391,12 +349,9 @@ namespace hal {
                 // Try to delete a Gate from a Module (Gate owned by another Module)
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
-                Module*
-                    m_other = nl->create_module(MIN_MODULE_ID + 1, "other_test_module", nl->get_top_module());
-                Gate*
-                    gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                Module* m_0 = nl->create_module("test_module", nl->get_top_module());
+                Module* m_other = nl->create_module("other_test_module", nl->get_top_module());
+                Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
                 m_other->assign_gate(gate_0);
 
                 m_0->remove_gate(gate_0);
@@ -408,9 +363,7 @@ namespace hal {
                 // Try to delete a Gate from the top-Module (should change nothing)
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
                 Module* tm = nl->get_top_module();
 
                 ASSERT_TRUE(tm->contains_gate(gate_0));
@@ -439,38 +392,24 @@ namespace hal {
             {
                 // get a Gate by its id (Gate owned by Module)(not recursive)
                 auto nl = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
-                Gate*
-                    gate_123 =
-                    nl->create_gate(MIN_GATE_ID + 123, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_123");
+                Module* m_0 = nl->create_module("test_module", nl->get_top_module());
+                Gate* gate_123 = nl->create_gate(123, nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_123");
                 m_0->assign_gate(gate_123);
 
                 ASSERT_TRUE(m_0->contains_gate(gate_123));
-                EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID + 123), gate_123);
+                EXPECT_EQ(m_0->get_gate_by_id(123, false), gate_123);
+                EXPECT_EQ(m_0->get_gate_by_id(123, true), gate_123);
             }
             {
                 // get a Gate by its id (not owned by a submodule)(not recursive)
                 auto nl = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
-                Module* submodule = nl->create_module(MIN_MODULE_ID + 1, "other_module", m_0);
-                Gate*
-                    gate_123 =
-                    nl->create_gate(MIN_GATE_ID + 123, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_123");
+                Module* m_0 = nl->create_module("test_module", nl->get_top_module());
+                Module* submodule = nl->create_module("other_module", m_0);
+                Gate* gate_123 = nl->create_gate(123, nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_123");
                 submodule->assign_gate(gate_123);
 
-                EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID + 123), nullptr);
-            }
-            {
-                // get a Gate by its id (not owned by a submodule)(recursive)
-                auto nl = test_utils::create_empty_netlist();
-                Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
-                Module* submodule = nl->create_module(MIN_MODULE_ID + 1, "other_module", m_0);
-                Gate*
-                    gate_123 =
-                    nl->create_gate(MIN_GATE_ID + 123, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_123");
-                submodule->assign_gate(gate_123);
-
-                EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID + 123, true), gate_123);
+                EXPECT_EQ(m_0->get_gate_by_id(123, false), nullptr);
+                EXPECT_EQ(m_0->get_gate_by_id(123, true), gate_123);
             }
         TEST_END
     }
@@ -496,20 +435,20 @@ namespace hal {
             auto nl = test_utils::create_empty_netlist();
             Module* tm = nl->get_top_module();
             ASSERT_NE(tm, nullptr);
-            Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "even_module", tm);
+            Module* m_0 = nl->create_module("even_module", tm);
             ASSERT_NE(m_0, nullptr);
-            Module* m_1 = nl->create_module(MIN_MODULE_ID + 1, "odd_module", tm);
+            Module* m_1 = nl->create_module("odd_module", tm);
             ASSERT_NE(m_1, nullptr);
-            Module* m_2 = nl->create_module(MIN_MODULE_ID + 2, "even_module", m_1);
+            Module* m_2 = nl->create_module("even_module", m_1);
             ASSERT_NE(m_2, nullptr);
-            Module* m_3 = nl->create_module(MIN_MODULE_ID + 3, "odd_module", m_1);
+            Module* m_3 = nl->create_module("odd_module", m_1);
             ASSERT_NE(m_3, nullptr);
             {
                 // Testing the access on submodules (no module_name_filter, not recursive)
                 {
                     // Submodules of TOP_MODULE;
                     std::vector<Module*> exp_result = {m_0, m_1};
-                    EXPECT_TRUE(test_utils::vectors_have_same_content(tm->get_submodules(nullptr, false), exp_result));
+                    EXPECT_EQ(tm->get_submodules(nullptr, false), exp_result);
                     EXPECT_TRUE(tm->contains_module(m_0, false));
                     EXPECT_TRUE(tm->contains_module(m_1, false));
                     EXPECT_FALSE(tm->contains_module(m_2, false));
@@ -518,7 +457,7 @@ namespace hal {
                 {
                     // Submodules of MODULE_1;
                     std::vector<Module*> exp_result = {m_2, m_3};
-                    EXPECT_TRUE(test_utils::vectors_have_same_content(m_1->get_submodules(nullptr, false), exp_result));
+                    EXPECT_EQ(m_1->get_submodules(nullptr, false), exp_result);
                 }
                 {
                     // Submodules of MODULE_0;
@@ -531,18 +470,17 @@ namespace hal {
                 {
                     // Submodules of TOP_MODULE;
                     std::vector<Module*> exp_result = {m_0};
-                    EXPECT_EQ(tm->get_submodules(test_utils::module_name_filter("even_module"), false), exp_result);
+                    EXPECT_EQ(tm->get_submodules([](const Module* module){ return module->get_name() == "even_module"; }, false), exp_result);
                 }
                 {
                     // Submodules of MODULE_1;
                     std::vector<Module*> exp_result = {m_2};
-                    EXPECT_EQ(m_1->get_submodules(test_utils::module_name_filter("even_module"), false), exp_result);
+                    EXPECT_EQ(m_1->get_submodules([](const Module* module){ return module->get_name() == "even_module"; }, false), exp_result);
                 }
                 {
                     // Submodules of TOP_MODULE (name does not exists);
                     std::vector<Module*> exp_result = {};
-                    EXPECT_EQ(tm->get_submodules(test_utils::module_name_filter("non_existing_name"), false),
-                              exp_result);
+                    EXPECT_EQ(tm->get_submodules([](const Module* module){ return module->get_name() == "INVALID"; }, false), exp_result);
                 }
             }
             {
@@ -550,7 +488,7 @@ namespace hal {
                 {
                     // Submodules of TOP_MODULE;
                     std::vector<Module*> exp_result = {m_0, m_1, m_2, m_3};
-                    EXPECT_TRUE(test_utils::vectors_have_same_content(tm->get_submodules(nullptr, true), exp_result));
+                    EXPECT_EQ(tm->get_submodules(nullptr, true), exp_result);
                     EXPECT_TRUE(tm->contains_module(m_0, true));
                     EXPECT_TRUE(tm->contains_module(m_1, true));
                     EXPECT_TRUE(tm->contains_module(m_2, true));
@@ -559,7 +497,7 @@ namespace hal {
                 {
                     // Submodules of TOP_MODULE (with module_name_filter);
                     std::vector<Module*> exp_result = {m_0, m_2};
-                    EXPECT_TRUE(test_utils::vectors_have_same_content(tm->get_submodules(test_utils::module_name_filter("even_module"), true), exp_result));
+                    EXPECT_TRUE(test_utils::vectors_have_same_content(tm->get_submodules([](const Module* module){ return module->get_name() == "even_module"; }, true), exp_result));
                 }
                 {
                     // Submodules of MODULE_0
@@ -586,12 +524,12 @@ namespace hal {
      *                     ################################################
      *                     # TEST_MODULE                                  #
      *                     #                                              #
-     *      global_in -----§---------------=  INV (0)  = -----------------§----- global_out
+     *      global_in -----§---------------=  BUF (0)  = -----------------§----- global_out
      *                     #                                              #
-     *                 .---§--= INV (1) =--=                              #
-     *                 |   #                  AND2 (2) =--+---------------§----= INV (5)
-     *    = INV (4) =--+---§---------------=              |               #
-     *                     #                              '--= INV (3) =  #
+     *                 .---§--= BUF (1) =--=                              #
+     *                 |   #                  AND2 (2) =--+---------------§----= BUF (5)
+     *    = BUF (4) =--+---§---------------=              |               #
+     *                     #                              '--= BUF (3) =  #
      *                     #                                              #
      *                     ################################################
      *
@@ -610,65 +548,48 @@ namespace hal {
             auto nl = test_utils::create_empty_netlist();
 
             // Add the gates
-            Gate*
-                gate_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
-            Gate*
-                gate_1 = nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_1");
-            Gate*
-                gate_2 = nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("gate_2_to_1"), "gate_2");
-            Gate*
-                gate_3 = nl->create_gate(MIN_GATE_ID + 3, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_3");
-            Gate*
-                gate_4 = nl->create_gate(MIN_GATE_ID + 4, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_4");
-            Gate*
-                gate_5 = nl->create_gate(MIN_GATE_ID + 5, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_5");
+            Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+            Gate* gate_1 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_1");
+            Gate* gate_2 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("AND2"), "gate_2");
+            Gate* gate_3 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_3");
+            Gate* gate_4 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_4");
+            Gate* gate_5 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_5");
 
-            // Add the nets (net_x_y1_y2_... is Net from x to y1,y2,... (g = global input/output))
-            Net* net_g_0 = nl->create_net(MIN_NET_ID + 0, "name_0");
-            Net* net_0_g = nl->create_net(MIN_NET_ID + 1, "name_0");
-            Net* net_1_2 = nl->create_net(MIN_NET_ID + 3, "name_0");
-            Net* net_4_1_2 = nl->create_net(MIN_NET_ID + 4, "name_1");
-            Net* net_2_3_5 = nl->create_net(MIN_NET_ID + 5, "name_1");
-
-            // Connect the nets
+            Net* net_g_0 = nl->create_net("name_0");
+            nl->mark_global_input_net(net_g_0);
             net_g_0->add_destination(gate_0, "I");
 
+            Net* net_0_g = nl->create_net("name_1");
             net_0_g->add_source(gate_0, "O");
-
-            net_4_1_2->add_source(gate_4, "O");
-            net_4_1_2->add_destination(gate_1, "I");
-            net_4_1_2->add_destination(gate_2, "I1");
-
-            net_1_2->add_source(gate_1, "O");
-            net_1_2->add_destination(gate_2, "I0");
-
-            net_2_3_5->add_source(gate_2, "O");
-            net_2_3_5->add_destination(gate_3, "I");
-            net_2_3_5->add_destination(gate_5, "I");
-
-            // Mark global nets
-            nl->mark_global_input_net(net_g_0);
             nl->mark_global_output_net(net_0_g);
 
+            Net* net_4_1_2 = test_utils::connect(nl.get(), gate_4, "O", gate_1, "I");
+            test_utils::connect(nl.get(), gate_4, "O", gate_2, "I1");
+
+            Net* net_1_2 = test_utils::connect(nl.get(), gate_1, "O", gate_2, "I0");
+
+            Net* net_2_3_5 = test_utils::connect(nl.get(), gate_2, "O", gate_3, "I");
+            test_utils::connect(nl.get(), gate_2, "O", gate_5, "I");
+
             // Create the Module
-            auto test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+            auto test_module = nl->create_module("test_module", nl->get_top_module());
             for (auto g : std::set<Gate*>({gate_0, gate_1, gate_2, gate_3})) {
                 test_module->assign_gate(g);
             }
             {
                 // Get input nets of the test Module
                 std::vector<Net*> exp_result = {net_g_0, net_4_1_2};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_input_nets(), exp_result));
+                EXPECT_EQ(test_module->get_input_nets(), exp_result);
             }
             {
                 // Get output nets of the test Module
                 std::vector<Net*> exp_result = {net_0_g, net_2_3_5};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_output_nets(), exp_result));
+                EXPECT_EQ(test_module->get_output_nets(), exp_result);
             }
             {
                 // Get internal nets of the test Module
                 std::vector<Net*> exp_result = {net_1_2, net_2_3_5};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_internal_nets(), exp_result));
+                EXPECT_EQ(test_module->get_internal_nets(), exp_result);
             }
 
         TEST_END
@@ -684,10 +605,7 @@ namespace hal {
         TEST_START
             // Add some modules to the example netlist
             auto nl = test_utils::create_example_netlist();
-            Module* m_0 = nl->create_module("mod_0",
-                                                            nl->get_top_module(),
-                                                            {nl->get_gate_by_id(MIN_GATE_ID + 0),
-                                                             nl->get_gate_by_id(MIN_GATE_ID + 3)});
+            Module* m_0 = nl->create_module("mod_0", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 0), nl->get_gate_by_id(MIN_GATE_ID + 3)});
             {
                 // Get the input port name of a Net, which port name was not specified yet
                 EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)), "I(0)");
@@ -709,11 +627,7 @@ namespace hal {
                 EXPECT_EQ(m_0->get_output_port_net("port_name_net_0_4_5"), nl->get_net_by_id(MIN_NET_ID + 045));
             }
             // Create a new Module with more modules (with 2 input and ouput nets)
-            Module* m_1 = nl->create_module("mod_1",
-                                                            nl->get_top_module(),
-                                                            {nl->get_gate_by_id(MIN_GATE_ID + 0),
-                                                             nl->get_gate_by_id(MIN_GATE_ID + 3),
-                                                             nl->get_gate_by_id(MIN_GATE_ID + 7)});
+            Module* m_1 = nl->create_module("mod_1", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 0), nl->get_gate_by_id(MIN_GATE_ID + 3), nl->get_gate_by_id(MIN_GATE_ID + 7)});
             // Specify exactly one input and output port name
             m_1->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3");
             m_1->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "port_name_net_0_4_5");

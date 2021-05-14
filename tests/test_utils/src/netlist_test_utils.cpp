@@ -2,12 +2,25 @@
 #include "netlist_test_utils.h"
 
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "gate_library_test_utils.h"
 
 namespace hal
 {
     namespace test_utils 
     {   
-        Net* connect(Netlist* nl, Gate* src, std::string src_pin, Gate* dst, std::string dst_pin)
+        std::unique_ptr<Netlist> create_empty_netlist(const u32 id)
+        {
+            std::unique_ptr<Netlist> netlist = std::make_unique<Netlist>(get_gate_library());
+
+            if (id != 0)
+            {
+                netlist->set_id(id);
+            }
+
+            return netlist;
+        }
+
+        Net* connect(Netlist* nl, Gate* src, const std::string& src_pin, Gate* dst, const std::string& dst_pin)
         {
             Net* n;
             if (n = src->get_fan_out_net(src_pin); n != nullptr)
@@ -47,20 +60,7 @@ namespace hal
         run_known_issue_tests = false;
     }
 
-    std::unique_ptr<Netlist> test_utils::create_empty_netlist(const int id)
-    {
-        NO_COUT_BLOCK;
-        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(get_testing_gate_library());
-
-        if (id >= 0)
-        {
-            nl->set_id(id);
-        }
-        nl->set_device_name("device_name");
-        nl->set_design_name("design_name");
-
-        return nl;
-    }
+    
 
     void test_utils::init_log_channels()
     {
@@ -117,11 +117,6 @@ namespace hal
         auto in_pins        = g->get_type()->get_input_pins();
         bool is_destination = (std::find(in_pins.begin(), in_pins.end(), pin_type) != in_pins.end());
         return get_endpoint(nl, gate_id, pin_type, is_destination);
-    }
-
-    bool test_utils::is_empty(Endpoint* ep)
-    {
-        return ep == nullptr;
     }
 
     std::vector<BooleanFunction::Value> test_utils::minimize_truth_table(const std::vector<BooleanFunction::Value> tt)
@@ -419,22 +414,24 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl             = get_testing_gate_library();
-        std::unique_ptr<Netlist> nl = create_empty_netlist(id);
+        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(gl);
+        nl->set_device_name("device_name");
+        nl->set_design_name("design_name");
         if (id >= 0)
         {
             nl->set_id(id);
         }
 
         // Create the gates
-        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_2_to_1"), "gate_0");
-        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_types().at("gnd"), "gate_1");
-        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_types().at("vcc"), "gate_2");
-        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_types().at("gate_1_to_1"), "gate_3");
-        Gate* gate_4 = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_types().at("gate_1_to_1"), "gate_4");
-        Gate* gate_5 = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_types().at("gate_2_to_1"), "gate_5");
-        Gate* gate_6 = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_types().at("gate_2_to_0"), "gate_6");
-        Gate* gate_7 = nl->create_gate(MIN_GATE_ID + 7, gl->get_gate_types().at("gate_2_to_1"), "gate_7");
-        Gate* gate_8 = nl->create_gate(MIN_GATE_ID + 8, gl->get_gate_types().at("gate_2_to_1"), "gate_8");
+        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("gate_2_to_1"), "gate_0");
+        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_type_by_name("gnd"), "gate_1");
+        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_type_by_name("vcc"), "gate_2");
+        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_type_by_name("gate_1_to_1"), "gate_3");
+        Gate* gate_4 = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_type_by_name("gate_1_to_1"), "gate_4");
+        Gate* gate_5 = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_type_by_name("gate_2_to_1"), "gate_5");
+        Gate* gate_6 = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_type_by_name("gate_2_to_0"), "gate_6");
+        Gate* gate_7 = nl->create_gate(MIN_GATE_ID + 7, gl->get_gate_type_by_name("gate_2_to_1"), "gate_7");
+        Gate* gate_8 = nl->create_gate(MIN_GATE_ID + 8, gl->get_gate_type_by_name("gate_2_to_1"), "gate_8");
 
         gate_0->set_data("a", "b", "c", "d");
         gate_1->set_data("x", "y", "z", "w");
@@ -468,13 +465,19 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl             = get_testing_gate_library();
-        std::unique_ptr<Netlist> nl = create_empty_netlist(id);
+        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(gl);
+        nl->set_device_name("device_name");
+        nl->set_design_name("design_name");
+        if (id >= 0)
+        {
+            nl->set_id(id);
+        }
 
         // Create the gates
-        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_4_to_1"), "gate_0");
-        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_types().at("gate_4_to_1"), "gate_1");
-        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_types().at("gate_4_to_1"), "gate_2");
-        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_types().at("gate_4_to_1"), "gate_3");
+        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("gate_4_to_1"), "gate_0");
+        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_type_by_name("gate_4_to_1"), "gate_1");
+        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_type_by_name("gate_4_to_1"), "gate_2");
+        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_type_by_name("gate_4_to_1"), "gate_3");
 
         // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
 
@@ -496,10 +499,16 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl             = get_testing_gate_library();
-        std::unique_ptr<Netlist> nl = create_empty_netlist(id);
+        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(gl);
+        nl->set_device_name("device_name");
+        nl->set_design_name("design_name");
+        if (id >= 0)
+        {
+            nl->set_id(id);
+        }
 
         // Create the Gate
-        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_1_to_1"), "gate_0");
+        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("gate_1_to_1"), "gate_0");
 
         // Net connected to the input pin
         Net* net_X_1 = nl->create_net(MIN_GATE_ID + 0, "net_X_1");
@@ -516,17 +525,23 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl             = get_testing_gate_library();
-        std::unique_ptr<Netlist> nl = create_empty_netlist(id);
+        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(gl);
+        nl->set_device_name("device_name");
+        nl->set_design_name("design_name");
+        if (id >= 0)
+        {
+            nl->set_id(id);
+        }
 
         // Create the gates
-        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_2_to_1"), "gate_0");
-        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_types().at("gnd"), "gate_1");
-        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_types().at("vcc"), "gate_2");
-        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_types().at("gate_1_to_1"), "gate_3");
-        Gate* gate_4 = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_types().at("gate_1_to_1"), "gate_4");
-        Gate* gate_5 = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_types().at("gate_2_to_1"), "gate_5");
-        Gate* gate_6 = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_types().at("gate_2_to_1"), "gate_6");
-        Gate* gate_7 = nl->create_gate(MIN_GATE_ID + 7, gl->get_gate_types().at("gate_2_to_1"), "gate_7");
+        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("gate_2_to_1"), "gate_0");
+        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_type_by_name("gnd"), "gate_1");
+        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_type_by_name("vcc"), "gate_2");
+        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_type_by_name("gate_1_to_1"), "gate_3");
+        Gate* gate_4 = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_type_by_name("gate_1_to_1"), "gate_4");
+        Gate* gate_5 = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_type_by_name("gate_2_to_1"), "gate_5");
+        Gate* gate_6 = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_type_by_name("gate_2_to_1"), "gate_6");
+        Gate* gate_7 = nl->create_gate(MIN_GATE_ID + 7, gl->get_gate_type_by_name("gate_2_to_1"), "gate_7");
 
         // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
         Net* net_1_3 = nl->create_net(MIN_NET_ID + 13, "gnd_net");
@@ -565,7 +580,7 @@ namespace hal
     Gate* test_utils::create_test_gate(Netlist* nl, const u32 id)
     {
         GateLibrary* gl = get_testing_gate_library();
-        Gate* res_gate  = nl->create_gate(id, gl->get_gate_types().at("gate_3_to_1"), "gate_" + std::to_string(id));
+        Gate* res_gate  = nl->create_gate(id, gl->get_gate_type_by_name("gate_3_to_1"), "gate_" + std::to_string(id));
 
         return res_gate;
     }
@@ -673,7 +688,7 @@ namespace hal
             log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: Names are different (\"{}\" vs \"{}\")", g0->get_name(), g1->get_name());
             return false;
         }
-        if (g0->get_type() != g1->get_type())
+        if (*(g0->get_type()) != *(g1->get_type()))
         {
             log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: Gates types are different (\"{}\" vs \"{}\")", g0->get_type()->get_name(), g1->get_type()->get_name());
             return false;

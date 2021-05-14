@@ -182,6 +182,8 @@ namespace hal
             }
         }
 
+        res_stream << "endmodule" << std::endl;
+
         return true;
     }
 

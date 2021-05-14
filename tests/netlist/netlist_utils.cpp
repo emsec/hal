@@ -140,18 +140,12 @@ namespace hal
             *    .-=|gate_1|=-'  |
             *    '---------------'
             */
-            std::unique_ptr<Netlist> cyclic_nl = test_utils::create_empty_netlist();
-            Gate* cy_gate_0                    = cyclic_nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
-            Gate* cy_gate_1                    = cyclic_nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_1");
-            cy_gate_0->add_boolean_function("O", BooleanFunction::from_string("O", {"I"}));
-            cy_gate_1->add_boolean_function("O", BooleanFunction::from_string("O", {"I"}));
+            std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+            Gate* cy_gate_0 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+            Gate* cy_gate_1 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_1");
 
-            Net* cy_net_0 = cyclic_nl->create_net("net_0");
-            Net* cy_net_1 = cyclic_nl->create_net("net_1");
-            cy_net_0->add_source(cy_gate_0, "O");
-            cy_net_0->add_destination(cy_gate_1, "I");
-            cy_net_1->add_source(cy_gate_1, "O");
-            cy_net_1->add_destination(cy_gate_0, "I");
+            Net* cy_net_0 = test_utils::connect(netlist.get(), cy_gate_0, "O", cy_gate_1, "I");
+            Net* cy_net_1 = test_utils::connect(netlist.get(), cy_gate_1, "O", cy_gate_0, "I");
 
             const std::vector<const Gate*> subgraph_gates({cy_gate_0, cy_gate_1});
             const Net* output_net        = cy_net_0;
@@ -238,17 +232,18 @@ namespace hal
     {
         TEST_START
         {
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
-            Gate* gate_0     = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("GND"), "gate_0");
-            Gate* gate_1     = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_type_by_name("VCC"), "gate_1");
-            Gate* gate_2     = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_type_by_name("BUF"), "gate_2");
-            Gate* gate_3     = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_type_by_name("AND2"), "gate_3");
-            Gate* gate_4_seq = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_type_by_name("DFFE"), "gate_4_seq");
-            Gate* gate_5_seq = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_type_by_name("DFFE"), "gate_5_seq");
-            Gate* gate_6     = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_type_by_name("AND2"), "gate_6");
+            Gate* gate_0     = nl->create_gate(gl->get_gate_type_by_name("GND"), "gate_0");
+            Gate* gate_1     = nl->create_gate(gl->get_gate_type_by_name("VCC"), "gate_1");
+            Gate* gate_2     = nl->create_gate(gl->get_gate_type_by_name("BUF"), "gate_2");
+            Gate* gate_3     = nl->create_gate(gl->get_gate_type_by_name("AND2"), "gate_3");
+            Gate* gate_4_seq = nl->create_gate(gl->get_gate_type_by_name("DFFE"), "gate_4_seq");
+            Gate* gate_5_seq = nl->create_gate(gl->get_gate_type_by_name("DFFE"), "gate_5_seq");
+            Gate* gate_6     = nl->create_gate(gl->get_gate_type_by_name("AND2"), "gate_6");
 
             test_utils::connect(nl.get(), gate_0, "O", gate_2, "I");
             test_utils::connect(nl.get(), gate_0, "O", gate_3, "I1");
@@ -320,9 +315,10 @@ namespace hal
     {
         TEST_START
         {
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             Gate* l0 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l0");
             Gate* l1 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l1");
@@ -353,9 +349,10 @@ namespace hal
     {
         TEST_START
         {
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
             nl->mark_gnd_gate(gnd_gate);
@@ -393,9 +390,10 @@ namespace hal
             EXPECT_EQ(g0->get_successor("O")->get_gate(), g2);
         }
         {
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
             nl->mark_gnd_gate(gnd_gate);
@@ -436,9 +434,10 @@ namespace hal
             EXPECT_EQ(g0->get_successor("O")->get_gate(), g2);
         }
         {
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
             nl->mark_gnd_gate(gnd_gate);
@@ -490,9 +489,10 @@ namespace hal
     {
         TEST_START
         {
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
             nl->mark_gnd_gate(gnd_gate);
@@ -552,9 +552,10 @@ namespace hal
     {
         TEST_START
         {
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
             nl->mark_gnd_gate(gnd_gate);
@@ -600,9 +601,10 @@ namespace hal
     {
         TEST_START
         {
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             // TODO implement test
         }
@@ -619,9 +621,10 @@ namespace hal
         TEST_START
         {
             // test default functionality
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
             Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
@@ -659,9 +662,10 @@ namespace hal
         }
         {
             // test connection through unspecified pins
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
             Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
@@ -694,9 +698,10 @@ namespace hal
         }
         {
             // test loop
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
             Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
@@ -713,9 +718,10 @@ namespace hal
         }
         {
             // test multiple successors
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             Gate* c0 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c0");
             Gate* c1 = nl->create_gate(gl->get_gate_type_by_name("CARRY"), "c1");
@@ -760,9 +766,10 @@ namespace hal
     {
         TEST_START
         {
-            const GateLibrary* gl       = test_utils::get_gate_library();
-            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl);
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
             ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl       = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
 
             // TODO implement test
         }

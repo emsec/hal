@@ -20,7 +20,24 @@ namespace hal
 {
     namespace test_utils
     {
-        Net* connect(Netlist* nl, Gate* src, std::string src_pin, Gate* dst, std::string dst_pin);
+        /**
+         * Create an empty netlist using the default testing gate library.
+         *
+         * @param[in] id - ID of the netlist
+         * @returns An empty netlist
+         */
+        std::unique_ptr<Netlist> create_empty_netlist(const u32 id = 0);
+
+        /**
+         * Create a connectio between two gates.
+         * 
+         * @param[in] netlist - The netlist.
+         * @param[in] src_gate - The source gate.
+         * @param[in] src_pin - The source pin at the specified source gate.
+         * @param[in] dst_gate - The destination gate.
+         * @param[in] dst_pin - The destination pin at the specified destination gate.
+         */
+        Net* connect(Netlist* netlist, Gate* src_gate, const std::string& src_pin, Gate* dst_gate, const std::string& dst_pin);
 
         // TODO clean up everything below
 
@@ -75,14 +92,6 @@ namespace hal
         [[maybe_unused]] void deactivate_known_issue_tests();
 
         /**
-         * Creates an empty netlist.
-         *
-         * @param[in] id - Id of the netlist
-         * @returns An empty netlist
-         */
-        std::unique_ptr<Netlist> create_empty_netlist(const int id = -1);
-
-        /**
          * Initializes all log channels used by hal.
          */
         void init_log_channels();
@@ -108,14 +117,6 @@ namespace hal
          * @returns the Endpoint* object
          */
         Endpoint* get_endpoint(Gate* g, const std::string& pin_type);
-
-        /**
-         * Checks if an Endpoint* is empty (i.e. (nullptr, ""))
-         *
-         * @param[in] ep - Endpoint
-         * @return true, if the Endpoint* is the empty Endpoint
-         */
-        bool is_empty(Endpoint* ep);
 
         /**
          * Minimizes a truth table of a boolean function such that variables that do not matter are eliminated.
