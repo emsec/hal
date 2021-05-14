@@ -27,8 +27,8 @@ namespace hal
                     std::vector<Module*> submodules = (*it)->get_submodules();
                     if (submodules.empty() || std::all_of(submodules.begin(), submodules.end(), [modules_set](const Module* submod) { return modules_set.find(submod) == modules_set.end(); }))
                     {
-                        it = modules_set.erase(it);
                         ordered_modules.push_back(*it);
+                        it = modules_set.erase(it);
                     }
                     else
                     {
