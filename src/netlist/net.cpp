@@ -74,6 +74,10 @@ namespace hal
 
     bool Net::remove_source(Endpoint* ep)
     {
+        if(ep == nullptr) 
+        {
+            return false;
+        }
         return m_internal_manager->net_remove_source(this, ep);
     }
 
@@ -150,6 +154,11 @@ namespace hal
 
     bool Net::remove_destination(Endpoint* ep)
     {
+        if(ep == nullptr) 
+        {
+            return false;
+        }
+        
         return m_internal_manager->net_remove_destination(this, ep);
     }
 
