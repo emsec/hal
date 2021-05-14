@@ -28,6 +28,7 @@
 
 #include <functional>
 #include <map>
+#include <set>
 #include <sstream>
 
 namespace hal
@@ -57,6 +58,8 @@ namespace hal
         bool write(Netlist* netlist, const std::filesystem::path& file_path) override;
 
     private:
+        static const std::set<std::string> valid_types;
+
         bool write_module_declaration(std::stringstream& res_stream,
                                       const Module* module,
                                       std::unordered_map<const Module*, std::string>& module_type_aliases,
@@ -70,10 +73,11 @@ namespace hal
                                    std::unordered_map<const DataContainer*, std::string>& aliases,
                                    std::unordered_map<std::string, u32>& identifier_occurrences,
                                    std::unordered_map<const Module*, std::string>& module_type_aliases) const;
-        bool write_generic_assignments(std::stringstream& res_stream, const DataContainer* container) const;
+        bool write_parameter_assignments(std::stringstream& res_stream, const DataContainer* container) const;
         bool write_pin_assignments(std::stringstream& res_stream,
                                    const std::vector<std::pair<std::string, std::vector<const Net*>>>& pin_assignments,
                                    std::unordered_map<const DataContainer*, std::string>& aliases) const;
+        bool write_parameter_value(std::stringstream& res_stream, const std::string& type, const std::string& value) const;
         std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
         std::string escape(const std::string& s) const;
     };

@@ -10,6 +10,8 @@
 
 namespace hal
 {
+    const std::set<std::string> VerilogWriter::valid_types = {"string", "integer", "floating_point", "bit_value", "bit_vector"};
+
     bool VerilogWriter::write(Netlist* netlist, const std::filesystem::path& file_path)
     {
         std::stringstream res_stream;
@@ -86,8 +88,6 @@ namespace hal
         std::unordered_map<const DataContainer*, std::string> aliases;
         std::unordered_map<std::string, u32> identifier_occurrences;
 
-        // TODO generics
-
         bool first_port = true;
         std::stringstream tmp_stream;
 
@@ -130,6 +130,29 @@ namespace hal
         res_stream << ");" << std::endl;
         res_stream << tmp_stream.str();
 
+        {
+            // module parameters
+            const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data = module->get_data_map();
+
+            for (const auto& [first, second] : data)
+            {
+                const auto& [category, key] = first;
+                const auto& [type, value]   = second;
+
+                if (category != "generic" || valid_types.find(type) == valid_types.end())
+                {
+                    continue;
+                }
+
+                res_stream << "    parameter " << escape(key) << " = ";
+                if (!write_parameter_value(res_stream, type, value))
+                {
+                    return false;
+                }
+                res_stream << ";" << std::endl;
+            }
+        }
+
         for (Net* net : module->get_nets())
         {
             if (aliases.find(net) == aliases.end())
@@ -170,7 +193,7 @@ namespace hal
         const GateType* gate_type = gate->get_type();
 
         res_stream << "    " << escape(gate_type->get_name());
-        if (!write_generic_assignments(res_stream, gate))
+        if (!write_parameter_assignments(res_stream, gate))
         {
             return false;
         }
@@ -251,7 +274,7 @@ namespace hal
                                               std::unordered_map<const Module*, std::string>& module_type_aliases) const
     {
         res_stream << "    " << escape(module_type_aliases.at(module));
-        if (!write_generic_assignments(res_stream, module))
+        if (!write_parameter_assignments(res_stream, module))
         {
             return false;
         }
@@ -281,13 +304,11 @@ namespace hal
         return true;
     }
 
-    bool VerilogWriter::write_generic_assignments(std::stringstream& res_stream, const DataContainer* container) const
+    bool VerilogWriter::write_parameter_assignments(std::stringstream& res_stream, const DataContainer* container) const
     {
         const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data = container->get_data_map();
 
-        static const std::set<std::string> valid_types = {"string", "integer", "floating_point", "bit_value", "bit_vector"};
-
-        bool first_generic = true;
+        bool first_parameter = true;
         for (const auto& [first, second] : data)
         {
             const auto& [category, key] = first;
@@ -298,10 +319,10 @@ namespace hal
                 continue;
             }
 
-            if (first_generic)
+            if (first_parameter)
             {
                 res_stream << " #(" << std::endl;
-                first_generic = false;
+                first_parameter = false;
             }
             else
             {
@@ -310,40 +331,15 @@ namespace hal
 
             res_stream << "        ." << escape(key) << "(";
 
-            if (type == "string")
+            if (!write_parameter_value(res_stream, type, value))
             {
-                res_stream << "\"" << value << "\"";
-            }
-            else if (type == "integer" || type == "floating_point")
-            {
-                res_stream << value;
-            }
-            else if (type == "bit_value")
-            {
-                res_stream << "1'b" << value;
-            }
-            else if (type == "bit_vector")
-            {
-                u32 len = value.size() * 4;
-                if (value.at(0) == '0' || value.at(0) == '1')
-                {
-                    len -= 3;
-                }
-                else if (value.at(0) == '2' || value.at(0) == '3')
-                {
-                    len -= 2;
-                }
-                else if (value.at(0) >= '4' && value.at(0) <= '7')
-                {
-                    len -= 1;
-                }
-                res_stream << len << "'h" << value;
+                return false;
             }
 
             res_stream << ")";
         }
 
-        if (!first_generic)
+        if (!first_parameter)
         {
             res_stream << std::endl << "    )";
         }
@@ -414,6 +410,45 @@ namespace hal
         }
 
         res_stream << std::endl << "    )";
+
+        return true;
+    }
+
+    bool VerilogWriter::write_parameter_value(std::stringstream& res_stream, const std::string& type, const std::string& value) const
+    {
+        if (type == "string")
+        {
+            res_stream << "\"" << value << "\"";
+        }
+        else if (type == "integer" || type == "floating_point")
+        {
+            res_stream << value;
+        }
+        else if (type == "bit_value")
+        {
+            res_stream << "1'b" << value;
+        }
+        else if (type == "bit_vector")
+        {
+            u32 len = value.size() * 4;
+            if (value.at(0) == '0' || value.at(0) == '1')
+            {
+                len -= 3;
+            }
+            else if (value.at(0) == '2' || value.at(0) == '3')
+            {
+                len -= 2;
+            }
+            else if (value.at(0) >= '4' && value.at(0) <= '7')
+            {
+                len -= 1;
+            }
+            res_stream << len << "'h" << value;
+        }
+        else
+        {
+            return false;
+        }
 
         return true;
     }

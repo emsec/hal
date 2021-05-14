@@ -496,6 +496,13 @@ namespace hal
                     return false;
                 }
             }
+            else if (next_token == "parameter")
+            {
+                // TODO add support for parameter parsing
+                m_token_stream.consume_until(";");
+                m_token_stream.consume(";", true);
+                log_warning("verilog_parser", "cannot parse parameter provided for module '{}'.", module_name);
+            }
             else if (next_token == "assign")
             {
                 if (!parse_assignment(module))

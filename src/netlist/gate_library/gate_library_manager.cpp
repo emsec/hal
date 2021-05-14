@@ -37,7 +37,7 @@ namespace hal
                     std::string name = "HAL_GND";
                     if (gate_types.find(name) != gate_types.end())
                     {
-                        log_error("gate_library_manager", "no 'GND' gate type found in gate library, but gate type 'HAL_GND' already exist.");
+                        log_error("gate_library_manager", "no 'GND' gate type found in gate library, but gate type 'HAL_GND' already exists.");
                         return false;
                     }
 
@@ -53,7 +53,7 @@ namespace hal
                     std::string name = "HAL_VDD";
                     if (gate_types.find(name) != gate_types.end())
                     {
-                        log_error("gate_library_manager", "no 'VDD' gate found in gate library, but gate type 'HAL_VDD' already exist.");
+                        log_error("gate_library_manager", "no 'VDD' gate found in gate library, but gate type 'HAL_VDD' already exists.");
                         return false;
                     }
 
