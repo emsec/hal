@@ -14,11 +14,40 @@ namespace hal
     {
         std::stringstream res_stream;
 
-        // TODO make sure that module type identifiers are unique
+        // get modules in hierarchical order (bottom-up)
+        std::vector<const Module*> ordered_modules;
+        {
+            const std::vector<Module*> modules = netlist->get_modules();
+            std::unordered_set<const Module*> modules_set(modules.begin(), modules.end());
+
+            while (!modules_set.empty())
+            {
+                for (auto it = modules_set.begin(); it != modules_set.end();)
+                {
+                    std::vector<Module*> submodules = (*it)->get_submodules();
+                    if (submodules.empty() || std::all_of(submodules.begin(), submodules.end(), [modules_set](const Module* submod) { return modules_set.find(submod) == modules_set.end(); }))
+                    {
+                        it = modules_set.erase(it);
+                        ordered_modules.push_back(*it);
+                    }
+                    else
+                    {
+                        it++;
+                    }
+                }
+            }
+
+            assert(ordered_modules.back()->is_top_module() == true);
+        }
+
         // TODO take care of 1 and 0 nets (probably rework their handling within the core to supply a "is_gnd_net" and "is_vcc_net" function)
 
-        // TODO figure out order of declaration for all modules and declare in a loop
-        write_module_declaration(res_stream, netlist->get_top_module());
+        std::unordered_map<const Module*, std::string> module_aliases;
+        std::unordered_map<std::string, u32> module_identifier_occurrences;
+        for (const Module* mod : ordered_modules)
+        {
+            write_module_declaration(res_stream, mod, module_aliases, module_identifier_occurrences);
+        }
 
         // write to file
         std::ofstream file;
@@ -34,12 +63,28 @@ namespace hal
         return true;
     }
 
-    bool VerilogWriter::write_module_declaration(std::stringstream& res_stream, const Module* module) const
+    bool VerilogWriter::write_module_declaration(std::stringstream& res_stream,
+                                                 const Module* module,
+                                                 std::unordered_map<const Module*, std::string>& module_type_aliases,
+                                                 std::unordered_map<std::string, u32>& module_type_occurrences) const
     {
+        // deal with empty modules
+        if (module->get_gates(nullptr, true).empty())
+        {
+            return true;
+        }
+
+        // deal with unspecified module type
+        std::string module_type = module->get_type();
+        if (module_type.empty())
+        {
+            module_type = module->get_name() + "_type";
+        }
+        module_type_aliases[module] = get_unique_alias(module_type_occurrences, module_type);
+        res_stream << "module " << escape(module_type_aliases.at(module));
+
         std::unordered_map<const DataContainer*, std::string> aliases;
         std::unordered_map<std::string, u32> identifier_occurrences;
-
-        res_stream << "module " << escape(module->get_type());    // TODO alias
 
         // TODO generics
 
@@ -108,7 +153,7 @@ namespace hal
         for (const Module* sub_module : module->get_submodules())
         {
             res_stream << std::endl;
-            if (!write_module_instance(res_stream, sub_module, aliases, identifier_occurrences))
+            if (!write_module_instance(res_stream, sub_module, aliases, identifier_occurrences, module_type_aliases))
             {
                 return false;
             }
@@ -202,9 +247,10 @@ namespace hal
     bool VerilogWriter::write_module_instance(std::stringstream& res_stream,
                                               const Module* module,
                                               std::unordered_map<const DataContainer*, std::string>& aliases,
-                                              std::unordered_map<std::string, u32>& identifier_occurrences) const
+                                              std::unordered_map<std::string, u32>& identifier_occurrences,
+                                              std::unordered_map<const Module*, std::string>& module_type_aliases) const
     {
-        res_stream << "    " << escape(module->get_type());    // TODO respect alias
+        res_stream << "    " << escape(module_type_aliases.at(module));
         if (!write_generic_assignments(res_stream, module))
         {
             return false;
