@@ -185,19 +185,19 @@ namespace hal {
                 nl->mark_global_input_net(global_in);
 
                 Gate* test_gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate_0");
+                    nl->create_gate(MIN_GATE_ID + 0, nl->get_gate_library()->get_gate_type_by_name("gate_1_to_1"), "test_gate_0");
                 Gate* test_gate_1 =
-                    nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate_1");
+                    nl->create_gate(MIN_GATE_ID + 1, nl->get_gate_library()->get_gate_type_by_name("gate_1_to_1"), "test_gate_1");
                 Gate* test_gate_2 =
-                    nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate_2");
+                    nl->create_gate(MIN_GATE_ID + 2, nl->get_gate_library()->get_gate_type_by_name("gate_1_to_1"), "test_gate_2");
                 Gate* test_gate_3 =
-                    nl->create_gate(MIN_GATE_ID + 3, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate_3");
+                    nl->create_gate(MIN_GATE_ID + 3, nl->get_gate_library()->get_gate_type_by_name("gate_1_to_1"), "test_gate_3");
                 Gate* test_gate_4 =
-                    nl->create_gate(MIN_GATE_ID + 4, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate_4");
+                    nl->create_gate(MIN_GATE_ID + 4, nl->get_gate_library()->get_gate_type_by_name("gate_1_to_1"), "test_gate_4");
                 Gate* test_gate_5 =
-                    nl->create_gate(MIN_GATE_ID + 5, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate_5");
+                    nl->create_gate(MIN_GATE_ID + 5, nl->get_gate_library()->get_gate_type_by_name("gate_1_to_1"), "test_gate_5");
                 Gate* test_gate_6 =
-                    nl->create_gate(MIN_GATE_ID + 6, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate_6");
+                    nl->create_gate(MIN_GATE_ID + 6, nl->get_gate_library()->get_gate_type_by_name("gate_1_to_1"), "test_gate_6");
 
                 // Create output nets for all gates to create a valid netlist
                 unsigned int idx = 0;
@@ -510,7 +510,7 @@ namespace hal {
                 Net* test_net = nl->create_net(test_utils::MIN_NET_ID + 0, "gate_net_name");
                 Gate*
                     test_gate = nl->create_gate(test_utils::MIN_GATE_ID + 0,
-                                                test_utils::get_gate_type_by_name("gate_1_to_1"),
+                                                nl->get_gate_library()->get_gate_type_by_name("gate_1_to_1"),
                                                 "gate_net_name");
 
                 test_net->add_destination(test_gate, "I");

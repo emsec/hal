@@ -363,8 +363,8 @@ namespace hal {
                 // The expected result
                 std::vector<Gate*> ex_gates = {nl->get_gate_by_id(MIN_GATE_ID + 3), nl->get_gate_by_id(MIN_GATE_ID + 4)};
 
-                EXPECT_TRUE(test_utils::vectors_have_same_content(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")), ex_gates));
-                EXPECT_TRUE(test_utils::vectors_have_same_content(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")), ex_gates));
+                EXPECT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")), ex_gates);
+                EXPECT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")), ex_gates);
             }
             {// Get an existing Gate of the example netlist by its name
                 auto nl = test_utils::create_example_netlist();
@@ -711,7 +711,7 @@ namespace hal {
                     ex_nets.push_back(nl->get_net_by_id(id));
                 }
 
-                EXPECT_TRUE(test_utils::vectors_have_same_content(nl->get_nets(), ex_nets));
+                EXPECT_EQ(nl->get_nets(), ex_nets);
             }
         TEST_END
     }
@@ -750,7 +750,7 @@ namespace hal {
                 Net* net_0 = nl->create_net("net_name");
                 Net* net_1 = nl->create_net("other_net_name");
 
-                EXPECT_TRUE(test_utils::vectors_have_same_content(nl->get_nets(), std::vector<Net*>({net_0, net_1})));
+                EXPECT_EQ(nl->get_nets(), std::vector<Net*>({net_0, net_1}));
                 EXPECT_EQ(nl->get_nets(test_utils::net_name_filter("net_name")), std::vector<Net*>({net_0}));
             }
             {

@@ -151,30 +151,6 @@ namespace hal
         return tt;
     }
 
-    GateType* test_utils::get_gate_type_by_name(std::string name, GateLibrary* gate_lib)
-    {
-        GateLibrary* gl;
-        if (gate_lib == nullptr)
-        {
-            gl = get_testing_gate_library();
-        }
-        else
-        {
-            gl = gate_lib;
-        }
-        auto names_to_type = gl->get_gate_types();
-        // If the Gate type isn't found in the Gate library
-        if (names_to_type.find(name) == names_to_type.end())
-        {
-            log_error("test_utils", "get_gate_type_by_name: Gate type '{}' can't be found in gate library '{}' ", name, gate_lib->get_name());
-            return nullptr;
-        }
-        else
-        {
-            return names_to_type.at(name);
-        }
-    }
-
     bool test_utils::string_contains_substring(const std::string str, const std::string sub_str)
     {
         return (str.find(sub_str) != std::string::npos);
@@ -575,14 +551,6 @@ namespace hal
         net_7_out->add_source(gate_7, "O");
 
         return nl;
-    }
-
-    Gate* test_utils::create_test_gate(Netlist* nl, const u32 id)
-    {
-        GateLibrary* gl = get_testing_gate_library();
-        Gate* res_gate  = nl->create_gate(id, gl->get_gate_type_by_name("gate_3_to_1"), "gate_" + std::to_string(id));
-
-        return res_gate;
     }
 
     Endpoint* test_utils::get_destination_by_pin_type(const std::vector<Endpoint*> dsts, const std::string pin_type)

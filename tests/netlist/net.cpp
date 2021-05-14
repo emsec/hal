@@ -708,7 +708,7 @@ namespace hal {
 
             std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
             Net* test_net = test_nl->get_net_by_id(MIN_NET_ID + 13);
-            Gate* new_gate = test_nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "new_gate");
+            Gate* new_gate = test_nl->create_gate(test_nl->get_gate_library()->get_gate_type_by_name("gate_1_to_1"), "new_gate");
 
             // Small functions that should trigger certain events exactly once (these operations are executed in this order)
             std::function<void(void)> trigger_name_changed = [=](){test_net->set_name("new_name");};

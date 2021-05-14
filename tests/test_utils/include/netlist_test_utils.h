@@ -130,15 +130,6 @@ namespace hal
         std::vector<BooleanFunction::Value> minimize_truth_table(const std::vector<BooleanFunction::Value> tt);
 
         /**
-         * Get a Gate type by its name
-         *
-         * @param name - the name of the GateType
-         * @param gate_library - The Gate library, the GateType can be found in. If empty, the example Gate library (g_lib_name) is taken.
-         * @return the GateType pointer if found. If no Gate type matches, return nullptr
-         */
-        GateType* get_gate_type_by_name(std::string name, GateLibrary* gate_library = nullptr);
-
-        /**
          * Given a vector of endpoints. Returns the first Endpoint* that has a certain pin type
          *
          * @param[in] dsts - vector of destination endpoints
@@ -156,15 +147,6 @@ namespace hal
          */
         Endpoint* get_source_by_pin_type(const std::vector<Endpoint*> srcs, const std::string pin_type);
 
-        // NOTE: Using create_test_gate is messy. It should not exist. Will be removed someday...
-        /**
-         * Create a test Gate with 3 input pins
-         *
-         * @param nl - the netlist, the test Gate is created in
-         * @param[in] id - id of the Gate
-         * @returns an already created AND3 Gate
-         */
-        Gate* create_test_gate(Netlist* nl, const u32 id);
         /**
          * Checks if two vectors have the same content regardless of their order. Shouldn't be used for
          * large vectors, since it isn't really efficient.
