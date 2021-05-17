@@ -26,10 +26,10 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
 
-#include <functional>
-#include <map>
 #include <set>
 #include <sstream>
+#include <unordered_map>
+#include <vector>
 
 namespace hal
 {

@@ -1138,9 +1138,9 @@ namespace hal
                     }
 
                     // merge generics and attributes
-                    for (const auto it : slave_net->get_data_map())
+                    for (const auto& [identifier, content] : slave_net->get_data_map())
                     {
-                        if (!master_net->set_data(std::get<0>(it.first), std::get<1>(it.first), std::get<0>(it.second), std::get<1>(it.second)))
+                        if (!master_net->set_data(std::get<0>(identifier), std::get<1>(identifier), std::get<0>(content), std::get<1>(content)))
                         {
                             log_warning("verilog_parser",
                                         "unable to transfer data from slave net '{}' with ID {} to master net '{}' with ID {}.",
