@@ -52,6 +52,7 @@ namespace hal
             {
                 return false;
             }
+            res_stream << std::endl;
         }
 
         // write to file
