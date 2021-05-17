@@ -1,9 +1,14 @@
 #include "gui/module_widget/module_widget.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/module_relay/module_relay.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_unfold_module.h"
+#include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -57,6 +62,8 @@ namespace hal
         connect(mTreeView, &ModuleTreeView::doubleClicked, this, &ModuleWidget::handleItemDoubleClicked);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleWidget::handleSelectionChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleWidget::handleModuleRemoved);
+
+        connect(mSearchAction, &QAction::triggered, this, &ModuleWidget::toggleSearchbar);
     }
 
     void ModuleWidget::setupToolbar(Toolbar* Toolbar)
@@ -66,11 +73,11 @@ namespace hal
 
     QList<QShortcut*> ModuleWidget::createShortcuts()
     {
-        QShortcut* search_shortcut = gKeybindManager->makeShortcut(this, "keybinds/searchbar_toggle");
-        connect(search_shortcut, &QShortcut::activated, this, &ModuleWidget::toggleSearchbar);
+        mSearchShortcut = new QShortcut(mSearchKeysequence, this);
+        connect(mSearchShortcut, &QShortcut::activated, mSearchAction, &QAction::trigger);
 
         QList<QShortcut*> list;
-        list.append(search_shortcut);
+        list.append(mSearchShortcut);
 
         return list;
     }
@@ -106,13 +113,13 @@ namespace hal
 
         QMenu context_menu;
 
-        QAction isolate_action("Isolate In New View", &context_menu);
-        QAction add_selection_action("Add Graph Selection To Module", &context_menu);
-        QAction add_child_action("Add Child Module", &context_menu);
-        QAction change_name_action("Change Module Name", &context_menu);
-        QAction change_type_action("Change Module Type", &context_menu);
-        QAction change_color_action("Change Module Color", &context_menu);
-        QAction delete_action("Delete Module", &context_menu);
+        QAction isolate_action("Isolate in new view", &context_menu);
+        QAction add_selection_action("Add selected gates to module", &context_menu);
+        QAction add_child_action("Add child module", &context_menu);
+        QAction change_name_action("Change module name", &context_menu);
+        QAction change_type_action("Change module type", &context_menu);
+        QAction change_color_action("Change module color", &context_menu);
+        QAction delete_action("Delete module", &context_menu);
 
         context_menu.addAction(&isolate_action);
         context_menu.addAction(&add_selection_action);
@@ -183,13 +190,13 @@ namespace hal
         for (const auto& index : current_selection)
         {
             u32 module_id = getModuleItemFromIndex(index)->id();
-            gSelectionRelay->mSelectedModules.insert(module_id);
+            gSelectionRelay->addModule(module_id);
         }
 
         if (current_selection.size() == 1)
         {
-            gSelectionRelay->mFocusType = SelectionRelay::ItemType::Module;
-            gSelectionRelay->mFocusId   = gNetlistRelay->getModuleModel()->getItem(mModuleProxyModel->mapToSource(current_selection.first()))->id();
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,
+                gNetlistRelay->getModuleModel()->getItem(mModuleProxyModel->mapToSource(current_selection.first()))->id());
         }
 
         gSelectionRelay->relaySelectionChanged(this);
@@ -202,14 +209,35 @@ namespace hal
 
     void ModuleWidget::openModuleInView(const QModelIndex& index)
     {
-        auto module = gNetlist->get_module_by_id(getModuleItemFromIndex(index)->id());
+        openModuleInView(getModuleItemFromIndex(index)->id(), false);
+    }
+
+    void ModuleWidget::openModuleInView(u32 moduleId, bool unfold)
+    {
+        const Module* module = gNetlist->get_module_by_id(moduleId);
 
         if (!module)
             return;
 
-        GraphContext* new_context = nullptr;
-        new_context                = gGraphContextManager->createNewContext(QString::fromStdString(module->get_name()));
-        new_context->add({module->get_id()}, {});
+        GraphContext* moduleContext =
+                gGraphContextManager->getCleanContext(QString::fromStdString(module->get_name()));
+        if (moduleContext)
+        {
+            gContentManager->getContextManagerWidget()->selectViewContext(moduleContext);
+            gContentManager->getContextManagerWidget()->handleOpenContextClicked();
+        }
+        else
+        {
+            UserActionCompound* act = new UserActionCompound;
+            act->setUseCreatedObject();
+            act->addAction(new ActionCreateObject(UserActionObjectType::Context,
+                                                  QString::fromStdString(module->get_name())));
+            act->addAction(new ActionAddItemsToObject({module->get_id()}, {}));
+            if (unfold) act->addAction(new ActionUnfoldModule(module->get_id()));
+            act->exec();
+            moduleContext = gGraphContextManager->getContextById(act->object().id());
+            moduleContext->setDirty(false);
+        }
     }
 
     void ModuleWidget::handleSelectionChanged(void* sender)
@@ -221,7 +249,7 @@ namespace hal
 
         QItemSelection module_selection;
 
-        for (auto module_id : gSelectionRelay->mSelectedModules)
+        for (auto module_id : gSelectionRelay->selectedModulesList())
         {
             QModelIndex index = mModuleProxyModel->mapFromSource(gNetlistRelay->getModuleModel()->getIndex(gNetlistRelay->getModuleModel()->getItem(module_id)));
             module_selection.select(index, index);
@@ -235,5 +263,10 @@ namespace hal
     ModuleItem* ModuleWidget::getModuleItemFromIndex(const QModelIndex& index)
     {
         return gNetlistRelay->getModuleModel()->getItem(mModuleProxyModel->mapToSource(index));
+    }
+
+    ModuleProxyModel* ModuleWidget::proxyModel()
+    {
+        return mModuleProxyModel;
     }
 }

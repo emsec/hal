@@ -150,7 +150,7 @@ namespace hal
         auto it = m_modules_map.find(id);
         if (it == m_modules_map.end())
         {
-            log_error("netlist", "there is no module with id = {}.", id);
+            log_error("netlist", "there is no module with ID {} in the netlist with ID {}.", id, m_netlist_id);
             return nullptr;
         }
         return it->second.get();
@@ -184,12 +184,12 @@ namespace hal
         return m_next_gate_id;
     }
 
-    Gate* Netlist::create_gate(const u32 id, const GateType* gt, const std::string& name, float x, float y)
+    Gate* Netlist::create_gate(const u32 id, GateType* gt, const std::string& name, i32 x, i32 y)
     {
         return m_manager->create_gate(id, gt, name, x, y);
     }
 
-    Gate* Netlist::create_gate(const GateType* gt, const std::string& name, float x, float y)
+    Gate* Netlist::create_gate(GateType* gt, const std::string& name, i32 x, i32 y)
     {
         return create_gate(get_unique_gate_id(), gt, name, x, y);
     }
@@ -206,12 +206,35 @@ namespace hal
 
     Gate* Netlist::get_gate_by_id(const u32 gate_id) const
     {
-        return m_top_module->get_gate_by_id(gate_id, true);
+        if (auto it = m_gates_map.find(gate_id); it != m_gates_map.end())
+        {
+            return it->second.get();
+        }
+
+        log_error("netlist", "there is no gate with ID {} in the netlist with ID {}.", gate_id, m_netlist_id);
+        return nullptr;
     }
 
     std::vector<Gate*> Netlist::get_gates(const std::function<bool(Gate*)>& filter) const
     {
-        return m_top_module->get_gates(filter, true);
+        std::vector<Gate*> res;
+        if (!filter)
+        {
+            res = m_gates;
+        }
+        else
+        {
+            for (Gate* g : m_gates)
+            {
+                if (!filter(g))
+                {
+                    continue;
+                }
+                res.push_back(g);
+            }
+        }
+
+        return res;
     }
 
     bool Netlist::mark_vcc_gate(Gate* gate)
@@ -222,7 +245,7 @@ namespace hal
         }
         if (is_vcc_gate(gate))
         {
-            log_debug("netlist", "gate '{}' (id = {:08x}) is already registered as global vcc gate in netlist.", gate->get_name(), gate->get_id());
+            log_debug("netlist", "gate '{}' with ID {} is already registered as global VCC gate in the netlist with ID {}.", gate->get_name(), gate->get_id(), m_netlist_id);
             return true;
         }
         m_vcc_gates.push_back(gate);
@@ -238,7 +261,7 @@ namespace hal
         }
         if (is_gnd_gate(gate))
         {
-            log_debug("netlist", "gate '{}' (id = {:08x}) is already registered as global gnd gate in netlist.", gate->get_name(), gate->get_id());
+            log_debug("netlist", "gate '{}' with ID {} is already registered as global GND gate in the netlist with ID {}.", gate->get_name(), gate->get_id(), m_netlist_id);
             return true;
         }
         m_gnd_gates.push_back(gate);
@@ -255,7 +278,7 @@ namespace hal
         auto it = std::find(m_vcc_gates.begin(), m_vcc_gates.end(), gate);
         if (it == m_vcc_gates.end())
         {
-            log_debug("netlist", "gate '{}' (id = {:08x}) is not registered as a global vcc gate in netlist.", gate->get_name(), gate->get_id());
+            log_debug("netlist", "gate '{}' with ID {} is not registered as global VCC gate in the netlist with ID {}.", gate->get_name(), gate->get_id(), m_netlist_id);
             return false;
         }
         m_vcc_gates.erase(it);
@@ -272,7 +295,7 @@ namespace hal
         auto it = std::find(m_gnd_gates.begin(), m_gnd_gates.end(), gate);
         if (it == m_gnd_gates.end())
         {
-            log_debug("netlist", "gate '{}' (id = {:08x}) is not registered as a global gnd gate in netlist.", gate->get_name(), gate->get_id());
+            log_debug("netlist", "gate '{}' with ID {} is not registered as global GND gate in the netlist with ID {}.", gate->get_name(), gate->get_id(), m_netlist_id);
             return false;
         }
         m_gnd_gates.erase(it);
@@ -343,7 +366,7 @@ namespace hal
         auto it = m_nets_map.find(net_id);
         if (it == m_nets_map.end())
         {
-            log_error("netlist", "no net with id {:08x} registered in netlist.", net_id);
+            log_error("netlist", "there is no net with ID {} in the netlist with ID {}.", net_id, m_netlist_id);
             return nullptr;
         }
         return it->second.get();
@@ -375,7 +398,7 @@ namespace hal
         }
         if (is_global_input_net(n))
         {
-            log_debug("netlist", "net '{}' (id = {:08x}) is already registered as global input net in netlist.", n->get_name(), n->get_id());
+            log_debug("netlist", "net '{}' with ID {} is already registered as global input net in the netlist with ID {}.", n->get_name(), n->get_id(), m_netlist_id);
             return true;
         }
         m_global_input_nets.push_back(n);
@@ -392,7 +415,7 @@ namespace hal
         }
         if (is_global_output_net(n))
         {
-            log_debug("netlist", "net '{}' (id = {:08x}) is already registered as global output net in netlist", n->get_name(), n->get_id());
+            log_debug("netlist", "net '{}' with ID {} is already registered as global output net in the netlist with ID {}.", n->get_name(), n->get_id(), m_netlist_id);
             return true;
         }
         m_global_output_nets.push_back(n);
@@ -410,7 +433,7 @@ namespace hal
         auto it = std::find(m_global_input_nets.begin(), m_global_input_nets.end(), n);
         if (it == m_global_input_nets.end())
         {
-            log_debug("netlist", "net '{}' (id = {:08x}) is not registered as global input net in netlist.", n->get_name(), n->get_id());
+            log_debug("netlist", "net '{}' with ID {} is not registered as global input net in the netlist with ID {}.", n->get_name(), n->get_id(), m_netlist_id);
             return false;
         }
         m_global_input_nets.erase(it);
@@ -428,7 +451,7 @@ namespace hal
         auto it = std::find(m_global_output_nets.begin(), m_global_output_nets.end(), n);
         if (it == m_global_output_nets.end())
         {
-            log_debug("netlist", "net '{}' (id = {:08x}) is not registered as global output net in netlist.", n->get_name(), n->get_id());
+            log_debug("netlist", "net '{}' with ID {} is not registered as global output net in the netlist with ID {}.", n->get_name(), n->get_id(), m_netlist_id);
             return false;
         }
         m_global_output_nets.erase(it);
@@ -500,7 +523,7 @@ namespace hal
         auto it = m_groupings_map.find(grouping_id);
         if (it == m_groupings_map.end())
         {
-            log_error("netlist", "no grouping with id {:08x} registered in netlist.", grouping_id);
+            log_error("netlist", "there is no grouping with ID {} in the netlist with ID {}.", grouping_id, m_netlist_id);
             return nullptr;
         }
         return it->second.get();

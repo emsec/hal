@@ -27,16 +27,24 @@
 
 namespace hal
 {
+    /**
+     * @ingroup graph-visuals
+     * @brief Specifically stores/updates visual information about a module and its items.
+     */
     class ModuleShader final : public GraphShader
     {
     public:
         explicit ModuleShader(const GraphContext* const context);
+
+        static void debugSetNetColor(const QColor& color);
 
         void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
         void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
         void update() override;
 
     private:
+        static QColor sDebugNetColor;
+
         bool mColorGates;
     };
 }

@@ -7,9 +7,8 @@
 
 namespace hal
 {
-    PhysicalGraphLayouter::PhysicalGraphLayouter(const GraphContext* const context) : GraphLayouter(context),
-        mMinXDistance(std::numeric_limits<float>::max()),
-        mMinYDistance(std::numeric_limits<float>::max())
+    PhysicalGraphLayouter::PhysicalGraphLayouter(const GraphContext* const context)
+        : GraphLayouter(context), mMinXDistance(std::numeric_limits<i32>::max()), mMinYDistance(std::numeric_limits<i32>::max())
     {
     }
 
@@ -34,8 +33,8 @@ namespace hal
         // DOES THE CORE GUARANTEE UNIQUE LOCATION DATA ???
         // COLLAPSE / ALIGN
 
-        std::set<float> x_coordinates;
-        std::set<float> y_coordinates;
+        std::set<i32> x_coordinates;
+        std::set<i32> y_coordinates;
 
         for (u32 id : gates)
         {
@@ -49,21 +48,21 @@ namespace hal
             }
         }
 
-        for (float x1 : x_coordinates)
-            for (float x2 : x_coordinates)
+        for (i32 x1 : x_coordinates)
+            for (i32 x2 : x_coordinates)
                 if (x1 != x2)
                 {
-                    float x_distance = std::abs(x1 - x2);
+                    i32 x_distance = std::abs(x1 - x2);
 
                     if (x_distance < mMinXDistance)
                         mMinXDistance = x_distance;
                 }
 
-        for (float y1 : y_coordinates)
-            for (float y2 : y_coordinates)
+        for (i32 y1 : y_coordinates)
+            for (i32 y2 : y_coordinates)
                 if (y1 != y2)
                 {
-                    float y_distance = std::abs(y1 - y2);
+                    i32 y_distance = std::abs(y1 - y2);
 
                     if (y_distance < mMinYDistance)
                         mMinYDistance = y_distance;
@@ -77,9 +76,9 @@ namespace hal
         Q_UNUSED(nets)
 
         for (u32 id : modules)
-            removeNodeFromMaps(Node(id,Node::Module));
+            removeNodeFromMaps(Node(id, Node::Module));
 
         for (u32 id : gates)
-            removeNodeFromMaps(Node(id,Node::Gate));
+            removeNodeFromMaps(Node(id, Node::Gate));
     }
-}
+}    // namespace hal

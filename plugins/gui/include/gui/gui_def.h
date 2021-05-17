@@ -24,13 +24,17 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include <QPoint>
+#include <QHash>
+#include <QSet>
 
 namespace hal
 {
     /**
+     * @ingroup gui
      * @brief The ItemType enum provides the enum type to classify graphic items
-     * into Modules, Gates, or Nets. The null-type None indicates that the ItemType
-     * has not been initialized or that a function could not determine the ItemType
+     * into <b>Module</b>s, <b>Gate</b>s or <b>Net</b>s. The ItemType <b>None</b> indicates that the ItemType
+     * has not been initialized or that a function could not determine the ItemType.
      */
     enum class ItemType
     {
@@ -141,7 +145,7 @@ namespace hal
          * @brief The PlacementModeType enum either most compact arrangement (Standard) or to the
          * left or right of given origin
          */
-        enum PlacementModeType {Standard = 0, PreferLeft = 1, PreferRight = 2};
+        enum PlacementModeType {Standard = 0, PreferLeft = 1, PreferRight = 2, GridPosition = 3};
 
         /**
          * @brief PlacementHint constructor
@@ -188,9 +192,26 @@ namespace hal
         {
             return mMode == rhs.mMode && mPreferredOrigin == rhs.mPreferredOrigin;
         }
+
+        void addGridPosition(const Node& nd, const QPoint& p)
+        {
+            mGridPos.insert(nd,p);
+        }
+
+        const QHash<Node,QPoint>& gridPosition() const { return mGridPos; }
     private:
         PlacementModeType mMode;
         Node mPreferredOrigin;
+        QHash<Node,QPoint> mGridPos;
+    };
+
+    class PlacementEntry {
+    public:
+        PlacementHint mPlacementHint;
+        QSet<u32> mModules;
+        QSet<u32> mGates;
+        PlacementEntry(const PlacementHint& plc, const QSet<u32>& mods, const QSet<u32>& gats)
+            : mPlacementHint(plc), mModules(mods), mGates(gats) {;}
     };
 
 }

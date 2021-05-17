@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -160,7 +160,7 @@ namespace hal
          * @param[in] y - The y-coordinate of the gate.
          * @returns The new gate on success, nullptr otherwise.
          */
-        Gate* create_gate(const u32 gate_id, const GateType* gate_type, const std::string& name = "", float x = -1, float y = -1);
+        Gate* create_gate(const u32 gate_id, GateType* gate_type, const std::string& name = "", i32 x = -1, i32 y = -1);
 
         /**
          * Create a new gate and add it to the netlist.<br>
@@ -172,7 +172,7 @@ namespace hal
          * @param[in] y - The y-coordinate of the gate.
          * @returns The new gate on success, nullptr otherwise.
          */
-        Gate* create_gate(const GateType* gate_type, const std::string& name = "", float x = -1, float y = -1);
+        Gate* create_gate(GateType* gate_type, const std::string& name = "", i32 x = -1, i32 y = -1);
 
         /**
          * Remove a gate from the netlist.
@@ -218,7 +218,7 @@ namespace hal
         /**
          * Mark a gate as a global GND gate.
          *
-         * @param[in] gate - The negate.
+         * @param[in] gate - The gate.
          * @returns True on success, false otherwise.
          */
         bool mark_gnd_gate(Gate* gate);

@@ -29,6 +29,9 @@ namespace hal
 {
     class GraphLayouter;
 
+    /**
+     * @ingroup graph-layouter
+     */
     class LayouterTask : public Task
     {
     public:

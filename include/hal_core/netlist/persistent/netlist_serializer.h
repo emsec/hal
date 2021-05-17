@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -40,20 +40,18 @@ namespace hal
     namespace netlist_serializer
     {
         /**
-         * Serializes a netlist into a .hal file.<br>
-         * Invokes the hal_file_manager and all associated callbacks.
+         * Serializes a netlist into a .hal file.
          *
-         * @param[in] nl - The netlist to serialize.
-         * @param[in] hal_file - The file to serialize to.
-         * @returns True on success.
+         * @param[in] netlist - The netlist to serialize.
+         * @param[in] hal_file - The destination .hal file.
+         * @returns True on success, false otherwise.
          */
-        NETLIST_API bool serialize_to_file(Netlist* nl, const std::filesystem::path& hal_file);
+        NETLIST_API bool serialize_to_file(Netlist* netlist, const std::filesystem::path& hal_file);
 
         /**
-         * Deserializes a netlist from a .hal file.<br>
-         * Invokes the hal_file_manager and all associated callbacks.
+         * Deserializes a netlist from a .hal file.
          *
-         * @param[in] hal_file - The file to deserialize from.
+         * @param[in] hal_file - The source .hal file.
          * @returns The deserialized netlist.
          */
         NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file);

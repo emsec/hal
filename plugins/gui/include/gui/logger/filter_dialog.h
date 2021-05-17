@@ -24,6 +24,7 @@
 #pragma once
 
 #include "gui/logger/filter_item.h"
+
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -36,64 +37,53 @@ namespace hal
 {
     class FilterTabBar;
 
+    /**
+     * @ingroup unused
+     * TODO: Unused (cause FilterTabBar unused).
+     */
     class FilterDialog : public QDialog
     {
         Q_OBJECT
 
     public:
-        FilterDialog(FilterTabBar* caller, QWidget* parent = 0);
-
+        FilterDialog(FilterTabBar* caller, QWidget* parent = nullptr);
         ~FilterDialog();
 
         void appendFilterItem(QString name, FilterItem* item);
 
     Q_SIGNALS:
-
         void inputValid();
 
     public Q_SLOTS:
-
         void verify();
-
         void reset(int);
 
     private:
         class FilterComboBox : public QComboBox
         {
         public:
-            FilterComboBox(QWidget* parent = 0);
+            FilterComboBox(QWidget* parent = nullptr);
 
             FilterItem::Rule get_data();
         };
 
         FilterTabBar* mCaller;
-
         QVBoxLayout mContentLayout;
-
         QFormLayout mFormLayout;
-
         QGridLayout mGridLayout;
 
         QLineEdit mName;
-
         QLineEdit mKeywords;
-
         QLineEdit mRegex;
 
         QLabel mStatusMessage;
 
         FilterComboBox mTraceBox;
-
         FilterComboBox mDebugBox;
-
         FilterComboBox mInfoBox;
-
         FilterComboBox mWarningBox;
-
         FilterComboBox mErrorBox;
-
         FilterComboBox mCriticalBox;
-
         FilterComboBox mDefaultBox;
 
         QDialogButtonBox mButtonBox;

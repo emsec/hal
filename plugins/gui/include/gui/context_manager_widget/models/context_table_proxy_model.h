@@ -30,12 +30,16 @@
 
 namespace hal
 {
+    /**
+     * @ingroup utility_widgets-context
+     * @brief A proxy model to filter the ContextTableModel by a given string.
+     */
     class ContextTableProxyModel : public QSortFilterProxyModel
     {
         Q_OBJECT
 
     public:
-        ContextTableProxyModel(QObject* parent = 0);
+        ContextTableProxyModel(QObject* parent = nullptr);
         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 
     public Q_SLOTS:

@@ -293,8 +293,8 @@ namespace hal {
                                                                      "}";
             std::filesystem::path other_g_lib_path = test_utils::create_sandbox_file("other_test_gate_lib.lib", other_gl_content);
             // Load both gate libraries
-            gate_library_manager::load_file(m_g_lib_path);
-            gate_library_manager::load_file(other_g_lib_path);
+            gate_library_manager::load(m_g_lib_path);
+            gate_library_manager::load(other_g_lib_path);
             {
                 // Get the netlist for a file, that can be parsed with both gate libraries (passing the parser name)
                 std::filesystem::path tmp_hdl_file_path = test_utils::create_sandbox_file("nl_factory_test_file.vhdl",

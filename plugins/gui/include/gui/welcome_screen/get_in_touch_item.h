@@ -32,6 +32,12 @@ class QVBoxLayout;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * @brief One item in the welcome screen's GetInTouch section.
+     *
+     * Widget that represents one item of the GetInTouchWidget
+     */
     class GetInTouchItem : public QFrame
     {
         Q_OBJECT
@@ -40,23 +46,61 @@ namespace hal
         Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param title - The title of the entry
+         * @param mDescription - The description of the entry
+         * @param parent - The parent widget
+         */
         explicit GetInTouchItem(const QString& title, const QString& mDescription, QWidget* parent = nullptr);
 
+        /**
+         * Handles the event, that the mouse enters the widget.
+         *
+         * @param event - The event
+         */
         void enterEvent(QEvent* event) override;
+
+        /**
+         * Handles the event, that the mouse leaves the widget.
+         *
+         * @param event - The event
+         */
         void leaveEvent(QEvent* event) override;
+
+        /**
+         * Handles the event, that the widget was clicked.
+         *
+         * @param event - The event
+         */
         void mousePressEvent(QMouseEvent* event) override;
 
+        /**
+         * (Re-)initializes the appearance of the widget.
+         */
         void repolish();
 
+        /** @name Q_PROPERTY READ Functions
+         */
+        ///@{
         bool hover();
         QString iconPath();
         QString iconStyle();
+        ///@}
 
+        /** @name Q_PROPERTY WRITE Functions
+         */
+        ///@{
         void setHoverActive(bool active);
         void setIconPath(const QString& path);
         void setIconStyle(const QString& style);
+        ///@}
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL to notify that the item was clicked.
+         */
         void clicked();
 
     private:

@@ -4,6 +4,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup unused
+     */
     namespace GraphicsEffectFactory
     {
         QGraphicsEffect* getEffect(); // DEBUG FUNCTION

@@ -14,18 +14,8 @@
         <file alias="DroidSansMono">fonts/Droid Sans Mono/DroidSansMono.ttf</file>
     </qresource>
     <qresource prefix="/style">
-        <file>stylesheet/gui.css</file>
-        <file>stylesheet/gui.qss</file>
-        <file alias="default_style">stylesheet/default.qss</file>
-        <file alias="midnight">stylesheet/midnight.qss</file>
-        <file alias="rainy">stylesheet/rainy.qss</file>
-        <file alias="darcula">stylesheet/darcula.qss</file>
-        <file alias="vibrant dark">stylesheet/vibrant dark.qss</file>
-        <file alias="hal">stylesheet/hal.qss</file>
-        <file alias="test base">stylesheet/test_base.qss</file>
-        <file alias="test definitions">stylesheet/test_definitions</file>
-        <file alias="test definitions2">stylesheet/test_definitions2</file>
-        <file alias="sunny">stylesheet/sunny.qss</file>
+        <file alias="dark">stylesheet/dark.qss</file>
+        <file alias="light">stylesheet/light.qss</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="start-doc">icons/0042-file-play.svg</file>
@@ -85,10 +75,11 @@
         <file alias="sel_module">icons/sel_module.png</file>
         <file alias="sel_gate">icons/sel_gate.png</file>
         <file alias="sel_net">icons/sel_net.png</file>
+        <file alias="toolbox">icons/toolbox.png</file>
         <file alias="undo2">icons/0104-undo2.svg</file>
+        <file alias="module_cursor">icons/module_cursor.png</file>
     </qresource>
     <qresource prefix="/images">
-        <file alias="hal">images/hal_9000_by_johnnyslowhand.png</file>
         <file alias="spinner">images/oval.svg</file>
     </qresource>
 </RCC>

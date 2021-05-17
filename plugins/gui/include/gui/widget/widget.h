@@ -27,25 +27,62 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * @brief A QWidget customized for hal.
+     *
+     * The Widget class extends the QWidget with the following Q_SIGNALS: <ul>
+     * <li> If the parent of a widget is changed a signal 'parentSetTo' is emitted.
+     * <li >If the widget becomes hidden/shown the signals 'hidden'/'shown' are emitted.
+     */
     class Widget : public QWidget
     {
         Q_OBJECT
 
     public:
-        explicit Widget(QWidget* parent = 0);
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget
+         */
+        explicit Widget(QWidget* parent = nullptr);
 
-        //virtual void paintEvent(QPaintEvent*) override;
-        //overshadowed functions
+        /**
+         * Sets the parent of the widget to the specified widget. Overrides QWidget::setParent to emit the signal
+         * Widget::parentSetTo after changing the parent.
+         *
+         * @param parent - The new parent
+         */
         void setParent(QWidget* parent);
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted whenever the parent of the widget changes.
+         *
+         * @param parent - The new parent
+         */
         void parentSetTo(QWidget* parent);
+
+        /**
+         * Q_SIGNAL that is emitted after the widget was hidden.
+         */
         void hidden();
+
+        /**
+         * Q_SIGNAL that is emitted after the widget was shown.
+         */
         void shown();
 
     public Q_SLOTS:
-        //overshadowed functions (slots)
+        /**
+         * Q_SLOT to hide the Widget. Overrides QWidget::hide to emit the signal Widget::hidden after hiding the Widget.
+         */
         void hide();
+
+        /**
+         * Q_SLOT to show the Widget and its children. Overrides QWidget::show to emit the signal Widget::shown
+         * after hiding the Widget.
+         */
         void show();
     };
 }

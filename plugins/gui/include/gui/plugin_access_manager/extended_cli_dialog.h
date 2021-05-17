@@ -39,12 +39,15 @@
 
 namespace hal
 {
+    /**
+     * @ingroup unused
+     */
     class ExtendedCliDialog : public QDialog
     {
         Q_OBJECT
 
     public:
-        ExtendedCliDialog(QString plugin_name, QWidget* parent = 0);
+        ExtendedCliDialog(QString plugin_name, QWidget* parent = nullptr);
 
         ProgramArguments getArgs();
 

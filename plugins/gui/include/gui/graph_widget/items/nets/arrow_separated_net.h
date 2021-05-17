@@ -27,19 +27,63 @@
 
 namespace hal
 {
+    /**
+     * @ingroup graph-visuals-net
+     * @brief Used to display all nets which destinations are not in the current view.
+     *
+     * The SeparatedGraphicsNet that is used to represent global in- and outputs as well as sources and destinations that
+     * are not included in the current view. The endings are shaped as arrows.
+     */
     class ArrowSeparatedNet : public SeparatedGraphicsNet
     {
     public:
+        /**
+         * Loads the cosmetic setting that will be applied to all ArrowSeparatedNet.
+         */
         static void loadSettings();
 
+        /**
+         * Constructor.
+         *
+         * @param n - The underlying net
+         */
         ArrowSeparatedNet(Net* n);
 
+        /**
+         * Draws the ArrowSeparatedNet in the scene.
+         *
+         * @param painter - The used QPainter
+         * @param option - The styling options. Used to access the state (option->state).
+         * @param widget - The widget to paint on
+         */
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
+        /**
+         * Add the an input pin as a destination of the ArrowSeparatedNet
+         *
+         * @param scene_position - The scene position of the input pin
+         */
         void addInput(const QPointF& scene_position) override;
+
+        /**
+         * Add the an output pin as a source of the ArrowSeparatedNet
+         *
+         * @param scene_position - The scene position of the output pin
+         */
         void addOutput(const QPointF& scene_position) override;
 
+        /**
+         * Get the width of one entire input (including the line and the box) of the ArrowSeparatedNet
+         *
+         * @returns the width of an input
+         */
         qreal inputWidth() const override;
+
+        /**
+         * Get the width of one entire output (including the line and the box) of the ArrowSeparatedNet
+         *
+         * @returns the width of an output
+         */
         qreal outputWidth() const override;
 
     private:

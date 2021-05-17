@@ -30,7 +30,7 @@ namespace hal
 
     bool GraphicsScene::sGridEnabled = true;
     bool GraphicsScene::sGridClustersEnabled = true;
-    graph_widget_constants::grid_type GraphicsScene::sGridType = graph_widget_constants::grid_type::Lines;
+    GraphicsScene::GridType GraphicsScene::sGridType = GraphicsScene::GridType::Dots;
 
     QColor GraphicsScene::sGridBaseLineColor = QColor(30, 30, 30);
     QColor GraphicsScene::sGridClusterLineColor = QColor(15, 15, 15);
@@ -74,9 +74,9 @@ namespace hal
         sGridClustersEnabled = value;
     }
 
-    void GraphicsScene::setGridType(const graph_widget_constants::grid_type& grid_type)
+    void GraphicsScene::setGridType(const GraphicsScene::GridType& gridType)
     {
-        sGridType = grid_type;
+        sGridType = gridType;
     }
 
     void GraphicsScene::setGridBaseLineColor(const QColor& color)
@@ -107,7 +107,7 @@ namespace hal
     }
 
     GraphicsScene::GraphicsScene(QObject* parent) : QGraphicsScene(parent),
-        mDragShadowGate(new NodeDragShadow())
+        mDragShadowGate(new NodeDragShadow()), mDebugGridEnable(false)
     {
         // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
         //mScene.setBspTreeDepth(10);
@@ -117,10 +117,16 @@ namespace hal
         connectAll();
 
         QGraphicsScene::addItem(mDragShadowGate);
+    }
 
-        #ifdef GUI_DEBUG_GRID
-        mDebugGridEnable = gSettingsManager->get("debug/grid").toBool();
-        #endif
+    GraphicsScene::~GraphicsScene()
+    {
+        disconnect(this, &QGraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
+        for (QGraphicsItem* gi : items())
+        {
+            removeItem(gi);
+            delete gi;
+        }
     }
 
     void GraphicsScene::startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue)
@@ -323,9 +329,7 @@ namespace hal
 
     void GraphicsScene::connectAll()
     {
-        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GraphicsScene::handleGlobalSettingChanged);
-
-        connect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
+        connect(this, &QGraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
 
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GraphicsScene::handleExternSelectionChanged);
         connect(gSelectionRelay, &SelectionRelay::subfocusChanged, this, &GraphicsScene::handleExternSubfocusChanged);
@@ -341,9 +345,7 @@ namespace hal
 
     void GraphicsScene::disconnectAll()
     {
-        disconnect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GraphicsScene::handleGlobalSettingChanged);
-
-        disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
+        disconnect(this, &QGraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
 
         disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GraphicsScene::handleExternSelectionChanged);
         disconnect(gSelectionRelay, &SelectionRelay::subfocusChanged, this, &GraphicsScene::handleExternSubfocusChanged);
@@ -404,9 +406,9 @@ namespace hal
     {
         gSelectionRelay->clear();
 
-        int gates = 0;
-        int nets = 0;
-        int modules = 0;
+        QSet<u32> mods;
+        QSet<u32> gats;
+        QSet<u32> nets;
 
         for (const QGraphicsItem* item : selectedItems())
         {
@@ -414,20 +416,17 @@ namespace hal
             {
             case ItemType::Gate:
             {
-                gSelectionRelay->mSelectedGates.insert(static_cast<const GraphicsItem*>(item)->id());
-                ++gates;
+                gats.insert(static_cast<const GraphicsItem*>(item)->id());
                 break;
             }
             case ItemType::Net:
             {
-                gSelectionRelay->mSelectedNets.insert(static_cast<const GraphicsItem*>(item)->id());
-                ++nets;
+                nets.insert(static_cast<const GraphicsItem*>(item)->id());
                 break;
             }
             case ItemType::Module:
             {
-                gSelectionRelay->mSelectedModules.insert(static_cast<const GraphicsItem*>(item)->id());
-                ++modules;
+                mods.insert(static_cast<const GraphicsItem*>(item)->id());
                 break;
             }
             default:
@@ -437,35 +436,34 @@ namespace hal
 
         // TEST CODE
         // ADD FOCUS DEDUCTION INTO RELAY ???
-        if (gates + nets + modules == 1)
+        if (gats.size() + nets.size() + mods.size() == 1)
         {
-            if (gates)
+            if (!gats.isEmpty())
             {
-                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedGates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,*gats.begin());
             }
-            else if (nets)
+            else if (!nets.isEmpty())
             {
-                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
-                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedNets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,*nets.begin());
             }
             else
             {
-                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Module;
-                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedModules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,*mods.begin());
             }
         }
         else
         {
-            gSelectionRelay->mFocusType = SelectionRelay::ItemType::None;
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::None,0);
         }
-        gSelectionRelay->mSubfocus = SelectionRelay::Subfocus::None;
         // END OF TEST CODE
 
         //LOG MANUAL SELECTION CHANGED:
         //log_info("gui", "Selection changed through manual interaction with a view to: insert here..");
-        gSelectionRelay->relaySelectionChanged(this);
 
+        gSelectionRelay->setSelectedModules(mods);
+        gSelectionRelay->setSelectedGates(gats);
+        gSelectionRelay->setSelectedNets(nets);
+        gSelectionRelay->relaySelectionChanged(this);
     }
 
     void GraphicsScene::handleGroupingAssignModule(Grouping *grp, u32 id)
@@ -533,7 +531,7 @@ namespace hal
 
         clearSelection();
 
-        if (!gSelectionRelay->mSelectedModules.isEmpty())
+        if (gSelectionRelay->numberSelectedModules())
         {
             for (auto& element : mModuleItems)
             {
@@ -545,7 +543,7 @@ namespace hal
             }
         }
 
-        if (!gSelectionRelay->mSelectedGates.isEmpty())
+        if (gSelectionRelay->numberSelectedGates())
         {
             for (auto& element : mGateItems)
             {
@@ -557,7 +555,7 @@ namespace hal
             }
         }
 
-        if (!gSelectionRelay->mSelectedNets.isEmpty())
+        if (gSelectionRelay->numberSelectedNets())
         {
             for (auto& element : mNetItems)
             {
@@ -589,18 +587,6 @@ namespace hal
         QGraphicsScene::mousePressEvent(event);
     }
 
-    void GraphicsScene::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
-    {
-        Q_UNUSED(sender)
-
-        #ifdef GUI_DEBUG_GRID
-        if (key == "debug/grid")
-        {
-            mDebugGridEnable = value.toBool();
-        }
-        #endif
-    }
-
     void GraphicsScene::drawBackground(QPainter* painter, const QRectF& rect)
     {
         if (!sGridEnabled)
@@ -629,9 +615,9 @@ namespace hal
 
         switch (sGridType)
         {
-        case graph_widget_constants::grid_type::None:
-            return; // nothing to do
-        case graph_widget_constants::grid_type::Lines:
+        case GraphicsScene::GridType::None:
+            break;//return; // nothing to do //indirectly disabled the debug grid if activated
+        case GraphicsScene::GridType::Lines:
         {
             QVarLengthArray<QLine, 512> base_lines;
             QVarLengthArray<QLine, 64> cluster_lines;
@@ -669,7 +655,7 @@ namespace hal
             break;
         }
 
-        case graph_widget_constants::grid_type::Dots:
+        case GraphicsScene::GridType::Dots:
         {
             QVector<QPoint> base_points;
             QVector<QPoint> cluster_points;
@@ -769,6 +755,16 @@ namespace hal
             painter->drawLine(line);
             y -= mDebugDefaultHeight;
         }
+    }
+
+    void GraphicsScene::setDebugGridEnabled(bool enabled)
+    {
+        mDebugGridEnable = enabled;
+    }
+
+    bool GraphicsScene::debugGridEnabled()
+    {
+        return mDebugGridEnable;
     }
     #endif
 }

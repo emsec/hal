@@ -2,20 +2,18 @@
 
 #include "gui/expanding_list/expanding_list_button.h"
 
-#include <QPropertyAnimation>
 #include <QStyle>
 
 namespace hal
 {
-    ExpandingListItem::ExpandingListItem(ExpandingListButton* parentButton, QWidget* parent)
-        : QFrame(parent), mParentButton(parentButton), mCollapsedHeight(0), mExpandedHeight(0),
-          //mAnimation(new QPropertyAnimation(this, "minimumHeight", this)),
-          mAnimation(new QPropertyAnimation(this, "fixedHeight", this)), mExpanded(false), mFixedHeight(mParentButton->minimumHeight())
+    ExpandingListItem::ExpandingListItem(ExpandingListButton* but, QWidget* parent)
+        : QFrame(parent), mButton(but), mCollapsedHeight(0), mExpandedHeight(0),
+          mExpanded(false), mFixedHeight(mButton->minimumHeight())
     {
-        parentButton->setParent(this);
-        parentButton->show();
+        mButton->setParent(this);
+        mButton->show();
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        setMinimumHeight(mParentButton->minimumHeight());
+        setMinimumHeight(mButton->minimumHeight());
     }
 
     QSize ExpandingListItem::minimumSizeHint() const
@@ -32,45 +30,23 @@ namespace hal
     {
         int width = event->size().width();
 
-        mParentButton->resize(width, mParentButton->height());
-
-        for (ExpandingListButton* button : mChildButtons)
-            button->resize(width, button->height());
+        mButton->resize(width, mButton->height());
     }
 
-    bool ExpandingListItem::expanded()
+    bool ExpandingListItem::expanded() const
     {
         return mExpanded;
     }
 
-    int ExpandingListItem::fixedHeight()
+    int ExpandingListItem::fixedHeight() const
     {
         return mFixedHeight;
     }
 
-    bool ExpandingListItem::contains(ExpandingListButton* button)
+
+    ExpandingListButton* ExpandingListItem::button() const
     {
-        if (button == mParentButton)
-            return true;
-
-        for (ExpandingListButton* child_button : mChildButtons)
-            if (button == child_button)
-                return true;
-
-        return false;
-    }
-
-    ExpandingListButton* ExpandingListItem::parentButton()
-    {
-        return mParentButton;
-    }
-
-    void ExpandingListItem::appendChildButton(ExpandingListButton* button)
-    {
-        mChildButtons.append(button);
-        button->setParent(this);
-        button->set_type("child");
-        button->show();
+        return mButton;
     }
 
     void ExpandingListItem::repolish()
@@ -80,60 +56,26 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        mParentButton->repolish();
-        mParentButton->move(0, 0);
-        mCollapsedHeight = mParentButton->height();
-        int offset         = mCollapsedHeight;
-
-        for (ExpandingListButton* button : mChildButtons)
-        {
-            button->repolish();
-            button->move(0, offset);
-            offset += button->height();
-        }
+        mButton->repolish();
+        mButton->move(0, 0);
+        mCollapsedHeight = mButton->height();
+        int offset       = mCollapsedHeight;
 
         mExpandedHeight = offset;
-
-        mAnimation->setDuration(200);
-        //    mAnimation->setStartValue(QSize(width(), mCollapsedHeight));
-        //    mAnimation->setEndValue(QSize(width(), mExpandedHeight));
-
-        mAnimation->setStartValue(mCollapsedHeight);
-        mAnimation->setEndValue(mExpandedHeight);
 
         setFixedHeight(mCollapsedHeight);
     }
 
     void ExpandingListItem::collapse()
     {
-        for (ExpandingListButton* button : mChildButtons)
-            button->setEnabled(false);
-
-        mAnimation->setDirection(QPropertyAnimation::Backward);
-
-        if (mAnimation->state() != QPropertyAnimation::Running)
-            mAnimation->start();
+        mExpanded = false;
+        hide();
     }
 
     void ExpandingListItem::expand()
     {
-        for (ExpandingListButton* button : mChildButtons)
-            button->setEnabled(true);
-
-        mAnimation->setDirection(QPropertyAnimation::Forward);
-
-        if (mAnimation->state() == QPropertyAnimation::Running)
-        {
-            mAnimation->pause();
-            mAnimation->resume();
-        }
-        else
-            mAnimation->start();
-    }
-
-    void ExpandingListItem::setExpanded(bool expanded)
-    {
-        mExpanded = expanded;
+        mExpanded = true;
+        show();
         repolish();
     }
 

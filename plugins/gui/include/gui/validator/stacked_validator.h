@@ -29,15 +29,56 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * @brief Combines different validators into one.
+     *
+     * The StackedValidator is a Validator that combines multiple other Validators. Its validate function returns
+     * <b>true</b> if all added Validators accept the string. <br>
+     * The fail text will be chosen from the firstly added validator which validation fails.
+     */
     class StackedValidator : public Validator
     {
         public:
+            /**
+             * Constructor.
+             * At this point the StackedValidator will accept any string.
+             * Therefore one should add validators by calling addValidator.
+             */
             StackedValidator();
 
+            /**
+             * TODO: Refactor parameter name.
+             * Adds a Validator to the StackedValidator.
+             *
+             * @param Validator - The Validator to add
+             */
             void addValidator(Validator* Validator);
+
+            /**
+             * TODO: Refactor parameter name.
+             * Removes a Validator from the StackedValidator.
+             *
+             * @param Validator - The Validator to remove
+             */
             void removeValidator(Validator* Validator);
+
+            /**
+             * Removes all Validators from the StackedValidator.
+             */
             void clearValidators();
 
+            /**
+             * Given any string this function returns <b>true</b> iff the string is accepted by all registered Validators
+             * (added by StackedValidator:addValidator).
+             *
+             * If no Validator is registered this function always returns true.
+             * If one or more Validators reject the string, the fail text of the failing Validator that was added the
+             * earliest will be chosen.
+             *
+             * @param input - The input string
+             * @returns <b>true</b> iff the string is considered valid (accepted by all validators)
+             */
             bool validate(const QString &input);
 
         private:

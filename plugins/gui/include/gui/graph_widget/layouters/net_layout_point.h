@@ -16,6 +16,9 @@ typedef quint32 u32;
 
 namespace hal {
 
+    /**
+     * @ingroup graph-layouter
+     */
     class NetLayoutDirection
     {
     public:
@@ -41,6 +44,9 @@ namespace hal {
         DirectionType mDir;
     };
 
+    /**
+     * @ingroup graph-layouter
+     */
     class NetLayoutPoint : public QPoint
     {
     public:
@@ -57,6 +63,9 @@ namespace hal {
         static QList<NetLayoutPoint> orderByDistance(const QList<NetLayoutPoint>& points);
     };
 
+    /**
+     * @ingroup graph-layouter
+     */
     class NetLayoutWire
     {
     public:
@@ -74,6 +83,9 @@ namespace hal {
         bool mIsEndpoint;
     };
 
+    /**
+     * @ingroup graph-layouter
+     */
     class NetLayoutConnection : public QList<NetLayoutWire>
     {
     public:
@@ -88,6 +100,9 @@ namespace hal {
         NetLayoutPoint addWire(const NetLayoutPoint& pnt, const NetLayoutDirection& dir, bool omitEndpoint);
     };
 
+    /**
+     * @ingroup graph-layouter
+     */
     class NetLayoutMetric
     {
     public:
@@ -103,6 +118,9 @@ namespace hal {
         int mSecond;
     };
 
+    /**
+     * @ingroup graph-layouter
+     */
     class NetLayoutConnectionFactory
     {
     public:
@@ -117,6 +135,9 @@ namespace hal {
         QList<NetLayoutPoint> mPoints;
     };
 
+    /**
+     * @ingroup graph-layouter
+     */
     class NetLayoutConnectionMetric : public QMap<NetLayoutMetric,NetLayoutConnection*>
     {
     public:

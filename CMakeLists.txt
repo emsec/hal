@@ -237,6 +237,13 @@ configure_file(${CMAKE_SOURCE_DIR}/include/hal_core/hal_version.h.in ${CMAKE_BIN
 # Declare Study Config in hal_config.h
 option(HAL_STUDY "Enable Study Config" OFF)
 configure_file(${CMAKE_SOURCE_DIR}/include/hal_core/hal_config.h.in ${CMAKE_BINARY_DIR}/hal_config.h @ONLY)
+if(HAL_STUDY)
+    message(STATUS "HAL_STUDY mode turned ON!")
+else()
+    message(STATUS "HAL_STUDY mode turned OFF!")
+endif()
+
+
 
 ##################################
 #####   Include Code Directories

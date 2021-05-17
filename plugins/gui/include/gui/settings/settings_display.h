@@ -29,10 +29,13 @@ class QVBoxLayout;
 
 namespace hal
 {
+    /**
+     * @ingroup settings
+     */
     class SettingsDisplay : public QScrollArea
     {
     public:
-        SettingsDisplay(QWidget* parent = 0);
+        SettingsDisplay(QWidget* parent = nullptr);
 
         void addWidget(QWidget* widget);
 

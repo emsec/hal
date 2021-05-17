@@ -33,14 +33,40 @@ namespace hal
 {
     class DataContainer;
 
+    /**
+     * @ingroup utility_widgets-selection_details
+     * @brief Displays commonly shared fields.
+     *
+     * A specific tablewidget to display the data fields of a gate, net or module (or any data that is given to
+     * the updateData function).
+     */
     class DataFieldsTable : public QTableWidget
     {
         Q_OBJECT
     public:
+        /**
+         * The constructor.
+         *
+         * @param parent - The widget's parent.
+         */
         DataFieldsTable(DetailsWidget* parent = nullptr);
+
+        /**
+         * Fills the table with the given data in the form of key-value pairs.
+         *
+         * @param id - The id of the item to which the data belongs.
+         * @param dc - The data in the form of key - vlaue pairs.
+         */
         void updateData(const u32 id, const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dc);
 
     private Q_SLOTS:
+
+        /**
+         * Handler function to handle a context-menu-requested signal. Creates a context menu in which the python
+         * code for the data can be extracted.
+         *
+         * @param pos - The position from where the menu is requested.
+         */
         void handleContextMenuRequest(const QPoint& pos);
 
     private:

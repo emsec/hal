@@ -4,6 +4,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup graph-layouter
+     */
     class PositionGenerator
     {
         int mN;  // size of square

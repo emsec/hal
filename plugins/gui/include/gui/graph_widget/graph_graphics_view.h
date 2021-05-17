@@ -26,6 +26,7 @@
 #include "hal_core/defines.h"
 #include "gui/gui_globals.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
+#include "gui/graph_widget/graphics_scene.h"
 
 #include <QGraphicsView>
 #include <QAction>
@@ -40,26 +41,62 @@ namespace hal
     enum class grid_type;
     }
 
+    /**
+     * @ingroup graph-visuals
+     * @brief A view to display the rendered graph (needs a GraphicsScene).
+     *
+     * The GraphGraphicsView is the GraphicsView for a GraphicsScene. (Its like the camera that shows a section of
+     * the scene)
+     */
     class GraphGraphicsView : public QGraphicsView
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent GraphWidget
+         */
         GraphGraphicsView(GraphWidget* parent);
 
-        //zooms into the mouse position
+        /**
+         * Zoom in/out at the position of the mouse.
+         *
+         * @param factor - The new zoom factor
+         */
         void gentleZoom(const qreal factor);
-        //zooms into the center of the viewport
+
+        /**
+         * Zoom in/out at the center of the viewport.
+         *
+         * @param factor - The new zoom factor
+         */
         void viewportCenterZoom(const qreal factor);
 
+        GraphicsScene::GridType gridType();
+        void setGridType(GraphicsScene::GridType gridType);
+
+        Qt::KeyboardModifier dragModifier();
+        void setDragModifier(Qt::KeyboardModifier dragModifier);
+
+        Qt::KeyboardModifier panModifier();
+        void setPanModifier(Qt::KeyboardModifier panModifier);
+
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted whenever the user double-clicks a module in the current view. <br>
+         * Note that this signal is not emitted for double-clicks on gates or nets.
+         *
+         * @param id - The id of the module that was double clicked.
+         */
         void moduleDoubleClicked(u32 id);
 
     private Q_SLOTS:
         void conditionalUpdate();
-        void handleChangeColorAction();
         void handleIsolationViewAction();
-        void handleMoveAction(QAction* action);
+        void handleRemoveFromView();
+        void handleMoveAction(u32 moduleId);
         void handleMoveNewAction();
         void handleRenameAction();
         void handleChangeTypeAction();
@@ -76,7 +113,8 @@ namespace hal
         void handleGroupingAssignNew();
         void handleGroupingAssingExisting();
 
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
+        void handleModuleDialog();
+        void handleCancelPickModule();
 
     private:
         void paintEvent(QPaintEvent* event) override;
@@ -93,8 +131,6 @@ namespace hal
         void keyReleaseEvent(QKeyEvent* event) override;
         void resizeEvent(QResizeEvent* event) override;
 
-        void initializeSettings();
-
         void showContextMenu(const QPoint& pos);
 
         void updateMatrix(const int delta);
@@ -102,7 +138,6 @@ namespace hal
         void toggleAntialiasing();
 
         bool itemDraggable(GraphicsItem* item);
-        void groupingAssignInternal(Grouping* grp);
 
         struct LayouterPoint
         {
@@ -116,7 +151,7 @@ namespace hal
         void debugShowLayouterGridpos(const QPoint& mouse_pos);
         void debugDrawLayouterGridpos(QPainter* painter);
         QPoint m_debug_gridpos = QPoint(0,0);
-        bool mDebugGridposEnable;
+        bool mDebugGridposEnable = true;
         #endif
 
         GraphWidget* mGraphWidget;
@@ -127,7 +162,7 @@ namespace hal
 
         bool mGridEnabled;
         bool mGridClustersEnabled;
-        graph_widget_constants::grid_type mGridType;
+        GraphicsScene::GridType mGridType;
 
         QPoint mDragMousedownPosition;
         QPoint mDragStartGridpos;
@@ -139,7 +174,7 @@ namespace hal
         Qt::KeyboardModifier mDragModifier;
 
         QPoint mMovePosition;
-        Qt::KeyboardModifier mMoveModifier;
+        Qt::KeyboardModifier mPanModifier;
 
         Qt::KeyboardModifier mZoomModifier;
         qreal mZoomFactorBase;

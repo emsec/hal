@@ -1,11 +1,12 @@
 #pragma once
 
+#include "hal_core/defines.h"
+
 #include <QPoint>
 #include <QHash>
 #include <QSet>
 #include <map>
 #include <limits.h>
-#include "hal_core/defines.h"
 
 uint qHash(const QPoint& pnt);
 
@@ -15,6 +16,10 @@ namespace hal {
     class Gate;
     class Node;
 
+    /**
+     * @ingroup graph-layouter
+     * TODO
+     */
     class CoordinateFromData : public QPoint
     {
     public:
@@ -25,6 +30,10 @@ namespace hal {
         static CoordinateFromData fromData(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dc);
     };
 
+    /**
+     * @ingroup graph-layouter
+     * TODO
+     */
     class CoordinateFromDataMap : public QHash<hal::Node,CoordinateFromData>
     {
     public:

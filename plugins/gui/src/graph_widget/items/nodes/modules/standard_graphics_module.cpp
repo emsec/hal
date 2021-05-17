@@ -129,8 +129,8 @@ namespace hal
                 painter->drawText(mTextPosition[iline], mNodeText[iline]);
             }
 
-            bool moduleHasFocus = gSelectionRelay->mFocusType == SelectionRelay::ItemType::Module && gSelectionRelay->mFocusId == mId;
-            int subFocusIndex   = static_cast<int>(gSelectionRelay->mSubfocusIndex);
+            bool moduleHasFocus = gSelectionRelay->focusType() == SelectionRelay::ItemType::Module && gSelectionRelay->focusId() == mId;
+            int subFocusIndex   = static_cast<int>(gSelectionRelay->subfocusIndex());
 
             painter->setFont(sPinFont);
             QPointF text_pos(sPinOuterHorizontalSpacing, sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline);
@@ -138,7 +138,7 @@ namespace hal
             for (int i = 0; i < mInputPins.size(); ++i)
             {
                 if (moduleHasFocus)
-                    if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::Left && i == subFocusIndex)
+                    if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left && i == subFocusIndex)
                         sPen.setColor(selectionColor());
                     else
                         sPen.setColor(sTextColor);
@@ -152,7 +152,7 @@ namespace hal
             for (int i = 0; i < mOutputPins.size(); ++i)
             {
                 if (moduleHasFocus)
-                    if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::Right && i == subFocusIndex)
+                    if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right && i == subFocusIndex)
                         sPen.setColor(selectionColor());
                     else
                         sPen.setColor(sTextColor);

@@ -220,12 +220,19 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
+        py_boolean_function.def("optimize_constants", &BooleanFunction::optimize_constants, R"(
+            Removes constant values whenever possible.
+
+            :returns: The optimized Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
         py_boolean_function.def("get_truth_table", &BooleanFunction::get_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), py::arg("remove_unknown_variables") = false, R"(
             Get the truth table outputs of the Boolean function.
 
             WARNING: Exponential runtime in the number of variables!
 
-            Output is the vector of output values when walking the truth table in ascending order.
+            Output is the vector of output values when walking the truth table from the least significant bit to the most significant one.
 
             If ordered_variables is empty, all included variables are used and ordered alphabetically.
 

@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,8 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/utilities/enums.h"
+#include "z3++.h"
 
 #include <algorithm>
 #include <cassert>
@@ -47,9 +49,10 @@ namespace hal
          */
         enum Value
         {
-            X    = -1, /**< Represents an undefined value. */
-            ZERO = 0,  /**< Represents a logical 0. */
-            ONE  = 1   /**< Represents a logical 1 */
+            ZERO = 0, /**< Represents a logical 0. */
+            ONE  = 1, /**< Represents a logical 1 */
+            Z,        /**< Represents an undefined value. */
+            X         /**< Represents an undefined value. */
         };
 
         /**
@@ -297,11 +300,18 @@ namespace hal
         BooleanFunction optimize() const;
 
         /**
-         * Get the truth table outputs of the function.
+         * Removes constant values whenever possible.
          * 
+         * @return The optimized Boolean function.
+         */
+        BooleanFunction optimize_constants() const;
+
+        /**
+         * Get the truth table outputs of the function.
+         *
          * WARNING: Exponential runtime in the number of variables!
          *
-         * Output is the vector of output values when walking the truth table in ascending order.
+         * Output is the vector of output values when walking the truth table from the least significant bit to the most significant one.
          *
          * If ordered_variables is empty, all included variables are used and ordered alphabetically.
          *
@@ -310,6 +320,15 @@ namespace hal
          * @returns The vector of output values.
          */
         std::vector<Value> get_truth_table(std::vector<std::string> ordered_variables = {}, bool remove_unknown_variables = false) const;
+
+        // TODO figure out how to test this
+        /**
+         * Get the z3 representation of the Boolean function.
+         *
+         * @param[in,out] context - The z3 context.
+         * @returns The z3 representation of the Boolean function.
+         */
+        z3::expr to_z3(z3::context& context) const;
 
     protected:
         enum class operation
@@ -343,21 +362,17 @@ namespace hal
         // expands ands, i.e., a & (b | c) -> a&b | a&c
         BooleanFunction expand_ands() const;
         // helper function 1
-        std::vector<BooleanFunction> expand_ands_internal(const std::vector<std::vector<BooleanFunction>>& sub_primitives) const;
+        std::vector<BooleanFunction> expand_AND_of_functions(const std::vector<std::vector<BooleanFunction>>& AND_terms_to_expand) const;
         // helper function 2
-        std::vector<BooleanFunction> get_primitives() const;
-
-        // merges constants if possible and resolves duplicates
-        BooleanFunction optimize_constants() const;
+        std::vector<BooleanFunction> get_AND_terms() const;
 
         // merges nested expressions of the same operands
-        BooleanFunction flatten() const;
-
-        // merges nested expressions of the same operands
-        static std::vector<std::vector<Value>> qmc(const std::vector<std::vector<Value>>& terms);
+        static std::vector<std::vector<Value>> qmc(std::vector<std::vector<Value>> terms);
 
         // helper to allow for substitution with reduced amount of copies
         static void substitute_helper(BooleanFunction& f, const std::string& v, const BooleanFunction& s);
+
+        z3::expr to_z3_internal(z3::context& context, const std::unordered_map<std::string, z3::expr>& input2expr) const;
 
         bool m_invert;
 
@@ -375,4 +390,7 @@ namespace hal
         operation m_op;
         std::vector<BooleanFunction> m_operands;
     };
+
+    template<>
+    std::vector<std::string> EnumStrings<BooleanFunction::Value>::data;
 }    // namespace hal

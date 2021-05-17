@@ -34,7 +34,7 @@ namespace hal
     {
         if (utils::trim(name).empty())
         {
-            log_error("module", "empty name is not allowed.");
+            log_error("module", "module name cannot be empty.");
             return;
         }
         if (name != m_name)
@@ -74,25 +74,25 @@ namespace hal
     {
         if (new_parent == this)
         {
-            log_error("module", "can not set module as its own parent");
+            log_error("module", "module '{}' with ID {} in netlist with ID {} cannot be its own parent module.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return false;
         }
 
         if (m_parent == nullptr)
         {
-            log_error("module", "no parent can be assigned to the top module");
+            log_error("module", "no parent module can be assigned to top module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return false;
         }
 
         if (new_parent == nullptr)
         {
-            log_error("module", "cannot reassign top module");
+            log_error("module", "module '{}' with ID {} in netlist with ID {} cannot be assigned to be the top module.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return false;
         }
 
         if (!get_netlist()->is_module_in_netlist(new_parent))
         {
-            log_error("module", "module must be in the current netlist");
+            log_error("module", "module '{}' with ID {} is not contained in netlist with ID {}.", new_parent->get_name(), new_parent->get_id(), m_internal_manager->m_netlist->get_id());
             return false;
         }
 
@@ -177,6 +177,11 @@ namespace hal
         return false;
     }
 
+    bool Module::is_top_module() const
+    {
+        return m_parent == nullptr;
+    }
+
     Netlist* Module::get_netlist() const
     {
         return m_internal_manager->m_netlist;
@@ -184,18 +189,25 @@ namespace hal
 
     bool Module::assign_gate(Gate* gate)
     {
-        m_input_nets_dirty    = true;
-        m_output_nets_dirty   = true;
-        m_internal_nets_dirty = true;
         return m_internal_manager->module_assign_gate(this, gate);
     }
 
     bool Module::remove_gate(Gate* gate)
     {
-        m_input_nets_dirty    = true;
-        m_output_nets_dirty   = true;
-        m_internal_nets_dirty = true;
-        return m_internal_manager->module_remove_gate(this, gate);
+        if (contains_gate(gate))
+        {
+            return m_internal_manager->module_assign_gate(m_internal_manager->m_netlist->get_top_module(), gate);
+        }
+
+        if (gate == nullptr)
+        {
+            log_error("module", "gate cannot be a nullptr.");
+            return false;
+        }
+
+        log_error(
+            "module", "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.", gate->get_name(), gate->get_id(), m_name, m_id, m_internal_manager->m_netlist->get_id());
+        return false;
     }
 
     bool Module::contains_gate(Gate* gate, bool recursive) const
@@ -375,7 +387,7 @@ namespace hal
     {
         if (input_net == nullptr)
         {
-            log_warning("module", "nullptr given as input net of module {} with id {}.", this->get_name(), this->get_id());
+            log_error("module", "nullptr given as input net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return;
         }
 
@@ -383,8 +395,13 @@ namespace hal
 
         if (auto it = std::find(input_nets.begin(), input_nets.end(), input_net); it == input_nets.end())
         {
-            log_warning(
-                "module", "net '{}' with id {} is not an input net of module '{}' with id {}, ignoring port assignment", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
+            log_error("module",
+                      "net '{}' with ID {} is not an input net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment",
+                      input_net->get_name(),
+                      input_net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
             return;
         }
 
@@ -398,7 +415,7 @@ namespace hal
     {
         if (output_net == nullptr)
         {
-            log_warning("module", "nullptr given as output net of module {} with id {}.", this->get_name(), this->get_id());
+            log_error("module", "nullptr given as output net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return;
         }
 
@@ -406,12 +423,13 @@ namespace hal
 
         if (auto it = std::find(output_nets.begin(), output_nets.end(), output_net); it == output_nets.end())
         {
-            log_warning("module",
-                        "net '{}' with id {} is not an output net of module '{}' with id {}, ignoring port assignment",
-                        output_net->get_name(),
-                        output_net->get_id(),
-                        this->get_name(),
-                        this->get_id());
+            log_error("module",
+                      "net '{}' with ID {} is not an output net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment",
+                      output_net->get_name(),
+                      output_net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
             return;
         }
 
@@ -425,7 +443,7 @@ namespace hal
     {
         if (net == nullptr)
         {
-            log_warning("module", "nullptr given as input net of module {} with id {}.", this->get_name(), this->get_id());
+            log_error("module", "nullptr given as input net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return "";
         }
 
@@ -433,7 +451,13 @@ namespace hal
 
         if (auto it = std::find(input_nets.begin(), input_nets.end(), net); it == input_nets.end())
         {
-            log_warning("module", "net '{}' with id {} is not an input net of module '{}' with id {}.", net->get_name(), net->get_id(), this->get_name(), this->get_id());
+            log_error("module",
+                      "net '{}' with ID {} is not an input net of module '{}' with ID {} in netlist with ID {}.",
+                      net->get_name(),
+                      net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
             return "";
         }
 
@@ -456,14 +480,20 @@ namespace hal
     {
         if (net == nullptr)
         {
-            log_warning("module", "nullptr given as output net of module {} with id {}.", this->get_name(), this->get_id());
+            log_error("module", "nullptr given as output net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return "";
         }
         auto output_nets = get_output_nets();
 
         if (auto it = std::find(output_nets.begin(), output_nets.end(), net); it == output_nets.end())
         {
-            log_warning("module", "net '{}' with id {} is not an output net of module '{}' with id {}.", net->get_name(), net->get_id(), this->get_name(), this->get_id());
+            log_error("module",
+                      "net '{}' with ID {} is not an output net of module '{}' with ID {} in netlist with ID {}.",
+                      net->get_name(),
+                      net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
             return "";
         }
 
@@ -492,7 +522,7 @@ namespace hal
             }
         }
 
-        log_warning("module", "port '{}' is not an input port of module '{}' with id {}.", port_name, this->get_name(), this->get_id());
+        log_error("module", "port '{}' is not an input port of module '{}' with ID {} in netlist with ID {}.", port_name, this->get_name(), this->get_id(), m_internal_manager->m_netlist->get_id());
         return nullptr;
     }
 
@@ -506,7 +536,7 @@ namespace hal
             }
         }
 
-        log_warning("module", "port '{}' is not an output port of module '{}' with id {}.", port_name, this->get_name(), this->get_id());
+        log_error("module", "port '{}' is not an output port of module '{}' with ID {} in netlist with ID {}.", port_name, this->get_name(), this->get_id(), m_internal_manager->m_netlist->get_id());
         return nullptr;
     }
 

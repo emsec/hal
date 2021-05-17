@@ -44,27 +44,110 @@ namespace hal
     class SelectionDetailsWidget;
     class ModuleWidget;
     class LoggerWidget;
+    class SettingsItemDropdown;
+    class SettingsItemKeybind;
 
+
+    /**
+     * @ingroup gui
+     * @brief Manages all ContentWidget%s
+     *
+     * The ContentManager class manages the creation and deletion of hal's subwidgets such as the python editor or the
+     * selection details widget. There should only be one content manager at any time.
+     */
     class ContentManager : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit ContentManager(MainWindow* parent);
+        /**
+         * The constructor of the class. The content manager's parent is the MainwWndow of hal.
+         * The MainWindow must be known to the content manager so it can place the subwidgets in it.
+         *
+         * @param parent - The content manager's parent.
+         */
+        explicit ContentManager(MainWindow* parent);       
         ~ContentManager();
 
+        /**
+         * Deletes all subwidgets created by the manager. Used when closing a file.
+         */
         void deleteContent();
 
+        /**
+         * Get hal's python editor.
+         *
+         * @return The python editor.
+         */
         PythonEditor* getPythonEditorWidget();
+
+        /**
+         * @brief Get hal's graph tab widget.
+         *
+         * @return The graph tab widget.
+         */
         GraphTabWidget* getGraphTabWidget();
+
+        /**
+         * Get hal's context manager.
+         *
+         * @return The context manager.
+         */
         ContextManagerWidget* getContextManagerWidget();
+
+        /**
+         * Get hal's selection details widget.
+         *
+         * @return The selection details widget.
+         */
         SelectionDetailsWidget* getSelectionDetailsWidget();
+
+        /**
+         * Get hal's grouping manager.
+         *
+         * @return The grouping manager.
+         */
         GroupingManagerWidget* getGroupingManagerWidget();
 
+        /**
+         * get hal's module tree widget
+         *
+         * @return module tree widget
+         */
+        ModuleWidget* getModuleWidget();
+
+        /**
+         * Set main window title
+         * @param filename name of netlist filename
+         */
+        void setWindowTitle(const QString& filename);
+
     public Q_SLOTS:
+
+        /**
+         * This function is called when a file is opened (connected to a signal that is emitted by the file manager).
+         * It creates the necessary subwidgets and places them in the mainwindow.
+         *
+         * @param fileName - The name of the opened file.
+         */
         void handleOpenDocument(const QString& fileName);
+
+        /**
+         * A function yet to be implemented.
+         *
+         * @param fileName - The name of the new file.
+         */
         void handleFilsystemDocChanged(const QString& fileName);
+
+        /**
+         * A function yet to be implemented.
+         *
+         * @param fileName - The name of the new file.
+         */
         void handleSaveTriggered();
+
+    public:
+        static SettingsItemKeybind* sSettingSearch;
 
     private:
         MainWindow* mMainWindow;
@@ -82,6 +165,10 @@ namespace hal
         GroupingManagerWidget* mGroupingManagerWidget;
         SelectionDetailsWidget* mSelectionDetailsWidget;
         LoggerWidget* mLoggerWidget;
+
+        static SettingsItemDropdown* sSettingSortMechanism;
+        static bool sSettingsInitialized;
+        static bool initializeSettins();
 
 #ifdef HAL_STUDY
         SpecialLogContentManager* mSpecialLogContentManager;

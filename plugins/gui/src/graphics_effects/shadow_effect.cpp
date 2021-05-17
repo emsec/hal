@@ -8,7 +8,7 @@ QT_END_NAMESPACE
 
 namespace hal
 {
-    ShadowEffect::ShadowEffect(QObject* parent) : QGraphicsEffect(parent), _distance(4.0f), _blurRadius(10.0f), _color(0, 0, 0, 80)
+    ShadowEffect::ShadowEffect(QObject* parent) : QGraphicsEffect(parent), mDistance(4.0f), mBlurRadius(10.0f), mColor(0, 0, 0, 80)
     {
     }
 

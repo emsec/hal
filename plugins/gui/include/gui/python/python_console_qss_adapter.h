@@ -28,6 +28,12 @@
 
 namespace hal
 {
+    /**
+     * @ingroup python-console
+     * @brief Connects the stylesheet properties to the console code.
+     *
+     * Singleton class that provides access to the style sheets configuration of the python console.
+     */
     class PythonConsoleQssAdapter : public QWidget
     {
         Q_OBJECT
@@ -36,17 +42,35 @@ namespace hal
         Q_PROPERTY(QColor promtColor READ promtColor WRITE setPromtColor)
 
     public:
+        /**
+         * Get the instance of the singleton class.
+         *
+         * @returns a pointer to the PythonConsoleQssAdapter object.
+         */
         static PythonConsoleQssAdapter* instance();
 
+        /** @name Q_PROPERTY READ Functions
+         */
+        ///@{
         QColor standardColor() const;
         QColor errorColor() const;
         QColor promtColor() const;
+        ///@}
 
+        /** @name Q_PROPERTY WRITE Functions
+         */
+        ///@{
         void setStandardColor(const QColor& color);
         void setErrorColor(const QColor& color);
         void setPromtColor(const QColor& color);
+        ///@}
 
     private:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget.
+         */
         explicit PythonConsoleQssAdapter(QWidget* parent = nullptr);
 
         QColor mStandardColor;

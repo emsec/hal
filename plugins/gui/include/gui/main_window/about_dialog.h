@@ -30,18 +30,28 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * @brief A dialog that displays the Qt version and our open source license
+     *
+     * The AboutDialog is a QDialog that can be opened via Help->About.
+     * It shows the Qt version used for compilation and displays our open source license in a QPlainTextEdit.
+     */
     class AboutDialog : public QDialog
     {
         Q_OBJECT
 
     public:
-        explicit AboutDialog(QWidget* parent = 0);
+        /**
+         * Constructor. Initializes the Dialog.
+         *
+         * @param parent - The parent widget.
+         */
+        explicit AboutDialog(QWidget* parent = nullptr);
 
     private:
-        QVBoxLayout mContentLayout;
-        QLabel mPlaceholder;
-        QLabel mLicensesLabel;
-        QPlainTextEdit mTextedit;
+        QVBoxLayout* mLayout;
+        QPlainTextEdit* mTextedit;
     };
 }
 

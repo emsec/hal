@@ -34,13 +34,27 @@ namespace hal
     class RecentFilesWidget;
     class LabeledFrame;
 
+    /**
+     * @ingroup gui
+     * @brief Hal's welcome screen.
+     *
+     * The welcome screen shown at the start of the gui.
+     */
     class WelcomeScreen : public QFrame
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - the parent widget
+         */
         explicit WelcomeScreen(QWidget* parent = nullptr);
 
+        /**
+         * Initializes the appearance of the widget and its children.
+         */
         void repolish();
 
         //    void intro();

@@ -24,11 +24,17 @@
 #pragma once
 
 #include <QtGlobal>
+#include <QObject>
 
 namespace hal
 {
+    /**
+     * @ingroup graph
+     */
     namespace graph_widget_constants
     {
+        Q_NAMESPACE
+
         static const int sFontSize = 12;
         static const int sGridSize = 14;
         static const int sClusterSize = 8;
@@ -55,9 +61,11 @@ namespace hal
 
         enum class grid_type
         {
-            Lines,
-            Dots,
-            None
+            Lines = 0,
+            Dots = 1,
+            None = 2
         };
+
+        Q_ENUM_NS(grid_type)
     }
 }

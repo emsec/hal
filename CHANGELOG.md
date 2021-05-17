@@ -5,6 +5,124 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added user action system to enable recording and reverting actions within the GUI
+  * moved most GUI actions to the new user action system, including interactions with the graph view and view management
+  * user actions can be recorded and exported as a macro file allowing easier debugging and crash reporting
+  * recording of the user actions is automatically dumped on crash
+  * users can now revert actions executed within the GUI
+* rebuild the settings system from scratch to allow for easier integration of new settings
+  * theme setting (and many others) can now be changed during the session
+  * added a warning when attempting to assign a keybinding that is already in use
+  * added incremental search for settings
+  * added setting to enable/disable extra window to list all executed instances from UserAction
+* added new `Move to module ... dialog 
+  * allows to create new module or select from existing modules
+  * existing modules can be selected from a table, tree-view, or using a module picker within the graph view
+  * enables searching for existing modules
+  * added cursor to indicate that user is in module pick mode
+* improved netlist parsers
+  * split VHDL and Verilog parsers into two independent plugins
+  * netlist parsers now take the path to the netlist file as input instead of a `std::stringstream`
+  * added support for `Z` and `X` assignments to Verilog and VHDL parsers
+  * fixed netlist parsers assigning wrong order of inputs for some multi-bit signals
+* expanded `netlist_utils`
+  * added function `get_common_inputs` to `netlist_utils` to get inputs that are common across multiple gates
+  * added function `replace_gate` to `netlist_utils` to replace a gate with an instance of another gate type
+  * added function `get_gate_chain` and `get_complex_gate_chain` to `netlist_utils` to find gates that are arranged in a chain
+* improved save and export functionality within the GUI
+  * added `Save As...` option to save `.hal` files under a different name
+  * added `Export ...` menu to export the netlist using any of the registered netlist writers
+  * added `GEXF` netlist writer, e.g., for netlist analysis within Gephi
+* added `Remove from view` action to context menu for gates and modules
+* added grouping toolbox feature to highlight successors or predecessors
+* added an indicator showing whether views have been modified
+* added function `is_top_module` to class `Module` to determin whether the current module is the top module of the netlist
+* added Python bindings for `netlist_serializer`
+* added HAL version number to the info shown in `About`
+* when trying to create a view for a module that is already associated with an (unchanged) view, the existing view is activated instead of creating a new view
+* netlist writers now take the output path as input instead of a `std::stringstream`
+* fixed selection details not being updated immediately when renaming or changing a type
+* fixed navigation bug where ports and nets did not match for modules
+* fixed list of navigation targets containing duplicates and/or loops
+* fixed drag'n'drop bug related to negative coordinates
+* fixed liberty parser aborting on unknown `pg_type`
+* fixed stylesheets
+
+## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
+* added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`
+  * renamed enum `GateType::BaseType` to `GateTypeProperty` and moved it out of class `GateType`
+  * added function `has_property` to class `GateType`
+  * changed function `get_base_type` of class `GateType` to `get_properties`
+  * changed HGL gate libraries to support multiple properties
+  * changed function `create_gate_type` of class `GateLibrary` to support multiple properties
+* added `sequential`, `power`, `ground`, `buffer`, `mux`, and `carry` gate type properties to enum `GateTypeProperty`
+* moved enums `PinType` and `PinDirection` from class `GateType` into global scope
+* added `get_path` to `netlist_utils` to retrieve all gates on the predecessor/successor path from a start gate/net to gates of a specified property
+* made `optimize_constants` of class `BooleanFunction` publicly accessible
+* refined buffer removal in `netlist_utils::remove_buffers` to take constant `0` and `1` inputs into account
+* added high-impedance state `Z` to class `BooleanFunction` and added basic support to `evaluate`
+* cleaned up and refined some logger outputs and streamlined log channel names
+* disabled extended logging again
+* changes to `z3_utils` (WIP)
+* fixed crash related to GraphicsScene destructor
+* fixed overlapping gates in cone view (and subsequent segfault) by suppressing gate coordinates when adding to cone view
+* fixed `get_gate_by_id` and `get_gates` of class `Netlist` returning only gates contained within one of its modules (causing a GUI crash upon deleting gates from a module)
+* fixed nets of old module not updating when moving gate from one module to another
+
+## [3.2.5] - 2021-01-29 13:15:00+02:00 (urgency: medium)
+* **WARNING:** temporarily enabled extended logging (includes taking screenshots) for university course purposes. Note that no data leaves your machine unless you actively provide it to us.
+* views get persisted to .halv file and are restored if the file is found on disk
+* fixed bug in `boolean_influence` plugin causing problems on global inputs
+* fixed gate and net details widget not showing full list of pins for large gates
+
+## [3.2.4] - 2021-01-23 15:30:00+02:00 (urgency: medium)
+* added plugin `boolean_influence` that enables calculation of the boolean influence for each FF depending on the predecessing FFs
+* extended the `z3_utils` plugin with a `z3Wrapper` class, which holds exactly one `z3::expr` and the corresponding `z3::context`
+* removed the code coverage checks from the macOS pipeline and added test command, so the macOS pipeline will work again properly
+* fixed a bug in DANA, where sometimes the net names were output in the DANA results instead of the gate names
+
+## [3.2.3] - 2021-01-18 18:30:00+02:00 (urgency: medium)
+* fixed `z3_utils` plugin being disabled by default causing linking errors
+* fixed `load_initial_values` and `load_initial_values_from_netlist` assigning values to potentially non-existing nets
+
+## [3.2.2] - 2021-01-16 14:40:00+02:00 (urgency: medium)
+* refactored gate library handling
+  * separated gate library manager from gate library parser interface
+  * added gate library writer interface to enable writing out gate library files
+* extended and refactored gate library functionality
+  * added `create_gate_type` to class `GateLibrary` to enable gate type creation from Python
+  * added `mark_vcc_gate_type` and `mark_gnd_gate_type` to class `GateLibrary` to enable marking gate types as power or ground connections
+  * added `get_gate_type_by_name` and `contains_gate_type_by_name` to class `GateLibrary`
+  * added pin types and respective functions to `GateType` to enable assigning special-purpose pins
+  * added `get_gate_library` to class `GateType`
+  * added base types `ram`, `dsp`, and `io`
+  * merged input and output pin groups to simplify pin group handling
+  * removed `add_gate_type` function from class `GateLibrary`
+  * removed `GateTypeSequential` and `GateTypeLut` classes and moved their functionality into class `GateType`
+  * renamed some functions to have shorter and more understandable names
+* added new gate library format: "HAL Gate Library" (HGL)
+  * supports assignment of pin types to gate types
+  * added parser for HGL (`.hgl`) files
+  * added writer for HGL (`.hgl`) files
+* refactored liberty gate library parser
+  * added parsing of power and ground pins (`pg_pin`) to Liberty parser
+* added more netlist utility functions
+  * added `get_nets_at_pins` to retrieve nets that are connected to a vector of pins
+  * added `remove_buffers` to remove buffer gates from a netlist
+  * added `remove_unused_lut_endpoints` to remove unused LUT fan-in endpoints
+  * added `rename_luts_according_to_function` to rename LUTs depending on the Boolean function they implement
+* added `to_z3` to class `BooleanFunction` to translate a Boolean function into a z3 expression
+* added **highly experimental** `solve_fsm` plugin for FSM verification using z3
+* added `z3_utils` plugin to provide common z3 functions to all other plugins
+* improved layouter uses location information from gate API
+* switched from float gate coordinates to integer ones
+* the netlist simulator VCD writer now optionally takes a set of target nets to write to VCD
+* fixed `add_boolean_function` of class `Gate` assigning wrong functions to LUTs
+* fixed wrong Python binding for property `gate_library` of class `Netlist`
+* fixed netlist simulator segfaulting when an output pin of a FF remains unconnected
+* fixed optimization of Boolean functions sometimes producing wrong or non-optimal results
+* fixed `netlist_utils::get_subgraph_function` returning wrong results if input pins without relevance for the Boolean function remained unconnected
+* fixed layouter not showing connections if things change within submodules by adding additional test whether removing or adding a gate/module requires context update
 
 ## [3.1.11] - 2021-01-03 11:35:00+02:00 (urgency: medium)
 * added **highly experimental** way to close and reopen netlists at runtime
@@ -455,7 +573,12 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.11...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.2.6...HEAD
+[3.2.6]: https://github.com/emsec/hal/compare/v3.2.5...v3.2.6
+[3.2.5]: https://github.com/emsec/hal/compare/v3.2.4...v3.2.5
+[3.2.4]: https://github.com/emsec/hal/compare/v3.2.3...v3.2.4
+[3.2.3]: https://github.com/emsec/hal/compare/v3.2.2...v3.2.3
+[3.2.2]: https://github.com/emsec/hal/compare/v3.1.11...v3.2.2
 [3.1.11]: https://github.com/emsec/hal/compare/v3.1.10...v3.1.11
 [3.1.10]: https://github.com/emsec/hal/compare/v3.1.9...v3.1.10
 [3.1.9]: https://github.com/emsec/hal/compare/v3.1.8...v3.1.9

@@ -1,4 +1,13 @@
-[![DOI](https://zenodo.org/badge/169076171.svg)](https://zenodo.org/badge/latestdoi/169076171) [![pipeline status](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) [![macOS Workflow](https://github.com/emsec/hal/workflows/Github%20CI/badge.svg?branch=master)](https://github.com/emsec/hal/actions?query=branch%3Amaster+workflow%3A%22Github+CI%22) [![coverage report](https://codecov.io/gh/emsec/hal/branch/master/graph/badge.svg)](https://codecov.io/gh/emsec/hal) [![CodeFactor](https://www.codefactor.io/repository/github/emsec/hal/badge)](https://www.codefactor.io/repository/github/emsec/hal) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6070b197c3644c03bb3f0ec79d641675)](https://app.codacy.com/app/emsec/hal?utm_source=github.com&utm_medium=referral&utm_content=emsec/hal&utm_campaign=Badge_Grade_Settings) [![Doc: C++](https://img.shields.io/badge/doc-c%2B%2B-orange)](https://emsec.github.io/hal/doc/) [![Doc: Python](https://img.shields.io/badge/doc-python-red)](https://emsec.github.io/hal/pydoc/)
+# Welcome to HAL! <a name="introduction"></a>
+[![Ubuntu 20.04](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml)  [![macOS](https://github.com/emsec/hal/actions/workflows/macOS.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/macOS.yml) [![Doc: C++](https://img.shields.io/badge/doc-c%2B%2B-orange)](https://emsec.github.io/hal/doc/) [![Doc: Python](https://img.shields.io/badge/doc-python-red)](https://emsec.github.io/hal/pydoc/) [![deployment](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) 
+
+
+HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation framework.
+
+![HAL Screenshot](https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png "HAL Screenshot")
+
+
+
 
 # Navigation
 1. [Introduction](#introduction)
@@ -6,13 +15,6 @@
 3. [Build Instructions](#build-instructions)
 4. [Quickstart Guide](#quickstart)
 5. [Academic Context](#academic-context)
-
-# Welcome to HAL! <a name="introduction"></a>
-
-HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation framework.
-
-![HAL Screenshot](https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png "HAL Screenshot")
-
 
 ## What the hell is HAL?
 Virtually all available research on netlist analysis operates on a graph-based representation of the netlist under inspection.
@@ -50,31 +52,45 @@ This repository contains a selection of curated plugins:
 ## Documentation
 A comprehensive documentation of HAL's features from a user perspective is available in our [Wiki](https://github.com/emsec/hal/wiki). In addition, we provide a full [C++ API](https://emsec.github.io/hal/doc/) and [Python API](https://emsec.github.io/hal/pydoc/) documentation.
 
-# Install Instructions <a name="install-instructions"></a>
+## Slack, Contact and Support
+For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@csp.mpg.de](mailto:hal@csp.mpg.de). To receive an invite to our dedicated hal-support Slack workspace, please write us an e-mail as well.
 
-## Ubuntu
+
+<a name="install-instructions"></a>
+# Install Instructions 
+
+## Ubuntu 20.04
 
 HAL releases are available via it's own ppa, which can be found here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal)
 
+
+<a name="build-instructions"></a>
+# Build Instructions 
+
+## Ubuntu 18.04
+
+We do currently not support building HAL on Ubuntu 18.04. We are working towards a solution and will update this guide as soon as possible.
+
+## Ubuntu 20.04
+
+If you want to build HAL on Ubuntu 20.04, run the following commands:
+
+1. `git clone https://github.com/emsec/hal.git && cd hal` to clone the Git repository
+2. `./install_dependencies.sh` to install all required dependencies
+3. `mkdir build && cd build` to create and move to the build folder
+4. `cmake .. [OPTIONS]` to run cmake
+5. `make` to compile HAL
+6. `make install` (optionally) to install HAL
+
 ## macOS
 
-Use the following commands to install hal via [homebrew](https://brew.sh/index_de).
+**Warning:** Building on macOS is experimental and may not always work.
 
-```bash
-brew tap emsec/hal
-brew install hal
-```
+Please make sure to use a compiler that supports OpenMP. You can install one using, e.g., Homebrew via: `brew install llvm`.
 
-# Build Instructions <a name="build-instructions"></a>
+To let cmake know of the custom compiler use following command.
 
-If you want to build HAL locally on your machine, run the following commands:
-
-1. `git clone https://github.com/emsec/hal.git && cd hal`
-2. To install all neccessary dependencies execute `./install_dependencies.sh`
-3. `mkdir build && cd build`
-4. `cmake .. ` + your desired configuration (see below)
-5. `make`
-6. `make install` (optionally)
+`cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
 
 ## CMake Options
 Using the CMake build system, your HAL build can be configured quite easily (by adding `-D<OPTION>=1` to the cmake command).
@@ -86,18 +102,10 @@ This also builds all tests of plugins that are built.
 - `BUILD_ALL_PLUGINS`: all-in-one option to build all available plugins, overrides the options for individual plugins
 - `SANITIZE_ADDRESS`, `SANITIZE_MEMORY`, `SANITIZE_THREAD`, `SANITIZE_UNDEFINED `: builds with the respective sanitizers (recommended only for debug builds)
 
-The default `CMAKE_BUILD_TYPE` if you do not specify any option is set to `Release`.
+If you do not specify `CMAKE_BUILD_TYPE`, it defaults to `Release`.
 
-## Notes for building on macOS
-
-Please make sure to use a compiler that supports OpenMP. You can install one using, e.g., Homebrew via: `brew install llvm`.
-
-To let cmake know of the custom compiler use following command.
-
-`cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
-
-
-# Quickstart Guide <a name="quickstart"></a>
+<a name="quickstart"></a>
+# Quickstart Guide 
 
 Install HAL or build HAL and start the GUI via `hal -g`. You can list all available options via `hal [--help|-h]`.
 We included some example netlists in `examples` together with the implementation of the respective example gate library in `plugins/example_gate_library`.
@@ -162,7 +170,8 @@ Start Docker build via:
 
 `git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges`
 
-# Academic Context <a name="academic-context"></a>
+<a name="academic-context"></a>
+# Academic Context 
 
 If you use HAL in an academic context, please cite the framework using the reference below:
 ```latex
@@ -190,8 +199,6 @@ Hence, we prefer citing the above entry.
 
 To get an overview on the challenges we set out to solve with HAL, feel free to watch our [talk](https://media.ccc.de/v/36c3-10879-hal_-_the_open-source_hardware_analyzer) at 36C3.
 
-# Contact and Support
-For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@csp.mpg.de](mailto:hal@csp.mpg.de).
 
 # Licensing
 HAL is licensed under MIT License to encourage collaboration with other research groups and contributions from the industry. Please refer to the license file for further information.

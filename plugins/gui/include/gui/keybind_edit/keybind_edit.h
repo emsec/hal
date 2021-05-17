@@ -27,29 +27,45 @@
 
 #include <QKeySequenceEdit>
 #include <QEvent>
+#include <QColor>
 
 namespace hal
 {
+    class SettingsItemKeybind;
+
+    /**
+     * @ingroup settings
+     */
     class KeybindEdit : public QKeySequenceEdit
     {
     Q_OBJECT
+    Q_PROPERTY(bool hasGrab READ hasGrab WRITE setHasGrab)
     Q_PROPERTY(bool validated READ validated WRITE setValidated)
+
     public:
         KeybindEdit(QWidget* parent = nullptr);
-        void addValidator(Validator* v);
-        void setValidated(bool validated);
+        void setHasGrab(bool isgrab);
+        void setValidated(bool valid);
+        bool hasGrab();
         bool validated();
-        void revalidate();
+        bool doValidate();
+        void load(const QKeySequence& seq, SettingsItemKeybind* item);
 
     Q_SIGNALS:
-        void editRejected();
+        void editRejected(QString errmsg);
+        void editAccepted();
+
+    private Q_SLOTS:
+        void restoreOldSequence();
 
     protected:
         bool event(QEvent* e) override;
 
     private:
-        StackedValidator mValidator;
+        SettingsItemKeybind* mItem;
         QKeySequence mOldSequence;
-        bool mValidated = true;
+        bool mSkipValidate;
+        bool mValidated;
+        bool mGrab;
     };
 }

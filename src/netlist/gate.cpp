@@ -2,7 +2,7 @@
 
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/event_handler.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -37,7 +37,7 @@ static u64 bitreverse(u64 n)
 
 namespace hal
 {
-    Gate::Gate(NetlistInternalManager* mgr, const u32 id, const GateType* gt, const std::string& name, float x, float y, EventHandler* event_handler)
+    Gate::Gate(NetlistInternalManager* mgr, const u32 id, const GateType* gt, const std::string& name, float x, float y)
     {
         m_internal_manager = mgr;
         m_id               = id;
@@ -68,12 +68,12 @@ namespace hal
     {
         if (utils::trim(name).empty())
         {
-            log_error("netlist.internal", "gate::set_name: empty name is not allowed");
+            log_error("gate", "gate name cannot be empty.");
             return;
         }
         if (name != m_name)
         {
-            log_info("netlist.internal", "changed name for gate (id = {}, type = {}) from '{}' to '{}'.", m_id, m_type->get_name(), m_name, name);
+            log_info("net", "changed name for gate with ID {} from '{}' to '{}' in netlist with ID {}.", m_id, m_name, name, m_internal_manager->m_netlist->get_id());
 
             m_name = name;
 
@@ -81,32 +81,32 @@ namespace hal
         }
     }
 
-    const GateType* Gate::get_type() const
+    GateType* Gate::get_type() const
     {
         return m_type;
     }
 
-    float Gate::get_location_x() const
+    i32 Gate::get_location_x() const
     {
         return m_x;
     }
 
-    float Gate::get_location_y() const
+    i32 Gate::get_location_y() const
     {
         return m_y;
     }
 
-    std::pair<float, float> Gate::get_location() const
+    std::pair<i32, i32> Gate::get_location() const
     {
         return {m_x, m_y};
     }
 
     bool Gate::has_location() const
     {
-        return m_x >= 0 && m_y >= 0;
+        return m_x != -1 && m_y != -1;
     }
 
-    void Gate::set_location_x(float x)
+    void Gate::set_location_x(i32 x)
     {
         if (x != m_x)
         {
@@ -115,7 +115,7 @@ namespace hal
         }
     }
 
-    void Gate::set_location_y(float y)
+    void Gate::set_location_y(i32 y)
     {
         if (y != m_y)
         {
@@ -124,7 +124,7 @@ namespace hal
         }
     }
 
-    void Gate::set_location(const std::pair<float, float>& location)
+    void Gate::set_location(const std::pair<i32, i32>& location)
     {
         set_location_x(location.first);
         set_location_y(location.second);
@@ -152,11 +152,10 @@ namespace hal
             name = output_pins[0];
         }
 
-        if (m_type->get_base_type() == GateType::BaseType::lut)
+        if (m_type->has_property(GateTypeProperty::lut))
         {
-            auto lut_type = static_cast<const GateTypeLut*>(m_type);
-            auto lut_pins = lut_type->get_output_from_init_string_pins();
-            if (lut_pins.find(name) != lut_pins.end())
+            auto lut_pins = m_type->get_pins_of_type(PinType::lut);
+            if (std::find(lut_pins.begin(), lut_pins.end(), name) != lut_pins.end())
             {
                 return get_lut_function(name);
             }
@@ -190,10 +189,9 @@ namespace hal
             res.emplace(it.first, it.second);
         }
 
-        if (!only_custom_functions && m_type->get_base_type() == GateType::BaseType::lut)
+        if (!only_custom_functions && m_type->has_property(GateTypeProperty::lut))
         {
-            auto lut_type = static_cast<const GateTypeLut*>(m_type);
-            for (auto pin : lut_type->get_output_from_init_string_pins())
+            for (auto pin : m_type->get_pins_of_type(PinType::lut))
             {
                 res.emplace(pin, get_lut_function(pin));
             }
@@ -206,12 +204,10 @@ namespace hal
     {
         UNUSED(pin);
 
-        auto lut_type = static_cast<const GateTypeLut*>(m_type);
-
-        std::string category   = lut_type->get_config_data_category();
-        std::string key        = lut_type->get_config_data_identifier();
+        std::string category   = m_type->get_config_data_category();
+        std::string key        = m_type->get_config_data_identifier();
         std::string config_str = std::get<1>(get_data(category, key));
-        auto is_ascending      = lut_type->is_config_data_ascending_order();
+        auto is_ascending      = m_type->is_lut_init_ascending();
         auto inputs            = get_input_pins();
 
         BooleanFunction result = BooleanFunction::ZERO;
@@ -223,7 +219,7 @@ namespace hal
 
         if (inputs.size() > 6)
         {
-            log_error("netlist.internal", "{}-gate '{}' (id = {}) has more than six input pins (unsupported)", get_type()->get_name(), get_name(), get_id());
+            log_error("gate", "LUT gate '{}' with ID {} in netlist with ID {} has more than six input pins, which is currently not supported.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return BooleanFunction();
         }
 
@@ -234,7 +230,12 @@ namespace hal
         }
         catch (std::invalid_argument& ex)
         {
-            log_error("netlist.internal", "{}-gate '{}' (id = {}) has invalid config string: '{}' is not a hex value", get_type()->get_name(), get_name(), get_id(), config_str);
+            log_error("gate",
+                      "LUT gate '{}' with ID {} in netlist with ID {} has invalid configuration string of '{}', which is not a hex value.",
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id(),
+                      config_str);
             return BooleanFunction();
         }
 
@@ -265,11 +266,11 @@ namespace hal
 
         if (config_size > max_config_size)
         {
-            log_error("netlist.internal",
-                      "{}-gate '{}' (id = {}) supports a config of up to {} bits, but config string {} contains {} bits.",
-                      get_type()->get_name(),
-                      get_name(),
-                      get_id(),
+            log_error("gate",
+                      "LUT gate '{}' with ID {} in netlist with ID {} supports a configuration string of up to {} bits, but '{}' comprises {} bits instead.",
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id(),
                       max_config_size,
                       config_str,
                       config_str.size() * 4);
@@ -307,16 +308,15 @@ namespace hal
 
     void Gate::add_boolean_function(const std::string& name, const BooleanFunction& func)
     {
-        if (m_type->get_base_type() == GateType::BaseType::lut)
+        if (m_type->has_property(GateTypeProperty::lut))
         {
             auto output_pins = m_type->get_output_pins();
             if (!output_pins.empty() && name == output_pins[0])
             {
-                auto lut_type = static_cast<const GateTypeLut*>(m_type);
-                auto tt       = func.get_truth_table(get_input_pins());
+                auto tt = func.get_truth_table(get_input_pins());
 
                 u64 config_value = 0;
-                if (lut_type->is_config_data_ascending_order())
+                if (!m_type->is_lut_init_ascending())
                 {
                     std::reverse(tt.begin(), tt.end());
                 }
@@ -324,15 +324,21 @@ namespace hal
                 {
                     if (v == BooleanFunction::X)
                     {
-                        log_error("netlist", "function truth table contained undefined values");
+                        log_error("netlist",
+                                  "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {} in netlist with ID {} as its truth table contains undefined values.",
+                                  name,
+                                  func.to_string(),
+                                  m_name,
+                                  m_id,
+                                  m_internal_manager->m_netlist->get_id());
                         return;
                     }
                     config_value <<= 1;
                     config_value |= v;
                 }
 
-                std::string category = lut_type->get_config_data_category();
-                std::string key      = lut_type->get_config_data_identifier();
+                std::string category = m_type->get_config_data_category();
+                std::string key      = m_type->get_config_data_identifier();
 
                 std::stringstream stream;
                 stream << std::hex << config_value;
@@ -411,7 +417,7 @@ namespace hal
 
         if (it == m_in_endpoints.end())
         {
-            log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to input pin '{}'.", get_name(), get_type()->get_name(), pin);
+            log_debug("gate", "no net is connected to input pin '{}' of gate '{}' with ID {} in netlist with ID {}.", pin, m_name, m_id, m_internal_manager->m_netlist->get_id());
             return nullptr;
         }
 
@@ -444,7 +450,7 @@ namespace hal
 
         if (it == m_out_endpoints.end())
         {
-            log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to output pin '{}'.", get_name(), get_type()->get_name(), pin);
+            log_debug("gate", "no net is connected to output pin '{}' of gate '{}' with ID {} in netlist with ID {}.", pin, m_name, m_id, m_internal_manager->m_netlist->get_id());
             return nullptr;
         }
 
@@ -489,16 +495,16 @@ namespace hal
         return result;
     }
 
-    Endpoint* Gate::get_predecessor(const std::string& which_pin) const
+    Endpoint* Gate::get_predecessor(const std::string& input_pin) const
     {
-        auto predecessors = this->get_predecessors([&which_pin](auto& starting_pin, auto) -> bool { return starting_pin == which_pin; });
+        auto predecessors = this->get_predecessors([&input_pin](auto& starting_pin, auto) -> bool { return starting_pin == input_pin; });
         if (predecessors.size() == 0)
         {
             return nullptr;
         }
         if (predecessors.size() > 1)
         {
-            log_error("netlist", "internal error: multiple predecessors for '{}' at pin '{}'.", get_name(), which_pin);
+            log_error("gate", "gate '{}' with ID {} has multiple predecessors at input pin '{}' in netlist with ID {}.", m_name, m_id, input_pin, m_internal_manager->m_netlist->get_id());
             return nullptr;
         }
 
@@ -543,16 +549,16 @@ namespace hal
         return result;
     }
 
-    Endpoint* Gate::get_successor(const std::string& which_pin) const
+    Endpoint* Gate::get_successor(const std::string& output_pin) const
     {
-        auto successors = this->get_successors([&which_pin](auto& starting_pin, auto) -> bool { return starting_pin == which_pin; });
+        auto successors = this->get_successors([&output_pin](auto& starting_pin, auto) -> bool { return starting_pin == output_pin; });
         if (successors.size() == 0)
         {
             return nullptr;
         }
         if (successors.size() > 1)
         {
-            log_error("netlist", "internal error: multiple successors for '{}' at pin '{}'.", get_name(), which_pin);
+            log_error("gate", "gate '{}' with ID {} has multiple successors at output pin '{}' in netlist with ID {}.", m_name, m_id, output_pin, m_internal_manager->m_netlist->get_id());
             return nullptr;
         }
 

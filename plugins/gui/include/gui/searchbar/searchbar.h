@@ -33,6 +33,9 @@ class QToolButton;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class Searchbar : public QFrame
     {
         Q_OBJECT
@@ -42,7 +45,7 @@ namespace hal
         Q_PROPERTY(QString clearIconStyle READ clearIconStyle WRITE setClearIconStyle)
 
     public:
-        Searchbar(QWidget* parent = 0);
+        Searchbar(QWidget* parent = nullptr);
 
         QString searchIcon() const;
         QString searchIconStyle() const;

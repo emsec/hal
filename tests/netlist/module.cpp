@@ -1,6 +1,5 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/event_system/gate_event_handler.h"
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
@@ -25,16 +24,18 @@ namespace hal {
     /**
      * Testing the access on the id, the type and the stored netlist after calling the constructor
      *
-     * Functions: constructor, get_id, get_name
+     * Functions: constructor, get_id, get_name, is_top_module
      */
     TEST_F(ModuleTest, check_constructor) {
         TEST_START
             {
                 // Creating a Module of id 123 and type "test Module"
-                auto nl = test_utils::create_empty_netlist();
-                Module*
-                    test_module = nl->create_module(MIN_MODULE_ID + 123, "test Module", nl->get_top_module());
-
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                Module* top_module = nl->get_top_module();
+                EXPECT_EQ(top_module->get_id(), 1);
+                EXPECT_TRUE(top_module->is_top_module());
+                Module* test_module = nl->create_module(MIN_MODULE_ID + 123, "test Module", top_module);
+                EXPECT_FALSE(test_module->is_top_module());
                 EXPECT_EQ(test_module->get_id(), (u32) (MIN_MODULE_ID + 123));
                 EXPECT_EQ(test_module->get_name(), "test Module");
                 EXPECT_EQ(test_module->get_netlist(), nl.get());

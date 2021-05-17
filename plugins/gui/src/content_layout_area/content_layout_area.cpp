@@ -33,8 +33,6 @@ namespace hal
         connect(mRightAnchor, &SplitterAnchor::contentChanged, this, &ContentLayoutArea::updateRightDockBar);
         connect(mBottomAnchor, &SplitterAnchor::contentChanged, this, &ContentLayoutArea::updateBottomDockBar);
 
-
-        //needed to fix a bug where the bottom dockbar does not reappear after dragging every widget out of it
         connect(ContentDragRelay::instance(), &ContentDragRelay::dragStart, this, &ContentLayoutArea::handleDragStart);
         connect(ContentDragRelay::instance(), &ContentDragRelay::dragEnd, this, &ContentLayoutArea::handleDragEnd);
 
@@ -130,7 +128,7 @@ namespace hal
 
     void ContentLayoutArea::removeContent(ContentWidget* widget)
     {
-        // IMPLEMENT
+        Q_UNUSED(widget);
     }
 
     void ContentLayoutArea::clear()

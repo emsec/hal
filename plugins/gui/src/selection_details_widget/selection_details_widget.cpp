@@ -4,8 +4,18 @@
 #include "gui/selection_details_widget/gate_details_widget.h"
 #include "gui/selection_details_widget/net_details_widget.h"
 #include "gui/selection_details_widget/module_details_widget.h"
+#include "gui/module_dialog/module_dialog.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/selection_history_navigator/selection_history_navigator.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/action_set_selection_focus.h"
+#include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/user_action_object.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
+
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
@@ -35,13 +45,20 @@ namespace hal
 {
     const QString SelectionDetailsWidget::sAddToGrouping("Add to grouping ");
 
+    SettingsItemCheckbox* SelectionDetailsWidget::sSettingHideEmpty =
+            new SettingsItemCheckbox(
+                "Hide Empty Section",
+                "selection_details/hide_empty_sections",
+                false,
+                "Appearance:Selection Details",
+                "Specifies wheter empty sections are hidden or shown in the Selection Details Widget."
+                );
+
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
         : ContentWidget("Selection Details", parent), mNumberSelectedItems(0),
-          mRestoreLastSelection(new QAction),
           mSelectionToGrouping(new QAction),
           mSelectionToModule(new QAction),
-          mSearchAction(new QAction),
-          mHistory(new SelectionHistoryNavigator(5))
+          mSearchAction(new QAction)
     {
         //needed to load the properties
         ensurePolished();
@@ -111,13 +128,10 @@ namespace hal
         //    m_table_widget->setAlternatingRowColors(true);
         //    m_table_widget->horizontalHeader()->setStretchLastSection(true);
         //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
-
-        mRestoreLastSelection->setToolTip("Restore last selection");
         mSelectionToGrouping->setToolTip("Assign to grouping");
         mSelectionToModule->setToolTip("Move to module");
         mSelectionToGrouping->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mToGroupingIconPath));
         mSelectionToModule->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mToModuleIconPath));
-        canRestoreSelection();
         canMoveToModule(0);
 
         mSearchAction->setToolTip("Search");
@@ -125,8 +139,15 @@ namespace hal
         mSelectionToGrouping->setDisabled(true);
         mSelectionToModule->setDisabled(true);
 
+        mGateDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
+        mModuleDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
+        mNetDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
+
+        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mGateDetails, &GateDetailsWidget::hideSectionsWhenEmpty);
+        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mModuleDetails, &ModuleDetailsWidget::hideSectionsWhenEmpty);
+        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mNetDetails, &NetDetailsWidget::hideSectionsWhenEmpty);
+
         gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
-        connect(mRestoreLastSelection, &QAction::triggered, this, &SelectionDetailsWidget::restoreLastSelection);
         connect(mSelectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);
         connect(mSelectionToModule, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleMenu);
         connect(mSearchAction, &QAction::triggered, this, &SelectionDetailsWidget::toggleSearchbar);
@@ -138,79 +159,36 @@ namespace hal
         connect(mSelectionTreeView, &SelectionTreeView::focusItemClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
     }
 
-    void SelectionDetailsWidget::restoreLastSelection()
-    {
-        gSelectionRelay->clear();
-        mHistory->restorePreviousEntry();
-        gSelectionRelay->relaySelectionChanged(nullptr);
-        canRestoreSelection();
-    }
-
     void SelectionDetailsWidget::selectionToModuleMenu()
     {
-        if (gSelectionRelay->mSelectedModules.size() + gSelectionRelay->mSelectedGates.size() <= 0) return;
-        QMenu* menu = new QMenu(this);
-        QAction* action = menu->addAction("New module …");
-        action->setData(-1);
-        connect(action, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleAction);
-        menu->addSeparator();
+        if (gSelectionRelay->numberSelectedNodes() <= 0) return;
 
-        for (Module* module : gNetlist->get_modules())
-        {
-            bool canAdd = true;
+        ModuleDialog md = new ModuleDialog(this);
+        if (md.exec() != QDialog::Accepted) return;
 
-            for (u32 mid : gSelectionRelay->mSelectedModules)
-            {
-                Module* m = gNetlist->get_module_by_id(mid);
-                if (!m) continue;
-                if (module == m || module->contains_module(m) || m->contains_module(module))
-                {
-                    canAdd = false;
-                    break;
-                }
-            }
-            if (canAdd)
-                for (u32 gid : gSelectionRelay->mSelectedGates)
-                {
-                    Gate* g = gNetlist->get_gate_by_id(gid);
-                    if (!g) continue;
-                    if (module->contains_gate(g))
-                    {
-                        canAdd = false;
-                        break;
-                    }
-                }
-            // don't allow a gate to be moved into its current module
-            // && don't allow a module to be moved into its current module
-            // && don't allow a module to be moved into itself
-            // (either check automatically passes if g respective m is nullptr, so we
-            // don't have to create two loops)
-            if (canAdd)
-            {
-                QString modName = QString::fromStdString(module->get_name());
-                const u32 modId = module->get_id();
-                action          = menu->addAction(modName);
-                connect(action, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleAction);
-                action->setData(modId);
-            }
-        }
-        menu->exec(mapToGlobal(geometry().topLeft()+QPoint(120,0)));
+        if (md.isNewModule())
+            SelectionDetailsWidget::selectionToModuleAction(-1);
+        else
+            SelectionDetailsWidget::selectionToModuleAction(md.selectedId());
     }
 
-    void SelectionDetailsWidget::selectionToModuleAction()
+    void SelectionDetailsWidget::selectionToModuleAction(int actionCode)
     {
-        Module* targetModule = nullptr;
-        const QAction* senderAction = static_cast<const QAction*>(sender());
-        Q_ASSERT(senderAction);
-        int actionCode = senderAction->data().toInt();
+
+        ActionAddItemsToObject* actAddSelected =
+                new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
+                                           gSelectionRelay->selectedGates());
+        u32 targetModuleId = 0;
+
         if (actionCode < 0)
         {
+            // add to new module
             std::unordered_set<Gate*> gatesSelected;
             std::unordered_set<Module*> modulesSelected;
-            for (u32 id : gSelectionRelay->mSelectedGates)
+            for (u32 id : gSelectionRelay->selectedGatesList())
                 gatesSelected.insert(gNetlist->get_gate_by_id(id));
 
-            for (u32 id : gSelectionRelay->mSelectedModules)
+            for (u32 id : gSelectionRelay->selectedModulesList())
                 modulesSelected.insert(gNetlist->get_module_by_id(id));
 
             Module* parentModule = gui_utility::firstCommonAncestor(modulesSelected, gatesSelected);
@@ -218,27 +196,28 @@ namespace hal
             bool ok;
             QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parentName + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
             if (!ok || name.isEmpty()) return;
-            targetModule = gNetlist->create_module(gNetlist->get_unique_module_id(), name.toStdString(), parentModule);
+            ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
+            actNewModule->setParentId(parentModule->get_id());
+            UserActionCompound* act = new UserActionCompound;
+            act->setUseCreatedObject();
+            act->addAction(actNewModule);
+            act->addAction(actAddSelected);
+            act->exec();
+            targetModuleId = act->object().id();
         }
         else
         {
-            u32 mod_id = actionCode;
-            targetModule = gNetlist->get_module_by_id(mod_id);
-        }
-        Q_ASSERT(targetModule);
-        for (const auto& id : gSelectionRelay->mSelectedGates)
-        {
-            targetModule->assign_gate(gNetlist->get_gate_by_id(id));
-        }
-        for (const auto& id : gSelectionRelay->mSelectedModules)
-        {
-            gNetlist->get_module_by_id(id)->set_parent_module(targetModule);
+            // add to existing module
+            targetModuleId = actionCode;
+            actAddSelected->setObject(UserActionObject(targetModuleId,UserActionObjectType::Module));
+            actAddSelected->exec();
         }
 
-        auto gates   = gSelectionRelay->mSelectedGates;
-        auto modules = gSelectionRelay->mSelectedModules;
         gSelectionRelay->clear();
+        gSelectionRelay->addModule(targetModuleId);
+        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,targetModuleId);
         gSelectionRelay->relaySelectionChanged(this);
+        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
     }
 
     void SelectionDetailsWidget::selectionToGrouping()
@@ -267,8 +246,7 @@ namespace hal
 
     void SelectionDetailsWidget::selectionToNewGrouping()
     {
-        Grouping* grp = gContentManager->getGroupingManagerWidget()->getModel()->addDefaultEntry();
-        if (grp) selectionToGroupingInternal(grp);
+        selectionToGroupingAction();
     }
 
     void SelectionDetailsWidget::selectionToExistingGrouping()
@@ -276,46 +254,70 @@ namespace hal
         const QAction* action = static_cast<const QAction*>(QObject::sender());
         QString grpName = action->text();
         if (grpName.startsWith(sAddToGrouping)) grpName.remove(0,sAddToGrouping.size());
-        Grouping* grp =
-                gContentManager->getGroupingManagerWidget()->getModel()->groupingByName(grpName);
-        if (grp) selectionToGroupingInternal(grp);
+        selectionToGroupingAction(grpName);
     }
 
-    void SelectionDetailsWidget::selectionToGroupingInternal(Grouping* grp)
+    UserAction* SelectionDetailsWidget::groupingUnassignActionFactory(const UserActionObject& obj) const
     {
-        for (u32 mid : gSelectionRelay->mSelectedModules)
-        {
-            Module* m = gNetlist->get_module_by_id(mid);
-            if (m)
-            {
-                Grouping* mg = m->get_grouping();
-                if (mg) mg->remove_module(m);
-                grp->assign_module(m);
-            }
+        Grouping* assignedGrouping = nullptr;
+        QSet<u32> mods, gats, nets;
+        Module* mod;
+        Gate*   gat;
+        Net*    net;
+        switch(obj.type()) {
+        case UserActionObjectType::Module:
+            mod = gNetlist->get_module_by_id(obj.id());
+            if (mod) assignedGrouping = mod->get_grouping();
+            mods.insert(mod->get_id());
+            break;
+        case UserActionObjectType::Gate:
+            gat = gNetlist->get_gate_by_id(obj.id());
+            if (gat) assignedGrouping = gat->get_grouping();
+            gats.insert(gat->get_id());
+            break;
+        case UserActionObjectType::Net:
+            net = gNetlist->get_net_by_id(obj.id());
+            if (net) assignedGrouping = net->get_grouping();
+            nets.insert(net->get_id());
+            break;
+        default:
+            break;
         }
-        for (u32 gid : gSelectionRelay->mSelectedGates)
+        if (!assignedGrouping) return nullptr; // nothing to do
+        ActionRemoveItemsFromObject* retval = new ActionRemoveItemsFromObject(mods,gats,nets);
+        retval->setObject(UserActionObject(assignedGrouping->get_id(),
+                                           UserActionObjectType::Grouping));
+        retval->setObjectLock(true);
+        return retval;
+    }
+
+    void SelectionDetailsWidget::selectionToGroupingAction(const QString& existingGrpName)
+    {
+        UserActionCompound* compound = new UserActionCompound;
+        u32 grpId = 0;
+        if (existingGrpName.isEmpty())
         {
-            Gate* g = gNetlist->get_gate_by_id(gid);
-            if (g)
-            {
-                Grouping* gg = g->get_grouping();
-                if (gg) gg->remove_gate(g);
-                grp->assign_gate(g);
-            }
+            compound->addAction(new ActionCreateObject(UserActionObjectType::Grouping));
+            compound->setUseCreatedObject();
         }
-        for (u32 nid : gSelectionRelay->mSelectedNets)
+        else
         {
-            Net* n = gNetlist->get_net_by_id(nid);
-            if (n)
-            {
-                Grouping* ng = n->get_grouping();
-                if (ng) ng->remove_net(n);
-                grp->assign_net(n);
-            }
+            Grouping* grp = gContentManager->getGroupingManagerWidget()->
+                    getModel()->groupingByName(existingGrpName);
+            if (grp) grpId = grp->get_id();
         }
-        gSelectionRelay->clear();
-        gSelectionRelay->relaySelectionChanged(nullptr);
-        canRestoreSelection();
+        for (const UserActionObject& obj : gSelectionRelay->toUserActionObject())
+        {
+            UserAction* act = groupingUnassignActionFactory(obj);
+            if (act) compound->addAction(act);
+        }
+        ActionAddItemsToObject* act = new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
+                                                                 gSelectionRelay->selectedGates(),
+                                                                 gSelectionRelay->selectedNets());
+        act->setObject(UserActionObject(grpId,UserActionObjectType::Grouping));
+        compound->addAction(act);
+        compound->addAction(new ActionSetSelectionFocus);
+        compound->exec();
     }
 
     void SelectionDetailsWidget::enableSearchbar(bool enable)
@@ -332,25 +334,14 @@ namespace hal
         mSearchAction->setEnabled(enable);
     }
 
-    void SelectionDetailsWidget::canRestoreSelection()
-    {
-        bool enable = mHistory->hasPreviousEntry();
-
-        QString iconStyle = enable
-                ? mSearchIconStyle
-                : mDisabledIconStyle;
-
-        mRestoreLastSelection->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mRestoreIconPath));
-        mRestoreLastSelection->setEnabled(enable);
-    }
-
     void SelectionDetailsWidget::canMoveToModule(int nodes)
     {
         QString iconStyle = nodes > 0
                 ? mToModuleIconStyle
                 : mDisabledIconStyle;
         mSelectionToModule->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mToModuleIconPath));
-        mSelectionToModule->setEnabled(nodes > 0);
+        mSelectionToModule->setEnabled(!gContentManager->getGraphTabWidget()->isModuleSelectCursor()
+                                       && nodes > 0);
     }
 
     void SelectionDetailsWidget::handleSelectionUpdate(void* sender)
@@ -370,7 +361,7 @@ namespace hal
         proxy->handleFilterTextChanged(QString());
         handleFilterTextChanged(QString());
 
-        mNumberSelectedItems = gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size() + gSelectionRelay->mSelectedNets.size();
+        mNumberSelectedItems = gSelectionRelay->numberSelectedItems();
         QVector<const SelectionTreeItem*> defaultHighlight;
 
         if (mNumberSelectedItems)
@@ -379,14 +370,17 @@ namespace hal
             mSelectionTreeView->populate(true);
             defaultHighlight.append(mSelectionTreeView->itemFromIndex());
 
-            mHistory->storeCurrentSelection();
-            canRestoreSelection();
-            canMoveToModule(gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size());
+            canMoveToModule(gSelectionRelay->numberSelectedNodes());
             enableSearchbar(true);
+
+            bool toModuleEnabled = !gContentManager->getGraphTabWidget()->isModuleSelectCursor();
             mSelectionToGrouping->setEnabled(true);
-            mSelectionToModule->setEnabled(true);
+            mSelectionToModule->setEnabled(toModuleEnabled);
             mSelectionToGrouping->setIcon(gui_utility::getStyledSvgIcon(mToGroupingIconStyle, mToGroupingIconPath));
-            mSelectionToModule->setIcon(gui_utility::getStyledSvgIcon(mToModuleIconStyle, mToModuleIconPath));
+            mSelectionToModule->setIcon(gui_utility::getStyledSvgIcon(toModuleEnabled
+                                                                      ? mToModuleIconStyle
+                                                                      : mDisabledIconStyle,
+                                                                      mToModuleIconPath));
         }
         else
         {
@@ -394,7 +388,6 @@ namespace hal
             singleSelectionInternal(nullptr);
             // clear and hide tree
             mSelectionTreeView->populate(false);
-            mHistory->emptySelection();
             canMoveToModule(0);
             enableSearchbar(false);
             mSelectionToGrouping->setDisabled(true);
@@ -406,19 +399,19 @@ namespace hal
         }
 
 
-        if (!gSelectionRelay->mSelectedModules.isEmpty())
+        if (gSelectionRelay->numberSelectedModules())
         {
-            SelectionTreeItemModule sti(*gSelectionRelay->mSelectedModules.begin());
+            SelectionTreeItemModule sti(gSelectionRelay->selectedModulesList().at(0));
             singleSelectionInternal(&sti);
         }
-        else if (!gSelectionRelay->mSelectedGates.isEmpty())
+        else if (gSelectionRelay->numberSelectedGates())
         {
-            SelectionTreeItemGate sti(*gSelectionRelay->mSelectedGates.begin());
+            SelectionTreeItemGate sti(gSelectionRelay->selectedGatesList().at(0));
             singleSelectionInternal(&sti);
         }
-        else if (!gSelectionRelay->mSelectedNets.isEmpty())
+        else if (gSelectionRelay->numberSelectedNets())
         {
-            SelectionTreeItemNet sti(*gSelectionRelay->mSelectedNets.begin());
+            SelectionTreeItemNet sti(gSelectionRelay->selectedNetsList().at(0));
             singleSelectionInternal(&sti);
         }
         Q_EMIT triggerHighlight(defaultHighlight);
@@ -468,10 +461,13 @@ namespace hal
 
     QList<QShortcut *> SelectionDetailsWidget::createShortcuts()
     {
-        QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"),this);
-        connect(search_shortcut, &QShortcut::activated, this, &SelectionDetailsWidget::toggleSearchbar);
+        mSearchShortcut = new QShortcut(mSearchKeysequence, this);
+        connect(mSearchShortcut, &QShortcut::activated, mSearchAction, &QAction::trigger);
 
-        return (QList<QShortcut*>() << search_shortcut);
+        QList<QShortcut*> list;
+        list.append(mSearchShortcut);
+
+        return list;
     }
 
     void SelectionDetailsWidget::toggleSearchbar()
@@ -511,10 +507,14 @@ namespace hal
 
     void SelectionDetailsWidget::setupToolbar(Toolbar* toolbar)
     {
-        toolbar->addAction(mRestoreLastSelection);
         toolbar->addAction(mSelectionToGrouping);
         toolbar->addAction(mSelectionToModule);
         toolbar->addAction(mSearchAction);
+    }
+
+    SelectionTreeView* SelectionDetailsWidget::selectionTreeView()
+    {
+        return mSelectionTreeView;
     }
 
     QString SelectionDetailsWidget::disabledIconStyle() const
@@ -557,26 +557,6 @@ namespace hal
         mSearchActiveIconStyle = style;
     }
 
-    QString SelectionDetailsWidget::restoreIconPath() const
-    {
-        return mRestoreIconPath;
-    }
-
-    QString SelectionDetailsWidget::restoreIconStyle() const
-    {
-        return mRestoreIconStyle;
-    }
-
-    void SelectionDetailsWidget::setRestoreIconPath(const QString& path)
-    {
-        mRestoreIconPath = path;
-    }
-
-    void SelectionDetailsWidget::setRestoreIconStyle(const QString& style)
-    {
-        mRestoreIconStyle = style;
-    }
-    
     QString SelectionDetailsWidget::toGroupingIconPath() const
     {
         return mToGroupingIconPath;

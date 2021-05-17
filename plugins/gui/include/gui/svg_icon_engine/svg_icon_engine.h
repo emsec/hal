@@ -27,13 +27,47 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * @brief Creates Icons from svg data.
+     *
+     * The SvgIconEngine is a QIconEngine that is used for create QIcons from given svg data.
+     */
     class SvgIconEngine : public QIconEngine
     {
     public:
+        /**
+         * Constructor.
+         *
+         * @param svg_data - The svg data to create the QIcon from
+         */
         explicit SvgIconEngine(const std::string& svg_data);
 
+        /**
+         * Uses the given painter to paint the icon into the rectangle rect. Mode and state are unused.
+         *
+         * @param painter - The painter to paint the icon with
+         * @param rect - The rectangle to draw the icon in
+         * @param mode - The mode (unused)
+         * @param state - The state (unused)
+         */
         void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) override;
+
+        /**
+         * Returns a clone of this icon engine
+         *
+         * @returns a clone of this icon engine
+         */
         QIconEngine* clone() const override;
+
+        /**
+         * Returns the icon as a pixmap with the required size. Mode and state are unused.
+         *
+         * @param size - The size of the pixmap
+         * @param mode - The mode (unused)
+         * @param state - The state (unused)
+         * @returns the pixmap for the icon
+         */
         QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) override;
 
     private:

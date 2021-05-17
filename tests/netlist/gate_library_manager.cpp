@@ -1,6 +1,5 @@
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
-
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
@@ -20,17 +19,13 @@ namespace hal
     protected:
         // The path, where the library is temporary stored
         std::filesystem::path m_test_lib_path;
-        std::string m_lib_file_name;
-        std::string m_test_lib_name;
 
         virtual void SetUp()
         {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
             plugin_manager::load_all_plugins();
-            m_lib_file_name = "test_lib";
-            m_test_lib_name = "TEST_GATE_LIBRARY_FOR_GATE_LIBRARY_MANAGER_TESTS";
-            m_test_lib_path = (utils::get_gate_library_directories()[0]) / (m_lib_file_name + ".lib");
+            m_test_lib_path = (utils::get_gate_library_directories()[0]) / "test1.lib";
         }
 
         virtual void TearDown()
@@ -47,27 +42,9 @@ namespace hal
             std::ofstream test_lib(m_test_lib_path.string());
             test_lib << "/* This file only exists for testing purposes and should be already destroyed*/\n"
                         "library ("
-                     << m_test_lib_name
+                     << "example_lib"
                      << ") {\n"
                         "    define(cell);\n"
-                        "    cell(GATE_A) {\n"
-                        "        pin(I) {\n"
-                        "            direction: input;\n"
-                        "        }\n"
-                        "        pin(O) {\n"
-                        "            direction: output;\n"
-                        "            function: \"I\";\n"
-                        "        }\n"
-                        "    }\n"
-                        "    cell(GATE_B) {\n"
-                        "        pin(I) {\n"
-                        "            direction: input;\n"
-                        "        }\n"
-                        "        pin(O) {\n"
-                        "            direction: output;\n"
-                        "            function: \"!I\";\n"
-                        "        }\n"
-                        "    }\n"
                         "    cell(GND) {\n"
                         "        pin(O) {\n"
                         "            direction: output;\n"
@@ -94,7 +71,7 @@ namespace hal
     TEST_F(GateLibraryManagerTest, check_get_gate_library)
     {
         TEST_START
-        // NO_COUT_TEST_BLOCK;
+        NO_COUT_TEST_BLOCK;
         create_test_lib();
         // Load the Gate library twice by its filename
         GateLibrary* test_lib_0 = gate_library_manager::get_gate_library(m_test_lib_path);
@@ -106,7 +83,7 @@ namespace hal
         bool found_test_lib = false;
         for (GateLibrary* gl : gate_library_manager::get_gate_libraries())
         {
-            if (gl->get_name() == m_test_lib_name)
+            if (gl->get_name() == "example_lib")
             {
                 found_test_lib = true;
                 break;
@@ -134,7 +111,7 @@ namespace hal
         bool found_test_lib = false;
         for (GateLibrary* gl : gate_library_manager::get_gate_libraries())
         {
-            if (gl->get_name() == m_test_lib_name)
+            if (gl->get_name() == "example_lib")
             {
                 found_test_lib = true;
                 break;
@@ -145,7 +122,7 @@ namespace hal
     }
 
     /**
-     * Testing that a GND/VCC Gate type is added to the Gate library, if the file does not contain any.
+     * Testing whether GND and VCC gate type are marked or even added to the gate library.
      *
      * Functions: get_gate_library, get_gate_libraries
      */
@@ -153,8 +130,34 @@ namespace hal
     {
         TEST_START
         {
+            // Parse a file that does contain a GND or VCC Gate type (constant 0 / constant 1)
+            NO_COUT_TEST_BLOCK;
+            create_test_lib();
+            GateLibrary* test_lib = gate_library_manager::get_gate_library(m_test_lib_path);
+            ASSERT_NE(test_lib, nullptr);
+
+            // check GND gate type
+            auto gnd_types = test_lib->get_gnd_gate_types();
+            ASSERT_TRUE(gnd_types.size() == 1);
+            ASSERT_TRUE(gnd_types.find("GND") != gnd_types.end());
+            EXPECT_TRUE(gnd_types.at("GND")->has_property(GateTypeProperty::ground));
+            auto gnd_bf = gnd_types.at("GND")->get_boolean_functions();
+            ASSERT_TRUE(gnd_bf.find("O") != gnd_bf.end());
+            EXPECT_TRUE(gnd_bf.at("O").is_constant_zero());
+
+            // check VCC gate type
+            auto vcc_types = test_lib->get_vcc_gate_types();
+            ASSERT_TRUE(vcc_types.size() == 1);
+            ASSERT_TRUE(vcc_types.find("VCC") != vcc_types.end());
+            EXPECT_TRUE(vcc_types.at("VCC")->has_property(GateTypeProperty::power));
+            auto vcc_bf = vcc_types.at("VCC")->get_boolean_functions();
+            ASSERT_TRUE(vcc_bf.find("O") != vcc_bf.end());
+            EXPECT_TRUE(vcc_bf.at("O").is_constant_one());
+        }
+        {
             // Parse a file that does not contain a GND or VCC Gate type (constant 0 / constant 1)
             NO_COUT_TEST_BLOCK;
+            m_test_lib_path = (utils::get_gate_library_directories()[0]) / "test2.lib";
             std::ofstream test_lib(m_test_lib_path.string());
             test_lib << "/* This file only exists for testing purposes and should be already destroyed*/\n"
                         "library (check_prepare_library_1) {\n"
@@ -164,15 +167,22 @@ namespace hal
             test_lib.close();
             GateLibrary* empty_lib = gate_library_manager::get_gate_library(m_test_lib_path);
             ASSERT_NE(empty_lib, nullptr);
-            auto g_types = empty_lib->get_gate_types();
-            // Check the creation of a gnd Gate type
-            ASSERT_TRUE(g_types.find("GND") != g_types.end());
-            auto gnd_bf = g_types.at("GND")->get_boolean_functions();
+
+            // check GND gate type
+            auto gnd_types = empty_lib->get_gnd_gate_types();
+            ASSERT_TRUE(gnd_types.size() == 1);
+            ASSERT_TRUE(gnd_types.find("HAL_GND") != gnd_types.end());
+            EXPECT_TRUE(gnd_types.at("HAL_GND")->has_property(GateTypeProperty::ground));
+            auto gnd_bf = gnd_types.at("HAL_GND")->get_boolean_functions();
             ASSERT_TRUE(gnd_bf.find("O") != gnd_bf.end());
             EXPECT_TRUE(gnd_bf.at("O").is_constant_zero());
-            // Check the creation of a vcc Gate type
-            ASSERT_TRUE(g_types.find("VCC") != g_types.end());
-            auto vcc_bf = g_types.at("VCC")->get_boolean_functions();
+
+            // check VCC gate type
+            auto vcc_types = empty_lib->get_vcc_gate_types();
+            ASSERT_TRUE(vcc_types.size() == 1);
+            ASSERT_TRUE(vcc_types.find("HAL_VDD") != vcc_types.end());
+            EXPECT_TRUE(vcc_types.at("HAL_VDD")->has_property(GateTypeProperty::power));
+            auto vcc_bf = vcc_types.at("HAL_VDD")->get_boolean_functions();
             ASSERT_TRUE(vcc_bf.find("O") != vcc_bf.end());
             EXPECT_TRUE(vcc_bf.at("O").is_constant_one());
         }

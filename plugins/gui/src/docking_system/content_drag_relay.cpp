@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    ContentDragRelay *ContentDragRelay::instance()
+    ContentDragRelay* ContentDragRelay::instance()
     {
         static ContentDragRelay instance;
         return &instance;
@@ -18,8 +18,7 @@ namespace hal
         Q_EMIT dragEnd();
     }
 
-    ContentDragRelay::ContentDragRelay(QObject *parent) : QObject(parent)
+    ContentDragRelay::ContentDragRelay(QObject* parent) : QObject(parent)
     {
-
     }
 }

@@ -28,15 +28,38 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * @brief Adds button functionality to a QLabel.
+     *
+     * The LabelButton is a QLabel that can be used as a button.
+     */
     class LabelButton : public QLabel
     {
         Q_OBJECT
 
     public:
-        explicit LabelButton(QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
-        explicit LabelButton(const QString& text, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget
+         * @param f - The WindowFlags that are passed to the QWidget constructor
+         */
+        explicit LabelButton(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
+        /**
+         * Constructor.
+         *
+         * @param text - The text of the label
+         * @param parent - The parent widget
+         * @param f - The WindowFlags that are passed to the QWidget constructor
+         */
+        explicit LabelButton(const QString& text, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted after the label was clicked.
+         */
         void clicked();
 
     protected:

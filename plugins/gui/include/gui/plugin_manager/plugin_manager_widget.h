@@ -32,12 +32,16 @@ namespace hal
     class PluginModel;
     class Toolbar;
 
+    /**
+     * @ingroup unused
+     * TODO: The plugin manager widget is disabled in the current version.
+     */
     class PluginManagerWidget : public ContentWidget
     {
         Q_OBJECT
 
     public:
-        explicit PluginManagerWidget(QWidget* parent = 0);
+        explicit PluginManagerWidget(QWidget* parent = nullptr);
         void setPluginModel(PluginModel* mPluginModel);
         virtual void setupToolbar(Toolbar* Toolbar);
 

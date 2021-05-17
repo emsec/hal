@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -61,9 +61,9 @@ namespace hal
         ~NetlistInternalManager() = default;
 
         // gate functions
-        Gate* create_gate(u32 id, const GateType* gt, const std::string& name, float x, float y);
+        Gate* create_gate(u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
         bool delete_gate(Gate* gate);
-        bool is_gate_type_invalid(const GateType* gt) const;
+        bool is_gate_type_invalid(GateType* gt) const;
 
         // net functions
         Net* create_net(u32 id, const std::string& name);
@@ -77,7 +77,6 @@ namespace hal
         Module* create_module(u32 id, Module* parent, const std::string& name);
         bool delete_module(Module* module);
         bool module_assign_gate(Module* m, Gate* g);
-        bool module_remove_gate(Module* m, Gate* g);
 
         // grouping functions
         Grouping* create_grouping(u32 id, const std::string name);

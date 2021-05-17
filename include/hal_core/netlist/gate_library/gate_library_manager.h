@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,8 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/gate_library/gate_library_parser.h"
 
-#include <functional>
-#include <map>
-#include <memory>
+#include <filesystem>
 #include <vector>
 
 namespace hal
@@ -36,67 +33,59 @@ namespace hal
     class GateLibrary;
 
     /**
+     * The gate library manager keeps track of all gate libraries that are used within HAL. Further, it takes care of loading and saving gate libraries on demnand.
+     * 
      * @ingroup gate_lib
      */
     namespace gate_library_manager
     {
-        using ParserFactory = std::function<std::unique_ptr<GateLibraryParser>()>;
-
         /**
-         * Registers a new gate library parser for a selection of file types.
-         * If parsers for some of the extensions already exist, they are not changed, only the new ones are registered.
+         * Load a gate library from file.
          *
-         * @param[in] name - The name of the parser.
-         * @param[in] parser_factory - A factory function that constructs a new parser instance.
-         * @param[in] supported_file_extensions - The file extensions this parser can process.
+         * @param[in] file_path - The input path.
+         * @param[in] reload - If true, reloads the library in case it is already loaded.
+         * @returns The gate library on success, nullptr otherwise.
          */
-        NETLIST_API void register_parser(const std::string& name, const ParserFactory& parser_factory, const std::vector<std::string>& supported_file_extensions);
+        NETLIST_API GateLibrary* load(std::filesystem::path file_path, bool reload = false);
 
         /**
-         * Unregisters a specific parser.
+         * Load all gate libraries available in standard gate library directories.
          *
-         * @param[in] name - The name of the parser.
+         * @param[in] reload - If true, reloads all libraries that have already been loaded.
          */
-        NETLIST_API void unregister_parser(const std::string& name);
+        NETLIST_API void load_all(bool reload = false);
 
         /**
-         * Loads a gate library file.
-         *
-         * @param[in] path - the file to load.
-         * @param[in] reload_if_existing - If true, reloads all libraries that are already loaded.
-         * @returns Pointer to the loaded gate library or nullptr on error.
+         * Save a gate library to file.
+         * 
+         * @param[in] file_path - The output path. 
+         * @param[in] gate_lib - The gate library.
+         * @param[in] overwrite - If true, overwrites already existing files.
+         * @returns True on success, false otherwise.
          */
-        NETLIST_API GateLibrary* load_file(std::filesystem::path path, bool reload_if_existing = false);
+        // TODO test
+        NETLIST_API bool save(std::filesystem::path file_path, GateLibrary* gate_lib, bool overwrite = false);
 
         /**
-         * Loads all gate libraries which are available.
+         * Get a gate library by file path. If no library with the given name is loaded, loading the gate library from file will be attempted.
          *
-         * @param[in] reload_if_existing - If true, reloads all libraries that are already loaded.
+         * @param[in] file_path - The input path.
+         * @returns The gate library on success, nullptr otherwise.
          */
-        NETLIST_API void load_all(bool reload_if_existing = false);
+        NETLIST_API GateLibrary* get_gate_library(const std::string& file_path);
 
         /**
-         * Get a gate library object by file name.
-         * If no library with the given name is already loaded this function will attempt to load the file.
+         * Get a gate library by name. If no library with the given name is loaded, a nullptr will be returned.
          *
-         * @param[in] file_name - file name of the gate library.
-         * @returns Pointer to the gate library object or nullptr on error.
-         */
-        NETLIST_API GateLibrary* get_gate_library(const std::string& file_name);
-
-        /**
-         * Get a gate library object by library name.
-         * If no library with the given name is loaded this function returns nullptr.
-         *
-         * @param[in] lib_name - name of the gate library.
-         * @returns Pointer to the gate library object or nullptr on error.
+         * @param[in] lib_name - The name of the gate library.
+         * @returns The gate library on success, nullptr otherwise.
          */
         NETLIST_API GateLibrary* get_gate_library_by_name(const std::string& lib_name);
 
         /**
          * Get all loaded gate libraries.
          *
-         * @returns A vector of pointers to the gate library objects.
+         * @returns A vector of gate libraries.
          */
         NETLIST_API std::vector<GateLibrary*> get_gate_libraries();
 

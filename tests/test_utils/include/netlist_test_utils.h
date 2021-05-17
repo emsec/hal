@@ -4,9 +4,8 @@
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
-#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/grouping.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
@@ -17,17 +16,14 @@
 #include <math.h>
 #include <stack>
 
-/*
-namespace hal
-{
-
-
-}    // namespace test_utils
-*/
 namespace hal
 {
     namespace test_utils
     {
+        Net* connect(Netlist* nl, Gate* src, std::string src_pin, Gate* dst, std::string dst_pin);
+
+        // TODO clean up everything below
+
         /*********************************************************
          *                      Constants                        *
          *********************************************************/
@@ -139,7 +135,7 @@ namespace hal
          * @param gate_library - The Gate library, the GateType can be found in. If empty, the example Gate library (g_lib_name) is taken.
          * @return the GateType pointer if found. If no Gate type matches, return nullptr
          */
-        const GateType* get_gate_type_by_name(std::string name, GateLibrary* gate_library = nullptr);
+        GateType* get_gate_type_by_name(std::string name, GateLibrary* gate_library = nullptr);
 
         /**
          * Given a vector of endpoints. Returns the first Endpoint* that has a certain pin type

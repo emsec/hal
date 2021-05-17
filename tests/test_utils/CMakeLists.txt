@@ -4,8 +4,10 @@ add_library(
     test_utils
         include/test_def.h
         include/netlist_test_utils.h
+        include/gate_library_test_utils.h
         src/test_def.cpp
         src/netlist_test_utils.cpp
+        src/gate_library_test_utils.cpp
         src/test_main.cpp
 )
 

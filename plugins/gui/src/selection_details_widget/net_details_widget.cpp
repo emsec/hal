@@ -69,13 +69,13 @@ namespace hal
         mGeneralView->setSelectionMode(QAbstractItemView::SingleSelection);
 
         // place net icon
-        QLabel* img = new DisputedBigIcon("sel_net", this);
+        mBigIcon = new DisputedBigIcon("sel_net", this);
 
         //adding things to intermediate layout (the one thats neccessary for the left spacing)
         intermediate_layout_gt->addWidget(mGeneralView);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        intermediate_layout_gt->addWidget(img);
-        intermediate_layout_gt->setAlignment(img,Qt::AlignTop);
+        intermediate_layout_gt->addWidget(mBigIcon);
+        intermediate_layout_gt->setAlignment(mBigIcon,Qt::AlignTop);
 
         //adding things to the main layout
         mTopLvlLayout->addWidget(mGeneralInfoButton);
@@ -129,6 +129,7 @@ namespace hal
         mSourcePinsSection->setRowCount(n->get_sources().size());
         mSourcePinsTable->setRowCount(n->get_sources().size());
         mSourcePinsTable->setMaximumHeight(mSourcePinsTable->verticalHeader()->length());
+        mSourcePinsTable->setMinimumHeight(mSourcePinsTable->verticalHeader()->length());
         int index = 0;
         if (!gNetlist->is_global_input_net(n))
         {
@@ -159,6 +160,7 @@ namespace hal
         mDestinationPinsSection->setRowCount(n->get_destinations().size());
         mDestinationPinsTable->setRowCount(n->get_destinations().size());
         mDestinationPinsTable->setMaximumHeight(mDestinationPinsTable->verticalHeader()->length());
+        mDestinationPinsTable->setMinimumHeight(mDestinationPinsTable->verticalHeader()->length());
         index = 0;
         if (!gNetlist->is_global_output_net(n))
         {
@@ -294,14 +296,11 @@ namespace hal
             return;
 
         gSelectionRelay->clear();
-        gSelectionRelay->mSelectedGates.insert(gate_id);
-        gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-        gSelectionRelay->mFocusId   = gate_id;
-        gSelectionRelay->mSubfocus   = focus;
+        gSelectionRelay->addGate(gate_id);
 
         auto pins                          = (sender_table == mSourcePinsTable) ? clicked_gate->get_output_pins() : clicked_gate->get_input_pins();
         auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
-        gSelectionRelay->mSubfocusIndex = index;
+        gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,gate_id,focus,index);
 
         gSelectionRelay->relaySelectionChanged(this);
     }
@@ -336,4 +335,10 @@ namespace hal
         menu.exec();
     }
 
+    void NetDetailsWidget::hideSectionsWhenEmpty(bool hide)
+    {
+        mSourcePinsSection->hideWhenEmpty(hide);
+        mDestinationPinsSection->hideWhenEmpty(hide);
+        mDataFieldsSection->hideWhenEmpty(hide);
+    }
 }    // namespace hal

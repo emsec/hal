@@ -27,7 +27,7 @@ namespace hal
     {
         if (utils::trim(name).empty())
         {
-            log_error("grouping", "empty name is not allowed.");
+            log_error("grouping", "grouping name cannot be empty.");
             return;
         }
         if (name != m_name)

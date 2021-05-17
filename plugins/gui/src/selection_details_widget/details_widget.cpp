@@ -3,14 +3,12 @@
 
 namespace hal
 {
-    DetailsWidget::DetailsWidget(DetailsType tp, QWidget *parent)
-        : QWidget(parent), mDetailsType(tp), mCurrentId(0)
+    DetailsWidget::DetailsWidget(DetailsType tp, QWidget* parent)
+        : QWidget(parent), mDetailsType(tp), mCurrentId(0), mHideEmptySections(false)
     {
         mKeyFont = QFont("Iosevka");
         mKeyFont.setBold(true);
         mKeyFont.setPixelSize(13);
-
-        mHideEmptySections = gSettingsManager->get("selection_details/hide_empty_sections", false).toBool();
     }
 
     QFont DetailsWidget::keyFont() const
@@ -25,4 +23,13 @@ namespace hal
         return QString(typeName[mDetailsType]);
     }
 
+    QLabel* DetailsWidget::bigIcon()
+    {
+        return mBigIcon;
+    }
+    
+    void DetailsWidget::hideSectionsWhenEmpty(bool hide)
+    {
+        mHideEmptySections = hide;
+    }
 }
