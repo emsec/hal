@@ -301,10 +301,7 @@ namespace hal
 
         for (Module* m : affected_modules)
         {
-            m->m_nets_dirty          = true;
-            m->m_input_nets_dirty    = true;
-            m->m_output_nets_dirty   = true;
-            m->m_internal_nets_dirty = true;
+            m->set_cache_dirty();
         }
 
         auto new_endpoint     = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, false));
@@ -338,10 +335,7 @@ namespace hal
 
         for (Module* m : affected_modules)
         {
-            m->m_nets_dirty          = true;
-            m->m_input_nets_dirty    = true;
-            m->m_output_nets_dirty   = true;
-            m->m_internal_nets_dirty = true;
+            m->set_cache_dirty();
         }
 
         bool removed = false;
@@ -431,10 +425,7 @@ namespace hal
 
         for (Module* m : affected_modules)
         {
-            m->m_nets_dirty          = true;
-            m->m_input_nets_dirty    = true;
-            m->m_output_nets_dirty   = true;
-            m->m_internal_nets_dirty = true;
+            m->set_cache_dirty();
         }
 
         auto new_endpoint     = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, true));
@@ -467,10 +458,7 @@ namespace hal
 
         for (Module* m : affected_modules)
         {
-            m->m_nets_dirty          = true;
-            m->m_input_nets_dirty    = true;
-            m->m_output_nets_dirty   = true;
-            m->m_internal_nets_dirty = true;
+            m->set_cache_dirty();
         }
 
         bool removed = false;
@@ -556,6 +544,7 @@ namespace hal
         {
             parent->m_submodules_map[id] = raw;
             parent->m_submodules.push_back(raw);
+            parent->set_cache_dirty();
         }
 
         module_event_handler::notify(module_event_handler::event::created, raw);
@@ -655,14 +644,8 @@ namespace hal
         }
 
         // mark caches as dirty
-        m->m_nets_dirty                    = true;
-        m->m_input_nets_dirty              = true;
-        m->m_output_nets_dirty             = true;
-        m->m_internal_nets_dirty           = true;
-        prev_module->m_nets_dirty          = true;
-        prev_module->m_input_nets_dirty    = true;
-        prev_module->m_output_nets_dirty   = true;
-        prev_module->m_internal_nets_dirty = true;
+        m->set_cache_dirty();
+        prev_module->set_cache_dirty();
 
         // remove gate from old module
         auto it = prev_module->m_gates_map.find(g->get_id());

@@ -306,6 +306,12 @@ namespace hal
             :param int id: The next output port ID.
         )");
 
+        py_module.def("set_cache_dirty", &Module::set_cache_dirty, py::arg("is_dirty") = true, R"(
+            Mark all internal caches as dirty. Caches are primarily used for the nets connected to the gates of a module.
+
+            :param bool is_dirty: True to mark caches as dirty, False otherwise.
+        )");
+
         py_module.def("assign_gate", &Module::assign_gate, py::arg("gate"), R"(
             Assign a gate to the module.
             The gate is removed from its previous module in the process.

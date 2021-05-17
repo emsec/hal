@@ -103,10 +103,7 @@ namespace hal
         m_parent->m_submodules_map.erase(m_id);
         m_parent->m_submodules.erase(std::find(m_parent->m_submodules.begin(), m_parent->m_submodules.end(), this));
 
-        m_parent->m_nets_dirty          = true;
-        m_parent->m_input_nets_dirty    = true;
-        m_parent->m_output_nets_dirty   = true;
-        m_parent->m_internal_nets_dirty = true;
+        m_parent->set_cache_dirty();
 
         module_event_handler::notify(module_event_handler::event::submodule_removed, m_parent, m_id);
 
@@ -115,10 +112,7 @@ namespace hal
         m_parent->m_submodules_map[m_id] = this;
         m_parent->m_submodules.push_back(this);
 
-        m_parent->m_nets_dirty          = true;
-        m_parent->m_input_nets_dirty    = true;
-        m_parent->m_output_nets_dirty   = true;
-        m_parent->m_internal_nets_dirty = true;
+        m_parent->set_cache_dirty();
 
         module_event_handler::notify(module_event_handler::event::parent_changed, this);
         module_event_handler::notify(module_event_handler::event::submodule_added, m_parent, m_id);
@@ -185,6 +179,14 @@ namespace hal
     Netlist* Module::get_netlist() const
     {
         return m_internal_manager->m_netlist;
+    }
+
+    void Module::set_cache_dirty(bool is_dirty) 
+    {
+        m_nets_dirty = is_dirty;
+        m_input_nets_dirty = is_dirty;
+        m_output_nets_dirty = is_dirty;
+        m_internal_nets_dirty = is_dirty;
     }
 
     bool Module::assign_gate(Gate* gate)

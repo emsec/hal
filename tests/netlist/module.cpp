@@ -36,7 +36,7 @@ namespace hal {
                 Module* top_module = netlist->get_top_module();
                 ASSERT_NE(top_module, nullptr);
                 EXPECT_EQ(top_module->get_id(), 1);
-                EXPECT_EQ(top_module->get_name(), "top module");
+                EXPECT_EQ(top_module->get_name(), "top_module");
                 EXPECT_TRUE(top_module->is_top_module());
                 EXPECT_TRUE(top_module->get_type().empty());
                 EXPECT_EQ(top_module->get_parent_module(), nullptr);

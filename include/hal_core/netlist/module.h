@@ -265,6 +265,13 @@ namespace hal
          */
         u32 get_next_output_port_id() const;
 
+        /**
+         * Mark all internal caches as dirty. Caches are primarily used for the nets connected to the gates of a module.
+         * 
+         * @param[in] is_dirty - True to mark caches as dirty, false otherwise.
+         */
+        void set_cache_dirty(bool is_dirty = true); 
+
         /*
          * ################################################################
          *      gate functions
