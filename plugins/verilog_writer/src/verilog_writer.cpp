@@ -48,7 +48,10 @@ namespace hal
         std::unordered_map<std::string, u32> module_identifier_occurrences;
         for (const Module* mod : ordered_modules)
         {
-            write_module_declaration(res_stream, mod, module_aliases, module_identifier_occurrences);
+            if (!write_module_declaration(res_stream, mod, module_aliases, module_identifier_occurrences))
+            {
+                return false;
+            }
         }
 
         // write to file
@@ -71,7 +74,7 @@ namespace hal
                                                  std::unordered_map<std::string, u32>& module_type_occurrences) const
     {
         // deal with empty modules
-        if (module->get_gates(nullptr, true).empty())
+        if (module->get_gates(nullptr, true).empty() && !module->is_top_module())
         {
             return true;
         }
@@ -80,7 +83,11 @@ namespace hal
         std::string module_type = module->get_type();
         if (module_type.empty())
         {
-            module_type = module->get_name() + "_type";
+            module_type = module->get_name();
+            if (!module->is_top_module())
+            {
+                module_type += "_type";
+            }
         }
         module_type_aliases[module] = get_unique_alias(module_type_occurrences, module_type);
         res_stream << "module " << escape(module_type_aliases.at(module));
@@ -127,6 +134,7 @@ namespace hal
 
             tmp_stream << "    output " << aliases.at(net) << ";" << std::endl;
         }
+
         res_stream << ");" << std::endl;
         res_stream << tmp_stream.str();
 

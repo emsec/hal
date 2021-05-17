@@ -29,15 +29,36 @@ namespace hal
         std::unique_ptr<Netlist> create_empty_netlist(const u32 id = 0);
 
         /**
-         * Create a connectio between two gates.
+         * Create a connection between two gates.
          * 
          * @param[in] netlist - The netlist.
          * @param[in] src_gate - The source gate.
          * @param[in] src_pin - The source pin at the specified source gate.
          * @param[in] dst_gate - The destination gate.
          * @param[in] dst_pin - The destination pin at the specified destination gate.
+         * @param[in] net_name - The name of the net, defaults to IDs of connected gates.
          */
-        Net* connect(Netlist* netlist, Gate* src_gate, const std::string& src_pin, Gate* dst_gate, const std::string& dst_pin);
+        Net* connect(Netlist* netlist, Gate* src_gate, const std::string& src_pin, Gate* dst_gate, const std::string& dst_pin, const std::string& net_name = "");
+
+        /**
+         * Creates a connection to a global input.
+         * 
+         * @param[in] netlist - The netlist.
+         * @param[in] dst_gate - The destination gate.
+         * @param[in] dst_pin - The destination pin at the specified destination gate.
+         * @param[in] net_name - The name of the net, defaults to ID of connected gate.
+         */
+        Net* connect_global_in(Netlist* netlist, Gate* dst_gate, const std::string& dst_pin, const std::string& net_name = "");
+
+        /**
+         * Creates a connection to a global input.
+         * 
+         * @param[in] netlist - The netlist.
+         * @param[in] src_gate - The source gate.
+         * @param[in] src_pin - The source pin at the specified source gate.
+         * @param[in] net_name - The name of the net, defaults to ID of connected gate.
+         */
+        Net* connect_global_out(Netlist* netlist, Gate* src_gate, const std::string& src_pin, const std::string& net_name = "");
 
         // TODO clean up everything below
 
@@ -314,32 +335,6 @@ namespace hal
          * @returns the created netlist object
          */
         std::unique_ptr<Netlist> create_example_netlist_negative(const int id = -1);
-
-        /*
-          *      Example netlist circuit diagram (Id in brackets). Used for get fan in and
-          *      out nets.
-          *
-          *
-          *      GND (1) =-= INV (3) =--=             .------=  INV (4)  =---
-          *                                 AND2 (0) =-
-          *      VCC (2) =--------------=             '------=
-          *                                                     AND2 (5) =---
-          *                                                  =
-          *
-          *                           =                .-----=
-          *                              OR2 (6)  =----'        OR2 (7)  =---
-          *                           =                      =
-          */
-        // Creates a simple netlist shown in the diagram above. The nets that have a GND/VCC Gate as a source are named '0'/'1'
-        /**
-         * Creates the netlist shown in the diagram above.
-         * The nets which are connected to a GND/VCC Gate are named '0'/'1' (necessary for some parser/writer tests).
-         * Sets a concrete id if passed.
-         *
-         * @param[in] id - id of the netlist
-         * @returns the created netlist object
-         */
-        std::unique_ptr<Netlist> create_example_parse_netlist(int id = -1);
 
         // ===== Netlist Comparison Functions (mainly used to test parser and writer) =====
 

@@ -1,4 +1,4 @@
-if(BUILD_TESTS AND ((PL_VERILOG_PARSER) OR BUILD_ALL_PLUGINS) AND NOT_CONFIGURED)
+if(BUILD_TESTS AND ((PL_VERILOG_PARSER) OR BUILD_ALL_PLUGINS))
     include_directories(
             ${gtest_SOURCE_DIR}/include
             ${gtest_SOURCE_DIR}

@@ -20,22 +20,87 @@ namespace hal
             return netlist;
         }
 
-        Net* connect(Netlist* nl, Gate* src, const std::string& src_pin, Gate* dst, const std::string& dst_pin)
+        Net* connect(Netlist* nl, Gate* src, const std::string& src_pin, Gate* dst, const std::string& dst_pin, const std::string& net_name)
         {
-            Net* n;
-            if (n = src->get_fan_out_net(src_pin); n != nullptr)
+            Net* n = nullptr;
+            if(src != nullptr && dst != nullptr)
             {
-                n->add_destination(dst, dst_pin);
+                if (n = src->get_fan_out_net(src_pin); n != nullptr)
+                {
+                    n->add_destination(dst, dst_pin);
+                }
+                else if (n = dst->get_fan_in_net(dst_pin); n != nullptr)
+                {
+                    n->add_source(src, src_pin);
+                }
+                else
+                {
+                    if (net_name.empty())
+                    {
+                    n = nl->create_net("net_" + std::to_string(src->get_id()) + "_" + std::to_string(dst->get_id()));
+                    }
+                    else
+                    {
+                        n = nl->create_net(net_name);
+                    }
+                    
+                    n->add_source(src, src_pin);
+                    n->add_destination(dst, dst_pin);
+                }
             }
-            else if (n = dst->get_fan_in_net(dst_pin); n != nullptr)
+            return n;
+        }
+
+        Net* connect_global_in(Netlist* nl, Gate* dst, const std::string& dst_pin, const std::string& net_name)
+        {
+            Net* n = nullptr;
+            if(dst != nullptr)
             {
-                n->add_source(src, src_pin);
+                if (n = dst->get_fan_in_net(dst_pin); n != nullptr)
+                {
+                    n->mark_global_input_net();
+                }
+                else
+                {
+                    if (net_name.empty())
+                    {
+                    n = nl->create_net("net_" + std::to_string(dst->get_id()));
+                    }
+                    else
+                    {
+                        n = nl->create_net(net_name);
+                    }
+                    
+                    n->add_destination(dst, dst_pin);
+                    n->mark_global_input_net();
+                }
             }
-            else
+            return n;
+        }
+
+        Net* connect_global_out(Netlist* nl, Gate* src, const std::string& src_pin, const std::string& net_name)
+        {
+            Net* n = nullptr;
+            if(src != nullptr)
             {
-                n = nl->create_net("net_" + std::to_string(src->get_id()) + "_" + std::to_string(dst->get_id()));
-                n->add_source(src, src_pin);
-                n->add_destination(dst, dst_pin);
+                if (n = src->get_fan_out_net(src_pin); n != nullptr)
+                {
+                    n->mark_global_output_net();
+                }
+                else
+                {
+                    if (net_name.empty())
+                    {
+                        n = nl->create_net("net_" + std::to_string(src->get_id()));
+                    }
+                    else
+                    {
+                        n = nl->create_net(net_name);
+                    }
+                    
+                    n->add_source(src, src_pin);
+                    n->mark_global_output_net();
+                }
             }
             return n;
         }
@@ -493,62 +558,6 @@ namespace hal
         // Net connected to the output pin
         Net* net_1_X = nl->create_net(MIN_GATE_ID + 1, "net_1_X");
         net_1_X->add_source(gate_0, "O");
-
-        return nl;
-    }
-
-    std::unique_ptr<Netlist> test_utils::create_example_parse_netlist(int id)
-    {
-        NO_COUT_BLOCK;
-        GateLibrary* gl             = get_testing_gate_library();
-        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(gl);
-        nl->set_device_name("device_name");
-        nl->set_design_name("design_name");
-        if (id >= 0)
-        {
-            nl->set_id(id);
-        }
-
-        // Create the gates
-        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_type_by_name("gate_2_to_1"), "gate_0");
-        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_type_by_name("gnd"), "gate_1");
-        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_type_by_name("vcc"), "gate_2");
-        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_type_by_name("gate_1_to_1"), "gate_3");
-        Gate* gate_4 = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_type_by_name("gate_1_to_1"), "gate_4");
-        Gate* gate_5 = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_type_by_name("gate_2_to_1"), "gate_5");
-        Gate* gate_6 = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_type_by_name("gate_2_to_1"), "gate_6");
-        Gate* gate_7 = nl->create_gate(MIN_GATE_ID + 7, gl->get_gate_type_by_name("gate_2_to_1"), "gate_7");
-
-        // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
-        Net* net_1_3 = nl->create_net(MIN_NET_ID + 13, "gnd_net");
-        net_1_3->add_source(gate_1, "O");
-        net_1_3->add_destination(gate_3, "I");
-
-        Net* net_3_0 = nl->create_net(MIN_NET_ID + 30, "net_3_0");
-        net_3_0->add_source(gate_3, "O");
-        net_3_0->add_destination(gate_0, "I0");
-
-        Net* net_2_0 = nl->create_net(MIN_NET_ID + 20, "vcc_net");
-        net_2_0->add_source(gate_2, "O");
-        net_2_0->add_destination(gate_0, "I1");
-
-        Net* net_0_4_5 = nl->create_net(MIN_NET_ID + 045, "net_0_4_5");
-        net_0_4_5->add_source(gate_0, "O");
-        net_0_4_5->add_destination(gate_4, "I");
-        net_0_4_5->add_destination(gate_5, "I0");
-
-        Net* net_6_7 = nl->create_net(MIN_NET_ID + 67, "net_6_7");
-        net_6_7->add_source(gate_6, "O");
-        net_6_7->add_destination(gate_7, "I0");
-
-        Net* net_4_out = nl->create_net(MIN_NET_ID + 400, "net_4_out");
-        net_4_out->add_source(gate_4, "O");
-
-        Net* net_5_out = nl->create_net(MIN_NET_ID + 500, "net_5_out");
-        net_5_out->add_source(gate_5, "O");
-
-        Net* net_7_out = nl->create_net(MIN_NET_ID + 700, "net_7_out");
-        net_7_out->add_source(gate_7, "O");
 
         return nl;
     }
