@@ -27,7 +27,7 @@
 
 namespace hal
 {
-    class PLUGIN_API VhdlVerilogWritersPlugin : public BasePluginInterface
+    class PLUGIN_API VerilogWriterPlugin : public BasePluginInterface
     {
     public:
         std::string get_name() const override;

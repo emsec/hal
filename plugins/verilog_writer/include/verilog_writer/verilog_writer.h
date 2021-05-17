@@ -26,16 +26,18 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
 
-#include <functional>
-#include <map>
+#include <set>
 #include <sstream>
+#include <unordered_map>
+#include <vector>
 
 namespace hal
 {
-    /* forward declaration */
-    class Netlist;
+    class GateType;
+    class DataContainer;
     class Net;
     class Gate;
+    class Module;
 
     /**
      * @ingroup netlist_writer
@@ -56,54 +58,27 @@ namespace hal
         bool write(Netlist* netlist, const std::filesystem::path& file_path) override;
 
     private:
-        Netlist* m_netlist;
-        std::stringstream m_stream;
+        static const std::set<std::string> valid_types;
 
-        void print_module_interface_verilog();
-
-        void print_signal_definition_verilog();
-
-        void print_gate_definitions_verilog();
-
-        void print_generic_map_verilog(Gate* n);
-
-        bool print_gate_signal_list_verilog(Gate* n, std::vector<std::string> port_types, bool is_first, std::function<Net*(std::string)> get_net_fkt);
-
-        void prepare_signal_names();
-
-        std::string get_net_name(Net* n);
-
-        std::string get_gate_name(Gate* g);
-
-        std::string get_port_name(std::string pin);
-
-        std::map<std::string, std::vector<std::string>> get_gate_signal_buses_verilog(std::vector<std::string> port_types);
-
-        /**
-         * Following maps saves prepared net names used internally.
-         */
-        std::map<Net*, std::string> m_printable_signal_names;
-
-        std::map<std::string, Net*> m_printable_signal_names_str_to_net;
-
-        std::map<Net*, std::string> m_only_wire_names;
-
-        std::map<std::string, Net*> m_only_wire_names_str_to_net;
-
-        std::map<Net*, std::string> m_in_names;
-
-        std::map<std::string, Net*> m_in_names_str_to_net;
-
-        std::map<Net*, std::string> m_out_names;
-
-        std::map<std::string, Net*> m_out_names_str_to_net;
-
-        std::map<Net*, std::string> m_gnd_names;
-
-        std::map<std::string, Net*> m_gnd_names_str_to_net;
-
-        std::map<Net*, std::string> m_vcc_names;
-
-        std::map<std::string, Net*> m_vcc_names_str_to_net;
+        bool write_module_declaration(std::stringstream& res_stream,
+                                      const Module* module,
+                                      std::unordered_map<const Module*, std::string>& module_type_aliases,
+                                      std::unordered_map<std::string, u32>& module_type_occurrences) const;
+        bool write_gate_instance(std::stringstream& res_stream,
+                                 const Gate* gate,
+                                 std::unordered_map<const DataContainer*, std::string>& aliases,
+                                 std::unordered_map<std::string, u32>& identifier_occurrences) const;
+        bool write_module_instance(std::stringstream& res_stream,
+                                   const Module* module,
+                                   std::unordered_map<const DataContainer*, std::string>& aliases,
+                                   std::unordered_map<std::string, u32>& identifier_occurrences,
+                                   std::unordered_map<const Module*, std::string>& module_type_aliases) const;
+        bool write_parameter_assignments(std::stringstream& res_stream, const DataContainer* container) const;
+        bool write_pin_assignments(std::stringstream& res_stream,
+                                   const std::vector<std::pair<std::string, std::vector<const Net*>>>& pin_assignments,
+                                   std::unordered_map<const DataContainer*, std::string>& aliases) const;
+        bool write_parameter_value(std::stringstream& res_stream, const std::string& type, const std::string& value) const;
+        std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
+        std::string escape(const std::string& s) const;
     };
 }    // namespace hal
