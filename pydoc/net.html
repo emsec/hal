@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Net &mdash; hal_py v3.2.6-284-g774c1cfeb documentation</title>
+  <title>Net &mdash; hal_py v3.2.6-308-g104083164 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.6-284-g774c1cfeb
+                v3.2.6-308-g104083164
               </div>
             
           
@@ -618,14 +618,46 @@ A filter can be supplied which filters out all potential values that return fals
 </dd></dl>
 
 <dl class="method">
-<dt id="hal_py.Net.is_unrouted">
-<code class="descname">is_unrouted</code><span class="sig-paren">(</span><em>self: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Net.is_unrouted" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether the net is unrouted, i.e. it has no source or no destination.</p>
+<dt id="hal_py.Net.is_gnd_net">
+<code class="descname">is_gnd_net</code><span class="sig-paren">(</span><em>self: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Net.is_gnd_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the net is connected to GND.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the net is unrouted.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the net is connected to GND, false otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Net.is_unrouted">
+<code class="descname">is_unrouted</code><span class="sig-paren">(</span><em>self: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Net.is_unrouted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the net is unrouted, i.e., it has no source or no destination.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the net is unrouted, false otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Net.is_vcc_net">
+<code class="descname">is_vcc_net</code><span class="sig-paren">(</span><em>self: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Net.is_vcc_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the net is connected to VCC.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the net is connected to VCC, false otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
 </tr>

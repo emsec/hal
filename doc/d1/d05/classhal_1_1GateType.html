@@ -83,7 +83,7 @@ Collaboration diagram for hal::GateType:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/dbe/classhal_1_1GateType__coll__graph.png" border="0" usemap="#hal_1_1GateType_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1GateType_coll__map" id="hal_1_1GateType_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,224,655"/>
+<area shape="rect" title=" " alt="" coords="5,5,224,669"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -153,6 +153,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a190a58de9dce12097dcd77b56c1992d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63d024e86e3229f92749a20749ad4e4c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#a63d024e86e3229f92749a20749ad4e4c">assign_pin_group</a> (const std::string &amp;group, const std::vector&lt; std::pair&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt;&gt; &amp;pins)</td></tr>
 <tr class="separator:a63d024e86e3229f92749a20749ad4e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad48fa1422e1234a274406b07231d728a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#ad48fa1422e1234a274406b07231d728a">get_pin_group</a> (const std::string &amp;pin) const</td></tr>
+<tr class="separator:ad48fa1422e1234a274406b07231d728a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa2d0c6d6a39b2bca0b78425a017303c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::vector&lt; std::pair&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#afa2d0c6d6a39b2bca0b78425a017303c">get_pin_groups</a> () const</td></tr>
 <tr class="separator:afa2d0c6d6a39b2bca0b78425a017303c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d6c35298a5297a223617dece72bc084"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#a3d6c35298a5297a223617dece72bc084">get_pins_of_group</a> (const std::string &amp;group) const</td></tr>
@@ -936,6 +938,34 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="ad48fa1422e1234a274406b07231d728a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad48fa1422e1234a274406b07231d728a">&#9670;&nbsp;</a></span>get_pin_group()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string hal::GateType::get_pin_group </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>pin</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin is not in a group or the does not exist, an empty string will be returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The pin. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pin group. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gad09c61daaa174b451b0519d0f54a2382">hal::gate_type_init()</a>.</p>
+
+</div>
+</div>
 <a id="afa2d0c6d6a39b2bca0b78425a017303c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afa2d0c6d6a39b2bca0b78425a017303c">&#9670;&nbsp;</a></span>get_pin_groups()</h2>
 
@@ -1392,7 +1422,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 12 2021 08:05:54 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon May 17 2021 17:50:31 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

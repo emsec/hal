@@ -143,92 +143,98 @@ $(function() {
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <a class="code" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a>* get_netlist() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        std::vector&lt;Net*&gt; get_input_nets() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        std::vector&lt;Net*&gt; get_output_nets() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        std::vector&lt;Net*&gt; get_internal_nets() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordtype">void</span> set_input_port_name(<a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* input_net, <span class="keyword">const</span> std::string&amp; port_name);</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        std::string get_input_port_name(<a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* input_net);</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* get_input_port_net(<span class="keyword">const</span> std::string&amp; port_name);</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keyword">const</span> std::map&lt;Net*, std::string&gt;&amp; get_input_port_names() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160; </div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <span class="keywordtype">void</span> set_next_input_port_id(<a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> get_next_input_port_id() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keywordtype">void</span> set_output_port_name(<a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* output_net, <span class="keyword">const</span> std::string&amp; port_name);</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        std::string get_output_port_name(<a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* output_net);</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* get_output_port_net(<span class="keyword">const</span> std::string&amp; port_name);</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="keyword">const</span> std::map&lt;Net*, std::string&gt;&amp; get_output_port_names() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160; </div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="keywordtype">void</span> set_next_output_port_id(<a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> get_next_output_port_id() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="comment">/*</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="comment">         * ################################################################</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="comment">         *      gate functions</span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="comment">         * ################################################################</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="comment">         */</span></div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keywordtype">bool</span> assign_gate(<a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>* gate);</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        <span class="keywordtype">bool</span> remove_gate(<a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>* gate);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keywordtype">bool</span> contains_gate(<a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>* gate, <span class="keywordtype">bool</span> recursive = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <span class="keyword">const</span> std::vector&lt;Net*&gt;&amp; get_nets() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <span class="keyword">const</span> std::vector&lt;Net*&gt;&amp; get_input_nets() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keyword">const</span> std::vector&lt;Net*&gt;&amp; get_output_nets() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keyword">const</span> std::vector&lt;Net*&gt;&amp; get_internal_nets() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keywordtype">void</span> set_input_port_name(<a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* input_net, <span class="keyword">const</span> std::string&amp; port_name);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        std::string get_input_port_name(<a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* input_net);</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* get_input_port_net(<span class="keyword">const</span> std::string&amp; port_name);</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <span class="keyword">const</span> std::map&lt;Net*, std::string&gt;&amp; get_input_port_names() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        <span class="keywordtype">void</span> set_next_input_port_id(<a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> get_next_input_port_id() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keywordtype">void</span> set_output_port_name(<a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* output_net, <span class="keyword">const</span> std::string&amp; port_name);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        std::string get_output_port_name(<a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* output_net);</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* get_output_port_net(<span class="keyword">const</span> std::string&amp; port_name);</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        <span class="keyword">const</span> std::map&lt;Net*, std::string&gt;&amp; get_output_port_names() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        <span class="keywordtype">void</span> set_next_output_port_id(<a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> get_next_output_port_id() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160; </div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keywordtype">void</span> set_cache_dirty(<span class="keywordtype">bool</span> is_dirty = <span class="keyword">true</span>); </div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="comment">/*</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="comment">         * ################################################################</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="comment">         *      gate functions</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="comment">         * ################################################################</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="comment">         */</span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        <span class="keywordtype">bool</span> assign_gate(<a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>* gate);</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keywordtype">bool</span> remove_gate(<a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>* gate);</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>* get_gate_by_id(<span class="keyword">const</span> <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>, <span class="keywordtype">bool</span> recursive = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="keywordtype">bool</span> contains_gate(<a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>* gate, <span class="keywordtype">bool</span> recursive = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        std::vector&lt;Gate*&gt; get_gates(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>*)&gt;&amp; filter = <span class="keyword">nullptr</span>, <span class="keywordtype">bool</span> recursive = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00321"></a><span class="lineno"><a class="line" href="../../d1/d10/classhal_1_1Module.html#a71851ef81c1a491be6395f4c883218de">  321</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">NetlistInternalManager</a>;</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>(<a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>, <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>* parent, <span class="keyword">const</span> std::string&amp; name, <a class="code" href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">NetlistInternalManager</a>* internal_manager);</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160; </div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>(<span class="keyword">const</span> <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>&amp;) = <span class="keyword">delete</span>;               <span class="comment">//disable copy-constructor</span></div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>&amp;) = <span class="keyword">delete</span>;    <span class="comment">//disable copy-assignment</span></div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160; </div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        std::string m_name;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        std::string m_type;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>* get_gate_by_id(<span class="keyword">const</span> <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>, <span class="keywordtype">bool</span> recursive = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        std::vector&lt;Gate*&gt; get_gates(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>*)&gt;&amp; filter = <span class="keyword">nullptr</span>, <span class="keywordtype">bool</span> recursive = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160; </div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <a class="code" href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">NetlistInternalManager</a>* m_internal_manager;</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> m_id;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160; </div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="comment">/* grouping */</span></div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        <a class="code" href="../../d2/d20/classhal_1_1Grouping.html">Grouping</a>* m_grouping = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>* m_parent;</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        std::unordered_map&lt;u32, Module*&gt; m_submodules_map;</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        std::vector&lt;Module*&gt; m_submodules;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00331"></a><span class="lineno"><a class="line" href="../../d1/d10/classhal_1_1Module.html#a71851ef81c1a491be6395f4c883218de">  331</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">NetlistInternalManager</a>;</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>(<a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>, <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>* parent, <span class="keyword">const</span> std::string&amp; name, <a class="code" href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">NetlistInternalManager</a>* internal_manager);</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160; </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>(<span class="keyword">const</span> <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>&amp;) = <span class="keyword">delete</span>;               <span class="comment">//disable copy-constructor</span></div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>&amp;) = <span class="keyword">delete</span>;    <span class="comment">//disable copy-assignment</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160; </div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        std::string m_name;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        std::string m_type;</div>
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        <span class="comment">/* port names */</span></div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        <span class="keyword">mutable</span> <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> m_next_input_port_id  = 0;</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <span class="keyword">mutable</span> <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> m_next_output_port_id = 0;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="keyword">mutable</span> std::set&lt;Net*&gt; m_named_input_nets;                        <span class="comment">// ordering necessary, cannot be replaced with unordered_set</span></div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        <span class="keyword">mutable</span> std::set&lt;Net*&gt; m_named_output_nets;                       <span class="comment">// ordering necessary, cannot be replaced with unordered_set</span></div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        <span class="keyword">mutable</span> std::map&lt;Net*, std::string&gt; m_input_net_to_port_name;     <span class="comment">// ordering necessary, cannot be replaced with unordered_map</span></div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        <span class="keyword">mutable</span> std::map&lt;Net*, std::string&gt; m_output_net_to_port_name;    <span class="comment">// ordering necessary, cannot be replaced with unordered_map</span></div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160; </div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        <span class="comment">/* stores gates sorted by id */</span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        std::unordered_map&lt;u32, Gate*&gt; m_gates_map;</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        std::vector&lt;Gate*&gt; m_gates;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_input_nets_dirty;</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="keyword">mutable</span> std::vector&lt;Net*&gt; m_input_nets;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_output_nets_dirty;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        <span class="keyword">mutable</span> std::vector&lt;Net*&gt; m_output_nets;</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_internal_nets_dirty;</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        <span class="keyword">mutable</span> std::vector&lt;Net*&gt; m_internal_nets;</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    };</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        <a class="code" href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">NetlistInternalManager</a>* m_internal_manager;</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> m_id;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="comment">/* grouping */</span></div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        <a class="code" href="../../d2/d20/classhal_1_1Grouping.html">Grouping</a>* m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160; </div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>* m_parent;</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        std::unordered_map&lt;u32, Module*&gt; m_submodules_map;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        std::vector&lt;Module*&gt; m_submodules;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        <span class="comment">/* port names */</span></div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        <span class="keyword">mutable</span> <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> m_next_input_port_id  = 0;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        <span class="keyword">mutable</span> <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> m_next_output_port_id = 0;</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="keyword">mutable</span> std::set&lt;Net*&gt; m_named_input_nets;                        <span class="comment">// ordering necessary, cannot be replaced with unordered_set</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        <span class="keyword">mutable</span> std::set&lt;Net*&gt; m_named_output_nets;                       <span class="comment">// ordering necessary, cannot be replaced with unordered_set</span></div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        <span class="keyword">mutable</span> std::map&lt;Net*, std::string&gt; m_input_net_to_port_name;     <span class="comment">// ordering necessary, cannot be replaced with unordered_map</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keyword">mutable</span> std::map&lt;Net*, std::string&gt; m_output_net_to_port_name;    <span class="comment">// ordering necessary, cannot be replaced with unordered_map</span></div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160; </div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="comment">/* stores gates sorted by id */</span></div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        std::unordered_map&lt;u32, Gate*&gt; m_gates_map;</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        std::vector&lt;Gate*&gt; m_gates;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160; </div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_nets_dirty;</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        <span class="keyword">mutable</span> std::vector&lt;Net*&gt; m_nets;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_input_nets_dirty;</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        <span class="keyword">mutable</span> std::vector&lt;Net*&gt; m_input_nets;</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_output_nets_dirty;</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        <span class="keyword">mutable</span> std::vector&lt;Net*&gt; m_output_nets;</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_internal_nets_dirty;</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;        <span class="keyword">mutable</span> std::vector&lt;Net*&gt; m_internal_nets;</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    };</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasshal_1_1Gate_html"><div class="ttname"><a href="../../d5/d57/classhal_1_1Gate.html">hal::Gate</a></div><div class="ttdef"><b>Definition:</b> gate.h:54</div></div>
 <div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> defines.h:43</div></div>
@@ -245,7 +251,7 @@ $(function() {
 <div class="ttc" id="aclasshal_1_1Net_html"><div class="ttname"><a href="../../de/db0/classhal_1_1Net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> net.h:51</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 12 2021 08:05:53 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon May 17 2021 17:50:31 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type &mdash; hal_py v3.2.6-284-g774c1cfeb documentation</title>
+  <title>Gate Type &mdash; hal_py v3.2.6-308-g104083164 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.6-284-g774c1cfeb
+                v3.2.6-308-g104083164
               </div>
             
           
@@ -306,8 +306,8 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The pin.</li>
-<li><strong>direction</strong> (<em>hal_py.GateType.PinDirection</em>) – The pin direction to be assigned.</li>
-<li><strong>pin_type</strong> (<em>hal_py.GateType.PinType</em>) – The pin type to be assigned.</li>
+<li><strong>direction</strong> (<em>hal_py.PinDirection</em>) – The pin direction to be assigned.</li>
+<li><strong>pin_type</strong> (<em>hal_py.PinType</em>) – The pin type to be assigned.</li>
 </ul>
 </td>
 </tr>
@@ -331,8 +331,8 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The pins.</li>
-<li><strong>direction</strong> (<em>hal_py.GateType.PinDirection</em>) – The pin direction to be assigned.</li>
-<li><strong>pin_type</strong> (<em>hal_py.GateType.PinType</em>) – The pin type to be assigned.</li>
+<li><strong>direction</strong> (<em>hal_py.PinDirection</em>) – The pin direction to be assigned.</li>
+<li><strong>pin_type</strong> (<em>hal_py.PinType</em>) – The pin type to be assigned.</li>
 </ul>
 </td>
 </tr>
@@ -374,7 +374,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The pin.</li>
-<li><strong>pin_type</strong> (<em>hal_py.GateType.PinType</em>) – The pin type to be assigned.</li>
+<li><strong>pin_type</strong> (<em>hal_py.PinType</em>) – The pin type to be assigned.</li>
 </ul>
 </td>
 </tr>
@@ -600,7 +600,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin direction.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.GateType.PinDirection</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.PinDirection</td>
 </tr>
 </tbody>
 </table>
@@ -616,7 +616,25 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin to pin direction.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[std,hal_py.GateType.PinDirection]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[std,hal_py.PinDirection]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_pin_group">
+<code class="descname">get_pin_group</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.GateType.get_pin_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin is not in a group or the does not exist, an empty string will be returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin group.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -674,7 +692,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin type.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.GateType.PinType</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.PinType</td>
 </tr>
 </tbody>
 </table>
@@ -690,7 +708,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin to pin type.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,hal_py.GateType.PinType]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,hal_py.PinType]</td>
 </tr>
 </tbody>
 </table>
@@ -720,7 +738,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction</strong> (<em>hal_py.GateType.PinDirection</em>) – The pin direction.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction</strong> (<em>hal_py.PinDirection</em>) – The pin direction.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A set of pins.</td>
 </tr>
@@ -756,7 +774,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_type</strong> (<em>hal_py.GateType.PinType</em>) – The pin type.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_type</strong> (<em>hal_py.PinType</em>) – The pin type.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A set of pins.</td>
 </tr>
@@ -893,7 +911,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,hal_py.GateType.PinDirection]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,hal_py.PinDirection]</td>
 </tr>
 </tbody>
 </table>
@@ -921,7 +939,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,hal_py.GateType.PinType]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,hal_py.PinType]</td>
 </tr>
 </tbody>
 </table>
