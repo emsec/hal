@@ -58,7 +58,7 @@ namespace hal
         /**
          * Configures the mSortMechanism that should be applied to sort groupings (by their name).
          *
-         * @param sortMechanism - the new sorting mechanism
+         * @param sortMechanism - The new sorting mechanism
          */
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
 
@@ -72,7 +72,7 @@ namespace hal
          *
          * @param sourceRow - The row in the source model
          * @param sourceParent - the source parent
-         * @returns <b>true</b> iff the row should be included in the model.
+         * @returns <b>true</b> if the row should be included in the model.
          */
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
@@ -81,20 +81,9 @@ namespace hal
          *
          * @param source_left - The model index of the left element
          * @param source_right - The model index of the right element
-         * @returns <b>true</b> iff the element at source_left is considered less than the element at source_right
+         * @returns <b>true</b> if the element at source_left is considered less than the element at source_right
          */
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
-
-    private Q_SLOTS:
-        /**
-         * Q_SLOT to call whenever the global settings were changed. It is used to apply changes in the sort mechanism
-         * settings.
-         *
-         * @param sender - The sender of the signal
-         * @param key - The setting's key
-         * @param value - The new value of the setting
-         */
-        //-void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         gui_utility::mSortMechanism mSortMechanism;

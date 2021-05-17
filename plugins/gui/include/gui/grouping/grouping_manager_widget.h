@@ -139,6 +139,12 @@ namespace hal
          * @returns the GroupingTableModel of this GroupingManagerWidget
          */
         GroupingTableModel* getModel() const { return mGroupingTableModel; }
+
+        /**
+         * Get the underlying proxy model that is used to sort and filter the normal model.
+         *
+         * @return The proxy model.
+         */
         GroupingProxyModel* getProxyModel() const {return mProxyModel; }
 
     public Q_SLOTS:
@@ -216,10 +222,31 @@ namespace hal
          */
         void handleContextMenuRequest(const QPoint& point);
 
+        /**
+         * Creates a context menu with four options. A slot that should be connected to the toolbox action.
+         */
         void handleToolboxClicked();
+
+        /**
+         * Adds all predecessor of the currently selected gate or module to a new grouping.
+         */
         void handleToolboxPredecessor();
+
+        /**
+         * Adds all successor of the currently selected gate or module to a new grouping.
+         */
         void handleToolboxSuccessor();
+
+        /**
+         * Performs a BFS with a max-depth of three and creates a new grouping
+         * for the predecessors of each depth.
+         */
         void handleToolboxPredecessorDistance();
+
+        /**
+         * Performs a BFS with a max-depth of three and creates a new grouping
+         * for the successors of each depth.
+         */
         void handleToolboxSuccessorDistance();
 
     private:

@@ -229,6 +229,12 @@ namespace hal
          * @returns the old color of the module (used to create an undo action easier)
          */
         QColor setRandomColor(u32 id);
+
+        /**
+         * Removes the color that belongs to the given id.
+         *
+         * @param id - The module id for which to remove the color.
+         */
         void removeColor(u32 id);
 
     private:

@@ -54,6 +54,10 @@ namespace hal
          */
         KeybindEdit(QWidget* parent = nullptr);
 
+        /** @name Q_PROPERTY WRITE Functions
+          */
+        ///@{
+
         /**
          * Sets the hasGrab variable that should be set when the widget has the
          * keyboard focus (is set to true in the focusIn event and to false in
@@ -69,6 +73,11 @@ namespace hal
          * @param valid - The value to set.
          */
         void setValidated(bool valid);
+        ///@}
+
+        /** @name Q_PROPERTY READ Functions
+          */
+        ///@{
 
         /**
          * Get the hasGrab state.
@@ -83,6 +92,7 @@ namespace hal
          * @return The validation state.
          */
         bool validated();
+        ///@}
 
         /**
          * Validates the current sequence by checking if no keysequence already exists

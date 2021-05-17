@@ -78,6 +78,9 @@ namespace hal
          */
         virtual qreal outputWidth() const = 0;
 
+        /**
+         * Commits the path and sets its bounding rect.
+         */
         virtual void finalize();
 
     protected:

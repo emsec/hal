@@ -68,8 +68,16 @@ namespace hal
          */
         DockButton(ContentWidget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent);
 
+        /**
+         * Overwritten qt function.
+         *
+         * @param event - The paint event.
+         */
         void paintEvent(QPaintEvent* event) override;
 
+        /** @name Q_PROPERTY READ Functions
+          */
+        ///@{
         /**
          * Returns the text color
          */
@@ -84,6 +92,11 @@ namespace hal
          * Returns the hover color
          */
         QColor hoverColor();
+        ///@}
+
+        /** @name Q_PROPERTY WRITE Functions
+          */
+        ///@{
 
         /**
          * Set the text color
@@ -102,6 +115,7 @@ namespace hal
          * @param color -  The new color.
          */
         void setHoverColor(const QColor& color);
+        ///@}
 
         /**
          * Calculates its size and sets the height and width as fixed values.

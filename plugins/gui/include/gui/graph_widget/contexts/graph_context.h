@@ -129,7 +129,16 @@ namespace hal
          * @param id - The id of the gate
          */
         bool isGateUnfolded(u32 gateId) const;
+
+        /**
+         * Folds a given module with a given placement hint.
+         *
+         * @param moduleId - The module to fold.
+         * @param plc - The placement hint.
+         * @return True on success, False otherwise.
+         */
         bool foldModuleAction(u32 moduleId, const PlacementHint& plc);
+
         /**
          * Unfold a specific module. The specified module is removed from the context and replaced by its Gate%s and
          * submodules.
@@ -291,11 +300,32 @@ namespace hal
          */
         QDateTime getTimestamp() const;
 
+        /**
+         * Writes the context (its modules, gates, nets) to a given json object.
+         *
+         * @param json - The object to write to.
+         */
         void writeToFile(QJsonObject& json);
 
+        /**
+         * Reads a context from a given json object.
+         *
+         * @param json - The object to read from.
+         */
         void readFromFile(const QJsonObject& json);
 
+        /**
+         * Sets the dirty state.
+         *
+         * @param dty - The value to set.
+         */
         void setDirty(bool dty);
+
+        /**
+         * Get the dirty state.
+         *
+         * @return The dirty state.
+         */
         bool isDirty() const {return mDirty; }
 
     Q_SIGNALS:

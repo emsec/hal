@@ -46,9 +46,34 @@ namespace hal {
          * @param l - The lines this GraphicsNet consists of
          */
         StandardArrowNet(Net* n, const Lines& l);
+        /**
+         * Adds an input position.
+         *
+         * @param pos - The position.
+         */
         void setInputPosition(const QPointF &pos);
+
+        /**
+         * Adds an output position.
+         *
+         * @param pos - The position.
+         */
         void setOutputPosition(const QPointF &pos);
+
+        /**
+         * Sets the given visuals.
+         *
+         * @param v - The visuals to set.
+         */
         virtual void setVisuals(const Visuals& v);
+
+        /**
+         * Overwritten qt function to draw the net.
+         *
+         * @param painter - The painter to draw.
+         * @param option - The options.
+         * @param widget - The widget to draw on.
+         */
         void paint(QPainter* painter,
                    const QStyleOptionGraphicsItem* option,
                    QWidget* widget) override;

@@ -39,13 +39,22 @@ namespace hal
 
     /**
      * @ingroup settings
-     * @brief A helpter class to group related list items (buttons).
+     * @brief A helper class to group related list items (buttons).
      */
     class ExpandingListGroup : public QList<ExpandingListItem*>
     {
     public:
         bool mCollapsed;
+        /**
+         * The constructor.
+         */
         ExpandingListGroup() : mCollapsed(false) {;}
+
+        /**
+         * Expands the given list button if it is collapsed. Collapses it otherwise.
+         *
+         * @param exceptSelected - The button to toggle.
+         */
         void toggleCollapsed(ExpandingListButton* exceptSelected);
     };
 
