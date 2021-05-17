@@ -46,12 +46,33 @@ namespace hal
         Q_PROPERTY(QColor commentColor READ commentColor WRITE setCommentColor)
 
     public:
+        /**
+         * The Constructor.
+         *
+         * @param parent - The widget's parent.
+         */
         explicit PythonQssAdapter(QWidget* parent = nullptr);
+
+        /**
+         * The destructor.
+         */
         ~PythonQssAdapter();    // DEBUG CODE, DELETE LATER
+
+        /**
+         * Get the singleton instance of the adapter.
+         *
+         * @return The singleton instance.
+         */
         static PythonQssAdapter* instance();
 
+        /**
+         * Reloads the Q_PROPERTIES from the stylesheet.
+         */
         void repolish();
 
+        /** @name Q_PROPERTY READ Functions
+         */
+        ///@{
         QColor keywordColor() const;
         QColor operator_color() const;
         QColor braceColor() const;
@@ -61,7 +82,9 @@ namespace hal
         QColor singleQuotedStringColor() const;
         QColor doubleQuotedStringColor() const;
         QColor commentColor() const;
-
+        ///@}
+        /** @name Q_PROPERTY WRITE Function*/
+        ///@{
         void setKeywordColor(const QColor& color);
         void setOperatorColor(const QColor& color);
         void setBraceColor(const QColor& color);
@@ -71,6 +94,7 @@ namespace hal
         void setSingleQuotedStringColor(const QColor& color);
         void setDoubleQuotedStringColor(const QColor& color);
         void setCommentColor(const QColor& color);
+        ///@}
 
         // LEFT PUBLIC INTENTIONALLY
         QTextCharFormat mKeywordFormat;

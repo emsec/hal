@@ -105,6 +105,9 @@ namespace hal
          */
         virtual void setupToolbar(Toolbar* toolbar) override;
 
+        /** @name Q_PROPERTY READ Functions
+         */
+        ///@{
         QString disabledIconStyle() const;
         QString newViewIconPath() const;
         QString newViewIconStyle() const;
@@ -118,7 +121,11 @@ namespace hal
         QString openIconStyle() const;
         QString searchIconPath() const;
         QString searchIconStyle() const;
+        ///@}
 
+        /** @name Q_PROPERTY WRITE Functions
+         */
+        ///@{
         void setDisabledIconStyle(const QString &path);
         void setNewViewIconPath(const QString &path);
         void setNewViewIconStyle(const QString &style);
@@ -132,6 +139,7 @@ namespace hal
         void setOpenIconStyle(const QString &style);
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
+        ///@}
 
     public Q_SLOTS:
         //void handleContextCreated(GraphContext* context);

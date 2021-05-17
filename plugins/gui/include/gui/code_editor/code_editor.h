@@ -149,12 +149,36 @@ namespace hal
         void setLineNumberHighlightColor(QColor& color);
         void setLineNumberHighlightBackground(QColor& color);
         void setCurrentLineBackground(QColor& color);
-
-	void setLineNumberEnabled(bool enabled);
-        void setHighlightCurrentLineEnabled(bool enabled);
-        void setLineWrapEnabled(bool enabled);
-        void setMinimapEnabled(bool enabled);
         ///@}
+
+
+        /**
+         * Enables or disables the line numbers.
+         *
+         * @param enabled - True to enable, False to disable.
+         */
+        void setLineNumberEnabled(bool enabled);
+
+        /**
+         * Enables or disables the highlight of the current line.
+         *
+         * @param enabled - True to enable, False to disable.
+         */
+        void setHighlightCurrentLineEnabled(bool enabled);
+
+        /**
+         * Enables or disables the linewrap.
+         *
+         * @param enabled - True to enable, False to disable.
+         */
+        void setLineWrapEnabled(bool enabled);
+
+        /**
+         * Enables or disables the minimap.
+         *
+         * @param enabled - True to enable, False to disable.
+         */
+        void setMinimapEnabled(bool enabled);
 
     public Q_SLOTS:
         /**

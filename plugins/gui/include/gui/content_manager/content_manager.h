@@ -110,15 +110,16 @@ namespace hal
         GroupingManagerWidget* getGroupingManagerWidget();
 
         /**
-         * get hal's module tree widget
+         * Get hal's module tree widget.
          *
          * @return module tree widget
          */
         ModuleWidget* getModuleWidget();
 
         /**
-         * Set main window title
-         * @param filename name of netlist filename
+         * Set main window title.
+         *
+         * @param filename name of netlist filename.
          */
         void setWindowTitle(const QString& filename);
 

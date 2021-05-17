@@ -118,6 +118,10 @@ namespace hal
          */
         void set_name(const QString& name);
 
+        /** @name Q_PROPERTY READ Functions
+        */
+        ///@{
+
         /**
          * Necessary function used by qt's property system. Refer to Qt's documentation to learn more.
          *
@@ -131,6 +135,11 @@ namespace hal
          * @return The icon's path.
          */
         QString iconPath();
+        ///@}
+
+        /** @name Q_PROPERTY WRITE Functions
+          */
+        ///@{
 
         /**
          * Necessary function used by qt's property system. Refer to Qt's documentation to learn more.
@@ -145,6 +154,7 @@ namespace hal
          * @param path - The icon's path.
          */
         void setIconPath(const QString& path);
+        ///@}
 
     Q_SIGNALS:
 
