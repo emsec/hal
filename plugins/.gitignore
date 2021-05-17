@@ -27,10 +27,10 @@
 !solve_fsm/**/*
 !verilog_parser*
 !verilog_parser/**/*
+!verilog_writer*
+!verilog_writer/**/*
 !vhdl_parser*
 !vhdl_parser/**/*
-!vhdl_verilog_writers*
-!vhdl_verilog_writers/**/*
 !z3_utils*
 !z3_utils/**/*
 !CMakeLists.txt

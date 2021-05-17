@@ -29,7 +29,7 @@ namespace hal
 {
     namespace test_utils
     {
-        std::unique_ptr<GateLibrary> create_gate_library();
+        std::unique_ptr<GateLibrary> create_gate_library(const std::filesystem::path& file_path = "");
         const GateLibrary* get_gate_library();
     }    // namespace test_utils
 }    // namespace hal

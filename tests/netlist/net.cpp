@@ -7,13 +7,16 @@ namespace hal {
     using test_utils::MIN_MODULE_ID;
     using test_utils::MIN_NETLIST_ID;
 
-    class NetTest : public ::testing::Test {
+    class NetTest : public ::testing::Test 
+    {
     protected:
-        virtual void SetUp() {
+        virtual void SetUp() 
+        {
             test_utils::init_log_channels();
         }
 
-        virtual void TearDown() {
+        virtual void TearDown() 
+        {
         }
     };
 
@@ -23,16 +26,16 @@ namespace hal {
      *
      * Functions: constructor, get_id, get_name, get_netlist
      */
-    TEST_F(NetTest, check_constructor) {
+    TEST_F(NetTest, check_constructor) 
+    {
         TEST_START
-            // Create a Net (id = 100) and append it to its netlist
-            auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-            Net* test_net = nl->create_net(MIN_NET_ID + 100, "test_net");
+        {
+            auto nl = test_utils::create_empty_netlist();
+            Net* test_net = nl->create_net(100, "test_net");
 
-            EXPECT_EQ(test_net->get_id(), (u32) (MIN_NET_ID + 100));
+            EXPECT_EQ(test_net->get_id(), 100);
             EXPECT_EQ(test_net->get_name(), "test_net");
-            EXPECT_EQ(test_net->get_netlist()->get_id(), (u32) (MIN_NETLIST_ID + 0));
-
+        }
         TEST_END
     }
 
@@ -41,440 +44,429 @@ namespace hal {
      *
      * Functions: get_name, set_name
      */
-    TEST_F(NetTest, check_set_and_get_name) {
+    TEST_F(NetTest, check_set_and_get_name) 
+    {
         TEST_START
-            // Create a Net and append it to its netlist
-            auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-            Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+            {
+                // Create a Net and append it to its netlist
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
 
-            EXPECT_EQ(test_net->get_name(), "test_net");
+                EXPECT_EQ(test_net->get_name(), "test_net");
 
-            // Set a new name
-            NO_COUT(test_net->set_name("new_name"));
-            EXPECT_EQ(test_net->get_name(), "new_name");
+                // Set a new name
+                NO_COUT(test_net->set_name("new_name"));
+                EXPECT_EQ(test_net->get_name(), "new_name");
 
-            // Set the name to the same new name again
-            NO_COUT(test_net->set_name("new_name"));
-            EXPECT_EQ(test_net->get_name(), "new_name");
-
-            // Set an empty name (should do nothing)
-            NO_COUT(test_net->set_name("name"));
-            NO_COUT(test_net->set_name(""));
-            EXPECT_EQ(test_net->get_name(), "name");
-
+                // Set an empty name (should do nothing)
+                NO_COUT(test_net->set_name(""));
+                EXPECT_EQ(test_net->get_name(), "new_name");
+            }
         TEST_END
     }
 
     /**
-     * Testing the function add_src
+     * Test adding and retrieving sources.
      *
-     * Functions: add_src
+     * Functions: add_source, get_sources, remove_source
      */
-    TEST_F(NetTest, check_add_src) {
+    TEST_F(NetTest, check_sources) {
         TEST_START
             {
-                // Add a source of the Net (using a valid Gate and pin_type)
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                Gate* t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                bool suc = test_net->add_source(t_gate, "O");
-                EXPECT_TRUE(suc);
+                // get sources of net without sources
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+            }
+            {
+                // add source to net
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                EXPECT_TRUE(test_net->get_sources().empty());
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                Endpoint* ep = test_net->add_source(test_gate, "O");
+                EXPECT_NE(ep, nullptr);
                 ASSERT_EQ(test_net->get_sources().size(), 1);
-                EXPECT_EQ(test_net->get_sources()[0], test_utils::get_endpoint(t_gate, "O"));
+                EXPECT_EQ(test_net->get_sources().at(0), test_gate->get_fan_out_endpoint("O"));
+            }
+            {
+                // get multiple sources (no filter applied)
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("RAM"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                test_net->add_source(test_gate, "DATA_OUT(0)");
+                test_net->add_source(test_gate, "DATA_OUT(1)");
+                test_net->add_source(test_gate, "DATA_OUT(2)");
+                test_net->add_source(test_gate, "DATA_OUT(3)");
+                EXPECT_EQ(test_net->get_sources(), std::vector<Endpoint*>(test_gate->get_fan_out_endpoints()));
+            }
+            {
+                // get multiple sources (filter applied)
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate_1 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("RAM"), "test_gate_1");
+                ASSERT_NE(test_gate_1, nullptr);
+                Gate* test_gate_2 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("RAM"), "test_gate_2");
+                ASSERT_NE(test_gate_2, nullptr);
+                EXPECT_NE(test_net->add_source(test_gate_1, "DATA_OUT(0)"), nullptr);
+                EXPECT_NE(test_net->add_source(test_gate_1, "DATA_OUT(1)"), nullptr);
+                EXPECT_NE(test_net->add_source(test_gate_2, "DATA_OUT(0)"), nullptr);
+                EXPECT_NE(test_net->add_source(test_gate_2, "DATA_OUT(1)"), nullptr);
+                EXPECT_EQ(test_net->get_sources([](const Endpoint* ep){return ep->get_gate()->get_name() == "test_gate_1";}),
+                          std::vector<Endpoint*>(test_gate_1->get_fan_out_endpoints()));
+            }
+            {
+                // remove a source by specifying gate and pin
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_NE(test_net->add_source(test_gate, "O"), nullptr);
+                EXPECT_TRUE(test_net->remove_source(test_gate, "O"));
+                EXPECT_TRUE(test_net->get_sources().empty());
+            }
+            {
+                // remove a source by specifying endpoint
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                Endpoint* ep = test_net->add_source(test_gate, "O");
+                ASSERT_NE(ep, nullptr);
+                EXPECT_TRUE(test_net->remove_source(ep));
+                EXPECT_TRUE(test_net->get_sources().empty());
             }
             // Negative
             {
-                // Set the source of the Net (Gate is nullptr)
+                // add invalid source
                 NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                bool suc = test_net->add_source(nullptr, "O");
-                EXPECT_FALSE(suc);
-                EXPECT_EQ(test_net->get_sources().size(), 0);
-            }
-            {
-                // Pin is an input pin (not an output/inout pin)
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate_0 = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                bool suc = test_net->add_source(t_gate_0, "I0");    // <- input pin
-                EXPECT_FALSE(suc);
-                EXPECT_EQ(test_net->get_sources().size(), 0);
-            }
-            {
-                // Pin is already occupied (example netlist is used)
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_example_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                bool suc = test_net->add_source(nl->get_gate_by_id(MIN_NET_ID + 1), "O");
-                EXPECT_FALSE(suc);
-                EXPECT_EQ(test_net->get_sources().size(), 0);
-            }
-            {
-                // Set the source of the Net (invalid pin type)
-                auto nl = test_utils::create_empty_netlist(0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                testing::internal::CaptureStdout();
-                bool suc = test_net->add_source(t_gate, "NEx_PIN");
-                testing::internal::GetCapturedStdout();
-                EXPECT_FALSE(suc);
-                EXPECT_EQ(test_net->get_sources().size(), 0);
-            }
-
-        TEST_END
-    }
-
-    /**
-     * Testing the access on sources
-     *
-     * Functions: get_sources, get_source
-     */
-    // disable get_source() deprecated warning for this test (because get_source() is also tested)
-    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    #pragma warning(disable:1478)
-    TEST_F(NetTest, check_get_sources) {
-        TEST_START
-            {
-                // Get a single source
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate");
-                test_net->add_source(t_gate, "O0");
-                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O0")); // (compiler warning intended)
-            }
-            {
-                // Get all sources (no filter)
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate");
-                test_net->add_source(t_gate, "O0");
-                test_net->add_source(t_gate, "O1");
-                test_net->add_source(t_gate, "O3");
-                EXPECT_EQ(test_net->get_sources(), std::vector<Endpoint*>({test_utils::get_endpoint(t_gate, "O0"),
-                                                                          test_utils::get_endpoint(t_gate, "O1"),
-                                                                          test_utils::get_endpoint(t_gate, "O3")}));
-            }
-            {
-                // Get all sources by using a filter
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate_0 =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate_0");
-                auto t_gate_1 =
-                    nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate_1");
-                test_net->add_source(t_gate_0, "O0");
-                test_net->add_source(t_gate_0, "O1");
-                test_net->add_source(t_gate_1, "O1");
-                test_net->add_source(t_gate_1, "O2");
-                EXPECT_EQ(test_net->get_sources(test_utils::endpoint_gate_name_filter("test_gate_0")),
-                          std::vector<Endpoint*>({test_utils::get_endpoint(t_gate_0, "O0"),
-                                                 test_utils::get_endpoint(t_gate_0, "O1")}));
-            }
-            {
-                // Get the source(s) if the Gate has no source
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source())); // (compiler warning intended)
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_EQ(test_net->add_source(test_gate, "INVALID"), nullptr);  // invalid pin
+                EXPECT_EQ(test_net->add_source(test_gate, "I"), nullptr);        // input pin
+                EXPECT_EQ(test_net->add_source(test_gate, ""), nullptr);         // empty pin
+                EXPECT_EQ(test_net->add_source(nullptr, "O"), nullptr);          // nullptr gate
                 EXPECT_TRUE(test_net->get_sources().empty());
             }
-            // NEGATIVE
             {
-                // Get source, if there are multiple sources (only the first one is returned)
+                // add source twice
                 NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate");
-                test_net->add_source(t_gate, "O0");
-                test_net->add_source(t_gate, "O1");
-                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O0")); // (compiler warning intended)
+                auto nl = test_utils::create_empty_netlist();
+                Net* test_net_1 = nl->create_net("test_net_1");
+                ASSERT_NE(test_net_1, nullptr);
+                Net* test_net_2 = nl->create_net("test_net_2");
+                ASSERT_NE(test_net_2, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_NE(test_net_1->add_source(test_gate, "O"), nullptr);
+                EXPECT_EQ(test_net_2->add_source(test_gate, "O"), nullptr);
+                EXPECT_TRUE(test_net_2->get_sources().empty());
+            }
+            {
+                // remove invalid source
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_NE(test_net->add_source(test_gate, "O"), nullptr);
+                EXPECT_FALSE(test_net->remove_source(test_gate, "INVALID"));  // invalid pin
+                EXPECT_FALSE(test_net->remove_source(test_gate, "I"));        // input pin
+                EXPECT_FALSE(test_net->remove_source(test_gate, ""));         // empty pin
+                EXPECT_FALSE(test_net->remove_source(nullptr, "O"));          // nullptr gate
+                EXPECT_FALSE(test_net->remove_source(nullptr));               // nullptr endpoint
+                EXPECT_EQ(test_net->get_sources().size(), 1);
+            }
+            {
+                // remove source twice by specifying gate and pin
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_NE(test_net->add_source(test_gate, "O"), nullptr);
+                EXPECT_TRUE(test_net->remove_source(test_gate, "O"));
+                EXPECT_FALSE(test_net->remove_source(test_gate, "O"));
+                EXPECT_TRUE(test_net->get_sources().empty());
+            }
+            {
+                // remove source twice by specifying endpoint
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                Endpoint* ep = test_net->add_source(test_gate, "O");
+                ASSERT_NE(ep, nullptr);
+                EXPECT_TRUE(test_net->remove_source(ep));
+                EXPECT_FALSE(test_net->remove_source(ep));
+                EXPECT_TRUE(test_net->get_sources().empty());
             }
         TEST_END
     }
-    // enable get_source() deprecated warning
-    #pragma GCC diagnostic warning "-Wdeprecated-declarations"
-    #pragma warning(enable:1478) // enable get_source() deprecated warning
 
     /**
-     * Testing the function remove_src
+     * Test adding and retrieving destinations.
      *
-     * Functions: remove_src
+     * Functions: add_destination, get_destinations, remove_destination
      */
-    TEST_F(NetTest, check_remove_src) {
+    TEST_F(NetTest, check_destinations) {
         TEST_START
             {
-                // Remove an existing source (passing a Gate and a pin type)
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_source(t_gate, "O");
-                bool suc = test_net->remove_source(t_gate, "O");
-                EXPECT_EQ(test_net->get_sources().size(), 0);
-                EXPECT_TRUE(suc);
+                // get destinations of net without destinations
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                EXPECT_TRUE(test_net->get_destinations().empty());
             }
-            // NEGATIVE
             {
-                // Remove the source if the passed parameters do not define any source
+                // add destination to net
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_TRUE(test_net->get_destinations().empty());
+                EXPECT_NE(test_net->add_destination(test_gate, "I"), nullptr);
+                ASSERT_EQ(test_net->get_destinations().size(), 1);
+                EXPECT_EQ(test_net->get_destinations().at(0), test_gate->get_fan_in_endpoint("I"));
+            }
+            {
+                // get multiple destinations (no filter applied)
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("RAM"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate, "DATA_IN(0)"), nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate, "DATA_IN(1)"), nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate, "DATA_IN(2)"), nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate, "DATA_IN(3)"), nullptr);
+                EXPECT_EQ(test_net->get_destinations(), std::vector<Endpoint*>(test_gate->get_fan_in_endpoints()));
+            }
+            {
+                // get multiple destinations (filter applied)
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate_1 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("RAM"), "test_gate_1");
+                ASSERT_NE(test_gate_1, nullptr);
+                Gate* test_gate_2 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("RAM"), "test_gate_2");
+                ASSERT_NE(test_gate_2, nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate_1, "DATA_IN(0)"), nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate_1, "DATA_IN(1)"), nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate_2, "DATA_IN(0)"), nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate_2, "DATA_IN(1)"), nullptr);
+                EXPECT_EQ(test_net->get_destinations([](const Endpoint* ep){return ep->get_gate()->get_name() == "test_gate_1";}),
+                          std::vector<Endpoint*>(test_gate_1->get_fan_in_endpoints()));
+            }
+            {
+                // remove a destination by specifying gate and pin
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate, "I"), nullptr);
+                EXPECT_TRUE(test_net->remove_destination(test_gate, "I"));
+                EXPECT_TRUE(test_net->get_destinations().empty());
+            }
+            {
+                // remove a destination by specifying endpoint
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                Endpoint* ep = test_net->add_destination(test_gate, "I");
+                ASSERT_NE(ep, nullptr);
+                EXPECT_TRUE(test_net->remove_destination(ep));
+                EXPECT_TRUE(test_net->get_destinations().empty());
+            }
+            // Negative
+            {
+                // add invalid destination
                 NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                bool suc = test_net->remove_source(nullptr, "");
-                EXPECT_EQ(test_net->get_sources().size(), 0);
-                EXPECT_FALSE(suc);
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_EQ(test_net->add_destination(test_gate, "INVALID"), nullptr);  // invalid pin
+                EXPECT_EQ(test_net->add_destination(test_gate, "O"), nullptr);        // input pin
+                EXPECT_EQ(test_net->add_destination(test_gate, ""), nullptr);         // empty pin
+                EXPECT_EQ(test_net->add_destination(nullptr, "I"), nullptr);          // nullptr gate
+                EXPECT_TRUE(test_net->get_destinations().empty());
+            }
+            {
+                // add destination twice
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net_1 = nl->create_net("test_net_1");
+                ASSERT_NE(test_net_1, nullptr);
+                Net* test_net_2 = nl->create_net("test_net_2");
+                ASSERT_NE(test_net_2, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_NE(test_net_1->add_destination(test_gate, "I"), nullptr);
+                EXPECT_EQ(test_net_2->add_destination(test_gate, "I"), nullptr);
+                EXPECT_TRUE(test_net_2->get_destinations().empty());
+            }
+            {
+                // remove invalid destination
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate, "I"), nullptr);
+                EXPECT_FALSE(test_net->remove_destination(test_gate, "INVALID"));  // invalid pin
+                EXPECT_FALSE(test_net->remove_destination(test_gate, "O"));        // input pin
+                EXPECT_FALSE(test_net->remove_destination(test_gate, ""));         // empty pin
+                EXPECT_FALSE(test_net->remove_destination(nullptr, "I"));          // nullptr gate
+                EXPECT_FALSE(test_net->remove_destination(nullptr));               // nullptr endpoint
+                EXPECT_EQ(test_net->get_destinations().size(), 1);
+            }
+            {
+                // remove destination twice by specifying gate and pin
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate, "I"), nullptr);
+                EXPECT_TRUE(test_net->remove_destination(test_gate, "I"));
+                EXPECT_FALSE(test_net->remove_destination(test_gate, "I"));
+                EXPECT_TRUE(test_net->get_destinations().empty());
+            }
+            {
+                // remove destination twice by specifying endpoint
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                Endpoint* ep = test_net->add_destination(test_gate, "I");
+                ASSERT_NE(ep, nullptr);
+                EXPECT_TRUE(test_net->remove_destination(ep));
+                EXPECT_FALSE(test_net->remove_destination(ep));
+                EXPECT_TRUE(test_net->get_destinations().empty());
             }
         TEST_END
     }
 
     /**
-     * Testing the function which removes a destination
-     *
-     * Functions: remove_destination, get_num_of_destinations
-     */
-    TEST_F(NetTest, check_add_remove_destination) {
-        TEST_START
-            {
-                // Remove a destination in the normal way
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_destination(t_gate, "I0");
-
-                bool suc = test_net->remove_destination(t_gate, "I0");
-
-                EXPECT_TRUE(suc);
-                EXPECT_TRUE(test_net->get_destinations().empty());
-                EXPECT_EQ(test_net->get_num_of_destinations(), (size_t) 0);
-            }
-            {
-                // Remove the same destination twice
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_destination(t_gate, "I0");
-
-                test_net->remove_destination(t_gate, "I0");
-                NO_COUT_TEST_BLOCK;
-                bool suc = test_net->remove_destination(t_gate, "I0");
-
-                EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_net->get_destinations().empty());
-                EXPECT_EQ(test_net->get_num_of_destinations(), 0);
-            }
-            // NEGATIVE
-            {
-                // The Gate is a nullptr
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-
-                bool suc = test_net->remove_destination(nullptr, "I0");
-
-                EXPECT_FALSE(suc);
-            }
-            {
-                // The Gate wasn't added to the netlist
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                Gate*
-                    t_gate =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "t_gate");
-
-                bool suc = test_net->remove_destination(t_gate, "I0");
-
-                EXPECT_FALSE(suc);
-            }
-
-        TEST_END
-    }
-
-    /**
-     * Testing the function which adds a destination
-     *
-     * Functions: add_destination, get_num_of_destinations
-     */
-    TEST_F(NetTest, check_add_dst) {
-        TEST_START
-            {
-                // Add a destination in the normal way
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                bool suc = test_net->add_destination(t_gate, "I0");
-                std::vector<Endpoint*> dsts = {test_utils::get_endpoint(t_gate, "I0")};
-                EXPECT_EQ(test_net->get_destinations(), dsts);
-                EXPECT_EQ(test_net->get_num_of_destinations(), (size_t) 1);
-                EXPECT_TRUE(suc);
-            }
-            {
-                // Add the same destination twice
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_destination(t_gate, "I0");
-                bool suc = test_net->add_destination(t_gate, "I0");
-                std::vector<Endpoint*> dsts = {test_utils::get_endpoint(t_gate, "I0")};
-                EXPECT_EQ(test_net->get_destinations(), dsts);
-                EXPECT_EQ(test_net->get_num_of_destinations(), (size_t) 1);
-                EXPECT_FALSE(suc);
-            }
-
-            // NEGATIVE
-            {
-                // The Gate is a nullptr
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                bool suc = test_net->add_destination(nullptr, "I0");
-
-                EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_net->get_destinations().empty());
-                EXPECT_EQ(test_net->get_num_of_destinations(), (size_t) 0);
-            }
-            {
-                // The Gate isn't part of the netlist
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                Gate*
-                    t_gate =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "t_gate");
-                // Gate isn't added
-                bool suc = test_net->add_destination(t_gate, "I0");
-
-                EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_net->get_destinations().empty());
-                EXPECT_EQ(test_net->get_num_of_destinations(), (size_t) 0);
-            }
-            {
-                // The pin to connect is weather an input pin nor an inout pin (but an output pin)
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                bool suc = test_net->add_destination(t_gate, "O");
-
-                EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_net->get_destinations().empty());
-                EXPECT_EQ(test_net->get_num_of_destinations(), (size_t) 0);
-            }
-            {
-                // The pin is already occupied (example netlist is used)
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_example_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                bool suc = test_net->add_destination(nl->get_gate_by_id(MIN_GATE_ID + 0), "I1");
-
-                EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_net->get_destinations().empty());
-                EXPECT_EQ(test_net->get_num_of_destinations(), (size_t) 0);
-            }
-        TEST_END
-    }
-
-    /**
-     * Testing the functions is_a_destination and is_a_source
+     * Test identifying whether an endpoint is a source or a destination.
      *
      * Functions: is_a_destination, is_a_source
      */
     TEST_F(NetTest, check_is_a_dest_or_src) {
         TEST_START
             {
-                // Gate is a destination
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_destination(t_gate, "I2");
-                // Pass the Gate and the pin type
-                EXPECT_TRUE(test_net->is_a_destination(t_gate, "I2"));
-                EXPECT_FALSE(test_net->is_a_source(t_gate, "I2"));
-                // Pass the Endpoint
-                EXPECT_TRUE(test_net->is_a_destination(test_utils::get_endpoint(t_gate, "I2")));
-                NO_COUT_TEST_BLOCK;
-                EXPECT_FALSE(test_net->is_a_source(test_utils::get_endpoint(t_gate, "I2")));
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                Endpoint* ep = test_net->add_source(test_gate, "O");
+                ASSERT_NE(ep, nullptr);
+
+                EXPECT_TRUE(test_net->is_a_source(test_gate, "O"));
+                EXPECT_FALSE(test_net->is_a_destination(test_gate, "O"));
+
+                EXPECT_TRUE(test_net->is_a_source(ep));
+                EXPECT_FALSE(test_net->is_a_destination(ep));
             }
             {
-                // Gate is a source
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_source(t_gate, "O");
-                // Pass the Gate and the pin type
-                EXPECT_TRUE(test_net->is_a_source(t_gate, "O"));
-                EXPECT_FALSE(test_net->is_a_destination(t_gate, "O"));
-                // Pass the Endpoint
-                EXPECT_TRUE(test_net->is_a_source(test_utils::get_endpoint(t_gate, "O")));
-                NO_COUT_TEST_BLOCK;
-                EXPECT_FALSE(test_net->is_a_destination(test_utils::get_endpoint(t_gate, "O")));
-            }
-            {
-                // Gate is a destination but the pin type doesn't match
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_destination(t_gate, "I2");
-                EXPECT_TRUE(test_net->is_a_destination(t_gate, "I2"));
-                EXPECT_FALSE(test_net->is_a_destination(t_gate, "I1"));
-            }
-            {
-                // Gate is a destination but the pin type doesn't exist
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_destination(t_gate, "I2");
-                EXPECT_TRUE(test_net->is_a_destination(t_gate, "I2"));
-                EXPECT_FALSE(test_net->is_a_destination(t_gate, "NEx_PIN"));
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                Endpoint* ep = test_net->add_destination(test_gate, "I");
+                ASSERT_NE(ep, nullptr);
+
+                EXPECT_FALSE(test_net->is_a_source(test_gate, "I"));
+                EXPECT_TRUE(test_net->is_a_destination(test_gate, "I"));
+
+                EXPECT_FALSE(test_net->is_a_source(ep));
+                EXPECT_TRUE(test_net->is_a_destination(ep));
             }
             // NEGATIVE
             {
-                // Gate is a nullptr
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                // invalid source
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                Endpoint* ep = test_net->add_source(test_gate, "O");
+                ASSERT_NE(ep, nullptr);
 
-                EXPECT_FALSE(test_net->is_a_destination(nullptr, ""));
-                EXPECT_FALSE(test_net->is_a_source(nullptr, ""));
-            }
-        TEST_END
-    }
-
-    /**
-     * Testing the function get_destinations
-     *
-     * Functions: get_destinations, get_destinations_by_type
-     */
-    TEST_F(NetTest, check_get_destinations) {
-        TEST_START
-            // Create a Net with two different destinations (AND3 and INV Gate)
-            auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-            Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-            auto mult_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-            Gate*
-                inv_gate = nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_1");
-            test_net->add_destination(mult_gate, "I0");
-            test_net->add_destination(inv_gate, "I");
-
-            {
-                // Get the destinations
-                std::vector<Endpoint*>
-                    dsts = {test_utils::get_endpoint(mult_gate, "I0"), test_utils::get_endpoint(inv_gate, "I")};
-
-                EXPECT_TRUE(test_utils::vectors_have_same_content(test_net->get_destinations(), dsts));
+                EXPECT_FALSE(test_net->is_a_source(test_gate, "INVALID"));
+                EXPECT_FALSE(test_net->is_a_source(test_gate, ""));
+                EXPECT_FALSE(test_net->is_a_source(test_gate, "I"));
+                EXPECT_FALSE(test_net->is_a_source(nullptr, "O"));
+                EXPECT_FALSE(test_net->is_a_source(nullptr));
             }
             {
-                // Get the destinations by passing a Gate type
-                std::vector<Endpoint*> dsts = {test_utils::get_endpoint(inv_gate, "I")};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(test_net
-                                                                      ->get_destinations(test_utils::endpoint_gate_type_filter(
-                                                                          "gate_1_to_1")),
-                                                                  dsts));
+                // invalid destination
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                Endpoint* ep = test_net->add_destination(test_gate, "I");
+                ASSERT_NE(ep, nullptr);
+
+                EXPECT_FALSE(test_net->is_a_destination(test_gate, "INVALID"));
+                EXPECT_FALSE(test_net->is_a_destination(test_gate, ""));
+                EXPECT_FALSE(test_net->is_a_destination(test_gate, "O"));
+                EXPECT_FALSE(test_net->is_a_destination(nullptr, "I"));
+                EXPECT_FALSE(test_net->is_a_destination(nullptr));
             }
         TEST_END
     }
@@ -487,34 +479,50 @@ namespace hal {
     TEST_F(NetTest, check_is_unrouted) {
         TEST_START
             {
-                // Net has a source and a destination
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-
-                auto t_gate_src = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                auto t_gate_dst = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 2);
-                test_net->add_source(t_gate_src, "O");
-                test_net->add_destination(t_gate_dst, "I0");
+                // has source and destination
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate_src = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate_src");
+                ASSERT_NE(test_gate_src, nullptr);
+                Gate* test_gate_dst = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate_dst");
+                ASSERT_NE(test_gate_dst, nullptr);
+                EXPECT_NE(test_net->add_source(test_gate_src, "O"), nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate_dst, "I"), nullptr);
 
                 EXPECT_FALSE(test_net->is_unrouted());
             }
             {
-                // Net has no destination
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-
-                auto t_gate_src = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_source(t_gate_src, "O");
+                // has source
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate_src = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate_src");
+                ASSERT_NE(test_gate_src, nullptr);
+                EXPECT_NE(test_net->add_source(test_gate_src, "O"), nullptr);
 
                 EXPECT_TRUE(test_net->is_unrouted());
             }
             {
-                // Net has no source
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                // has destination
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                Gate* test_gate_dst = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate_dst");
+                ASSERT_NE(test_gate_dst, nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate_dst, "I"), nullptr);
 
-                auto t_gate_dst = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_destination(t_gate_dst, "I0");
+                EXPECT_TRUE(test_net->is_unrouted());
+            }
+            {
+                // has no source and no destination
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
 
                 EXPECT_TRUE(test_net->is_unrouted());
             }
@@ -523,66 +531,165 @@ namespace hal {
     }
 
     /**
-     * Testing the handling of global nets
+     * Test the handling of global input and output nets.
      *
-     * Functions: mark_global_input_net, mark_global_input_net, mark_global_inout_net,
-     *            unmark_global_input_net, unmark_global_input_net, unmark_global_inout_net
-     *            is_global_input_net, is_global_input_net, is_global_inout_net
+     * Functions: mark_global_input_net, mark_global_input_net,
+     *            unmark_global_input_net, unmark_global_input_net,
+     *            is_global_input_net, is_global_input_net
      */
-    TEST_F(NetTest, check_global_nets) {
+    TEST_F(NetTest, check_global_inout_nets) {
         TEST_START
             {
-                // mark and unmark a global input Net
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                // mark and unmark a global input net
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
 
-                test_net->mark_global_input_net();
+                EXPECT_TRUE(test_net->mark_global_input_net());
                 EXPECT_TRUE(test_net->is_global_input_net());
                 EXPECT_TRUE(nl->is_global_input_net(test_net));
+                EXPECT_FALSE(test_net->is_global_output_net());
+                EXPECT_FALSE(nl->is_global_output_net(test_net));
 
-                test_net->unmark_global_input_net();
+                EXPECT_TRUE(test_net->unmark_global_input_net());
                 EXPECT_FALSE(test_net->is_global_input_net());
                 EXPECT_FALSE(nl->is_global_input_net(test_net));
-            }
-            {
-                // mark and unmark a global output Net
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-
-                test_net->mark_global_output_net();
-                EXPECT_TRUE(test_net->is_global_output_net());
-                EXPECT_TRUE(nl->is_global_output_net(test_net));
-
-                test_net->unmark_global_output_net();
                 EXPECT_FALSE(test_net->is_global_output_net());
                 EXPECT_FALSE(nl->is_global_output_net(test_net));
             }
+            {
+                // mark and unmark a global output net
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
 
+                EXPECT_TRUE(test_net->mark_global_output_net());
+                EXPECT_FALSE(test_net->is_global_input_net());
+                EXPECT_FALSE(nl->is_global_input_net(test_net));
+                EXPECT_TRUE(test_net->is_global_output_net());
+                EXPECT_TRUE(nl->is_global_output_net(test_net));
+
+                EXPECT_TRUE(test_net->unmark_global_output_net());
+                EXPECT_FALSE(test_net->is_global_output_net());
+                EXPECT_FALSE(nl->is_global_input_net(test_net));
+                EXPECT_FALSE(test_net->is_global_output_net());
+                EXPECT_FALSE(nl->is_global_output_net(test_net));
+            }
+            {
+                // mark and unmark a global input and output net
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+
+                EXPECT_TRUE(test_net->mark_global_input_net());
+                EXPECT_TRUE(test_net->mark_global_output_net());
+                EXPECT_TRUE(test_net->is_global_input_net());
+                EXPECT_TRUE(nl->is_global_input_net(test_net));
+                EXPECT_TRUE(test_net->is_global_output_net());
+                EXPECT_TRUE(nl->is_global_output_net(test_net));
+
+                EXPECT_TRUE(test_net->unmark_global_input_net());
+                EXPECT_TRUE(test_net->unmark_global_output_net());
+                EXPECT_FALSE(test_net->is_global_output_net());
+                EXPECT_FALSE(nl->is_global_input_net(test_net));
+                EXPECT_FALSE(test_net->is_global_output_net());
+                EXPECT_FALSE(nl->is_global_output_net(test_net));
+            }
+            {
+                // unmark unmarked nets
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+
+                EXPECT_FALSE(test_net->is_global_output_net());
+                EXPECT_FALSE(nl->is_global_input_net(test_net));
+                EXPECT_FALSE(test_net->is_global_output_net());
+                EXPECT_FALSE(nl->is_global_output_net(test_net));
+
+                EXPECT_FALSE(test_net->unmark_global_input_net());
+                EXPECT_FALSE(test_net->unmark_global_output_net());
+                EXPECT_FALSE(test_net->is_global_output_net());
+                EXPECT_FALSE(nl->is_global_input_net(test_net));
+                EXPECT_FALSE(test_net->is_global_output_net());
+                EXPECT_FALSE(nl->is_global_output_net(test_net));
+            }
         TEST_END
     }
 
     /**
-     * Testing the get_grouping function
+     * Test detection of GND and VCC nets.
+     *
+     * Functions: is_gnd_net, is_vcc_net
+     */
+    TEST_F(NetTest, check_gnd_vcc_nets) {
+        TEST_START
+            {
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Gate* gnd = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("GND"), "gnd");
+                ASSERT_NE(gnd, nullptr);
+                EXPECT_TRUE(gnd->mark_gnd_gate());
+                Gate* vcc = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("VCC"), "vcc");
+                ASSERT_NE(vcc, nullptr);
+                EXPECT_TRUE(vcc->mark_vcc_gate());
+
+                Net* gnd_net = nl->create_net("gnd_net");
+                ASSERT_NE(gnd_net, nullptr);
+                Net* vcc_net = nl->create_net("vcc_net");
+                ASSERT_NE(vcc_net, nullptr);
+
+                EXPECT_FALSE(gnd_net->is_gnd_net());
+                EXPECT_FALSE(vcc_net->is_gnd_net());
+                EXPECT_FALSE(gnd_net->is_vcc_net());
+                EXPECT_FALSE(vcc_net->is_vcc_net());
+
+                EXPECT_NE(gnd_net->add_source(gnd, "O"), nullptr);
+                EXPECT_NE(vcc_net->add_source(vcc, "O"), nullptr);
+
+                EXPECT_TRUE(gnd_net->is_gnd_net());
+                EXPECT_FALSE(vcc_net->is_gnd_net());
+                EXPECT_FALSE(gnd_net->is_vcc_net());
+                EXPECT_TRUE(vcc_net->is_vcc_net());
+
+                EXPECT_TRUE(gnd_net->remove_source(gnd, "O"));
+                EXPECT_TRUE(vcc_net->remove_source(vcc, "O"));
+
+                EXPECT_FALSE(gnd_net->is_gnd_net());
+                EXPECT_FALSE(vcc_net->is_gnd_net());
+                EXPECT_FALSE(gnd_net->is_vcc_net());
+                EXPECT_FALSE(vcc_net->is_vcc_net());
+            }
+        TEST_END
+    }
+
+
+    /**
+     * Test handling of groupings.
      *
      * Functions: get_grouping
      */
     TEST_F(NetTest, check_get_grouping) {
         TEST_START
             {
-                // get the grouping of a net (nullptr), then add it to another grouping and check again
                 auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
                 Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
 
                 EXPECT_EQ(test_net->get_grouping(), nullptr);
 
                 // move the net in the test_grouping
                 Grouping* test_grouping = nl->create_grouping("test_grouping");
-                test_grouping->assign_net(test_net);
-
+                ASSERT_NE(test_grouping, nullptr);
+                EXPECT_TRUE(test_grouping->assign_net(test_net));
                 EXPECT_EQ(test_net->get_grouping(), test_grouping);
 
                 // -- delete the test_grouping, so the net should be nullptr again
-                nl->delete_grouping(test_grouping);
+                EXPECT_TRUE(nl->delete_grouping(test_grouping));
                 EXPECT_EQ(test_net->get_grouping(), nullptr);
             }
         TEST_END
@@ -601,7 +708,7 @@ namespace hal {
 
             std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
             Net* test_net = test_nl->get_net_by_id(MIN_NET_ID + 13);
-            Gate* new_gate = test_nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "new_gate");
+            Gate* new_gate = test_nl->create_gate(test_nl->get_gate_library()->get_gate_type_by_name("gate_1_to_1"), "new_gate");
 
             // Small functions that should trigger certain events exactly once (these operations are executed in this order)
             std::function<void(void)> trigger_name_changed = [=](){test_net->set_name("new_name");};

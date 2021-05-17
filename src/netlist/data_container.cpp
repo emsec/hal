@@ -59,7 +59,7 @@ namespace hal
         return true;
     }
 
-    std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> DataContainer::get_data_map() const
+    const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& DataContainer::get_data_map() const
     {
         return m_data;
     }

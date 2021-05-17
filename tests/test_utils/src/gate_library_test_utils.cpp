@@ -4,9 +4,9 @@ namespace hal
 {
     namespace test_utils
     {
-        std::unique_ptr<GateLibrary> create_gate_library()
+        std::unique_ptr<GateLibrary> create_gate_library(const std::filesystem::path& file_path)
         {
-            std::unique_ptr<GateLibrary> lib = std::unique_ptr<GateLibrary>(new GateLibrary("dummy_path", "TEST LIBRARY"));
+            std::unique_ptr<GateLibrary> lib = std::unique_ptr<GateLibrary>(new GateLibrary(file_path, "TESTING_GATE_LIBRARY"));
             {
                 GateType* gnd = lib->create_gate_type("GND", {GateTypeProperty::combinational, GateTypeProperty::ground});
                 gnd->add_pin("O", PinDirection::output);
@@ -68,11 +68,38 @@ namespace hal
                 or4->add_boolean_function("O", BooleanFunction::from_string("I0 | I1 | I2 | I3"));
             }
             {
+                GateType* or2 = lib->create_gate_type("XOR2", {GateTypeProperty::combinational});
+                or2->add_pins({"I0", "I1"}, PinDirection::input);
+                or2->add_pin("O", PinDirection::output);
+                or2->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1"));
+            }
+            {
+                GateType* or3 = lib->create_gate_type("XOR3", {GateTypeProperty::combinational});
+                or3->add_pins({"I0", "I1", "I2"}, PinDirection::input);
+                or3->add_pin("O", PinDirection::output);
+                or3->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1 ^ I2"));
+            }
+            {
+                GateType* or4 = lib->create_gate_type("XOR4", {GateTypeProperty::combinational});
+                or4->add_pins({"I0", "I1", "I2", "I3"}, PinDirection::input);
+                or4->add_pin("O", PinDirection::output);
+                or4->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1 ^ I2 ^ I3"));
+            }
+            {
                 GateType* lut2 = lib->create_gate_type("LUT2", {GateTypeProperty::combinational, GateTypeProperty::lut});
                 lut2->add_pins({"I0", "I1"}, PinDirection::input);
                 lut2->add_pin("O", PinDirection::output, PinType::lut);
                 lut2->set_config_data_category("generic");
                 lut2->set_config_data_identifier("INIT");
+                lut2->set_lut_init_ascending(true);
+            }
+            {
+                GateType* lut3 = lib->create_gate_type("LUT3", {GateTypeProperty::combinational, GateTypeProperty::lut});
+                lut3->add_pins({"I0", "I1", "I2"}, PinDirection::input);
+                lut3->add_pin("O", PinDirection::output, PinType::lut);
+                lut3->set_config_data_category("generic");
+                lut3->set_config_data_identifier("INIT");
+                lut3->set_lut_init_ascending(true);
             }
             {
                 GateType* lut4 = lib->create_gate_type("LUT4", {GateTypeProperty::combinational, GateTypeProperty::lut});
@@ -80,6 +107,15 @@ namespace hal
                 lut4->add_pin("O", PinDirection::output, PinType::lut);
                 lut4->set_config_data_category("generic");
                 lut4->set_config_data_identifier("INIT");
+                lut4->set_lut_init_ascending(true);
+            }
+            {
+                GateType* lut5 = lib->create_gate_type("LUT5", {GateTypeProperty::combinational, GateTypeProperty::lut});
+                lut5->add_pins({"I0", "I1", "I2", "I3", "I4"}, PinDirection::input);
+                lut5->add_pin("O", PinDirection::output, PinType::lut);
+                lut5->set_config_data_category("generic");
+                lut5->set_config_data_identifier("INIT");
+                lut5->set_lut_init_ascending(true);
             }
             {
                 GateType* lut6 = lib->create_gate_type("LUT6", {GateTypeProperty::combinational, GateTypeProperty::lut});
@@ -87,6 +123,7 @@ namespace hal
                 lut6->add_pin("O", PinDirection::output, PinType::lut);
                 lut6->set_config_data_category("generic");
                 lut6->set_config_data_identifier("INIT");
+                lut6->set_lut_init_ascending(true);
             }
             {
                 GateType* carry = lib->create_gate_type("CARRY", {GateTypeProperty::combinational, GateTypeProperty::carry});

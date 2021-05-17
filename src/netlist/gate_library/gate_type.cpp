@@ -260,10 +260,21 @@ namespace hal
         for (const auto& [index, pin] : pins)
         {
             index_to_pin[index] = pin;
+            m_pin_to_group[pin] = group;
         }
 
         m_pin_group_indices[group] = index_to_pin;
         return true;
+    }
+
+    std::string GateType::get_pin_group(const std::string& pin) const
+    {
+        if (const auto it = m_pin_to_group.find(pin); it != m_pin_to_group.end())
+        {
+            return it->second;
+        }
+
+        return "";
     }
 
     std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> GateType::get_pin_groups() const
