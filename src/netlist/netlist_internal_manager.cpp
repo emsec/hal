@@ -1,6 +1,10 @@
 #include "hal_core/netlist/netlist_internal_manager.h"
 
 #include "hal_core/netlist/endpoint.h"
+#include "hal_core/netlist/event_system/gate_event_handler.h"
+#include "hal_core/netlist/event_system/grouping_event_handler.h"
+#include "hal_core/netlist/event_system/module_event_handler.h"
+#include "hal_core/netlist/event_system/net_event_handler.h"
 #include "hal_core/netlist/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
@@ -257,7 +261,7 @@ namespace hal
         if (net->is_a_source(gate, pin))
         {
             log_error("net",
-                      "pin '{}' of gate '{}' with ID {} is already a source of net '{}' with ID {} in netlist with ID {}.",
+                      "pin '{}' of gate '{}' with ID {} is already a source of net '{}' with ID {} in netlist with ID {}.",
                       pin,
                       gate->get_name(),
                       gate->get_id(),
@@ -272,7 +276,7 @@ namespace hal
 
         if ((std::find(output_pins.begin(), output_pins.end(), pin) == output_pins.end()))
         {
-            log_error("net", "gate '{}' with ID {} has no output pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
+            log_error("net", "gate '{}' with ID {} has no output pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
             return nullptr;
         }
 
@@ -280,7 +284,7 @@ namespace hal
         if (gate->get_fan_out_net(pin) != nullptr)
         {
             log_error("net",
-                      "gate '{}' with ID {} is already connected to net '{}' with ID {} at output pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
+                      "gate '{}' with ID {} is already connected to net '{}' with ID {} at output pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
                       gate->get_name(),
                       gate->get_id(),
                       gate->get_fan_out_net(pin)->get_name(),
@@ -363,7 +367,7 @@ namespace hal
         if (!removed)
         {
             log_warning("net",
-                        "output pin '{}' of gate '{}' with ID {} is not a source of net '{}' with ID {} in netlist with ID {}",
+                        "output pin '{}' of gate '{}' with ID {} is not a source of net '{}' with ID {} in netlist with ID {}",
                         ep->get_pin(),
                         gate->get_name(),
                         gate->get_id(),
@@ -385,7 +389,7 @@ namespace hal
         if (net->is_a_destination(gate, pin))
         {
             log_error("net",
-                      "pin '{}' of gate '{}' with ID {} is already a destination of net '{}' with ID {} in netlist with ID {}.",
+                      "pin '{}' of gate '{}' with ID {} is already a destination of net '{}' with ID {} in netlist with ID {}.",
                       pin,
                       gate->get_name(),
                       gate->get_id(),
@@ -400,7 +404,7 @@ namespace hal
 
         if ((std::find(input_pins.begin(), input_pins.end(), pin) == input_pins.end()))
         {
-            log_error("net", "gate '{}' with ID {} has no input pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
+            log_error("net", "gate '{}' with ID {} has no input pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
             return nullptr;
         }
 
@@ -408,7 +412,7 @@ namespace hal
         if (gate->get_fan_in_net(pin) != nullptr)
         {
             log_error("net",
-                      "gate '{}' with ID {} is already connected to net '{}' with ID {} at input pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
+                      "gate '{}' with ID {} is already connected to net '{}' with ID {} at input pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
                       gate->get_name(),
                       gate->get_id(),
                       gate->get_fan_in_net(pin)->get_name(),
@@ -490,7 +494,7 @@ namespace hal
         if (!removed)
         {
             log_warning("net",
-                        "input pin '{}' of gate '{}' with ID {} is not a destination of net '{}' with ID {} in netlist with ID {}",
+                        "input pin '{}' of gate '{}' with ID {} is not a destination of net '{}' with ID {} in netlist with ID {}",
                         ep->get_pin(),
                         gate->get_name(),
                         gate->get_id(),
@@ -666,7 +670,7 @@ namespace hal
         if (it == m->m_gates_map.end())
         {
             log_error("module",
-                      "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.",
+                      "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.",
                       g->get_name(),
                       g->get_id(),
                       prev_module->get_name(),
