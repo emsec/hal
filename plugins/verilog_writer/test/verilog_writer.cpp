@@ -29,7 +29,7 @@ namespace hal
         {
             NO_COUT_BLOCK;
             plugin_manager::unload_all_plugins();
-            test_utils::remove_sandbox_directory();
+            // test_utils::remove_sandbox_directory();
         }
     };
 
@@ -327,6 +327,64 @@ namespace hal
                 EXPECT_EQ(parsed_module->get_data("generic", "test_integer"), std::make_tuple(std::string("integer"), std::string("123")));
                 EXPECT_EQ(parsed_module->get_data("generic", "test_float"), std::make_tuple(std::string("floating_point"), std::string("1.001")));
                 EXPECT_EQ(parsed_module->get_data("generic", "test_bit_value"), std::make_tuple(std::string("bit_value"), std::string("1")));
+            }
+        TEST_END
+    }
+
+    /**
+     * Test writing gates with multi-bit pins.
+     *
+     * Functions: write
+     */
+    TEST_F(VerilogWriterTest, check_multi_bit_pins) {
+        TEST_START
+            {
+                std::filesystem::path path_netlist = test_utils::create_sandbox_path("test.v");
+                std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(m_gl);
+
+                Gate* gate = nl->create_gate(m_gl->get_gate_type_by_name("RAM"), "ram");
+
+                Module* top_module = nl->get_top_module();
+
+                for (u32 i = 0; i < 4; i++)
+                {
+                    Net* n = test_utils::connect_global_in(nl.get(), gate, "DATA_IN(" + std::to_string(i) + ")", "DATA_IN(" + std::to_string(i) + ")");
+                    top_module->set_input_port_name(n, "DATA_IN(" + std::to_string(i) + ")");
+
+                    n = test_utils::connect_global_out(nl.get(), gate, "DATA_OUT(" + std::to_string(i) + ")", "DATA_OUT(" + std::to_string(i) + ")");
+                    top_module->set_output_port_name(n, "DATA_OUT(" + std::to_string(i) + ")");
+
+                    n = test_utils::connect_global_in(nl.get(), gate, "ADDR(" + std::to_string(i) + ")", "ADDR(" + std::to_string(i) + ")");
+                    top_module->set_input_port_name(n, "ADDR(" + std::to_string(i) + ")");
+                }
+
+                std::vector<Endpoint*> fan_in = gate->get_fan_in_endpoints();
+                std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
+
+                VerilogWriter verilog_writer;
+                ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
+
+                VerilogParser verilog_parser;
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
+                ASSERT_NE(parsed_nl, nullptr);
+
+                std::vector<Gate*> gates = parsed_nl->get_gates();
+                ASSERT_EQ(gates.size(), 1);
+                const Gate* parsed_gate = gates.front();
+                ASSERT_NE(parsed_gate, nullptr);
+
+                EXPECT_EQ(parsed_gate->get_fan_in_nets().size(), 8);
+                EXPECT_EQ(parsed_gate->get_fan_out_nets().size(), 4);
+
+                for (const Endpoint* ep : fan_in) 
+                {
+                    EXPECT_EQ(parsed_gate->get_fan_in_net(ep->get_pin())->get_name(), ep->get_net()->get_name());
+                }
+
+                for (const Endpoint* ep : fan_out) 
+                {
+                    EXPECT_EQ(parsed_gate->get_fan_out_net(ep->get_pin())->get_name(), ep->get_net()->get_name());
+                }
             }
         TEST_END
     }
