@@ -81,8 +81,19 @@ namespace hal
          * @return The widget's type.
          */
         QString detailsTypeName() const;
+
+        /**
+         * Get the label that contains the big icon for each specific widget.
+         *
+         * @return The icon containing label.
+         */
         QLabel* bigIcon();
 
+        /**
+         * Sets the flag to hide empty sections when they are empty.
+         *
+         * @param hide - True to hide empty sections, False otherwise.
+         */
         virtual void hideSectionsWhenEmpty(bool hide);
 
     protected:

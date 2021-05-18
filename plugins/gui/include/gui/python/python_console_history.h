@@ -43,6 +43,9 @@ namespace hal
          */
         PythonConsoleHistory();
 
+        /**
+          * The destructor.
+          */
         ~PythonConsoleHistory();
 
         /**

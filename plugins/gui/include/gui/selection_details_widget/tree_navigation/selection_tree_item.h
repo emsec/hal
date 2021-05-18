@@ -94,7 +94,7 @@ namespace hal
         /**
          * Sets the parent (direct ancestor in the tree) of the item.
          *
-         * @param The parent.
+         * @param p - The parent.
          */
         void setParent(SelectionTreeItem* p);
 

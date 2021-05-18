@@ -79,6 +79,11 @@ namespace hal
          */
         void update(const u32 module_id);
 
+        /**
+         * Hides or shows all empty sections.
+         *
+         * @param hide - True to hide empty sections, False to show.
+         */
         void hideSectionsWhenEmpty(bool hide) override;
 
     public Q_SLOTS:

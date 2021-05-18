@@ -94,8 +94,23 @@ namespace hal
          */
         virtual QList<QShortcut*> createShortcuts() override;
 
+        /**
+         * Emits the forwardStdout signal.
+         *
+         * @param output - The string to forward.
+         */
         virtual void handleStdout(const QString& output) override;
+
+        /**
+         * Emits the forwardError signal.
+         *
+         * @param output - The string to forward.
+         */
         virtual void handleError(const QString& output) override;
+
+        /**
+         * Does currently nothing.
+         */
         virtual void clear() override;
 
         /**

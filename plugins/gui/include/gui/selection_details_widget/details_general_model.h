@@ -122,6 +122,12 @@ namespace hal {
          * @return The python getter code.
          */
         QString pythonGetter() const { return mPythonGetter; }
+
+        /**
+         * Checks if the text can be edited.
+         *
+         * @return True if it can be edited, False otherwise.
+         */
         bool canEditText() const;
     };
 

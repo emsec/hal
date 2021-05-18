@@ -75,6 +75,12 @@ namespace hal
          * @param rc - The new rowcount of the widget's table.
          */
         void setRowCount(int rc);
+
+        /**
+         * Sets the hideWhenEmpty flag and hides itself when there is no data to show.
+         *
+         * @param hide - True if should be hidden when empty.
+         */
         void hideWhenEmpty(bool hide);
 
     private Q_SLOTS:

@@ -81,6 +81,11 @@ namespace hal
          */
         void update(u32 mNetId);
 
+        /**
+         * Hides or shows all empty sections.
+         *
+         * @param hide - True to hide empty sections, False to show.
+         */
         void hideSectionsWhenEmpty(bool hide) override;
 
     public Q_SLOTS:

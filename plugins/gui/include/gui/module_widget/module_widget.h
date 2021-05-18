@@ -76,8 +76,21 @@ namespace hal
          * @returns the list of created shortcuts
          */
         virtual QList<QShortcut*> createShortcuts() override;
+
+        /**
+         * Opens a existing view that contains the given module, otherwise creates a new context
+         * and opens it.
+         *
+         * @param moduleId - The module to open.
+         * @param unfold - True to unfold the module upon opening.
+         */
         void openModuleInView(u32 moduleId, bool unfold);
 
+        /**
+         * Get the widget's proxy model that represents the ModuleModel.
+         *
+         * @return The proxy model.
+         */
         ModuleProxyModel* proxyModel();
 
     public Q_SLOTS:

@@ -67,6 +67,10 @@ namespace hal
           */
         ~SelectionTreeModel();
 
+        /** @name Overwritten model functions.
+          */
+        ///@{
+
         //information access
         /**
           * Overwritten Qt function that is necessary for the model. For further information pleaser
@@ -109,6 +113,7 @@ namespace hal
           * refer to the Qt documentation.
           */
         int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+        ///@}
 
         /**
          * Updates its internal data. If hasEntries is set to True, the current selection is fetched
@@ -145,7 +150,20 @@ namespace hal
         static const int sMaxColumn  = 3;
 
     public Q_SLOTS:
+        /**
+         * Q_SLOT to handle the change of a gate and emits the dataChanged signal. This
+         * function is connected to the gateNameChanged signal.
+         *
+         * @param gate - The gate whose information changed.
+         */
         void handleGateItemChanged(Gate* gate);
+
+        /**
+         * Q_SLOT to handle the change of a module and emits the dataChanged signal. This
+         * function is connected to the moduleNameChanged and moduleTypeChanged signal.
+         *
+         * @param module - The module whose information changed.
+         */
         void handleModuleItemChanged(Module* module);
 
     private:

@@ -124,6 +124,12 @@ namespace hal
          * @return The item that is represented. Returns a nullptr if the index is invalid or the conversion fails.
          */
         SelectionTreeItem* itemFromIndex(const QModelIndex& index = QModelIndex()) const;
+
+        /**
+         * Get the view's proxy model for the SelectionTreeModel.
+         *
+         * @return The proxy model.
+         */
         SelectionTreeProxyModel* proxyModel();
 
     private Q_SLOTS:

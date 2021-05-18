@@ -48,6 +48,9 @@ namespace hal
          */
         std::string get_version() const override;
 
+        /**
+         * Adds all gui related channels to the LogManager.
+         */
         void initialize_logging() override;
 
         /**
@@ -57,6 +60,12 @@ namespace hal
          */
         ProgramOptions get_cli_options() const override;
 
+        /**
+         * Executes the gui plugin.
+         *
+         * @param args - The given program arguments.
+         * @return True on success, False otherwise.
+         */
         bool exec(ProgramArguments& args) override;
     };
 }    // namespace hal

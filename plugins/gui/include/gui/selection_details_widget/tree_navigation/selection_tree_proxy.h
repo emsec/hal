@@ -62,7 +62,18 @@ namespace hal
          */
         bool isGraphicsBusy() const { return mGraphicsBusy > 0; }
 
+        /**
+         * Get the currently set sort mechanism.
+         *
+         * @return The sorting mechanism.
+         */
         gui_utility::mSortMechanism sortMechanism();
+
+        /**
+         * Sets the given sort mechanism.
+         *
+         * @param sortMechanism - The new mechanism.
+         */
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
 
     protected:

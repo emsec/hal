@@ -111,7 +111,6 @@ namespace hal
         ///@{
         bool hover();
         bool disabled();
-
         QString iconPath();
         QString iconStyle();
         ///@}

@@ -74,12 +74,17 @@ namespace hal
          */
         bool matchLabel(const QString& needle);
 
+        /** @name Q_PROPERTY READ Function
+          */
+        ///@{
+
         /**
          * Get the dirty state.
          *
          * @return The dirty state.
          */
         bool dirty() const;
+        ///@}
 
         /**
          * Loads the value of its SettingsItem and adjusts the visuals accordingly
@@ -167,12 +172,17 @@ namespace hal
 
     protected:
 
+        /** @name Q_PROPERTY WRITE Function
+          */
+        ///@{
+
         /**
          * @brief Sets the dirty state.
          *
          * @param dirty - The value to set the state to.
          */
         void setDirty(bool dirty);
+        ///@}
 
         /**
          * Compares its visual value to the SettingsItem's current value and default value and

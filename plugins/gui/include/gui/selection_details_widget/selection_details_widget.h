@@ -121,17 +121,6 @@ namespace hal
         QString searchActiveIconStyle() const;
 
         /**
-         * Q_PROPERTY READ function for the "restore"-icon path.
-         *
-         * @return The "restore" icon path.
-         */
-
-        /**
-         * Q_PROPERTY READ function for the "restore"-icon style.
-         *
-         * @return The "restore" icon style.
-         */
-        /**
          * Q_PROPERTY READ function for the "to grouping"-icon path.
          *
          * @return The "to grouping" icon path.
@@ -188,17 +177,6 @@ namespace hal
         void setSearchActiveIconStyle(const QString &style);
 
         /**
-         * Q_PROPERTY WRITE function for the "restore"-icon path.
-         *
-         * @param path - The new path.
-         */
-
-        /**
-         * Q_PROPERTY WRITE function for the "restore"-icon style.
-         *
-         * @param style - The new style.
-         */
-        /**
          * Q_PROPERTY WRITE function for the "to grouping"-icon path.
          *
          * @param path - The new path.
@@ -232,8 +210,20 @@ namespace hal
          *
          */
         void selectionToGroupingAction(const QString& existingGrpName = QString());
+
+        /**
+         * Returns a UserAction to undo an assignment defined by the given UserActionObject.
+         *
+         * @param obj - The object containing the assign action.
+         * @return The resulting unassign action.
+         */
         UserAction* groupingUnassignActionFactory(const UserActionObject& obj) const;
 
+        /**
+         * Get the tree view that displays the current selection.
+         *
+         * @return The tree view.
+         */
         SelectionTreeView* selectionTreeView();
 
     Q_SIGNALS:

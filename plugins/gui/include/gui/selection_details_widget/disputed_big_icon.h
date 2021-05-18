@@ -52,6 +52,11 @@ namespace hal
         DisputedBigIcon(const QString& iconName, QWidget* parent = nullptr);
 
     public Q_SLOTS:
+        /**
+         * Hides or shows the icon (label).
+         *
+         * @param vis - True to show, False to hide.
+         */
         void setVisibleStatus(bool vis);
 
     private:
