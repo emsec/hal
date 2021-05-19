@@ -152,9 +152,27 @@ namespace hal
         return it->second.get();
     }
 
-    std::vector<Module*> Netlist::get_modules() const
+    const std::vector<Module*>& Netlist::get_modules() const
     {
         return m_modules;
+    }
+
+    std::vector<Module*> Netlist::get_modules(const std::function<bool(Module*)>& filter) const
+    {
+        if (!filter)
+        {
+            return m_modules;
+        }
+        std::vector<Module*> res;
+        for (auto module : m_modules)
+        {
+            if (!filter(module))
+            {
+                continue;
+            }
+            res.push_back(module);
+        }
+        return res;
     }
 
     bool Netlist::is_module_in_netlist(Module* module) const
@@ -211,23 +229,25 @@ namespace hal
         return nullptr;
     }
 
+    const std::vector<Gate*>& Netlist::get_gates() const
+    {
+        return m_gates;
+    }
+
     std::vector<Gate*> Netlist::get_gates(const std::function<bool(Gate*)>& filter) const
     {
-        std::vector<Gate*> res;
         if (!filter)
         {
-            res = m_gates;
+            return m_gates;
         }
-        else
+        std::vector<Gate*> res;
+        for (Gate* g : m_gates)
         {
-            for (Gate* g : m_gates)
+            if (!filter(g))
             {
-                if (!filter(g))
-                {
-                    continue;
-                }
-                res.push_back(g);
+                continue;
             }
+            res.push_back(g);
         }
 
         return res;
@@ -366,6 +386,11 @@ namespace hal
             return nullptr;
         }
         return it->second.get();
+    }
+
+    const std::vector<Net*>& Netlist::get_nets() const
+    {
+        return m_nets;
     }
 
     std::vector<Net*> Netlist::get_nets(const std::function<bool(Net*)>& filter) const
