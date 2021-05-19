@@ -50,6 +50,7 @@ namespace hal
 
     void EventHandler::notify(ModuleEvent::event c, Module* module, u32 associated_data)
     {
+        ModuleEvent::dump(c, true);
         if (module_event_enabled)
         {
             m_module_callback(c, module, associated_data);

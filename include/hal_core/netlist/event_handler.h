@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/utilities/callback_hook.h"
+#include <iostream>
 
 // TODO convert namespace to class
 
@@ -101,6 +102,26 @@ namespace hal
                 input_port_name_changed,     ///< associated_data = id of respective net
                 output_port_name_changed,    ///< associated_data = id of respective net
             };
+
+            static void dump(event c, bool isInstance)
+            {
+                const char* cinst = isInstance ? "*** new ***" : "... old ...";
+
+                switch(c)
+                {
+                case created:	                 std::cerr << cinst << "event created" << std::endl; break;
+                case removed:	                 std::cerr << cinst << "event removed" << std::endl; break;
+                case name_changed:	             std::cerr << cinst << "event name_changed" << std::endl; break;
+                case type_changed:	             std::cerr << cinst << "event type_changed" << std::endl; break;
+                case parent_changed:	         std::cerr << cinst << "event parent_changed" << std::endl; break;
+                case submodule_added:	         std::cerr << cinst << "event submodule_added" << std::endl; break;
+                case submodule_removed:	         std::cerr << cinst << "event submodule_removed" << std::endl; break;
+                case gate_assigned:	             std::cerr << cinst << "event gate_assigned" << std::endl; break;
+                case gate_removed:	             std::cerr << cinst << "event gate_removed" << std::endl; break;
+                case input_port_name_changed:	 std::cerr << cinst << "event input_port_name_changed" << std::endl; break;
+                case output_port_name_changed:	 std::cerr << cinst << "event output_port_name_changed" << std::endl; break;
+                }
+            }
     };
 
     class NetEvent{
