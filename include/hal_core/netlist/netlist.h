@@ -709,6 +709,12 @@ namespace hal
          */
         void set_free_grouping_ids(const std::set<u32> ids);
 
+        /**
+         * Get event handler. Should only be used to register callbacks
+         *
+         * @return Pointer to netlist event handler
+         */
+        EventHandler* get_event_handler() const;
     private:
         /* stores the pointer to the netlist internal manager */
         NetlistInternalManager* m_manager;

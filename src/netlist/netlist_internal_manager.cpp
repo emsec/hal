@@ -1,10 +1,6 @@
 #include "hal_core/netlist/netlist_internal_manager.h"
 
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/event_system/gate_event_handler.h"
-#include "hal_core/netlist/event_system/grouping_event_handler.h"
-#include "hal_core/netlist/event_system/module_event_handler.h"
-#include "hal_core/netlist/event_system/net_event_handler.h"
 #include "hal_core/netlist/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
@@ -643,8 +639,6 @@ namespace hal
         }
 
         auto prev_module = g->m_module;
-        module_event_handler::notify(module_event_handler::event::gate_removed, prev_module, g->get_id());
-        module_event_handler::notify(module_event_handler::event::gate_assigned, m, g->get_id());
         if (prev_module == m)
         {
             log_error("module",
@@ -688,8 +682,8 @@ namespace hal
         g->m_module = m;
 
         // notify event handlers
-        module_event_handler::notify(module_event_handler::event::gate_removed, m, g->get_id());
-        module_event_handler::notify(module_event_handler::event::gate_assigned, m_netlist->m_top_module, g->get_id());
+        m_event_handler->notify(ModuleEvent::event::gate_removed,prev_module,g->get_id());
+        m_event_handler->notify(ModuleEvent::event::gate_assigned,m,g->get_id());
         return true;
     }
 

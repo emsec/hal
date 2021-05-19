@@ -574,6 +574,7 @@ namespace hal
             auto selected_lib = libraries[items.indexOf(selected)];
             gNetlistOwner     = netlist_factory::create_netlist(selected_lib);
             gNetlist          = gNetlistOwner.get();
+            gNetlistRelay->registerNetlistCallbacks();
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(true);
             Q_EMIT FileManager::get_instance()->fileOpened("new netlist");

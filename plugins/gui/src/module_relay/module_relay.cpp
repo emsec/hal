@@ -49,12 +49,12 @@ namespace hal
         // MANUAL UPDATE OF SUBSCRIBERS
     }
 
-    void ModuleRelay::handleModuleEvent(module_event_handler::event ev, Module* object, u32 associated_data)
+    void ModuleRelay::handleModuleEvent(ModuleEvent::event ev, Module* object, u32 associated_data)
     {
         Q_UNUSED(associated_data);
         switch (ev)
         {
-            case module_event_handler::event::created: {
+            case ModuleEvent::event::created: {
                 //< no associated_data
 
                 ModuleItem* parent_item = mModuleItems.value(object->get_parent_module()->get_id());
@@ -64,52 +64,52 @@ namespace hal
 
                 break;
             }
-            case module_event_handler::event::removed: {
+            case ModuleEvent::event::removed: {
                 //< no associated_data
 
                 break;
             }
-            case module_event_handler::event::name_changed: {
+            case ModuleEvent::event::name_changed: {
                 //< no associated_data
 
                 break;
             }
-            case module_event_handler::event::type_changed: {
+            case ModuleEvent::event::type_changed: {
                 //< no associated_data
 
                 break;
             }
-            case module_event_handler::event::parent_changed: {
+            case ModuleEvent::event::parent_changed: {
                 //< no associated_data
 
                 break;
             }
-            case module_event_handler::event::submodule_added: {
+            case ModuleEvent::event::submodule_added: {
                 //< associated_data = id of added module
 
                 break;
             }
-            case module_event_handler::event::submodule_removed: {
+            case ModuleEvent::event::submodule_removed: {
                 //< associated_data = id of removed module
 
                 break;
             }
-            case module_event_handler::event::gate_assigned: {
+            case ModuleEvent::event::gate_assigned: {
                 //< associated_data = id of inserted gate
 
                 break;
             }
-            case module_event_handler::event::gate_removed: {
+            case ModuleEvent::event::gate_removed: {
                 //< associated_data = id of removed gate
 
                 break;
             }
-            case module_event_handler::event::input_port_name_changed: {
+            case ModuleEvent::event::input_port_name_changed: {
                 //< associated_data = id of respective net
 
                 break;
             }
-            case module_event_handler::event::output_port_name_changed: {
+            case ModuleEvent::event::output_port_name_changed: {
                 //< associated_data = id of respective net
 
                 break;

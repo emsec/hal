@@ -11,19 +11,19 @@ namespace hal
                     std::function<void(netlist_event_handler::event, Netlist*, u32)>
                     (std::bind(&NetlistWatcher::handleNetlistEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
-        net_event_handler::register_callback(
-                    "NetlistWatcher",
-                    std::function<void(net_event_handler::event, Net*, u32)>
+        gNetlist->get_event_handler()->register_callback(
+                    "NetWatcher",
+                    std::function<void(NetEvent::event, Net*, u32)>
                     (std::bind(&NetlistWatcher::handleNetEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
-        gate_event_handler::register_callback(
-                    "NetlistWatcher",
-                    std::function<void(gate_event_handler::event, Gate*, u32)>
+        gNetlist->get_event_handler()->register_callback(
+                    "GateWatcher",
+                    std::function<void(GateEvent::event, Gate*, u32)>
                     (std::bind(&NetlistWatcher::handleGateEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
-        module_event_handler::register_callback(
-                    "NetlistWatcher",
-                    std::function<void(module_event_handler::event, Module*, u32)>
+        gNetlist->get_event_handler()->register_callback(
+                    "ModuleWatcher",
+                    std::function<void(ModuleEvent::event, Module*, u32)>
                     (std::bind(&NetlistWatcher::handleModuleEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
         reset();
@@ -32,12 +32,12 @@ namespace hal
     NetlistWatcher::~NetlistWatcher()
     {
         netlist_event_handler::unregister_callback("NetlistWatcher");
-        net_event_handler::unregister_callback("NetlistWatcher");
-        gate_event_handler::unregister_callback("NetlistWatcher");
-        module_event_handler::unregister_callback("NetlistWatcher");
+        gNetlist->get_event_handler()->unregister_callback("ModuleWatcher");
+        gNetlist->get_event_handler()->unregister_callback("GateWatcher");
+        gNetlist->get_event_handler()->unregister_callback("NetWatcher");
     }
 
-    void NetlistWatcher::handleNetlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data)
+    void NetlistWatcher::handleNetlistEvent(netlist_event_handler::event ev, Netlist *object, u32 associated_data)
     {
         Q_UNUSED(ev);
         Q_UNUSED(object);
@@ -45,28 +45,36 @@ namespace hal
         handleNetlistModified();
     }
 
-    void NetlistWatcher::handleModuleEvent(module_event_handler::event ev, Module* object, u32 associated_data)
+    void NetlistWatcher::handleModuleEvent(ModuleEvent::event ev, Module *mod, u32 associated_data)
     {
         Q_UNUSED(ev);
-        Q_UNUSED(object);
+        Q_UNUSED(mod);
         Q_UNUSED(associated_data);
         handleNetlistModified();
     }
 
-    void NetlistWatcher::handleGateEvent(gate_event_handler::event ev, Gate* object, u32 associated_data)
+    void NetlistWatcher::handleGateEvent(GateEvent::event ev, Gate *gat, u32 associated_data)
     {
         Q_UNUSED(ev);
-        Q_UNUSED(object);
+        Q_UNUSED(gat);
         Q_UNUSED(associated_data);
         handleNetlistModified();
     }
 
-    void NetlistWatcher::handleNetEvent(net_event_handler::event ev, Net* object, u32 associated_data)
+    void NetlistWatcher::handleNetEvent(NetEvent::event ev, Net *net, u32 associated_data)
     {
         Q_UNUSED(ev);
-        Q_UNUSED(object);
+        Q_UNUSED(net);
         Q_UNUSED(associated_data);
         handleNetlistModified();
+    }
+
+    void NetlistWatcher::handleGroupingEvent(GroupingEvent::event ev, Grouping *grp, u32 associated_data)
+    {
+        Q_UNUSED(ev);
+        Q_UNUSED(grp);
+        Q_UNUSED(associated_data);
+        // TODO: update grouping widget
     }
 
     void NetlistWatcher::reset()

@@ -25,7 +25,7 @@
 
 #include "hal_core/defines.h"
 
-#include "hal_core/netlist/event_system/module_event_handler.h"
+#include "hal_core/netlist/event_handler.h"
 
 #include "gui/module_model/module_item.h"
 #include "gui/module_model/module_model.h"
@@ -63,7 +63,7 @@ namespace hal
         void setModuleHidden(const u32 id, const bool hidden);
 
     public Q_SLOTS:
-        void handleModuleEvent(module_event_handler::event ev, Module* object, u32 associated_data);
+        void handleModuleEvent(ModuleEvent::event ev, Module* object, u32 associated_data);
 
     private:
         QMap<u32, ModuleItem*> mModuleItems;

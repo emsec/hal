@@ -254,6 +254,7 @@ namespace hal
             {
                 gNetlistOwner = std::move(netlist);
                 gNetlist       = gNetlistOwner.get();
+                gNetlistRelay->registerNetlistCallbacks();
                 fileSuccessfullyLoaded(logical_file_name);
             }
             else
@@ -279,6 +280,7 @@ namespace hal
             {
                 gNetlistOwner = std::move(netlist);
                 gNetlist       = gNetlistOwner.get();
+                gNetlistRelay->registerNetlistCallbacks();
                 fileSuccessfullyLoaded(logical_file_name);
                 return;
             }
@@ -306,6 +308,7 @@ namespace hal
             log_info("gui", "One compatible gate library found.");
             gNetlistOwner = std::move(netlists.at(0));
             gNetlist       = gNetlistOwner.get();
+            gNetlistRelay->registerNetlistCallbacks();
         }
         else
         {
@@ -333,6 +336,7 @@ namespace hal
                     {
                         gNetlistOwner = std::move(n);
                         gNetlist       = gNetlistOwner.get();
+                        gNetlistRelay->registerNetlistCallbacks();
                     }
                 }
             }
@@ -355,6 +359,7 @@ namespace hal
 
         // CHECK DIRTY AND TRIGGER SAVE ROUTINE
 
+        gNetlistRelay->unregisterNetlistCallbacks();
         mFileWatcher->removePath(mFileName);
         mFileName = "";
         mFileOpen = false;

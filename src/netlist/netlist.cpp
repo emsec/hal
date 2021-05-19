@@ -93,6 +93,11 @@ namespace hal
         return m_gate_library;
     }
 
+    EventHandler* Netlist::get_event_handler() const
+    {
+        return m_event_handler;
+    }
+
     void Netlist::clear_caches()
     {
         m_manager->clear_caches();
