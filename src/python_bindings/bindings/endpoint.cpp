@@ -14,6 +14,20 @@ namespace hal
             :type: hal_py.Gate
         )");
 
+        py_endpoint.def(py::self == py::self, R"(
+            Check whether two endpoints are equal.
+
+            :returns: True if both endpoints are equal, false otherwise.
+            :rtype: bool
+        )");
+
+        py_endpoint.def(py::self != py::self, R"(
+            Check whether two endpoints are unequal.
+
+            :returns: True if both endpoints are unequal, false otherwise.
+            :rtype: bool
+        )");
+
         py_endpoint.def("get_gate", &Endpoint::get_gate, R"(
             Get the gate associated with the endpoint.
 

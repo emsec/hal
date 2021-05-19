@@ -8,6 +8,22 @@ namespace hal
             Netlist class containing information about the netlist including its gates, modules, nets, and groupings as well as the underlying gate library.
         )");
 
+        py_netlist.def(py::self == py::self, R"(
+            Check whether two netlists are equal.
+            Does not check netlist IDs.
+
+            :returns: True if both netlists are equal, false otherwise.
+            :rtype: bool
+        )");
+
+        py_netlist.def(py::self != py::self, R"(
+            Check whether two netlists are unequal.
+            Does not check netlist IDs.
+
+            :returns: True if both netlists are unequal, false otherwise.
+            :rtype: bool
+        )");
+
         py_netlist.def(py::init<GateLibrary*>(), py::arg("gate_library"), R"(
             Construct a new netlist for the specified gate library.
 
