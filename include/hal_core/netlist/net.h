@@ -52,6 +52,22 @@ namespace hal
     {
     public:
         /**
+         * Check whether two nets are equal.
+         *
+         * @param[in] other - The net to compare against.
+         * @returns True if both nets are equal, false otherwise.
+         */
+        bool operator==(const Net& other) const;
+
+        /**
+         * Check whether two nets are unequal.
+         *
+         * @param[in] other - The net to compare against.
+         * @returns True if both nets are unequal, false otherwise.
+         */
+        bool operator!=(const Net& other) const;
+
+        /**
          * Get the unique id of the net.
          *
          * @returns The unique id.

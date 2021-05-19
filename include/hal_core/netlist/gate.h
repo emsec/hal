@@ -55,6 +55,24 @@ namespace hal
     {
     public:
         /**
+         * Check whether two gates are equal.
+         * Does not check for connected nets or containing module.
+         *
+         * @param[in] other - The gate to compare against.
+         * @returns True if both gates are equal, false otherwise.
+         */
+        bool operator==(const Gate& other) const;
+
+        /**
+         * Check whether two gates are unequal.
+         * Does not check for connected nets or containing module.
+         *
+         * @param[in] other - The gate to compare against.
+         * @returns True if both gates are unequal, false otherwise.
+         */
+        bool operator!=(const Gate& other) const;
+
+        /**
          * Get the unique id of the gate.
          *
          * @returns The unique id.

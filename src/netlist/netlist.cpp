@@ -27,6 +27,55 @@ namespace hal
         delete m_manager;
     }
 
+    bool Netlist::operator==(const Netlist& other) const
+    {
+        if (m_file_name != other.get_input_filename() || m_design_name != other.get_design_name() || m_device_name != other.get_device_name())
+        {
+            return false;
+        }
+
+        if (m_gate_library != other.get_gate_library())
+        {
+            return false;
+        }
+
+        if (m_gates.size() != other.get_gates().size() || m_nets.size() != other.get_nets().size() || m_modules.size() != other.get_modules().size())
+        {
+            return false;
+        }
+
+        for (const Gate* gate : other.get_gates())
+        {
+            if (*get_gate_by_id(gate->get_id()) != *gate)
+            {
+                return false;
+            }
+        }
+
+        for (const Net* net : other.get_nets())
+        {
+            if (*get_net_by_id(net->get_id()) != *net)
+            {
+                return false;
+            }
+        }
+
+        for (const Module* module : other.get_modules())
+        {
+            if (*get_module_by_id(module->get_id()) != *module)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool Netlist::operator!=(const Netlist& other) const
+    {
+        return !operator==(other);
+    }
+
     u32 Netlist::get_id() const
     {
         return m_netlist_id;

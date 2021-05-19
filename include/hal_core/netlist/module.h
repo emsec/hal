@@ -54,6 +54,22 @@ namespace hal
     {
     public:
         /**
+         * Check whether two modules are equal.
+         *
+         * @param[in] other - The module to compare again.
+         * @returns True if both modules are equal, false otherwise.
+         */
+        bool operator==(const Module& other) const;
+
+        /**
+         * Check whether two modules are unequal.
+         *
+         * @param[in] other - The module to compare again.
+         * @returns True if both modules are unequal, false otherwise.
+         */
+        bool operator!=(const Module& other) const;
+
+        /**
          * Get the unique ID of the module.
          *
          * @returns The unique id.
@@ -354,6 +370,8 @@ namespace hal
         mutable std::set<Net*> m_named_output_nets;                       // ordering necessary, cannot be replaced with unordered_set
         mutable std::map<Net*, std::string> m_input_net_to_port_name;     // ordering necessary, cannot be replaced with unordered_map
         mutable std::map<Net*, std::string> m_output_net_to_port_name;    // ordering necessary, cannot be replaced with unordered_map
+        mutable std::unordered_set<std::string> m_input_port_names;
+        mutable std::unordered_set<std::string> m_output_port_names;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;

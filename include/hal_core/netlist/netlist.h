@@ -65,6 +65,24 @@ namespace hal
         ~Netlist();
 
         /**
+         * Check whether two netlists are equal.
+         * Does not check netlist IDs.
+         *
+         * @param[in] other - The netlist to compare against.
+         * @returns True if both netlists are equal, false otherwise.
+         */
+        bool operator==(const Netlist& other) const;
+
+        /**
+         * Check whether two netlists are unequal.
+         * Does not check netlist IDs.
+         *
+         * @param[in] other - The netlist to compare against.
+         * @returns True if both netlists are unequal, false otherwise.
+         */
+        bool operator!=(const Netlist& other) const;
+
+        /**
          * Get the ID of the netlist.<br>
          * If not explicitly set, the ID defaults to 0.
          *
@@ -197,13 +215,20 @@ namespace hal
         Gate* get_gate_by_id(const u32 gate_id) const;
 
         /**
-         * Get all gates contained within the netlist.<br>
-         * A filter can be applied to the result to only get gates matching the specified condition.
+         * Get all gates contained within the netlist.
          *
-         * @param[in] filter - Filter to be applied to the gates.
          * @return A vector of gates.
          */
-        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr) const;
+        const std::vector<Gate*>& get_gates() const;
+
+        /**
+         * Get all gates contained within the netlist.<br>
+         * The filter is evaluated on every gate such that the result only contains gates matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each gate.
+         * @return A vector of gates.
+         */
+        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter) const;
 
         /**
          * Mark a gate as a global VCC gate.
@@ -324,13 +349,20 @@ namespace hal
         Net* get_net_by_id(u32 net_id) const;
 
         /**
-         * Get all nets contained within the netlist.<br>
-         * A filter can be applied to the result to only get nets matching the specified condition.
+         * Get all nets contained within the netlist.
          *
-         * @param[in] filter - Filter to be applied to the nets.
          * @return A vector of nets.
          */
-        std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr) const;
+        const std::vector<Net*>& get_nets() const;
+
+        /**
+         * Get all nets contained within the netlist.<br>
+         * The filter is evaluated on every net such that the result only contains nets matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each net.
+         * @return A vector of nets.
+         */
+        std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter) const;
 
         /**
          * Mark a net as a global input net.
@@ -455,11 +487,20 @@ namespace hal
         Module* get_module_by_id(u32 module_id) const;
 
         /**
-         * Get all modules contained within the netlist including the top module.
+         * Get all modules contained within the netlist, including the top module.
          *
          * @return A vector of modules.
          */
-        std::vector<Module*> get_modules() const;
+        const std::vector<Module*>& get_modules() const;
+
+        /**
+         * Get all modules contained within the netlist, including the top module.<br>
+         * The filter is evaluated on every module such that the result only contains modules matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each module.
+         * @return A vector of modules.
+         */
+        std::vector<Module*> get_modules(const std::function<bool(Module*)>& filter) const;
 
         /**
          * Get the top module of the netlist.
