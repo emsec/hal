@@ -189,7 +189,7 @@ namespace hal
          * @param[in] input_net - The input net.
          * @returns The input port name.
          */
-        std::string get_input_port_name(Net* input_net);
+        std::string get_input_port_name(Net* input_net) const;
 
         /**
          * Get the input net of the port corresponding to the specified port name.
@@ -197,7 +197,7 @@ namespace hal
          * @param[in] port_name - The input port name.
          * @returns The input net or a nullptr.
          */
-        Net* get_input_port_net(const std::string& port_name);
+        Net* get_input_port_net(const std::string& port_name) const;
 
         /**
          * Get the mapping of all input nets to their corresponding port names.
@@ -234,7 +234,7 @@ namespace hal
          * @param[in] output_net - The output net.
          * @returns The output port name.
          */
-        std::string get_output_port_name(Net* output_net);
+        std::string get_output_port_name(Net* output_net) const;
 
         /**
          * Get the output net of the port corresponding to the specified port name.
@@ -242,7 +242,7 @@ namespace hal
          * @param[in] port_name - The output port name.
          * @returns The output net or a nullptr.
          */
-        Net* get_output_port_net(const std::string& port_name);
+        Net* get_output_port_net(const std::string& port_name) const;
 
         /**
          * Get the mapping of all output nets to their corresponding port names.
@@ -270,7 +270,7 @@ namespace hal
          * 
          * @param[in] is_dirty - True to mark caches as dirty, false otherwise.
          */
-        void set_cache_dirty(bool is_dirty = true); 
+        void set_cache_dirty(bool is_dirty = true);
 
         /*
          * ################################################################

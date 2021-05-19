@@ -73,7 +73,7 @@ namespace hal
          *
          * @returns The name.
          */
-        std::string get_name() const;
+        const std::string& get_name() const;
 
         /**
          * Set the name of the gate.
@@ -220,14 +220,14 @@ namespace hal
          *
          * @returns True if the gate is a global vcc gate.
          */
-        bool is_vcc_gate();
+        bool is_vcc_gate() const;
 
         /**
          * Checks whether this gate is a global gnd gate.
          *
          * @returns True if the gate is a global gnd gate.
          */
-        bool is_gnd_gate();
+        bool is_gnd_gate() const;
 
         /*
          *      pin specific functions
@@ -412,6 +412,6 @@ namespace hal
         std::vector<Net*> m_out_nets;
 
         /* dedicated functions */
-        std::map<std::string, BooleanFunction> m_functions;
+        std::unordered_map<std::string, BooleanFunction> m_functions;
     };
 }    // namespace hal

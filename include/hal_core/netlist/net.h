@@ -70,7 +70,7 @@ namespace hal
          *
          * @returns The name.
          */
-        std::string get_name() const;
+        const std::string& get_name() const;
 
         /**
          * Set the name of the net.
@@ -282,14 +282,14 @@ namespace hal
          *
          * @returns True if the net is a global input net.
          */
-        bool is_global_input_net();
+        bool is_global_input_net() const;
 
         /**
          * Checks whether this net is a global output net.
          *
          * @returns True if the net is a global output net.
          */
-        bool is_global_output_net();
+        bool is_global_output_net() const;
 
     private:
         friend class NetlistInternalManager;

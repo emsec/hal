@@ -254,7 +254,7 @@ namespace hal
         /**
          * Check whether two Boolean functions are equal.
          *
-         * @param[in] other - The Boolean function to compare to.
+         * @param[in] other - The Boolean function to compare against.
          * @returns True if both Boolean functions are equal, false otherwise.
          */
         bool operator==(const BooleanFunction& other) const;

@@ -243,7 +243,7 @@ namespace hal
          * @param[in] gate - The gate to check.
          * @returns True if the gate is a global VCC gate, false otherwise.
          */
-        bool is_vcc_gate(Gate* gate) const;
+        bool is_vcc_gate(const Gate* gate) const;
 
         /**
          * Check whether a gate is a global GND gate.
@@ -251,21 +251,21 @@ namespace hal
          * @param[in] gate - The gate to check.
          * @returns True if the gate is a global GND gate, false otherwise.
          */
-        bool is_gnd_gate(Gate* gate) const;
+        bool is_gnd_gate(const Gate* gate) const;
 
         /**
          * Get all global VCC gates.
          *
          * @returns A vector of gates.
          */
-        std::vector<Gate*> get_vcc_gates() const;
+        const std::vector<Gate*>& get_vcc_gates() const;
 
         /**
          * Get all global GND gates.
          *
          * @returns A vector of gates.
          */
-        std::vector<Gate*> get_gnd_gates() const;
+        const std::vector<Gate*>& get_gnd_gates() const;
 
         /*
          * ################################################################
@@ -370,7 +370,7 @@ namespace hal
          * @param[in] net - The net to check.
          * @returns True if the net is a global input net, false otherwise.
          */
-        bool is_global_input_net(Net* net) const;
+        bool is_global_input_net(const Net* net) const;
 
         /**
          * Checks whether a net is a global output net.
@@ -378,21 +378,21 @@ namespace hal
          * @param[in] net - The net to check.
          * @returns True if the net is a global output net, false otherwise.
          */
-        bool is_global_output_net(Net* net) const;
+        bool is_global_output_net(const Net* net) const;
 
         /**
          * Get all global input nets.
          *
          * @returns A vector of nets.
          */
-        std::vector<Net*> get_global_input_nets() const;
+        const std::vector<Net*>& get_global_input_nets() const;
 
         /**
          * Get all global output nets.
          *
          * @returns A vector of nets.
          */
-        std::vector<Net*> get_global_output_nets() const;
+        const std::vector<Net*>& get_global_output_nets() const;
 
         /*
          * ################################################################

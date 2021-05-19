@@ -57,7 +57,7 @@ namespace hal
         return m_internal_manager->m_netlist;
     }
 
-    std::string Gate::get_name() const
+    const std::string& Gate::get_name() const
     {
         return m_name;
     }
@@ -369,12 +369,12 @@ namespace hal
         return m_internal_manager->m_netlist->unmark_gnd_gate(this);
     }
 
-    bool Gate::is_vcc_gate()
+    bool Gate::is_vcc_gate() const
     {
         return m_internal_manager->m_netlist->is_vcc_gate(this);
     }
 
-    bool Gate::is_gnd_gate()
+    bool Gate::is_gnd_gate() const
     {
         return m_internal_manager->m_netlist->is_gnd_gate(this);
     }

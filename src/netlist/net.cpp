@@ -31,7 +31,7 @@ namespace hal
         return m_internal_manager->m_netlist;
     }
 
-    std::string Net::get_name() const
+    const std::string& Net::get_name() const
     {
         return m_name;
     }
@@ -74,7 +74,7 @@ namespace hal
 
     bool Net::remove_source(Endpoint* ep)
     {
-        if(ep == nullptr) 
+        if (ep == nullptr)
         {
             return false;
         }
@@ -154,11 +154,11 @@ namespace hal
 
     bool Net::remove_destination(Endpoint* ep)
     {
-        if(ep == nullptr) 
+        if (ep == nullptr)
         {
             return false;
         }
-        
+
         return m_internal_manager->net_remove_destination(this, ep);
     }
 
@@ -240,12 +240,12 @@ namespace hal
         return m_internal_manager->m_netlist->unmark_global_output_net(this);
     }
 
-    bool Net::is_global_input_net()
+    bool Net::is_global_input_net() const
     {
         return m_internal_manager->m_netlist->is_global_input_net(this);
     }
 
-    bool Net::is_global_output_net()
+    bool Net::is_global_output_net() const
     {
         return m_internal_manager->m_netlist->is_global_output_net(this);
     }

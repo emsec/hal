@@ -299,22 +299,22 @@ namespace hal
         return true;
     }
 
-    bool Netlist::is_vcc_gate(Gate* gate) const
+    bool Netlist::is_vcc_gate(const Gate* gate) const
     {
         return (std::find(m_vcc_gates.begin(), m_vcc_gates.end(), gate) != m_vcc_gates.end());
     }
 
-    bool Netlist::is_gnd_gate(Gate* gate) const
+    bool Netlist::is_gnd_gate(const Gate* gate) const
     {
         return (std::find(m_gnd_gates.begin(), m_gnd_gates.end(), gate) != m_gnd_gates.end());
     }
 
-    std::vector<Gate*> Netlist::get_vcc_gates() const
+    const std::vector<Gate*>& Netlist::get_vcc_gates() const
     {
         return m_vcc_gates;
     }
 
-    std::vector<Gate*> Netlist::get_gnd_gates() const
+    const std::vector<Gate*>& Netlist::get_gnd_gates() const
     {
         return m_gnd_gates;
     }
@@ -520,22 +520,22 @@ namespace hal
         return true;
     }
 
-    bool Netlist::is_global_input_net(Net* n) const
+    bool Netlist::is_global_input_net(const Net* n) const
     {
         return (std::find(m_global_input_nets.begin(), m_global_input_nets.end(), n) != m_global_input_nets.end());
     }
 
-    bool Netlist::is_global_output_net(Net* n) const
+    bool Netlist::is_global_output_net(const Net* n) const
     {
         return (std::find(m_global_output_nets.begin(), m_global_output_nets.end(), n) != m_global_output_nets.end());
     }
 
-    std::vector<Net*> Netlist::get_global_input_nets() const
+    const std::vector<Net*>& Netlist::get_global_input_nets() const
     {
         return m_global_input_nets;
     }
 
-    std::vector<Net*> Netlist::get_global_output_nets() const
+    const std::vector<Net*>& Netlist::get_global_output_nets() const
     {
         return m_global_output_nets;
     }
