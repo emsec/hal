@@ -42,7 +42,7 @@ namespace hal
         for (const Endpoint* ep_n1 : m_sources_raw)
         {
             if (std::find_if(sources_n2.begin(), sources_n2.end(), [ep_n1](const Endpoint* ep_n2) { return ep_n1->get_pin() == ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
-                != sources_n2.end())
+                == sources_n2.end())
             {
                 return false;
             }
@@ -53,7 +53,7 @@ namespace hal
         {
             if (std::find_if(
                     destinations_n2.begin(), destinations_n2.end(), [ep_n1](const Endpoint* ep_n2) { return ep_n1->get_pin() == ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
-                != destinations_n2.end())
+                == destinations_n2.end())
             {
                 return false;
             }
