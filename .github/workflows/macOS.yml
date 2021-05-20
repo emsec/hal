@@ -128,7 +128,7 @@ jobs:
         run: |
           cd build
           ninja
-          ctest
+          ctest --rerun-failed --output-on-failure
         #  ninja -v hal_coverage
         # bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
         env:

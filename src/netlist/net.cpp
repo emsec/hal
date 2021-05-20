@@ -76,6 +76,10 @@ namespace hal
 
     bool Net::remove_source(Endpoint* ep)
     {
+        if(ep == nullptr) 
+        {
+            return false;
+        }
         return m_internal_manager->net_remove_source(this, ep);
     }
 
@@ -152,6 +156,11 @@ namespace hal
 
     bool Net::remove_destination(Endpoint* ep)
     {
+        if(ep == nullptr) 
+        {
+            return false;
+        }
+        
         return m_internal_manager->net_remove_destination(this, ep);
     }
 
@@ -200,7 +209,17 @@ namespace hal
 
     bool Net::is_unrouted() const
     {
-        return ((this->get_num_of_sources() == 0) || (this->get_num_of_destinations() == 0));
+        return ((m_sources.size() == 0) || (m_destinations.size() == 0));
+    }
+
+    bool Net::is_gnd_net() const
+    {
+        return m_sources.size() == 1 && m_sources.front()->get_gate()->is_gnd_gate();
+    }
+
+    bool Net::is_vcc_net() const
+    {
+        return m_sources.size() == 1 && m_sources.front()->get_gate()->is_vcc_gate();
     }
 
     bool Net::mark_global_input_net()

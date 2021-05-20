@@ -453,6 +453,7 @@ namespace hal
         // parse parameter list
         if (m_token_stream.consume("#("))
         {
+            // TODO add support for parameter parsing
             m_token_stream.consume_until(")");
             m_token_stream.consume(")", true);
             log_warning("verilog_parser", "cannot parse parameter list provided for module '{}'.", module_name);
@@ -494,6 +495,13 @@ namespace hal
                 {
                     return false;
                 }
+            }
+            else if (next_token == "parameter")
+            {
+                // TODO add support for parameter parsing
+                m_token_stream.consume_until(";");
+                m_token_stream.consume(";", true);
+                log_warning("verilog_parser", "cannot parse parameter provided for module '{}'.", module_name);
             }
             else if (next_token == "assign")
             {
@@ -866,7 +874,7 @@ namespace hal
                         skip = true;
                     }
 
-                    if (value.size() == 1)
+                    if (value == "0" || value == "1")
                     {
                         data_type = "bit_value";
                     }
@@ -1130,9 +1138,9 @@ namespace hal
                     }
 
                     // merge generics and attributes
-                    for (const auto it : slave_net->get_data_map())
+                    for (const auto& [identifier, content] : slave_net->get_data_map())
                     {
-                        if (!master_net->set_data(std::get<0>(it.first), std::get<1>(it.first), std::get<0>(it.second), std::get<1>(it.second)))
+                        if (!master_net->set_data(std::get<0>(identifier), std::get<1>(identifier), std::get<0>(content), std::get<1>(content)))
                         {
                             log_warning("verilog_parser",
                                         "unable to transfer data from slave net '{}' with ID {} to master net '{}' with ID {}.",
@@ -1194,9 +1202,6 @@ namespace hal
     {
         std::unordered_map<std::string, std::string> signal_alias;
         std::unordered_map<std::string, std::string> instance_alias;
-
-        // const auto& e              = m_entities.at(entity_inst_type);
-        // const auto& entity_signals = e.get_signals();
 
         // TODO check parent module assignments for port aliases
 
@@ -1367,7 +1372,7 @@ namespace hal
             const std::string& inst_type = verilog_module.m_instance_types.at(inst_identifier);
 
             // will later hold either module or gate, so attributes can be assigned properly
-            DataContainer* container;
+            DataContainer* container = nullptr;
 
             // assign actual signal names to ports
             std::unordered_map<std::string, std::string> instance_assignments;

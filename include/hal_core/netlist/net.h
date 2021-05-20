@@ -231,11 +231,25 @@ namespace hal
         std::vector<Endpoint*> get_destinations(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * Check whether the net is unrouted, i.e. it has no source or no destination.
+         * Check whether the net is unrouted, i.e., it has no source or no destination.
          *
-         * @returns True if the net is unrouted.
+         * @returns True if the net is unrouted, false otherwise.
          */
         bool is_unrouted() const;
+
+        /**
+         * Check whether the net is connected to GND.
+         *
+         * @returns True if the net is connected to GND, false otherwise.
+         */
+        bool is_gnd_net() const;
+
+        /**
+         * Check whether the net is connected to VCC.
+         *
+         * @returns True if the net is connected to VCC, false otherwise.
+         */
+        bool is_vcc_net() const;
 
         /**
          * Mark this net as a global input net.

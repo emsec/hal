@@ -26,28 +26,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * netlist parsers now take the path to the netlist file as input instead of a `std::stringstream`
   * added support for `Z` and `X` assignments to Verilog and VHDL parsers
   * fixed netlist parsers assigning wrong order of inputs for some multi-bit signals
+* improved netlist writers
+  * netlist writers now take the output path as input instead of a `std::stringstream`
+  * removed broken VHDL writer (will not be supported until further notice)
+  * completely renewed Verilog writer that respects module hierarchies
+  * added GEXF netlist writer, e.g., for netlist analysis within Gephi
 * expanded `netlist_utils`
   * added function `get_common_inputs` to `netlist_utils` to get inputs that are common across multiple gates
   * added function `replace_gate` to `netlist_utils` to replace a gate with an instance of another gate type
   * added function `get_gate_chain` and `get_complex_gate_chain` to `netlist_utils` to find gates that are arranged in a chain
-* improved save and export functionality within the GUI
+* miscellaneous API changes and additions
+  * added function `is_top_module` to class `Module` to determine whether a module is the top module
+  * added function `get_nets` to class `Module` to get all nets that are connected to any of the gates or submodules of a module
+  * added functions `is_gnd_net` and `is_vcc_net` to class `Net` to determine whether a net is connected to GND or VCC
+  * added Python bindings for `netlist_serializer`
+* miscellaneous GUI changes and additions
   * added `Save As...` option to save `.hal` files under a different name
   * added `Export ...` menu to export the netlist using any of the registered netlist writers
-  * added `GEXF` netlist writer, e.g., for netlist analysis within Gephi
-* added `Remove from view` action to context menu for gates and modules
-* added grouping toolbox feature to highlight successors or predecessors
-* added an indicator showing whether views have been modified
-* added function `is_top_module` to class `Module` to determin whether the current module is the top module of the netlist
-* added Python bindings for `netlist_serializer`
-* added HAL version number to the info shown in `About`
-* when trying to create a view for a module that is already associated with an (unchanged) view, the existing view is activated instead of creating a new view
-* netlist writers now take the output path as input instead of a `std::stringstream`
-* fixed selection details not being updated immediately when renaming or changing a type
-* fixed navigation bug where ports and nets did not match for modules
-* fixed list of navigation targets containing duplicates and/or loops
-* fixed drag'n'drop bug related to negative coordinates
-* fixed liberty parser aborting on unknown `pg_type`
-* fixed stylesheets
+  * added `Remove from view` action to context menu for gates and modules
+  * added grouping toolbox feature to highlight successors or predecessors
+  * added an indicator showing whether views have been modified
+  * added HAL version number to the info shown in `About`
+  * when trying to create a view for a module that is already associated with an (unchanged) view, the existing view is activated instead of creating a new view
+* bugfixes
+  * fixed selection details not being updated immediately when renaming or changing a type
+  * fixed navigation bug where ports and nets did not match for modules
+  * fixed list of navigation targets containing duplicates and/or loops
+  * fixed drag'n'drop bug related to negative coordinates
+  * fixed liberty parser aborting on unknown `pg_type`
+  * fixed stylesheets
 
 ## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`

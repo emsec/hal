@@ -22,7 +22,7 @@ namespace hal
         m_next_module_id   = 1;
         m_next_grouping_id = 1;
         m_top_module       = nullptr;    // this triggers the internal manager to allow creation of a module without parent
-        m_top_module       = create_module("top module", nullptr);
+        m_top_module       = create_module("top_module", nullptr);
         
     }
 
@@ -408,6 +408,22 @@ namespace hal
         }
         m_global_input_nets.push_back(n);
 
+        // mark module caches as dirty
+        std::unordered_set<Module*> affected_modules;
+        for (Endpoint* ep : n->get_sources())
+        {
+            affected_modules.insert(ep->get_gate()->get_module());
+        }
+        for (Endpoint* ep : n->get_destinations())
+        {
+            affected_modules.insert(ep->get_gate()->get_module());
+        }
+
+        for (Module* m : affected_modules)
+        {
+            m->set_cache_dirty();
+        }
+
         m_event_handler->notify(NetlistEvent::event::marked_global_input, this, n->get_id());
         return true;
     }
@@ -424,6 +440,22 @@ namespace hal
             return true;
         }
         m_global_output_nets.push_back(n);
+
+        // mark module caches as dirty
+        std::unordered_set<Module*> affected_modules;
+        for (Endpoint* ep : n->get_sources())
+        {
+            affected_modules.insert(ep->get_gate()->get_module());
+        }
+        for (Endpoint* ep : n->get_destinations())
+        {
+            affected_modules.insert(ep->get_gate()->get_module());
+        }
+
+        for (Module* m : affected_modules)
+        {
+            m->set_cache_dirty();
+        }
 
         m_event_handler->notify(NetlistEvent::event::marked_global_output, this, n->get_id());
         return true;
@@ -443,6 +475,22 @@ namespace hal
         }
         m_global_input_nets.erase(it);
 
+        // mark module caches as dirty
+        std::unordered_set<Module*> affected_modules;
+        for (Endpoint* ep : n->get_sources())
+        {
+            affected_modules.insert(ep->get_gate()->get_module());
+        }
+        for (Endpoint* ep : n->get_destinations())
+        {
+            affected_modules.insert(ep->get_gate()->get_module());
+        }
+
+        for (Module* m : affected_modules)
+        {
+            m->set_cache_dirty();
+        }
+
         m_event_handler->notify(NetlistEvent::event::unmarked_global_input, this, n->get_id());
         return true;
     }
@@ -460,6 +508,22 @@ namespace hal
             return false;
         }
         m_global_output_nets.erase(it);
+
+        // mark module caches as dirty
+        std::unordered_set<Module*> affected_modules;
+        for (Endpoint* ep : n->get_sources())
+        {
+            affected_modules.insert(ep->get_gate()->get_module());
+        }
+        for (Endpoint* ep : n->get_destinations())
+        {
+            affected_modules.insert(ep->get_gate()->get_module());
+        }
+
+        for (Module* m : affected_modules)
+        {
+            m->set_cache_dirty();
+        }
 
         m_event_handler->notify(NetlistEvent::event::unmarked_global_output, this, n->get_id());
         return true;
