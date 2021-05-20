@@ -31,20 +31,17 @@ namespace hal
     NetlistRelay::NetlistRelay(QObject* parent) : QObject(parent), mModuleModel(new ModuleModel(this))
     {
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &NetlistRelay::debugHandleFileOpened);    // DEBUG LINE
-        netlist_event_handler::register_callback("relay",
-                                                 std::function<void(netlist_event_handler::event, Netlist*, u32)>(
-                                                     std::bind(&NetlistRelay::relayNetlistEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
     }
 
     NetlistRelay::~NetlistRelay()
     {
         unregisterNetlistCallbacks();
-        netlist_event_handler::unregister_callback("relay");
     }
 
     void NetlistRelay::unregisterNetlistCallbacks()
     {
         log_info("test", "unregister netlist callbacks");
+        gNetlist->get_event_handler()->unregister_callback("gui_netlist_handler");
         gNetlist->get_event_handler()->unregister_callback("gui_module_handler");
         gNetlist->get_event_handler()->unregister_callback("gui_gate_handler");
         gNetlist->get_event_handler()->unregister_callback("gui_net_handler");
@@ -54,17 +51,21 @@ namespace hal
     void NetlistRelay::registerNetlistCallbacks()
     {
         log_info("test", "register netlist callbacks");
-        gNetlist->get_event_handler()->register_callback("gui_net_handler",
-                                             std::function<void(NetEvent::event, Net*, u32)>(
-                                                 std::bind(&NetlistRelay::relayNetEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+        gNetlist->get_event_handler()->register_callback("gui_netlist_handler",
+                                                 std::function<void(NetlistEvent::event, Netlist*, u32)>(
+                                                     std::bind(&NetlistRelay::relayNetlistEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+
+        gNetlist->get_event_handler()->register_callback("gui_module_handler",
+                                                std::function<void(ModuleEvent::event, Module*, u32)>(
+                                                    std::bind(&NetlistRelay::relayModuleEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
         gNetlist->get_event_handler()->register_callback("gui_gate_handler",
                                               std::function<void(GateEvent::event, Gate*, u32)>(
                                                   std::bind(&NetlistRelay::relayGateEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
-        gNetlist->get_event_handler()->register_callback("gui_module_handler",
-                                                std::function<void(ModuleEvent::event, Module*, u32)>(
-                                                    std::bind(&NetlistRelay::relayModuleEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+        gNetlist->get_event_handler()->register_callback("gui_net_handler",
+                                             std::function<void(NetEvent::event, Net*, u32)>(
+                                                 std::bind(&NetlistRelay::relayNetEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
         gNetlist->get_event_handler()->register_callback("gui_grouping_handler",
                                                 std::function<void(GroupingEvent::event, Grouping*, u32)>(
@@ -173,7 +174,7 @@ namespace hal
         act->exec();
     }
 
-    void NetlistRelay::relayNetlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data)
+    void NetlistRelay::relayNetlistEvent(NetlistEvent::event ev, Netlist* object, u32 associated_data)
     {
         if (!object)
             return;    // SHOULD NEVER BE REACHED
@@ -185,63 +186,63 @@ namespace hal
 
         switch (ev)
         {
-        case netlist_event_handler::event::id_changed:
+        case NetlistEvent::event::id_changed:
         {
             ///< associated_data = old id
 
             Q_EMIT netlistIdChanged(object, associated_data);
             break;
         }
-        case netlist_event_handler::event::input_filename_changed:
+        case NetlistEvent::event::input_filename_changed:
         {
             ///< no associated_data
 
             Q_EMIT netlistInputFilenameChanged(object);
             break;
         }
-        case netlist_event_handler::event::design_name_changed:
+        case NetlistEvent::event::design_name_changed:
         {
             ///< no associated_data
 
             Q_EMIT netlistDesignNameChanged(object);
             break;
         }
-        case netlist_event_handler::event::device_name_changed:
+        case NetlistEvent::event::device_name_changed:
         {
             ///< no associated_data
 
             Q_EMIT netlistDeviceNameChanged(object);
             break;
         }
-        case netlist_event_handler::event::marked_global_vcc:
+        case NetlistEvent::event::marked_global_vcc:
         {
             ///< associated_data = id of gate
 
             Q_EMIT netlistMarkedGlobalVcc(object, associated_data);
             break;
         }
-        case netlist_event_handler::event::marked_global_gnd:
+        case NetlistEvent::event::marked_global_gnd:
         {
             ///< associated_data = id of gate
 
             Q_EMIT netlistMarkedGlobalGnd(object, associated_data);
             break;
         }
-        case netlist_event_handler::event::unmarked_global_vcc:
+        case NetlistEvent::event::unmarked_global_vcc:
         {
             ///< associated_data = id of gate
 
             Q_EMIT netlistUnmarkedGlobalVcc(object, associated_data);
             break;
         }
-        case netlist_event_handler::event::unmarked_global_gnd:
+        case NetlistEvent::event::unmarked_global_gnd:
         {
             ///< associated_data = id of gate
 
             Q_EMIT netlistUnmarkedGlobalGnd(object, associated_data);
             break;
         }
-        case netlist_event_handler::event::marked_global_input:
+        case NetlistEvent::event::marked_global_input:
         {
             ///< associated_data = id of net
             gGraphContextManager->handleMarkedGlobalInput(associated_data);
@@ -249,7 +250,7 @@ namespace hal
             Q_EMIT netlistMarkedGlobalInput(object, associated_data);
             break;
         }
-        case netlist_event_handler::event::marked_global_output:
+        case NetlistEvent::event::marked_global_output:
         {
             ///< associated_data = id of net
             gGraphContextManager->handleMarkedGlobalOutput(associated_data);
@@ -257,14 +258,14 @@ namespace hal
             Q_EMIT netlistMarkedGlobalOutput(object, associated_data);
             break;
         }
-        case netlist_event_handler::event::marked_global_inout:
+        case NetlistEvent::event::marked_global_inout:
         {
             ///< associated_data = id of net
 
             Q_EMIT netlistMarkedGlobalInout(object, associated_data);
             break;
         }
-        case netlist_event_handler::event::unmarked_global_input:
+        case NetlistEvent::event::unmarked_global_input:
         {
             ///< associated_data = id of net
             gGraphContextManager->handleUnmarkedGlobalInput(associated_data);
@@ -272,7 +273,7 @@ namespace hal
             Q_EMIT netlistUnmarkedGlobalInput(object, associated_data);
             break;
         }
-        case netlist_event_handler::event::unmarked_global_output:
+        case NetlistEvent::event::unmarked_global_output:
         {
             ///< associated_data = id of net
             gGraphContextManager->handleUnmarkedGlobalOutput(associated_data);
@@ -280,7 +281,7 @@ namespace hal
             Q_EMIT netlistUnmarkedGlobalOutput(object, associated_data);
             break;
         }
-        case netlist_event_handler::event::unmarked_global_inout:
+        case NetlistEvent::event::unmarked_global_inout:
         {
             ///< associated_data = id of net
 

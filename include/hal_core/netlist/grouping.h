@@ -319,7 +319,7 @@ namespace hal
     private:
         friend class NetlistInternalManager;
 
-        Grouping(NetlistInternalManager* internal_manager, u32 id, std::string name, EventHandler* event_handler);
+        Grouping(NetlistInternalManager* internal_manager, EventHandler* event_handler, u32 id, std::string name);
 
         u32 m_id;
         std::string m_name;

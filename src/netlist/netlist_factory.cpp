@@ -1,6 +1,5 @@
 #include "hal_core/netlist/netlist_factory.h"
 
-#include "hal_core/netlist/event_system/event_controls.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"

@@ -13,7 +13,7 @@
 
 namespace hal
 {
-    Net::Net(NetlistInternalManager* internal_manager, const u32 id, EventHandler* event_handler, const std::string& name)
+    Net::Net(NetlistInternalManager* internal_manager, EventHandler* event_handler, const u32 id, const std::string& name)
     {
         assert(internal_manager != nullptr);
         m_internal_manager = internal_manager;

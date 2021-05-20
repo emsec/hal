@@ -66,7 +66,7 @@ namespace hal
             return nullptr;
         }
 
-        auto new_gate = std::unique_ptr<Gate>(new Gate(this, id, gt, name, x, y, m_event_handler));
+        auto new_gate = std::unique_ptr<Gate>(new Gate(this, m_event_handler, id, gt, name, x, y));
 
         auto free_id_it = m_netlist->m_free_gate_ids.find(id);
         if (free_id_it != m_netlist->m_free_gate_ids.end())
@@ -175,7 +175,7 @@ namespace hal
             return nullptr;
         }
 
-        auto new_net = std::unique_ptr<Net>(new Net(this, id, m_event_handler, name));
+        auto new_net = std::unique_ptr<Net>(new Net(this, m_event_handler, id, name));
 
         auto free_id_it = m_netlist->m_free_net_ids.find(id);
         if (free_id_it != m_netlist->m_free_net_ids.end())
@@ -534,7 +534,7 @@ namespace hal
             return nullptr;
         }
 
-        auto m = std::unique_ptr<Module>(new Module(id, parent, name, this, m_event_handler));
+        auto m = std::unique_ptr<Module>(new Module(this, m_event_handler, id, parent, name));
 
         auto free_id_it = m_netlist->m_free_module_ids.find(id);
         if (free_id_it != m_netlist->m_free_module_ids.end())
@@ -709,7 +709,7 @@ namespace hal
             return nullptr;
         }
 
-        auto new_grouping = std::unique_ptr<Grouping>(new Grouping(this, id, name, m_event_handler));
+        auto new_grouping = std::unique_ptr<Grouping>(new Grouping(this, m_event_handler, id, name));
 
         auto free_id_it = m_netlist->m_free_grouping_ids.find(id);
         if (free_id_it != m_netlist->m_free_grouping_ids.end())

@@ -23,7 +23,6 @@
 
 #pragma once
 
-#include "hal_core/netlist/event_system/netlist_event_handler.h"
 #include "hal_core/netlist/event_handler.h"
 
 #include <QMap>
@@ -138,7 +137,7 @@ namespace hal
         /**
          * TODO: Unused (Never Emitted)
          */
-        void netlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data) const;
+        void netlistEvent(NetlistEvent::event ev, Netlist* object, u32 associated_data) const;
 
         /**
          * TODO: Unused (Never Emitted)
@@ -162,7 +161,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that the netlists id has been changed. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::id_changed</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::id_changed</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The old netlist id
@@ -171,7 +170,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that the input filename of the netlist has been changed. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::input_filename_changed</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::input_filename_changed</i>
          *
          * @param n - The affected netlist
          */
@@ -179,7 +178,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that the design name of the netlist has been changed. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::design_name_changed</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::design_name_changed</i>
          *
          * @param n - The affected netlist
          */
@@ -187,7 +186,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that the device name of the netlist has been changed. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::device_name_changed</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::device_name_changed</i>
          *
          * @param n - The affected netlist
          */
@@ -195,7 +194,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been marked as a global vcc gate. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::marked_global_vcc</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::marked_global_vcc</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the gate that has been marked as a global vcc gate
@@ -204,7 +203,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been marked as a global gnd gate. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::marked_global_gnd</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::marked_global_gnd</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the gate that has been marked as a global gnd gate
@@ -213,7 +212,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been unmarked from being a global vcc gate. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::unmarked_global_vcc</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_vcc</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the gate that is not a global vcc gate anymore
@@ -222,7 +221,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been unmarked from being a global gnd gate. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::unmarked_global_gnd</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_gnd</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the gate that is not a global gnd gate anymore
@@ -231,7 +230,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been marked as a global input net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::marked_global_input</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::marked_global_input</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the newly marked global input net
@@ -240,7 +239,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been marked as a global output net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::marked_global_output</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::marked_global_output</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the newly marked global output net
@@ -250,7 +249,7 @@ namespace hal
         // TODO: inout nets do not exist anymore... Remove event from gui and core?
         /**
          * Q_SIGNAL to notify that a gate has been marked as a global input net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::marked_global_inout</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::marked_global_inout</i>
          *
          * @deprecated Inout nets do not exist anymore. Therefore this event is never triggered.
          *
@@ -261,7 +260,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a net has been unmarked from being a global input net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::unmarked_global_input</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_input</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the net that is not a global input net anymore
@@ -270,7 +269,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a net has been unmarked from being a global output net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::unmarked_global_output</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_output</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the net that is not a global output net anymore
@@ -280,7 +279,7 @@ namespace hal
         // TODO: inout nets do not exist anymore... Remove event from gui and core?
         /**
          * Q_SIGNAL to notify that a net has been unmarked from being a global inout net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::unmarked_global_inout</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_inout</i>
          *
          * @deprecated Inout nets do not exist anymore. Therefore this event is never triggered.
          *
@@ -601,7 +600,7 @@ namespace hal
         void debugHandleFileClosed();
 
     private:
-        void relayNetlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data);
+        void relayNetlistEvent(NetlistEvent::event ev, Netlist* object, u32 associated_data);
         void relayModuleEvent(ModuleEvent::event ev, Module* mod, u32 associated_data);
         void relayGateEvent(GateEvent::event ev, Gate* gat, u32 associated_data);
         void relayNetEvent(NetEvent::event ev, Net* net, u32 associated_data);

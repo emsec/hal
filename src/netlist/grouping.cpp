@@ -9,7 +9,7 @@
 
 namespace hal
 {
-    Grouping::Grouping(NetlistInternalManager* internal_manager, u32 id, std::string name, EventHandler* event_handler)
+    Grouping::Grouping(NetlistInternalManager* internal_manager, EventHandler* event_handler, u32 id, std::string name)
     {
         m_id               = id;
         m_name             = name;

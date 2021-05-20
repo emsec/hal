@@ -20,7 +20,6 @@
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/welcome_screen/welcome_screen.h"
 #include "hal_core/defines.h"
-#include "hal_core/netlist/event_system/event_controls.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/net.h"
@@ -569,14 +568,10 @@ namespace hal
 
         if (ok)
         {
-            // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
-            event_controls::enable_all(false);
             auto selected_lib = libraries[items.indexOf(selected)];
             gNetlistOwner     = netlist_factory::create_netlist(selected_lib);
             gNetlist          = gNetlistOwner.get();
             gNetlistRelay->registerNetlistCallbacks();
-            // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
-            event_controls::enable_all(true);
             Q_EMIT FileManager::get_instance()->fileOpened("new netlist");
         }
     }
@@ -610,12 +605,8 @@ namespace hal
         {
             gGuiState->setValue("FileDialog/Path/MainWindow", fileName);
 
-            // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
-            event_controls::enable_all(false);
             ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(fileName);
             actOpenfile->exec();
-            // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
-            event_controls::enable_all(true);
         }
     }
 

@@ -6,9 +6,9 @@ namespace hal
 {
     NetlistWatcher::NetlistWatcher(QObject* parent) : QObject(parent)
     {
-        netlist_event_handler::register_callback(
+        gNetlist->get_event_handler()->register_callback(
                     "NetlistWatcher",
-                    std::function<void(netlist_event_handler::event, Netlist*, u32)>
+                    std::function<void(NetlistEvent::event, Netlist*, u32)>
                     (std::bind(&NetlistWatcher::handleNetlistEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
         gNetlist->get_event_handler()->register_callback(
@@ -31,13 +31,13 @@ namespace hal
 
     NetlistWatcher::~NetlistWatcher()
     {
-        netlist_event_handler::unregister_callback("NetlistWatcher");
+        gNetlist->get_event_handler()->unregister_callback("NetlistWatcher");
         gNetlist->get_event_handler()->unregister_callback("ModuleWatcher");
         gNetlist->get_event_handler()->unregister_callback("GateWatcher");
         gNetlist->get_event_handler()->unregister_callback("NetWatcher");
     }
 
-    void NetlistWatcher::handleNetlistEvent(netlist_event_handler::event ev, Netlist *object, u32 associated_data)
+    void NetlistWatcher::handleNetlistEvent(NetlistEvent::event ev, Netlist *object, u32 associated_data)
     {
         Q_UNUSED(ev);
         Q_UNUSED(object);

@@ -281,7 +281,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        explicit Net(NetlistInternalManager* internal_manager, const u32 id, EventHandler* event_handler, const std::string& name = "");
+        explicit Net(NetlistInternalManager* internal_manager, EventHandler* event_handler, const u32 id, const std::string& name = "");
 
         Net(const Net&) = delete;
         Net(Net&&)      = delete;

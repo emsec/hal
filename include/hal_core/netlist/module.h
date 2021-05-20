@@ -320,7 +320,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Module(u32 id, Module* parent, const std::string& name, NetlistInternalManager* internal_manager, EventHandler* event_handler);
+        Module(NetlistInternalManager* internal_manager, EventHandler* event_handler, u32 id, Module* parent, const std::string& name);
 
         Module(const Module&) = delete;               //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment

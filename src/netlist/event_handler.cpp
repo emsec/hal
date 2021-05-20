@@ -9,16 +9,21 @@
 
 namespace hal
 {
-    EventHandler::EventHandler() {
-        netlist_event_enabled = true;
-        gate_event_enabled = true;
-        net_event_enabled = true;
-        module_event_enabled = true;
-    }
+    EventHandler::EventHandler()
+        : netlist_event_enabled(true),
+          module_event_enabled(true),
+          gate_event_enabled(true),
+          net_event_enabled(true),
+          grouping_event_enabled(true)
+    {;}
 
-    void EventHandler::netlist_event_enable(bool flag)
+    void EventHandler::event_enable_all(bool flag)
     {
-        netlist_event_enabled = flag;
+        netlist_event_enabled  = flag;
+        module_event_enabled   = flag;
+        gate_event_enabled     = flag;
+        net_event_enabled      = flag;
+        grouping_event_enabled = flag;
     }
 
     void EventHandler::notify(NetlistEvent::event c, Netlist* netlist, u32 associated_data)
@@ -60,7 +65,7 @@ namespace hal
 
     void EventHandler::notify(GroupingEvent::event c, Grouping* grouping, u32 associated_data)
     {
-        if (module_event_enabled)
+        if (grouping_event_enabled)
         {
             m_grouping_callback(c, grouping, associated_data);
         }
@@ -94,5 +99,9 @@ namespace hal
     void EventHandler::unregister_callback(const std::string& name)
     {
         m_netlist_callback.remove_callback(name);
+        m_module_callback.remove_callback(name);
+        m_gate_callback.remove_callback(name);
+        m_net_callback.remove_callback(name);
+        m_grouping_callback.remove_callback(name);
     }
 }    // namespace hal

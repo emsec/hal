@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    Module::Module(u32 id, Module* parent, const std::string& name, NetlistInternalManager* internal_manager, EventHandler* event_handler)
+    Module::Module(NetlistInternalManager* internal_manager, EventHandler* event_handler, u32 id, Module* parent, const std::string& name)
     {
         m_internal_manager = internal_manager;
         m_id               = id;
@@ -206,7 +206,7 @@ namespace hal
         }
 
         log_error(
-            "module", "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.", gate->get_name(), gate->get_id(), m_name, m_id, m_internal_manager->m_netlist->get_id());
+            "module", "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.", gate->get_name(), gate->get_id(), m_name, m_id, m_internal_manager->m_netlist->get_id());
         return false;
     }
 
