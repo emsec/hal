@@ -104,6 +104,32 @@ namespace hal
             }
             return n;
         }
+
+        void clear_connections(Gate* gate) 
+        {
+            for (Endpoint* ep : gate->get_fan_in_endpoints()) 
+            {
+                ep->get_net()->remove_destination(ep);
+            }
+
+            for (Endpoint* ep : gate->get_fan_out_endpoints()) 
+            {
+                ep->get_net()->remove_source(ep);
+            }
+        }
+
+        void clear_connections(Net* net) 
+        {
+            for (Endpoint* ep : net->get_sources())
+            {
+                net->remove_source(ep);
+            }
+
+            for (Endpoint* ep : net->get_destinations())
+            {
+                net->remove_destination(ep);
+            }
+        }
     }
 
     // TODO clean up everything below
