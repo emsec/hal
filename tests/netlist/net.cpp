@@ -40,6 +40,213 @@ namespace hal {
     }
 
     /**
+     * Test operators for equality and inequality.
+     * 
+     * Functions: operator==, operator!=
+     */
+    TEST_F(NetTest, check_operators)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl_1 = test_utils::create_empty_netlist();
+            ASSERT_NE(nl_1, nullptr);
+            std::unique_ptr<Netlist> nl_2 = test_utils::create_empty_netlist();
+            ASSERT_NE(nl_2, nullptr);
+            const GateLibrary* gl = nl_1->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+            ASSERT_EQ(gl, nl_2->get_gate_library());
+
+            Gate* nl1_dummy_1 = nl_1->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_1");
+            ASSERT_NE(nl1_dummy_1, nullptr);
+            Gate* nl1_dummy_2 = nl_1->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_2");
+            ASSERT_NE(nl1_dummy_2, nullptr);
+            Gate* nl1_dummy_3 = nl_1->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_3");
+            ASSERT_NE(nl1_dummy_3, nullptr);
+            Gate* nl2_dummy_1 = nl_2->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_1");
+            ASSERT_NE(nl2_dummy_1, nullptr);
+            Gate* nl2_dummy_2 = nl_2->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_2");
+            ASSERT_NE(nl2_dummy_2, nullptr);
+            Gate* nl2_dummy_3 = nl_2->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_3");
+            ASSERT_NE(nl2_dummy_3, nullptr);
+
+            // standard stuff
+            Net* nl1_n1 = nl_1->create_net(1, "net_1");
+            ASSERT_NE(nl1_n1, nullptr);
+            Net* nl2_n1 = nl_2->create_net(1, "net_1");
+            ASSERT_NE(nl2_n1, nullptr);
+            Net* nl1_n2 = nl_1->create_net(2, "net_1");
+            ASSERT_NE(nl1_n2, nullptr);
+            Net* nl2_n2 = nl_2->create_net(2, "net_2");
+            ASSERT_NE(nl2_n2, nullptr);
+
+            EXPECT_TRUE(*nl1_n1 == *nl1_n1);        // identical gate pointer
+            EXPECT_TRUE(*nl2_n1 == *nl2_n1);
+            EXPECT_FALSE(*nl1_n1 != *nl1_n1);
+            EXPECT_FALSE(*nl2_n1 != *nl2_n1);
+            EXPECT_TRUE(*nl1_n1 == *nl2_n1);        // identical gates, but different netlists
+            EXPECT_TRUE(*nl2_n1 == *nl1_n1);
+            EXPECT_FALSE(*nl1_n1 != *nl2_n1);
+            EXPECT_FALSE(*nl2_n1 != *nl1_n1);
+            EXPECT_FALSE(*nl1_n1 == *nl1_n2);       // different IDs
+            EXPECT_FALSE(*nl2_n1 == *nl2_n2);
+            EXPECT_TRUE(*nl1_n1 != *nl1_n2);
+            EXPECT_TRUE(*nl2_n1 != *nl2_n2);
+            EXPECT_FALSE(*nl1_n2 == *nl2_n2);       // different names
+            EXPECT_FALSE(*nl2_n2 == *nl1_n2);
+            EXPECT_TRUE(*nl1_n2 != *nl2_n2);
+            EXPECT_TRUE(*nl2_n2 != *nl1_n2);
+
+            // global inputs/outputs
+            Net* nl1_n3 = nl_1->create_net(3, "net_3");
+            ASSERT_NE(nl1_n3, nullptr);
+            nl1_n3->mark_global_input_net();
+            Net* nl2_n3 = nl_2->create_net(3, "net_3");
+            ASSERT_NE(nl2_n3, nullptr);
+            EXPECT_FALSE(*nl1_n3 == *nl2_n3);       // one not marked as global in
+            EXPECT_FALSE(*nl2_n3 == *nl1_n3);
+            EXPECT_TRUE(*nl1_n3 != *nl2_n3);
+            EXPECT_TRUE(*nl2_n3 != *nl1_n3);
+
+            Net* nl1_n4 = nl_1->create_net(4, "net_4");
+            ASSERT_NE(nl1_n4, nullptr);
+            nl1_n4->mark_global_output_net();
+            Net* nl2_n4 = nl_2->create_net(4, "net_4");
+            ASSERT_NE(nl2_n4, nullptr);
+            EXPECT_FALSE(*nl1_n4 == *nl2_n4);       // one not marked as global out
+            EXPECT_FALSE(*nl2_n4 == *nl1_n4);
+            EXPECT_TRUE(*nl1_n4 != *nl2_n4);
+            EXPECT_TRUE(*nl2_n4 != *nl1_n4);
+
+            // sources
+            Net* nl1_n5 = nl_1->create_net(5, "net_5");
+            ASSERT_NE(nl1_n5, nullptr);
+            ASSERT_NE(nl1_n5->add_source(nl1_dummy_1, "O"), nullptr);
+            ASSERT_NE(nl1_n5->add_source(nl1_dummy_2, "O"), nullptr);
+            ASSERT_NE(nl1_n5->add_source(nl1_dummy_3, "O"), nullptr);
+            Net* nl2_n5 = nl_2->create_net(5, "net_5");
+            ASSERT_NE(nl2_n5, nullptr);
+            ASSERT_NE(nl2_n5->add_source(nl2_dummy_1, "O"), nullptr);
+            ASSERT_NE(nl2_n5->add_source(nl2_dummy_2, "O"), nullptr);
+            ASSERT_NE(nl2_n5->add_source(nl2_dummy_3, "O"), nullptr);
+            EXPECT_TRUE(*nl1_n5 == *nl2_n5);        // identical sources, identical order
+            EXPECT_TRUE(*nl2_n5 == *nl1_n5); 
+            EXPECT_FALSE(*nl1_n5 != *nl2_n5);
+            EXPECT_FALSE(*nl2_n5 != *nl1_n5); 
+            test_utils::clear_connections(nl1_n5);
+            test_utils::clear_connections(nl2_n5);
+
+            Net* nl1_n6 = nl_1->create_net(6, "net_6");
+            ASSERT_NE(nl1_n6, nullptr);
+            ASSERT_NE(nl1_n6->add_source(nl1_dummy_1, "O"), nullptr);
+            ASSERT_NE(nl1_n6->add_source(nl1_dummy_2, "O"), nullptr);
+            ASSERT_NE(nl1_n6->add_source(nl1_dummy_3, "O"), nullptr);
+            Net* nl2_n6 = nl_2->create_net(6, "net_6");
+            ASSERT_NE(nl2_n6, nullptr);
+            ASSERT_NE(nl2_n6->add_source(nl2_dummy_3, "O"), nullptr);
+            ASSERT_NE(nl2_n6->add_source(nl2_dummy_2, "O"), nullptr);
+            ASSERT_NE(nl2_n6->add_source(nl2_dummy_1, "O"), nullptr);
+            EXPECT_TRUE(*nl1_n6 == *nl2_n6);        // identical sources, different order
+            EXPECT_TRUE(*nl2_n6 == *nl1_n6);
+            EXPECT_FALSE(*nl1_n6 != *nl2_n6);
+            EXPECT_FALSE(*nl2_n6 != *nl1_n6);
+            test_utils::clear_connections(nl1_n6);
+            test_utils::clear_connections(nl2_n6);
+
+            Net* nl1_n7 = nl_1->create_net(7, "net_7");
+            ASSERT_NE(nl1_n7, nullptr);
+            ASSERT_NE(nl1_n7->add_source(nl1_dummy_1, "O"), nullptr);
+            Net* nl2_n7 = nl_2->create_net(7, "net_7");
+            ASSERT_NE(nl2_n7, nullptr);
+            ASSERT_NE(nl2_n7->add_source(nl2_dummy_2, "O"), nullptr);
+            ASSERT_NE(nl2_n7->add_source(nl2_dummy_1, "O"), nullptr);
+            EXPECT_FALSE(*nl1_n7 == *nl2_n7);       // different number of sources
+            EXPECT_FALSE(*nl2_n7 == *nl1_n7); 
+            EXPECT_TRUE(*nl1_n7 != *nl2_n7);
+            EXPECT_TRUE(*nl2_n7 != *nl1_n7); 
+            test_utils::clear_connections(nl1_n7);
+            test_utils::clear_connections(nl2_n7);
+
+            Net* nl1_n8 = nl_1->create_net(8, "net_8");
+            ASSERT_NE(nl1_n8, nullptr);
+            ASSERT_NE(nl1_n8->add_source(nl1_dummy_1, "O"), nullptr);
+            ASSERT_NE(nl1_n8->add_source(nl1_dummy_2, "O"), nullptr);
+            Net* nl2_n8 = nl_2->create_net(8, "net_8");
+            ASSERT_NE(nl2_n8, nullptr);
+            ASSERT_NE(nl2_n8->add_source(nl2_dummy_2, "O"), nullptr);
+            ASSERT_NE(nl2_n8->add_source(nl2_dummy_3, "O"), nullptr);
+            EXPECT_FALSE(*nl1_n8 == *nl2_n8);       // different sources
+            EXPECT_FALSE(*nl2_n8 == *nl1_n8);
+            EXPECT_TRUE(*nl1_n8 != *nl2_n8);
+            EXPECT_TRUE(*nl2_n8 != *nl1_n8);
+            test_utils::clear_connections(nl1_n8);
+            test_utils::clear_connections(nl2_n8);
+
+            // destinations
+            Net* nl1_n9 = nl_1->create_net(9, "net_9");
+            ASSERT_NE(nl1_n9, nullptr);
+            ASSERT_NE(nl1_n9->add_destination(nl1_dummy_1, "I"), nullptr);
+            ASSERT_NE(nl1_n9->add_destination(nl1_dummy_2, "I"), nullptr);
+            ASSERT_NE(nl1_n9->add_destination(nl1_dummy_3, "I"), nullptr);
+            Net* nl2_n9 = nl_2->create_net(9, "net_9");
+            ASSERT_NE(nl2_n9, nullptr);
+            ASSERT_NE(nl2_n9->add_destination(nl2_dummy_1, "I"), nullptr);
+            ASSERT_NE(nl2_n9->add_destination(nl2_dummy_2, "I"), nullptr);
+            ASSERT_NE(nl2_n9->add_destination(nl2_dummy_3, "I"), nullptr);
+            EXPECT_TRUE(*nl1_n9 == *nl2_n9);        // identical destinations, identical order
+            EXPECT_TRUE(*nl2_n9 == *nl1_n9); 
+            EXPECT_FALSE(*nl1_n9 != *nl2_n9);
+            EXPECT_FALSE(*nl2_n9 != *nl1_n9); 
+            test_utils::clear_connections(nl1_n9);
+            test_utils::clear_connections(nl2_n9);
+
+            Net* nl1_n10 = nl_1->create_net(10, "net_10");
+            ASSERT_NE(nl1_n10, nullptr);
+            ASSERT_NE(nl1_n10->add_destination(nl1_dummy_1, "I"), nullptr);
+            ASSERT_NE(nl1_n10->add_destination(nl1_dummy_2, "I"), nullptr);
+            ASSERT_NE(nl1_n10->add_destination(nl1_dummy_3, "I"), nullptr);
+            Net* nl2_n10 = nl_2->create_net(10, "net_10");
+            ASSERT_NE(nl2_n10, nullptr);
+            ASSERT_NE(nl2_n10->add_destination(nl2_dummy_3, "I"), nullptr);
+            ASSERT_NE(nl2_n10->add_destination(nl2_dummy_2, "I"), nullptr);
+            ASSERT_NE(nl2_n10->add_destination(nl2_dummy_1, "I"), nullptr);
+            EXPECT_TRUE(*nl1_n10 == *nl2_n10);        // identical destinations, different order
+            EXPECT_TRUE(*nl2_n10 == *nl1_n10);
+            EXPECT_FALSE(*nl1_n10 != *nl2_n10);
+            EXPECT_FALSE(*nl2_n10 != *nl1_n10);
+            test_utils::clear_connections(nl1_n10);
+            test_utils::clear_connections(nl2_n10);
+
+            Net* nl1_n11 = nl_1->create_net(11, "net_11");
+            ASSERT_NE(nl1_n11, nullptr);
+            ASSERT_NE(nl1_n11->add_destination(nl1_dummy_1, "I"), nullptr);
+            Net* nl2_n11 = nl_2->create_net(11, "net_11");
+            ASSERT_NE(nl2_n11, nullptr);
+            ASSERT_NE(nl2_n11->add_destination(nl2_dummy_2, "I"), nullptr);
+            ASSERT_NE(nl2_n11->add_destination(nl2_dummy_1, "I"), nullptr);
+            EXPECT_FALSE(*nl1_n11 == *nl2_n11);       // different number of destinations
+            EXPECT_FALSE(*nl2_n11 == *nl1_n11); 
+            EXPECT_TRUE(*nl1_n11 != *nl2_n11);
+            EXPECT_TRUE(*nl2_n11 != *nl1_n11); 
+            test_utils::clear_connections(nl1_n11);
+            test_utils::clear_connections(nl2_n11);
+
+            Net* nl1_n12 = nl_1->create_net(12, "net_12");
+            ASSERT_NE(nl1_n12, nullptr);
+            ASSERT_NE(nl1_n12->add_destination(nl1_dummy_1, "I"), nullptr);
+            ASSERT_NE(nl1_n12->add_destination(nl1_dummy_2, "I"), nullptr);
+            Net* nl2_n12 = nl_2->create_net(12, "net_12");
+            ASSERT_NE(nl2_n12, nullptr);
+            ASSERT_NE(nl2_n12->add_destination(nl2_dummy_2, "I"), nullptr);
+            ASSERT_NE(nl2_n12->add_destination(nl2_dummy_3, "I"), nullptr);
+            EXPECT_FALSE(*nl1_n12 == *nl2_n12);       // different destinations
+            EXPECT_FALSE(*nl2_n12 == *nl1_n12);
+            EXPECT_TRUE(*nl1_n12 != *nl2_n12);
+            EXPECT_TRUE(*nl2_n12 != *nl1_n12);
+        }
+        TEST_END
+    }
+
+    /**
      * Testing the function set_name and get_name
      *
      * Functions: get_name, set_name
