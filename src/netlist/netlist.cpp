@@ -31,16 +31,19 @@ namespace hal
     {
         if (m_file_name != other.get_input_filename() || m_design_name != other.get_design_name() || m_device_name != other.get_device_name())
         {
+            log_info("netlist", "Netlist not equal due to file_name, design_name or device_name!");
             return false;
         }
 
         if (m_gate_library != other.get_gate_library())
         {
+            log_info("netlist", "Netlist not equal due to gate_library!");
             return false;
         }
 
         if (m_gates.size() != other.get_gates().size() || m_nets.size() != other.get_nets().size() || m_modules.size() != other.get_modules().size())
         {
+            log_info("netlist", "Netlist not equal due to gate size or net size or module size!");
             return false;
         }
 
@@ -48,6 +51,7 @@ namespace hal
         {
             if (const auto it = m_nets_map.find(net->get_id()); it == m_nets_map.end() || *it->second != *net)
             {
+                log_info("netlist", "Netlist not equal due to net {}, present in {} netlist!", net->get_id(), (it == m_nets_map.end() ? "only one" : "both"));
                 return false;
             }
         }
