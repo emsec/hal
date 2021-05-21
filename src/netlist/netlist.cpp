@@ -1,7 +1,6 @@
 #include "hal_core/netlist/netlist.h"
 
 #include "hal_core/netlist/event_handler.h"
-
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -14,7 +13,6 @@ namespace hal
     Netlist::Netlist(const GateLibrary* library) : m_gate_library(library)
     {
         m_event_handler    = new EventHandler();
-
         m_manager          = new NetlistInternalManager(this, m_event_handler);
         m_netlist_id       = 1;
         m_next_gate_id     = 1;
@@ -23,12 +21,12 @@ namespace hal
         m_next_grouping_id = 1;
         m_top_module       = nullptr;    // this triggers the internal manager to allow creation of a module without parent
         m_top_module       = create_module("top_module", nullptr);
-        
     }
 
     Netlist::~Netlist()
     {
         delete m_manager;
+        delete m_event_handler;
     }
 
     u32 Netlist::get_id() const

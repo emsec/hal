@@ -1,7 +1,6 @@
 #include "hal_core/netlist/event_handler.h"
-#include "hal_core/netlist/event_system/event_log.h"
 
-#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -9,13 +8,48 @@
 
 namespace hal
 {
-    EventHandler::EventHandler()
-        : netlist_event_enabled(true),
-          module_event_enabled(true),
-          gate_event_enabled(true),
-          net_event_enabled(true),
-          grouping_event_enabled(true)
-    {;}
+    template<>
+    std::vector<std::string> EnumStrings<NetlistEvent::event>::data = {"id_changed",
+                                                                       "input_filename_changed",
+                                                                       "design_name_changed",
+                                                                       "device_name_changed",
+                                                                       "marked_global_vcc",
+                                                                       "marked_global_gnd",
+                                                                       "unmarked_global_vcc",
+                                                                       "unmarked_global_gnd",
+                                                                       "marked_global_input",
+                                                                       "marked_global_output",
+                                                                       "marked_global_inout",
+                                                                       "unmarked_global_input",
+                                                                       "unmarked_global_output",
+                                                                       "unmarked_global_inout"};
+
+    template<>
+    std::vector<std::string> EnumStrings<GateEvent::event>::data = {"created", "removed", "name_changed", "location_changed"};
+
+    template<>
+    std::vector<std::string> EnumStrings<NetEvent::event>::data = {"created", "removed", "name_changed", "src_added", "src_removed", "dst_added", "dst_removed"};
+
+    template<>
+    std::vector<std::string> EnumStrings<ModuleEvent::event>::data = {"created",
+                                                                      "removed",
+                                                                      "name_changed",
+                                                                      "type_changed",
+                                                                      "parent_changed",
+                                                                      "submodule_added",
+                                                                      "submodule_removed",
+                                                                      "gate_assigned",
+                                                                      "gate_removed",
+                                                                      "input_port_name_changed",
+                                                                      "output_port_name_changed"};
+
+    template<>
+    std::vector<std::string> EnumStrings<GroupingEvent::event>::data =
+        {"created", "removed", "name_changed", "gate_assigned", "gate_removed", "net_assigned", "net_removed", "module_assigned", "module_removed"};
+
+    EventHandler::EventHandler() : netlist_event_enabled(true), module_event_enabled(true), gate_event_enabled(true), net_event_enabled(true), grouping_event_enabled(true)
+    {
+    }
 
     void EventHandler::event_enable_all(bool flag)
     {
@@ -55,7 +89,7 @@ namespace hal
 
     void EventHandler::notify(ModuleEvent::event c, Module* module, u32 associated_data)
     {
-//        ModuleEvent::dump(c, true);
+        //        ModuleEvent::dump(c, true);
         if (module_event_enabled)
         {
             m_module_callback(c, module, associated_data);
