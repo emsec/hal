@@ -40,11 +40,50 @@ namespace hal
 {
     namespace event_log
     {
+         /**
+         * dump gate events to hal log
+         * @param event gate event
+         * @param gate pointer to gate
+         * @param associated_data additional data
+         */
         NETLIST_API void handle_gate_event(GateEvent::event event, Gate* gate, u32 associated_data);
+
+        /**
+        * dump net events to hal log
+        * @param event net event
+        * @param net pointer to net
+        * @param associated_data additional data
+        */
         NETLIST_API void handle_net_event(NetEvent::event event, Net* net, u32 associated_data);
+
+        /**
+        * dump netlist events to hal log
+        * @param event netlist event
+        * @param netlist pointer to netlist
+        * @param associated_data additional data
+        */
         NETLIST_API void handle_netlist_event(NetlistEvent::event event, Netlist* netlist, u32 associated_data);
+
+        /**
+        * dump grouping events to hal log
+        * @param event grouping event
+        * @param grp pointer to grouping
+        * @param associated_data additional data
+        */
         NETLIST_API void handle_grouping_event(GroupingEvent::event event, Grouping* grp, u32 associated_data);
+
+        /**
+        * dump module events to hal log
+        * @param event module event
+        * @param module pointer to module
+        * @param associated_data additional data
+        */
         NETLIST_API void handle_module_event(ModuleEvent::event event, Module* module, u32 associated_data);
+
+        /**
+         * enable event log
+         * @param enable enable logging for all event types
+         */
         NETLIST_API void enable_event_log(bool enable);
 
     }    // namespace event_log
