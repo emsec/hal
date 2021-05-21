@@ -44,31 +44,18 @@ namespace hal
             return false;
         }
 
-        for (const Gate* gate : other.get_gates())
-        {
-            if (*get_gate_by_id(gate->get_id()) != *gate)
-            {
-                return false;
-            }
-        }
-
         for (const Net* net : other.get_nets())
         {
-            if (*get_net_by_id(net->get_id()) != *net)
+            if (const auto it = m_nets_map.find(net->get_id()); it == m_nets_map.end() || *it->second != *net)
             {
                 return false;
             }
         }
 
-        for (const Module* module : other.get_modules())
-        {
-            if (*get_module_by_id(module->get_id()) != *module)
-            {
-                return false;
-            }
-        }
+        // gates check included within modules
 
-        return true;
+        // modules are checked recursively
+        return *m_top_module == *other.get_top_module();
     }
 
     bool Netlist::operator!=(const Netlist& other) const

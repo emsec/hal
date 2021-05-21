@@ -55,6 +55,7 @@ namespace hal
     public:
         /**
          * Check whether two modules are equal.
+         * Does not check for parent module.
          *
          * @param[in] other - The module to compare again.
          * @returns True if both modules are equal, false otherwise.
@@ -63,6 +64,7 @@ namespace hal
 
         /**
          * Check whether two modules are unequal.
+         * Does not check for parent module.
          *
          * @param[in] other - The module to compare again.
          * @returns True if both modules are unequal, false otherwise.

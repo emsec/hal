@@ -25,18 +25,29 @@ namespace hal
             return false;
         }
 
-        if (m_parent != other.get_parent_module() || m_submodules != other.get_submodules())
+        if (other.get_input_port_names().size() != get_input_port_names().size() || other.get_output_port_names().size() != get_output_port_names().size())
         {
             return false;
         }
 
-        if (other.get_input_port_names().size() != m_input_net_to_port_name.size() || other.get_output_port_names().size() != m_output_net_to_port_name.size())
+        // does not check parent module to avoid infinite loop
+        for (Module* other_module : other.get_submodules()) 
         {
-            // early abort
-            return false;
+            if (const auto it = m_submodules_map.find(other_module->get_id()); it == m_submodules_map.end() || *it->second != *other_module) 
+            {
+                return false;
+            }
         }
 
-        for (const auto& [net, port_name] : m_input_net_to_port_name)
+        for (Gate* other_gate : other.get_gates())
+        {
+            if (const auto it = m_gates_map.find(other_gate->get_id()); it == m_gates_map.end() || *it->second != *other_gate)
+            {
+                return false;
+            }
+        }
+
+        for (const auto& [net, port_name] : get_input_port_names())
         {
             if (const Net* other_net = other.get_input_port_net(port_name); other_net == nullptr || *other_net != *net)
             {
@@ -44,7 +55,7 @@ namespace hal
             }
         }
 
-        for (const auto& [net, port_name] : m_output_net_to_port_name)
+        for (const auto& [net, port_name] : get_output_port_names())
         {
             if (const Net* other_net = other.get_output_port_net(port_name); other_net == nullptr || *other_net != *net)
             {
