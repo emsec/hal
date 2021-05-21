@@ -427,6 +427,13 @@ namespace hal
 
         void reloadStylsheet(int istyle);
 
+    private Q_SLOTS:
+        /**
+         * Private slot to handle event log setting
+         * @param enable dump all events to log if set
+         */
+        void handleEventLogEnabled(bool enable);
+
     private:
         /**
          * Overwritten Qt function to handle the close event.

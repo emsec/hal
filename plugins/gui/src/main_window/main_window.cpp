@@ -14,6 +14,7 @@
 #include "gui/plugin_manager/plugin_manager_widget.h"
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/python/python_editor.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
 #include "gui/settings/settings_manager.h"
@@ -28,6 +29,7 @@
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/netlist/event_system/event_log.h"
 
 #include <QApplication>
 #include <QCloseEvent>
@@ -201,6 +203,16 @@ namespace hal
             menuExport->addAction(action);
         }
         if (menuExport) mMenuFile->addMenu(menuExport);
+
+        SettingsItemCheckbox* evlogSetting =  new SettingsItemCheckbox(
+                    "Netlist event log",
+                    "debug/event_log",
+                    false,
+                    "eXpert Settings:Debug",
+                    "Specifies whether each netlist event gets dumped to event log. Might generate a lot of output thus slowing down hal system."
+                );
+        event_log::enable_event_log(evlogSetting->value().toBool());
+        connect(evlogSetting,&SettingsItemCheckbox::boolChanged,this,&MainWindow::handleEventLogEnabled);
 
         mMenuEdit->addAction(mActionUndo);
         mMenuEdit->addSeparator();
@@ -492,6 +504,11 @@ namespace hal
     void MainWindow::clear()
     {
         mLayoutArea->clear();
+    }
+
+    void MainWindow::handleEventLogEnabled(bool enable)
+    {
+        event_log::enable_event_log(enable);
     }
 
     extern void runMain(const QString fileName, const QList<QString> plugins);

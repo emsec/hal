@@ -93,7 +93,7 @@ namespace hal
         if (module_event_enabled)
         {
             m_module_callback(c, module, associated_data);
-            event_log::handle_submodule_event(c, module, associated_data);
+            event_log::handle_module_event(c, module, associated_data);
         }
     }
 
@@ -102,6 +102,7 @@ namespace hal
         if (grouping_event_enabled)
         {
             m_grouping_callback(c, grouping, associated_data);
+            event_log::handle_grouping_event(c, grouping, associated_data);
         }
     }
 
