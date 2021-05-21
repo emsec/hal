@@ -25,16 +25,19 @@ namespace hal
     {
         if (m_id != other.get_id() || m_name != other.get_name())
         {
+            log_info("net", "the nets with IDs {} and {} are not equal due to an unequal ID or name.", m_id, other.get_id());
             return false;
         }
 
         if (is_global_input_net() != other.is_global_input_net() || is_global_output_net() != other.is_global_output_net())
         {
+            log_info("net", "the nets with IDs {} and {} are not equal as one is a global input or output net and the other is not.", m_id, other.get_id());
             return false;
         }
 
         if (m_sources.size() != other.get_num_of_sources() || m_destinations.size() != other.get_num_of_destinations())
         {
+            log_info("net", "the nets with IDs {} and {} are not equal due to an unequal number of sources or destinations.", m_id, other.get_id());
             return false;
         }
 
@@ -44,6 +47,7 @@ namespace hal
             if (std::find_if(sources_n2.begin(), sources_n2.end(), [ep_n1](const Endpoint* ep_n2) { return ep_n1->get_pin() == ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
                 == sources_n2.end())
             {
+                log_info("net", "the nets with IDs {} and {} are not equal due to an unequal source endpoint.", m_id, other.get_id());
                 return false;
             }
         }
@@ -55,11 +59,18 @@ namespace hal
                     destinations_n2.begin(), destinations_n2.end(), [ep_n1](const Endpoint* ep_n2) { return ep_n1->get_pin() == ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
                 == destinations_n2.end())
             {
+                log_info("net", "the nets with IDs {} and {} are not equal due to an unequal destination endpoint.", m_id, other.get_id());
                 return false;
             }
         }
 
-        return DataContainer::operator==(other);
+        if (!DataContainer::operator==(other))
+        {
+            log_info("net", "the nets with IDs {} and {} are not equal due to unequal data.", m_id, other.get_id());
+            return false;
+        }
+
+        return true;
     }
 
     bool Net::operator!=(const Net& other) const

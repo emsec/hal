@@ -51,25 +51,35 @@ namespace hal
     {
         if (m_id != other.get_id() || m_name != other.get_name() || m_type != other.get_type())
         {
+            log_info("gate", "the gates with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
             return false;
         }
 
         if (m_x != other.get_location_x() || m_y != other.get_location_y())
         {
+            log_info("gate", "the gates with IDs {} and {} are not equal due to unequal location data.", m_id, other.get_id());
             return false;
         }
 
         if (is_gnd_gate() != other.is_gnd_gate() || is_vcc_gate() != other.is_vcc_gate())
         {
+            log_info("gate", "the gates with IDs {} and {} are not equal as one is a GND or VCC gate and the other is not.", m_id, other.get_id());
             return false;
         }
 
         if (m_functions != other.get_boolean_functions(true))
         {
+            log_info("gate", "the gates with IDs {} and {} are not equal due to an unequal Boolean functions.", m_id, other.get_id());
             return false;
         }
 
-        return DataContainer::operator==(other);
+        if (!DataContainer::operator==(other))
+        {
+            log_info("gate", "the gates with IDs {} and {} are not equal due to unequal data.", m_id, other.get_id());
+            return false;
+        }
+
+        return true;
     }
 
     bool Gate::operator!=(const Gate& other) const
