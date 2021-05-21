@@ -28,6 +28,11 @@ namespace hal
 {
     /**
      * @ingroup user_action
+     * @brief Removes an item from a Module or Grouping.
+     *
+     * Removes modules, gates, or nets from the UserActionObject's object. This object must be a Module or a Grouping.
+     *
+     * Undo Action: ActionAddItemsToObject
      */
     class ActionRemoveItemsFromObject : public UserAction
     {
@@ -35,6 +40,13 @@ namespace hal
         QSet<u32> mGates;
         QSet<u32> mNets;
     public:
+        /**
+         * Action Constructor.
+         *
+         * @param mods - The ids of the Module%s to remove
+         * @param gats - The ids of the Gate%s to remove
+         * @param nets - The ifs of the Net%s to remove
+         */
         ActionRemoveItemsFromObject(const QSet<u32>& mods = QSet<u32>(),
                                     const QSet<u32>& gats = QSet<u32>(),
                                     const QSet<u32>& nets = QSet<u32>())
@@ -48,6 +60,7 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief UserActionFactory for ActionRemoveItemsFromObject
      */
     class ActionRemoveItemsFromObjectFactory : public UserActionFactory
     {

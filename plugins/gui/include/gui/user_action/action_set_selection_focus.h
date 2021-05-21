@@ -29,6 +29,11 @@ namespace hal
 {
     /**
      * @ingroup user_action
+     * @brief Set the selection and focus.
+     *
+     * Sets the current selection and focus. The internal parameter are set directly by the SelectionRelay.
+     *
+     * Undo Action: SetSelectionFocus
      */
     class ActionSetSelectionFocus : public UserAction
     {
@@ -42,6 +47,9 @@ namespace hal
         u32 mSubfocusIndex;
 
     public:
+        /**
+         * Action constructor.
+         */
         ActionSetSelectionFocus() {;}
 
         QString tagname() const override;
@@ -49,12 +57,18 @@ namespace hal
         void readFromXml(QXmlStreamReader& xmlIn) override;
         bool exec() override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
+        /**
+         * Checks if the new selection/focus of this action differs from the current selection/focus.
+         *
+         * @returns true iff the selection/focus differs from the current one.
+         */
         bool hasModifications() const;
         void setObject(const UserActionObject &obj) override;
     };
 
     /**
      * @ingroup user_action
+     * @brief UserActionFactory for ActionSetSelectionFocus
      */
     class ActionSetSelectionFocusFactory : public UserActionFactory
     {

@@ -28,11 +28,19 @@ namespace hal
 {
     /**
      * @ingroup user_action
+     * @brief Loads a netlist.
+     *
+     * This UserAction can not be undone.
      */
     class ActionOpenNetlistFile : public UserAction
     {
         QString mFilename;
     public:
+        /**
+         * Action constructor.
+         *
+         * @param filename_ - The path of the netlist file to open.
+         */
         ActionOpenNetlistFile(const QString& filename_ = QString());
         QString tagname() const override;
         bool exec() override;
@@ -43,6 +51,7 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief UserActionFactory for ActionOpenNetlistFile
      */
     class ActionOpenNetlistFileFactory : public UserActionFactory
     {

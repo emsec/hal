@@ -29,11 +29,21 @@ namespace hal
 {
     /**
      * @ingroup user_action
+     * @brief Recolors the object.
+     *
+     * Assigns a new color to the UserActionObject's object. The object must be a Grouping or a Module.
+     *
+     * Undo Action: ActionSetObjectColor
      */
     class ActionSetObjectColor : public UserAction
     {
         QColor mColor;
     public:
+        /**
+         * Action Constructor.
+         *
+         * @param col - The new color
+         */
         ActionSetObjectColor(const QColor& col=QColor()) : mColor(col) {;}
         bool exec() override;
         QString tagname() const override;
@@ -44,6 +54,7 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief UserActionFactory for ActionSetObjectColor
      */
     class ActionSetObjectColorFactory : public UserActionFactory
     {

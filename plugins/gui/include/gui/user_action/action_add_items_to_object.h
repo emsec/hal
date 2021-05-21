@@ -30,6 +30,11 @@ namespace hal
 {
     /**
      * @ingroup user_action
+     * @brief Adds an item to a module or grouping.
+     *
+     * Adds Module%s, Gate%s, or Net%s to the UserActionObject which must exist and must be of type Module or Grouping.
+     *
+     * Undo Action: ActionDeleteObject
      */
     class ActionAddItemsToObject : public UserAction
     {
@@ -39,6 +44,13 @@ namespace hal
         PlacementHint mPlacementHint;
         Node mPlacementOrigin;
     public:
+        /**
+         * Action constructor.
+         *
+         * @param mods - The ids of the modules to add
+         * @param gats - The ids of the gates to add
+         * @param nets - The ids of the nets to add
+         */
         ActionAddItemsToObject(const QSet<u32>& mods = QSet<u32>(),
                                const QSet<u32>& gats = QSet<u32>(),
                                const QSet<u32>& nets = QSet<u32>())
@@ -46,6 +58,12 @@ namespace hal
               mPlacementHint(PlacementHint::Standard)
         {;}
         bool exec() override;
+
+        /**
+         * Sets the placement hints that are used to layout the added items.
+         *
+         * @param hint - The new placement hint
+         */
         void setPlacementHint(PlacementHint hint) { mPlacementHint = hint; }
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
@@ -55,6 +73,7 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief UserActionFactory for ActionAddItemsToObject
      */
     class ActionAddItemsToObjectFactory : public UserActionFactory
     {

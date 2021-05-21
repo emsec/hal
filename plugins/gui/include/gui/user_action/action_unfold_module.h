@@ -31,17 +31,39 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief Unfolds a module.
+     *
+     * Unfolds a module so that its content is shown in the GraphicsScene.
+     *
+     * User Action: ActionFoldModule
      */
     class ActionUnfoldModule : public UserAction
     {
         u32 mContextId;
         PlacementHint mPlacementHint;
     public:
+        /**
+         * Action constructor.
+         *
+         * @param moduleId - The id of the module to unfold.
+         */
         ActionUnfoldModule(u32 moduleId = 0);
         QString tagname() const override;
         bool exec() override;
+
+        /**
+         * Sets the id of the context the module will be folded in.
+         *
+         * @param id - The context id
+         */
         void setContextId(u32 id) { mContextId = id; }
         void setObject(const UserActionObject& obj) override;
+
+        /**
+         * Configures the placement hints for the unfolded module.
+         *
+         * @param hint - The new placement hints.
+         */
         void setPlacementHint(PlacementHint hint) { mPlacementHint = hint; }
     private:
         void execInternal(Module* m, GraphContext* currentContext);
@@ -49,6 +71,7 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief UserActionFactory for ActionUnfoldModule
      */
     class ActionUnfoldModuleFactory : public UserActionFactory
     {

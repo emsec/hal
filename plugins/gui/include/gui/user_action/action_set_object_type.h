@@ -28,11 +28,21 @@ namespace hal
 {
     /**
      * @ingroup user_action
+     * @brief Assigns a new type to a module.
+     *
+     * Assigns a new type to the UserActionObject's object. The object must be of type Module.
+     *
+     * Undo Action: ActionSetObjectType
      */
     class ActionSetObjectType : public UserAction
     {
         QString mObjectType;
     public:
+        /**
+         * Action constructor.
+         *
+         * @param type - The new type
+         */
         ActionSetObjectType(const QString& type=QString()) : mObjectType(type) {;}
         bool exec() override;
         QString tagname() const override;
@@ -43,6 +53,7 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief UserActionFactory for ActionSetObjectType
      */
     class ActionSetObjectTypeFactory : public UserActionFactory
     {

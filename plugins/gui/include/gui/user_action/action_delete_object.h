@@ -28,10 +28,18 @@ namespace hal
 {
     /**
      * @ingroup user_action
+     * @brief Deletes an object
+     *
+     * Deletes the UserActionObject's object.
+     *
+     * Undo Action: ActionCreateObject
      */
     class ActionDeleteObject : public UserAction
     {
     public:
+        /**
+         * Action constructor.
+         */
         ActionDeleteObject() {;}
         bool exec() override;
         QString tagname() const override;
@@ -39,6 +47,7 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief UserActionFactory for ActionDeleteObject
      */
     class ActionDeleteObjectFactory : public UserActionFactory
     {

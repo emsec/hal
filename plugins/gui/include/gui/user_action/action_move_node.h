@@ -30,6 +30,12 @@ namespace hal
 {
     /**
      * @ingroup user_action
+     * @brief Moves a node.
+     *
+     * Moves a node to another grid position in the GraphicsScene. The Context ID should be provided by passing it in
+     * the UserActionObject of type UserActionObjectType::Context.
+     *
+     * Undo Action: ActionMoveNode
      */
     class ActionMoveNode : public UserAction
     {
@@ -37,6 +43,12 @@ namespace hal
 
         static QPoint parseFromString(const QString& s);
     public:
+        /**
+         * Action constructor.
+         *
+         * @param from - The initial position of the node to move
+         * @param to - The destination of the node
+         */
         ActionMoveNode(const QPoint& from = QPoint(), const QPoint& to = QPoint())
             : mFrom(from), mTo(to) {;}
         bool exec() override;
@@ -48,6 +60,7 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief UserActionFactory for ActionMoveNode
      */
     class ActionMoveNodeFactory : public UserActionFactory
     {

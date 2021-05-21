@@ -31,21 +31,44 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief Folds a module.
+     *
+     * Shows the parent module as one single box rather than showing its content.
+     *
+     * Undo Action: ActionUnfoldModule
      */
     class ActionFoldModule : public UserAction
     {
         u32 mContextId;
         PlacementHint mPlacementHint;
     public:
+        /**
+         * Action constructor.
+         *
+         * @param moduleId - The id of the module to fold.
+         */
         ActionFoldModule(u32 moduleId = 0);
         QString tagname() const override;
         bool exec() override;
+
+        /**
+         * Sets the id of the context the module will be folded in.
+         *
+         * @param id - The context id
+         */
         void setContextId(u32 id) { mContextId = id; }
+
+        /**
+         * Configures the placement hints for the folded module.
+         *
+         * @param hint - The new placement hints.
+         */
         void setPlacementHint(PlacementHint hint) { mPlacementHint = hint; }
     };
 
     /**
      * @ingroup user_action
+     * @brief UserActionFactory for ActionFoldModule
      */
     class ActionFoldModuleFactory : public UserActionFactory
     {

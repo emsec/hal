@@ -28,12 +28,23 @@ namespace hal
 {
     /**
      * @ingroup user_action
+     * @brief Create a new item
+     *
+     * Creates a new object with a given type and name.
+     *
+     * Undo Action: ActionDeleteObject.
      */
     class ActionCreateObject : public UserAction
     {
         QString mObjectName;
         u32 mParentId;
     public:
+        /**
+         * Action Constructor.
+         *
+         * @param type - The UserActionObjectType of the item that should be created (default type: None)
+         * @param objName - The name of the object to create (default name: "").
+         */
         ActionCreateObject(UserActionObjectType::ObjectType type=UserActionObjectType::None,
                            const QString& objName = QString());
         bool exec() override;
@@ -46,6 +57,7 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief UserActionFactory for ActionCreateObject
      */
     class ActionCreateObjectFactory : public UserActionFactory
     {
