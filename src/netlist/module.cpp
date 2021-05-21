@@ -20,6 +20,72 @@ namespace hal
         m_event_handler    = event_handler;
     }
 
+    bool Module::operator==(const Module& other) const
+    {
+        if (m_id != other.get_id() || m_name != other.get_name() || m_type != other.get_type())
+        {
+            log_info("module", "the modules with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
+            return false;
+        }
+
+        if (other.get_input_port_names().size() != get_input_port_names().size() || other.get_output_port_names().size() != get_output_port_names().size())
+        {
+            log_info("module", "the modules with IDs {} and {} are not equal due to unequal number of port names.", m_id, other.get_id());
+            return false;
+        }
+
+        // does not check parent module to avoid infinite loop
+
+        for (Module* other_module : other.get_submodules())
+        {
+            if (const auto it = m_submodules_map.find(other_module->get_id()); it == m_submodules_map.end() || *it->second != *other_module)
+            {
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal submodules.", m_id, other.get_id());
+                return false;
+            }
+        }
+
+        for (Gate* other_gate : other.get_gates())
+        {
+            if (const auto it = m_gates_map.find(other_gate->get_id()); it == m_gates_map.end() || *it->second != *other_gate)
+            {
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal gates.", m_id, other.get_id());
+                return false;
+            }
+        }
+
+        for (const auto& [net, port_name] : get_input_port_names())
+        {
+            if (const Net* other_net = other.get_input_port_net(port_name); other_net == nullptr || *other_net != *net)
+            {
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal input ports.", m_id, other.get_id());
+                return false;
+            }
+        }
+
+        for (const auto& [net, port_name] : get_output_port_names())
+        {
+            if (const Net* other_net = other.get_output_port_net(port_name); other_net == nullptr || *other_net != *net)
+            {
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal output ports.", m_id, other.get_id());
+                return false;
+            }
+        }
+
+        if (!DataContainer::operator==(other))
+        {
+            log_info("module", "the modules with IDs {} and {} are not equal due to unequal data.", m_id, other.get_id());
+            return false;
+        }
+
+        return true;
+    }
+
+    bool Module::operator!=(const Module& other) const
+    {
+        return !operator==(other);
+    }
+
     u32 Module::get_id() const
     {
         return m_id;
@@ -183,11 +249,11 @@ namespace hal
         return m_internal_manager->m_netlist;
     }
 
-    void Module::set_cache_dirty(bool is_dirty) 
+    void Module::set_cache_dirty(bool is_dirty)
     {
-        m_nets_dirty = is_dirty;
-        m_input_nets_dirty = is_dirty;
-        m_output_nets_dirty = is_dirty;
+        m_nets_dirty          = is_dirty;
+        m_input_nets_dirty    = is_dirty;
+        m_output_nets_dirty   = is_dirty;
         m_internal_nets_dirty = is_dirty;
     }
 
@@ -449,12 +515,22 @@ namespace hal
             return;
         }
 
-        auto input_nets = get_input_nets();
+        if (m_input_port_names.find(port_name) != m_input_port_names.end())
+        {
+            log_error("module",
+                      "input port name '{}' already exists within module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
+                      port_name,
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return;
+        }
 
+        const std::vector<Net*>& input_nets = get_input_nets();
         if (auto it = std::find(input_nets.begin(), input_nets.end(), input_net); it == input_nets.end())
         {
             log_error("module",
-                      "net '{}' with ID {} is not an input net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment",
+                      "net '{}' with ID {} is not an input net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
                       input_net->get_name(),
                       input_net->get_id(),
                       m_name,
@@ -464,6 +540,7 @@ namespace hal
         }
 
         m_named_input_nets.insert(input_net);
+        m_input_port_names.insert(port_name);
         m_input_net_to_port_name[input_net] = port_name;
 
         m_event_handler->notify(ModuleEvent::event::input_port_name_changed, this, input_net->get_id());
@@ -477,12 +554,22 @@ namespace hal
             return;
         }
 
-        auto output_nets = get_output_nets();
+        if (m_output_port_names.find(port_name) != m_output_port_names.end())
+        {
+            log_error("module",
+                      "output port name '{}' already exists within module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
+                      port_name,
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return;
+        }
 
+        const std::vector<Net*>& output_nets = get_output_nets();
         if (auto it = std::find(output_nets.begin(), output_nets.end(), output_net); it == output_nets.end())
         {
             log_error("module",
-                      "net '{}' with ID {} is not an output net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment",
+                      "net '{}' with ID {} is not an output net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
                       output_net->get_name(),
                       output_net->get_id(),
                       m_name,
@@ -492,12 +579,13 @@ namespace hal
         }
 
         m_named_output_nets.insert(output_net);
+        m_output_port_names.insert(port_name);
         m_output_net_to_port_name[output_net] = port_name;
 
         m_event_handler->notify(ModuleEvent::event::output_port_name_changed, this, output_net->get_id());
     }
 
-    std::string Module::get_input_port_name(Net* net)
+    std::string Module::get_input_port_name(Net* net) const
     {
         if (net == nullptr)
         {
@@ -505,8 +593,7 @@ namespace hal
             return "";
         }
 
-        auto input_nets = get_input_nets();
-
+        const std::vector<Net*>& input_nets = get_input_nets();
         if (auto it = std::find(input_nets.begin(), input_nets.end(), net); it == input_nets.end())
         {
             log_error("module",
@@ -526,23 +613,28 @@ namespace hal
         }
         else
         {
-            port_name = "I(" + std::to_string(m_next_input_port_id++) + ")";
+            do
+            {
+                port_name = "I(" + std::to_string(m_next_input_port_id++) + ")";
+            } while (m_input_port_names.find(port_name) != m_input_port_names.end());
+
             m_named_input_nets.insert(net);
+            m_input_port_names.insert(port_name);
             m_input_net_to_port_name.emplace(net, port_name);
         }
 
         return port_name;
     }
 
-    std::string Module::get_output_port_name(Net* net)
+    std::string Module::get_output_port_name(Net* net) const
     {
         if (net == nullptr)
         {
             log_error("module", "nullptr given as output net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return "";
         }
-        auto output_nets = get_output_nets();
 
+        const std::vector<Net*>& output_nets = get_output_nets();
         if (auto it = std::find(output_nets.begin(), output_nets.end(), net); it == output_nets.end())
         {
             log_error("module",
@@ -562,15 +654,20 @@ namespace hal
         }
         else
         {
-            port_name = "O(" + std::to_string(m_next_output_port_id++) + ")";
+            do
+            {
+                port_name = "O(" + std::to_string(m_next_output_port_id++) + ")";
+            } while (m_output_port_names.find(port_name) != m_output_port_names.end());
+
             m_named_output_nets.insert(net);
+            m_output_port_names.insert(port_name);
             m_output_net_to_port_name.emplace(net, port_name);
         }
 
         return port_name;
     }
 
-    Net* Module::get_input_port_net(const std::string& port_name)
+    Net* Module::get_input_port_net(const std::string& port_name) const
     {
         for (const auto& [net, name] : m_input_net_to_port_name)
         {
@@ -584,7 +681,7 @@ namespace hal
         return nullptr;
     }
 
-    Net* Module::get_output_port_net(const std::string& port_name)
+    Net* Module::get_output_port_net(const std::string& port_name) const
     {
         for (const auto& [net, name] : m_output_net_to_port_name)
         {
@@ -600,7 +697,7 @@ namespace hal
 
     const std::map<Net*, std::string>& Module::get_input_port_names() const
     {
-        auto input_nets = get_input_nets();
+        const std::vector<Net*>& input_nets = get_input_nets();
 
         std::vector<Net*> diff;
 
@@ -609,6 +706,7 @@ namespace hal
         for (auto net : diff)
         {
             m_named_input_nets.erase(net);
+            m_input_port_names.erase(m_input_net_to_port_name.at(net));
             m_input_net_to_port_name.erase(net);
         }
 
@@ -618,8 +716,14 @@ namespace hal
         std::set_difference(input_nets.begin(), input_nets.end(), m_named_input_nets.begin(), m_named_input_nets.end(), std::back_inserter(diff));
         for (auto net : diff)
         {
-            auto port_name = "I(" + std::to_string(m_next_input_port_id++) + ")";
+            std::string port_name;
+            do
+            {
+                port_name = "I(" + std::to_string(m_next_input_port_id++) + ")";
+            } while (m_input_port_names.find(port_name) != m_input_port_names.end());
+
             m_named_input_nets.insert(net);
+            m_input_port_names.insert(port_name);
             m_input_net_to_port_name.emplace(net, port_name);
         }
 
@@ -628,7 +732,7 @@ namespace hal
 
     const std::map<Net*, std::string>& Module::get_output_port_names() const
     {
-        auto output_nets = get_output_nets();
+        const std::vector<Net*>& output_nets = get_output_nets();
         std::set<Net*> diff;
 
         // find nets that are still in the port map but no longer an output net
@@ -636,6 +740,7 @@ namespace hal
         for (auto net : diff)
         {
             m_named_output_nets.erase(net);
+            m_output_port_names.erase(m_output_net_to_port_name.at(net));
             m_output_net_to_port_name.erase(net);
         }
 
@@ -645,8 +750,14 @@ namespace hal
         std::set_difference(output_nets.begin(), output_nets.end(), m_named_output_nets.begin(), m_named_output_nets.end(), std::inserter(diff, diff.begin()));
         for (auto net : diff)
         {
-            auto port_name = "O(" + std::to_string(m_next_output_port_id++) + ")";
+            std::string port_name;
+            do
+            {
+                port_name = "O(" + std::to_string(m_next_output_port_id++) + ")";
+            } while (m_output_port_names.find(port_name) != m_output_port_names.end());
+
             m_named_output_nets.insert(net);
+            m_output_port_names.insert(port_name);
             m_output_net_to_port_name.emplace(net, port_name);
         }
 

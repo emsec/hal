@@ -173,6 +173,8 @@ namespace hal
                 // ignore top module, since this is already created by the constructor
                 if (module->get_id() == 1)
                 {
+                    c_netlist->get_top_module()->set_data_map(module->get_data_map());
+                    c_netlist->get_top_module()->set_type(module->get_type());
                     continue;
                 }
 
@@ -188,6 +190,7 @@ namespace hal
                 Module* new_module = c_netlist->create_module(module->get_id(), module->get_name(), c_netlist->get_top_module(), c_gates);
 
                 new_module->set_data_map(module->get_data_map());
+                new_module->set_type(module->get_type());
             }
 
             // update parent_module in modules

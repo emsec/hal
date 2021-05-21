@@ -47,6 +47,22 @@ namespace hal
         virtual ~DataContainer() = default;
 
         /**
+         * Check whether two data containers are equal.
+         *
+         * @param[in] other - The data container to compare against.
+         * @returns True if both data containers are equal, false otherwise.
+         */
+        bool operator==(const DataContainer& other) const;
+
+        /**
+         * Check whether two data containers are unequal.
+         *
+         * @param[in] other - The data container to compare against.
+         * @returns True if both data containers are unequal, false otherwise.
+         */
+        bool operator!=(const DataContainer& other) const;
+
+        /**
         * Add a data entry.<br>
         * May overwrite an existing entry.
         *
