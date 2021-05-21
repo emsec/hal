@@ -40,6 +40,22 @@ namespace hal
     {
     public:
         /**
+         * Check whether two endpoints are equal.
+         *
+         * @param[in] other - The endpoint to compare against.
+         * @returns True if both endpoints are equal, false otherwise.
+         */
+        bool operator==(const Endpoint& other) const;
+
+        /**
+         * Check whether two endpoints are unequal.
+         *
+         * @param[in] other - The endpoint to compare against.
+         * @returns True if both endpoints are unequal, false otherwise.
+         */
+        bool operator!=(const Endpoint& other) const;
+
+        /**
          * Get the gate associated with the endpoint.
          *
          * @returns The gate.

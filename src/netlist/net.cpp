@@ -21,6 +21,52 @@ namespace hal
         m_name             = name;
     }
 
+    bool Net::operator==(const Net& other) const
+    {
+        if (m_id != other.get_id() || m_name != other.get_name())
+        {
+            return false;
+        }
+
+        if (is_global_input_net() != other.is_global_input_net() || is_global_output_net() != other.is_global_output_net())
+        {
+            return false;
+        }
+
+        if (m_sources.size() != other.get_num_of_sources() || m_destinations.size() != other.get_num_of_destinations())
+        {
+            return false;
+        }
+
+        const std::vector<Endpoint*>& sources_n2 = other.get_sources();
+        for (const Endpoint* ep_n1 : m_sources_raw)
+        {
+            if (std::find_if(sources_n2.begin(), sources_n2.end(), [ep_n1](const Endpoint* ep_n2) { return ep_n1->get_pin() == ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
+                == sources_n2.end())
+            {
+                return false;
+            }
+        }
+
+        const std::vector<Endpoint*>& destinations_n2 = other.get_destinations();
+        for (const Endpoint* ep_n1 : m_destinations_raw)
+        {
+            if (std::find_if(
+                    destinations_n2.begin(), destinations_n2.end(), [ep_n1](const Endpoint* ep_n2) { return ep_n1->get_pin() == ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
+                == destinations_n2.end())
+            {
+                return false;
+            }
+        }
+
+        return DataContainer::operator==(other);
+    }
+
+    bool Net::operator!=(const Net& other) const
+    {
+        return !operator==(other);
+    }
+
     u32 Net::get_id() const
     {
         return m_id;
@@ -31,7 +77,7 @@ namespace hal
         return m_internal_manager->m_netlist;
     }
 
-    std::string Net::get_name() const
+    const std::string& Net::get_name() const
     {
         return m_name;
     }
@@ -74,7 +120,7 @@ namespace hal
 
     bool Net::remove_source(Endpoint* ep)
     {
-        if(ep == nullptr) 
+        if (ep == nullptr)
         {
             return false;
         }
@@ -154,11 +200,11 @@ namespace hal
 
     bool Net::remove_destination(Endpoint* ep)
     {
-        if(ep == nullptr) 
+        if (ep == nullptr)
         {
             return false;
         }
-        
+
         return m_internal_manager->net_remove_destination(this, ep);
     }
 
@@ -240,12 +286,12 @@ namespace hal
         return m_internal_manager->m_netlist->unmark_global_output_net(this);
     }
 
-    bool Net::is_global_input_net()
+    bool Net::is_global_input_net() const
     {
         return m_internal_manager->m_netlist->is_global_input_net(this);
     }
 
-    bool Net::is_global_output_net()
+    bool Net::is_global_output_net() const
     {
         return m_internal_manager->m_netlist->is_global_output_net(this);
     }

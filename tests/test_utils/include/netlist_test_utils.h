@@ -41,7 +41,7 @@ namespace hal
         Net* connect(Netlist* netlist, Gate* src_gate, const std::string& src_pin, Gate* dst_gate, const std::string& dst_pin, const std::string& net_name = "");
 
         /**
-         * Creates a connection to a global input.
+         * Create a connection to a global input.
          * 
          * @param[in] netlist - The netlist.
          * @param[in] dst_gate - The destination gate.
@@ -51,7 +51,7 @@ namespace hal
         Net* connect_global_in(Netlist* netlist, Gate* dst_gate, const std::string& dst_pin, const std::string& net_name = "");
 
         /**
-         * Creates a connection to a global input.
+         * Create a connection to a global input.
          * 
          * @param[in] netlist - The netlist.
          * @param[in] src_gate - The source gate.
@@ -59,6 +59,20 @@ namespace hal
          * @param[in] net_name - The name of the net, defaults to ID of connected gate.
          */
         Net* connect_global_out(Netlist* netlist, Gate* src_gate, const std::string& src_pin, const std::string& net_name = "");
+
+        /**
+         * Remove all connections of the gate.
+         * 
+         * @param[in] gate - The gate.
+         */
+        void clear_connections(Gate* gate);
+
+        /**
+         * Remove all connections of the net.
+         * 
+         * @param[in] net - The net.
+         */
+        void clear_connections(Net* net);
 
         // TODO clean up everything below
 

@@ -9,6 +9,22 @@ namespace hal
             Each gate can only be in one module at a time. Nets are only loosely associated with modules.
         )");
 
+        py_module.def(py::self == py::self, R"(
+            Check whether two modules are equal.
+            Does not check for parent module.
+
+            :returns: True if both modules are equal, false otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def(py::self != py::self, R"(
+            Check whether two modules are unequal.
+            Does not check for parent module.
+
+            :returns: True if both modules are unequal, false otherwise.
+            :rtype: bool
+        )");
+
         py_module.def_property_readonly("id", &Module::get_id, R"(
             The unique ID of the module.
 

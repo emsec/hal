@@ -24,6 +24,154 @@ namespace hal {
     };
 
     /**
+     * Test operators for equality and inequality.
+     * 
+     * Functions: operator==, operator!=
+     */
+    TEST_F(NetlistTest, check_operators)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl_1 = test_utils::create_empty_netlist();
+            ASSERT_NE(nl_1, nullptr);
+            std::unique_ptr<Netlist> nl_2 = test_utils::create_empty_netlist();
+            ASSERT_NE(nl_2, nullptr);
+            const GateLibrary* gl = nl_1->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+            ASSERT_EQ(gl, nl_2->get_gate_library());
+
+            EXPECT_TRUE(*nl_1 == *nl_1);        // identical netlist pointer
+            EXPECT_TRUE(*nl_2 == *nl_2);
+            EXPECT_FALSE(*nl_1 != *nl_1);
+            EXPECT_FALSE(*nl_2 != *nl_2);
+            EXPECT_TRUE(*nl_1 == *nl_2);        // identical netlists
+            EXPECT_TRUE(*nl_2 == *nl_1);
+            EXPECT_FALSE(*nl_1 != *nl_2);
+            EXPECT_FALSE(*nl_2 != *nl_1);
+
+            // different gate libraries
+            std::unique_ptr<GateLibrary> gl_other = std::make_unique<GateLibrary>("test/path", "test");
+            std::unique_ptr<Netlist> nl_3 = std::make_unique<Netlist>(gl_other.get());
+            EXPECT_FALSE(*nl_1 == *nl_3);
+            EXPECT_FALSE(*nl_3 == *nl_1);
+            EXPECT_TRUE(*nl_1 != *nl_3);
+            EXPECT_TRUE(*nl_3 != *nl_1);
+
+            // different file/design/device names
+            nl_1->set_design_name("design_1");
+            nl_2->set_design_name("design_2");
+            EXPECT_FALSE(*nl_1 == *nl_2);
+            EXPECT_FALSE(*nl_2 == *nl_1);
+            EXPECT_TRUE(*nl_1 != *nl_2);
+            EXPECT_TRUE(*nl_2 != *nl_1);
+
+            nl_2->set_design_name("design_1");
+            nl_1->set_device_name("device_1");
+            nl_2->set_device_name("device_2");   
+            EXPECT_FALSE(*nl_1 == *nl_2);
+            EXPECT_FALSE(*nl_2 == *nl_1);
+            EXPECT_TRUE(*nl_1 != *nl_2);
+            EXPECT_TRUE(*nl_2 != *nl_1);
+
+            nl_2->set_device_name("device_1");
+            nl_1->set_input_filename("path_1");
+            nl_2->set_input_filename("path_2");   
+            EXPECT_FALSE(*nl_1 == *nl_2);
+            EXPECT_FALSE(*nl_2 == *nl_1);
+            EXPECT_TRUE(*nl_1 != *nl_2);
+            EXPECT_TRUE(*nl_2 != *nl_1);
+
+            nl_1->set_input_filename("path_2");   
+            EXPECT_TRUE(*nl_1 == *nl_2);
+            EXPECT_TRUE(*nl_2 == *nl_1);
+            EXPECT_FALSE(*nl_1 != *nl_2);
+            EXPECT_FALSE(*nl_2 != *nl_1);
+
+            // different modules
+            Gate* nl1_dummy_1 = nl_1->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_1");
+            ASSERT_NE(nl1_dummy_1, nullptr);
+            Gate* nl1_dummy_2 = nl_1->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_2");
+            ASSERT_NE(nl1_dummy_2, nullptr);
+            Gate* nl1_dummy_3 = nl_1->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_3");
+            ASSERT_NE(nl1_dummy_3, nullptr);
+            Gate* nl2_dummy_1 = nl_2->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_1");
+            ASSERT_NE(nl2_dummy_1, nullptr);
+            Gate* nl2_dummy_2 = nl_2->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_2");
+            ASSERT_NE(nl2_dummy_2, nullptr);
+            Gate* nl2_dummy_3 = nl_2->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_3");
+            ASSERT_NE(nl2_dummy_3, nullptr);
+
+            Module* nl1_mod_1 = nl_1->create_module("mod_1", nl_1->get_top_module(), {nl1_dummy_1, nl1_dummy_2});
+            ASSERT_NE(nl1_mod_1, nullptr);
+            Module* nl1_mod_2 = nl_1->create_module("mod_2", nl1_mod_1, {nl1_dummy_3});
+            ASSERT_NE(nl1_mod_2, nullptr);
+            Module* nl2_mod_1 = nl_2->create_module("mod_1", nl_2->get_top_module(), {nl2_dummy_1, nl2_dummy_2});
+            ASSERT_NE(nl2_mod_1, nullptr);
+            Module* nl2_mod_2 = nl_2->create_module("mod_2", nl2_mod_1, {nl2_dummy_3});
+            ASSERT_NE(nl2_mod_2, nullptr);
+            EXPECT_TRUE(*nl_1 == *nl_2);
+            EXPECT_TRUE(*nl_2 == *nl_1);
+            EXPECT_FALSE(*nl_1 != *nl_2);
+            EXPECT_FALSE(*nl_2 != *nl_1);
+
+            nl2_mod_2->assign_gate(nl2_dummy_2);
+
+            EXPECT_FALSE(*nl_1 == *nl_2);
+            EXPECT_FALSE(*nl_2 == *nl_1);
+            EXPECT_TRUE(*nl_1 != *nl_2);
+            EXPECT_TRUE(*nl_2 != *nl_1);
+
+            nl2_mod_1->assign_gate(nl2_dummy_2);
+
+            EXPECT_TRUE(*nl_1 == *nl_2);
+            EXPECT_TRUE(*nl_2 == *nl_1);
+            EXPECT_FALSE(*nl_1 != *nl_2);
+            EXPECT_FALSE(*nl_2 != *nl_1);
+
+            nl_2->delete_gate(nl2_dummy_3);
+
+            EXPECT_FALSE(*nl_1 == *nl_2);
+            EXPECT_FALSE(*nl_2 == *nl_1);
+            EXPECT_TRUE(*nl_1 != *nl_2);
+            EXPECT_TRUE(*nl_2 != *nl_1);
+
+            nl_1->delete_gate(nl1_dummy_3);
+
+            EXPECT_TRUE(*nl_1 == *nl_2);
+            EXPECT_TRUE(*nl_2 == *nl_1);
+            EXPECT_FALSE(*nl_1 != *nl_2);
+            EXPECT_FALSE(*nl_2 != *nl_1);
+
+            // different nets (and different order)
+            Net* nl1_net_1 = nl_1->create_net(1, "net_1");
+            ASSERT_NE(nl1_net_1, nullptr);
+            Net* nl1_net_2 = nl_1->create_net(2, "net_2");
+            ASSERT_NE(nl1_net_2, nullptr);
+            Net* nl1_net_3 = nl_1->create_net(3, "net_3");
+            ASSERT_NE(nl1_net_3, nullptr);
+            Net* nl2_net_1 = nl_2->create_net(1, "net_1");
+            ASSERT_NE(nl2_net_1, nullptr);
+            Net* nl2_net_3 = nl_2->create_net(3, "net_3");
+            ASSERT_NE(nl2_net_3, nullptr);
+            Net* nl2_net_2 = nl_2->create_net(2, "net_2");
+            ASSERT_NE(nl2_net_2, nullptr);
+
+            EXPECT_TRUE(*nl_1 == *nl_2);
+            EXPECT_TRUE(*nl_2 == *nl_1);
+            EXPECT_FALSE(*nl_1 != *nl_2);
+            EXPECT_FALSE(*nl_2 != *nl_1);
+
+            nl_2->delete_net(nl2_net_3);
+
+            EXPECT_FALSE(*nl_1 == *nl_2);
+            EXPECT_FALSE(*nl_2 == *nl_1);
+            EXPECT_TRUE(*nl_1 != *nl_2);
+            EXPECT_TRUE(*nl_2 != *nl_1);
+        }
+        TEST_END
+    }
+
+    /**
      * Testing the access on the id
      *
      * Functions: get_id, set_id

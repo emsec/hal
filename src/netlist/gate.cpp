@@ -47,6 +47,36 @@ namespace hal
         m_y                = y;
     }
 
+    bool Gate::operator==(const Gate& other) const
+    {
+        if (m_id != other.get_id() || m_name != other.get_name() || m_type != other.get_type())
+        {
+            return false;
+        }
+
+        if (m_x != other.get_location_x() || m_y != other.get_location_y())
+        {
+            return false;
+        }
+
+        if (is_gnd_gate() != other.is_gnd_gate() || is_vcc_gate() != other.is_vcc_gate())
+        {
+            return false;
+        }
+
+        if (m_functions != other.get_boolean_functions(true))
+        {
+            return false;
+        }
+
+        return DataContainer::operator==(other);
+    }
+
+    bool Gate::operator!=(const Gate& other) const
+    {
+        return !operator==(other);
+    }
+
     u32 Gate::get_id() const
     {
         return m_id;
@@ -57,7 +87,7 @@ namespace hal
         return m_internal_manager->m_netlist;
     }
 
-    std::string Gate::get_name() const
+    const std::string& Gate::get_name() const
     {
         return m_name;
     }
@@ -369,12 +399,12 @@ namespace hal
         return m_internal_manager->m_netlist->unmark_gnd_gate(this);
     }
 
-    bool Gate::is_vcc_gate()
+    bool Gate::is_vcc_gate() const
     {
         return m_internal_manager->m_netlist->is_vcc_gate(this);
     }
 
-    bool Gate::is_gnd_gate()
+    bool Gate::is_gnd_gate() const
     {
         return m_internal_manager->m_netlist->is_gnd_gate(this);
     }
