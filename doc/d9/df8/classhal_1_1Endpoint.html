@@ -82,12 +82,16 @@ Collaboration diagram for hal::Endpoint:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d4/dd3/classhal_1_1Endpoint__coll__graph.png" border="0" usemap="#hal_1_1Endpoint_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1Endpoint_coll__map" id="hal_1_1Endpoint_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,171,141"/>
+<area shape="rect" title=" " alt="" coords="5,5,171,171"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a8b11d0e2bbf41dcdcd3bd9cec0d5082e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#a8b11d0e2bbf41dcdcd3bd9cec0d5082e">operator==</a> (const <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> &amp;other) const</td></tr>
+<tr class="separator:a8b11d0e2bbf41dcdcd3bd9cec0d5082e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa1f3e2681b24e03ac009d6a322afd2f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#aaa1f3e2681b24e03ac009d6a322afd2f">operator!=</a> (const <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> &amp;other) const</td></tr>
+<tr class="separator:aaa1f3e2681b24e03ac009d6a322afd2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5d98029f04ec9dc36da48b3fece7bd6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">get_gate</a> () const</td></tr>
 <tr class="separator:aa5d98029f04ec9dc36da48b3fece7bd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb701e971149c5bf2eea49c8a1dd9d4d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#abb701e971149c5bf2eea49c8a1dd9d4d">get_pin</a> () const</td></tr>
@@ -107,6 +111,60 @@ Friends</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An endpoint comprises the pin of a gate, the respective gate, and the connected net. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8b11d0e2bbf41dcdcd3bd9cec0d5082e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b11d0e2bbf41dcdcd3bd9cec0d5082e">&#9670;&nbsp;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::Endpoint::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check whether two endpoints are equal.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>- The endpoint to compare against. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both endpoints are equal, false otherwise. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">get_gate()</a>, <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#a4eb6a0c6fc8133fb74feebfdf0cd1589">get_net()</a>, <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#abb701e971149c5bf2eea49c8a1dd9d4d">get_pin()</a>, and <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">is_destination_pin()</a>.</p>
+
+</div>
+</div>
+<a id="aaa1f3e2681b24e03ac009d6a322afd2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa1f3e2681b24e03ac009d6a322afd2f">&#9670;&nbsp;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::Endpoint::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check whether two endpoints are unequal.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>- The endpoint to compare against. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both endpoints are unequal, false otherwise. </dd></dl>
+
+</div>
+</div>
 <a id="aa5d98029f04ec9dc36da48b3fece7bd6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa5d98029f04ec9dc36da48b3fece7bd6">&#9670;&nbsp;</a></span>get_gate()</h2>
 
@@ -124,7 +182,7 @@ Friends</h2></td></tr>
 <p>Get the gate associated with the endpoint.</p>
 <dl class="section return"><dt>Returns</dt><dd>The gate. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a0875f5c8245c404e549e7f85511d69f3">hal::netlist_utils::get_complex_gate_chain()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a42120b05f3abe3a4b75f33f67a73e141">hal::netlist_utils::get_gate_chain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a0875f5c8245c404e549e7f85511d69f3">hal::netlist_utils::get_complex_gate_chain()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a42120b05f3abe3a4b75f33f67a73e141">hal::netlist_utils::get_gate_chain()</a>, and <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#a8b11d0e2bbf41dcdcd3bd9cec0d5082e">operator==()</a>.</p>
 
 </div>
 </div>
@@ -145,7 +203,7 @@ Friends</h2></td></tr>
 <p>Get the name of the pin associated with the endpoint.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name of the pin. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a0875f5c8245c404e549e7f85511d69f3">hal::netlist_utils::get_complex_gate_chain()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a73cd013dd914485d2ef82f888b600a45">hal::netlist_utils::remove_buffers()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a0875f5c8245c404e549e7f85511d69f3">hal::netlist_utils::get_complex_gate_chain()</a>, <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#a8b11d0e2bbf41dcdcd3bd9cec0d5082e">operator==()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a73cd013dd914485d2ef82f888b600a45">hal::netlist_utils::remove_buffers()</a>.</p>
 
 </div>
 </div>
@@ -166,7 +224,7 @@ Friends</h2></td></tr>
 <p>Get the net associated with the endpoint.</p>
 <dl class="section return"><dt>Returns</dt><dd>The net. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a73cd013dd914485d2ef82f888b600a45">hal::netlist_utils::remove_buffers()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>, <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#a8b11d0e2bbf41dcdcd3bd9cec0d5082e">operator==()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a73cd013dd914485d2ef82f888b600a45">hal::netlist_utils::remove_buffers()</a>.</p>
 
 </div>
 </div>
@@ -208,7 +266,7 @@ Friends</h2></td></tr>
 <p>Checks whether the pin of the endpoint is a destination (input) pin.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if the endpoint is an destination (input) pin, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>, and <a class="el" href="../../de/db0/classhal_1_1Net.html#a873703738f1425608306e7d8ebffb659">hal::Net::is_a_destination()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a873703738f1425608306e7d8ebffb659">hal::Net::is_a_destination()</a>, and <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#a8b11d0e2bbf41dcdcd3bd9cec0d5082e">operator==()</a>.</p>
 
 </div>
 </div>
@@ -242,7 +300,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 20 2021 16:02:04 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 21 2021 10:01:48 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

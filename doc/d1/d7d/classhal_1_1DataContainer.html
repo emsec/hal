@@ -81,7 +81,7 @@ Collaboration diagram for hal::DataContainer:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/df0/classhal_1_1DataContainer__coll__graph.png" border="0" usemap="#hal_1_1DataContainer_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1DataContainer_coll__map" id="hal_1_1DataContainer_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,157,171"/>
+<area shape="rect" title=" " alt="" coords="5,5,157,200"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -91,6 +91,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a268c27a803da43b036ac0d324dfd31c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af25d5d4fc6a9ff420e8d37aef4b3daad"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#af25d5d4fc6a9ff420e8d37aef4b3daad">~DataContainer</a> ()=default</td></tr>
 <tr class="separator:af25d5d4fc6a9ff420e8d37aef4b3daad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13f9b027f0b7f73502f3cbe3811c83b9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#a13f9b027f0b7f73502f3cbe3811c83b9">operator==</a> (const <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html">DataContainer</a> &amp;other) const</td></tr>
+<tr class="separator:a13f9b027f0b7f73502f3cbe3811c83b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1eaa13661da056d27b56a2198ed152ab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#a1eaa13661da056d27b56a2198ed152ab">operator!=</a> (const <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html">DataContainer</a> &amp;other) const</td></tr>
+<tr class="separator:a1eaa13661da056d27b56a2198ed152ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5cb9be187148a5be1f9ee9e558df2c9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#ab5cb9be187148a5be1f9ee9e558df2c9">set_data</a> (const std::string &amp;category, const std::string &amp;key, const std::string &amp;data_type, const std::string &amp;value, const bool log_with_info_level=false)</td></tr>
 <tr class="separator:ab5cb9be187148a5be1f9ee9e558df2c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15ddfdb9e6d693c4e29d535ad2be215b"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#a15ddfdb9e6d693c4e29d535ad2be215b">get_data</a> (const std::string &amp;category, const std::string &amp;key) const</td></tr>
@@ -157,6 +161,64 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a13f9b027f0b7f73502f3cbe3811c83b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13f9b027f0b7f73502f3cbe3811c83b9">&#9670;&nbsp;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::DataContainer::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html">DataContainer</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check whether two data containers are equal.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>- The data container to compare against. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both data containers are equal, false otherwise. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#a1067630aa486e2a76391c0572d263a24">get_data_map()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#a1eaa13661da056d27b56a2198ed152ab">operator!=()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a63f99a31407b08c2a4fe7e7868e2332f">hal::Net::operator==()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a3357e372a3b5193f519e951af42e0713">hal::Module::operator==()</a>, and <a class="el" href="../../d5/d57/classhal_1_1Gate.html#adbd389b40d0f3bbcc8ebdcf46b3a28d0">hal::Gate::operator==()</a>.</p>
+
+</div>
+</div>
+<a id="a1eaa13661da056d27b56a2198ed152ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1eaa13661da056d27b56a2198ed152ab">&#9670;&nbsp;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::DataContainer::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html">DataContainer</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check whether two data containers are unequal.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>- The data container to compare against. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both data containers are unequal, false otherwise. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#a13f9b027f0b7f73502f3cbe3811c83b9">operator==()</a>.</p>
+
+</div>
+</div>
 <a id="ab5cb9be187148a5be1f9ee9e558df2c9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab5cb9be187148a5be1f9ee9e558df2c9">&#9670;&nbsp;</a></span>set_data()</h2>
 
@@ -326,7 +388,7 @@ Public Member Functions</h2></td></tr>
 <p>Get a map from ((1) category, (2) key) to ((1) type, (2) value) containing all stored data entries.</p>
 <dl class="section return"><dt>Returns</dt><dd>The stored data as a map. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4">hal::data_container_init()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a2a6599c0e0034abb437a5ba1b9f15493">hal::netlist_utils::replace_gate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4">hal::data_container_init()</a>, <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#a13f9b027f0b7f73502f3cbe3811c83b9">operator==()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a2a6599c0e0034abb437a5ba1b9f15493">hal::netlist_utils::replace_gate()</a>.</p>
 
 </div>
 </div>
@@ -364,7 +426,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 20 2021 16:02:04 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 21 2021 10:01:48 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

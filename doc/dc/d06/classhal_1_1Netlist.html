@@ -82,7 +82,7 @@ Collaboration diagram for hal::Netlist:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/da5/classhal_1_1Netlist__coll__graph.png" border="0" usemap="#hal_1_1Netlist_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1Netlist_coll__map" id="hal_1_1Netlist_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,227,1256"/>
+<area shape="rect" title=" " alt="" coords="5,5,227,1329"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -92,6 +92,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae0cbe9fa2733455ca05be3655bd88585"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abeffd0b1e03bedf1aa670e5bba0966fd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#abeffd0b1e03bedf1aa670e5bba0966fd">~Netlist</a> ()</td></tr>
 <tr class="separator:abeffd0b1e03bedf1aa670e5bba0966fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a742b4070e8474e074d8f91b294e4679d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a742b4070e8474e074d8f91b294e4679d">operator==</a> (const <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &amp;other) const</td></tr>
+<tr class="separator:a742b4070e8474e074d8f91b294e4679d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01fbe874fababfe4d69f8b48c4484842"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a01fbe874fababfe4d69f8b48c4484842">operator!=</a> (const <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &amp;other) const</td></tr>
+<tr class="separator:a01fbe874fababfe4d69f8b48c4484842"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dc3f04d8b357b25fc129bf85b3b2dec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a7dc3f04d8b357b25fc129bf85b3b2dec">get_id</a> () const</td></tr>
 <tr class="separator:a7dc3f04d8b357b25fc129bf85b3b2dec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a826dd40ce2b4033f7e4fca4a53a02945"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a826dd40ce2b4033f7e4fca4a53a02945">set_id</a> (const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> id)</td></tr>
@@ -124,8 +128,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5ac1b9f92caf55d0ce9fc1835c38933b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26d0f67be01c66f22422f40938e29237"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a> (const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gate_id) const</td></tr>
 <tr class="separator:a26d0f67be01c66f22422f40938e29237"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a747f7afeaa0187353882cdc4ac3248ee"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a747f7afeaa0187353882cdc4ac3248ee">get_gates</a> (const std::function&lt; bool(<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;filter=nullptr) const</td></tr>
-<tr class="separator:a747f7afeaa0187353882cdc4ac3248ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d6c2c4b712ac8964253627e7adf3266"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a0d6c2c4b712ac8964253627e7adf3266">get_gates</a> () const</td></tr>
+<tr class="separator:a0d6c2c4b712ac8964253627e7adf3266"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca7cefd88af9d856c81b6d176049e59c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#aca7cefd88af9d856c81b6d176049e59c">get_gates</a> (const std::function&lt; bool(<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;filter) const</td></tr>
+<tr class="separator:aca7cefd88af9d856c81b6d176049e59c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13814c485dc7040d31820466b0a6883f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a13814c485dc7040d31820466b0a6883f">mark_vcc_gate</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate)</td></tr>
 <tr class="separator:a13814c485dc7040d31820466b0a6883f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1600d7ec1cf6455657786174bc958589"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a1600d7ec1cf6455657786174bc958589">mark_gnd_gate</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate)</td></tr>
@@ -134,14 +140,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8f8cff382fcbad02221028e6d52ae920"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71338941318c4d1cd89daf208c204251"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a71338941318c4d1cd89daf208c204251">unmark_gnd_gate</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate)</td></tr>
 <tr class="separator:a71338941318c4d1cd89daf208c204251"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a608c875cc68eaed4451c1b38200266f5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a608c875cc68eaed4451c1b38200266f5">is_vcc_gate</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate) const</td></tr>
-<tr class="separator:a608c875cc68eaed4451c1b38200266f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a484937fe6ca85607827277129220ac95"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a484937fe6ca85607827277129220ac95">is_gnd_gate</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate) const</td></tr>
-<tr class="separator:a484937fe6ca85607827277129220ac95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1cb3ca0ff11e42f596f6a4fda2e13a73"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a1cb3ca0ff11e42f596f6a4fda2e13a73">get_vcc_gates</a> () const</td></tr>
-<tr class="separator:a1cb3ca0ff11e42f596f6a4fda2e13a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29f3c8cc0d7f9fb9828044a292476da4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a29f3c8cc0d7f9fb9828044a292476da4">get_gnd_gates</a> () const</td></tr>
-<tr class="separator:a29f3c8cc0d7f9fb9828044a292476da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadea5f117fc8b9ed0e521de4cb788060"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#aadea5f117fc8b9ed0e521de4cb788060">is_vcc_gate</a> (const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate) const</td></tr>
+<tr class="separator:aadea5f117fc8b9ed0e521de4cb788060"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a452ad19faf39c73ba45e4a46e7a37672"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a452ad19faf39c73ba45e4a46e7a37672">is_gnd_gate</a> (const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate) const</td></tr>
+<tr class="separator:a452ad19faf39c73ba45e4a46e7a37672"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b9524e351ab55d1b6cd6cb27dec707c"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a6b9524e351ab55d1b6cd6cb27dec707c">get_vcc_gates</a> () const</td></tr>
+<tr class="separator:a6b9524e351ab55d1b6cd6cb27dec707c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5024423d773b9705545bf62f64c749a9"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5024423d773b9705545bf62f64c749a9">get_gnd_gates</a> () const</td></tr>
+<tr class="separator:a5024423d773b9705545bf62f64c749a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ec76f035241fed1fff23fd695484d77"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8ec76f035241fed1fff23fd695484d77">get_unique_net_id</a> ()</td></tr>
 <tr class="separator:a8ec76f035241fed1fff23fd695484d77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18c6fe99cddc61227422286299a6926d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a18c6fe99cddc61227422286299a6926d">create_net</a> (const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> net_id, const std::string &amp;name=&quot;&quot;)</td></tr>
@@ -154,8 +160,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8514bcb8c9bcdd25c2cabd2f3aaa6307"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5e29819702448bdd0315d3282e2eaae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ab5e29819702448bdd0315d3282e2eaae">get_net_by_id</a> (<a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> net_id) const</td></tr>
 <tr class="separator:ab5e29819702448bdd0315d3282e2eaae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d39a1ba86bb511dab74dfc6907b2553"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a4d39a1ba86bb511dab74dfc6907b2553">get_nets</a> (const std::function&lt; bool(<a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *)&gt; &amp;filter=nullptr) const</td></tr>
-<tr class="separator:a4d39a1ba86bb511dab74dfc6907b2553"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac787de6b52a38112735e3ff9bd2b6d17"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ac787de6b52a38112735e3ff9bd2b6d17">get_nets</a> () const</td></tr>
+<tr class="separator:ac787de6b52a38112735e3ff9bd2b6d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e2f24198689f7b22fc2b7df00628ad0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a1e2f24198689f7b22fc2b7df00628ad0">get_nets</a> (const std::function&lt; bool(<a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *)&gt; &amp;filter) const</td></tr>
+<tr class="separator:a1e2f24198689f7b22fc2b7df00628ad0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b2353349272a95760d03c118900f4cc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a9b2353349272a95760d03c118900f4cc">mark_global_input_net</a> (<a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *net)</td></tr>
 <tr class="separator:a9b2353349272a95760d03c118900f4cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5341a316daab6aafceac102a744c8ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ab5341a316daab6aafceac102a744c8ee">mark_global_output_net</a> (<a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *net)</td></tr>
@@ -164,14 +172,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aef44997a66ed0834dd0893092f2f7bdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac796504ffcf3d4d3748cc9b7213b22e1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ac796504ffcf3d4d3748cc9b7213b22e1">unmark_global_output_net</a> (<a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *net)</td></tr>
 <tr class="separator:ac796504ffcf3d4d3748cc9b7213b22e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ce8e376af0b84a91e057b7d944fb943"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a2ce8e376af0b84a91e057b7d944fb943">is_global_input_net</a> (<a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *net) const</td></tr>
-<tr class="separator:a2ce8e376af0b84a91e057b7d944fb943"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa606b4d1678bb1bb54dd8dd7cb5d72a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#aa606b4d1678bb1bb54dd8dd7cb5d72a1">is_global_output_net</a> (<a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *net) const</td></tr>
-<tr class="separator:aa606b4d1678bb1bb54dd8dd7cb5d72a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a099ab97938cf02c0f50ddad8fa00ed90"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a099ab97938cf02c0f50ddad8fa00ed90">get_global_input_nets</a> () const</td></tr>
-<tr class="separator:a099ab97938cf02c0f50ddad8fa00ed90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e965807232e675eb9f5475d55b5d2b2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a2e965807232e675eb9f5475d55b5d2b2">get_global_output_nets</a> () const</td></tr>
-<tr class="separator:a2e965807232e675eb9f5475d55b5d2b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb8ef34b9462dd7750958c78dbdc56d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#acb8ef34b9462dd7750958c78dbdc56d6">is_global_input_net</a> (const <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *net) const</td></tr>
+<tr class="separator:acb8ef34b9462dd7750958c78dbdc56d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af00e6e1e8fbfe9fd0a066922ef5cf893"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#af00e6e1e8fbfe9fd0a066922ef5cf893">is_global_output_net</a> (const <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *net) const</td></tr>
+<tr class="separator:af00e6e1e8fbfe9fd0a066922ef5cf893"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14f90b67d5536b381ff3774523eed04d"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a14f90b67d5536b381ff3774523eed04d">get_global_input_nets</a> () const</td></tr>
+<tr class="separator:a14f90b67d5536b381ff3774523eed04d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac536d7aebe1058d6ed2c54fa71e84c5c"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ac536d7aebe1058d6ed2c54fa71e84c5c">get_global_output_nets</a> () const</td></tr>
+<tr class="separator:ac536d7aebe1058d6ed2c54fa71e84c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b216ae67326e514b53bbb320e65b6ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a3b216ae67326e514b53bbb320e65b6ef">get_unique_module_id</a> ()</td></tr>
 <tr class="separator:a3b216ae67326e514b53bbb320e65b6ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2441daee88b306451caa9265d37d78c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#af2441daee88b306451caa9265d37d78c">create_module</a> (const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> module_id, const std::string &amp;name, <a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> *parent, const std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp;gates={})</td></tr>
@@ -184,8 +192,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac322b3605d50992b76b8afa8dfd6fb11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa963e38a4ce49c0e440be5e36f46369a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a> (<a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> module_id) const</td></tr>
 <tr class="separator:aa963e38a4ce49c0e440be5e36f46369a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98a8caba1e3934f37b9a1a3c6713ad48"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a98a8caba1e3934f37b9a1a3c6713ad48">get_modules</a> () const</td></tr>
-<tr class="separator:a98a8caba1e3934f37b9a1a3c6713ad48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7eb17e617d1b20d05fdd146ad63c138b"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a7eb17e617d1b20d05fdd146ad63c138b">get_modules</a> () const</td></tr>
+<tr class="separator:a7eb17e617d1b20d05fdd146ad63c138b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04177f05a463f75237aad42ecad1bb7a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a04177f05a463f75237aad42ecad1bb7a">get_modules</a> (const std::function&lt; bool(<a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> *)&gt; &amp;filter) const</td></tr>
+<tr class="separator:a04177f05a463f75237aad42ecad1bb7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b4333d865d8813103a495745a30c817"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a0b4333d865d8813103a495745a30c817">get_top_module</a> () const</td></tr>
 <tr class="separator:a0b4333d865d8813103a495745a30c817"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a8945e5b0d05d28b0bb50f1e053e08c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a1a8945e5b0d05d28b0bb50f1e053e08c">get_unique_grouping_id</a> ()</td></tr>
@@ -313,6 +323,64 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a742b4070e8474e074d8f91b294e4679d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a742b4070e8474e074d8f91b294e4679d">&#9670;&nbsp;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::Netlist::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check whether two netlists are equal. Does not check netlist IDs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>- The netlist to compare against. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both netlists are equal, false otherwise. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a0ff62e377eab88e6fbae17ae1d1604ce">get_design_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ae339f011fd95f51ded3b281c0f198fe7">get_device_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#adeae0f508eb65ca66c78d560f89340c2">get_gate_library()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a0d6c2c4b712ac8964253627e7adf3266">get_gates()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ad44a4aa90a3de7011003ec5d2d1c6a34">get_input_filename()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a7eb17e617d1b20d05fdd146ad63c138b">get_modules()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ac787de6b52a38112735e3ff9bd2b6d17">get_nets()</a>, and <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a0b4333d865d8813103a495745a30c817">get_top_module()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a01fbe874fababfe4d69f8b48c4484842">operator!=()</a>.</p>
+
+</div>
+</div>
+<a id="a01fbe874fababfe4d69f8b48c4484842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01fbe874fababfe4d69f8b48c4484842">&#9670;&nbsp;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::Netlist::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check whether two netlists are unequal. Does not check netlist IDs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>- The netlist to compare against. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both netlists are unequal, false otherwise. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a742b4070e8474e074d8f91b294e4679d">operator==()</a>.</p>
+
+</div>
+</div>
 <a id="a7dc3f04d8b357b25fc129bf85b3b2dec"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7dc3f04d8b357b25fc129bf85b3b2dec">&#9670;&nbsp;</a></span>get_id()</h2>
 
@@ -331,7 +399,7 @@ Friends</h2></td></tr>
  If not explicitly set, the ID defaults to 0.</p>
 <dl class="section return"><dt>Returns</dt><dd>The ID of the netlist. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a86bc448620b92e78da68b4b220f709af">hal::Gate::add_boolean_function()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a0875f5c8245c404e549e7f85511d69f3">hal::netlist_utils::get_complex_gate_chain()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a2bb7660dab70b6eb878328565f32cba3">hal::Gate::get_fan_in_endpoint()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a07a6aead63e62bbd7d5ca75d46905b8a">hal::Gate::get_fan_out_endpoint()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a42120b05f3abe3a4b75f33f67a73e141">hal::netlist_utils::get_gate_chain()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#ab21d28c0cdd01b0faa1388f055877061">hal::Module::get_input_port_name()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a3b4fb298e33c8287e95693d2119664fb">hal::Module::get_input_port_net()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a4cdad5d566753f90d891a5423ad51625">hal::Module::get_output_port_name()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a34405b18525a074c4cf8214f359b6d71">hal::Module::get_output_port_net()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ac59ae4de6cdb8ef057245594fa03758e">hal::Gate::get_predecessor()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a261285edd2702cf3bfcf47a646a55234">hal::Net::get_source()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#aaa02ffdfe2818d4a45af3aae72e2bc63">hal::Gate::get_successor()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a220173f927815a8acc900856bfe6735b">hal::Module::remove_gate()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a2a6599c0e0034abb437a5ba1b9f15493">hal::netlist_utils::replace_gate()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a6503f5b2ad22fdc5d235ab4f5bcf24ec">hal::Module::set_input_port_name()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a1703f0e71b660976800a3329264106cc">hal::Net::set_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ab25ece3d82abfe3646fa53f0f5a49091">hal::Gate::set_name()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a85f8916ad7d510b04ee4c81f66303f91">hal::Module::set_output_port_name()</a>, and <a class="el" href="../../d1/d10/classhal_1_1Module.html#a2110d4088efee9b9313fce0171d9bc40">hal::Module::set_parent_module()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a86bc448620b92e78da68b4b220f709af">hal::Gate::add_boolean_function()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a0875f5c8245c404e549e7f85511d69f3">hal::netlist_utils::get_complex_gate_chain()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a2bb7660dab70b6eb878328565f32cba3">hal::Gate::get_fan_in_endpoint()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a07a6aead63e62bbd7d5ca75d46905b8a">hal::Gate::get_fan_out_endpoint()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a42120b05f3abe3a4b75f33f67a73e141">hal::netlist_utils::get_gate_chain()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a4b001c39877c766f037aad7a520114a7">hal::Module::get_input_port_name()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a65b7da6c5f4fcfdb0328c0bfb0e79a6c">hal::Module::get_input_port_net()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a901b3ef582bd0fc0ea4fc942229d4078">hal::Module::get_output_port_name()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#af87a954ee4e669bc0f67727f75001222">hal::Module::get_output_port_net()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ac59ae4de6cdb8ef057245594fa03758e">hal::Gate::get_predecessor()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a261285edd2702cf3bfcf47a646a55234">hal::Net::get_source()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#aaa02ffdfe2818d4a45af3aae72e2bc63">hal::Gate::get_successor()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a220173f927815a8acc900856bfe6735b">hal::Module::remove_gate()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a2a6599c0e0034abb437a5ba1b9f15493">hal::netlist_utils::replace_gate()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a6503f5b2ad22fdc5d235ab4f5bcf24ec">hal::Module::set_input_port_name()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a1703f0e71b660976800a3329264106cc">hal::Net::set_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ab25ece3d82abfe3646fa53f0f5a49091">hal::Gate::set_name()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a85f8916ad7d510b04ee4c81f66303f91">hal::Module::set_output_port_name()</a>, and <a class="el" href="../../d1/d10/classhal_1_1Module.html#a2110d4088efee9b9313fce0171d9bc40">hal::Module::set_parent_module()</a>.</p>
 
 </div>
 </div>
@@ -381,7 +449,7 @@ Friends</h2></td></tr>
 <p>Get the path to the input file.</p>
 <dl class="section return"><dt>Returns</dt><dd>The path to the input file. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a742b4070e8474e074d8f91b294e4679d">operator==()</a>.</p>
 
 </div>
 </div>
@@ -431,7 +499,7 @@ Friends</h2></td></tr>
 <p>Get the name of the design.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name of the design. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../db/d5a/namespacehal_1_1netlist__writer__manager.html#a1bb87c0a35221bb18a28e97611b71a12">hal::netlist_writer_manager::write()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a742b4070e8474e074d8f91b294e4679d">operator==()</a>, and <a class="el" href="../../db/d5a/namespacehal_1_1netlist__writer__manager.html#a1bb87c0a35221bb18a28e97611b71a12">hal::netlist_writer_manager::write()</a>.</p>
 
 </div>
 </div>
@@ -481,7 +549,7 @@ Friends</h2></td></tr>
 <p>Get the name of the target device.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name of the target device. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a742b4070e8474e074d8f91b294e4679d">operator==()</a>.</p>
 
 </div>
 </div>
@@ -531,7 +599,7 @@ Friends</h2></td></tr>
 <p>Get the gate library associated with the netlist.</p>
 <dl class="section return"><dt>Returns</dt><dd>The gate library. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a742b4070e8474e074d8f91b294e4679d">operator==()</a>.</p>
 
 </div>
 </div>
@@ -778,8 +846,29 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a747f7afeaa0187353882cdc4ac3248ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a747f7afeaa0187353882cdc4ac3248ee">&#9670;&nbsp;</a></span>get_gates()</h2>
+<a id="a0d6c2c4b712ac8964253627e7adf3266"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d6c2c4b712ac8964253627e7adf3266">&#9670;&nbsp;</a></span>get_gates() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp; hal::Netlist::get_gates </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all gates contained within the netlist.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector of gates. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a742b4070e8474e074d8f91b294e4679d">operator==()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a73cd013dd914485d2ef82f888b600a45">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a3bc1381508d3e2e81a75762664d016cb">hal::netlist_utils::remove_unused_lut_endpoints()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a7252fdca08ea0f7e5c0aa4720083d23c">hal::netlist_utils::rename_luts_according_to_function()</a>.</p>
+
+</div>
+</div>
+<a id="aca7cefd88af9d856c81b6d176049e59c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca7cefd88af9d856c81b6d176049e59c">&#9670;&nbsp;</a></span>get_gates() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -788,22 +877,20 @@ Friends</h2></td></tr>
           <td class="memname">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; hal::Netlist::get_gates </td>
           <td>(</td>
           <td class="paramtype">const std::function&lt; bool(<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *)&gt; &amp;&#160;</td>
-          <td class="paramname"><em>filter</em> = <code>nullptr</code></td><td>)</td>
+          <td class="paramname"><em>filter</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Get all gates contained within the netlist.<br  />
- A filter can be applied to the result to only get gates matching the specified condition.</p>
+ The filter is evaluated on every gate such that the result only contains gates matching the specified condition.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- Filter to be applied to the gates. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- Filter function to be evaluated on each gate. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of gates. </dd></dl>
-
-<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a73cd013dd914485d2ef82f888b600a45">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a3bc1381508d3e2e81a75762664d016cb">hal::netlist_utils::remove_unused_lut_endpoints()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a7252fdca08ea0f7e5c0aa4720083d23c">hal::netlist_utils::rename_luts_according_to_function()</a>.</p>
 
 </div>
 </div>
@@ -831,7 +918,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">hal::Gate::get_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5ac1b9f92caf55d0ce9fc1835c38933b">is_gate_in_netlist()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a608c875cc68eaed4451c1b38200266f5">is_vcc_gate()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4a05d300ab3ae5f80517cbaf6bf39bf538">hal::netlist_event_handler::marked_global_vcc</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>.</p>
+<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a55ca16fc3905a6c0cb87a6427189de31">hal::Gate::get_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5ac1b9f92caf55d0ce9fc1835c38933b">is_gate_in_netlist()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#aadea5f117fc8b9ed0e521de4cb788060">is_vcc_gate()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4a05d300ab3ae5f80517cbaf6bf39bf538">hal::netlist_event_handler::marked_global_vcc</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad7f56703158cb9be403c644540eb76ff">hal::Gate::mark_vcc_gate()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
@@ -861,7 +948,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">hal::Gate::get_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5ac1b9f92caf55d0ce9fc1835c38933b">is_gate_in_netlist()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a484937fe6ca85607827277129220ac95">is_gnd_gate()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4a86fad9501a1ba3770f9a93c8b70fe202">hal::netlist_event_handler::marked_global_gnd</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>.</p>
+<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a55ca16fc3905a6c0cb87a6427189de31">hal::Gate::get_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5ac1b9f92caf55d0ce9fc1835c38933b">is_gate_in_netlist()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a452ad19faf39c73ba45e4a46e7a37672">is_gnd_gate()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4a86fad9501a1ba3770f9a93c8b70fe202">hal::netlist_event_handler::marked_global_gnd</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a8a3704d1c856cabfc696d7fd0d7f183e">hal::Gate::mark_gnd_gate()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
@@ -891,7 +978,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">hal::Gate::get_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5ac1b9f92caf55d0ce9fc1835c38933b">is_gate_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4acdd6c54205e63fea37e0b288093be5ef">hal::netlist_event_handler::unmarked_global_vcc</a>.</p>
+<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a55ca16fc3905a6c0cb87a6427189de31">hal::Gate::get_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5ac1b9f92caf55d0ce9fc1835c38933b">is_gate_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4acdd6c54205e63fea37e0b288093be5ef">hal::netlist_event_handler::unmarked_global_vcc</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a2eb12902a1c69ed06e7bec5bfaaec696">hal::Gate::unmark_vcc_gate()</a>.</p>
 
@@ -921,14 +1008,14 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">hal::Gate::get_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5ac1b9f92caf55d0ce9fc1835c38933b">is_gate_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4ac116e5b8ad7b38f69d24b29e0bf7aa14">hal::netlist_event_handler::unmarked_global_gnd</a>.</p>
+<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a55ca16fc3905a6c0cb87a6427189de31">hal::Gate::get_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5ac1b9f92caf55d0ce9fc1835c38933b">is_gate_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4ac116e5b8ad7b38f69d24b29e0bf7aa14">hal::netlist_event_handler::unmarked_global_gnd</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ab37898081515fb0c276aead3d7a35fbe">hal::Gate::unmark_gnd_gate()</a>.</p>
 
 </div>
 </div>
-<a id="a608c875cc68eaed4451c1b38200266f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a608c875cc68eaed4451c1b38200266f5">&#9670;&nbsp;</a></span>is_vcc_gate()</h2>
+<a id="aadea5f117fc8b9ed0e521de4cb788060"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadea5f117fc8b9ed0e521de4cb788060">&#9670;&nbsp;</a></span>is_vcc_gate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -936,7 +1023,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">bool hal::Netlist::is_vcc_gate </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *&#160;</td>
           <td class="paramname"><em>gate</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -951,12 +1038,12 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the gate is a global VCC gate, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a05f8239a0cb7350bff1e55e0be6a3cff">hal::Gate::is_vcc_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a13814c485dc7040d31820466b0a6883f">mark_vcc_gate()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a7de755eaa94ebd4728913b2298003f35">hal::Gate::is_vcc_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a13814c485dc7040d31820466b0a6883f">mark_vcc_gate()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
-<a id="a484937fe6ca85607827277129220ac95"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a484937fe6ca85607827277129220ac95">&#9670;&nbsp;</a></span>is_gnd_gate()</h2>
+<a id="a452ad19faf39c73ba45e4a46e7a37672"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a452ad19faf39c73ba45e4a46e7a37672">&#9670;&nbsp;</a></span>is_gnd_gate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -964,7 +1051,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">bool hal::Netlist::is_gnd_gate </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *&#160;</td>
           <td class="paramname"><em>gate</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -979,18 +1066,18 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the gate is a global GND gate, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a26b2987269f90bb2477280fe9c1ff745">hal::Gate::is_gnd_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a1600d7ec1cf6455657786174bc958589">mark_gnd_gate()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ab6a6ce82a70650676e69cddd5a59e4e3">hal::Gate::is_gnd_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a1600d7ec1cf6455657786174bc958589">mark_gnd_gate()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
-<a id="a1cb3ca0ff11e42f596f6a4fda2e13a73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1cb3ca0ff11e42f596f6a4fda2e13a73">&#9670;&nbsp;</a></span>get_vcc_gates()</h2>
+<a id="a6b9524e351ab55d1b6cd6cb27dec707c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b9524e351ab55d1b6cd6cb27dec707c">&#9670;&nbsp;</a></span>get_vcc_gates()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; hal::Netlist::get_vcc_gates </td>
+          <td class="memname">const std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp; hal::Netlist::get_vcc_gates </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1004,14 +1091,14 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a29f3c8cc0d7f9fb9828044a292476da4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29f3c8cc0d7f9fb9828044a292476da4">&#9670;&nbsp;</a></span>get_gnd_gates()</h2>
+<a id="a5024423d773b9705545bf62f64c749a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5024423d773b9705545bf62f64c749a9">&#9670;&nbsp;</a></span>get_gnd_gates()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; hal::Netlist::get_gnd_gates </td>
+          <td class="memname">const std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp; hal::Netlist::get_gnd_gates </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1201,8 +1288,29 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a4d39a1ba86bb511dab74dfc6907b2553"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d39a1ba86bb511dab74dfc6907b2553">&#9670;&nbsp;</a></span>get_nets()</h2>
+<a id="ac787de6b52a38112735e3ff9bd2b6d17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac787de6b52a38112735e3ff9bd2b6d17">&#9670;&nbsp;</a></span>get_nets() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt; &amp; hal::Netlist::get_nets </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all nets contained within the netlist.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector of nets. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a742b4070e8474e074d8f91b294e4679d">operator==()</a>.</p>
+
+</div>
+</div>
+<a id="a1e2f24198689f7b22fc2b7df00628ad0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e2f24198689f7b22fc2b7df00628ad0">&#9670;&nbsp;</a></span>get_nets() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1211,22 +1319,20 @@ Friends</h2></td></tr>
           <td class="memname">std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt; hal::Netlist::get_nets </td>
           <td>(</td>
           <td class="paramtype">const std::function&lt; bool(<a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *)&gt; &amp;&#160;</td>
-          <td class="paramname"><em>filter</em> = <code>nullptr</code></td><td>)</td>
+          <td class="paramname"><em>filter</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Get all nets contained within the netlist.<br  />
- A filter can be applied to the result to only get nets matching the specified condition.</p>
+ The filter is evaluated on every net such that the result only contains nets matching the specified condition.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- Filter to be applied to the nets. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- Filter function to be evaluated on each net. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of nets. </dd></dl>
-
-<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -1254,7 +1360,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../de/db0/classhal_1_1Net.html#ab8947aa24e7c234b984da284a20558c7">hal::Net::get_destinations()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a6d3751bef8641fc34323e5773ccb4ce4">hal::Net::get_name()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac">hal::Net::get_sources()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a2ce8e376af0b84a91e057b7d944fb943">is_global_input_net()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8514bcb8c9bcdd25c2cabd2f3aaa6307">is_net_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4a42a4604b207c4a645b4e6041403f4858">hal::netlist_event_handler::marked_global_input</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>.</p>
+<p class="reference">References <a class="el" href="../../de/db0/classhal_1_1Net.html#ab8947aa24e7c234b984da284a20558c7">hal::Net::get_destinations()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a4627e0be693c99fece29559be12898bd">hal::Net::get_name()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac">hal::Net::get_sources()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#acb8ef34b9462dd7750958c78dbdc56d6">is_global_input_net()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8514bcb8c9bcdd25c2cabd2f3aaa6307">is_net_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4a42a4604b207c4a645b4e6041403f4858">hal::netlist_event_handler::marked_global_input</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../de/db0/classhal_1_1Net.html#a3b6801ba9de02da9965bb63b1c6431b1">hal::Net::mark_global_input_net()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
@@ -1284,7 +1390,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../de/db0/classhal_1_1Net.html#ab8947aa24e7c234b984da284a20558c7">hal::Net::get_destinations()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a6d3751bef8641fc34323e5773ccb4ce4">hal::Net::get_name()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac">hal::Net::get_sources()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#aa606b4d1678bb1bb54dd8dd7cb5d72a1">is_global_output_net()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8514bcb8c9bcdd25c2cabd2f3aaa6307">is_net_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4a74f7b15f7dcecd6d64cd110155ba2adf">hal::netlist_event_handler::marked_global_output</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>.</p>
+<p class="reference">References <a class="el" href="../../de/db0/classhal_1_1Net.html#ab8947aa24e7c234b984da284a20558c7">hal::Net::get_destinations()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a4627e0be693c99fece29559be12898bd">hal::Net::get_name()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac">hal::Net::get_sources()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#af00e6e1e8fbfe9fd0a066922ef5cf893">is_global_output_net()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8514bcb8c9bcdd25c2cabd2f3aaa6307">is_net_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4a74f7b15f7dcecd6d64cd110155ba2adf">hal::netlist_event_handler::marked_global_output</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../de/db0/classhal_1_1Net.html#a7a7ba541ea1082b2b647749ebb8673ab">hal::Net::mark_global_output_net()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
@@ -1314,7 +1420,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../de/db0/classhal_1_1Net.html#ab8947aa24e7c234b984da284a20558c7">hal::Net::get_destinations()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a6d3751bef8641fc34323e5773ccb4ce4">hal::Net::get_name()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac">hal::Net::get_sources()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8514bcb8c9bcdd25c2cabd2f3aaa6307">is_net_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4ae6ffbd10eb0497a7dc1399343d32cd25">hal::netlist_event_handler::unmarked_global_input</a>.</p>
+<p class="reference">References <a class="el" href="../../de/db0/classhal_1_1Net.html#ab8947aa24e7c234b984da284a20558c7">hal::Net::get_destinations()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a4627e0be693c99fece29559be12898bd">hal::Net::get_name()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac">hal::Net::get_sources()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8514bcb8c9bcdd25c2cabd2f3aaa6307">is_net_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4ae6ffbd10eb0497a7dc1399343d32cd25">hal::netlist_event_handler::unmarked_global_input</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../de/db0/classhal_1_1Net.html#a761fc416c46010813c3b2d80db488227">hal::Net::unmark_global_input_net()</a>.</p>
 
@@ -1344,14 +1450,14 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../de/db0/classhal_1_1Net.html#ab8947aa24e7c234b984da284a20558c7">hal::Net::get_destinations()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a6d3751bef8641fc34323e5773ccb4ce4">hal::Net::get_name()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac">hal::Net::get_sources()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8514bcb8c9bcdd25c2cabd2f3aaa6307">is_net_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4a7adbbbf0c3747b1ae00d5c4c760dbd7b">hal::netlist_event_handler::unmarked_global_output</a>.</p>
+<p class="reference">References <a class="el" href="../../de/db0/classhal_1_1Net.html#ab8947aa24e7c234b984da284a20558c7">hal::Net::get_destinations()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a4627e0be693c99fece29559be12898bd">hal::Net::get_name()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac">hal::Net::get_sources()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8514bcb8c9bcdd25c2cabd2f3aaa6307">is_net_in_netlist()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#a538575d4b08dfc5d17b627a38f5961c6">hal::netlist_event_handler::notify()</a>, and <a class="el" href="../../da/d3f/namespacehal_1_1netlist__event__handler.html#adc35e70a7408fc09759375c2f6b447e4a7adbbbf0c3747b1ae00d5c4c760dbd7b">hal::netlist_event_handler::unmarked_global_output</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../de/db0/classhal_1_1Net.html#a4960644ecb2fec23e0e1d06fe99fbe82">hal::Net::unmark_global_output_net()</a>.</p>
 
 </div>
 </div>
-<a id="a2ce8e376af0b84a91e057b7d944fb943"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ce8e376af0b84a91e057b7d944fb943">&#9670;&nbsp;</a></span>is_global_input_net()</h2>
+<a id="acb8ef34b9462dd7750958c78dbdc56d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb8ef34b9462dd7750958c78dbdc56d6">&#9670;&nbsp;</a></span>is_global_input_net()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1359,7 +1465,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">bool hal::Netlist::is_global_input_net </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *&#160;</td>
           <td class="paramname"><em>net</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1374,12 +1480,12 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the net is a global input net, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d1/d10/classhal_1_1Module.html#a1a51135930d6989903c0f67fd9cd5298">hal::Module::get_input_nets()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a374f7cd7a4909447bec0e3ade0692790">hal::Net::is_global_input_net()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a9b2353349272a95760d03c118900f4cc">mark_global_input_net()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d1/d10/classhal_1_1Module.html#a1a51135930d6989903c0f67fd9cd5298">hal::Module::get_input_nets()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#ae02b9dac36239ecba4c0417c4dc009f7">hal::Net::is_global_input_net()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a9b2353349272a95760d03c118900f4cc">mark_global_input_net()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
-<a id="aa606b4d1678bb1bb54dd8dd7cb5d72a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa606b4d1678bb1bb54dd8dd7cb5d72a1">&#9670;&nbsp;</a></span>is_global_output_net()</h2>
+<a id="af00e6e1e8fbfe9fd0a066922ef5cf893"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af00e6e1e8fbfe9fd0a066922ef5cf893">&#9670;&nbsp;</a></span>is_global_output_net()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1387,7 +1493,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">bool hal::Netlist::is_global_output_net </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *&#160;</td>
           <td class="paramname"><em>net</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1402,18 +1508,18 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the net is a global output net, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d1/d10/classhal_1_1Module.html#a327a93a6005f1c92e34bdfd3d2e78c7b">hal::Module::get_output_nets()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a58a2caa27dbb99f816a72fddea4dc575">hal::Net::is_global_output_net()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ab5341a316daab6aafceac102a744c8ee">mark_global_output_net()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d1/d10/classhal_1_1Module.html#a327a93a6005f1c92e34bdfd3d2e78c7b">hal::Module::get_output_nets()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a8a39c340226d3bbd5896f91d1e27b786">hal::Net::is_global_output_net()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ab5341a316daab6aafceac102a744c8ee">mark_global_output_net()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
-<a id="a099ab97938cf02c0f50ddad8fa00ed90"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a099ab97938cf02c0f50ddad8fa00ed90">&#9670;&nbsp;</a></span>get_global_input_nets()</h2>
+<a id="a14f90b67d5536b381ff3774523eed04d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14f90b67d5536b381ff3774523eed04d">&#9670;&nbsp;</a></span>get_global_input_nets()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt; hal::Netlist::get_global_input_nets </td>
+          <td class="memname">const std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt; &amp; hal::Netlist::get_global_input_nets </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1427,14 +1533,14 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a2e965807232e675eb9f5475d55b5d2b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e965807232e675eb9f5475d55b5d2b2">&#9670;&nbsp;</a></span>get_global_output_nets()</h2>
+<a id="ac536d7aebe1058d6ed2c54fa71e84c5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac536d7aebe1058d6ed2c54fa71e84c5c">&#9670;&nbsp;</a></span>get_global_output_nets()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt; hal::Netlist::get_global_output_nets </td>
+          <td class="memname">const std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt; &amp; hal::Netlist::get_global_output_nets </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1658,8 +1764,29 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a98a8caba1e3934f37b9a1a3c6713ad48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98a8caba1e3934f37b9a1a3c6713ad48">&#9670;&nbsp;</a></span>get_modules()</h2>
+<a id="a7eb17e617d1b20d05fdd146ad63c138b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eb17e617d1b20d05fdd146ad63c138b">&#9670;&nbsp;</a></span>get_modules() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; <a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> * &gt; &amp; hal::Netlist::get_modules </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all modules contained within the netlist, including the top module.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector of modules. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a742b4070e8474e074d8f91b294e4679d">operator==()</a>.</p>
+
+</div>
+</div>
+<a id="a04177f05a463f75237aad42ecad1bb7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04177f05a463f75237aad42ecad1bb7a">&#9670;&nbsp;</a></span>get_modules() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1667,15 +1794,21 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">std::vector&lt; <a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> * &gt; hal::Netlist::get_modules </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const std::function&lt; bool(<a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> *)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>filter</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get all modules contained within the netlist including the top module.</p>
+<p>Get all modules contained within the netlist, including the top module.<br  />
+ The filter is evaluated on every module such that the result only contains modules matching the specified condition.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- Filter function to be evaluated on each module. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of modules. </dd></dl>
-
-<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -1696,7 +1829,7 @@ Friends</h2></td></tr>
 <p>Get the top module of the netlist.</p>
 <dl class="section return"><dt>Returns</dt><dd>The top module. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../d1/d10/classhal_1_1Module.html#a220173f927815a8acc900856bfe6735b">hal::Module::remove_gate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a742b4070e8474e074d8f91b294e4679d">operator==()</a>, and <a class="el" href="../../d1/d10/classhal_1_1Module.html#a220173f927815a8acc900856bfe6735b">hal::Module::remove_gate()</a>.</p>
 
 </div>
 </div>
@@ -2513,7 +2646,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 20 2021 16:02:04 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 21 2021 10:01:48 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
