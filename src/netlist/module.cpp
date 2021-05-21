@@ -22,19 +22,23 @@ namespace hal
     {
         if (m_id != other.get_id() || m_name != other.get_name() || m_type != other.get_type())
         {
+            log_info("module", "the modules with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
             return false;
         }
 
         if (other.get_input_port_names().size() != get_input_port_names().size() || other.get_output_port_names().size() != get_output_port_names().size())
         {
+            log_info("module", "the modules with IDs {} and {} are not equal due to unequal number of port names.", m_id, other.get_id());
             return false;
         }
 
         // does not check parent module to avoid infinite loop
-        for (Module* other_module : other.get_submodules()) 
+
+        for (Module* other_module : other.get_submodules())
         {
-            if (const auto it = m_submodules_map.find(other_module->get_id()); it == m_submodules_map.end() || *it->second != *other_module) 
+            if (const auto it = m_submodules_map.find(other_module->get_id()); it == m_submodules_map.end() || *it->second != *other_module)
             {
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal submodules.", m_id, other.get_id());
                 return false;
             }
         }
@@ -43,6 +47,7 @@ namespace hal
         {
             if (const auto it = m_gates_map.find(other_gate->get_id()); it == m_gates_map.end() || *it->second != *other_gate)
             {
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal gates.", m_id, other.get_id());
                 return false;
             }
         }
@@ -51,6 +56,7 @@ namespace hal
         {
             if (const Net* other_net = other.get_input_port_net(port_name); other_net == nullptr || *other_net != *net)
             {
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal input ports.", m_id, other.get_id());
                 return false;
             }
         }
@@ -59,11 +65,18 @@ namespace hal
         {
             if (const Net* other_net = other.get_output_port_net(port_name); other_net == nullptr || *other_net != *net)
             {
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal output ports.", m_id, other.get_id());
                 return false;
             }
         }
 
-        return DataContainer::operator==(other);
+        if (!DataContainer::operator==(other))
+        {
+            log_info("module", "the modules with IDs {} and {} are not equal due to unequal data.", m_id, other.get_id());
+            return false;
+        }
+
+        return true;
     }
 
     bool Module::operator!=(const Module& other) const

@@ -31,16 +31,19 @@ namespace hal
     {
         if (m_file_name != other.get_input_filename() || m_design_name != other.get_design_name() || m_device_name != other.get_device_name())
         {
+            log_info("netlist", "the netlists with IDs {} and {} are not equal due to an unequal file name, design name, or device name.", m_netlist_id, other.get_id());
             return false;
         }
 
         if (m_gate_library != other.get_gate_library())
         {
+            log_info("netlist", "the netlists with IDs {} and {} are not equal due to an unequal gate library.", m_netlist_id, other.get_id());
             return false;
         }
 
         if (m_gates.size() != other.get_gates().size() || m_nets.size() != other.get_nets().size() || m_modules.size() != other.get_modules().size())
         {
+            log_info("netlist", "the netlists with IDs {} and {} are not equal due to an unequal number of gates, nets, or modules.", m_netlist_id, other.get_id());
             return false;
         }
 
@@ -48,6 +51,7 @@ namespace hal
         {
             if (const auto it = m_nets_map.find(net->get_id()); it == m_nets_map.end() || *it->second != *net)
             {
+                log_info("netlist", "the netlists with IDs {} and {} are not equal due to unequal nets.", m_netlist_id, other.get_id());
                 return false;
             }
         }
@@ -55,7 +59,13 @@ namespace hal
         // gates check included within modules
 
         // modules are checked recursively
-        return *m_top_module == *other.get_top_module();
+        if (*m_top_module != *other.get_top_module())
+        {
+            log_info("netlist", "the netlists with IDs {} and {} are not equal due to unequal modules.", m_netlist_id, other.get_id());
+            return false;
+        }
+
+        return true;
     }
 
     bool Netlist::operator!=(const Netlist& other) const
