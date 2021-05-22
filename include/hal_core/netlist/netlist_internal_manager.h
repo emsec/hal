@@ -57,7 +57,6 @@ namespace hal
         EventHandler* m_event_handler;
 
         explicit NetlistInternalManager(Netlist* nl, EventHandler* eh);
-
         ~NetlistInternalManager() = default;
 
         // gate functions
