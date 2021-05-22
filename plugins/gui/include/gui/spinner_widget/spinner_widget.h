@@ -35,7 +35,7 @@ namespace hal
      * This widget represents a loading wheel that appears while the layouter is in progress. <br>
      * <i>Currently unused...</i>
      */
-    class GraphLayoutSpinnerWidget final : public QWidget
+    class SpinnerWidget final : public QWidget
     {
         Q_OBJECT
 
@@ -45,7 +45,7 @@ namespace hal
          *
          * @param parent - The parent widget where the loading wheel should be embedded (i.e. the GraphWidget).
          */
-        explicit GraphLayoutSpinnerWidget(QWidget* parent = nullptr);
+        explicit SpinnerWidget(QWidget* parent = nullptr);
 
         /**
          * Activate the loading wheel.

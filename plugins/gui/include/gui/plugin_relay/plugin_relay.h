@@ -29,18 +29,50 @@
 
 namespace hal
 {
+    /** @ingroup gui
+     *  @brief Forwards plugin related events from the core to the gui.
+     */
     class PluginRelay : public QObject
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor. Connects to the core's plugin manager.
+         *
+         * @param parent - The relay's parent.
+         */
         explicit PluginRelay(QObject* parent = nullptr);
+
+        /**
+         * The destructor. Removes the relay's connection from the core.
+         */
         ~PluginRelay();
 
+        /**
+         * Callback function that is connected to the core. Emits the appropriate signals.
+         *
+         * @param is_load - True if the plugin is loaded, False if unloaded.
+         * @param plugin_name - The plugin's name.
+         * @param plugin_path - The plugin's path.
+         */
         void pluginManagerCallback(bool is_load, const std::string& plugin_name, const std::string& plugin_path);
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted when a plugin is loaded.
+         *
+         * @param name - The plugin's name.
+         * @param path - The plugin's path.
+         */
         void pluginLoaded(const QString& name, const QString& path);
+
+        /**
+         * Q_SIGNAL that is emitted when a plugin is unloaded.
+         *
+         * @param name - The plugin's name.
+         * @param path - The plugin's path.
+         */
         void pluginUnloaded(const QString& name, const QString& path);
 
     private:

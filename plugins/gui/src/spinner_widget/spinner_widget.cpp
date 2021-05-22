@@ -1,24 +1,24 @@
-#include "gui/graph_widget/graph_layout_spinner_widget.h"
-
+//#include "gui/graph_widget/graph_layout_spinner_widget.h"
+#include "gui/spinner_widget/spinner_widget.h"
 #include <QPainter>
 
 namespace hal
 {
-    GraphLayoutSpinnerWidget::GraphLayoutSpinnerWidget(QWidget* parent) : QWidget(parent),
+    SpinnerWidget::SpinnerWidget(QWidget* parent) : QWidget(parent),
         mRenderer(new QSvgRenderer())
     {
         const QString string(":/images/spinner");
         mRenderer->load(string);
         mRenderer->setFramesPerSecond(10);
-        connect(mRenderer, &QSvgRenderer::repaintNeeded, this, &GraphLayoutSpinnerWidget::handleRepaintNeeded);
+        connect(mRenderer, &QSvgRenderer::repaintNeeded, this, &SpinnerWidget::handleRepaintNeeded);
     }
 
-    void GraphLayoutSpinnerWidget::handleRepaintNeeded()
+    void SpinnerWidget::handleRepaintNeeded()
     {
         update();
     }
 
-    void GraphLayoutSpinnerWidget::paintEvent(QPaintEvent* event)
+    void SpinnerWidget::paintEvent(QPaintEvent* event)
     {
         QWidget::paintEvent(event);
 
@@ -27,18 +27,18 @@ namespace hal
         mRenderer->render(&painter, rect());
     }
 
-    QSize GraphLayoutSpinnerWidget::sizeHint() const
+    QSize SpinnerWidget::sizeHint() const
     {
         //DEBUG FUNCTION, REPLACE WITH INTERNAL LAYOUT OR SOMETHING LATER
         return QSize(260, 260);
     }
 
-    void GraphLayoutSpinnerWidget::start()
+    void SpinnerWidget::start()
     {
         mRenderer->setFramesPerSecond(10);
     }
 
-    void GraphLayoutSpinnerWidget::stop()
+    void SpinnerWidget::stop()
     {
         mRenderer->setFramesPerSecond(0);
     }

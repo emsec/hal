@@ -37,7 +37,7 @@ namespace hal
     class WidgetOverlay;
     class GraphContext;
     class GraphGraphicsView;
-    class GraphLayoutSpinnerWidget;
+    class SpinnerWidget;
     class GraphNavigationWidget;
 
     /**
@@ -150,7 +150,7 @@ namespace hal
 
         WidgetOverlay* mOverlay;
         GraphNavigationWidget* mNavigationWidgetV3;
-        GraphLayoutSpinnerWidget* mSpinnerWidget;
+        SpinnerWidget* mSpinnerWidget;
 
         u32 mCurrentExpansion;
 
