@@ -137,7 +137,7 @@ namespace hal
                     // implicit "0"
                     for (u32 i = 0; i < left_size - right_size; i++)
                     {
-                        module.m_expanded_assignments.push_back(std::make_pair(left_signals.at(i), "0"));
+                        module.m_expanded_assignments.push_back(std::make_pair(left_signals.at(i + right_size), "'0'"));
                     }
                 }
             }
