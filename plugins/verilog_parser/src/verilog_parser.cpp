@@ -1912,7 +1912,8 @@ namespace hal
         if (len != -1)
         {
             // fill with '0'
-            for (i32 i = 0; i < len - (i32)result.size(); i++)
+            i32 fill_width = len - (i32)result.size();
+            for (i32 i = 0; i < fill_width; i++)
             {
                 result.push_back("'0'");
             }
