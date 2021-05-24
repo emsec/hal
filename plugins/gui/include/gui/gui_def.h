@@ -193,11 +193,22 @@ namespace hal
             return mMode == rhs.mMode && mPreferredOrigin == rhs.mPreferredOrigin;
         }
 
+        /**
+         * Assigns a given node the given position. Stores it internally.
+         *
+         * @param nd - The node.
+         * @param p - The position
+         */
         void addGridPosition(const Node& nd, const QPoint& p)
         {
             mGridPos.insert(nd,p);
         }
 
+        /**
+         * Get the data structure containing the node - position assignments.
+         *
+         * @return The QHash that maps nodes to positions.
+         */
         const QHash<Node,QPoint>& gridPosition() const { return mGridPos; }
     private:
         PlacementModeType mMode;
@@ -205,11 +216,21 @@ namespace hal
         QHash<Node,QPoint> mGridPos;
     };
 
+    /**
+     * @brief Container class to store a PlacementHint togerther with a set of modules and gates.
+     */
     class PlacementEntry {
     public:
         PlacementHint mPlacementHint;
         QSet<u32> mModules;
         QSet<u32> mGates;
+        /**
+         * The constructure.
+         *
+         * @param plc - The placement hint.
+         * @param mods - The module ids.
+         * @param gats - The gate ids.
+         */
         PlacementEntry(const PlacementHint& plc, const QSet<u32>& mods, const QSet<u32>& gats)
             : mPlacementHint(plc), mModules(mods), mGates(gats) {;}
     };

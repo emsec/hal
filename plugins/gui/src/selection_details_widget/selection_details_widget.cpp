@@ -191,6 +191,7 @@ namespace hal
                 modulesSelected.insert(gNetlist->get_module_by_id(id));
 
             Module* parentModule = gui_utility::firstCommonAncestor(modulesSelected, gatesSelected);
+            if(!parentModule) return; //hotfix, when the top-level module is in modulesSelected, this will be a nullptr
             QString parentName            = QString::fromStdString(parentModule->get_name());
             bool ok;
             QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parentName + "\"\nModule Name:", QLineEdit::Normal, "", &ok);

@@ -46,7 +46,7 @@ namespace hal
             /**
              * Given any string this function returns <b>true</b> iff the string contains at least one non-whitespace
              * character. Whitespace characters are: <i>space, horizontal tab, new line, vertical tab,
-             * new page</i> and <i>carriage return<i>
+             * new page</i> and <i>carriage return</i>
              *
              * @param input - The input string
              * @returns <b>true</b> iff the string is considered valid (unique)
