@@ -304,11 +304,11 @@ namespace hal
         void moduleSubmoduleAdded(Module* m, const u32 added_module) const;
 
         /**
-         * Q_SIGNAL to notify that a submodule has been added to a module. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::submodule_added</i>
+         * Q_SIGNAL to notify that a submodule has been removed from a module. <br>
+         * Relays the following hal-core event: <i>module_event_handler::event::submodule_removed</i>
          *
-         * @param m - The module with a new submodule
-         * @param added_module - The id of the added submodule
+         * @param m - The module from which a submodule has been removed
+         * @param removed_module - The id of the removed submodule
          */
         void moduleSubmoduleRemoved(Module* m, const u32 removed_module) const;
 
@@ -317,16 +317,16 @@ namespace hal
          * Relays the following hal-core event: <i>module_event_handler::event::gate_assigned</i>
          *
          * @param m - The module with a newly assigned gate
-         * @param added_module - The id of the assigned gate
+         * @param assigned_gate - The id of the assigned gate
          */
         void moduleGateAssigned(Module* m, const u32 assigned_gate) const;
 
         /**
-         * Q_SIGNAL to notify that a gate has been assigned to a module. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::gate_assigned</i>
+         * Q_SIGNAL to notify that a gate has been removed from a module. <br>
+         * Relays the following hal-core event: <i>module_event_handler::event::gate_removed</i>
          *
-         * @param m - The module with a newly assigned gate
-         * @param added_module - The id of the assigned gate
+         * @param m - The module from which a gate is removed
+         * @param removed_gate - The id of the removed gate
          */
         void moduleGateRemoved(Module* m, const u32 removed_gate) const;
 
@@ -335,7 +335,7 @@ namespace hal
          * Relays the following hal-core event: <i>module_event_handler::event::input_port_name_changed</i>
          *
          * @param m - The module with the renamed input port
-         * @param added_module - The id of the net of the renamed input port
+         * @param respective_net - The id of the net of the renamed input port
          */
         void moduleInputPortNameChanged(Module* m, const u32 respective_net) const;
 
@@ -344,7 +344,7 @@ namespace hal
          * Relays the following hal-core event: <i>module_event_handler::event::output_port_name_changed</i>
          *
          * @param m - The module with the renamed output port
-         * @param added_module - The id of the net of the renamed output port
+         * @param respective_net - The id of the net of the renamed output port
          */
         void moduleOutputPortNameChanged(Module* m, const u32 respective_net) const;
 
@@ -423,7 +423,7 @@ namespace hal
          * Relays the following hal-core event: <i>net_event_handler::event::src_added</i>
          *
          * @param n - The net with a new source
-         * @param dst_gate_id - The id of the source gate
+         * @param src_gate_id - The id of the source gate
          */
         void netSourceAdded(Net* n, const u32 src_gate_id) const;
 
@@ -432,7 +432,7 @@ namespace hal
          * Relays the following hal-core event: <i>net_event_handler::event::src_removed</i>
          *
          * @param n - The net with the removed source
-         * @param dst_gate_id - The id of the gate at the removed source
+         * @param src_gate_id - The id of the gate at the removed source
          */
         void netSourceRemoved(Net* n, const u32 src_gate_id) const;
 
