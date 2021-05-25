@@ -54,6 +54,22 @@ namespace hal
     {
     public:
         /**
+         * Check whether two nets are equal.
+         *
+         * @param[in] other - The net to compare against.
+         * @returns True if both nets are equal, false otherwise.
+         */
+        bool operator==(const Net& other) const;
+
+        /**
+         * Check whether two nets are unequal.
+         *
+         * @param[in] other - The net to compare against.
+         * @returns True if both nets are unequal, false otherwise.
+         */
+        bool operator!=(const Net& other) const;
+
+        /**
          * Get the unique id of the net.
          *
          * @returns The unique id.
@@ -72,7 +88,7 @@ namespace hal
          *
          * @returns The name.
          */
-        std::string get_name() const;
+        const std::string& get_name() const;
 
         /**
          * Set the name of the net.
@@ -284,14 +300,14 @@ namespace hal
          *
          * @returns True if the net is a global input net.
          */
-        bool is_global_input_net();
+        bool is_global_input_net() const;
 
         /**
          * Checks whether this net is a global output net.
          *
          * @returns True if the net is a global output net.
          */
-        bool is_global_output_net();
+        bool is_global_output_net() const;
 
     private:
         friend class NetlistInternalManager;

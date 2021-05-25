@@ -53,6 +53,152 @@ namespace hal {
     }
 
     /**
+     * Test operators for equality and inequality.
+     * 
+     * Functions: operator==, operator!=
+     */
+    TEST_F(ModuleTest, check_operators)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl_1 = test_utils::create_empty_netlist();
+            ASSERT_NE(nl_1, nullptr);
+            std::unique_ptr<Netlist> nl_2 = test_utils::create_empty_netlist();
+            ASSERT_NE(nl_2, nullptr);
+            const GateLibrary* gl = nl_1->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+            ASSERT_EQ(gl, nl_2->get_gate_library());
+
+            Gate* nl1_dummy_1 = nl_1->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_1");
+            ASSERT_NE(nl1_dummy_1, nullptr);
+            Gate* nl1_dummy_2 = nl_1->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_2");
+            ASSERT_NE(nl1_dummy_2, nullptr);
+            Gate* nl1_dummy_3 = nl_1->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_3");
+            ASSERT_NE(nl1_dummy_3, nullptr);
+            Gate* nl2_dummy_1 = nl_2->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_1");
+            ASSERT_NE(nl2_dummy_1, nullptr);
+            Gate* nl2_dummy_2 = nl_2->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_2");
+            ASSERT_NE(nl2_dummy_2, nullptr);
+            Gate* nl2_dummy_3 = nl_2->create_gate(gl->get_gate_type_by_name("BUF"), "dummy_3");
+            ASSERT_NE(nl2_dummy_3, nullptr);
+
+            // standard stuff
+            Module* nl1_m1 = nl_1->create_module(2, "module_1", nl_1->get_top_module());
+            ASSERT_NE(nl1_m1, nullptr);
+            Module* nl2_m1 = nl_2->create_module(2, "module_1", nl_2->get_top_module());
+            ASSERT_NE(nl2_m1, nullptr);
+            Module* nl1_m2 = nl_1->create_module(3, "module_1", nl_1->get_top_module());
+            ASSERT_NE(nl1_m2, nullptr);
+            Module* nl2_m2 = nl_2->create_module(3, "module_2", nl_2->get_top_module());
+            ASSERT_NE(nl2_m2, nullptr);
+            Module* nl1_m3 = nl_1->create_module(4, "module_3", nl_1->get_top_module());
+            ASSERT_NE(nl1_m3, nullptr);
+            nl1_m3->set_type("type_1");
+            Module* nl2_m3 = nl_2->create_module(4, "module_3", nl_2->get_top_module());
+            ASSERT_NE(nl2_m3, nullptr);
+            nl2_m3->set_type("type_2");
+
+            EXPECT_TRUE(*nl1_m1 == *nl1_m1);        // identical module pointer
+            EXPECT_TRUE(*nl2_m1 == *nl2_m1);
+            EXPECT_FALSE(*nl1_m1 != *nl1_m1);
+            EXPECT_FALSE(*nl2_m1 != *nl2_m1);
+            EXPECT_TRUE(*nl1_m1 == *nl2_m1);        // identical modules, but different netlists
+            EXPECT_TRUE(*nl2_m1 == *nl1_m1);
+            EXPECT_FALSE(*nl1_m1 != *nl2_m1);
+            EXPECT_FALSE(*nl2_m1 != *nl1_m1);
+            EXPECT_FALSE(*nl1_m1 == *nl1_m2);       // different IDs
+            EXPECT_FALSE(*nl2_m1 == *nl2_m2);
+            EXPECT_TRUE(*nl1_m1 != *nl1_m2);
+            EXPECT_TRUE(*nl2_m1 != *nl2_m2);
+            EXPECT_FALSE(*nl1_m2 == *nl2_m2);       // different names
+            EXPECT_FALSE(*nl2_m2 == *nl1_m2);
+            EXPECT_TRUE(*nl1_m2 != *nl2_m2);
+            EXPECT_TRUE(*nl2_m2 != *nl1_m2);
+            EXPECT_FALSE(*nl1_m3 == *nl2_m3);       // different types
+            EXPECT_FALSE(*nl2_m3 == *nl1_m3);
+            EXPECT_TRUE(*nl1_m3 != *nl2_m3);
+            EXPECT_TRUE(*nl2_m3 != *nl1_m3);
+
+            // different parent modules
+            Module* nl1_m4 = nl_1->create_module(5, "module_4", nl1_m1);
+            ASSERT_NE(nl1_m4, nullptr);
+            Module* nl2_m4 = nl_2->create_module(5, "module_4", nl2_m2);
+            ASSERT_NE(nl2_m4, nullptr);
+            EXPECT_TRUE(*nl1_m4 == *nl2_m4);       // different parent modules
+            EXPECT_TRUE(*nl2_m4 == *nl1_m4);
+            EXPECT_FALSE(*nl1_m4 != *nl2_m4);
+            EXPECT_FALSE(*nl2_m4 != *nl1_m4);
+
+            // different submodules
+            Module* nl1_m5 = nl_1->create_module(6, "module_5", nl_1->get_top_module());
+            ASSERT_NE(nl1_m5, nullptr);
+            Module* nl2_m5 = nl_2->create_module(6, "module_5", nl_2->get_top_module());
+            ASSERT_NE(nl2_m5, nullptr);
+            Module* nl1_m6 = nl_1->create_module(7, "module_6a", nl1_m5);
+            ASSERT_NE(nl1_m6, nullptr);
+            Module* nl2_m6 = nl_2->create_module(7, "module_6b", nl2_m5);
+            ASSERT_NE(nl2_m6, nullptr);
+            EXPECT_FALSE(*nl1_m5 == *nl2_m5);       // different submodules
+            EXPECT_FALSE(*nl2_m5 == *nl1_m5);
+            EXPECT_TRUE(*nl1_m5 != *nl2_m5);
+            EXPECT_TRUE(*nl2_m5 != *nl1_m5);
+
+            // different gates
+            Module* nl1_m7 = nl_1->create_module(8, "module_7", nl_1->get_top_module(), {nl1_dummy_1, nl1_dummy_2});
+            ASSERT_NE(nl1_m7, nullptr);
+            Module* nl2_m7 = nl_2->create_module(8, "module_7", nl_2->get_top_module(), {nl2_dummy_1, nl2_dummy_3});
+            ASSERT_NE(nl2_m7, nullptr);
+            EXPECT_FALSE(*nl1_m7 == *nl2_m7);       // different gates
+            EXPECT_FALSE(*nl2_m7 == *nl1_m7);
+            EXPECT_TRUE(*nl1_m7 != *nl2_m7);
+            EXPECT_TRUE(*nl2_m7 != *nl1_m7);
+
+            // different input port names
+            Module* nl1_m8 = nl_1->create_module(9, "module_8", nl_1->get_top_module(), {nl1_dummy_1, nl1_dummy_2});
+            ASSERT_NE(nl1_m8, nullptr);
+            Net* nl1_net_in = test_utils::connect(nl_1.get(), nl1_dummy_3, "O", nl1_dummy_1, "I", "net_in");
+            ASSERT_NE(nl1_net_in, nullptr);
+            Module* nl2_m8 = nl_2->create_module(9, "module_8", nl_2->get_top_module(), {nl2_dummy_1, nl2_dummy_2});
+            ASSERT_NE(nl2_m8, nullptr);
+            Net* nl2_net_in = test_utils::connect(nl_2.get(), nl2_dummy_3, "O", nl2_dummy_1, "I", "net_in");
+            ASSERT_NE(nl2_net_in, nullptr);
+
+            EXPECT_TRUE(*nl1_m8 == *nl2_m8);
+            EXPECT_TRUE(*nl2_m8 == *nl1_m8);
+            EXPECT_FALSE(*nl1_m8 != *nl2_m8);
+            EXPECT_FALSE(*nl2_m8 != *nl1_m8);
+            nl1_m8->set_input_port_name(nl1_net_in, "in_a");
+            nl2_m8->set_input_port_name(nl2_net_in, "in_b");
+            EXPECT_FALSE(*nl1_m8 == *nl2_m8);       // different input port names
+            EXPECT_FALSE(*nl2_m8 == *nl1_m8);
+            EXPECT_TRUE(*nl1_m8 != *nl2_m8);
+            EXPECT_TRUE(*nl2_m8 != *nl1_m8);
+
+            // different input port names
+            Module* nl1_m9 = nl_1->create_module(10, "module_9", nl_1->get_top_module(), {nl1_dummy_1, nl1_dummy_2});
+            ASSERT_NE(nl1_m9, nullptr);
+            Net* nl1_net_out = test_utils::connect(nl_1.get(), nl1_dummy_1, "O", nl1_dummy_3, "I", "net_out");
+            ASSERT_NE(nl1_net_out, nullptr);
+            Module* nl2_m9 = nl_2->create_module(10, "module_9", nl_2->get_top_module(), {nl2_dummy_1, nl2_dummy_2});
+            ASSERT_NE(nl2_m9, nullptr);
+            Net* nl2_net_out = test_utils::connect(nl_2.get(), nl2_dummy_1, "O", nl2_dummy_3, "I", "net_out");
+            ASSERT_NE(nl2_net_out, nullptr);
+
+            EXPECT_TRUE(*nl1_m9 == *nl2_m9);
+            EXPECT_TRUE(*nl2_m9 == *nl1_m9);
+            EXPECT_FALSE(*nl1_m9 != *nl2_m9);
+            EXPECT_FALSE(*nl2_m9 != *nl1_m9);
+            nl1_m9->set_output_port_name(nl1_net_out, "out_a");
+            nl2_m9->set_output_port_name(nl2_net_out, "out_b");
+            EXPECT_FALSE(*nl1_m9 == *nl2_m9);       // different input port names
+            EXPECT_FALSE(*nl2_m9 == *nl1_m9);
+            EXPECT_TRUE(*nl1_m9 != *nl2_m9);
+            EXPECT_TRUE(*nl2_m9 != *nl1_m9);
+        }
+        TEST_END
+    }
+
+    /**
      * Test changing a module's name.
      *
      * Functions: set_name
@@ -578,19 +724,21 @@ namespace hal {
             {
                 // Get input nets of the test Module
                 std::vector<Net*> exp_result = {net_g_0, net_4_1_2};
+                std::sort(exp_result.begin(), exp_result.end());
                 EXPECT_EQ(test_module->get_input_nets(), exp_result);
             }
             {
                 // Get output nets of the test Module
                 std::vector<Net*> exp_result = {net_0_g, net_2_3_5};
+                std::sort(exp_result.begin(), exp_result.end());
                 EXPECT_EQ(test_module->get_output_nets(), exp_result);
             }
             {
                 // Get internal nets of the test Module
                 std::vector<Net*> exp_result = {net_1_2, net_2_3_5};
+                std::sort(exp_result.begin(), exp_result.end());
                 EXPECT_EQ(test_module->get_internal_nets(), exp_result);
             }
-
         TEST_END
     }
 

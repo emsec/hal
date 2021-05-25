@@ -8,6 +8,22 @@ namespace hal
             Netlist class containing information about the netlist including its gates, modules, nets, and groupings as well as the underlying gate library.
         )");
 
+        py_netlist.def(py::self == py::self, R"(
+            Check whether two netlists are equal.
+            Does not check netlist IDs.
+
+            :returns: True if both netlists are equal, false otherwise.
+            :rtype: bool
+        )");
+
+        py_netlist.def(py::self != py::self, R"(
+            Check whether two netlists are unequal.
+            Does not check netlist IDs.
+
+            :returns: True if both netlists are unequal, false otherwise.
+            :rtype: bool
+        )");
+
         py_netlist.def(py::init<GateLibrary*>(), py::arg("gate_library"), R"(
             Construct a new netlist for the specified gate library.
 
@@ -185,18 +201,24 @@ namespace hal
             :rtype: hal_py.Gate or None
         )");
 
-        py_netlist.def_property_readonly(
-            "gates", [](Netlist* n) { return n->get_gates(); }, R"(
+        py_netlist.def_property_readonly("gates", static_cast<const std::vector<Gate*>& (Netlist::*)() const>(&Netlist::get_gates), R"(
             All gates contained within the netlist.
 
             :type: list[hal_py.Gate]
         )");
 
-        py_netlist.def("get_gates", &Netlist::get_gates, py::arg("filter") = nullptr, R"(
+        py_netlist.def("get_gates", static_cast<const std::vector<Gate*>& (Netlist::*)() const>(&Netlist::get_gates), R"(
             Get all gates contained within the netlist.
-            A filter can be applied to the result to only get gates matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the gates.
+            :returns: A list of gates.
+            :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist.def("get_gates", static_cast<std::vector<Gate*> (Netlist::*)(const std::function<bool(Gate*)>&) const>(&Netlist::get_gates), py::arg("filter"), R"(
+            Get all gates contained within the netlist.
+            The filter is evaluated on every gate such that the result only contains gates matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each gate.
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
         )");
@@ -327,18 +349,24 @@ namespace hal
             :rtype: hal_py.Net or None
         )");
 
-        py_netlist.def_property_readonly(
-            "nets", [](Netlist* n) { return n->get_nets(); }, R"(
+        py_netlist.def_property_readonly("nets", static_cast<const std::vector<Net*>& (Netlist::*)() const>(&Netlist::get_nets), R"(
             All nets contained within the netlist.
 
             :type: list[hal_py.Net]
         )");
 
-        py_netlist.def("get_nets", &Netlist::get_nets, py::arg("filter") = nullptr, R"(
+        py_netlist.def("get_nets", static_cast<const std::vector<Net*>& (Netlist::*)() const>(&Netlist::get_nets), R"(
             Get all nets contained within the netlist.
-            A filter can be applied to the result to only get nets matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the nets.
+            :returns: A list of nets.
+            :rtype: list[hal_py.Net]
+        )");
+
+        py_netlist.def("get_nets", static_cast<std::vector<Net*> (Netlist::*)(const std::function<bool(Net*)>&) const>(&Netlist::get_nets), py::arg("filter"), R"(
+            Get all nets contained within the netlist.<br>
+            The filter is evaluated on every net such that the result only contains nets matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each net.
             :returns: A list of nets.
             :rtype: list[hal_py.Net]
         )");
@@ -483,15 +511,24 @@ namespace hal
             :rtype: hal_py.Module
         )");
 
-        py_netlist.def_property_readonly("modules", &Netlist::get_modules, R"(
-            All modules contained within the netlist including the top module.
+        py_netlist.def_property_readonly("modules", static_cast<const std::vector<Module*>& (Netlist::*)() const>(&Netlist::get_modules), R"(
+            All modules contained within the netlist, including the top module.
 
+            :type: list[hal_py.Module]
+        )");
+
+        py_netlist.def("get_modules", static_cast<const std::vector<Module*>& (Netlist::*)() const>(&Netlist::get_modules), R"(
+            Get all modules contained within the netlist, including the top module.
+
+            :returns: A list of modules.
             :rtype: list[hal_py.Module]
         )");
 
-        py_netlist.def("get_modules", &Netlist::get_modules, R"(
-            Get all modules contained within the netlist including the top module.
+        py_netlist.def("get_modules", static_cast<std::vector<Module*> (Netlist::*)(const std::function<bool(Module*)>&) const>(&Netlist::get_modules), py::arg("filter"), R"(
+            Get all modules contained within the netlist, including the top module.
+            The filter is evaluated on every module such that the result only contains modules matching the specified condition.
 
+            :param lambda filter: Filter function to be evaluated on each module.
             :returns: A list of modules.
             :rtype: list[hal_py.Module]
         )");

@@ -184,7 +184,7 @@ namespace hal
         py_boolean_function.def(py::self != py::self, R"(
             Check whether two Boolean functions are unequal.
 
-            :returns: True when both Boolean functions are unequal, false otherwise.
+            :returns: True if both Boolean functions are unequal, false otherwise.
             :rtype: bool
         )");
 

@@ -131,16 +131,181 @@ namespace hal
     TEST_F(GateTest, check_constructor)
     {
         TEST_START
-        // Create a Gate (id = 100) and append it to its netlist
-        auto nl        = test_utils::create_empty_netlist();
-        auto test_gate = nl->create_gate(100, nl->get_gate_library()->get_gate_type_by_name("AND2"), "gate_name");
+        {
+            // Create a Gate (id = 100) and append it to its netlist
+            auto nl        = test_utils::create_empty_netlist();
+            auto test_gate = nl->create_gate(100, nl->get_gate_library()->get_gate_type_by_name("AND2"), "gate_name");
 
-        ASSERT_NE(test_gate, nullptr);
-        EXPECT_EQ(test_gate->get_id(), 100);
-        EXPECT_EQ(test_gate->get_type()->get_name(), "AND2");
-        EXPECT_EQ(test_gate->get_name(), "gate_name");
-        EXPECT_EQ(test_gate->get_netlist(), nl.get());
+            ASSERT_NE(test_gate, nullptr);
+            EXPECT_EQ(test_gate->get_id(), 100);
+            EXPECT_EQ(test_gate->get_type()->get_name(), "AND2");
+            EXPECT_EQ(test_gate->get_name(), "gate_name");
+            EXPECT_EQ(test_gate->get_netlist(), nl.get());
+        }
+        TEST_END
+    }
 
+    /**
+     * Test operators for equality and inequality.
+     * 
+     * Functions: operator==, operator!=
+     */
+    TEST_F(GateTest, check_operators)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl_1 = test_utils::create_empty_netlist();
+            ASSERT_NE(nl_1, nullptr);
+            std::unique_ptr<Netlist> nl_2 = test_utils::create_empty_netlist();
+            ASSERT_NE(nl_2, nullptr);
+            const GateLibrary* gl = nl_1->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+            ASSERT_EQ(gl, nl_2->get_gate_library());
+
+            // standard stuff
+            Gate* nl1_g1 = nl_1->create_gate(1, gl->get_gate_type_by_name("AND2"), "gate_1");
+            ASSERT_NE(nl1_g1, nullptr);
+            Gate* nl2_g1 = nl_2->create_gate(1, gl->get_gate_type_by_name("AND2"), "gate_1");
+            ASSERT_NE(nl2_g1, nullptr);
+            Gate* nl1_g2 = nl_1->create_gate(2, gl->get_gate_type_by_name("AND2"), "gate_1");
+            ASSERT_NE(nl1_g2, nullptr);
+            Gate* nl2_g2 = nl_2->create_gate(2, gl->get_gate_type_by_name("AND2"), "gate_2");
+            ASSERT_NE(nl2_g2, nullptr);
+            Gate* nl1_g3 = nl_1->create_gate(3, gl->get_gate_type_by_name("AND2"), "gate_3");
+            ASSERT_NE(nl1_g3, nullptr);
+            Gate* nl2_g3 = nl_2->create_gate(3, gl->get_gate_type_by_name("OR2"), "gate_3");
+            ASSERT_NE(nl2_g3, nullptr);
+
+            // GND/VCC gates
+            Gate* nl1_g4 = nl_1->create_gate(4, gl->get_gate_type_by_name("GND"), "gnd");
+            ASSERT_NE(nl1_g4, nullptr);
+            nl1_g4->mark_gnd_gate();
+            Gate* nl2_g4 = nl_2->create_gate(4, gl->get_gate_type_by_name("GND"), "gnd");
+            ASSERT_NE(nl2_g4, nullptr);
+            Gate* nl1_g5 = nl_1->create_gate(5, gl->get_gate_type_by_name("VCC"), "vcc");
+            ASSERT_NE(nl1_g5, nullptr);
+            nl1_g5->mark_vcc_gate();
+            Gate* nl2_g5 = nl_2->create_gate(5, gl->get_gate_type_by_name("VCC"), "vcc");
+            ASSERT_NE(nl2_g5, nullptr);
+
+            // locations
+            Gate* nl1_g6 = nl_1->create_gate(6, gl->get_gate_type_by_name("AND2"), "gate_6", 20, 30);
+            ASSERT_NE(nl1_g6, nullptr);
+            Gate* nl2_g6 = nl_2->create_gate(6, gl->get_gate_type_by_name("AND2"), "gate_6", 20, 30);
+            ASSERT_NE(nl2_g6, nullptr);
+            Gate* nl1_g7 = nl_1->create_gate(7, gl->get_gate_type_by_name("AND2"), "gate_7", 20, 30);
+            ASSERT_NE(nl1_g7, nullptr);
+            Gate* nl2_g7 = nl_2->create_gate(7, gl->get_gate_type_by_name("AND2"), "gate_7", 10, 30);
+            ASSERT_NE(nl2_g7, nullptr);
+            Gate* nl1_g8 = nl_1->create_gate(8, gl->get_gate_type_by_name("AND2"), "gate_8", 20, 30);
+            ASSERT_NE(nl1_g8, nullptr);
+            Gate* nl2_g8 = nl_2->create_gate(8, gl->get_gate_type_by_name("AND2"), "gate_8", 20, 40);
+            ASSERT_NE(nl2_g8, nullptr);
+
+            // data
+            Gate* nl1_g9 = nl_1->create_gate(9, gl->get_gate_type_by_name("AND2"), "gate_9");
+            ASSERT_NE(nl1_g9, nullptr);
+            nl1_g9->set_data("some", "random", "string", "data");
+            Gate* nl2_g9 = nl_2->create_gate(9, gl->get_gate_type_by_name("AND2"), "gate_9");
+            ASSERT_NE(nl2_g9, nullptr);
+            nl2_g9->set_data("some", "random", "string", "data");
+            Gate* nl1_g10 = nl_1->create_gate(10, gl->get_gate_type_by_name("AND2"), "gate_10");
+            ASSERT_NE(nl1_g10, nullptr);
+            nl1_g10->set_data("some", "random", "string", "data");
+            Gate* nl2_g10 = nl_2->create_gate(10, gl->get_gate_type_by_name("AND2"), "gate_10");
+            ASSERT_NE(nl2_g10, nullptr);
+            Gate* nl1_g11 = nl_1->create_gate(11, gl->get_gate_type_by_name("AND2"), "gate_11");
+            ASSERT_NE(nl1_g11, nullptr);
+            nl1_g11->set_data("some", "random", "string", "data");
+            Gate* nl2_g11 = nl_2->create_gate(11, gl->get_gate_type_by_name("AND2"), "gate_11");
+            ASSERT_NE(nl2_g11, nullptr);
+            nl1_g11->set_data("some", "other", "string", "data");
+
+            // Boolean functions
+            Gate* nl1_g12 = nl_1->create_gate(12, gl->get_gate_type_by_name("AND2"), "gate_12");
+            ASSERT_NE(nl1_g12, nullptr);
+            nl1_g12->add_boolean_function("test", BooleanFunction::from_string("A & B"));
+            Gate* nl2_g12 = nl_2->create_gate(12, gl->get_gate_type_by_name("AND2"), "gate_12");
+            ASSERT_NE(nl2_g12, nullptr);
+            nl2_g12->add_boolean_function("test", BooleanFunction::from_string("A & B"));
+            Gate* nl1_g13 = nl_1->create_gate(13, gl->get_gate_type_by_name("AND2"), "gate_13");
+            ASSERT_NE(nl1_g13, nullptr);
+            nl1_g13->add_boolean_function("test", BooleanFunction::from_string("A & B"));
+            Gate* nl2_g13 = nl_2->create_gate(13, gl->get_gate_type_by_name("AND2"), "gate_13");
+            ASSERT_NE(nl2_g13, nullptr);
+            Gate* nl1_g14 = nl_1->create_gate(14, gl->get_gate_type_by_name("AND2"), "gate_14");
+            ASSERT_NE(nl1_g14, nullptr);
+            nl1_g14->add_boolean_function("test", BooleanFunction::from_string("A & B"));
+            Gate* nl2_g14 = nl_2->create_gate(14, gl->get_gate_type_by_name("AND2"), "gate_14");
+            ASSERT_NE(nl2_g14, nullptr);
+            nl2_g14->add_boolean_function("test", BooleanFunction::from_string("A | B"));
+
+            EXPECT_TRUE(*nl1_g1 == *nl1_g1);        // identical gate pointer
+            EXPECT_TRUE(*nl2_g1 == *nl2_g1); 
+            EXPECT_TRUE(*nl1_g1 == *nl2_g1);        // identical gates, but different netlists
+            EXPECT_TRUE(*nl2_g1 == *nl1_g1);
+            EXPECT_FALSE(*nl1_g1 == *nl1_g2);       // different IDs
+            EXPECT_FALSE(*nl2_g1 == *nl2_g2);
+            EXPECT_FALSE(*nl1_g2 == *nl2_g2);       // different names
+            EXPECT_FALSE(*nl2_g2 == *nl1_g2);
+            EXPECT_FALSE(*nl1_g3 == *nl2_g3);       // different gate types
+            EXPECT_FALSE(*nl2_g3 == *nl1_g3);
+            EXPECT_FALSE(*nl1_g4 == *nl2_g4);       // one not marked as GND gate
+            EXPECT_FALSE(*nl2_g4 == *nl1_g4);
+            EXPECT_FALSE(*nl1_g5 == *nl2_g5);       // one not marked as VCC gate
+            EXPECT_FALSE(*nl2_g5 == *nl1_g5);
+            EXPECT_TRUE(*nl1_g6 == *nl2_g6);        // identical locations
+            EXPECT_TRUE(*nl2_g6 == *nl1_g6);
+            EXPECT_FALSE(*nl1_g7 == *nl2_g7);       // different x location
+            EXPECT_FALSE(*nl2_g7 == *nl1_g7); 
+            EXPECT_FALSE(*nl1_g8 == *nl2_g8);       // different y location
+            EXPECT_FALSE(*nl2_g8 == *nl1_g8);
+            EXPECT_TRUE(*nl1_g9 == *nl2_g9);        // identical data
+            EXPECT_TRUE(*nl2_g9 == *nl1_g9);
+            EXPECT_FALSE(*nl1_g10 == *nl2_g10);     // data missing
+            EXPECT_FALSE(*nl2_g10 == *nl1_g10);
+            EXPECT_FALSE(*nl1_g11 == *nl2_g11);     // different data
+            EXPECT_FALSE(*nl2_g11 == *nl1_g11);
+            EXPECT_TRUE(*nl1_g12 == *nl2_g12);      // identical Boolean function
+            EXPECT_TRUE(*nl2_g12 == *nl1_g12);
+            EXPECT_FALSE(*nl1_g13 == *nl2_g13);     // Boolean function missing
+            EXPECT_FALSE(*nl2_g13 == *nl1_g13);
+            EXPECT_FALSE(*nl1_g14 == *nl2_g14);     // different Boolean functions
+            EXPECT_FALSE(*nl2_g14 == *nl1_g14);
+
+            EXPECT_FALSE(*nl1_g1 != *nl1_g1);       // identical gate pointer
+            EXPECT_FALSE(*nl2_g1 != *nl2_g1); 
+            EXPECT_FALSE(*nl1_g1 != *nl2_g1);       // identical gates, but different netlists
+            EXPECT_FALSE(*nl2_g1 != *nl1_g1);
+            EXPECT_TRUE(*nl1_g1 != *nl1_g2);        // different IDs
+            EXPECT_TRUE(*nl2_g1 != *nl2_g2);
+            EXPECT_TRUE(*nl1_g2 != *nl2_g2);        // different names
+            EXPECT_TRUE(*nl2_g2 != *nl1_g2);
+            EXPECT_TRUE(*nl1_g3 != *nl2_g3);        // different gate types
+            EXPECT_TRUE(*nl2_g3 != *nl1_g3);
+            EXPECT_TRUE(*nl1_g4 != *nl2_g4);        // one not marked as GND gate
+            EXPECT_TRUE(*nl2_g4 != *nl1_g4);
+            EXPECT_TRUE(*nl1_g5 != *nl2_g5);        // one not marked as VCC gate
+            EXPECT_TRUE(*nl2_g5 != *nl1_g5);
+            EXPECT_FALSE(*nl1_g6 != *nl2_g6);       // identical locations
+            EXPECT_FALSE(*nl2_g6 != *nl1_g6);
+            EXPECT_TRUE(*nl1_g7 != *nl2_g7);        // different x location
+            EXPECT_TRUE(*nl2_g7 != *nl1_g7); 
+            EXPECT_TRUE(*nl1_g8 != *nl2_g8);        // different y location
+            EXPECT_TRUE(*nl2_g8 != *nl1_g8);
+            EXPECT_FALSE(*nl1_g9 != *nl2_g9);       // identical data
+            EXPECT_FALSE(*nl2_g9 != *nl1_g9);
+            EXPECT_TRUE(*nl1_g10 != *nl2_g10);      // data missing
+            EXPECT_TRUE(*nl2_g10 != *nl1_g10);
+            EXPECT_TRUE(*nl1_g11 != *nl2_g11);      // different data
+            EXPECT_TRUE(*nl2_g11 != *nl1_g11);
+            EXPECT_FALSE(*nl1_g12 != *nl2_g12);     // identical Boolean function
+            EXPECT_FALSE(*nl2_g12 != *nl1_g12);
+            EXPECT_TRUE(*nl1_g13 != *nl2_g13);      // Boolean function missing
+            EXPECT_TRUE(*nl2_g13 != *nl1_g13);
+            EXPECT_TRUE(*nl1_g14 != *nl2_g14);      // different Boolean functions
+            EXPECT_TRUE(*nl2_g14 != *nl1_g14);
+        }
         TEST_END
     }
 

@@ -174,7 +174,7 @@ namespace hal {
                 ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), test_hal_file_path));
                 auto des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
                 ASSERT_NE(des_nl, nullptr);
-                EXPECT_TRUE(test_utils::netlists_are_equal(nl.get(), des_nl.get()));
+                EXPECT_TRUE(*nl == *des_nl);
             }
             {
                 // Test the example netlist against its deserialized version, but flip the module ids
@@ -205,7 +205,7 @@ namespace hal {
                 ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), test_hal_file_path));
                 auto des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
                 ASSERT_NE(des_nl, nullptr);
-                EXPECT_TRUE(test_utils::netlists_are_equal(nl.get(), des_nl.get()));
+                EXPECT_TRUE(*nl == *des_nl);
             }
             {
                 // Serialize and deserialize an empty netlist and compare the result with the original netlist
@@ -215,7 +215,7 @@ namespace hal {
                 ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), test_hal_file_path));
                 auto des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
                 ASSERT_NE(des_nl, nullptr);
-                EXPECT_TRUE(test_utils::netlists_are_equal(nl.get(), des_nl.get()));
+                EXPECT_TRUE(*nl == *des_nl);
             }
 
 
