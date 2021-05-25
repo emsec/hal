@@ -120,7 +120,7 @@ namespace hal
          * Handle key presses within the graph widget <br>
          * Used to handle the key presses for the navigation.
          *
-         * @param e - The key event
+         * @param event - The key event
          */
         void keyPressEvent(QKeyEvent* event) override;
 

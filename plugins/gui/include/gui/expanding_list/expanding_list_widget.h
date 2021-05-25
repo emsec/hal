@@ -87,7 +87,7 @@ namespace hal
          * on the top-level parent button, all its children appear right below it.
          *
          * @param button - The button to add to the list.
-         * @param parentButton - The parent to which the button is added (optional).
+         * @param groupName - Name of group to which the button is added (optional).
          */
         void appendItem(ExpandingListButton* button, const QString& groupName = QString());
 

@@ -87,7 +87,7 @@ namespace hal
         /**
          * Sets the type of the grid. The following grid types are supported: None, Lines, Dots
          *
-         * @param grid_type
+         * @param gridType - enumerated grid type
          */
         static void setGridType(const GridType& gridType);
 

@@ -77,7 +77,7 @@ namespace hal
          * Emits the signal contextRenamed.
          *
          * @param ctx - The graph context to rename. Must not be a <i>nullptr</i>.
-         * @param new_name - The new name of the context
+         * @param newName - The new name of the context
          */
         void renameGraphContextAction(GraphContext* ctx, const QString& newName);
 
@@ -244,7 +244,7 @@ namespace hal
          * Used to apply the changes in the affected contexts.
          *
          * @param n - The net with the new destination
-         * @param src_gate_id - The id of the gate that contains the destination pin
+         * @param dst_gate_id - The id of the gate that contains the destination pin
          */
         void handleNetDestinationAdded(Net* n, const u32 dst_gate_id) const;
 
@@ -253,7 +253,7 @@ namespace hal
          * Used to apply the changes in the affected contexts.
          *
          * @param n - The net with the removed destination
-         * @param src_gate_id - The id of the gate that contains the destination pin
+         * @param dst_gate_id - The id of the gate that contains the destination pin
          */
         void handleNetDestinationRemoved(Net* n, const u32 dst_gate_id) const;
 

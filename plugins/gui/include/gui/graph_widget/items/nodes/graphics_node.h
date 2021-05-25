@@ -150,7 +150,7 @@ namespace hal
          * <li> The list contains an entry for each input pin.
          * <li> An entry <i>netId</i> at index <i>idx</i> implies that the net of id <i>netId</i> is connected to
          *      the input pin at position <i>idx</i>.
-         * <li> If <i>netId=0</i> there is no net connected to the pin at index <i>idx</i>.  <ul>
+         * <li> If <i>netId=0</i> there is no net connected to the pin at index <i>idx</i>.  </ul>
          *
          * @returns the list of input nets
          */
@@ -161,7 +161,7 @@ namespace hal
          * <li> The list contains an entry for each output pin.
          * <li> An entry <i>netId</i> at index <i>idx</i> implies that the net of id <i>netId</i> is connected to
          *      the output pin at position <i>idx</i>.
-         * <li> If <i>netId=0</i> there is no net connected to the pin at index <i>idx</i>.  <ul>
+         * <li> If <i>netId=0</i> there is no net connected to the pin at index <i>idx</i>.  </ul>
          *
          * @returns the list of output nets
          */

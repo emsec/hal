@@ -126,7 +126,7 @@ namespace hal
          * Fold the parent module of a specific gate. The specified gate as well as all other Gate%s and Submodule%s of the parent
          * module are removed from the context and replaced by the module itself.
          *
-         * @param id - The id of the gate
+         * @param gateId - The id of the gate
          */
         bool isGateUnfolded(u32 gateId) const;
 

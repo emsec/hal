@@ -249,10 +249,10 @@ namespace hal {
          */
         QColor colorForItem(ItemType itemType, u32 itemId) const;
 
-        /**
+      /**
          * Renames the grouping at the given table row of the groupings table.
          *
-         * @param irow - The table row index of the grouping to rename
+         * @param id - The id of the grouping to rename
          * @param groupingName - The new name
          * @returns The old name.
          */

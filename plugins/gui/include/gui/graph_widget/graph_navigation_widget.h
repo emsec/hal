@@ -188,7 +188,7 @@ namespace hal {
          *
          * @param origin - The gate to navigate from
          * @param via_net - The net to navigate along
-         * @param direction - The direction to navigate
+         * @param dir - The direction to navigate
          */
         void setup(Node origin, Net* via_net, SelectionRelay::Subfocus dir);
 
@@ -232,13 +232,13 @@ namespace hal {
          * This signal is sent after the user has selected a navigation target (chosen in the GraphNavigationTableWidget)
          * or gates and modules to add to the view (chosen in the GraphNavigationTreeWidget). <br>
          * If he has chosen a <b>navigation target</b>: <ul>
-         *   If the target is a gate, <i>to_gates</i> will contain the one id of the target gate while <i>to_modules</i>
+         *   <li> If the target is a gate, <i>to_gates</i> will contain the one id of the target gate while <i>to_modules</i>
          *   will be empty. <br>
-         *   If the target is a module, <i>to_gates</i> will be empty while <i>to_modules</i> will contain the one id of the
+         *   <li> If the target is a module, <i>to_gates</i> will be empty while <i>to_modules</i> will contain the one id of the
          *   target module. <br></ul>
          *
          * If he has chosen <b>gates and modules to add to the view</b>: <ul>
-         *   The sets <i>to_gates</i> and <i>to_modules</i> will be filled with the ids of the chosen gates and modules. </ul>
+         *   <li> The sets <i>to_gates</i> and <i>to_modules</i> will be filled with the ids of the chosen gates and modules. </ul>
          *
          * @param origin - The gate to navigate from
          * @param via_net - The net to navigate along
