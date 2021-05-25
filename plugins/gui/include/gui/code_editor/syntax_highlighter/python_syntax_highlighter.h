@@ -43,6 +43,7 @@ namespace hal
      *   <li> Keyword: self
      *   <li> Numbers (e.g. 42, 3.5, 0xDEADBEAF, 0765)
      *   <li> Comments (single- and multiline)
+     * </ul>
      */
     class PythonSyntaxHighlighter : public QSyntaxHighlighter
     {

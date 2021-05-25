@@ -473,7 +473,7 @@ namespace hal
         /**
          * Q_SLOT to handle that the used has selected another tab, so that the index of the current tab has changed.
          *
-         * @param fileName - The index of the newly selected tab
+         * @param index - The index of the newly selected tab
          */
         void handleCurrentTabChanged(int index);
 

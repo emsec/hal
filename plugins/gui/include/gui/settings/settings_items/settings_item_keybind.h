@@ -50,7 +50,7 @@ namespace hal
          * @param tag - The tag (key).
          * @param defVal - The default value.
          * @param cat - The category.
-         * @param descr - The description.
+         * @param desc - The description.
          * @param isGlobal - The isGlobal flag.
          */
         SettingsItemKeybind(const QString& label, const QString& tag, const QKeySequence& defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
