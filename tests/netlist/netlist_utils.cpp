@@ -217,7 +217,7 @@ namespace hal
         // Copy and compare the netlist
         std::unique_ptr<Netlist> test_nl_copy = netlist_utils::copy_netlist(test_nl.get());
 
-        EXPECT_TRUE(test_utils::netlists_are_equal(test_nl.get(), test_nl_copy.get()));
+        EXPECT_TRUE(*test_nl_copy == *test_nl);
         TEST_END
     }
 

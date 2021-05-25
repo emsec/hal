@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added a warning when attempting to assign a keybinding that is already in use
   * added incremental search for settings
   * added setting to enable/disable extra window to list all executed instances from UserAction
-* added new `Move to module ... dialog 
+* added new `Move to module ...` dialog 
   * allows to create new module or select from existing modules
   * existing modules can be selected from a table, tree-view, or using a module picker within the graph view
   * enables searching for existing modules
@@ -28,16 +28,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * improved netlist writers
   * netlist writers now take the output path as input instead of a `std::stringstream`
   * removed broken VHDL writer (will not be supported until further notice)
-  * completely renewed Verilog writer that respects module hierarchies
+  * entirely new Verilog writer that respects module hierarchies
   * added GEXF netlist writer, e.g., for netlist analysis within Gephi
 * expanded `netlist_utils`
-  * added function `get_common_inputs` to `netlist_utils` to get inputs that are common across multiple gates
-  * added function `replace_gate` to `netlist_utils` to replace a gate with an instance of another gate type
-  * added function `get_gate_chain` and `get_complex_gate_chain` to `netlist_utils` to find gates that are arranged in a chain
+  * added function `get_common_inputs` to get inputs that are common across multiple gates
+  * added function `replace_gate` to replace a gate with an instance of another gate type
+  * added function `get_gate_chain` and `get_complex_gate_chain` to find gates that are arranged in a chain
 * miscellaneous API changes and additions
   * added function `is_top_module` to class `Module` to determine whether a module is the top module
   * added function `get_nets` to class `Module` to get all nets that are connected to any of the gates or submodules of a module
   * added functions `is_gnd_net` and `is_vcc_net` to class `Net` to determine whether a net is connected to GND or VCC
+  * added functions `operator==` and `operator!=` to classes `Netlist`, `Gate`, `Net`, `Module`, and `Endpoint`
   * added Python bindings for `netlist_serializer`
 * miscellaneous GUI changes and additions
   * added `Save As...` option to save `.hal` files under a different name

@@ -27,6 +27,52 @@ namespace hal
         delete m_manager;
     }
 
+    bool Netlist::operator==(const Netlist& other) const
+    {
+        if (m_file_name != other.get_input_filename() || m_design_name != other.get_design_name() || m_device_name != other.get_device_name())
+        {
+            log_info("netlist", "the netlists with IDs {} and {} are not equal due to an unequal file name, design name, or device name.", m_netlist_id, other.get_id());
+            return false;
+        }
+
+        if (m_gate_library != other.get_gate_library())
+        {
+            log_info("netlist", "the netlists with IDs {} and {} are not equal due to an unequal gate library.", m_netlist_id, other.get_id());
+            return false;
+        }
+
+        if (m_gates.size() != other.get_gates().size() || m_nets.size() != other.get_nets().size() || m_modules.size() != other.get_modules().size())
+        {
+            log_info("netlist", "the netlists with IDs {} and {} are not equal due to an unequal number of gates, nets, or modules.", m_netlist_id, other.get_id());
+            return false;
+        }
+
+        for (const Net* net : other.get_nets())
+        {
+            if (const auto it = m_nets_map.find(net->get_id()); it == m_nets_map.end() || *it->second != *net)
+            {
+                log_info("netlist", "the netlists with IDs {} and {} are not equal due to unequal nets.", m_netlist_id, other.get_id());
+                return false;
+            }
+        }
+
+        // gates check included within modules
+
+        // modules are checked recursively
+        if (*m_top_module != *other.get_top_module())
+        {
+            log_info("netlist", "the netlists with IDs {} and {} are not equal due to unequal modules.", m_netlist_id, other.get_id());
+            return false;
+        }
+
+        return true;
+    }
+
+    bool Netlist::operator!=(const Netlist& other) const
+    {
+        return !operator==(other);
+    }
+
     u32 Netlist::get_id() const
     {
         return m_netlist_id;
@@ -152,9 +198,27 @@ namespace hal
         return it->second.get();
     }
 
-    std::vector<Module*> Netlist::get_modules() const
+    const std::vector<Module*>& Netlist::get_modules() const
     {
         return m_modules;
+    }
+
+    std::vector<Module*> Netlist::get_modules(const std::function<bool(Module*)>& filter) const
+    {
+        if (!filter)
+        {
+            return m_modules;
+        }
+        std::vector<Module*> res;
+        for (auto module : m_modules)
+        {
+            if (!filter(module))
+            {
+                continue;
+            }
+            res.push_back(module);
+        }
+        return res;
     }
 
     bool Netlist::is_module_in_netlist(Module* module) const
@@ -211,23 +275,25 @@ namespace hal
         return nullptr;
     }
 
+    const std::vector<Gate*>& Netlist::get_gates() const
+    {
+        return m_gates;
+    }
+
     std::vector<Gate*> Netlist::get_gates(const std::function<bool(Gate*)>& filter) const
     {
-        std::vector<Gate*> res;
         if (!filter)
         {
-            res = m_gates;
+            return m_gates;
         }
-        else
+        std::vector<Gate*> res;
+        for (Gate* g : m_gates)
         {
-            for (Gate* g : m_gates)
+            if (!filter(g))
             {
-                if (!filter(g))
-                {
-                    continue;
-                }
-                res.push_back(g);
+                continue;
             }
+            res.push_back(g);
         }
 
         return res;
@@ -299,22 +365,22 @@ namespace hal
         return true;
     }
 
-    bool Netlist::is_vcc_gate(Gate* gate) const
+    bool Netlist::is_vcc_gate(const Gate* gate) const
     {
         return (std::find(m_vcc_gates.begin(), m_vcc_gates.end(), gate) != m_vcc_gates.end());
     }
 
-    bool Netlist::is_gnd_gate(Gate* gate) const
+    bool Netlist::is_gnd_gate(const Gate* gate) const
     {
         return (std::find(m_gnd_gates.begin(), m_gnd_gates.end(), gate) != m_gnd_gates.end());
     }
 
-    std::vector<Gate*> Netlist::get_vcc_gates() const
+    const std::vector<Gate*>& Netlist::get_vcc_gates() const
     {
         return m_vcc_gates;
     }
 
-    std::vector<Gate*> Netlist::get_gnd_gates() const
+    const std::vector<Gate*>& Netlist::get_gnd_gates() const
     {
         return m_gnd_gates;
     }
@@ -366,6 +432,11 @@ namespace hal
             return nullptr;
         }
         return it->second.get();
+    }
+
+    const std::vector<Net*>& Netlist::get_nets() const
+    {
+        return m_nets;
     }
 
     std::vector<Net*> Netlist::get_nets(const std::function<bool(Net*)>& filter) const
@@ -520,22 +591,22 @@ namespace hal
         return true;
     }
 
-    bool Netlist::is_global_input_net(Net* n) const
+    bool Netlist::is_global_input_net(const Net* n) const
     {
         return (std::find(m_global_input_nets.begin(), m_global_input_nets.end(), n) != m_global_input_nets.end());
     }
 
-    bool Netlist::is_global_output_net(Net* n) const
+    bool Netlist::is_global_output_net(const Net* n) const
     {
         return (std::find(m_global_output_nets.begin(), m_global_output_nets.end(), n) != m_global_output_nets.end());
     }
 
-    std::vector<Net*> Netlist::get_global_input_nets() const
+    const std::vector<Net*>& Netlist::get_global_input_nets() const
     {
         return m_global_input_nets;
     }
 
-    std::vector<Net*> Netlist::get_global_output_nets() const
+    const std::vector<Net*>& Netlist::get_global_output_nets() const
     {
         return m_global_output_nets;
     }
