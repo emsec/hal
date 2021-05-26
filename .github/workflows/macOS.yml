@@ -99,7 +99,7 @@ jobs:
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
           CCACHE_COMPRESSLEVEL: 6
-          CCACHE_MAXSIZE: 400M
+          CCACHE_MAXSIZE: 500M
 
       - name: Build
         if: startsWith(runner.os, 'macOS')
@@ -116,7 +116,7 @@ jobs:
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
           CCACHE_COMPRESSLEVEL: 6
-          CCACHE_MAXSIZE: 400M
+          CCACHE_MAXSIZE: 500M
 
 #      - name: Setup tmate session
 #        uses: mxschmitt/action-tmate@v1
@@ -138,4 +138,4 @@ jobs:
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
           CCACHE_COMPRESSLEVEL: 6
-          CCACHE_MAXSIZE: 400M
+          CCACHE_MAXSIZE: 500M
