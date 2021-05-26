@@ -147,7 +147,7 @@ jobs:
           cd build
           mkdir -p doc/pydoc
           cmake --build . --target pydoc --clean-first --config $BUILD_TYPE
-          cp -R python-doc/html/* doc/pydoc/
+          cp -R documentation/python-doc/html/* doc/pydoc/
         env:
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
