@@ -226,7 +226,7 @@ namespace hal
         std::ofstream(output_path + "eval.json", std::ios_base::app) << std::setw(4) << output_json << std::endl;
 
         // dot_graph::create_graph(final_grouping, output_path + "result_", {"png", "pdf"});
-        dataflow::dot_graph::create_graph(final_grouping, output_path + "result_", {"png"});
+        //dataflow::dot_graph::create_graph(final_grouping, output_path + "result_", {"png"});
 
         if (draw_graph)
         {
