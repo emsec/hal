@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +51,7 @@ namespace hal
         /**
          * The constructor.
          *
-         * @param parentButton - The button to wrap.
+         * @param but - The button to wrap.
          * @param parent - The parent widget.
          */
         ExpandingListItem(ExpandingListButton* but, QWidget* parent = nullptr);
@@ -78,6 +78,10 @@ namespace hal
          */
         virtual void resizeEvent(QResizeEvent* event) override;
 
+        /** @name Q_PROPERTY READ Functions
+          */
+        ///@{
+
         /**
          * Get the expanded property of this items.
          *
@@ -92,6 +96,7 @@ namespace hal
          * @return The item's fixed height.
          */
         int fixedHeight() const;
+        ///@}
 
         /**
          * Gets the ExpandingListButton that belongs to this ExpandingListItem
@@ -119,6 +124,10 @@ namespace hal
          */
         void expand();
 
+        /** @name Q_PROPERTY WRITE Function
+          */
+        ///@{
+
         /**
          * Sets the fixed height property of this item. This function is called in the
          * repolish function and the fixed height is set to the height this item has when
@@ -127,6 +136,7 @@ namespace hal
          * @param height - The new fixed height.
          */
         void setFixedHeight(int height);
+        ///@}
 
     private:
         ExpandingListButton* mButton;

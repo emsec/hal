@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -35,12 +35,24 @@ namespace hal
 
     /**
      * @ingroup settings
+     * @brief A SettingsItem to modify keybinds.
      */
     class SettingsItemKeybind : public SettingsItem
     {
         Q_OBJECT
 
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param label - The label.
+         * @param tag - The tag (key).
+         * @param defVal - The default value.
+         * @param cat - The category.
+         * @param desc - The description.
+         * @param isGlobal - The isGlobal flag.
+         */
         SettingsItemKeybind(const QString& label, const QString& tag, const QKeySequence& defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
 
         virtual QVariant value() const override;
@@ -50,6 +62,12 @@ namespace hal
         virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
 
     Q_SIGNALS:
+
+        /**
+         * Q_SIGNAL that is emitted when the keysequence (value) changes.
+         *
+         * @param value - The new sequence.
+         */
         void keySequenceChanged(QKeySequence value);
 
     private:

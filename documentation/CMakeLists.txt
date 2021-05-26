@@ -1,15 +1,18 @@
 if(BUILD_DOCUMENTATION)
     find_package(Doxygen REQUIRED)
 
-    set(doxyfile "Doxyfile")
+    set(DOXYGEN_IN ${CMAKE_SOURCE_DIR}/documentation/Doxyfile.in)
+    set(DOXYGEN_OUT ${CMAKE_BINARY_DIR}/documentation/Doxyfile)
 
-    configure_file(${doxyfile} ${doxyfile} @ONLY)
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    message("Building Doxygen documentation...")
 
-    add_custom_target(doc
-                      COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
+    add_custom_target(doc ALL
+                      COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                       COMMENT "Generating API documentation with Doxygen"
-                      VERBATIM)
+                      VERBATIM )
+
 
     find_package(Sphinx REQUIRED)
     if(NOT DEFINED SPHINX_THEME)
@@ -21,13 +24,13 @@ if(BUILD_DOCUMENTATION)
     endif()
 
     # configured documentation tools and intermediate build results
-    set(BINARY_BUILD_DIR "${CMAKE_BINARY_DIR}/python-doc/_build")
+    set(BINARY_BUILD_DIR "${CMAKE_BINARY_DIR}/documentation/python-doc/_build")
 
     # Sphinx cache with pickled ReST documents
-    set(SPHINX_CACHE_DIR "${CMAKE_BINARY_DIR}/python-doc/_doctrees")
+    set(SPHINX_CACHE_DIR "${CMAKE_BINARY_DIR}/documentation/python-doc/_doctrees")
 
     # HTML output directory
-    set(SPHINX_HTML_DIR "${CMAKE_BINARY_DIR}/python-doc/html")
+    set(SPHINX_HTML_DIR "${CMAKE_BINARY_DIR}/documentation/python-doc/html")
 
     configure_file(
             "sphinx_doc/conf.py.in"

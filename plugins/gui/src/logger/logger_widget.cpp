@@ -27,8 +27,6 @@ namespace hal
 
         mSelector = new ChannelSelector();
 
-        connect(mPlainTextEdit, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showTextEditContextMenu(const QPoint&)));
-        connect(mTabBar, SIGNAL(currentChanged(int)), this, SLOT(filterItemClicked(int)));
         connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
 
@@ -61,16 +59,6 @@ namespace hal
     FilterTabBar* LoggerWidget::getTabBar()
     {
         return mTabBar;
-    }
-
-    void LoggerWidget::showTextEditContextMenu(const QPoint& point)
-    {
-        Q_UNUSED(point)
-    }
-
-    void LoggerWidget::filterItemClicked(const int& index)
-    {
-        Q_UNUSED(index)
     }
 
     void LoggerWidget::handleCurrentChannelUpdated(spdlog::level::level_enum t, const QString& msg)

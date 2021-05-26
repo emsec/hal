@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,6 @@ namespace hal
     class PythonQssAdapter : public QWidget
     {
         Q_OBJECT
-        Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor) // TODO: Unused?
         Q_PROPERTY(QColor keywordColor READ keywordColor WRITE setKeywordColor)
         Q_PROPERTY(QColor operator_color READ operator_color WRITE setOperatorColor)
         Q_PROPERTY(QColor braceColor READ braceColor WRITE setBraceColor)
@@ -47,13 +46,33 @@ namespace hal
         Q_PROPERTY(QColor commentColor READ commentColor WRITE setCommentColor)
 
     public:
+        /**
+         * The Constructor.
+         *
+         * @param parent - The widget's parent.
+         */
         explicit PythonQssAdapter(QWidget* parent = nullptr);
+
+        /**
+         * The destructor.
+         */
         ~PythonQssAdapter();    // DEBUG CODE, DELETE LATER
+
+        /**
+         * Get the singleton instance of the adapter.
+         *
+         * @return The singleton instance.
+         */
         static PythonQssAdapter* instance();
 
+        /**
+         * Reloads the Q_PROPERTIES from the stylesheet.
+         */
         void repolish();
 
-        QColor textColor() const;
+        /** @name Q_PROPERTY READ Functions
+         */
+        ///@{
         QColor keywordColor() const;
         QColor operator_color() const;
         QColor braceColor() const;
@@ -63,8 +82,9 @@ namespace hal
         QColor singleQuotedStringColor() const;
         QColor doubleQuotedStringColor() const;
         QColor commentColor() const;
-
-        void setTextColor(const QColor& color);
+        ///@}
+        /** @name Q_PROPERTY WRITE Function*/
+        ///@{
         void setKeywordColor(const QColor& color);
         void setOperatorColor(const QColor& color);
         void setBraceColor(const QColor& color);
@@ -74,6 +94,7 @@ namespace hal
         void setSingleQuotedStringColor(const QColor& color);
         void setDoubleQuotedStringColor(const QColor& color);
         void setCommentColor(const QColor& color);
+        ///@}
 
         // LEFT PUBLIC INTENTIONALLY
         QTextCharFormat mKeywordFormat;
@@ -87,7 +108,7 @@ namespace hal
         QTextCharFormat mCommentFormat;
 
     private:
-        QColor mTextColor;
+        //QColor mTextColor;
         QColor mKeywordColor;
         QColor mOperatorColor;
         QColor mBraceColor;

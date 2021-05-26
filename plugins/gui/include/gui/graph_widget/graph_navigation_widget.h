@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -107,8 +107,8 @@ namespace hal {
         void focusInEvent(QFocusEvent* event) override;
 
         /**
-         * TODO: Put this in keyPressEvent?
          * Overridden event. Used to toggle the navigation widget when pressing <i>TAB</i>.
+         * Note: It seems that this piece of code can't be put in the keyPressEvent. I won't work then.
          *
          * @param ev - The QEvent
          * @returns true if the event e was recognized and processed (see Qt documentation)
@@ -188,11 +188,10 @@ namespace hal {
          *
          * @param origin - The gate to navigate from
          * @param via_net - The net to navigate along
-         * @param direction - The direction to navigate
+         * @param dir - The direction to navigate
          */
         void setup(Node origin, Net* via_net, SelectionRelay::Subfocus dir);
 
-        // TODO: Why are GraphNavigationTableWidget and GraphNavigationTreeWidget not using their friendship for this?
         /**
          * Gets the direction to navigate along. The direction is set in the <i>setup</i>-function. <br>
          * This function is internally used by both managed navigation widgets but should be irrelevant to
@@ -233,13 +232,13 @@ namespace hal {
          * This signal is sent after the user has selected a navigation target (chosen in the GraphNavigationTableWidget)
          * or gates and modules to add to the view (chosen in the GraphNavigationTreeWidget). <br>
          * If he has chosen a <b>navigation target</b>: <ul>
-         *   If the target is a gate, <i>to_gates</i> will contain the one id of the target gate while <i>to_modules</i>
+         *   <li> If the target is a gate, <i>to_gates</i> will contain the one id of the target gate while <i>to_modules</i>
          *   will be empty. <br>
-         *   If the target is a module, <i>to_gates</i> will be empty while <i>to_modules</i> will contain the one id of the
+         *   <li> If the target is a module, <i>to_gates</i> will be empty while <i>to_modules</i> will contain the one id of the
          *   target module. <br></ul>
          *
          * If he has chosen <b>gates and modules to add to the view</b>: <ul>
-         *   The sets <i>to_gates</i> and <i>to_modules</i> will be filled with the ids of the chosen gates and modules. </ul>
+         *   <li> The sets <i>to_gates</i> and <i>to_modules</i> will be filled with the ids of the chosen gates and modules. </ul>
          *
          * @param origin - The gate to navigate from
          * @param via_net - The net to navigate along

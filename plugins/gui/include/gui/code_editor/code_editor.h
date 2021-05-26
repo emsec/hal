@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -64,7 +64,6 @@ namespace hal
         explicit CodeEditor(QWidget* parent = nullptr);
 
         /**
-         * TODO: Does not work! (eventFilter never installed?)
          * Captures the mouse scroll event to zoom in and out via CTRL+SCROLL UP/DOWN.
          *
          * @param object - The object this filter is applied on.
@@ -111,14 +110,6 @@ namespace hal
         int first_visible_block();
 
         /**
-         * TODO: Unused and wrong?
-         * Returns always 0.
-         *
-         * @returns 0
-         */
-        int visibleBlockCount();
-
-        /**
          * Scrolls to the specified line number using a scroll animation.
          *
          * @param number - The number to scroll to
@@ -158,12 +149,36 @@ namespace hal
         void setLineNumberHighlightColor(QColor& color);
         void setLineNumberHighlightBackground(QColor& color);
         void setCurrentLineBackground(QColor& color);
-
-	void setLineNumberEnabled(bool enabled);
-        void setHighlightCurrentLineEnabled(bool enabled);
-        void setLineWrapEnabled(bool enabled);
-        void setMinimapEnabled(bool enabled);
         ///@}
+
+
+        /**
+         * Enables or disables the line numbers.
+         *
+         * @param enabled - True to enable, False to disable.
+         */
+        void setLineNumberEnabled(bool enabled);
+
+        /**
+         * Enables or disables the highlight of the current line.
+         *
+         * @param enabled - True to enable, False to disable.
+         */
+        void setHighlightCurrentLineEnabled(bool enabled);
+
+        /**
+         * Enables or disables the linewrap.
+         *
+         * @param enabled - True to enable, False to disable.
+         */
+        void setLineWrapEnabled(bool enabled);
+
+        /**
+         * Enables or disables the minimap.
+         *
+         * @param enabled - True to enable, False to disable.
+         */
+        void setMinimapEnabled(bool enabled);
 
     public Q_SLOTS:
         /**
@@ -226,16 +241,6 @@ namespace hal
          * @param dy - The amount of pixels the viewport was vertically scrolled (unused)
          */
         void updateMinimap(const QRect& rect, int dy);
-
-        /**
-         * TODO: Move logic in PythonCodeEditor class?
-         * Handles that the global settings that affect the code editor has been changed.
-         *
-         * @param sender - The object that sent the signal
-         * @param key - The settings key that has been changed
-         * @param value - The new value of of the setting
-         */
-       // void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         void updateLayout();

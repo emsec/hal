@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -128,7 +128,7 @@ namespace hal
         /**
          * Given a net by its id, this function returns the index of a pin that is a destination of the net. If no
          * pin of this gate is a destination of this net -1 is returned. <br>
-         * Note(TODO): Undefined behaviour if there are multiple destinations on this gate! Unused/deprecated?
+         * Note(TODO): Undefined behaviour if there are multiple destinations on this gate!
          *
          * @param netId - The id of the net
          * @returns the index of a pin that is connected to the net.
@@ -138,7 +138,7 @@ namespace hal
         /**
          * Given a net by its id, this function returns the index of a pin that is a source of the net. If no
          * pin of this gate is a source of this net -1 is returned. <br>
-         * Note(TODO): Undefined behaviour if there are multiple sources on this gate! Unused/deprecated?
+         * Note(TODO): Undefined behaviour if there are multiple sources on this gate!
          *
          * @param netId - The id of the net
          * @returns the index of a pin that is connected to the net.
@@ -150,7 +150,7 @@ namespace hal
          * <li> The list contains an entry for each input pin.
          * <li> An entry <i>netId</i> at index <i>idx</i> implies that the net of id <i>netId</i> is connected to
          *      the input pin at position <i>idx</i>.
-         * <li> If <i>netId=0</i> there is no net connected to the pin at index <i>idx</i>.  <ul>
+         * <li> If <i>netId=0</i> there is no net connected to the pin at index <i>idx</i>.  </ul>
          *
          * @returns the list of input nets
          */
@@ -161,7 +161,7 @@ namespace hal
          * <li> The list contains an entry for each output pin.
          * <li> An entry <i>netId</i> at index <i>idx</i> implies that the net of id <i>netId</i> is connected to
          *      the output pin at position <i>idx</i>.
-         * <li> If <i>netId=0</i> there is no net connected to the pin at index <i>idx</i>.  <ul>
+         * <li> If <i>netId=0</i> there is no net connected to the pin at index <i>idx</i>.  </ul>
          *
          * @returns the list of output nets
          */
@@ -202,15 +202,6 @@ namespace hal
     //    qreal yOffset() const;
 
     protected:
-        /**
-         * TODO: Unused?
-         *
-         * @param change
-         * @param value
-         * @return
-         */
-        QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
-
         /**
          * The text in the center of the GraphicsNode. Each index stores one line of text. Therefore there is a maximum
          * of 3 lines in total.

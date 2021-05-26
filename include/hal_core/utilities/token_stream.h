@@ -420,7 +420,7 @@ namespace hal
         }
 
         /**
-         * @copydoc at(i32)
+         * @copydoc at(u32)
          */
         const Token<T>& at(u32 position) const
         {

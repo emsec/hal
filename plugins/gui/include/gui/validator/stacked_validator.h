@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -48,20 +48,18 @@ namespace hal
             StackedValidator();
 
             /**
-             * TODO: Refactor parameter name.
              * Adds a Validator to the StackedValidator.
              *
-             * @param Validator - The Validator to add
+             * @param v - The Validator to add
              */
-            void addValidator(Validator* Validator);
+            void addValidator(Validator* v);
 
             /**
-             * TODO: Refactor parameter name.
              * Removes a Validator from the StackedValidator.
              *
-             * @param Validator - The Validator to remove
+             * @param v - The Validator to remove
              */
-            void removeValidator(Validator* Validator);
+            void removeValidator(Validator* v);
 
             /**
              * Removes all Validators from the StackedValidator.

@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -63,14 +63,22 @@ namespace hal
          * @return The channel model instance.
          */
         static ChannelModel* get_instance();
+
+        /**
+         * The destructor. Removes callback.
+         */
         ~ChannelModel() override;
 
+        /** @name Overwritten model functions
+         */
+        ///@{
         QVariant data(const QModelIndex& index, int role) const override;
         Qt::ItemFlags flags(const QModelIndex& index) const override;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
         QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
         int rowCount(const QModelIndex& parent = QModelIndex()) const override;
         int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+        ///@}
 
         /**
          * Adds a new channel with the given name to its temporary channel list.

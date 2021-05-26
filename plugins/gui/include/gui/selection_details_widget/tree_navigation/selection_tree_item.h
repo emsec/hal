@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -94,7 +94,7 @@ namespace hal
         /**
          * Sets the parent (direct ancestor in the tree) of the item.
          *
-         * @param The parent.
+         * @param p - The parent.
          */
         void setParent(SelectionTreeItem* p);
 
@@ -127,15 +127,7 @@ namespace hal
          *
          * @return The item's name.
          */
-        virtual QVariant name() const = 0; // implemented in subclass
-
-        /**
-         * A specific function for the SelectionTreeItemGate subclass. It returns the name of
-         * the gate's type (e.g. LUT5 or FF).
-         *
-         * @return The gate type.
-         */
-        //virtual QVariant gateType() const;
+        virtual QVariant name() const = 0;
 
         /**
          * Get the icon for either the module, gate, or net item. Must be implemented by
@@ -145,9 +137,12 @@ namespace hal
          */
         virtual const QIcon& icon() const = 0;
 
+
         /**
-         * TODO: DOCUMENT!
-         * @return
+         * Returns the appropriate type of either a gate or module (not a net).
+         * Must be implemented in the subclass.
+         *
+         * @return The name of the type.
          */
         virtual QVariant boxType() const;
 
@@ -158,7 +153,7 @@ namespace hal
          * @param regex -  The regex to match against the item.
          * @return True if a match in either of the categories was found. False otherwise.
          */
-        virtual bool     match(const QRegularExpression& regex) const;
+        virtual bool match(const QRegularExpression& regex) const;
 
         /**
          * A function that fills the modIds, gateIds, and netIds lists with the respective ids if the
@@ -235,8 +230,9 @@ namespace hal
         virtual const QIcon& icon() const;
 
         /**
-         * TODO: Implement
-         * @return
+         * Returns the name of the module's type.
+         *
+         * @return The name of the module's type.
          */
         virtual QVariant boxType() const;
 
@@ -328,12 +324,6 @@ namespace hal
          * @return The gate specific icon.
          */
         virtual const QIcon& icon() const;
-        /**
-         * Get the name of the gate's type (e.g. LUT5 or FF).
-         *
-         * @return The gate type.
-         */
-        //virtual QVariant gateType() const;
 
         /**
          * Matches itself against the given regex. If no match was found it appends itself (its id)
@@ -348,8 +338,9 @@ namespace hal
                                                  const QRegularExpression& regex) const;
 
         /**
-         * TODO: DOCUMENT!
-         * @return
+         * Get the name of the gate's type (e.g. LUT5 or FF).
+         *
+         * @return The gate type (QString).
          */
         virtual QVariant boxType() const;
     private:

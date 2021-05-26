@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -39,13 +39,22 @@ namespace hal
 
     /**
      * @ingroup settings
-     * @brief A helpter class to group related list items (buttons).
+     * @brief A helper class to group related list items (buttons).
      */
     class ExpandingListGroup : public QList<ExpandingListItem*>
     {
     public:
         bool mCollapsed;
+        /**
+         * The constructor.
+         */
         ExpandingListGroup() : mCollapsed(false) {;}
+
+        /**
+         * Expands the given list button if it is collapsed. Collapses it otherwise.
+         *
+         * @param exceptSelected - The button to toggle.
+         */
         void toggleCollapsed(ExpandingListButton* exceptSelected);
     };
 
@@ -78,7 +87,7 @@ namespace hal
          * on the top-level parent button, all its children appear right below it.
          *
          * @param button - The button to add to the list.
-         * @param parentButton - The parent to which the button is added (optional).
+         * @param groupName - Name of group to which the button is added (optional).
          */
         void appendItem(ExpandingListButton* button, const QString& groupName = QString());
 

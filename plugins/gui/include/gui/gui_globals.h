@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -56,7 +56,6 @@ namespace hal
     extern ContentManager* gContentManager;
 
     /**
-     * TODO: Make unique_ptr?
      * This shared_ptr contains and owns the netlist after a file was opened. To access the Netlist data structure with
      * its functions, it is intended to use the raw pointer gNetlist instead.
      */
@@ -110,6 +109,6 @@ namespace hal
     ///@}
 
     // Comment this out to not compile the debug code for the graph grid.
-    // This will also hide the respective debug setting from the settings page. TODO: Quite hacky...
+    // This will also hide the respective debug setting from the settings page.
     #define GUI_DEBUG_GRID
 }

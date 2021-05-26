@@ -206,7 +206,7 @@ namespace hal
 
     std::string PluginGui::get_version() const
     {
-        return std::string("0.1");
+        return std::string("2.0");
     }
 
     void PluginGui::initialize_logging()

@@ -96,7 +96,7 @@ namespace hal
         connect(mDestinationPinsTable, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handleDestinationsTableMenuRequeted);
 
         //NetlistRelay connections
-        connect(gNetlistRelay, &NetlistRelay::net_removed, this, &NetDetailsWidget::handleNetRemoved);
+        connect(gNetlistRelay, &NetlistRelay::netRemoved, this, &NetDetailsWidget::handleNetRemoved);
         connect(gNetlistRelay, &NetlistRelay::netNameChanged, this, &NetDetailsWidget::handleNetNameChanged);
         connect(gNetlistRelay, &NetlistRelay::netSourceAdded, this, &NetDetailsWidget::handleNetSourceAdded);
         connect(gNetlistRelay, &NetlistRelay::netSourceRemoved, this, &NetDetailsWidget::handleNetSourceRemoved);
@@ -197,7 +197,11 @@ namespace hal
 
     void NetDetailsWidget::handleNetRemoved(Net* n)
     {
-        Q_UNUSED(n)
+        if (mCurrentId == n->get_id())
+        {
+            mGeneralView->setHidden(true);
+            mScrollArea->setHidden(true);
+        }
     }
 
     void NetDetailsWidget::handleNetNameChanged(Net* n)
