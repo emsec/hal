@@ -42,7 +42,7 @@ namespace hal {
      * @ingroup utility_widgets-selection_details
      * @brief Single entry in the GeneralDetailsModel.
      *
-     * The item class that is used by the GeneralDetailsModel to store and display its entries. It consists
+     * The item class that is used by the DetailsGeneralModel to store and display its entries. It consists
      * of a key(label) and a value string that are both displayed in the view. Furthermore this item class
      * stores (if available) python code as a string to access it later (e.g. via a contextmenu).
      */
@@ -98,7 +98,7 @@ namespace hal {
         /**
          * Sets the setter method for the entry (e.g. the set_name method of a module for the name entry).
          *
-         * @param setter_ - The actual setter method.
+         * @param obj - The object value to be set.
          */
         void setObject(const UserActionObject& obj) { mObject = obj; }
 
