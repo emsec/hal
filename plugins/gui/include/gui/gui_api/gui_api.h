@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -172,15 +172,14 @@ namespace hal
          * Selects a single net with the specified id.
          * By default, the new selection will overwrite the old one and the view will move to the new selection.
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
-         * TODO: Rename parameter
          *
-         * @param mNetId - The id of the net to select
+         * @param netId - The id of the net to select
          * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
          *                                  <b>false</b>: The new selection will be appended to the old one.
          * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
          *                                <b>false</b>: The view won't be moved.
          */
-        void selectNet(u32 mNetId, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectNet(u32 netId, bool clear_current_selection = true, bool navigate_to_selection = true);
 
         /**
          * Selects multiple nets that are specified by their id.
@@ -410,11 +409,11 @@ namespace hal
         void deselectGate(const std::vector<Gate*>& gates);
 
         /**
-         * Removes the net with the specified id from the selection. TODO: Rename mNetId
+         * Removes the net with the specified id from the selection.
          *
-         * @param mNetId - The id of the net that will be removed from the selection
+         * @param netId - The id of the net that will be removed from the selection
          */
-        void deselectNet(u32 mNetId);
+        void deselectNet(u32 netId);
 
         /**
          * Removes multiple nets that are specified by their id from the selection.

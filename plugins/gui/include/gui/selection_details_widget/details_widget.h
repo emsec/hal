@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -81,8 +81,19 @@ namespace hal
          * @return The widget's type.
          */
         QString detailsTypeName() const;
+
+        /**
+         * Get the label that contains the big icon for each specific widget.
+         *
+         * @return The icon containing label.
+         */
         QLabel* bigIcon();
 
+        /**
+         * Sets the flag to hide empty sections when they are empty.
+         *
+         * @param hide - True to hide empty sections, False otherwise.
+         */
         virtual void hideSectionsWhenEmpty(bool hide);
 
     protected:

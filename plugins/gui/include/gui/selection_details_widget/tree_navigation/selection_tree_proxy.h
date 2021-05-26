@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,6 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
-
 #pragma once
 
 #include "gui/gui_utils/sort.h"
@@ -63,7 +62,18 @@ namespace hal
          */
         bool isGraphicsBusy() const { return mGraphicsBusy > 0; }
 
+        /**
+         * Get the currently set sort mechanism.
+         *
+         * @return The sorting mechanism.
+         */
         gui_utility::mSortMechanism sortMechanism();
+
+        /**
+         * Sets the given sort mechanism.
+         *
+         * @param sortMechanism - The new mechanism.
+         */
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
 
     protected:

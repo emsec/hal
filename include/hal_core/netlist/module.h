@@ -89,7 +89,7 @@ namespace hal
         /**
          * Set the name of the module.
          *
-         * @params[in] name - The new name.
+         * @param[in] name - The new name.
          */
         void set_name(const std::string& name);
 
@@ -103,7 +103,7 @@ namespace hal
         /**
          * Set the type of the module.
          *
-         * @params[in] type - The new type.
+         * @param[in] type - The new type.
          */
         void set_type(const std::string& type);
 

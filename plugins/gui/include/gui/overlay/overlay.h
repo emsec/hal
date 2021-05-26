@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -29,15 +29,27 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief The Overlay overlays its parent.
+     *
+     * The Overlay's parent will be overlayed by this QFrame if it is shown (Overlay:show). To hide the Overlay use
+     * Overlay::hide. This class is used as an abstract class for diverse overlay contents.
      */
     class Overlay : public QFrame
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The QWidget to overlay
+         */
         explicit Overlay(QWidget* parent = nullptr);
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted whenever a click withing the overlay was registered.
+         */
         void clicked();
 
     protected:

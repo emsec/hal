@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -29,14 +29,29 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief A QSplitter that can be checked if it is unused or not
+     *
+     * Extends the QSplitter class by the function unused.
      */
     class Splitter : public QSplitter
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param orientation - The Splitter's orientation
+         * @param parent - The parent widget
+         */
         explicit Splitter(Qt::Orientation orientation, QWidget* parent = nullptr);
 
+        /**
+         * Returns true if the Splitter is currently unused, i.e. if all Widget%s of the Splitter are hidden. Returns
+         * false otherwise.
+         *
+         * @returns <b>true</b> iff the Splitter is unused.
+         */
         bool unused();
     };
 }

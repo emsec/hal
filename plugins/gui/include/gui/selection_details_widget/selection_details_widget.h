@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,6 @@ namespace hal
     class ModuleDetailsWidget;
     class GateDetailsWidget;
     class NetDetailsWidget;
-    class SelectionHistoryNavigator;
     class UserAction;
     class UserActionObject;
     class SettingsItemCheckbox;
@@ -76,7 +75,6 @@ namespace hal
          * @param parent - The widget's parent.
          */
         SelectionDetailsWidget(QWidget* parent = nullptr);
-        void clear(); //delete later, does not even exist in the cpp...
 
         /**
          * Overrides the ContentWidget's setupToolbar method. Adds its specific actions to the given toolbar
@@ -122,17 +120,6 @@ namespace hal
          */
         QString searchActiveIconStyle() const;
 
-        /**
-         * Q_PROPERTY READ function for the "restore"-icon path.
-         *
-         * @return The "restore" icon path.
-         */
-
-        /**
-         * Q_PROPERTY READ function for the "restore"-icon style.
-         *
-         * @return The "restore" icon style.
-         */
         /**
          * Q_PROPERTY READ function for the "to grouping"-icon path.
          *
@@ -190,17 +177,6 @@ namespace hal
         void setSearchActiveIconStyle(const QString &style);
 
         /**
-         * Q_PROPERTY WRITE function for the "restore"-icon path.
-         *
-         * @param path - The new path.
-         */
-
-        /**
-         * Q_PROPERTY WRITE function for the "restore"-icon style.
-         *
-         * @param style - The new style.
-         */
-        /**
          * Q_PROPERTY WRITE function for the "to grouping"-icon path.
          *
          * @param path - The new path.
@@ -234,8 +210,20 @@ namespace hal
          *
          */
         void selectionToGroupingAction(const QString& existingGrpName = QString());
+
+        /**
+         * Returns a UserAction to undo an assignment defined by the given UserActionObject.
+         *
+         * @param obj - The object containing the assign action.
+         * @return The resulting unassign action.
+         */
         UserAction* groupingUnassignActionFactory(const UserActionObject& obj) const;
 
+        /**
+         * Get the tree view that displays the current selection.
+         *
+         * @return The tree view.
+         */
         SelectionTreeView* selectionTreeView();
 
     Q_SIGNALS:

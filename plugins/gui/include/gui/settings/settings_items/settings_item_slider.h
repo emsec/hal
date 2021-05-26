@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -30,12 +30,24 @@ namespace hal
 {
     /**
      * @ingroup settings
+     * @brief A SettingsItem representing a slider.
      */
     class SettingsItemSlider : public SettingsItem
     {
         Q_OBJECT
 
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param label - The label.
+         * @param tag - The tag (key).
+         * @param defVal - The default value.
+         * @param cat - The category.
+         * @param desc - The description.
+         * @param isGlobal - The isGlobal flag.
+         */
         SettingsItemSlider(const QString& label, const QString& tag, int defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
 
         virtual QVariant value() const override;
@@ -44,19 +56,41 @@ namespace hal
         virtual void setDefaultValue(const QVariant& dv) override;
         virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
 
+        /**
+         * Sets the minimum and maximum value of the slider.
+         *
+         * @param min - The minimum value.
+         * @param max - The maximum value.
+         */
         void setRange(int min, int max);
 
+        /**
+         * Get the minimum value.
+         *
+         * @return The minimum value.
+         */
         int minimum() const
         {
             return mMinimum;
         }
 
+        /**
+         * Get the maximum value.
+         *
+         * @return The maximum value.
+         */
         int maximum() const
         {
             return mMaximum;
         }
 
     Q_SIGNALS:
+
+        /**
+         * Q_SIGNAL that is emitted when the value changes.
+         *
+         * @param value - The new value.
+         */
         void intChanged(int value);
 
     private:

@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ namespace hal
     class WidgetOverlay;
     class GraphContext;
     class GraphGraphicsView;
-    class GraphLayoutSpinnerWidget;
+    class SpinnerWidget;
     class GraphNavigationWidget;
 
     /**
@@ -120,7 +120,7 @@ namespace hal
          * Handle key presses within the graph widget <br>
          * Used to handle the key presses for the navigation.
          *
-         * @param e - The key event
+         * @param event - The key event
          */
         void keyPressEvent(QKeyEvent* event) override;
 
@@ -150,7 +150,7 @@ namespace hal
 
         WidgetOverlay* mOverlay;
         GraphNavigationWidget* mNavigationWidgetV3;
-        GraphLayoutSpinnerWidget* mSpinnerWidget;
+        SpinnerWidget* mSpinnerWidget;
 
         u32 mCurrentExpansion;
 

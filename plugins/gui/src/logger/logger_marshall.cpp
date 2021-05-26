@@ -136,16 +136,16 @@ namespace hal
 
     void LoggerMarshall::highlightCurrentLine()
     {
-    //    QList<QTextEdit::ExtraSelection> extraSelections;
-    //    QTextEdit::ExtraSelection selection;
-    //    QColor lineColor = QColor(48, 49, 49, 255);
+//        QList<QTextEdit::ExtraSelection> extraSelections;
+//        QTextEdit::ExtraSelection selection;
+//        QColor lineColor = QColor(48, 49, 49, 255);
 
-    //    selection.format.setBackground(lineColor);
-    //    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-    //    selection.cursor = mEdit->textCursor();
-    //    selection.cursor.clearSelection();
-    //    extraSelections.append(selection);
+//        selection.format.setBackground(lineColor);
+//        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+//        selection.cursor = mEdit->textCursor();
+//        selection.cursor.clearSelection();
+//        extraSelections.append(selection);
 
-    //    mEdit->setExtraSelections(extraSelections);
+//        mEdit->setExtraSelections(extraSelections);
     }
 }

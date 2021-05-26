@@ -133,7 +133,7 @@ namespace hal
          *
          * @param[in] gate - The initial gate.
          * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
-         * @param[in] stop_types - Stop recursion when reaching a gate of a type with one of the specified properties.
+         * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the gate.
          */
@@ -146,7 +146,7 @@ namespace hal
          *
          * @param[in] gate - The initial gate.
          * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
-         * @param[in] stop_types - Stop recursion when reaching a gate of a type with one of the specified properties.
+         * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the gate.
          */
         CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties);
@@ -172,7 +172,7 @@ namespace hal
          *
          * @param[in] net - The initial net.
          * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
-         * @param[in] stop_types - Stop recursion when reaching a gate of a type with one of the specified properties.
+         * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the net.
          */
         CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties);

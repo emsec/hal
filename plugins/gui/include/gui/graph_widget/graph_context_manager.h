@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -77,7 +77,7 @@ namespace hal
          * Emits the signal contextRenamed.
          *
          * @param ctx - The graph context to rename. Must not be a <i>nullptr</i>.
-         * @param new_name - The new name of the context
+         * @param newName - The new name of the context
          */
         void renameGraphContextAction(GraphContext* ctx, const QString& newName);
 
@@ -190,8 +190,6 @@ namespace hal
          */
         void handleModuleOutputPortNameChanged(Module* m, const u32 net);
 
-        //void handle_gate_created(Gate* g) const;
-        //void handleGateRemoved(Gate* g) const;
         /**
          * Handler to be called after a gate has been renamed. <br>
          * Used to apply the changes in the affected contexts.
@@ -215,7 +213,6 @@ namespace hal
          * @param n - The removed net
          */
         void handleNetRemoved(Net* n) const;
-        // TODO: IN_PROGRESS: Documentation of the remaining functions
         /**
          * Handler to be called after a net has been renamed. <br>
          * Used to apply the changes in the affected contexts.
@@ -247,7 +244,7 @@ namespace hal
          * Used to apply the changes in the affected contexts.
          *
          * @param n - The net with the new destination
-         * @param src_gate_id - The id of the gate that contains the destination pin
+         * @param dst_gate_id - The id of the gate that contains the destination pin
          */
         void handleNetDestinationAdded(Net* n, const u32 dst_gate_id) const;
 
@@ -256,7 +253,7 @@ namespace hal
          * Used to apply the changes in the affected contexts.
          *
          * @param n - The net with the removed destination
-         * @param src_gate_id - The id of the gate that contains the destination pin
+         * @param dst_gate_id - The id of the gate that contains the destination pin
          */
         void handleNetDestinationRemoved(Net* n, const u32 dst_gate_id) const;
 
@@ -301,8 +298,9 @@ namespace hal
         void setContextId(GraphContext* ctx, u32 ctxId);
 
         /**
-         * TODO: Memory leak? Better name: 'createDefaultLayouter'? Use smart pointer instead?
          * Creates an instance of the StandardGraphLayouter used for a certain GraphContext.
+         *
+         * Note: The calling party must assure that the layouter is delegated to the context using GraphContext::setLayouter
          *
          * @param context - The context the layouter works on
          * @returns a pointer to the new GraphLayouter
@@ -310,8 +308,9 @@ namespace hal
         GraphLayouter* getDefaultLayouter(GraphContext* const context) const;
 
         /**
-         * TODO: Memory leak? Better name: 'createDefaultShader'? Use smart pointer instead?
          * Creates an instance of ModuleShader used for a certain GraphContext.
+         *
+         * Note: The calling party must assure that the shader is delegated to the context using GraphContext::setShader
          *
          * @param context - The context the shader works on
          * @returns a pointer to the new GraphShader

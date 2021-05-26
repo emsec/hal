@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -47,15 +47,6 @@ namespace hal
          * @param id - The id of the module this item represents
          */
         ModuleItem(const u32 id);
-
-        /**
-         * Constructor.
-         * TODO: Since the module name is accessible in the netlist passing the name (without a check) seems to be wrong... Remove me?
-         *
-         * @param name - The name of the module item
-         * @param id - The id of the module this item represents
-         */
-        ModuleItem(const QString& name, const u32 id);
 
         /**
          * Appends a child ModuleItem to this ModuleItem.
@@ -183,7 +174,6 @@ namespace hal
         void setParent(ModuleItem* parent);
 
         /**
-         * TODO: Why not access the module directly via 'gNetlist->get_module_by_id(id)->get_name()/set_name()'. To expensive?
          * Sets the name of this ModuleItem (not the underlying module).
          *
          * @param name - The new name

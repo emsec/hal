@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,6 @@ namespace hal
      * The NetlistWatcher observes changes of the netlist. Its main purpose is to notify the FileStatusManager about
      * any changes that occur (especially outside the gui). Afterwards the FileStatusManager marks the netlist as
      * modified until the next save.
-     * TODO: Why does the FileStatusManager not use the NetlistRelay instead?
      */
     class NetlistWatcher : public QObject
     {
@@ -59,7 +58,6 @@ namespace hal
         /**
          * The FileStatusManager is only notified once. Afterwards this function has to be called to enable the
          * notification again.
-         * TODO: Only one notification ever? (Only called by constructor...)
          */
         void reset();
 

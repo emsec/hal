@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -39,13 +39,42 @@ namespace hal
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param parent - The widget's parent.
+         */
         ContextTableProxyModel(QObject* parent = nullptr);
+
+        /**
+         * Determines if the index specified by the row and its parent should be displayed
+         * given the before set filter.
+         *
+         * @param source_row - The index's row.
+         * @param source_parent - The index's parent.
+         *
+         * @return True if it should be displayed, False otherwise.
+         */
         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 
     public Q_SLOTS:
+
+        /**
+         * Sets the proxy model's filter to the given string.
+         *
+         * @param filter_text - The new filter string.
+         */
         void handleFilterTextChanged(const QString& filter_text);
 
     protected:
+
+        /**
+         * Defines the compare criteria of 2 data entries (might be defined for each column specifically).
+         *
+         * @param left - The first entry.
+         * @param right - The seconds entry.
+         * @return True if left < right, False otherwise.
+         */
         bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
 
     private:

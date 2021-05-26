@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,22 +23,48 @@
 
 #pragma once
 
+#include <QSvgRenderer>
 #include <QWidget>
 
 namespace hal
 {
     /**
-     * @ingroup gui
-     * TODO: Unused class. Remove me?
+     * @ingroup unused
+     * @brief A loading wheel.
+     *
+     * This widget represents a loading wheel that appears while the layouter is in progress. <br>
+     * <i>Currently unused...</i>
      */
-    class StyleableWidget : public QWidget
+    class SpinnerWidget final : public QWidget
     {
         Q_OBJECT
 
     public:
-        explicit StyleableWidget(QWidget* parent = nullptr);
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget where the loading wheel should be embedded (i.e. the GraphWidget).
+         */
+        explicit SpinnerWidget(QWidget* parent = nullptr);
+
+        /**
+         * Activate the loading wheel.
+         */
+        void start();
+
+        /**
+         * Deactivate the loading wheel
+         */
+        void stop();
+
+    private Q_SLOTS:
+        void handleRepaintNeeded();
 
     protected:
-        void paintEvent(QPaintEvent* event);
+        void paintEvent(QPaintEvent* event) override;
+        QSize sizeHint() const override;
+
+    private:
+        QSvgRenderer* mRenderer;
     };
 }

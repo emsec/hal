@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -98,8 +98,16 @@ namespace hal
          */
         void handleOpenContextClicked();
 
+        /**
+         * Initializes the Toolbar of the ContextManagerWidget.
+         *
+         * @param toolbar - The ContextManagerWidget's Toolbar
+         */
         virtual void setupToolbar(Toolbar* toolbar) override;
 
+        /** @name Q_PROPERTY READ Functions
+         */
+        ///@{
         QString disabledIconStyle() const;
         QString newViewIconPath() const;
         QString newViewIconStyle() const;
@@ -113,7 +121,11 @@ namespace hal
         QString openIconStyle() const;
         QString searchIconPath() const;
         QString searchIconStyle() const;
+        ///@}
 
+        /** @name Q_PROPERTY WRITE Functions
+         */
+        ///@{
         void setDisabledIconStyle(const QString &path);
         void setNewViewIconPath(const QString &path);
         void setNewViewIconStyle(const QString &style);
@@ -127,6 +139,7 @@ namespace hal
         void setOpenIconStyle(const QString &style);
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
+        ///@}
 
     public Q_SLOTS:
         //void handleContextCreated(GraphContext* context);

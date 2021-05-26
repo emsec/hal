@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -118,6 +118,10 @@ namespace hal
          */
         void set_name(const QString& name);
 
+        /** @name Q_PROPERTY READ Functions
+        */
+        ///@{
+
         /**
          * Necessary function used by qt's property system. Refer to Qt's documentation to learn more.
          *
@@ -131,6 +135,11 @@ namespace hal
          * @return The icon's path.
          */
         QString iconPath();
+        ///@}
+
+        /** @name Q_PROPERTY WRITE Functions
+          */
+        ///@{
 
         /**
          * Necessary function used by qt's property system. Refer to Qt's documentation to learn more.
@@ -145,6 +154,7 @@ namespace hal
          * @param path - The icon's path.
          */
         void setIconPath(const QString& path);
+        ///@}
 
     Q_SIGNALS:
 
@@ -206,6 +216,13 @@ namespace hal
          * Closes (hides) the widget in its anchor (related to the docking system).
          */
         void close();
+
+        /**
+         * Q_SLOT to handle that the settings for the search key sequence (default: 'Ctrl+F') has been changed.
+         * Configures the new search key sequence for the ContentWidget.
+         *
+         * @param seq - The new search key sequence
+         */
         void handleSearchKeysequenceChanged(QKeySequence seq);
 
     private:

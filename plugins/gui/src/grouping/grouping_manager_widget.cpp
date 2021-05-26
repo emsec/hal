@@ -30,7 +30,7 @@
 
 namespace hal
 {
-    GroupingManagerWidget::GroupingManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
+    GroupingManagerWidget::GroupingManagerWidget(QWidget* parent)
         : ContentWidget("Groupings", parent),
           mProxyModel(new GroupingProxyModel(this)),
           mSearchbar(new Searchbar(this)),
@@ -43,7 +43,6 @@ namespace hal
     {
         //needed to load the properties
         ensurePolished();
-        mTabView = tab_view;
 
         mNewGroupingAction->setIcon(gui_utility::getStyledSvgIcon(mNewGroupingIconStyle, mNewGroupingIconPath));
         mToolboxAction->setIcon(toolboxIcon());
@@ -484,16 +483,6 @@ namespace hal
         Q_UNUSED(sender);
 
         mToolboxAction->setEnabled(gSelectionRelay->numberSelectedNodes()==1);
-    }
-
-    void GroupingManagerWidget::handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
-    {
-        Q_UNUSED(deselected);
-
-        if(selected.indexes().isEmpty())
-            setToolbarButtonsEnabled(false);
-        else
-            setToolbarButtonsEnabled(true);
     }
 
     void GroupingManagerWidget::handleContextMenuRequest(const QPoint& point)

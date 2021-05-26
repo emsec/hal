@@ -1,4 +1,5 @@
-# Welcome to HAL! <a name="introduction"></a>
+<a name="introduction"></a>
+# Welcome to HAL! 
 [![Ubuntu 20.04](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml)  [![macOS](https://github.com/emsec/hal/actions/workflows/macOS.yml/badge.svg)](https://github.com/emsec/hal/actions/workflows/macOS.yml) [![Doc: C++](https://img.shields.io/badge/doc-c%2B%2B-orange)](https://emsec.github.io/hal/doc/) [![Doc: Python](https://img.shields.io/badge/doc-python-red)](https://emsec.github.io/hal/pydoc/) [![deployment](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) 
 
 
@@ -97,7 +98,7 @@ Using the CMake build system, your HAL build can be configured quite easily (by 
 Here is a selection of the most important options:
 - `BUILD_TESTS`: builds all available tests which can be executed by running `ctest` in the build directory.
 This also builds all tests of plugins that are built.
-- `BUILD_DOCUMENTATION`: build the C++ and Python documentation
+- `BUILD_DOCUMENTATION`: builds the C++ and Python documentation in the directory \<build directory\>/documentation/
 - `PL_<plugin name>`: enable (or disable) building a specific plugin
 - `BUILD_ALL_PLUGINS`: all-in-one option to build all available plugins, overrides the options for individual plugins
 - `SANITIZE_ADDRESS`, `SANITIZE_MEMORY`, `SANITIZE_THREAD`, `SANITIZE_UNDEFINED `: builds with the respective sanitizers (recommended only for debug builds)

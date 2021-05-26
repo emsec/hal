@@ -129,9 +129,9 @@ namespace hal
             Q_EMIT navigationRequested();
     }
 
-    void GuiApi::selectNet(u32 mNetId, bool clear_current_selection, bool navigate_to_selection)
+    void GuiApi::selectNet(u32 netId, bool clear_current_selection, bool navigate_to_selection)
     {
-        selectNet(gNetlist->get_net_by_id(mNetId), clear_current_selection, navigate_to_selection);
+        selectNet(gNetlist->get_net_by_id(netId), clear_current_selection, navigate_to_selection);
     }
 
     void GuiApi::selectNet(const std::vector<Net*>& nets, bool clear_current_selection, bool navigate_to_selection)
@@ -316,9 +316,9 @@ namespace hal
         gSelectionRelay->selectionChanged(this);
     }
 
-    void GuiApi::deselectNet(u32 mNetId)
+    void GuiApi::deselectNet(u32 netId)
     {
-        deselectNet(gNetlist->get_net_by_id(mNetId));
+        deselectNet(gNetlist->get_net_by_id(netId));
     }
 
     void GuiApi::deselectNet(const std::vector<Net*>& nets)
