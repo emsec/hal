@@ -1,0 +1,4 @@
+<map id="Context Management" name="Context Management">
+<area shape="rect" id="node1" href="$group__graph.html" title="Contains all classes that are relevant for the GraphWidget and the management of GraphContexts." alt="" coords="5,5,116,31"/>
+<area shape="rect" id="node2" title="Contains all classes that are related to GraphContexts." alt="" coords="164,5,327,31"/>
+</map>

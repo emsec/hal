@@ -1,0 +1,4 @@
+<map id="hal::SelectionRelay" name="hal::SelectionRelay">
+<area shape="rect" id="node1" title="Stores and manages the gui&#39;s selection state." alt="" coords="13,395,164,545"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="5,5,172,347"/>
+</map>

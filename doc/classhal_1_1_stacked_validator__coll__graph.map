@@ -1,0 +1,5 @@
+<map id="hal::StackedValidator" name="hal::StackedValidator">
+<area shape="rect" id="node1" title="Combines different validators into one." alt="" coords="5,536,164,672"/>
+<area shape="rect" id="node2" href="$classhal_1_1_validator.html" title="Base class for any string validator." alt="" coords="27,380,143,487"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qstring.html" title=" " alt="" coords="15,5,154,317"/>
+</map>

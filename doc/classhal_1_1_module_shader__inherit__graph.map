@@ -1,0 +1,4 @@
+<map id="hal::ModuleShader" name="hal::ModuleShader">
+<area shape="rect" id="node1" title="Specifically stores/updates visual information about a module and its items." alt="" coords="5,219,171,355"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graph_shader.html" title="Base class to store and update visual information about the graph." alt="" coords="17,5,159,171"/>
+</map>

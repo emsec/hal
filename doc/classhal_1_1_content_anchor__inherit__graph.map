@@ -1,0 +1,5 @@
+<map id="hal::ContentAnchor" name="hal::ContentAnchor">
+<area shape="rect" id="node1" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="93,5,247,171"/>
+<area shape="rect" id="node2" href="$classhal_1_1_splitter_anchor.html" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="5,241,148,391"/>
+<area shape="rect" id="node3" href="$classhal_1_1_tab_widget.html" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="172,219,357,413"/>
+</map>

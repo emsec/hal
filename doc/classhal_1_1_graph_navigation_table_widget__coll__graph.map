@@ -1,0 +1,5 @@
+<map id="hal::GraphNavigationTableWidget" name="hal::GraphNavigationTableWidget">
+<area shape="rect" id="node1" title="A widget used to select destinations when traversing through the graph." alt="" coords="5,652,243,773"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtablewidget.html" title=" " alt="" coords="29,351,219,604"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtableview.html" title=" " alt="" coords="37,5,211,303"/>
+</map>

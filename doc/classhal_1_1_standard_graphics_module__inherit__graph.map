@@ -1,0 +1,5 @@
+<map id="hal::StandardGraphicsModule" name="hal::StandardGraphicsModule">
+<area shape="rect" id="node1" title="The standard module to visualize netlist modules." alt="" coords="5,403,219,597"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graphics_module.html" title="Abstract base class for modules." alt="" coords="35,263,189,355"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="11,5,213,215"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="hal::GraphicsItem" name="hal::GraphicsItem">
+<area shape="rect" id="node1" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="105,409,245,648"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsitem.html" title=" " alt="" coords="5,5,175,317"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qcolor.html" title=" " alt="" coords="199,5,325,317"/>
+</map>

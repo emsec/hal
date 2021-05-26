@@ -1,0 +1,6 @@
+<map id="hal::GraphicsModule" name="hal::GraphicsModule">
+<area shape="rect" id="node1" title="Abstract base class for modules." alt="" coords="35,593,189,685"/>
+<area shape="rect" id="node4" href="$classhal_1_1_standard_graphics_module.html" title="The standard module to visualize netlist modules." alt="" coords="5,733,219,928"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="11,336,213,545"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="42,5,182,288"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="hal::ActionMoveNodeFactory" name="hal::ActionMoveNodeFactory">
+<area shape="rect" id="node1" title="UserActionFactory for ActionMoveNode." alt="" coords="5,160,213,252"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action_factory.html" title="The UserActionFactory is the abstract base class for registration." alt="" coords="25,5,193,112"/>
+</map>

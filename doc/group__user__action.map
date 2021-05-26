@@ -1,0 +1,4 @@
+<map id="User Actions" name="User Actions">
+<area shape="rect" id="node1" href="$group__gui.html" title="The Gui is a huge plugin that provides a graphical user interface to load and work with Netlists...." alt="" coords="5,5,80,31"/>
+<area shape="rect" id="node2" title="Contains the classes for all available UserActions and the UserAction management system." alt="" coords="128,5,232,31"/>
+</map>

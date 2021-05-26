@@ -1,0 +1,4 @@
+<map id="hal::StackedValidator" name="hal::StackedValidator">
+<area shape="rect" id="node1" title="Combines different validators into one." alt="" coords="5,160,164,296"/>
+<area shape="rect" id="node2" href="$classhal_1_1_validator.html" title="Base class for any string validator." alt="" coords="27,5,143,112"/>
+</map>

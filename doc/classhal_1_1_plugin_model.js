@@ -1,0 +1,27 @@
+var classhal_1_1_plugin_model =
+[
+    [ "PluginModel", "classhal_1_1_plugin_model.html#a5aeac81aa5b89f8a643f2d30f72f34b0", null ],
+    [ "~PluginModel", "classhal_1_1_plugin_model.html#a6d0c66ba469027f6c77c9e053a2e5916", null ],
+    [ "columnCount", "classhal_1_1_plugin_model.html#a861e03b54a7f547e4e6bad5079e39a51", null ],
+    [ "data", "classhal_1_1_plugin_model.html#a9d1cd4f2fea3f21ae9398aa4e00e692c", null ],
+    [ "dropMimeData", "classhal_1_1_plugin_model.html#a1f8a04eb05ab3965020845b6ad67a8ff", null ],
+    [ "flags", "classhal_1_1_plugin_model.html#accb55aec3fb49348bcc99da54eecde33", null ],
+    [ "getPluginList", "classhal_1_1_plugin_model.html#ae42154c6bf32654cd69b6f008d51a0ea", null ],
+    [ "handleLoadPlugin", "classhal_1_1_plugin_model.html#a1310d2e8342bff61a39a5db234402f4d", null ],
+    [ "handleRunPluginTriggered", "classhal_1_1_plugin_model.html#ad700b8e281c2c60a0fb41a1cb389c56a", null ],
+    [ "handleUnloadPlugin", "classhal_1_1_plugin_model.html#a2d2f5676096a1ffbeb0f5c07cddf051e", null ],
+    [ "headerData", "classhal_1_1_plugin_model.html#a608aaf26c08a62f07a75ff9db7b81fb6", null ],
+    [ "index", "classhal_1_1_plugin_model.html#a6bcdd5a2f701a22fc8664f62e5003755", null ],
+    [ "isValidIndex", "classhal_1_1_plugin_model.html#a66211eb7b3d957c189325e3cfeb32869", null ],
+    [ "loadPlugin", "classhal_1_1_plugin_model.html#a624fac85280ce246638ae67050f0b457", null ],
+    [ "moveRows", "classhal_1_1_plugin_model.html#a2554012f9b2c5e0cc74e2bfaaca14a1b", null ],
+    [ "parent", "classhal_1_1_plugin_model.html#afdc8cf97c18466938ff14971d0682330", null ],
+    [ "pluginManagerCallback", "classhal_1_1_plugin_model.html#a5db29812827f54a62653e8968ef96f8e", null ],
+    [ "requestLoadPlugin", "classhal_1_1_plugin_model.html#a34c54b9a7609a2eb38c622341ac78a37", null ],
+    [ "requestUnloadPlugin", "classhal_1_1_plugin_model.html#a7764bc1523a63bc38334bf919cfd183c", null ],
+    [ "rowCount", "classhal_1_1_plugin_model.html#a88c84c222026156f134207065bc4453d", null ],
+    [ "runPlugin", "classhal_1_1_plugin_model.html#a0a2eb33f6e9e50f823406b4ef84479ef", null ],
+    [ "setData", "classhal_1_1_plugin_model.html#a415d3fd4d402aed7f6de91d2d2e7d3d4", null ],
+    [ "supportedDropActions", "classhal_1_1_plugin_model.html#a73d0bed7dbb3f012c95066a4bd802367", null ],
+    [ "unloadPlugin", "classhal_1_1_plugin_model.html#a99cda3c72dc5d63e6765f709cea592fb", null ]
+];

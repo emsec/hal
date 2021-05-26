@@ -1,0 +1,8 @@
+<map id="hal::GraphicsNode" name="hal::GraphicsNode">
+<area shape="rect" id="node1" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="238,799,441,964"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="105,446,245,685"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsitem.html" title=" " alt="" coords="5,5,175,317"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qcolor.html" title=" " alt="" coords="199,5,325,317"/>
+<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qstring.html" title=" " alt="" coords="270,409,409,721"/>
+<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmultihash.html" title=" " alt="" coords="433,490,611,641"/>
+</map>

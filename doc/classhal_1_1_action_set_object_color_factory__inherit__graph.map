@@ -1,0 +1,4 @@
+<map id="hal::ActionSetObjectColorFactory" name="hal::ActionSetObjectColorFactory">
+<area shape="rect" id="node1" title="UserActionFactory for ActionSetObjectColor." alt="" coords="5,160,237,267"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action_factory.html" title="The UserActionFactory is the abstract base class for registration." alt="" coords="37,5,205,112"/>
+</map>

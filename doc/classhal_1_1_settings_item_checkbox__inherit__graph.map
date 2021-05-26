@@ -1,0 +1,5 @@
+<map id="hal::SettingsItemCheckbox" name="hal::SettingsItemCheckbox">
+<area shape="rect" id="node1" title="A SettingsItem representing a Checkbox." alt="" coords="5,652,203,803"/>
+<area shape="rect" id="node2" href="$classhal_1_1_settings_item.html" title="The interface for the logical part of a setting." alt="" coords="31,395,177,604"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="21,5,187,347"/>
+</map>

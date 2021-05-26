@@ -1,0 +1,5 @@
+<map id="hal::SettingsItemSlider" name="hal::SettingsItemSlider">
+<area shape="rect" id="node1" title="A SettingsItem representing a slider." alt="" coords="5,652,176,803"/>
+<area shape="rect" id="node2" href="$classhal_1_1_settings_item.html" title="The interface for the logical part of a setting." alt="" coords="18,395,163,604"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="7,5,174,347"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="hal::SettingsItem" name="hal::SettingsItem">
+<area shape="rect" id="node1" title="The interface for the logical part of a setting." alt="" coords="571,395,717,604"/>
+<area shape="rect" id="node3" href="$classhal_1_1_settings_item_checkbox.html" title="A SettingsItem representing a Checkbox." alt="" coords="5,652,203,803"/>
+<area shape="rect" id="node4" href="$classhal_1_1_settings_item_dropdown.html" title="A SettingsItem that represents a dropdown menu." alt="" coords="227,652,426,803"/>
+<area shape="rect" id="node5" href="$classhal_1_1_settings_item_keybind.html" title="A SettingsItem to modify keybinds." alt="" coords="450,652,635,803"/>
+<area shape="rect" id="node6" href="$classhal_1_1_settings_item_slider.html" title="A SettingsItem representing a slider." alt="" coords="660,652,831,803"/>
+<area shape="rect" id="node7" href="$classhal_1_1_settings_item_spinbox.html" title="A SettingsItem that represents a spinbox." alt="" coords="855,652,1041,803"/>
+<area shape="rect" id="node8" href="$classhal_1_1_settings_item_text.html" title="A SettingsItem that represents a textfield." alt="" coords="1065,652,1225,803"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="561,5,727,347"/>
+</map>

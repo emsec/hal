@@ -1,0 +1,4 @@
+<map id="Docking System" name="Docking System">
+<area shape="rect" id="node1" title="Contains all classes that are relevant for the ContentWidget&#39;s docking system." alt="" coords="128,5,256,31"/>
+<area shape="rect" id="node2" href="$group__gui.html" title="The Gui is a huge plugin that provides a graphical user interface to load and work with Netlists...." alt="" coords="5,5,80,31"/>
+</map>

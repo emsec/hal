@@ -1,0 +1,5 @@
+<map id="hal::Action" name="hal::Action">
+<area shape="rect" id="node1" title="Provides an interface for triggerable functionality that can be inserted into widgets and also connec..." alt="" coords="39,769,161,920"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qaction.html" title=" " alt="" coords="5,395,195,721"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="17,5,183,347"/>
+</map>

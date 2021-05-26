@@ -1,0 +1,5 @@
+<map id="hal::ArrowSeparatedNet" name="hal::ArrowSeparatedNet">
+<area shape="rect" id="node1" title="Used to display all nets which destinations are not in the current view." alt="" coords="15,564,192,729"/>
+<area shape="rect" id="node2" href="$classhal_1_1_separated_graphics_net.html" title="Abstract base class for separated nets (e.g. ArrowSeparatedNet)" alt="" coords="5,321,201,516"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_net.html" title="The basic net class all other nets inherit from." alt="" coords="35,5,171,273"/>
+</map>

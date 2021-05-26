@@ -1,0 +1,5 @@
+<map id="hal::SettingsItemKeybind" name="hal::SettingsItemKeybind">
+<area shape="rect" id="node1" title="A SettingsItem to modify keybinds." alt="" coords="5,652,191,803"/>
+<area shape="rect" id="node2" href="$classhal_1_1_settings_item.html" title="The interface for the logical part of a setting." alt="" coords="25,395,171,604"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="15,5,181,347"/>
+</map>

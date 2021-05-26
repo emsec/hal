@@ -1,0 +1,7 @@
+<map id="hal::SelectionTreeItem" name="hal::SelectionTreeItem">
+<area shape="rect" id="node1" title="Basic item for the SelectionTreeModel." alt="" coords="287,5,462,185"/>
+<area shape="rect" id="node2" href="$classhal_1_1_selection_tree_item_gate.html" title="Tree item that represents a gate." alt="" coords="5,248,240,384"/>
+<area shape="rect" id="node3" href="$classhal_1_1_selection_tree_item_module.html" title="Tree item that represents a module." alt="" coords="263,233,486,399"/>
+<area shape="rect" id="node5" href="$classhal_1_1_selection_tree_item_net.html" title="Tree item that represents a net." alt="" coords="509,255,744,377"/>
+<area shape="rect" id="node4" href="$classhal_1_1_selection_tree_item_root.html" title="Tree item that represent the root." alt="" coords="276,447,473,524"/>
+</map>

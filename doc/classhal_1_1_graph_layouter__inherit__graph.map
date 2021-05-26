@@ -1,0 +1,6 @@
+<map id="hal::GraphLayouter" name="hal::GraphLayouter">
+<area shape="rect" id="node1" title="Base class for all specific layouters." alt="" coords="129,395,308,589"/>
+<area shape="rect" id="node3" href="$classhal_1_1_physical_graph_layouter.html" title="A specific implementation of a layouter." alt="" coords="5,645,205,781"/>
+<area shape="rect" id="node4" href="$classhal_1_1_standard_graph_layouter.html" title="The standard layouter used to layout netlists." alt="" coords="230,637,434,788"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="135,5,302,347"/>
+</map>

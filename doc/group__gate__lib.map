@@ -1,0 +1,6 @@
+<map id="Gate Library" name="Gate Library">
+<area shape="rect" id="node1" href="$group__gate__lib__parser.html" title=" " alt="" coords="269,5,416,31"/>
+<area shape="rect" id="node2" title=" " alt="" coords="119,31,221,56"/>
+<area shape="rect" id="node4" href="$group__gate__lib__writer.html" title=" " alt="" coords="269,55,416,80"/>
+<area shape="rect" id="node3" href="$group__netlist.html" title=" " alt="" coords="5,31,71,56"/>
+</map>

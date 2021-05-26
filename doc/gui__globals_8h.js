@@ -1,0 +1,16 @@
+var gui__globals_8h =
+[
+    [ "GUI_DEBUG_GRID", "gui__globals_8h.html#a45bf493aef646143652f7064c48609ed", null ],
+    [ "gContentManager", "gui__globals_8h.html#a36ac15c9dc231bbb2cff96b936a5b8d4", null ],
+    [ "gFileStatusManager", "gui__globals_8h.html#a4fac8393f1437113df74c148fdd8889d", null ],
+    [ "gGraphContextManager", "gui__globals_8h.html#a63d96610e22dcbffc0755f514731d730", null ],
+    [ "gGuiApi", "gui__globals_8h.html#ada0064833138221168460e2dafafac6f", null ],
+    [ "gGuiState", "gui__globals_8h.html#a26043d445e88c55f2c8cb048e9abc291", null ],
+    [ "gNetlist", "gui__globals_8h.html#aabb4e1324f8808da9712d67be96fb614", null ],
+    [ "gNetlistOwner", "gui__globals_8h.html#ae9eb93dc7dd8514d3afb4c935a09a9a0", null ],
+    [ "gNetlistRelay", "gui__globals_8h.html#ac87c0ce709dc346017d7c2aff4aea006", null ],
+    [ "gPluginRelay", "gui__globals_8h.html#a4cd901560b6cb156908e4cb43a1ea812", null ],
+    [ "gPythonContext", "gui__globals_8h.html#a54235e7df25a78fa437937569928dc84", null ],
+    [ "gSelectionRelay", "gui__globals_8h.html#a6ba6e6ec49eb58d0b35a604e16187112", null ],
+    [ "gThreadPool", "gui__globals_8h.html#a0f7ae86893472f13cc5dea0660463a58", null ]
+];

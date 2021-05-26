@@ -1,0 +1,7 @@
+<map id="hal::Validator" name="hal::Validator">
+<area shape="rect" id="node1" title="Base class for any string validator." alt="" coords="389,5,505,112"/>
+<area shape="rect" id="node2" href="$classhal_1_1_empty_string_validator.html" title="Checks if a given string is not empty." alt="" coords="5,219,193,311"/>
+<area shape="rect" id="node3" href="$classhal_1_1_grouping_table_model.html" title="Table that holds information about all groupings." alt="" coords="218,160,455,369"/>
+<area shape="rect" id="node4" href="$classhal_1_1_stacked_validator.html" title="Combines different validators into one." alt="" coords="480,197,639,333"/>
+<area shape="rect" id="node5" href="$classhal_1_1_unique_string_validator.html" title="Checks if a given string is unique compared to other given strings." alt="" coords="663,219,855,311"/>
+</map>

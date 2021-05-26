@@ -1,0 +1,4 @@
+<map id="hal::ActionRenameObjectFactory" name="hal::ActionRenameObjectFactory">
+<area shape="rect" id="node1" title="UserActionFactory for ActionRenameObject." alt="" coords="5,160,240,252"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action_factory.html" title="The UserActionFactory is the abstract base class for registration." alt="" coords="39,5,207,112"/>
+</map>

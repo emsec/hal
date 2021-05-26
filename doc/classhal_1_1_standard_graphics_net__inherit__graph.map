@@ -1,0 +1,6 @@
+<map id="hal::StandardGraphicsNet" name="hal::StandardGraphicsNet">
+<area shape="rect" id="node1" title="The most basic net to display the standard nets." alt="" coords="5,652,193,773"/>
+<area shape="rect" id="node4" href="$classhal_1_1_standard_arrow_net.html" title="A standard net that has parts of a separated net." alt="" coords="15,821,184,957"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graphics_net.html" title="The basic net class all other nets inherit from." alt="" coords="31,336,167,604"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="29,5,169,288"/>
+</map>

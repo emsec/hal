@@ -5,10 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>hal: Class Members</title>
+<title>HAL: Class Members</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -22,8 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">hal
-   &#160;<span id="projectnumber">3.2.6.</span>
+   <div id="projectname">HAL
    </div>
   </td>
  </tr>
@@ -48,6 +51,22 @@ $(function() {
 /* @license-end */</script>
 <div id="main-nav"></div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('functions_m.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -66,41 +85,683 @@ $(function() {
 <div class="textblock">Here is a list of all class members with links to the classes they belong to:</div>
 
 <h3><a id="index_m"></a>- m -</h3><ul>
+<li>m_constant
+: <a class="el" href="classhal_1_1_boolean_function.html#a948c6b3eebd099cdec1c1bfd13da7394">hal::BooleanFunction</a>
+</li>
+<li>m_content
+: <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">hal::BooleanFunction</a>
+</li>
+<li>m_data
+: <a class="el" href="classhal_1_1_data_container.html#a379e3abc9ed3ff7e624564785d5425b6">hal::DataContainer</a>
+</li>
+<li>m_invert
+: <a class="el" href="classhal_1_1_boolean_function.html#a6944ba7c9f1abb8115d9e4d9f8e9fda1">hal::BooleanFunction</a>
+</li>
+<li>m_labels
+: <a class="el" href="classhal_1_1_settings_widget.html#a78c62b527aa8e1b21ad507a705baac67">hal::SettingsWidget</a>
+</li>
+<li>m_layout
+: <a class="el" href="classhal_1_1_settings_widget.html#a5722a013df67238e680be18e8db7593c">hal::SettingsWidget</a>
+</li>
+<li>m_op
+: <a class="el" href="classhal_1_1_boolean_function.html#a149a88b1fd3d84251b27d7ebd3db570a">hal::BooleanFunction</a>
+</li>
+<li>m_operands
+: <a class="el" href="classhal_1_1_boolean_function.html#a5b471f114125cc2e8c1a6f88a7db0c4a">hal::BooleanFunction</a>
+</li>
+<li>m_top_bar
+: <a class="el" href="classhal_1_1_settings_widget.html#a38290689f08252c12d2b5ff4a74c7344">hal::SettingsWidget</a>
+</li>
+<li>m_variable
+: <a class="el" href="classhal_1_1_boolean_function.html#aaa930e5d0eb1f23c62d0f7ca251e22c7">hal::BooleanFunction</a>
+</li>
+<li>mActionList
+: <a class="el" href="classhal_1_1_user_action_compound.html#aa3f53057ccf26e72517e5a708bfcfe15">hal::UserActionCompound</a>
+</li>
+<li>MainSettingsWidget()
+: <a class="el" href="classhal_1_1_main_settings_widget.html#a2b214cb4fb645aa08d7eade4d5c7425c">hal::MainSettingsWidget</a>
+</li>
+<li>mainWindowPosition()
+: <a class="el" href="classhal_1_1_settings_manager.html#ae0349b9494d2da1e2714df25400a9601">hal::SettingsManager</a>
+</li>
+<li>mainWindowSaveGeometry()
+: <a class="el" href="classhal_1_1_settings_manager.html#a3b30e94ab9f48efbd2322e23cf20972e">hal::SettingsManager</a>
+</li>
+<li>mainWindowSize()
+: <a class="el" href="classhal_1_1_settings_manager.html#add001bf6cbff37262612014f4239c871">hal::SettingsManager</a>
+</li>
 <li>mark_global_input_net()
-: <a class="el" href="de/db0/classhal_1_1Net.html#a3b6801ba9de02da9965bb63b1c6431b1">hal::Net</a>
-, <a class="el" href="dc/d06/classhal_1_1Netlist.html#a9b2353349272a95760d03c118900f4cc">hal::Netlist</a>
+: <a class="el" href="classhal_1_1_net.html#a3b6801ba9de02da9965bb63b1c6431b1">hal::Net</a>
+, <a class="el" href="classhal_1_1_netlist.html#a9b2353349272a95760d03c118900f4cc">hal::Netlist</a>
 </li>
 <li>mark_global_output_net()
-: <a class="el" href="de/db0/classhal_1_1Net.html#a7a7ba541ea1082b2b647749ebb8673ab">hal::Net</a>
-, <a class="el" href="dc/d06/classhal_1_1Netlist.html#ab5341a316daab6aafceac102a744c8ee">hal::Netlist</a>
+: <a class="el" href="classhal_1_1_net.html#a7a7ba541ea1082b2b647749ebb8673ab">hal::Net</a>
+, <a class="el" href="classhal_1_1_netlist.html#ab5341a316daab6aafceac102a744c8ee">hal::Netlist</a>
 </li>
 <li>mark_gnd_gate()
-: <a class="el" href="d5/d57/classhal_1_1Gate.html#a8a3704d1c856cabfc696d7fd0d7f183e">hal::Gate</a>
-, <a class="el" href="dc/d06/classhal_1_1Netlist.html#a1600d7ec1cf6455657786174bc958589">hal::Netlist</a>
+: <a class="el" href="classhal_1_1_gate.html#a8a3704d1c856cabfc696d7fd0d7f183e">hal::Gate</a>
+, <a class="el" href="classhal_1_1_netlist.html#a1600d7ec1cf6455657786174bc958589">hal::Netlist</a>
 </li>
 <li>mark_gnd_gate_type()
-: <a class="el" href="d7/daf/classhal_1_1GateLibrary.html#a82ab1b37d4070635bc32d99e927024ae">hal::GateLibrary</a>
+: <a class="el" href="classhal_1_1_gate_library.html#a82ab1b37d4070635bc32d99e927024ae">hal::GateLibrary</a>
 </li>
 <li>mark_vcc_gate()
-: <a class="el" href="d5/d57/classhal_1_1Gate.html#ad7f56703158cb9be403c644540eb76ff">hal::Gate</a>
-, <a class="el" href="dc/d06/classhal_1_1Netlist.html#a13814c485dc7040d31820466b0a6883f">hal::Netlist</a>
+: <a class="el" href="classhal_1_1_gate.html#ad7f56703158cb9be403c644540eb76ff">hal::Gate</a>
+, <a class="el" href="classhal_1_1_netlist.html#a13814c485dc7040d31820466b0a6883f">hal::Netlist</a>
 </li>
 <li>mark_vcc_gate_type()
-: <a class="el" href="d7/daf/classhal_1_1GateLibrary.html#a365e5c3131c9a1c9d753a43468aced8d">hal::GateLibrary</a>
+: <a class="el" href="classhal_1_1_gate_library.html#a365e5c3131c9a1c9d753a43468aced8d">hal::GateLibrary</a>
+</li>
+<li>markerColor
+: <a class="el" href="classhal_1_1_logger_qss_adapter.html#a7a115f5f78b01947472a137cdb5e19c5">hal::LoggerQssAdapter</a>
+</li>
+<li>match()
+: <a class="el" href="classhal_1_1_selection_tree_item.html#a00937a305e27184c33e51222714240f0">hal::SelectionTreeItem</a>
+, <a class="el" href="classhal_1_1_selection_tree_item_module.html#a462f965619b4b1c831711cb55c0642cd">hal::SelectionTreeItemModule</a>
+</li>
+<li>matchLabel()
+: <a class="el" href="classhal_1_1_settings_widget.html#af6fe668527de262997dbe0aea34ebe25">hal::SettingsWidget</a>
+</li>
+<li>MaxDir
+: <a class="el" href="classhal_1_1_net_layout_direction.html#a804a82ac3192d771ed7a64fe9137f142a768cc56eebaf58c8218c4361f7bc0eb6">hal::NetLayoutDirection</a>
+</li>
+<li>maximum()
+: <a class="el" href="classhal_1_1_minimap_scrollbar.html#a1bfd60d64da9c1a63476f4f4d0f6de92">hal::MinimapScrollbar</a>
+, <a class="el" href="classhal_1_1_settings_item_slider.html#ade4b6ac521e0083f05bb702c949fcad1">hal::SettingsItemSlider</a>
+, <a class="el" href="classhal_1_1_settings_item_spinbox.html#a4a7b3ac9bf5bbc8c12eb27b65782e7c5">hal::SettingsItemSpinbox</a>
+</li>
+<li>MaxItem
+: <a class="el" href="classhal_1_1_selection_tree_item.html#a9035c6a32a5ddf83771aad02b549b177a707e08174ca1484f7ad5fcd08e536d3d">hal::SelectionTreeItem</a>
+</li>
+<li>maxNodeHeight()
+: <a class="el" href="classhal_1_1_graph_layouter.html#a7c9af1e0be689d31af8f9c7e8710f463">hal::GraphLayouter</a>
+</li>
+<li>maxNodeWidth()
+: <a class="el" href="classhal_1_1_graph_layouter.html#a689dc2865b59116339fd4bb4494fe051">hal::GraphLayouter</a>
+</li>
+<li>MaxObjectType
+: <a class="el" href="classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79a1f454bf3fc9403944e7d3d7462f98318">hal::UserActionObjectType</a>
+</li>
+<li>mBackgroundColor
+: <a class="el" href="structhal_1_1_graphics_node_1_1_visuals.html#a4a9de62c0ff605b2240e138717ed53e6">hal::GraphicsNode::Visuals</a>
+</li>
+<li>mBigIcon
+: <a class="el" href="classhal_1_1_details_widget.html#aabfd0b017790593a29d5ff6536c63af2">hal::DetailsWidget</a>
+</li>
+<li>mBigX
+: <a class="el" href="structhal_1_1_standard_graphics_net_1_1_h_line.html#aee89315a51b042ad67ea612e6030e557">hal::StandardGraphicsNet::HLine</a>
+</li>
+<li>mBigY
+: <a class="el" href="structhal_1_1_standard_graphics_net_1_1_v_line.html#a5975f0d2d5db7d34d751b944ce398679">hal::StandardGraphicsNet::VLine</a>
+</li>
+<li>mBraceFormat
+: <a class="el" href="classhal_1_1_python_qss_adapter.html#a656f1029290557b6aaf5e0dfd49e20eb">hal::PythonQssAdapter</a>
+</li>
+<li>mBrushStyle
+: <a class="el" href="classhal_1_1_graphics_net.html#adfa7693a71e5fb047b4e715854e7ba12">hal::GraphicsNet</a>
+, <a class="el" href="structhal_1_1_graphics_net_1_1_visuals.html#a88fddff17f3f4a332411e65ccc61a1ef">hal::GraphicsNet::Visuals</a>
+</li>
+<li>mCategory
+: <a class="el" href="classhal_1_1_settings_item.html#ab17093a221aacb848350c72be70e0066">hal::SettingsItem</a>
+</li>
+<li>mChildItem
+: <a class="el" href="classhal_1_1_selection_tree_item_module.html#a0022430af328d94c3f6d912d7ec96131">hal::SelectionTreeItemModule</a>
+</li>
+<li>mCollapsed
+: <a class="el" href="classhal_1_1_expanding_list_group.html#a8ae72d44b9207d4cdc8811e3f98b7907">hal::ExpandingListGroup</a>
+</li>
+<li>mColor
+: <a class="el" href="classhal_1_1_graphics_item.html#ad62e8e9a97f337bc865bca0b45198b79">hal::GraphicsItem</a>
+</li>
+<li>mCommentFormat
+: <a class="el" href="classhal_1_1_python_qss_adapter.html#a9ef39bfdbc981dd51909d72f2d7fb5cb">hal::PythonQssAdapter</a>
+</li>
+<li>mCompoundOrder
+: <a class="el" href="classhal_1_1_user_action.html#ad7a49a6a643395eb9b8ab136c6ac36a9">hal::UserAction</a>
+</li>
+<li>mContainer
+: <a class="el" href="classhal_1_1_settings_widget.html#adee63eab01b1bb092d55799cc235ee2a">hal::SettingsWidget</a>
+</li>
+<li>mContentIconPath
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#aaf850524cd24d88df428df7b799a0001">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mContentIconStyle
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#a34d386a590a2231a41124094fe7b28cb">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mContentLayout
+: <a class="el" href="classhal_1_1_content_widget.html#afd69e89ab3ff4a3ad430403efc97cbe5">hal::ContentWidget</a>
+</li>
+<li>mContext
+: <a class="el" href="classhal_1_1_graph_layouter.html#ad138a86a719c89dbf1a923d4c5a912d7">hal::GraphLayouter</a>
+, <a class="el" href="classhal_1_1_graph_shader.html#a6fe51b1df15c68f8de98156012fdbb79">hal::GraphShader</a>
+</li>
+<li>mCritical
+: <a class="el" href="structhal_1_1_filter_item.html#aeb601b1e913e2501f8007a99bb136ade">hal::FilterItem</a>
+</li>
+<li>mCurrentId
+: <a class="el" href="classhal_1_1_details_widget.html#a37eddd5dc46d23cc25a8dbf38a3d938d">hal::DetailsWidget</a>
+</li>
+<li>mDebug
+: <a class="el" href="structhal_1_1_filter_item.html#a7b8d1013b991a9208920848bcedaf5e2">hal::FilterItem</a>
+</li>
+<li>mDefault
+: <a class="el" href="structhal_1_1_filter_item.html#a1ce157bc415a60804597d51a35dc1ccc">hal::FilterItem</a>
+</li>
+<li>mDefaultButton
+: <a class="el" href="classhal_1_1_settings_widget.html#a964105391119c0bfd243763af8578da3">hal::SettingsWidget</a>
+</li>
+<li>mDefclassFormat
+: <a class="el" href="classhal_1_1_python_qss_adapter.html#a025d3c27296b64d17e8b0237551e9083">hal::PythonQssAdapter</a>
+</li>
+<li>mDescription()
+: <a class="el" href="classhal_1_1_graph_layouter.html#a200c7b3e3d6aa67ace5afa3df94eb600">hal::GraphLayouter</a>
+, <a class="el" href="classhal_1_1_physical_graph_layouter.html#a61d577e05796a50a1fb8dc02c1d0363f">hal::PhysicalGraphLayouter</a>
+, <a class="el" href="classhal_1_1_settings_item.html#aaba81714046afe9bbaa987514760edee">hal::SettingsItem</a>
+, <a class="el" href="classhal_1_1_standard_graph_layouter.html#acb8a073f4ed31909e7c81a653d6dfd85">hal::StandardGraphLayouter</a>
+</li>
+<li>mDetailsType
+: <a class="el" href="classhal_1_1_details_widget.html#ae4394a7f4b3316c6ec22a9227a538e85">hal::DetailsWidget</a>
+</li>
+<li>mDoubleQuotedStringFormat
+: <a class="el" href="classhal_1_1_python_qss_adapter.html#aa4b3632b46a543a6f1a0d62879c9b38b">hal::PythonQssAdapter</a>
+</li>
+<li>mEntries
+: <a class="el" href="classhal_1_1_net_layout_junction_entries.html#ad6750bacdad52f4c6214be7f7f286ddc">hal::NetLayoutJunctionEntries</a>
+</li>
+<li>mergeLines()
+: <a class="el" href="structhal_1_1_standard_graphics_net_1_1_lines.html#a663d2d8b4c5a61b4cc7fd39105d5d598">hal::StandardGraphicsNet::Lines</a>
+</li>
+<li>mError
+: <a class="el" href="structhal_1_1_filter_item.html#ab0174e7dc5dbfab8aef4df8fa3ffd1f2">hal::FilterItem</a>
+</li>
+<li>mErrorT
+: <a class="el" href="classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bc">hal::NetLayoutJunction</a>
 </li>
 <li>message
-: <a class="el" href="df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html#ad45051801a87dc6ab7384e4971b7c59a">hal::TokenStream&lt; T &gt;::TokenStreamException</a>
+: <a class="el" href="structhal_1_1_token_stream_1_1_token_stream_exception.html#ad45051801a87dc6ab7384e4971b7c59a">hal::TokenStream&lt; T &gt;::TokenStreamException</a>
+</li>
+<li>mFailText
+: <a class="el" href="classhal_1_1_validator.html#a131a79485244d821cf2790bef11dd723">hal::Validator</a>
+</li>
+<li>mFillColor
+: <a class="el" href="classhal_1_1_graphics_net.html#a306064c996859fa89ee5e4999040e39e">hal::GraphicsNet</a>
+, <a class="el" href="structhal_1_1_graphics_net_1_1_visuals.html#ab8f5adbf9810ccfe4fbfb68da818f791">hal::GraphicsNet::Visuals</a>
+</li>
+<li>mFillIcon
+: <a class="el" href="classhal_1_1_graphics_net.html#a5000648c2b8e5f360ced6331b31832a5">hal::GraphicsNet</a>
+, <a class="el" href="structhal_1_1_graphics_net_1_1_visuals.html#a5cb8d2b85d025e86dbc9461b6e567d80">hal::GraphicsNet::Visuals</a>
+</li>
+<li>mFirst
+: <a class="el" href="classhal_1_1_net_layout_junction_wire.html#a858ac35c515f85a1cee53add137f71d4">hal::NetLayoutJunctionWire</a>
+</li>
+<li>mGates
+: <a class="el" href="classhal_1_1_placement_entry.html#a6a5a8c0dd80cf17a0463656408ccfbbc">hal::PlacementEntry</a>
+</li>
+<li>mGateVisuals
+: <a class="el" href="structhal_1_1_graph_shader_1_1_shading.html#a8a21c27a07d51b21511cae9951aebd6c">hal::GraphShader::Shading</a>
+</li>
+<li>mHeader
+: <a class="el" href="classhal_1_1_labeled_frame.html#abbbb6d718d245b2960a2d87da9c55814">hal::LabeledFrame</a>
+</li>
+<li>mHeaderLayout
+: <a class="el" href="classhal_1_1_labeled_frame.html#aeb8c432115335a5584307d62b4b4d41d">hal::LabeledFrame</a>
+</li>
+<li>mHeight
+: <a class="el" href="classhal_1_1_graphics_node.html#ace13e61718b28ae1a2259090966f8434">hal::GraphicsNode</a>
+</li>
+<li>mHideEmptySections
+: <a class="el" href="classhal_1_1_details_widget.html#a2bc574d2cfbf91d5466e2f630631fb06">hal::DetailsWidget</a>
+</li>
+<li>mHighlight
+: <a class="el" href="classhal_1_1_graphics_item.html#a1bbe21562cfc9d6454fe38b0fb5f9a06">hal::GraphicsItem</a>
+</li>
+<li>mHighlightColor
+: <a class="el" href="structhal_1_1_graphics_node_1_1_visuals.html#a3de134e1b14e7dc019b25ea749538dec">hal::GraphicsNode::Visuals</a>
+</li>
+<li>mHorizontal
+: <a class="el" href="classhal_1_1_net_layout_junction_wire.html#ac934cfa35e539edac35f0b178a28b2d4">hal::NetLayoutJunctionWire</a>
+</li>
+<li>mId
+: <a class="el" href="classhal_1_1_graphics_item.html#a9c4df4387503cfebc024215ccd177af9">hal::GraphicsItem</a>
+, <a class="el" href="classhal_1_1_selection_tree_item.html#a29ea93468d706eac0a69524bec40f708">hal::SelectionTreeItem</a>
+</li>
+<li>mInfo
+: <a class="el" href="structhal_1_1_filter_item.html#a93daddae0e51589268eba764e52a551e">hal::FilterItem</a>
+</li>
+<li>minimap()
+: <a class="el" href="classhal_1_1_code_editor.html#aca5746acdd6268374c3ed784913defa1">hal::CodeEditor</a>
+</li>
+<li>minimapPaintEvent()
+: <a class="el" href="classhal_1_1_code_editor.html#aeec7f9f0c16e418ce9a29ecb8fc80fc6">hal::CodeEditor</a>
+</li>
+<li>MinimapScrollbar()
+: <a class="el" href="classhal_1_1_minimap_scrollbar.html#af8257e09bce7aee2fc9a222d1aa8dfce">hal::MinimapScrollbar</a>
+</li>
+<li>minimapWidth()
+: <a class="el" href="classhal_1_1_code_editor.html#af003d5938793bc402c1636eb62fcc7f0">hal::CodeEditor</a>
+</li>
+<li>minimum()
+: <a class="el" href="classhal_1_1_minimap_scrollbar.html#a03688adf74509fd1157c91cf0e91b252">hal::MinimapScrollbar</a>
+, <a class="el" href="classhal_1_1_settings_item_slider.html#a5a78cf85729e947cc0679c06cffdfd2a">hal::SettingsItemSlider</a>
+, <a class="el" href="classhal_1_1_settings_item_spinbox.html#a784e03d4820d7622ac211821feb8af75">hal::SettingsItemSpinbox</a>
+</li>
+<li>minimumSizeHint()
+: <a class="el" href="classhal_1_1_dock_bar.html#a1f29836fd8f4fc64b6aa42889b941ea8">hal::DockBar</a>
+, <a class="el" href="classhal_1_1_expanding_list_item.html#aa9ff3f15ef75e56c1bf72ce4a7980d6f">hal::ExpandingListItem</a>
+</li>
+<li>mInputByNet
+: <a class="el" href="classhal_1_1_graphics_node.html#a1390747e6f28ac38564d52d8c30e34c4">hal::GraphicsNode</a>
+</li>
+<li>mInputPins
+: <a class="el" href="classhal_1_1_graphics_gate.html#a8e3339bc6846a4da7464b929d5e92742">hal::GraphicsGate</a>
+, <a class="el" href="classhal_1_1_graphics_module.html#aa3f7578175071c4a1c2c361ca2d7a04f">hal::GraphicsModule</a>
+</li>
+<li>mInputPositions
+: <a class="el" href="classhal_1_1_separated_graphics_net.html#a39c46f62c53d4d3595a7b2249e5bef73">hal::SeparatedGraphicsNet</a>
+</li>
+<li>minXIndex()
+: <a class="el" href="classhal_1_1_graph_layouter.html#afc478385504ae005da1262db61c26133">hal::GraphLayouter</a>
+</li>
+<li>minYIndex()
+: <a class="el" href="classhal_1_1_graph_layouter.html#a1d1154abfdcb2f24fe42f21fbbbd6c8d">hal::GraphLayouter</a>
+</li>
+<li>mIsGlobal
+: <a class="el" href="classhal_1_1_settings_item.html#a51ff4f69e6dd1e41cf15640d27937d0a">hal::SettingsItem</a>
+</li>
+<li>mIsRoot
+: <a class="el" href="classhal_1_1_selection_tree_item_module.html#a99a166d7225e793d81edf7b3efacbb63">hal::SelectionTreeItemModule</a>
+</li>
+<li>mItemType
+: <a class="el" href="classhal_1_1_graphics_item.html#a4f5bc6af869516d935ec9143aba34409">hal::GraphicsItem</a>
+, <a class="el" href="classhal_1_1_selection_tree_item.html#a7af86760054b836f7332ce2d2f7921d4">hal::SelectionTreeItem</a>
+</li>
+<li>mJunctions
+: <a class="el" href="classhal_1_1_net_layout_connection_factory.html#ad564e79e59b3996cf408ac9ac53a2692">hal::NetLayoutConnectionFactory</a>
+</li>
+<li>mKeyFont
+: <a class="el" href="classhal_1_1_details_widget.html#aa3d689c36381ed2e3dc0c8c51b97bc20">hal::DetailsWidget</a>
+</li>
+<li>mKeywordFormat
+: <a class="el" href="classhal_1_1_python_qss_adapter.html#acc1fe6992369ddd0206f3d92bcb0dc54">hal::PythonQssAdapter</a>
+</li>
+<li>mKeywords
+: <a class="el" href="structhal_1_1_filter_item.html#adef6f0598ed939b55f866c057c8ea151">hal::FilterItem</a>
+</li>
+<li>mLabel
+: <a class="el" href="classhal_1_1_labeled_frame.html#a3877a369c8e1da1f3e04bf8a083b0f96">hal::LabeledFrame</a>
+, <a class="el" href="classhal_1_1_settings_item.html#a8779c008bd2448f72f9bf986abfd658b">hal::SettingsItem</a>
+</li>
+<li>mLast
+: <a class="el" href="classhal_1_1_net_layout_junction_wire.html#ac22fa648c8987fa09f2b6bf2211f96b6">hal::NetLayoutJunctionWire</a>
+</li>
+<li>mLayout
+: <a class="el" href="classhal_1_1_labeled_frame.html#a17fb09ca52ce3babb2ce8f50de2c3293">hal::LabeledFrame</a>
+, <a class="el" href="classhal_1_1_preview_widget.html#aa3292a064fffe6c16fcdddd15ea26368">hal::PreviewWidget</a>
+</li>
+<li>mLeftSpacer
+: <a class="el" href="classhal_1_1_labeled_frame.html#aea4e290b8d27fdafb44dfd4909afa76c">hal::LabeledFrame</a>
+</li>
+<li>mMainColor
+: <a class="el" href="structhal_1_1_graphics_node_1_1_visuals.html#a2b83a0d30d8383f06b2ef32d26ca0bed">hal::GraphicsNode::Visuals</a>
+</li>
+<li>mModules
+: <a class="el" href="classhal_1_1_placement_entry.html#afd921ed33dfc766ba898fb0663d95f09">hal::PlacementEntry</a>
+</li>
+<li>mMsg
+: <a class="el" href="structhal_1_1_channel_entry.html#a9ee12094c5a5f748c9f35579089f32a9">hal::ChannelEntry</a>
+</li>
+<li>mMsgType
+: <a class="el" href="structhal_1_1_channel_entry.html#a09fdea02a9e0d38eb57f1464701581a0">hal::ChannelEntry</a>
+</li>
+<li>mName
+: <a class="el" href="classhal_1_1_plugin_item.html#a474ef8ab1c0987dfcfdf8d359e8612a7">hal::PluginItem</a>
+</li>
+<li>mNameColor
+: <a class="el" href="structhal_1_1_graphics_node_1_1_visuals.html#aec44d353d01f74645b30cf4e167e4368">hal::GraphicsNode::Visuals</a>
+</li>
+<li>mNameLabel
+: <a class="el" href="classhal_1_1_settings_widget.html#a449526cc0baf75ddee00c2db4656ea06">hal::SettingsWidget</a>
+</li>
+<li>mNetId
+: <a class="el" href="structhal_1_1_graphics_module_1_1_module_pin.html#aa14bcbee588796d58b6c94548870ec45">hal::GraphicsModule::ModulePin</a>
+</li>
+<li>mNetVisuals
+: <a class="el" href="structhal_1_1_graph_shader_1_1_shading.html#a8fe9cca7737fe4b9c54e10d3d5670a01">hal::GraphShader::Shading</a>
+</li>
+<li>mNodeText
+: <a class="el" href="classhal_1_1_graphics_node.html#a4b147b4473d9dc9c92fa9a0c2073455f">hal::GraphicsNode</a>
+</li>
+<li>mNodeToPositionMap
+: <a class="el" href="classhal_1_1_graph_layouter.html#aeaeddcf086701a164f02e5de0740bac1">hal::GraphLayouter</a>
+</li>
+<li>mNumberFormat
+: <a class="el" href="classhal_1_1_python_qss_adapter.html#a6bde19b86be9782c50ef70d64653b214">hal::PythonQssAdapter</a>
+</li>
+<li>mNumList
+: <a class="el" href="classhal_1_1gui__utility_1_1_numerated_string.html#a3e67c1c5cf947017d25148a0b4ef5a69">hal::gui_utility::NumeratedString</a>
+</li>
+<li>mObject
+: <a class="el" href="classhal_1_1_user_action.html#ad3e183ca84db2229ea52015ecf81b502">hal::UserAction</a>
+</li>
+<li>mObjectLock
+: <a class="el" href="classhal_1_1_user_action.html#a49f5683828bd9940db72d46885ec6570">hal::UserAction</a>
+</li>
+<li>mode()
+: <a class="el" href="classhal_1_1_placement_hint.html#ac5b9ad8472ea00e21577d7224d8517d5">hal::PlacementHint</a>
+</li>
+<li>modeClicked()
+: <a class="el" href="classhal_1_1_searchbar.html#a61b7ce9ac1b4420a582e8a8be0bb4e61">hal::Searchbar</a>
+</li>
+<li>modifiedFilesExisting()
+: <a class="el" href="classhal_1_1_file_status_manager.html#aa30234a1327fed69ac1009a3f81c8dfa">hal::FileStatusManager</a>
 </li>
 <li>Module
-: <a class="el" href="d1/d1b/classhal_1_1NetlistInternalManager.html#a21f639900c480510650969df9c74d17d">hal::NetlistInternalManager</a>
+: <a class="el" href="classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d">hal::NetlistInternalManager</a>
+, <a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a2b02efee2cb6afc1c319874996e97f25">hal::Node</a>
+, <a class="el" href="classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79a201c9bb8033ad45e270bbab36b9564fa">hal::UserActionObjectType</a>
+</li>
+<li>moduleColor()
+: <a class="el" href="classhal_1_1_module_model.html#a729bb9cb6352f2834d26949d1149a52a">hal::ModuleModel</a>
+, <a class="el" href="classhal_1_1_module_select_model.html#a246633a688e08c90e88808f9d44d3734">hal::ModuleSelectModel</a>
+</li>
+<li>moduleColorChanged()
+: <a class="el" href="classhal_1_1_netlist_relay.html#abcb90a65239739807e602c79221bd931">hal::NetlistRelay</a>
+</li>
+<li>moduleCreated()
+: <a class="el" href="classhal_1_1_netlist_relay.html#ac909d23f8dfc8bd143cb471e7eb8165e">hal::NetlistRelay</a>
+</li>
+<li>ModuleDetails
+: <a class="el" href="classhal_1_1_details_widget.html#ada95cc23c91c7de6d41c1015491582faa5107368390e6937f1461a0b7804113ac">hal::DetailsWidget</a>
+</li>
+<li>ModuleDetailsWidget()
+: <a class="el" href="classhal_1_1_module_details_widget.html#a0a9314cac1d95a687afedbf27f1d79ac">hal::ModuleDetailsWidget</a>
+</li>
+<li>ModuleDialog()
+: <a class="el" href="classhal_1_1_module_dialog.html#a2b450f84f02839b64ce3a1ca5cba2bd8">hal::ModuleDialog</a>
+</li>
+<li>moduleDoubleClicked()
+: <a class="el" href="classhal_1_1_graph_graphics_view.html#a6452181b33c1d423394489d5c4d82b09">hal::GraphGraphicsView</a>
+</li>
+<li>moduleGateAssigned()
+: <a class="el" href="classhal_1_1_netlist_relay.html#a73b70303af2a2f5fbdc9527c1963d20c">hal::NetlistRelay</a>
+</li>
+<li>moduleGateRemoved()
+: <a class="el" href="classhal_1_1_netlist_relay.html#a6e1646900c7f6da6139a26fe96f7d161">hal::NetlistRelay</a>
+</li>
+<li>moduleId()
+: <a class="el" href="classhal_1_1_module_select_model.html#a7c34657fe9ae2a54927474a195b3d891">hal::ModuleSelectModel</a>
+</li>
+<li>moduleInputPortNameChanged()
+: <a class="el" href="classhal_1_1_netlist_relay.html#a22a082e1959ef3a4c98ecaaa694b68e9">hal::NetlistRelay</a>
+</li>
+<li>ModuleItem()
+: <a class="el" href="classhal_1_1_module_item.html#a3654b10c3e9528ec375775e9d1c6a483">hal::ModuleItem</a>
+, <a class="el" href="classhal_1_1_selection_tree_item.html#a9035c6a32a5ddf83771aad02b549b177ab5db58ad43a3c434ccbf89a51e1f24ed">hal::SelectionTreeItem</a>
+</li>
+<li>ModuleModel()
+: <a class="el" href="classhal_1_1_module_model.html#aa0f4446475325e5c503e9c70e3b83c0b">hal::ModuleModel</a>
+</li>
+<li>moduleNameChanged()
+: <a class="el" href="classhal_1_1_netlist_relay.html#aab996ad30d23ed458721a333621a70e1">hal::NetlistRelay</a>
+</li>
+<li>moduleOutputPortNameChanged()
+: <a class="el" href="classhal_1_1_netlist_relay.html#a3ad773eb556d0bcfba29e8bb75228075">hal::NetlistRelay</a>
+</li>
+<li>moduleParentChanged()
+: <a class="el" href="classhal_1_1_netlist_relay.html#ab6ba2204bd9cff45190c47069bba64a0">hal::NetlistRelay</a>
+</li>
+<li>ModuleProxyModel()
+: <a class="el" href="classhal_1_1_module_proxy_model.html#ae559ea75f0314cc0d831ba57f58c2e3f">hal::ModuleProxyModel</a>
+</li>
+<li>moduleRemoved()
+: <a class="el" href="classhal_1_1_netlist_relay.html#ab5199f13e4de7ff88bc2d346b46cf019">hal::NetlistRelay</a>
+</li>
+<li>modules()
+: <a class="el" href="classhal_1_1_graph_context.html#a70f5d15c9cd808c74abd1d392e7dad5a">hal::GraphContext</a>
+, <a class="el" href="classhal_1_1_module_select_exclude.html#a37897f800f131594a658bc98ec123074">hal::ModuleSelectExclude</a>
+</li>
+<li>moduleSelected()
+: <a class="el" href="classhal_1_1_module_select_view.html#aa68c4f45e11eb6e9de3aef46def14d84">hal::ModuleSelectView</a>
+</li>
+<li>ModuleSelectEntry()
+: <a class="el" href="classhal_1_1_module_select_entry.html#a9ac828d5143bf75327034c0fdfac558a">hal::ModuleSelectEntry</a>
+</li>
+<li>ModuleSelectExclude()
+: <a class="el" href="classhal_1_1_module_select_exclude.html#a02a7f9587de7b3b2df4afda8b9ce643f">hal::ModuleSelectExclude</a>
+</li>
+<li>ModuleSelectModel()
+: <a class="el" href="classhal_1_1_module_select_model.html#a2928e4f1868dce9f0c4b7e46ca972ace">hal::ModuleSelectModel</a>
+</li>
+<li>ModuleSelectPicker()
+: <a class="el" href="classhal_1_1_module_select_picker.html#a2f2844889852d2628a211481d97f59fa">hal::ModuleSelectPicker</a>
+</li>
+<li>ModuleSelectProxy()
+: <a class="el" href="classhal_1_1_module_select_proxy.html#ae62f123113cbe593440a22c2713c1a70">hal::ModuleSelectProxy</a>
+</li>
+<li>ModuleSelectView()
+: <a class="el" href="classhal_1_1_module_select_view.html#a89381c4595bb1199b1db153a3a2253c4">hal::ModuleSelectView</a>
+</li>
+<li>ModuleShader()
+: <a class="el" href="classhal_1_1_module_shader.html#aab6363b934e58f89a91167999e10d7a6">hal::ModuleShader</a>
+</li>
+<li>moduleSubmoduleAdded()
+: <a class="el" href="classhal_1_1_netlist_relay.html#ac42e72263fd7fe300f666e4cdaea971a">hal::NetlistRelay</a>
+</li>
+<li>moduleSubmoduleRemoved()
+: <a class="el" href="classhal_1_1_netlist_relay.html#aa26c2eca1d6dbed9b9683abf3e329a5e">hal::NetlistRelay</a>
+</li>
+<li>ModuleTreeView()
+: <a class="el" href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">hal::ModuleTreeView</a>
+</li>
+<li>moduleTypeChanged()
+: <a class="el" href="classhal_1_1_netlist_relay.html#a3b3abae876a37d302fcc9f125972943a">hal::NetlistRelay</a>
+</li>
+<li>mOduleVisuals
+: <a class="el" href="structhal_1_1_graph_shader_1_1_shading.html#aa7e7e08d821939386fe6cd6b4af072c4">hal::GraphShader::Shading</a>
+</li>
+<li>ModuleWidget()
+: <a class="el" href="classhal_1_1_module_widget.html#a963359f06fc5a42f373cb6fd282ac685">hal::ModuleWidget</a>
+</li>
+<li>mOpenIconPath
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#a735611816be2a5328844738c7eebf1de">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mOpenIconStyle
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#af14fbc31911962b8181c4ba635c48b13">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mOperatorFormat
+: <a class="el" href="classhal_1_1_python_qss_adapter.html#af456bc67c5202547b935594d38c29866">hal::PythonQssAdapter</a>
+</li>
+<li>mouseDoubleClickEvent()
+: <a class="el" href="classhal_1_1_selection_tree_view.html#a01f646cadd86a82126b679012f9a1c0f">hal::SelectionTreeView</a>
+</li>
+<li>mouseMoveEvent()
+: <a class="el" href="classhal_1_1_dock_bar.html#a03347d7bde11b4406ce5edaba444691e">hal::DockBar</a>
+, <a class="el" href="classhal_1_1_minimap_scrollbar.html#adc1b411b8aea467614281004de5cd6d9">hal::MinimapScrollbar</a>
+</li>
+<li>mousePressEvent()
+: <a class="el" href="classhal_1_1_code_editor_minimap.html#a13313db6414a7bdfbdc769d7fef07ab1">hal::CodeEditorMinimap</a>
+, <a class="el" href="classhal_1_1_expanding_list_button.html#a925bef5944ace333726d7cc6760daffa">hal::ExpandingListButton</a>
+, <a class="el" href="classhal_1_1_get_in_touch_item.html#a118dd5182505aa88a2b2eb22ea21300b">hal::GetInTouchItem</a>
+, <a class="el" href="classhal_1_1_graphics_scene.html#a058a592f0c567866e683fdf8589d21de">hal::GraphicsScene</a>
+, <a class="el" href="classhal_1_1_label_button.html#a26144b1fcb76adfa43575df4b13c1148">hal::LabelButton</a>
+, <a class="el" href="classhal_1_1_minimap_scrollbar.html#ae41583b2ce9d03d698a054283b1414e6">hal::MinimapScrollbar</a>
+, <a class="el" href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">hal::ModuleTreeView</a>
+, <a class="el" href="classhal_1_1_overlay.html#a4317f126e9be859c9d5329a7eb413273">hal::Overlay</a>
+, <a class="el" href="classhal_1_1_python_console.html#a1a9c74ad14277dca87092ad872dc887e">hal::PythonConsole</a>
+, <a class="el" href="classhal_1_1_recent_file_item.html#a0b6a2538bc5cf4d332b7f1bc512f75fb">hal::RecentFileItem</a>
+</li>
+<li>mouseReleaseEvent()
+: <a class="el" href="classhal_1_1_minimap_scrollbar.html#a4677590fed00da0f7b977fe85032ca94">hal::MinimapScrollbar</a>
+</li>
+<li>mOutputByNet
+: <a class="el" href="classhal_1_1_graphics_node.html#a2805f9ba01f96991e5d705f01b458282">hal::GraphicsNode</a>
+</li>
+<li>mOutputPins
+: <a class="el" href="classhal_1_1_graphics_gate.html#a813b7153cf74c7ffb73a36eb57326715">hal::GraphicsGate</a>
+, <a class="el" href="classhal_1_1_graphics_module.html#a80e360aff271c10c1b11f41865463144">hal::GraphicsModule</a>
+</li>
+<li>mOutputPositions
+: <a class="el" href="classhal_1_1_separated_graphics_net.html#ab5aa80bb43972392acdac53a2f3e493a">hal::SeparatedGraphicsNet</a>
+</li>
+<li>moveDragShadow()
+: <a class="el" href="classhal_1_1_graphics_scene.html#a04cdbbdaa8326691ee44e4ccc4fd6b31">hal::GraphicsScene</a>
+</li>
+<li>moveNetsToBackground()
+: <a class="el" href="classhal_1_1_graphics_scene.html#af1b953794af7656ee478baa25e4e4896">hal::GraphicsScene</a>
+</li>
+<li>moveNodeAction()
+: <a class="el" href="classhal_1_1_graph_context.html#a523cca126fa995096cc1d57fc08fa144">hal::GraphContext</a>
+</li>
+<li>moveRows()
+: <a class="el" href="classhal_1_1_plugin_model.html#a2554012f9b2c5e0cc74e2bfaaca14a1b">hal::PluginModel</a>
+</li>
+<li>mParent
+: <a class="el" href="classhal_1_1_selection_tree_item.html#ad2f51021cbc61dba8b4646c6046512e8">hal::SelectionTreeItem</a>
+</li>
+<li>mPath
+: <a class="el" href="classhal_1_1_plugin_item.html#a2b4ab5ddef8ec00a37fea49a8cc0b262">hal::PluginItem</a>
+</li>
+<li>mPenStyle
+: <a class="el" href="classhal_1_1_graphics_net.html#a4de5dcda9c70058ce361fc56ba27a943">hal::GraphicsNet</a>
+, <a class="el" href="structhal_1_1_graphics_net_1_1_visuals.html#adad9baf662a5a8869c935190a9487481">hal::GraphicsNet::Visuals</a>
+</li>
+<li>mPinColor
+: <a class="el" href="structhal_1_1_graphics_node_1_1_visuals.html#aa5e63276344d213bf9f4684d9ccf72aa">hal::GraphicsNode::Visuals</a>
+</li>
+<li>mPlacementHint
+: <a class="el" href="classhal_1_1_placement_entry.html#a185e89f0ec4c7634cb7ef78120ba245c">hal::PlacementEntry</a>
+</li>
+<li>mPositionToNodeMap
+: <a class="el" href="classhal_1_1_graph_layouter.html#a446ea8d8b55b22fb8343ec87e790d14c">hal::GraphLayouter</a>
+</li>
+<li>mRect
+: <a class="el" href="classhal_1_1_graphics_net.html#ae15c7f4bb9bc5ee6fc06605c90fd9852">hal::GraphicsNet</a>
+</li>
+<li>mRegEx
+: <a class="el" href="structhal_1_1_filter_item.html#afb16b33015aee2007a03cde4dbbe8db2">hal::FilterItem</a>
+</li>
+<li>mRemainder
+: <a class="el" href="classhal_1_1gui__utility_1_1_numerated_string.html#a2e3088729f2ee83c767476a51d5bca45">hal::gui_utility::NumeratedString</a>
+</li>
+<li>mRevertButton
+: <a class="el" href="classhal_1_1_settings_widget.html#a2a5d9c00a7b8d22cf104b77f8e84190c">hal::SettingsWidget</a>
+</li>
+<li>mRightSpacer
+: <a class="el" href="classhal_1_1_labeled_frame.html#a44943ff0937757b3908d48a578db7c39">hal::LabeledFrame</a>
+</li>
+<li>mRoad
+: <a class="el" href="classhal_1_1_net_layout_junction_wire.html#a069a615259d24757ded111a55d287118">hal::NetLayoutJunctionWire</a>
+</li>
+<li>mRunIconPath
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#aa67218269025be7c4eea733cb43b2474">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mRunIconStyle
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#ac890f84c9d3c7b564c88e57f39ac5fea">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mSaveIconPath
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#a350bea94e0145f5c096ed6ff7ed60025">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mSaveIconStyle
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#ae701ee1937a6b3264d34f46e9c49c9b4">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mScene
+: <a class="el" href="classhal_1_1_graph_layouter.html#a5994e7e9693cce878c09fc059eaab324">hal::GraphLayouter</a>
+</li>
+<li>mScheduleIconPath
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#ade3308695515e6fea139cce89eb9f657">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mScheduleIconStyle
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#a2fe66dedda874d5158a67453ea525ffa">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mSearchAction
+: <a class="el" href="classhal_1_1_content_widget.html#a600bd891c5bc2cf6139761c21c3dd91e">hal::ContentWidget</a>
+</li>
+<li>mSearchKeysequence
+: <a class="el" href="classhal_1_1_content_widget.html#a0fe07a490c09775afe6b10a4476f6c07">hal::ContentWidget</a>
+</li>
+<li>mSearchShortcut
+: <a class="el" href="classhal_1_1_content_widget.html#a967488363abaed7b1509455c8bd4be21">hal::ContentWidget</a>
+</li>
+<li>mSelfFormat
+: <a class="el" href="classhal_1_1_python_qss_adapter.html#afb83edd66f419becf57fb490214ff692">hal::PythonQssAdapter</a>
+</li>
+<li>mSettingsIconPath
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#aa97f471ac8619ab75004b57d2b777e06">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mSettingsIconStyle
+: <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#aefd879b48699a28efc777844c23373e2">hal::SharedPropertiesQssAdapter</a>
+</li>
+<li>mSettingsItem
+: <a class="el" href="classhal_1_1_settings_widget.html#aa6c7ec1a188c4c260967642f38ff9ab9">hal::SettingsWidget</a>
+</li>
+<li>mSettingsList
+: <a class="el" href="classhal_1_1_settings_manager.html#ab03781ce8ef9ebf152d6f6c2437b472f">hal::SettingsManager</a>
+</li>
+<li>mShading
+: <a class="el" href="classhal_1_1_graph_shader.html#a0053088ce8c43fa66cd90cd6e13893c2">hal::GraphShader</a>
+</li>
+<li>mShape
+: <a class="el" href="classhal_1_1_graphics_net.html#a3b7a367ca92cc274b9b63f20d18bded6">hal::GraphicsNet</a>
+</li>
+<li>mSingleQuotedStringFormat
+: <a class="el" href="classhal_1_1_python_qss_adapter.html#a985d2f41ad36d7c21f9e196b40a5cbf8">hal::PythonQssAdapter</a>
+</li>
+<li>mSmallX
+: <a class="el" href="structhal_1_1_standard_graphics_net_1_1_h_line.html#ad875de3ae5dfd9ab6c3c137ef80ce2ef">hal::StandardGraphicsNet::HLine</a>
+</li>
+<li>mSmallY
+: <a class="el" href="structhal_1_1_standard_graphics_net_1_1_v_line.html#a17fad40fc55af7b9c17065c917a23c4e">hal::StandardGraphicsNet::VLine</a>
+</li>
+<li>mTag
+: <a class="el" href="classhal_1_1_settings_item.html#aa617d15bd59718e3d2eba5e3643db622">hal::SettingsItem</a>
+</li>
+<li>mTagname
+: <a class="el" href="classhal_1_1_user_action_factory.html#afeff9a0a7147fdb61b6b364b5d17b242">hal::UserActionFactory</a>
+</li>
+<li>mTimeStamp
+: <a class="el" href="classhal_1_1_user_action.html#a086c2074270db533c9e41d4c0a60e3a5">hal::UserAction</a>
+</li>
+<li>mTrace
+: <a class="el" href="structhal_1_1_filter_item.html#a9696244f728a3d4a84556d35c7fa0dc6">hal::FilterItem</a>
+</li>
+<li>mType
+: <a class="el" href="classhal_1_1_graphics_gate.html#a38de4073444caa17038f78cd42126fdd">hal::GraphicsGate</a>
+</li>
+<li>mTypeColor
+: <a class="el" href="structhal_1_1_graphics_node_1_1_visuals.html#a6051e170d1606fc603ce7c2c30df604e">hal::GraphicsNode::Visuals</a>
+</li>
+<li>mUndoAction
+: <a class="el" href="classhal_1_1_user_action.html#a84c02c70962a1d9b03bde33b693c81d0">hal::UserAction</a>
+</li>
+<li>mUseCreatedObject
+: <a class="el" href="classhal_1_1_user_action_compound.html#a1074bfc9fb2bbeeea7b8c5547d28fce2">hal::UserActionCompound</a>
+</li>
+<li>mVisible
+: <a class="el" href="structhal_1_1_graphics_net_1_1_visuals.html#aea9c37babf4d44a9fd3f8aaf880829f0">hal::GraphicsNet::Visuals</a>
+, <a class="el" href="structhal_1_1_graphics_node_1_1_visuals.html#a4d4e8766e0f43bb20552b368e3e90cd7">hal::GraphicsNode::Visuals</a>
+</li>
+<li>mWaitForReady
+: <a class="el" href="classhal_1_1_user_action.html#a61f687463d570639e7cbbc7b0a05a563">hal::UserAction</a>
+</li>
+<li>mWarning
+: <a class="el" href="structhal_1_1_filter_item.html#ae2dd9ebf1aafb829f2acc67441789a62">hal::FilterItem</a>
+</li>
+<li>mWidth
+: <a class="el" href="classhal_1_1_graphics_node.html#a2b80d47cdbe321446fbcc5e9994fd97b">hal::GraphicsNode</a>
+</li>
+<li>mWires
+: <a class="el" href="classhal_1_1_net_layout_junction_net.html#a5382d1c271223453ed932d2d0c7f9fb6">hal::NetLayoutJunctionNet</a>
 </li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Wed May 26 2021 10:18:46 for hal by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.17
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on Wed May 26 2021 12:19:05 for HAL by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
 </body>
 </html>

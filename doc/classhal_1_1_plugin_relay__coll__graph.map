@@ -1,0 +1,4 @@
+<map id="hal::PluginRelay" name="hal::PluginRelay">
+<area shape="rect" id="node1" title="Forwards plugin related events from the core to the gui." alt="" coords="5,395,205,501"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="22,5,189,347"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Graph Widget" name="Graph Widget">
+<area shape="rect" id="node1" href="$group__gui.html" title="The Gui is a huge plugin that provides a graphical user interface to load and work with Netlists...." alt="" coords="5,55,80,80"/>
+<area shape="rect" id="node3" title="Contains all classes that are relevant for the GraphWidget and the management of GraphContexts." alt="" coords="128,55,239,80"/>
+<area shape="rect" id="node2" href="$group__graph-layouter.html" title="Contains all classes that are relevant for the layouting process." alt="" coords="325,5,411,31"/>
+<area shape="rect" id="node4" href="$group__graph-contexts.html" title="Contains all classes that are related to GraphContexts." alt="" coords="287,55,449,80"/>
+<area shape="rect" id="node5" href="$group__graph-visuals.html" title="Contains the classes that are responsible for building up and showing the scene. It also contains the..." alt="" coords="333,104,403,129"/>
+</map>

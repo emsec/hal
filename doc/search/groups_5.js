@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['utilities_1501',['Utilities',['../dc/d39/group__utilities.html',1,'']]]
+  ['hal_20core_35613',['HAL Core',['../group__core.html',1,'']]],
+  ['hal_20gui_35614',['HAL Gui',['../group__gui.html',1,'']]]
 ];

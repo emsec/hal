@@ -1,0 +1,5 @@
+<map id="hal::SettingsWidgetDropdown" name="hal::SettingsWidgetDropdown">
+<area shape="rect" id="node1" title="A SettingsWidget representing a dropdown menu." alt="" coords="5,857,220,964"/>
+<area shape="rect" id="node2" href="$classhal_1_1_settings_widget.html" title="The base class for all specific SettingsWidgets." alt="" coords="5,424,220,809"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qframe.html" title=" " alt="" coords="41,5,185,376"/>
+</map>

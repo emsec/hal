@@ -1,0 +1,12 @@
+<map id="HAL Gui" name="HAL Gui">
+<area shape="rect" id="node1" href="$group__docking.html" title="Contains all classes that are relevant for the ContentWidget&#39;s docking system." alt="" coords="131,5,259,31"/>
+<area shape="rect" id="node2" href="$group__logging.html" title="Contains everything that can be associated with the LoggerWidget." alt="" coords="132,55,259,80"/>
+<area shape="rect" id="node3" title="The Gui is a huge plugin that provides a graphical user interface to load and work with Netlists...." alt="" coords="5,203,80,228"/>
+<area shape="rect" id="node4" href="$group__file__management.html" title="Contains the classes that are responsible for working with files." alt="" coords="128,104,263,129"/>
+<area shape="rect" id="node5" href="$group__python.html" title="Contains everything that can be associated with the python usage within the GUI." alt="" coords="162,153,229,179"/>
+<area shape="rect" id="node6" href="$group__graph.html" title="Contains all classes that are relevant for the GraphWidget and the management of GraphContexts." alt="" coords="140,203,251,228"/>
+<area shape="rect" id="node7" href="$group__utility__widgets.html" title="Contains classes related to the ContextManagerWidget, ModuleWidget, GroupingsWidget and the Selection..." alt="" coords="136,252,255,277"/>
+<area shape="rect" id="node8" href="$group__unused.html" title="Classes and systems that are no longer used or that are not (yet) available in a current master build..." alt="" coords="160,301,231,327"/>
+<area shape="rect" id="node9" href="$group__settings.html" title="Contains all classes that belong to the settings system." alt="" coords="131,351,259,376"/>
+<area shape="rect" id="node10" href="$group__user__action.html" title="Contains the classes for all available UserActions and the UserAction management system." alt="" coords="143,400,247,425"/>
+</map>

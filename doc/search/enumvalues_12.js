@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['x_1460',['X',['../d6/d9d/classhal_1_1BooleanFunction.html#aac7bb4fda3bf06664f6bc717c3be92fba65f3ff6b5989443249c6173d99e8815e',1,'hal::BooleanFunction::X()'],['../d1/d05/classhal_1_1GateType.html#a15686996a46af6fd61df29b08e8d66e6a02129bb861061d1a052c592e2dc6b383',1,'hal::GateType::X()']]]
+  ['variable_34832',['VARIABLE',['../classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31',1,'hal::BooleanFunction']]],
+  ['verify_34833',['Verify',['../classhal_1_1_net_layout_junction_wire_intersection.html#afc2efe400507fbb8da994754117b0ae9aebf2defe950433fa3c332a46208998ab',1,'hal::NetLayoutJunctionWireIntersection']]],
+  ['vertical_5fdown_34834',['vertical_down',['../group__docking.html#gga96c899c45d7192341d04caf575c7f02cae2a44fa65a0cf99e723e1887fc5eda0a',1,'hal']]],
+  ['vertical_5fup_34835',['vertical_up',['../group__docking.html#gga96c899c45d7192341d04caf575c7f02ca6f50993948b855a8efa011b6915164d6',1,'hal']]]
 ];

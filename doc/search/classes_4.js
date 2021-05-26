@@ -1,10 +1,14 @@
 var searchData=
 [
-  ['gate_750',['Gate',['../d5/d57/classhal_1_1Gate.html',1,'hal']]],
-  ['gatelibrary_751',['GateLibrary',['../d7/daf/classhal_1_1GateLibrary.html',1,'hal']]],
-  ['gatelibraryparser_752',['GateLibraryParser',['../d2/d3d/classhal_1_1GateLibraryParser.html',1,'hal']]],
-  ['gatelibrarywriter_753',['GateLibraryWriter',['../da/db7/classhal_1_1GateLibraryWriter.html',1,'hal']]],
-  ['gatetype_754',['GateType',['../d1/d05/classhal_1_1GateType.html',1,'hal']]],
-  ['grouping_755',['Grouping',['../d2/d20/classhal_1_1Grouping.html',1,'hal']]],
-  ['guiplugininterface_756',['GUIPluginInterface',['../d6/d19/classhal_1_1GUIPluginInterface.html',1,'hal']]]
+  ['element_16773',['Element',['https://doc.qt.io/qt-5/qpainterpath-element.html',1,'QPainterPath']]],
+  ['emptystringvalidator_16774',['EmptyStringValidator',['../classhal_1_1_empty_string_validator.html',1,'hal']]],
+  ['endpoint_16775',['Endpoint',['../classhal_1_1_endpoint.html',1,'hal']]],
+  ['enumstrings_16776',['EnumStrings',['../structhal_1_1_enum_strings.html',1,'hal']]],
+  ['expandinglistbutton_16777',['ExpandingListButton',['../classhal_1_1_expanding_list_button.html',1,'hal']]],
+  ['expandinglistgroup_16778',['ExpandingListGroup',['../classhal_1_1_expanding_list_group.html',1,'hal']]],
+  ['expandinglistitem_16779',['ExpandingListItem',['../classhal_1_1_expanding_list_item.html',1,'hal']]],
+  ['expandinglistwidget_16780',['ExpandingListWidget',['../classhal_1_1_expanding_list_widget.html',1,'hal']]],
+  ['exportregisteredformat_16781',['ExportRegisteredFormat',['../classhal_1_1_export_registered_format.html',1,'hal']]],
+  ['extendedclidialog_16782',['ExtendedCliDialog',['../classhal_1_1_extended_cli_dialog.html',1,'hal']]],
+  ['extraselection_16783',['ExtraSelection',['https://doc.qt.io/qt-5/qtextedit-extraselection.html',1,'QTextEdit']]]
 ];

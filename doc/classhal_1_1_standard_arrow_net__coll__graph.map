@@ -1,0 +1,5 @@
+<map id="hal::StandardArrowNet" name="hal::StandardArrowNet">
+<area shape="rect" id="node1" title="A standard net that has parts of a separated net." alt="" coords="15,417,184,553"/>
+<area shape="rect" id="node2" href="$classhal_1_1_standard_graphics_net.html" title="The most basic net to display the standard nets." alt="" coords="5,248,193,369"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_net.html" title="The basic net class all other nets inherit from." alt="" coords="31,5,167,200"/>
+</map>

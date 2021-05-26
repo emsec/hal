@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['welcome_20to_20hal_21_20_3ca_20name_3d_22introduction_22_3e_3c_2fa_3e_1503',['Welcome to HAL! &lt;a name=&quot;introduction&quot;&gt;&lt;/a&gt;',['../index.html',1,'']]]
+  ['license_35635',['LICENSE',['../md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html',1,'']]]
 ];

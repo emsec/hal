@@ -1,0 +1,10 @@
+<map id="hal::StandardGraphicsNet" name="hal::StandardGraphicsNet">
+<area shape="rect" id="node1" title="The most basic net to display the standard nets." alt="" coords="358,955,546,1076"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graphics_net.html" title="The basic net class all other nets inherit from." alt="" coords="384,711,520,905"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="153,409,293,648"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qcolor.html" title=" " alt="" coords="5,5,131,317"/>
+<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qrectf.html" title=" " alt="" coords="317,446,443,611"/>
+<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qpen.html" title=" " alt="" coords="467,453,583,604"/>
+<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qpainterpath.html" title=" " alt="" coords="607,431,782,626"/>
+<area shape="rect" id="node8" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qbrush.html" title=" " alt="" coords="806,453,922,604"/>
+</map>

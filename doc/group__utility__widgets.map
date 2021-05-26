@@ -1,0 +1,8 @@
+<map id="Utility Widgets" name="Utility Widgets">
+<area shape="rect" id="node1" href="$group__gui.html" title="The Gui is a huge plugin that provides a graphical user interface to load and work with Netlists...." alt="" coords="5,80,80,105"/>
+<area shape="rect" id="node3" title="Contains classes related to the ContextManagerWidget, ModuleWidget, GroupingsWidget and the Selection..." alt="" coords="128,80,247,105"/>
+<area shape="rect" id="node2" href="$group__utility__widgets-grouping.html" title="Contains classes related to the GroupingsWidget." alt="" coords="321,5,452,31"/>
+<area shape="rect" id="node4" href="$group__utility__widgets-selection__details.html" title="Contains classes related to the SelectionDetailsWidget." alt="" coords="295,55,478,80"/>
+<area shape="rect" id="node5" href="$group__utility__widgets-context.html" title="Contains classes related to the ContextManagerWidget." alt="" coords="295,104,479,129"/>
+<area shape="rect" id="node6" href="$group__utility__widgets-module.html" title="Contains classes related to the ModuleWidget ." alt="" coords="327,153,447,179"/>
+</map>

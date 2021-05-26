@@ -1,0 +1,4 @@
+<map id="hal::NetlistWatcher" name="hal::NetlistWatcher">
+<area shape="rect" id="node1" title="Observes changes of the netlist and notifies the FileStatusManager." alt="" coords="11,395,166,501"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="5,5,172,347"/>
+</map>

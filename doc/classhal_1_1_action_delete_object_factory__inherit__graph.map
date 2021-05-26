@@ -1,0 +1,4 @@
+<map id="hal::ActionDeleteObjectFactory" name="hal::ActionDeleteObjectFactory">
+<area shape="rect" id="node1" title="UserActionFactory for ActionDeleteObject." alt="" coords="5,160,228,252"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action_factory.html" title="The UserActionFactory is the abstract base class for registration." alt="" coords="33,5,201,112"/>
+</map>

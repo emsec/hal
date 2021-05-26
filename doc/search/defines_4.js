@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['internal_1477',['INTERNAL',['../d8/db0/defines_8h.html#a02c5e2eafaed44878fd8e6c54c8dde4d',1,'defines.h']]]
+  ['gui_5fdebug_5fgrid_35584',['GUI_DEBUG_GRID',['../gui__globals_8h.html#a45bf493aef646143652f7064c48609ed',1,'gui_globals.h']]]
 ];

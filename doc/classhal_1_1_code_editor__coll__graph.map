@@ -1,0 +1,5 @@
+<map id="hal::CodeEditor" name="hal::CodeEditor">
+<area shape="rect" id="node1" title="A plain text edit widget that is intended for editing code." alt="" coords="5,755,288,1404"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qplaintextedit.html" title=" " alt="" coords="65,365,228,707"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractscrollarea.html" title=" " alt="" coords="31,5,262,317"/>
+</map>

@@ -1,0 +1,115 @@
+var group__docking =
+[
+    [ "ContentAnchor", "classhal_1_1_content_anchor.html", [
+      [ "~ContentAnchor", "classhal_1_1_content_anchor.html#aab0281280c629b6523d074db05dcbbfa", null ],
+      [ "add", "classhal_1_1_content_anchor.html#a122685a9eb05e3a34b8ede51f5f81a49", null ],
+      [ "close", "classhal_1_1_content_anchor.html#a496d11b75abd78806245592ad9c247c9", null ],
+      [ "detach", "classhal_1_1_content_anchor.html#ac4af161894ff9b1834dcb6d95f4c2d1d", null ],
+      [ "open", "classhal_1_1_content_anchor.html#aa4c6d92e189efdfcc470dbe61d1a6d23", null ],
+      [ "reattach", "classhal_1_1_content_anchor.html#a063bb055da54fa4ffd3689e813cf6067", null ],
+      [ "remove", "classhal_1_1_content_anchor.html#a850d7c8d3cdad50d4b135246aebd2c71", null ]
+    ] ],
+    [ "ContentFrame", "classhal_1_1_content_frame.html", [
+      [ "ContentFrame", "classhal_1_1_content_frame.html#acec9c0993ffb1fd6a9d79aefb7739486", null ],
+      [ "childEvent", "classhal_1_1_content_frame.html#ae1f6b74e7aefce77534ce5f2170af106", null ],
+      [ "content", "classhal_1_1_content_frame.html#af253a9801b46b09a25a866be832f42ef", null ],
+      [ "detachWidget", "classhal_1_1_content_frame.html#aad727c38a42c485a5c704860306a7100", null ],
+      [ "handleNameChanged", "classhal_1_1_content_frame.html#a7c366e534baa60b6a26153f020d6c1d5", null ],
+      [ "reattachWidget", "classhal_1_1_content_frame.html#a3424a240a9313a6bf2188c70a93920b9", null ]
+    ] ],
+    [ "ContentDragRelay", "classhal_1_1_content_drag_relay.html", [
+      [ "dragEnd", "classhal_1_1_content_drag_relay.html#a27cb9311df3407875ae76b695b86cd8d", null ],
+      [ "dragStart", "classhal_1_1_content_drag_relay.html#a68407cc29b4a41b56741812a2c46aa71", null ],
+      [ "relayDragEnd", "classhal_1_1_content_drag_relay.html#a3caaf3a7ed45298de28483db823564da", null ],
+      [ "relayDragStart", "classhal_1_1_content_drag_relay.html#a561c07b5247a2f14972803cc1f3be4a0", null ]
+    ] ],
+    [ "DockBar", "classhal_1_1_dock_bar.html", [
+      [ "DockBar", "classhal_1_1_dock_bar.html#a7916e78c642b524fa20fffbf6b28bdfe", null ],
+      [ "addButton", "classhal_1_1_dock_bar.html#af88b40845191433e2a8ef2c97c356900", null ],
+      [ "checkButton", "classhal_1_1_dock_bar.html#a497545fee703e4b50f42362206c08c5b", null ],
+      [ "clear", "classhal_1_1_dock_bar.html#a0269dc1433dcb659dc5e1bf585dd31ec", null ],
+      [ "collapseButtons", "classhal_1_1_dock_bar.html#afda6f5e577c507ec61f02d86a344e54a", null ],
+      [ "count", "classhal_1_1_dock_bar.html#aba73ba2b60878f4b1f21fc601c539d78", null ],
+      [ "detachButton", "classhal_1_1_dock_bar.html#acafc385cdf323d371f424d32a5fcaaf3", null ],
+      [ "dragEnterEvent", "classhal_1_1_dock_bar.html#a045c002dc78e519983522b55d19cac38", null ],
+      [ "dragLeaveEvent", "classhal_1_1_dock_bar.html#ab33787edc8aa1cca25b42a7072c3f219", null ],
+      [ "dragMoveEvent", "classhal_1_1_dock_bar.html#ae876a9af86edbf76a36654fd57e45240", null ],
+      [ "dropEvent", "classhal_1_1_dock_bar.html#a035f262da88bc408cc76fe37ed4f8105", null ],
+      [ "eventFilter", "classhal_1_1_dock_bar.html#a681224f3b81ce93a4230dd13230a53d8", null ],
+      [ "handleDragEnd", "classhal_1_1_dock_bar.html#ab35e53a657477bf605c490f28ca66d52", null ],
+      [ "handleDragStart", "classhal_1_1_dock_bar.html#ad66811a7a674c3a88984a9043ba37f2d", null ],
+      [ "index", "classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce", null ],
+      [ "minimumSizeHint", "classhal_1_1_dock_bar.html#a1f29836fd8f4fc64b6aa42889b941ea8", null ],
+      [ "mouseMoveEvent", "classhal_1_1_dock_bar.html#a03347d7bde11b4406ce5edaba444691e", null ],
+      [ "nextAvailableWidget", "classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4", null ],
+      [ "rearrangeButtons", "classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf", null ],
+      [ "reattachButton", "classhal_1_1_dock_bar.html#a73435370114794dfe9e8ff31b898cdf8", null ],
+      [ "removeButton", "classhal_1_1_dock_bar.html#a0e224001ed07b05a8b4e5ed9ed782f58", null ],
+      [ "removeButton", "classhal_1_1_dock_bar.html#adc2fb001432e3849fadfbfb5abfb7b9e", null ],
+      [ "setAnchor", "classhal_1_1_dock_bar.html#a1a156536406fab3653e97296cb87e348", null ],
+      [ "setAutohide", "classhal_1_1_dock_bar.html#a726f3f9acbe3ffd67a009db4fa7a2761", null ],
+      [ "sizeHint", "classhal_1_1_dock_bar.html#a03d8bd985c7d9f05c035b6fff8200cac", null ],
+      [ "stopAnimations", "classhal_1_1_dock_bar.html#ac7ae24497457a458c831a51aab8b2c92", null ],
+      [ "uncheckButton", "classhal_1_1_dock_bar.html#aa459f3af6f385a73ae80d1441ef92437", null ],
+      [ "unused", "classhal_1_1_dock_bar.html#ac692239114f6137af698f788f3a1a083", null ],
+      [ "widgetAt", "classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70", null ]
+    ] ],
+    [ "DockButton", "classhal_1_1_dock_button.html", [
+      [ "DockButton", "classhal_1_1_dock_button.html#a5d4cb97c9b1c7f9d3bfaf79f437ed010", null ],
+      [ "adjustSize", "classhal_1_1_dock_button.html#ae39e6d11344f231ee8f3758a6cfb30a0", null ],
+      [ "available", "classhal_1_1_dock_button.html#a4eb4f5b1975e2b3c186af863448ba076", null ],
+      [ "checkedColor", "classhal_1_1_dock_button.html#a7508b0bc3838e27430e3527707909c80", null ],
+      [ "handleClicked", "classhal_1_1_dock_button.html#aa7efdb932cc0bdddf5f1fec0245f855a", null ],
+      [ "hidden", "classhal_1_1_dock_button.html#ae7f8fdf919a95d09968dc475262196eb", null ],
+      [ "hide", "classhal_1_1_dock_button.html#a41dafc3b058ad6c8caf7739902b8071b", null ],
+      [ "hoverColor", "classhal_1_1_dock_button.html#a797d6718839ba71592f3938dc43abc0a", null ],
+      [ "paintEvent", "classhal_1_1_dock_button.html#abb8875535f8da091d3523700f2220d2a", null ],
+      [ "relativeWidth", "classhal_1_1_dock_button.html#a45a5ff92f5310ed48e31093e4d2258f4", null ],
+      [ "setAvailable", "classhal_1_1_dock_button.html#a1f35abe89b48969286d6fc0a33c37b95", null ],
+      [ "setCheckedColor", "classhal_1_1_dock_button.html#a08a719daec4cff9b72d71ffb4b8fe477", null ],
+      [ "setHoverColor", "classhal_1_1_dock_button.html#acae13b1e828595a0a7caaa5c50bacc9d", null ],
+      [ "setRelativeHeight", "classhal_1_1_dock_button.html#a7a76946fd78d76c233f1a82a8e0300d2", null ],
+      [ "setTextColor", "classhal_1_1_dock_button.html#ae25c55381bd50f4978ed4656882678f9", null ],
+      [ "show", "classhal_1_1_dock_button.html#a7536247e6a82798c519814ecf907ad79", null ],
+      [ "textColor", "classhal_1_1_dock_button.html#a332de6fd7433080ca029e943d22ae7c2", null ],
+      [ "widget", "classhal_1_1_dock_button.html#acf760eb6637d2cb20222e99b618243c2", null ],
+      [ "checkedColor", "classhal_1_1_dock_button.html#a9571738e6406a932c6b4c3753ae0c6a0", null ],
+      [ "hoverColor", "classhal_1_1_dock_button.html#a191bd3dafe877d763dfbfcee0874fc48", null ],
+      [ "textColor", "classhal_1_1_dock_button.html#a6d8c4ad276f05efb9e7a4c91d393c3a5", null ]
+    ] ],
+    [ "DockMimeData", "classhal_1_1_dock_mime_data.html", [
+      [ "DockMimeData", "classhal_1_1_dock_mime_data.html#a68e0d254c49318e582e18b1fd3fa15a5", null ],
+      [ "widget", "classhal_1_1_dock_mime_data.html#afeb85263afda21684adf719c4451c36e", null ]
+    ] ],
+    [ "SplitterAnchor", "classhal_1_1_splitter_anchor.html", [
+      [ "SplitterAnchor", "classhal_1_1_splitter_anchor.html#a913d050c07582f0d6195aa2696f37a93", null ],
+      [ "add", "classhal_1_1_splitter_anchor.html#a4d2651b9f557d4e64854f731bafbfae9", null ],
+      [ "clear", "classhal_1_1_splitter_anchor.html#aca0ec543f029b97e6b1cba6e8ee30b49", null ],
+      [ "close", "classhal_1_1_splitter_anchor.html#a287a494e68b7f54ac727c2cc57d2c1e6", null ],
+      [ "contentChanged", "classhal_1_1_splitter_anchor.html#a76454846d21a56a45891a3389a7b64a4", null ],
+      [ "count", "classhal_1_1_splitter_anchor.html#a8f3af112cb8d1c3a607d9b59db8ff0cc", null ],
+      [ "detach", "classhal_1_1_splitter_anchor.html#ad36265c03bb7b96e1f5aeff8ae5adc33", null ],
+      [ "open", "classhal_1_1_splitter_anchor.html#a051641523e0974e6462b08cf5553366b", null ],
+      [ "reattach", "classhal_1_1_splitter_anchor.html#a70454d29c95acabb53ac14c672c76bb5", null ],
+      [ "remove", "classhal_1_1_splitter_anchor.html#aaad6336ad5e5ee230ab6b119542742e1", null ]
+    ] ],
+    [ "TabWidget", "classhal_1_1_tab_widget.html", [
+      [ "TabWidget", "classhal_1_1_tab_widget.html#a01a06adde0839efb940ab97bb81bb5d6", null ],
+      [ "add", "classhal_1_1_tab_widget.html#a9af97c04429797b0497f434001baaf6f", null ],
+      [ "clear", "classhal_1_1_tab_widget.html#a208648799f8927cd9d4cdd2670b91743", null ],
+      [ "close", "classhal_1_1_tab_widget.html#a30f23ce9feff8559abbbff432bfe124e", null ],
+      [ "detach", "classhal_1_1_tab_widget.html#a78521bcdfd7d838219763496c36745eb", null ],
+      [ "detachCurrentWidget", "classhal_1_1_tab_widget.html#a18563303f9b1c45ffad958dc578bcde0", null ],
+      [ "handleDragEnd", "classhal_1_1_tab_widget.html#aa54adb84139bdb5b80bc94563889df9f", null ],
+      [ "handleDragStart", "classhal_1_1_tab_widget.html#a561969c197ed97474257c40ec7d35a79", null ],
+      [ "handleNoCurrentWidget", "classhal_1_1_tab_widget.html#a4ab3514a0cbfdd9b327959e1a5d48205", null ],
+      [ "open", "classhal_1_1_tab_widget.html#ae02de948a566f428334c51c2788a06b1", null ],
+      [ "reattach", "classhal_1_1_tab_widget.html#a3b134235e20afb30c03d9cb7e91b4c80", null ],
+      [ "remove", "classhal_1_1_tab_widget.html#ab6400bdb142ec2b9149d4cd1668152d4", null ]
+    ] ],
+    [ "button_orientation", "group__docking.html#ga96c899c45d7192341d04caf575c7f02c", [
+      [ "horizontal", "group__docking.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f", null ],
+      [ "vertical_up", "group__docking.html#gga96c899c45d7192341d04caf575c7f02ca6f50993948b855a8efa011b6915164d6", null ],
+      [ "vertical_down", "group__docking.html#gga96c899c45d7192341d04caf575c7f02cae2a44fa65a0cf99e723e1887fc5eda0a", null ]
+    ] ]
+];

@@ -5,10 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>hal: Modules</title>
+<title>HAL: Modules</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -22,8 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">hal
-   &#160;<span id="projectnumber">3.2.6.</span>
+   <div id="projectname">HAL
    </div>
   </td>
  </tr>
@@ -48,6 +51,22 @@ $(function() {
 /* @license-end */</script>
 <div id="main-nav"></div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('modules.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -69,26 +88,51 @@ $(function() {
 <div class="contents">
 <div class="textblock">Here is a list of all modules:</div><div class="directory">
 <div class="levels">[detail level <span onclick="javascript:toggleLevel(1);">1</span><span onclick="javascript:toggleLevel(2);">2</span><span onclick="javascript:toggleLevel(3);">3</span><span onclick="javascript:toggleLevel(4);">4</span>]</div><table class="directory">
-<tr id="row_0_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_0_" class="arrow" onclick="toggleFolder('0_')">&#9660;</span><a class="el" href="d0/de1/group__core.html" target="_self">HAL Core</a></td><td class="desc"></td></tr>
-<tr id="row_0_0_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_0_0_" class="arrow" onclick="toggleFolder('0_0_')">&#9660;</span><a class="el" href="de/d89/group__netlist.html" target="_self">Netlist</a></td><td class="desc"></td></tr>
-<tr id="row_0_0_0_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="d9/dbe/group__netlist__parser.html" target="_self">Netlist Parser</a></td><td class="desc"></td></tr>
-<tr id="row_0_0_1_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="d0/dad/group__netlist__writer.html" target="_self">Netlist Writer</a></td><td class="desc"></td></tr>
-<tr id="row_0_0_2_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><span id="arr_0_0_2_" class="arrow" onclick="toggleFolder('0_0_2_')">&#9660;</span><a class="el" href="de/de8/group__gate__lib.html" target="_self">Gate Library</a></td><td class="desc"></td></tr>
-<tr id="row_0_0_2_0_"><td class="entry"><span style="width:64px;display:inline-block;">&#160;</span><a class="el" href="d6/d78/group__gate__lib__parser.html" target="_self">Gate Library Parser</a></td><td class="desc"></td></tr>
-<tr id="row_0_0_2_1_" class="even"><td class="entry"><span style="width:64px;display:inline-block;">&#160;</span><a class="el" href="da/d09/group__gate__lib__writer.html" target="_self">Gate Library Writer</a></td><td class="desc"></td></tr>
-<tr id="row_0_0_3_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="d0/d5f/group__persistent.html" target="_self">Persistency</a></td><td class="desc"></td></tr>
-<tr id="row_0_0_4_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="d1/ddf/group__events.html" target="_self">Event System</a></td><td class="desc"></td></tr>
-<tr id="row_0_1_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="d1/d29/group__plugins.html" target="_self">Plugin System</a></td><td class="desc"></td></tr>
-<tr id="row_0_2_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="dc/d39/group__utilities.html" target="_self">Utilities</a></td><td class="desc"></td></tr>
-<tr id="row_0_3_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="db/d7c/group__pybind.html" target="_self">Python Bindings</a></td><td class="desc"></td></tr>
+<tr id="row_0_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_0_" class="arrow" onclick="toggleFolder('0_')">&#9660;</span><a class="el" href="group__gui.html" target="_self">HAL Gui</a></td><td class="desc">The Gui is a huge plugin that provides a graphical user interface to load and work with Netlists. If compiled it can be started using the '-g'/'&ndash;gui' flag. To learn more about the GUI and its structure make sure to check out our <a href="https://github.com/emsec/hal/wiki/GUI">GitHub Wiki</a>! </td></tr>
+<tr id="row_0_0_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_0_0_" class="arrow" onclick="toggleFolder('0_0_')">&#9660;</span><a class="el" href="group__graph.html" target="_self">Graph Widget</a></td><td class="desc">Contains all classes that are relevant for the GraphWidget and the management of GraphContexts </td></tr>
+<tr id="row_0_0_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><span id="arr_0_0_0_" class="arrow" onclick="toggleFolder('0_0_0_')">&#9660;</span><a class="el" href="group__graph-visuals.html" target="_self">Visuals</a></td><td class="desc">Contains the classes that are responsible for building up and showing the scene. It also contains the GraphicsItems the scene is built with </td></tr>
+<tr id="row_0_0_0_0_"><td class="entry"><span style="width:64px;display:inline-block;">&#160;</span><a class="el" href="group__graph-visuals-gate.html" target="_self">Graphics Gates</a></td><td class="desc">Contains all GraphicsItems for displaying Gates in the scene </td></tr>
+<tr id="row_0_0_0_1_" class="even"><td class="entry"><span style="width:64px;display:inline-block;">&#160;</span><a class="el" href="group__graph-visuals-module.html" target="_self">Graphics Modules</a></td><td class="desc">Contains all GraphicsItems for displaying Modules in the scene </td></tr>
+<tr id="row_0_0_0_2_"><td class="entry"><span style="width:64px;display:inline-block;">&#160;</span><a class="el" href="group__graph-visuals-net.html" target="_self">Graphics Net</a></td><td class="desc">Contains all GraphicsItems for displaying Nets in the scene </td></tr>
+<tr id="row_0_0_1_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__graph-contexts.html" target="_self">Context Management</a></td><td class="desc">Contains all classes that are related to GraphContexts </td></tr>
+<tr id="row_0_0_2_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__graph-layouter.html" target="_self">Layouters</a></td><td class="desc">Contains all classes that are relevant for the layouting process </td></tr>
+<tr id="row_0_1_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_0_1_" class="arrow" onclick="toggleFolder('0_1_')">&#9660;</span><a class="el" href="group__python.html" target="_self">Python</a></td><td class="desc">Contains everything that can be associated with the python usage within the GUI </td></tr>
+<tr id="row_0_1_0_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__python-editor.html" target="_self">Python Editor</a></td><td class="desc">Contains all classes that are related to the PythonEditor widget </td></tr>
+<tr id="row_0_1_1_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__python-console.html" target="_self">Python Console</a></td><td class="desc">Contains all classes that are related to the PythonConsoleWidget </td></tr>
+<tr id="row_0_2_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__docking.html" target="_self">Docking System</a></td><td class="desc">Contains all classes that are relevant for the ContentWidget's docking system </td></tr>
+<tr id="row_0_3_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__logging.html" target="_self">Logging System</a></td><td class="desc">Contains everything that can be associated with the LoggerWidget </td></tr>
+<tr id="row_0_4_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__settings.html" target="_self">Settings System</a></td><td class="desc">Contains all classes that belong to the settings system </td></tr>
+<tr id="row_0_5_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__user__action.html" target="_self">User Actions</a></td><td class="desc">Contains the classes for all available UserActions and the UserAction management system </td></tr>
+<tr id="row_0_6_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__file__management.html" target="_self">File Management</a></td><td class="desc">Contains the classes that are responsible for working with files </td></tr>
+<tr id="row_0_7_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_0_7_" class="arrow" onclick="toggleFolder('0_7_')">&#9660;</span><a class="el" href="group__utility__widgets.html" target="_self">Utility Widgets</a></td><td class="desc">Contains classes related to the ContextManagerWidget, ModuleWidget, GroupingsWidget and the SelectionDetailsWidget </td></tr>
+<tr id="row_0_7_0_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__utility__widgets-context.html" target="_self">Context Manager Widget</a></td><td class="desc">Contains classes related to the ContextManagerWidget </td></tr>
+<tr id="row_0_7_1_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__utility__widgets-module.html" target="_self">Module Widget</a></td><td class="desc">Contains classes related to the ModuleWidget </td></tr>
+<tr id="row_0_7_2_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__utility__widgets-grouping.html" target="_self">Grouping Widget</a></td><td class="desc">Contains classes related to the GroupingsWidget </td></tr>
+<tr id="row_0_7_3_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__utility__widgets-selection__details.html" target="_self">Selection Details Widget</a></td><td class="desc">Contains classes related to the SelectionDetailsWidget </td></tr>
+<tr id="row_0_8_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__unused.html" target="_self">Unused</a></td><td class="desc">Classes and systems that are no longer used or that are not (yet) available in a current master build </td></tr>
+<tr id="row_1_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_1_" class="arrow" onclick="toggleFolder('1_')">&#9660;</span><a class="el" href="group__core.html" target="_self">HAL Core</a></td><td class="desc"></td></tr>
+<tr id="row_1_0_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_1_0_" class="arrow" onclick="toggleFolder('1_0_')">&#9660;</span><a class="el" href="group__netlist.html" target="_self">Netlist</a></td><td class="desc"></td></tr>
+<tr id="row_1_0_0_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__netlist__parser.html" target="_self">Netlist Parser</a></td><td class="desc"></td></tr>
+<tr id="row_1_0_1_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__netlist__writer.html" target="_self">Netlist Writer</a></td><td class="desc"></td></tr>
+<tr id="row_1_0_2_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><span id="arr_1_0_2_" class="arrow" onclick="toggleFolder('1_0_2_')">&#9660;</span><a class="el" href="group__gate__lib.html" target="_self">Gate Library</a></td><td class="desc"></td></tr>
+<tr id="row_1_0_2_0_"><td class="entry"><span style="width:64px;display:inline-block;">&#160;</span><a class="el" href="group__gate__lib__parser.html" target="_self">Gate Library Parser</a></td><td class="desc"></td></tr>
+<tr id="row_1_0_2_1_" class="even"><td class="entry"><span style="width:64px;display:inline-block;">&#160;</span><a class="el" href="group__gate__lib__writer.html" target="_self">Gate Library Writer</a></td><td class="desc"></td></tr>
+<tr id="row_1_0_3_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__persistent.html" target="_self">Persistency</a></td><td class="desc"></td></tr>
+<tr id="row_1_0_4_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__events.html" target="_self">Event System</a></td><td class="desc"></td></tr>
+<tr id="row_1_1_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__plugins.html" target="_self">Plugin System</a></td><td class="desc"></td></tr>
+<tr id="row_1_2_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__utilities.html" target="_self">Utilities</a></td><td class="desc"></td></tr>
+<tr id="row_1_3_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__pybind.html" target="_self">Python Bindings</a></td><td class="desc"></td></tr>
 </table>
 </div><!-- directory -->
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Wed May 26 2021 10:18:46 for hal by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.17
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on Wed May 26 2021 12:19:05 for HAL by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
 </body>
 </html>

@@ -1,0 +1,5 @@
+<map id="hal::DockButton" name="hal::DockButton">
+<area shape="rect" id="node1" title="A button of in the DockerBar." alt="" coords="17,740,173,1111"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtoolbutton.html" title=" " alt="" coords="5,365,185,692"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractbutton.html" title=" " alt="" coords="13,5,178,317"/>
+</map>

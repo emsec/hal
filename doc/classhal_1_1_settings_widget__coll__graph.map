@@ -1,0 +1,16 @@
+<map id="hal::SettingsWidget" name="hal::SettingsWidget">
+<area shape="rect" id="node1" title="The base class for all specific SettingsWidgets." alt="" coords="429,1784,644,2081"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qframe.html" title=" " alt="" coords="71,947,215,1317"/>
+<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qlabel.html" title=" " alt="" coords="62,1387,225,1699"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="236,453,443,897"/>
+<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractbutton.html" title=" " alt="" coords="257,976,422,1288"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="584,5,751,347"/>
+<area shape="rect" id="node9" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qlayout.html" title=" " alt="" coords="571,505,763,846"/>
+<area shape="rect" id="node11" href="$classhal_1_1_settings_item.html" title="The interface for the logical part of a setting." alt="" coords="832,600,977,751"/>
+<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtoolbutton.html" title=" " alt="" coords="249,1380,429,1707"/>
+<area shape="rect" id="node8" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qboxlayout.html" title=" " alt="" coords="599,1020,736,1244"/>
+<area shape="rect" id="node10" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qvboxlayout.html" title=" " alt="" coords="594,1490,741,1597"/>
+<area shape="rect" id="node13" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qhboxlayout.html" title=" " alt="" coords="765,1490,911,1597"/>
+<area shape="rect" id="node12" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qstring.html" title=" " alt="" coords="835,20,974,332"/>
+<area shape="rect" id="node14" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="987,1402,1169,1685"/>
+</map>

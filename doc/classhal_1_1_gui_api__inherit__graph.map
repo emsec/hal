@@ -1,0 +1,4 @@
+<map id="hal::GuiApi" name="hal::GuiApi">
+<area shape="rect" id="node1" title="Interface to interact with the gui itself." alt="" coords="5,395,196,545"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="17,5,184,347"/>
+</map>

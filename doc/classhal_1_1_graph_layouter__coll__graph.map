@@ -1,0 +1,9 @@
+<map id="hal::GraphLayouter" name="hal::GraphLayouter">
+<area shape="rect" id="node1" title="Base class for all specific layouters." alt="" coords="338,1413,493,1564"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="159,5,326,347"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsscene.html" title=" " alt="" coords="158,396,327,811"/>
+<area shape="rect" id="node5" href="$classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets." alt="" coords="328,835,476,985"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_scene.html" title="Container for a GraphGraphicsView containing gates, nets, and modules." alt="" coords="117,1009,368,1351"/>
+<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmap.html" title=" " alt="" coords="520,1061,720,1299"/>
+<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmap.html" title=" " alt="" coords="744,1068,946,1292"/>
+</map>

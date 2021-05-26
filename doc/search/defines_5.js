@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['json_5fstr_5fhelper_1478',['JSON_STR_HELPER',['../d1/d8e/netlist_2persistent_2netlist__serializer_8cpp.html#ad9bde63b1c828a1328bf592ad5325fa6',1,'netlist_serializer.cpp']]]
+  ['internal_35585',['INTERNAL',['../defines_8h.html#a02c5e2eafaed44878fd8e6c54c8dde4d',1,'defines.h']]]
 ];

@@ -1,0 +1,4 @@
+<map id="hal::ActionFoldModuleFactory" name="hal::ActionFoldModuleFactory">
+<area shape="rect" id="node1" title="UserActionFactory for ActionFoldModule." alt="" coords="5,160,219,252"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action_factory.html" title="The UserActionFactory is the abstract base class for registration." alt="" coords="28,5,196,112"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="hal::SelectionTreeItemGate" name="hal::SelectionTreeItemGate">
+<area shape="rect" id="node1" title="Tree item that represents a gate." alt="" coords="5,220,240,356"/>
+<area shape="rect" id="node2" href="$classhal_1_1_selection_tree_item.html" title="Basic item for the SelectionTreeModel." alt="" coords="35,5,210,171"/>
+</map>

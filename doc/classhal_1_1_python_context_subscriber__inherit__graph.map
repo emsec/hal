@@ -1,0 +1,5 @@
+<map id="hal::PythonContextSubscriber" name="hal::PythonContextSubscriber">
+<area shape="rect" id="node1" title="Interface for handling python outputs." alt="" coords="90,5,305,112"/>
+<area shape="rect" id="node2" href="$classhal_1_1_python_console.html" title="An interactable python console." alt="" coords="5,336,168,487"/>
+<area shape="rect" id="node3" href="$classhal_1_1_python_editor.html" title="Main widget that combines all neccessary functionality to develop in python (for hal)." alt="" coords="193,160,423,663"/>
+</map>

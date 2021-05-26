@@ -1,0 +1,5 @@
+<map id="hal::ActionOpenNetlistFileFactory" name="hal::ActionOpenNetlistFileFactory">
+<area shape="rect" id="node1" title="UserActionFactory for ActionOpenNetlistFile." alt="" coords="5,536,240,643"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action_factory.html" title="The UserActionFactory is the abstract base class for registration." alt="" coords="39,380,207,487"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qstring.html" title=" " alt="" coords="53,5,192,317"/>
+</map>

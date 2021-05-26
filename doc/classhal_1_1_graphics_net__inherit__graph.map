@@ -1,0 +1,11 @@
+<map id="hal::GraphicsNet" name="hal::GraphicsNet">
+<area shape="rect" id="node1" title="The basic net class all other nets inherit from." alt="" coords="433,696,569,964"/>
+<area shape="rect" id="node4" href="$classhal_1_1_separated_graphics_net.html" title="Abstract base class for separated nets (e.g. ArrowSeparatedNet)" alt="" coords="295,1012,491,1207"/>
+<area shape="rect" id="node8" href="$classhal_1_1_standard_graphics_net.html" title="The most basic net to display the standard nets." alt="" coords="564,1049,752,1170"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="431,365,571,648"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsitem.html" title=" " alt="" coords="416,5,585,317"/>
+<area shape="rect" id="node5" href="$classhal_1_1_arrow_separated_net.html" title="Used to display all nets which destinations are not in the current view." alt="" coords="5,1255,183,1420"/>
+<area shape="rect" id="node6" href="$classhal_1_1_circle_separated_net.html" title="Used to display all nets which destinations are not in the current view." alt="" coords="207,1255,383,1420"/>
+<area shape="rect" id="node7" href="$classhal_1_1_labeled_separated_net.html" title="Nets whose output and input can be labeled (e.g. from GND/VCC)" alt="" coords="408,1255,599,1420"/>
+<area shape="rect" id="node9" href="$classhal_1_1_standard_arrow_net.html" title="A standard net that has parts of a separated net." alt="" coords="623,1269,792,1405"/>
+</map>

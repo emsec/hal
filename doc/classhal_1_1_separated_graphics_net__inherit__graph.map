@@ -1,0 +1,8 @@
+<map id="hal::SeparatedGraphicsNet" name="hal::SeparatedGraphicsNet">
+<area shape="rect" id="node1" title="Abstract base class for separated nets (e.g. ArrowSeparatedNet)" alt="" coords="197,652,393,847"/>
+<area shape="rect" id="node4" href="$classhal_1_1_arrow_separated_net.html" title="Used to display all nets which destinations are not in the current view." alt="" coords="5,895,183,1060"/>
+<area shape="rect" id="node5" href="$classhal_1_1_circle_separated_net.html" title="Used to display all nets which destinations are not in the current view." alt="" coords="207,895,383,1060"/>
+<area shape="rect" id="node6" href="$classhal_1_1_labeled_separated_net.html" title="Nets whose output and input can be labeled (e.g. from GND/VCC)" alt="" coords="408,895,599,1060"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graphics_net.html" title="The basic net class all other nets inherit from." alt="" coords="227,336,363,604"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="225,5,365,288"/>
+</map>

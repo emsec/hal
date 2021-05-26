@@ -1,0 +1,11 @@
+<map id="hal::SettingsWidget" name="hal::SettingsWidget">
+<area shape="rect" id="node1" title="The base class for all specific SettingsWidgets." alt="" coords="594,916,809,1301"/>
+<area shape="rect" id="node4" href="$classhal_1_1_settings_widget_checkbox.html" title="A SettingsWidget representing a checkbox." alt="" coords="5,1371,219,1478"/>
+<area shape="rect" id="node5" href="$classhal_1_1_settings_widget_dropdown.html" title="A SettingsWidget representing a dropdown menu." alt="" coords="243,1371,458,1478"/>
+<area shape="rect" id="node6" href="$classhal_1_1_settings_widget_keybind.html" title="A setting to configure keybinds." alt="" coords="482,1349,697,1500"/>
+<area shape="rect" id="node7" href="$classhal_1_1_settings_widget_slider.html" title="A SettingsWidget representing a slider." alt="" coords="721,1371,908,1478"/>
+<area shape="rect" id="node8" href="$classhal_1_1_settings_widget_spinbox.html" title="A SettingsWidget representing a spinbox." alt="" coords="933,1371,1134,1478"/>
+<area shape="rect" id="node9" href="$classhal_1_1_settings_widget_text.html" title="A SettingsWidget representing a textfield." alt="" coords="1159,1371,1335,1478"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qframe.html" title=" " alt="" coords="629,497,773,868"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="598,5,805,449"/>
+</map>

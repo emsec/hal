@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classhal_1_1_selection_tree_item.html" title="Basic item for the SelectionTreeModel." alt="" coords="5,56,172,83"/>
+<area shape="rect" id="node2" href="$classhal_1_1_selection_tree_item_gate.html" title="Tree item that represents a gate." alt="" coords="228,5,427,32"/>
+<area shape="rect" id="node3" href="$classhal_1_1_selection_tree_item_module.html" title="Tree item that represents a module." alt="" coords="220,56,435,83"/>
+<area shape="rect" id="node5" href="$classhal_1_1_selection_tree_item_net.html" title="Tree item that represents a net." alt="" coords="232,107,423,133"/>
+<area shape="rect" id="node4" href="$classhal_1_1_selection_tree_item_root.html" title="Tree item that represent the root." alt="" coords="483,56,680,83"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="hal::SelectionTreeItemNet" name="hal::SelectionTreeItemNet">
+<area shape="rect" id="node1" title="Tree item that represents a net." alt="" coords="5,233,240,355"/>
+<area shape="rect" id="node2" href="$classhal_1_1_selection_tree_item.html" title="Basic item for the SelectionTreeModel." alt="" coords="35,5,210,185"/>
+</map>

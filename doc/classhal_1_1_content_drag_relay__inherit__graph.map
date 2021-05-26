@@ -1,0 +1,4 @@
+<map id="hal::ContentDragRelay" name="hal::ContentDragRelay">
+<area shape="rect" id="node1" title="This relay provides the timing information when a DockButton is dragged. It is implemented as a singl..." alt="" coords="5,395,175,501"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="7,5,173,347"/>
+</map>

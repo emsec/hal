@@ -1,0 +1,6 @@
+<map id="hal::ArrowSeparatedNet" name="hal::ArrowSeparatedNet">
+<area shape="rect" id="node1" title="Used to display all nets which destinations are not in the current view." alt="" coords="77,551,254,716"/>
+<area shape="rect" id="node2" href="$classhal_1_1_separated_graphics_net.html" title="Abstract base class for separated nets (e.g. ArrowSeparatedNet)" alt="" coords="67,336,263,501"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_net.html" title="The basic net class all other nets inherit from." alt="" coords="5,35,141,229"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qvector.html" title=" " alt="" coords="166,5,349,259"/>
+</map>

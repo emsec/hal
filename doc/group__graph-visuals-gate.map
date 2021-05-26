@@ -1,0 +1,4 @@
+<map id="Graphics Gates" name="Graphics Gates">
+<area shape="rect" id="node1" href="$group__graph-visuals.html" title="Contains the classes that are responsible for building up and showing the scene. It also contains the..." alt="" coords="5,5,75,31"/>
+<area shape="rect" id="node2" title="Contains all GraphicsItems for displaying Gates in the scene." alt="" coords="123,5,244,31"/>
+</map>

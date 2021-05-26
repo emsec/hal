@@ -1,0 +1,6 @@
+<map id="Python" name="Python">
+<area shape="rect" id="node1" href="$group__python-editor.html" title="Contains all classes that are related to the PythonEditor widget." alt="" coords="249,5,359,31"/>
+<area shape="rect" id="node2" href="$group__gui.html" title="The Gui is a huge plugin that provides a graphical user interface to load and work with Netlists...." alt="" coords="5,31,80,56"/>
+<area shape="rect" id="node3" title="Contains everything that can be associated with the python usage within the GUI." alt="" coords="128,31,195,56"/>
+<area shape="rect" id="node4" href="$group__python-console.html" title="Contains all classes that are related to the PythonConsoleWidget." alt="" coords="243,55,365,80"/>
+</map>
