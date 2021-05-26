@@ -12,8 +12,8 @@ namespace hal
 {
     Netlist::Netlist(const GateLibrary* library) : m_gate_library(library)
     {
-        m_event_handler    = new EventHandler();
-        m_manager          = new NetlistInternalManager(this, m_event_handler);
+        m_event_handler    = std::make_unique<EventHandler>();
+        m_manager          = new NetlistInternalManager(this, m_event_handler.get());
         m_netlist_id       = 1;
         m_next_gate_id     = 1;
         m_next_net_id      = 1;
@@ -26,7 +26,6 @@ namespace hal
     Netlist::~Netlist()
     {
         delete m_manager;
-        delete m_event_handler;
     }
 
     bool Netlist::operator==(const Netlist& other) const
@@ -139,7 +138,7 @@ namespace hal
 
     EventHandler* Netlist::get_event_handler() const
     {
-        return m_event_handler;
+        return m_event_handler.get();
     }
 
     void Netlist::clear_caches()

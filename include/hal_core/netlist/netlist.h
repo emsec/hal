@@ -24,9 +24,8 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/event_handler.h"
-
+#include "hal_core/netlist/gate_library/gate_library.h"
 
 #include <functional>
 #include <memory>
@@ -756,10 +755,8 @@ namespace hal
          * @return Pointer to netlist event handler
          */
         EventHandler* get_event_handler() const;
-    private:
-        /* stores the pointer to the netlist internal manager */
-        NetlistInternalManager* m_manager;
 
+    private:
         /* stores the gate library */
         const GateLibrary* m_gate_library;
 
@@ -775,7 +772,11 @@ namespace hal
         /* stores the name of the device */
         std::string m_device_name;
 
-        EventHandler* m_event_handler;
+        /* stores the pointer to the netlist internal manager */
+        NetlistInternalManager* m_manager;
+
+        /* the event handler associated with the netlist */
+        std::unique_ptr<EventHandler> m_event_handler;
 
         /* stores the auto generated ids for fast next id */
         u32 m_next_gate_id;

@@ -393,7 +393,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Gate(NetlistInternalManager* mgr, EventHandler* event_handler, u32 id, GateType* gt, const std::string& name, u32 x, u32 y);
+        Gate(NetlistInternalManager* mgr, EventHandler* event_handler, u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
 
         Gate(const Gate&) = delete;
         Gate(Gate&&)      = delete;
