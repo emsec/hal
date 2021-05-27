@@ -9,22 +9,21 @@
 
 #include "gui/module_model/module_item.h"
 #include "gui/module_model/module_model.h"
-
-#include "gui/file_manager/file_manager.h"    // DEBUG LINE
-#include "gui/gui_globals.h"                  // DEBUG LINE
+#include "gui/file_manager/file_manager.h"
+#include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
-
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/action_set_object_type.h"
-#include <functional>
 
-#include <QColorDialog>    // DEBUG LINE
+#include <QColorDialog>
 #include <QDebug>
-#include <QInputDialog>    // DEBUG LINE
+#include <QInputDialog>
+
+#include <functional>
 
 namespace hal
 {
@@ -32,12 +31,10 @@ namespace hal
     {
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &NetlistRelay::debugHandleFileOpened);    // DEBUG LINE
         registerCallbacks();
-        log_info("test", "register callbacks");
     }
 
     NetlistRelay::~NetlistRelay()
     {
-        log_info("test", "unregister callbacks");
         netlist_event_handler::unregister_callback("relay");
         net_event_handler::unregister_callback("relay");
         gate_event_handler::unregister_callback("relay");
@@ -64,7 +61,16 @@ namespace hal
 
         grouping_event_handler::register_callback("relay",
                                                 std::function<void(grouping_event_handler::event, Grouping*, u32)>(
-                                                    std::bind(&NetlistRelay::relayGroupingEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+                                                      std::bind(&NetlistRelay::relayGroupingEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+    }
+
+    void NetlistRelay::handleNetlistModified()
+    {
+        if (!mNotified)
+        {
+            mNotified = true;
+            gFileStatusManager->netlistChanged();
+        }
     }
 
     QColor NetlistRelay::getModuleColor(const u32 id)
@@ -169,6 +175,11 @@ namespace hal
         act->exec();
     }
 
+    void NetlistRelay::reset()
+    {
+        mNotified = false;
+    }
+
     void NetlistRelay::relayNetlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data)
     {
         if (!object)
@@ -176,8 +187,8 @@ namespace hal
 
         if(object != gNetlist)
             return;
-        //qDebug() << "relayNetlistEvent called: event ID =" << ev << "for object at" << object.get();
-        //Q_EMIT netlistEvent(ev, object, associated_data);
+
+        handleNetlistModified();
 
         switch (ev)
         {
@@ -295,6 +306,8 @@ namespace hal
         if(object->get_netlist() != gNetlist)
             return;
 
+        handleNetlistModified();
+
         switch (ev)
         {
         case grouping_event_handler::event::created:
@@ -335,8 +348,7 @@ namespace hal
         if(object->get_netlist() != gNetlist)
             return;
 
-        //qDebug() << "relayModuleEvent called: event ID =" << ev << "for object at" << object.get();
-        //Q_EMIT moduleEvent(ev, object, associated_data);
+        handleNetlistModified();
 
         switch (ev)
         {
@@ -462,8 +474,7 @@ namespace hal
         if(object->get_netlist() != gNetlist)
             return;
 
-        //qDebug() << "relayGateEvent called: event ID =" << ev << "for object at" << object.get();
-        //Q_EMIT gateEvent(ev, object, associated_data);
+        handleNetlistModified();
 
         switch (ev)
         {
@@ -505,8 +516,7 @@ namespace hal
         if(object->get_netlist() != gNetlist)
             return;
 
-        //qDebug() << "relayNetEvent called: event ID =" << ev << "for object at" << object.get();
-        //Q_EMIT netEvent(ev, object, associated_data);
+        handleNetlistModified();
 
         switch (ev)
         {

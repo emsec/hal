@@ -27,7 +27,6 @@
 #include <QObject>
 #include <QStringList>
 
-#include "gui/netlist_watcher/netlist_watcher.h"
 #include "gui/gui_utils/special_log_content_manager.h"
 #include "hal_config.h"
 
@@ -40,7 +39,6 @@ namespace hal
     class GraphTabWidget;
     class GroupingManagerWidget;
     class ContextManagerWidget;
-    class NetlistWatcher;
     class SelectionDetailsWidget;
     class ModuleWidget;
     class LoggerWidget;
@@ -141,8 +139,6 @@ namespace hal
         QString mWindowTitle;
 
         QList<ContentWidget*> mContent;
-
-        NetlistWatcher* mNetlistWatcher;
 
         PythonConsoleWidget* mPythonConsoleWidget;
         PythonEditor* mPythonWidget;

@@ -3,7 +3,6 @@
 #include "gui/content_manager/content_manager.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_status_manager/file_status_manager.h"
-#include "gui/focus_logger/focus_logger.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/gui_api/gui_api.h"
 #include "gui/main_window/main_window.h"
@@ -11,11 +10,9 @@
 #include "gui/plugin_relay/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
-#include "gui/thread_pool/thread_pool.h"
 #include "gui/user_action/user_action_manager.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/style/style.h"
-#include "gui/style/style_manager.h"
 
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
@@ -53,7 +50,6 @@ namespace hal
     PluginRelay* gPluginRelay                     = nullptr;
     SelectionRelay* gSelectionRelay               = nullptr;
     FileStatusManager* gFileStatusManager         = nullptr;
-    ThreadPool* gThreadPool                       = nullptr;
     GraphContextManager* gGraphContextManager     = nullptr;
     GuiApi* gGuiApi                               = nullptr;
     std::unique_ptr<PythonContext> gPythonContext = nullptr;
@@ -170,7 +166,6 @@ namespace hal
         stylesheet.close();
         //##############END OF TEMPORARY TESTING TO SWITCH BETWEEN STYLESHEETS
 
-        StyleManager::get_instance();
         style::debugUpdate();
 
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
@@ -182,8 +177,6 @@ namespace hal
         gSelectionRelay      = new SelectionRelay();
         gFileStatusManager   = new FileStatusManager();
         gGraphContextManager = new GraphContextManager();
-
-        gThreadPool = new ThreadPool();
 
         gGuiApi = new GuiApi();
 
