@@ -1,6 +1,7 @@
 #include "verilog_parser/verilog_parser.h"
 
 #include "netlist_test_utils.h"
+#include "gate_library_test_utils.h"
 
 #include <bitset>
 #include <experimental/filesystem>
@@ -443,6 +444,48 @@ namespace hal {
                     ASSERT_EQ(n_vec_i_j->get_sources().size(), 1);
                     EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin(), "O" + std::to_string(idx));
                     EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin(), "I" + std::to_string(idx));
+                }
+            }
+        TEST_END
+    }
+
+    /**
+     * Test zero parsing and (implicit) zero padding.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_zero_padding) {
+
+        TEST_START
+            {
+                const GateLibrary* gl = test_utils::get_gate_library();
+
+                std::string netlist_input(
+                                        "module top (); "
+                                        "   wire [3:0] gate_0_in, gate_1_in;"
+                                        "   RAM gate_0 ( "
+                                        "       .DATA_IN (gate_0_in ), "
+                                        "   ) ; "
+                                        "   RAM gate_1 ( "
+                                        "       .DATA_IN (gate_1_in ), "
+                                        "   ) ; "
+                                        "   assign gate_0_in = 4'd0;"
+                                        "   assign gate_1_in = 1'd0;"
+                                        "endmodule");
+                
+                std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, gl);
+                ASSERT_NE(nl, nullptr);
+
+                EXPECT_EQ(nl->get_gnd_gates().front()->get_successors().size(), 8);
+                for (Gate* gate : nl->get_gates([](const Gate* gate) { return !gate->is_gnd_gate(); })) 
+                {
+                    EXPECT_EQ(gate->get_fan_in_endpoints().size(), 4);
+                    for (Endpoint* ep : gate->get_fan_in_endpoints()) 
+                    {
+                        EXPECT_TRUE(ep->get_net()->is_gnd_net());
+                    }
                 }
             }
         TEST_END
