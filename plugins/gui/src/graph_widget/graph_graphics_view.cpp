@@ -432,7 +432,7 @@ namespace hal
             mDragCurrentModifier = swapModifier;
 
             auto context            = mGraphWidget->getContext();
-            GraphLayouter* layouter = context->debugGetLayouter();
+            const GraphLayouter* layouter = context->getLayouter();
             assert(layouter->done());    // ensure grid stable
             QMap<QPoint, Node>::const_iterator node_iter = layouter->positionToNodeMap().find(snap[0]);
 
@@ -473,7 +473,7 @@ namespace hal
             if (mDropAllowed)
             {
                 auto context            = mGraphWidget->getContext();
-                GraphLayouter* layouter = context->debugGetLayouter();
+                GraphLayouter* layouter = context->getLayouter();
                 assert(layouter->done());    // ensure grid stable
 
                 // convert scene coordinates into layouter grid coordinates
@@ -1055,7 +1055,7 @@ namespace hal
         if (!context)
             return;
 
-        GraphLayouter* layouter = context->debugGetLayouter();
+        const GraphLayouter* layouter = context->getLayouter();
         if (!(layouter->done()))
             return;
 
@@ -1070,7 +1070,7 @@ namespace hal
         auto context = mGraphWidget->getContext();
         assert(context);
 
-        GraphLayouter* layouter = context->debugGetLayouter();
+        const GraphLayouter* layouter = context->getLayouter();
         assert(layouter->done());    // ensure grid stable
 
         int default_width      = layouter->defaultGridWidth();

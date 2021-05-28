@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -34,15 +34,33 @@ namespace hal
 
     /**
      * @ingroup settings
+     * @brief A SettingsWidget representing a dropdown menu.
      */
     class SettingsWidgetDropdown : public SettingsWidget
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param item - The underlying dropdown item.
+         * @param parent - The widget's parent.
+         */
         SettingsWidgetDropdown(SettingsItemDropdown* item, QWidget* parent = nullptr);
 
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @param value - The value(s) to load into the widget.
+         */
         virtual void load(const QVariant& value) override;
+
+        /**
+         * Overwritten SettingsWidget function.
+         *
+         * @return The currently selected visual value of the menu.
+         */
         virtual QVariant value() override;
 
     private:

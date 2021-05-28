@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -51,8 +51,25 @@ namespace hal {
     {
         Q_OBJECT
     public:
+        /**
+         * The constructor.
+         *
+         * @param parent - The dialog's parent.
+         */
         ModuleDialog(QWidget* parent=nullptr);
+
+        /**
+         * Get the through this dialog selected id.
+         *
+         * @return The selected id.
+         */
         u32 selectedId() const { return mSelectedId; }
+
+        /**
+         * Get the flag that states if a new module should be created.
+         *
+         * @return True if a new module should be created, False otherwise.
+         */
         bool isNewModule() const { return mNewModule; }
 
     private Q_SLOTS:
@@ -63,8 +80,27 @@ namespace hal {
         void handleTreeDoubleClick(const QModelIndex& index);
 
     public Q_SLOTS:
+        /**
+         *
+         * Checks if the selected module id is valid (not excluded). If yes and the doubleClick
+         * parameter is set to True, the dialog is accepted. If doubleClick is False, the dialog
+         * buttons will be enabled.
+         *
+         * @param id - The selected id.
+         * @param doubleClick - True to accept the dialog when id is valid. False to enable buttons.
+         */
         void handleTableSelection(u32 id, bool doubleClick);
+
+        /**
+         * Updates the module select history and accepts the dialog.
+         */
         void accept() override;
+
+        /**
+         * Sets the keybind to toggle the searchbar. Used when the settings changes.
+         *
+         * @param seq - The new sequence.
+         */
         void keybindToggleSearchbar(const QKeySequence& seq);
 
     private:

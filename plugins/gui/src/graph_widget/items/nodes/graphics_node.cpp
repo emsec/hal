@@ -84,24 +84,4 @@ namespace hal
     {
         mNodeText[0] = name;
     }
-
-    QVariant GraphicsNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
-    {
-        // NOT FUNCTIONAL, NEEDS TO USE LAYOUT DATA
-        // superseded by new drag and drop function
-        // if (change == ItemPositionChange)
-        // {
-        //     if(QApplication::mouseButtons() == Qt::LeftButton)
-        //     {
-        //         QPointF new_position = value.toPointF();
-        //         int adjusted_x = qRound(new_position.x() / graph_widget_constants::sGridSize) * graph_widget_constants::sGridSize;
-        //         int adjusted_y = qRound(new_position.y() / graph_widget_constants::sGridSize) * graph_widget_constants::sGridSize;
-        //         return QPoint(adjusted_x, adjusted_y);
-        //     }
-        //     else
-        //         return value;
-        // }
-        // else
-            return QGraphicsItem::itemChange(change, value);
-    }
 }

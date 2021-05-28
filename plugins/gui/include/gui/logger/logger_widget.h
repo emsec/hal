@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -79,7 +79,6 @@ namespace hal
 
         /**
          * Gets the FilterTabBar of this widget.
-         * TODO: FilterTabBar unused?
          *
          * @returns the FilterTabBar of this widget
          */
@@ -93,18 +92,13 @@ namespace hal
          */
         void resizeEvent(QResizeEvent* event) override;
 
-    Q_SIGNALS:
-        /**
-         * TODO: Unused Q_SIGNAL
-         */
-        void queueLogUpdate(spdlog::level::level_enum t, QString const& msg, FilterItem* filter);
 
     public Q_SLOTS:
         /**
-         * TODO: Unused Q_SLOT
+         * Appends the log message to the appropriate filter.
          *
-         * @param t
-         * @param msg
+         * @param t - The enum level.
+         * @param msg - The new log message.
          */
         void handleCurrentChannelUpdated(spdlog::level::level_enum t, QString const& msg);
 
@@ -124,21 +118,6 @@ namespace hal
          * @param index - The new channel index
          */
         void handleCurrentChannelChanged(int index);
-
-        /**
-         * TODO: Unused Q_SLOT. Remove me?
-         *
-         * @param point
-         */
-        void showTextEditContextMenu(const QPoint& point);
-
-        /**
-         * TODO: TabBar is unused?
-         * Q_SLOT to handle a click on the filter bar.
-         *
-         * @param index - The index of the filter that was clicked
-         */
-        void filterItemClicked(const int& index);
 
         /**
          * Q_SLOT to handle interactions with the scrollbar. After the first scrollbar interaction the scrollbar wont

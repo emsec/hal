@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -73,7 +73,6 @@ namespace hal
         Q_PROPERTY(QString runIconStyle READ runIconStyle WRITE setRunIconStyle)
         Q_PROPERTY(QString newFileIconPath READ newFileIconPath WRITE setNewFileIconPath)
         Q_PROPERTY(QString newFileIconStyle READ newFileIconStyle WRITE setNewFileIconStyle)
-        // TODO: In my opinion the toggle minimap icon is unintuitive. It looks like a debugger icon...
         Q_PROPERTY(QString toggleMinimapIconPath READ toggleMinimapIconPath WRITE setToggleMinimapIconPath)
         Q_PROPERTY(QString toggleMinimapIconStyle READ toggleMinimapIconStyle WRITE setToggleMinimapIconStyle)
 
@@ -95,8 +94,23 @@ namespace hal
          */
         virtual QList<QShortcut*> createShortcuts() override;
 
+        /**
+         * Emits the forwardStdout signal.
+         *
+         * @param output - The string to forward.
+         */
         virtual void handleStdout(const QString& output) override;
+
+        /**
+         * Emits the forwardError signal.
+         *
+         * @param output - The string to forward.
+         */
         virtual void handleError(const QString& output) override;
+
+        /**
+         * Does currently nothing.
+         */
         virtual void clear() override;
 
         /**
@@ -459,7 +473,7 @@ namespace hal
         /**
          * Q_SLOT to handle that the used has selected another tab, so that the index of the current tab has changed.
          *
-         * @param fileName - The index of the newly selected tab
+         * @param index - The index of the newly selected tab
          */
         void handleCurrentTabChanged(int index);
 

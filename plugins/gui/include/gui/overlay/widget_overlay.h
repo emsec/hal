@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -31,18 +31,29 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief Container for a QWidget that overlays another one.
+     *
+     * The overlaying widget can be configures via setWidget. If the WidgetOverly is set to shown (WidgetOverly::show),
+     * the configured QWidget will overlay the parent widget.
      */
     class WidgetOverlay : public Overlay
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The QWidget to overlay
+         */
         WidgetOverlay(QWidget* parent = nullptr);
 
+        /**
+         * Configures the widget that should overlay the WidgetOverlay's parent.
+         *
+         * @param widget - The overlay widget
+         */
         void setWidget(QWidget* widget);
-
-    //protected:
-    //    void resizeEvent(QResizeEvent* event) override;
 
     private:
         QVBoxLayout* mLayout;

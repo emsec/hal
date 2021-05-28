@@ -61,11 +61,11 @@ namespace hal
         rule.mFormat = PythonQssAdapter::instance()->mSelfFormat;
         mHighlightingRules.append(rule);
 
-        rule.mPattern = QRegularExpression("(\\b([1-9][0-9]*|0)\\.[0-9]*[eE][+-]?[0-9]+\\b)|"    // Exponent float
-                                          "(\\b([1-9][0-9]*|0)\\.[0-9]*)|"                      // Point float
-                                          "(\\b0[xX][0-9A-Fa-f]+[lL]?\\b)|"                     // Hexadecimal integer
-                                          "(\\b0[0-7]+[lL]?\\b)|"                               // Octal integer
-                                          "(\\b([1-9][0-9]*|0)[lL]?\\b)");                      // Decimal integer
+        rule.mPattern = QRegularExpression("(\\b([1-9][0-9]*|0)[.]?[0-9]*[eE][+-]?[0-9]+[jJ]?\\b)|"// Exponent float
+                                          "(\\b([1-9][0-9]*|0)\\.[0-9]*[jJ]?)|"                           // Point float
+                                          "(\\b0[xX][0-9A-Fa-f]+[lL]?\\b)|"                               // Hexadecimal integer
+                                          "(\\b0[oO][0-7]+[lL]?\\b)|"                                     // Octal integer
+                                          "(\\b([1-9][0-9]*|0)[lLjJ]?\\b)");                              // Decimal integer
 
         rule.mPattern.optimize();
         rule.mFormat = PythonQssAdapter::instance()->mNumberFormat;

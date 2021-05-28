@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -110,15 +110,16 @@ namespace hal
         GroupingManagerWidget* getGroupingManagerWidget();
 
         /**
-         * get hal's module tree widget
+         * Get hal's module tree widget.
          *
          * @return module tree widget
          */
         ModuleWidget* getModuleWidget();
 
         /**
-         * Set main window title
-         * @param filename name of netlist filename
+         * Set main window title.
+         *
+         * @param filename name of netlist filename.
          */
         void setWindowTitle(const QString& filename);
 
@@ -131,20 +132,6 @@ namespace hal
          * @param fileName - The name of the opened file.
          */
         void handleOpenDocument(const QString& fileName);
-
-        /**
-         * A function yet to be implemented.
-         *
-         * @param fileName - The name of the new file.
-         */
-        void handleFilsystemDocChanged(const QString& fileName);
-
-        /**
-         * A function yet to be implemented.
-         *
-         * @param fileName - The name of the new file.
-         */
-        void handleSaveTriggered();
 
     public:
         static SettingsItemKeybind* sSettingSearch;

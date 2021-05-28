@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,6 @@ namespace hal
      * @ingroup python
      * @brief A syntax highlighter that fits for python code.
      *
-     * TODO: Belongs in the python directory?
      * The following sections are distinguished and their color can be
      * configured in the qss file: <ul>
      *   <li> Python Keywords (e.g. if, and, break, class, True, ...)
@@ -42,8 +41,9 @@ namespace hal
      *   <li> Single Quoted String ('string')
      *   <li> Double Quoted String ("string")
      *   <li> Keyword: self
-     *   <li> Numbers (e.g. 42, 3.5, 0xDEADBEAF, 0765) TODO: add complex numbers, python3 octal syntax (0o765)
+     *   <li> Numbers (e.g. 42, 3.5, 0xDEADBEAF, 0765)
      *   <li> Comments (single- and multiline)
+     * </ul>
      */
     class PythonSyntaxHighlighter : public QSyntaxHighlighter
     {

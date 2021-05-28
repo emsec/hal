@@ -399,10 +399,10 @@ namespace hal
         return Node();
     }
 
-    GraphLayouter* GraphContext::debugGetLayouter() const
+    /*GraphLayouter* GraphContext::debugGetLayouter() const
     {
         return mLayouter;
-    }
+    }*/
 
     void GraphContext::handleLayouterUpdate(const int percent)
     {

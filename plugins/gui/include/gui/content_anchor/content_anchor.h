@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -35,12 +35,52 @@ namespace hal
     class ContentAnchor
     {
     public:
+        /**
+         * Adds a given ContentWidget to the anchor.
+         *
+         * @param widget - The widget to add.
+         * @param index - The position.
+         */
         virtual void add(ContentWidget* widget, int index) = 0;
+
+        /**
+         * Removes a given widget from the anchor.
+         *
+         * @param widget - The widget to remove.
+         */
         virtual void remove(ContentWidget* widget) = 0;
+
+        /**
+         * Detaches a given widget from the anchor.
+         *
+         * @param widget - The widget to detach.
+         */
         virtual void detach(ContentWidget* widget) = 0;
+
+        /**
+         * Reattaches a given widget to the anchor.
+         *
+         * @param widget - The widget to reattach.
+         */
         virtual void reattach(ContentWidget* widget) = 0;
+
+        /**
+         * Displays a given widget in the achor's corresponding area.
+         *
+         * @param widget - The widget to open.
+         */
         virtual void open(ContentWidget* widget) = 0;
+
+        /**
+         * Closes a given widget.
+         *
+         * @param widget - The widget to close.
+         */
         virtual void close(ContentWidget* widget) = 0;
+
+        /**
+         * Destructor that has to be overriden.
+         */
         virtual inline ~ContentAnchor() = 0;
     };
 

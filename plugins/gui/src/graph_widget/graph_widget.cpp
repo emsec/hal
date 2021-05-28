@@ -6,7 +6,8 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
-#include "gui/graph_widget/graph_layout_spinner_widget.h"
+//#include "gui/graph_widget/graph_layout_spinner_widget.h"
+#include "gui/spinner_widget/spinner_widget.h"
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
@@ -40,7 +41,7 @@ namespace hal
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
         : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)),
           mNavigationWidgetV3(new GraphNavigationWidget(false)),
-          mSpinnerWidget(new GraphLayoutSpinnerWidget(this)), mCurrentExpansion(0)
+          mSpinnerWidget(new SpinnerWidget(this)), mCurrentExpansion(0)
     {
         connect(mNavigationWidgetV3, &GraphNavigationWidget::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);
         connect(mNavigationWidgetV3, &GraphNavigationWidget::closeRequested, mOverlay, &WidgetOverlay::hide);

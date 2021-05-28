@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,9 @@ namespace hal
      * The SelectionRelay is used to manage the selection and the focus of Module%s, Gate%s and Net%s. <br>
      * There can be any number of selected modules and/or gates and/or nets, but only one focused item at a time. <br>
      * This class contains signals to notify objects about changes of the focus and the selection. However these
-     * signals must be emitted manually by calling the functions relaySelectionChanged and relaySubfocusChanged.
+     * signals must be emitted manually by calling the functions relaySelectionChanged and relaySubfocusChanged. <br>
+     * Remark: Changes within the selection that are done calling methods like addGate, removeNet, or setSelectedModules
+     * are only applied after calling the relaySelectionChanged function.
      */
     class SelectionRelay : public QObject
     {
@@ -78,19 +80,6 @@ namespace hal
             None  = 0,
             Left  = 1,
             Right = 2
-            //        up     = 3,
-            //        down   = 4,
-            //        center = 5,
-        };
-
-        /**
-         * Unused? TODO: Remove?
-         */
-        enum class Mode
-        {
-            Override = 0,
-            Add      = 1,
-            Remove   = 2
         };
 
         /**
@@ -130,8 +119,12 @@ namespace hal
         // TEST METHOD
         // USE RELAY METHODS OR ACCESS SIGNALS DIRECTLY ???
         /**
+         * Applies and relays all selection changes done by functions of this SelectionRelay (e.g. addGate, setSelectedNets, ...),
+         * by executing the built up ActionSetSelectionFocus UserAction.
+         *
          * Emits the selectionChanged signal. If compiled with the HAL_STUDY flag it also invokes the
-         * evaluateSelectionChanged function. <br>
+         * evaluateSelectionChanged function.
+         *
          * If the receiver wants to prevent event handling of certain senders (e.g. itself to prevent infinite loops),
          * it can check the sender pointer. Therefore the sender should always pass a <i>this</i>-pointer.
          *
@@ -228,39 +221,211 @@ namespace hal
                                 const QList<u32>& gatIds = QList<u32>(),
                                 const QList<u32>& netIds = QList<u32>());
 
+        /**
+         * Gets a list of ids of all selected gates.
+         *
+         * @returns the list of gate ids
+         */
         QList<u32> selectedGatesList()   const { return mSelectedGates.toList(); }
+
+        /**
+         * Gets a list of ids of all selected nets.
+         *
+         * @returns the list of net ids
+         */
         QList<u32> selectedNetsList()    const { return mSelectedNets.toList(); }
+
+        /**
+         * Gets a list of ids of all selected modules.
+         *
+         * @returns the list of module ids
+         */
         QList<u32> selectedModulesList() const { return mSelectedModules.toList(); }
 
+
+        /**
+         * Gets a list of ids of all selected gates as an std::vector.
+         *
+         * @returns the vector of gate ids
+         */
         std::vector<u32> selectedGatesVector()   const { return std::vector<u32>(mSelectedGates.begin(), mSelectedGates.end()); }
+
+        /**
+         * Gets a list of ids of all selected nets as an std::vector.
+         *
+         * @returns the vector of net ids
+         */
         std::vector<u32> selectedNetsVector()    const { return std::vector<u32>(mSelectedNets.begin(), mSelectedNets.end()); }
+
+        /**
+         * Gets a list of ids of all selected modules as an std::vector.
+         *
+         * @returns the vector of module ids
+         */
         std::vector<u32> selectedModulesVector() const { return std::vector<u32>(mSelectedModules.begin(), mSelectedModules.end()); }
 
+        /**
+         * Gets a set of ids of all selected gates.
+         *
+         * @returns the set of gate ids
+         */
         const QSet<u32>& selectedGates()   const { return mSelectedGates; }
+
+        /**
+         * Gets a set of ids of all selected nets.
+         *
+         * @returns the set of net ids
+         */
         const QSet<u32>& selectedNets()    const { return mSelectedNets; }
+
+        /**
+         * Gets a set of ids of all selected modules.
+         *
+         * @returns the set of module ids
+         */
         const QSet<u32>& selectedModules() const { return mSelectedModules; }
 
+        /**
+         * Gets the amount of currently selected gates.
+         *
+         * @returns the amount of selected gates
+         */
         int numberSelectedGates()   const { return mSelectedGates.size(); }
+
+        /**
+         * Gets the amount of currently selected nets.
+         *
+         * @returns the amount of selected nets
+         */
         int numberSelectedNets()    const { return mSelectedNets.size(); }
+
+        /**
+         * Gets the amount of currently selected modules.
+         *
+         * @returns the amount of selected modules
+         */
         int numberSelectedModules() const { return mSelectedModules.size(); }
+
+        /**
+         * Gets the amount of currently selected nodes. Nodes are both gates and modules.
+         *
+         * @returns the amount of selected nodes
+         */
         int numberSelectedNodes()   const { return mSelectedGates.size() + mSelectedModules.size(); }
+
+        /**
+         * Gets the amount of all currently selected items. Items are gates nets or modules.
+         *
+         * @returns the amount of selected items
+         */
         int numberSelectedItems()   const { return mSelectedGates.size() + mSelectedModules.size() + mSelectedNets.size(); }
 
+        /**
+         * Return true iff the gate with the specified id is contained in the current selection.
+         *
+         * @param id - The id of the gate to look for
+         * @returns true iff the gate is selected
+         */
         bool containsGate(u32 id) const   { return mSelectedGates.contains(id); }
+
+        /**
+         * Return true iff the net with the specified id is contained in the current selection.
+         *
+         * @param id - The id of the net to look for
+         * @returns true iff the net is selected
+         */
         bool containsNet(u32 id) const    { return mSelectedNets.contains(id); }
+
+        /**
+         * Return true iff the module with the specified id is contained in the current selection.
+         *
+         * @param id - The id of the module to look for
+         * @returns true iff the module is selected
+         */
         bool containsModule(u32 id) const { return mSelectedModules.contains(id); }
 
+        /**
+         * Adds the gate with the specified id to the current selection.
+         *
+         * @param id - The id of the gate to add
+         */
         void addGate(u32 id);
+
+        /**
+         * Adds the net with the specified id to the current selection.
+         *
+         * @param id - The id of the net to add
+         */
         void addNet(u32 id);
+
+        /**
+         * Adds the module with the specified id to the current selection.
+         *
+         * @param id - The id of the module to add
+         */
         void addModule(u32 id);
 
+        /**
+         * Overwrites the gate selection with the specified list. The selection of nets and modules are not
+         * changed/overwritten by this function.
+         *
+         * @param ids - A set of gate ids to overwrite the gate selection with
+         */
         void setSelectedGates(const QSet<u32>& ids);
+
+        /**
+         * Overwrites the net selection with the specified list. The selection of gates and modules are not
+         * changed/overwritten by this function.
+         *
+         * @param ids - A set of net ids to overwrite the net selection with
+         */
         void setSelectedNets(const QSet<u32>& ids);
+
+        /**
+         * Overwrites the module selection with the specified list. The selection of gates and nets are not
+         * changed/overwritten by this function.
+         *
+         * @param ids - A set of module ids to overwrite the module selection with
+         */
         void setSelectedModules(const QSet<u32>& ids);
+
+        /**
+         * This function is invoked by the ActionSetSelectionFocus (and must not be used by others basically). It is
+         * responsible to apply the selection changes that were done by the setters of this SelectionRelay
+         * (e.g. addGate, setSelectedModules, ...); the UserAction that executes this function was built up using
+         * these setters.
+         *
+         * If the action is an UNDO action it may want to recreate the previous selection. Therefore the calling
+         * party must pass the new selection as parameters - they are not stored within the selection relay itself,
+         * but in the ActionSetSelectionFocus. The new selection overwrites the old one.
+         *
+         * Calling this function emits the signal SelectionRelay::selectionChanged afterwards.
+         *
+         * @param mods - The set of ids of modules to overwrite the selection with
+         * @param gats - The set of ids of gates to overwrite the selection with
+         * @param nets - The set of ids of nets to overwrite the selection with
+         */
         void actionSetSelected(const QSet<u32>& mods, const QSet<u32>& gats, const QSet<u32>& nets);
 
+        /**
+         * Removes the gate of the specified id from the current selection.
+         *
+         * @param id - The id of the gate to remove
+         */
         void removeGate(u32 id);
+
+        /**
+         * Removes the net of the specified id from the current selection.
+         *
+         * @param id - The id of the net to remove
+         */
         void removeNet(u32 id);
+
+        /**
+         * Removes the module of the specified id from the current selection.
+         *
+         * @param id - The id of the module to remove
+         */
         void removeModule(u32 id);
     Q_SIGNALS:
         // TEST SIGNAL
@@ -286,38 +451,62 @@ namespace hal
         void subfocusChanged(void* sender);
 
     public:
-        // TODO: encapsulate public members?
         /**
-         * Contains the currently selected gates. <br>
-         * Please call relaySelectionChanged after manipulations of this member.
+         * Gets the type of the item that is in the current focus. ItemType::None if no item is in focus.
+         *
+         * @returns the ItemType of the current item in focus.
          */
         ItemType focusType() const { return mFocusType; }
 
         /**
-         * Contains the currently selected nets. <br>
-         * Please call relaySelectionChanged after manipulations of this member.
+         * Gets the id of the item in the current focus.
+         *
+         * @returns the focus item's id.
          */
         u32 focusId()        const { return mFocusId; }
 
         /**
-         * Contains the currently selected modules. <br>
-         * Please call relaySelectionChanged after manipulations of this member.
+         * Gets the current Subfocus. Returns Subfocus::None if there is no Subfocus.
+         *
+         * @returns the current subfocus.
          */
         Subfocus subfocus()  const { return mSubfocus; }
+
+        /**
+         * Return the index of the current subfocus (i.e. the index of the pin in Subfocus).
+         *
+         * @returns the Subfocus index.
+         */
         u32 subfocusIndex()  const { return mSubfocusIndex; }
 
-        void setFocus(ItemType ftype, u32 fid, Subfocus sfoc = Subfocus::None, u32 sfinx = 0);
         /**
-         * <b>Unused!</b> <br>
-         * \deprecated Please use mFocusType to access the ItemType of the current focus.
+         * Changes the focus and subfocus to a new value. They are applied after relaySelectionChanged or
+         * relaySubfocusChanged was called.
+         *
+         * @param ftype - The ItemType of the new focus item
+         * @param fid - The id of the new focus item
+         * @param sfoc - The new Subfocus
+         * @param sfinx - The new Subfocus index (i.e. the pin index in subfocus)
+         */
+        void setFocus(ItemType ftype, u32 fid, Subfocus sfoc = Subfocus::None, u32 sfinx = 0);
+
+        /**
+         * This function is called by the UserAction ActionSetSelectionFocus (and must not be called by others basically).
+         * It is used to apply the changes in the focus/subfocus to the SelectionRelay. Note that these changes are not
+         * relayed until the signal subfocusChanged is emitted.
+         *
+         * @param ftype - The ItemType of the new focus item
+         * @param fid - The id of the new focus item
+         * @param sfoc - The new Subfocus
+         * @param sfinx - The new Subfocus index (i.e. the pin index in subfocus)
          */
         void setFocusDirect(ItemType ftype, u32 fid, Subfocus sfoc = Subfocus::None, u32 sfinx = 0);
 
         /**
-         * <b>Unused!</b> <br>
-         * \deprecated Please use mFocusId to access the id of the current focused item.
+         * Wraps each selected item into a UserActionObject. Returns the list of all these objects.
+         *
+         * @returns the list of UserActionObject%s
          */
-
         QList<UserActionObject> toUserActionObject() const;
 
     private:

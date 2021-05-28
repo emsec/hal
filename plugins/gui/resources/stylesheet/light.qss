@@ -1158,7 +1158,7 @@ hal--MainWindow
 
 hal--PythonQssAdapter
 {
-    qproperty-textColor: #000000;
+    /*qproperty-textColor: #000000;*/
     qproperty-keywordColor: #000000;
     qproperty-operator_color: #000000;
     qproperty-braceColor: #000000;

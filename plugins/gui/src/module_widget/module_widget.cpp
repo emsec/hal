@@ -4,7 +4,6 @@
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/module_model/module_proxy_model.h"
-#include "gui/module_relay/module_relay.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_unfold_module.h"
@@ -12,7 +11,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
-
+#include "gui/module_model/module_model.h"
 #include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QMenu>
@@ -143,25 +142,25 @@ namespace hal
             openModuleInView(index);
 
         if (clicked == &add_selection_action)
-            gNetlistRelay->debugAddSelectionToModule(getModuleItemFromIndex(index)->id());
+            gNetlistRelay->addSelectionToModule(getModuleItemFromIndex(index)->id());
 
         if (clicked == &add_child_action)
         {
-            gNetlistRelay->debugAddChildModule(getModuleItemFromIndex(index)->id());
+            gNetlistRelay->addChildModule(getModuleItemFromIndex(index)->id());
             mTreeView->setExpanded(index, true);
         }
 
         if (clicked == &change_name_action)
-            gNetlistRelay->debugChangeModuleName(getModuleItemFromIndex(index)->id());
+            gNetlistRelay->changeModuleName(getModuleItemFromIndex(index)->id());
 
         if (clicked == &change_type_action)
-            gNetlistRelay->debugChangeModuleType(getModuleItemFromIndex(index)->id());
+            gNetlistRelay->changeModuleType(getModuleItemFromIndex(index)->id());
 
         if (clicked == &change_color_action)
-            gNetlistRelay->debugChangeModuleColor(getModuleItemFromIndex(index)->id());
+            gNetlistRelay->changeModuleColor(getModuleItemFromIndex(index)->id());
 
         if (clicked == &delete_action)
-            gNetlistRelay->debugDeleteModule(getModuleItemFromIndex(index)->id());
+            gNetlistRelay->deleteModule(getModuleItemFromIndex(index)->id());
     }
 
     void ModuleWidget::handleModuleRemoved(Module* module, u32 module_id)

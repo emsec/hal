@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,11 @@ namespace hal
 
     /**
      * @ingroup settings
+     * @brief A map to keep track of the assigned keybinds.
+     *
+     * The AssignedKeybindMap class keeps track of all configured keybinds and maps
+     * the sequence to a specific SettingsItemKeybind. It is implemented
+     * as a singleton pattern.
      */
     class AssignedKeybindMap
     {
@@ -41,9 +46,34 @@ namespace hal
         QMap<QKeySequence,SettingsItemKeybind*> mKeybindMap;
 
     public:
+        /**
+         * Maps a (new) keysequence to the corresponding SettingsItemKeybind. If an old key
+         * is provided it is first removed from the map.
+         *
+         * @param newkey - The (new) key.
+         * @param setting - The corresponding keybind setting.
+         * @param oldkey - The old key to be removed from the map.
+         */
         void assign(const QKeySequence& newkey, SettingsItemKeybind *setting, const QKeySequence& oldkey=QKeySequence());
+
+        /**
+         * Get the keybind item that is associated with the given keysequence.
+         *
+         * @param needle - The keysequence for which the keybind item is wanted.
+         * @return The assiciated keybind item.
+         */
         SettingsItemKeybind* currentAssignment(const QKeySequence& needle) const;
+
+        /**
+         * Clears all entries from the map.
+         */
         void initMap() { mKeybindMap.clear(); }
+
+        /**
+         * Get the singleton instance of the AssignedKeybindMap.
+         *
+         * @return The instance.
+         */
         static AssignedKeybindMap* instance();
     };
 }

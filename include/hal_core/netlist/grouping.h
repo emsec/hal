@@ -56,7 +56,7 @@ namespace hal
         /**
          * Set the name of the grouping.
          *
-         * @params[in] name - The new name.
+         * @param[in] name - The new name.
          */
         void set_name(std::string name);
 

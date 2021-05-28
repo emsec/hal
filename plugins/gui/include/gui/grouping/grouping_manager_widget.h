@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -75,10 +75,9 @@ namespace hal
         /**
         * Constructor.
         *
-        * @param tab_view - A GraphTabWidget (TODO: Unused?)
         * @param parent - The parent widget
         */
-        GroupingManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
+        GroupingManagerWidget(QWidget* parent = nullptr);
 
         /**
          * Setups the toolbar with the actions that are supported by the grouping.
@@ -140,6 +139,12 @@ namespace hal
          * @returns the GroupingTableModel of this GroupingManagerWidget
          */
         GroupingTableModel* getModel() const { return mGroupingTableModel; }
+
+        /**
+         * Get the underlying proxy model that is used to sort and filter the normal model.
+         *
+         * @return The proxy model.
+         */
         GroupingProxyModel* getProxyModel() const {return mProxyModel; }
 
     public Q_SLOTS:
@@ -155,14 +160,6 @@ namespace hal
          */
         void handleNewEntryAdded(const QModelIndex& modelIndex);
 
-        /**
-         * TODO: Unused (Unconnected)?
-         * Q_SLOT to handle that the selection has been changed.
-         *
-         * @param selected - The newly selected items
-         * @param deselected - The newly deselected items
-         */
-        void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
         /**
          * Q_SLOT to handle that the current item of the table views selection model has been changed.
@@ -171,6 +168,12 @@ namespace hal
          * @param previous - The index of the previous current item.
          */
         void handleCurrentChanged(const QModelIndex &current = QModelIndex(), const QModelIndex &previous = QModelIndex());
+
+        /**
+         * Q_SLOT to handle the change of the graph selection.
+         *
+         * @param sender - The sender that emitted the change.
+         */
         void handleGraphSelectionChanged(void* sender);
 
     private Q_SLOTS:
@@ -219,11 +222,31 @@ namespace hal
          */
         void handleContextMenuRequest(const QPoint& point);
 
-        // TODO: DOCUMENT!
+        /**
+         * Creates a context menu with four options. A slot that should be connected to the toolbox action.
+         */
         void handleToolboxClicked();
+
+        /**
+         * Adds all predecessor of the currently selected gate or module to a new grouping.
+         */
         void handleToolboxPredecessor();
+
+        /**
+         * Adds all successor of the currently selected gate or module to a new grouping.
+         */
         void handleToolboxSuccessor();
+
+        /**
+         * Performs a BFS with a max-depth of three and creates a new grouping
+         * for the predecessors of each depth.
+         */
         void handleToolboxPredecessorDistance();
+
+        /**
+         * Performs a BFS with a max-depth of three and creates a new grouping
+         * for the successors of each depth.
+         */
         void handleToolboxSuccessorDistance();
 
     private:
@@ -245,7 +268,7 @@ namespace hal
         };
 
         QIcon toolboxIcon() const;
-        GraphTabWidget* mTabView;
+        //GraphTabWidget* mTabView;
         QTableView* mGroupingTableView;
         GroupingTableModel* mGroupingTableModel;
         GroupingProxyModel* mProxyModel;

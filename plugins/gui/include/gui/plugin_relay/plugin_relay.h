@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -29,21 +29,50 @@
 
 namespace hal
 {
-    /**
-     * @ingroup unused
+    /** @ingroup gui
+     *  @brief Forwards plugin related events from the core to the gui.
      */
     class PluginRelay : public QObject
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor. Connects to the core's plugin manager.
+         *
+         * @param parent - The relay's parent.
+         */
         explicit PluginRelay(QObject* parent = nullptr);
+
+        /**
+         * The destructor. Removes the relay's connection from the core.
+         */
         ~PluginRelay();
 
+        /**
+         * Callback function that is connected to the core. Emits the appropriate signals.
+         *
+         * @param is_load - True if the plugin is loaded, False if unloaded.
+         * @param plugin_name - The plugin's name.
+         * @param plugin_path - The plugin's path.
+         */
         void pluginManagerCallback(bool is_load, const std::string& plugin_name, const std::string& plugin_path);
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted when a plugin is loaded.
+         *
+         * @param name - The plugin's name.
+         * @param path - The plugin's path.
+         */
         void pluginLoaded(const QString& name, const QString& path);
+
+        /**
+         * Q_SIGNAL that is emitted when a plugin is unloaded.
+         *
+         * @param name - The plugin's name.
+         * @param path - The plugin's path.
+         */
         void pluginUnloaded(const QString& name, const QString& path);
 
     private:

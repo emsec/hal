@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -63,7 +63,7 @@ namespace hal
          * @param critical - Filter rule for message type 'critical'
          * @param default_rule - Filter rule for a default message type
          * @param keywords - The keyword list used for the <b>Process</b> filter rule
-         * @param reg_ex - A regular expression (TODO: unused)
+         * @param reg_ex - A regular expression
          */
         FilterItem(Rule trace, Rule debug, Rule info, Rule warning, Rule error, Rule critical, Rule default_rule, QStringList& keywords, QRegularExpression& reg_ex)
             : mTrace(trace), mDebug(debug), mInfo(info), mWarning(warning), mError(error), mCritical(critical), mDefault(default_rule), mKeywords(keywords), mRegEx(reg_ex)

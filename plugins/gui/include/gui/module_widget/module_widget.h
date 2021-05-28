@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -76,8 +76,21 @@ namespace hal
          * @returns the list of created shortcuts
          */
         virtual QList<QShortcut*> createShortcuts() override;
+
+        /**
+         * Opens a existing view that contains the given module, otherwise creates a new context
+         * and opens it.
+         *
+         * @param moduleId - The module to open.
+         * @param unfold - True to unfold the module upon opening.
+         */
         void openModuleInView(u32 moduleId, bool unfold);
 
+        /**
+         * Get the widget's proxy model that represents the ModuleModel.
+         *
+         * @return The proxy model.
+         */
         ModuleProxyModel* proxyModel();
 
     public Q_SLOTS:
@@ -87,7 +100,6 @@ namespace hal
         void toggleSearchbar();
 
         /**
-         * TODO: Filtering seems to be broken. Can't search for submodules. Works only for the topmodule.
          * Q_SLOT to overwrite the filter with the regular expression given in <i>text</i>.
          *
          * @param text - Contains the regular expression filter as a string

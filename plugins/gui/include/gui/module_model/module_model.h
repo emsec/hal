@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -229,6 +229,12 @@ namespace hal
          * @returns the old color of the module (used to create an undo action easier)
          */
         QColor setRandomColor(u32 id);
+
+        /**
+         * Removes the color that belongs to the given id.
+         *
+         * @param id - The module id for which to remove the color.
+         */
         void removeColor(u32 id);
 
     private:
