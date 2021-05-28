@@ -5,6 +5,9 @@
 #include "verilog_writer/verilog_writer.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include <iostream>
+#include <fstream>
+#include <string>
 
 namespace hal 
 {
@@ -363,6 +366,19 @@ namespace hal
 
                 VerilogWriter verilog_writer;
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
+
+                std::cout << "<" << path_netlist << ">" << std::endl;
+                std::string line;
+                std::ifstream dumpfile(path_netlist);
+                if (dumpfile.is_open())
+                {
+                  while ( getline (dumpfile,line) )
+                  {
+                    std::cout << line << std::endl;
+                  }
+                    dumpfile.close();
+                    std::cout << "============" << std::endl;
+                }
 
                 VerilogParser verilog_parser;
                 std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
