@@ -4,12 +4,10 @@
 
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/layouters/layouter_task.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_def.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/user_action/user_action_manager.h"
-#include "gui/style/style_manager.h"
 #include <QVector>
 #include <QJsonArray>
 #include "gui/main_window/main_window.h"
@@ -558,7 +556,6 @@ namespace hal
     void GraphContext::handleStyleChanged(int istyle)
     {
         Q_UNUSED(istyle);
-        StyleManager::get_instance()->repolish();
         handleLayouterFinished();
     }
 

@@ -32,7 +32,6 @@
 #include "gui/plugin_relay/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
-#include "gui/thread_pool/thread_pool.h"
 #include "gui/gui_api/gui_api.h"
 
 #include <QSettings>
@@ -90,11 +89,6 @@ namespace hal
      * The global GraphContextManager (see doc)
      */
     extern GraphContextManager* gGraphContextManager;
-
-    /**
-     * The global ThreadPool. Currently unused.
-     */
-    extern ThreadPool* gThreadPool;
 
     /**
      * The global PythonContext (see doc)

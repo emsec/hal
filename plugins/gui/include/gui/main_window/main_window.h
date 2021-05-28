@@ -23,25 +23,23 @@
 
 #pragma once
 
+#include "hal_core/utilities/program_options.h"
+
 #include "gui/content_layout_area/content_layout_area.h"
 #include "hal_core/utilities/program_options.h"
 #include "gui/action/action.h"
-#include "gui/plugin_manager/plugin_manager_widget.h"
-#include "gui/plugin_manager/plugin_model.h"
 #include "gui/settings/main_settings_widget.h"
-
 #include "gui/splitter/splitter.h"
+
 #include <QLayout>
 #include <QMenuBar>
 #include <QObject>
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QToolBar>
-#include "hal_core/utilities/program_options.h"
 
 namespace hal
 {
-    class PluginModel;
     class plugin_manager_dialog;
     class PythonEditor;
     class FileManager;
@@ -340,13 +338,6 @@ namespace hal
         void onActionCloseDocumentTriggered();
 
         /**
-         * Q_SLOT to run a plugin.
-         *
-         * @param name - The name of the plugin
-         */
-        void runPluginTriggered(const QString& name);
-
-        /**
          * Q_SLOT to open (toggle to the) settings menu.
          */
         void toggleSettings();
@@ -493,8 +484,6 @@ namespace hal
         QMenu* mMenuEdit;
         QMenu* mMenuMacro;
         QMenu* mMenuHelp;
-
-        PluginModel* mPluginModel;
 
         QString mHalIconStyle;
         QString mHalIconPath;

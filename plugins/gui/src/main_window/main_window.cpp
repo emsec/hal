@@ -5,14 +5,10 @@
 #include "gui/docking_system/dock_bar.h"
 #include "gui/export/export_registered_format.h"
 #include "gui/file_manager/file_manager.h"
-#include "gui/graphics_effects/overlay_effect.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/logger/logger_widget.h"
 #include "gui/main_window/about_dialog.h"
-#include "gui/plugin_access_manager/plugin_access_manager.h"
-#include "gui/plugin_manager/plugin_manager_widget.h"
-#include "gui/plugin_manager/plugin_model.h"
 #include "gui/python/python_editor.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
@@ -251,8 +247,6 @@ namespace hal
         mMenuMacro->setTitle("Macro");
         mMenuHelp->setTitle("Help");
 
-        mPluginModel = new PluginModel(this);
-
         gPythonContext = std::make_unique<PythonContext>();
 
         gContentManager = new ContentManager(this);
@@ -313,11 +307,6 @@ namespace hal
         //    PluginManagerWidget* widget = new PluginManagerWidget(nullptr);
         //    widget->setPluginModel(mPluginModel);
         //    widget->show();
-
-        //setGraphicsEffect(new OverlayEffect());
-
-        //ReminderOverlay* o = new ReminderOverlay(this);
-        //Q_UNUSED(o)
     }
 
     void MainWindow::reloadStylsheet(int istyle)
@@ -512,22 +501,6 @@ namespace hal
     }
 
     extern void runMain(const QString fileName, const QList<QString> plugins);
-
-    void MainWindow::runPluginTriggered(const QString& name)
-    {
-        if (!FileManager::get_instance()->fileOpen())
-        {
-            return;
-        }
-
-        //    QString document = m_document_manager->get_input_file_name();
-        //    QList<QString> plugins;
-        //    plugins.append(name);
-        //    QFuture<void> future = QtConcurrent::run(runMain, document, plugins);
-
-        auto args            = plugin_access_manager::requestArguments(name.toStdString());
-        QFuture<void> future = QtConcurrent::run(plugin_access_manager::runPlugin, name.toStdString(), &args);
-    }
 
     void MainWindow::onActionCloseDocumentTriggered()
     {
@@ -823,6 +796,8 @@ namespace hal
         setWindowTitle("HAL");
 
         mStackedWidget->setCurrentWidget(mWelcomeScreen);
+
+        gNetlistRelay->reset();
 
         return true;
     }

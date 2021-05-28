@@ -130,6 +130,12 @@ namespace hal
          */
         void deleteModule(const u32 id);
 
+        /**
+         * The FileStatusManager is only notified once. Afterwards this function has to be called to enable the
+         * notification again.
+         */
+        void reset();
+
     Q_SIGNALS:
         /*=======================================
            Netlist Event Signals
@@ -575,6 +581,9 @@ namespace hal
         void relayGateEvent(GateEvent::event ev, Gate* gat, u32 associated_data);
         void relayNetEvent(NetEvent::event ev, Net* net, u32 associated_data);
         void relayGroupingEvent(GroupingEvent::event ev, Grouping* grp, u32 associated_data);
+
+        void handleNetlistModified();
+        bool mNotified;
 
         QMap<u32, QColor> mModuleColors;
         ModuleModel* mModuleModel;

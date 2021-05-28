@@ -81,8 +81,6 @@ namespace hal
 
         mContent.clear();
 
-        delete mNetlistWatcher;
-
         //m_python_widget = nullptr; DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
 
         mPythonConsoleWidget = nullptr;
@@ -183,13 +181,6 @@ namespace hal
         //mContent.append(mPythonWidget); // DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
         mContent.append(mPythonConsoleWidget);
 
-        PluginModel* model                 = new PluginModel(this);
-        PluginManagerWidget* plugin_widget = new PluginManagerWidget();
-        plugin_widget->setPluginModel(model);
-        //mMainWindow->addContent(plugin_widget, content_anchor::bottom);
-
-        connect(model, &PluginModel::runPlugin, mMainWindow, &MainWindow::runPluginTriggered);
-
         setWindowTitle(fileName);
 
 #ifdef HAL_STUDY
@@ -197,7 +188,6 @@ namespace hal
         mSpecialLogContentManager = new SpecialLogContentManager(mMainWindow, mPythonWidget);
         mSpecialLogContentManager->startLogging(60000);
 #endif
-        mNetlistWatcher = new NetlistWatcher(this);
 
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusGateClicked, mGraphTabWidget, &GraphTabWidget::handleGateFocus);
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusNetClicked, mGraphTabWidget, &GraphTabWidget::handleNetFocus);
