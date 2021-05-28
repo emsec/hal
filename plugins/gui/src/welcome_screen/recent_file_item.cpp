@@ -1,7 +1,5 @@
 #include "gui/welcome_screen/recent_file_item.h"
 
-#include "hal_core/netlist/event_system/event_controls.h"
-
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_utils/graphics.h"
 #include "gui/user_action/action_open_netlist_file.h"
@@ -89,12 +87,8 @@ namespace hal
 
         if(event->button() == Qt::MouseButton::LeftButton)
         {
-            // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
-            event_controls::enable_all(false);
             ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(mFile);
             actOpenfile->exec();
-            // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
-            event_controls::enable_all(true);
             event->accept();
         }
     }

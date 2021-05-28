@@ -1,5 +1,4 @@
 #include "hal_core/defines.h"
-#include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
@@ -89,6 +88,7 @@ int main(int argc, const char* argv[])
     lm.add_channel("netlist_parser", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("hdl_writer", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("python_context", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("event", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
 
     if (args.is_option_set("--logfile"))
     {
@@ -202,7 +202,6 @@ int main(int argc, const char* argv[])
 
             /* add timestamp to log output */
             LogManager::get_instance().set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
-            event_log::initialize();
 
             auto ret = plugin->exec(args);
 

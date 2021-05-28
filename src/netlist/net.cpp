@@ -1,7 +1,7 @@
 #include "hal_core/netlist/net.h"
 
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/event_system/net_event_handler.h"
+#include "hal_core/netlist/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/netlist.h"
@@ -13,12 +13,14 @@
 
 namespace hal
 {
-    Net::Net(NetlistInternalManager* internal_manager, const u32 id, const std::string& name)
+    Net::Net(NetlistInternalManager* internal_manager, EventHandler* event_handler, const u32 id, const std::string& name)
     {
         assert(internal_manager != nullptr);
         m_internal_manager = internal_manager;
         m_id               = id;
         m_name             = name;
+
+        m_event_handler    = event_handler;
     }
 
     bool Net::operator==(const Net& other) const
@@ -106,7 +108,7 @@ namespace hal
 
             m_name = name;
 
-            net_event_handler::notify(net_event_handler::event::name_changed, this);
+            m_event_handler->notify(NetEvent::event::name_changed, this);
         }
     }
 

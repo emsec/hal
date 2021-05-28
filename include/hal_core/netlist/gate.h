@@ -27,6 +27,7 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/data_container.h"
 #include "hal_core/netlist/endpoint.h"
+#include "hal_core/netlist/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <functional>
@@ -392,7 +393,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Gate(NetlistInternalManager* mgr, u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
+        Gate(NetlistInternalManager* mgr, EventHandler* event_handler, u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
 
         Gate(const Gate&) = delete;
         Gate(Gate&&)      = delete;
@@ -431,5 +432,7 @@ namespace hal
 
         /* dedicated functions */
         std::unordered_map<std::string, BooleanFunction> m_functions;
+
+        EventHandler* m_event_handler;
     };
 }    // namespace hal

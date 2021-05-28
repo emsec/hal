@@ -140,7 +140,9 @@ namespace hal
         //QTimer::singleShot(50, [this]() { this->mContextManagerWid->handleCreateContextClicked(); });
 
         //executes same code as found in 'create_context_clicked' from the context manager widget but allows to keep its method private
+/*
         QTimer::singleShot(50, [this]() {
+
             GraphContext* new_context = nullptr;
             new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
             new_context->add({gNetlist->get_top_module()->get_id()}, {});
@@ -149,7 +151,7 @@ namespace hal
             gGraphContextManager->restoreFromFile();
             new_context->setDirty(false);
         });
-
+*/
         //why does this segfault without a timer?
         //GraphContext* new_context = nullptr;
         //new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
@@ -212,6 +214,15 @@ namespace hal
         connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mSelectionDetailsWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
 
         sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
+
+        GraphContext* new_context = nullptr;
+        new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
+        new_context->add({gNetlist->get_top_module()->get_id()}, {});
+
+        mContextManagerWidget->selectViewContext(new_context);
+        gGraphContextManager->restoreFromFile();
+        new_context->setDirty(false);
+
     }
 
     void ContentManager::setWindowTitle(const QString &filename)

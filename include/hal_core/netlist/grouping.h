@@ -24,6 +24,8 @@
 #pragma once
 
 #include "hal_core/netlist/netlist_internal_manager.h"
+#include "hal_core/netlist/event_handler.h"
+
 
 #include <functional>
 #include <unordered_map>
@@ -317,7 +319,7 @@ namespace hal
     private:
         friend class NetlistInternalManager;
 
-        Grouping(NetlistInternalManager* internal_manager, u32 id, std::string name);
+        Grouping(NetlistInternalManager* internal_manager, EventHandler* event_handler, u32 id, std::string name);
 
         u32 m_id;
         std::string m_name;
@@ -329,5 +331,7 @@ namespace hal
         std::unordered_map<u32, Net*> m_nets_map;
         std::vector<Module*> m_modules;
         std::unordered_map<u32, Module*> m_modules_map;
+
+        EventHandler* m_event_handler;
     };
 }    // namespace hal

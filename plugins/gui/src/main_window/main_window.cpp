@@ -10,13 +10,13 @@
 #include "gui/logger/logger_widget.h"
 #include "gui/main_window/about_dialog.h"
 #include "gui/python/python_editor.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
 #include "gui/settings/settings_manager.h"
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/welcome_screen/welcome_screen.h"
 #include "hal_core/defines.h"
-#include "hal_core/netlist/event_system/event_controls.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/net.h"
@@ -25,6 +25,7 @@
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/netlist/event_system/event_log.h"
 
 #include <QApplication>
 #include <QCloseEvent>
@@ -198,6 +199,16 @@ namespace hal
             menuExport->addAction(action);
         }
         if (menuExport) mMenuFile->addMenu(menuExport);
+
+        SettingsItemCheckbox* evlogSetting =  new SettingsItemCheckbox(
+                    "Netlist event log",
+                    "debug/event_log",
+                    false,
+                    "eXpert Settings:Debug",
+                    "Specifies whether each netlist event gets dumped to event log. Might generate a lot of output thus slowing down hal system."
+                );
+        event_log::enable_event_log(evlogSetting->value().toBool());
+        connect(evlogSetting,&SettingsItemCheckbox::boolChanged,this,&MainWindow::handleEventLogEnabled);
 
         mMenuEdit->addAction(mActionUndo);
         mMenuEdit->addSeparator();
@@ -484,6 +495,11 @@ namespace hal
         mLayoutArea->clear();
     }
 
+    void MainWindow::handleEventLogEnabled(bool enable)
+    {
+        event_log::enable_event_log(enable);
+    }
+
     extern void runMain(const QString fileName, const QList<QString> plugins);
 
     void MainWindow::onActionCloseDocumentTriggered()
@@ -542,13 +558,10 @@ namespace hal
 
         if (ok)
         {
-            // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
-            event_controls::enable_all(false);
             auto selected_lib = libraries[items.indexOf(selected)];
             gNetlistOwner     = netlist_factory::create_netlist(selected_lib);
             gNetlist          = gNetlistOwner.get();
-            // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
-            event_controls::enable_all(true);
+            gNetlistRelay->registerNetlistCallbacks();
             Q_EMIT FileManager::get_instance()->fileOpened("new netlist");
         }
     }
@@ -582,12 +595,8 @@ namespace hal
         {
             gGuiState->setValue("FileDialog/Path/MainWindow", fileName);
 
-            // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
-            event_controls::enable_all(false);
             ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(fileName);
             actOpenfile->exec();
-            // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
-            event_controls::enable_all(true);
         }
     }
 

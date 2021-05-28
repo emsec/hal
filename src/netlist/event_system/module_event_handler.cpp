@@ -19,6 +19,7 @@ namespace hal
 
         void notify(event c, Module* module, u32 associated_data)
         {
+//            ModuleEvent::dump((ModuleEvent::event)((int)c), false);
             if (enabled)
             {
                 m_callback(c, module, associated_data);

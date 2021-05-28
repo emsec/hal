@@ -94,6 +94,7 @@ namespace hal
         Q_ENUM(KeyboardModifier)
 
     public Q_SLOTS:
+
         /**
          * Q_SLOT that should be called whenever a new GraphContext was created. It is used to show the new context in
          * a new tab.
