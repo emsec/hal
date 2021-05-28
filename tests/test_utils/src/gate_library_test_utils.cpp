@@ -208,6 +208,9 @@ namespace hal
                 ram->add_pins({"ADDR(0)", "ADDR(1)", "ADDR(2)", "ADDR(3)"}, PinDirection::input, PinType::address);
                 ram->add_pins({"DATA_IN(0)", "DATA_IN(1)", "DATA_IN(2)", "DATA_IN(3)"}, PinDirection::input, PinType::data);
                 ram->add_pins({"DATA_OUT(0)", "DATA_OUT(1)", "DATA_OUT(2)", "DATA_OUT(3)"}, PinDirection::output, PinType::data);
+                ram->assign_pin_group("ADDR", {{0, "ADDR(0)"}, {1, "ADDR(1)"}, {2, "ADDR(2)"}, {3, "ADDR(3)"}});
+                ram->assign_pin_group("DATA_IN", {{0, "DATA_IN(0)"}, {1, "DATA_IN(1)"}, {2, "DATA_IN(2)"}, {3, "DATA_IN(3)"}});
+                ram->assign_pin_group("DATA_OUT", {{0, "DATA_OUT(0)"}, {1, "DATA_OUT(1)"}, {2, "DATA_OUT(2)"}, {3, "DATA_OUT(3)"}});
             }
 
             return std::move(lib);
