@@ -252,6 +252,13 @@ namespace hal
                     }
                 }
 
+                std::cout << "grp pin_assignment <" << pin_group << "> :";
+                for (const Net* nx : nets)
+                {
+                    std::cout << " <" << nx->get_name() << ">";
+                }
+                std::cout << std::endl;
+
                 // only append if at least one pin of the group is connected
                 if (std::any_of(nets.begin(), nets.end(), [](const Net* net) { return net != nullptr; }))
                 {
@@ -261,10 +268,17 @@ namespace hal
             else
             {
                 // append all connected pins
+                std::cout << "all pin_assignment <" << pin << "> :";
+
+
                 if (const auto ep_it = connections.find(pin); ep_it != connections.end())
                 {
+                    std::cout << " net <" << ep_it->second->get_name() << ">";
                     pin_assignments.push_back(std::make_pair(pin, std::vector<const Net*>({ep_it->second})));
                 }
+
+                std::cout << std::endl;
+
             }
         }
 
