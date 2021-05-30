@@ -239,6 +239,13 @@ namespace hal
 
     bool GateType::assign_pin_group(const std::string& group, const std::vector<std::pair<u32, std::string>>& pins)
     {
+        std::cout << "assign_pin_group <" << m_name << "> <" << group << "> :";
+        for (auto p : pins)
+        {
+            std::cout << " [" << p.first << "|" << p.second << "]";
+        }
+        std::cout << std::endl;
+
         if (m_pin_groups.find(group) != m_pin_groups.end())
         {
             log_error("gate_library", "pin group '{}' could not be added to gate type '{}' since a pin group with the same name does already exist.", group, m_name);

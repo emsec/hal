@@ -119,6 +119,7 @@ namespace hal
 
         if (gate_type.HasMember("groups") && gate_type["groups"].IsArray())
         {
+            std::cout << "gate_type <" << gt->get_name() << "> has groups" << std::endl;
             for (const auto& group_val : gate_type["groups"].GetArray())
             {
                 if (!parse_group(gt, group_val, name))
