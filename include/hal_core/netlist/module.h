@@ -25,6 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/data_container.h"
+#include "hal_core/netlist/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 
 #include <functional>
@@ -347,7 +348,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Module(u32 id, Module* parent, const std::string& name, NetlistInternalManager* internal_manager);
+        Module(NetlistInternalManager* internal_manager, EventHandler* event_handler, u32 id, Module* parent, const std::string& name);
 
         Module(const Module&) = delete;               //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
@@ -387,5 +388,7 @@ namespace hal
         mutable std::vector<Net*> m_output_nets;
         mutable bool m_internal_nets_dirty;
         mutable std::vector<Net*> m_internal_nets;
+
+        EventHandler* m_event_handler;
     };
 }    // namespace hal

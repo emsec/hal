@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/utilities/log.h"
+
 #include <QMutex>
 #include <QObject>
 #include <QPlainTextEdit>
@@ -55,8 +56,6 @@ namespace hal
          */
         explicit LoggerMarshall(QPlainTextEdit* edit, QObject* parent = nullptr);
 
-    Q_SIGNALS:
-
     public Q_SLOTS:
 
         /**
@@ -68,12 +67,7 @@ namespace hal
          * @param msg - The message
          * @param filter - The filter
          */
-        void appendLog(spdlog::level::level_enum log_type, QString const& msg, FilterItem* filter);
-
-        /**
-         * Highlights the current line.
-         */
-        void highlightCurrentLine();
+        void appendLog(spdlog::level::level_enum log_type, QString const& msg);
 
     private:
         int mMaxLineCount;

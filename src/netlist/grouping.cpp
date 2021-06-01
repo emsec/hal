@@ -1,6 +1,6 @@
 #include "hal_core/netlist/grouping.h"
 
-#include "hal_core/netlist/event_system/grouping_event_handler.h"
+#include "hal_core/netlist/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -9,11 +9,13 @@
 
 namespace hal
 {
-    Grouping::Grouping(NetlistInternalManager* internal_manager, u32 id, std::string name)
+    Grouping::Grouping(NetlistInternalManager* internal_manager, EventHandler* event_handler, u32 id, std::string name)
     {
         m_id               = id;
         m_name             = name;
         m_internal_manager = internal_manager;
+
+        m_event_handler    = event_handler;
     }
 
     u32 Grouping::get_id() const
@@ -32,7 +34,7 @@ namespace hal
         {
             m_name = name;
 
-            grouping_event_handler::notify(grouping_event_handler::event::name_changed, this);
+            m_event_handler->notify(GroupingEvent::event::name_changed, this);
         }
     }
 

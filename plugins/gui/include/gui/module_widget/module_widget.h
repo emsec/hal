@@ -29,7 +29,6 @@
 #include "gui/searchbar/searchbar.h"
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/module_widget/module_tree_view.h"
-#include "hal_core/netlist/event_system/module_event_handler.h"
 #include "hal_core/netlist/module.h"
 
 #include <QAction>

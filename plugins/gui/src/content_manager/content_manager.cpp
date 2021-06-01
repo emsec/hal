@@ -81,8 +81,6 @@ namespace hal
 
         mContent.clear();
 
-        delete mNetlistWatcher;
-
         //m_python_widget = nullptr; DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
 
         mPythonConsoleWidget = nullptr;
@@ -142,7 +140,9 @@ namespace hal
         //QTimer::singleShot(50, [this]() { this->mContextManagerWid->handleCreateContextClicked(); });
 
         //executes same code as found in 'create_context_clicked' from the context manager widget but allows to keep its method private
+/*
         QTimer::singleShot(50, [this]() {
+
             GraphContext* new_context = nullptr;
             new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
             new_context->add({gNetlist->get_top_module()->get_id()}, {});
@@ -151,7 +151,7 @@ namespace hal
             gGraphContextManager->restoreFromFile();
             new_context->setDirty(false);
         });
-
+*/
         //why does this segfault without a timer?
         //GraphContext* new_context = nullptr;
         //new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
@@ -181,13 +181,6 @@ namespace hal
         //mContent.append(mPythonWidget); // DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
         mContent.append(mPythonConsoleWidget);
 
-        PluginModel* model                 = new PluginModel(this);
-        PluginManagerWidget* plugin_widget = new PluginManagerWidget();
-        plugin_widget->setPluginModel(model);
-        //mMainWindow->addContent(plugin_widget, content_anchor::bottom);
-
-        connect(model, &PluginModel::runPlugin, mMainWindow, &MainWindow::runPluginTriggered);
-
         setWindowTitle(fileName);
 
 #ifdef HAL_STUDY
@@ -195,7 +188,6 @@ namespace hal
         mSpecialLogContentManager = new SpecialLogContentManager(mMainWindow, mPythonWidget);
         mSpecialLogContentManager->startLogging(60000);
 #endif
-        mNetlistWatcher = new NetlistWatcher(this);
 
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusGateClicked, mGraphTabWidget, &GraphTabWidget::handleGateFocus);
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusNetClicked, mGraphTabWidget, &GraphTabWidget::handleNetFocus);
@@ -222,6 +214,15 @@ namespace hal
         connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mSelectionDetailsWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
 
         sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
+
+        GraphContext* new_context = nullptr;
+        new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
+        new_context->add({gNetlist->get_top_module()->get_id()}, {});
+
+        mContextManagerWidget->selectViewContext(new_context);
+        gGraphContextManager->restoreFromFile();
+        new_context->setDirty(false);
+
     }
 
     void ContentManager::setWindowTitle(const QString &filename)

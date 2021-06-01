@@ -23,11 +23,7 @@
 
 #pragma once
 
-#include "hal_core/netlist/event_system/gate_event_handler.h"
-#include "hal_core/netlist/event_system/net_event_handler.h"
-#include "hal_core/netlist/event_system/netlist_event_handler.h"
-#include "hal_core/netlist/event_system/module_event_handler.h"
-#include "hal_core/netlist/event_system/grouping_event_handler.h"
+#include "hal_core/netlist/event_handler.h"
 
 #include <QMap>
 #include <QObject>
@@ -64,6 +60,18 @@ namespace hal
          * Destructor. Disconnects this relay from the event system of the hal-core.
          */
         ~NetlistRelay();
+
+        /**
+         * Adds the relay functions of the NetlistRelay as callbacks for hal-core events.
+         * Must be called after netlist is loaded
+         */
+        void registerNetlistCallbacks();
+
+        /**
+         * Unregister callback entries in hal-core.
+         * Must be called when netlist gets closed
+         */
+        void unregisterNetlistCallbacks();
 
         /**
          * Gets the color that is assigned to a module.
@@ -122,15 +130,20 @@ namespace hal
          */
         void deleteModule(const u32 id);
 
-    Q_SIGNALS:
+        /**
+         * The FileStatusManager is only notified once. Afterwards this function has to be called to enable the
+         * notification again.
+         */
+        void reset();
 
+    Q_SIGNALS:
         /*=======================================
            Netlist Event Signals
          ========================================*/
 
         /**
          * Q_SIGNAL to notify that the netlists id has been changed. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::id_changed</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::id_changed</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The old netlist id
@@ -139,7 +152,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that the input filename of the netlist has been changed. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::input_filename_changed</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::input_filename_changed</i>
          *
          * @param n - The affected netlist
          */
@@ -147,7 +160,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that the design name of the netlist has been changed. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::design_name_changed</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::design_name_changed</i>
          *
          * @param n - The affected netlist
          */
@@ -155,7 +168,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that the device name of the netlist has been changed. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::device_name_changed</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::device_name_changed</i>
          *
          * @param n - The affected netlist
          */
@@ -163,7 +176,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been marked as a global vcc gate. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::marked_global_vcc</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::marked_global_vcc</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the gate that has been marked as a global vcc gate
@@ -172,7 +185,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been marked as a global gnd gate. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::marked_global_gnd</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::marked_global_gnd</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the gate that has been marked as a global gnd gate
@@ -181,7 +194,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been unmarked from being a global vcc gate. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::unmarked_global_vcc</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_vcc</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the gate that is not a global vcc gate anymore
@@ -190,7 +203,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been unmarked from being a global gnd gate. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::unmarked_global_gnd</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_gnd</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the gate that is not a global gnd gate anymore
@@ -199,7 +212,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been marked as a global input net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::marked_global_input</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::marked_global_input</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the newly marked global input net
@@ -208,7 +221,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been marked as a global output net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::marked_global_output</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::marked_global_output</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the newly marked global output net
@@ -217,7 +230,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been marked as a global input net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::marked_global_inout</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::marked_global_inout</i>
          *
          * @deprecated Inout nets do not exist anymore. Therefore this event is never triggered.
          *
@@ -228,7 +241,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a net has been unmarked from being a global input net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::unmarked_global_input</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_input</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the net that is not a global input net anymore
@@ -237,7 +250,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a net has been unmarked from being a global output net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::unmarked_global_output</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_output</i>
          *
          * @param n - The affected netlist
          * @param associated_data - The id of the net that is not a global output net anymore
@@ -246,7 +259,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a net has been unmarked from being a global inout net. <br>
-         * Relays the following hal-core event: <i>netlist_event_handler::event::unmarked_global_inout</i>
+         * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_inout</i>
          *
          * @deprecated Inout nets do not exist anymore. Therefore this event is never triggered.
          *
@@ -261,7 +274,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a module has been created. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::created</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::created</i>
          *
          * @param m - The created module
          */
@@ -269,7 +282,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a module has been removed from the netlist. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::created</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::created</i>
          *
          * Note that when this signal is emitted the module is not contained in the netlist anymore. However the
          * pointer m remains valid.
@@ -280,7 +293,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a module has been renamed. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::name_changed</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::name_changed</i>
          *
          * @param m - The renamed module
          */
@@ -288,7 +301,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that the parent of a module has been changed. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::parent_changed</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::parent_changed</i>
          *
          * @param m - The module with a new parent
          */
@@ -296,7 +309,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a submodule has been added to a module. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::submodule_added</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::submodule_added</i>
          *
          * @param m - The module with a new submodule
          * @param added_module - The id of the added submodule
@@ -305,7 +318,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a submodule has been removed from a module. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::submodule_removed</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::submodule_added</i>
          *
          * @param m - The module from which a submodule has been removed
          * @param removed_module - The id of the removed submodule
@@ -314,7 +327,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been assigned to a module. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::gate_assigned</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::gate_assigned</i>
          *
          * @param m - The module with a newly assigned gate
          * @param assigned_gate - The id of the assigned gate
@@ -323,7 +336,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been removed from a module. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::gate_removed</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::gate_assigned</i>
          *
          * @param m - The module from which a gate is removed
          * @param removed_gate - The id of the removed gate
@@ -332,7 +345,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that an input port name of a module has been changed. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::input_port_name_changed</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::input_port_name_changed</i>
          *
          * @param m - The module with the renamed input port
          * @param respective_net - The id of the net of the renamed input port
@@ -341,7 +354,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that an output port name of a module has been changed. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::output_port_name_changed</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::output_port_name_changed</i>
          *
          * @param m - The module with the renamed output port
          * @param respective_net - The id of the net of the renamed output port
@@ -350,7 +363,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that the type of a module has been changed. <br>
-         * Relays the following hal-core event: <i>module_event_handler::event::type_changed</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::type_changed</i>
          *
          * @param m - The module with a new type
          */
@@ -362,7 +375,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been created. <br>
-         * Relays the following hal-core event: <i>gate_event_handler::event::created</i>
+         * Relays the following hal-core event: <i>GateEvent::event::created</i>
          *
          * @param g - The created gate
          */
@@ -370,7 +383,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been removed from the netlist. <br>
-         * Relays the following hal-core event: <i>gate_event_handler::event::removed</i>
+         * Relays the following hal-core event: <i>GateEvent::event::removed</i>
          *
          * Note that when this signal is emitted the gate is not contained in the netlist anymore. However the
          * pointer g remains valid.
@@ -381,7 +394,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been renamed. <br>
-         * Relays the following hal-core event: <i>gate_event_handler::event::name_changed</i>
+         * Relays the following hal-core event: <i>GateEvent::event::name_changed</i>
          *
          * @param g - The renamed gate
          */
@@ -393,7 +406,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a net has been created. <br>
-         * Relays the following hal-core event: <i>net_event_handler::event::created</i>
+         * Relays the following hal-core event: <i>NetEvent::event::created</i>
          *
          * @param n - The created net
          */
@@ -401,7 +414,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a net has been removed from the netlist. <br>
-         * Relays the following hal-core event: <i>net_event_handler::event::removed</i>
+         * Relays the following hal-core event: <i>NetEvent::event::removed</i>
          *
          * Note that when this signal is emitted the net is not contained in the netlist anymore. However the
          * pointer n remains valid.
@@ -412,7 +425,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a net has been renamed. <br>
-         * Relays the following hal-core event: <i>net_event_handler::event::name_changed</i>
+         * Relays the following hal-core event: <i>NetEvent::event::name_changed</i>
          *
          * @param n - The renamed net
          */
@@ -420,7 +433,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a source has been added to a net. <br>
-         * Relays the following hal-core event: <i>net_event_handler::event::src_added</i>
+         * Relays the following hal-core event: <i>NetEvent::event::src_added</i>
          *
          * @param n - The net with a new source
          * @param src_gate_id - The id of the source gate
@@ -429,7 +442,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a source has been removed from a net. <br>
-         * Relays the following hal-core event: <i>net_event_handler::event::src_removed</i>
+         * Relays the following hal-core event: <i>NetEvent::event::src_removed</i>
          *
          * @param n - The net with the removed source
          * @param src_gate_id - The id of the gate at the removed source
@@ -438,7 +451,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a destination has been added to a net. <br>
-         * Relays the following hal-core event: <i>net_event_handler::event::dst_added</i>
+         * Relays the following hal-core event: <i>NetEvent::event::dst_added</i>
          *
          * @param n - The net with a new destination
          * @param dst_gate_id - The id of the destination gate
@@ -447,7 +460,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a destination has been removed from a net. <br>
-         * Relays the following hal-core event: <i>net_event_handler::event::dst_removed</i>
+         * Relays the following hal-core event: <i>NetEvent::event::dst_removed</i>
          *
          * @param n - The net with the removed destination
          * @param dst_gate_id - The id of the gate at the removed destination
@@ -460,7 +473,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a grouping has been created. <br>
-         * Relays the following hal-core event: <i>grouping_event_handler::event::created</i>
+         * Relays the following hal-core event: <i>GroupingEvent::event::created</i>
          *
          * @param grp - The created grouping
          */
@@ -468,7 +481,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a grouping has been removed. <br>
-         * Relays the following hal-core event: <i>grouping_event_handler::event::removed</i>
+         * Relays the following hal-core event: <i>GroupingEvent::event::removed</i>
          *
          * Note that when this signal is emitted the grouping is not contained in the netlist anymore. However the
          * pointer grp remains valid.
@@ -479,7 +492,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a grouping has been renamed. <br>
-         * Relays the following hal-core event: <i>grouping_event_handler::event::name_changed</i>
+         * Relays the following hal-core event: <i>GroupingEvent::event::name_changed</i>
          *
          * @param grp - The renamed grouping
          */
@@ -487,7 +500,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been assigned to a grouping. <br>
-         * Relays the following hal-core event: <i>grouping_event_handler::event::gate_assigned</i>
+         * Relays the following hal-core event: <i>GroupingEvent::event::gate_assigned</i>
          *
          * @param grp - The grouping with the newly assigned gate
          * @param id - The id of the assigned gate
@@ -496,7 +509,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a gate has been removed from a grouping. <br>
-         * Relays the following hal-core event: <i>grouping_event_handler::event::gate_removed</i>
+         * Relays the following hal-core event: <i>GroupingEvent::event::gate_removed</i>
          *
          * @param grp - The grouping from which the gate has been removed
          * @param id - The id of the gate which has been removed from the grouping
@@ -505,7 +518,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a net has been assigned to a grouping. <br>
-         * Relays the following hal-core event: <i>grouping_event_handler::event::net_assigned</i>
+         * Relays the following hal-core event: <i>GroupingEvent::event::net_assigned</i>
          *
          * @param grp - The grouping with the newly assigned net
          * @param id - The id of the assigned net
@@ -514,7 +527,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a net has been removed from a grouping. <br>
-         * Relays the following hal-core event: <i>grouping_event_handler::event::net_removed</i>
+         * Relays the following hal-core event: <i>GroupingEvent::event::net_removed</i>
          *
          * @param grp - The grouping from which the net has been removed
          * @param id - The id of the net which has been removed from the grouping
@@ -523,7 +536,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a module has been assigned to a grouping. <br>
-         * Relays the following hal-core event: <i>grouping_event_handler::event::module_assigned</i>
+         * Relays the following hal-core event: <i>GroupingEvent::event::module_assigned</i>
          *
          * @param grp - The grouping with the newly assigned module
          * @param id - The id of the assigned module
@@ -532,7 +545,7 @@ namespace hal
 
         /**
         * Q_SIGNAL to notify that a module has been removed from a grouping. <br>
-        * Relays the following hal-core event: <i>grouping_event_handler::event::module_removed</i>
+        * Relays the following hal-core event: <i>GroupingEvent::event::module_removed</i>
         *
         * @param grp - The grouping from which the module has been removed
         * @param id - The id of the module which has been removed from the grouping
@@ -563,12 +576,14 @@ namespace hal
         void debugHandleFileClosed();
 
     private:
-        void relayNetlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data);
-        void relayModuleEvent(module_event_handler::event ev, Module* object, u32 associated_data);
-        void relayGateEvent(gate_event_handler::event ev, Gate* object, u32 associated_data);
-        void relayNetEvent(net_event_handler::event ev, Net* object, u32 associated_data);
-        void relayGroupingEvent(grouping_event_handler::event ev, Grouping* object, u32 associated_data);
-        void registerCallbacks();
+        void relayNetlistEvent(NetlistEvent::event ev, Netlist* object, u32 associated_data);
+        void relayModuleEvent(ModuleEvent::event ev, Module* mod, u32 associated_data);
+        void relayGateEvent(GateEvent::event ev, Gate* gat, u32 associated_data);
+        void relayNetEvent(NetEvent::event ev, Net* net, u32 associated_data);
+        void relayGroupingEvent(GroupingEvent::event ev, Grouping* grp, u32 associated_data);
+
+        void handleNetlistModified();
+        bool mNotified;
 
         QMap<u32, QColor> mModuleColors;
         ModuleModel* mModuleModel;
