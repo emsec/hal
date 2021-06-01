@@ -1,15 +1,16 @@
 <map id="/home/runner/work/hal/hal/src/netlist/event_system/net_event_handler.cpp" name="/home/runner/work/hal/hal/src/netlist/event_system/net_event_handler.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="175,5,403,61"/>
-<area shape="rect" id="node2" href="$net__event__handler_8h.html" title=" " alt="" coords="77,109,291,151"/>
-<area shape="rect" id="node9" href="$net_8h.html" title=" " alt="" coords="315,117,474,143"/>
-<area shape="rect" id="node3" href="$callback__hook_8h.html" title=" " alt="" coords="121,199,252,240"/>
-<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="269,288,409,315"/>
-<area shape="rect" id="node5" title=" " alt="" coords="90,288,177,315"/>
-<area shape="rect" id="node6" title=" " alt="" coords="433,288,484,315"/>
-<area shape="rect" id="node7" title=" " alt="" coords="201,288,244,315"/>
-<area shape="rect" id="node8" title=" " alt="" coords="5,288,64,315"/>
-<area shape="rect" id="node10" href="$data__container_8h.html" title=" " alt="" coords="428,199,583,240"/>
-<area shape="rect" id="node11" title=" " alt="" coords="585,288,639,315"/>
-<area shape="rect" id="node12" title=" " alt="" coords="702,288,765,315"/>
-<area shape="rect" id="node13" title=" " alt="" coords="607,206,684,233"/>
+<area shape="rect" id="node1" title=" " alt="" coords="119,5,347,61"/>
+<area shape="rect" id="node2" href="$net__event__handler_8h.html" title=" " alt="" coords="21,109,234,151"/>
+<area shape="rect" id="node9" href="$net_8h.html" title=" " alt="" coords="323,117,481,143"/>
+<area shape="rect" id="node3" href="$callback__hook_8h.html" title=" " alt="" coords="167,288,298,329"/>
+<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="451,377,591,404"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,377,92,404"/>
+<area shape="rect" id="node6" title=" " alt="" coords="375,377,426,404"/>
+<area shape="rect" id="node7" title=" " alt="" coords="153,377,195,404"/>
+<area shape="rect" id="node8" title=" " alt="" coords="258,377,317,404"/>
+<area shape="rect" id="node10" href="$data__container_8h.html" title=" " alt="" coords="439,199,594,240"/>
+<area shape="rect" id="node11" title=" " alt="" coords="560,295,615,322"/>
+<area shape="rect" id="node12" title=" " alt="" coords="643,295,705,322"/>
+<area shape="rect" id="node13" href="$event__handler_8h.html" title=" " alt="" coords="151,199,314,240"/>
+<area shape="rect" id="node14" title=" " alt="" coords="719,206,797,233"/>
 </map>

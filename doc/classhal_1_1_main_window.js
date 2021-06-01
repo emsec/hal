@@ -32,7 +32,6 @@ var classhal_1_1_main_window =
     [ "Q_ENUM", "classhal_1_1_main_window.html#a8702df329ce6159b0023dd7e3b696f96", null ],
     [ "reloadStylsheet", "classhal_1_1_main_window.html#a380542f624230ae54843840c50c80e1b", null ],
     [ "removeContent", "classhal_1_1_main_window.html#aaa7cf3d78e32b48dafa5a8216c28a9a2", null ],
-    [ "runPluginTriggered", "classhal_1_1_main_window.html#aec79c959f97bb23acedd1d4e50a6851f", null ],
     [ "saveAsIconPath", "classhal_1_1_main_window.html#ae5e1663269e3d53937c245d9c7073a59", null ],
     [ "saveAsIconStyle", "classhal_1_1_main_window.html#aad194e3fccefd0004afa7068da532e69", null ],
     [ "saveIconPath", "classhal_1_1_main_window.html#aea4827c2b236052cb34e920beba2e4ae", null ],

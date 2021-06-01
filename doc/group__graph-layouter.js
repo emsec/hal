@@ -49,10 +49,6 @@ var group__graph_layouter =
       [ "mPositionToNodeMap", "classhal_1_1_graph_layouter.html#a446ea8d8b55b22fb8343ec87e790d14c", null ],
       [ "mScene", "classhal_1_1_graph_layouter.html#a5994e7e9693cce878c09fc059eaab324", null ]
     ] ],
-    [ "LayouterTask", "classhal_1_1_layouter_task.html", [
-      [ "LayouterTask", "classhal_1_1_layouter_task.html#ae421db8dd8261e7988e712b16f5c4e61", null ],
-      [ "execute", "classhal_1_1_layouter_task.html#aefa51719b8bb373e2742e85682c68acc", null ]
-    ] ],
     [ "NetLayoutJunctionWire", "classhal_1_1_net_layout_junction_wire.html", [
       [ "NetLayoutJunctionWire", "classhal_1_1_net_layout_junction_wire.html#aaa5b952caa4b6ee11943586c67b09390", null ],
       [ "centralEnd", "classhal_1_1_net_layout_junction_wire.html#ac799e6c03ada2b32f6d3032562f0ffe1", null ],

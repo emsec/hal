@@ -56,5 +56,8 @@ var classhal_1_1_netlist_relay =
     [ "netNameChanged", "classhal_1_1_netlist_relay.html#afa589f75b384df2e5af2339e830056d0", null ],
     [ "netRemoved", "classhal_1_1_netlist_relay.html#a7de86cbad084e75c81867a241dd8646a", null ],
     [ "netSourceAdded", "classhal_1_1_netlist_relay.html#a6b024dd82fd67349f514b2e38ae9e625", null ],
-    [ "netSourceRemoved", "classhal_1_1_netlist_relay.html#a75cfac5ab111bd76c99465b6b5a0f053", null ]
+    [ "netSourceRemoved", "classhal_1_1_netlist_relay.html#a75cfac5ab111bd76c99465b6b5a0f053", null ],
+    [ "registerNetlistCallbacks", "classhal_1_1_netlist_relay.html#a3dc315c75ac5ecbcbedf3e26ee75e040", null ],
+    [ "reset", "classhal_1_1_netlist_relay.html#a5b1738463cab64e14d9392a43b77a357", null ],
+    [ "unregisterNetlistCallbacks", "classhal_1_1_netlist_relay.html#a597a1b91ef031e791652099ca5a347ff", null ]
 ];

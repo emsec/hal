@@ -8,6 +8,7 @@ var dir_2b1fe3a00210b132c6a6c3a6780f4f6e =
     [ "boolean_function.cpp", "netlist_2boolean__function_8cpp.html", "netlist_2boolean__function_8cpp" ],
     [ "data_container.cpp", "netlist_2data__container_8cpp.html", null ],
     [ "endpoint.cpp", "netlist_2endpoint_8cpp.html", null ],
+    [ "event_handler.cpp", "event__handler_8cpp.html", null ],
     [ "gate.cpp", "netlist_2gate_8cpp.html", null ],
     [ "grouping.cpp", "netlist_2grouping_8cpp.html", null ],
     [ "module.cpp", "netlist_2module_8cpp.html", null ],

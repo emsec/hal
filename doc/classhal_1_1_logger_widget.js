@@ -3,7 +3,6 @@ var classhal_1_1_logger_widget =
     [ "LoggerWidget", "classhal_1_1_logger_widget.html#aec19d96bb1c86b27de6a0b7cfc745f18", null ],
     [ "~LoggerWidget", "classhal_1_1_logger_widget.html#a46eb7512717f914b5f9f2ae359b4cdc6", null ],
     [ "getPlainTextEdit", "classhal_1_1_logger_widget.html#a9c58d57a85fb7ebe315229168671a934", null ],
-    [ "getTabBar", "classhal_1_1_logger_widget.html#ae91120f255af7ea1578954f4293fd797", null ],
     [ "handleChannelUpdated", "classhal_1_1_logger_widget.html#aea26d6d226f1fcf811a7c0280639ab98", null ],
     [ "handleCurrentChannelChanged", "classhal_1_1_logger_widget.html#a285b1c41d112de5f72aedc957748ce8f", null ],
     [ "handleCurrentChannelUpdated", "classhal_1_1_logger_widget.html#ae1a3a5082d7def61bc5460c028fd5fc9", null ],

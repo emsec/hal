@@ -1,6 +1,5 @@
 var dir_cb8cc93da11b1c841f0707f5b40c498b =
 [
-    [ "event_controls.h", "event__controls_8h.html", "event__controls_8h" ],
     [ "event_log.h", "event__log_8h.html", "event__log_8h" ],
     [ "gate_event_handler.h", "gate__event__handler_8h.html", "gate__event__handler_8h" ],
     [ "grouping_event_handler.h", "grouping__event__handler_8h.html", "grouping__event__handler_8h" ],

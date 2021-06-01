@@ -112,59 +112,53 @@ $(document).ready(function(){initNavTree('logger__marshall_8h_source.html',''); 
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;QMutex&gt;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QObject&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;QPlainTextEdit&gt;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;QQueue&gt;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;QtCore/qreadwritelock.h&gt;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">struct </span>FilterItem;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classhal_1_1_logger_marshall.html">   45</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_logger_marshall.html">LoggerMarshall</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_logger_marshall.html#a5622fedae3848291dc2048e36d145cf8">LoggerMarshall</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html">QPlainTextEdit</a>* edit, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">Q_SIGNALS</a>:</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_logger_marshall.html#a211925cf83a4277265a7b5a9dd4871d2">appendLog</a>(spdlog::level::level_enum log_type, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <span class="keyword">const</span>&amp; msg, <a class="code" href="structhal_1_1_filter_item.html">FilterItem</a>* filter);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_logger_marshall.html#a3a614373e7ec10a8a3dc5036e418f17f">highlightCurrentLine</a>();</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordtype">int</span> mMaxLineCount;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="comment">//will be deleted within the logger_widgets destrcutor (is the parent of the textedit)</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html">QPlainTextEdit</a>* mEdit;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    };</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;}</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QMutex&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;QObject&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;QPlainTextEdit&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;QQueue&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;QtCore/qreadwritelock.h&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">struct </span>FilterItem;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classhal_1_1_logger_marshall.html">   46</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_logger_marshall.html">LoggerMarshall</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    {</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_logger_marshall.html#a5622fedae3848291dc2048e36d145cf8">LoggerMarshall</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html">QPlainTextEdit</a>* edit, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_logger_marshall.html#a82813bf6775cc952fafedee7586a2ad0">appendLog</a>(spdlog::level::level_enum log_type, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <span class="keyword">const</span>&amp; msg);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordtype">int</span> mMaxLineCount;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="comment">//will be deleted within the logger_widgets destrcutor (is the parent of the textedit)</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html">QPlainTextEdit</a>* mEdit;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    };</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
 <div class="ttc" id="aqobject_html_Q_SLOTS"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">QObject::Q_SLOTS</a></div><div class="ttdeci">Q_SLOTSQ_SLOTS</div></div>
-<div class="ttc" id="aclasshal_1_1_logger_marshall_html_a5622fedae3848291dc2048e36d145cf8"><div class="ttname"><a href="classhal_1_1_logger_marshall.html#a5622fedae3848291dc2048e36d145cf8">hal::LoggerMarshall::LoggerMarshall</a></div><div class="ttdeci">LoggerMarshall(QPlainTextEdit *edit, QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="logger__marshall_8cpp_source.html#l00011">logger_marshall.cpp:11</a></div></div>
+<div class="ttc" id="aclasshal_1_1_logger_marshall_html_a5622fedae3848291dc2048e36d145cf8"><div class="ttname"><a href="classhal_1_1_logger_marshall.html#a5622fedae3848291dc2048e36d145cf8">hal::LoggerMarshall::LoggerMarshall</a></div><div class="ttdeci">LoggerMarshall(QPlainTextEdit *edit, QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="logger__marshall_8cpp_source.html#l00012">logger_marshall.cpp:12</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00009">boolean_function.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_logger_marshall_html_a211925cf83a4277265a7b5a9dd4871d2"><div class="ttname"><a href="classhal_1_1_logger_marshall.html#a211925cf83a4277265a7b5a9dd4871d2">hal::LoggerMarshall::appendLog</a></div><div class="ttdeci">void appendLog(spdlog::level::level_enum log_type, QString const &amp;msg, FilterItem *filter)</div><div class="ttdef"><b>Definition:</b> <a href="logger__marshall_8cpp_source.html#l00018">logger_marshall.cpp:18</a></div></div>
 <div class="ttc" id="aqobject_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
-<div class="ttc" id="aclasshal_1_1_logger_marshall_html"><div class="ttname"><a href="classhal_1_1_logger_marshall.html">hal::LoggerMarshall</a></div><div class="ttdoc">Appends log messages to the corresponding LoggerWidget.</div><div class="ttdef"><b>Definition:</b> <a href="logger__marshall_8h_source.html#l00045">logger_marshall.h:45</a></div></div>
-<div class="ttc" id="aqobject_html_Q_SIGNALS"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">QObject::Q_SIGNALS</a></div><div class="ttdeci">Q_SIGNALSQ_SIGNALS</div></div>
+<div class="ttc" id="aclasshal_1_1_logger_marshall_html"><div class="ttname"><a href="classhal_1_1_logger_marshall.html">hal::LoggerMarshall</a></div><div class="ttdoc">Appends log messages to the corresponding LoggerWidget.</div><div class="ttdef"><b>Definition:</b> <a href="logger__marshall_8h_source.html#l00046">logger_marshall.h:46</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
-<div class="ttc" id="astructhal_1_1_filter_item_html"><div class="ttname"><a href="structhal_1_1_filter_item.html">hal::FilterItem</a></div><div class="ttdoc">Item to filter different message types.</div><div class="ttdef"><b>Definition:</b> <a href="filter__item_8h_source.html#l00043">filter_item.h:43</a></div></div>
-<div class="ttc" id="aclasshal_1_1_logger_marshall_html_a3a614373e7ec10a8a3dc5036e418f17f"><div class="ttname"><a href="classhal_1_1_logger_marshall.html#a3a614373e7ec10a8a3dc5036e418f17f">hal::LoggerMarshall::highlightCurrentLine</a></div><div class="ttdeci">void highlightCurrentLine()</div><div class="ttdef"><b>Definition:</b> <a href="logger__marshall_8cpp_source.html#l00137">logger_marshall.cpp:137</a></div></div>
+<div class="ttc" id="aclasshal_1_1_logger_marshall_html_a82813bf6775cc952fafedee7586a2ad0"><div class="ttname"><a href="classhal_1_1_logger_marshall.html#a82813bf6775cc952fafedee7586a2ad0">hal::LoggerMarshall::appendLog</a></div><div class="ttdeci">void appendLog(spdlog::level::level_enum log_type, QString const &amp;msg)</div><div class="ttdef"><b>Definition:</b> <a href="logger__marshall_8cpp_source.html#l00018">logger_marshall.cpp:18</a></div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
 <div class="ttc" id="aqplaintextedit_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qplaintextedit.html">QPlainTextEdit</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_4a8579db386ef695e67dd0763cf247a7.html">logger</a></li><li class="navelem"><a class="el" href="logger__marshall_8h.html">logger_marshall.h</a></li>
-    <li class="footer">Generated on Mon May 31 2021 09:26:21 for HAL by
+    <li class="footer">Generated on Tue Jun 1 2021 12:57:28 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

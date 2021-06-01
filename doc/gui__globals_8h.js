@@ -11,6 +11,5 @@ var gui__globals_8h =
     [ "gNetlistRelay", "gui__globals_8h.html#ac87c0ce709dc346017d7c2aff4aea006", null ],
     [ "gPluginRelay", "gui__globals_8h.html#a4cd901560b6cb156908e4cb43a1ea812", null ],
     [ "gPythonContext", "gui__globals_8h.html#a54235e7df25a78fa437937569928dc84", null ],
-    [ "gSelectionRelay", "gui__globals_8h.html#a6ba6e6ec49eb58d0b35a604e16187112", null ],
-    [ "gThreadPool", "gui__globals_8h.html#a0f7ae86893472f13cc5dea0660463a58", null ]
+    [ "gSelectionRelay", "gui__globals_8h.html#a6ba6e6ec49eb58d0b35a604e16187112", null ]
 ];

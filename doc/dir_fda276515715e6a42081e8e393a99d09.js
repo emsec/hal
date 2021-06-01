@@ -2,7 +2,6 @@ var dir_fda276515715e6a42081e8e393a99d09 =
 [
     [ "coordinate_from_data.cpp", "coordinate__from__data_8cpp.html", null ],
     [ "graph_layouter.cpp", "graph__layouter_8cpp.html", null ],
-    [ "layouter_task.cpp", "layouter__task_8cpp.html", null ],
     [ "net_layout_junction.cpp", "net__layout__junction_8cpp.html", "net__layout__junction_8cpp" ],
     [ "net_layout_point.cpp", "net__layout__point_8cpp.html", "net__layout__point_8cpp" ],
     [ "node_box.cpp", "node__box_8cpp.html", "node__box_8cpp" ],

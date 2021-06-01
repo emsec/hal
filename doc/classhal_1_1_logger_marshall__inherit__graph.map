@@ -1,4 +1,4 @@
 <map id="hal::LoggerMarshall" name="hal::LoggerMarshall">
-<area shape="rect" id="node1" title="Appends log messages to the corresponding LoggerWidget." alt="" coords="5,395,184,501"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="11,5,178,347"/>
+<area shape="rect" id="node1" title="Appends log messages to the corresponding LoggerWidget." alt="" coords="13,395,164,487"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="5,5,172,347"/>
 </map>

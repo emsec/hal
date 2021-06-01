@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['readme_2emd_18275',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
-  ['recent_5ffile_5fitem_2ecpp_18276',['recent_file_item.cpp',['../recent__file__item_8cpp.html',1,'']]],
-  ['recent_5ffile_5fitem_2eh_18277',['recent_file_item.h',['../recent__file__item_8h.html',1,'']]],
-  ['recent_5ffiles_5fwidget_2ecpp_18278',['recent_files_widget.cpp',['../recent__files__widget_8cpp.html',1,'']]],
-  ['recent_5ffiles_5fwidget_2eh_18279',['recent_files_widget.h',['../recent__files__widget_8h.html',1,'']]],
-  ['runtime_5flibrary_2ecpp_18280',['runtime_library.cpp',['../runtime__library_8cpp.html',1,'']]],
-  ['runtime_5flibrary_2eh_18281',['runtime_library.h',['../runtime__library_8h.html',1,'']]]
+  ['readme_2emd_18133',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
+  ['recent_5ffile_5fitem_2ecpp_18134',['recent_file_item.cpp',['../recent__file__item_8cpp.html',1,'']]],
+  ['recent_5ffile_5fitem_2eh_18135',['recent_file_item.h',['../recent__file__item_8h.html',1,'']]],
+  ['recent_5ffiles_5fwidget_2ecpp_18136',['recent_files_widget.cpp',['../recent__files__widget_8cpp.html',1,'']]],
+  ['recent_5ffiles_5fwidget_2eh_18137',['recent_files_widget.h',['../recent__files__widget_8h.html',1,'']]],
+  ['runtime_5flibrary_2ecpp_18138',['runtime_library.cpp',['../runtime__library_8cpp.html',1,'']]],
+  ['runtime_5flibrary_2eh_18139',['runtime_library.h',['../runtime__library_8h.html',1,'']]]
 ];

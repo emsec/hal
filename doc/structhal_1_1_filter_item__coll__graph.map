@@ -1,6 +1,0 @@
-<map id="hal::FilterItem" name="hal::FilterItem">
-<area shape="rect" id="node1" title="Item to filter different message types." alt="" coords="117,697,230,863"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qregularexpression.html" title=" " alt="" coords="5,323,243,635"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qstringlist.html" title=" " alt="" coords="267,396,477,561"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="281,5,463,273"/>
-</map>

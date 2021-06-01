@@ -221,6 +221,7 @@ var group__netlist =
       [ "delete_net", "classhal_1_1_netlist.html#a3c2fbba09aa1857d44790bbd16c9df4e", null ],
       [ "get_design_name", "classhal_1_1_netlist.html#a0ff62e377eab88e6fbae17ae1d1604ce", null ],
       [ "get_device_name", "classhal_1_1_netlist.html#ae339f011fd95f51ded3b281c0f198fe7", null ],
+      [ "get_event_handler", "classhal_1_1_netlist.html#aedc720597caab3ff1cb6ad4e5839c429", null ],
       [ "get_free_gate_ids", "classhal_1_1_netlist.html#a5f7900676fda58ddebf01044f10a7312", null ],
       [ "get_free_grouping_ids", "classhal_1_1_netlist.html#ab6f2ca6f0f49b95d39b3637d30849a9a", null ],
       [ "get_free_module_ids", "classhal_1_1_netlist.html#a349e8a245c3c36d2ce27196958dcd824", null ],

@@ -1,6 +1,5 @@
 var dir_b501f277d7b770addc1a9f85203c26bf =
 [
-    [ "event_controls.cpp", "event__controls_8cpp.html", "event__controls_8cpp" ],
     [ "event_log.cpp", "event__log_8cpp.html", "event__log_8cpp" ],
     [ "gate_event_handler.cpp", "gate__event__handler_8cpp.html", "gate__event__handler_8cpp" ],
     [ "grouping_event_handler.cpp", "grouping__event__handler_8cpp.html", "grouping__event__handler_8cpp" ],

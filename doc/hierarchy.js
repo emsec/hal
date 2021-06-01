@@ -18,6 +18,11 @@ var hierarchy =
     [ "hal::CallbackHook< class >", "classhal_1_1_callback_hook.html", null ],
     [ "hal::CallbackHook< R(ArgTypes...)>", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html", null ],
     [ "hal::CallbackHook< void(const spdlog::level::level_enum &, const std::string &, const std::string &)>", "classhal_1_1_callback_hook.html", null ],
+    [ "hal::CallbackHook< void(GateEvent::event, hal::Gate *, u32)>", "classhal_1_1_callback_hook.html", null ],
+    [ "hal::CallbackHook< void(GroupingEvent::event, hal::Grouping *, u32)>", "classhal_1_1_callback_hook.html", null ],
+    [ "hal::CallbackHook< void(ModuleEvent::event, hal::Module *, u32)>", "classhal_1_1_callback_hook.html", null ],
+    [ "hal::CallbackHook< void(NetEvent::event, hal::Net *, u32)>", "classhal_1_1_callback_hook.html", null ],
+    [ "hal::CallbackHook< void(NetlistEvent::event, hal::Netlist *, u32)>", "classhal_1_1_callback_hook.html", null ],
     [ "hal::ChannelEntry", "structhal_1_1_channel_entry.html", null ],
     [ "hal::ChannelItem", "classhal_1_1_channel_item.html", null ],
     [ "char_traits", null, [
@@ -38,8 +43,9 @@ var hierarchy =
     [ "hal::utils::DirectoryRange", "classhal_1_1utils_1_1_directory_range.html", null ],
     [ "hal::Endpoint", "classhal_1_1_endpoint.html", null ],
     [ "hal::EnumStrings< T, typename >", "structhal_1_1_enum_strings.html", null ],
+    [ "hal::EventHandler", "classhal_1_1_event_handler.html", null ],
     [ "hal::ExportRegisteredFormat", "classhal_1_1_export_registered_format.html", null ],
-    [ "hal::FilterItem", "structhal_1_1_filter_item.html", null ],
+    [ "hal::GateEvent", "classhal_1_1_gate_event.html", null ],
     [ "hal::GateLibrary", "classhal_1_1_gate_library.html", null ],
     [ "hal::GateLibraryParser", "classhal_1_1_gate_library_parser.html", null ],
     [ "hal::GateLibraryWriter", "classhal_1_1_gate_library_writer.html", null ],
@@ -51,16 +57,19 @@ var hierarchy =
       [ "hal::ModuleShader", "classhal_1_1_module_shader.html", null ]
     ] ],
     [ "hal::Grouping", "classhal_1_1_grouping.html", null ],
+    [ "hal::GroupingEvent", "classhal_1_1_grouping_event.html", null ],
     [ "hal::GroupingTableEntry", "classhal_1_1_grouping_table_entry.html", null ],
     [ "std::hash< hal::core_strings::CaseInsensitiveString >", "structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html", null ],
     [ "hal::StandardGraphicsNet::HLine", "structhal_1_1_standard_graphics_net_1_1_h_line.html", null ],
     [ "hal::StandardGraphicsNet::Lines", "structhal_1_1_standard_graphics_net_1_1_lines.html", null ],
     [ "hal::LogManager::log_sink", "structhal_1_1_log_manager_1_1log__sink.html", null ],
     [ "hal::LogManager", "classhal_1_1_log_manager.html", null ],
+    [ "hal::ModuleEvent", "classhal_1_1_module_event.html", null ],
     [ "hal::ModuleItem", "classhal_1_1_module_item.html", null ],
     [ "hal::GraphicsModule::ModulePin", "structhal_1_1_graphics_module_1_1_module_pin.html", null ],
     [ "hal::ModuleSelectEntry", "classhal_1_1_module_select_entry.html", null ],
     [ "hal::ModuleSelectExclude", "classhal_1_1_module_select_exclude.html", null ],
+    [ "hal::NetEvent", "classhal_1_1_net_event.html", null ],
     [ "hal::NetLayoutConnectionFactory", "classhal_1_1_net_layout_connection_factory.html", null ],
     [ "hal::NetLayoutDirection", "classhal_1_1_net_layout_direction.html", null ],
     [ "hal::NetLayoutJunction", "classhal_1_1_net_layout_junction.html", null ],
@@ -71,6 +80,7 @@ var hierarchy =
     [ "hal::NetLayoutMetric", "classhal_1_1_net_layout_metric.html", null ],
     [ "hal::NetLayoutWire", "classhal_1_1_net_layout_wire.html", null ],
     [ "hal::Netlist", "classhal_1_1_netlist.html", null ],
+    [ "hal::NetlistEvent", "classhal_1_1_netlist_event.html", null ],
     [ "hal::NetlistInternalManager", "classhal_1_1_netlist_internal_manager.html", null ],
     [ "hal::NetlistParser", "classhal_1_1_netlist_parser.html", null ],
     [ "hal::NetlistWriter", "classhal_1_1_netlist_writer.html", null ],
@@ -78,7 +88,6 @@ var hierarchy =
     [ "hal::NodeBox", "classhal_1_1_node_box.html", null ],
     [ "hal::PlacementEntry", "classhal_1_1_placement_entry.html", null ],
     [ "hal::PlacementHint", "classhal_1_1_placement_hint.html", null ],
-    [ "hal::PluginItem", "classhal_1_1_plugin_item.html", null ],
     [ "hal::PositionGenerator", "classhal_1_1_position_generator.html", null ],
     [ "hal::ProgramArguments", "classhal_1_1_program_arguments.html", null ],
     [ "hal::ProgramOptions", "classhal_1_1_program_options.html", null ],
@@ -147,7 +156,6 @@ var hierarchy =
       [ "hal::ContentManager", "classhal_1_1_content_manager.html", null ],
       [ "hal::FileManager", "classhal_1_1_file_manager.html", null ],
       [ "hal::FileStatusManager", "classhal_1_1_file_status_manager.html", null ],
-      [ "hal::FocusLogger", "classhal_1_1_focus_logger.html", null ],
       [ "hal::GraphContext", "classhal_1_1_graph_context.html", null ],
       [ "hal::GraphContextManager", "classhal_1_1_graph_context_manager.html", null ],
       [ "hal::GraphLayouter", "classhal_1_1_graph_layouter.html", [
@@ -158,7 +166,6 @@ var hierarchy =
       [ "hal::LoggerMarshall", "classhal_1_1_logger_marshall.html", null ],
       [ "hal::ModuleSelectPicker", "classhal_1_1_module_select_picker.html", null ],
       [ "hal::NetlistRelay", "classhal_1_1_netlist_relay.html", null ],
-      [ "hal::NetlistWatcher", "classhal_1_1_netlist_watcher.html", null ],
       [ "hal::PluginRelay", "classhal_1_1_plugin_relay.html", null ],
       [ "hal::SelectionRelay", "classhal_1_1_selection_relay.html", null ],
       [ "hal::SelectionTreeModelDisposer", "classhal_1_1_selection_tree_model_disposer.html", null ],
@@ -173,11 +180,6 @@ var hierarchy =
       [ "hal::SettingsManager", "classhal_1_1_settings_manager.html", null ],
       [ "hal::SpecialLogContentManager", "classhal_1_1_special_log_content_manager.html", null ],
       [ "hal::SplitterAnchor", "classhal_1_1_splitter_anchor.html", null ],
-      [ "hal::StyleManager", "classhal_1_1_style_manager.html", null ],
-      [ "hal::Task", "classhal_1_1_task.html", [
-        [ "hal::LayouterTask", "classhal_1_1_layouter_task.html", null ]
-      ] ],
-      [ "hal::ThreadPool", "classhal_1_1_thread_pool.html", null ],
       [ "hal::UserActionManager", "classhal_1_1_user_action_manager.html", null ],
       [ "hal::UserActionObjectType", "classhal_1_1_user_action_object_type.html", null ],
       [ "QAbstractItemDelegate", "https://doc.qt.io/qt-5/qabstractitemdelegate.html", [
@@ -187,7 +189,6 @@ var hierarchy =
       ] ],
       [ "QAbstractItemModel", "https://doc.qt.io/qt-5/qabstractitemmodel.html", [
         [ "hal::ModuleModel", "classhal_1_1_module_model.html", null ],
-        [ "hal::PluginModel", "classhal_1_1_plugin_model.html", null ],
         [ "hal::SelectionTreeModel", "classhal_1_1_selection_tree_model.html", null ],
         [ "QAbstractProxyModel", "https://doc.qt.io/qt-5/qabstractproxymodel.html", [
           [ "QSortFilterProxyModel", "https://doc.qt.io/qt-5/qsortfilterproxymodel.html", [
@@ -210,7 +211,6 @@ var hierarchy =
         [ "hal::Action", "classhal_1_1_action.html", null ]
       ] ],
       [ "QGraphicsEffect", "https://doc.qt.io/qt-5/qgraphicseffect.html", [
-        [ "hal::OverlayEffect", "classhal_1_1_overlay_effect.html", null ],
         [ "hal::ShadowEffect", "classhal_1_1_shadow_effect.html", null ]
       ] ],
       [ "QGraphicsObject", "https://doc.qt.io/qt-5/qgraphicsobject.html", null ],
@@ -222,9 +222,6 @@ var hierarchy =
       ] ],
       [ "QSyntaxHighlighter", "https://doc.qt.io/qt-5/qsyntaxhighlighter.html", [
         [ "hal::PythonSyntaxHighlighter", "classhal_1_1_python_syntax_highlighter.html", null ]
-      ] ],
-      [ "QThread", "https://doc.qt.io/qt-5/qthread.html", [
-        [ "hal::Worker", "classhal_1_1_worker.html", null ]
       ] ],
       [ "QWidget", "https://doc.qt.io/qt-5/qwidget.html", [
         [ "hal::CodeEditorMinimap", "classhal_1_1_code_editor_minimap.html", null ],
@@ -245,7 +242,6 @@ var hierarchy =
         [ "hal::MinimapScrollbar", "classhal_1_1_minimap_scrollbar.html", null ],
         [ "hal::PythonConsoleQssAdapter", "classhal_1_1_python_console_qss_adapter.html", null ],
         [ "hal::PythonQssAdapter", "classhal_1_1_python_qss_adapter.html", null ],
-        [ "hal::SharedPropertiesQssAdapter", "classhal_1_1_shared_properties_qss_adapter.html", null ],
         [ "hal::SpinnerWidget", "classhal_1_1_spinner_widget.html", null ],
         [ "hal::Widget", "classhal_1_1_widget.html", [
           [ "hal::ContentWidget", "classhal_1_1_content_widget.html", [
@@ -255,7 +251,6 @@ var hierarchy =
             [ "hal::GroupingManagerWidget", "classhal_1_1_grouping_manager_widget.html", null ],
             [ "hal::LoggerWidget", "classhal_1_1_logger_widget.html", null ],
             [ "hal::ModuleWidget", "classhal_1_1_module_widget.html", null ],
-            [ "hal::PluginManagerWidget", "classhal_1_1_plugin_manager_widget.html", null ],
             [ "hal::PythonConsoleWidget", "classhal_1_1_python_console_widget.html", null ],
             [ "hal::PythonEditor", "classhal_1_1_python_editor.html", null ],
             [ "hal::SelectionDetailsWidget", "classhal_1_1_selection_details_widget.html", null ]
@@ -277,8 +272,6 @@ var hierarchy =
         ] ],
         [ "QDialog", "https://doc.qt.io/qt-5/qdialog.html", [
           [ "hal::AboutDialog", "classhal_1_1_about_dialog.html", null ],
-          [ "hal::ExtendedCliDialog", "classhal_1_1_extended_cli_dialog.html", null ],
-          [ "hal::FilterDialog", "classhal_1_1_filter_dialog.html", null ],
           [ "hal::InputDialog", "classhal_1_1_input_dialog.html", null ],
           [ "hal::ModuleDialog", "classhal_1_1_module_dialog.html", null ],
           [ "hal::PythonEditorCodeCompletionDialog", "classhal_1_1_python_editor_code_completion_dialog.html", null ]
@@ -351,9 +344,6 @@ var hierarchy =
         ] ],
         [ "QKeySequenceEdit", "https://doc.qt.io/qt-5/qkeysequenceedit.html", [
           [ "hal::KeybindEdit", "classhal_1_1_keybind_edit.html", null ]
-        ] ],
-        [ "QTabBar", "https://doc.qt.io/qt-5/qtabbar.html", [
-          [ "hal::FilterTabBar", "classhal_1_1_filter_tab_bar.html", null ]
         ] ],
         [ "QToolBar", "https://doc.qt.io/qt-5/qtoolbar.html", [
           [ "hal::Toolbar", "classhal_1_1_toolbar.html", null ]

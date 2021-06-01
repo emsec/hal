@@ -232,7 +232,6 @@ var group__gui =
       [ "Q_ENUM", "classhal_1_1_main_window.html#a8702df329ce6159b0023dd7e3b696f96", null ],
       [ "reloadStylsheet", "classhal_1_1_main_window.html#a380542f624230ae54843840c50c80e1b", null ],
       [ "removeContent", "classhal_1_1_main_window.html#aaa7cf3d78e32b48dafa5a8216c28a9a2", null ],
-      [ "runPluginTriggered", "classhal_1_1_main_window.html#aec79c959f97bb23acedd1d4e50a6851f", null ],
       [ "saveAsIconPath", "classhal_1_1_main_window.html#ae5e1663269e3d53937c245d9c7073a59", null ],
       [ "saveAsIconStyle", "classhal_1_1_main_window.html#aad194e3fccefd0004afa7068da532e69", null ],
       [ "saveIconPath", "classhal_1_1_main_window.html#aea4827c2b236052cb34e920beba2e4ae", null ],
@@ -391,12 +390,10 @@ var group__gui =
       [ "netNameChanged", "classhal_1_1_netlist_relay.html#afa589f75b384df2e5af2339e830056d0", null ],
       [ "netRemoved", "classhal_1_1_netlist_relay.html#a7de86cbad084e75c81867a241dd8646a", null ],
       [ "netSourceAdded", "classhal_1_1_netlist_relay.html#a6b024dd82fd67349f514b2e38ae9e625", null ],
-      [ "netSourceRemoved", "classhal_1_1_netlist_relay.html#a75cfac5ab111bd76c99465b6b5a0f053", null ]
-    ] ],
-    [ "NetlistWatcher", "classhal_1_1_netlist_watcher.html", [
-      [ "NetlistWatcher", "classhal_1_1_netlist_watcher.html#a07839ba53738e935421a3003a2ae4073", null ],
-      [ "~NetlistWatcher", "classhal_1_1_netlist_watcher.html#ab10ef4c9268c87ee47c9d5b417dc696d", null ],
-      [ "reset", "classhal_1_1_netlist_watcher.html#a5149be1df3e3df1431728803800156ca", null ]
+      [ "netSourceRemoved", "classhal_1_1_netlist_relay.html#a75cfac5ab111bd76c99465b6b5a0f053", null ],
+      [ "registerNetlistCallbacks", "classhal_1_1_netlist_relay.html#a3dc315c75ac5ecbcbedf3e26ee75e040", null ],
+      [ "reset", "classhal_1_1_netlist_relay.html#a5b1738463cab64e14d9392a43b77a357", null ],
+      [ "unregisterNetlistCallbacks", "classhal_1_1_netlist_relay.html#a597a1b91ef031e791652099ca5a347ff", null ]
     ] ],
     [ "Overlay", "classhal_1_1_overlay.html", [
       [ "Overlay", "classhal_1_1_overlay.html#ada47cd21b03c426f2de388da536a415d", null ],
@@ -517,13 +514,6 @@ var group__gui =
     [ "Splitter", "classhal_1_1_splitter.html", [
       [ "Splitter", "classhal_1_1_splitter.html#a44152283cb1fdb86759f1a9fcc0b2d48", null ],
       [ "unused", "classhal_1_1_splitter.html#a383657b0b717428f497ede0bda4b56be", null ]
-    ] ],
-    [ "StyleManager", "classhal_1_1_style_manager.html", [
-      [ "StyleManager", "classhal_1_1_style_manager.html#ac6e86ef755b39f3b8c805da26aa3ab38", null ],
-      [ "operator=", "classhal_1_1_style_manager.html#aa3ab08fddb9fa5b2315f9f6dc4a2bc6c", null ],
-      [ "PythonSyntaxHighlighter", "classhal_1_1_style_manager.html#a00c45e083e0a82788a95143b8874b790", null ],
-      [ "repolish", "classhal_1_1_style_manager.html#ae8dfbd118ef79a3ebba5f8205f9566bd", null ],
-      [ "sharedProperties", "classhal_1_1_style_manager.html#accc1a7aff353e3f1e306eccbe7a6084d", null ]
     ] ],
     [ "SvgIconEngine", "classhal_1_1_svg_icon_engine.html", [
       [ "SvgIconEngine", "classhal_1_1_svg_icon_engine.html#a61be45b54af219d98b0d91031fbd9924", null ],

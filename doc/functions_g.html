@@ -194,6 +194,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>get_dnf_clauses()
 : <a class="el" href="classhal_1_1_boolean_function.html#a9a7638db9c73a22dde7768a87d02eaaa">hal::BooleanFunction</a>
 </li>
+<li>get_event_handler()
+: <a class="el" href="classhal_1_1_netlist.html#aedc720597caab3ff1cb6ad4e5839c429">hal::Netlist</a>
+</li>
 <li>get_fan_in_endpoint()
 : <a class="el" href="classhal_1_1_gate.html#a2bb7660dab70b6eb878328565f32cba3">hal::Gate</a>
 </li>
@@ -324,7 +327,6 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_channel_model.html#af5c2c66cb11cb72b23d3436c205f1acf">hal::ChannelModel</a>
 , <a class="el" href="classhal_1_1_file_manager.html#a39922020ae71b765ce940170bd936038">hal::FileManager</a>
 , <a class="el" href="classhal_1_1_log_manager.html#af9c7cb6730a13cab04151b95c5cfc492">hal::LogManager</a>
-, <a class="el" href="classhal_1_1_style_manager.html#ac1cdf2d7145415a8f5d855d766727679">hal::StyleManager</a>
 </li>
 <li>get_internal_nets()
 : <a class="el" href="classhal_1_1_module.html#afad5d3e06fb0a3dfcaf9e98ac0afbcfb">hal::Module</a>
@@ -570,14 +572,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 , <a class="el" href="classhal_1_1_plugin_gui.html#a21214d366b49e93ebdfad07607adeb8f">hal::PluginGui</a>
 , <a class="el" href="classhal_1_1_pyi__base.html#ab71228d46acd8658fdd07540dadce6fb">hal::Pyi_base</a>
 </li>
-<li>getArgs()
-: <a class="el" href="classhal_1_1_extended_cli_dialog.html#a56efe4fb6161d620a39bce81dd960d3e">hal::ExtendedCliDialog</a>
-</li>
 <li>getCleanContext()
 : <a class="el" href="classhal_1_1_graph_context_manager.html#a6c751ee6b445bf6fbd85068e6623ad9d">hal::GraphContextManager</a>
-</li>
-<li>getColumnDescription()
-: <a class="el" href="classhal_1_1_plugin_item.html#a33880e7e376778b2e1758b8c477cef79">hal::PluginItem</a>
 </li>
 <li>getContext()
 : <a class="el" href="classhal_1_1_context_table_model.html#a210489dfbfe9cbdd92291dd7e1d9f3ce">hal::ContextTableModel</a>
@@ -600,9 +596,6 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>getCurrentContext()
 : <a class="el" href="classhal_1_1_context_manager_widget.html#a5c7c50af9450337f177db146a68a53fb">hal::ContextManagerWidget</a>
-</li>
-<li>getCurrentFilter()
-: <a class="el" href="classhal_1_1_filter_tab_bar.html#a82cf3ee78693b89c929948668e6ab6a5">hal::FilterTabBar</a>
 </li>
 <li>getCurrentText()
 : <a class="el" href="classhal_1_1_searchbar.html#adaee6f5c780da69a3f0cabeb7d9ca7d5">hal::Searchbar</a>
@@ -695,9 +688,6 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>getPlainTextEdit()
 : <a class="el" href="classhal_1_1_logger_widget.html#a9c58d57a85fb7ebe315229168671a934">hal::LoggerWidget</a>
 </li>
-<li>getPluginList()
-: <a class="el" href="classhal_1_1_plugin_model.html#ae42154c6bf32654cd69b6f008d51a0ea">hal::PluginModel</a>
-</li>
 <li>getProxyModel()
 : <a class="el" href="classhal_1_1_grouping_manager_widget.html#a85d39ec7dc82b0f3ce1beaa67f8919a5">hal::GroupingManagerWidget</a>
 </li>
@@ -736,9 +726,6 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>getShading()
 : <a class="el" href="classhal_1_1_graph_shader.html#a8edc447a180d18bd35ed60ee170078f9">hal::GraphShader</a>
-</li>
-<li>getTabBar()
-: <a class="el" href="classhal_1_1_logger_widget.html#ae91120f255af7ea1578954f4293fd797">hal::LoggerWidget</a>
 </li>
 <li>getTabWidget()
 : <a class="el" href="classhal_1_1_python_editor.html#a52630bff23ea464091873b4955e4b3fc">hal::PythonEditor</a>
@@ -829,8 +816,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>gridClusterDotColor
 : <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a31b8d28575ff766a99f59a7ff88f0efe">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridClusterLineColor
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a93a3f1267b9ea82cf117bf5f9b493b54">hal::GraphicsQssAdapter</a>
+<li>gridClusterLineColor()
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a1b197be4d6786e9572af238b493941ff">hal::GraphicsQssAdapter</a>
 </li>
 <li>gridPoint()
 : <a class="el" href="classhal_1_1_net_layout_point.html#a2ab7b2f0f56f9b57b30cb763ff6437d0">hal::NetLayoutPoint</a>
@@ -933,7 +920,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon May 31 2021 09:26:26 for HAL by
+    <li class="footer">Generated on Tue Jun 1 2021 12:57:32 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

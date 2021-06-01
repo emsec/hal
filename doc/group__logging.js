@@ -28,27 +28,9 @@ var group__logging =
     [ "ChannelSelector", "classhal_1_1_channel_selector.html", [
       [ "ChannelSelector", "classhal_1_1_channel_selector.html#a0e46dd6bf7ef752924b23a023b8c5db4", null ]
     ] ],
-    [ "FilterItem", "structhal_1_1_filter_item.html", [
-      [ "Rule", "structhal_1_1_filter_item.html#a7a7f776b0cb6bae46a5bf056117ac48e", [
-        [ "ShowAll", "structhal_1_1_filter_item.html#a7a7f776b0cb6bae46a5bf056117ac48ea4e86de30fa86048437962111d923c3ca", null ],
-        [ "HideAll", "structhal_1_1_filter_item.html#a7a7f776b0cb6bae46a5bf056117ac48eaeca90f3dec9ac9d57fc1f9a492dad7b7", null ],
-        [ "Process", "structhal_1_1_filter_item.html#a7a7f776b0cb6bae46a5bf056117ac48eab6ec7abeb6ae29cc35a4b47475e12afe", null ]
-      ] ],
-      [ "FilterItem", "structhal_1_1_filter_item.html#a4ef1560e51f8a5d194e6316d52eda20a", null ],
-      [ "mCritical", "structhal_1_1_filter_item.html#aeb601b1e913e2501f8007a99bb136ade", null ],
-      [ "mDebug", "structhal_1_1_filter_item.html#a7b8d1013b991a9208920848bcedaf5e2", null ],
-      [ "mDefault", "structhal_1_1_filter_item.html#a1ce157bc415a60804597d51a35dc1ccc", null ],
-      [ "mError", "structhal_1_1_filter_item.html#ab0174e7dc5dbfab8aef4df8fa3ffd1f2", null ],
-      [ "mInfo", "structhal_1_1_filter_item.html#a93daddae0e51589268eba764e52a551e", null ],
-      [ "mKeywords", "structhal_1_1_filter_item.html#adef6f0598ed939b55f866c057c8ea151", null ],
-      [ "mRegEx", "structhal_1_1_filter_item.html#afb16b33015aee2007a03cde4dbbe8db2", null ],
-      [ "mTrace", "structhal_1_1_filter_item.html#a9696244f728a3d4a84556d35c7fa0dc6", null ],
-      [ "mWarning", "structhal_1_1_filter_item.html#ae2dd9ebf1aafb829f2acc67441789a62", null ]
-    ] ],
     [ "LoggerMarshall", "classhal_1_1_logger_marshall.html", [
       [ "LoggerMarshall", "classhal_1_1_logger_marshall.html#a5622fedae3848291dc2048e36d145cf8", null ],
-      [ "appendLog", "classhal_1_1_logger_marshall.html#a211925cf83a4277265a7b5a9dd4871d2", null ],
-      [ "highlightCurrentLine", "classhal_1_1_logger_marshall.html#a3a614373e7ec10a8a3dc5036e418f17f", null ]
+      [ "appendLog", "classhal_1_1_logger_marshall.html#a82813bf6775cc952fafedee7586a2ad0", null ]
     ] ],
     [ "LoggerQssAdapter", "classhal_1_1_logger_qss_adapter.html", [
       [ "criticalColor", "classhal_1_1_logger_qss_adapter.html#a26e3ffa5f208c47c06549bb75be12d34", null ],
@@ -101,7 +83,6 @@ var group__logging =
       [ "LoggerWidget", "classhal_1_1_logger_widget.html#aec19d96bb1c86b27de6a0b7cfc745f18", null ],
       [ "~LoggerWidget", "classhal_1_1_logger_widget.html#a46eb7512717f914b5f9f2ae359b4cdc6", null ],
       [ "getPlainTextEdit", "classhal_1_1_logger_widget.html#a9c58d57a85fb7ebe315229168671a934", null ],
-      [ "getTabBar", "classhal_1_1_logger_widget.html#ae91120f255af7ea1578954f4293fd797", null ],
       [ "handleChannelUpdated", "classhal_1_1_logger_widget.html#aea26d6d226f1fcf811a7c0280639ab98", null ],
       [ "handleCurrentChannelChanged", "classhal_1_1_logger_widget.html#a285b1c41d112de5f72aedc957748ce8f", null ],
       [ "handleCurrentChannelUpdated", "classhal_1_1_logger_widget.html#ae1a3a5082d7def61bc5460c028fd5fc9", null ],

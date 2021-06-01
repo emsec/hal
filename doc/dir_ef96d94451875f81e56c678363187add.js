@@ -8,6 +8,14 @@ var dir_ef96d94451875f81e56c678363187add =
     [ "boolean_function.h", "boolean__function_8h.html", null ],
     [ "data_container.h", "data__container_8h.html", null ],
     [ "endpoint.h", "endpoint_8h.html", null ],
+    [ "event_handler.h", "event__handler_8h.html", [
+      [ "NetlistEvent", "classhal_1_1_netlist_event.html", "classhal_1_1_netlist_event" ],
+      [ "GateEvent", "classhal_1_1_gate_event.html", "classhal_1_1_gate_event" ],
+      [ "NetEvent", "classhal_1_1_net_event.html", "classhal_1_1_net_event" ],
+      [ "ModuleEvent", "classhal_1_1_module_event.html", "classhal_1_1_module_event" ],
+      [ "GroupingEvent", "classhal_1_1_grouping_event.html", "classhal_1_1_grouping_event" ],
+      [ "EventHandler", "classhal_1_1_event_handler.html", "classhal_1_1_event_handler" ]
+    ] ],
     [ "gate.h", "gate_8h.html", null ],
     [ "grouping.h", "grouping_8h.html", null ],
     [ "module.h", "module_8h.html", [

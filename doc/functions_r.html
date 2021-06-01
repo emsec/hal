@@ -135,8 +135,14 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 <li>RecursiveDirectoryRange()
 : <a class="el" href="classhal_1_1utils_1_1_recursive_directory_range.html#a96a1554b62cd303048c1928ff2ed6603">hal::utils::RecursiveDirectoryRange</a>
 </li>
+<li>register_callback()
+: <a class="el" href="classhal_1_1_event_handler.html#aab69a24745b3c0df656cbe4955b08466">hal::EventHandler</a>
+</li>
 <li>registerFactory()
 : <a class="el" href="classhal_1_1_user_action_manager.html#a0e6b8eb675e81722703fd5b19ecc0c68">hal::UserActionManager</a>
+</li>
+<li>registerNetlistCallbacks()
+: <a class="el" href="classhal_1_1_netlist_relay.html#a3dc315c75ac5ecbcbedf3e26ee75e040">hal::NetlistRelay</a>
 </li>
 <li>registerSender()
 : <a class="el" href="classhal_1_1_selection_relay.html#ae676c25874636390081fa362d88934f8">hal::SelectionRelay</a>
@@ -214,7 +220,7 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 : <a class="el" href="classhal_1_1_grouping.html#a5a855be1c6d8b725d3ae27b99308e8b2">hal::Grouping</a>
 </li>
 <li>remove_source()
-: <a class="el" href="classhal_1_1_net.html#ae0661594c7a48bedb432c0ee46401a0d">hal::Net</a>
+: <a class="el" href="classhal_1_1_net.html#a1a1392ffea2809f992febeb11557af6a">hal::Net</a>
 </li>
 <li>removeButton()
 : <a class="el" href="classhal_1_1_dock_bar.html#a0e224001ed07b05a8b4e5ed9ed782f58">hal::DockBar</a>
@@ -269,8 +275,8 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 <li>renameGrouping()
 : <a class="el" href="classhal_1_1_grouping_table_model.html#a3e924cdd7e59ac0bb04c804814fa557f">hal::GroupingTableModel</a>
 </li>
-<li>renameGroupingIconPath
-: <a class="el" href="classhal_1_1_grouping_manager_widget.html#a1660a3d7ce3b6d8e93bd0ee7adc3e181">hal::GroupingManagerWidget</a>
+<li>renameGroupingIconPath()
+: <a class="el" href="classhal_1_1_grouping_manager_widget.html#a7c1b04accc5ed3973841b2c6cbb74c78">hal::GroupingManagerWidget</a>
 </li>
 <li>renameGroupingIconStyle
 : <a class="el" href="classhal_1_1_grouping_manager_widget.html#a5b1e5a9b693f846629e09f275b243b39">hal::GroupingManagerWidget</a>
@@ -302,23 +308,14 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 , <a class="el" href="classhal_1_1_recent_file_item.html#a6f2f28dc01a5b60692666a42c1a8e218">hal::RecentFileItem</a>
 , <a class="el" href="classhal_1_1_recent_files_widget.html#ae2e51f7a48d099173dacc0983641ee38">hal::RecentFilesWidget</a>
 , <a class="el" href="classhal_1_1_searchbar.html#a1064c3a7d77df4b790a298fc9fc9af8f">hal::Searchbar</a>
-, <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#acdc2c54e313c83a298a786055bf96bbb">hal::SharedPropertiesQssAdapter</a>
-, <a class="el" href="classhal_1_1_style_manager.html#ae8dfbd118ef79a3ebba5f8205f9566bd">hal::StyleManager</a>
 , <a class="el" href="classhal_1_1_toolbar.html#aca44709fea709ca91894a5a2c0cc8e85">hal::Toolbar</a>
 , <a class="el" href="classhal_1_1_welcome_screen.html#a121d7795345e410e4f11a68ca5965485">hal::WelcomeScreen</a>
-</li>
-<li>requestLoadPlugin()
-: <a class="el" href="classhal_1_1_plugin_model.html#a34c54b9a7609a2eb38c622341ac78a37">hal::PluginModel</a>
-</li>
-<li>requestUnloadPlugin()
-: <a class="el" href="classhal_1_1_plugin_model.html#a7764bc1523a63bc38334bf919cfd183c">hal::PluginModel</a>
 </li>
 <li>requireUpdate()
 : <a class="el" href="classhal_1_1_details_general_model.html#a34fb7f791d3ee4e6ab41f0e1a269dc0b">hal::DetailsGeneralModel</a>
 </li>
 <li>reset()
-: <a class="el" href="classhal_1_1_filter_dialog.html#a8ff9736336f6de6dfab9e788b8167693">hal::FilterDialog</a>
-, <a class="el" href="classhal_1_1_netlist_watcher.html#a5149be1df3e3df1431728803800156ca">hal::NetlistWatcher</a>
+: <a class="el" href="classhal_1_1_netlist_relay.html#a5b1738463cab64e14d9392a43b77a357">hal::NetlistRelay</a>
 </li>
 <li>reset_labels()
 : <a class="el" href="classhal_1_1_settings_widget.html#a86c7be9a22f93c0026ddec4deba56550">hal::SettingsWidget</a>
@@ -363,28 +360,13 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 , <a class="el" href="classhal_1_1_grouping_table_model.html#a8ba69e4b3df886cc9c9c304ab1aaa7ef">hal::GroupingTableModel</a>
 , <a class="el" href="classhal_1_1_module_model.html#a96793741236b34d4df5cab96f9cbdce7">hal::ModuleModel</a>
 , <a class="el" href="classhal_1_1_module_select_model.html#a563d7f745bbb21601b052ce4f7670ebc">hal::ModuleSelectModel</a>
-, <a class="el" href="classhal_1_1_plugin_model.html#a88c84c222026156f134207065bc4453d">hal::PluginModel</a>
 , <a class="el" href="classhal_1_1_selection_tree_model.html#af15f97f318fd282fc82056321fd42d12">hal::SelectionTreeModel</a>
-</li>
-<li>Rule
-: <a class="el" href="structhal_1_1_filter_item.html#a7a7f776b0cb6bae46a5bf056117ac48e">hal::FilterItem</a>
-</li>
-<li>run()
-: <a class="el" href="classhal_1_1_worker.html#a16b4f91691612d30cfed67fd77a85b9c">hal::Worker</a>
 </li>
 <li>runIconPath
 : <a class="el" href="classhal_1_1_python_editor.html#ac628125539572fdd23670a472638fcef">hal::PythonEditor</a>
-, <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#a81ccb98dc8e9884f36496ac4ce7d8c8b">hal::SharedPropertiesQssAdapter</a>
 </li>
-<li>runIconStyle()
-: <a class="el" href="classhal_1_1_python_editor.html#af8942bc3b8bf19eb4a753b4cfdcdb138">hal::PythonEditor</a>
-, <a class="el" href="classhal_1_1_shared_properties_qss_adapter.html#a640a5754e7972a7c26ad97c0d40d871f">hal::SharedPropertiesQssAdapter</a>
-</li>
-<li>runPlugin()
-: <a class="el" href="classhal_1_1_plugin_model.html#a0a2eb33f6e9e50f823406b4ef84479ef">hal::PluginModel</a>
-</li>
-<li>runPluginTriggered()
-: <a class="el" href="classhal_1_1_main_window.html#aec79c959f97bb23acedd1d4e50a6851f">hal::MainWindow</a>
+<li>runIconStyle
+: <a class="el" href="classhal_1_1_python_editor.html#a738016becc85154f578ae7ab8504f256">hal::PythonEditor</a>
 </li>
 <li>RuntimeLibrary()
 : <a class="el" href="classhal_1_1_runtime_library.html#aad635bbc833495c11d54da0add1571ba">hal::RuntimeLibrary</a>
@@ -395,7 +377,7 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon May 31 2021 09:26:26 for HAL by
+    <li class="footer">Generated on Tue Jun 1 2021 12:57:32 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
