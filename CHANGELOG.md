@@ -5,7 +5,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-* hal-core event system rewritten so that handlers can register for events of one netlist instance only
 * added user action system to enable recording and reverting actions within the GUI
   * moved most GUI actions to the new user action system, including interactions with the graph view and view management
   * user actions can be recorded and exported as a macro file allowing easier debugging and crash reporting
@@ -35,6 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added function `get_common_inputs` to get inputs that are common across multiple gates
   * added function `replace_gate` to replace a gate with an instance of another gate type
   * added function `get_gate_chain` and `get_complex_gate_chain` to find gates that are arranged in a chain
+* new internal event system 
+  * binds event handlers to a netlist instance
+  * facilitates listening to the events of selected netlists only
 * miscellaneous API changes and additions
   * added function `is_top_module` to class `Module` to determine whether a module is the top module
   * added function `get_nets` to class `Module` to get all nets that are connected to any of the gates or submodules of a module
