@@ -25,6 +25,7 @@
 
 #include <QAbstractTableModel>
 #include <QString>
+#include <hal_core/netlist/gate.h>
 
 #include "hal_core/defines.h"
 
@@ -35,7 +36,16 @@ namespace hal {
         Q_OBJECT
 
         //QList<GroupingTableEntry> mGroupings;
+        struct LutEntry
+        {
+            QList<u8> inputBits; // 0 or 1 per entry
+            QString output; // "0", "1", "X" or "Z"
+        };
 
+        QList<LutEntry> mLutEntries;
+        QList<QString> mHeaderPins;
+        int mInputCount;
+        QString mOutPinName;
 
     public:
         /**
@@ -89,6 +99,8 @@ namespace hal {
          * @returns <b>true</b> on success
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+
+        void update(Gate* g);
 
     };
 }

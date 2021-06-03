@@ -24,6 +24,8 @@
 #pragma once
 
 #include "gui/new_selection_details_widget/models/lut_model.h"
+#include "gui/selection_details_widget/selection_details_widget.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 
 #include <QTableView>
 
@@ -49,6 +51,11 @@ namespace hal
          * @returns the LutModel of this LutDetailsWidget
          */
         LutModel* getModel() const { return mLutModel; }
+
+    public Q_SLOTS:
+        // Debug
+        void handleFocusChanged(const SelectionTreeItem* sti);
+
 
     private:
         LutModel* mLutModel;
