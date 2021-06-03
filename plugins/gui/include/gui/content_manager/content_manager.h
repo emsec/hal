@@ -30,6 +30,12 @@
 #include "gui/netlist_watcher/netlist_watcher.h"
 #include "gui/gui_utils/special_log_content_manager.h"
 #include "hal_config.h"
+// -----------------------------------------------------------
+//   Temporary Debug Code - TODO: Remove me before merging
+#include "gui/new_selection_details_widget/new_gate_details_widget/lut_details_widget.h"
+
+
+// -----------------------------------------------------------
 
 namespace hal
 {
@@ -156,6 +162,12 @@ namespace hal
         static SettingsItemDropdown* sSettingSortMechanism;
         static bool sSettingsInitialized;
         static bool initializeSettins();
+        // -----------------------------------------------------------
+        //   Temporary Debug Code - TODO: Remove me before merging
+        std::shared_ptr<LutDetailsWidget> mDebugLutDetailsWidget;
+
+
+        // -----------------------------------------------------------
 
 #ifdef HAL_STUDY
         SpecialLogContentManager* mSpecialLogContentManager;

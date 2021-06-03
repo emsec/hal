@@ -222,6 +222,15 @@ namespace hal
         connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mSelectionDetailsWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
 
         sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
+        // -----------------------------------------------------------
+        //   Temporary Debug Code - TODO: Remove me before merging
+        mDebugLutDetailsWidget = std::shared_ptr<LutDetailsWidget>(new LutDetailsWidget(nullptr));
+        mDebugLutDetailsWidget->show();
+
+
+
+
+        // -----------------------------------------------------------
     }
 
     void ContentManager::setWindowTitle(const QString &filename)
