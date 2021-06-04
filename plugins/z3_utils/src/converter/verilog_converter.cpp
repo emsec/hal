@@ -137,6 +137,8 @@ namespace hal
 
         std::string VerilogConverter::construct_function(const std::string& assignments, const std::string& initialization, const std::vector<u32>& inputs) const
         {
+            // NOTE the inputs are unused because they are included in the initialization for the verilog converter
+            UNUSED(inputs);
             std::string return_var;
             if (assignments.empty()) {
                 const auto begin = initialization.find("i");
