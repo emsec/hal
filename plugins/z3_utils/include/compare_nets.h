@@ -23,22 +23,14 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
-
-#include "converter/converter.h"
-#include "converter/cpp_converter.h"
-#include "compare_nets.h"
-#include "SubgraphFunctionGenerator.h"
-#include "z3Wrapper.h"
-
 namespace hal
 {
-    class PLUGIN_API Z3UtilsPlugin : public BasePluginInterface
-    {
-    public:
-        std::string get_name() const override;
-        std::string get_version() const override;
+    /* forward declaration */
+    class Netlist;
+    class Net;
 
-        void initialize() override;
-    };
+    namespace z3_utils
+    {
+       bool compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b,  bool replace_net_ids=true);
+    }    // namespace z3_utils
 }    // namespace hal
