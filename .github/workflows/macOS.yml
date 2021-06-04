@@ -108,6 +108,7 @@ jobs:
         run: |
           cd build
           export PATH="/usr/local/opt/qt/bin:$PATH"
+          export BUILD_TYPE=Debug
           cmake --build . --target all --clean-first --config $BUILD_TYPE
         env:
           LDFLAGS: "-L/usr/local/opt/qt@5/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
