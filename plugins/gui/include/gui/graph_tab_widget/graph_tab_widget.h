@@ -149,11 +149,22 @@ namespace hal
         void handleModuleFocus(u32 moduleId);
 
         /**
+         *
+         * @param index - The index of the tab within the QTabWidget
+         */
+        void handleCustomContextMenuRequested(const QPoint &pos);
+
+        /**
          * Change shape of cursor to indicate that a module should be picked by user
          *
          * @param on - true=on,  false=off
          */
         void setModuleSelectCursor(bool on);
+
+        void handleCloseThisTab();
+        void handleCloseOtherTabs();
+        void handleCloseTabsToRight();
+        void handleCloseTabsToLeft();
 
     private:
         QTabWidget* mTabWidget;

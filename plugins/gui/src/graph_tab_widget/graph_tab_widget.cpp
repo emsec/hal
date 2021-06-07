@@ -81,7 +81,9 @@ namespace hal
         mContentLayout->addWidget(mTabWidget);
         mTabWidget->setTabsClosable(true);
         mTabWidget->setMovable(true);
+        mTabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
+        connect(mTabWidget, &QTabWidget::customContextMenuRequested, this, &GraphTabWidget::handleCustomContextMenuRequested);
         connect(mTabWidget, &QTabWidget::tabCloseRequested, this, &GraphTabWidget::handleTabCloseRequested);
         connect(mTabWidget, &QTabWidget::currentChanged, this, &GraphTabWidget::handleTabChanged);
         connect(gGraphContextManager, &GraphContextManager::contextCreated, this, &GraphTabWidget::handleContextCreated);
@@ -253,6 +255,67 @@ namespace hal
             }
         }
         return -1;
+    }
+
+    void GraphTabWidget::handleCustomContextMenuRequested(const QPoint &pos)
+    {
+        int clickedIndex = mTabWidget->tabBar()->tabAt(pos);
+
+        QMenu contextMenu("Context menu", this);
+
+        QAction closeThisTab("Close This Tab", this);
+        QAction closeOtherTabs("Close Other Tabs", this);
+        QAction closeTabsToRight("Close Tabs to Right", this);
+        QAction closeTabsToLeft("Close Tabs to Left", this);
+
+        contextMenu.addAction(&closeThisTab);
+        contextMenu.addAction(&closeOtherTabs);
+        contextMenu.addAction(&closeTabsToRight);
+        contextMenu.addAction(&closeTabsToLeft);
+
+        connect(&closeThisTab, &QAction::triggered, this, &GraphTabWidget::handleCloseThisTab);
+        connect(&closeOtherTabs, &QAction::triggered, this, &GraphTabWidget::handleCloseOtherTabs);
+        connect(&closeTabsToRight, &QAction::triggered, this, &GraphTabWidget::handleCloseTabsToRight);
+        connect(&closeTabsToLeft, &QAction::triggered, this, &GraphTabWidget::handleCloseTabsToLeft);
+
+        // Only show context menu when tab is clicked
+        if (clickedIndex != -1)
+        {
+            mTabWidget->setCurrentIndex(clickedIndex);
+            mTabWidget->widget(clickedIndex)->setFocus();
+            contextMenu.exec(mapToGlobal(pos));
+        }
+    }
+
+    void GraphTabWidget::handleCloseThisTab()
+    {
+        handleTabCloseRequested(mTabWidget->currentIndex());
+    }
+
+    void GraphTabWidget::handleCloseOtherTabs()
+    {
+        handleCloseTabsToLeft();
+        handleCloseTabsToRight();
+    }
+
+    void GraphTabWidget::handleCloseTabsToRight()
+    {
+        // Remove last tab until focused tab is the last tab
+        while (mTabWidget->currentIndex() != mTabWidget->count()-1)
+        {
+            handleTabCloseRequested(mTabWidget->count()-1);
+        }
+
+    }
+
+    void GraphTabWidget::handleCloseTabsToLeft()
+    {
+        // Remove first tab until focused tab is the first tab
+        while (mTabWidget->currentIndex() != 0)
+        {
+            handleTabCloseRequested(0);
+        }
+
     }
 
     void GraphTabWidget::setModuleSelectCursor(bool on)
