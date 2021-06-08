@@ -89,7 +89,7 @@ namespace hal
             }
         }
 
-        if (execute(nl, path, sizes, false, {{}}).empty())
+        if (execute(nl, path, sizes, false).empty())
         {
             return false;
         }
@@ -97,7 +97,7 @@ namespace hal
         return true;
     }
 
-    std::vector<std::vector<Gate*>> plugin_dataflow::execute(Netlist* nl, std::string output_path, const std::vector<u32> sizes, bool draw_graph, std::set<std::set<u32>> known_groups = {{}})
+    std::vector<std::vector<Gate*>> plugin_dataflow::execute(Netlist* nl, std::string output_path, const std::vector<u32> sizes, bool draw_graph)
     {
         log("--- starting dataflow analysis ---");
 
@@ -173,7 +173,7 @@ namespace hal
         auto nl_copy       = netlist_utils::copy_netlist(nl);
         auto netlist_abstr = dataflow::pre_processing::run(nl_copy.get());
 
-        auto initial_grouping = netlist_abstr.create_initial_grouping(known_groups);
+        auto initial_grouping = netlist_abstr.create_initial_grouping();
         std::shared_ptr<dataflow::Grouping> final_grouping;
 
         total_time += (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000;
