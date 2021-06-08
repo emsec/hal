@@ -23,22 +23,28 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
-
-#include "converter/converter.h"
-#include "converter/cpp_converter.h"
-#include "compare_nets.h"
-#include "SubgraphFunctionGenerator.h"
-#include "z3Wrapper.h"
-
 namespace hal
 {
-    class PLUGIN_API Z3UtilsPlugin : public BasePluginInterface
-    {
-    public:
-        std::string get_name() const override;
-        std::string get_version() const override;
+    /* forward declaration */
+    class Netlist;
+    class Net;
 
-        void initialize() override;
-    };
+    namespace z3_utils
+    {
+        /**
+         * Compare two nets from two different netlist. This is done on a functional level and 
+         * compares the combinational gates infront of the nets until hitting a sequential gate.
+         * In order for this two work the sequential gates of both netlists must be identical and only the combinational gates my differ.
+         * If replace_net_ids is set the function subtitutes the input nets of the functions with their source gate and pin.
+         * This allows to also change the output nets of the sequential gates.
+         * 
+         * @param[in] netlist_a - The first netlist.
+         * @param[in] netlist_b - The second netlist.
+         * @param[in] net_a - First net, from netlist_a.
+         * @param[in] net_b - Second net, from netlist_b.
+         * @param[in] replace_net_ids - If set, the input_net_ids are substituted by their source gate and pin.
+         * 
+         */
+       bool compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b,  bool replace_net_ids=true);
+    }    // namespace z3_utils
 }    // namespace hal
