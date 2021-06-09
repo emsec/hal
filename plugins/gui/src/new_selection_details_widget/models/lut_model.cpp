@@ -31,14 +31,20 @@ namespace hal
 
     QVariant LutModel::data(const QModelIndex &index, int role) const
     {
-        if (role != Qt::DisplayRole) return QVariant();
-        if(index.column() < mInputCount){
-            return mLutEntries[index.row()].inputBits[index.column()];
-        }
-        else{
-            return mLutEntries[index.row()].output;
+        if (role == Qt::DisplayRole){
+            if(index.column() < mInputCount){
+                return mLutEntries[index.row()].inputBits[index.column()];
+            }
+            else{
+                return mLutEntries[index.row()].output;
+            }
         }
 
+        else if (role == Qt::TextAlignmentRole){
+            return Qt::AlignCenter;
+        }
+
+        return QVariant();
     }
 
     QVariant LutModel::headerData(int section, Qt::Orientation orientation, int role) const

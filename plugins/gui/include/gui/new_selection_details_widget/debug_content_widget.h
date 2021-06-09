@@ -23,19 +23,25 @@
 
 #pragma once
 
-#include "gui/new_selection_details_widget/models/lut_model.h"
-#include "gui/selection_details_widget/selection_details_widget.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "gui/content_widget/content_widget.h"
+#include "gui/new_selection_details_widget/new_gate_details_widget/lut_details_widget.h"
+#include "hal_core/defines.h"
+
 
 #include <QTableView>
-
+#include <QVBoxLayout>
 
 namespace hal
 {
+    class LutDetailsWidget;
 
-    class LutDetailsWidget : public QTableView
+    /**
+     * Can be used to insert and test new widgets.
+     * TODO: Remove me before merging
+     */
+    class DebugContentWidget : public ContentWidget
     {
-    Q_OBJECT
+        Q_OBJECT
 
     public:
         /**
@@ -43,27 +49,11 @@ namespace hal
         *
         * @param parent - The parent widget
         */
-        LutDetailsWidget(QWidget* parent = nullptr);
-
-        /**
-         * Accesses the underlying table model of this LutModel.
-         *
-         * @returns the LutModel of this LutDetailsWidget
-         */
-        LutModel* getModel() const { return mLutModel; }
-
-    public Q_SLOTS:
-        // Debug
-        void handleFocusChanged(const SelectionTreeItem* sti);
-        void resizeEvent(QResizeEvent* event) override;
-
+        DebugContentWidget(QWidget* parent = nullptr);
 
     private:
-        void updateGate(Gate* gate);
-        void adjustColumnSizes();
-
-        LutModel* mLutModel;
-        QTableView* mLutTableView;
+        LutDetailsWidget* mContent;
+        QVBoxLayout* mContainerLayout;
 
     };
 }

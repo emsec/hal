@@ -224,11 +224,10 @@ namespace hal
         sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
         // -----------------------------------------------------------
         //   Temporary Debug Code - TODO: Remove me before merging
-        mDebugLutDetailsWidget = std::shared_ptr<LutDetailsWidget>(new LutDetailsWidget(nullptr));
-        mDebugLutDetailsWidget->show();
-
-
-
+        mDebugContentWidget = new DebugContentWidget();
+        mMainWindow->addContent(mDebugContentWidget, 6, content_anchor::bottom);
+        mDebugContentWidget->open();
+        mContent.append(mDebugContentWidget);
 
         // -----------------------------------------------------------
     }

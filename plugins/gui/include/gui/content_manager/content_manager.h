@@ -33,7 +33,7 @@
 // -----------------------------------------------------------
 //   Temporary Debug Code - TODO: Remove me before merging
 #include "gui/new_selection_details_widget/new_gate_details_widget/lut_details_widget.h"
-
+#include "gui/new_selection_details_widget/debug_content_widget.h"
 
 // -----------------------------------------------------------
 
@@ -164,7 +164,7 @@ namespace hal
         static bool initializeSettins();
         // -----------------------------------------------------------
         //   Temporary Debug Code - TODO: Remove me before merging
-        std::shared_ptr<LutDetailsWidget> mDebugLutDetailsWidget;
+        DebugContentWidget* mDebugContentWidget;
 
 
         // -----------------------------------------------------------
