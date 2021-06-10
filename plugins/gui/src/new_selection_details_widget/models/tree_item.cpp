@@ -59,4 +59,33 @@ namespace hal
         return mChildren.size();
     }
 
+    int TreeItem::getColumnCount()
+    {
+        return mData.size();
+    }
+
+    int TreeItem::getRowForChild(TreeItem *child)
+    {
+        int index = -1;
+        for(int i = 0; i < mChildren.size(); i++)
+        {
+            if(mChildren.at(i) == child)
+            {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    void TreeItem::setAdditionalData(QString key, QVariant data)
+    {
+        mAdditionalData.insert(key, data);
+    }
+
+    QVariant TreeItem::getAdditionalData(QString key)
+    {
+        return mAdditionalData.value(key, QVariant());
+    }
+
 }

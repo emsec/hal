@@ -124,13 +124,46 @@ namespace hal
          */
         int getChildCount();
 
+        /**
+         * Get the number of currently stored column data.
+         *
+         * @return The column count.
+         */
+        int getColumnCount();
+
+        /**
+         * Convenients method to get the row for a given item.
+         * If the item is not a child of this item, -1 is returned.
+         *
+         * @param child - The child for which the row is requested.
+         * @return The row if the item is a child, -1 otherwise.
+         */
+        int getRowForChild(TreeItem* child);
+
+        /**
+         * Stores additional data. Can be accessed by getAdditionalData.
+         * (For example, a menu or color)
+         *
+         * @param key - The key to store the data under.
+         * @param data - The actual data to store.
+         */
+        void setAdditionalData(QString key, QVariant data);
+
+        /**
+         * Retrieve the data stored under the given key.
+         *
+         * @param key - The key for the requested data.
+         * @return The data if something was stored under the key, empty QVariant otherwise.
+         */
+        QVariant getAdditionalData(QString key);
+
     private:
         TreeItem* mParent;
         QList<TreeItem*> mChildren;
         QList<QVariant> mData;
 
         // experimental, additional data (for anything)
-        //QMap<QString, QVariant> mAdditionalData;
+        QMap<QString, QVariant> mAdditionalData;
         //QList<QVariant> mAdditionalData;
 
     };
