@@ -3,9 +3,7 @@
 namespace hal {
     DebugContentWidget::DebugContentWidget(QWidget *parent) : ContentWidget("Debug Widget", parent)
     {
-        mContent = new LUTTableWidget(this);
-
-        mContentLayout->addWidget(mContent);
+        mContentLayout->addWidget(new BooleanFunctionTable(this));
     }
 
 } // namespace hal

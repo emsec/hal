@@ -23,26 +23,22 @@
 
 #pragma once
 
-#include "gui/content_widget/content_widget.h"
-#include "gui/new_selection_details_widget/new_gate_details_widget/lut_table_widget.h"
-#include "hal_core/defines.h"
-#include "gui/new_selection_details_widget/new_gate_details_widget/boolean_function_table.h"
+#include "gui/selection_details_widget/selection_details_widget.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate.h"
 
+#include <QLabel>
+#include <QWidget>
+#include <QTableWidget>
 
-#include <QTableView>
-#include <QVBoxLayout>
 
 namespace hal
 {
-    class ContentWidget;
 
-    /**
-     * Can be used to insert and test new widgets.
-     * TODO: Remove me before merging
-     */
-    class DebugContentWidget : public ContentWidget
+    class BooleanFunctionTable : public QTableWidget
     {
-        Q_OBJECT
+    Q_OBJECT
 
     public:
         /**
@@ -50,7 +46,33 @@ namespace hal
         *
         * @param parent - The parent widget
         */
-        DebugContentWidget(QWidget* parent = nullptr);
+        BooleanFunctionTable(QWidget* parent = nullptr);
+
+    public Q_SLOTS:
+        /**
+         * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
+         * boolean functions content if necessary.
+         *
+         * @param sti - The focused SelectionTreeItem
+         */
+        void handleDetailsFocusChanged(const SelectionTreeItem* sti);
+
+    protected Q_SLOTS:
+        /**
+         * Handles the resize event. The table is sized, so that the output column is bigger than the input columns.
+         *
+         * @param event - The QResizeEvent
+         */
+        void resizeEvent(QResizeEvent* event) override;
+
+
+    private:
+        void adjustTableSizes();
+        void setGate(Gate* gate);
+
+        QLabel getBooleanFunctionLabel(QString outPinName, const BooleanFunction bf);
+        //void adjustColumnSizes();
+
 
     };
-}
+} // namespace hal
