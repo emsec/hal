@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "gui/new_selection_details_widget/models/lut_model.h"
+#include "gui/new_selection_details_widget/models/lut_table_model.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 
@@ -33,7 +33,7 @@
 namespace hal
 {
 
-    class LutDetailsWidget : public QTableView
+    class LUTTableWidget : public QTableView
     {
     Q_OBJECT
 
@@ -43,18 +43,30 @@ namespace hal
         *
         * @param parent - The parent widget
         */
-        LutDetailsWidget(QWidget* parent = nullptr);
+        LUTTableWidget(QWidget* parent = nullptr);
 
         /**
-         * Accesses the underlying table model of this LutModel.
+         * Accesses the underlying table model of this LUTTableModel.
          *
-         * @returns the LutModel of this LutDetailsWidget
+         * @returns the LUTTableModel of this LUTTableWidget
          */
-        LutModel* getModel() const { return mLutModel; }
+        LUTTableModel* getModel() const { return mLutModel; }
 
     public Q_SLOTS:
-        // Debug
-        void handleFocusChanged(const SelectionTreeItem* sti);
+        /**
+         * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
+         * LUT content if necessary.
+         *
+         * @param sti - The focused SelectionTreeItem
+         */
+        void handleDetailsFocusChanged(const SelectionTreeItem* sti);
+
+    protected Q_SLOTS:
+        /**
+         * Handles the resize event. The table is sized, so that the output column is bigger than the input columns.
+         *
+         * @param event - The QResizeEvent
+         */
         void resizeEvent(QResizeEvent* event) override;
 
 
@@ -62,7 +74,7 @@ namespace hal
         void updateGate(Gate* gate);
         void adjustColumnSizes();
 
-        LutModel* mLutModel;
+        LUTTableModel* mLutModel;
         QTableView* mLutTableView;
 
     };

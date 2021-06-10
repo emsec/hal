@@ -24,7 +24,7 @@
 #pragma once
 
 #include "gui/content_widget/content_widget.h"
-#include "gui/new_selection_details_widget/new_gate_details_widget/lut_details_widget.h"
+#include "gui/new_selection_details_widget/new_gate_details_widget/lut_table_widget.h"
 #include "hal_core/defines.h"
 
 
@@ -33,7 +33,7 @@
 
 namespace hal
 {
-    class LutDetailsWidget;
+    class LUTTableWidget;
 
     /**
      * Can be used to insert and test new widgets.
@@ -52,7 +52,7 @@ namespace hal
         DebugContentWidget(QWidget* parent = nullptr);
 
     private:
-        LutDetailsWidget* mContent;
+        LUTTableWidget* mContent;
         QVBoxLayout* mContainerLayout;
 
     };

@@ -1,14 +1,14 @@
 #include <QHeaderView>
 
-#include "gui/new_selection_details_widget/new_gate_details_widget/lut_details_widget.h"
+#include "gui/new_selection_details_widget/new_gate_details_widget/lut_table_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 
 namespace hal{
 
-    LutDetailsWidget::LutDetailsWidget(QWidget* parent):
+    LUTTableWidget::LUTTableWidget(QWidget* parent):
         QTableView(parent),
-        mLutModel(new LutModel(this))
+        mLutModel(new LUTTableModel(this))
     {
         this->setModel(mLutModel);
         this->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -19,10 +19,10 @@ namespace hal{
         SelectionTreeView* t = gContentManager->getSelectionDetailsWidget()->selectionTreeView();
 
         this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-        connect(t, &SelectionTreeView::triggerSelection, this, &LutDetailsWidget::handleFocusChanged);
+        connect(t, &SelectionTreeView::triggerSelection, this, &LUTTableWidget::handleDetailsFocusChanged);
     }
 
-    void LutDetailsWidget::handleFocusChanged(const SelectionTreeItem* sti){
+    void LUTTableWidget::handleDetailsFocusChanged(const SelectionTreeItem* sti){
         if(sti == nullptr){
             return;
         }
@@ -33,20 +33,24 @@ namespace hal{
         }
     }
 
-    void LutDetailsWidget::updateGate(Gate* gate){
+    void LUTTableWidget::updateGate(Gate* gate){
         if(gate == nullptr)
             return;
-        if(gate->get_type()->get_pins_of_type(PinType::lut).size() > 0){
-            mLutModel->update(gate);
-            this->resizeColumnsToContents();
-            this->resizeRowsToContents();
+
+        std::unordered_set<std::basic_string<char>> lutPins = gate->get_type()->get_pins_of_type(PinType::lut);
+        // The table is only updated if the gate has a LUT pin
+        if(lutPins.size() > 0){
+            // All LUT pins have the same boolean function
+            std::basic_string<char> outPin = *lutPins.begin();
+            BooleanFunction lutFunction = gate->get_boolean_function(outPin);
+            mLutModel->setBooleanFunction(lutFunction, QString::fromStdString(outPin));
             this->clearSelection();
             this->update();
             adjustColumnSizes();
         }
     }
 
-    void LutDetailsWidget::adjustColumnSizes(){
+    void LUTTableWidget::adjustColumnSizes(){
         int w = this->size().width();
         int colCount = mLutModel->columnCount();
 
@@ -59,7 +63,7 @@ namespace hal{
         this->horizontalHeader()->setSectionResizeMode(colCount-1, QHeaderView::Stretch);
     }
 
-    void LutDetailsWidget::resizeEvent(QResizeEvent *event) {
+    void LUTTableWidget::resizeEvent(QResizeEvent *event) {
         QTableView::resizeEvent(event);
         adjustColumnSizes();
     }

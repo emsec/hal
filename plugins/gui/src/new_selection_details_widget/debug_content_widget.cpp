@@ -3,7 +3,7 @@
 namespace hal {
     DebugContentWidget::DebugContentWidget(QWidget *parent) : ContentWidget("Debug Widget", parent)
     {
-        mContent = new LutDetailsWidget(this);
+        mContent = new LUTTableWidget(this);
 
         mContentLayout->addWidget(mContent);
     }

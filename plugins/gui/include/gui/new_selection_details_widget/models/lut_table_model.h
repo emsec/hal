@@ -31,21 +31,16 @@
 
 namespace hal {
 
-    class LutModel : public QAbstractTableModel
+    class LUTTableModel : public QAbstractTableModel
     {
         Q_OBJECT
+    private:
 
-        //QList<GroupingTableEntry> mGroupings;
         struct LutEntry
         {
             QList<u8> inputBits; // 0 or 1 per entry
             QString output; // "0", "1", "X" or "Z"
         };
-
-        QList<LutEntry> mLutEntries;
-        QList<QString> mHeaderPins;
-        int mInputCount;
-        QString mOutPinName;
 
     public:
         /**
@@ -53,13 +48,13 @@ namespace hal {
          *
          * @param parent - The parent widget
          */
-        LutModel(QObject* parent=nullptr);
+        LUTTableModel(QObject* parent=nullptr);
 
         /**
          * Returns the amount of columns.
          *
          * @param parent - Then parent model index
-         * @returns
+         * @returns the amount of columns.
          */
         int columnCount(const QModelIndex &parent=QModelIndex()) const override;
 
@@ -72,7 +67,9 @@ namespace hal {
         int rowCount(const QModelIndex &parent=QModelIndex()) const override;
 
         /**
-         * Returns the data stored under the given role for a given index in the table model.
+         * Returns the data stored under the given role for a given index in the table model. <br>
+         * All values are aligned centered. The last column is the rows output,
+         * in the other columns are the input values.
          *
          * @param index - The index in the table
          * @param role - The access role
@@ -91,7 +88,7 @@ namespace hal {
         QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
         /**
-         * Sets the role data for the item at index to value.
+         * Sets the role data for the item at index to value. Currently unused.
          *
          * @param index - The model index
          * @param value - The value to set
@@ -100,7 +97,19 @@ namespace hal {
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
-        void update(Gate* g);
+        /**
+         * Sets the content of this model to the specified BooleanFunction. The name of the outputPin must be
+         * passed additionally.
+         *
+         * @param lutFunction - The boolean function of the LUT to show.
+         * @param outputPinName - The name of the output pin. Becomes the header of the output column.
+         */
+        void setBooleanFunction(const BooleanFunction lutFunction, const QString outputPinName);
+
+    private:
+        QList<LutEntry> mLutEntries;
+        QList<QString> mInputPins;
+        QString mOutputPin;
 
     };
 }

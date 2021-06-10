@@ -32,7 +32,7 @@
 #include "hal_config.h"
 // -----------------------------------------------------------
 //   Temporary Debug Code - TODO: Remove me before merging
-#include "gui/new_selection_details_widget/new_gate_details_widget/lut_details_widget.h"
+#include "gui/new_selection_details_widget/new_gate_details_widget/lut_table_widget.h"
 #include "gui/new_selection_details_widget/debug_content_widget.h"
 
 // -----------------------------------------------------------

@@ -1,38 +1,36 @@
 
 #include <algorithm>
 
-#include "gui/new_selection_details_widget/models/lut_model.h"
+#include "gui/new_selection_details_widget/models/lut_table_model.h"
 #include "hal_core/utilities/log.h"
 
 
 namespace hal
 {
 
-    LutModel::LutModel(QObject* parent) : QAbstractTableModel(parent){
+    LUTTableModel::LUTTableModel(QObject* parent) : QAbstractTableModel(parent){
         LutEntry emptyEntry;
-        emptyEntry.output = "Error: Not initialized yet";
+        emptyEntry.output = "No LUT gate selected yet...";
         mLutEntries.append(emptyEntry);
-        mHeaderPins.append("-");
-        mInputCount = 0;
-        mOutPinName = "-";
+        mOutputPin = "-";
     }
 
-    int LutModel::columnCount(const QModelIndex &parent) const
+    int LUTTableModel::columnCount(const QModelIndex &parent) const
     {
         Q_UNUSED(parent)
-        return (mInputCount + 1);
+        return (mInputPins.size() + 1);
     }
 
-    int LutModel::rowCount(const QModelIndex &parent) const
+    int LUTTableModel::rowCount(const QModelIndex &parent) const
     {
         Q_UNUSED(parent)
         return mLutEntries.size();
     }
 
-    QVariant LutModel::data(const QModelIndex &index, int role) const
+    QVariant LUTTableModel::data(const QModelIndex &index, int role) const
     {
         if (role == Qt::DisplayRole){
-            if(index.column() < mInputCount){
+            if(index.column() < mInputPins.size()){
                 return mLutEntries[index.row()].inputBits[index.column()];
             }
             else{
@@ -47,21 +45,21 @@ namespace hal
         return QVariant();
     }
 
-    QVariant LutModel::headerData(int section, Qt::Orientation orientation, int role) const
+    QVariant LUTTableModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
         if (role != Qt::DisplayRole) return QVariant();
         if(orientation == Qt::Horizontal)
         {
-            if (section < mInputCount)
-                return mHeaderPins[section];
+            if (section < mInputPins.size())
+                return mInputPins[section];
             else
-                return mOutPinName;
+                return mOutputPin;
         }
 
         return QVariant();
     }
 
-    bool LutModel::setData(const QModelIndex &index, const QVariant &value, int role)
+    bool LUTTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
     {
         // TODO
         Q_UNUSED(index)
@@ -70,29 +68,19 @@ namespace hal
         return false;
     }
 
-    void LutModel::update(Gate* gate)
+    void LUTTableModel::setBooleanFunction(const BooleanFunction lutFunction, const QString outputPinName)
     {
-        std::unordered_set<std::basic_string<char>> lutPins = gate->get_type()->get_pins_of_type(PinType::lut);
-        if(lutPins.size() == 0){
-            log_error("gui", "LutModel was initialized with non-LUT gate!");
-            return;
-        }
-        // All LUT pins have the same boolean function
-        std::basic_string<char> outPin = *lutPins.begin();
-        BooleanFunction lutFunction = gate->get_boolean_function(outPin);
-
         Q_EMIT layoutAboutToBeChanged();
-        mOutPinName = QString::fromStdString(outPin);
+        mOutputPin = outputPinName;
 
         // Collect the variables as headers
-        mHeaderPins.clear();
+        mInputPins.clear();
         for(std::string v : lutFunction.get_variables()){
-            mHeaderPins.append(QString::fromStdString(v));
+            mInputPins.append(QString::fromStdString(v));
         }
 
         // Collect the lut data
         std::vector<std::string> bfVariables = lutFunction.get_variables();
-        mInputCount = bfVariables.size();
         std::reverse(bfVariables.begin(), bfVariables.end()); // To read the lut the variable list must be reversed
 
         std::vector<BooleanFunction::Value> truthTable = lutFunction.get_truth_table(bfVariables, false);
@@ -100,8 +88,8 @@ namespace hal
         for(u32 truthTableIdx = 0; truthTableIdx < truthTable.size(); truthTableIdx++){
             LutEntry entry;
             // Get input bits
-            for(int i = 0; i < mInputCount; i++){
-                u32 shift = mInputCount-i-1;
+            for(int i = 0; i < mInputPins.size(); i++){
+                u32 shift = mInputPins.size()-i-1;
                 u8 inputBit = u8((truthTableIdx >> shift) & 1);
                 entry.inputBits.append(inputBit);
             }
