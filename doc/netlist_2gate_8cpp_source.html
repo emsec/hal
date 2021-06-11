@@ -135,7 +135,7 @@ $(document).ready(function(){initNavTree('netlist_2gate_8cpp_source.html',''); i
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">if</span> (m_id != other.<a class="code" href="classhal_1_1_gate.html#afc66cb905518bd5b03c1323caea00b81">get_id</a>() || m_name != other.<a class="code" href="classhal_1_1_gate.html#a55ca16fc3905a6c0cb87a6427189de31">get_name</a>() || m_type != other.<a class="code" href="classhal_1_1_gate.html#a24e1a29c3fc812588acb673c214af128">get_type</a>())</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;gate&quot;</span>, <span class="stringliteral">&quot;the gates with IDs {} and {} are not equal due to an unequal ID, name, or type.&quot;</span>, m_id, other.<a class="code" href="classhal_1_1_gate.html#afc66cb905518bd5b03c1323caea00b81">get_id</a>());</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <span class="comment">// log_info(&quot;gate&quot;, &quot;the gates with IDs {} and {} are not equal due to an unequal ID, name, or type.&quot;, m_id, other.get_id());</span></div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        }</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
@@ -789,7 +789,7 @@ $(document).ready(function(){initNavTree('netlist_2gate_8cpp_source.html',''); i
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="netlist_2gate_8cpp.html">gate.cpp</a></li>
-    <li class="footer">Generated on Tue Jun 8 2021 12:06:27 for HAL by
+    <li class="footer">Generated on Fri Jun 11 2021 15:23:09 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
