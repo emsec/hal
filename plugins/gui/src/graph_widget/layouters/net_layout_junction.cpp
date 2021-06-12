@@ -234,6 +234,9 @@ namespace hal {
         QHash<int,int> straightConnected;
         u32 searchPattern = dirFrom.toPattern() | dirTo.toPattern();
 
+        QSet<int> connectedInput, connectedOutput;
+        QList<u32> detourIds;
+
         for (u32 netId : mEntries.mEntries[dirFrom.index()])
         {
             if (netId==0) continue;
@@ -243,14 +246,31 @@ namespace hal {
             {
                 int iroadIn  = itNet.value().roadNumber(dirFrom);
                 int iroadOut = itNet.value().roadNumber(dirTo);
-                if (straightConnected.value(iroadOut,-1) == iroadIn) // swap detected
-                    routeSingleSwap(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
-                else
-                    routeSingleStraight(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
+                if (connectedInput.contains(iroadOut) && connectedOutput.contains(iroadIn))
+                {
+                    // swap detected, cannot route directly
+                    detourIds.append(netId);
+                    continue;
+                }
+                routeSingleStraight(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
                 straightConnected[iroadIn] = iroadOut;
                 if (itNet.value().numberEntries() % 2 ==0)
                     itNet->setPlaced();
+                connectedInput.insert(iroadIn);
+                connectedOutput.insert(iroadOut);
             }
+        }
+
+        for (u32 netId : detourIds)
+        {
+            auto itNet = mNetsInput.find(netId);
+            Q_ASSERT(itNet != mNetsInput.end());
+            int iroadIn  = itNet.value().roadNumber(dirFrom);
+            int iroadOut = itNet.value().roadNumber(dirTo);
+            routeSingleDetour(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
+            straightConnected[iroadIn] = iroadOut;
+            if (itNet.value().numberEntries() % 2 ==0)
+                itNet->setPlaced();
         }
     }
 
@@ -278,7 +298,7 @@ namespace hal {
                                              range.endPosition(1)));
     }
 
-    void NetLayoutJunction::routeSingleSwap(u32 netId, int iMain, int iroadIn, int iroadOut)
+    void NetLayoutJunction::routeSingleDetour(u32 netId, int iMain, int iroadIn, int iroadOut)
     {
         int iJump = 1-iMain;
         int iroadJump0 = -1;
