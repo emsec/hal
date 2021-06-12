@@ -47,7 +47,7 @@ namespace hal
     {
         if (m_id != other.get_id() || m_name != other.get_name() || m_type != other.get_type())
         {
-            log_info("gate", "the gates with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
+            // log_info("gate", "the gates with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
             return false;
         }
 
