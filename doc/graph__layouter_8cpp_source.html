@@ -590,8 +590,8 @@ $(document).ready(function(){initNavTree('graph__layouter_8cpp_source.html','');
 <div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160; </div>
 <div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = mJunctionEntries.constBegin(); it != mJunctionEntries.constEnd(); ++it)</div>
 <div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;        {</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;<span class="comment">//            it.value().dumpFile(it.key());</span></div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;<span class="comment">//            qDebug() &lt;&lt; &quot;Junction at&quot; &lt;&lt; it.key().x() &lt;&lt; it.key().y();</span></div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;            it.value().dumpFile(it.key());</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;            qDebug() &lt;&lt; <span class="stringliteral">&quot;Junction at&quot;</span> &lt;&lt; it.key().x() &lt;&lt; it.key().y();</div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;            NetLayoutJunction* nlj = <span class="keyword">new</span> NetLayoutJunction(it.value());</div>
 <div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;            <span class="keywordflow">if</span> (nlj-&gt;lastError() != <a class="code" href="classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bcacf61cd8eb98de819958a126312c27047">NetLayoutJunction::Ok</a>)</div>
 <div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;                qDebug() &lt;&lt; <span class="stringliteral">&quot;Junction route error&quot;</span> &lt;&lt; nlj-&gt;lastError() &lt;&lt; it.key();</div>
@@ -2879,7 +2879,7 @@ $(document).ready(function(){initNavTree('graph__layouter_8cpp_source.html','');
 <div class="ttc" id="alabeled__separated__net_8h_html"><div class="ttname"><a href="labeled__separated__net_8h.html">labeled_separated_net.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_layouter_html_a5994e7e9693cce878c09fc059eaab324"><div class="ttname"><a href="classhal_1_1_graph_layouter.html#a5994e7e9693cce878c09fc059eaab324">hal::GraphLayouter::mScene</a></div><div class="ttdeci">GraphicsScene * mScene</div><div class="ttdef"><b>Definition:</b> <a href="graph__layouter_8h_source.html#l00293">graph_layouter.h:293</a></div></div>
 <div class="ttc" id="aqrect_html_left"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrect.html#left">QRect::left</a></div><div class="ttdeci">int left() const const</div></div>
-<div class="ttc" id="aclasshal_1_1_net_layout_junction_hash_html_afc5714060472c815dd3ff9a214601413"><div class="ttname"><a href="classhal_1_1_net_layout_junction_hash.html#afc5714060472c815dd3ff9a214601413">hal::NetLayoutJunctionHash::clearAll</a></div><div class="ttdeci">void clearAll()</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__junction_8cpp_source.html#l00459">net_layout_junction.cpp:459</a></div></div>
+<div class="ttc" id="aclasshal_1_1_net_layout_junction_hash_html_afc5714060472c815dd3ff9a214601413"><div class="ttname"><a href="classhal_1_1_net_layout_junction_hash.html#afc5714060472c815dd3ff9a214601413">hal::NetLayoutJunctionHash::clearAll</a></div><div class="ttdeci">void clearAll()</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__junction_8cpp_source.html#l00479">net_layout_junction.cpp:479</a></div></div>
 <div class="ttc" id="agraph__layouter_8h_html"><div class="ttname"><a href="graph__layouter_8h.html">graph_layouter.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_net_layout_wire_html_aab9de4aa1429470e0e34ef4801aeb2c4a68b118e6e3b0fbe09851049bb40f21b8"><div class="ttname"><a href="classhal_1_1_net_layout_wire.html#aab9de4aa1429470e0e34ef4801aeb2c4a68b118e6e3b0fbe09851049bb40f21b8">hal::NetLayoutWire::SourcePoint</a></div><div class="ttdeci">@ SourcePoint</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00095">net_layout_point.h:95</a></div></div>
 <div class="ttc" id="aqhash_html_insert"><div class="ttname"><a href="https://doc.qt.io/qt-5/qhash.html#insert">QHash::insert</a></div><div class="ttdeci">QHash::iterator insert(const Key &amp;key, const T &amp;value)</div></div>
@@ -2972,7 +2972,7 @@ $(document).ready(function(){initNavTree('graph__layouter_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="dir_fda276515715e6a42081e8e393a99d09.html">layouters</a></li><li class="navelem"><a class="el" href="graph__layouter_8cpp.html">graph_layouter.cpp</a></li>
-    <li class="footer">Generated on Fri Jun 11 2021 15:23:08 for HAL by
+    <li class="footer">Generated on Sat Jun 12 2021 16:28:55 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -13,7 +13,7 @@ var searchData=
   ['zhuang_16112',['Zhuang',['https://doc.qt.io/qt-5/qlocale.html#Language-enum',1,'QLocale']]],
   ['zimbabwe_16113',['Zimbabwe',['https://doc.qt.io/qt-5/qlocale.html#Country-enum',1,'QLocale']]],
   ['zlibcompression_16114',['ZlibCompression',['https://doc.qt.io/qt-5/qresource.html#Compression-enum',1,'QResource']]],
-  ['zoomin_16115',['zoomIn',['https://doc.qt.io/qt-5/qplaintextedit.html#zoomIn',1,'QPlainTextEdit::zoomIn()'],['https://doc.qt.io/qt-5/qtextedit.html#zoomIn',1,'QTextEdit::zoomIn()'],['https://doc.qt.io/qt-5/qkeysequence.html#StandardKey-enum',1,'QKeySequence::ZoomIn()']]],
+  ['zoomin_16115',['ZoomIn',['https://doc.qt.io/qt-5/qkeysequence.html#StandardKey-enum',1,'QKeySequence::ZoomIn()'],['https://doc.qt.io/qt-5/qplaintextedit.html#zoomIn',1,'QPlainTextEdit::zoomIn()'],['https://doc.qt.io/qt-5/qtextedit.html#zoomIn',1,'QTextEdit::zoomIn()']]],
   ['zoomnativegesture_16116',['ZoomNativeGesture',['https://doc.qt.io/qt-5/qt.html#NativeGestureType-enum',1,'Qt']]],
   ['zoomout_16117',['zoomOut',['https://doc.qt.io/qt-5/qplaintextedit.html#zoomOut',1,'QPlainTextEdit::zoomOut()'],['https://doc.qt.io/qt-5/qtextedit.html#zoomOut',1,'QTextEdit::zoomOut()'],['https://doc.qt.io/qt-5/qkeysequence.html#StandardKey-enum',1,'QKeySequence::ZoomOut()']]],
   ['zorderchange_16118',['ZOrderChange',['https://doc.qt.io/qt-5/qevent.html#Type-enum',1,'QEvent']]],

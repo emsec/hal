@@ -81,7 +81,7 @@ var searchData=
   ['unfoldmodule_15280',['unfoldModule',['../classhal_1_1_graph_context.html#af5994fa27903de66f5af0453368f3cf3',1,'hal::GraphContext']]],
   ['ungetchar_15281',['ungetChar',['https://doc.qt.io/qt-5/qiodevice.html#ungetChar',1,'QIODevice']]],
   ['ungrabgesture_15282',['ungrabGesture',['https://doc.qt.io/qt-5/qgraphicsobject.html#ungrabGesture',1,'QGraphicsObject::ungrabGesture()'],['https://doc.qt.io/qt-5/qscroller.html#ungrabGesture',1,'QScroller::ungrabGesture()'],['https://doc.qt.io/qt-5/qwidget.html#ungrabGesture',1,'QWidget::ungrabGesture()']]],
-  ['ungrabkeyboard_15283',['ungrabKeyboard',['https://doc.qt.io/qt-5/qgraphicsitem.html#ungrabKeyboard',1,'QGraphicsItem::ungrabKeyboard()'],['https://doc.qt.io/qt-5/qevent.html#Type-enum',1,'QEvent::UngrabKeyboard()']]],
+  ['ungrabkeyboard_15283',['UngrabKeyboard',['https://doc.qt.io/qt-5/qevent.html#Type-enum',1,'QEvent::UngrabKeyboard()'],['https://doc.qt.io/qt-5/qgraphicsitem.html#ungrabKeyboard',1,'QGraphicsItem::ungrabKeyboard()']]],
   ['ungrabkeyboardevent_15284',['ungrabKeyboardEvent',['https://doc.qt.io/qt-5/qgraphicswidget.html#ungrabKeyboardEvent',1,'QGraphicsWidget']]],
   ['ungrabmouse_15285',['ungrabMouse',['https://doc.qt.io/qt-5/qgraphicsitem.html#ungrabMouse',1,'QGraphicsItem::ungrabMouse()'],['https://doc.qt.io/qt-5/qevent.html#Type-enum',1,'QEvent::UngrabMouse()']]],
   ['ungrabmouseevent_15286',['ungrabMouseEvent',['https://doc.qt.io/qt-5/qgraphicsproxywidget.html#ungrabMouseEvent',1,'QGraphicsProxyWidget::ungrabMouseEvent()'],['https://doc.qt.io/qt-5/qgraphicswidget.html#ungrabMouseEvent',1,'QGraphicsWidget::ungrabMouseEvent()']]],
