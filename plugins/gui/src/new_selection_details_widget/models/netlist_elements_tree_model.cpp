@@ -1,4 +1,6 @@
 #include "gui/new_selection_details_widget/models/netlist_elements_tree_model.h"
+#include "hal_core/netlist/module.h"
+#include "gui/gui_globals.h"
 
 
 namespace hal
@@ -7,7 +9,8 @@ namespace hal
     NetlistElementsTreeModel::NetlistElementsTreeModel(QObject *parent) : QAbstractItemModel(parent)
     {
         // use root item to store header information
-        mRootItem = new TreeItem(nullptr, QList<QVariant>() << "column1" << "column2");
+        mRootItem = new TreeItem(QList<QVariant>() << "Name" << "ID" << "Type");
+        setModule(gNetlist->get_module_by_id(1));
 
     }
 
@@ -86,6 +89,26 @@ int NetlistElementsTreeModel::rowCount(const QModelIndex &parent) const
         return mRootItem->getColumnCount();
     }
 
+    void NetlistElementsTreeModel::setContent(QList<int> modIds, QList<int> gateIds, QList<int> netIds, bool displayModulesRecursive, bool showGatesInSubmod)
+    {
+        Q_UNUSED(modIds)
+        Q_UNUSED(gateIds)
+        Q_UNUSED(netIds)
+        Q_UNUSED(displayModulesRecursive)
+        Q_UNUSED(showGatesInSubmod)
+    }
+
+    void NetlistElementsTreeModel::setModule(Module* mod, bool showGates, bool displayModulesRecursive)
+    {
+        clear();
+        beginResetModel();//also used in clear, but better once too much than once too little
+        TreeItem* tmp = new TreeItem(QList<QVariant>() << "tst" << "tst2" << "tst3" << "tst4");
+        tmp->setParent(mRootItem);
+        mRootItem->appendChild(tmp);
+        endResetModel();
+
+    }
+
     QModelIndex NetlistElementsTreeModel::getIndexFromItem(TreeItem *item) const
     {
         assert(item);
@@ -106,7 +129,19 @@ int NetlistElementsTreeModel::rowCount(const QModelIndex &parent) const
 
     TreeItem *NetlistElementsTreeModel::getItemFromIndex(QModelIndex index) const
     {
-      return (index.isValid()) ? static_cast<TreeItem*>(index.internalPointer()) : nullptr;
+        return (index.isValid()) ? static_cast<TreeItem*>(index.internalPointer()) : nullptr;
+    }
+
+    void NetlistElementsTreeModel::clear()
+    {
+        beginResetModel();
+        //delete all children, not the root item
+        while(mRootItem->getChildCount() > 0)
+        {
+            TreeItem* tmp = mRootItem->removeChild(0);
+            delete tmp;
+        }
+        endResetModel();
     }
 
 }

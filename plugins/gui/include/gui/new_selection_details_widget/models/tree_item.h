@@ -44,18 +44,20 @@ namespace hal
     public:
         /**
          * The constructor.
-         *
-         * @param parent - The item's parent.
          */
-        TreeItem(TreeItem* parent = nullptr);
+        TreeItem();
 
         /**
          * Second constructor to immediately assign column data.
          *
-         * @param parent - The item's parent.
          * @param columnData - The item's data.
          */
-        TreeItem(TreeItem* parent = nullptr, QList<QVariant> columnData  = QList<QVariant>());
+        TreeItem(QList<QVariant> columnData  = QList<QVariant>());
+
+        /**
+          * The destructor.
+          */
+        ~TreeItem();
 
         /**
          * Get the data of a specific column (most in the form of a string).
@@ -116,6 +118,14 @@ namespace hal
          * @param child - The child to append.
          */
         void appendChild(TreeItem* child);
+
+        /**
+         * Removes the child at the given row and returns it.
+         *
+         * @param row - The row from which to remove the child.
+         * @return The removed child. Nullptr if row was out of bounds.
+         */
+        TreeItem* removeChild(int row);
 
         /**
          * Get the number of children.

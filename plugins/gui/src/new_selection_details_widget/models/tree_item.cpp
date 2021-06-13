@@ -3,14 +3,20 @@
 
 namespace hal
 {
-    TreeItem::TreeItem(TreeItem* parent) : mParent(parent)
+    TreeItem::TreeItem() : mParent(nullptr)
     {
 
     }
 
-    TreeItem::TreeItem(TreeItem *parent, QList<QVariant> columnData) : mParent(parent), mData(columnData)
+    TreeItem::TreeItem(QList<QVariant> columnData) : mParent(nullptr), mData(columnData)
     {
 
+    }
+
+    TreeItem::~TreeItem()
+    {
+        for(TreeItem* item : mChildren)
+            delete item;
     }
 
     QVariant TreeItem::getData(int column)
@@ -52,6 +58,18 @@ namespace hal
     void TreeItem::appendChild(TreeItem *child)
     {
         mChildren.append(child);
+    }
+
+    TreeItem* TreeItem::removeChild(int row)
+    {
+        if(row < 0 || row >= mChildren.size())
+            return nullptr;
+        else
+        {
+            TreeItem* itemToRemove = mChildren.at(row);
+            mChildren.removeAt(row);
+            return itemToRemove;
+        }
     }
 
     int TreeItem::getChildCount()

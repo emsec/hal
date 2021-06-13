@@ -28,6 +28,7 @@
 
 namespace hal
 {
+    class Module;
     /**
      * @ingroup utility_widgets-selection_details
      * @brief A model to display arbitrary elements of the netlist.
@@ -95,6 +96,28 @@ namespace hal
         int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         ///@}
 
+        /**
+         * Sets the module's content to the specified ids. Adds all Elements to the top level of
+         * the tree.
+         *
+         * @param modIds - Ids of modules.
+         * @param gateIds - Ids of gates.
+         * @param netIds - Ids of nets.
+         * @param displayModulesRecursive - True to add all submodules of the given module list to the tree.
+         * @param showGatesInSubmod - True to show the gates in the submodules that were added if displayModulesRecursive = true.
+         */
+        void setContent(QList<int> modIds, QList<int> gateIds, QList<int> netIds, bool displayModulesRecursive = false, bool showGatesInSubmod = false);
+
+        /**
+         * Updates the model's content to the given module. Convenient functions that can be used
+         * instead of the more general setContent() function.
+         *
+         * @param mod - The module to display.
+         * @param showGates - True to add gates, False to show only module hierarchy.
+         * @param displayModulesRecursive - True to show
+         */
+        void setModule(Module* mod, bool showGates = true, bool displayModulesRecursive = true);
+
         // important converter methods
         /**
          * Helper method to convert between the item and its index.
@@ -111,6 +134,17 @@ namespace hal
          * @return The internal item.
          */
         TreeItem* getItemFromIndex(QModelIndex index) const;
+
+        /**
+         * Resets the model (deletes the tree).
+         */
+        void clear();
+
+
+        //Column identifier
+        static const int sNameColumn = 0;
+        static const int sIdColumn = 1;
+        static const int sTypeColumn = 2;
 
     private:
         TreeItem* mRootItem;
