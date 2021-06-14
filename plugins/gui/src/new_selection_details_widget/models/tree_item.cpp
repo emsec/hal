@@ -57,6 +57,7 @@ namespace hal
 
     void TreeItem::appendChild(TreeItem *child)
     {
+        child->setParent(this);
         mChildren.append(child);
     }
 

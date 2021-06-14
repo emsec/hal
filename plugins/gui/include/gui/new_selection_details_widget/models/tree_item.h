@@ -52,7 +52,7 @@ namespace hal
          *
          * @param columnData - The item's data.
          */
-        TreeItem(QList<QVariant> columnData  = QList<QVariant>());
+        TreeItem(QList<QVariant> columnData);
 
         /**
           * The destructor.
@@ -118,6 +118,15 @@ namespace hal
          * @param child - The child to append.
          */
         void appendChild(TreeItem* child);
+
+        /**
+         * Inserts a child at the given index. If the index exceeds the amount
+         * of children, the new child is appended.
+         *
+         * @param index - The position at which to insert.
+         * @param child - The child to insert.
+         */
+        void insertChild(int index, TreeItem* child);
 
         /**
          * Removes the child at the given row and returns it.

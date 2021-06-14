@@ -149,6 +149,9 @@ namespace hal
     private:
         TreeItem* mRootItem;
 
+        //necessary because setModule uses beginResetModel (should not be called by each recursive iteration)
+        void moduleRecursive(Module* mod, TreeItem* modItem,  bool showGates = true);
+
 
     };
 

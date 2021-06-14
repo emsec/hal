@@ -1,5 +1,6 @@
 #include "gui/new_selection_details_widget/models/netlist_elements_tree_model.h"
 #include "hal_core/netlist/module.h"
+#include "hal_core/netlist/gate.h"
 #include "gui/gui_globals.h"
 
 
@@ -10,7 +11,7 @@ namespace hal
     {
         // use root item to store header information
         mRootItem = new TreeItem(QList<QVariant>() << "Name" << "ID" << "Type");
-        setModule(gNetlist->get_module_by_id(1));
+        setModule(gNetlist->get_module_by_id(2), true, false);
 
     }
 
@@ -102,9 +103,24 @@ int NetlistElementsTreeModel::rowCount(const QModelIndex &parent) const
     {
         clear();
         beginResetModel();//also used in clear, but better once too much than once too little
-        TreeItem* tmp = new TreeItem(QList<QVariant>() << "tst" << "tst2" << "tst3" << "tst4");
-        tmp->setParent(mRootItem);
-        mRootItem->appendChild(tmp);
+        for(Module* subMod : mod->get_submodules())
+        {
+            TreeItem* subModItem = new TreeItem(QList<QVariant>() << QString::fromStdString(subMod->get_name())
+                                                << subMod->get_id() << QString::fromStdString(subMod->get_type()));
+            if(displayModulesRecursive)
+                moduleRecursive(subMod, subModItem, showGates);
+            mRootItem->appendChild(subModItem);
+        }
+        if(showGates)
+        {
+            for(auto gate : mod->get_gates())
+                mRootItem->appendChild(new TreeItem(QList<QVariant>() << QString::fromStdString(gate->get_name())
+                                                    << gate->get_id() << QString::fromStdString(gate->get_type()->get_name())));
+        }
+
+//        TreeItem* tmp = new TreeItem(QList<QVariant>() << "tst" << "tst2" << "tst3" << "tst4");
+//        tmp->setParent(mRootItem);
+//        mRootItem->appendChild(tmp);
         endResetModel();
 
     }
@@ -142,6 +158,24 @@ int NetlistElementsTreeModel::rowCount(const QModelIndex &parent) const
             delete tmp;
         }
         endResetModel();
+    }
+
+    void NetlistElementsTreeModel::moduleRecursive(Module* mod, TreeItem* modItem, bool showGates)
+    {
+        TreeItem* subModItem = nullptr;
+        for(Module* subMod : mod->get_submodules())
+        {
+            subModItem = new TreeItem(QList<QVariant>() << QString::fromStdString(subMod->get_name())
+                                                << subMod->get_id() << QString::fromStdString(subMod->get_type()));
+            moduleRecursive(subMod, subModItem, showGates);
+            modItem->appendChild(subModItem);
+        }
+        if(showGates)
+        {
+            for(auto gate : mod->get_gates())
+                modItem->appendChild(new TreeItem(QList<QVariant>() << QString::fromStdString(gate->get_name())
+                                                    << gate->get_id() << QString::fromStdString(gate->get_type()->get_name())));
+        }
     }
 
 }
