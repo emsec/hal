@@ -175,6 +175,17 @@ namespace hal
         compound->addAction(actNewModule);
         compound->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
                                                   gSelectionRelay->selectedGates()));
+        if (mItem && (mItem->itemType()==ItemType::Gate || mItem->itemType()==ItemType::Module))
+        {
+            Node nd(mItem->id(),mItem->itemType()==ItemType::Gate ? Node::Gate : Node::Module);
+            const NodeBox* box = mGraphWidget->getContext()->getLayouter()->boxes().boxForNode(nd);
+            if (box)
+            {
+                ActionMoveNode* actMoveNode = new ActionMoveNode(mGraphWidget->getContext()->id(),
+                                                                 QPoint(box->x(),box->y()));
+                compound->addAction(actMoveNode);
+            }
+        }
         compound->exec();
         gSelectionRelay->clear();
         gSelectionRelay->addModule(compound->object().id());
