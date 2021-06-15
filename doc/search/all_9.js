@@ -553,7 +553,7 @@ var searchData=
   ['isendelement_5680',['isEndElement',['https://doc.qt.io/qt-5/qxmlstreamreader.html#isEndElement',1,'QXmlStreamReader']]],
   ['isendpoint_5681',['isEndpoint',['../classhal_1_1_net_layout_point.html#a691ec3487ff6e8a391774308c76d514e',1,'hal::NetLayoutPoint::isEndpoint()'],['../classhal_1_1_net_layout_wire.html#a5d2d1c5f4024beedc9d84c70998dd516',1,'hal::NetLayoutWire::isEndpoint()']]],
   ['isentityreference_5682',['isEntityReference',['https://doc.qt.io/qt-5/qxmlstreamreader.html#isEntityReference',1,'QXmlStreamReader']]],
-  ['isentry_5683',['isEntry',['../classhal_1_1_net_layout_junction_wire.html#a6210536101337b240986e8a2072f148b',1,'hal::NetLayoutJunctionWire']]],
+  ['isentry_5683',['isEntry',['../classhal_1_1_net_layout_junction_wire.html#a6210536101337b240986e8a2072f148b',1,'hal::NetLayoutJunctionWire::isEntry()'],['../classhal_1_1_net_layout_junction_range.html#a27dcf17dc8c780c37bfde1c8b50a9fc2',1,'hal::NetLayoutJunctionRange::isEntry()']]],
   ['isenumeration_5684',['IsEnumeration',['https://doc.qt.io/qt-5/qmetatype.html#TypeFlag-enum',1,'QMetaType']]],
   ['isenumtype_5685',['isEnumType',['https://doc.qt.io/qt-5/qmetaproperty.html#isEnumType',1,'QMetaProperty']]],
   ['isequal_5686',['isEqual',['https://doc.qt.io/qt-5/qpalette.html#isEqual',1,'QPalette::isEqual()'],['../classhal_1_1_selection_tree_item.html#af605657dd13a60db8b0b311e707c8e15',1,'hal::SelectionTreeItem::isEqual()']]],

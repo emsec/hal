@@ -112,14 +112,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2c07f8b7a7df4b9a72a3fc1565691942"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a231b272d6541b83921b48a99be1c7c6c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_range.html#a231b272d6541b83921b48a99be1c7c6c">canJoin</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="classhal_1_1_net_layout_junction_range.html#aa4e30b59f57dbf92a76461b1fd24d6d2">netId</a>, int pos) const</td></tr>
 <tr class="separator:a231b272d6541b83921b48a99be1c7c6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a435ca59f6ff5392190136f9b02461fc7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_range.html#a435ca59f6ff5392190136f9b02461fc7">canJoin</a> (const <a class="el" href="classhal_1_1_net_layout_junction_range.html">NetLayoutJunctionRange</a> &amp;other) const</td></tr>
+<tr class="separator:a435ca59f6ff5392190136f9b02461fc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4e30b59f57dbf92a76461b1fd24d6d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_range.html#aa4e30b59f57dbf92a76461b1fd24d6d2">netId</a> () const</td></tr>
 <tr class="separator:aa4e30b59f57dbf92a76461b1fd24d6d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb3b91b381b37c241d95326fd0611f05"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_range.html#abb3b91b381b37c241d95326fd0611f05">endPosition</a> (int inx) const</td></tr>
 <tr class="separator:abb3b91b381b37c241d95326fd0611f05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27dcf17dc8c780c37bfde1c8b50a9fc2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_range.html#a27dcf17dc8c780c37bfde1c8b50a9fc2">isEntry</a> (int inx) const</td></tr>
+<tr class="separator:a27dcf17dc8c780c37bfde1c8b50a9fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9d8be52ec8ff57781ddbc2fe7118bf2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_range.html#ab9d8be52ec8ff57781ddbc2fe7118bf2">graphFirst</a> () const</td></tr>
 <tr class="separator:ab9d8be52ec8ff57781ddbc2fe7118bf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60b9e0eb94f3268551cfee94f7ff291e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_range.html#a60b9e0eb94f3268551cfee94f7ff291e">graphLast</a> () const</td></tr>
 <tr class="separator:a60b9e0eb94f3268551cfee94f7ff291e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adde72abde4912081b3999f4a1829e1a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_range.html#adde72abde4912081b3999f4a1829e1a4">operator==</a> (const <a class="el" href="classhal_1_1_net_layout_junction_range.html">NetLayoutJunctionRange</a> &amp;other) const</td></tr>
+<tr class="separator:adde72abde4912081b3999f4a1829e1a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39492ff017c6c7df21dd18c329081f76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_range.html#a39492ff017c6c7df21dd18c329081f76">expand</a> (const <a class="el" href="classhal_1_1_net_layout_junction_range.html">NetLayoutJunctionRange</a> &amp;other)</td></tr>
+<tr class="separator:a39492ff017c6c7df21dd18c329081f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -141,7 +149,7 @@ Static Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00122">122</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00133">133</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad70b618717d94d8adf4afc32499f54b5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad70b618717d94d8adf4afc32499f54b5">&#9670;&nbsp;</a></span>NetLayoutJunctionRange()</h2>
@@ -175,15 +183,33 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00575">575</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00668">668</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00585">entryRange()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00678">entryRange()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a435ca59f6ff5392190136f9b02461fc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a435ca59f6ff5392190136f9b02461fc7">&#9670;&nbsp;</a></span>canJoin() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::NetLayoutJunctionRange::canJoin </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_net_layout_junction_range.html">NetLayoutJunctionRange</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a231b272d6541b83921b48a99be1c7c6c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a231b272d6541b83921b48a99be1c7c6c">&#9670;&nbsp;</a></span>canJoin()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a231b272d6541b83921b48a99be1c7c6c">&#9670;&nbsp;</a></span>canJoin() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -208,11 +234,11 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00597">597</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00690">690</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="net__layout__junction_8h_source.html#l00138">netId()</a>.</p>
+<p class="reference">References <a class="el" href="net__layout__junction_8h_source.html#l00150">netId()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00628">hal::NetLayoutJunctionOccupied::canJoin()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00751">hal::NetLayoutJunctionOccupied::canJoin()</a>.</p>
 
 </div>
 </div>
@@ -232,9 +258,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00615">615</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00715">715</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00635">hal::NetLayoutJunctionOccupied::conflict()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00758">hal::NetLayoutJunctionOccupied::conflict()</a>.</p>
 
 </div>
 </div>
@@ -254,7 +280,7 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00622">622</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00722">722</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
 </div>
 </div>
@@ -298,9 +324,29 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00585">585</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00678">678</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="net__layout__point_8h_source.html#l00060">hal::NetLayoutDirection::index()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00138">netId()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00575">NetLayoutJunctionRange()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00129">sMaxInf</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00128">sMinInf</a>.</p>
+<p class="reference">References <a class="el" href="net__layout__point_8h_source.html#l00060">hal::NetLayoutDirection::index()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00150">netId()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00668">NetLayoutJunctionRange()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00140">sMaxInf</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00139">sMinInf</a>.</p>
+
+</div>
+</div>
+<a id="a39492ff017c6c7df21dd18c329081f76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39492ff017c6c7df21dd18c329081f76">&#9670;&nbsp;</a></span>expand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetLayoutJunctionRange::expand </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_net_layout_junction_range.html">NetLayoutJunctionRange</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00734">734</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
 </div>
 </div>
@@ -319,9 +365,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00603">603</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00696">696</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="net__layout__junction_8h_source.html#l00128">sMinInf</a>, <a class="el" href="net__layout__junction_8h_source.html#l00130">sSceneDelta</a>, <a class="el" href="net__layout__junction_8h_source.html#l00131">sSceneFirst</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00132">sSceneGap</a>.</p>
+<p class="reference">References <a class="el" href="net__layout__junction_8h_source.html#l00139">sMinInf</a>, <a class="el" href="net__layout__junction_8h_source.html#l00141">sSceneDelta</a>, <a class="el" href="net__layout__junction_8h_source.html#l00142">sSceneFirst</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00143">sSceneGap</a>.</p>
 
 </div>
 </div>
@@ -340,9 +386,31 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00609">609</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00702">702</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="net__layout__junction_8h_source.html#l00129">sMaxInf</a>, <a class="el" href="net__layout__junction_8h_source.html#l00130">sSceneDelta</a>, <a class="el" href="net__layout__junction_8h_source.html#l00131">sSceneFirst</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00132">sSceneGap</a>.</p>
+<p class="reference">References <a class="el" href="net__layout__junction_8h_source.html#l00140">sMaxInf</a>, <a class="el" href="net__layout__junction_8h_source.html#l00141">sSceneDelta</a>, <a class="el" href="net__layout__junction_8h_source.html#l00142">sSceneFirst</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00143">sSceneGap</a>.</p>
+
+</div>
+</div>
+<a id="a27dcf17dc8c780c37bfde1c8b50a9fc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27dcf17dc8c780c37bfde1c8b50a9fc2">&#9670;&nbsp;</a></span>isEntry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::NetLayoutJunctionRange::isEntry </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>inx</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00728">728</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="net__layout__junction_8h_source.html#l00140">sMaxInf</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00139">sMinInf</a>.</p>
 
 </div>
 </div>
@@ -369,9 +437,29 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00138">138</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00150">150</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00597">canJoin()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00585">entryRange()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00690">canJoin()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00678">entryRange()</a>.</p>
+
+</div>
+</div>
+<a id="adde72abde4912081b3999f4a1829e1a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adde72abde4912081b3999f4a1829e1a4">&#9670;&nbsp;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::NetLayoutJunctionRange::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_net_layout_junction_range.html">NetLayoutJunctionRange</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00708">708</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
 </div>
 </div>
@@ -401,7 +489,7 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00592">592</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00685">685</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
 </div>
 </div>
@@ -426,9 +514,9 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00129">129</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00140">140</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00585">entryRange()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00609">graphLast()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00649">hal::NetLayoutJunctionWire::isEntry()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00678">entryRange()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00702">graphLast()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00772">hal::NetLayoutJunctionWire::isEntry()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00728">isEntry()</a>.</p>
 
 </div>
 </div>
@@ -452,9 +540,9 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00128">128</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00139">139</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00642">hal::NetLayoutJunctionWire::centralEnd()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00585">entryRange()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00603">graphFirst()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00649">hal::NetLayoutJunctionWire::isEntry()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00765">hal::NetLayoutJunctionWire::centralEnd()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00678">entryRange()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00696">graphFirst()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00772">hal::NetLayoutJunctionWire::isEntry()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00728">isEntry()</a>.</p>
 
 </div>
 </div>
@@ -478,9 +566,9 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00130">130</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00141">141</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00603">graphFirst()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00564">hal::NetLayoutJunctionWireIntersection::graphicsFactory()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00609">graphLast()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00696">graphFirst()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00657">hal::NetLayoutJunctionWireIntersection::graphicsFactory()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00702">graphLast()</a>.</p>
 
 </div>
 </div>
@@ -504,9 +592,9 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00131">131</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00142">142</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00603">graphFirst()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00564">hal::NetLayoutJunctionWireIntersection::graphicsFactory()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00609">graphLast()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00696">graphFirst()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00657">hal::NetLayoutJunctionWireIntersection::graphicsFactory()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00702">graphLast()</a>.</p>
 
 </div>
 </div>
@@ -530,9 +618,9 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00132">132</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00143">143</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00603">graphFirst()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00609">graphLast()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00696">graphFirst()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00702">graphLast()</a>.</p>
 
 </div>
 </div>
@@ -546,7 +634,7 @@ Static Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_net_layout_junction_range.html">NetLayoutJunctionRange</a></li>
-    <li class="footer">Generated on Tue Jun 15 2021 12:31:39 for HAL by
+    <li class="footer">Generated on Tue Jun 15 2021 18:39:56 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -157,6 +157,7 @@ var namespacehal =
     [ "NetLayoutJunction", "classhal_1_1_net_layout_junction.html", "classhal_1_1_net_layout_junction" ],
     [ "NetLayoutJunctionEntries", "classhal_1_1_net_layout_junction_entries.html", "classhal_1_1_net_layout_junction_entries" ],
     [ "NetLayoutJunctionHash", "classhal_1_1_net_layout_junction_hash.html", "classhal_1_1_net_layout_junction_hash" ],
+    [ "NetLayoutJunctionMultiPin", "classhal_1_1_net_layout_junction_multi_pin.html", "classhal_1_1_net_layout_junction_multi_pin" ],
     [ "NetLayoutJunctionNet", "classhal_1_1_net_layout_junction_net.html", "classhal_1_1_net_layout_junction_net" ],
     [ "NetLayoutJunctionOccupied", "classhal_1_1_net_layout_junction_occupied.html", "classhal_1_1_net_layout_junction_occupied" ],
     [ "NetLayoutJunctionRange", "classhal_1_1_net_layout_junction_range.html", "classhal_1_1_net_layout_junction_range" ],

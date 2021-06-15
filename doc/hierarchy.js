@@ -74,6 +74,7 @@ var hierarchy =
     [ "hal::NetLayoutDirection", "classhal_1_1_net_layout_direction.html", null ],
     [ "hal::NetLayoutJunction", "classhal_1_1_net_layout_junction.html", null ],
     [ "hal::NetLayoutJunctionEntries", "classhal_1_1_net_layout_junction_entries.html", null ],
+    [ "hal::NetLayoutJunctionMultiPin", "classhal_1_1_net_layout_junction_multi_pin.html", null ],
     [ "hal::NetLayoutJunctionNet", "classhal_1_1_net_layout_junction_net.html", null ],
     [ "hal::NetLayoutJunctionRange", "classhal_1_1_net_layout_junction_range.html", null ],
     [ "hal::NetLayoutJunctionWire", "classhal_1_1_net_layout_junction_wire.html", null ],

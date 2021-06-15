@@ -1,5 +1,16 @@
 var NAVTREEINDEX20 =
 {
+"structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html#a48bd0e946b2b0cded8a3f435a034351c":[13,0,1,0,0],
+"style_8cpp.html":[14,0,1,0,2,39,0],
+"style_8cpp.html#af1c64f88684b924fc0403ad8305ed98a":[14,0,1,0,2,39,0,0],
+"style_8cpp_source.html":[14,0,1,0,2,39,0],
+"style_8h.html":[14,0,1,0,0,0,41,0],
+"style_8h.html#af1c64f88684b924fc0403ad8305ed98a":[14,0,1,0,0,0,41,0,0],
+"style_8h_source.html":[14,0,1,0,0,0,41,0],
+"svg__icon__engine_8cpp.html":[14,0,1,0,2,40,0],
+"svg__icon__engine_8cpp_source.html":[14,0,1,0,2,40,0],
+"svg__icon__engine_8h.html":[14,0,1,0,0,0,42,0],
+"svg__icon__engine_8h_source.html":[14,0,1,0,0,0,42,0],
 "tab__widget_8cpp.html":[14,0,1,0,2,8,5],
 "tab__widget_8cpp_source.html":[14,0,1,0,2,8,5],
 "tab__widget_8h.html":[14,0,1,0,0,0,9,5],

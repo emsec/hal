@@ -300,7 +300,7 @@ var searchData=
   ['exitcode_3094',['exitCode',['https://doc.qt.io/qt-5/qprocess.html#exitCode',1,'QProcess']]],
   ['exited_3095',['exited',['https://doc.qt.io/qt-5/qabstractstate.html#exited',1,'QAbstractState']]],
   ['exitstatus_3096',['exitStatus',['https://doc.qt.io/qt-5/qprocess.html#exitStatus',1,'QProcess::exitStatus() const const'],['https://doc.qt.io/qt-5/qprocess.html#ExitStatus-enum',1,'QProcess::ExitStatus()']]],
-  ['expand_3097',['expand',['https://doc.qt.io/qt-5/qtreeview.html#expand',1,'QTreeView::expand()'],['../classhal_1_1_expanding_list_item.html#ab9e32115fe98f4279fe048a5e60ff195',1,'hal::ExpandingListItem::expand()']]],
+  ['expand_3097',['expand',['https://doc.qt.io/qt-5/qtreeview.html#expand',1,'QTreeView::expand()'],['../classhal_1_1_expanding_list_item.html#ab9e32115fe98f4279fe048a5e60ff195',1,'hal::ExpandingListItem::expand()'],['../classhal_1_1_net_layout_junction_range.html#a39492ff017c6c7df21dd18c329081f76',1,'hal::NetLayoutJunctionRange::expand()']]],
   ['expand_5fand_5fof_5ffunctions_3098',['expand_AND_of_functions',['../classhal_1_1_boolean_function.html#ac8e98b8536450714890de87afbbe9972',1,'hal::BooleanFunction']]],
   ['expand_5fands_3099',['expand_ands',['../classhal_1_1_boolean_function.html#aa96520d84d1d36e19b897b83f3ef7423',1,'hal::BooleanFunction']]],
   ['expandall_3100',['expandAll',['https://doc.qt.io/qt-5/qtreeview.html#expandAll',1,'QTreeView']]],
