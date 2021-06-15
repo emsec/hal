@@ -687,6 +687,14 @@ namespace hal {
         return NetLayoutJunctionWire(hor, rd, mFirst, mLast);
     }
 
+    bool NetLayoutJunctionRange::canJoin(const NetLayoutJunctionRange& other) const
+    {
+        if (mNetId != other.mNetId) return false;
+        if (mFirst > other.mLast) return false;
+        if (other.mFirst > mLast) return false;
+        return true;
+    }
+
     bool NetLayoutJunctionRange::canJoin(u32 netId, int pos) const
     {
         if (netId != mNetId) return false;
