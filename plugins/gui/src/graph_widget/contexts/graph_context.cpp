@@ -199,13 +199,26 @@ namespace hal
             auto m = gNetlist->get_module_by_id(id);
             QSet<u32> gates;
             QSet<u32> modules;
-            for (const auto& g : m->get_gates())
+
+            Node singleContentNode;
+
+            for (const Gate* g : m->get_gates())
             {
+                singleContentNode = Node(g->get_id(),Node::Gate);
                 gates.insert(g->get_id());
             }
-            for (auto sm : m->get_submodules())
+            for (const Module* sm : m->get_submodules())
             {
+                singleContentNode = Node(sm->get_id(),Node::Module);
                 modules.insert(sm->get_id());
+            }
+
+            PlacementHint plc;
+            if (gates.size() + modules.size() == 1)
+            {
+                plc = PlacementHint(PlacementHint::GridPosition);
+                plc.addGridPosition(singleContentNode,
+                                    mLayouter->nodeToPositionMap().value(Node(id,Node::Module)));
             }
 
             // That would unfold the empty module into nothing, meaning there would
@@ -214,7 +227,7 @@ namespace hal
 
             beginChange();
             remove({id}, {});
-            add(modules, gates);
+            add(modules, gates, plc);
             endChange();
         }
         setDirty(false);

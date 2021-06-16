@@ -967,8 +967,12 @@ namespace hal
             Module* m = gNetlist->get_gate_by_id(gateId)->get_module();
             if (!m) return;
 
+            PlacementHint plc(PlacementHint::GridPosition);
+            plc.addGridPosition(Node(m->get_id(),Node::Module),
+                                context->getLayouter()->nodeToPositionMap().value(Node(gateId,Node::Gate)));
             ActionFoldModule* act = new ActionFoldModule(m->get_id());
             act->setContextId(context->id());
+            act->setPlacementHint(plc);
             act->exec();
         }
     }
