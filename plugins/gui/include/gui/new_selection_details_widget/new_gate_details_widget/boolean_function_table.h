@@ -25,6 +25,7 @@
 
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "gui/new_selection_details_widget/models/boolean_function_table_model.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
 
@@ -36,7 +37,7 @@
 namespace hal
 {
 
-    class BooleanFunctionTable : public QTableWidget
+    class BooleanFunctionTable : public QTableView
     {
     Q_OBJECT
 
@@ -47,6 +48,8 @@ namespace hal
         * @param parent - The parent widget
         */
         BooleanFunctionTable(QWidget* parent = nullptr);
+
+        BooleanFunctionTableModel getModel();
 
     public Q_SLOTS:
         /**
@@ -70,7 +73,8 @@ namespace hal
         void adjustTableSizes();
         void setGate(Gate* gate);
 
-        QLabel getBooleanFunctionLabel(QString outPinName, const BooleanFunction bf);
+        BooleanFunctionTableModel* mBooleanFunctionTableModel;
+        //QLabel getBooleanFunctionLabel(QString outPinName, const BooleanFunction bf);
         //void adjustColumnSizes();
 
 

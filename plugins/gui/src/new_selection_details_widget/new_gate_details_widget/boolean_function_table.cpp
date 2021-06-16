@@ -3,21 +3,25 @@
 #include <QHeaderView>
 
 namespace hal {
-    BooleanFunctionTable::BooleanFunctionTable(QWidget *parent) : QTableWidget(parent)
+    BooleanFunctionTable::BooleanFunctionTable(QWidget *parent) : QTableView(parent),
+    mBooleanFunctionTableModel(new BooleanFunctionTableModel(this))
     {
-        // TODO
+        this->setModel(mBooleanFunctionTableModel);
         this->setSelectionBehavior(QAbstractItemView::SelectRows);
         this->setSelectionMode(QAbstractItemView::SingleSelection);
         this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        setColumnCount(3);
         this->verticalHeader()->setVisible(false);
         this->horizontalHeader()->setVisible(false);
+        this->setShowGrid(false);
 
         SelectionTreeView* t = gContentManager->getSelectionDetailsWidget()->selectionTreeView();
-
-
         connect(t, &SelectionTreeView::triggerSelection, this, &BooleanFunctionTable::handleDetailsFocusChanged);
+    }
+
+    BooleanFunctionTableModel BooleanFunctionTable::getModel()
+    {
+        return mBooleanFunctionTableModel;
     }
 
     void BooleanFunctionTable::handleDetailsFocusChanged(const SelectionTreeItem* sti)
@@ -34,35 +38,50 @@ namespace hal {
 
     void BooleanFunctionTable::setGate(Gate *gate)
     {
-        // TODO
         if(gate == nullptr){
             return;
         }
-        clear();
-        std::unordered_map<std::string, BooleanFunction> bfs = gate->get_boolean_functions();
-        setRowCount(bfs.size());
-        setColumnCount(3);
-        int r = 0;
-        for(auto& it : bfs){
-            QTableWidgetItem* outNameItem = new QTableWidgetItem(QString::fromStdString(it.first));
-            outNameItem->setData(Qt::TextAlignmentRole, QVariant(Qt::AlignTop|Qt::AlignRight));
-            setItem(r,0,outNameItem);
+        // Only for debug
+        bool showCSBehaviour = (gate->get_type()->get_clear_preset_behavior() != std::make_pair(GateType::ClearPresetBehavior::undef, GateType::ClearPresetBehavior::undef));
 
-            QTableWidgetItem* equalSign = new QTableWidgetItem("=");
-            equalSign->setData(Qt::TextAlignmentRole, QVariant(Qt::AlignTop|Qt::AlignHCenter));
-            setItem(r,1, equalSign);
+        static QSet<QString> lutOrLatchBfNames = {
+            "clear", "preset", // Both
+            "clocked_on", "clocked_on_also", "next_state", "power_down_function", // FF names
+            "enable", "data_in" // Latch names
+        };
 
-            setItem(r,2,new QTableWidgetItem(QString::fromStdString(it.second.to_string())));
-            r++;
+        std::unordered_map<std::string, BooleanFunction> allBfs = gate->get_boolean_functions(false);
+        //std::unordered_map<std::string, BooleanFunction> customBfs = gate->get_boolean_functions(true);
+        QMap<QString, BooleanFunction> latchOrFFFunctions;
+        QMap<QString, BooleanFunction> customFunctions;
+
+        for(auto& it : allBfs){
+            QString bfName = QString::fromStdString(it.first);
+            if(lutOrLatchBfNames.contains(bfName))
+            {
+                // Function is a custom function
+                latchOrFFFunctions.insert(bfName, it.second);
+            }
+            else
+            {
+                // All non-custom function are considered
+                customFunctions.insert(bfName, it.second);
+            }
+        }
+        if(showCSBehaviour)
+        {
+            mBooleanFunctionTableModel->setBooleanFunctionList( latchOrFFFunctions,
+                                                                customFunctions,
+                                                                gate->get_type()->get_clear_preset_behavior());
+        }
+        else
+        {
+            mBooleanFunctionTableModel->setBooleanFunctionList( latchOrFFFunctions,
+                                                                customFunctions);
         }
         adjustTableSizes();
-    }
-
-
-
-    QLabel BooleanFunctionTable::getBooleanFunctionLabel(QString outPinName, const BooleanFunction bf)
-    {
-        return QLabel();
+        this->clearSelection();
+        this->update();
     }
 
     void BooleanFunctionTable::resizeEvent(QResizeEvent *event)
@@ -74,9 +93,10 @@ namespace hal {
     void BooleanFunctionTable::adjustTableSizes()
     {
         resizeColumnsToContents();
-        this->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+        this->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
         this->setWordWrap(true);
         this->resizeRowsToContents();
     }
+
 
 } // namespace hal
