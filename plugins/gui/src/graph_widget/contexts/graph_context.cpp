@@ -327,6 +327,28 @@ namespace hal
         return false;
     }
 
+    Node GraphContext::getNetSource(const Net *n) const
+    {
+        for (Endpoint* ep : n->get_sources())
+        {
+            Gate* g = ep->get_gate();
+            NodeBox* box = mLayouter->boxes().boxForGate(g);
+            if (box) return box->getNode();
+        }
+        return Node();
+    }
+
+    Node GraphContext::getNetDestination(const Net* n) const
+    {
+        for (Endpoint* ep : n->get_destinations())
+        {
+            Gate* g = ep->get_gate();
+            NodeBox* box = mLayouter->boxes().boxForGate(g);
+            if (box) return box->getNode();
+        }
+        return Node();
+    }
+
     const QSet<u32>& GraphContext::modules() const
     {
         return mModules;
