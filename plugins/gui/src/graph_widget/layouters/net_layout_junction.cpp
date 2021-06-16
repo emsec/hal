@@ -273,9 +273,9 @@ namespace hal {
                 int roadLink = itNet.value().roadNumber(ilink);
                 int jhoriz = 1-ihoriz;
                 int roadj;
-                if (canJoin(jhoriz,road0,itNet.key(),ilink))
+                if (canJoin(jhoriz,road0,itNet.key(),roadLink))
                     roadj = road0;
-                else if (canJoin(jhoriz,road1,itNet.key(),ilink))
+                else if (canJoin(jhoriz,road1,itNet.key(),roadLink))
                     roadj = road1;
                 else
                 {
