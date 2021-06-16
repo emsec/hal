@@ -60,6 +60,8 @@ namespace hal {
         for (int iroad=0; iroad<nEntries; iroad++)
         {
             u32 id = mEntries.mEntries[leftOrRight.index()].at(iroad);
+            if (!id) continue; // pin not connected to any net
+
             bool isRouted = false;
 
             for (const NetLayoutJunctionRange& rng : mOccupied[0].value(iroad))
