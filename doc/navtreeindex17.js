@@ -1,5 +1,7 @@
 var NAVTREEINDEX17 =
 {
+"namespacehal_1_1netlist__parser__manager.html":[12,0,0,15],
+"namespacehal_1_1netlist__serializer.html":[12,0,0,16],
 "namespacehal_1_1netlist__utils.html":[12,0,0,17],
 "namespacehal_1_1netlist__writer__manager.html":[12,0,0,18],
 "namespacehal_1_1plugin__manager.html":[12,0,0,19],
@@ -37,8 +39,8 @@ var NAVTREEINDEX17 =
 "namespacenetlist__factory.html":[12,0,1],
 "namespacenetlist__serializer.html":[12,0,2],
 "namespaces.html":[12,0],
-"namespacestd.html":[12,0,3],
 "namespacestd.html":[13,0,1],
+"namespacestd.html":[12,0,3],
 "net_8h.html":[14,0,0,0,1,12],
 "net_8h_source.html":[14,0,0,0,1,12],
 "net__details__widget_8cpp.html":[14,0,1,0,2,34,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX17 =
 "netlist__writer_8h_source.html":[14,0,0,0,1,3,0],
 "netlist__writer__manager_8h.html":[14,0,0,0,1,3,1],
 "netlist__writer__manager_8h.html#a1bb87c0a35221bb18a28e97611b71a12":[14,0,0,0,1,3,1,6],
-"netlist__writer__manager_8h.html#a4d998d78fd82eb290cc8679a90f57515":[14,0,0,0,1,3,1,1],
-"netlist__writer__manager_8h.html#a65494ac5303bc472d87e8be3b4a44505":[14,0,0,0,1,3,1,0],
-"netlist__writer__manager_8h.html#a69b04c9bcb90a1aa9ff6743c8b38d68d":[14,0,0,0,1,3,1,2]
+"netlist__writer__manager_8h.html#a4d998d78fd82eb290cc8679a90f57515":[14,0,0,0,1,3,1,1]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX16 =
 {
+"grouping__color__delegate_8h.html":[14,0,1,0,0,0,19,0],
+"grouping__color__delegate_8h_source.html":[14,0,1,0,0,0,19,0],
 "grouping__event__handler_8cpp.html":[14,0,2,0,0,2],
 "grouping__event__handler_8cpp.html#a1e2095ce592661728ff7b94c7c5932cb":[14,0,2,0,0,2,1],
 "grouping__event__handler_8cpp.html#a28b3508a0b00940b7fe27fe3f0b06ab7":[14,0,2,0,0,2,0],
@@ -241,13 +243,11 @@ var NAVTREEINDEX16 =
 "namespacehal_1_1gate__library__writer__manager.html":[12,0,0,5],
 "namespacehal_1_1graph__widget__constants.html":[12,0,0,6],
 "namespacehal_1_1grouping__event__handler.html":[12,0,0,8],
-"namespacehal_1_1gui__utility.html":[13,0,0,1],
 "namespacehal_1_1gui__utility.html":[12,0,0,9],
+"namespacehal_1_1gui__utility.html":[13,0,0,1],
 "namespacehal_1_1hal__file__manager.html":[12,0,0,10],
 "namespacehal_1_1module__event__handler.html":[12,0,0,11],
 "namespacehal_1_1net__event__handler.html":[12,0,0,12],
 "namespacehal_1_1netlist__event__handler.html":[12,0,0,13],
-"namespacehal_1_1netlist__factory.html":[12,0,0,14],
-"namespacehal_1_1netlist__parser__manager.html":[12,0,0,15],
-"namespacehal_1_1netlist__serializer.html":[12,0,0,16]
+"namespacehal_1_1netlist__factory.html":[12,0,0,14]
 };

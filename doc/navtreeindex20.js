@@ -1,5 +1,7 @@
 var NAVTREEINDEX20 =
 {
+"structhal_1_1core__strings_1_1_case_insensitive_char_traits.html":[13,0,0,0,0],
+"structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html":[13,0,1,0],
 "structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html#a48bd0e946b2b0cded8a3f435a034351c":[13,0,1,0,0],
 "style_8cpp.html":[14,0,1,0,2,39,0],
 "style_8cpp.html#af1c64f88684b924fc0403ad8305ed98a":[14,0,1,0,2,39,0,0],

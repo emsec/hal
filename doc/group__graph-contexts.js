@@ -12,6 +12,8 @@ var group__graph_contexts =
       [ "foldModuleAction", "classhal_1_1_graph_context.html#a2b01afbd51b5c8dee5ab048f760670b2", null ],
       [ "gates", "classhal_1_1_graph_context.html#a6e32cfa5e0c18cb334c716cd3861b052", null ],
       [ "getLayouter", "classhal_1_1_graph_context.html#ab4ff1193f5bdd31d5863e33832e28c13", null ],
+      [ "getNetDestination", "classhal_1_1_graph_context.html#a6c91ba6077f73370061bb6c8c47e1994", null ],
+      [ "getNetSource", "classhal_1_1_graph_context.html#a4c2adbdcefa3d2173e9026fdb081e6e6", null ],
       [ "getTimestamp", "classhal_1_1_graph_context.html#a8de86725cd7c23dcc355ece981833502", null ],
       [ "id", "classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477", null ],
       [ "isDirty", "classhal_1_1_graph_context.html#a9c8859333e6da84fabd0af90ab44b755", null ],
