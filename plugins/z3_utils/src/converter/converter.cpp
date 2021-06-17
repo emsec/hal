@@ -52,7 +52,7 @@ namespace hal
                     op_str = "bvxor";
                     break;
                 default:
-                    log_error("Tried to convert unkown operation to string.");
+                    log_error("z3_utils", "Tried to convert unkown operation to string.");
                     op_str = "NOT IMPLEMENTED REACHED";
             }
 

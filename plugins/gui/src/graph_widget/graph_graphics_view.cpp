@@ -175,6 +175,17 @@ namespace hal
         compound->addAction(actNewModule);
         compound->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
                                                   gSelectionRelay->selectedGates()));
+        if (mItem && (mItem->itemType()==ItemType::Gate || mItem->itemType()==ItemType::Module))
+        {
+            Node nd(mItem->id(),mItem->itemType()==ItemType::Gate ? Node::Gate : Node::Module);
+            const NodeBox* box = mGraphWidget->getContext()->getLayouter()->boxes().boxForNode(nd);
+            if (box)
+            {
+                ActionMoveNode* actMoveNode = new ActionMoveNode(mGraphWidget->getContext()->id(),
+                                                                 QPoint(box->x(),box->y()));
+                compound->addAction(actMoveNode);
+            }
+        }
         compound->exec();
         gSelectionRelay->clear();
         gSelectionRelay->addModule(compound->object().id());
@@ -956,8 +967,12 @@ namespace hal
             Module* m = gNetlist->get_gate_by_id(gateId)->get_module();
             if (!m) return;
 
+            PlacementHint plc(PlacementHint::GridPosition);
+            plc.addGridPosition(Node(m->get_id(),Node::Module),
+                                context->getLayouter()->nodeToPositionMap().value(Node(gateId,Node::Gate)));
             ActionFoldModule* act = new ActionFoldModule(m->get_id());
             act->setContextId(context->id());
+            act->setPlacementHint(plc);
             act->exec();
         }
     }

@@ -200,6 +200,22 @@ namespace hal
         bool isShowingNetDestination(const u32 mNetId) const;
 
         /**
+         * Given a net, this function returns the first visible source node.
+         *
+         * @param n - Pointer to net
+         * @returns <b>true</b> The first visibible source node, might be Node::None
+         */
+        Node getNetSource(const Net *n) const;
+
+        /**
+         * Given a net, this function returns the first visible destination node.
+         *
+         * @param n - Pointer to net
+         * @returns <b>true</b> The first visibible destination node, might be Node::None
+         */
+        Node getNetDestination(const Net *n) const;
+
+        /**
          * Get the ids of the Module%s of the context.
          *
          * @returns a set of Module ids.

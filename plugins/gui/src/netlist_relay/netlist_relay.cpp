@@ -39,6 +39,7 @@ namespace hal
 
     void NetlistRelay::unregisterNetlistCallbacks()
     {
+        if (!gNetlist) return; // no netlist -> no registered callbacks
         log_info("test", "unregister netlist callbacks");
         gNetlist->get_event_handler()->unregister_callback("gui_netlist_handler");
         gNetlist->get_event_handler()->unregister_callback("gui_module_handler");
