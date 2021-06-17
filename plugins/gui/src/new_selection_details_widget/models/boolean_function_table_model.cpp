@@ -92,6 +92,28 @@ namespace hal {
         return false;
     }
 
+    QPair<QString, bool> BooleanFunctionTableModel::getBooleanFunctionNameAtRow(int row) const
+    {
+        BooleanFunctionTableEntry entry;
+        bool isClearSetBehavior = false;
+        if(row < mLatchOrFFFunctions.size())
+        {
+            entry = mLatchOrFFFunctions[row];
+        }
+        // The Custom Functions are under the Latch/FF functions. The indices must be computed accordingly.
+        else if(row < (mLatchOrFFFunctions.size() + mCustomFunctions.size()))
+        {
+            entry = mCustomFunctions[(row - mLatchOrFFFunctions.size())];
+        }
+        else
+        {
+            isClearSetBehavior = true;
+            entry = mCSBehaviour;
+        }
+
+        return QPair<QString, bool>(entry.functionName, isClearSetBehavior);
+    }
+
     void BooleanFunctionTableModel::setBooleanFunctionList(const QMap<QString, BooleanFunction>& latchOrFFFunctions,
                                                            const QMap<QString, BooleanFunction>& customFunctions,
                                                            std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviour)

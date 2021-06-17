@@ -98,6 +98,7 @@ namespace hal {
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
+        QPair<QString, bool> getBooleanFunctionNameAtRow(int row) const;
 
         void setBooleanFunctionList(const QMap<QString, BooleanFunction>& latchOrFFFunctions,
                                     const QMap<QString, BooleanFunction>& customFunctions,

@@ -51,6 +51,9 @@ namespace hal
 
         BooleanFunctionTableModel getModel();
 
+    protected:
+
+
     public Q_SLOTS:
         /**
          * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
@@ -60,6 +63,8 @@ namespace hal
          */
         void handleDetailsFocusChanged(const SelectionTreeItem* sti);
 
+
+
     protected Q_SLOTS:
         /**
          * Handles the resize event. The table is sized, so that the output column is bigger than the input columns.
@@ -68,12 +73,14 @@ namespace hal
          */
         void resizeEvent(QResizeEvent* event) override;
 
+        void handleContextMenuRequest(const QPoint &pos);
 
     private:
         void adjustTableSizes();
         void setGate(Gate* gate);
 
         BooleanFunctionTableModel* mBooleanFunctionTableModel;
+        Gate* mCurrentGate;
         //QLabel getBooleanFunctionLabel(QString outPinName, const BooleanFunction bf);
         //void adjustColumnSizes();
 

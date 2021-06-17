@@ -1,6 +1,9 @@
 #include "gui/new_selection_details_widget/new_gate_details_widget/boolean_function_table.h"
 #include "gui/gui_globals.h"
 #include <QHeaderView>
+#include <QtWidgets/QMenu>
+#include <QApplication>
+#include <QClipboard>
 
 namespace hal {
     BooleanFunctionTable::BooleanFunctionTable(QWidget *parent) : QTableView(parent),
@@ -17,6 +20,7 @@ namespace hal {
 
         SelectionTreeView* t = gContentManager->getSelectionDetailsWidget()->selectionTreeView();
         connect(t, &SelectionTreeView::triggerSelection, this, &BooleanFunctionTable::handleDetailsFocusChanged);
+        connect(this, &QTableView::customContextMenuRequested, this, &BooleanFunctionTable::handleContextMenuRequest);
     }
 
     BooleanFunctionTableModel BooleanFunctionTable::getModel()
@@ -41,6 +45,7 @@ namespace hal {
         if(gate == nullptr){
             return;
         }
+        mCurrentGate = gate;
         // Only for debug
         bool showCSBehaviour = (gate->get_type()->get_clear_preset_behavior() != std::make_pair(GateType::ClearPresetBehavior::undef, GateType::ClearPresetBehavior::undef));
 
@@ -88,6 +93,43 @@ namespace hal {
     {
         QAbstractItemView::resizeEvent(event);
         adjustTableSizes();
+    }
+
+    void BooleanFunctionTable::handleContextMenuRequest(const QPoint &pos)
+    {
+        QModelIndex idx = indexAt(pos);
+        if(!idx.isValid()){
+            return;
+        }
+
+        QPair<QString, bool> bfNameOrCSBehavior = mBooleanFunctionTableModel->getBooleanFunctionNameAtRow(idx.row());
+        QMenu menu;
+        QString menuText;
+        QString pythonCode;
+
+        QString getGatePythonCode = QString("netlist.get_gate_by_id(%1)").arg(mCurrentGate->get_id());
+
+        mCurrentGate->get_type()->get_clear_preset_behavior();
+        // Entry is a boolean function
+        if(!bfNameOrCSBehavior.second)
+        {
+            menuText = "Extract boolean function as python code (copy to clipboard)";
+            pythonCode = getGatePythonCode + QString(".get_boolean_function(\"%1\")").arg(bfNameOrCSBehavior.first);
+        }
+        // Entry is Clear-Set Behavior
+        else
+        {
+            menuText = "Extract clear-preset behavior as python code (copy to clipboard)";
+            pythonCode = getGatePythonCode + QString(".get_type().get_clear_preset_behavior()");
+        }
+        menu.addAction(QIcon(":/icons/python"), menuText,
+           [pythonCode]()
+           {
+               QApplication::clipboard()->setText( pythonCode );
+           }
+        );
+        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+        menu.exec();
     }
 
     void BooleanFunctionTable::adjustTableSizes()
