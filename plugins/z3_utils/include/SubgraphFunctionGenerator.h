@@ -46,5 +46,20 @@ namespace hal
             BooleanFunction get_function_of_gate(const Gate* gate, const std::string& out_pin);
         };
 
+        struct RecursiveSubgraphFunctionGenerator
+        {
+            void get_subgraph_z3_function_recursive(const Net* net, const std::vector<Gate*>& subgraph_gates, z3::context& ctx, z3::expr& result);
+
+            RecursiveSubgraphFunctionGenerator() = default;
+
+        private:
+            BooleanFunction get_function_of_gate(const Gate* gate, const std::string& out_pin);
+            z3::expr get_function_of_net(const Net* net, z3::context& ctx, const std::vector<Gate*>& subgraph_gates);
+
+            std::map<std::tuple<u32, std::string>, BooleanFunction> m_cache;
+            std::map<const Net*, z3::expr> m_expr_cache;
+            std::set<Gate*> m_last_subgraph;
+        };
+
     }    // namespace z3_utils
 }    // namespace hal

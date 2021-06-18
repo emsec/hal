@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <map>
 #include <ostream>
 #include <unordered_map>
 #include <unordered_set>
@@ -328,7 +329,7 @@ namespace hal
          * @param[in,out] context - The z3 context.
          * @returns The z3 representation of the Boolean function.
          */
-        z3::expr to_z3(z3::context& context) const;
+        z3::expr to_z3(z3::context& context, const std::map<std::string, z3::expr>& var_to_expr = {}) const;
 
     protected:
         enum class operation

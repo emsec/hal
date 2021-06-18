@@ -64,7 +64,7 @@ namespace hal
                     op.erase(op.size() - 3);
                     break;
                 default:
-                    log_error("verifiaction", "unkown operation for operation building ({})", operation);
+                    log_error("z3_utils", "unkown operation for operation building ({})", operation);
                     return "NOT IMPLEMENTED REACHED";
             }
 
