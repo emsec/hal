@@ -56,8 +56,7 @@ namespace hal
                     log_info("z3_utils", "Pin ({}) has no input net. Gate id: ({})", input_pin, gate->get_id());
                     continue;
                 }
-                // std::cout << gate->get_id() << "\t" << gate->get_name() << "\t" << gate->get_type()->get_name() << "\t" << input_pin << std::endl;
-                bf                    = bf.substitute(input_pin, std::to_string(input_net->get_id()));
+                bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));
             }
 
             m_cache.emplace(std::make_tuple(gate->get_id(), out_pin), bf);
@@ -71,7 +70,6 @@ namespace hal
                                       z3::expr& result,
                                       std::unordered_set<u32>& input_net_ids)
         {
-            // measure_block_time("generation of boolean function");
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
             {
@@ -209,8 +207,6 @@ namespace hal
 
         z3::expr RecursiveSubgraphFunctionGenerator::get_function_of_net(const Net* net, z3::context& ctx, const std::vector<Gate*>& subgraph_gates) {
             
-            // std::cout << "Getting function of net " <<  net->get_id() << std::endl;
-            
             if (m_expr_cache.find(net) != m_expr_cache.end()) {
                 return m_expr_cache.at(net);
             }
@@ -225,9 +221,6 @@ namespace hal
 
             // net has no source
             if (sources.empty()) {
-
-                // std::cout << "Net " << net->get_id() << " has no sources." << std::endl;
-
                 z3::expr ret = ctx.bv_const(std::to_string(net->get_id()).c_str(), 1);
                 m_expr_cache.insert({net, ret});
                 return ret;
@@ -243,9 +236,6 @@ namespace hal
 
             // source is not in subgraph gates
             if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src) == subgraph_gates.end()) {
-
-                // std::cout << "Source not in subgraph for net " << net->get_id() << std::endl;
-
                 z3::expr ret = ctx.bv_const(std::to_string(net->get_id()).c_str(), 1);
                 m_expr_cache.insert({net, ret});
                 return ret;
@@ -263,10 +253,7 @@ namespace hal
                 }
 
                 pin_to_expr.insert({pin, get_function_of_net(in_net, ctx, subgraph_gates)});
-            }
-
-            // std::cout << "Got " << pin_to_expr.size() << " expr for variables." << std::endl;
-            // std::cout << "BF: " << bf << std::endl;  
+            } 
 
             z3::expr ret = bf.to_z3(ctx, pin_to_expr);
             m_expr_cache.insert({net, ret});
@@ -278,7 +265,6 @@ namespace hal
                                                                                     z3::context& ctx,
                                                                                     z3::expr& result)
         {
-            // measure_block_time("generation of boolean function");
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
             {
