@@ -3,15 +3,13 @@
 #include "hal_core/netlist/gate.h"
 #include "gui/gui_globals.h"
 
-
 namespace hal
 {
-
-    NetlistElementsTreeModel::NetlistElementsTreeModel(QObject *parent) : QAbstractItemModel(parent)
+    NetlistElementsTreeModel::NetlistElementsTreeModel(QObject *parent) : QAbstractItemModel(parent), mModuleIcon(QIcon(":/icons/sel_module")), mGateIcon(QIcon(":/icons/sel_gate")), mNetIcon(QIcon(":/icons/sel_net"))
     {
         // use root item to store header information
         mRootItem = new TreeItem(QList<QVariant>() << "Name" << "ID" << "Type");
-        setModule(gNetlist->get_module_by_id(2), true, false);
+        setModule(gNetlist->get_module_by_id(1));
 
     }
 
@@ -32,6 +30,8 @@ namespace hal
         //for now only standard text data, other roles can follow
         if(role == Qt::DisplayRole)
             return item->getData(index.column());
+        if(role == Qt::DecorationRole && index.column() == 0)
+            return getIconFromItem(getItemFromIndex(index));
 
         return QVariant();
     }
@@ -99,7 +99,7 @@ int NetlistElementsTreeModel::rowCount(const QModelIndex &parent) const
         Q_UNUSED(showGatesInSubmod)
     }
 
-    void NetlistElementsTreeModel::setModule(Module* mod, bool showGates, bool displayModulesRecursive)
+    void NetlistElementsTreeModel::setModule(Module* mod, bool showGates, bool showNets, bool displayModulesRecursive)
     {
         clear();
         beginResetModel();//also used in clear, but better once too much than once too little
@@ -109,18 +109,29 @@ int NetlistElementsTreeModel::rowCount(const QModelIndex &parent) const
                                                 << subMod->get_id() << QString::fromStdString(subMod->get_type()));
             if(displayModulesRecursive)
                 moduleRecursive(subMod, subModItem, showGates);
+            subModItem->setAdditionalData(mItemTypeKey, itemType::module);
             mRootItem->appendChild(subModItem);
         }
         if(showGates)
         {
             for(auto gate : mod->get_gates())
-                mRootItem->appendChild(new TreeItem(QList<QVariant>() << QString::fromStdString(gate->get_name())
-                                                    << gate->get_id() << QString::fromStdString(gate->get_type()->get_name())));
+            {
+                TreeItem* gateItem = new TreeItem(QList<QVariant>() << QString::fromStdString(gate->get_name())
+                                                  << gate->get_id() << QString::fromStdString(gate->get_type()->get_name()));
+                gateItem->setAdditionalData(mItemTypeKey, itemType::gate);
+                mRootItem->appendChild(gateItem);
+            }
         }
-
-//        TreeItem* tmp = new TreeItem(QList<QVariant>() << "tst" << "tst2" << "tst3" << "tst4");
-//        tmp->setParent(mRootItem);
-//        mRootItem->appendChild(tmp);
+        if(showNets)
+        {
+            for(auto net : mod->get_internal_nets())
+            {
+                TreeItem* netItem = new TreeItem(QList<QVariant>() << QString::fromStdString(net->get_name())
+                                                 << net->get_id() << "");
+                netItem->setAdditionalData(mItemTypeKey, itemType::net);
+                mRootItem->appendChild(netItem);
+            }
+        }
         endResetModel();
 
     }
@@ -160,7 +171,7 @@ int NetlistElementsTreeModel::rowCount(const QModelIndex &parent) const
         endResetModel();
     }
 
-    void NetlistElementsTreeModel::moduleRecursive(Module* mod, TreeItem* modItem, bool showGates)
+    void NetlistElementsTreeModel::moduleRecursive(Module* mod, TreeItem* modItem, bool showGates, bool showNets)
     {
         TreeItem* subModItem = nullptr;
         for(Module* subMod : mod->get_submodules())
@@ -168,13 +179,44 @@ int NetlistElementsTreeModel::rowCount(const QModelIndex &parent) const
             subModItem = new TreeItem(QList<QVariant>() << QString::fromStdString(subMod->get_name())
                                                 << subMod->get_id() << QString::fromStdString(subMod->get_type()));
             moduleRecursive(subMod, subModItem, showGates);
+            subModItem->setAdditionalData(mItemTypeKey, itemType::module);
             modItem->appendChild(subModItem);
         }
         if(showGates)
         {
             for(auto gate : mod->get_gates())
-                modItem->appendChild(new TreeItem(QList<QVariant>() << QString::fromStdString(gate->get_name())
-                                                    << gate->get_id() << QString::fromStdString(gate->get_type()->get_name())));
+            {
+                TreeItem* gateItem = new TreeItem(QList<QVariant>() << QString::fromStdString(gate->get_name())
+                                                  << gate->get_id() << QString::fromStdString(gate->get_type()->get_name()));
+                gateItem->setAdditionalData(mItemTypeKey, itemType::gate);
+                modItem->appendChild(gateItem);
+
+            }
+        }
+        if(showNets)
+        {
+            for(auto net : mod->get_internal_nets())
+            {
+                TreeItem* netItem = new TreeItem(QList<QVariant>() << QString::fromStdString(net->get_name())
+                                                 << net->get_id() << "");
+                netItem->setAdditionalData(mItemTypeKey, itemType::net);
+                modItem->appendChild(netItem);
+
+            }
+        }
+    }
+
+    QIcon NetlistElementsTreeModel::getIconFromItem(TreeItem *item) const
+    {
+        if(!item)
+            return mGateIcon;//some cool gate icon if the item is a nullptr
+
+        switch (item->getAdditionalData(mItemTypeKey).toUInt())
+        {
+        case itemType::module: return mModuleIcon;
+        case itemType::gate: return mGateIcon;
+        case itemType::net: return mNetIcon;
+        default: return mGateIcon;
         }
     }
 

@@ -24,6 +24,7 @@
 #pragma once
 
 #include <QAbstractItemModel>
+#include <QIcon>
 #include "gui/new_selection_details_widget/models/tree_item.h"
 
 namespace hal
@@ -114,9 +115,10 @@ namespace hal
          *
          * @param mod - The module to display.
          * @param showGates - True to add gates, False to show only module hierarchy.
+         * @param showNets - True to add nets, False to show only module hierarchy.
          * @param displayModulesRecursive - True to show
          */
-        void setModule(Module* mod, bool showGates = true, bool displayModulesRecursive = true);
+        void setModule(Module* mod, bool showGates = true, bool showNets = true, bool displayModulesRecursive = true);
 
         // important converter methods
         /**
@@ -146,12 +148,27 @@ namespace hal
         static const int sIdColumn = 1;
         static const int sTypeColumn = 2;
 
+        enum  itemType{module = 0, gate = 1, net = 2};
+        Q_ENUM(itemType)
+
     private:
         TreeItem* mRootItem;
+        //Note: make these somehow static (does not work with pointer...?)
+        QIcon mModuleIcon;
+        QIcon mGateIcon;
+        QIcon mNetIcon;
+        QString mItemTypeKey = "type"; //also save value in enum (if it is possible with QVariant)
 
         //necessary because setModule uses beginResetModel (should not be called by each recursive iteration)
-        void moduleRecursive(Module* mod, TreeItem* modItem,  bool showGates = true);
+        void moduleRecursive(Module* mod, TreeItem* modItem,  bool showGates = true, bool showNets = true);
 
+        /**
+         * Utility function to determine the displayed icon for a given item
+         *
+         * @param item - The requested item.
+         * @return A module, net, or gate icon depending on the item's type.
+         */
+        QIcon getIconFromItem(TreeItem* item) const;
 
     };
 
