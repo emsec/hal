@@ -27,7 +27,7 @@ namespace hal {
         //--------End NetlistElementsModel
 
 
-        //General Info Tables - Why are the views so scuffed when embedded into the debug widget? pls elp! maybe style sheets?
+        //General Info Tables
         //GateInfoTable* gateTable = new GateInfoTable(this); //hardcoded to show gate with id 11 in constructor atm
         //mContentLayout->addWidget(gateTable);
 
