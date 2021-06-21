@@ -1,0 +1,101 @@
+#include "gui/new_selection_details_widget/py_code_provider.h"
+
+//#include <QString>
+
+#include <QDebug>
+
+namespace hal
+{
+    const QString PyCodeProvider::gateCodePrefix = "netlist.get_gate_by_id(%1).";
+    const QString PyCodeProvider::netCodePrefix = "netlist.get_net_by_id(%1).";
+    const QString PyCodeProvider::moduleCodePrefix = "netlist.get_module_by_id(%1).";
+
+    QString PyCodeProvider::buildPyCode(const QString& prefix, const QString& suffix, u32 id)
+    {
+        return QString(prefix + suffix).arg(id);
+    }
+
+    QString PyCodeProvider::pyCodeGateName(u32 gateId)
+    {
+        const QString suffix = "get_name()";
+
+        return buildPyCode(gateCodePrefix, suffix, gateId);
+    }
+
+    QString PyCodeProvider::pyCodeGateType(u32 gateId)
+    {
+        const QString suffix = "get_type()";
+
+        return buildPyCode(gateCodePrefix, suffix, gateId);
+    }
+
+    QString PyCodeProvider::pyCodeProperties(u32 gateId)
+    {
+        const QString suffix = "get_type().get_properties()";
+
+        return buildPyCode(gateCodePrefix, suffix, gateId);
+    }
+
+    QString PyCodeProvider::pyCodeGateLocation(u32 gateId)
+    {
+        const QString suffix = "get_location()";
+
+        return buildPyCode(gateCodePrefix, suffix, gateId);
+    }
+
+    QString PyCodeProvider::pyCodeGateModule(u32 gateId)
+    {
+        const QString suffix = "get_module()";
+
+        return buildPyCode(gateCodePrefix, suffix, gateId);
+    }
+
+    QString PyCodeProvider::pyCodeNetName(u32 netId)
+    {
+        const QString suffix = "get_name()";
+
+        return buildPyCode(netCodePrefix, suffix, netId);
+    }
+
+    QString PyCodeProvider::pyCodeNetType(u32 netId)
+    {
+        const QString prefix = QString(netCodePrefix).arg(netId);
+
+        qDebug() << prefix;
+
+        const QString check1 = prefix + "is_global_input_net()";
+        const QString check2 = prefix + "is_global_output_net()";
+        const QString check3 = prefix + "is_unrouted()";
+
+        const QString result1 = "\"Global Input\"";
+        const QString result2 = "\"Global Output\"";
+        const QString result3 = "\"Unrouted\"";
+        const QString result4 = "\"Internal\"";
+
+        const QString pyCode = result1 + " if " + check1 + " else " + result2 + " if " + check2 + " else " + result3 + " if " + check3 + " else " + result4;
+
+        return pyCode;
+    }
+
+    QString PyCodeProvider::pyCodeModuleName(u32 moduleId)
+    {
+        const QString suffix = "get_name()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleType(u32 moduleId)
+    {
+        const QString suffix = "get_type()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+
+    }
+
+        QString PyCodeProvider::pyCodeModuleModule(u32 moduleId)
+    {
+        const QString suffix = "get_parent_module()";
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+}

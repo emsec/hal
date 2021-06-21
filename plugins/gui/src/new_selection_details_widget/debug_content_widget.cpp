@@ -6,6 +6,10 @@
 #include <QHeaderView>
 //---------------------------
 
+#include "gui/new_selection_details_widget/new_gate_details_widget/gate_info_table.h"
+#include "gui/new_selection_details_widget/new_net_details_widget/net_info_table.h"
+#include "gui/new_selection_details_widget/new_module_details_widget/module_info_table.h"
+
 namespace hal {
     DebugContentWidget::DebugContentWidget(QWidget *parent) : ContentWidget("Debug Widget", parent)
     {
@@ -21,6 +25,18 @@ namespace hal {
         mContentLayout->addWidget(mTreeView);
 
         //--------End NetlistElementsModel
+
+
+        //General Info Tables
+        //GateInfoTable* gateTable = new GateInfoTable(this); //hardcoded to show gate with id 11 in constructor atm
+        //mContentLayout->addWidget(gateTable);
+
+        //NetInfoTable* netTable = new NetInfoTable(this); //hardcoded to show net with id 17 in constructor atm
+        //mContentLayout->addWidget(netTable);
+
+        //ModuleInfoTable* moduleTable = new ModuleInfoTable(this); //hardcoded to show module with id 1 in constructor atm
+        //mContentLayout->addWidget(moduleTable);
+        //-----------------------------------------------------------------------------------------------------------------------
     }
 
 } // namespace hal
