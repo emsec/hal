@@ -99,15 +99,19 @@ namespace hal
 
         /**
          * Sets the module's content to the specified ids. Adds all Elements to the top level of
-         * the tree.
+         * the tree. As of now, the model does not check the consistency of the items. For instance, if
+         * modules that shall explicity be displayed are already within other given modules. This also
+         * applies to gates. This can result in duplicate items that are displayed at the top level as
+         * well as within a module hirarchy.
          *
          * @param modIds - Ids of modules.
          * @param gateIds - Ids of gates.
          * @param netIds - Ids of nets.
          * @param displayModulesRecursive - True to add all submodules of the given module list to the tree.
-         * @param showGatesInSubmod - True to show the gates in the submodules that were added if displayModulesRecursive = true.
+         * @param showGatesInSubmods - True to show the gates in the submodules that were added if displayModulesRecursive = true.
+         * @param showNetsInSubmods - True to show the net in the submodules that were added if displayModulesRecursive = true.
          */
-        void setContent(QList<int> modIds, QList<int> gateIds, QList<int> netIds, bool displayModulesRecursive = false, bool showGatesInSubmod = false);
+        void setContent(QList<int> modIds, QList<int> gateIds, QList<int> netIds, bool displayModulesRecursive = true, bool showGatesInSubmods = true, bool showNetsInSubmods = true);
 
         /**
          * Updates the model's content to the given module. Convenient functions that can be used
