@@ -166,6 +166,10 @@ namespace hal
             }
         }
 
+        RecursiveSubgraphFunctionGenerator::RecursiveSubgraphFunctionGenerator(z3::context& ctx, const std::vector<Gate*>& subgraph_gates) : m_ctx(&ctx), m_subgraph_gates(subgraph_gates) {
+
+        };
+
         BooleanFunction RecursiveSubgraphFunctionGenerator::get_function_of_gate(const Gate* gate, const std::string& out_pin)
         {
             if (auto it = m_cache.find({gate->get_id(), out_pin}); it != m_cache.end())
@@ -260,25 +264,19 @@ namespace hal
             return ret;
         }
 
-        void RecursiveSubgraphFunctionGenerator::get_subgraph_z3_function_recursive(const Net* net,
-                                                                                    const std::vector<Gate*>& subgraph_gates,
-                                                                                    z3::context& ctx,
-                                                                                    z3::expr& result)
+        void RecursiveSubgraphFunctionGenerator::get_subgraph_z3_function_recursive(const Net* net, z3::expr& result)
         {
             /* check validity of subgraph_gates */
-            if (subgraph_gates.empty())
+            if (m_subgraph_gates.empty())
             {
                 log_error("z3_utils", "parameter 'subgraph_gates' is empty");
             }
-            if (std::any_of(subgraph_gates.begin(), subgraph_gates.end(), [](auto& g) { return g == nullptr; }))
+            if (std::any_of(m_subgraph_gates.begin(), m_subgraph_gates.end(), [](auto& g) { return g == nullptr; }))
             {
                 log_error("z3_utils", "parameter 'subgraph_gates' contains a nullptr");
             }
-            
-            // clear the cache since the cache is only valid for the same subgraph gates and context (could check whether they changed)
-            m_expr_cache.clear();
 
-            result = get_function_of_net(net, ctx, subgraph_gates);
+            result = get_function_of_net(net, *m_ctx, m_subgraph_gates);
             return;
         }
     

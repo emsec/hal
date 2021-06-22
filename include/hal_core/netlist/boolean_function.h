@@ -325,7 +325,9 @@ namespace hal
         // TODO figure out how to test this
         /**
          * Get the z3 representation of the Boolean function.
+         * The variables can be efficiently substituted by passing in the var_to_expr map. 
          *
+         * @param[in] var_to_expr - A mapping from input variable to expression that this variable is substituted with.
          * @param[in,out] context - The z3 context.
          * @returns The z3 representation of the Boolean function.
          */
