@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <map>
 #include <ostream>
 #include <unordered_map>
 #include <unordered_set>
@@ -324,11 +325,13 @@ namespace hal
         // TODO figure out how to test this
         /**
          * Get the z3 representation of the Boolean function.
+         * The variables can be efficiently substituted by passing in the var_to_expr map. 
          *
+         * @param[in] var_to_expr - A mapping from input variable to expression that this variable is substituted with.
          * @param[in,out] context - The z3 context.
          * @returns The z3 representation of the Boolean function.
          */
-        z3::expr to_z3(z3::context& context) const;
+        z3::expr to_z3(z3::context& context, const std::map<std::string, z3::expr>& var_to_expr = {}) const;
 
     protected:
         enum class operation

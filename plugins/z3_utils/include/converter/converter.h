@@ -25,7 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "z3++.h"
-#include "z3Wrapper.h"
+#include "z3_utils/include/z3Wrapper.h"
 
 #include <map>
 #include <vector>

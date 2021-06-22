@@ -1382,14 +1382,19 @@ namespace hal
         return output;
     }
 
-    z3::expr BooleanFunction::to_z3(z3::context& context) const
+    z3::expr BooleanFunction::to_z3(z3::context& context, const std::map<std::string, z3::expr>& var_to_expr) const
     {
         // convert bf variables to z3::expr
         std::unordered_map<std::string, z3::expr> input2expr;
 
         for (const std::string& var : get_variables())
         {
-            input2expr.emplace(var, context.bv_const(var.c_str(), 1));
+            if (var_to_expr.find(var) == var_to_expr.end()) {
+                input2expr.emplace(var, context.bv_const(var.c_str(), 1));
+            }
+            else {
+                input2expr.insert({var, var_to_expr.at(var)});
+            }
         }
 
         z3::expr expr = to_z3_internal(context, input2expr);
