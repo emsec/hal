@@ -258,7 +258,7 @@ namespace hal
 
             // replace all vcc and gnd nets with constant zeros and ones
             for (const auto& gnd_gate : nl->get_gnd_gates()) {
-                if (gnd_gate->get_fan_out_nets().size() != 0) {
+                if (gnd_gate->get_fan_out_nets().size() != 1) {
                     log_error("fsm_solve", "GND gate {} with {} outputs!", gnd_gate->get_id(), gnd_gate->get_fan_out_nets().size());
                 }
 
@@ -278,7 +278,7 @@ namespace hal
             }
 
             for (const auto& vcc_gate : nl->get_vcc_gates()) {
-                if (vcc_gate->get_fan_out_nets().size() != 0) {
+                if (vcc_gate->get_fan_out_nets().size() != 1) {
                     log_error("fsm_solve", "GND gate {} with {} outputs!", vcc_gate->get_id(), vcc_gate->get_fan_out_nets().size());
                 }
 
