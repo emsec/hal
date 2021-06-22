@@ -149,12 +149,12 @@ namespace hal
         /**
          * Handles 'Case Sensitive'-Button clicks.
          */
-        void handleCaseSensitiveClicked();
+        // void handleCaseSensitiveClicked();
 
         /**
          * Handles 'Exact Match'-Button clicks.
          */
-        void handleExactMatchClicked();
+        // void handleExactMatchClicked();
 
         void handleFilterAdjusted();
 
