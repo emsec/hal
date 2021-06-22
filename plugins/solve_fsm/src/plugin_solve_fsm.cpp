@@ -255,6 +255,48 @@ namespace hal
             z3::expr r(ctx);
             std::unordered_set<u32> ids;
             g.get_subgraph_z3_function(input_net, subgraph_gates, ctx, r, ids);
+
+            // replace all vcc and gnd nets with constant zeros and ones
+            for (const auto& gnd_gate : nl->get_gnd_gates()) {
+                if (gnd_gate->get_fan_out_nets().size() != 1) {
+                    log_error("fsm_solve", "GND gate {} with {} outputs!", gnd_gate->get_id(), gnd_gate->get_fan_out_nets().size());
+                }
+
+                Net* gnd_net = gnd_gate->get_fan_out_nets().at(0);
+                u32 gnd_net_id = gnd_net->get_id();
+
+                z3::expr from = ctx.bv_const(std::to_string(gnd_net_id).c_str(), 1);
+                z3::expr to = ctx.bv_val(0, 1);
+
+                z3::expr_vector from_vec(ctx);
+                z3::expr_vector to_vec(ctx);
+
+                from_vec.push_back(from);
+                to_vec.push_back(to);
+
+                r = r.substitute(from_vec, to_vec);
+            }
+
+            for (const auto& vcc_gate : nl->get_vcc_gates()) {
+                if (vcc_gate->get_fan_out_nets().size() != 1) {
+                    log_error("fsm_solve", "GND gate {} with {} outputs!", vcc_gate->get_id(), vcc_gate->get_fan_out_nets().size());
+                }
+
+                Net* vcc_net = vcc_gate->get_fan_out_nets().at(0);
+                u32 vcc_net_id = vcc_net->get_id();
+
+                z3::expr from = ctx.bv_const(std::to_string(vcc_net_id).c_str(), 1);
+                z3::expr to = ctx.bv_val(1, 1);
+
+                z3::expr_vector from_vec(ctx);
+                z3::expr_vector to_vec(ctx);
+
+                from_vec.push_back(from);
+                to_vec.push_back(to);
+
+                r = r.substitute(from_vec, to_vec);
+            }
+
             r.simplify();
 
             // find all external inputs. We define external inputs as nets that are inputs to the transition logic but are not bits from the previous state.
