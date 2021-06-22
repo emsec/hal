@@ -259,51 +259,44 @@ namespace hal
 
     void GraphTabWidget::handleCustomContextMenuRequested(const QPoint &pos)
     {
-        int clickedIndex = mTabWidget->tabBar()->tabAt(pos);
+        int index = mTabWidget->tabBar()->tabAt(pos);
+
+        if (index == -1)
+            return;
 
         QMenu contextMenu("Context menu", this);
 
-        QAction closeThisTab("Close This Tab", this);
-        QAction closeOtherTabs("Close Other Tabs", this);
-        QAction closeTabsToRight("Close Tabs to Right", this);
-        QAction closeTabsToLeft("Close Tabs to Left", this);
+        contextMenu.addAction("Close This Tab", [this, index](){
+            handleTabCloseRequested(index);
+        });
 
-        contextMenu.addAction(&closeThisTab);
-        contextMenu.addAction(&closeOtherTabs);
-        contextMenu.addAction(&closeTabsToRight);
-        contextMenu.addAction(&closeTabsToLeft);
+        contextMenu.addAction("Close Other Tab", [this, index](){
+            handleCloseTabsToRight(index);
+            handleCloseTabsToLeft(index);
+        });
 
-        // Only show context menu when tab is clicked
-        if (clickedIndex != -1)
-        {
-            QAction* clicked = contextMenu.exec(mapToGlobal(pos));
+        contextMenu.addAction("Close Tabs To Right", [this, index](){
+            handleCloseTabsToRight(index);
+        });
 
-            if (!clicked)
-                return;
-            if (clicked == &closeThisTab)
-                handleTabCloseRequested(clickedIndex);
-            if (clicked == &closeOtherTabs)
-            {
-                handleCloseTabsToRight(clickedIndex);
-                handleCloseTabsToLeft(clickedIndex);
-            }
-            if (clicked == &closeTabsToRight)
-                handleCloseTabsToRight(clickedIndex);
-            if (clicked == &closeTabsToLeft)
-                handleCloseTabsToLeft(clickedIndex);
-        }
+        contextMenu.addAction("Close Tabs To Left", [this, index](){
+            handleCloseTabsToLeft(index);
+        });
+
+        contextMenu.exec(mapToGlobal(pos));
+
     }
 
     void GraphTabWidget::handleCloseTabsToRight(int index)
     {
-        // Close last tab until focused tab is the last tab
+        // Close last tab until tab at index is the last tab
         while (index != mTabWidget->count()-1)
             handleTabCloseRequested(mTabWidget->count()-1);
     }
 
     void GraphTabWidget::handleCloseTabsToLeft(int index)
     {
-        // Close first tab until focused tab is the first tab
+        // Close first tab until tab at index is the first tab
         while (index != 0)
         {
             handleTabCloseRequested(0);
