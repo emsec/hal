@@ -26,6 +26,7 @@
 #include <QAbstractItemModel>
 #include <QIcon>
 #include "gui/new_selection_details_widget/models/tree_item.h"
+#include "gui/new_selection_details_widget/models/base_tree_model.h"
 
 namespace hal
 {
@@ -34,7 +35,7 @@ namespace hal
      * @ingroup utility_widgets-selection_details
      * @brief A model to display arbitrary elements of the netlist.
      */
-    class NetlistElementsTreeModel : public QAbstractItemModel
+    class NetlistElementsTreeModel : public BaseTreeModel
     {
         Q_OBJECT
     public:
@@ -59,42 +60,6 @@ namespace hal
           * refer to the Qt documentation.
           */
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        QModelIndex parent(const QModelIndex &index) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        Qt::ItemFlags flags(const QModelIndex& index) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         ///@}
 
         /**
@@ -124,28 +89,6 @@ namespace hal
          */
         void setModule(Module* mod, bool showGates = true, bool showNets = true, bool displayModulesRecursive = true);
 
-        // important converter methods
-        /**
-         * Helper method to convert between the item and its index.
-         *
-         * @param item - The item from which to get the index.
-         * @return The index.
-         */
-        QModelIndex getIndexFromItem(TreeItem* item) const;
-
-        /**
-         * Helper method to convert between the index and its item.
-         *
-         * @param index - The index to convert.
-         * @return The internal item.
-         */
-        TreeItem* getItemFromIndex(QModelIndex index) const;
-
-        /**
-         * Resets the model (deletes the tree).
-         */
-        void clear();
-
 
         //Column identifier
         static const int sNameColumn = 0;
@@ -156,7 +99,7 @@ namespace hal
         Q_ENUM(itemType)
 
     private:
-        TreeItem* mRootItem;
+        //TreeItem* mRootItem;
         //Note: make these somehow static (does not work with pointer...?)
         QIcon mModuleIcon;
         QIcon mGateIcon;
