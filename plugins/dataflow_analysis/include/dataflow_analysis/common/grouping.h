@@ -31,7 +31,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <map> 
 
 namespace hal
 {
@@ -49,7 +48,6 @@ namespace hal
 
             std::unordered_map<u32, std::unordered_set<u32>> gates_of_group;
             std::unordered_map<u32, u32> parent_group_of_gate;
-            std::map<u32, bool> operations_on_group_allowed;
 
             bool operator==(const Grouping& other) const;
             bool operator!=(const Grouping& other) const;

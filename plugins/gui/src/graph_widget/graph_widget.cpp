@@ -468,8 +468,8 @@ namespace hal
         // FIXME If the scene has been resized during this method, the animation triggered by
         // ensure_gates_visible is broken. Thus, if that is the case, we bail out here and not
         // trigger the animation.
-        if (bail_animation)
-            return;
+        // if (bail_animation)
+        //    return;
 
         // JUMP TO THE GATES AND MODULES
         ensureItemsVisible(final_gates, final_modules);
@@ -544,7 +544,8 @@ namespace hal
 
                 if (n->get_num_of_sources() == 1)
                 {
-                    handleNavigationJumpRequested(Node(), n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
+                    handleNavigationJumpRequested(mContext->getNetDestination(n),
+                                                  n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
                 }
                 else
                 {
@@ -620,6 +621,9 @@ namespace hal
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right)
                 {
                     auto n = g->get_fan_out_net(g->get_output_pins()[gSelectionRelay->subfocusIndex()]);
+                    if (!n)
+                        return;
+
                     if (n->get_num_of_destinations() == 0)
                     {
                         gSelectionRelay->clear();
@@ -659,7 +663,8 @@ namespace hal
 
                 if (n->get_num_of_destinations() == 1)
                 {
-                    handleNavigationJumpRequested(Node(), n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
+                    handleNavigationJumpRequested(mContext->getNetSource(n),
+                                                  n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                 }
                 else
                 {
