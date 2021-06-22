@@ -16,7 +16,7 @@ namespace hal
 {
     Searchbar::Searchbar(QWidget* parent)
         : QFrame(parent), mLayout(new QHBoxLayout()), mSearchIconLabel(new QLabel()), mLineEdit(new QLineEdit()), mClearIconLabel(new QLabel()), mModeButton(new QPushButton()),
-          mDownButton(new QToolButton()), mUpButton(new QToolButton())
+          mDownButton(new QToolButton()), mUpButton(new QToolButton()), mExactMatch(new QToolButton()), mCaseSensitive(new QToolButton())
     {
         setLayout(mLayout);
 
@@ -43,19 +43,26 @@ namespace hal
         //mLayout->addWidget(mClearIconLabel);
         //mLayout.addWidget(mButton);
 
-        //Hack solution, because QPushButton not working as expected, fix
-        LabelButton* hack = new LabelButton("Mode", this);
-        hack->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-        mLayout->addWidget(hack);
+        //mExactMatch->setIcon(QIcon(":/icons/fire"));
+        mExactMatch->setText("==");
+        mExactMatch->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+        mExactMatch->setCheckable(true);
+        mExactMatch->setToolTip("Exact Match");
+        mLayout->addWidget(mExactMatch);
 
-        //mLayout.addWidget(&mDownButton);
-        //mLayout.addWidget(&mUpButton);
+        //mCaseSensitive->setIcon(QIcon(":/icons/cross"));
+        mCaseSensitive->setText("Aa");
+        mCaseSensitive->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+        mCaseSensitive->setCheckable(true);
+        mCaseSensitive->setToolTip("Case Sensitive");
+        mLayout->addWidget(mCaseSensitive);
 
         setFrameStyle(QFrame::NoFrame);
 
         connect(mLineEdit, &QLineEdit::textEdited, this, &Searchbar::handleTextEdited);
         connect(mLineEdit, &QLineEdit::returnPressed, this, &Searchbar::handleReturnPressed);
-        connect(hack, &LabelButton::clicked, this, &Searchbar::handleModeClicked);
+        connect(mCaseSensitive, &QToolButton::clicked, this, &Searchbar::handleFilterAdjusted);
+        connect(mExactMatch, &QToolButton::clicked, this, &Searchbar::handleFilterAdjusted);
 
         setFocusProxy(mLineEdit);
     }
@@ -123,6 +130,21 @@ namespace hal
         return mLineEdit->text();
     }
 
+    QString Searchbar::addFlags(const QString& oldText)
+    {
+        QString text;
+        if (mCaseSensitive->isChecked())
+            text.append("(?-i)");
+        else
+            text.append("(?i)");
+        if (mExactMatch->isChecked())
+            text.append("^");
+        text.append(oldText);
+        if (mExactMatch->isChecked())
+            text.append("$");
+        return text;
+    }
+
     void Searchbar::repolish()
     {
         QStyle* s = style();
@@ -143,7 +165,10 @@ namespace hal
     void Searchbar::handleTextEdited(const QString& text)
     {
         repolish();
-        Q_EMIT textEdited(text);
+        if (mEmitTextWithFlags)
+            Q_EMIT textEdited(addFlags(text));
+        else
+            Q_EMIT textEdited(text);
     }
 
     void Searchbar::handleReturnPressed()
@@ -151,8 +176,29 @@ namespace hal
         Q_EMIT returnPressed();
     }
 
-    void Searchbar::handleModeClicked()
+    void Searchbar::handleFilterAdjusted()
     {
-        Q_EMIT modeClicked();
+        // handleTextEdited will emit textEdited with updated filter
+        handleTextEdited(getCurrentText());
+    }
+
+    bool Searchbar::exactMatchChecked()
+    {
+        return mExactMatch->isChecked();
+    }
+
+    bool Searchbar::caseSensitiveChecked()
+    {
+        return mCaseSensitive->isChecked();
+    }
+
+    void Searchbar::setEmitTextWithFlags(bool emitTextWithFlags)
+    {
+        mEmitTextWithFlags = emitTextWithFlags;
+    }
+
+    bool Searchbar::getEmitTextWithFlags()
+    {
+        return mEmitTextWithFlags;
     }
 }

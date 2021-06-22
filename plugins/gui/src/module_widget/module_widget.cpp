@@ -29,7 +29,8 @@ namespace hal
     ModuleWidget::ModuleWidget(QWidget* parent)
         : ContentWidget("Modules", parent),
           mTreeView(new ModuleTreeView(this)),
-          mModuleProxyModel(new ModuleProxyModel(this))
+          mModuleProxyModel(new ModuleProxyModel(this)),
+          mSearchbar(new Searchbar(this))
     {
         connect(mTreeView, &QTreeView::customContextMenuRequested, this, &ModuleWidget::handleTreeViewContextMenuRequested);
 
@@ -49,14 +50,14 @@ namespace hal
         mTreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mTreeView->expandAll();
         mContentLayout->addWidget(mTreeView);
-        mContentLayout->addWidget(&mSearchbar);
-        mSearchbar.hide();
+        mContentLayout->addWidget(mSearchbar);
+        mSearchbar->hide();
 
         mIgnoreSelectionChange = false;
 
         gSelectionRelay->registerSender(this, name());
 
-        connect(&mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::filter);
+        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::filter);
         connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleWidget::handleTreeSelectionChanged);
         connect(mTreeView, &ModuleTreeView::doubleClicked, this, &ModuleWidget::handleItemDoubleClicked);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleWidget::handleSelectionChanged);
@@ -83,21 +84,21 @@ namespace hal
 
     void ModuleWidget::toggleSearchbar()
     {
-        if (mSearchbar.isHidden())
+        if (mSearchbar->isHidden())
         {
-            mSearchbar.show();
-            mSearchbar.setFocus();
+            mSearchbar->show();
+            mSearchbar->setFocus();
         }
         else
-            mSearchbar.hide();
+            mSearchbar->hide();
     }
 
     void ModuleWidget::filter(const QString& text)
     {
-        QRegExp* regex = new QRegExp(text);
+        QRegularExpression* regex = new QRegularExpression(text);
         if (regex->isValid())
         {
-            mModuleProxyModel->setFilterRegExp(*regex);
+            mModuleProxyModel->setFilterRegularExpression(*regex);
             QString output = "navigation regular expression '" + text + "' entered.";
             log_info("user", output.toStdString());
         }

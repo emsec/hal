@@ -204,7 +204,10 @@ namespace hal
         QColor color            = QColor(12, 15, 19);
         QColor mBackgroundColor = QColor(255, 255, 0);
 
-        while (find(string))
+        // QRegExp is needed here, because find does not support QRegularExpression before Qt 5.13
+        QRegExp regex = QRegExp(string);
+
+        while (find(regex))
         {
             QTextEdit::ExtraSelection extra;
             extra.format.setForeground(QBrush(color));

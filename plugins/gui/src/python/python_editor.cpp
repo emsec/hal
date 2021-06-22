@@ -53,6 +53,7 @@ namespace hal
         connect(mTabWidget, &QTabWidget::tabCloseRequested, this, &PythonEditor::handleTabCloseRequested);
         mContentLayout->addWidget(mSearchbar);
         mSearchbar->hide();
+        mSearchbar->setEmitTextWithFlags(false);
 
         mActionOpenFile->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));

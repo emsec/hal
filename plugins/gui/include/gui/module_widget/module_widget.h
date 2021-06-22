@@ -145,7 +145,7 @@ namespace hal
 
     private:
         ModuleTreeView* mTreeView;
-        Searchbar mSearchbar;
+        Searchbar* mSearchbar;
 
         QAction* mFilterAction;
 

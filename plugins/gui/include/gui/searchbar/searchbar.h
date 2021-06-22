@@ -103,6 +103,13 @@ namespace hal
         QString getCurrentText();
 
         /**
+         * Adds flags ("Exact Match" or "Case Sensitive") as regex modifiers to oldText.
+         *
+         * @return oldText with regex modifiers as QString
+         */
+        QString addFlags(const QString& oldText);
+
+        /**
          * Reinitializes the appearance of the Searchbar.
          */
         void repolish();
@@ -140,9 +147,24 @@ namespace hal
         void handleReturnPressed();
 
         /**
-         * Handles 'Mode'-Button clicks. Emits the signal modeClicked.
+         * Handles 'Case Sensitive'-Button clicks.
          */
-        void handleModeClicked();
+        void handleCaseSensitiveClicked();
+
+        /**
+         * Handles 'Exact Match'-Button clicks.
+         */
+        void handleExactMatchClicked();
+
+        void handleFilterAdjusted();
+
+        bool exactMatchChecked();
+
+        bool caseSensitiveChecked();
+
+        void setEmitTextWithFlags(bool);
+
+        bool getEmitTextWithFlags();
 
     private:
         QHBoxLayout* mLayout;
@@ -153,10 +175,16 @@ namespace hal
         QPushButton* mModeButton;
         QToolButton* mDownButton;
         QToolButton* mUpButton;
+        QToolButton* mCaseSensitive;
+        QToolButton* mExactMatch;
 
         QString mSearchIcon;
         QString mSearchIconStyle;
         QString mClearIcon;
         QString mClearIconStyle;
+
+        // One can decide wether to receive the text (emitted by textEdited) with or without regex modifier
+        // If set to false, one has to manually implement 'Exact Match'/'Case Sensitive' functionality
+        bool mEmitTextWithFlags = true;
     };
 }

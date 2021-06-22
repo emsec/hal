@@ -588,10 +588,11 @@ namespace hal
 
     void GroupingManagerWidget::filter(const QString& text)
     {
-        QRegExp* regex = new QRegExp(text);
+
+        QRegularExpression* regex = new QRegularExpression(text);
         if (regex->isValid())
         {
-            mProxyModel->setFilterRegExp(*regex);
+            mProxyModel->setFilterRegularExpression(*regex);
             QString output = "Groupings widget regular expression '" + text + "' entered.";
             log_info("user", output.toStdString());
         }
