@@ -149,8 +149,9 @@ namespace hal
         void handleModuleFocus(u32 moduleId);
 
         /**
+         * Q_SLOT that should be called whenever a tab is rightclicked.
          *
-         * @param index - The index of the tab within the QTabWidget
+         * @param pos - Mouse position as QPoint.
          */
         void handleCustomContextMenuRequested(const QPoint &pos);
 
@@ -161,10 +162,12 @@ namespace hal
          */
         void setModuleSelectCursor(bool on);
 
-        void handleCloseThisTab();
-        void handleCloseOtherTabs();
-        void handleCloseTabsToRight();
-        void handleCloseTabsToLeft();
+        /**
+         * Q_SLOT to close a single tab.
+         *
+         * @param index - The index of the tab within the QTabWidget
+         */
+        void handleTabCloseRequested(int index);
 
     private:
         QTabWidget* mTabWidget;
@@ -176,13 +179,13 @@ namespace hal
 
         int getContextTabIndex(GraphContext* context) const;
 
-        //functions
-        void handleTabCloseRequested(int index);
-
         void addGraphWidgetTab(GraphContext* context);
 
         void zoomInShortcut();
         void zoomOutShortcut();
+
+        void handleCloseTabsToRight(int index);
+        void handleCloseTabsToLeft(int index);
 
         static SettingsItemDropdown* sSettingGridType;
         static SettingsItemDropdown* sSettingDragModifier;

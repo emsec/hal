@@ -273,49 +273,42 @@ namespace hal
         contextMenu.addAction(&closeTabsToRight);
         contextMenu.addAction(&closeTabsToLeft);
 
-        connect(&closeThisTab, &QAction::triggered, this, &GraphTabWidget::handleCloseThisTab);
-        connect(&closeOtherTabs, &QAction::triggered, this, &GraphTabWidget::handleCloseOtherTabs);
-        connect(&closeTabsToRight, &QAction::triggered, this, &GraphTabWidget::handleCloseTabsToRight);
-        connect(&closeTabsToLeft, &QAction::triggered, this, &GraphTabWidget::handleCloseTabsToLeft);
-
         // Only show context menu when tab is clicked
         if (clickedIndex != -1)
         {
-            mTabWidget->setCurrentIndex(clickedIndex);
-            mTabWidget->widget(clickedIndex)->setFocus();
-            contextMenu.exec(mapToGlobal(pos));
+            QAction* clicked = contextMenu.exec(mapToGlobal(pos));
+
+            if (!clicked)
+                return;
+            if (clicked == &closeThisTab)
+                handleTabCloseRequested(clickedIndex);
+            if (clicked == &closeOtherTabs)
+            {
+                handleCloseTabsToRight(clickedIndex);
+                handleCloseTabsToLeft(clickedIndex);
+            }
+            if (clicked == &closeTabsToRight)
+                handleCloseTabsToRight(clickedIndex);
+            if (clicked == &closeTabsToLeft)
+                handleCloseTabsToLeft(clickedIndex);
         }
     }
 
-    void GraphTabWidget::handleCloseThisTab()
+    void GraphTabWidget::handleCloseTabsToRight(int index)
     {
-        handleTabCloseRequested(mTabWidget->currentIndex());
-    }
-
-    void GraphTabWidget::handleCloseOtherTabs()
-    {
-        handleCloseTabsToLeft();
-        handleCloseTabsToRight();
-    }
-
-    void GraphTabWidget::handleCloseTabsToRight()
-    {
-        // Remove last tab until focused tab is the last tab
-        while (mTabWidget->currentIndex() != mTabWidget->count()-1)
-        {
+        // Close last tab until focused tab is the last tab
+        while (index != mTabWidget->count()-1)
             handleTabCloseRequested(mTabWidget->count()-1);
-        }
-
     }
 
-    void GraphTabWidget::handleCloseTabsToLeft()
+    void GraphTabWidget::handleCloseTabsToLeft(int index)
     {
-        // Remove first tab until focused tab is the first tab
-        while (mTabWidget->currentIndex() != 0)
+        // Close first tab until focused tab is the first tab
+        while (index != 0)
         {
             handleTabCloseRequested(0);
+            index-=1;
         }
-
     }
 
     void GraphTabWidget::setModuleSelectCursor(bool on)
