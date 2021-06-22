@@ -1,23 +1,21 @@
 #include "hal_core/utilities/project_manager.h"
-#include "rapidjson/filereadstream.h"
-#include "rapidjson/stringbuffer.h"
 
-#include <iostream>
-#include <fstream>
 #include <filesystem>
+#include <rapidjson/filereadstream.h>
+#include <iostream>
 
-#define PRETTY_JSON_OUTPUT 0
-#if PRETTY_JSON_OUTPUT == 1
-#include "rapidjson/prettywriter.h"
-#else
-#include "rapidjson/writer.h"
-#endif
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/project_serializer.h"
+#include "hal_core/utilities/project_filelist.h"
+
+const int SERIALIZATION_FORMAT_VERSION = 9;
 
 namespace hal {
     ProjectManager* ProjectManager::inst = nullptr;
 
     ProjectManager::ProjectManager()
     {
+        m_proj_file = ".project.halp";
     }
 
     ProjectManager* ProjectManager::instance()
@@ -26,47 +24,125 @@ namespace hal {
         return inst;
     }
 
-    bool ProjectManager::serialize() const
+    void ProjectManager::register_serializer(const std::string& tagname, ProjectSerializer* serializer)
     {
-        std::filesystem::path currentDir = std::filesystem::current_path();
+        if (m_serializer.find(tagname) == m_serializer.end())
+            m_serializer[tagname] = serializer;
+        else
+        {
+            log_warning("project_manager", "serializer '{}' already registered.", tagname);
+        }
+    }
 
-            std::ofstream hal_file_stream;
-            hal_file_stream.open(hal_file.string());
-            if (hal_file_stream.fail())
-            {
-                log_error("hdl_writer", "Cannot open or create file {}. Please verify that the file and the containing directory is writable!", hal_file.string());
-                return false;
-            }
+    ProjectFilelist* ProjectManager::get_filelist(const std::string& tagname)
+    {
+        auto it = m_filelist.find(tagname);
+        if (it==m_filelist.end()) return nullptr;
+        return it->second;
+    }
 
-            rapidjson::Document document;
-            document.SetObject();
+    void ProjectManager::set_project_directory(const std::string& path)
+    {
+        m_proj_dir = ProjectDirectory(path);
+    }
 
-            document.AddMember("serialization_format_version", SERIALIZATION_FORMAT_VERSION, document.GetAllocator());
+    const ProjectDirectory &ProjectManager::get_project_directory() const
+    {
+        return m_proj_dir;
+    }
 
-            serialize(nl, document);
+    bool ProjectManager::create_project_directory() const
+    {
+        return std::filesystem::create_directory(m_proj_dir);
+    }
 
-            if (!hal_file_manager::serialize(hal_file, nl, document))
-            {
-                log_info("netlist_persistent", "serialization failed");
-                return false;
-            }
+    void ProjectManager::set_netlist_file(const std::string& fname, Netlist *netlist)
+    {
+        m_netlist = netlist;
+        m_netlist_file = fname;
+    }
 
-            rapidjson::StringBuffer strbuf;
-#if PRETTY_JSON_OUTPUT == 1
-            rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(strbuf);
-#else
-            rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-#endif
-            document.Accept(writer);
+    bool ProjectManager::deserialize()
+    {
+        std::filesystem::path projFilePath(m_proj_dir);
+        projFilePath.append(m_proj_file);
 
-            hal_file_stream << strbuf.GetString();
-
-            hal_file_stream.close();
-
-            log_info("netlist_persistent", "serialized netlist in {:2.2f} seconds", DURATION(begin_time));
-
-            return true;
+        FILE* fp = fopen(projFilePath.string().c_str(), "r");
+        if (fp == NULL)
+        {
+//            log_error("hgl_parser", "unable to open '{}' for reading.", file_path.string());
+            log_error("project_manager", "cannot open project file '{}'.", projFilePath.string());
+            return false;
         }
 
+        char buffer[65536];
+        rapidjson::FileReadStream frs(fp, buffer, sizeof(buffer));
+        rapidjson::Document doc;
+        doc.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(frs);
+        fclose(fp);
+
+        if (doc.HasMember("serializer"))
+        {
+            for(auto it = doc["serializer"].MemberBegin(); it!= doc["serializer"].MemberEnd(); ++it)
+            {
+                parse_filelist(it->name.GetString(),it->value);
+            }
+        }
+
+        for (auto it = m_serializer.begin(); it != m_serializer.end(); ++it)
+        {
+            it->second->deserialize(m_netlist, m_proj_dir);
+        }
+        return true;
+    }
+
+    void ProjectManager::parse_filelist(const std::string& tagname, rapidjson::Value& farray)
+    {
+        ProjectFilelist* flist = new ProjectFilelist(tagname);
+        for (rapidjson::Document::ConstValueIterator it = farray.Begin(); it != farray.End(); ++it)
+        {
+            flist->push_back(it->GetString());
+        }
+        m_filelist[tagname] = flist;
+    }
+
+    bool ProjectManager::serialize() const
+    {
+        if (!m_netlist) return false;
+
+        std::filesystem::path projFilePath(m_proj_dir);
+        projFilePath.append(m_proj_file);
+
+        JsonWriteDocument doc;
+        doc["serialization_format_version"] = SERIALIZATION_FORMAT_VERSION;
+        doc["netlist"] = m_netlist_file;
+
+        JsonWriteObject& serial = doc.add_object("serializer");
+        for (auto it = m_serializer.begin(); it != m_serializer.end(); ++it)
+        {
+            ProjectFilelist* pfl = it->second->serialize(m_netlist, m_proj_dir);
+            if (!pfl) continue;
+            JsonWriteArray& jsarray = serial.add_array(it->first);
+            for (const std::string& fname : *pfl)
+                jsarray << fname;
+            jsarray.close();
+        }
+        serial.close();
+        doc.serialize(projFilePath.string());
+
+        return true;
+    }
+
+    void ProjectManager::dump() const
+    {
+        for (auto it = m_filelist.begin(); it != m_filelist.end(); ++it)
+        {
+            std::cout << "serializer: <" << it->first << ">" << std::endl;
+            for (const std::string& fname : *(it->second))
+            {
+                std::cout << "   "  << fname << std::endl;
+            }
+            std::cout << "=========" << std::endl;
+        }
     }
 }

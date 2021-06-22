@@ -9,6 +9,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/hal_file_manager.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/project_manager.h"
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
 
@@ -672,6 +673,8 @@ namespace hal
             hal_file_stream.close();
 
             log_info("netlist_persistent", "serialized netlist in {:2.2f} seconds", DURATION(begin_time));
+
+            ProjectManager::instance()->set_netlist_file(hal_file.filename());
 
             return true;
         }

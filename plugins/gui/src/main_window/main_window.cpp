@@ -26,6 +26,8 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/netlist/event_system/event_log.h"
+#include "hal_core/utilities/project_manager.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include <QApplication>
 #include <QCloseEvent>
@@ -635,44 +637,37 @@ namespace hal
         saveHandler(FileManager::get_instance()->fileName());
     }
 
-    QString MainWindow::saveHandler(const QString &filename)
+    QString MainWindow::saveHandler(const QString &projectDir)
     {
         if (!gNetlist) return QString();
 
-        std::filesystem::path path;
-        QString newName;
+        QString newName(projectDir);
 
-        if (filename.isEmpty())
+        if (newName.isEmpty())
         {
-            QString title = "Save File";
-            QString text  = "HAL Progress Files (*.hal)";
+            QString title = "Save Project";
+            QString text  = "HAL Directory Folder (*.hal)";
 
             // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
             newName = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr);
-            if (!newName.isNull())
-            {
-                path = newName.toStdString();
-            }
-            else
-            {
-                return QString();
-            }
-        }
-        else
-        {
-            path = filename.toStdString();
+            if (newName.isEmpty()) return QString();
         }
 
+        ProjectManager* pm = ProjectManager::instance();
+        pm->set_project_directory(newName.toStdString());
+        pm->create_project_directory();
 
-        path.replace_extension(".hal");
-        netlist_serializer::serialize_to_file(gNetlist, path);
+        std::filesystem::path netlistPath = pm->get_project_directory().get_filename(false,".hal");
+        netlist_serializer::serialize_to_file(gNetlist, netlistPath);
+
+        pm->serialize();
 
         gFileStatusManager->netlistSaved();
-        FileManager::get_instance()->watchFile(QString::fromStdString(path.string()));
+        FileManager::get_instance()->watchFile(QString::fromStdString(netlistPath.string()));
 
         Q_EMIT saveTriggered();
 
-        return newName;
+        return QString::fromStdString(pm->get_project_directory().string());
     }
 
     void MainWindow::handleActionStartRecording()

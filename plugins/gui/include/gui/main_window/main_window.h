@@ -438,12 +438,12 @@ namespace hal
 
         /**
          * Internal handler for "save" and "save as" commands. If neccessary a new-file dialog
-         * will query for output file name.
+         * will query for hal project directory name.
          *
-         * @param filename, might be empty
-         * @return file name from new-file dialog (if any)
+         * @param project directory, might be empty
+         * @return project directory name from new-file dialog (if any)
          */
-        QString saveHandler(const QString& filename = QString());
+        QString saveHandler(const QString& projectDir = QString());
 
         /**
          * Restores the window geometry of the MainWindow and all its children, configured with saveState().

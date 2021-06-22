@@ -25,45 +25,16 @@
 
 #include "hal_core/defines.h"
 
+
 #include <string>
-#include <unordered_map>
-#include <filesystem>
+#include <vector>
 
-#include "hal_core/utilities/project_directory.h"
-#include "hal_core/utilities/json_write_document.h"
-#include "hal_core/netlist/netlist.h"
+namespace hal {
 
-namespace hal
-{
-    class Netlist;
-    class ProjectSerializer;
-    class ProjectFilelist;
-
-    class ProjectManager
+    class ProjectFilelist : public std::vector<std::string>
     {
-    private:
-        ProjectManager();
-
-        static ProjectManager* inst;
-
-        Netlist* m_netlist;
-        ProjectDirectory m_proj_dir;
-        std::string m_proj_file;
-        std::string m_netlist_file;
-        std::unordered_map<std::string,ProjectSerializer*> m_serializer;
-        std::unordered_map<std::string,ProjectFilelist*> m_filelist;
-
-        void parse_filelist(const std::string& tagname, rapidjson::Value& farray);
+        std::string m_serializer;
     public:
-        static ProjectManager* instance();
-        void register_serializer(const std::string& tagname, ProjectSerializer* serializer);
-        ProjectFilelist* get_filelist(const std::string& tagname);
-        bool serialize() const;
-        bool deserialize();
-        void dump() const;
-        void set_netlist_file(const std::string& fname, Netlist* netlist);
-        void set_project_directory(const std::string& path);
-        bool create_project_directory() const;
-        const ProjectDirectory& get_project_directory() const;
+        ProjectFilelist(const std::string& serizalizer = std::string());
     };
-}    // namespace hal
+}
