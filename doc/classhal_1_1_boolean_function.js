@@ -52,7 +52,7 @@ var classhal_1_1_boolean_function =
     [ "to_dnf", "classhal_1_1_boolean_function.html#a51239fd8f787b31b7a59561c19162cab", null ],
     [ "to_string", "classhal_1_1_boolean_function.html#a404f2bad29d2cd14108e22fc247b7e15", null ],
     [ "to_string_internal", "classhal_1_1_boolean_function.html#ad2e5fa55324021109088323c77a53da8", null ],
-    [ "to_z3", "classhal_1_1_boolean_function.html#a8264cc6e595cabd8253a2be33d0213f6", null ],
+    [ "to_z3", "classhal_1_1_boolean_function.html#a657457cc9975026477302cd08ddfad3f", null ],
     [ "to_z3_internal", "classhal_1_1_boolean_function.html#a92f34e37bfc4a5d8ab6d2471fbb9efe1", null ],
     [ "operator<<", "classhal_1_1_boolean_function.html#ac651e5f78d6e546f8784837138d907f2", null ],
     [ "operator<<", "classhal_1_1_boolean_function.html#ae1e49f87bbb4446a516e1350aadaca7b", null ],

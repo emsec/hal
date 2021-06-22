@@ -1,16 +1,16 @@
 <map id="/home/runner/work/hal/hal/include/hal_core/netlist/gate_library/gate_type.h" name="/home/runner/work/hal/hal/include/hal_core/netlist/gate_library/gate_type.h">
-<area shape="rect" id="node1" title=" " alt="" coords="641,5,810,76"/>
-<area shape="rect" id="node2" href="$boolean__function_8h.html" title=" " alt="" coords="375,124,553,165"/>
+<area shape="rect" id="node1" title=" " alt="" coords="653,5,822,76"/>
+<area shape="rect" id="node2" href="$boolean__function_8h.html" title=" " alt="" coords="412,124,591,165"/>
 <area shape="rect" id="node4" href="$enums_8h.html" title=" " alt="" coords="5,213,136,255"/>
-<area shape="rect" id="node10" title=" " alt="" coords="659,221,783,247"/>
-<area shape="rect" id="node11" title=" " alt="" coords="808,221,923,247"/>
-<area shape="rect" id="node12" title=" " alt="" coords="763,131,813,158"/>
-<area shape="rect" id="node13" title=" " alt="" coords="837,131,880,158"/>
-<area shape="rect" id="node14" title=" " alt="" coords="904,131,963,158"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="51,303,191,329"/>
-<area shape="rect" id="node5" title=" " alt="" coords="305,303,367,329"/>
-<area shape="rect" id="node6" title=" " alt="" coords="565,221,635,247"/>
-<area shape="rect" id="node7" title=" " alt="" coords="211,221,296,247"/>
-<area shape="rect" id="node8" title=" " alt="" coords="320,221,389,247"/>
-<area shape="rect" id="node9" title=" " alt="" coords="465,221,541,247"/>
+<area shape="rect" id="node9" title=" " alt="" coords="661,221,712,247"/>
+<area shape="rect" id="node11" title=" " alt="" coords="737,221,861,247"/>
+<area shape="rect" id="node12" title=" " alt="" coords="885,221,1000,247"/>
+<area shape="rect" id="node13" title=" " alt="" coords="825,131,868,158"/>
+<area shape="rect" id="node14" title=" " alt="" coords="892,131,951,158"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="215,303,355,329"/>
+<area shape="rect" id="node5" title=" " alt="" coords="90,303,153,329"/>
+<area shape="rect" id="node6" title=" " alt="" coords="363,221,434,247"/>
+<area shape="rect" id="node7" title=" " alt="" coords="459,221,544,247"/>
+<area shape="rect" id="node8" title=" " alt="" coords="568,221,637,247"/>
+<area shape="rect" id="node10" title=" " alt="" coords="211,221,287,247"/>
 </map>
