@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['layouters_35395',['Layouters',['../group__graph-layouter.html',1,'']]],
-  ['logging_20system_35396',['Logging System',['../group__logging.html',1,'']]]
+  ['layouters_35397',['Layouters',['../group__graph-layouter.html',1,'']]],
+  ['logging_20system_35398',['Logging System',['../group__logging.html',1,'']]]
 ];

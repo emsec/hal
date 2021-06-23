@@ -1,5 +1,7 @@
 var NAVTREEINDEX15 =
 {
+"gate__library__parser__manager_8h.html#ac953effd3772be75aa045d1723121dc1":[14,0,0,0,1,1,0,1,0],
+"gate__library__parser__manager_8h_source.html":[14,0,0,0,1,1,0,1],
 "gate__library__writer_8h.html":[14,0,0,0,1,1,1,0],
 "gate__library__writer_8h_source.html":[14,0,0,0,1,1,1,0],
 "gate__library__writer__manager_8cpp.html":[14,0,2,0,1,1,0],
@@ -227,18 +229,18 @@ var NAVTREEINDEX15 =
 "group__unused.html":[11,0,8],
 "group__user__action.html":[11,0,5],
 "group__utilities.html":[11,1,2],
-"group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d":[14,0,0,0,4,3,2],
 "group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d":[11,1,2,9],
+"group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d":[14,0,0,0,4,3,2],
 "group__utilities.html#ga522d6d0c8a408128993be37c86656280":[11,1,2,12],
 "group__utilities.html#ga522d6d0c8a408128993be37c86656280":[14,0,0,0,4,3,6],
-"group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466":[11,1,2,11],
 "group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466":[14,0,0,0,4,3,5],
-"group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2":[14,0,0,0,4,3,7],
+"group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466":[11,1,2,11],
 "group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2":[11,1,2,13],
+"group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2":[14,0,0,0,4,3,7],
 "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[14,0,0,0,4,3,4],
 "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[11,1,2,10],
-"group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[11,1,2,15],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[14,0,0,0,4,3,9],
+"group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[11,1,2,15],
 "group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[14,0,0,0,4,3,8],
 "group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[11,1,2,14],
 "group__utility__widgets-context.html":[11,0,7,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX15 =
 "group__utility__widgets-selection__details.html":[11,0,7,3],
 "group__utility__widgets.html":[11,0,7],
 "grouping_8h.html":[14,0,0,0,1,10],
-"grouping_8h_source.html":[14,0,0,0,1,10],
-"grouping__color__delegate_8cpp.html":[14,0,1,0,2,18,0],
-"grouping__color__delegate_8cpp_source.html":[14,0,1,0,2,18,0]
+"grouping_8h_source.html":[14,0,0,0,1,10]
 };

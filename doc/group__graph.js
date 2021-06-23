@@ -17,10 +17,12 @@ var group__graph =
       [ "ensureSelectionVisible", "classhal_1_1_graph_tab_widget.html#a3a028176881287f11d73e85ff954a3ca", null ],
       [ "handleContextRemoved", "classhal_1_1_graph_tab_widget.html#a65385d3e9ab4b904019a3da3332c1a0a", null ],
       [ "handleContextRenamed", "classhal_1_1_graph_tab_widget.html#af147f3e768ddda79c63dac6b588bd22f", null ],
+      [ "handleCustomContextMenuRequested", "classhal_1_1_graph_tab_widget.html#a18f0607d7e65a39ebd00d58921168924", null ],
       [ "handleGateFocus", "classhal_1_1_graph_tab_widget.html#a030e27ff45c4904d8345652a51cd008c", null ],
       [ "handleModuleFocus", "classhal_1_1_graph_tab_widget.html#acdfb9c178d804294352f5bcbaa780f19", null ],
       [ "handleNetFocus", "classhal_1_1_graph_tab_widget.html#a92a91a079a63163e9f1f74bbc4c82fa2", null ],
       [ "handleTabChanged", "classhal_1_1_graph_tab_widget.html#acffdd8dc91ee21690d34571252400a0e", null ],
+      [ "handleTabCloseRequested", "classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47", null ],
       [ "isModuleSelectCursor", "classhal_1_1_graph_tab_widget.html#a31282ac72dca0b7a5341335cf3fc80b7", null ],
       [ "setModuleSelectCursor", "classhal_1_1_graph_tab_widget.html#a0011f8b8928c9a1b49bc08aae37b5bcc", null ],
       [ "showContext", "classhal_1_1_graph_tab_widget.html#aa18b4eee005357a3cf24788fb67c094e", null ]

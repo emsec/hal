@@ -1,5 +1,7 @@
 var NAVTREEINDEX20 =
 {
+"structhal_1_1_token_stream_1_1_token_stream_exception.html#abb7da9caf5a7da029069ca6a914f279b":[11,1,2,8,0,0],
+"structhal_1_1_token_stream_1_1_token_stream_exception.html#ad45051801a87dc6ab7384e4971b7c59a":[11,1,2,8,0,1],
 "structhal_1_1core__strings_1_1_case_insensitive_char_traits.html":[13,0,0,0,0],
 "structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html":[13,0,1,0],
 "structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html#a48bd0e946b2b0cded8a3f435a034351c":[13,0,1,0,0],
