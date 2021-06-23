@@ -270,7 +270,7 @@ namespace hal
             handleTabCloseRequested(index);
         });
 
-        contextMenu.addAction("Close Other Tab", [this, index](){
+        contextMenu.addAction("Close Other Tabs", [this, index](){
             handleCloseTabsToRight(index);
             handleCloseTabsToLeft(index);
         });
