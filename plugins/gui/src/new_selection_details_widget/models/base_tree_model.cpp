@@ -77,6 +77,12 @@ namespace hal
         return mRootItem->getColumnCount();
     }
 
+    void BaseTreeModel::setContent(QList<TreeItem *> firstLevelItems)
+    {
+        for(auto item : firstLevelItems)
+            mRootItem->appendChild(item);
+    }
+
     void BaseTreeModel::clear()
     {
         beginResetModel();

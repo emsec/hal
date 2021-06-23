@@ -21,6 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#pragma once
+
 #include <QAbstractItemModel>
 #include "tree_item.h"
 
@@ -87,6 +89,14 @@ namespace hal
         virtual int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         ///@}
 
+
+        /**
+         * Sets the content the tree then represents. An already complete tree (or rather all their
+         * first-level items) must be provided.
+         *
+         * @param firstLevelItems - All items that will be appended to this model's root item.
+         */
+        void setContent(QList<TreeItem*> firstLevelItems);
 
         /**
          * Resets the model (deletes the tree).
