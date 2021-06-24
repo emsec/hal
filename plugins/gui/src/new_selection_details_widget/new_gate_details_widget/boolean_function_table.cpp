@@ -1,5 +1,6 @@
 #include "gui/new_selection_details_widget/new_gate_details_widget/boolean_function_table.h"
 #include "gui/gui_globals.h"
+#include "gui/new_selection_details_widget/py_code_provider.h"
 #include <QHeaderView>
 #include <QtWidgets/QMenu>
 #include <QApplication>
@@ -40,6 +41,14 @@ namespace hal {
         }
     }
 
+    void BooleanFunctionTable::setEntries(QList<QSharedPointer<BooleanFunctionTableEntry>> entries){
+        mBooleanFunctionTableModel->setEntries(entries);
+        adjustTableSizes();
+        this->clearSelection();
+        this->update();
+    }
+
+    //TODO: can be (partially) used later in the gate details widget
     void BooleanFunctionTable::setGate(Gate *gate)
     {
         if(gate == nullptr){
@@ -56,7 +65,7 @@ namespace hal {
         };
 
         std::unordered_map<std::string, BooleanFunction> allBfs = gate->get_boolean_functions(false);
-        //std::unordered_map<std::string, BooleanFunction> customBfs = gate->get_boolean_functions(true);
+
         QMap<QString, BooleanFunction> latchOrFFFunctions;
         QMap<QString, BooleanFunction> customFunctions;
 
@@ -73,20 +82,21 @@ namespace hal {
                 customFunctions.insert(bfName, it.second);
             }
         }
-        if(showCSBehaviour)
-        {
-            mBooleanFunctionTableModel->setBooleanFunctionList( latchOrFFFunctions,
-                                                                customFunctions,
-                                                                gate->get_type()->get_clear_preset_behavior());
+
+        QList<QSharedPointer<BooleanFunctionTableEntry>> entries;
+        QMap<QString, BooleanFunction>::iterator i;
+        for(i = latchOrFFFunctions.begin(); i != latchOrFFFunctions.end(); i++)
+            entries.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), i.key(), i.value())));
+
+        for(i = customFunctions.begin(); i != customFunctions.end(); i++)
+            entries.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), i.key(), i.value())));
+
+        if(showCSBehaviour){
+            entries.append(QSharedPointer<BooleanFunctionTableEntry>(new CPBehaviorEntry(gate->get_id(), gate->get_type()->get_clear_preset_behavior())));
         }
-        else
-        {
-            mBooleanFunctionTableModel->setBooleanFunctionList( latchOrFFFunctions,
-                                                                customFunctions);
-        }
-        adjustTableSizes();
-        this->clearSelection();
-        this->update();
+
+        setEntries(entries);
+
     }
 
     void BooleanFunctionTable::resizeEvent(QResizeEvent *event)
@@ -102,25 +112,22 @@ namespace hal {
             return;
         }
 
-        QPair<QString, bool> bfNameOrCSBehavior = mBooleanFunctionTableModel->getBooleanFunctionNameAtRow(idx.row());
+        QSharedPointer<BooleanFunctionTableEntry> entry = mBooleanFunctionTableModel->getEntryAtRow(idx.row());
         QMenu menu;
         QString menuText;
         QString pythonCode;
 
-        QString getGatePythonCode = QString("netlist.get_gate_by_id(%1)").arg(mCurrentGate->get_id());
-
-        mCurrentGate->get_type()->get_clear_preset_behavior();
         // Entry is a boolean function
-        if(!bfNameOrCSBehavior.second)
+        if(!entry->isCPBehavior())
         {
             menuText = "Extract boolean function as python code (copy to clipboard)";
-            pythonCode = getGatePythonCode + QString(".get_boolean_function(\"%1\")").arg(bfNameOrCSBehavior.first);
+            pythonCode = PyCodeProvider::pyCodeGateBooleanFunction(entry->getGateId(), entry->getEntryIdentifier());
         }
-        // Entry is Clear-Set Behavior
+        // Entry is clear-preset behavior
         else
         {
             menuText = "Extract clear-preset behavior as python code (copy to clipboard)";
-            pythonCode = getGatePythonCode + QString(".get_type().get_clear_preset_behavior()");
+            pythonCode = PyCodeProvider::pyCodeGateClearPresetBehavior(entry->getGateId());
         }
         menu.addAction(QIcon(":/icons/python"), menuText,
            [pythonCode]()

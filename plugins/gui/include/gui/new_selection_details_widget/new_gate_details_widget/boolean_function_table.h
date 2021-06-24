@@ -51,17 +51,20 @@ namespace hal
 
         BooleanFunctionTableModel getModel();
 
-    protected:
-
 
     public Q_SLOTS:
         /**
          * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
          * boolean functions content if necessary.
          *
+         * TODO: This is only a temporary slot for debug purposes. Normally the boolean function table is filled by
+         * via set boolean functions
+         *
          * @param sti - The focused SelectionTreeItem
          */
         void handleDetailsFocusChanged(const SelectionTreeItem* sti);
+
+        void setEntries(QList<QSharedPointer<BooleanFunctionTableEntry>> entries); // TODO: Don't copy the lists two times
 
 
 
@@ -77,13 +80,13 @@ namespace hal
 
     private:
         void adjustTableSizes();
+
+        // TODO: Only for debug purposes
         void setGate(Gate* gate);
 
         BooleanFunctionTableModel* mBooleanFunctionTableModel;
         Gate* mCurrentGate;
-        //QLabel getBooleanFunctionLabel(QString outPinName, const BooleanFunction bf);
-        //void adjustColumnSizes();
-
+        u32 mCurrentGateId;
 
     };
 } // namespace hal

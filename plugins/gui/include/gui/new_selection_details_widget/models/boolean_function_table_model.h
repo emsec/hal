@@ -24,24 +24,97 @@
 #pragma once
 
 #include <QAbstractTableModel>
+#include <QList>
 #include <QString>
+#include <QSharedPointer>
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 
 #include "hal_core/defines.h"
+#include "hal_core/utilities/log.h"
+
 
 namespace hal {
+
+    // TODO: Beautify it (move in .cpp, comments, ...)
+
+    class BooleanFunctionTableEntry
+    {
+    public:
+        BooleanFunctionTableEntry(u32 gateId){
+            mGateId = gateId;
+        }
+
+        BooleanFunctionTableEntry(u32 gateId, std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviors);
+
+        virtual bool isCPBehavior() = 0;
+
+        std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> getCPBehavior() const{
+            return mCPBehavior;
+        }
+
+        QString getEntryIdentifier() const { return mLeft;}
+
+        QString getEntryValueString() const { return mRight;}
+
+        u32 getGateId() const { return mGateId;}
+
+    protected:
+        bool mIsCPBehavior;
+        QString mLeft;
+        QString mRight;
+        u32 mGateId;
+        std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> mCPBehavior;
+
+    };
+
+
+    class BooleanFunctionEntry : public BooleanFunctionTableEntry
+    {
+    public:
+        BooleanFunctionEntry(u32 gateId, QString functionName, BooleanFunction bf) : BooleanFunctionTableEntry(gateId){
+            mLeft = functionName;
+            mRight = QString::fromStdString(bf.to_string());
+            mBF = bf;
+        }
+        BooleanFunction getBooleanFunction(){ return mBF; }
+        virtual bool isCPBehavior(){ return false; };
+    private:
+        BooleanFunction mBF;
+    };
+
+
+    class CPBehaviorEntry : public BooleanFunctionTableEntry
+    {
+
+    public:
+        CPBehaviorEntry(u32 gateId, std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehavior) : BooleanFunctionTableEntry(gateId){
+            mLeft = "set_clear_behavior";
+            mRight = cPBehaviourToString(cPBehavior);
+            mCPBehavior =cPBehavior;
+        }
+        std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> getCPBehavior(){ return mCPBehavior; }
+        virtual bool isCPBehavior(){ return true; };
+
+    private:
+        QString cPBehaviourToString (std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviour){
+            static QMap<GateType::ClearPresetBehavior, QString> cPBehaviourToString {
+                {GateType::ClearPresetBehavior::L, "L"},
+                {GateType::ClearPresetBehavior::H, "H"},
+                {GateType::ClearPresetBehavior::N, "N"},
+                {GateType::ClearPresetBehavior::T, "T"},
+                {GateType::ClearPresetBehavior::X, "X"},
+                {GateType::ClearPresetBehavior::undef, "Undefined"},
+            };
+            return QString(cPBehaviourToString[cPBehaviour.first] + ", " + cPBehaviourToString[cPBehaviour.second]);
+        }
+        std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> mCPBehavior;
+    };
+
 
     class BooleanFunctionTableModel : public QAbstractTableModel
     {
     Q_OBJECT
-    private:
-
-        struct BooleanFunctionTableEntry
-        {
-            QString functionName; // e.g. "O" or "clock"
-            QString functionString; // e.g. "I0 & !I1"
-        };
 
     public:
         /**
@@ -98,26 +171,12 @@ namespace hal {
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
-        QPair<QString, bool> getBooleanFunctionNameAtRow(int row) const;
+        void setEntries(QList<QSharedPointer<BooleanFunctionTableEntry>> entries);
 
-        void setBooleanFunctionList(const QMap<QString, BooleanFunction>& latchOrFFFunctions,
-                                    const QMap<QString, BooleanFunction>& customFunctions,
-                                    std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviour);
-
-        void setBooleanFunctionList(const QMap<QString, BooleanFunction>& latchOrFFFunctions,
-                                    const QMap<QString, BooleanFunction>& customFunctions);
-
-        void setSingleBooleanFunction(QString functionName, BooleanFunction booleanFunction);
+        QSharedPointer<BooleanFunctionTableEntry> getEntryAtRow(int row) const;
 
     private:
-        QList<BooleanFunctionTableEntry> getEntryListFromMap(const QMap<QString, BooleanFunction>& map);
-        BooleanFunctionTableEntry getEntryFromCPBehaviour(std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviour);
-
-        QList<BooleanFunctionTableEntry> mLatchOrFFFunctions;
-        QList<BooleanFunctionTableEntry> mCustomFunctions;
-        // maybe:
-        bool mIncludeCSBehaviour;
-        BooleanFunctionTableEntry mCSBehaviour;
+        QList<QSharedPointer<BooleanFunctionTableEntry>> mEntries;
 
 
     };
