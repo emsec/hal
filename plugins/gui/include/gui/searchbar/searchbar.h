@@ -166,6 +166,8 @@ namespace hal
 
         bool getEmitTextWithFlags();
 
+        bool isEmpty();
+
     private:
         QHBoxLayout* mLayout;
 

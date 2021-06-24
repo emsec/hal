@@ -199,7 +199,8 @@ namespace hal
 
     void ContextManagerWidget::handleFilterTextChanged(const QString& filter_text)
     {
-        if(filter_text.isEmpty())
+        Q_UNUSED(filter_text);
+        if(mSearchbar.isEmpty())
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon("all->#30ac4f", mSearchIconPath)); //color test, integrate into stylsheet later

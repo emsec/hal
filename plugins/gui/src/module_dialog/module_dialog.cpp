@@ -42,13 +42,6 @@ namespace hal {
         connect(mTableView, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
-        mModuleSelectModel = new ModuleSelectModel(false);
-        mModuleTableProxyModel = new ModuleSelectProxy();
-        mModuleTableProxyModel->setFilterKeyColumn(-1);
-        mModuleTableProxyModel->setDynamicSortFilter(true);
-        mModuleTableProxyModel->setSourceModel(mModuleSelectModel);
-        mTableView->setModel(mModuleTableProxyModel);
-
         if (!ModuleSelectHistory::instance()->isEmpty())
         {
             mLastUsed = new ModuleSelectView(true,mSearchbar,mTabWidget);
@@ -63,11 +56,19 @@ namespace hal {
 
         layout->addWidget(mTabWidget, 2, 0, 1, 2);
 
+        mModuleSelectModel = new ModuleSelectModel(false);
+        mModuleTableProxyModel = new ModuleSelectProxy();
+        mModuleTableProxyModel->setFilterKeyColumn(-1);
+        mModuleTableProxyModel->setDynamicSortFilter(true);
+        mModuleTableProxyModel->setSourceModel(mModuleSelectModel);
+        mTableView->setModel(mModuleTableProxyModel);
+
         mModuleTreeProxyModel = new ModuleProxyModel(this);
         mModuleTreeProxyModel->setFilterKeyColumn(-1);
         mModuleTreeProxyModel->setDynamicSortFilter(true);
         mModuleTreeProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
         mTreeView->setModel(mModuleTreeProxyModel);
+        mTreeView->expandAll();
 
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
         layout->addWidget(mButtonBox, 3, 1);
@@ -173,6 +174,7 @@ namespace hal {
         {
             mModuleTreeProxyModel->setFilterRegularExpression(*regex);
             mModuleTableProxyModel->setFilterRegularExpression(*regex);
+            mTreeView->expandAll();
             QString output = "navigation regular expression '" + text + "' entered.";
             log_info("user", output.toStdString());
         }

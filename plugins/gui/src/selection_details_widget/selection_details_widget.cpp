@@ -472,7 +472,7 @@ namespace hal
 
     void SelectionDetailsWidget::toggleSearchbar()
     {
-        if(mSearchbar->isHidden())
+        if(mSearchbar->isHidden() && mSearchAction->isEnabled())
         {
             mSearchbar->show();
             mSearchbar->setFocus();
@@ -486,7 +486,8 @@ namespace hal
 
     void SelectionDetailsWidget::handleFilterTextChanged(const QString& filter_text)
     {
-        if(filter_text.isEmpty())
+        Q_UNUSED(filter_text);
+        if(mSearchbar->isEmpty())
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));

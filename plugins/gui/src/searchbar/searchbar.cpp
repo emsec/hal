@@ -201,4 +201,9 @@ namespace hal
     {
         return mEmitTextWithFlags;
     }
+
+    bool Searchbar::isEmpty()
+    {
+        return getCurrentText().isEmpty();
+    }
 }

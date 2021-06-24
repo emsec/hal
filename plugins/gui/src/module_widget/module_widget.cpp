@@ -99,6 +99,7 @@ namespace hal
         if (regex->isValid())
         {
             mModuleProxyModel->setFilterRegularExpression(*regex);
+            mTreeView->expandAll();
             QString output = "navigation regular expression '" + text + "' entered.";
             log_info("user", output.toStdString());
         }
