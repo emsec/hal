@@ -1,4 +1,5 @@
 #include "gui/welcome_screen/recent_files_widget.h"
+#include "hal_core/utilities/project_manager.h"
 
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_globals.h"
@@ -11,12 +12,14 @@
 #include <QSettings>
 #include <QStyle>
 #include <QVBoxLayout>
+#include <QDebug>
 
 namespace hal
 {
     RecentFilesWidget::RecentFilesWidget(QWidget* parent) : QFrame(parent), mLayout(new QVBoxLayout())
     {
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &RecentFilesWidget::handleFileOpened);
+        connect(FileManager::get_instance(), &FileManager::projectOpened, this, &RecentFilesWidget::handleProjectOpened);
 
         mLayout->setContentsMargins(0, 0, 0, 0);
         mLayout->setSpacing(0);
@@ -43,10 +46,14 @@ namespace hal
         }
     }
 
+    void RecentFilesWidget::handleProjectOpened(const QString& projDir, const QString& fileName)
+    {
+        Q_UNUSED(fileName);
+        handleFileOpened(projDir);
+    }
+
     void RecentFilesWidget::handleFileOpened(const QString& fileName)
     {
-        Q_UNUSED(fileName)
-
         for (const RecentFileItem* item : mItems)
         {
             if (item->file() == fileName)
@@ -93,8 +100,22 @@ namespace hal
             connect(item, &RecentFileItem::removeRequested, this, &RecentFilesWidget::handleRemoveRequested);
 
             QFileInfo info(file);
-            if(!(info.exists() && info.isFile()))
-                item->setDisabled(true);
+
+            bool disabl = false;
+            if (info.exists())
+            {
+                if (info.isDir())
+                {
+                    disabl = !QFileInfo(QDir(info.absoluteFilePath()).absoluteFilePath(QString::fromStdString(ProjectManager::s_project_file))).exists();
+                }
+                else
+                    disabl = !info.isFile();
+            }
+            else
+                disabl = true;
+
+            if (disabl)
+                item->setDisabled(disabl);
 
             mItems.append(item);
             mLayout->addWidget(item);

@@ -92,6 +92,8 @@ namespace hal
          */
         void fileOpened(const QString& fileName);
 
+        void projectOpened(QString projectDir, QString fileName);
+
         /**
          * Q_SIGNAL that is emitted when the file changed.
          *
@@ -126,7 +128,23 @@ namespace hal
          *
          * @param fileName - The file to be opened.
          */
-        void openFile(QString fileName);
+        void deprecatedOpenFile(QString filename);
+
+
+        /**
+         * Imports the netlist file into a new hal project. User will be queried for project directory.
+         *
+         * @param filename - The netlist file to be imported.
+         */
+        void importFile(QString filename);
+
+
+        /**
+         * Opens the given project.
+         *
+         * @param projPath - The directory path of the project to be opened
+         */
+        void openProject(QString projPath);
 
         /**
          * Closes the file and resets all information regarding the closed file.
@@ -153,9 +171,17 @@ namespace hal
         /**
          * This function is called by openFile when the netlist could be serialized successfully.
          *
-         * @param fileName - the file's name.
+         * @param file - the file's name.
          */
-        void fileSuccessfullyLoaded(QString fileName);
+        void fileSuccessfullyLoaded(QString file);
+
+        /**
+         * This function is called by openDirectory when the hal project could be loaded successfully.
+         *
+         * @param projectDir - the project directory
+         * @param file - the file name
+         */
+        void projectSuccessfullyLoaded(QString& projectDir, QString& file);
 
         /**
          * Sets the opened file at the top of the recently used files in the welcome screen through a setting file

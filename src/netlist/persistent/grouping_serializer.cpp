@@ -9,6 +9,8 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/grouping.h"
+#include "hal_core/utilities/log.h"
+#include "rapidjson/filereadstream.h"
 
 namespace hal {
     GroupingSerializer* GroupingSerializer::instance = new GroupingSerializer();
@@ -19,7 +21,7 @@ namespace hal {
 
     ProjectFilelist* GroupingSerializer::serialize(Netlist* netlist, const ProjectDirectory& haldir)
     {
-        std::filesystem::path groupingFilePath = haldir.get_filename(false, ".halg");
+        std::filesystem::path groupingFilePath = haldir.get_filename(".halg");
 
         JsonWriteDocument doc;
 
@@ -31,60 +33,31 @@ namespace hal {
             grpObj["id"]   = grp->get_id();
             grpObj["name"] = grp->get_name();
 
-            JsonWriteArray&  grpGates = grpObj.add_array("gates");
-            std::vector<Gate*> sorted = grp->get_gates();
-            std::sort(sorted.begin(), sorted.end(), [](Gate* lhs, Gate* rhs) { return lhs->get_id() < rhs->get_id(); });
-            for (const Gate* g : sorted)
-                grpGates << g->get_id();
-            grpGates.close();
+            JsonWriteArray& grpMod = grpObj.add_array("modules");
+            std::vector<Module*> sortMod = grp->get_modules();
+            std::sort(sortMod.begin(), sortMod.end(), [](Module* lhs, Module* rhs) { return lhs->get_id() < rhs->get_id(); });
+            for (const Module* m : sortMod)
+                grpMod << m->get_id();
+            grpMod.close();
 
+            JsonWriteArray& grpGat = grpObj.add_array("gates");
+            std::vector<Gate*> sortGat = grp->get_gates();
+            std::sort(sortGat.begin(), sortGat.end(), [](Gate* lhs, Gate* rhs) { return lhs->get_id() < rhs->get_id(); });
+            for (const Gate* g : sortGat)
+                grpGat << g->get_id();
+            grpGat.close();
 
-        }
-        rapidjson::Value (rapidjson::kObjectType);
+            JsonWriteArray& grpNet = grpObj.add_array("nets");
+            std::vector<Net*> sortNet = grp->get_nets();
+            std::sort(sortNet.begin(), sortNet.end(), [](Net* lhs, Net* rhs) { return lhs->get_id() < rhs->get_id(); });
+            for (const Net* n : sortNet)
+                grpNet << n->get_id();
+            grpNet.close();
 
-        val.AddMember("id", grouping->get_id(), allocator);
-        val.AddMember("name", grouping->get_name(), allocator);
-        {
-            rapidjson::Value gates(rapidjson::kArrayType);
-            std::vector<Gate*> sorted = grouping->get_gates();
-            std::sort(sorted.begin(), sorted.end(), [](Gate* lhs, Gate* rhs) { return lhs->get_id() < rhs->get_id(); });
-            for (auto gate : sorted)
-            {
-                gates.PushBack(gate->get_id(), allocator);
-            }
-            if (!gates.Empty())
-            {
-                val.AddMember("gates", gates, allocator);
-            }
-        }
-        {
-            rapidjson::Value nets(rapidjson::kArrayType);
-            std::vector<Net*> sorted = grouping->get_nets();
-            std::sort(sorted.begin(), sorted.end(), [](Net* lhs, Net* rhs) { return lhs->get_id() < rhs->get_id(); });
-            for (auto net : sorted)
-            {
-                nets.PushBack(net->get_id(), allocator);
-            }
-            if (!nets.Empty())
-            {
-                val.AddMember("nets", nets, allocator);
-            }
-        }
-        {
-            rapidjson::Value modules(rapidjson::kArrayType);
-            std::vector<Module*> sorted = grouping->get_modules();
-            std::sort(sorted.begin(), sorted.end(), [](Module* lhs, Module* rhs) { return lhs->get_id() < rhs->get_id(); });
-            for (auto module : sorted)
-            {
-                modules.PushBack(module->get_id(), allocator);
-            }
-            if (!modules.Empty())
-            {
-                val.AddMember("modules", modules, allocator);
-            }
+            grpObj.close();
         }
 
-        return val;
+        grpArr.close();
 
         doc.serialize(groupingFilePath.string());
 
@@ -94,8 +67,55 @@ namespace hal {
     }
 
     void GroupingSerializer::deserialize(Netlist* netlist, const ProjectDirectory& haldir)
-    {
+    {        
+        std::filesystem::path groupingFilePath = haldir.get_filename(".halg");
 
+        FILE* grpFile = fopen(groupingFilePath.string().c_str(), "rb");
+        if (grpFile == NULL)
+        {
+            log_error("GroupingSerializer::deserialize", "unable to open '{}'.", groupingFilePath.string());
+            return;
+        }
+
+        char buffer[65536];
+        rapidjson::FileReadStream frs(grpFile, buffer, sizeof(buffer));
+        rapidjson::Document document;
+        document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(frs);
+
+        if (document.HasMember("groupings"))
+        {
+            for (const rapidjson::Value& grpVal : document["groupings"].GetArray())
+            {
+                Grouping* grouping = netlist->create_grouping(grpVal["id"].GetUint(), grpVal["name"].GetString());
+                if (grouping == nullptr)
+                {
+                    return;
+                }
+
+                if (grpVal.HasMember("modules"))
+                {
+                    for (auto& module_node : grpVal["modules"].GetArray())
+                    {
+                        grouping->assign_module(netlist->get_module_by_id(module_node.GetUint()));
+                    }
+                }
+
+                if (grpVal.HasMember("gates"))
+                {
+                    for (auto& gate_node : grpVal["gates"].GetArray())
+                    {
+                        grouping->assign_gate(netlist->get_gate_by_id(gate_node.GetUint()));
+                    }
+                }
+
+                if (grpVal.HasMember("nets"))
+                {
+                    for (auto& net_node : grpVal["nets"].GetArray())
+                    {
+                        grouping->assign_net(netlist->get_net_by_id(net_node.GetUint()));
+                    }
+                }
+            }
+        }
     }
-
 }

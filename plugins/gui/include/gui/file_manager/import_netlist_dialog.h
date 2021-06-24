@@ -22,43 +22,27 @@
 //  SOFTWARE.
 
 #pragma once
-#include "user_action.h"
 
-namespace hal
-{
-    /**
-     * @ingroup user_action
-     * @brief Loads a netlist.
-     *
-     * This UserAction can not be undone.
-     */
-    class ActionOpenNetlistFile : public UserAction
-    {
-        QString mFilename;
-        bool mProject;
-    public:
-        /**
-         * Action constructor.
-         *
-         * @param filename_ - The path of the netlist file to open.
-         */
-        ActionOpenNetlistFile(const QString& filename_ = QString(), bool isProj = true);
-        QString tagname() const override;
-        bool exec() override;
-        void writeToXml(QXmlStreamWriter& xmlOut) const override;
-        void readFromXml(QXmlStreamReader& xmlIn) override;
-        void addToHash(QCryptographicHash& cryptoHash) const override;
-    };
+#include <QDialog>
+#include <QString>
 
-    /**
-     * @ingroup user_action
-     * @brief UserActionFactory for ActionOpenNetlistFile
-     */
-    class ActionOpenNetlistFileFactory : public UserActionFactory
+class QComboBox;
+class QCheckBox;
+class QLineEdit;
+
+namespace hal {
+
+    class ImportNetlistDialog : public QDialog
     {
+        Q_OBJECT
+        QString mProjectdir;
+        QLineEdit* mEditProjectdir;
+        QComboBox* mComboGatelib;
+        QCheckBox* mCheckMoveNetlist;
     public:
-        ActionOpenNetlistFileFactory();
-        UserAction* newAction() const;
-        static ActionOpenNetlistFileFactory* sFactory;
+        ImportNetlistDialog(const QString& filename, QWidget* parent = nullptr);
+        QString projectDirectory() const;
+        QString gateLibrary() const;
+        bool isMoveNetlistChecked() const;
     };
 }

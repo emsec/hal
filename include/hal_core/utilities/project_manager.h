@@ -46,8 +46,10 @@ namespace hal
 
         static ProjectManager* inst;
 
-        Netlist* m_netlist;
+        Netlist* m_netlist_save;
+        std::unique_ptr<Netlist> m_netlist_load;
         ProjectDirectory m_proj_dir;
+        bool m_user_provided_directory;
         std::string m_proj_file;
         std::string m_netlist_file;
         std::unordered_map<std::string,ProjectSerializer*> m_serializer;
@@ -58,12 +60,20 @@ namespace hal
         static ProjectManager* instance();
         void register_serializer(const std::string& tagname, ProjectSerializer* serializer);
         ProjectFilelist* get_filelist(const std::string& tagname);
+        std::unique_ptr<Netlist>& get_netlist();
         bool serialize() const;
         bool deserialize();
         void dump() const;
         void set_netlist_file(const std::string& fname, Netlist* netlist);
         void set_project_directory(const std::string& path);
         bool create_project_directory() const;
+        bool has_user_provided_directory() const;
+        std::string get_netlist_filename() const;
         const ProjectDirectory& get_project_directory() const;
+
+        /**
+         * The name of the file with project info (without path)
+         */
+        static const std::string s_project_file;
     };
 }    // namespace hal

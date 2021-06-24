@@ -63,7 +63,7 @@ namespace hal
             //            return;
 
             QString file = mime_data->urls().at(0).toLocalFile();
-            FileManager::get_instance()->openFile(file);
+            FileManager::get_instance()->deprecatedOpenFile(file);
 
             //        for (int i = 0; i < url_list.size() && i < 32; ++i)
             //        {

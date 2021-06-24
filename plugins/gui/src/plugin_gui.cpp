@@ -60,7 +60,7 @@ namespace hal
         {
             auto fileName = std::filesystem::path(args.get_parameter("--input-file"));
             log_info("gui", "GUI started with file {}.", fileName.string());
-            FileManager::get_instance()->openFile(QString::fromStdString(fileName.string()));
+            FileManager::get_instance()->deprecatedOpenFile(QString::fromStdString(fileName.string()));
         }
     }
 

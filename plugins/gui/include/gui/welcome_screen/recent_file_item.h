@@ -45,6 +45,7 @@ namespace hal
         Q_OBJECT
         Q_PROPERTY(bool hover READ hover)
         Q_PROPERTY(bool disabled READ disabled)
+        Q_PROPERTY(bool isProject READ isProject)
         Q_PROPERTY(QString iconPath READ iconPath WRITE setIconPath)
         Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
 
@@ -109,8 +110,9 @@ namespace hal
         /** @name Q_PROPERTY READ Functions
          */
         ///@{
-        bool hover();
-        bool disabled();
+        bool hover() const;
+        bool disabled() const;
+        bool isProject() const;
         QString iconPath();
         QString iconStyle();
         ///@}
@@ -147,6 +149,7 @@ namespace hal
 
         bool mHover;
         bool mDisabled;
+        bool mProject;
 
         QString mIconPath;
         QString mIconStyle;

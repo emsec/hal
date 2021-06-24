@@ -18,7 +18,7 @@ namespace hal
 {
     RecentFileItem::RecentFileItem(const QString& file, QWidget* parent)
         : QFrame(parent), mWidget(new QWidget()), mHorizontalLayout(new QHBoxLayout()), mIconLabel(new QLabel()), mVerticalLayout(new QVBoxLayout()), mNameLabel(new QLabel()),
-          mPathLabel(new QLabel()), mAnimation(new QPropertyAnimation()), mRemoveButton(new QToolButton(this)), mHover(false), mDisabled(false)
+          mPathLabel(new QLabel()), mAnimation(new QPropertyAnimation()), mRemoveButton(new QToolButton(this)), mHover(false), mDisabled(false), mProject(true)
     {
         mHorizontalLayout->setContentsMargins(0, 0, 0, 0);
         mHorizontalLayout->setSpacing(0);
@@ -46,6 +46,7 @@ namespace hal
 
         mFile = file;
         QFileInfo info(file);
+        mProject = info.isDir();
         mNameLabel->setText(info.fileName());
         //mPath = info.canonicalPath();
         mPath = info.absolutePath();
@@ -87,7 +88,7 @@ namespace hal
 
         if(event->button() == Qt::MouseButton::LeftButton)
         {
-            ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(mFile);
+            ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(mFile,mProject);
             actOpenfile->exec();
             event->accept();
         }
@@ -138,14 +139,19 @@ namespace hal
             mIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mIconStyle, mIconPath).pixmap(QSize(17, 17)));
     }
 
-    bool RecentFileItem::hover()
+    bool RecentFileItem::hover() const
     {
         return mHover;
     }
 
-    bool RecentFileItem::disabled()
+    bool RecentFileItem::disabled() const
     {
         return mDisabled;
+    }
+
+    bool RecentFileItem::isProject() const
+    {
+        return mProject;
     }
 
     QString RecentFileItem::iconPath()

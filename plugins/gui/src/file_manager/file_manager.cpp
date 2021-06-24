@@ -5,9 +5,12 @@
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/project_manager.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "gui/settings/settings_items/settings_item_spinbox.h"
+#include "gui/file_manager/import_netlist_dialog.h"
 
 #include <QDateTime>
 #include <QFile>
@@ -19,6 +22,8 @@
 #include <QPushButton>
 #include <QSpacerItem>
 #include <QTextStream>
+#include <QApplication>
+#include <QDir>
 
 namespace hal
 {
@@ -76,7 +81,7 @@ namespace hal
         {
             auto fileName = std::filesystem::path(args.get_parameter("--input-file"));
             log_info("gui", "GUI started with file {}.", fileName.string());
-            openFile(QString::fromStdString(fileName.string()));
+            importFile(QString::fromStdString(fileName.string()));
         }
     }
 
@@ -135,10 +140,18 @@ namespace hal
         }
     }
 
-    void FileManager::fileSuccessfullyLoaded(QString fileName)
+    void FileManager::projectSuccessfullyLoaded(QString& projectDir, QString& file)
     {
-        watchFile(fileName);
-        Q_EMIT fileOpened(mFileName);
+        watchFile(file);
+        Q_EMIT projectOpened(projectDir, file);
+        gNetlistRelay->debugHandleFileOpened();
+        gContentManager->handleOpenDocument(file);
+    }
+
+    void FileManager::fileSuccessfullyLoaded(QString file)
+    {
+        watchFile(file);
+        Q_EMIT fileOpened(file);
     }
 
     void FileManager::removeShadowFile()
@@ -163,9 +176,63 @@ namespace hal
         return shadow_file_name.left(shadow_file_name.lastIndexOf('.')) + ".hal";
     }
 
-    void FileManager::openFile(QString fileName)
+    void FileManager::importFile(QString filename)
     {
-        QString logical_file_name = fileName;
+        ImportNetlistDialog ind(filename, qApp->activeWindow());
+        if (ind.exec() != QDialog::Accepted) return;
+        QString projdir = ind.projectDirectory();
+        if (QFileInfo(projdir).exists())
+        {
+            QMessageBox::warning(qApp->activeWindow(),"Aborted", "Project directory <" + projdir + "> already exists");
+            return;
+        }
+        if (!QDir().mkpath(projdir))
+        {
+            QMessageBox::warning(qApp->activeWindow(),"Aborted", "Error creating project directory <" + projdir + ">");
+            return;
+        }
+
+        QDir projectDir(projdir);
+        QString netlistFilename = filename;
+        if (ind.isMoveNetlistChecked())
+        {
+            netlistFilename = projectDir.absoluteFilePath(QFileInfo(filename).fileName());
+            QDir().rename(filename,netlistFilename);
+        }
+
+        ProjectManager* pm = ProjectManager::instance();
+        pm->set_project_directory(projdir.toStdString());
+
+        deprecatedOpenFile(netlistFilename);
+    }
+
+    void FileManager::openProject(QString projPath)
+    {
+        ProjectManager* pm = ProjectManager::instance();
+        pm->set_project_directory(projPath.toStdString());
+        if (!pm->deserialize())
+        {
+            QString errorMsg = QString("Error opening project <%1>").arg(projPath);
+            log_error("gui", "{}", errorMsg.toStdString());
+            displayErrorMessage(errorMsg);
+            return;
+        }
+
+        gNetlistOwner = std::move(pm->get_netlist());
+        gNetlist       = gNetlistOwner.get();
+        gNetlistRelay->registerNetlistCallbacks();
+        QString filename = QString::fromStdString(pm->get_netlist_filename());
+        projectSuccessfullyLoaded(projPath, filename);
+
+        LogManager& lm                 = LogManager::get_instance();
+        ProjectDirectory pdir = pm->get_project_directory();
+        std::filesystem::path log_path = pdir.get_filename(".log");
+        lm.set_file_name(log_path);
+    }
+
+    void FileManager::deprecatedOpenFile(QString filename)
+    {
+        QString logical_file_name = filename;
 
         if (gNetlist)
         {
@@ -173,18 +240,18 @@ namespace hal
             return;
         }
 
-        if (fileName.isEmpty())
+        if (filename.isEmpty())
         {
-            std::string error_message("Unable to open file. File name is empty");
-            log_error("gui", "{}", error_message);
-            displayErrorMessage(QString::fromStdString(error_message));
+            QString errorMsg("Unable to open file. File name is empty");
+            log_error("gui", "{}", errorMsg.toStdString());
+            displayErrorMessage(errorMsg);
             return;
         }
 
-        if (!fileName.endsWith(".hal"))
+        if (!filename.endsWith(".hal"))
         {
-            QString hal_file_name = fileName.left(fileName.lastIndexOf('.')) + ".hal";
-            QString extension     = fileName.right(fileName.size() - fileName.lastIndexOf('.'));
+            QString hal_file_name = filename.left(filename.lastIndexOf('.')) + ".hal";
+            QString extension     = filename.right(filename.size() - filename.lastIndexOf('.'));
 
             if (QFileInfo::exists(hal_file_name) && QFileInfo(hal_file_name).isFile())
             {
@@ -204,7 +271,7 @@ namespace hal
 
                 if (msgBox.clickedButton() == (QAbstractButton*)parse_hal_btn)
                 {
-                    fileName         = hal_file_name;
+                    filename         = hal_file_name;
                     logical_file_name = hal_file_name;
                 }
                 else if (msgBox.clickedButton() != (QAbstractButton*)parse_hdl_btn)
@@ -215,12 +282,12 @@ namespace hal
         }
 
         LogManager& lm                 = LogManager::get_instance();
-        std::filesystem::path log_path = fileName.toStdString();
+        std::filesystem::path log_path = filename.toStdString();
         lm.set_file_name(std::filesystem::path(log_path.replace_extension(".log")));
 
-        if (fileName.endsWith(".hal"))
+        if (filename.endsWith(".hal"))
         {
-            QString shadow_file_name = getShadowFile(fileName);
+            QString shadow_file_name = getShadowFile(filename);
 
             if (QFileInfo::exists(shadow_file_name) && QFileInfo(shadow_file_name).isFile())
             {
@@ -229,25 +296,25 @@ namespace hal
                 if (QMessageBox::question(nullptr, "HAL did not exit cleanly", message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
                 {
                     // logical_file_name is not changed
-                    fileName = shadow_file_name;
+                    filename = shadow_file_name;
                 }
             }
         }
 
-        QFile file(fileName);
+        QFile file(filename);
 
         if (!file.open(QFile::ReadOnly))
         {
-            std::string error_message("Unable to open file" + fileName.toStdString());
+            std::string error_message("Unable to open file" + filename.toStdString());
             log_error("gui", "Unable to open file '{}'", error_message);
             displayErrorMessage(QString::fromStdString(error_message));
             return;
         }
 
-        if (fileName.endsWith(".hal"))
+        if (filename.endsWith(".hal"))
         {
             // event_controls::enable_all(false); won't get events until callbacks are registered
-            auto netlist = netlist_factory::load_netlist(fileName.toStdString());
+            auto netlist = netlist_factory::load_netlist(filename.toStdString());
             // event_controls::enable_all(true);
             if (netlist)
             {
@@ -266,13 +333,13 @@ namespace hal
             return;
         }
 
-        QString lib_file_name = fileName.left(fileName.lastIndexOf('.')) + ".lib";
+        QString lib_file_name = filename.left(filename.lastIndexOf('.')) + ".lib";
         if (QFileInfo::exists(lib_file_name) && QFileInfo(lib_file_name).isFile())
         {
             log_info("gui", "Trying to use gate library {}.", lib_file_name.toStdString());
 
             // event_controls::enable_all(false);
-            auto netlist = netlist_factory::load_netlist(fileName.toStdString(), lib_file_name.toStdString());
+            auto netlist = netlist_factory::load_netlist(filename.toStdString(), lib_file_name.toStdString());
             // event_controls::enable_all(true);
 
             if (netlist)
@@ -292,7 +359,7 @@ namespace hal
         log_info("gui", "Searching for (other) compatible netlists.");
 
         // event_controls::enable_all(false);
-        std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(fileName.toStdString());
+        std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(filename.toStdString());
         // event_controls::enable_all(true);
 
         if (netlists.empty())

@@ -7,16 +7,18 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/project_serializer.h"
 #include "hal_core/utilities/project_filelist.h"
+#include "hal_core/netlist/netlist_factory.h"
 
 const int SERIALIZATION_FORMAT_VERSION = 9;
 
 namespace hal {
     ProjectManager* ProjectManager::inst = nullptr;
 
+    const std::string ProjectManager::s_project_file = ".project.halp";
+
     ProjectManager::ProjectManager()
-    {
-        m_proj_file = ".project.halp";
-    }
+        : m_user_provided_directory(false)
+    {;}
 
     ProjectManager* ProjectManager::instance()
     {
@@ -44,6 +46,12 @@ namespace hal {
     void ProjectManager::set_project_directory(const std::string& path)
     {
         m_proj_dir = ProjectDirectory(path);
+        m_user_provided_directory = true;
+    }
+
+    bool ProjectManager::has_user_provided_directory() const
+    {
+        return m_user_provided_directory;
     }
 
     const ProjectDirectory &ProjectManager::get_project_directory() const
@@ -58,14 +66,26 @@ namespace hal {
 
     void ProjectManager::set_netlist_file(const std::string& fname, Netlist *netlist)
     {
-        m_netlist = netlist;
+        m_netlist_save = netlist;
         m_netlist_file = fname;
+    }
+
+    std::string ProjectManager::get_netlist_filename() const
+    {
+        std::filesystem::path filename(m_proj_dir);
+        filename.append(m_netlist_file);
+        return filename.string();
+    }
+
+    std::unique_ptr<Netlist>& ProjectManager::get_netlist()
+    {
+        return m_netlist_load;
     }
 
     bool ProjectManager::deserialize()
     {
         std::filesystem::path projFilePath(m_proj_dir);
-        projFilePath.append(m_proj_file);
+        projFilePath.append(s_project_file);
 
         FILE* fp = fopen(projFilePath.string().c_str(), "r");
         if (fp == NULL)
@@ -81,6 +101,15 @@ namespace hal {
         doc.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(frs);
         fclose(fp);
 
+        if (doc.HasMember("netlist"))
+        {
+            m_netlist_file = doc["netlist"].GetString();
+            std::filesystem::path netlistPath(m_proj_dir);
+            netlistPath.append(m_netlist_file);
+            m_netlist_load = netlist_factory::load_netlist(netlistPath.string());
+        }
+        else return false;
+
         if (doc.HasMember("serializer"))
         {
             for(auto it = doc["serializer"].MemberBegin(); it!= doc["serializer"].MemberEnd(); ++it)
@@ -91,7 +120,7 @@ namespace hal {
 
         for (auto it = m_serializer.begin(); it != m_serializer.end(); ++it)
         {
-            it->second->deserialize(m_netlist, m_proj_dir);
+            it->second->deserialize(m_netlist_load.get(), m_proj_dir);
         }
         return true;
     }
@@ -108,10 +137,10 @@ namespace hal {
 
     bool ProjectManager::serialize() const
     {
-        if (!m_netlist) return false;
+        if (!m_netlist_save) return false;
 
         std::filesystem::path projFilePath(m_proj_dir);
-        projFilePath.append(m_proj_file);
+        projFilePath.append(s_project_file);
 
         JsonWriteDocument doc;
         doc["serialization_format_version"] = SERIALIZATION_FORMAT_VERSION;
@@ -120,7 +149,7 @@ namespace hal {
         JsonWriteObject& serial = doc.add_object("serializer");
         for (auto it = m_serializer.begin(); it != m_serializer.end(); ++it)
         {
-            ProjectFilelist* pfl = it->second->serialize(m_netlist, m_proj_dir);
+            ProjectFilelist* pfl = it->second->serialize(m_netlist_save, m_proj_dir);
             if (!pfl) continue;
             JsonWriteArray& jsarray = serial.add_array(it->first);
             for (const std::string& fname : *pfl)

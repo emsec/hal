@@ -65,6 +65,15 @@ namespace hal
         void handleFileOpened(const QString& fileName);
 
         /**
+         * Q_SLOT to handle that a project has been opened. Used to append the project to the list of recently used files.
+         * The updated list is persisted by updating the settings.
+         *
+         * @param projDir - The path of the opened project folder
+         * @param fileName - The path of the opened netlist file
+         */
+        void handleProjectOpened(const QString& projDir, const QString& fileName);
+
+        /**
          * Handles that a recentFileItem should be removed (by clicking the 'x'). It removed the item from the widget.
          *
          * @param item - The item to remove

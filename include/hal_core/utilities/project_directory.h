@@ -37,6 +37,6 @@ namespace hal {
     public:
         ProjectDirectory(const std::string& dirname = std::string());
 
-        std::filesystem::path get_filename(bool relative = true, const std::string& extension = std::string()) const;
+        std::filesystem::path get_filename(const std::string& extension = std::string()) const;
     };
 }

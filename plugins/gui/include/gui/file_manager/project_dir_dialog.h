@@ -22,43 +22,40 @@
 //  SOFTWARE.
 
 #pragma once
-#include "user_action.h"
 
-namespace hal
-{
-    /**
-     * @ingroup user_action
-     * @brief Loads a netlist.
-     *
-     * This UserAction can not be undone.
-     */
-    class ActionOpenNetlistFile : public UserAction
+#include <QFileDialog>
+#include <QSortFilterProxyModel>
+#include <QAbstractButton>
+
+namespace hal {
+
+/*
+    class ProjectDirProxy : public QSortFilterProxyModel
     {
-        QString mFilename;
-        bool mProject;
+        Q_OBJECT
+        bool hasProjectDirectory(const QString& dir) const;
     public:
-        /**
-         * Action constructor.
-         *
-         * @param filename_ - The path of the netlist file to open.
-         */
-        ActionOpenNetlistFile(const QString& filename_ = QString(), bool isProj = true);
-        QString tagname() const override;
-        bool exec() override;
-        void writeToXml(QXmlStreamWriter& xmlOut) const override;
-        void readFromXml(QXmlStreamReader& xmlIn) override;
-        void addToHash(QCryptographicHash& cryptoHash) const override;
+        ProjectDirProxy(QObject* parent = nullptr);
+        bool filterAcceptsRow(int irow, const QModelIndex &parentInx) const override;
     };
-
-    /**
-     * @ingroup user_action
-     * @brief UserActionFactory for ActionOpenNetlistFile
-     */
-    class ActionOpenNetlistFileFactory : public UserActionFactory
+*/
+    class ProjectDirDialog : public QFileDialog
     {
+        Q_OBJECT
+
+        QAbstractButton* mChooseButton;
+        bool mSelectable;
+
+        bool isSelectable(const QString& path = QString()) const;
+
+    private Q_SLOTS:
+        void handleCurrentChanged(const QString& path);
+
     public:
-        ActionOpenNetlistFileFactory();
-        UserAction* newAction() const;
-        static ActionOpenNetlistFileFactory* sFactory;
+        void accept() override;
+
+        ProjectDirDialog(QWidget* parent = nullptr);
+
+        bool eventFilter(QObject* obj, QEvent* event);
     };
 }

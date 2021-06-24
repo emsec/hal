@@ -803,8 +803,17 @@ hal--RecentFileItem
     padding-bottom       : 6px;
     padding-left         : 10px;
     padding-right        : 10px;
-    qproperty-iconPath  : ":/icons/folder";
     qproperty-iconStyle : "all->#000000";
+}
+
+hal--RecentFileItem[isProject=true]
+{
+    qproperty-iconPath  : ":/icons/folder";
+}
+
+hal--RecentFileItem[isProject=false]
+{
+    qproperty-iconPath  : ":/icons/detach";
 }
 
 hal--RecentFileItem *

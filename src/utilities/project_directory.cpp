@@ -20,11 +20,10 @@ namespace hal {
             replace_extension(); // remove any extension
     }
 
-    std::filesystem::path ProjectDirectory::get_filename(bool relative, const std::string& extension) const
+    std::filesystem::path ProjectDirectory::get_filename(const std::string& extension) const
     {
         std::string name(filename());
         name += extension.empty() ?  std::string(".hal") : extension;
-        if (relative) return std::filesystem::path(name);
         std::filesystem::path retval(*this);
         retval.append(name);
         return retval;
