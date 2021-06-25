@@ -22,6 +22,14 @@ namespace hal{
         connect(t, &SelectionTreeView::triggerSelection, this, &LUTTableWidget::handleDetailsFocusChanged);
     }
 
+    void LUTTableWidget::setBooleanFunction(BooleanFunction bf, QString functionName)
+    {
+        mLutModel->setBooleanFunction(bf, functionName);
+        this->clearSelection();
+        this->update();
+        adjustColumnSizes();
+    }
+
     void LUTTableWidget::handleDetailsFocusChanged(const SelectionTreeItem* sti){
         if(sti == nullptr){
             return;
@@ -43,10 +51,7 @@ namespace hal{
             // All LUT pins have the same boolean function
             std::basic_string<char> outPin = *lutPins.begin();
             BooleanFunction lutFunction = gate->get_boolean_function(outPin);
-            mLutModel->setBooleanFunction(lutFunction, QString::fromStdString(outPin));
-            this->clearSelection();
-            this->update();
-            adjustColumnSizes();
+            setBooleanFunction(lutFunction, QString::fromStdString(outPin));
         }
     }
 

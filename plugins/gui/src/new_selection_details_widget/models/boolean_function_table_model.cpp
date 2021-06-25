@@ -6,6 +6,90 @@
 
 namespace hal {
 
+
+    /* ========================================================
+     * BooleanFunctionTableEntry - Superclass
+     * ========================================================*/
+
+    BooleanFunctionTableEntry::BooleanFunctionTableEntry(u32 gateId)
+    {
+        mGateId = gateId;
+    }
+
+    QString BooleanFunctionTableEntry::getEntryIdentifier() const
+    {
+        return mLeft;
+    }
+
+    QString BooleanFunctionTableEntry::getEntryValueString() const
+    {
+        return mRight;
+    }
+
+    u32 BooleanFunctionTableEntry::getGateId() const {
+        return mGateId;
+    }
+
+    /* ========================================================
+     * BooleanFunctionTableEntry - BooleanFunctionEntry
+     * ========================================================*/
+
+    BooleanFunctionEntry::BooleanFunctionEntry(u32 gateId, QString functionName, BooleanFunction bf)
+    : BooleanFunctionTableEntry(gateId)
+    {
+        mLeft = functionName;
+        mRight = QString::fromStdString(bf.to_string());
+    }
+
+    BooleanFunction BooleanFunctionEntry::getBooleanFunction() const
+    {
+        return mBF;
+    }
+
+    bool BooleanFunctionEntry::isCPBehavior() const
+    {
+        return false;
+    }
+
+    /* ========================================================
+     * BooleanFunctionTableEntry - CPBehaviorEntry
+     * ========================================================*/
+
+    CPBehaviorEntry::CPBehaviorEntry(u32 gateId, std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehavior)
+    : BooleanFunctionTableEntry(gateId)
+    {
+        mLeft = "set_clear_behavior";
+        mRight = cPBehaviourToString(cPBehavior);
+        mCPBehavior =cPBehavior;
+    }
+
+    std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> CPBehaviorEntry::getCPBehavior() const
+    {
+        return mCPBehavior;
+    }
+
+    bool CPBehaviorEntry::isCPBehavior() const
+    {
+        return true;
+    }
+
+    QString CPBehaviorEntry::cPBehaviourToString (std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviour)
+    {
+        static QMap<GateType::ClearPresetBehavior, QString> cPBehaviourToString {
+            {GateType::ClearPresetBehavior::L, "L"},
+            {GateType::ClearPresetBehavior::H, "H"},
+            {GateType::ClearPresetBehavior::N, "N"},
+            {GateType::ClearPresetBehavior::T, "T"},
+            {GateType::ClearPresetBehavior::X, "X"},
+            {GateType::ClearPresetBehavior::undef, "Undefined"},
+        };
+        return QString(cPBehaviourToString[cPBehaviour.first] + ", " + cPBehaviourToString[cPBehaviour.second]);
+    }
+
+    /* ========================================================
+     * BooleanFunctionTableModel
+     * ========================================================*/
+
     BooleanFunctionTableModel::BooleanFunctionTableModel(QObject *parent) : QAbstractTableModel(parent)
     {
         mEntries.clear();
@@ -14,7 +98,7 @@ namespace hal {
     int BooleanFunctionTableModel::columnCount(const QModelIndex &parent) const
     {
         Q_UNUSED(parent);
-        return 2;
+        return 3;
     }
 
     int BooleanFunctionTableModel::rowCount(const QModelIndex &parent) const
@@ -33,7 +117,11 @@ namespace hal {
             // Extract the information from the entry based on the column
             if(col == 0)
             {
-                return (mEntries[row]->getEntryIdentifier() + " =");
+                return (mEntries[row]->getEntryIdentifier());
+            }
+            else if(col == 1)
+            {
+                return mSeparator;
             }
             else
             {
@@ -43,8 +131,13 @@ namespace hal {
 
         else if (role == Qt::TextAlignmentRole)
         {
-            if(col == 0){
-                return QVariant(Qt::AlignTop | Qt::AlignRight);
+            if(col == 0)
+            {
+                return QVariant(Qt::AlignTop | Qt::AlignLeft);
+            }
+            else if(col == 1)
+            {
+                return QVariant(Qt::AlignTop | Qt::AlignHCenter);
             }
             else
             {

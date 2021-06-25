@@ -31,6 +31,13 @@
 
 namespace hal {
 
+    /**
+     * @ingroup utility_widgets-selection_details
+     *
+     * @brief A model for truth-tables
+     *
+     * Passing this model a BooleanFunction (via setBooleanFunction) it stores the truth table of it in a table.
+     */
     class LUTTableModel : public QAbstractTableModel
     {
         Q_OBJECT

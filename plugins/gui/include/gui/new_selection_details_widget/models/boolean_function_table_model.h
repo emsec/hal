@@ -35,83 +35,131 @@
 
 
 namespace hal {
-
-    // TODO: Beautify it (move in .cpp, comments, ...)
-
+    /**
+     * @ingroup utility_widgets-selection_details
+     *
+     * @brief An entry in the boolean function table model.
+     *
+     * The boolean function table consists of boolean functions and clear-preset behaviors. Therefore the subclasses
+     * BooleanFunctionEntry and CPBehaviorEntry are used. However both entry types have an entry left and right so that
+     * the table looks like "left=right". These value can be accessed via getEntryIdentifier (left) and getEntryValueString (right).
+     */
     class BooleanFunctionTableEntry
     {
     public:
-        BooleanFunctionTableEntry(u32 gateId){
-            mGateId = gateId;
-        }
+        /**
+         * Constructor.
+         *
+         * @param gateId - The id of the gate the boolean function/clear-preset behavior belongs to. If it belongs
+         *                 to no gate, an invalid id can be passed (i.e. gateId=0).
+         */
+        BooleanFunctionTableEntry(u32 gateId);
 
-        BooleanFunctionTableEntry(u32 gateId, std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviors);
+        /**
+         * Tells if the entry is a CPBehavior (true) or a boolean function (false)
+         *
+         * @returns true iff the BooleanFunctionTableEntry represents a CPBehavior
+         */
+        virtual bool isCPBehavior() const = 0;
 
-        virtual bool isCPBehavior() = 0;
+        /**
+         * Gets the left side of the equation.
+         *
+         * @return the entry identifier
+         */
+        QString getEntryIdentifier() const;
 
-        std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> getCPBehavior() const{
-            return mCPBehavior;
-        }
+        /**
+         * Gets the right side of the equation.
+         *
+         * @return the entry's value.
+         */
+        QString getEntryValueString() const;
 
-        QString getEntryIdentifier() const { return mLeft;}
-
-        QString getEntryValueString() const { return mRight;}
-
-        u32 getGateId() const { return mGateId;}
+        /**
+         * Returns the gate id the represented entry is associated with. The gate id may be invalid.
+         *
+         * @returns the associated gate id.
+         */
+        u32 getGateId() const;
 
     protected:
-        bool mIsCPBehavior;
         QString mLeft;
         QString mRight;
         u32 mGateId;
-        std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> mCPBehavior;
-
     };
 
-
+    /**
+     * @ingroup utility_widgets-selection_details
+     *
+     * @brief A BooleanFunctionTableEntry that represents a boolean function.
+     */
     class BooleanFunctionEntry : public BooleanFunctionTableEntry
     {
     public:
-        BooleanFunctionEntry(u32 gateId, QString functionName, BooleanFunction bf) : BooleanFunctionTableEntry(gateId){
-            mLeft = functionName;
-            mRight = QString::fromStdString(bf.to_string());
-            mBF = bf;
-        }
-        BooleanFunction getBooleanFunction(){ return mBF; }
-        virtual bool isCPBehavior(){ return false; };
+        /**
+         * Constructor.
+         *
+         * @param gateId - The id of the gate the boolean function belongs to
+         * @param functionName - The name of the boolean function (e.g. "O")
+         * @param bf - The boolean function
+         */
+        BooleanFunctionEntry(u32 gateId, QString functionName, BooleanFunction bf);
+
+        /**
+         * Get the stored boolean function (copy).
+         *
+         * @returns the boolean function of the entry.
+         */
+        BooleanFunction getBooleanFunction() const;
+
+        virtual bool isCPBehavior() const;
     private:
         BooleanFunction mBF;
     };
 
-
+    /**
+     * @ingroup utility_widgets-selection_details
+     *
+     * @brief A BooleanFunctionTableEntry that represents a clear-preset behavior.
+     */
     class CPBehaviorEntry : public BooleanFunctionTableEntry
     {
 
     public:
-        CPBehaviorEntry(u32 gateId, std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehavior) : BooleanFunctionTableEntry(gateId){
-            mLeft = "set_clear_behavior";
-            mRight = cPBehaviourToString(cPBehavior);
-            mCPBehavior =cPBehavior;
-        }
-        std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> getCPBehavior(){ return mCPBehavior; }
-        virtual bool isCPBehavior(){ return true; };
+        /**
+         * Constructor.
+         *
+         * @param gateId - The id of the gate the clear-preset behavior belongs to
+         * @param cPBehavior - The clear set behavior
+         */
+        CPBehaviorEntry(u32 gateId, std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehavior);
+
+        /**
+         * Get the clear-preset behavior.
+         *
+         * @returns the clear-preset behavior
+         */
+        std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> getCPBehavior() const;
+
+        virtual bool isCPBehavior() const;
 
     private:
-        QString cPBehaviourToString (std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviour){
-            static QMap<GateType::ClearPresetBehavior, QString> cPBehaviourToString {
-                {GateType::ClearPresetBehavior::L, "L"},
-                {GateType::ClearPresetBehavior::H, "H"},
-                {GateType::ClearPresetBehavior::N, "N"},
-                {GateType::ClearPresetBehavior::T, "T"},
-                {GateType::ClearPresetBehavior::X, "X"},
-                {GateType::ClearPresetBehavior::undef, "Undefined"},
-            };
-            return QString(cPBehaviourToString[cPBehaviour.first] + ", " + cPBehaviourToString[cPBehaviour.second]);
-        }
+        QString cPBehaviourToString (std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviour);
         std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> mCPBehavior;
     };
 
-
+    /**
+     * @ingroup utility_widgets-selection_details
+     *
+     * @brief A model that holds BooleanFunction%s and clear-preset behaviors.
+     *
+     * The model can be filled with a list of BooleanFunctionTableEntry%s. Each element is either BooleanFunction%s (using
+     * BooleanFunctionEntry) or a clear-preset behavior (using CPBehaviorEntry).
+     *
+     * The table contains the identifier in the left column, a separator (i.e. "=") in the center column and the
+     * BooleanFunction/clear-preset behavior in the right column.
+     */
     class BooleanFunctionTableModel : public QAbstractTableModel
     {
     Q_OBJECT
@@ -171,13 +219,25 @@ namespace hal {
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
+        /**
+         * Overwrites the model's entries with the entries in the specified list.
+         *
+         * @param entries - The new entries
+         */
         void setEntries(QList<QSharedPointer<BooleanFunctionTableEntry>> entries);
 
+        /**
+         * Access an entry at the specified row. The row MUST be valid.
+         *
+         * @param row - the row
+         * @returns the entry at the specified row
+         */
         QSharedPointer<BooleanFunctionTableEntry> getEntryAtRow(int row) const;
 
     private:
         QList<QSharedPointer<BooleanFunctionTableEntry>> mEntries;
 
-
+        /// The separator sign between the identifier and the value (e.g. "O [SEPARATOR] I1 & I2")
+        QString mSeparator = "=";
     };
 }

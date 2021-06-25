@@ -24,7 +24,7 @@ namespace hal {
         connect(this, &QTableView::customContextMenuRequested, this, &BooleanFunctionTable::handleContextMenuRequest);
     }
 
-    BooleanFunctionTableModel BooleanFunctionTable::getModel()
+    BooleanFunctionTableModel* BooleanFunctionTable::getModel()
     {
         return mBooleanFunctionTableModel;
     }
@@ -54,7 +54,6 @@ namespace hal {
         if(gate == nullptr){
             return;
         }
-        mCurrentGate = gate;
         // Only for debug
         bool showCSBehaviour = (gate->get_type()->get_clear_preset_behavior() != std::make_pair(GateType::ClearPresetBehavior::undef, GateType::ClearPresetBehavior::undef));
 
@@ -142,7 +141,7 @@ namespace hal {
     void BooleanFunctionTable::adjustTableSizes()
     {
         resizeColumnsToContents();
-        this->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+        this->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
         this->setWordWrap(true);
         this->resizeRowsToContents();
     }

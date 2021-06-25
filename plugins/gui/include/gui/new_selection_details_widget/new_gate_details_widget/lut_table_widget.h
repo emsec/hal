@@ -33,6 +33,13 @@
 namespace hal
 {
 
+    /**
+     * @ingroup utility_widgets-selection_details
+     *
+     * @brief A view for truth-tables (based on the LUTTableModel)
+     *
+     * Passing this model a BooleanFunction (via setBooleanFunction) it stores the truth table of it in a table.
+     */
     class LUTTableWidget : public QTableView
     {
     Q_OBJECT
@@ -52,10 +59,20 @@ namespace hal
          */
         LUTTableModel* getModel() const { return mLutModel; }
 
-    public Q_SLOTS:
+        /**
+         * Sets the boolean function that should be shown in the truth table.
+         *
+         * @param bf - The BooleanFunction
+         * @param functionName - The function name (e.g. "O")
+         */
+        void setBooleanFunction(BooleanFunction bf, QString functionName);
+
+    private Q_SLOTS:
+
         /**
          * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
          * LUT content if necessary.
+         * TODO: Temporary for debug. Use setBooleanFunction later.
          *
          * @param sti - The focused SelectionTreeItem
          */
@@ -69,8 +86,8 @@ namespace hal
          */
         void resizeEvent(QResizeEvent* event) override;
 
-
     private:
+        /// TODO: Debug only
         void updateGate(Gate* gate);
         void adjustColumnSizes();
 

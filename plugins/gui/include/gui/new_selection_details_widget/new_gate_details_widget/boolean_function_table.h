@@ -36,7 +36,11 @@
 
 namespace hal
 {
-
+    /**
+     * @ingroup utility_widgets-selection_details
+     *
+     * @brief A table view that shows BooleanFunction%s and clear-preset behaviors.
+     */
     class BooleanFunctionTable : public QTableView
     {
     Q_OBJECT
@@ -49,7 +53,12 @@ namespace hal
         */
         BooleanFunctionTable(QWidget* parent = nullptr);
 
-        BooleanFunctionTableModel getModel();
+        /**
+         * Access the boolean function table model of this table.
+         *
+         * @returns the BooleanFunctionTableModel
+         */
+        BooleanFunctionTableModel* getModel();
 
 
     public Q_SLOTS:
@@ -57,18 +66,22 @@ namespace hal
          * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
          * boolean functions content if necessary.
          *
-         * TODO: This is only a temporary slot for debug purposes. Normally the boolean function table is filled by
-         * via set boolean functions
+         * TODO: This is only a temporary slot for debug purposes. Normally the boolean function table is filled via setEntries(...)
          *
          * @param sti - The focused SelectionTreeItem
          */
         void handleDetailsFocusChanged(const SelectionTreeItem* sti);
 
-        void setEntries(QList<QSharedPointer<BooleanFunctionTableEntry>> entries); // TODO: Don't copy the lists two times
+        /**
+         * Sets (and overwrites) the list of table entries that are displayed in this boolean function table.
+         *
+         * @param entries - The list of boolean function table entries
+         */
+        void setEntries(QList<QSharedPointer<BooleanFunctionTableEntry>> entries);
 
 
 
-    protected Q_SLOTS:
+    private Q_SLOTS:
         /**
          * Handles the resize event. The table is sized, so that the output column is bigger than the input columns.
          *
@@ -81,7 +94,7 @@ namespace hal
     private:
         void adjustTableSizes();
 
-        // TODO: Only for debug purposes
+        // TODO: Only for debug purposes.Can be paritially reused later.
         void setGate(Gate* gate);
 
         BooleanFunctionTableModel* mBooleanFunctionTableModel;
