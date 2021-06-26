@@ -20,6 +20,19 @@ target_compile_options(core
                        PRIVATE ${COMPILE_OPTIONS_PRIVATE}
                        INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 set_target_properties(PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
+
+set(Boost_USE_MULTITHREADED ON)
+find_package(Boost REQUIRED COMPONENTS system)
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+elseif(NOT Boost_FOUND)
+    set(Missing_package "TRUE")
+    if(APPLE AND CMAKE_HOST_APPLE)
+        message(STATUS "To install boost on MacOS using homebrew run following command:")
+        message(STATUS "    brew install boost --c++11")
+    endif(APPLE AND CMAKE_HOST_APPLE)
+endif(Boost_FOUND)
+
 target_link_libraries(core
                       PUBLIC
                       hal::utilities
