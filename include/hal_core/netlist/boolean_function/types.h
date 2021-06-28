@@ -31,181 +31,182 @@
 #include <optional>
 #include <string>
 
-namespace hal 
+namespace hal
 {
-namespace SMT {
-	/// 'SMTSolverType' represents the identifier for an SMT solver.
-	enum class SolverType
-	{
-		Z3,
-		Boolector,
-		
-		Unknown,
-	};
-	
-	template<>
-    std::vector<std::string> EnumStrings<SolverType>::data;
+    namespace SMT
+    {
+        /// 'SMTSolverType' represents the identifier for an SMT solver.
+        enum class SolverType
+        {
+            Z3,
+            Boolector,
 
-    /**
-     * 'QueryConfig' represents the data structure to configure an SMT query.
-     */
-	struct QueryConfig final 
-	{
-        ////////////////////////////////////////////////////////////////////////
-        // Member
-        ////////////////////////////////////////////////////////////////////////
+            Unknown,
+        };
 
-		/// refers to the SMT solver identifier.
-		SolverType solver = SolverType::Z3;
-		/// refers to whether SMT query is performed on a local/remote machine.
-		bool local = true;
-		/// refers to whether the SMT solver should generate a model (in case formula is satisfiable)
-		bool generate_model = true;
-		/// refers to the timeout after which the SMT solver is killed (seconds)
-		u64 timeout_in_seconds = 10;
+        template<>
+        std::vector<std::string> EnumStrings<SolverType>::data;
 
-        ////////////////////////////////////////////////////////////////////////
-        // Interface
-        ////////////////////////////////////////////////////////////////////////
+        /**
+		 * 'QueryConfig' represents the data structure to configure an SMT query.
+		 */
+        struct QueryConfig final
+        {
+            ////////////////////////////////////////////////////////////////////////
+            // Member
+            ////////////////////////////////////////////////////////////////////////
 
-		/// Appends a solver to the configuration.
-		QueryConfig& with_solver(SolverType _solver);
+            /// refers to the SMT solver identifier.
+            SolverType solver = SolverType::Z3;
+            /// refers to whether SMT query is performed on a local/remote machine.
+            bool local = true;
+            /// refers to whether the SMT solver should generate a model (in case formula is satisfiable)
+            bool generate_model = true;
+            /// refers to the timeout after which the SMT solver is killed (seconds)
+            u64 timeout_in_seconds = 10;
 
-		/// Indicates that the SMT solver runs on a local machine.
-		QueryConfig& with_local_solver();
-		/// Indicates that the SMT solver runs on a remote machine.
-		QueryConfig& with_remote_solver();
-		/// Indicates that the SMT solver should generate a model (in case formula is satisfiable).
-		QueryConfig& with_model_generation();
-		/// Indicates that the SMT solver should not generate a model.
-		QueryConfig& without_model_generation();
-		/// Indicates the timeout in seconds after which SMT query is killed.
-		QueryConfig& with_timeout(u64 seconds);
+            ////////////////////////////////////////////////////////////////////////
+            // Interface
+            ////////////////////////////////////////////////////////////////////////
 
-		/// Human-readable description of SMT configuration.
-		friend std::ostream& operator<<(std::ostream& out, const QueryConfig& config);
-	};
+            /// Appends a solver to the configuration.
+            QueryConfig& with_solver(SolverType _solver);
 
-	/**
-	 * 'Constraint' represents a constraint a.k.a. assertion to the SMT query
-	 * i.e. an assignment of two Boolean function that is true.
-	 */
-	struct Constraint final
-	{
-        ////////////////////////////////////////////////////////////////////////
-        // Member
-        ////////////////////////////////////////////////////////////////////////
+            /// Indicates that the SMT solver runs on a local machine.
+            QueryConfig& with_local_solver();
+            /// Indicates that the SMT solver runs on a remote machine.
+            QueryConfig& with_remote_solver();
+            /// Indicates that the SMT solver should generate a model (in case formula is satisfiable).
+            QueryConfig& with_model_generation();
+            /// Indicates that the SMT solver should not generate a model.
+            QueryConfig& without_model_generation();
+            /// Indicates the timeout in seconds after which SMT query is killed.
+            QueryConfig& with_timeout(u64 seconds);
 
-		/// Left-hand side of equality constraint.
-		BooleanFunction lhs;
-		/// Right-hand side of equality constraint.
-		BooleanFunction rhs;
+            /// Human-readable description of SMT configuration.
+            friend std::ostream& operator<<(std::ostream& out, const QueryConfig& config);
+        };
 
-        ////////////////////////////////////////////////////////////////////////
-        // Constructors, Destructors, Operators
-        ////////////////////////////////////////////////////////////////////////
+        /**
+		 * 'Constraint' represents a constraint a.k.a. assertion to the SMT query
+		 * i.e. an assignment of two Boolean function that is true.
+		 */
+        struct Constraint final
+        {
+            ////////////////////////////////////////////////////////////////////////
+            // Member
+            ////////////////////////////////////////////////////////////////////////
 
-		/// Creates a new 'Constraint' 
-		Constraint(BooleanFunction _lhs, BooleanFunction _rhs);
+            /// Left-hand side of equality constraint.
+            BooleanFunction lhs;
+            /// Right-hand side of equality constraint.
+            BooleanFunction rhs;
 
-		/// Human-readable description of an SMT constraint.
-		friend std::ostream& operator<<(std::ostream& out, const Constraint& constraint);
-	};
+            ////////////////////////////////////////////////////////////////////////
+            // Constructors, Destructors, Operators
+            ////////////////////////////////////////////////////////////////////////
 
-	/// 'ResultType' refers to the result of an SMT solver query.
-	enum class ResultType
-	{
-		Sat,     // indicates that a list of constraints is satisfiable
-		UnSat,   // indicates that a list of constraints is unsatisfiable
-		Unknown, // indicates that a result cannot be obtained, i.e. timeout.
-	};
+            /// Creates a new 'Constraint'
+            Constraint(BooleanFunction _lhs, BooleanFunction _rhs);
 
-	template<>
-    std::vector<std::string> EnumStrings<ResultType>::data;
+            /// Human-readable description of an SMT constraint.
+            friend std::ostream& operator<<(std::ostream& out, const Constraint& constraint);
+        };
 
-    /**
-     * 'Model' represents a list of assignment for variable nodes that yield
-     * a satisfiable assignment for a given list of constraints.
-     */
-	struct Model final
-	{
-        ////////////////////////////////////////////////////////////////////////
-        // Member
-        ////////////////////////////////////////////////////////////////////////
+        /// 'ResultType' refers to the result of an SMT solver query.
+        enum class ResultType
+        {
+            Sat,        // indicates that a list of constraints is satisfiable
+            UnSat,      // indicates that a list of constraints is unsatisfiable
+            Unknown,    // indicates that a result cannot be obtained, i.e. timeout.
+        };
 
-		/// maps variable identifiers to a (1) value and (2) its bit-size.
-		std::map<std::string, std::tuple<u64, u16>> model;
+        template<>
+        std::vector<std::string> EnumStrings<ResultType>::data;
 
-        ////////////////////////////////////////////////////////////////////////
-        // Constructors, Destructors, Operators
-        ////////////////////////////////////////////////////////////////////////
+        /**
+		 * 'Model' represents a list of assignment for variable nodes that yield
+		 * a satisfiable assignment for a given list of constraints.
+		 */
+        struct Model final
+        {
+            ////////////////////////////////////////////////////////////////////////
+            // Member
+            ////////////////////////////////////////////////////////////////////////
 
-		/// Constructor to initialize an 'Model'.
-		Model(std::map<std::string, std::tuple<u64, u16>> _model = {});
+            /// maps variable identifiers to a (1) value and (2) its bit-size.
+            std::map<std::string, std::tuple<u64, u16>> model;
 
-		/// comparison operators 
-		bool operator==(const Model& other) const;
-    	bool operator!=(const Model& other) const;
+            ////////////////////////////////////////////////////////////////////////
+            // Constructors, Destructors, Operators
+            ////////////////////////////////////////////////////////////////////////
 
-    	/// Human-readable description of SMT model.
-		friend std::ostream& operator<<(std::ostream& out, const Model& model);
+            /// Constructor to initialize an 'Model'.
+            Model(std::map<std::string, std::tuple<u64, u16>> _model = {});
 
-        ////////////////////////////////////////////////////////////////////////
-        // Interface
-        ////////////////////////////////////////////////////////////////////////
+            /// comparison operators
+            bool operator==(const Model& other) const;
+            bool operator!=(const Model& other) const;
 
-		/**
-		 * Parses an SMT-LIB model for a given solver.
-		 *
-		 * @param[in] s - SMT-LIB model string.
-		 * @param[in] solver - Solver that computed the model.
-		 * @returns (1) status (true on success, false otherwise), and 
- 		 *          (2) SMT model.
- 		 */
-		static std::tuple<bool, Model> parse(std::string s, const SolverType& solver); 
-	};
+            /// Human-readable description of SMT model.
+            friend std::ostream& operator<<(std::ostream& out, const Model& model);
 
-	/**
-	 * 'Result' represents the result of an SMT query.
-	 */
-	struct Result final 
-	{
-        ////////////////////////////////////////////////////////////////////////
-        // Member
-        ////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////
+            // Interface
+            ////////////////////////////////////////////////////////////////////////
 
-		/// stores result of SMT query 
-		ResultType type;
-		/// stores optional model (only available if type == Sat) and model generation is enabled in SMTQueryConfig
-		std::optional<Model> model;
+            /**
+			 * Parses an SMT-LIB model for a given solver.
+			 *
+			 * @param[in] s - SMT-LIB model string.
+			 * @param[in] solver - Solver that computed the model.
+			 * @returns (1) status (true on success, false otherwise), and 
+			 *          (2) SMT model.
+			 */
+            static std::tuple<bool, Model> parse(std::string s, const SolverType& solver);
+        };
 
-		////////////////////////////////////////////////////////////////////////
-        // Constructors, Destructors, Operators
-        ////////////////////////////////////////////////////////////////////////
+        /**
+		 * 'Result' represents the result of an SMT query.
+		 */
+        struct Result final
+        {
+            ////////////////////////////////////////////////////////////////////////
+            // Member
+            ////////////////////////////////////////////////////////////////////////
 
-		/// Creates a satisfiable result with an optional model.
-		static Result Sat(const std::optional<Model>& model = {});
-		/// Creates an unsatisfiable result.
-		static Result UnSat();
-		/// Creates an unknown result.
-		static Result Unknown();
+            /// stores result of SMT query
+            ResultType type;
+            /// stores optional model (only available if type == Sat) and model generation is enabled in SMTQueryConfig
+            std::optional<Model> model;
 
-		/// Checks whether result is of specific type.
-		bool is(const ResultType& _type) const;
-		/// Checks whether result is of satisfiable type.
-		bool is_sat() const;
-		/// Checks whether result is of unsatisfiable type.
-		bool is_unsat() const;
-		/// Checks whether result is of unknown type.
-		bool is_unknown() const;
+            ////////////////////////////////////////////////////////////////////////
+            // Constructors, Destructors, Operators
+            ////////////////////////////////////////////////////////////////////////
 
-    	/// Human-readable description of SMT result.
-		friend std::ostream& operator<<(std::ostream& out, const Result& result);
+            /// Creates a satisfiable result with an optional model.
+            static Result Sat(const std::optional<Model>& model = {});
+            /// Creates an unsatisfiable result.
+            static Result UnSat();
+            /// Creates an unknown result.
+            static Result Unknown();
 
-	private:
-		/// Constructor to initialize a 'Result.
-		Result(ResultType _type, std::optional<Model> _model);
-	};
+            /// Checks whether result is of specific type.
+            bool is(const ResultType& _type) const;
+            /// Checks whether result is of satisfiable type.
+            bool is_sat() const;
+            /// Checks whether result is of unsatisfiable type.
+            bool is_unsat() const;
+            /// Checks whether result is of unknown type.
+            bool is_unknown() const;
 
-}  // namespace SMT
-}  // namespace hal
+            /// Human-readable description of SMT result.
+            friend std::ostream& operator<<(std::ostream& out, const Result& result);
+
+        private:
+            /// Constructor to initialize a 'Result.
+            Result(ResultType _type, std::optional<Model> _model);
+        };
+
+    }    // namespace SMT
+}    // namespace hal
