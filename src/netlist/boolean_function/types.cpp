@@ -192,17 +192,14 @@ namespace hal
                     case SolverType::Boolector:
                         return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::BOOLECTOR_MODEL_GRAMMAR, boost::spirit::x3::space);
 
-                    default:
-                        return false;
+                    default: return false;
                 }
             }();
 
             switch (ok && (iter == s.end()))
             {
-                case true:
-                    return {true, Model(ModelParser::parser_context.model)};
-                case false:
-                    return {false, Model()};
+                case true: return {true, Model(ModelParser::parser_context.model)};
+                default:   return {false, Model()};
             }
         }
 

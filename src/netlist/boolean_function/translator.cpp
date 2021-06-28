@@ -44,10 +44,16 @@ namespace Translator
 
  			case BooleanFunction::NodeType::Concat:
  				return {true, "(concat " + operands[0] + " " + operands[1] + ")"};
+
+ 			// TODO: check correctness of the extract/extension operations once
+ 			//       the BooleanFunction uses the new data structure / interface
+
+ 			/*
  			case BooleanFunction::NodeType::Slice:
  				return {true, "((_ extract " + operands[2] + " " + operands[1] + ") " + operands[0] + ")"};
  			case BooleanFunction::NodeType::Zext: 
  				return {true, "((_ zero_extend " + operands[1] + ") " + operands[0] +  ")"};
+			*/
 
  			default: {
  				std::cerr << "[!] cannot generate SMT-LIB for node-type '" << std::to_string(node->type) << "' (not implemented reached)." << std::endl;
@@ -64,15 +70,15 @@ namespace Translator
         	stack.erase(stack.end() - static_cast<i64>(node->get_arity()), stack.end());
         	
         	switch (auto [ok, reduction] = reduce_to_smt2(node.get(), std::move(operands)); ok) {
-        		case true:  stack.emplace_back(reduction); break;
-        		case false: return {false, ""};
+        		case true: stack.emplace_back(reduction); break;
+        		default:   return {false, ""};
         	}
 		}
 
-		if (stack.size() == 1) {
-			return {true, stack.back()};
-		}
-		return {false, ""};
+		switch (stack.size() == 1) {
+			case true: return {true, stack.back()};
+			default:   return {false, ""};
+		}	
 	}
 }  // namespace Translator
 }  // namespace SMT
