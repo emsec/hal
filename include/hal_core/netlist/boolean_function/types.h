@@ -44,9 +44,6 @@ namespace hal
             Unknown,
         };
 
-        template<>
-        std::vector<std::string> EnumStrings<SolverType>::data;
-
         /**
 		 * 'QueryConfig' represents the data structure to configure an SMT query.
 		 */
@@ -120,9 +117,6 @@ namespace hal
             UnSat,      // indicates that a list of constraints is unsatisfiable
             Unknown,    // indicates that a result cannot be obtained, i.e. timeout.
         };
-
-        template<>
-        std::vector<std::string> EnumStrings<ResultType>::data;
 
         /**
 		 * 'Model' represents a list of assignment for variable nodes that yield
@@ -209,4 +203,10 @@ namespace hal
         };
 
     }    // namespace SMT
+
+    template<>
+    std::vector<std::string> EnumStrings<SMT::SolverType>::data;
+
+    template<>
+    std::vector<std::string> EnumStrings<SMT::ResultType>::data;
 }    // namespace hal
