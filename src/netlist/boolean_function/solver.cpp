@@ -162,8 +162,8 @@ namespace Boolector {
 		};
 
 		switch (auto it = type2query.find(solver); it != type2query.end()) {
-			case true:  return std::get<0>(it->second());
-			case false: return false;
+			case true: return std::get<0>(it->second());
+			default:   return false;
 		}
 	}
 
@@ -187,8 +187,8 @@ namespace Boolector {
 		}
 
 		switch (auto [output_ok, was_killed, output] = type2query.at(config.solver)(input, config); output_ok) {
-			case true:  return Solver::translate_from_smt2(was_killed, output, config);
-			case false: return {false, Result::Unknown()};
+			case true: return Solver::translate_from_smt2(was_killed, output, config);
+			default:   return {false, Result::Unknown()};
 		}
 	}
 
@@ -226,8 +226,8 @@ namespace Boolector {
 					auto [rhs_ok, rhs] = Translator::translate_to_smt2(constraint.rhs);
 
 					switch (ok && lhs_ok && rhs_ok) {
-						case true:  return {true, accumulator + "(assert (= " + lhs + " " + rhs + "))\n"};
-						case false: return {false, ""};
+						case true: return {true, accumulator + "(assert (= " + lhs + " " + rhs + "))\n"};
+						default:   return {false, ""};
 					}
 				}
 			);
@@ -239,8 +239,8 @@ namespace Boolector {
 		auto epilogue = std::string("(check-sat)") + ((config.generate_model) ? "\n(get-model)" : "");
 
 		switch (constraints_ok) {
-			case true:  return {true, theory + "\n" + declarations + "\n" + constraints_str + "\n" + epilogue};
-			case false: return {false, ""};
+			case true: return {true, theory + "\n" + declarations + "\n" + constraints_str + "\n" + epilogue};
+			default:   return {false, ""};
 		}		
 	}
 
@@ -265,7 +265,7 @@ namespace Boolector {
 					auto [ok, model] = Model::parse(model_str, config.solver);
 					return {ok, Result::Sat(model)};
 				}
-				case false: return {true, Result::Sat()};
+				default: return {true, Result::Sat()};
 			}
 		}
 		if (to_lowercase(result) == "unsat")

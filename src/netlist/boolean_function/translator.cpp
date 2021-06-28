@@ -69,10 +69,10 @@ namespace Translator
         	}
 		}
 
-		switch (stack.size() == 1) {
-			case true:  return {true, stack.back()};
-			case false: return {false, ""};
-		}		
+		if (stack.size() == 1) {
+			return {true, stack.back()};
+		}
+		return {false, ""};
 	}
 }  // namespace Translator
 }  // namespace SMT
