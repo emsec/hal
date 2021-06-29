@@ -83,10 +83,10 @@ $(document).ready(function(){initNavTree('classhal_1_1_boolean_function.html',''
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
@@ -107,6 +107,17 @@ Collaboration diagram for hal::BooleanFunction:</div>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_1_1_node.html">Node</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_1_1_node_type.html">NodeType</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_1_1_operand_node.html">OperandNode</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_1_1_operation_node.html">OperationNode</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:aac7bb4fda3bf06664f6bc717c3be92fb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">Value</a> { <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fbac487892e83456269ce717a99dffe1d49">ZERO</a> = 0, 
@@ -114,7 +125,18 @@ Public Types</h2></td></tr>
 <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fbaafb2333195401045b0f658dbe9a1a502">Z</a>, 
 <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fba65f3ff6b5989443249c6173d99e8815e">X</a>
  }</td></tr>
+<tr class="memdesc:aac7bb4fda3bf06664f6bc717c3be92fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">reprsents an operand node (e.g., a variable)  <a href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">More...</a><br /></td></tr>
 <tr class="separator:aac7bb4fda3bf06664f6bc717c3be92fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af70326490071e314efd523b8ab0f5232"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232">content_type</a> { <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">content_type::VARIABLE</a>, 
+<a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">content_type::CONSTANT</a>, 
+<a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">content_type::TERMS</a>
+ }</td></tr>
+<tr class="separator:af70326490071e314efd523b8ab0f5232"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a640c4ac719b4a74d2532ad60d0b14667"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667">operation</a> { <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">operation::AND</a>, 
+<a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">operation::OR</a>, 
+<a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">operation::XOR</a>
+ }</td></tr>
+<tr class="separator:a640c4ac719b4a74d2532ad60d0b14667"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -132,6 +154,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a69acdbd8fe2a2de1a0040fb768c6f0b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5cccdeca9becae6842cef115c14f5565"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">Value</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a5cccdeca9becae6842cef115c14f5565">operator()</a> (const std::unordered_map&lt; std::string, <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">Value</a> &gt; &amp;inputs={}) const</td></tr>
 <tr class="separator:a5cccdeca9becae6842cef115c14f5565"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1750c84ab904df4f294814f82ad9eed1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232">content_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a1750c84ab904df4f294814f82ad9eed1">get_type</a> () const</td></tr>
+<tr class="separator:a1750c84ab904df4f294814f82ad9eed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8945c399b71fcc78e2a16cb3745b7e58"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667">operation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a8945c399b71fcc78e2a16cb3745b7e58">get_operation</a> () const</td></tr>
+<tr class="separator:a8945c399b71fcc78e2a16cb3745b7e58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad63f4fe4235684069c1dcf5e4bc87271"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#ad63f4fe4235684069c1dcf5e4bc87271">is_neg</a> () const</td></tr>
+<tr class="separator:ad63f4fe4235684069c1dcf5e4bc87271"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5f9a1bf4471914fed4301b2d04e15f2"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#ad5f9a1bf4471914fed4301b2d04e15f2">get_operands</a> () const</td></tr>
+<tr class="separator:ad5f9a1bf4471914fed4301b2d04e15f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a699783dc199b969b663b91553e6cf807"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a699783dc199b969b663b91553e6cf807">is_constant_one</a> () const</td></tr>
 <tr class="separator:a699783dc199b969b663b91553e6cf807"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec67289287df362a060e81aec4d80ab7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#aec67289287df362a060e81aec4d80ab7">is_constant_zero</a> () const</td></tr>
@@ -176,6 +206,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a79f7213798c1927842874c8271fba751"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a657457cc9975026477302cd08ddfad3f"><td class="memItemLeft" align="right" valign="top">z3::expr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a657457cc9975026477302cd08ddfad3f">to_z3</a> (z3::context &amp;context, const std::map&lt; std::string, z3::expr &gt; &amp;var_to_expr={}) const</td></tr>
 <tr class="separator:a657457cc9975026477302cd08ddfad3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a426dc98ca84d499465167541dd759d62"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="structhal_1_1_boolean_function_1_1_node.html">Node</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a426dc98ca84d499465167541dd759d62">get_reverse_polish_notation</a> () const</td></tr>
+<tr class="separator:a426dc98ca84d499465167541dd759d62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -183,19 +215,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a7d129dbc26a6183db0a86033f7749d63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b46c6b87020ad341a0f5231e9c74294"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a8b46c6b87020ad341a0f5231e9c74294">from_string</a> (std::string expression, const std::vector&lt; std::string &gt; &amp;variable_names={})</td></tr>
 <tr class="separator:a8b46c6b87020ad341a0f5231e9c74294"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
-Protected Types</h2></td></tr>
-<tr class="memitem:a640c4ac719b4a74d2532ad60d0b14667"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667">operation</a> { <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">operation::AND</a>, 
-<a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">operation::OR</a>, 
-<a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">operation::XOR</a>
- }</td></tr>
-<tr class="separator:a640c4ac719b4a74d2532ad60d0b14667"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af70326490071e314efd523b8ab0f5232"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232">content_type</a> { <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">content_type::VARIABLE</a>, 
-<a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">content_type::CONSTANT</a>, 
-<a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">content_type::TERMS</a>
- }</td></tr>
-<tr class="separator:af70326490071e314efd523b8ab0f5232"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -233,12 +252,12 @@ Static Protected Member Functions</h2></td></tr>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a6944ba7c9f1abb8115d9e4d9f8e9fda1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a6944ba7c9f1abb8115d9e4d9f8e9fda1">m_invert</a></td></tr>
 <tr class="separator:a6944ba7c9f1abb8115d9e4d9f8e9fda1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae23f893ed63b50ff302db9b8e5f46d04"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232">hal::BooleanFunction::content_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a></td></tr>
-<tr class="separator:ae23f893ed63b50ff302db9b8e5f46d04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa930e5d0eb1f23c62d0f7ca251e22c7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#aaa930e5d0eb1f23c62d0f7ca251e22c7">m_variable</a></td></tr>
 <tr class="separator:aaa930e5d0eb1f23c62d0f7ca251e22c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a948c6b3eebd099cdec1c1bfd13da7394"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">Value</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a948c6b3eebd099cdec1c1bfd13da7394">m_constant</a></td></tr>
 <tr class="separator:a948c6b3eebd099cdec1c1bfd13da7394"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae07337417a2e03e5bfd43b47c22d3850"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232">content_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#ae07337417a2e03e5bfd43b47c22d3850">m_content</a></td></tr>
+<tr class="separator:ae07337417a2e03e5bfd43b47c22d3850"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a149a88b1fd3d84251b27d7ebd3db570a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667">operation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a149a88b1fd3d84251b27d7ebd3db570a">m_op</a></td></tr>
 <tr class="separator:a149a88b1fd3d84251b27d7ebd3db570a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b471f114125cc2e8c1a6f88a7db0c4a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function.html#a5b471f114125cc2e8c1a6f88a7db0c4a">m_operands</a></td></tr>
@@ -273,7 +292,7 @@ Friends</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -283,7 +302,7 @@ Friends</h2></td></tr>
 <tr><td class="fieldname"><a id="af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26"></a>TERMS&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00382">382</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00075">75</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
 
 </div>
 </div>
@@ -302,7 +321,7 @@ Friends</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -312,7 +331,7 @@ Friends</h2></td></tr>
 <tr><td class="fieldname"><a id="a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d"></a>XOR&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00337">337</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00082">82</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
 
 </div>
 </div>
@@ -327,6 +346,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>reprsents an operand node (e.g., a variable) </p>
 <p>Represents the logic value that a boolean function operates on. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aac7bb4fda3bf06664f6bc717c3be92fbac487892e83456269ce717a99dffe1d49"></a>ZERO&#160;</td><td class="fielddoc"><p>Represents a logical 0. </p>
@@ -339,7 +360,7 @@ Friends</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00051">51</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00067">67</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
 
 </div>
 </div>
@@ -362,9 +383,9 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">44</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00853">expand_ands()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00283">from_string_internal()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00951">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00715">replace_xors()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00084">substitute()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">expand_ands()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00299">from_string_internal()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00967">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00731">replace_xors()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00100">substitute()</a>.</p>
 
 </div>
 </div>
@@ -393,7 +414,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00071">71</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00389">m_variable</a>, <a class="el" href="utils_8h_source.html#l00313">hal::utils::trim()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00445">m_variable</a>, <a class="el" href="utils_8h_source.html#l00313">hal::utils::trim()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -422,7 +443,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00078">78</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00391">m_constant</a>, and <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00447">m_constant</a>, and <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>.</p>
 
 </div>
 </div>
@@ -468,7 +489,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00050">50</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00391">m_constant</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00447">m_constant</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
 
 </div>
 </div>
@@ -507,11 +528,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">612</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">628</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">is_empty()</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">is_empty()</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00644">operator&amp;()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00659">operator&amp;=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00654">operator^()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00669">operator^=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00649">operator|()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00664">operator|=()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00660">operator&amp;()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00675">operator&amp;=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00670">operator^()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00685">operator^=()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00665">operator|()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00680">operator|=()</a>.</p>
 
 </div>
 </div>
@@ -539,11 +560,11 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The value that the function evaluates to. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00132">132</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00148">148</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00391">m_constant</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00389">m_variable</a>, <a class="el" href="boolean__function_8h_source.html#l00054">ONE</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>, <a class="el" href="boolean__function_8h_source.html#l00056">X</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>, <a class="el" href="boolean__function_8h_source.html#l00055">Z</a>, and <a class="el" href="boolean__function_8h_source.html#l00053">ZERO</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00447">m_constant</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00445">m_variable</a>, <a class="el" href="boolean__function_8h_source.html#l00070">ONE</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>, <a class="el" href="boolean__function_8h_source.html#l00072">X</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>, <a class="el" href="boolean__function_8h_source.html#l00071">Z</a>, and <a class="el" href="boolean__function_8h_source.html#l00069">ZERO</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01120">get_truth_table()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00214">operator()()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01136">get_truth_table()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00230">operator()()</a>.</p>
 
 </div>
 </div>
@@ -571,11 +592,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00745">745</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00761">761</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00817">get_AND_terms()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00833">get_AND_terms()</a>.</p>
 
 </div>
 </div>
@@ -602,11 +623,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00853">853</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">869</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00817">get_AND_terms()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00833">get_AND_terms()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01034">to_dnf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01050">to_dnf()</a>.</p>
 
 </div>
 </div>
@@ -655,9 +676,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The Boolean function extracted from the string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00265">265</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00281">281</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00283">from_string_internal()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00299">from_string_internal()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -697,11 +718,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00283">283</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00299">299</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="boolean__function_8h_source.html#l00054">ONE</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, <a class="el" href="utils_8h_source.html#l00122">hal::utils::starts_with()</a>, <a class="el" href="utils_8h_source.html#l00313">hal::utils::trim()</a>, <a class="el" href="boolean__function_8h_source.html#l00056">X</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>, <a class="el" href="boolean__function_8h_source.html#l00055">Z</a>, and <a class="el" href="boolean__function_8h_source.html#l00053">ZERO</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="boolean__function_8h_source.html#l00070">ONE</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, <a class="el" href="utils_8h_source.html#l00122">hal::utils::starts_with()</a>, <a class="el" href="utils_8h_source.html#l00313">hal::utils::trim()</a>, <a class="el" href="boolean__function_8h_source.html#l00072">X</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>, <a class="el" href="boolean__function_8h_source.html#l00071">Z</a>, and <a class="el" href="boolean__function_8h_source.html#l00069">ZERO</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00265">from_string()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00281">from_string()</a>.</p>
 
 </div>
 </div>
@@ -728,11 +749,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00817">817</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00833">833</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00745">expand_AND_of_functions()</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00761">expand_AND_of_functions()</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00853">expand_ands()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">expand_ands()</a>.</p>
 
 </div>
 </div>
@@ -755,11 +776,81 @@ Friends</h2></td></tr>
 <p>Returns an empty vector if the Boolean function is empty.</p>
 <dl class="section return"><dt>Returns</dt><dd>The DNF clauses as a vector of vectors of pairs (string, bool). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01069">1069</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01085">1085</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">is_empty()</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01034">to_dnf()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00539">to_string()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">is_empty()</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01050">to_dnf()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00555">to_string()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
+
+</div>
+</div>
+<a id="ad5f9a1bf4471914fed4301b2d04e15f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5f9a1bf4471914fed4301b2d04e15f2">&#9670;&nbsp;</a></span>get_operands()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt; &amp; hal::BooleanFunction::get_operands </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns list of operands as Boolean function.</p>
+<dl class="section return"><dt>Returns</dt><dd>List of operands. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00096">96</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>.</p>
+
+</div>
+</div>
+<a id="a8945c399b71fcc78e2a16cb3745b7e58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8945c399b71fcc78e2a16cb3745b7e58">&#9670;&nbsp;</a></span>get_operation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667">BooleanFunction::operation</a> hal::BooleanFunction::get_operation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns operation identifier of Boolean function.</p>
+<dl class="section return"><dt>Returns</dt><dd>Operation. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00088">88</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>.</p>
+
+</div>
+</div>
+<a id="a426dc98ca84d499465167541dd759d62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a426dc98ca84d499465167541dd759d62">&#9670;&nbsp;</a></span>get_reverse_polish_notation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::unique_ptr&lt; <a class="el" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a> &gt; &gt; hal::BooleanFunction::get_reverse_polish_notation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the list of nodes of the Boolean function in reverse-polish notation, i.e. top-level node is at last vector.</p>
+<p>WARNING: This is a temporary function as long as the underlying <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> is using the recursive data structure.</p>
+<dl class="section return"><dt>Returns</dt><dd>The vector of abstract syntax tree nodes. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01485">1485</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="boolean__function_8h_source.html#l00545">hal::BooleanFunction::NodeType::And</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00447">m_constant</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00445">m_variable</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01623">hal::BooleanFunction::OperationNode::make()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01669">hal::BooleanFunction::OperandNode::make()</a>, <a class="el" href="boolean__function_8h_source.html#l00547">hal::BooleanFunction::NodeType::Not</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, <a class="el" href="boolean__function_8h_source.html#l00546">hal::BooleanFunction::NodeType::Or</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>, and <a class="el" href="boolean__function_8h_source.html#l00548">hal::BooleanFunction::NodeType::Xor</a>.</p>
 
 </div>
 </div>
@@ -801,11 +892,34 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The vector of output values. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01120">1120</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01136">1136</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00132">evaluate()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00244">get_variables()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00148">evaluate()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00260">get_variables()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00343">hal::Gate::add_boolean_function()</a>, and <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
+
+</div>
+</div>
+<a id="a1750c84ab904df4f294814f82ad9eed1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1750c84ab904df4f294814f82ad9eed1">&#9670;&nbsp;</a></span>get_type()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232">BooleanFunction::content_type</a> hal::BooleanFunction::get_type </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns content type of Boolean function.</p>
+<dl class="section return"><dt>Returns</dt><dd>Content type. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00084">84</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>.</p>
 
 </div>
 </div>
@@ -826,11 +940,11 @@ Friends</h2></td></tr>
 <p>Get all variable names utilized in this Boolean function.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of all variable names. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00244">244</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00260">260</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00389">m_variable</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00445">m_variable</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01120">get_truth_table()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01385">to_z3()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01136">get_truth_table()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01401">to_z3()</a>.</p>
 
 </div>
 </div>
@@ -851,9 +965,9 @@ Friends</h2></td></tr>
 <p>Check whether the Boolean function always evaluates to ONE.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if function is constant ONE, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00219">219</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00235">235</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00391">m_constant</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00054">ONE</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00447">m_constant</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00070">ONE</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -876,9 +990,9 @@ Friends</h2></td></tr>
 <p>Check whether the Boolean function always evaluates to ZERO.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if function is constant ZERO, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00229">229</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00245">245</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00391">m_constant</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>, and <a class="el" href="boolean__function_8h_source.html#l00053">ZERO</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00447">m_constant</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>, and <a class="el" href="boolean__function_8h_source.html#l00069">ZERO</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>.</p>
 
@@ -901,11 +1015,11 @@ Friends</h2></td></tr>
 <p>Check whether the Boolean function is in disjunctive normal form (DNF).</p>
 <dl class="section return"><dt>Returns</dt><dd>True if in DNF, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00991">991</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01007">1007</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01034">to_dnf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01050">to_dnf()</a>.</p>
 
 </div>
 </div>
@@ -926,11 +1040,34 @@ Friends</h2></td></tr>
 <p>Check whether the function is empty.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if function is empty, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">239</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">255</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01069">get_dnf_clauses()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00697">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00539">to_string()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01405">to_z3_internal()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01085">get_dnf_clauses()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00713">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00555">to_string()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01421">to_z3_internal()</a>.</p>
+
+</div>
+</div>
+<a id="ad63f4fe4235684069c1dcf5e4bc87271"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad63f4fe4235684069c1dcf5e4bc87271">&#9670;&nbsp;</a></span>is_neg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::BooleanFunction::is_neg </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Checks whether Boolean function is negated.</p>
+<dl class="section return"><dt>Returns</dt><dd>True in case Boolean function is negated, false otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00092">92</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>.</p>
 
 </div>
 </div>
@@ -952,9 +1089,9 @@ Friends</h2></td></tr>
  Negate the Boolean function.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The negated Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00675">675</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00691">691</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00680">operator~()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00696">operator~()</a>.</p>
 
 </div>
 </div>
@@ -982,7 +1119,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both Boolean functions are unequal, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00710">710</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00726">726</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
 </div>
 </div>
@@ -1010,9 +1147,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The combined Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00644">644</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00660">660</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>.</p>
 
 </div>
 </div>
@@ -1040,9 +1177,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The combined Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00659">659</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00675">675</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>.</p>
 
 </div>
 </div>
@@ -1070,9 +1207,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The value that the function evaluates to. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00214">214</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00230">230</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00132">evaluate()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00148">evaluate()</a>.</p>
 
 </div>
 </div>
@@ -1100,9 +1237,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both Boolean functions are equal, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00697">697</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00713">713</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">is_empty()</a>, <a class="el" href="boolean__function_8h_source.html#l00391">m_constant</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00389">m_variable</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">is_empty()</a>, <a class="el" href="boolean__function_8h_source.html#l00447">m_constant</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00445">m_variable</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1130,9 +1267,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The combined Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00654">654</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00670">670</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>.</p>
 
 </div>
 </div>
@@ -1160,9 +1297,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The combined Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00669">669</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00685">685</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>.</p>
 
 </div>
 </div>
@@ -1190,9 +1327,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The combined Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00649">649</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00665">665</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>.</p>
 
 </div>
 </div>
@@ -1220,9 +1357,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The combined Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00664">664</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00680">680</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>.</p>
 
 </div>
 </div>
@@ -1243,11 +1380,11 @@ Friends</h2></td></tr>
 <p>Negate the Boolean function.</p>
 <dl class="section return"><dt>Returns</dt><dd>The negated Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00680">680</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00696">696</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00391">m_constant</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00054">ONE</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>, and <a class="el" href="boolean__function_8h_source.html#l00053">ZERO</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="boolean__function_8h_source.html#l00447">m_constant</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00070">ONE</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>, and <a class="el" href="boolean__function_8h_source.html#l00069">ZERO</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00675">operator!()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00691">operator!()</a>.</p>
 
 </div>
 </div>
@@ -1268,11 +1405,11 @@ Friends</h2></td></tr>
 <p>Optimizes the Boolean function by first converting it to disjunctive normal form (DNF) and then applying the Quine-McCluskey algorithm.</p>
 <dl class="section return"><dt>Returns</dt><dd>The optimized Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">1151</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">1167</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00244">get_variables()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">is_empty()</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00951">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01217">qmc()</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01034">to_dnf()</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00260">get_variables()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">is_empty()</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00967">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01233">qmc()</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01050">to_dnf()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00219">is_constant_one()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00229">is_constant_zero()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00235">is_constant_one()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00245">is_constant_zero()</a>.</p>
 
 </div>
 </div>
@@ -1293,11 +1430,11 @@ Friends</h2></td></tr>
 <p>Removes constant values whenever possible.</p>
 <dl class="section return"><dt>Returns</dt><dd>The optimized Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">869</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">885</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">is_empty()</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00389">m_variable</a>, <a class="el" href="boolean__function_8h_source.html#l00054">ONE</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>, and <a class="el" href="boolean__function_8h_source.html#l00053">ZERO</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">is_empty()</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00445">m_variable</a>, <a class="el" href="boolean__function_8h_source.html#l00070">ONE</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>, and <a class="el" href="boolean__function_8h_source.html#l00069">ZERO</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00745">expand_AND_of_functions()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00503">hal::netlist_utils::remove_buffers()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01034">to_dnf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00761">expand_AND_of_functions()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00503">hal::netlist_utils::remove_buffers()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01050">to_dnf()</a>.</p>
 
 </div>
 </div>
@@ -1325,11 +1462,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00951">951</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00967">967</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01034">to_dnf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01050">to_dnf()</a>.</p>
 
 </div>
 </div>
@@ -1357,11 +1494,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01217">1217</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01233">1233</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>.</p>
 
 </div>
 </div>
@@ -1388,11 +1525,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00715">715</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00731">731</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01034">to_dnf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01050">to_dnf()</a>.</p>
 
 </div>
 </div>
@@ -1431,7 +1568,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00084">84</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00100">100</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>.</p>
 
@@ -1474,9 +1611,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00125">125</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00141">141</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00089">substitute_helper()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00105">substitute_helper()</a>.</p>
 
 </div>
 </div>
@@ -1520,11 +1657,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00089">89</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00105">105</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00389">m_variable</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00445">m_variable</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232acd5bdd112922377a2b37303ad7893d26">TERMS</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00125">substitute()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00141">substitute()</a>.</p>
 
 </div>
 </div>
@@ -1545,11 +1682,11 @@ Friends</h2></td></tr>
 <p>Get the plain disjunctive normal form (DNF) representation of the Boolean function.</p>
 <dl class="section return"><dt>Returns</dt><dd>The DNF as a Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01034">1034</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01050">1050</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00853">expand_ands()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00991">is_dnf()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00951">propagate_negations()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00715">replace_xors()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">expand_ands()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01007">is_dnf()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00967">propagate_negations()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00731">replace_xors()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01069">get_dnf_clauses()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01085">get_dnf_clauses()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>.</p>
 
 </div>
 </div>
@@ -1570,11 +1707,11 @@ Friends</h2></td></tr>
 <p>Get the boolean function as a string.</p>
 <dl class="section return"><dt>Returns</dt><dd>A string describing the boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00539">539</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00555">555</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">is_empty()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">to_string_internal()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">is_empty()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">to_string_internal()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01069">get_dnf_clauses()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00029">hal::operator&lt;&lt;()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00681">hal::netlist_utils::rename_luts_according_to_function()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">to_string_internal()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01085">get_dnf_clauses()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00029">hal::operator&lt;&lt;()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00681">hal::netlist_utils::rename_luts_according_to_function()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">to_string_internal()</a>.</p>
 
 </div>
 </div>
@@ -1642,7 +1779,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00034">34</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00343">hal::Gate::add_boolean_function()</a>, <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00607">hal::operator&lt;&lt;()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00503">hal::netlist_utils::remove_buffers()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00343">hal::Gate::add_boolean_function()</a>, <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00623">hal::operator&lt;&lt;()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00503">hal::netlist_utils::remove_buffers()</a>.</p>
 
 </div>
 </div>
@@ -1669,11 +1806,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">576</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">592</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="utils_8h_source.html#l00367">hal::utils::join()</a>, <a class="el" href="boolean__function_8h_source.html#l00391">m_constant</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00389">m_variable</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00539">to_string()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="utils_8h_source.html#l00367">hal::utils::join()</a>, <a class="el" href="boolean__function_8h_source.html#l00447">m_constant</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00445">m_variable</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00555">to_string()</a>, and <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00539">to_string()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00555">to_string()</a>.</p>
 
 </div>
 </div>
@@ -1712,9 +1849,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The z3 representation of the Boolean function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01385">1385</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01401">1401</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00244">get_variables()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01405">to_z3_internal()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00260">get_variables()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01421">to_z3_internal()</a>.</p>
 
 </div>
 </div>
@@ -1752,11 +1889,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01405">1405</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01421">1421</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">is_empty()</a>, <a class="el" href="boolean__function_8h_source.html#l00391">m_constant</a>, <a class="el" href="classhal_1_1_boolean_function.html#ae23f893ed63b50ff302db9b8e5f46d04">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00380">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00393">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00394">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00389">m_variable</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a558ffc8f5770d8e4f95f51d822685532">AND</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232a8d6b5cada83510220f59e00ce86d4d92">CONSTANT</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">is_empty()</a>, <a class="el" href="boolean__function_8h_source.html#l00447">m_constant</a>, <a class="el" href="boolean__function_8h_source.html#l00449">m_content</a>, <a class="el" href="boolean__function_8h_source.html#l00443">m_invert</a>, <a class="el" href="boolean__function_8h_source.html#l00450">m_op</a>, <a class="el" href="boolean__function_8h_source.html#l00451">m_operands</a>, <a class="el" href="boolean__function_8h_source.html#l00445">m_variable</a>, <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a1d00e7dce692e8dc3f6877f035e3a616">OR</a>, <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232ae61ad9b2553a293b4a3f4d3b4fa5ab31">VARIABLE</a>, and <a class="el" href="classhal_1_1_boolean_function.html#a640c4ac719b4a74d2532ad60d0b14667a97675eb3f268048604dc5155511a2a4d">XOR</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01385">to_z3()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01401">to_z3()</a>.</p>
 
 </div>
 </div>
@@ -1804,7 +1941,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to os. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00607">607</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00623">623</a> of file <a class="el" href="netlist_2boolean__function_8cpp_source.html">boolean_function.cpp</a>.</p>
 
 </div>
 </div>
@@ -1914,14 +2051,14 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00391">391</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00447">447</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00050">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00132">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00219">is_constant_one()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00229">is_constant_zero()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00697">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00680">operator~()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01405">to_z3_internal()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00050">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00148">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01485">get_reverse_polish_notation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00235">is_constant_one()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00245">is_constant_zero()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00713">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00696">operator~()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01421">to_z3_internal()</a>.</p>
 
 </div>
 </div>
-<a id="ae23f893ed63b50ff302db9b8e5f46d04"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae23f893ed63b50ff302db9b8e5f46d04">&#9670;&nbsp;</a></span>m_content</h2>
+<a id="ae07337417a2e03e5bfd43b47c22d3850"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae07337417a2e03e5bfd43b47c22d3850">&#9670;&nbsp;</a></span>m_content</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1930,7 +2067,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232">hal::BooleanFunction::content_type</a> hal::BooleanFunction::m_content</td>
+          <td class="memname"><a class="el" href="classhal_1_1_boolean_function.html#af70326490071e314efd523b8ab0f5232">content_type</a> hal::BooleanFunction::m_content</td>
         </tr>
       </table>
   </td>
@@ -1940,7 +2077,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00132">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00817">get_AND_terms()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00244">get_variables()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00219">is_constant_one()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00229">is_constant_zero()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00991">is_dnf()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">is_empty()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00697">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00680">operator~()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00951">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00715">replace_xors()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00089">substitute_helper()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01405">to_z3_internal()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00449">449</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00148">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00833">get_AND_terms()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01485">get_reverse_polish_notation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00084">get_type()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00260">get_variables()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00235">is_constant_one()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00245">is_constant_zero()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01007">is_dnf()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">is_empty()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00713">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00696">operator~()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00967">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00731">replace_xors()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00105">substitute_helper()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01421">to_z3_internal()</a>.</p>
 
 </div>
 </div>
@@ -1964,9 +2103,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00380">380</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00443">443</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00132">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00697">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00680">operator~()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00951">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00715">replace_xors()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00089">substitute_helper()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01405">to_z3_internal()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00044">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00148">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01485">get_reverse_polish_notation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00092">is_neg()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00713">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00696">operator~()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00967">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00731">replace_xors()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00105">substitute_helper()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01421">to_z3_internal()</a>.</p>
 
 </div>
 </div>
@@ -1990,9 +2129,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00393">393</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00450">450</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00050">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00132">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00817">get_AND_terms()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00991">is_dnf()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00697">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00951">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00715">replace_xors()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01405">to_z3_internal()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00050">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00148">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00833">get_AND_terms()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00088">get_operation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01485">get_reverse_polish_notation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01007">is_dnf()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00713">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00967">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00731">replace_xors()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01421">to_z3_internal()</a>.</p>
 
 </div>
 </div>
@@ -2016,9 +2155,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00394">394</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00451">451</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00050">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00612">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00132">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00817">get_AND_terms()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00244">get_variables()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00991">is_dnf()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">is_empty()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00697">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00680">operator~()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01151">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00951">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00715">replace_xors()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00089">substitute_helper()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01405">to_z3_internal()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00050">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00628">combine()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00148">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00833">get_AND_terms()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00096">get_operands()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01485">get_reverse_polish_notation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00260">get_variables()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01007">is_dnf()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00255">is_empty()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00713">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00696">operator~()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01167">optimize()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00967">propagate_negations()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00731">replace_xors()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00105">substitute_helper()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01421">to_z3_internal()</a>.</p>
 
 </div>
 </div>
@@ -2042,9 +2181,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00389">389</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="boolean__function_8h_source.html#l00445">445</a> of file <a class="el" href="boolean__function_8h_source.html">boolean_function.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00071">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00132">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00244">get_variables()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00697">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00869">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00089">substitute_helper()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00576">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01405">to_z3_internal()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00071">BooleanFunction()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00148">evaluate()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01485">get_reverse_polish_notation()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00260">get_variables()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00713">operator==()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00885">optimize_constants()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00105">substitute_helper()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00592">to_string_internal()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01421">to_z3_internal()</a>.</p>
 
 </div>
 </div>
@@ -2058,7 +2197,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a></li>
-    <li class="footer">Generated on Wed Jun 23 2021 11:44:35 for HAL by
+    <li class="footer">Generated on Tue Jun 29 2021 12:23:50 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -2,6 +2,7 @@ var namespacehal =
 [
     [ "core_strings", "namespacehal_1_1core__strings.html", "namespacehal_1_1core__strings" ],
     [ "gui_utility", "namespacehal_1_1gui__utility.html", "namespacehal_1_1gui__utility" ],
+    [ "SMT", "namespacehal_1_1_s_m_t.html", "namespacehal_1_1_s_m_t" ],
     [ "utils", "namespacehal_1_1utils.html", "namespacehal_1_1utils" ],
     [ "AboutDialog", "classhal_1_1_about_dialog.html", "classhal_1_1_about_dialog" ],
     [ "Action", "classhal_1_1_action.html", "classhal_1_1_action" ],
