@@ -52,7 +52,11 @@ namespace SMT {
         // Interface
         ////////////////////////////////////////////////////////////////////////
 
-		/// Returns list of available constraints.
+		/**
+		 * Returns list of available constraints.
+		 *
+		 * @returns List of available constraints.
+		 */
 		const std::vector<Constraint>& get_constraints() const;
 
 		/**

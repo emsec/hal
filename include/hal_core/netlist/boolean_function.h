@@ -159,16 +159,32 @@ namespace hal
          */
         Value operator()(const std::unordered_map<std::string, Value>& inputs = {}) const;
 
-        /// Returns content type of Boolean function.
+        /**
+         * Returns content type of Boolean function.
+         *
+         * @returns Content type.
+         */
         content_type get_type() const;
 
-        /// Returns operation identifier of Boolean function.
+        /**
+         * Returns operation identifier of Boolean function.
+         *
+         * @returns Operation.
+         */
         operation get_operation() const;
 
-        /// Checks whether Boolean function is negated.
+        /** 
+         * Checks whether Boolean function is negated.
+         *
+         * @returns True in case Boolean function is negated, false otherwise.
+         */
         bool is_neg() const;
 
-        /// Returns list of operands as Boolean function.
+        /**
+         * Returns list of operands as Boolean function.
+         *
+         * @returns List of operands.
+         */
         const std::vector<BooleanFunction>& get_operands() const;
 
         /**

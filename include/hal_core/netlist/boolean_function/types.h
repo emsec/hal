@@ -66,21 +66,57 @@ namespace hal
             // Interface
             ////////////////////////////////////////////////////////////////////////
 
-            /// Appends a solver to the configuration.
+            /**
+             * Appends a solver to the configuration.
+             *
+             * @param[in] _solver - Solver identifier.
+             * @returns Self-reference.
+             */
             QueryConfig& with_solver(SolverType _solver);
-
-            /// Indicates that the SMT solver runs on a local machine.
+            
+            /**
+             * Indicates that the SMT solver runs on a local machine.
+             *
+             * @returns Self-reference.
+             */
             QueryConfig& with_local_solver();
-            /// Indicates that the SMT solver runs on a remote machine.
+            
+            /**
+             * Indicates that the SMT solver runs on a remote machine.
+             *
+             * @returns Self-reference.
+             */
             QueryConfig& with_remote_solver();
-            /// Indicates that the SMT solver should generate a model (in case formula is satisfiable).
+            
+            /**
+             * Indicates that the SMT solver should generate a model (in case formula is satisfiable).
+             *
+             * @returns Self-reference.
+             */
             QueryConfig& with_model_generation();
-            /// Indicates that the SMT solver should not generate a model.
+            
+            /**
+             * Indicates that the SMT solver should not generate a model.
+             *
+             * @returns Self-reference.
+             */
             QueryConfig& without_model_generation();
-            /// Indicates the timeout in seconds after which SMT query is killed.
+            
+            /**
+             * Indicates the timeout in seconds after which SMT query is killed.
+             *
+             * @param[in] seconds - Timeout in seconds.
+             * @returns Self-reference.
+             */
             QueryConfig& with_timeout(u64 seconds);
 
-            /// Human-readable description of SMT configuration.
+            /**
+             * Human-readable description of SMT configuration.
+             *
+             * @param[in] out - Stream to write to.
+             * @param[in] config - SMT query configuration.
+             * @returns A reference to output stream.
+             */
             friend std::ostream& operator<<(std::ostream& out, const QueryConfig& config);
         };
 
@@ -106,7 +142,13 @@ namespace hal
             /// Creates a new 'Constraint'
             Constraint(BooleanFunction _lhs, BooleanFunction _rhs);
 
-            /// Human-readable description of an SMT constraint.
+            /**
+             * Human-readable description of an SMT constraint.
+             *
+             * @param[in] out - Stream to write to.
+             * @param[in] constraint - SMT constraint.
+             * @returns A reference to output stream.
+             */
             friend std::ostream& operator<<(std::ostream& out, const Constraint& constraint);
         };
 
@@ -138,11 +180,29 @@ namespace hal
             /// Constructor to initialize an 'Model'.
             Model(std::map<std::string, std::tuple<u64, u16>> _model = {});
 
-            /// comparison operators
+            /**
+             * Check whether two models are equal.
+             *
+             * @param[in] other - The model to compare again.
+             * @returns True if both models are equal, false otherwise.
+             */
             bool operator==(const Model& other) const;
+
+            /**
+             * Check whether two models are unequal.
+             *
+             * @param[in] other - The model to compare again.
+             * @returns True if both models are unequal, false otherwise.
+             */
             bool operator!=(const Model& other) const;
 
-            /// Human-readable description of SMT model.
+            /**
+             * Human-readable description of an SMT model.
+             *
+             * @param[in] out - Stream to write to.
+             * @param[in] model - SMT model.
+             * @returns A reference to output stream.
+             */
             friend std::ostream& operator<<(std::ostream& out, const Model& model);
 
             ////////////////////////////////////////////////////////////////////////
@@ -178,23 +238,65 @@ namespace hal
             // Constructors, Destructors, Operators
             ////////////////////////////////////////////////////////////////////////
 
-            /// Creates a satisfiable result with an optional model.
+            
+            /**
+             * Creates a satisfiable result with an optional model.
+             *
+             * @param[in] model - Optional model for satisfiable formula.
+             * @returns Result.
+             */
             static Result Sat(const std::optional<Model>& model = {});
-            /// Creates an unsatisfiable result.
+            
+            /**
+             * Creates an unsatisfiable result.
+             *
+             * @returns Result.
+             */
             static Result UnSat();
-            /// Creates an unknown result.
+            
+            /**
+             * Creates an unknown result.
+             *
+             * @returns Result.
+             */
             static Result Unknown();
 
-            /// Checks whether result is of specific type.
+            /**
+             * Checks whether result is of specific type.
+             *
+             * @param[in] _type - Type to check.
+             * @returns True in case result matches _type, false otherwise.
+             */
             bool is(const ResultType& _type) const;
-            /// Checks whether result is of satisfiable type.
+
+            /**
+             * Checks whether result is of satisfiable type.
+             *
+             * @returns True in case result is satisfiable, false otherwise.
+             */
             bool is_sat() const;
-            /// Checks whether result is of unsatisfiable type.
+
+            /**
+             * Checks whether result is of unsatisfiable type.
+             *
+             * @returns True in case result is unsatisfiable, false otherwise.
+             */
             bool is_unsat() const;
-            /// Checks whether result is of unknown type.
+
+            /**
+             * Checks whether result is of unknown type.
+             *
+             * @returns True in case result is unknown, false otherwise.
+             */
             bool is_unknown() const;
 
-            /// Human-readable description of SMT result.
+            /**
+             * Human-readable description of SMT result.
+             *
+             * @param[in] out - Stream to write to.
+             * @param[in] result - SMT result.
+             * @returns A reference to output stream.
+             */ 
             friend std::ostream& operator<<(std::ostream& out, const Result& result);
 
         private:
