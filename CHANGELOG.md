@@ -25,6 +25,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * fixed multiple connections of a single net to the same gate not being shown properly
   * fixed incorrect placement of new gates and modules in cone view when navigating starting from a net
   * preserve location of gate when moving it to new module
+* Added generic SMT solver interface.
+  * Added translation from `BooleanFunction` to SMT-LIB.
+  * Added `BooleanFunction::Node` data structure to extend functionality to generic ASTs.
+  * Added support for z3 and boolector SMT solvers.
+  * Added cpp-subprocess library to handle communication with SMT solver.
+  * Added Boost Spirit x3 library to generate grammar-based parser from SMT-LIB models to C++ data structures.
 * improved netlist parsers
   * split VHDL and Verilog parsers into two independent plugins
   * netlist parsers now take the path to the netlist file as input instead of a `std::stringstream`
