@@ -95,7 +95,7 @@ namespace hal
         static const int sIdColumn = 1;
         static const int sTypeColumn = 2;
 
-        enum  itemType{module = 0, gate = 1, net = 2};
+        enum itemType{module = 0, gate = 1, net = 2};
         Q_ENUM(itemType)
 
     private:
