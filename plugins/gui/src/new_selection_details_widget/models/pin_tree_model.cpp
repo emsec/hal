@@ -13,7 +13,7 @@ namespace hal
     PinTreeModel::PinTreeModel(QObject *parent) : BaseTreeModel(parent)
     {
         setHeaderLabels(QList<QVariant>() << "Name" << "Direction" << "Type" << "Connected Net");
-        setPinsOfGate(gNetlist->get_gate_by_id(19));
+        setGate(gNetlist->get_gate_by_id(19));
     }
 
     PinTreeModel::~PinTreeModel()
@@ -22,7 +22,7 @@ namespace hal
 
     }
 
-    void PinTreeModel::setPinsOfGate(Gate *g)
+    void PinTreeModel::setGate(Gate *g)
     {
         //1. display all input grouping items at the beginning, try to keep order by iterate over input-pins instead of groupings
         //2. display all input pins not belonging to any group after that

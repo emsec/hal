@@ -24,59 +24,39 @@
 #pragma once
 
 #include "gui/new_selection_details_widget/models/base_tree_model.h"
-#include <QMap>
 
 namespace hal
 {
-
-    class Gate;
-
-/**
- * @ingroup gui
- * @brief A model to display the pins of a gate.
- */
-class PinTreeModel : public BaseTreeModel
-{
-    Q_OBJECT
-
-public:
+    class Module;
 
     /**
-     * The constructor.
-     *
-     * @param parent - The model's parent.
+     * @brief A model to represent the ports of a module.
      */
-    PinTreeModel(QObject* parent = nullptr);
+    class PortTreeModel : public BaseTreeModel
+    {
+        Q_OBJECT
+    public:
 
-    /**
-      * The destructor.
-      */
-    ~PinTreeModel();
+        /**
+         * The constructor.
+         *
+         * @param parent - THe model's parent.
+         */
+        PortTreeModel(QObject* parent = nullptr);
 
-    /**
-     * Sets the gate of the pins this model will represent.
-     *
-     * @param g - The gate of the pins.
-     */
-    void setGate(Gate* g);
+        /**
+          * The destructor.
+          */
+        ~PortTreeModel();
 
-    //column identifier
-    static const int sNameColumn = 0;
-    static const int sDirectionColumn = 1;
-    static const int sTypeColumn = 2;
-    static const int sConnectedNetColumn = 3;
+        /**
+         * Sets up the model to display the module's ports.
+         *
+         * @param m - The module for which to display the ports.
+         */
+        void setModule(Module* m);
 
-    enum itemType {grouping = 0, pin = 1};
-    Q_ENUM(itemType)
-
-private:
-    int mGateId;
-    QMap<std::string, TreeItem*> mPinGroupingToTreeItem;
-    QString mTypeKey = "type";
-
-    //helper method to prevent code redundance
-    void appendInputOutputPins(Gate* g, std::vector<std::string> inputOrOutputPins, bool areInputPins);
-
-};
-
+    private:
+        int mModuleId;
+    };
 }

@@ -4,6 +4,7 @@
 #include "gui/new_selection_details_widget/models/netlist_elements_tree_model.h"
 #include "gui/new_selection_details_widget/models/base_tree_model.h"
 #include "gui/new_selection_details_widget/models/pin_tree_model.h"
+#include "gui/new_selection_details_widget/models/port_tree_model.h"
 #include <QTreeView>
 #include <QHeaderView>
 //---------------------------
@@ -25,12 +26,14 @@ namespace hal {
         NetlistElementsTreeModel* model = new NetlistElementsTreeModel(mTreeView);
         BaseTreeModel* baseModel = new BaseTreeModel(mTreeView);
         PinTreeModel* pinModel = new PinTreeModel(mTreeView);
+        PortTreeModel* portModel = new PortTreeModel(mTreeView);
         baseModel->setHeaderLabels(QList<QVariant>() << "Label1" << "Label2");
         TreeItem* someRootItem = new TreeItem(QList<QVariant>() << "parent1" << "parent2");
         TreeItem* someChildItem = new TreeItem(QList<QVariant>() << "Test1" << "Test2");
         someRootItem->appendChild(someChildItem);
         baseModel->setContent(QList<TreeItem*>() << someRootItem);
-        mTreeView->setModel(pinModel);
+        //mTreeView->setModel(pinModel);
+        mTreeView->setModel(portModel);
         mContentLayout->addWidget(mTreeView);
 
         //--------End NetlistElementsModel
