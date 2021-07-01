@@ -124,10 +124,9 @@ namespace hal
             return m_inputs_net_ids;
         }
 
-        std::unordered_map<u32, double> z3Wrapper::get_boolean_influence() const
+        std::unordered_map<u32, double> z3Wrapper::get_boolean_influence(const u32 num_evaluations) const
         {
             std::unordered_map<u32, double> influences;
-            const u32 evaluation_count = 32000;
 
             // compile the c file
             std::string directory = "/tmp/boolean_influence_tmp/";
@@ -157,7 +156,7 @@ namespace hal
             // run boolean function program for every input
             for (auto it = m_inputs_net_ids.begin(); it < m_inputs_net_ids.end(); it++)
             {
-                const std::string run_command = program_name + " " + std::to_string(*it) + " " + std::to_string(evaluation_count) + " 2>&1";
+                const std::string run_command = program_name + " " + std::to_string(*it) + " " + std::to_string(num_evaluations) + " 2>&1";
 
                 std::array<char, 128> buffer;
                 std::string result;
@@ -177,7 +176,7 @@ namespace hal
                 pclose(pipe);
 
                 const u32 count = std::stoi(result);
-                double cv       = double(count) / double(evaluation_count);
+                double cv       =  (double)(count) / (double)(num_evaluations);
 
                 log_debug("z3_utils", "calculation done");
 
@@ -202,10 +201,11 @@ namespace hal
             return s.to_smt2();
         }
 
-        bool z3Wrapper::write_verilog_file(const std::filesystem::path& path) const
+        bool z3Wrapper::write_verilog_file(const std::filesystem::path& path, const std::map<u32, bool>& control_mapping) const
         {
             // Convert z3 expr to boolean function in verilog
             auto converter    = VerilogConverter();
+            converter.set_control_mapping(control_mapping);
             auto verilog_file = converter.convert_z3_expr_to_func(*this);
 
             // parse out verilog function into file
@@ -273,6 +273,8 @@ namespace hal
                 to_vec.push_back(to);
                 m_expr = std::make_unique<z3::expr>(m_expr->substitute(from_vec, to_vec));
             }
+
+            m_expr = std::make_unique<z3::expr>(m_expr->simplify());
         }
 
         void z3Wrapper::remove_static_inputs(const Netlist* nl) {
