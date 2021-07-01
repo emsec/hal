@@ -25,6 +25,8 @@
 
 #include <QDialog>
 #include <QString>
+#include <QList>
+#include <QMap>
 
 class QComboBox;
 class QCheckBox;
@@ -32,6 +34,7 @@ class QLineEdit;
 
 namespace hal {
 
+    class GateLibrary;
     class ImportNetlistDialog : public QDialog
     {
         Q_OBJECT
@@ -39,10 +42,15 @@ namespace hal {
         QLineEdit* mEditProjectdir;
         QComboBox* mComboGatelib;
         QCheckBox* mCheckMoveNetlist;
+        QCheckBox* mCheckCopyGatelib;
+
+        QList<const GateLibrary*> mGateLibraries;
+        QMap<QString,int> mGateLibraryMap;
     public:
         ImportNetlistDialog(const QString& filename, QWidget* parent = nullptr);
         QString projectDirectory() const;
         QString gateLibrary() const;
         bool isMoveNetlistChecked() const;
+        bool isCopyGatelibChecked() const;
     };
 }

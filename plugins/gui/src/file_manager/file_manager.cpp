@@ -95,7 +95,7 @@ namespace hal
         if (!mShadowFileName.isEmpty() && mAutosaveEnabled)
         {
             log_info("gui", "saving a backup in case something goes wrong...");
-            netlist_serializer::serialize_to_file(gNetlist, mShadowFileName.toStdString());
+            ProjectManager::instance()->serialize_netlist(gNetlist, true);
         }
     }
 
@@ -140,6 +140,12 @@ namespace hal
         }
     }
 
+    void FileManager::emitProjectSaved(QString& projectDir, QString& file)
+    {
+        Q_EMIT projectSaved(projectDir, file);
+        gGraphContextManager->handleSaveTriggered();
+    }
+
     void FileManager::projectSuccessfullyLoaded(QString& projectDir, QString& file)
     {
         watchFile(file);
@@ -181,12 +187,10 @@ namespace hal
         ImportNetlistDialog ind(filename, qApp->activeWindow());
         if (ind.exec() != QDialog::Accepted) return;
         QString projdir = ind.projectDirectory();
-        if (QFileInfo(projdir).exists())
-        {
-            QMessageBox::warning(qApp->activeWindow(),"Aborted", "Project directory <" + projdir + "> already exists");
-            return;
-        }
-        if (!QDir().mkpath(projdir))
+        if (projdir.isEmpty()) return;
+
+        ProjectManager* pm = ProjectManager::instance();
+        if (!pm->create_project_directory(projdir.toStdString()))
         {
             QMessageBox::warning(qApp->activeWindow(),"Aborted", "Error creating project directory <" + projdir + ">");
             return;
@@ -200,8 +204,9 @@ namespace hal
             QDir().rename(filename,netlistFilename);
         }
 
-        ProjectManager* pm = ProjectManager::instance();
-        pm->set_project_directory(projdir.toStdString());
+        LogManager& lm              = LogManager::get_instance();
+        std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
+        lm.set_file_name(lpath);
 
         deprecatedOpenFile(netlistFilename);
     }
@@ -209,8 +214,7 @@ namespace hal
     void FileManager::openProject(QString projPath)
     {
         ProjectManager* pm = ProjectManager::instance();
-        pm->set_project_directory(projPath.toStdString());
-        if (!pm->deserialize())
+        if (!pm->open_project_directory(projPath.toStdString()))
         {
             QString errorMsg = QString("Error opening project <%1>").arg(projPath);
             log_error("gui", "{}", errorMsg.toStdString());
@@ -224,10 +228,9 @@ namespace hal
         QString filename = QString::fromStdString(pm->get_netlist_filename());
         projectSuccessfullyLoaded(projPath, filename);
 
-        LogManager& lm                 = LogManager::get_instance();
-        ProjectDirectory pdir = pm->get_project_directory();
-        std::filesystem::path log_path = pdir.get_filename(".log");
-        lm.set_file_name(log_path);
+        LogManager& lm              = LogManager::get_instance();
+        std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
+        lm.set_file_name(lpath);
     }
 
     void FileManager::deprecatedOpenFile(QString filename)
@@ -281,9 +284,6 @@ namespace hal
             }
         }
 
-        LogManager& lm                 = LogManager::get_instance();
-        std::filesystem::path log_path = filename.toStdString();
-        lm.set_file_name(std::filesystem::path(log_path.replace_extension(".log")));
 
         if (filename.endsWith(".hal"))
         {

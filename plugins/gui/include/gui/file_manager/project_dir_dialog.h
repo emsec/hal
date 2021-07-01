@@ -54,7 +54,7 @@ namespace hal {
     public:
         void accept() override;
 
-        ProjectDirDialog(QWidget* parent = nullptr);
+        ProjectDirDialog(const QString& title, QWidget* parent = nullptr);
 
         bool eventFilter(QObject* obj, QEvent* event);
     };

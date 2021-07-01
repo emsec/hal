@@ -30,10 +30,35 @@
 #include <fstream>
 #include <QDesktopServices>
 #include "gui/file_manager/file_manager.h"
+#include "hal_core/utilities/project_manager.h"
+#include "hal_core/utilities/project_directory.h"
 #include <QDebug>
 
 namespace hal
 {
+    PythonDefaultDirectory::PythonDefaultDirectory()
+        : ProjectSerializer("pydefault")
+    {
+        ProjectManager* pm = ProjectManager::instance();
+        if (pm->get_project_status()==ProjectManager::None)
+            mLast = QDir::currentPath();
+        else
+            mLast= QDir(QString::fromStdString(pm->get_project_directory().string())).absoluteFilePath("py/");
+    }
+
+    ProjectFilelist* PythonDefaultDirectory::serialize(Netlist* netlist, const ProjectDirectory& haldir)
+    {
+        Q_UNUSED(netlist);
+        mLast = QDir(QString::fromStdString(haldir.string())).absoluteFilePath("py/");
+        return nullptr;
+    }
+
+    void PythonDefaultDirectory::deserialize(Netlist* netlist, const ProjectDirectory& haldir)
+    {
+        Q_UNUSED(netlist);
+        mLast = QDir(QString::fromStdString(haldir.string())).absoluteFilePath("py/");
+    }
+
     PythonEditor::PythonEditor(QWidget* parent)
         : ContentWidget("Python Editor", parent), PythonContextSubscriber(), mSearchbar(new Searchbar()), mActionOpenFile(new Action(this)), mActionRun(new Action(this)),
           mActionSave(new Action(this)), mActionSaveAs(new Action(this)), mActionToggleMinimap(new Action(this)), mActionNewFile(new Action(this))
@@ -41,8 +66,6 @@ namespace hal
         ensurePolished();
         mNewFileCounter = 0;
         mLastClickTime  = 0;
-
-        mLastOpenedPath = QDir::currentPath();
 
         mTabWidget = new QTabWidget(this);
         mTabWidget->setTabsClosable(true);
@@ -434,7 +457,7 @@ namespace hal
         QString text  = "Python Scripts(*.py)";
 
         // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
-        QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, mLastOpenedPath, text, nullptr);
+        QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, mDefaultPath.last(), text, nullptr);
 
         if (file_names.isEmpty())
         {
@@ -466,7 +489,7 @@ namespace hal
             tabLoadFile(mTabWidget->count() - 1, fileName);
         }
 
-        mLastOpenedPath = QFileInfo(file_names.last()).absolutePath();
+        mDefaultPath.setLast(QFileInfo(file_names.last()).absolutePath());
     }
 
     void PythonEditor::tabLoadFile(u32 index, QString fileName)
@@ -514,7 +537,7 @@ namespace hal
 
         if (ask_path || current_editor->getFileName().isEmpty())
         {
-            selected_file_name = QFileDialog::getSaveFileName(nullptr, title, mLastOpenedPath, text, nullptr, QFileDialog::DontUseNativeDialog);
+            selected_file_name = QFileDialog::getSaveFileName(nullptr, title, mDefaultPath.last(), text, nullptr, QFileDialog::DontUseNativeDialog);
             if (selected_file_name.isEmpty())
                 return false;
 
@@ -522,7 +545,7 @@ namespace hal
                 selected_file_name.append(".py");
 
             current_editor->set_file_name(selected_file_name);
-            mLastOpenedPath = selected_file_name;
+            mDefaultPath.setLast(QFileInfo(selected_file_name).path());
 
             // Remove an existing snapshot and update its location
             removeSnapshotFile(current_editor);

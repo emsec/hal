@@ -21,7 +21,7 @@ namespace hal {
 
     ProjectFilelist* GroupingSerializer::serialize(Netlist* netlist, const ProjectDirectory& haldir)
     {
-        std::filesystem::path groupingFilePath = haldir.get_filename(".halg");
+        std::filesystem::path groupingFilePath = haldir.get_default_filename(".halg");
 
         JsonWriteDocument doc;
 
@@ -68,7 +68,7 @@ namespace hal {
 
     void GroupingSerializer::deserialize(Netlist* netlist, const ProjectDirectory& haldir)
     {        
-        std::filesystem::path groupingFilePath = haldir.get_filename(".halg");
+        std::filesystem::path groupingFilePath = haldir.get_default_filename(".halg");
 
         FILE* grpFile = fopen(groupingFilePath.string().c_str(), "rb");
         if (grpFile == NULL)

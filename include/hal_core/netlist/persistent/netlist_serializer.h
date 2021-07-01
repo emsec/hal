@@ -46,7 +46,7 @@ namespace hal
          * @param[in] hal_file - The destination .hal file.
          * @returns True on success, false otherwise.
          */
-        NETLIST_API bool serialize_to_file(Netlist* netlist, const std::filesystem::path& hal_file);
+        NETLIST_API bool xserialize_to_file(Netlist* netlist, const std::filesystem::path& hal_file);
 
         /**
          * Deserializes a netlist from a .hal file.

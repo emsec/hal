@@ -41,34 +41,124 @@ namespace hal
 
     class ProjectManager
     {
+    public:
+        enum ProjectStatus {None, Opened, Saved};
     private:
         ProjectManager();
 
         static ProjectManager* inst;
 
+        ProjectStatus m_project_status;
         Netlist* m_netlist_save;
         std::unique_ptr<Netlist> m_netlist_load;
         ProjectDirectory m_proj_dir;
-        bool m_user_provided_directory;
         std::string m_proj_file;
         std::string m_netlist_file;
+        std::string m_gatelib_path;
         std::unordered_map<std::string,ProjectSerializer*> m_serializer;
         std::unordered_map<std::string,ProjectFilelist*> m_filelist;
 
         void parse_filelist(const std::string& tagname, rapidjson::Value& farray);
     public:
+        /**
+         * Returns the singleton instance which gets constructed upon first call
+         * @return the singleton instance
+         */
         static ProjectManager* instance();
+
+        /**
+         * Registers an external serializer identified by unique tagname
+         *
+         * @param tagname unique tagname of serializer
+         * @param serializer serializer instance which must be derived from ProjectSerializer
+         */
         void register_serializer(const std::string& tagname, ProjectSerializer* serializer);
+
+        /**
+         * Returns the current project status (None, Opened, Saved)
+         *
+         * @return project status
+         */
+        ProjectStatus get_project_status() const;
+
+        /**
+         * Returns list of files to be parsed by external serializer
+         *
+         * @param tagname unique tagname of serializer
+         * @return list of files
+         */
         ProjectFilelist* get_filelist(const std::string& tagname);
+
+        /**
+         * Returns parsed netlist which is (temporarily) owned by project manager
+         *
+         * @return unique pointer to netlist
+         */
         std::unique_ptr<Netlist>& get_netlist();
-        bool serialize() const;
+
+        /**
+         * Serialize hal project
+         *
+         * @return true if OK, false if any error
+         */
+        bool yserialize() const;
+
+        /**
+         * Deserialize hal project
+         *
+         * @return true if OK, false if any error
+         */
         bool deserialize();
+
+        /**
+         * Dump for debugging purpose
+         */
         void dump() const;
-        void set_netlist_file(const std::string& fname, Netlist* netlist);
-        void set_project_directory(const std::string& path);
-        bool create_project_directory() const;
-        bool has_user_provided_directory() const;
+
+        /**
+         * Set gate library path name
+         *
+         * @param fname name of gate library path
+         */
+        void set_gatelib_path(const std::string& glpath);
+
+        /**
+         * Serialize netlist to project directory
+         *
+         * @param netlist Netlist to save
+         * @param shadow true if called from autosave procedure
+         * @param fname user provided filename. Use default filename if empty
+         */
+        bool serialize_netlist(Netlist* netlist, bool shadow = false, const std::string& fname = std::string());
+
+        /**
+         * Open project in directory path
+         *
+         * @param path to project directory
+         * @return true on success, false on error
+         */
+        bool open_project_directory(const std::string& path);
+
+        /**
+         * Create project directory. Project directory must not exist
+         *
+         * @param path to project directory
+         * @return true on success, false on error
+         */
+        bool create_project_directory(const std::string& path);
+
+        /**
+         * Getter for netlist filename
+         *
+         * @return the netlist filename
+         */
         std::string get_netlist_filename() const;
+
+        /**
+         * Returns project directory
+         *
+         * @return project directory
+         */
         const ProjectDirectory& get_project_directory() const;
 
         /**

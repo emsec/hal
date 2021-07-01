@@ -1,4 +1,7 @@
 #include "gui/file_manager/import_netlist_dialog.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
+
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -21,6 +24,7 @@ namespace hal {
         setWindowTitle("Import netlist");
         layout->addWidget(new QLabel("Create new hal project from netlist\n" + filename, this), irow++, 0, Qt::AlignLeft);
         layout->addItem(new QSpacerItem(30,30),irow++,0);
+
         layout->addWidget(new QLabel("Project directory:",this),irow++,0,Qt::AlignLeft);
         mProjectdir = filename;
         mProjectdir.remove(QRegularExpression("\\.\\w*$"));
@@ -28,13 +32,24 @@ namespace hal {
         mEditProjectdir->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
         layout->addWidget(mEditProjectdir,irow++,0);
         layout->addItem(new QSpacerItem(30,30),irow++,0);
+
         layout->addWidget(new QLabel("Gate library:",this),irow++,0,Qt::AlignLeft);
         mComboGatelib = new QComboBox(this);
+        mComboGatelib->addItem("(Auto detect)");
+        for (const GateLibrary* glib : gate_library_manager::get_gate_libraries())
+        {
+            mGateLibraryMap.insert(QString::fromStdString(glib->get_name()),mGateLibraries.size());
+            mGateLibraries.append(glib);
+        }
+        mComboGatelib->addItems(mGateLibraryMap.keys());
         mComboGatelib->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
         layout->addWidget(mComboGatelib,irow++,0);
+
         layout->addItem(new QSpacerItem(30,30),irow++,0);
         mCheckMoveNetlist = new QCheckBox("Move imported netlist into project directory");
         layout->addWidget(mCheckMoveNetlist,irow++,0,Qt::AlignLeft);
+        mCheckCopyGatelib = new QCheckBox("Copy gate library into project directory");
+        layout->addWidget(mCheckCopyGatelib,irow++,0,Qt::AlignLeft);
         layout->addItem(new QSpacerItem(30,30),irow++,0);
         QDialogButtonBox* dbb = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, Qt::Horizontal, this);
         connect(dbb,&QDialogButtonBox::accepted,this,&QDialog::accept);
@@ -55,5 +70,10 @@ namespace hal {
     bool ImportNetlistDialog::isMoveNetlistChecked() const
     {
         return mCheckMoveNetlist->isChecked();
+    }
+
+    bool ImportNetlistDialog::isCopyGatelibChecked() const
+    {
+        return mCheckCopyGatelib->isChecked();
     }
 }

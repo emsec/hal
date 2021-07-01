@@ -34,9 +34,18 @@ namespace hal {
 
     class ProjectDirectory : public std::filesystem::path
     {
+        static const std::string s_shadow_dir;
     public:
         ProjectDirectory(const std::string& dirname = std::string());
 
-        std::filesystem::path get_filename(const std::string& extension = std::string()) const;
+        std::filesystem::path get_default_filename(const std::string& extension = std::string()) const;
+
+        std::filesystem::path get_filename(const std::string& relative_filename) const;
+
+        std::filesystem::path get_shadow_filename(const std::string& extension = std::string()) const;
+
+        std::filesystem::path get_shadow_dir() const;
+
+        static ProjectDirectory generateRandom();
     };
 }

@@ -18,8 +18,8 @@ namespace hal
 {
     RecentFilesWidget::RecentFilesWidget(QWidget* parent) : QFrame(parent), mLayout(new QVBoxLayout())
     {
-        connect(FileManager::get_instance(), &FileManager::fileOpened, this, &RecentFilesWidget::handleFileOpened);
-        connect(FileManager::get_instance(), &FileManager::projectOpened, this, &RecentFilesWidget::handleProjectOpened);
+        connect(FileManager::get_instance(), &FileManager::projectOpened, this, &RecentFilesWidget::handleProjectUsed);
+        connect(FileManager::get_instance(), &FileManager::projectSaved,  this, &RecentFilesWidget::handleProjectUsed);
 
         mLayout->setContentsMargins(0, 0, 0, 0);
         mLayout->setSpacing(0);
@@ -46,31 +46,34 @@ namespace hal
         }
     }
 
-    void RecentFilesWidget::handleProjectOpened(const QString& projDir, const QString& fileName)
+    void RecentFilesWidget::handleProjectUsed(const QString& projDir, const QString& fileName)
     {
         Q_UNUSED(fileName);
-        handleFileOpened(projDir);
+        prependPath(projDir);
     }
 
-    void RecentFilesWidget::handleFileOpened(const QString& fileName)
+    void RecentFilesWidget::prependPath(const QString &path)
     {
-        for (const RecentFileItem* item : mItems)
+        auto it = mItems.begin();
+        int count = 0;
+        while (it != mItems.end())
         {
-            if (item->file() == fileName)
-                return; // DEBUG
+            // order of conditions is important here, don't count path entry which gets erased
+            if ((*it)->file() == path || count++ >= sMaxItems - 1)
+            {
+                RecentFileItem* item = *it;
+                mLayout->removeWidget(item);
+                it = mItems.erase(it);
+                item->deleteLater();
+            }
+            else
+                ++it;
         }
 
-        RecentFileItem* item = new RecentFileItem(fileName);
-        mItems.prepend(item);
+        RecentFileItem* item = new RecentFileItem(path, this);
         mLayout->insertWidget(0, item);
-
-        if (mItems.size() > 14)
-        {
-            // HACKY, FIX
-            RecentFileItem* last_item = mItems.last();
-            mItems.removeLast();
-            mLayout->removeWidget(last_item);
-        }
+        mItems.prepend(item);
+        item->repolish();
 
         updateSettings();
     }
@@ -88,7 +91,7 @@ namespace hal
     void RecentFilesWidget::readSettings()
     {
         gGuiState->beginReadArray("recent_files");
-        for (int i = 0; i < 14; ++i)
+        for (int i = 0; i < sMaxItems; ++i)
         {
             gGuiState->setArrayIndex(i);
             QString file = gGuiState->value("file").toString();
@@ -137,7 +140,7 @@ namespace hal
             gGuiState->setArrayIndex(index);
             gGuiState->setValue("file", item->file());
             index++;
-            if(index == 14)
+            if(index >= sMaxItems)
                 break;
         }
         gGuiState->endArray();

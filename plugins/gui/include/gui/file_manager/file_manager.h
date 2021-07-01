@@ -83,6 +83,13 @@ namespace hal
          */
         void watchFile(const QString& fileName);
 
+        /**
+         * This function is called by openDirectory when the hal was saved.
+         *
+         * @param projectDir - the project directory
+         * @param file - the file name
+         */
+        void emitProjectSaved(QString& projectDir, QString& file);
 
     Q_SIGNALS:
         /**
@@ -92,7 +99,21 @@ namespace hal
          */
         void fileOpened(const QString& fileName);
 
+        /**
+         * Q_SIGNAL that is emitted when a project is successfully opened.
+         *
+         * @param projectDir - The project directory
+         * @param fileName - The filename.
+         */
         void projectOpened(QString projectDir, QString fileName);
+
+        /**
+         * Q_SIGNAL that is emitted when a project gets saved.
+         *
+         * @param projectDir - The project directory
+         * @param fileName - The filename.
+         */
+        void projectSaved(QString projectDir, QString fileName);
 
         /**
          * Q_SIGNAL that is emitted when the file changed.

@@ -524,7 +524,7 @@ namespace hal
             }
         }    // namespace
 
-        bool serialize_to_file(Netlist* nl, const std::filesystem::path& hal_file)
+        bool xserialize_to_file(Netlist* nl, const std::filesystem::path& hal_file)
         {
             if (nl == nullptr)
             {
@@ -540,8 +540,6 @@ namespace hal
                 log_error("hdl_writer", "Cannot open or create file {}. Please verify that the file and the containing directory is writable!", hal_file.string());
                 return false;
             }
-
-            ProjectManager::instance()->set_netlist_file(hal_file.filename(),nl);
 
             rapidjson::Document document;
             document.SetObject();

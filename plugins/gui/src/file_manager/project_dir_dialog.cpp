@@ -8,9 +8,10 @@
 namespace hal {
 
 
-    ProjectDirDialog::ProjectDirDialog(QWidget* parent)
+    ProjectDirDialog::ProjectDirDialog(const QString &title, QWidget* parent)
         : QFileDialog(parent), mChooseButton(nullptr), mSelectable(false)
     {
+        setWindowTitle(title);
         setFilter(QDir::Dirs | QDir::NoDot  | QDir::NoDotDot  );
         setDirectory("/home/langhein/netlist");
         setFileMode(QFileDialog::DirectoryOnly);

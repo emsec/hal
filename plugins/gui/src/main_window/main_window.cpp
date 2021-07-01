@@ -304,9 +304,6 @@ namespace hal
                 this,
                 &MainWindow::handleActionUndo);    //        connect(mActionRunSchedule, &Action::triggered, PluginScheduleManager::get_instance(), &PluginScheduleManager::runSchedule);
 
-        //connect(this, &MainWindow::saveTriggered, gContentManager, &ContentManager::handleSaveTriggered);
-        connect(this, &MainWindow::saveTriggered, gGraphContextManager, &GraphContextManager::handleSaveTriggered);
-
         connect(UserActionManager::instance(), &UserActionManager::canUndoLastAction, this, &MainWindow::enableUndo);
         connect(sSettingStyle, &SettingsItemDropdown::intChanged, this, &MainWindow::reloadStylsheet);
         enableUndo(false);
@@ -589,7 +586,7 @@ namespace hal
             return;
         }
 
-        ProjectDirDialog pdd(this);
+        ProjectDirDialog pdd("Open netlist", this);
         if (pdd.exec() != QDialog::Accepted) return;
         if (pdd.selectedFiles().isEmpty()) return;
         ActionOpenNetlistFile* act = new ActionOpenNetlistFile(pdd.selectedFiles().at(0),true);
@@ -668,41 +665,56 @@ namespace hal
 
     void MainWindow::handleSaveTriggered()
     {
-        saveHandler(FileManager::get_instance()->fileName());
+        ProjectManager* pm = ProjectManager::instance();
+        if (pm->get_project_status() == ProjectManager::None) return;
+        QString  projectDir = QString::fromStdString(pm->get_project_directory().string());
+        saveHandler(projectDir);
+        gContentManager->setWindowTitle(projectDir);
     }
 
     QString MainWindow::saveHandler(const QString &projectDir)
     {
         if (!gNetlist) return QString();
 
-        QString newName(projectDir);
-
-        if (newName.isEmpty())
-        {
-            QString title = "Save Project";
-            QString text  = "HAL Directory Folder (*.hal)";
-
-            // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
-            newName = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr);
-            if (newName.isEmpty()) return QString();
-        }
+        QString saveProjectDir(projectDir);
 
         ProjectManager* pm = ProjectManager::instance();
-        if (!pm->has_user_provided_directory())
+
+        if (saveProjectDir.isEmpty())
         {
-            pm->set_project_directory(newName.toStdString());
-            pm->create_project_directory();
+            QString title = "Save Project";
+            QString text  = "HAL Directory Folder (*)";
+
+            // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
+            saveProjectDir = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr);
+            if (saveProjectDir.isEmpty()) return QString();
+
+            if (QFileInfo(saveProjectDir).exists())
+            {
+                QMessageBox::warning(this,"Save Error", "folder " + saveProjectDir + " already exists");
+                return QString();
+            }
+
+            if (pm->create_project_directory(saveProjectDir.toStdString()))
+            {
+                QMessageBox::warning(this,"Save Error", "cannot create folder " + saveProjectDir);
+                return QString();
+            }
         }
 
-        std::filesystem::path netlistPath = pm->get_project_directory().get_filename(".hal");
-        netlist_serializer::serialize_to_file(gNetlist, netlistPath);
+        QString qNetlistPath = QString::fromStdString(pm->get_project_directory().get_default_filename(".hal"));
 
-        pm->serialize();
+        if (!pm->serialize_netlist(gNetlist))
+        {
+            log_warning("gui", "error saving netlist to <" + qNetlistPath.toStdString() + ">");
+            return QString();
+        }
 
         gFileStatusManager->netlistSaved();
-        FileManager::get_instance()->watchFile(QString::fromStdString(netlistPath.string()));
 
-        Q_EMIT saveTriggered();
+        FileManager* fm = FileManager::get_instance();
+        fm->watchFile(qNetlistPath);
+        fm->emitProjectSaved(saveProjectDir, qNetlistPath);
 
         return QString::fromStdString(pm->get_project_directory().string());
     }

@@ -319,12 +319,6 @@ namespace hal
 
         static SettingsItemDropdown* sSettingStyle;
 
-    Q_SIGNALS:
-        /**
-         * Q_SIGNAL that is emitted, after the current project is stored as a .hal file.
-         */
-        void saveTriggered();
-
     public Q_SLOTS:
         /**
          * Q_SLOT to quit the program.
@@ -380,14 +374,14 @@ namespace hal
 
         /**
          * Q_SLOT to save the current project as a .hal file.
-         * Emits saveTriggered().
+         * call to FileManager::emitSaveTriggered().
          */
         void handleSaveTriggered();
 
         /**
          * Q_SLOT to save the current project as a new .hal file.
          * Will query for new name.
-         * Emits saveTriggered().
+         * call to FileManager::emitSaveTriggered().
          */
         void handleSaveAsTriggered();
 
