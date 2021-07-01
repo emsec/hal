@@ -59,6 +59,8 @@ namespace hal
         std::unordered_map<std::string,ProjectFilelist*> m_filelist;
 
         void parse_filelist(const std::string& tagname, rapidjson::Value& farray);
+        bool serialize_to_projectfile() const;
+        bool serialize_external();
     public:
         /**
          * Returns the singleton instance which gets constructed upon first call
@@ -82,6 +84,13 @@ namespace hal
         ProjectStatus get_project_status() const;
 
         /**
+         * Set current project status to new value (None, Opened, Saved)
+         *
+         * @param stat
+         */
+        void set_project_status(ProjectStatus stat);
+
+        /**
          * Returns list of files to be parsed by external serializer
          *
          * @param tagname unique tagname of serializer
@@ -101,7 +110,7 @@ namespace hal
          *
          * @return true if OK, false if any error
          */
-        bool yserialize() const;
+//        bool yserialize() const;
 
         /**
          * Deserialize hal project

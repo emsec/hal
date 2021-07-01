@@ -152,12 +152,14 @@ namespace hal
         Q_EMIT projectOpened(projectDir, file);
         gNetlistRelay->debugHandleFileOpened();
         gContentManager->handleOpenDocument(file);
+        ProjectManager::instance()->set_project_status(ProjectManager::Opened);
     }
 
     void FileManager::fileSuccessfullyLoaded(QString file)
     {
         watchFile(file);
         Q_EMIT fileOpened(file);
+        ProjectManager::instance()->set_project_status(ProjectManager::Opened);
     }
 
     void FileManager::removeShadowFile()

@@ -68,7 +68,15 @@ namespace hal {
         if (std::filesystem::exists(m_proj_dir)) return false;
         if (!std::filesystem::create_directory(m_proj_dir)) return false;
         m_netlist_file = m_proj_dir.get_default_filename(".hal");
-        return yserialize();
+
+        std::filesystem::create_directory(m_proj_dir.get_filename("py"));
+        std::filesystem::create_directory(m_proj_dir.get_filename(ProjectDirectory::s_shadow_dir));
+        return serialize_to_projectfile();
+    }
+
+    void ProjectManager::set_project_status(ProjectStatus stat)
+    {
+        m_project_status = stat;
     }
 
     ProjectManager::ProjectStatus ProjectManager::get_project_status() const
@@ -100,7 +108,9 @@ namespace hal {
 
         if (!netlist_serializer::xserialize_to_file(m_netlist_save, m_netlist_file)) return false;
 
-        return yserialize();
+        if (!serialize_external()) return false;
+
+        return serialize_to_projectfile();
     }
 
     std::string ProjectManager::get_netlist_filename() const
@@ -168,32 +178,46 @@ namespace hal {
         m_filelist[tagname] = flist;
     }
 
-    bool ProjectManager::yserialize() const
+
+    bool ProjectManager::serialize_external()
     {
         if (!m_netlist_save) return false;
 
-        std::filesystem::path projFilePath(m_proj_dir);
-        projFilePath.append(s_project_file);
+        m_filelist.clear();
+
+        for (auto it = m_serializer.begin(); it != m_serializer.end(); ++it)
+        {
+            ProjectFilelist* pfl = it->second->serialize(m_netlist_save, m_proj_dir);
+            if (!pfl) continue;
+            m_filelist[it->first] = pfl;
+        }
+        return true;
+    }
+
+
+    bool ProjectManager::serialize_to_projectfile() const
+    {
+        std::filesystem::path projFilePath = m_proj_dir.get_filename(s_project_file);
 
         JsonWriteDocument doc;
         doc["serialization_format_version"] = SERIALIZATION_FORMAT_VERSION;
         doc["netlist"] = m_netlist_file;
         doc["gate_library"] = m_gatelib_path;
 
-        JsonWriteObject& serial = doc.add_object("serializer");
-        for (auto it = m_serializer.begin(); it != m_serializer.end(); ++it)
+        if (!m_filelist.empty())
         {
-            ProjectFilelist* pfl = it->second->serialize(m_netlist_save, m_proj_dir);
-            if (!pfl) continue;
-            JsonWriteArray& jsarray = serial.add_array(it->first);
-            for (const std::string& fname : *pfl)
-                jsarray << fname;
-            jsarray.close();
+             JsonWriteObject& serial = doc.add_object("serializer");
+             for (auto it = m_filelist.begin(); it != m_filelist.end(); ++it)
+             {
+                 if (it->second->empty()) continue;
+                 JsonWriteArray& jsarray = serial.add_array(it->first);
+                 for (const std::string& fname : *(it->second))
+                     jsarray << fname;
+                 jsarray.close();
+             }
+             serial.close();
         }
-        serial.close();
-        doc.serialize(projFilePath.string());
-
-        return true;
+        return doc.serialize(projFilePath.string());
     }
 
     void ProjectManager::dump() const

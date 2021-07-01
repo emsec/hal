@@ -34,6 +34,8 @@ namespace hal {
 
     class ProjectDirectory : public std::filesystem::path
     {
+        friend class ProjectManager;
+
         static const std::string s_shadow_dir;
     public:
         ProjectDirectory(const std::string& dirname = std::string());
