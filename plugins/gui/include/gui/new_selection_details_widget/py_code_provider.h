@@ -41,13 +41,16 @@ namespace hal
         static QString pyCodeGateModule(u32 gateId);
         static QString pyCodeGateBooleanFunction(u32 gateId, QString booleanFunctionName);
         static QString pyCodeGateClearPresetBehavior(u32 gateId);
+        static QString pyCodeGateData(u32 gateId, QString category, QString key);
 
         static QString pyCodeNetName(u32 netId);
         static QString pyCodeNetType(u32 netId);
+        static QString pyCodeNetData(u32 netId, QString category, QString key);
 
         static QString pyCodeModuleName(u32 moduleId);
         static QString pyCodeModuleType(u32 moduleId);
         static QString pyCodeModuleModule(u32 moduleId);
+        static QString pyCodeModuleData(u32 moduleId, QString category, QString key);
 
     private:
         static QString buildPyCode(const QString& prefix, const QString& suffix, u32 id);

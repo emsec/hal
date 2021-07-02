@@ -1,13 +1,16 @@
 
 #include "gui/new_selection_details_widget/models/data_table_model.h"
 #include <algorithm>
+#include <QToolTip>
 
 
 namespace hal
 {
     DataTableModel::DataTableModel(QObject* parent) : QAbstractTableModel(parent) 
     {
-        DataEntry emptyEntry;
+        mKeyFont = QFont("Iosevka");
+        mKeyFont.setBold(true);
+        mKeyFont.setPixelSize(13);
     }
 
     int DataTableModel::columnCount(const QModelIndex &parent) const
@@ -26,10 +29,11 @@ namespace hal
     {
         if (role == Qt::DisplayRole){
             if(index.column() == 0){
-                return mDataEntries[index.row()].key;
+                return (mDataEntries[index.row()].key + ":");
             }
             else{
-                return mDataEntries[index.row()].value;
+                QString valueText = getValueTextByDataType(mDataEntries[index.row()].value, mDataEntries[index.row()].dataType);
+                return valueText;
             }
         }
 
@@ -37,11 +41,29 @@ namespace hal
             return Qt::AlignLeft;
         }
 
+        else if (role == Qt::FontRole){
+            if (index.column() == 0){
+                return mKeyFont;
+            }
+        }
+
+        else if (role == Qt::ToolTipRole){
+            if (index.column() == 0){
+                return mDataEntries[index.row()].category;
+            }
+            else {
+                return mDataEntries[index.row()].dataType;
+            }
+        }
+
         return QVariant();
     }
 
     QVariant DataTableModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
+        Q_UNUSED(section)
+        Q_UNUSED(orientation)
+        Q_UNUSED(role)
         return QVariant();
     }
 
@@ -53,13 +75,49 @@ namespace hal
         return false;
     }
 
-    void DataTableModel::updateData(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dc)
+    DataTableModel::DataEntry DataTableModel::getEntryAtRow(int row) const
     {
-        //TODO
+        return mDataEntries.at(row);
+    }
 
+    void DataTableModel::updateData(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dataMap)
+    {
         Q_EMIT layoutAboutToBeChanged();
-        // ...
+        mDataEntries.clear();
+        for(const auto& [key, value] : dataMap)
+        {
+            DataEntry e;
+            e.category  = QString::fromStdString(std::get<0>(key));
+            e.key       = QString::fromStdString(std::get<1>(key));
+            e.dataType  = QString::fromStdString(std::get<0>(value));
+            e.value     = QString::fromStdString(std::get<1>(value));
+            
+            mDataEntries.append(e);
+        }
+        // The data is sorted by category first and then by key
+        /*qSort(mDataEntries.begin(), mDataEntries.end(), 
+            [](const DataEntry* a, const DataEntry* b) -> bool 
+                { 
+                    if(a->category == b->category)
+                        return (a->key < b->key);
+                    else
+                        return (a->category < b->category); 
+                });*/
         Q_EMIT layoutChanged();
+    }
+
+    QString DataTableModel::getValueTextByDataType(QString value, QString dataType) const
+    {
+        if(dataType == "string")
+        {
+            return QString("\"%1\"").arg(value);
+        }
+        else if(dataType == "bit_value" || dataType == "bit_vector")
+        {
+            return QString("0x%1").arg(value);
+        }
+        
+        return value;
     }
 
 } // namespace hal

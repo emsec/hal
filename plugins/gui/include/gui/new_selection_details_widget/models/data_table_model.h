@@ -25,31 +25,34 @@
 
 #include <QAbstractTableModel>
 #include <QString>
-#include <hal_core/netlist/gate.h>
+#include <QFont>
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/data_container.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/module.h"
 
 namespace hal {
 
     /**
      * @ingroup utility_widgets-selection_details
      *
-     * @brief A model for truth-tables
+     * @brief A model to display the data of a DataContainer
      *
-     * Passing this model a BooleanFunction (via setBooleanFunction) it stores the truth table of it in a table.
      */
     class DataTableModel : public QAbstractTableModel
     {
         Q_OBJECT
-    private:
-
+    public:
         struct DataEntry
         {
+            QString category;
             QString key; // 0 or 1 per entry
+            QString dataType;
             QString value; // "0", "1", "X" or "Z"
         };
 
-    public:
         /**
          * Constructor.
          *
@@ -104,16 +107,20 @@ namespace hal {
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
+        DataEntry getEntryAtRow(int row) const;
+
         /**
          * Fills the table with the given data in the form of key-value pairs.
          *
-         * @param id - The id of the item to which the data belongs.
          * @param dc - The data in the form of key - vlaue pairs.
          */
-        void updateData(u32 id, const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dc);
+        void updateData(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dc);
 
     private:
+        QString getValueTextByDataType(QString value, QString dataType) const;
+
         QList<DataEntry> mDataEntries;
+        QFont mKeyFont;
 
     };
 }
