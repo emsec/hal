@@ -220,7 +220,7 @@ namespace hal
         return state_to_successors;
     }
 
-    std::map<u64, std::vector<u64>> SolveFsmPlugin::solve_fsm(Netlist* nl,
+    std::map<u64, std::map<u64, std::vector<std::map<u32, u8>>>> SolveFsmPlugin::solve_fsm(Netlist* nl,
                                                               const std::vector<Gate*> state_reg,
                                                               const std::vector<Gate*> transition_logic,
                                                               const std::map<Gate*, bool> initial_state,
@@ -471,6 +471,7 @@ namespace hal
 
         // generate mapping
         std::map<u64, std::vector<u64>> state_to_successors;
+        std::map<u64, std::map<u64, std::vector<std::map<u32, u8>>>> state_to_transitions;
 
         for (const auto& t : all_transitions)
         {
@@ -480,10 +481,16 @@ namespace hal
                 state_to_successors.insert({t.starting_state, {}});
             }
 
-            state_to_successors.at(t.starting_state).push_back(t.end_state);
+            // init transition map
+            if (state_to_transitions.find(t.starting_state) == state_to_transitions.end())
+            {
+                state_to_transitions.insert({t.starting_state, {}});
+            }
+
+            state_to_transitions.at(t.starting_state).insert({t.end_state, t.input_ids_to_values});
         }
 
-        return state_to_successors;
+        return state_to_transitions;
     }
 
     std::map<Net*, Net*> SolveFsmPlugin::find_output_net_to_input_net(const std::set<Gate*> state_reg)
