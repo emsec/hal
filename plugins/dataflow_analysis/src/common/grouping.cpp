@@ -190,10 +190,6 @@ namespace hal
         return false;
     }
      */
-            if (!(this->operations_on_group_allowed[group_1_id] && this->operations_on_group_allowed[group_2_id]))
-            {
-                return false;
-            }
 
             bool merged_allowed_register_stage = false;
 

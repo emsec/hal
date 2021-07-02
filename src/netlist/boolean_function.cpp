@@ -81,6 +81,22 @@ namespace hal
         m_constant = constant;
     }
 
+    BooleanFunction::content_type BooleanFunction::get_type() const {
+        return m_content;
+    }
+
+    BooleanFunction::operation BooleanFunction::get_operation() const {
+        return m_op;
+    }
+
+    bool BooleanFunction::is_neg() const {
+        return m_invert;
+    }
+
+    const std::vector<BooleanFunction>& BooleanFunction::get_operands() const {
+        return m_operands;
+    }
+
     BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
     {
         return substitute(old_variable_name, BooleanFunction(new_variable_name));
@@ -1382,14 +1398,19 @@ namespace hal
         return output;
     }
 
-    z3::expr BooleanFunction::to_z3(z3::context& context) const
+    z3::expr BooleanFunction::to_z3(z3::context& context, const std::map<std::string, z3::expr>& var_to_expr) const
     {
         // convert bf variables to z3::expr
         std::unordered_map<std::string, z3::expr> input2expr;
 
         for (const std::string& var : get_variables())
         {
-            input2expr.emplace(var, context.bv_const(var.c_str(), 1));
+            if (var_to_expr.find(var) == var_to_expr.end()) {
+                input2expr.emplace(var, context.bv_const(var.c_str(), 1));
+            }
+            else {
+                input2expr.insert({var, var_to_expr.at(var)});
+            }
         }
 
         z3::expr expr = to_z3_internal(context, input2expr);
@@ -1460,4 +1481,239 @@ namespace hal
 
         return result;
     }
+
+    std::vector<std::unique_ptr<BooleanFunction::Node>> BooleanFunction::get_reverse_polish_notation() const {
+        switch (this->m_content)
+        {
+            case BooleanFunction::content_type::CONSTANT:
+            {
+                std::vector<std::unique_ptr<BooleanFunction::Node>> nodes = {};
+                nodes.emplace_back(BooleanFunction::OperandNode::make(m_constant, 1));
+                if (this->m_invert) 
+                {
+                    nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Not, 1));
+                }
+                return nodes;
+            }
+            case BooleanFunction::content_type::VARIABLE:
+            {
+                std::vector<std::unique_ptr<BooleanFunction::Node>> nodes = {};
+                nodes.emplace_back(BooleanFunction::OperandNode::make(m_variable, 1));
+                if (this->m_invert) 
+                {
+                    nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Not, 1));
+                }
+                return nodes;
+            } 
+            case BooleanFunction::content_type::TERMS: 
+            {
+                std::vector<std::unique_ptr<BooleanFunction::Node>> nodes = {};
+                for (const auto& operand : this->m_operands) {
+                    for (auto&& node : operand.get_reverse_polish_notation()) {
+                        nodes.emplace_back(std::move(node));
+                    }
+                }
+
+                switch (this->m_op) 
+                {
+                    case BooleanFunction::operation::AND: nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::And, 1)); break;
+                    case BooleanFunction::operation::OR:  nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Or, 1)); break;
+                    case BooleanFunction::operation::XOR: nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Xor, 1)); break;
+                }
+
+                if (this->m_invert) 
+                {
+                    nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Not, 1));
+                }
+
+                return nodes;
+            }
+
+            // this statement should never be reached
+            default: return {};
+        }
+    }
+
+    BooleanFunction::Node::Node(u16 _type, u16 _size) : 
+        type(_type), size(_size) {}
+
+    bool BooleanFunction::Node::operator==(const Node& other) const
+    {
+        if (this->is_operation() && other.is_operation()) {
+        return static_cast<const OperationNode&>(*this) == static_cast<const OperationNode&>(other);
+        }
+        if (this->is_operand() && other.is_operand()) {
+            return static_cast<const OperandNode&>(*this) == static_cast<const OperandNode&>(other);
+        }
+
+        return false;
+    }
+    
+    bool BooleanFunction::Node::operator!=(const Node& other) const
+    {
+        return !(*this == other);
+    }
+    
+    bool BooleanFunction::Node::operator <(const Node& other) const
+    {
+        if (this->is_operation() && other.is_operation()) {
+            return static_cast<const OperationNode&>(*this) < static_cast<const OperationNode&>(other);
+        }
+        if (this->is_operand() && other.is_operand()) {
+            return static_cast<const OperandNode&>(*this) < static_cast<const OperandNode&>(other);
+        }
+        return std::tie(type, size) < std::tie(other.type, other.size);
+    }
+
+    u16 BooleanFunction::Node::get_arity() const {
+        return BooleanFunction::Node::get_arity(this->type);
+    }
+
+    u16 BooleanFunction::Node::get_arity(u16 type) {
+        static const std::map<u16, u16> type2arity = {
+            {BooleanFunction::NodeType::And, 2},
+            {BooleanFunction::NodeType::Or,  2},
+            {BooleanFunction::NodeType::Not, 1},
+            {BooleanFunction::NodeType::Xor, 2},
+
+            {BooleanFunction::NodeType::Add, 2},
+
+            {BooleanFunction::NodeType::Concat, 2},
+            {BooleanFunction::NodeType::Zext, 2},
+            {BooleanFunction::NodeType::Slice, 3},
+
+            {BooleanFunction::NodeType::Constant, 0},
+            {BooleanFunction::NodeType::Index, 0},
+            {BooleanFunction::NodeType::Variable, 0},
+        };
+
+        return type2arity.at(type);
+    }
+
+    bool BooleanFunction::Node::is(u16 _type) const 
+    {
+        return this->type == _type;   
+    }
+
+    bool BooleanFunction::Node::is_constant() const 
+    {
+        return this->is(BooleanFunction::NodeType::Constant);
+    }
+
+    bool BooleanFunction::Node::is_index() const 
+    {
+        return this->is(BooleanFunction::NodeType::Index);
+    }
+
+    bool BooleanFunction::Node::is_variable() const 
+    { 
+        return this->is(BooleanFunction::NodeType::Variable); 
+    }
+
+    bool BooleanFunction::Node::is_operation() const 
+    {
+        return !this->is_constant() && !this->is_variable(); 
+    }
+    
+    bool BooleanFunction::Node::is_operand() const 
+    {
+        return !this->is_operation(); 
+    }
+
+    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperationNode::make(u16 type, u16 size)
+    {
+        return std::unique_ptr<BooleanFunction::Node>(new OperationNode(type, size));
+    }
+
+    bool BooleanFunction::OperationNode::operator==(const BooleanFunction::OperationNode& other) const 
+    {
+        return std::tie(this->type, this->size) == std::tie(other.type, other.size);
+    }
+
+    bool BooleanFunction::OperationNode::operator!=(const BooleanFunction::OperationNode& other) const 
+    {
+        return !(*this == other);
+    }
+
+    bool BooleanFunction::OperationNode::operator <(const BooleanFunction::OperationNode& other) const 
+    {
+        return std::tie(this->type, this->size) < std::tie(other.type, other.size);
+    }
+
+    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperationNode::clone() const 
+    {
+        return std::unique_ptr<BooleanFunction::Node>(new OperationNode(*this));
+    }
+
+    std::string BooleanFunction::OperationNode::to_string() const 
+    {
+        static const std::map<u16, std::string>& operation2name = {
+            {BooleanFunction::NodeType::And, "&"},
+            {BooleanFunction::NodeType::Or, "|"},
+            {BooleanFunction::NodeType::Not, "~"},
+            {BooleanFunction::NodeType::Xor, "^"},
+
+            {BooleanFunction::NodeType::Add, "+"},
+
+            {BooleanFunction::NodeType::Concat, "++"},
+            {BooleanFunction::NodeType::Slice, "Slice"},
+            {BooleanFunction::NodeType::Zext, "Zext"},
+        };
+
+        return operation2name.at(this->type);
+    }
+
+    BooleanFunction::OperationNode::OperationNode(u16 _type, u16 _size) :
+        BooleanFunction::Node(_type, _size) {}
+
+    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(BooleanFunction::Value _constant, u16 _size)
+    {
+        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Constant, _size, _constant, 0, ""));
+    }
+ 
+    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(u16 _index, u16 _size) 
+    {
+        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Index, _size, BooleanFunction::Value::X, _index, ""));
+    }
+
+    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(const std::string& _name, u16 _size) 
+    {
+        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Variable, _size, BooleanFunction::Value::X, 0, _name));
+    }
+
+    bool BooleanFunction::OperandNode::operator==(const BooleanFunction::OperandNode& other) const 
+    {
+        return std::tie(this->type, this->size, this->constant, this->index, this->variable) == std::tie(other.type, other.size, other.constant, other.index, other.variable);
+    }
+
+    bool BooleanFunction::OperandNode::operator!=(const BooleanFunction::OperandNode& other) const 
+    {
+        return !(*this == other);
+    }
+
+    bool BooleanFunction::OperandNode::operator <(const BooleanFunction::OperandNode& other) const 
+    {
+        return std::tie(this->type, this->size, this->constant, this->index, this->variable) < std::tie(other.type, other.size, other.constant, other.index, other.variable);
+    }
+
+    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::clone() const 
+    {
+        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(*this));
+    }
+
+    std::string BooleanFunction::OperandNode::to_string() const 
+    {
+        static const std::map<u16, std::function<std::string(const OperandNode*)>> operand2name = 
+        {
+            {BooleanFunction::NodeType::Constant, [] (const OperandNode* node) { return enum_to_string(node->constant); }},
+            {BooleanFunction::NodeType::Index, [] (const OperandNode* node) { return std::to_string(node->index); }},
+            {BooleanFunction::NodeType::Variable, [] (const OperandNode* node) { return node->variable; }},
+        };
+
+        return operand2name.at(this->type)(this);
+    }
+
+    BooleanFunction::OperandNode::OperandNode(u16 _type, u16 _size, BooleanFunction::Value _constant, u16 _index, const std::string& _variable) :
+        BooleanFunction::Node(_type, _size), constant(_constant), index(_index), variable(_variable) {}
+
 }    // namespace hal

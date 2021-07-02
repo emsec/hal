@@ -20,6 +20,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * existing modules can be selected from a table, tree-view, or using a module picker within the graph view
   * enables searching for existing modules
   * added cursor to indicate that user is in module pick mode
+* improved layouter
+  * fixed routing errors for complex cable swaps
+  * fixed multiple connections of a single net to the same gate not being shown properly
+  * fixed incorrect placement of new gates and modules in cone view when navigating starting from a net
+  * preserve location of gate when moving it to new module
+* Added generic SMT solver interface.
+  * Added translation from `BooleanFunction` to SMT-LIB.
+  * Added `BooleanFunction::Node` data structure to extend functionality to generic ASTs.
+  * Added support for z3 and boolector SMT solvers.
+  * Added cpp-subprocess library to handle communication with SMT solver.
+  * Added Boost Spirit x3 library to generate grammar-based parser from SMT-LIB models to C++ data structures.
 * improved netlist parsers
   * split VHDL and Verilog parsers into two independent plugins
   * netlist parsers now take the path to the netlist file as input instead of a `std::stringstream`
@@ -47,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added `Save As...` option to save `.hal` files under a different name
   * added `Export ...` menu to export the netlist using any of the registered netlist writers
   * added `Remove from view` action to context menu for gates and modules
+  * added context menu options to close multiple view tabs at once
   * added grouping toolbox feature to highlight successors or predecessors
   * added an indicator showing whether views have been modified
   * added HAL version number to the info shown in `About`
@@ -58,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * fixed drag'n'drop bug related to negative coordinates
   * fixed liberty parser aborting on unknown `pg_type`
   * fixed stylesheets
+  * fixed improper handling of GND and VCC nets within the `solve_fsm` plugin
 
 ## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`

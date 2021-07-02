@@ -41,16 +41,33 @@ namespace hal
     {
         QPoint mFrom, mTo;
 
+        int mContextId;
+
         static QPoint parseFromString(const QString& s);
     public:
         /**
          * Action constructor.
          *
+         * The action object is the graphics context
+         *
          * @param from - The initial position of the node to move
          * @param to - The destination of the node
          */
         ActionMoveNode(const QPoint& from = QPoint(), const QPoint& to = QPoint())
-            : mFrom(from), mTo(to) {;}
+            : mFrom(from), mTo(to), mContextId(-1) {;}
+
+        /**
+         * Action constructor.
+         *
+         * Will move the node object (gate or module) in view identified by context
+         * A call to setObject is required to identify the node object
+         *
+         * @param  - The initial position of the node to move
+         * @param to - The destination of the node
+         */
+        ActionMoveNode(u32 ctxId, const QPoint& to)
+            : mTo(to), mContextId(ctxId) {;}
+
         bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;

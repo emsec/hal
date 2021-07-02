@@ -23,22 +23,26 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/defines.h"
+#include "hal_core/netlist/boolean_function.h"
 
-#include "converter/converter.h"
-#include "converter/cpp_converter.h"
-#include "compare_nets.h"
-#include "SubgraphFunctionGenerator.h"
-#include "z3Wrapper.h"
+#include <string>
+#include <tuple>
 
-namespace hal
+namespace hal 
 {
-    class PLUGIN_API Z3UtilsPlugin : public BasePluginInterface
-    {
-    public:
-        std::string get_name() const override;
-        std::string get_version() const override;
-
-        void initialize() override;
-    };
-}    // namespace hal
+namespace SMT
+{
+namespace Translator 
+{
+	/**
+	 * Translates a Boolean function into a SMT-LIB compatible string.
+	 *
+	 * @param[in] function - Boolean function to translate.
+	 * @returns (1) status (true on success, false otherwise), and 
+	 *          (2) SMT-LIB compatible string.
+	 */
+	std::tuple<bool, std::string> translate_to_smt2(const BooleanFunction& function);
+}  // namespace Translator
+}  // namespace SMT
+}  // namespace hal
