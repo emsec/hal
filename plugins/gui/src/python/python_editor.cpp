@@ -343,7 +343,7 @@ namespace hal
     void PythonEditor::handleSearchbarTextEdited(const QString& text)
     {
         if (mTabWidget->count() > 0)
-            dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text);
+            dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text, getFindFlags());
     }
 
     void PythonEditor::handleCurrentTabChanged(int index)
@@ -355,8 +355,9 @@ namespace hal
 
         PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
 
+
         if (!mSearchbar->isHidden())
-            current_editor->search(mSearchbar->getCurrentText());
+            current_editor->search(mSearchbar->getCurrentText(), getFindFlags());
         else if (!current_editor->extraSelections().isEmpty())
             current_editor->search("");
 
@@ -1391,7 +1392,7 @@ namespace hal
         {
             mSearchbar->show();
             if (mTabWidget->currentWidget())
-                dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(mSearchbar->getCurrentText());
+                dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(mSearchbar->getCurrentText(), getFindFlags());
             mSearchbar->setFocus();
         }
         else
@@ -1405,5 +1406,15 @@ namespace hal
             else
                 this->setFocus();
         }
+    }
+
+    QTextDocument::FindFlags PythonEditor::getFindFlags()
+    {
+        QTextDocument::FindFlags options = QTextDocument::FindFlags();
+        if (mSearchbar->caseSensitiveChecked())
+            options = options | QTextDocument::FindCaseSensitively;
+        if (mSearchbar->exactMatchChecked())
+            options = options | QTextDocument::FindWholeWords;
+        return options;
     }
 }

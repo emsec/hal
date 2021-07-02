@@ -10,21 +10,16 @@ namespace hal
 
     bool GroupingProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
     {
-        //if(filterRegExp().isEmpty())
-        //    return true;
+        if(filterRegularExpression().pattern().isEmpty())
+            return true;
 
         QModelIndex source_index = sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent);
-        //QModelIndex source_index = sourceModel()->index(sourceRow, 0, sourceParent);
         if(source_index.isValid())
         {
             if (sourceModel()->data(source_index, filterRole()).toString().contains(filterRegularExpression()))
-            {
                 return true;
-            }
             else
-            {
                 return false;
-            }
         }
 
         return true;

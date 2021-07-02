@@ -426,6 +426,8 @@ namespace hal
          */
         bool handleDeserializationFromHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
 
+        QTextDocument::FindFlags getFindFlags();
+
     Q_SIGNALS:
         void forwardStdout(const QString& output);
         void forwardError(const QString& output);
