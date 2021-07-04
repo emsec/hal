@@ -32,7 +32,7 @@ namespace hal
     void TreeItem::setDataAtIndex(int index, QVariant data)
     {
         if(!(index < 0 || index >= mData.size()) && !mData.empty())
-            mData.insert(index, data);
+            mData.replace(index, data);
     }
 
     void TreeItem::appendData(QVariant data)

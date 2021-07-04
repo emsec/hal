@@ -2,6 +2,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include "gui/gui_globals.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -10,8 +11,10 @@ namespace hal
         // use root item to store header information
         //mRootItem = new TreeItem(QList<QVariant>() << "Name" << "ID" << "Type");
         setHeaderLabels(QList<QVariant>() << "Name" << "ID" << "Type");
-        setModule(gNetlist->get_module_by_id(1));
+        setModule(gNetlist->get_module_by_id(1), true, true, false);
         //setContent(QList<int>() << 1, QList<int>(), QList<int>());
+
+        connect(gNetlistRelay, &NetlistRelay::gateNameChanged, this, &NetlistElementsTreeModel::gateNameChanged);
 
     }
 
@@ -36,6 +39,14 @@ namespace hal
         return BaseTreeModel::data(index, role);
     }
 
+    void NetlistElementsTreeModel::clear()
+    {
+        BaseTreeModel::clear();
+        mModuleToTreeitems.clear();
+        mGateToTreeitems.clear();
+        mNetToTreeitems.clear();
+    }
+
     void NetlistElementsTreeModel::setContent(QList<int> modIds, QList<int> gateIds, QList<int> netIds, bool displayModulesRecursive, bool showGatesInSubmods, bool showNetsInSubmods)
     {
         clear();
@@ -51,7 +62,7 @@ namespace hal
                 moduleRecursive(mod, modItem, showGatesInSubmods, showNetsInSubmods);
             modItem->setAdditionalData(mItemTypeKey, itemType::module);
             mRootItem->appendChild(modItem);
-
+            mModuleToTreeitems.insert(mod, modItem);
         }
         //no need to check if gates should be displayed, because if not, just give a empty gateIds list (same for nets)
         for(int id : gateIds)
@@ -61,7 +72,7 @@ namespace hal
                                               << gate->get_id() << QString::fromStdString(gate->get_type()->get_name()));
             gateItem->setAdditionalData(mItemTypeKey, itemType::gate);
             mRootItem->appendChild(gateItem);
-
+            mGateToTreeitems.insert(gate, gateItem);
         }
         for(int id : netIds)
         {
@@ -70,6 +81,7 @@ namespace hal
                                              << net->get_id() << "");
             netItem->setAdditionalData(mItemTypeKey, itemType::net);
             mRootItem->appendChild(netItem);
+            mNetToTreeitems.insert(net, netItem);
         }
         endResetModel();
     }
@@ -91,6 +103,18 @@ namespace hal
         setContent(subModIds, gateIds, netIds, displayModulesRecursive, showGates, showNets);
     }
 
+    void NetlistElementsTreeModel::gateNameChanged(Gate *g)
+    {
+        for(TreeItem* gateItem : mGateToTreeitems.values(g))
+        {
+            gateItem->setDataAtIndex(sNameColumn, QString::fromStdString(g->get_name()));
+            QModelIndex inx0 = getIndexFromItem(gateItem);
+            QModelIndex inx1 = createIndex(inx0.row(), sNameColumn, inx0.internalPointer());
+            Q_EMIT dataChanged(inx0, inx1);
+        }
+
+    }
+
     void NetlistElementsTreeModel::moduleRecursive(Module* mod, TreeItem* modItem, bool showGates, bool showNets)
     {
         TreeItem* subModItem = nullptr;
@@ -101,6 +125,7 @@ namespace hal
             moduleRecursive(subMod, subModItem, showGates);
             subModItem->setAdditionalData(mItemTypeKey, itemType::module);
             modItem->appendChild(subModItem);
+            mModuleToTreeitems.insert(subMod, subModItem);
         }
         if(showGates)
         {
@@ -110,7 +135,7 @@ namespace hal
                                                   << gate->get_id() << QString::fromStdString(gate->get_type()->get_name()));
                 gateItem->setAdditionalData(mItemTypeKey, itemType::gate);
                 modItem->appendChild(gateItem);
-
+                mGateToTreeitems.insert(gate, gateItem);
             }
         }
         if(showNets)
@@ -121,7 +146,7 @@ namespace hal
                                                  << net->get_id() << "");
                 netItem->setAdditionalData(mItemTypeKey, itemType::net);
                 modItem->appendChild(netItem);
-
+                mNetToTreeitems.insert(net, netItem);
             }
         }
     }

@@ -101,7 +101,7 @@ namespace hal
         /**
          * Resets the model (deletes the tree).
          */
-        void clear();
+        virtual void clear();
 
         /**
          * This function must be called first (as of now) in the constructor of the derived

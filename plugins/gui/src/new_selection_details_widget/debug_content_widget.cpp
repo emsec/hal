@@ -33,7 +33,7 @@ namespace hal {
         someRootItem->appendChild(someChildItem);
         baseModel->setContent(QList<TreeItem*>() << someRootItem);
         //mTreeView->setModel(pinModel);
-        mTreeView->setModel(portModel);
+        mTreeView->setModel(model);
         mContentLayout->addWidget(mTreeView);
 
         //--------End NetlistElementsModel

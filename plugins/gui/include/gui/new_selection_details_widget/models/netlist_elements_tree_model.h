@@ -31,6 +31,9 @@
 namespace hal
 {
     class Module;
+    class Gate;
+    class Net;
+
     /**
      * @ingroup utility_widgets-selection_details
      * @brief A model to display arbitrary elements of the netlist.
@@ -63,6 +66,11 @@ namespace hal
         ///@}
 
         /**
+         * Overwritten clear function to reset this model's specific structures.
+         */
+        void clear() override;
+
+        /**
          * Sets the module's content to the specified ids. Adds all Elements to the top level of
          * the tree. As of now, the model does not check the consistency of the items. For instance, if
          * modules that shall explicity be displayed are already within other given modules. This also
@@ -89,6 +97,25 @@ namespace hal
          */
         void setModule(Module* mod, bool showGates = true, bool showNets = true, bool displayModulesRecursive = true);
 
+        // HANDLER METHODS TO HANDLE EVENTS
+        void gateNameChanged(Gate* g);
+//        void gateRemoved(Gate* g);
+//        void netNameChanged(Net* n);
+//        void netRemoved(Net* n);
+//        void moduleNameChanged(Module* m);
+//        void moduleTypeChaned(Module* m);
+//        void moduleRemoved(Module* m);
+//        void moduleSubmoduleRemoved(Module* m, int removed_module);
+//        //void moduleParentChanged(Module* m);
+
+//        //optional
+//        void gateCreated(Gate* g);
+//        void netCreated(Net* n);
+//        void moduleCreated(Module* m);
+//        void moduleGateAssigned(Module* m, int assigned_gate); //const u32
+//        void moduleGateRemoved(Module* m, int removed_gate); //const u32
+//        void moduleSubmoduleAdded(Module* m, int added_module);
+
 
         //Column identifier
         static const int sNameColumn = 0;
@@ -105,6 +132,18 @@ namespace hal
         QIcon mGateIcon;
         QIcon mNetIcon;
         QString mItemTypeKey = "type"; //also save value in enum (if it is possible with QVariant)
+        //must(?) be stored for handler methods
+        bool gatesDisplay;
+        bool netsDisplay;
+        bool displaySubmodRecursive;
+
+        //"2" options: //also: use QMultiMap in case multiple "same" items (gates etc) are displayed
+        //1) 1 map that maps "raw element pointer (gate,net,module)" to a list of treeitems
+        //2) 3 maps with either id->treeitems or pointer->treeitems
+        //QMultiMap<void*, TreeItem*> mElementToTreeitem;
+        QMultiMap<Module*, TreeItem*> mModuleToTreeitems;
+        QMultiMap<Gate*, TreeItem*> mGateToTreeitems;
+        QMultiMap<Net*, TreeItem*> mNetToTreeitems;
 
         //necessary because setModule uses beginResetModel (should not be called by each recursive iteration)
         void moduleRecursive(Module* mod, TreeItem* modItem,  bool showGates = true, bool showNets = true);
