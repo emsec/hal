@@ -23,51 +23,28 @@
 
 #pragma once
 
-#include "hal_core/defines.h"
-
-#include <set>
+#include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
 namespace hal
 {
-    class GateTypeComponent
+    class LUTComponent : public GateTypeComponent
     {
     public:
-        enum class ComponentType
+        LUTComponent(std::unique_ptr<GateTypeComponent> component) : m_component(std::move(component))
         {
-            none = 0,
-            init,
-            lut,
-            ff,
-            latch,
-            ram
-        };
-
-        // factory methods
-        static std::unique_ptr<GateTypeComponent> create_init_component(const std::string& init_category, const std::string& init_identifier);
-        static std::unique_ptr<GateTypeComponent> create_lut_component(std::unique_ptr<GateTypeComponent> component, bool init_ascending);
-
-        virtual ComponentType get_type() const = 0;
-
-        static bool is_class_of(const const GateTypeComponent* component)
-        {
-            return component->get_type() == m_type;
         }
 
-        template<typename T>
-        const T* get_as() const
-        {
-            if (T::is_class_of(this))
-            {
-                return static_cast<const T*>(this);
-            }
+        ComponentType get_type() const override;
 
-            return nullptr;
-        }
+        std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
-        virtual std::set<const GateTypeComponent*> get_components() const = 0;
+        bool is_init_ascending() const;
+        void set_init_ascending(bool ascending = true);
 
-    protected:
-        static constexpr ComponentType m_type = ComponentType::none;
+    private:
+        static constexpr ComponentType m_type = ComponentType::lut;
+        std::unique_ptr<GateTypeComponent> m_component;
+
+        bool m_init_ascending;
     };
-
 }    // namespace hal

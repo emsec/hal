@@ -24,12 +24,44 @@ namespace hal
         {PinDirection::inout, {PinType::none, PinType::io_pad}},
         {PinDirection::internal, {PinType::none}}};
 
-    GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties)
+    GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
+        : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(m_component))
     {
-        m_gate_library = gate_library;
-        m_id           = id;
-        m_name         = name;
-        m_properties   = properties;
+    }
+
+    std::set<GateTypeComponent*> GateType::get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
+    {
+        if (m_component != nullptr)
+        {
+            std::set<GateTypeComponent*> res = m_component->get_components(filter);
+            if (filter)
+            {
+                if (filter(m_component.get()))
+                {
+                    res.insert(m_component.get());
+                }
+            }
+            else
+            {
+                res.insert(m_component.get());
+            }
+
+            return res;
+        }
+
+        return {};
+    }
+
+    GateTypeComponent* GateType::get_component(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
+    {
+        std::set<GateTypeComponent*> components = this->get_components(filter);
+
+        if (components.size() == 1)
+        {
+            return *components.begin();
+        }
+
+        return nullptr;
     }
 
     u32 GateType::get_id() const
@@ -311,7 +343,7 @@ namespace hal
         return "";
     }
 
-    void GateType::add_boolean_function(std::string pin_name, BooleanFunction bf)
+    void GateType::add_boolean_function(const std::string& pin_name, const BooleanFunction& bf)
     {
         m_functions.emplace(pin_name, bf);
     }
@@ -321,48 +353,18 @@ namespace hal
         m_functions.insert(functions.begin(), functions.end());
     }
 
+    BooleanFunction GateType::get_boolean_function(const std::string& function_name) const
+    {
+        if (const auto it = m_functions.find(function_name); it != m_functions.end())
+        {
+            return std::get<1>(*it);
+        }
+
+        return BooleanFunction();
+    }
+
     const std::unordered_map<std::string, BooleanFunction>& GateType::get_boolean_functions() const
     {
         return m_functions;
-    }
-
-    void GateType::set_clear_preset_behavior(ClearPresetBehavior cp1, ClearPresetBehavior cp2)
-    {
-        m_clear_preset_behavior = {cp1, cp2};
-    }
-
-    const std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior>& GateType::get_clear_preset_behavior() const
-    {
-        return m_clear_preset_behavior;
-    }
-
-    void GateType::set_config_data_category(const std::string& category)
-    {
-        m_config_data_category = category;
-    }
-
-    const std::string& GateType::get_config_data_category() const
-    {
-        return m_config_data_category;
-    }
-
-    void GateType::set_config_data_identifier(const std::string& identifier)
-    {
-        m_config_data_identifier = identifier;
-    }
-
-    const std::string& GateType::get_config_data_identifier() const
-    {
-        return m_config_data_identifier;
-    }
-
-    void GateType::set_lut_init_ascending(bool ascending)
-    {
-        m_ascending = ascending;
-    }
-
-    bool GateType::is_lut_init_ascending() const
-    {
-        return m_ascending;
     }
 }    // namespace hal

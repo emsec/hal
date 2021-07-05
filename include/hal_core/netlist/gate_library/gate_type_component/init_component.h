@@ -23,26 +23,29 @@
 
 #pragma once
 
-#include "hal_core/netlist/gate_library/gate_type/components/gate_type_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
 namespace hal
 {
-    class LUTComponent : public GateTypeComponent
+    class InitComponent : public GateTypeComponent
     {
     public:
-        LUTComponent(std::unique_ptr<GateTypeComponent> component, bool init_ascending) : m_component(std::move(component)), m_init_ascending(init_ascending)
-        {
-        }
+        InitComponent() = default;
 
-        std::set<const GateTypeComponent*> get_components() const override;
+        ComponentType get_type() const override;
 
-        bool is_init_ascending() const;
-        void set_init_ascending();
+        std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
+
+        const std::string& get_init_category() const;
+        void set_init_category(const std::string& init_category);
+
+        const std::string get_init_identifier() const;
+        void set_init_identifier(const std::string& init_identifier);
 
     private:
-        static constexpr ComponentType m_type = ComponentType::lut;
-        std::unique_ptr<GateTypeComponent> m_component;
+        static constexpr ComponentType m_type = ComponentType::init;
 
-        bool m_init_ascending;
+        std::string m_init_category;
+        std::string m_init_identifier;
     };
 }    // namespace hal

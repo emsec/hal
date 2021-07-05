@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/utilities/enums.h"
 
 #include <map>
@@ -118,6 +119,24 @@ namespace hal
             X,    /**< Set the internal state to \p X. **/
             undef /**< Invalid behavior, used by default. **/
         };
+
+        /**
+         * Get all components matching the filter condition (if provided) as a set. 
+         * Returns an empty set if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
+         * 
+         * @param[in] filter - The filter applied to all candidate components, disabled by default.
+         * @returns The components.
+         */
+        std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
+
+        /**
+         * Get a single component matching the filter condition (if provided).
+         * Returns a nullptr if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
+         * 
+         * @param[in] filter - The filter applied to all candidate components.
+         * @returns The component.
+         */
+        GateTypeComponent* get_component(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
 
         /**
          * Get the unique ID of the gate type.
@@ -358,7 +377,7 @@ namespace hal
          * @param[in] name - The name of the Boolean function.
          * @param[in] function - The Boolean function.
          */
-        void add_boolean_function(std::string name, BooleanFunction function);
+        void add_boolean_function(const std::string& name, const BooleanFunction& function);
 
         /**
          * Add multiple Boolean functions to the gate type.
@@ -368,73 +387,25 @@ namespace hal
         void add_boolean_functions(const std::unordered_map<std::string, BooleanFunction>& functions);
 
         /**
+         * Get the Boolean function specified by name.
+         * 
+         * @returns A Boolean function.
+         */
+        BooleanFunction get_boolean_function(const std::string& function_name) const;
+
+        /**
          * Get all Boolean functions of the gate type.
          *
          * @returns A map from Boolean function names to Boolean functions.
          */
         const std::unordered_map<std::string, BooleanFunction>& get_boolean_functions() const;
 
-        /**
-         * Set the behavior that describes the internal state when both clear and preset are active at the same time.
-         *
-         * @param[in] cp1 - The value specifying the behavior for the internal state.
-         * @param[in] cp2 - The value specifying the behavior for the negated internal state.
-         */
-        void set_clear_preset_behavior(ClearPresetBehavior cp1, ClearPresetBehavior cp2);
-
-        /**
-         * Get the behavior of the internal state and the negated internal state when both clear and preset are active at the same time.
-         *
-         * @returns The values specifying the behavior for the internal and negated internal state.
-         */
-        const std::pair<ClearPresetBehavior, ClearPresetBehavior>& get_clear_preset_behavior() const;
-
-        /**
-         * Set the category in which to find the configuration data associated with this gate type.
-         *
-         * @param[in] category - The data category.
-         */
-        void set_config_data_category(const std::string& category);
-
-        /**
-         * Get the category in which to find the configuration data associated with this gate type.
-         *
-         * @returns The data category.
-         */
-        const std::string& get_config_data_category() const;
-
-        /**
-         * Set the identifier used to specify the configuration data associated with this gate type.
-         *
-         * @param[in] identifier - The data identifier.
-         */
-        void set_config_data_identifier(const std::string& identifier);
-
-        /**
-         * Get the identifier used to specify the configuration data associated with this gate type.
-         *
-         * @returns The data identifier.
-         */
-        const std::string& get_config_data_identifier() const;
-
-        /**
-         * For LUT gate types, set the bit-order of the initialization string.
-         *
-         * @param[in] ascending - True if ascending bit-order, false otherwise.
-         */
-        void set_lut_init_ascending(bool ascending);
-
-        /**
-         * For LUT gate types, get the bit-order of the initialization string.
-         *
-         * @returns True if ascending bit-order, false otherwise.
-         */
-        bool is_lut_init_ascending() const;
-
     private:
         friend class GateLibrary;
 
         GateLibrary* m_gate_library;
+        std::unique_ptr<GateTypeComponent> m_component;
+
         u32 m_id;
         std::string m_name;
         std::set<GateTypeProperty> m_properties;
@@ -460,13 +431,7 @@ namespace hal
         // Boolean functions
         std::unordered_map<std::string, BooleanFunction> m_functions;
 
-        // sequential and LUT stuff
-        std::pair<ClearPresetBehavior, ClearPresetBehavior> m_clear_preset_behavior = {ClearPresetBehavior::undef, ClearPresetBehavior::undef};
-        std::string m_config_data_category                                          = "";
-        std::string m_config_data_identifier                                        = "";
-        bool m_ascending                                                            = true;
-
-        GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties);
+        GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component = nullptr);
 
         GateType(const GateType&) = delete;
         GateType& operator=(const GateType&) = delete;

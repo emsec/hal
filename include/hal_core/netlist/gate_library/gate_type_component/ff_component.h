@@ -24,17 +24,19 @@
 #pragma once
 
 #include "hal_core/netlist/boolean_function.h"
-#include "hal_core/netlist/gate_library/gate_type/components/gate_type_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
 namespace hal
 {
+    class GateType;
+
     class FFComponent : public GateTypeComponent
     {
     public:
         /**
          * Defines the behavior of the gate type in case both clear and preset are active at the same time.
          */
-        enum class SimultaneousSetResetBehavior
+        enum class AsyncSetResetBehavior
         {
             L,    /**< Set the internal state to \p 0. **/
             H,    /**< Set the internal state to \p 1. **/
@@ -48,25 +50,29 @@ namespace hal
         {
         }
 
-        std::set<const GateTypeComponent*> get_components() const override;
+        ComponentType get_type() const override;
 
-        const BooleanFunction get_clock_function() const;
-        void set_clock_function(const BooleanFunction&& clk_bf);
+        std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
-        const BooleanFunction get_enable_function() const;
-        void set_enable_function(const BooleanFunction&& en_bf);
+        BooleanFunction get_clock_function(const GateType* gate_type) const;
+        void set_clock_function(GateType* gate_type, const BooleanFunction& clk_bf);
 
-        const BooleanFunction& get_async_reset_function() const;
-        void set_async_reset_function(const BooleanFunction&& rst_bf);
+        BooleanFunction get_enable_function(const GateType* gate_type) const;
+        void set_enable_function(GateType* gate_type, const BooleanFunction& en_bf);
 
-        const BooleanFunction& get_async_set_function() const;
-        void set_async_set_function(const BooleanFunction&& set_bf);
+        BooleanFunction get_async_reset_function(const GateType* gate_type) const;
+        void set_async_reset_function(GateType* gate_type, const BooleanFunction& rst_bf);
 
-        std::pair<SimultaneousSetResetBehavior, SimultaneousSetResetBehavior> get_simultaneous_set_reset_behavior() const;
-        void set_simultaneous_set_reset_behavior(SimultaneousSetResetBehavior behav_state, SimultaneousSetResetBehavior behav_neg_state);
+        BooleanFunction get_async_set_function(const GateType* gate_type) const;
+        void set_async_set_function(GateType* gate_type, const BooleanFunction& set_bf);
+
+        const std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior>& get_async_set_reset_behavior() const;
+        void set_async_set_reset_behavior(AsyncSetResetBehavior behav_state, AsyncSetResetBehavior behav_neg_state);
 
     private:
         static constexpr ComponentType m_type = ComponentType::lut;
         std::unique_ptr<GateTypeComponent> m_component;
+
+        std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> m_async_set_reset_behavior = {AsyncSetResetBehavior::undef, AsyncSetResetBehavior::undef};
     };
 }    // namespace hal
