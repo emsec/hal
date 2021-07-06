@@ -23,30 +23,22 @@
 
 #pragma once
 
-#include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
+#include "hal_core/utilities/enums.h"
 
 namespace hal
 {
-    class InitComponent : public GateTypeComponent
+    /**
+     * Defines the direction of a pin.
+     */
+    enum class PinDirection
     {
-    public:
-        InitComponent(const std::string& init_category, const std::string& init_identifier);
-
-        ComponentType get_type() const override;
-        static bool is_class_of(const GateTypeComponent* component);
-
-        std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
-
-        const std::string& get_init_category() const;
-        void set_init_category(const std::string& init_category);
-
-        const std::string get_init_identifier() const;
-        void set_init_identifier(const std::string& init_identifier);
-
-    private:
-        static constexpr ComponentType m_type = ComponentType::init;
-
-        std::string m_init_category;
-        std::string m_init_identifier;
+        none,    /**< Invalid pin. **/
+        input,   /**< Input pin. **/
+        output,  /**< Output pin. **/
+        inout,   /**< Inout pin. **/
+        internal /**< Internal pin. **/
     };
+
+    template<>
+    std::vector<std::string> EnumStrings<PinDirection>::data;
 }    // namespace hal

@@ -2,9 +2,18 @@
 
 namespace hal
 {
-    GateTypeComponent::ComponentType InitComponent::get_type() const
+    InitComponent::InitComponent(const std::string& init_category, const std::string& init_identifier) : m_init_category(init_category), m_init_identifier(init_identifier)
     {
-        return ComponentType::init;
+    }
+
+    InitComponent::ComponentType InitComponent::get_type() const
+    {
+        return m_type;
+    }
+
+    bool InitComponent::is_class_of(const GateTypeComponent* component)
+    {
+        return component->get_type() == m_type;
     }
 
     std::set<GateTypeComponent*> InitComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const

@@ -31,21 +31,21 @@ namespace hal
 {
     class GateType;
 
-    class FFComponent : public GateTypeComponent
+    class LatchComponent : public GateTypeComponent
     {
     public:
-        FFComponent(std::unique_ptr<GateTypeComponent> component, GateType* gate_type, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf);
+        LatchComponent(std::unique_ptr<GateTypeComponent> component, GateType* gate_type, const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf);
 
         ComponentType get_type() const override;
         static bool is_class_of(const GateTypeComponent* component);
 
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
-        BooleanFunction get_next_state_function(const GateType* gate_type) const;
-        void set_next_state_function(GateType* gate_type, const BooleanFunction& next_state_bf);
+        BooleanFunction get_data_in_function(const GateType* gate_type) const;
+        void set_data_in_function(GateType* gate_type, const BooleanFunction& data_in_bf);
 
-        BooleanFunction get_clock_function(const GateType* gate_type) const;
-        void set_clock_function(GateType* gate_type, const BooleanFunction& clock_bf);
+        BooleanFunction get_enable_function(const GateType* gate_type) const;
+        void set_enable_function(GateType* gate_type, const BooleanFunction& enable_bf);
 
         BooleanFunction get_async_reset_function(const GateType* gate_type) const;
         void set_async_reset_function(GateType* gate_type, const BooleanFunction& async_reset_bf);
@@ -54,12 +54,13 @@ namespace hal
         void set_async_set_function(GateType* gate_type, const BooleanFunction& async_set_bf);
 
         const std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior>& get_async_set_reset_behavior() const;
-        void set_async_set_reset_behavior(const AsyncSetResetBehavior behav_state, const AsyncSetResetBehavior behav_neg_state);
+        void set_async_set_reset_behavior(AsyncSetResetBehavior behav_state, AsyncSetResetBehavior behav_neg_state);
 
     private:
-        static constexpr ComponentType m_type = ComponentType::ff;
+        static constexpr ComponentType m_type = ComponentType::latch;
         std::unique_ptr<GateTypeComponent> m_component;
 
         std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> m_async_set_reset_behavior = {AsyncSetResetBehavior::undef, AsyncSetResetBehavior::undef};
     };
+
 }    // namespace hal

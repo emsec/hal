@@ -30,16 +30,15 @@ namespace hal
     class LUTComponent : public GateTypeComponent
     {
     public:
-        LUTComponent(std::unique_ptr<GateTypeComponent> component) : m_component(std::move(component))
-        {
-        }
+        LUTComponent(std::unique_ptr<GateTypeComponent> component, bool init_ascending);
 
         ComponentType get_type() const override;
+        static bool is_class_of(const GateTypeComponent* component);
 
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
         bool is_init_ascending() const;
-        void set_init_ascending(bool ascending = true);
+        void set_init_ascending(bool init_ascending = true);
 
     private:
         static constexpr ComponentType m_type = ComponentType::lut;

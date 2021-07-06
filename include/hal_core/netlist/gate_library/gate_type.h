@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/utilities/enums.h"
 
@@ -61,21 +62,6 @@ namespace hal
     std::vector<std::string> EnumStrings<GateTypeProperty>::data;
 
     /**
-     * Defines the direction of a pin.
-     */
-    enum class PinDirection
-    {
-        none,    /**< Invalid pin. **/
-        input,   /**< Input pin. **/
-        output,  /**< Output pin. **/
-        inout,   /**< Inout pin. **/
-        internal /**< Internal pin. **/
-    };
-
-    template<>
-    std::vector<std::string> EnumStrings<PinDirection>::data;
-
-    /**
      * Defines the type of a pin.
      */
     enum class PinType
@@ -108,19 +94,7 @@ namespace hal
     {
     public:
         /**
-         * Defines the behavior of the gate type in case both clear and preset are active at the same time.
-         */
-        enum class ClearPresetBehavior
-        {
-            L,    /**< Set the internal state to \p 0. **/
-            H,    /**< Set the internal state to \p 1. **/
-            N,    /**< Do not change the internal state. **/
-            T,    /**< Toggle, i.e., invert the internal state. **/
-            X,    /**< Set the internal state to \p X. **/
-            undef /**< Invalid behavior, used by default. **/
-        };
-
-        /**
+         * TODO pybind
          * Get all components matching the filter condition (if provided) as a set. 
          * Returns an empty set if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
          * 
@@ -130,6 +104,7 @@ namespace hal
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
 
         /**
+         * TODO pybind
          * Get a single component matching the filter condition (if provided).
          * Returns a nullptr if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
          * 
@@ -137,6 +112,15 @@ namespace hal
          * @returns The component.
          */
         GateTypeComponent* get_component(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
+
+        /**
+         * TODO pybind
+         * Check if the gate type contains a component of the specified type.
+         * 
+         * @param[in] type - The component type to check for.
+         * @returns True if the gate type contains a component of the speciifed type, false otherwise.
+         */
+        bool has_component_of_type(const GateTypeComponent::ComponentType type) const;
 
         /**
          * Get the unique ID of the gate type.
@@ -436,7 +420,4 @@ namespace hal
         GateType(const GateType&) = delete;
         GateType& operator=(const GateType&) = delete;
     };
-
-    template<>
-    std::vector<std::string> EnumStrings<GateType::ClearPresetBehavior>::data;
 }    // namespace hal

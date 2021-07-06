@@ -69,9 +69,10 @@ namespace hal
          * 
          * @param[in] name - The name of the gate type.
          * @param[in] properties - The properties of the gate type.
+         * @param[in] component - A component adding additional functionality to the gate type.
          * @returns The new gate type instance on success, a nullptr otherwise.
          */
-        GateType* create_gate_type(const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational});
+        GateType* create_gate_type(const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational}, std::unique_ptr<GateTypeComponent> component = nullptr);
 
         /**
          * Check whether the given gate type is contained in this library.

@@ -23,30 +23,23 @@
 
 #pragma once
 
-#include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
+#include "hal_core/utilities/enums.h"
 
 namespace hal
 {
-    class InitComponent : public GateTypeComponent
+    /**
+     * Defines the behavior of the gate type in case both clear and preset are active at the same time.
+     */
+    enum class AsyncSetResetBehavior
     {
-    public:
-        InitComponent(const std::string& init_category, const std::string& init_identifier);
-
-        ComponentType get_type() const override;
-        static bool is_class_of(const GateTypeComponent* component);
-
-        std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
-
-        const std::string& get_init_category() const;
-        void set_init_category(const std::string& init_category);
-
-        const std::string get_init_identifier() const;
-        void set_init_identifier(const std::string& init_identifier);
-
-    private:
-        static constexpr ComponentType m_type = ComponentType::init;
-
-        std::string m_init_category;
-        std::string m_init_identifier;
+        L,    /**< Set the internal state to \p 0. **/
+        H,    /**< Set the internal state to \p 1. **/
+        N,    /**< Do not change the internal state. **/
+        T,    /**< Toggle, i.e., invert the internal state. **/
+        X,    /**< Set the internal state to \p X. **/
+        undef /**< Invalid behavior, used by default. **/
     };
+
+    template<>
+    std::vector<std::string> EnumStrings<AsyncSetResetBehavior>::data;
 }    // namespace hal

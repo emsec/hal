@@ -2,9 +2,18 @@
 
 namespace hal
 {
-    GateTypeComponent::ComponentType LUTComponent::get_type() const
+    LUTComponent::LUTComponent(std::unique_ptr<GateTypeComponent> component, bool init_ascending) : m_component(std::move(component)), m_init_ascending(init_ascending)
     {
-        return ComponentType::lut;
+    }
+
+    LUTComponent::ComponentType LUTComponent::get_type() const
+    {
+        return m_type;
+    }
+
+    bool LUTComponent::is_class_of(const GateTypeComponent* component)
+    {
+        return component->get_type() == m_type;
     }
 
     std::set<GateTypeComponent*> LUTComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
