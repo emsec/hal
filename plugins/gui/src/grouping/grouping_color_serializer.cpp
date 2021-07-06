@@ -1,5 +1,4 @@
 #include "gui/grouping/grouping_color_serializer.h"
-#include "hal_core/utilities/project_filelist.h"
 #include "hal_core/utilities/project_manager.h"
 
 #include "gui/gui_globals.h"
@@ -22,25 +21,25 @@ namespace hal {
     void GroupingColorSerializer::restore(GroupingTableModel* gtm)
     {
         ProjectManager* pm = ProjectManager::instance();
-        ProjectFilelist* pfl = pm->get_filelist(m_name);
-        if (pfl && !pfl->empty())
-            restoreGroupingColor(pm->get_project_directory(), pfl->at(0), gtm);
+        std::string relname = pm->get_filename(m_name);
+        if (!relname.empty())
+            restoreGroupingColor(pm->get_project_directory(), relname, gtm);
     }
 
-    ProjectFilelist* GroupingColorSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir)
+    std::string GroupingColorSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir)
     {
         Q_UNUSED(netlist);
         QString gcFilename("groupingcolor.json");
         QFile gcFile(QDir(QString::fromStdString(savedir.string())).absoluteFilePath(gcFilename));
-        if (!gcFile.open(QIODevice::WriteOnly)) return nullptr;
+        if (!gcFile.open(QIODevice::WriteOnly)) return std::string();
 
         QJsonObject gcObj;
         QJsonArray  gcArr;
 
         const GroupingManagerWidget* gmw = gContentManager->getGroupingManagerWidget();
-        if (!gmw) return nullptr;
+        if (!gmw) std::string();
         const GroupingTableModel* gtm = gmw->getModel();
-        if (!gtm) return nullptr;
+        if (!gtm) std::string();
 
         for (int irow=0; irow<gtm->rowCount(); irow++)
         {
@@ -54,17 +53,16 @@ namespace hal {
         gcObj["grpcolors"] = gcArr;
 
         gcFile.write(QJsonDocument(gcObj).toJson(QJsonDocument::Compact));
-        ProjectFilelist* retval = new ProjectFilelist;
-        retval->push_back(gcFilename.toStdString());
-        return retval;
+
+        return gcFilename.toStdString();
     }
 
     void GroupingColorSerializer::deserialize(Netlist* netlist, const std::filesystem::path& loaddir)
     {
         Q_UNUSED(netlist);
-        ProjectFilelist* pfl = ProjectManager::instance()->get_filelist(m_name);
-        if (pfl && !pfl->empty())
-            restoreGroupingColor(loaddir, pfl->at(0));
+        std::string relname = ProjectManager::instance()->get_filename(m_name);
+        if (!relname.empty())
+            restoreGroupingColor(loaddir, relname);
     }
 
     void GroupingColorSerializer::restoreGroupingColor(const std::filesystem::path& loaddir, const std::string& jsonfile, GroupingTableModel* gtm)

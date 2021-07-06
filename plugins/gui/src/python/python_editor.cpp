@@ -32,7 +32,6 @@
 #include "gui/file_manager/file_manager.h"
 #include "hal_core/utilities/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
-#include "hal_core/utilities/project_filelist.h"
 #include <QDebug>
 #include <QDir>
 #include "rapidjson/filereadstream.h"
@@ -48,18 +47,18 @@ namespace hal
         mSaveDir = QString::fromStdString(pm->get_project_directory().get_filename("py").string());
         QDir().mkpath(mSaveDir);
 
-        ProjectFilelist* pfl = pm->get_filelist(m_name);
-        if (pfl && !pfl->empty())
-            restoreTabs(pm->get_project_directory(), pfl->at(0));
+        std::string relname = pm->get_filename(m_name);
+        if (!relname.empty())
+            restoreTabs(pm->get_project_directory(), relname);
     }
 
-    ProjectFilelist* PythonSerializer::serialize(Netlist* netlist, const std::filesystem::path &savedir)
+    std::string PythonSerializer::serialize(Netlist* netlist, const std::filesystem::path &savedir)
     {
         Q_UNUSED(netlist);
         std::filesystem::path pydir(savedir);
         pydir.append("py");
         QStringList files = gContentManager->getPythonEditorWidget()->saveAllTabs(QString::fromStdString(pydir.string()));
-        if (files.isEmpty()) return nullptr;
+        if (files.isEmpty()) return std::string();
 
         std::filesystem::path pythoneditorFilePath(savedir);
         pythoneditorFilePath.append("pythoneditor.json");
@@ -83,17 +82,15 @@ namespace hal
 
         doc.serialize(pythoneditorFilePath.string());
 
-        ProjectFilelist* retval = new ProjectFilelist;
-        retval->push_back(pythoneditorFilePath.filename().string());
-        return retval;
+        return pythoneditorFilePath.filename().string();
     }
 
     void PythonSerializer::deserialize(Netlist* netlist, const std::filesystem::path& loaddir)
     {
         Q_UNUSED(netlist);
-        ProjectFilelist* pfl = ProjectManager::instance()->get_filelist(m_name);
-        if (pfl && !pfl->empty())
-            restoreTabs(loaddir, pfl->at(0));
+        std::string relname = ProjectManager::instance()->get_filename(m_name);
+        if (!relname.empty())
+            restoreTabs(loaddir, relname);
     }
 
     void PythonSerializer::restoreTabs(const std::filesystem::path& loaddir, const std::string& jsonfile)
@@ -596,7 +593,7 @@ namespace hal
     QString PythonEditor::saveFile(PythonEditor::QueryFilenamePolicy queryPolicy, int index)
     {
         QString title = "Save File";
-        QString text  = "Python Scripts(*.py)";
+        QString filter = "Python Scripts(*.py)";
 
         QString selected_file_name;
 
@@ -613,7 +610,7 @@ namespace hal
         if (queryPolicy == QueryAlways ||
                 ( queryPolicy == QueryIfEmpty && current_editor->getFileName().isEmpty()))
         {
-            selected_file_name = QFileDialog::getSaveFileName(nullptr, title, text, getDefaultPath(), nullptr, QFileDialog::DontUseNativeDialog);
+            selected_file_name = QFileDialog::getSaveFileName(this, title, getDefaultPath(), filter, nullptr, QFileDialog::DontUseNativeDialog);
             if (selected_file_name.isEmpty())
                 return QString();
 

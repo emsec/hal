@@ -7,7 +7,6 @@
 
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/project_serializer.h"
-#include "hal_core/utilities/project_filelist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 
@@ -45,10 +44,10 @@ namespace hal {
             m_serializer.erase(it);
     }
 
-    ProjectFilelist* ProjectManager::get_filelist(const std::string& tagname)
+    std::string ProjectManager::get_filename(const std::string& tagname)
     {
-        auto it = m_filelist.find(tagname);
-        if (it==m_filelist.end()) return nullptr;
+        auto it = m_filename.find(tagname);
+        if (it==m_filename.end()) return std::string();
         return it->second;
     }
 
@@ -164,7 +163,7 @@ namespace hal {
         {
             for(auto it = doc["serializer"].MemberBegin(); it!= doc["serializer"].MemberEnd(); ++it)
             {
-                parse_filelist(it->name.GetString(),it->value);
+                m_filename[it->name.GetString()] = it->value.GetString();
             }
         }
 
@@ -175,30 +174,19 @@ namespace hal {
         return true;
     }
 
-    void ProjectManager::parse_filelist(const std::string& tagname, rapidjson::Value& farray)
-    {
-        ProjectFilelist* flist = new ProjectFilelist(tagname);
-        for (rapidjson::Document::ConstValueIterator it = farray.Begin(); it != farray.End(); ++it)
-        {
-            flist->push_back(it->GetString());
-        }
-        m_filelist[tagname] = flist;
-    }
-
-
     bool ProjectManager::serialize_external(bool shadow)
     {
         if (!m_netlist_save) return false;
 
-        m_filelist.clear();
+        m_filename.clear();
 
         for (auto it = m_serializer.begin(); it != m_serializer.end(); ++it)
         {
-            ProjectFilelist* pfl = it->second->serialize(m_netlist_save, shadow
+            std::string relfile = it->second->serialize(m_netlist_save, shadow
                                                          ? m_proj_dir.get_filename(ProjectDirectory::s_shadow_dir)
                                                          : m_proj_dir);
-            if (!pfl) continue;
-            m_filelist[it->first] = pfl;
+            if (relfile.empty()) continue;
+            m_filename[it->first] = relfile;
         }
         return true;
     }
@@ -220,16 +208,13 @@ namespace hal {
         doc["netlist"] = m_netlist_file;
         doc["gate_library"] = m_gatelib_path;
 
-        if (!m_filelist.empty())
+        if (!m_filename.empty())
         {
              JsonWriteObject& serial = doc.add_object("serializer");
-             for (auto it = m_filelist.begin(); it != m_filelist.end(); ++it)
+             for (auto it = m_filename.begin(); it != m_filename.end(); ++it)
              {
-                 if (it->second->empty()) continue;
-                 JsonWriteArray& jsarray = serial.add_array(it->first);
-                 for (const std::string& fname : *(it->second))
-                     jsarray << fname;
-                 jsarray.close();
+                 if (it->second.empty()) continue;
+                 serial[it->first] = it->second;
              }
              serial.close();
         }
@@ -238,14 +223,9 @@ namespace hal {
 
     void ProjectManager::dump() const
     {
-        for (auto it = m_filelist.begin(); it != m_filelist.end(); ++it)
+        for (auto it = m_filename.begin(); it != m_filename.end(); ++it)
         {
-            std::cout << "serializer: <" << it->first << ">" << std::endl;
-            for (const std::string& fname : *(it->second))
-            {
-                std::cout << "   "  << fname << std::endl;
-            }
-            std::cout << "=========" << std::endl;
+            std::cout << "serializer: <" << it->first << "> <" << it->second << ">" << std::endl;
         }
     }
 }

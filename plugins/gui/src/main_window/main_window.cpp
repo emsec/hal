@@ -683,10 +683,10 @@ namespace hal
         if (saveProjectDir.isEmpty())
         {
             QString title = "Save Project";
-            QString text  = "HAL Directory Folder (*)";
+            QString filter = "HAL Directory Folder (*)";
 
             // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
-            saveProjectDir = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr);
+            saveProjectDir = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), filter, nullptr);
             if (saveProjectDir.isEmpty()) return QString();
 
             if (QFileInfo(saveProjectDir).exists())

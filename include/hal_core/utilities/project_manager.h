@@ -37,7 +37,6 @@ namespace hal
 {
     class Netlist;
     class ProjectSerializer;
-    class ProjectFilelist;
 
     class ProjectManager
     {
@@ -56,9 +55,8 @@ namespace hal
         std::string m_netlist_file;
         std::string m_gatelib_path;
         std::unordered_map<std::string,ProjectSerializer*> m_serializer;
-        std::unordered_map<std::string,ProjectFilelist*> m_filelist;
+        std::unordered_map<std::string,std::string> m_filename;
 
-        void parse_filelist(const std::string& tagname, rapidjson::Value& farray);
         bool serialize_to_projectfile(bool shadow) const;
         bool serialize_external(bool shadow);
     public:
@@ -97,12 +95,12 @@ namespace hal
         void set_project_status(ProjectStatus stat);
 
         /**
-         * Returns list of files to be parsed by external serializer
+         * Returns name of file to be parsed by external serializer
          *
          * @param tagname unique tagname of serializer
-         * @return list of files
+         * @return relative file name
          */
-        ProjectFilelist* get_filelist(const std::string& tagname);
+        std::string get_filename(const std::string& tagname);
 
         /**
          * Returns parsed netlist which is (temporarily) owned by project manager

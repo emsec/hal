@@ -26,7 +26,6 @@
 #include "hal_core/utilities/project_serializer.h"
 
 namespace hal {
-    class ProjectFileList;
     class GroupingTableModel;
 
     class GroupingColorSerializer : public ProjectSerializer
@@ -35,7 +34,7 @@ namespace hal {
     public:
         GroupingColorSerializer();
 
-        ProjectFilelist* serialize(Netlist* netlist, const std::filesystem::path& savedir) override;
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir) override;
 
         void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
 

@@ -29,8 +29,6 @@
 
 namespace hal {
 
-    class ProjectFilelist;
-
     class Netlist;
 
     class ProjectSerializer
@@ -43,7 +41,7 @@ namespace hal {
 
         virtual ~ProjectSerializer();
 
-        virtual ProjectFilelist* serialize(Netlist* netlist, const std::filesystem::path& savedir) = 0;
+        virtual std::string serialize(Netlist* netlist, const std::filesystem::path& savedir) = 0;
 
         virtual void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) = 0;
    };

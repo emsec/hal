@@ -469,22 +469,26 @@ namespace hal
                 GraphContext* context = getContextById(viewId);
                 if (context)
                 {
+                    // load view in existing context
+                    context->clear();
                     if (viewName != context->mName)
                         renameGraphContextAction(context,viewName);
+                    context->readFromFile(jsonView);
                 }
                 else
                 {
+                    // create new context
                     context = new GraphContext(viewId, viewName);
                     context->setLayouter(getDefaultLayouter(context));
                     context->setShader(getDefaultShader(context));
+                    context->readFromFile(jsonView);
+
+                    mContextTableModel->beginInsertContext(context);
+                    mContextTableModel->addContext(context);
+                    mContextTableModel->endInsertContext();
+                    Q_EMIT contextCreated(context);
                 }
-                context->readFromFile(jsonView);
 
-                mContextTableModel->beginInsertContext(context);
-                mContextTableModel->addContext(context);
-                mContextTableModel->endInsertContext();
-
-                Q_EMIT contextCreated(context);
                 context->setDirty(false);
             }
         }

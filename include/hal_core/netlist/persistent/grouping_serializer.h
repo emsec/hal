@@ -35,7 +35,7 @@ namespace hal {
     public:
         GroupingSerializer();
 
-        ProjectFilelist* serialize(Netlist* netlist, const std::filesystem::path& savedir) override;
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir) override;
 
         void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
     };

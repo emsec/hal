@@ -64,7 +64,7 @@ namespace hal
     public:
         PythonSerializer();
 
-        ProjectFilelist* serialize(Netlist* netlist, const std::filesystem::path& savedir);
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir);
 
         void deserialize(Netlist* netlist, const std::filesystem::path& loaddir);
 

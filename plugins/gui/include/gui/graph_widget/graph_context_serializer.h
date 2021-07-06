@@ -32,7 +32,7 @@ namespace hal
     public:
         GraphContextSerializer() : ProjectSerializer("views") {;}
 
-        ProjectFilelist* serialize(Netlist* netlist, const std::filesystem::path& savedir);
+        std::string serialize(Netlist* netlist, const std::filesystem::path& savedir);
 
         void deserialize(Netlist* netlist, const std::filesystem::path& loaddir);
 
