@@ -63,6 +63,12 @@ namespace hal
           * refer to the Qt documentation.
           */
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+        /**
+          * Overwritten Qt function that is necessary for the model. For further information pleaser
+          * refer to the Qt documentation.
+          */
+        bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
         ///@}
 
         /**
@@ -99,9 +105,9 @@ namespace hal
 
         // HANDLER METHODS TO HANDLE EVENTS
         void gateNameChanged(Gate* g);
-//        void gateRemoved(Gate* g);
-//        void netNameChanged(Net* n);
-//        void netRemoved(Net* n);
+        void gateRemoved(Gate* g);
+        void netNameChanged(Net* n);
+        void netRemoved(Net* n);
 //        void moduleNameChanged(Module* m);
 //        void moduleTypeChaned(Module* m);
 //        void moduleRemoved(Module* m);
@@ -133,9 +139,10 @@ namespace hal
         QIcon mNetIcon;
         QString mItemTypeKey = "type"; //also save value in enum (if it is possible with QVariant)
         //must(?) be stored for handler methods
-        bool gatesDisplay;
-        bool netsDisplay;
-        bool displaySubmodRecursive;
+        bool mGatesDisplayed;
+        bool mNetsDisplayed;
+        bool mDisplaySubmodRecursive;
+        void* mDataToBeRemoved;
 
         //"2" options: //also: use QMultiMap in case multiple "same" items (gates etc) are displayed
         //1) 1 map that maps "raw element pointer (gate,net,module)" to a list of treeitems

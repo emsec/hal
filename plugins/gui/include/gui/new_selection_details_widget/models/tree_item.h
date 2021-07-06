@@ -113,6 +113,13 @@ namespace hal
         TreeItem* getChild(int row);
 
         /**
+         * Get the list of all children.
+         *
+         * @return The list of children.
+         */
+        QList<TreeItem*> getChildren();
+
+        /**
          * Appends a child.
          *
          * @param child - The child to append.
@@ -134,7 +141,16 @@ namespace hal
          * @param row - The row from which to remove the child.
          * @return The removed child. Nullptr if row was out of bounds.
          */
-        TreeItem* removeChild(int row);
+        TreeItem* removeChildAtPos(int row);
+
+        /**
+         * Removes the given item and returns True if removing was successful
+         * or False if the given item was no child.
+         *
+         * @param child - The child to remove.
+         * @return True on success, False otherwise.
+         */
+        bool removeChild(TreeItem* child);
 
         /**
          * Get the number of children.
@@ -151,13 +167,21 @@ namespace hal
         int getColumnCount();
 
         /**
-         * Convenients method to get the row for a given item.
+         * Convenience method to get the row for a given item.
          * If the item is not a child of this item, -1 is returned.
          *
          * @param child - The child for which the row is requested.
          * @return The row if the item is a child, -1 otherwise.
          */
         int getRowForChild(TreeItem* child);
+
+        /**
+         * Convenience method to get the row of this item within
+         * the parent's list. If the item has no parent, -1 is returned.
+         *
+         * @return The row of this item if it has a parent, -1 otherwise.
+         */
+        int getOwnRow();
 
         /**
          * Stores additional data. Can be accessed by getAdditionalData.

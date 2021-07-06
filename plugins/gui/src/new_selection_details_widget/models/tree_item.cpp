@@ -55,13 +55,18 @@ namespace hal
         return (row < 0 || row >= mChildren.size()) ? nullptr : mChildren.at(row);
     }
 
+    QList<TreeItem *> TreeItem::getChildren()
+    {
+        return mChildren;
+    }
+
     void TreeItem::appendChild(TreeItem *child)
     {
         child->setParent(this);
         mChildren.append(child);
     }
 
-    TreeItem* TreeItem::removeChild(int row)
+    TreeItem* TreeItem::removeChildAtPos(int row)
     {
         if(row < 0 || row >= mChildren.size())
             return nullptr;
@@ -70,6 +75,18 @@ namespace hal
             TreeItem* itemToRemove = mChildren.at(row);
             mChildren.removeAt(row);
             return itemToRemove;
+        }
+    }
+
+    bool TreeItem::removeChild(TreeItem *child)
+    {
+        int index = mChildren.indexOf(child);
+        if(index == -1)
+            return false;
+        else
+        {
+            mChildren.removeAt(index);
+            return true;
         }
     }
 
@@ -95,6 +112,14 @@ namespace hal
             }
         }
         return index;
+    }
+
+    int TreeItem::getOwnRow()
+    {
+        if(!mParent)
+            return -1;
+
+        return mParent->getRowForChild(this);
     }
 
     void TreeItem::setAdditionalData(QString key, QVariant data)

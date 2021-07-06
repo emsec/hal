@@ -89,7 +89,7 @@ namespace hal
         //delete all children, not the root item
         while(mRootItem->getChildCount() > 0)
         {
-            TreeItem* tmp = mRootItem->removeChild(0);
+            TreeItem* tmp = mRootItem->removeChildAtPos(0);
             delete tmp;
         }
         endResetModel();

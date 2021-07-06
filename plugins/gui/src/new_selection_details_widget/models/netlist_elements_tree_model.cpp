@@ -11,10 +11,13 @@ namespace hal
         // use root item to store header information
         //mRootItem = new TreeItem(QList<QVariant>() << "Name" << "ID" << "Type");
         setHeaderLabels(QList<QVariant>() << "Name" << "ID" << "Type");
-        setModule(gNetlist->get_module_by_id(1), true, true, false);
+        setModule(gNetlist->get_module_by_id(1), true, true, true);
         //setContent(QList<int>() << 1, QList<int>(), QList<int>());
 
+        // CONNECTIONS
         connect(gNetlistRelay, &NetlistRelay::gateNameChanged, this, &NetlistElementsTreeModel::gateNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::gateRemoved, this, &NetlistElementsTreeModel::gateRemoved);
+        connect(gNetlistRelay, &NetlistRelay::netRemoved, this, &NetlistElementsTreeModel::netRemoved);
 
     }
 
@@ -37,6 +40,64 @@ namespace hal
 
         //yes, it performs the same two checks again, should be okay though (in terms of performance)
         return BaseTreeModel::data(index, role);
+    }
+
+    bool NetlistElementsTreeModel::removeRows(int row, int count, const QModelIndex &parent)
+    {
+        Q_UNUSED(count)
+        Q_UNUSED(row)
+        Q_UNUSED(parent)
+        return false;
+//        TreeItem* parentItem = getItemFromIndex(parent);
+//        TreeItem* itemToRemove = parentItem->getChild(row);
+//        int type = itemToRemove->getAdditionalData(mItemTypeKey).toUInt();
+
+//        if(type == itemType::net || type == itemType::gate)
+//        {
+//            beginRemoveRows(parent, row, row);
+//            parentItem->removeChild(itemToRemove);
+//            //must be tested, use mDataToBeRemoved as a means to communicate between functions without parameter
+//            if(type == itemType::net)
+//                mNetToTreeitems.remove((Net*)mDataToBeRemoved, itemToRemove);
+//            else
+//                mGateToTreeitems.remove((Gate*)mDataToBeRemoved, itemToRemove);
+//            endRemoveRows();
+//            delete itemToRemove;
+//            return true;
+//        }
+//        else //module type
+//        {
+//            beginResetModel();
+//            TreeItem* removedItem = getItemFromIndex(parent)->removeChildAtPos(row);
+//            //DFS /BFS to store all child items of the module and then remove them from the corresponding maps
+//            //(must be done before deleteing the removedItem item.
+//            QList<TreeItem*> itemsToRemoveFromMaps;
+//            QQueue<TreeItem*> queue;
+//            queue.enqueue(removedItem);
+//            while(!queue.isEmpty())
+//            {
+//                TreeItem* currentItem = queue.dequeue();
+//                itemsToRemoveFromMaps.append(currentItem);
+//                for(TreeItem* childItem : currentItem->getChildren())
+//                    queue.enqueue(childItem);
+//            }
+
+//            for(TreeItem* item : itemsToRemoveFromMaps)
+//            {
+////                switch (item->getAdditionalData(mItemTypeKey).toInt())
+////                {
+////                    case itemType::gate: mGateToTreeitems
+////                case itemType::net:
+////                case itemType::module:
+
+////                }
+//            }
+
+//            endResetModel();
+
+//        }
+
+//        return true;
     }
 
     void NetlistElementsTreeModel::clear()
@@ -112,7 +173,47 @@ namespace hal
             QModelIndex inx1 = createIndex(inx0.row(), sNameColumn, inx0.internalPointer());
             Q_EMIT dataChanged(inx0, inx1);
         }
+    }
 
+    void NetlistElementsTreeModel::gateRemoved(Gate *g)
+    {
+        QList<TreeItem*> items = mGateToTreeitems.values(g);
+        for(TreeItem* gateItem : items)
+        {
+            beginRemoveRows(parent(getIndexFromItem(gateItem)), gateItem->getOwnRow(), gateItem->getOwnRow());
+            gateItem->getParent()->removeChild(gateItem);
+            endRemoveRows();
+            mGateToTreeitems.remove(g, gateItem);
+            //a whole lot more complex for modules, because deleting a module item deletes all children, these should be first
+            //removed from the maps (i think), and: what is with beginRemoveRows??->simply calling beginResetModel might be the easiest solution..
+            delete gateItem;
+        }
+    }
+
+    void NetlistElementsTreeModel::netNameChanged(Net *n)
+    {
+        for(TreeItem* netItem : mNetToTreeitems.values(n))
+        {
+            netItem->setDataAtIndex(sNameColumn, QString::fromStdString(n->get_name()));
+            QModelIndex inx0 = getIndexFromItem(netItem);
+            QModelIndex inx1 = createIndex(inx0.row(), sNameColumn, inx0.internalPointer());
+            Q_EMIT dataChanged(inx0, inx1);
+        }
+    }
+
+    void NetlistElementsTreeModel::netRemoved(Net *n)
+    {
+        QList<TreeItem*> items = mNetToTreeitems.values(n);
+        for(TreeItem* netItem : items)
+        {
+            beginRemoveRows(parent(getIndexFromItem(netItem)), netItem->getOwnRow(), netItem->getOwnRow());
+            netItem->getParent()->removeChild(netItem);
+            endRemoveRows();
+            mNetToTreeitems.remove(n, netItem);
+            //a whole lot more complex for modules, because deleting a module item deletes all children, these should be first
+            //removed from the maps (i think), and: what is with beginRemoveRows??->simply calling beginResetModel might be the easiest solution..
+            delete netItem;
+        }
     }
 
     void NetlistElementsTreeModel::moduleRecursive(Module* mod, TreeItem* modItem, bool showGates, bool showNets)
