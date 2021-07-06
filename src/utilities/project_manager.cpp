@@ -16,7 +16,7 @@ const int SERIALIZATION_FORMAT_VERSION = 9;
 namespace hal {
     ProjectManager* ProjectManager::inst = nullptr;
 
-    const std::string ProjectManager::s_project_file = ".project.halp";
+    const std::string ProjectManager::s_project_file = ".project.json";
 
     ProjectManager::ProjectManager()
         : m_project_status(None)
@@ -36,6 +36,13 @@ namespace hal {
         {
             log_warning("project_manager", "serializer '{}' already registered.", tagname);
         }
+    }
+
+    void ProjectManager::unregister_serializer(const std::string &tagname)
+    {
+        auto it = m_serializer.find(tagname);
+        if (it != m_serializer.end())
+            m_serializer.erase(it);
     }
 
     ProjectFilelist* ProjectManager::get_filelist(const std::string& tagname)
@@ -71,7 +78,7 @@ namespace hal {
 
         std::filesystem::create_directory(m_proj_dir.get_filename("py"));
         std::filesystem::create_directory(m_proj_dir.get_filename(ProjectDirectory::s_shadow_dir));
-        return serialize_to_projectfile();
+        return serialize_to_projectfile(false);
     }
 
     void ProjectManager::set_project_status(ProjectStatus stat)
@@ -108,9 +115,9 @@ namespace hal {
 
         if (!netlist_serializer::xserialize_to_file(m_netlist_save, m_netlist_file)) return false;
 
-        if (!serialize_external()) return false;
+        if (!serialize_external(shadow)) return false;
 
-        return serialize_to_projectfile();
+        return serialize_to_projectfile(shadow);
     }
 
     std::string ProjectManager::get_netlist_filename() const
@@ -179,7 +186,7 @@ namespace hal {
     }
 
 
-    bool ProjectManager::serialize_external()
+    bool ProjectManager::serialize_external(bool shadow)
     {
         if (!m_netlist_save) return false;
 
@@ -187,7 +194,9 @@ namespace hal {
 
         for (auto it = m_serializer.begin(); it != m_serializer.end(); ++it)
         {
-            ProjectFilelist* pfl = it->second->serialize(m_netlist_save, m_proj_dir);
+            ProjectFilelist* pfl = it->second->serialize(m_netlist_save, shadow
+                                                         ? m_proj_dir.get_filename(ProjectDirectory::s_shadow_dir)
+                                                         : m_proj_dir);
             if (!pfl) continue;
             m_filelist[it->first] = pfl;
         }
@@ -195,9 +204,16 @@ namespace hal {
     }
 
 
-    bool ProjectManager::serialize_to_projectfile() const
+    bool ProjectManager::serialize_to_projectfile(bool shadow) const
     {
         std::filesystem::path projFilePath = m_proj_dir.get_filename(s_project_file);
+        if (shadow)
+        {
+            std::filesystem::path shadowPath = m_proj_dir.get_filename(ProjectDirectory::s_shadow_dir);
+            std::filesystem::create_directory(shadowPath);
+            projFilePath = shadowPath;
+            projFilePath.append(s_project_file);
+        }
 
         JsonWriteDocument doc;
         doc["serialization_format_version"] = SERIALIZATION_FORMAT_VERSION;

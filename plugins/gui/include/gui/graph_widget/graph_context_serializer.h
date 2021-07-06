@@ -22,21 +22,20 @@
 //  SOFTWARE.
 
 #pragma once
-
 #include "hal_core/defines.h"
 #include "hal_core/utilities/project_serializer.h"
-#include <string>
 
-namespace hal {
-
-    class GroupingSerializer : public ProjectSerializer
+namespace hal
+{
+    class GraphContextSerializer : public ProjectSerializer
     {
-        static GroupingSerializer* instance;
     public:
-        GroupingSerializer();
+        GraphContextSerializer() : ProjectSerializer("views") {;}
 
-        ProjectFilelist* serialize(Netlist* netlist, const std::filesystem::path& savedir) override;
+        ProjectFilelist* serialize(Netlist* netlist, const std::filesystem::path& savedir);
 
-        void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
+        void deserialize(Netlist* netlist, const std::filesystem::path& loaddir);
+
+        bool restore(const std::filesystem::path& loaddir = std::filesystem::path()) const;
     };
 }

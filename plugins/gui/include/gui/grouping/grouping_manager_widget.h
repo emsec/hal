@@ -28,6 +28,7 @@
 #include "hal_core/defines.h"
 
 #include "gui/grouping/grouping_table_model.h"
+#include "gui/grouping/grouping_color_serializer.h"
 
 #include <QListWidget>
 #include <QPoint>
@@ -299,6 +300,7 @@ namespace hal
         QString mToSelectionIconStyle;
 
         QString mDisabledIconStyle;
+        GroupingColorSerializer mColorSerializer;
 
         void setToolbarButtonsEnabled(bool enabled);
 

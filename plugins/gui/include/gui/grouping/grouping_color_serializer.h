@@ -23,20 +23,22 @@
 
 #pragma once
 
-#include "hal_core/defines.h"
 #include "hal_core/utilities/project_serializer.h"
-#include <string>
 
 namespace hal {
+    class ProjectFileList;
+    class GroupingTableModel;
 
-    class GroupingSerializer : public ProjectSerializer
+    class GroupingColorSerializer : public ProjectSerializer
     {
-        static GroupingSerializer* instance;
+        void restoreGroupingColor(const std::filesystem::path& loaddir, const std::string& jsonfile, GroupingTableModel *gtm = nullptr);
     public:
-        GroupingSerializer();
+        GroupingColorSerializer();
 
         ProjectFilelist* serialize(Netlist* netlist, const std::filesystem::path& savedir) override;
 
         void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
+
+        void restore(GroupingTableModel *gtm);
     };
 }

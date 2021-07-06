@@ -32,32 +32,99 @@
 #include "gui/file_manager/file_manager.h"
 #include "hal_core/utilities/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
+#include "hal_core/utilities/project_filelist.h"
 #include <QDebug>
+#include <QDir>
+#include "rapidjson/filereadstream.h"
 
 namespace hal
 {
-    PythonDefaultDirectory::PythonDefaultDirectory()
-        : ProjectSerializer("pydefault")
+    PythonSerializer::PythonSerializer()
+        : ProjectSerializer("pythoneditor")
     {
         ProjectManager* pm = ProjectManager::instance();
-        if (pm->get_project_status()==ProjectManager::None)
-            mLast = QDir::currentPath();
-        else
-            mLast= QDir(QString::fromStdString(pm->get_project_directory().string())).absoluteFilePath("py/");
+        if (pm->get_project_status() == ProjectManager::None) return;
+
+        mSaveDir = QString::fromStdString(pm->get_project_directory().get_filename("py").string());
+        QDir().mkpath(mSaveDir);
+
+        ProjectFilelist* pfl = pm->get_filelist(m_name);
+        if (pfl && !pfl->empty())
+            restoreTabs(pm->get_project_directory(), pfl->at(0));
     }
 
-    ProjectFilelist* PythonDefaultDirectory::serialize(Netlist* netlist, const ProjectDirectory& haldir)
+    ProjectFilelist* PythonSerializer::serialize(Netlist* netlist, const std::filesystem::path &savedir)
     {
         Q_UNUSED(netlist);
-        mLast = QDir(QString::fromStdString(haldir.string())).absoluteFilePath("py/");
-        return nullptr;
+        std::filesystem::path pydir(savedir);
+        pydir.append("py");
+        QStringList files = gContentManager->getPythonEditorWidget()->saveAllTabs(QString::fromStdString(pydir.string()));
+        if (files.isEmpty()) return nullptr;
+
+        std::filesystem::path pythoneditorFilePath(savedir);
+        pythoneditorFilePath.append("pythoneditor.json");
+
+        JsonWriteDocument doc;
+
+        JsonWriteArray& tabArr = doc.add_array("tabs");
+
+        for (int tabInx=0; tabInx < files.size(); tabInx++)
+        {
+            const QString& tabFile = files.at(tabInx);
+            if (tabFile.isEmpty()) continue;
+
+            JsonWriteObject& tabObj = tabArr.add_object();
+            tabObj["tab"]  = tabInx;
+            tabObj["path"] = tabFile.toStdString();
+            tabObj.close();
+        }
+
+        tabArr.close();
+
+        doc.serialize(pythoneditorFilePath.string());
+
+        ProjectFilelist* retval = new ProjectFilelist;
+        retval->push_back(pythoneditorFilePath.filename().string());
+        return retval;
     }
 
-    void PythonDefaultDirectory::deserialize(Netlist* netlist, const ProjectDirectory& haldir)
+    void PythonSerializer::deserialize(Netlist* netlist, const std::filesystem::path& loaddir)
     {
         Q_UNUSED(netlist);
-        mLast = QDir(QString::fromStdString(haldir.string())).absoluteFilePath("py/");
+        ProjectFilelist* pfl = ProjectManager::instance()->get_filelist(m_name);
+        if (pfl && !pfl->empty())
+            restoreTabs(loaddir, pfl->at(0));
     }
+
+    void PythonSerializer::restoreTabs(const std::filesystem::path& loaddir, const std::string& jsonfile)
+    {
+        std::filesystem::path jsonpath(loaddir);
+        jsonpath.append(jsonfile);
+
+        FILE* pytabFile = fopen(jsonpath.string().c_str(), "rb");
+        if (pytabFile == NULL)
+        {
+            log_error("GroupingSerializer::deserialize", "unable to open '{}'.", jsonpath.string());
+            return;
+        }
+
+
+        char buffer[65536];
+        rapidjson::FileReadStream frs(pytabFile, buffer, sizeof(buffer));
+        rapidjson::Document document;
+        document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(frs);
+
+        if (document.HasMember("tabs"))
+        {
+            for (const rapidjson::Value& tabVal : document["tabs"].GetArray())
+            {
+                int tabInx      = tabVal["tab"].GetUint();
+                QString tabPath = QString::fromStdString(tabVal["path"].GetString());
+                gContentManager->getPythonEditorWidget()->tabLoadFile(tabInx, tabPath);
+            }
+        }
+    }
+
 
     PythonEditor::PythonEditor(QWidget* parent)
         : ContentWidget("Python Editor", parent), PythonContextSubscriber(), mSearchbar(new Searchbar()), mActionOpenFile(new Action(this)), mActionRun(new Action(this)),
@@ -202,8 +269,6 @@ namespace hal
         handleActionNewTab();
 
         using namespace std::placeholders;
-        hal_file_manager::register_on_serialize_callback("PythonEditor", std::bind(&PythonEditor::handleSerializationToHalFile, this, _1, _2, _3));
-        hal_file_manager::register_on_deserialize_callback("PythonEditor", std::bind(&PythonEditor::handleDeserializationFromHalFile, this, _1, _2, _3));
     }
 
     bool PythonEditor::handleSerializationToHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document)
@@ -305,12 +370,12 @@ namespace hal
             {
                 if (file_name.isEmpty())
                 {
-                    bool suc = saveFile(true, index);
+                    bool suc = !saveFile(QueryAlways, index).isEmpty();
                     if(!suc)
                         return;
                 }
                 else
-                    saveFile(false, index);
+                    saveFile(QueryIfEmpty, index);
 
             }
             this->discardTab(index);
@@ -390,8 +455,6 @@ namespace hal
 
     PythonEditor::~PythonEditor()
     {
-        hal_file_manager::unregister_on_serialize_callback("PythonEditor");
-        hal_file_manager::unregister_on_deserialize_callback("PythonEditor");
     }
 
     void PythonEditor::setupToolbar(Toolbar* Toolbar)
@@ -457,7 +520,7 @@ namespace hal
         QString text  = "Python Scripts(*.py)";
 
         // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
-        QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, mDefaultPath.last(), text, nullptr);
+        QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, text, getDefaultPath(), nullptr);
 
         if (file_names.isEmpty())
         {
@@ -489,7 +552,7 @@ namespace hal
             tabLoadFile(mTabWidget->count() - 1, fileName);
         }
 
-        mDefaultPath.setLast(QFileInfo(file_names.last()).absolutePath());
+        mDefaultPath = QFileInfo(file_names.last()).path();
     }
 
     void PythonEditor::tabLoadFile(u32 index, QString fileName)
@@ -503,6 +566,9 @@ namespace hal
 
         std::string f((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
         QFileInfo info(fileName);
+
+        while (mTabWidget->count() <= (int)index)
+            handleActionNewTab();
 
         auto tab = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
 
@@ -518,7 +584,16 @@ namespace hal
         gFileStatusManager->fileSaved(tab->getUuid());
     }
 
-    bool PythonEditor::saveFile(const bool ask_path, int index)
+    QString PythonEditor::getDefaultPath() const
+    {
+        if (!mDefaultPath.isEmpty()) return mDefaultPath;
+        ProjectManager* pm = ProjectManager::instance();
+        if (pm->get_project_status() != ProjectManager::None)
+            return QString::fromStdString(pm->get_project_directory().get_filename("py").string());
+        return QDir::currentPath();
+    }
+
+    QString PythonEditor::saveFile(PythonEditor::QueryFilenamePolicy queryPolicy, int index)
     {
         QString title = "Save File";
         QString text  = "Python Scripts(*.py)";
@@ -533,19 +608,20 @@ namespace hal
         PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
 
         if (!current_editor)
-            return false;
+            return QString();
 
-        if (ask_path || current_editor->getFileName().isEmpty())
+        if (queryPolicy == QueryAlways ||
+                ( queryPolicy == QueryIfEmpty && current_editor->getFileName().isEmpty()))
         {
-            selected_file_name = QFileDialog::getSaveFileName(nullptr, title, mDefaultPath.last(), text, nullptr, QFileDialog::DontUseNativeDialog);
+            selected_file_name = QFileDialog::getSaveFileName(nullptr, title, text, getDefaultPath(), nullptr, QFileDialog::DontUseNativeDialog);
             if (selected_file_name.isEmpty())
-                return false;
+                return QString();
 
             if (!selected_file_name.endsWith(".py"))
                 selected_file_name.append(".py");
 
             current_editor->set_file_name(selected_file_name);
-            mDefaultPath.setLast(QFileInfo(selected_file_name).path());
+            mDefaultPath = QFileInfo(selected_file_name).path();
 
             // Remove an existing snapshot and update its location
             removeSnapshotFile(current_editor);
@@ -563,6 +639,10 @@ namespace hal
                 }
             }
         }
+        else if (queryPolicy == GenericName && current_editor->getFileName().isEmpty())
+        {
+            selected_file_name = QDir(mGenericPath).absoluteFilePath(QString(".editor_tab%1.py").arg(index));
+        }
         else
         {
             selected_file_name = current_editor->getFileName();
@@ -578,7 +658,7 @@ namespace hal
         if (!out.is_open())
         {
             log_error("gui", "could not open file path");
-            return false;
+            return QString();
         }
         out << current_editor->toPlainText().toStdString();
         out.close();
@@ -586,12 +666,25 @@ namespace hal
 
         gFileStatusManager->fileSaved(current_editor->getUuid());
 
+        if (queryPolicy == GenericName && current_editor->getFileName().isEmpty())
+            return selected_file_name;
+
         mPathEditorMap.insert(selected_file_name, current_editor);
         mFileWatcher->addPath(selected_file_name);
 
         QFileInfo info(selected_file_name);
         mTabWidget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
-        return true;
+        return selected_file_name;
+    }
+
+    QStringList PythonEditor::saveAllTabs(const QString& genericPath)
+    {
+        mGenericPath = genericPath;
+        QDir().mkpath(mGenericPath);
+        QStringList retval;
+        for (int inx=0; inx<mTabWidget->count(); ++inx)
+            retval << saveFile(GenericName,inx);
+        return retval;
     }
 
     QTabWidget *PythonEditor::getTabWidget()
@@ -658,12 +751,12 @@ namespace hal
 
     void PythonEditor::handleActionSaveFile()
     {
-        this->saveFile(false);
+        this->saveFile(QueryIfEmpty);
     }
 
     void PythonEditor::handleActionSaveFileAs()
     {
-        this->saveFile(true);
+        this->saveFile(QueryAlways);
     }
 
     void PythonEditor::handleActionRun()

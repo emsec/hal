@@ -143,7 +143,6 @@ namespace hal
     void FileManager::emitProjectSaved(QString& projectDir, QString& file)
     {
         Q_EMIT projectSaved(projectDir, file);
-        gGraphContextManager->handleSaveTriggered();
     }
 
     void FileManager::projectSuccessfullyLoaded(QString& projectDir, QString& file)

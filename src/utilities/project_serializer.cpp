@@ -7,4 +7,11 @@ namespace hal {
     {
         ProjectManager::instance()->register_serializer(m_name, this);
     }
+
+    ProjectSerializer::~ProjectSerializer()
+    {
+        ProjectManager::instance()->unregister_serializer(m_name);
+    }
 }
+
+

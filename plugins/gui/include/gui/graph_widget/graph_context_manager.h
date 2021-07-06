@@ -41,8 +41,8 @@ namespace hal
     class GraphContext;
 
     class ContextTableModel;
-
     class SettingsItemCheckbox;
+
     /**
      * @ingroup graph-contexts
      * @brief User interface to manage all GraphContext%s.
@@ -328,8 +328,9 @@ namespace hal
          * Deletes all contexts.
          */
         void clear();
-        void handleSaveTriggered();
-        void restoreFromFile();
+
+        bool handleSaveTriggered(const QString& filename);
+        bool restoreFromFile(const QString &filename);
 
         QString nextDefaultName() const { return QString("view %1").arg(mMaxContextId+1);}
     Q_SIGNALS:

@@ -38,6 +38,7 @@
 #include <QPushButton>
 #include <QtCore/QFileInfo>
 #include <QMessageBox>
+#include <filesystem>
 
 class QVBoxLayout;
 class QTabWidget;
@@ -55,19 +56,19 @@ namespace hal
     class SettingsItemKeybind;
     class SettingsItemSpinbox;
  
-    class PythonDefaultDirectory : public ProjectSerializer
+    class PythonSerializer : public ProjectSerializer
     {
-        QString mLast;
+        QString mSaveDir;
+
+        void restoreTabs(const std::filesystem::path& loaddir, const std::string& jsonfile);
     public:
-        PythonDefaultDirectory();
+        PythonSerializer();
 
-        ProjectFilelist* serialize(Netlist* netlist, const ProjectDirectory& haldir);
+        ProjectFilelist* serialize(Netlist* netlist, const std::filesystem::path& savedir);
 
-        void deserialize(Netlist* netlist, const ProjectDirectory& haldir);
+        void deserialize(Netlist* netlist, const std::filesystem::path& loaddir);
 
-        QString last() const { return mLast; }
-
-        void setLast(const QString& s) {mLast = s;}
+        QString getDirectory() const;
     };
 
     /**
@@ -96,6 +97,11 @@ namespace hal
     public:
         explicit PythonEditor(QWidget* parent = nullptr);
         ~PythonEditor();
+
+        /**
+         * Query filename policy
+         */
+        enum QueryFilenamePolicy { GenericName, QueryIfEmpty, QueryAlways };
 
         /**
          * Setups the toolbar of this content widget. Overwrites the function ContentWidget::setupToolbar.
@@ -214,13 +220,21 @@ namespace hal
         QTabWidget* getTabWidget();
 
         /**
-         * Saves a tab given by its index. If ask_path is true, the user is ask for a new save location.
+         * Saves a tab given by its index. File dialog for filename will be shown upon QueryAlways or upon
+         * QueryIfEmpty no name was given before
          *
-         * @param ask_path - Ask the user for a new save location
+         * @param queryPolicy one of  GenericName, QueryIfEmpty, QueryAlways
          * @param index - The tab index
-         * @returns true if the tab was saved
+         * @returns the filename if the tab was saved, empty otherwise
          */
-        bool saveFile(const bool ask_path, int index = -1);
+        QString saveFile(QueryFilenamePolicy queryPolicy, int index = -1);
+
+        /**
+         * Saves all open tabs. Will use generic filenames if no name was given so far.
+         *
+         * @returns list of all files saved
+         */
+        QStringList saveAllTabs(const QString& genericPath);
 
         /**
          * Close the tab given by its index. It will discard all unsaved changes of this tab without asking.
@@ -654,6 +668,15 @@ namespace hal
          */
         void removeSnapshotFile(PythonCodeEditor* editor) const;
 
+        /**
+         * Suggest path name for file dialog:
+         *   1. Path from file recently saved
+         *   2. Project dir + "/py"
+         *   3. Current directory
+         * @return the default path
+         */
+        QString getDefaultPath() const;
+
         QVBoxLayout* mLayout;
         Toolbar* mToolbar;
         Splitter* mSplitter;
@@ -697,7 +720,9 @@ namespace hal
 
         long mLastClickTime;
 
-        PythonDefaultDirectory mDefaultPath;
+        PythonSerializer mSerializer;
+        QString mDefaultPath;
+        QString mGenericPath;
 
         /**
          * Stores where the snapshots for the tabs are located

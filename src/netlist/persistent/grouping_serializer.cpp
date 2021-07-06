@@ -1,6 +1,7 @@
 #include "hal_core/netlist/persistent/grouping_serializer.h"
 #include "hal_core/utilities/project_directory.h"
 #include "hal_core/utilities/project_filelist.h"
+#include "hal_core/utilities/project_manager.h"
 #include "hal_core/utilities/json_write_document.h"
 #include <filesystem>
 #include <fstream>
@@ -16,12 +17,13 @@ namespace hal {
     GroupingSerializer* GroupingSerializer::instance = new GroupingSerializer();
 
     GroupingSerializer::GroupingSerializer()
-        : ProjectSerializer("grouping")
+        : ProjectSerializer("groupings")
     {;}
 
-    ProjectFilelist* GroupingSerializer::serialize(Netlist* netlist, const ProjectDirectory& haldir)
+    ProjectFilelist* GroupingSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir)
     {
-        std::filesystem::path groupingFilePath = haldir.get_default_filename(".halg");
+        std::filesystem::path groupingFilePath(savedir);
+        groupingFilePath.append("groupings.json");
 
         JsonWriteDocument doc;
 
@@ -66,9 +68,12 @@ namespace hal {
         return retval;
     }
 
-    void GroupingSerializer::deserialize(Netlist* netlist, const ProjectDirectory& haldir)
+    void GroupingSerializer::deserialize(Netlist* netlist, const std::filesystem::__cxx11::path &loaddir)
     {        
-        std::filesystem::path groupingFilePath = haldir.get_default_filename(".halg");
+        ProjectFilelist* pfl = ProjectManager::instance()->get_filelist(m_name);
+        if (!pfl | pfl->empty()) return;
+        std::filesystem::path groupingFilePath(loaddir);
+        groupingFilePath.append(pfl->at(0));
 
         FILE* grpFile = fopen(groupingFilePath.string().c_str(), "rb");
         if (grpFile == NULL)

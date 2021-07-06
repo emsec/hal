@@ -50,25 +50,5 @@ namespace hal
             return true;
         }
 
-        void register_on_serialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, Netlist* netlist, rapidjson::Document&)> callback)
-        {
-            m_on_serialize_hook.add_callback(identifier, callback);
-        }
-
-        void unregister_on_serialize_callback(const std::string& identifier)
-        {
-            m_on_serialize_hook.remove_callback(identifier);
-        }
-
-        void register_on_deserialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, Netlist* netlist, rapidjson::Document&)> callback)
-        {
-            m_on_deserialize_hook.add_callback(identifier, callback);
-        }
-
-        void unregister_on_deserialize_callback(const std::string& identifier)
-        {
-            m_on_deserialize_hook.remove_callback(identifier);
-        }
-
     }    // namespace hal_file_manager
 }    // namespace hal

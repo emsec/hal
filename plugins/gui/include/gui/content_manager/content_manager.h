@@ -44,6 +44,7 @@ namespace hal
     class LoggerWidget;
     class SettingsItemDropdown;
     class SettingsItemKeybind;
+    class GraphContextSerializer;
 
 
     /**
@@ -148,6 +149,7 @@ namespace hal
         GroupingManagerWidget* mGroupingManagerWidget;
         SelectionDetailsWidget* mSelectionDetailsWidget;
         LoggerWidget* mLoggerWidget;
+        GraphContextSerializer *mContextSerializer;
 
         static SettingsItemDropdown* sSettingSortMechanism;
         static bool sSettingsInitialized;

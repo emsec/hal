@@ -24,13 +24,12 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include <filesystem>
 #include <string>
 
 namespace hal {
 
     class ProjectFilelist;
-
-    class ProjectDirectory;
 
     class Netlist;
 
@@ -42,8 +41,10 @@ namespace hal {
     public:
         ProjectSerializer(const std::string& name);
 
-        virtual ProjectFilelist* serialize(Netlist* netlist, const ProjectDirectory& haldir) = 0;
+        virtual ~ProjectSerializer();
 
-        virtual void deserialize(Netlist* netlist, const ProjectDirectory& haldir) = 0;
-    };
+        virtual ProjectFilelist* serialize(Netlist* netlist, const std::filesystem::path& savedir) = 0;
+
+        virtual void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) = 0;
+   };
 }

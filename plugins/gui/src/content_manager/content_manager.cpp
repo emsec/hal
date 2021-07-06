@@ -5,6 +5,7 @@
 #include "gui/file_manager/file_manager.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/graph_context_manager.h"
+#include "gui/graph_widget/graph_context_serializer.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/content_layout_area/content_layout_area.h"
 #include "gui/content_widget/content_widget.h"
@@ -61,7 +62,8 @@ namespace hal
     }
 
 
-    ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent)
+    ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent),
+        mContextSerializer(nullptr)
     {
         // has to be created this early in order to receive deserialization by the core signals
         mPythonWidget = new PythonEditor();
@@ -87,6 +89,7 @@ namespace hal
         mGraphTabWidget = nullptr;
         mContextManagerWidget = nullptr;
         mSelectionDetailsWidget = nullptr;
+        if (mContextSerializer) delete mContextSerializer;
     }
 
     PythonEditor* ContentManager::getPythonEditorWidget()
@@ -220,7 +223,10 @@ namespace hal
         new_context->add({gNetlist->get_top_module()->get_id()}, {});
 
         mContextManagerWidget->selectViewContext(new_context);
-        gGraphContextManager->restoreFromFile();
+
+        mContextSerializer = new GraphContextSerializer;
+        if (!mContextSerializer->restore())
+            gGraphContextManager->restoreFromFile(fileName + "v");
         new_context->setDirty(false);
 
     }

@@ -1,0 +1,107 @@
+#include "gui/grouping/grouping_color_serializer.h"
+#include "hal_core/utilities/project_filelist.h"
+#include "hal_core/utilities/project_manager.h"
+
+#include "gui/gui_globals.h"
+#include "gui/grouping/grouping_manager_widget.h"
+#include "gui/grouping/grouping_table_model.h"
+
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QDir>
+#include <QFile>
+#include <QMap>
+
+namespace hal {
+
+    GroupingColorSerializer::GroupingColorSerializer()
+        : ProjectSerializer("groupingcolor")
+    {;}
+
+    void GroupingColorSerializer::restore(GroupingTableModel* gtm)
+    {
+        ProjectManager* pm = ProjectManager::instance();
+        ProjectFilelist* pfl = pm->get_filelist(m_name);
+        if (pfl && !pfl->empty())
+            restoreGroupingColor(pm->get_project_directory(), pfl->at(0), gtm);
+    }
+
+    ProjectFilelist* GroupingColorSerializer::serialize(Netlist* netlist, const std::filesystem::path& savedir)
+    {
+        Q_UNUSED(netlist);
+        QString gcFilename("groupingcolor.json");
+        QFile gcFile(QDir(QString::fromStdString(savedir.string())).absoluteFilePath(gcFilename));
+        if (!gcFile.open(QIODevice::WriteOnly)) return nullptr;
+
+        QJsonObject gcObj;
+        QJsonArray  gcArr;
+
+        const GroupingManagerWidget* gmw = gContentManager->getGroupingManagerWidget();
+        if (!gmw) return nullptr;
+        const GroupingTableModel* gtm = gmw->getModel();
+        if (!gtm) return nullptr;
+
+        for (int irow=0; irow<gtm->rowCount(); irow++)
+        {
+            GroupingTableEntry gtme = gtm->groupingAt(irow);
+            QJsonObject gcEntry;
+            gcEntry["id"] = (int)gtme.id();
+            gcEntry["color"] = gtme.color().name(QColor::HexArgb);
+            gcArr.append(gcEntry);
+        }
+
+        gcObj["grpcolors"] = gcArr;
+
+        gcFile.write(QJsonDocument(gcObj).toJson(QJsonDocument::Compact));
+        ProjectFilelist* retval = new ProjectFilelist;
+        retval->push_back(gcFilename.toStdString());
+        return retval;
+    }
+
+    void GroupingColorSerializer::deserialize(Netlist* netlist, const std::filesystem::path& loaddir)
+    {
+        Q_UNUSED(netlist);
+        ProjectFilelist* pfl = ProjectManager::instance()->get_filelist(m_name);
+        if (pfl && !pfl->empty())
+            restoreGroupingColor(loaddir, pfl->at(0));
+    }
+
+    void GroupingColorSerializer::restoreGroupingColor(const std::filesystem::path& loaddir, const std::string& jsonfile, GroupingTableModel* gtm)
+    {
+        if (!gtm)
+        {
+            const GroupingManagerWidget* gmw = gContentManager->getGroupingManagerWidget();
+            if (!gmw) return;
+            gtm = gmw->getModel();
+            if (!gtm) return;
+        }
+
+        QFile gcFile(QDir(QString::fromStdString(loaddir.string())).absoluteFilePath(QString::fromStdString(jsonfile)));
+        if (!gcFile.open(QIODevice::ReadOnly))
+            return;
+        QJsonDocument jsonDoc   = QJsonDocument::fromJson(gcFile.readAll());
+        const QJsonObject& json = jsonDoc.object();
+
+        QMap<int,QColor> colorMap;
+        if (json.contains("grpcolors") && json["grpcolors"].isArray())
+        {
+            QJsonArray gcArr = json["grpcolors"].toArray();
+            int ngc          = gcArr.size();
+            for (int igc = 0; igc < ngc; igc++)
+            {
+                QJsonObject gcEntry = gcArr.at(igc).toObject();
+                colorMap[gcEntry["id"].toInt()] = QColor(gcEntry["color"].toString());
+            }
+        }
+
+        for (int irow=0; irow < gtm->rowCount(); irow++)
+        {
+            u32 id = gtm->data(gtm->index(irow,1),Qt::DisplayRole).toInt();
+            QColor color = colorMap.value(id);
+            if (color.isValid())
+                gtm->setData(gtm->index(irow,2), color, Qt::EditRole);
+        }
+    }
+
+}
