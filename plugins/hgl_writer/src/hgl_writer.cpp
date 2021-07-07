@@ -1,6 +1,10 @@
 #include "hgl_writer/hgl_writer.h"
 
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/utilities/log.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/prettywriter.h"
@@ -93,8 +97,21 @@ namespace hal
             {
                 rapidjson::Value lut_config(rapidjson::kObjectType);
 
+                LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
+                if (lut_component == nullptr)
+                {
+                    return false;
+                }
+
+                InitComponent* init_component =
+                    lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+                if (init_component == nullptr)
+                {
+                    return false;
+                }
+
                 // bit_order
-                if (gt->is_lut_init_ascending())
+                if (lut_component->is_init_ascending())
                 {
                     lut_config.AddMember("bit_order", "ascending", allocator);
                 }
@@ -104,8 +121,8 @@ namespace hal
                 }
 
                 // data_category and data_identifier
-                lut_config.AddMember("data_category", gt->get_config_data_category(), allocator);
-                lut_config.AddMember("data_identifier", gt->get_config_data_identifier(), allocator);
+                lut_config.AddMember("data_category", init_component->get_init_category(), allocator);
+                lut_config.AddMember("data_identifier", init_component->get_init_identifier(), allocator);
 
                 cell.AddMember("lut_config", lut_config, allocator);
             }
@@ -113,36 +130,41 @@ namespace hal
             {
                 rapidjson::Value ff_config(rapidjson::kObjectType);
 
-                // data_category, data_identifier
-                ff_config.AddMember("data_category", gt->get_config_data_category(), allocator);
-                ff_config.AddMember("data_identifier", gt->get_config_data_identifier(), allocator);
+                FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
+                if (ff_component == nullptr)
+                {
+                    return false;
+                }
+
+                InitComponent* init_component =
+                    ff_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+                if (init_component != nullptr)
+                {
+                    // data_category, data_identifier
+                    ff_config.AddMember("data_category", init_component->get_init_category(), allocator);
+                    ff_config.AddMember("data_identifier", init_component->get_init_identifier(), allocator);
+                }
 
                 // next_state, clocked_on, clear_on, preset_on
-                if (const auto it = functions.find("next_state"); it != functions.end())
+                ff_config.AddMember("next_state", ff_component->get_next_state_function().to_string(), allocator);
+                ff_config.AddMember("clocked_on", ff_component->get_clock_function().to_string(), allocator);
+                if (BooleanFunction bf = ff_component->get_async_reset_function(); !bf.is_empty())
                 {
-                    ff_config.AddMember("next_state", it->second.to_string(), allocator);
+                    ff_config.AddMember("clear_on", bf.to_string(), allocator);
                 }
-                if (const auto it = functions.find("clock"); it != functions.end())
+                if (BooleanFunction bf = ff_component->get_async_set_function(); !bf.is_empty())
                 {
-                    ff_config.AddMember("clocked_on", it->second.to_string(), allocator);
-                }
-                if (const auto it = functions.find("clear"); it != functions.end())
-                {
-                    ff_config.AddMember("clear_on", it->second.to_string(), allocator);
-                }
-                if (const auto it = functions.find("preset"); it != functions.end())
-                {
-                    ff_config.AddMember("preset_on", it->second.to_string(), allocator);
+                    ff_config.AddMember("preset_on", bf.to_string(), allocator);
                 }
 
-                std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cp_behav = gt->get_clear_preset_behavior();
-                if (cp_behav.first != GateType::ClearPresetBehavior::undef)
+                std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> cp_behav = ff_component->get_async_set_reset_behavior();
+                if (cp_behav.first != AsyncSetResetBehavior::undef)
                 {
-                    ff_config.AddMember("state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.first), allocator);
+                    ff_config.AddMember("state_clear_preset", enum_to_string<AsyncSetResetBehavior>(cp_behav.first), allocator);
                 }
-                if (cp_behav.second != GateType::ClearPresetBehavior::undef)
+                if (cp_behav.second != AsyncSetResetBehavior::undef)
                 {
-                    ff_config.AddMember("neg_state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.second), allocator);
+                    ff_config.AddMember("neg_state_clear_preset", enum_to_string<AsyncSetResetBehavior>(cp_behav.second), allocator);
                 }
 
                 cell.AddMember("ff_config", ff_config, allocator);
@@ -151,32 +173,33 @@ namespace hal
             {
                 rapidjson::Value latch_config(rapidjson::kObjectType);
 
-                // next_state, clocked_on, clear_on, preset_on
-                if (const auto it = functions.find("data"); it != functions.end())
+                LatchComponent* latch_component =
+                    gt->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
+                if (latch_component == nullptr)
                 {
-                    latch_config.AddMember("data_in", it->second.to_string(), allocator);
-                }
-                if (const auto it = functions.find("enable"); it != functions.end())
-                {
-                    latch_config.AddMember("enable_on", it->second.to_string(), allocator);
-                }
-                if (const auto it = functions.find("clear"); it != functions.end())
-                {
-                    latch_config.AddMember("clear_on", it->second.to_string(), allocator);
-                }
-                if (const auto it = functions.find("preset"); it != functions.end())
-                {
-                    latch_config.AddMember("preset_on", it->second.to_string(), allocator);
+                    return false;
                 }
 
-                std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cp_behav = gt->get_clear_preset_behavior();
-                if (cp_behav.first != GateType::ClearPresetBehavior::undef)
+                // next_state, clocked_on, clear_on, preset_on
+                latch_config.AddMember("data_in", latch_component->get_data_in_function().to_string(), allocator);
+                latch_config.AddMember("enable", latch_component->get_enable_function().to_string(), allocator);
+                if (BooleanFunction bf = latch_component->get_async_reset_function(); !bf.is_empty())
                 {
-                    latch_config.AddMember("state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.first), allocator);
+                    latch_config.AddMember("clear_on", bf.to_string(), allocator);
                 }
-                if (cp_behav.second != GateType::ClearPresetBehavior::undef)
+                if (BooleanFunction bf = latch_component->get_async_set_function(); !bf.is_empty())
                 {
-                    latch_config.AddMember("neg_state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.second), allocator);
+                    latch_config.AddMember("preset_on", bf.to_string(), allocator);
+                }
+
+                std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> cp_behav = latch_component->get_async_set_reset_behavior();
+                if (cp_behav.first != AsyncSetResetBehavior::undef)
+                {
+                    latch_config.AddMember("state_clear_preset", enum_to_string<AsyncSetResetBehavior>(cp_behav.first), allocator);
+                }
+                if (cp_behav.second != AsyncSetResetBehavior::undef)
+                {
+                    latch_config.AddMember("neg_state_clear_preset", enum_to_string<AsyncSetResetBehavior>(cp_behav.second), allocator);
                 }
 
                 cell.AddMember("latch_config", latch_config, allocator);

@@ -12,8 +12,9 @@ namespace hal
         return component->get_type() == m_type;
     }
 
-    std::set<GateTypeComponent*> MACComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
+    std::set<GateTypeComponent*> MACComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
+        UNUSED(filter);
         return {};
     }
 }    // namespace hal

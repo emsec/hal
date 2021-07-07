@@ -19,11 +19,11 @@ namespace hal
         {PinDirection::internal, {PinType::none}}};
 
     GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
-        : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(m_component))
+        : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(component))
     {
     }
 
-    std::set<GateTypeComponent*> GateType::get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
+    std::set<GateTypeComponent*> GateType::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
         if (m_component != nullptr)
         {
@@ -46,7 +46,7 @@ namespace hal
         return {};
     }
 
-    GateTypeComponent* GateType::get_component(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
+    GateTypeComponent* GateType::get_component(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
         std::set<GateTypeComponent*> components = this->get_components(filter);
 
@@ -58,6 +58,11 @@ namespace hal
         return nullptr;
     }
 
+    bool GateType::has_component_of_type(const GateTypeComponent::ComponentType type) const
+    {
+        return !this->get_components([type](const GateTypeComponent* component) { return component->get_type() == type; }).empty();
+    }
+
     u32 GateType::get_id() const
     {
         return m_id;
@@ -66,6 +71,11 @@ namespace hal
     const std::string& GateType::get_name() const
     {
         return m_name;
+    }
+
+    void GateType::assign_property(const GateTypeProperty property)
+    {
+        m_properties.insert(property);
     }
 
     std::set<GateTypeProperty> GateType::get_properties() const

@@ -4,11 +4,9 @@
 
 namespace hal
 {
-    FFComponent::FFComponent(std::unique_ptr<GateTypeComponent> component, GateType* gate_type, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf)
-        : m_component(std::move(component))
+    FFComponent::FFComponent(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf)
+        : m_component(std::move(component)), m_next_state_bf(next_state_bf), m_clock_bf(clock_bf)
     {
-        this->set_next_state_function(gate_type, next_state_bf);
-        this->set_clock_function(gate_type, clock_bf);
     }
 
     FFComponent::ComponentType FFComponent::get_type() const
@@ -21,7 +19,7 @@ namespace hal
         return component->get_type() == m_type;
     }
 
-    std::set<GateTypeComponent*> FFComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
+    std::set<GateTypeComponent*> FFComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
         if (m_component != nullptr)
         {
@@ -44,44 +42,44 @@ namespace hal
         return {};
     }
 
-    BooleanFunction FFComponent::get_next_state_function(const GateType* gate_type) const
+        BooleanFunction FFComponent::get_next_state_function() const
     {
-        return gate_type->get_boolean_function("next_state");
+        return m_next_state_bf;
     }
 
-    void FFComponent::set_next_state_function(GateType* gate_type, const BooleanFunction& next_state_bf)
+    void FFComponent::set_next_state_function(const BooleanFunction& next_state_bf)
     {
-        gate_type->add_boolean_function("next_state", next_state_bf);
+        m_next_state_bf = next_state_bf;
     }
 
-    BooleanFunction FFComponent::get_clock_function(const GateType* gate_type) const
+    BooleanFunction FFComponent::get_clock_function() const
     {
-        return gate_type->get_boolean_function("clocked_on");
+        return m_clock_bf;
     }
 
-    void FFComponent::set_clock_function(GateType* gate_type, const BooleanFunction& clock_bf)
+    void FFComponent::set_clock_function(const BooleanFunction& clock_bf)
     {
-        gate_type->add_boolean_function("clocked_on", clock_bf);
+        m_clock_bf = clock_bf;
     }
 
-    BooleanFunction FFComponent::get_async_reset_function(const GateType* gate_type) const
+    BooleanFunction FFComponent::get_async_reset_function() const
     {
-        return gate_type->get_boolean_function("async_reset_on");
+        return m_async_reset_bf;
     }
 
-    void FFComponent::set_async_reset_function(GateType* gate_type, const BooleanFunction& async_reset_bf)
+    void FFComponent::set_async_reset_function(const BooleanFunction& async_reset_bf)
     {
-        gate_type->add_boolean_function("async_reset_on", async_reset_bf);
+        m_async_reset_bf = async_reset_bf;
     }
 
-    BooleanFunction FFComponent::get_async_set_function(const GateType* gate_type) const
+    BooleanFunction FFComponent::get_async_set_function() const
     {
-        return gate_type->get_boolean_function("async_set_on");
+        return m_async_set_bf;
     }
 
-    void FFComponent::set_async_set_function(GateType* gate_type, const BooleanFunction& async_set_bf)
+    void FFComponent::set_async_set_function(const BooleanFunction& async_set_bf)
     {
-        gate_type->add_boolean_function("async_set_on", async_set_bf);
+        m_async_set_bf = async_set_bf;
     }
 
     const std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior>& FFComponent::get_async_set_reset_behavior() const

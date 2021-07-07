@@ -4,11 +4,9 @@
 
 namespace hal
 {
-    LatchComponent::LatchComponent(std::unique_ptr<GateTypeComponent> component, GateType* gate_type, const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf)
-        : m_component(std::move(component))
+    LatchComponent::LatchComponent(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf)
+        : m_component(std::move(component)), m_data_in_bf(data_in_bf), m_enable_bf(enable_bf)
     {
-        this->set_data_in_function(gate_type, data_in_bf);
-        this->set_enable_function(gate_type, enable_bf);
     }
 
     LatchComponent::ComponentType LatchComponent::get_type() const
@@ -21,7 +19,7 @@ namespace hal
         return component->get_type() == m_type;
     }
 
-    std::set<GateTypeComponent*> LatchComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
+    std::set<GateTypeComponent*> LatchComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
         if (m_component != nullptr)
         {
@@ -44,44 +42,44 @@ namespace hal
         return {};
     }
 
-    BooleanFunction LatchComponent::get_data_in_function(const GateType* gate_type) const
+    BooleanFunction LatchComponent::get_data_in_function() const
     {
-        return gate_type->get_boolean_function("data_in");
+        return m_data_in_bf;
     }
 
-    void LatchComponent::set_data_in_function(GateType* gate_type, const BooleanFunction& data_in_bf)
+    void LatchComponent::set_data_in_function(const BooleanFunction& data_in_bf)
     {
-        gate_type->add_boolean_function("data_in", data_in_bf);
+        m_data_in_bf = data_in_bf;
     }
 
-    BooleanFunction LatchComponent::get_enable_function(const GateType* gate_type) const
+    BooleanFunction LatchComponent::get_enable_function() const
     {
-        return gate_type->get_boolean_function("enabled_on");
+        return m_enable_bf;
     }
 
-    void LatchComponent::set_enable_function(GateType* gate_type, const BooleanFunction& enable_bf)
+    void LatchComponent::set_enable_function(const BooleanFunction& enable_bf)
     {
-        gate_type->add_boolean_function("enabled_on", enable_bf);
+        m_enable_bf = enable_bf;
     }
 
-    BooleanFunction LatchComponent::get_async_reset_function(const GateType* gate_type) const
+    BooleanFunction LatchComponent::get_async_reset_function() const
     {
-        return gate_type->get_boolean_function("async_reset_on");
+        return m_async_reset_bf;
     }
 
-    void LatchComponent::set_async_reset_function(GateType* gate_type, const BooleanFunction& async_reset_bf)
+    void LatchComponent::set_async_reset_function(const BooleanFunction& async_reset_bf)
     {
-        gate_type->add_boolean_function("async_reset_on", async_reset_bf);
+        m_async_reset_bf = async_reset_bf;
     }
 
-    BooleanFunction LatchComponent::get_async_set_function(const GateType* gate_type) const
+    BooleanFunction LatchComponent::get_async_set_function() const
     {
-        return gate_type->get_boolean_function("async_set_on");
+        return m_async_set_bf;
     }
 
-    void LatchComponent::set_async_set_function(GateType* gate_type, const BooleanFunction& async_set_bf)
+    void LatchComponent::set_async_set_function(const BooleanFunction& async_set_bf)
     {
-        gate_type->add_boolean_function("async_set_on", async_set_bf);
+        m_async_set_bf = async_set_bf;
     }
 
     const std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior>& LatchComponent::get_async_set_reset_behavior() const

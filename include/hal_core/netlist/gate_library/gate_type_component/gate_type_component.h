@@ -24,17 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/gate_library/gate_type_component/buffer_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/carry_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/io_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/mac_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/mux_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
+#include "hal_core/netlist/boolean_function.h"
 
 #include <functional>
 #include <set>
@@ -46,117 +36,53 @@ namespace hal
     public:
         enum class ComponentType
         {
-            // power,
-            // ground,
-            buffer,
-            mux,
-            carry,
             lut,
             ff,
             latch,
             ram,
             mac,
-            io,
             init,
-            ram_port,
+            ram_port
         };
 
         // factory methods
-        static std::unique_ptr<GateTypeComponent> create_buffer_component()
-        {
-            return std::make_unique<BufferComponent>();
-        }
-
-        static std::unique_ptr<GateTypeComponent> create_mux_component()
-        {
-            return std::make_unique<MUXComponent>();
-        }
-
-        static std::unique_ptr<GateTypeComponent> create_carry_component()
-        {
-            return std::make_unique<CarryComponent>();
-        }
-
-        static std::unique_ptr<GateTypeComponent> create_lut_component(std::unique_ptr<GateTypeComponent> component, bool init_ascending)
-        {
-            if (component == nullptr)
-            {
-                return nullptr;
-            }
-
-            return std::make_unique<LUTComponent>(std::move(component), init_ascending);
-        }
-
-        static std::unique_ptr<GateTypeComponent> create_ff_component(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf)
-        {
-            if (component == nullptr)
-            {
-                return nullptr;
-            }
-
-            return std::make_unique<FFComponent>(std::move(component), next_state_bf, clock_bf);
-        }
-
-        static std::unique_ptr<GateTypeComponent> create_latch_component(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf)
-        {
-            if (component == nullptr)
-            {
-                return nullptr;
-            }
-
-            return std::make_unique<LatchComponent>(std::move(component), data_in_bf, enable_bf);
-        }
-
-        static std::unique_ptr<GateTypeComponent> create_ram_component(std::unique_ptr<GateTypeComponent> component)
-        {
-            // TODO do fancy RAM stuff
-            if (component == nullptr)
-            {
-                return nullptr;
-            }
-
-            return std::make_unique<RAMComponent>(std::move(component));
-        }
-
-        static std::unique_ptr<GateTypeComponent> create_mac_component()
-        {
-            // TODO do fancy MAC stuff
-            return std::make_unique<MACComponent>();
-        }
-
-        static std::unique_ptr<GateTypeComponent> create_io_component()
-        {
-            // TODO do fancy IO stuff
-            return std::make_unique<IOComponent>();
-        }
-
-        static std::unique_ptr<GateTypeComponent> create_init_component(const std::string& init_category, const std::string& init_identifier)
-        {
-            return std::make_unique<InitComponent>(init_category, init_identifier);
-        }
-
-        static std::unique_ptr<GateTypeComponent> create_ram_port_component()
-        {
-            // TODO do fancy RAM stuff
-            return std::make_unique<RAMPortComponent>();
-        }
+        static std::unique_ptr<GateTypeComponent> create_lut_component(std::unique_ptr<GateTypeComponent> component, bool init_ascending);
+        static std::unique_ptr<GateTypeComponent> create_ff_component(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf);
+        static std::unique_ptr<GateTypeComponent> create_latch_component(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf);
+        static std::unique_ptr<GateTypeComponent> create_ram_component(std::vector<std::unique_ptr<GateTypeComponent>> components);
+        static std::unique_ptr<GateTypeComponent> create_mac_component();
+        static std::unique_ptr<GateTypeComponent> create_init_component(const std::string& init_category, const std::string& init_identifier);
+        static std::unique_ptr<GateTypeComponent> create_ram_port_component();
 
         virtual ComponentType get_type() const = 0;
 
         template<typename T>
-        const T* get_as() const
+        T* convert_to()
         {
             if (T::is_class_of(this))
             {
-                return static_cast<const T*>(this);
+                return static_cast<T*>(this);
             }
 
             return nullptr;
         }
 
         virtual std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const = 0;
+        GateTypeComponent* get_component(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
+
+        template<typename T>
+        T* get_component_as(const std::function<bool(const GateTypeComponent*)>& filter = nullptr)
+        {
+            GateTypeComponent* component = this->get_component(filter);
+            if (component != nullptr)
+            {
+                return component->convert_to<T>();
+            }
+
+            return nullptr;
+        }
     };
 
-    // class LUTComponent : public GateTypeComponent;
-
+    template<>
+    std::vector<std::string> EnumStrings<GateTypeComponent::ComponentType>::data;
 }    // namespace hal

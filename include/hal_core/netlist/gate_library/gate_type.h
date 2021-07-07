@@ -115,6 +115,22 @@ namespace hal
 
         /**
          * TODO pybind
+         * TODO documentation
+         */
+        template<typename T>
+        T* get_component_as(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
+        {
+            GateTypeComponent* component = this->get_component(filter);
+            if (component != nullptr)
+            {
+                return component->convert_to<T>();
+            }
+
+            return nullptr;
+        }
+
+        /**
+         * TODO pybind
          * Check if the gate type contains a component of the specified type.
          * 
          * @param[in] type - The component type to check for.
@@ -135,6 +151,14 @@ namespace hal
          * @returns The name of the gate type.
          */
         const std::string& get_name() const;
+
+        /**
+         * TODO pybind
+         * Assign a new property to the gate type.
+         * 
+         * @param[in] property - The property to assign.
+         */
+        void assign_property(const GateTypeProperty property);
 
         /**
          * Get the properties assigned to the gate type.
@@ -387,12 +411,12 @@ namespace hal
     private:
         friend class GateLibrary;
 
-        GateLibrary* m_gate_library;
-        std::unique_ptr<GateTypeComponent> m_component;
-
         u32 m_id;
+
+        GateLibrary* m_gate_library;
         std::string m_name;
         std::set<GateTypeProperty> m_properties;
+        std::unique_ptr<GateTypeComponent> m_component;
 
         // pins
         std::vector<std::string> m_pins;
