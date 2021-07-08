@@ -84,6 +84,6 @@ namespace hal
           * @param[in] netlist_file - Path to the netlist file.
           * @returns A vector of netlists.
           */
-        NETLIST_API std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& netlist_file);
+        NETLIST_API std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& netlist_file, const std::filesystem::path& gatelib_file=std::filesystem::path());
     }    // namespace netlist_factory
 }    // namespace hal

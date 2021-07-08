@@ -87,11 +87,13 @@ namespace hal
         NETLIST_API std::unique_ptr<Netlist> parse(const std::filesystem::path& file_name, const GateLibrary* gate_library = nullptr);
 
         /**
-          * Tries to match the HDL file with each of the preloaded gate libraries and returns a vector of netlist objects for which the matching was successful.
+          * If gatelibrary name is empty : tries to match the HDL file with each of the preloaded gate libraries
+          * and returns a vector of netlist objects for which the matching was successful.
           *
           * @param[in] file_name - The netlist file.
+          * @param[in] gatelib_name - The gate library path, might be empty
           * @returns A vector containing one netlist per matching gate library.
           */
-        std::vector<std::unique_ptr<Netlist>> parse_all(const std::filesystem::path& file_name);
+        std::vector<std::unique_ptr<Netlist>> parse_all(const std::filesystem::path& file_name, const std::filesystem::path& gatelib_name = std::filesystem::path());
     }    // namespace netlist_parser_manager
 }    // namespace hal

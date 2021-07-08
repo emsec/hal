@@ -148,8 +148,9 @@ namespace hal
          * as the shadowfile logic in an automated fashion.
          *
          * @param fileName - The file to be opened.
+         * @param gatelibraryPath - Path to gate library, auto detection if empty
          */
-        void deprecatedOpenFile(QString filename);
+        void deprecatedOpenFile(QString filename, QString gatelibraryPath);
 
 
         /**

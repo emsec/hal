@@ -100,6 +100,8 @@ namespace hal {
         if (!netlist) return false;
 
         m_netlist_save = netlist;
+        const GateLibrary* gl = m_netlist_save->get_gate_library();
+        if (gl) m_gatelib_path = gl->get_path().string();
         if (fname.empty())
         {
             if (shadow)

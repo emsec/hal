@@ -554,14 +554,11 @@ namespace hal
 
     void PythonEditor::tabLoadFile(u32 index, QString fileName)
     {
-        std::ifstream file(fileName.toStdString(), std::ios::in);
-
-        if (!file.is_open())
-        {
+        QFile pyFile(fileName);
+        if (!pyFile.open(QIODevice::ReadOnly))
             return;
-        }
 
-        std::string f((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+        QByteArray pyText = pyFile.readAll();
         QFileInfo info(fileName);
 
         while (mTabWidget->count() <= (int)index)
@@ -569,16 +566,20 @@ namespace hal
 
         auto tab = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
 
-        tab->setPlainText(QString::fromStdString(f));
-        tab->set_file_name(fileName);
-        tab->document()->setModified(false);
-        mTabWidget->setTabText(mTabWidget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
-        mNewFileCounter--;
+        tab->setPlainText(QString::fromUtf8(pyText));
 
-        mPathEditorMap.insert(fileName, tab);
-        mFileWatcher->addPath(fileName);
+        if (!info.fileName().startsWith(".editor_tab"))
+        {
+            tab->document()->setModified(false);
+            tab->set_file_name(fileName);
+            mTabWidget->setTabText(mTabWidget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
+            mNewFileCounter--;
 
-        gFileStatusManager->fileSaved(tab->getUuid());
+            mPathEditorMap.insert(fileName, tab);
+            mFileWatcher->addPath(fileName);
+
+            gFileStatusManager->fileSaved(tab->getUuid());
+        }
     }
 
     QString PythonEditor::getDefaultPath() const

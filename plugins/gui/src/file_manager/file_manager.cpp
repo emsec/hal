@@ -24,6 +24,7 @@
 #include <QTextStream>
 #include <QApplication>
 #include <QDir>
+#include <QRegularExpression>
 
 namespace hal
 {
@@ -185,6 +186,37 @@ namespace hal
 
     void FileManager::importFile(QString filename)
     {
+        // check whether there is already a project with the same name as file-to-be-imported
+        QString testDirExists(filename);
+        testDirExists.remove(QRegularExpression("\\.\\w*$"));
+        if (QFileInfo(testDirExists).isDir() &&
+                QFileInfo(QDir(testDirExists).absoluteFilePath(QString::fromStdString(ProjectManager::s_project_file))).exists())
+        {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setWindowTitle("Resume previous work");
+            msgBox.setText("A hal project exists for the selected netlist.");
+            auto butLoadProject   = msgBox.addButton("Load hal project", QMessageBox::ActionRole);
+            auto butImportNetlist = msgBox.addButton("Parse " + QFileInfo(filename).suffix() + " file", QMessageBox::ActionRole);
+            msgBox.addButton("Abort", QMessageBox::RejectRole);
+
+            QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+            QGridLayout* layout           = (QGridLayout*)msgBox.layout();
+            layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+
+            msgBox.exec();
+
+            if (msgBox.clickedButton() == (QAbstractButton*)butLoadProject)
+            {
+                openProject(testDirExists);
+                return;
+            }
+            else if (msgBox.clickedButton() != (QAbstractButton*)butImportNetlist)
+            {
+                return;
+            }
+        }
+
         ImportNetlistDialog ind(filename, qApp->activeWindow());
         if (ind.exec() != QDialog::Accepted) return;
         QString projdir = ind.projectDirectory();
@@ -205,11 +237,20 @@ namespace hal
             QDir().rename(filename,netlistFilename);
         }
 
+        QString gatelib = ind.gateLibraryPath();
+        if (ind.isCopyGatelibChecked() && !gatelib.isEmpty())
+        {
+            QFileInfo glInfo(gatelib);
+            QString targetGateLib = projectDir.absoluteFilePath(glInfo.fileName());
+            if (QFile::copy(gatelib,targetGateLib))
+                gatelib = targetGateLib;
+        }
+
         LogManager& lm              = LogManager::get_instance();
         std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
         lm.set_file_name(lpath);
 
-        deprecatedOpenFile(netlistFilename);
+        deprecatedOpenFile(netlistFilename, gatelib);
     }
 
     void FileManager::openProject(QString projPath)
@@ -234,7 +275,7 @@ namespace hal
         lm.set_file_name(lpath);
     }
 
-    void FileManager::deprecatedOpenFile(QString filename)
+    void FileManager::deprecatedOpenFile(QString filename, QString gatelibraryPath)
     {
         QString logical_file_name = filename;
 
@@ -250,39 +291,6 @@ namespace hal
             log_error("gui", "{}", errorMsg.toStdString());
             displayErrorMessage(errorMsg);
             return;
-        }
-
-        if (!filename.endsWith(".hal"))
-        {
-            QString hal_file_name = filename.left(filename.lastIndexOf('.')) + ".hal";
-            QString extension     = filename.right(filename.size() - filename.lastIndexOf('.'));
-
-            if (QFileInfo::exists(hal_file_name) && QFileInfo(hal_file_name).isFile())
-            {
-                QMessageBox msgBox;
-                msgBox.setIcon(QMessageBox::Question);
-                msgBox.setWindowTitle("Resume previous work");
-                msgBox.setText("A .hal file exists for the selected netlist.");
-                auto parse_hal_btn = msgBox.addButton("Load .hal file", QMessageBox::ActionRole);
-                auto parse_hdl_btn = msgBox.addButton("Parse " + extension + " file", QMessageBox::ActionRole);
-                msgBox.addButton("Abort", QMessageBox::RejectRole);
-
-                QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-                QGridLayout* layout           = (QGridLayout*)msgBox.layout();
-                layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
-
-                msgBox.exec();
-
-                if (msgBox.clickedButton() == (QAbstractButton*)parse_hal_btn)
-                {
-                    filename         = hal_file_name;
-                    logical_file_name = hal_file_name;
-                }
-                else if (msgBox.clickedButton() != (QAbstractButton*)parse_hdl_btn)
-                {
-                    return;
-                }
-            }
         }
 
 
@@ -360,7 +368,7 @@ namespace hal
         log_info("gui", "Searching for (other) compatible netlists.");
 
         // event_controls::enable_all(false);
-        std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(filename.toStdString());
+        std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(filename.toStdString(),gatelibraryPath.toStdString());
         // event_controls::enable_all(true);
 
         if (netlists.empty())

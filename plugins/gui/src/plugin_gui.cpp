@@ -60,7 +60,10 @@ namespace hal
         {
             auto fileName = std::filesystem::path(args.get_parameter("--input-file"));
             log_info("gui", "GUI started with file {}.", fileName.string());
-            FileManager::get_instance()->deprecatedOpenFile(QString::fromStdString(fileName.string()));
+            QString gateLibraryPath;
+            if (args.is_option_set("--gate-library"))
+                gateLibraryPath = QString::fromStdString(args.get_parameter("--gate-library"));
+            FileManager::get_instance()->deprecatedOpenFile(QString::fromStdString(fileName.string()),gateLibraryPath);
         }
     }
 
@@ -136,7 +139,7 @@ namespace hal
         QFontDatabase::addApplicationFont(":/fonts/Montserrat/Montserrat-Black");
         QFontDatabase::addApplicationFont(":/fonts/Source Code Pro/SourceCodePro-Black");
 
-        gate_library_manager::load_all();
+//        gate_library_manager::load_all();
 
         //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
         //this settingsobject is currently neccessary to read from the settings from here, because the mGSettings are not yet initialized(?)

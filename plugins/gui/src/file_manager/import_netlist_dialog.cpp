@@ -10,6 +10,11 @@
 #include <QDialogButtonBox>
 #include <QSpacerItem>
 #include <QRegularExpression>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QFile>
+#include <QFileInfo>
+#include <QDebug>
 
 QLineEdit* mEditProjectdir;
 QComboBox* mComboGatelib;
@@ -19,6 +24,24 @@ namespace hal {
     ImportNetlistDialog::ImportNetlistDialog(const QString& filename, QWidget *parent)
         : QDialog(parent)
     {
+        QString suggestedGateLibraryPath;
+        QString suggestedGateLibraryName;
+        if (filename.endsWith(".hal"))
+        {
+            QFile halFile(filename);
+            if (halFile.open(QIODevice::ReadOnly))
+            {
+                QJsonDocument halDoc = QJsonDocument::fromJson(halFile.readAll());
+                const QJsonObject& halObj = halDoc.object();
+                if (halObj.contains("netlist") && halObj["netlist"].isObject())
+                {
+                    const QJsonObject& nlObj = halObj["netlist"].toObject();
+                    if (nlObj.contains("gate_library") && nlObj["gate_library"].isString())
+                        suggestedGateLibraryPath = nlObj["gate_library"].toString();
+                }
+            }
+        }
+
         int irow = 0;
         QGridLayout* layout = new QGridLayout(this);
         setWindowTitle("Import netlist");
@@ -36,12 +59,27 @@ namespace hal {
         layout->addWidget(new QLabel("Gate library:",this),irow++,0,Qt::AlignLeft);
         mComboGatelib = new QComboBox(this);
         mComboGatelib->addItem("(Auto detect)");
-        for (const GateLibrary* glib : gate_library_manager::get_gate_libraries())
+        for (const std::filesystem::path path : gate_library_manager::get_all_path())
         {
-            mGateLibraryMap.insert(QString::fromStdString(glib->get_name()),mGateLibraries.size());
-            mGateLibraries.append(glib);
+            int n = mGateLibraryPath.size();
+            QString qName = QString::fromStdString(path.filename());
+            mGateLibraryMap.insert(qName,n);
+            QString qPath = QString::fromStdString(path.string());
+            mGateLibraryPath.append(qPath);
+            if (qPath == suggestedGateLibraryPath) suggestedGateLibraryName = qName;
+        }
+        if (suggestedGateLibraryName.isEmpty() && !suggestedGateLibraryPath.isEmpty())
+        {
+            // suggested gate library not found in default path
+            QFileInfo info(suggestedGateLibraryPath);
+            suggestedGateLibraryName = info.fileName();
+            int n = mGateLibraryPath.size();
+            mGateLibraryMap.insert(suggestedGateLibraryName,n);
+            mGateLibraryPath.append(suggestedGateLibraryPath);
         }
         mComboGatelib->addItems(mGateLibraryMap.keys());
+        if (!suggestedGateLibraryName.isEmpty())
+            mComboGatelib->setCurrentText(suggestedGateLibraryName);
         mComboGatelib->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
         layout->addWidget(mComboGatelib,irow++,0);
 
@@ -55,6 +93,8 @@ namespace hal {
         connect(dbb,&QDialogButtonBox::accepted,this,&QDialog::accept);
         connect(dbb,&QDialogButtonBox::rejected,this,&QDialog::reject);
         layout->addWidget(dbb,irow++,0,Qt::AlignRight);
+        connect(mComboGatelib,&QComboBox::currentTextChanged,this,&ImportNetlistDialog::handleGateLibraryPathChanged);
+        handleGateLibraryPathChanged(mComboGatelib->currentText());
     }
 
     QString ImportNetlistDialog::projectDirectory() const
@@ -62,9 +102,24 @@ namespace hal {
         return mProjectdir;
     }
 
-    QString ImportNetlistDialog::gateLibrary() const
+    void ImportNetlistDialog::handleGateLibraryPathChanged(const QString& txt)
     {
-        return mComboGatelib->currentText();
+        if (mGateLibraryMap.value(txt,-1) < 0)
+        {
+            mCheckCopyGatelib->setCheckState(Qt::Unchecked);
+            mCheckCopyGatelib->setDisabled(true);
+        }
+        else
+            mCheckCopyGatelib->setEnabled(true);
+    }
+
+    QString ImportNetlistDialog::gateLibraryPath() const
+    {
+        QString seltxt = mComboGatelib->currentText();
+        int inx = mGateLibraryMap.value(seltxt,-1);
+        if (inx < 0) return QString();
+        qDebug() << "selected gate lib" << mGateLibraryPath.at(inx);
+        return mGateLibraryPath.at(inx);
     }
 
     bool ImportNetlistDialog::isMoveNetlistChecked() const

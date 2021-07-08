@@ -34,7 +34,6 @@ class QLineEdit;
 
 namespace hal {
 
-    class GateLibrary;
     class ImportNetlistDialog : public QDialog
     {
         Q_OBJECT
@@ -44,12 +43,14 @@ namespace hal {
         QCheckBox* mCheckMoveNetlist;
         QCheckBox* mCheckCopyGatelib;
 
-        QList<const GateLibrary*> mGateLibraries;
+        QStringList mGateLibraryPath;
         QMap<QString,int> mGateLibraryMap;
+    private Q_SLOTS:
+        void handleGateLibraryPathChanged(const QString& txt);
     public:
         ImportNetlistDialog(const QString& filename, QWidget* parent = nullptr);
         QString projectDirectory() const;
-        QString gateLibrary() const;
+        QString gateLibraryPath() const;
         bool isMoveNetlistChecked() const;
         bool isCopyGatelibChecked() const;
     };

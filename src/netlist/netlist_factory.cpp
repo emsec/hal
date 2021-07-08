@@ -80,7 +80,7 @@ namespace hal
             return netlist_parser_manager::parse(netlist_file, args);
         }
 
-        std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& netlist_file)
+        std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& netlist_file, const std::filesystem::path& gatelib_file)
         {
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
             {
@@ -88,7 +88,7 @@ namespace hal
                 return {};
             }
 
-            return netlist_parser_manager::parse_all(netlist_file);
+            return netlist_parser_manager::parse_all(netlist_file, gatelib_file);
         }
     }    // namespace netlist_factory
 }    // namespace hal
