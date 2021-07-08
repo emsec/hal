@@ -3,6 +3,8 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/gui_globals.h"
+#include "gui/gui_utils/graphics.h"
+#include "gui/toolbar/toolbar.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
@@ -32,7 +34,12 @@ namespace hal
           mModuleProxyModel(new ModuleProxyModel(this)),
           mSearchbar(new Searchbar(this))
     {
+        ensurePolished();
+
         connect(mTreeView, &QTreeView::customContextMenuRequested, this, &ModuleWidget::handleTreeViewContextMenuRequested);
+
+        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+        mSearchAction->setToolTip("Search");
 
         mModuleProxyModel->setFilterKeyColumn(-1);
         mModuleProxyModel->setDynamicSortFilter(true);
@@ -64,11 +71,12 @@ namespace hal
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleWidget::handleModuleRemoved);
 
         connect(mSearchAction, &QAction::triggered, this, &ModuleWidget::toggleSearchbar);
+        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::updateSearchIcon);
     }
 
-    void ModuleWidget::setupToolbar(Toolbar* Toolbar)
+    void ModuleWidget::setupToolbar(Toolbar* toolbar)
     {
-        Q_UNUSED(Toolbar)
+        toolbar->addAction(mSearchAction);
     }
 
     QList<QShortcut*> ModuleWidget::createShortcuts()
@@ -84,13 +92,22 @@ namespace hal
 
     void ModuleWidget::toggleSearchbar()
     {
+        if (!mSearchAction->isEnabled())
+            return;
+
         if (mSearchbar->isHidden())
         {
+            filter(mSearchbar->getCurrentTextWithFlags());
             mSearchbar->show();
             mSearchbar->setFocus();
         }
         else
+        {
+            filter("");
             mSearchbar->hide();
+            setFocus();
+        }
+        updateSearchIcon();
     }
 
     void ModuleWidget::filter(const QString& text)
@@ -266,8 +283,46 @@ namespace hal
         return gNetlistRelay->getModuleModel()->getItem(mModuleProxyModel->mapToSource(index));
     }
 
+    void ModuleWidget::updateSearchIcon()
+    {
+        if (!mSearchbar->isEmpty() && mSearchbar->isVisible())
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
+        else
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+    }
+
     ModuleProxyModel* ModuleWidget::proxyModel()
     {
         return mModuleProxyModel;
+    }
+
+    QString ModuleWidget::searchIconPath() const
+    {
+        return mSearchIconPath;
+    }
+
+    QString ModuleWidget::searchIconStyle() const
+    {
+        return mSearchIconStyle;
+    }
+
+    QString ModuleWidget::searchActiveIconStyle() const
+    {
+        return mSearchActiveIconStyle;
+    }
+
+    void ModuleWidget::setSearchIconPath(const QString& path)
+    {
+        mSearchIconPath = path;
+    }
+
+    void ModuleWidget::setSearchIconStyle(const QString& style)
+    {
+        mSearchIconStyle = style;
+    }
+
+    void ModuleWidget::setSearchActiveIconStyle(const QString& style)
+    {
+        mSearchActiveIconStyle = style;
     }
 }

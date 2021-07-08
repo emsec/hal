@@ -153,7 +153,7 @@ namespace hal
         connect(mSelectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &SelectionDetailsWidget::handleSelectionUpdate);
         connect(mSearchbar, &Searchbar::textEdited, mSelectionTreeView, &SelectionTreeView::handleFilterTextChanged);
-        connect(mSearchbar, &Searchbar::textEdited, this, &SelectionDetailsWidget::handleFilterTextChanged);
+        connect(mSearchbar, &Searchbar::textEdited, this, &SelectionDetailsWidget::updateSearchIcon);
         connect(mSelectionTreeView, &SelectionTreeView::itemDoubleClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
         connect(mSelectionTreeView, &SelectionTreeView::focusItemClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
     }
@@ -359,7 +359,7 @@ namespace hal
 
         mSearchbar->clear();
         proxy->handleFilterTextChanged(QString());
-        handleFilterTextChanged(QString());
+        updateSearchIcon();
 
         mNumberSelectedItems = gSelectionRelay->numberSelectedItems();
         QVector<const SelectionTreeItem*> defaultHighlight;
@@ -472,25 +472,30 @@ namespace hal
 
     void SelectionDetailsWidget::toggleSearchbar()
     {
-        if(mSearchbar->isHidden() && mSearchAction->isEnabled())
+        if (!mSearchAction->isEnabled())
+            return;
+
+        if (mSearchbar->isHidden())
         {
+            mSelectionTreeView->handleFilterTextChanged(mSearchbar->getCurrentTextWithFlags());
             mSearchbar->show();
             mSearchbar->setFocus();
         }
         else
         {
+            mSelectionTreeView->handleFilterTextChanged("");
             mSearchbar->hide();
             setFocus();
         }
+        updateSearchIcon();
     }
 
-    void SelectionDetailsWidget::handleFilterTextChanged(const QString& filter_text)
+    void SelectionDetailsWidget::updateSearchIcon()
     {
-        Q_UNUSED(filter_text);
-        if(mSearchbar->isEmpty())
-            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-        else
+        if (!mSearchbar->isEmpty() && mSearchbar->isVisible())
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
+        else
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
     }
 
     void SelectionDetailsWidget::handleTreeViewItemFocusClicked(const SelectionTreeItem* sti)

@@ -266,20 +266,26 @@ namespace hal
 
         QMenu contextMenu("Context menu", this);
 
-        contextMenu.addAction("Close This Tab", [this, index](){
+        contextMenu.addAction("Close", [this, index](){
             handleTabCloseRequested(index);
         });
 
-        contextMenu.addAction("Close Other Tabs", [this, index](){
+        contextMenu.addSeparator();
+
+        contextMenu.addAction("Close all", [this, index](){
+            handleCloseAllTabs();
+        });
+
+        contextMenu.addAction("Close all others", [this, index](){
             handleCloseTabsToRight(index);
             handleCloseTabsToLeft(index);
         });
 
-        contextMenu.addAction("Close Tabs To Right", [this, index](){
+        contextMenu.addAction("Close all right", [this, index](){
             handleCloseTabsToRight(index);
         });
 
-        contextMenu.addAction("Close Tabs To Left", [this, index](){
+        contextMenu.addAction("Close all left", [this, index](){
             handleCloseTabsToLeft(index);
         });
 
@@ -301,6 +307,15 @@ namespace hal
         {
             handleTabCloseRequested(0);
             index-=1;
+        }
+    }
+
+    void GraphTabWidget::handleCloseAllTabs()
+    {
+        int count = mTabWidget->count();
+        for (int i = 0; i < count; i++)
+        {
+            handleTabCloseRequested(0);
         }
     }
 

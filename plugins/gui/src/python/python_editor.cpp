@@ -61,6 +61,7 @@ namespace hal
         mActionRun->setIcon(gui_utility::getStyledSvgIcon(mRunIconStyle, mRunIconPath));
         mActionToggleMinimap->setIcon(gui_utility::getStyledSvgIcon(mToggleMinimapIconStyle, mToggleMinimapIconPath));
         mActionNewFile->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
+        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
         mActionOpenFile->setText("Open Script");
         mActionSave->setText("Save");
@@ -68,6 +69,9 @@ namespace hal
         mActionRun->setText("Execute Script");
         mActionNewFile->setText("New File");
         mActionToggleMinimap->setText("Toggle Minimap");
+        mSearchAction->setText("Search");
+
+        setToolbarButtonsEnabled(true);
 
         connect(mActionOpenFile, &Action::triggered, this, &PythonEditor::handleActionOpenFile);
         connect(mActionSave, &Action::triggered, this, &PythonEditor::handleActionSaveFile);
@@ -344,14 +348,44 @@ namespace hal
     {
         if (mTabWidget->count() > 0)
             dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text, getFindFlags());
+
+        if (mSearchbar->isEmpty())
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+        else
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
     }
 
     void PythonEditor::handleCurrentTabChanged(int index)
     {
         Q_UNUSED(index)
 
+        bool enable = mTabWidget->count() > 0;
+
+        QStringList iconPath, iconStyle;
+
+        QAction* entryBasedAction[] = { mActionSave, mActionSaveAs,
+                                        mActionRun, mActionToggleMinimap, mSearchAction, nullptr};
+
+        iconStyle << mSaveIconStyle << mSaveAsIconStyle
+                              << mRunIconStyle << mToggleMinimapIconStyle << mSearchIconStyle;
+        iconPath << mSaveIconPath << mSaveAsIconPath
+                             << mRunIconPath << mToggleMinimapIconPath << mSearchIconPath;
+
+        for (int iacc = 0; entryBasedAction[iacc]; iacc++)
+        {
+            entryBasedAction[iacc]->setEnabled(enable);
+            entryBasedAction[iacc]->setIcon(
+                        gui_utility::getStyledSvgIcon(enable
+                                                         ? iconStyle.at(iacc)
+                                                         : disabledIconStyle(),
+                                                         iconPath.at(iacc)));
+        }
+
         if (!mTabWidget->currentWidget())
+        {
+            mSearchbar->hide();
             return;
+        }
 
         PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
 
@@ -381,6 +415,7 @@ namespace hal
         Toolbar->addAction(mActionSaveAs);
         Toolbar->addAction(mActionRun);
         Toolbar->addAction(mActionToggleMinimap);
+        Toolbar->addAction(mSearchAction);
     }
 
     QList<QShortcut*> PythonEditor::createShortcuts()
@@ -635,6 +670,15 @@ namespace hal
         return true;
     }
 
+    void PythonEditor::setToolbarButtonsEnabled(bool enable)
+    {
+        mActionSave->setEnabled(enable);
+        mActionSaveAs->setEnabled(enable);
+        mActionRun->setEnabled(enable);
+        mActionToggleMinimap->setEnabled(enable);
+        mSearchAction->setEnabled(enable);
+    }
+
     void PythonEditor::handleActionSaveFile()
     {
         this->saveFile(false);
@@ -703,6 +747,12 @@ namespace hal
         connect(action, &QAction::triggered, this, &PythonEditor::handleActionCloseRightTabs);
         action = context_menu.addAction("Close all left");
         connect(action, &QAction::triggered, this, &PythonEditor::handleActionCloseLeftTabs);
+
+        context_menu.addSeparator();
+        action = context_menu.addAction("Save");
+        connect(action, &QAction::triggered, this, &PythonEditor::handleActionSaveFile);
+        action = context_menu.addAction("Save as");
+        connect(action, &QAction::triggered, this, &PythonEditor::handleActionSaveFileAs);
 
         context_menu.addSeparator();
         action                     = context_menu.addAction("Show in system explorer");
@@ -1266,6 +1316,11 @@ namespace hal
         }
     }
 
+    QString PythonEditor::disabledIconStyle() const
+    {
+        return mDisabledIconStyle;
+    }
+
     QString PythonEditor::openIconPath() const
     {
         return mOpenIconPath;
@@ -1324,6 +1379,11 @@ namespace hal
     QString PythonEditor::toggleMinimapIconStyle() const
     {
         return mToggleMinimapIconStyle;
+    }
+
+    void PythonEditor::setDisabledIconStyle(const QString& style)
+    {
+        mDisabledIconStyle = style;
     }
 
     void PythonEditor::setOpenIconPath(const QString& path)
@@ -1388,11 +1448,18 @@ namespace hal
 
     void PythonEditor::toggleSearchbar()
     {
+        if (!mSearchAction->isEnabled())
+            return;
+
         if (mSearchbar->isHidden())
         {
             mSearchbar->show();
             if (mTabWidget->currentWidget())
+            {
                 dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(mSearchbar->getCurrentText(), getFindFlags());
+                if (!mSearchbar->isEmpty())
+                    mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
+            }
             mSearchbar->setFocus();
         }
         else
@@ -1401,6 +1468,7 @@ namespace hal
             if (mTabWidget->currentWidget())
             {
                 dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search("");
+                mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
                 mTabWidget->currentWidget()->setFocus();
             }
             else
@@ -1416,5 +1484,35 @@ namespace hal
         if (mSearchbar->exactMatchChecked())
             options = options | QTextDocument::FindWholeWords;
         return options;
+    }
+
+    QString PythonEditor::searchIconPath() const
+    {
+        return mSearchIconPath;
+    }
+
+    QString PythonEditor::searchIconStyle() const
+    {
+        return mSearchIconStyle;
+    }
+
+    QString PythonEditor::searchActiveIconStyle() const
+    {
+        return mSearchActiveIconStyle;
+    }
+
+    void PythonEditor::setSearchIconPath(const QString& path)
+    {
+        mSearchIconPath = path;
+    }
+
+    void PythonEditor::setSearchIconStyle(const QString& style)
+    {
+        mSearchIconStyle = style;
+    }
+
+    void PythonEditor::setSearchActiveIconStyle(const QString& style)
+    {
+        mSearchActiveIconStyle = style;
     }
 }

@@ -103,6 +103,13 @@ namespace hal
         QString getCurrentText();
 
         /**
+         * Gets the current Searchbar input with regex modifier.
+         *
+         * @return the current search string
+         */
+        QString getCurrentTextWithFlags();
+
+        /**
          * Adds flags ("Exact Match" or "Case Sensitive") as regex modifiers to oldText.
          *
          * @return oldText with regex modifiers as QString

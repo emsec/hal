@@ -288,8 +288,9 @@ namespace hal
     private Q_SLOTS:
 
         /**
-         * Restores the previous selection that is contained in its history.
+         * Q_SLOT to update the search icon style. The search icon style indicates wether a filter is applied or not.
          */
+        void updateSearchIcon();
 
         /**
          * Opens a context menu and calls, depending on the cosen action, either selectionToNewGrouping()
@@ -375,7 +376,6 @@ namespace hal
         QString mToModuleIconPath;
         QString mToModuleIconStyle;
         
-        void handleFilterTextChanged(const QString& filter_text);
         void canMoveToModule(int nodes);
         void enableSearchbar(bool enable);
 

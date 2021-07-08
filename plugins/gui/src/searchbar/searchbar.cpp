@@ -43,14 +43,12 @@ namespace hal
         //mLayout->addWidget(mClearIconLabel);
         //mLayout.addWidget(mButton);
 
-        //mExactMatch->setIcon(QIcon(":/icons/fire"));
         mExactMatch->setText("==");
         mExactMatch->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         mExactMatch->setCheckable(true);
         mExactMatch->setToolTip("Exact Match");
         mLayout->addWidget(mExactMatch);
 
-        //mCaseSensitive->setIcon(QIcon(":/icons/cross"));
         mCaseSensitive->setText("Aa");
         mCaseSensitive->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         mCaseSensitive->setCheckable(true);
@@ -128,6 +126,11 @@ namespace hal
     QString Searchbar::getCurrentText()
     {
         return mLineEdit->text();
+    }
+
+    QString Searchbar::getCurrentTextWithFlags()
+    {
+        return addFlags(mLineEdit->text());
     }
 
     QString Searchbar::addFlags(const QString& oldText)
