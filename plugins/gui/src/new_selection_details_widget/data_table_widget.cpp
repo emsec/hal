@@ -19,7 +19,7 @@ namespace hal {
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         this->verticalHeader()->setVisible(false);
         this->horizontalHeader()->setVisible(false);
-        this->setShowGrid(false);
+        //this->setShowGrid(false);
 
         SelectionTreeView* t = gContentManager->getSelectionDetailsWidget()->selectionTreeView();
         connect(t, &SelectionTreeView::triggerSelection, this, &DataTableWidget::handleDetailsFocusChanged);
