@@ -66,6 +66,12 @@ namespace hal
         mChildren.append(child);
     }
 
+    void TreeItem::insertChild(int index, TreeItem *child)
+    {
+        child->setParent(this);
+        mChildren.insert(index, child);
+    }
+
     TreeItem* TreeItem::removeChildAtPos(int row)
     {
         if(row < 0 || row >= mChildren.size())

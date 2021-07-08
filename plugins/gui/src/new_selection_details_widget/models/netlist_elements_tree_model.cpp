@@ -6,7 +6,8 @@
 
 namespace hal
 {
-    NetlistElementsTreeModel::NetlistElementsTreeModel(QObject *parent) : BaseTreeModel(parent), mModuleIcon(QIcon(":/icons/sel_module")), mGateIcon(QIcon(":/icons/sel_gate")), mNetIcon(QIcon(":/icons/sel_net"))
+    NetlistElementsTreeModel::NetlistElementsTreeModel(QObject *parent) : BaseTreeModel(parent), mModuleIcon(QIcon(":/icons/sel_module")), mGateIcon(QIcon(":/icons/sel_gate")), mNetIcon(QIcon(":/icons/sel_net")),
+         mGatesDisplayed(true), mNetsDisplayed(true), mDisplaySubmodRecursive(true), mCurrentlyDisplayingModule(false), mModId(-1)
     {
         // use root item to store header information
         //mRootItem = new TreeItem(QList<QVariant>() << "Name" << "ID" << "Type");
@@ -18,7 +19,10 @@ namespace hal
         connect(gNetlistRelay, &NetlistRelay::gateNameChanged, this, &NetlistElementsTreeModel::gateNameChanged);
         connect(gNetlistRelay, &NetlistRelay::gateRemoved, this, &NetlistElementsTreeModel::gateRemoved);
         connect(gNetlistRelay, &NetlistRelay::netRemoved, this, &NetlistElementsTreeModel::netRemoved);
-
+        connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &NetlistElementsTreeModel::moduleNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleTypeChanged, this, &NetlistElementsTreeModel::moduleTypeChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &NetlistElementsTreeModel::moduleGateRemoved);
+        connect(gNetlistRelay, &NetlistRelay::moduleGateAssigned, this, &NetlistElementsTreeModel::moduleGateAssigned);
     }
 
     NetlistElementsTreeModel::~NetlistElementsTreeModel()
@@ -106,11 +110,28 @@ namespace hal
         mModuleToTreeitems.clear();
         mGateToTreeitems.clear();
         mNetToTreeitems.clear();
+        mDisplaySubmodRecursive = true;
+        mGatesDisplayed = true;
+        mNetsDisplayed = true;
+        mCurrentlyDisplayingModule = false;
+        mModId = -1;
     }
 
     void NetlistElementsTreeModel::setContent(QList<int> modIds, QList<int> gateIds, QList<int> netIds, bool displayModulesRecursive, bool showGatesInSubmods, bool showNetsInSubmods)
     {
+        mDisplaySubmodRecursive = displayModulesRecursive;
+        mGatesDisplayed = showGatesInSubmods;
+        mNetsDisplayed = showNetsInSubmods;
+
+        //i need to temp. store this because clear() is called....
+        bool disPlayedModtmp = mCurrentlyDisplayingModule;
+        int modIdtmp = mModId;
+
         clear();
+
+        mCurrentlyDisplayingModule = disPlayedModtmp;
+        mModId = modIdtmp;
+
         beginResetModel();
         for(int id : modIds)
         {
@@ -149,6 +170,9 @@ namespace hal
 
     void NetlistElementsTreeModel::setModule(Module* mod, bool showGates, bool showNets, bool displayModulesRecursive)
     {
+        mCurrentlyDisplayingModule = true;
+        mModId = mod->get_id();
+
         QList<int> subModIds, gateIds, netIds;
         for(auto subMod : mod->get_submodules())
             subModIds.append(subMod->get_id());
@@ -214,6 +238,77 @@ namespace hal
             //removed from the maps (i think), and: what is with beginRemoveRows??->simply calling beginResetModel might be the easiest solution..
             delete netItem;
         }
+    }
+
+    void NetlistElementsTreeModel::moduleNameChanged(Module *m)
+    {
+        for(TreeItem* modItem : mModuleToTreeitems.values(m))
+        {
+            modItem->setDataAtIndex(sNameColumn, QString::fromStdString(m->get_name()));
+            QModelIndex inx0 = getIndexFromItem(modItem);
+            Q_EMIT dataChanged(inx0, createIndex(inx0.row(), sNameColumn, inx0.internalPointer()));
+        }
+    }
+
+    void NetlistElementsTreeModel::moduleTypeChanged(Module *m)
+    {
+        for(TreeItem* modItem : mModuleToTreeitems.values(m))
+        {
+            modItem->setDataAtIndex(sTypeColumn, QString::fromStdString(m->get_type()));
+            QModelIndex inx0 = getIndexFromItem(modItem);
+            Q_EMIT dataChanged(inx0, createIndex(inx0.row(), sTypeColumn, inx0.internalPointer()));
+        }
+    }
+
+    void NetlistElementsTreeModel::moduleGateAssigned(Module *m, int assigned_gate)
+    {
+        //TODO: tidy up, since both cases (special and not special) are handled the same, perhaps
+        //put the code in an external function [ insertGateIntoMod(treeItem, gate) ]
+        if(!mGatesDisplayed)
+            return;
+
+        //special case when we actually displaying the content of a module through setModule
+        Gate* assignedGate = gNetlist->get_gate_by_id(assigned_gate);
+        if(mCurrentlyDisplayingModule && mModId == (int)m->get_id())
+        {
+            //insert gate at the first index possible(nets must also be invalidated?)
+            int indexToInsert = 0;
+            for(; indexToInsert < mRootItem->getChildCount(); indexToInsert++)
+            {
+                if(mRootItem->getChild(indexToInsert)->getAdditionalData(mItemTypeKey).toInt() != itemType::module)
+                    break;
+            }
+            TreeItem* gateItem = new TreeItem(QList<QVariant>() << QString::fromStdString(assignedGate->get_name())
+                                              << assignedGate->get_id() << QString::fromStdString(assignedGate->get_type()->get_name()));
+            gateItem->setAdditionalData(mItemTypeKey, itemType::gate);
+            beginResetModel();//only do that if "all" nets are invalidated that this module holds
+            mRootItem->insertChild(indexToInsert, gateItem);
+            endResetModel();
+            mGateToTreeitems.insert(assignedGate, gateItem);
+            return;
+        }
+        //standard case in which you do the same as obove, but just go through each module item
+        for(TreeItem* modItem : mModuleToTreeitems.values(m))
+        {
+            int indexToInsert = 0;
+            for(; indexToInsert < modItem->getChildCount(); indexToInsert++)
+                if(modItem->getChild(indexToInsert)->getAdditionalData(mItemTypeKey).toInt() != itemType::module)
+                    break;
+            TreeItem* gateItem = new TreeItem(QList<QVariant>() << QString::fromStdString(assignedGate->get_name())
+                                              << assignedGate->get_id() << QString::fromStdString(assignedGate->get_type()->get_name()));
+            gateItem->setAdditionalData(mItemTypeKey, itemType::gate);
+            beginInsertRows(getIndexFromItem(modItem), indexToInsert, indexToInsert);
+            modItem->insertChild(indexToInsert, gateItem);
+            endInsertRows();
+            mGateToTreeitems.insert(assignedGate, gateItem);
+            return;
+        }
+    }
+
+    void NetlistElementsTreeModel::moduleGateRemoved(Module *m, int removed_gate)
+    {
+        Q_UNUSED(m) //does not depend on the module but on the gate, simply removed them..
+        gateRemoved(gNetlist->get_gate_by_id(removed_gate));
     }
 
     void NetlistElementsTreeModel::moduleRecursive(Module* mod, TreeItem* modItem, bool showGates, bool showNets)

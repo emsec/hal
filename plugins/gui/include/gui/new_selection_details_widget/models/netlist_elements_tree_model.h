@@ -108,18 +108,18 @@ namespace hal
         void gateRemoved(Gate* g);
         void netNameChanged(Net* n);
         void netRemoved(Net* n);
-//        void moduleNameChanged(Module* m);
-//        void moduleTypeChaned(Module* m);
-//        void moduleRemoved(Module* m);
+        void moduleNameChanged(Module* m);
+        void moduleTypeChanged(Module* m);
+//        void moduleRemoved(Module* m);//at this point, nothing is to do anymore but to remove the item->all other events (assigning/submodremoving are done before)
 //        void moduleSubmoduleRemoved(Module* m, int removed_module);
 //        //void moduleParentChanged(Module* m);
 
 //        //optional
-//        void gateCreated(Gate* g);
+//        void gateCreated(Gate* g); / = assigned to top_module, no need to catch this
 //        void netCreated(Net* n);
 //        void moduleCreated(Module* m);
-//        void moduleGateAssigned(Module* m, int assigned_gate); //const u32
-//        void moduleGateRemoved(Module* m, int removed_gate); //const u32
+        void moduleGateAssigned(Module* m, int assigned_gate); //const u32
+        void moduleGateRemoved(Module* m, int removed_gate); //const u32 //same as assign_gate(top)
 //        void moduleSubmoduleAdded(Module* m, int added_module);
 
 
@@ -142,7 +142,9 @@ namespace hal
         bool mGatesDisplayed;
         bool mNetsDisplayed;
         bool mDisplaySubmodRecursive;
-        void* mDataToBeRemoved;
+        //boolean needed for a special case when displaying a module that is called with setModule
+        bool mCurrentlyDisplayingModule;
+        int mModId;
 
         //"2" options: //also: use QMultiMap in case multiple "same" items (gates etc) are displayed
         //1) 1 map that maps "raw element pointer (gate,net,module)" to a list of treeitems
