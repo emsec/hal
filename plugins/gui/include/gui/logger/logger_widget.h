@@ -41,6 +41,7 @@ namespace hal
 {
     class LoggerMarshall;
     class ChannelSelector;
+    class SeveritySelector;
 
     /**
      * @ingroup logging
@@ -123,6 +124,7 @@ namespace hal
 
         QPlainTextEdit* mPlainTextEdit;
         ChannelSelector* mSelector;
+        SeveritySelector* sSelector;
         LoggerMarshall* mLogMarshall;
         std::string mCurrentChannel;
         QReadWriteLock mLock;

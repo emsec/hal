@@ -1,6 +1,7 @@
 #include "gui/logger/logger_widget.h"
 #include "gui/channel_manager/channel_model.h"
 #include "gui/channel_manager/channel_selector.h"
+#include "gui/severity_manager/severity_selector.h"
 #include "gui/logger/logger_marshall.h"
 #include "gui/toolbar/toolbar.h"
 
@@ -25,6 +26,7 @@ namespace hal
         mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
 
         mSelector = new ChannelSelector();
+        //sSelector = new SeveritySelector();
 
         connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
@@ -36,6 +38,7 @@ namespace hal
     LoggerWidget::~LoggerWidget()
     {
         //cant set the parent correct, so just delete them in the constructor
+        //delete sSelector;
         delete mSelector;
     }
 
@@ -47,6 +50,16 @@ namespace hal
         ChannelSelector* selector = new ChannelSelector();
         connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         Toolbar->addWidget(selector);
+
+        SeveritySelector* infoSelector = new SeveritySelector(this);
+        infoSelector->setText("Info");
+        Toolbar->addWidget(infoSelector);
+        SeveritySelector* warningSelector = new SeveritySelector(this);
+        warningSelector->setText("Warning");
+        Toolbar->addWidget(warningSelector);
+        SeveritySelector* errorSelector = new SeveritySelector(this);
+        errorSelector->setText("Error");
+        Toolbar->addWidget(errorSelector);
     }
 
     QPlainTextEdit* LoggerWidget::getPlainTextEdit()
