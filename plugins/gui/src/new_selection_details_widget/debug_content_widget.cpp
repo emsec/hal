@@ -12,11 +12,12 @@
 #include "gui/new_selection_details_widget/new_gate_details_widget/gate_info_table.h"
 #include "gui/new_selection_details_widget/new_net_details_widget/net_info_table.h"
 #include "gui/new_selection_details_widget/new_module_details_widget/module_info_table.h"
+#include "gui/new_selection_details_widget/data_table_widget.h"
 
 namespace hal {
     DebugContentWidget::DebugContentWidget(QWidget *parent) : ContentWidget("Debug Widget", parent)
     {
-        //mContentLayout->addWidget(new BooleanFunctionTable(this));
+        //mContentLayout->addWidget(new DataTableWidget(this));
 
         //--------For NetlistElementsModel
         //NOTE: I've commented it out temporarily, because it SIGSEGVs sometimes (in netlists without gate id 2)

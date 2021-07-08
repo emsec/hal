@@ -26,6 +26,7 @@
 #include <QAbstractTableModel>
 #include <QString>
 #include <QFont>
+#include <QColor>
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/data_container.h"
@@ -117,8 +118,19 @@ namespace hal {
         void updateData(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dc);
 
     private:
-        QString getValueTextByDataType(QString value, QString dataType) const;
+        struct RowStyle
+        {
+            QFont keyFont;
+            QColor valueColor;
+            QString valueString;
+            QString keyToolTip;
+            QString valueToolTip;
+        };
 
+        RowStyle getRowStyleByEntry(const DataEntry& entry) const;
+
+        // Map: [category, key] -> row style of the respective entry
+        QMap<QPair<QString, QString>, RowStyle> mEntryToRowStyle;
         QList<DataEntry> mDataEntries;
         QFont mKeyFont;
 
