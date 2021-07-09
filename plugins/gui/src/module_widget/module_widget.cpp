@@ -97,13 +97,11 @@ namespace hal
 
         if (mSearchbar->isHidden())
         {
-            filter(mSearchbar->getCurrentTextWithFlags());
             mSearchbar->show();
             mSearchbar->setFocus();
         }
         else
         {
-            filter("");
             mSearchbar->hide();
             setFocus();
         }
@@ -285,7 +283,7 @@ namespace hal
 
     void ModuleWidget::updateSearchIcon()
     {
-        if (!mSearchbar->isEmpty() && mSearchbar->isVisible())
+        if (mSearchbar->filterApplied() && mSearchbar->isVisible())
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));

@@ -492,7 +492,7 @@ namespace hal
 
     void SelectionDetailsWidget::updateSearchIcon()
     {
-        if (!mSearchbar->isEmpty() && mSearchbar->isVisible())
+        if (mSearchbar->filterApplied() && mSearchbar->isVisible())
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));

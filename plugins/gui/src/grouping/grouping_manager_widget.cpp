@@ -589,14 +589,12 @@ namespace hal
 
         if (mSearchbar->isHidden())
         {
-            filter(mSearchbar->getCurrentTextWithFlags());
             mSearchbar->show();
             mSearchbar->setFocus();
         }
         else
         {
             mSearchbar->hide();
-            filter("");
             setFocus();
         }
         updateSearchIcon();
@@ -616,7 +614,7 @@ namespace hal
 
     void GroupingManagerWidget::updateSearchIcon()
     {
-        if (!mSearchbar->isEmpty() && mSearchbar->isVisible())
+        if (mSearchbar->filterApplied() && mSearchbar->isVisible())
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));

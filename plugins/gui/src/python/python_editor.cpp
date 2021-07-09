@@ -349,10 +349,10 @@ namespace hal
         if (mTabWidget->count() > 0)
             dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text, getFindFlags());
 
-        if (mSearchbar->isEmpty())
-            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-        else
+        if (mSearchbar->filterApplied())
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
+        else
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
     }
 
     void PythonEditor::handleCurrentTabChanged(int index)
@@ -1456,8 +1456,7 @@ namespace hal
             mSearchbar->show();
             if (mTabWidget->currentWidget())
             {
-                dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(mSearchbar->getCurrentText(), getFindFlags());
-                if (!mSearchbar->isEmpty())
+                if (!mSearchbar->filterApplied())
                     mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
             }
             mSearchbar->setFocus();
@@ -1467,7 +1466,6 @@ namespace hal
             mSearchbar->hide();
             if (mTabWidget->currentWidget())
             {
-                dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search("");
                 mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
                 mTabWidget->currentWidget()->setFocus();
             }

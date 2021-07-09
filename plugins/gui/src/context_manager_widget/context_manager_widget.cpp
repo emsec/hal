@@ -208,7 +208,7 @@ namespace hal
 
     void ContextManagerWidget::updateSearchIcon()
     {
-        if (!mSearchbar->isEmpty() && mSearchbar->isVisible())
+        if (mSearchbar->filterApplied() && mSearchbar->isVisible())
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
@@ -298,14 +298,12 @@ namespace hal
 
         if (mSearchbar->isHidden())
         {
-            mContextTableProxyModel->handleFilterTextChanged(mSearchbar->getCurrentTextWithFlags());
             mSearchbar->show();
             mSearchbar->setFocus();
         }
         else
         {
             mSearchbar->hide();
-            mContextTableProxyModel->handleFilterTextChanged("");
             setFocus();
         }
         updateSearchIcon();
