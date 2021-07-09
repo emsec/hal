@@ -28,6 +28,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <set>
 
 namespace hal
 {
@@ -43,7 +44,7 @@ namespace hal
         {
             NetlistAbstraction(Netlist* nl_arg);
 
-            std::shared_ptr<Grouping> create_initial_grouping() const;
+            std::shared_ptr<Grouping> create_initial_grouping(std::set<std::set<u32>> known_groups) const;
 
             // netlist
             Netlist* nl;
