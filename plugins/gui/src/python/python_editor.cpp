@@ -82,6 +82,7 @@ namespace hal
         connect(mSearchAction, &QAction::triggered, this, &PythonEditor::toggleSearchbar);
 
         connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::handleSearchbarTextEdited);
+        connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::updateSearchIcon);
         connect(mTabWidget, &QTabWidget::currentChanged, this, &PythonEditor::handleCurrentTabChanged);
 
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &PythonEditor::handleFileOpened);
@@ -399,6 +400,8 @@ namespace hal
             mFileModifiedBar->setHidden(false);
         else
             mFileModifiedBar->setHidden(true);
+
+        updateSearchIcon();
     }
 
     PythonEditor::~PythonEditor()
@@ -979,6 +982,16 @@ namespace hal
         handleActionNewTab();
     }
 
+    void PythonEditor::updateSearchIcon()
+    {
+        if (mSearchbar->filterApplied() && mSearchbar->isVisible())
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
+        else if (!mSearchAction->isEnabled())
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mSearchIconPath));
+        else
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+    }
+
     bool PythonEditor::eventFilter(QObject* obj, QEvent* event)
     {
         if (obj == mTabWidget->tabBar() && event->type() == QEvent::MouseButtonPress)
@@ -1454,21 +1467,13 @@ namespace hal
         if (mSearchbar->isHidden())
         {
             mSearchbar->show();
-            if (mTabWidget->currentWidget())
-            {
-                if (!mSearchbar->filterApplied())
-                    mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
-            }
             mSearchbar->setFocus();
         }
         else
         {
             mSearchbar->hide();
             if (mTabWidget->currentWidget())
-            {
-                mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
                 mTabWidget->currentWidget()->setFocus();
-            }
             else
                 this->setFocus();
         }

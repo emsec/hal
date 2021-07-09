@@ -587,6 +587,11 @@ namespace hal
          */
         void handleFileAboutToClose(const QString& fileName);
 
+        /**
+         * Q_SLOT to update the search icon style. The search icon style indicates wether a filter is applied or not.
+         */
+        void updateSearchIcon();
+
     protected:
         /**
          * QObject event filter overwritten by the python editor. Used to capture right-clicks on the tabs to open

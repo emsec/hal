@@ -123,11 +123,11 @@ namespace hal
         QString getCurrentTextWithFlags();
 
         /**
-         * Adds flags ("Exact Match" or "Case Sensitive") as regex modifiers to oldText.
+         * Adds flags ("Exact Match" or "Case Sensitive") as regex modifiers to text.
          *
-         * @return oldText with regex modifiers as QString
+         * @return text with regex modifiers as QString
          */
-        QString addFlags(const QString& oldText);
+        QString addFlags(const QString& text);
 
         /**
          * Reinitializes the appearance of the Searchbar.
@@ -172,11 +172,9 @@ namespace hal
 
     public Q_SLOTS:
         /**
-         * Handles changes within the QLineEdit. Emits the signal textEdited.
-         *
-         * @param text - The new search string
+         * Emits textEdited with respect to mEmitTextWithFlags.
          */
-        void handleTextEdited(const QString& text);
+        void emitTextEdited();
 
         /**
          * Handles Return/Enter key pressed. Emits the signal returnPressed.
@@ -202,8 +200,8 @@ namespace hal
 
         QToolButton* mDownButton;
         QToolButton* mUpButton;
-        QToolButton* mCaseSensitive;
-        QToolButton* mExactMatch;
+        QToolButton* mCaseSensitiveButton;
+        QToolButton* mExactMatchButton;
         QToolButton* mClearButton;
 
         QString mSearchIcon;
