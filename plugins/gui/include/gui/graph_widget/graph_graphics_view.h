@@ -115,6 +115,7 @@ namespace hal
 
         void handleModuleDialog();
         void handleCancelPickModule();
+        void handleShortestPath();
 
     private:
         void paintEvent(QPaintEvent* event) override;

@@ -176,6 +176,28 @@ namespace hal
          */
         void handleGraphSelectionChanged(void* sender);
 
+        /**
+         * Adds all predecessor of the currently selected gate or module to a new grouping.
+         */
+        void handleToolboxPredecessor();
+
+        /**
+         * Adds all successor of the currently selected gate or module to a new grouping.
+         */
+        void handleToolboxSuccessor();
+
+        /**
+         * Performs a BFS with a max-depth of three and creates a new grouping
+         * for the predecessors of each depth.
+         */
+        void handleToolboxPredecessorDistance();
+
+        /**
+         * Performs a BFS with a max-depth of three and creates a new grouping
+         * for the successors of each depth.
+         */
+        void handleToolboxSuccessorDistance();
+
     private Q_SLOTS:
         /**
          * Q_SLOT to toggle the searchbar. If the searchbar was hidden it will be shown. If it was shown it will be hidden.
@@ -226,28 +248,6 @@ namespace hal
          * Creates a context menu with four options. A slot that should be connected to the toolbox action.
          */
         void handleToolboxClicked();
-
-        /**
-         * Adds all predecessor of the currently selected gate or module to a new grouping.
-         */
-        void handleToolboxPredecessor();
-
-        /**
-         * Adds all successor of the currently selected gate or module to a new grouping.
-         */
-        void handleToolboxSuccessor();
-
-        /**
-         * Performs a BFS with a max-depth of three and creates a new grouping
-         * for the predecessors of each depth.
-         */
-        void handleToolboxPredecessorDistance();
-
-        /**
-         * Performs a BFS with a max-depth of three and creates a new grouping
-         * for the successors of each depth.
-         */
-        void handleToolboxSuccessorDistance();
 
     private:
         class ToolboxModuleHash
