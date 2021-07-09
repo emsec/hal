@@ -40,6 +40,7 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 build/
+build_dbg/
 deps/buddy-2.4/autom4te.cache/
 .vagrant
 .vscode/*
@@ -134,7 +135,7 @@ buttons.jsonc
 # Documentation
 Doxyfile
 html/
-documentation/DoxygenOutput/
+documentation/Doxyfile
 
 HAL_DEPLOYMENT_KEY
 HAL_GPG_KEY

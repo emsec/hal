@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+  * added utility function to calculate shortest path between two gates
+  * reorganized successor/predecessor functions in context menu
 * added user action system to enable recording and reverting actions within the GUI
   * moved most GUI actions to the new user action system, including interactions with the graph view and view management
   * user actions can be recorded and exported as a macro file allowing easier debugging and crash reporting
@@ -20,6 +22,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * existing modules can be selected from a table, tree-view, or using a module picker within the graph view
   * enables searching for existing modules
   * added cursor to indicate that user is in module pick mode
+* improved layouter
+  * fixed routing errors for complex cable swaps
+  * fixed multiple connections of a single net to the same gate not being shown properly
+  * fixed incorrect placement of new gates and modules in cone view when navigating starting from a net
+  * preserve location of gate when moving it to new module
+* Added generic SMT solver interface.
+  * Added translation from `BooleanFunction` to SMT-LIB.
+  * Added `BooleanFunction::Node` data structure to extend functionality to generic ASTs.
+  * Added support for z3 and boolector SMT solvers.
+  * Added cpp-subprocess library to handle communication with SMT solver.
+  * Added Boost Spirit x3 library to generate grammar-based parser from SMT-LIB models to C++ data structures.
 * improved netlist parsers
   * split VHDL and Verilog parsers into two independent plugins
   * netlist parsers now take the path to the netlist file as input instead of a `std::stringstream`
@@ -34,6 +47,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added function `get_common_inputs` to get inputs that are common across multiple gates
   * added function `replace_gate` to replace a gate with an instance of another gate type
   * added function `get_gate_chain` and `get_complex_gate_chain` to find gates that are arranged in a chain
+* new internal event system 
+  * binds event handlers to a netlist instance
+  * facilitates listening to the events of selected netlists only
 * miscellaneous API changes and additions
   * added function `is_top_module` to class `Module` to determine whether a module is the top module
   * added function `get_nets` to class `Module` to get all nets that are connected to any of the gates or submodules of a module
@@ -44,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added `Save As...` option to save `.hal` files under a different name
   * added `Export ...` menu to export the netlist using any of the registered netlist writers
   * added `Remove from view` action to context menu for gates and modules
+  * added context menu options to close multiple view tabs at once
   * added grouping toolbox feature to highlight successors or predecessors
   * added an indicator showing whether views have been modified
   * added HAL version number to the info shown in `About`
@@ -55,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * fixed drag'n'drop bug related to negative coordinates
   * fixed liberty parser aborting on unknown `pg_type`
   * fixed stylesheets
+  * fixed improper handling of GND and VCC nets within the `solve_fsm` plugin
 
 ## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`

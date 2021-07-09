@@ -12,7 +12,6 @@
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_utils/graphics.h"
-#include "gui/graphics/graphics_view.h"
 #include "gui/logger/logger_widget.h"
 #include "gui/module_widget/module_widget.h"
 #include "gui/python/python_console_widget.h"
@@ -68,7 +67,7 @@ namespace hal
         mPythonWidget = new PythonEditor();
 
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &ContentManager::handleOpenDocument);
-        connect(FileManager::get_instance(), &FileManager::fileChanged, this, &ContentManager::handleFilsystemDocChanged);
+        //connect(FileManager::get_instance(), &FileManager::fileChanged, this, &ContentManager::handleFilsystemDocChanged);
     }
 
     ContentManager::~ContentManager()
@@ -81,8 +80,6 @@ namespace hal
             delete content;
 
         mContent.clear();
-
-        delete mNetlistWatcher;
 
         //m_python_widget = nullptr; DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
 
@@ -135,7 +132,7 @@ namespace hal
         mMainWindow->addContent(mContextManagerWidget, 1, content_anchor::left);
         mContextManagerWidget->open();
 
-        mGroupingManagerWidget = new GroupingManagerWidget(mGraphTabWidget);
+        mGroupingManagerWidget = new GroupingManagerWidget();
         mMainWindow->addContent(mGroupingManagerWidget, 2, content_anchor::left);
         mGroupingManagerWidget->open();
 
@@ -143,7 +140,9 @@ namespace hal
         //QTimer::singleShot(50, [this]() { this->mContextManagerWid->handleCreateContextClicked(); });
 
         //executes same code as found in 'create_context_clicked' from the context manager widget but allows to keep its method private
+/*
         QTimer::singleShot(50, [this]() {
+
             GraphContext* new_context = nullptr;
             new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
             new_context->add({gNetlist->get_top_module()->get_id()}, {});
@@ -152,7 +151,7 @@ namespace hal
             gGraphContextManager->restoreFromFile();
             new_context->setDirty(false);
         });
-
+*/
         //why does this segfault without a timer?
         //GraphContext* new_context = nullptr;
         //new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
@@ -182,13 +181,6 @@ namespace hal
         //mContent.append(mPythonWidget); // DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
         mContent.append(mPythonConsoleWidget);
 
-        PluginModel* model                 = new PluginModel(this);
-        PluginManagerWidget* plugin_widget = new PluginManagerWidget();
-        plugin_widget->setPluginModel(model);
-        //mMainWindow->addContent(plugin_widget, content_anchor::bottom);
-
-        connect(model, &PluginModel::runPlugin, mMainWindow, &MainWindow::runPluginTriggered);
-
         setWindowTitle(fileName);
 
 #ifdef HAL_STUDY
@@ -196,7 +188,6 @@ namespace hal
         mSpecialLogContentManager = new SpecialLogContentManager(mMainWindow, mPythonWidget);
         mSpecialLogContentManager->startLogging(60000);
 #endif
-        mNetlistWatcher = new NetlistWatcher(this);
 
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusGateClicked, mGraphTabWidget, &GraphTabWidget::handleGateFocus);
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusNetClicked, mGraphTabWidget, &GraphTabWidget::handleNetFocus);
@@ -223,20 +214,20 @@ namespace hal
         connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mSelectionDetailsWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
 
         sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
-    }
 
-    void ContentManager::handleFilsystemDocChanged(const QString& fileName)
-    {
-        Q_UNUSED(fileName)
+        GraphContext* new_context = nullptr;
+        new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
+        new_context->add({gNetlist->get_top_module()->get_id()}, {});
+
+        mContextManagerWidget->selectViewContext(new_context);
+        gGraphContextManager->restoreFromFile();
+        new_context->setDirty(false);
+
     }
 
     void ContentManager::setWindowTitle(const QString &filename)
     {
         mWindowTitle = "HAL - " + QString::fromStdString(std::filesystem::path(filename.toStdString()).stem().string());
         mMainWindow->setWindowTitle(mWindowTitle);
-    }
-
-    void ContentManager::handleSaveTriggered()
-    {
     }
 }

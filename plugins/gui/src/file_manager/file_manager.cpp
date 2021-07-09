@@ -1,7 +1,6 @@
 #include "gui/file_manager/file_manager.h"
 
 #include "gui/gui_globals.h"
-#include "hal_core/netlist/event_system/event_controls.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
@@ -247,13 +246,14 @@ namespace hal
 
         if (fileName.endsWith(".hal"))
         {
-            event_controls::enable_all(false);
+            // event_controls::enable_all(false); won't get events until callbacks are registered
             auto netlist = netlist_factory::load_netlist(fileName.toStdString());
-            event_controls::enable_all(true);
+            // event_controls::enable_all(true);
             if (netlist)
             {
                 gNetlistOwner = std::move(netlist);
                 gNetlist       = gNetlistOwner.get();
+                gNetlistRelay->registerNetlistCallbacks();
                 fileSuccessfullyLoaded(logical_file_name);
             }
             else
@@ -271,14 +271,15 @@ namespace hal
         {
             log_info("gui", "Trying to use gate library {}.", lib_file_name.toStdString());
 
-            event_controls::enable_all(false);
+            // event_controls::enable_all(false);
             auto netlist = netlist_factory::load_netlist(fileName.toStdString(), lib_file_name.toStdString());
-            event_controls::enable_all(true);
+            // event_controls::enable_all(true);
 
             if (netlist)
             {
                 gNetlistOwner = std::move(netlist);
                 gNetlist       = gNetlistOwner.get();
+                gNetlistRelay->registerNetlistCallbacks();
                 fileSuccessfullyLoaded(logical_file_name);
                 return;
             }
@@ -290,9 +291,9 @@ namespace hal
 
         log_info("gui", "Searching for (other) compatible netlists.");
 
-        event_controls::enable_all(false);
+        // event_controls::enable_all(false);
         std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(fileName.toStdString());
-        event_controls::enable_all(true);
+        // event_controls::enable_all(true);
 
         if (netlists.empty())
         {
@@ -306,6 +307,7 @@ namespace hal
             log_info("gui", "One compatible gate library found.");
             gNetlistOwner = std::move(netlists.at(0));
             gNetlist       = gNetlistOwner.get();
+            gNetlistRelay->registerNetlistCallbacks();
         }
         else
         {
@@ -333,6 +335,7 @@ namespace hal
                     {
                         gNetlistOwner = std::move(n);
                         gNetlist       = gNetlistOwner.get();
+                        gNetlistRelay->registerNetlistCallbacks();
                     }
                 }
             }
@@ -355,6 +358,7 @@ namespace hal
 
         // CHECK DIRTY AND TRIGGER SAVE ROUTINE
 
+        gNetlistRelay->unregisterNetlistCallbacks();
         mFileWatcher->removePath(mFileName);
         mFileName = "";
         mFileOpen = false;

@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,7 @@ namespace hal {
      * @ingroup utility_widgets-selection_details
      * @brief Single entry in the GeneralDetailsModel.
      *
-     * The item class that is used by the GeneralDetailsModel to store and display its entries. It consists
+     * The item class that is used by the DetailsGeneralModel to store and display its entries. It consists
      * of a key(label) and a value string that are both displayed in the view. Furthermore this item class
      * stores (if available) python code as a string to access it later (e.g. via a contextmenu).
      */
@@ -98,7 +98,7 @@ namespace hal {
         /**
          * Sets the setter method for the entry (e.g. the set_name method of a module for the name entry).
          *
-         * @param setter_ - The actual setter method.
+         * @param obj - The object value to be set.
          */
         void setObject(const UserActionObject& obj) { mObject = obj; }
 
@@ -122,6 +122,12 @@ namespace hal {
          * @return The python getter code.
          */
         QString pythonGetter() const { return mPythonGetter; }
+
+        /**
+         * Checks if the text can be edited.
+         *
+         * @return True if it can be edited, False otherwise.
+         */
         bool canEditText() const;
     };
 

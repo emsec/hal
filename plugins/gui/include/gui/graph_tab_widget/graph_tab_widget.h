@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -94,6 +94,7 @@ namespace hal
         Q_ENUM(KeyboardModifier)
 
     public Q_SLOTS:
+
         /**
          * Q_SLOT that should be called whenever a new GraphContext was created. It is used to show the new context in
          * a new tab.
@@ -118,7 +119,6 @@ namespace hal
         void handleContextRemoved(GraphContext* context);
 
         /**
-         * TODO: Unused?
          *
          * @param index - The index of the tab within the QTabWidget
          */
@@ -149,11 +149,25 @@ namespace hal
         void handleModuleFocus(u32 moduleId);
 
         /**
+         * Q_SLOT that should be called whenever a tab is rightclicked.
+         *
+         * @param pos - Mouse position as QPoint.
+         */
+        void handleCustomContextMenuRequested(const QPoint &pos);
+
+        /**
          * Change shape of cursor to indicate that a module should be picked by user
          *
          * @param on - true=on,  false=off
          */
         void setModuleSelectCursor(bool on);
+
+        /**
+         * Q_SLOT to close a single tab.
+         *
+         * @param index - The index of the tab within the QTabWidget
+         */
+        void handleTabCloseRequested(int index);
 
     private:
         QTabWidget* mTabWidget;
@@ -165,13 +179,13 @@ namespace hal
 
         int getContextTabIndex(GraphContext* context) const;
 
-        //functions
-        void handleTabCloseRequested(int index);
-
         void addGraphWidgetTab(GraphContext* context);
 
         void zoomInShortcut();
         void zoomOutShortcut();
+
+        void handleCloseTabsToRight(int index);
+        void handleCloseTabsToLeft(int index);
 
         static SettingsItemDropdown* sSettingGridType;
         static SettingsItemDropdown* sSettingDragModifier;

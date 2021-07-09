@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ namespace hal
             /**
              * Given any string this function returns <b>true</b> iff the string contains at least one non-whitespace
              * character. Whitespace characters are: <i>space, horizontal tab, new line, vertical tab,
-             * new page</i> and <i>carriage return<i>
+             * new page</i> and <i>carriage return</i>
              *
              * @param input - The input string
              * @returns <b>true</b> iff the string is considered valid (unique)

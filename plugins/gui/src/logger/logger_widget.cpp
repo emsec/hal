@@ -1,11 +1,11 @@
 #include "gui/logger/logger_widget.h"
 #include "gui/channel_manager/channel_model.h"
 #include "gui/channel_manager/channel_selector.h"
-#include "gui/logger/filter_item.h"
-#include "gui/logger/filter_tab_bar.h"
 #include "gui/logger/logger_marshall.h"
 #include "gui/toolbar/toolbar.h"
+
 #include <QHeaderView>
+#include <QVBoxLayout>
 
 namespace hal
 {
@@ -19,7 +19,6 @@ namespace hal
         scrollToBottom();
         mUserInteractedWithScrollbar = false;
 
-        mTabBar      = new FilterTabBar();
         mLogMarshall = new LoggerMarshall(mPlainTextEdit);
         mContentLayout->addWidget(mPlainTextEdit);
 
@@ -27,8 +26,6 @@ namespace hal
 
         mSelector = new ChannelSelector();
 
-        connect(mPlainTextEdit, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showTextEditContextMenu(const QPoint&)));
-        connect(mTabBar, SIGNAL(currentChanged(int)), this, SLOT(filterItemClicked(int)));
         connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
 
@@ -39,7 +36,6 @@ namespace hal
     LoggerWidget::~LoggerWidget()
     {
         //cant set the parent correct, so just delete them in the constructor
-        delete mTabBar;
         delete mSelector;
     }
 
@@ -58,25 +54,9 @@ namespace hal
         return mPlainTextEdit;
     }
 
-    FilterTabBar* LoggerWidget::getTabBar()
-    {
-        return mTabBar;
-    }
-
-    void LoggerWidget::showTextEditContextMenu(const QPoint& point)
-    {
-        Q_UNUSED(point)
-    }
-
-    void LoggerWidget::filterItemClicked(const int& index)
-    {
-        Q_UNUSED(index)
-    }
-
     void LoggerWidget::handleCurrentChannelUpdated(spdlog::level::level_enum t, const QString& msg)
     {
-        FilterItem* filter = mTabBar->getCurrentFilter();
-        mLogMarshall->appendLog(t, msg, filter);
+        mLogMarshall->appendLog(t, msg);
     }
 
     void LoggerWidget::handleChannelUpdated(spdlog::level::level_enum t, const std::string& logger_name, const std::string& msg)
@@ -88,8 +68,7 @@ namespace hal
         if (logger_name != mCurrentChannel)
             return;
 
-        FilterItem* filter = mTabBar->getCurrentFilter();
-        mLogMarshall->appendLog(t, QString::fromStdString(msg), filter);
+        mLogMarshall->appendLog(t, QString::fromStdString(msg));
     }
 
     void LoggerWidget::handleCurrentChannelChanged(int index)
@@ -99,13 +78,11 @@ namespace hal
 
         mCurrentChannel = item->name().toStdString();
 
-        FilterItem* filter = mTabBar->getCurrentFilter();
-
         mPlainTextEdit->clear();
         QWriteLocker item_locker(item->getLock());
         for (ChannelEntry* entry : *(item->getList()))
         {
-            mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg), filter);
+            mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg));
         }
     }
 

@@ -1,7 +1,7 @@
 #include "hal_core/netlist/gate.h"
 
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/event_system/gate_event_handler.h"
+#include "hal_core/netlist/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -37,21 +37,17 @@ static u64 bitreverse(u64 n)
 
 namespace hal
 {
-    Gate::Gate(NetlistInternalManager* mgr, const u32 id, GateType* gt, const std::string& name, i32 x, i32 y)
+    Gate::Gate(NetlistInternalManager* mgr, EventHandler* event_handler, const u32 id, GateType* gt, const std::string& name, i32 x, i32 y)
+        : m_internal_manager(mgr), m_id(id), m_name(name), m_type(gt), m_x(x), m_y(y), m_event_handler(event_handler)
     {
-        m_internal_manager = mgr;
-        m_id               = id;
-        m_type             = gt;
-        m_name             = name;
-        m_x                = x;
-        m_y                = y;
+        ;
     }
 
     bool Gate::operator==(const Gate& other) const
     {
         if (m_id != other.get_id() || m_name != other.get_name() || m_type != other.get_type())
         {
-            log_info("gate", "the gates with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
+            // log_info("gate", "the gates with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
             return false;
         }
 
@@ -115,7 +111,7 @@ namespace hal
 
             m_name = name;
 
-            gate_event_handler::notify(gate_event_handler::event::name_changed, this);
+            m_event_handler->notify(GateEvent::event::name_changed, this);
         }
     }
 
@@ -149,7 +145,7 @@ namespace hal
         if (x != m_x)
         {
             m_x = x;
-            gate_event_handler::notify(gate_event_handler::event::location_changed, this);
+            m_event_handler->notify(GateEvent::event::location_changed, this);
         }
     }
 
@@ -158,7 +154,7 @@ namespace hal
         if (y != m_y)
         {
             m_y = y;
-            gate_event_handler::notify(gate_event_handler::event::location_changed, this);
+            m_event_handler->notify(GateEvent::event::location_changed, this);
         }
     }
 

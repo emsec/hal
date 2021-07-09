@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -83,6 +83,10 @@ namespace hal
          */
         void mousePressEvent(QMouseEvent* event) override;
 
+        /** @name Q_PROPERTY READ Functions
+          */
+        ///@{
+
         /**
          * Gets the level the this ExpandingListButton is at.
          *
@@ -105,18 +109,17 @@ namespace hal
         bool selected() const;
 
         /**
-         * Gets the text this ExpandingListButton displays
-         *
-         * @returns the ExpandingListButton%s text
-         */
-	    QString text() const;
-
-        /**
          * Get the icon stlye of the button.
          *
          * @return The button's icon style.
          */
         QString iconStyle() const;
+        ///@}
+
+
+        /** @name Q_PROPERTY WRITE Functions
+          */
+        ///@{
 
         /**
          * Set or unset the button's selected state.
@@ -145,6 +148,7 @@ namespace hal
          * @param path - The icon's path.
          */
         void setIconPath(const QString& path);
+        ///@}
 
         /**
          * Sets the button's text.
@@ -152,6 +156,13 @@ namespace hal
          * @param text - The soon to be displayed Text.
          */
         void setText(const QString& text);
+
+        /**
+         * Gets the text this ExpandingListButton displays
+         *
+         * @returns the ExpandingListButton%s text
+         */
+        QString text() const;
 
         /**
          * Applies the style that is currently set through the (globally set) stylesheet.

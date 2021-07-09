@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -126,10 +126,19 @@ namespace hal
          * Fold the parent module of a specific gate. The specified gate as well as all other Gate%s and Submodule%s of the parent
          * module are removed from the context and replaced by the module itself.
          *
-         * @param id - The id of the gate
+         * @param gateId - The id of the gate
          */
         bool isGateUnfolded(u32 gateId) const;
+
+        /**
+         * Folds a given module with a given placement hint.
+         *
+         * @param moduleId - The module to fold.
+         * @param plc - The placement hint.
+         * @return True on success, False otherwise.
+         */
         bool foldModuleAction(u32 moduleId, const PlacementHint& plc);
+
         /**
          * Unfold a specific module. The specified module is removed from the context and replaced by its Gate%s and
          * submodules.
@@ -189,6 +198,22 @@ namespace hal
          * @returns <b>true</b> if a destination gate of the net is shown
          */
         bool isShowingNetDestination(const u32 mNetId) const;
+
+        /**
+         * Given a net, this function returns the first visible source node.
+         *
+         * @param n - Pointer to net
+         * @returns <b>true</b> The first visibible source node, might be Node::None
+         */
+        Node getNetSource(const Net *n) const;
+
+        /**
+         * Given a net, this function returns the first visible destination node.
+         *
+         * @param n - Pointer to net
+         * @returns <b>true</b> The first visibible destination node, might be Node::None
+         */
+        Node getNetDestination(const Net *n) const;
 
         /**
          * Get the ids of the Module%s of the context.
@@ -252,7 +277,7 @@ namespace hal
          *
          * @returns the used GraphLayouter
          */
-        const GraphLayouter* getLayouter() const { return mLayouter; }
+        GraphLayouter* getLayouter() const { return mLayouter; }
 
         /**
 		 * Move node to antother grid location
@@ -285,26 +310,38 @@ namespace hal
         Node nodeForGate(const u32 id) const;
 
         /**
-         * TODO: remove?
-         * Get the used GraphLayouter. Originally used for debug purposes.
-         * \deprecated Please use getLayouter() instead.
-         *
-         * @returns the used GraphLayouter
-         */
-        GraphLayouter* debugGetLayouter() const;
-
-        /**
          * Returns the timestamp of this context. The timestamp is generated in the constructor.
          *
          * @returns the timestamp of the context.
          */
         QDateTime getTimestamp() const;
 
+        /**
+         * Writes the context (its modules, gates, nets) to a given json object.
+         *
+         * @param json - The object to write to.
+         */
         void writeToFile(QJsonObject& json);
 
+        /**
+         * Reads a context from a given json object.
+         *
+         * @param json - The object to read from.
+         */
         void readFromFile(const QJsonObject& json);
 
+        /**
+         * Sets the dirty state.
+         *
+         * @param dty - The value to set.
+         */
         void setDirty(bool dty);
+
+        /**
+         * Get the dirty state.
+         *
+         * @return The dirty state.
+         */
         bool isDirty() const {return mDirty; }
 
     Q_SIGNALS:

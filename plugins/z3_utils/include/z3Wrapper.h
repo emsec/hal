@@ -27,6 +27,7 @@
 #include "z3++.h"
 
 #include <atomic>
+#include <map>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -66,9 +67,11 @@ namespace hal
              * We check wether the overall output changed and record the total amount of changes.
              * We define the boolean influence to be estimated by the ratio between the total amount of changes to the total amount if executions.
              * 
+             * @param[in] num_evaluations - Number of random evaluations that are used for the estimation.
+             * 
              * @returns A mapping of the net_ids in the wrapped expr to their estimated boolean influence.
              */
-            std::unordered_map<u32, double> get_boolean_influence() const;
+            std::unordered_map<u32, double> get_boolean_influence(const u32 num_evaluations=32000) const;
 
             /**
              * Generates smt2 representation of the wrapped expression.
@@ -126,7 +129,7 @@ namespace hal
              * @param[in] path - Path where the file is written to.
              * @returns True in case of success, false otherwise.
              */
-            bool write_verilog_file(const std::filesystem::path& path) const;
+            bool write_verilog_file(const std::filesystem::path& path, const std::map<u32, bool>& control_mapping={}) const;
 
             /**
              * Transforms the wrapped z3 expression into efficent c code and writes it to a file.

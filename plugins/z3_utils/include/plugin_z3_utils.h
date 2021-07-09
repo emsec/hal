@@ -23,10 +23,12 @@
 
 #pragma once
 
-#include "SubgraphFunctionGenerator.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
+
 #include "converter/converter.h"
 #include "converter/cpp_converter.h"
-#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "compare_nets.h"
+#include "SubgraphFunctionGenerator.h"
 #include "z3Wrapper.h"
 
 namespace hal

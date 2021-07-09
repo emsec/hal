@@ -15,14 +15,6 @@ namespace hal
         mHighlighted(false)
     {;}
 
-    ModuleItem::ModuleItem(const QString& name, const u32 id) :
-        mParent(nullptr),
-        mId(id),
-        mName(name),
-        mColor(gNetlistRelay->getModuleColor(id)),
-        mHighlighted(false)
-    {;}
-
     void ModuleItem::insertChild(int row, ModuleItem* child)
     {
         mChildItems.insert(row, child);

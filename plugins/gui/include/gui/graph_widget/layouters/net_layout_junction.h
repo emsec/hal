@@ -1,3 +1,26 @@
+//  MIT License
+//
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+
 #pragma once
 
 #include <QPoint>
@@ -6,6 +29,7 @@
 #include <QList>
 #include <QHash>
 #include <QColor>
+#include <QRect>
 #include "net_layout_point.h"
 
 class QGraphicsEllipseItem;
@@ -63,6 +87,16 @@ namespace hal {
         void setEntries(NetLayoutDirection dir, const QList<u32>& entries_);
     };
 
+    class NetLayoutJunctionMultiPin
+    {
+    public:
+        int mRoad;
+        QList<int> mConnector;
+        NetLayoutJunctionMultiPin() : mRoad(-1) {}
+        void setRoad(int road) { mRoad = road; }
+    };
+
+
     /**
      * @ingroup graph-layouter
      */
@@ -112,10 +146,14 @@ namespace hal {
         NetLayoutJunctionWire toWire(int hor, int rd) const;
         bool conflict(const NetLayoutJunctionRange& other) const;
         bool canJoin(u32 netId, int pos) const;
+        bool canJoin(const NetLayoutJunctionRange& other) const;
         u32 netId() const { return mNetId; }
         int endPosition(int inx) const;
+        bool isEntry(int inx) const;
         int graphFirst() const;
         int graphLast() const;
+        bool operator==(const NetLayoutJunctionRange& other) const;
+        void expand(const NetLayoutJunctionRange& other);
         static NetLayoutJunctionRange entryRange(NetLayoutDirection dir, int iroad, u32 netId);
     };
 
@@ -127,6 +165,7 @@ namespace hal {
     public:
         bool conflict(const NetLayoutJunctionRange& test) const;
         bool canJoin(u32 netId, int pos) const;
+        void add(const NetLayoutJunctionRange& rng);
     };
 
     /**
@@ -148,8 +187,10 @@ namespace hal {
         void routeAllStraight(NetLayoutDirection dirFrom, NetLayoutDirection dirTo);
         void routeAllCorner(NetLayoutDirection dirHoriz, NetLayoutDirection dirVertic);
         void routeSingleStraight(u32 netId, int iMain, int iroadIn, int iroadOut);
-        void routeSingleSwap(u32 netId, int iMain, int iroadIn, int iroadOut);
+        void routeSingleDetour(u32 netId, int iMain, int iroadIn, int iroadOut);
         void routeSingleCorner(u32 netId, NetLayoutDirection dirHoriz, NetLayoutDirection dirVertic);
+        void routeAllMultiPin(NetLayoutDirection leftOrRight);
+        void routeSingleMultiPin(u32 netId, NetLayoutDirection leftOrRight, const NetLayoutJunctionMultiPin &nmpin);
         void calculateRect();
         bool conflict(int ihoriz, int iroad, const NetLayoutJunctionRange& testRng) const;
         void place(int ihoriz, int iroad, const NetLayoutJunctionRange& range);

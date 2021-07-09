@@ -89,7 +89,7 @@ namespace hal
         /**
           * Tries to match the HDL file with each of the preloaded gate libraries and returns a vector of netlist objects for which the matching was successful.
           *
-          * @param[in] hdl_file - The netlist file.
+          * @param[in] file_name - The netlist file.
           * @returns A vector containing one netlist per matching gate library.
           */
         std::vector<std::unique_ptr<Netlist>> parse_all(const std::filesystem::path& file_name);

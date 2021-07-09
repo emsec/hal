@@ -382,8 +382,10 @@ namespace hal
             }
 
             bool first_net = true;
-            for (const Net* net : nets)
+            for (auto it = nets.rbegin(); it != nets.rend(); it++)
             {
+                const Net* net = *it;
+
                 if (net != nullptr)
                 {
                     if (first_net)

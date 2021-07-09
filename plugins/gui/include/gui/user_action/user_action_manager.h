@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -40,50 +40,105 @@ namespace hal
 
     /**
      * @ingroup user_action
+     * @brief Handles and manages user actions related proccesses.
+     *
+     * The UserActionManager class manages everything related to user actions
+     * such as saving and recording actions. It is implemented as a
+     * singleton pattern.
      */
     class UserActionManager : public QObject
     {
         Q_OBJECT
     public:
-        /// get singleton instance
+
+        /**
+         * Get the singleton instance.
+         *
+         * @return The singleton instance.
+         */
         static UserActionManager* instance();
 
-        /// add executed action to history list
+        /**
+         * Add executed action to history list.
+         *
+         * @param act - The action.
+         */
         void addExecutedAction(UserAction* act);
 
-        /// register new action factory
+        /**
+         * Registers a new action factory.
+         *
+         * @param fac - The factory.
+         */
         void registerFactory(UserActionFactory* fac);
 
-        /// set start marker for macro recording
+        /**
+         * Sets a start marker for macro recording.
+         */
         void setStartRecording();
 
-        /// stop macro recording and write commands to xml file
+        /**
+         * Stops macro recording and write commands to xml file.
+         *
+         * @param macroFilename - The file name.
+         */
         void setStopRecording(const QString& macroFilename);
 
-        /// execute macro from file
+        /**
+         * Executes macro from file.
+         *
+         * @param macroFilename - The file name.
+         */
         void playMacro(const QString& macroFilename);
 
-        /// test whether actions are currently recorded
+        /**
+         * Tests whether actions are currently recorded.
+         *
+         * @return True if it is currently recording, False otherwise.
+         */
         bool isRecording() const;
 
-        /// test whether actions are currently recorded and
-        /// at least one command has been executed
+        /**
+         * Tests whether actions are currently recorded and
+         * at least one command has been executed
+         *
+         * @return True if there are recorded and executed actions, False otherwise.
+         */
         bool hasRecorded() const;
 
-        /// reset wait flag issued from action
+        /**
+         * Resets wait flag issued from action.
+         */
         void clearWaitCount() { mWaitCount = 0; }
 
-        /// create UserAction instance for next command found by xml parser
+        /**
+         * Creates UserAction instance for next command found by xml parser.
+         *
+         * @param xmlIn - The xml reader.
+         *
+         * @return The next UserAction.
+         */
         UserAction* getParsedAction(QXmlStreamReader& xmlIn) const;
 
-        /// elapsed time in milliseconds since GUI start
+        /**
+         * Get the elapsed time in milliseconds since GUI start.
+         *
+         * @return The elapsed time.
+         */
         qint64 timeStamp() const { return mElapsedTime.elapsed(); }
 
-        /// undo last action
+        /**
+         * Undo last action.
+         */
         void undoLastAction();
 
-        /// dump actions from beginning
+        /**
+         * Dumps actions from beginning.
+         *
+         * @param sig - Part of the macro file name.
+         */
         void crashDump(int sig);
+
     private:
         UserActionManager(QObject *parent = nullptr);
         void testUndo();
@@ -100,9 +155,20 @@ namespace hal
         SettingsItemCheckbox* mSettingDumpAction;
 
     public Q_SLOTS:
+        /**
+         * Deletes current dumpAction if parameter is set to true.
+         *
+         * @param wantDump - Decides if current dumpAction is to be deleted.
+         */
         void handleSettingDumpActionChanged(bool wantDump);
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted when undoLastAction() is called. The parameter is set to true
+         * if the last action could be undone.
+         *
+         * @param yesWeCan - True if last action could be undone.
+         */
         void canUndoLastAction(bool yesWeCan);
     };
 }

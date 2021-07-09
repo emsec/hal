@@ -6,7 +6,8 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
-#include "gui/graph_widget/graph_layout_spinner_widget.h"
+//#include "gui/graph_widget/graph_layout_spinner_widget.h"
+#include "gui/spinner_widget/spinner_widget.h"
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
@@ -40,7 +41,7 @@ namespace hal
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
         : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)),
           mNavigationWidgetV3(new GraphNavigationWidget(false)),
-          mSpinnerWidget(new GraphLayoutSpinnerWidget(this)), mCurrentExpansion(0)
+          mSpinnerWidget(new SpinnerWidget(this)), mCurrentExpansion(0)
     {
         connect(mNavigationWidgetV3, &GraphNavigationWidget::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);
         connect(mNavigationWidgetV3, &GraphNavigationWidget::closeRequested, mOverlay, &WidgetOverlay::hide);
@@ -467,8 +468,8 @@ namespace hal
         // FIXME If the scene has been resized during this method, the animation triggered by
         // ensure_gates_visible is broken. Thus, if that is the case, we bail out here and not
         // trigger the animation.
-        if (bail_animation)
-            return;
+        // if (bail_animation)
+        //    return;
 
         // JUMP TO THE GATES AND MODULES
         ensureItemsVisible(final_gates, final_modules);
@@ -543,7 +544,8 @@ namespace hal
 
                 if (n->get_num_of_sources() == 1)
                 {
-                    handleNavigationJumpRequested(Node(), n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
+                    handleNavigationJumpRequested(mContext->getNetDestination(n),
+                                                  n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
                 }
                 else
                 {
@@ -619,6 +621,9 @@ namespace hal
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right)
                 {
                     auto n = g->get_fan_out_net(g->get_output_pins()[gSelectionRelay->subfocusIndex()]);
+                    if (!n)
+                        return;
+
                     if (n->get_num_of_destinations() == 0)
                     {
                         gSelectionRelay->clear();
@@ -658,7 +663,8 @@ namespace hal
 
                 if (n->get_num_of_destinations() == 1)
                 {
-                    handleNavigationJumpRequested(Node(), n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
+                    handleNavigationJumpRequested(mContext->getNetSource(n),
+                                                  n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                 }
                 else
                 {

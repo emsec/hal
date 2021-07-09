@@ -61,11 +61,6 @@ namespace hal
         return instance;
     }
 
-    QColor PythonQssAdapter::textColor() const
-    {
-        return mTextColor;
-    }
-
     QColor PythonQssAdapter::keywordColor() const
     {
         return mKeywordColor;
@@ -111,10 +106,10 @@ namespace hal
         return mCommentColor;
     }
 
-    void PythonQssAdapter::setTextColor(const QColor& color)
+    /*void PythonQssAdapter::setTextColor(const QColor& color)
     {
         mTextColor = color;
-    }
+    }*/
 
     void PythonQssAdapter::setKeywordColor(const QColor& color)
     {

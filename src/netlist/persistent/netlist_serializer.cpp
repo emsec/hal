@@ -1,7 +1,6 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 
 #include "hal_core/netlist/boolean_function.h"
-#include "hal_core/netlist/event_system/event_controls.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/grouping.h"

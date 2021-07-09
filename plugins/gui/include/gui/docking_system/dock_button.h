@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -68,8 +68,16 @@ namespace hal
          */
         DockButton(ContentWidget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent);
 
+        /**
+         * Overwritten qt function.
+         *
+         * @param event - The paint event.
+         */
         void paintEvent(QPaintEvent* event) override;
 
+        /** @name Q_PROPERTY READ Functions
+          */
+        ///@{
         /**
          * Returns the text color
          */
@@ -84,6 +92,11 @@ namespace hal
          * Returns the hover color
          */
         QColor hoverColor();
+        ///@}
+
+        /** @name Q_PROPERTY WRITE Functions
+          */
+        ///@{
 
         /**
          * Set the text color
@@ -102,6 +115,7 @@ namespace hal
          * @param color -  The new color.
          */
         void setHoverColor(const QColor& color);
+        ///@}
 
         /**
          * Calculates its size and sets the height and width as fixed values.

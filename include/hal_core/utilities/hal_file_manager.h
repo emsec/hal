@@ -45,6 +45,7 @@ namespace hal
          * This fires all registered on_serialize callbacks.
          *
          * @param[in] file - The file path.
+         * @param[in] netlist - The netlist to be serialized
          * @param[in] document - The JSON document to serialize to.
          * @returns True if all registered callbacks succeed.
          */
@@ -55,6 +56,7 @@ namespace hal
          * This fires all registered on_deserialize callbacks.
          *
          * @param[in] file - The file path.
+         * @param[inout] netlist - The netlist to be obtained
          * @param[in] document - The JSON document to deserialize from.
          * @returns True if all registered callbacks succeed.
          */

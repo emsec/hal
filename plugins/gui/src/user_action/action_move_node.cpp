@@ -52,10 +52,22 @@ namespace hal
 
     bool ActionMoveNode::exec()
     {
-        GraphContext* ctx = gGraphContextManager->getContextById(mObject.id());
+        GraphContext* ctx = mContextId >= 0
+                    ? gGraphContextManager->getContextById(mContextId)
+                    : gGraphContextManager->getContextById(mObject.id());
+        UserActionObject undoObject(mObject);
         if (!ctx) return false;
+        if (mContextId >= 0)
+        {
+            Node nd(mObject.id(),UserActionObjectType::toNodeType(mObject.type()));
+            NodeBox* box = ctx->getLayouter()->boxes().boxForNode(nd);
+            if (!box) return false;
+            mFrom.setX(box->x());
+            mFrom.setY(box->y());
+            undoObject = UserActionObject(ctx->id(),UserActionObjectType::Context);
+        }
         ActionMoveNode* undo = new ActionMoveNode(mTo,mFrom);
-        undo->setObject(mObject);
+        undo->setObject(undoObject);
         mUndoAction = undo;
         ctx->moveNodeAction(mFrom,mTo);
         return UserAction::exec();

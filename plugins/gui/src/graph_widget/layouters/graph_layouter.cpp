@@ -1335,10 +1335,12 @@ namespace hal
             }
             else
             {
-                int inx = itPnt.value().outputPinIndex(id);
-                QPointF outPnt(itPnt.value().xOutput(),
-                               itPnt.value().lanePosition(inx,true));
-                net_item->addOutput(outPnt);
+                for (int inx : itPnt.value().outputPinIndex(id))
+                {
+                    QPointF outPnt(itPnt.value().xOutput(),
+                                   itPnt.value().lanePosition(inx,true));
+                    net_item->addOutput(outPnt);
+                }
             }
         }
         net_item->finalize();
@@ -1350,16 +1352,18 @@ namespace hal
         for (auto it=mEndpointHash.constBegin(); it!=mEndpointHash.constEnd(); ++it)
         {
             const EndpointCoordinate& epc = it.value();
-            int inpInx = epc.inputPinIndex(id);
-            int outInx = epc.outputPinIndex(id);
-            if (inpInx < 0 && outInx < 0) continue;
+
+            QList<int> inputsById  = epc.inputPinIndex(id);
+            QList<int> outputsById = epc.outputPinIndex(id);
+            if (inputsById.isEmpty() && outputsById.isEmpty()) continue;
 
             const NetLayoutJunction* nlj = mJunctionHash.value(it.key());
             const SceneCoordinate& xScenePos = mCoordX.value(it.key().x());
             float xjLeft  = xScenePos.lanePosition(nlj->rect().left());
             float xjRight = xScenePos.lanePosition(nlj->rect().right());
             Q_ASSERT(nlj);
-            if (inpInx>=0)
+
+            for (int inpInx : inputsById)
             {
                 if (xjRight >= epc.xInput())
                 {
@@ -1372,7 +1376,7 @@ namespace hal
                 else
                     lines.appendHLine(xjRight, epc.xInput(), epc.lanePosition(inpInx,true));
             }
-            if (outInx>=0)
+            for (int outInx : outputsById)
             {
                 if (epc.xOutput() >= xjLeft)
                     qDebug() << "cannot connect output pin" << id << it.key().x() << it.key().y()/2 << xjLeft << epc.xOutput();
@@ -2644,14 +2648,14 @@ namespace hal
         mYoffset = p0pos.y();
     }
 
-    int GraphLayouter::EndpointCoordinate::inputPinIndex(u32 id) const
+    QList<int> GraphLayouter::EndpointCoordinate::inputPinIndex(u32 id) const
     {
-        return mInputHash.value(id,-1);
+        return mInputHash.values(id);
     }
 
-    int GraphLayouter::EndpointCoordinate::outputPinIndex(u32 id) const
+    QList<int> GraphLayouter::EndpointCoordinate::outputPinIndex(u32 id) const
     {
-        return mOutputHash.value(id,-1);
+        return mOutputHash.values(id);
     }
 
     void GraphLayouter::EndpointCoordinate::setInputPins(const QList<u32> &pinList, float p0dist, float pdist)

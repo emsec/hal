@@ -674,15 +674,6 @@ hal--CodeEditor hal--LineNumberArea
     qproperty-rightOffset : 15;
 }
 
-hal--VhdlSyntaxHighlighter
-{
-    qproperty-keywordColor : rgb(204, 120, 50);
-    qproperty-commentColor : rgb(97, 150, 71);
-    qproperty-type_color   : rgb(152, 118, 170);
-    qproperty-numberColor  : rgb(104, 151, 187);
-    qproperty-textColor    : rgb(169, 183, 198);
-}
-
 hal--LabeledFrame
 {
     background    : rgb(14, 16, 18);
@@ -1156,7 +1147,7 @@ hal--MainWindow
 
 hal--PythonQssAdapter
 {
-    qproperty-textColor: #DEE9AF;
+    /*qproperty-textColor: #DEE9AF;*/
     qproperty-keywordColor: #CC7832;
     qproperty-operator_color: #A9B7C6;
     qproperty-braceColor: #A9B7C6;

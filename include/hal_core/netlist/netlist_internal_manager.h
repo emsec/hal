@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/event_handler.h"
 
 #include <map>
 #include <vector>
@@ -53,9 +54,9 @@ namespace hal
 
     private:
         Netlist* m_netlist;
+        EventHandler* m_event_handler;
 
-        explicit NetlistInternalManager(Netlist* nl);
-
+        explicit NetlistInternalManager(Netlist* nl, EventHandler* eh);
         ~NetlistInternalManager() = default;
 
         // gate functions

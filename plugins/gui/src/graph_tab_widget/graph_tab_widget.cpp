@@ -81,7 +81,9 @@ namespace hal
         mContentLayout->addWidget(mTabWidget);
         mTabWidget->setTabsClosable(true);
         mTabWidget->setMovable(true);
+        mTabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
+        connect(mTabWidget, &QTabWidget::customContextMenuRequested, this, &GraphTabWidget::handleCustomContextMenuRequested);
         connect(mTabWidget, &QTabWidget::tabCloseRequested, this, &GraphTabWidget::handleTabCloseRequested);
         connect(mTabWidget, &QTabWidget::currentChanged, this, &GraphTabWidget::handleTabChanged);
         connect(gGraphContextManager, &GraphContextManager::contextCreated, this, &GraphTabWidget::handleContextCreated);
@@ -253,6 +255,53 @@ namespace hal
             }
         }
         return -1;
+    }
+
+    void GraphTabWidget::handleCustomContextMenuRequested(const QPoint &pos)
+    {
+        int index = mTabWidget->tabBar()->tabAt(pos);
+
+        if (index == -1)
+            return;
+
+        QMenu contextMenu("Context menu", this);
+
+        contextMenu.addAction("Close This Tab", [this, index](){
+            handleTabCloseRequested(index);
+        });
+
+        contextMenu.addAction("Close Other Tabs", [this, index](){
+            handleCloseTabsToRight(index);
+            handleCloseTabsToLeft(index);
+        });
+
+        contextMenu.addAction("Close Tabs To Right", [this, index](){
+            handleCloseTabsToRight(index);
+        });
+
+        contextMenu.addAction("Close Tabs To Left", [this, index](){
+            handleCloseTabsToLeft(index);
+        });
+
+        contextMenu.exec(mapToGlobal(pos));
+
+    }
+
+    void GraphTabWidget::handleCloseTabsToRight(int index)
+    {
+        // Close last tab until tab at index is the last tab
+        while (index != mTabWidget->count()-1)
+            handleTabCloseRequested(mTabWidget->count()-1);
+    }
+
+    void GraphTabWidget::handleCloseTabsToLeft(int index)
+    {
+        // Close first tab until tab at index is the first tab
+        while (index != 0)
+        {
+            handleTabCloseRequested(0);
+            index-=1;
+        }
     }
 
     void GraphTabWidget::setModuleSelectCursor(bool on)

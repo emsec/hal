@@ -1,7 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -42,6 +42,7 @@
 #include <QMap>
 #include <QVector>
 #include <QRect>
+#include <QMultiHash>
 
 namespace hal
 {
@@ -101,8 +102,8 @@ namespace hal
             float mPinDistance;
             float mTopPin;
             int   mNumberPins;
-            QHash<u32,int> mInputHash;
-            QHash<u32,int> mOutputHash;
+            QMultiHash<u32,int> mInputHash;
+            QMultiHash<u32,int> mOutputHash;
         public:
             EndpointCoordinate();
             void setInputPosition(QPointF p0pos);
@@ -113,8 +114,8 @@ namespace hal
             void setInputPins(const QList<u32>& pinList, float p0dist, float pdist);
             void setOutputPins(const QList<u32>& pinList, float p0dist, float pdist);
             int numberPins() const;
-            int inputPinIndex(u32 id) const;
-            int outputPinIndex(u32 id) const;
+            QList<int> inputPinIndex(u32 id) const;
+            QList<int> outputPinIndex(u32 id) const;
         };
 
         class EndpointList : public QList<NetLayoutPoint>
