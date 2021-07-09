@@ -1,5 +1,16 @@
 var NAVTREEINDEX19 =
 {
+"plugin__system_2plugin__manager_8cpp.html#ad66fea3d4017a3c7b058436924d3dda3":[14,0,2,1,1,9],
+"plugin__system_2plugin__manager_8cpp.html#af13862a2a5565fb995d7cc93c0bfd980":[14,0,2,1,1,8],
+"plugin__system_2plugin__manager_8cpp_source.html":[14,0,2,1,1],
+"plugins_2gui_2include_2gui_2doxy__groups_8h.html":[14,0,1,0,0,0,48],
+"plugins_2gui_2include_2gui_2doxy__groups_8h_source.html":[14,0,1,0,0,0,48],
+"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html":[14,0,1,0,0,0,21,2],
+"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#a3706ba37634242a317cc5abe4acd919f":[14,0,1,0,0,0,21,2,1],
+"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#aac880cdffea5d42f94b5582c92d644c3":[14,0,1,0,0,0,21,2,0],
+"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#ab18ab45d5471bc18531142eba0744767":[14,0,1,0,0,0,21,2,2],
+"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#ad51f27ed983b775629326cdfc3052fe5":[14,0,1,0,0,0,21,2,3],
+"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h_source.html":[14,0,1,0,0,0,21,2],
 "plugins_2gui_2src_2gui__utils_2netlist_8cpp.html":[14,0,1,0,2,20,2],
 "plugins_2gui_2src_2gui__utils_2netlist_8cpp.html#a3706ba37634242a317cc5abe4acd919f":[14,0,1,0,2,20,2,1],
 "plugins_2gui_2src_2gui__utils_2netlist_8cpp.html#aac880cdffea5d42f94b5582c92d644c3":[14,0,1,0,2,20,2,0],
@@ -238,16 +249,5 @@ var NAVTREEINDEX19 =
 "settings__item__spinbox_8h.html":[14,0,1,0,0,0,38,0,5],
 "settings__item__spinbox_8h_source.html":[14,0,1,0,0,0,38,0,5],
 "settings__item__text_8cpp.html":[14,0,1,0,2,36,0,5],
-"settings__item__text_8cpp_source.html":[14,0,1,0,2,36,0,5],
-"settings__item__text_8h.html":[14,0,1,0,0,0,38,0,6],
-"settings__item__text_8h_source.html":[14,0,1,0,0,0,38,0,6],
-"settings__manager_8cpp.html":[14,0,1,0,2,36,5],
-"settings__manager_8cpp_source.html":[14,0,1,0,2,36,5],
-"settings__manager_8h.html":[14,0,1,0,0,0,38,6],
-"settings__manager_8h_source.html":[14,0,1,0,0,0,38,6],
-"settings__widget_8cpp.html":[14,0,1,0,2,36,1,0],
-"settings__widget_8cpp_source.html":[14,0,1,0,2,36,1,0],
-"settings__widget_8h.html":[14,0,1,0,0,0,38,1,0],
-"settings__widget_8h_source.html":[14,0,1,0,0,0,38,1,0],
-"settings__widget__checkbox_8cpp.html":[14,0,1,0,2,36,1,1]
+"settings__item__text_8cpp_source.html":[14,0,1,0,2,36,0,5]
 };

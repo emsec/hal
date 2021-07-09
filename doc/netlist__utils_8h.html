@@ -142,6 +142,8 @@ Functions</h2></td></tr>
 <tr class="separator:ae10e4d2360be0f2493d267fa63d6a350"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c5a4640b15a8d33e387ab2ff10fc914"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#a1c5a4640b15a8d33e387ab2ff10fc914">hal::netlist_utils::get_next_sequential_gates</a> (const Gate *gate, bool get_successors)</td></tr>
 <tr class="separator:a1c5a4640b15a8d33e387ab2ff10fc914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a503e7fdf7bb78de9cfba4a47bc71b862"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#a503e7fdf7bb78de9cfba4a47bc71b862">hal::netlist_utils::get_next_gates</a> (const Gate *gate, bool get_successors, bool recursive, const std::function&lt; bool(const Gate *)&gt; &amp;filter)</td></tr>
+<tr class="separator:a503e7fdf7bb78de9cfba4a47bc71b862"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2f10749460ef2bf67a20b9705a8c062"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#af2f10749460ef2bf67a20b9705a8c062">hal::netlist_utils::get_next_sequential_gates</a> (const Net *net, bool get_successors, std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::vector&lt; Gate * &gt;&gt; &amp;cache)</td></tr>
 <tr class="separator:af2f10749460ef2bf67a20b9705a8c062"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a213caef6d5d45e37da21f380645c33da"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#a213caef6d5d45e37da21f380645c33da">hal::netlist_utils::get_next_sequential_gates</a> (const Net *net, bool get_successors)</td></tr>
@@ -170,6 +172,8 @@ Functions</h2></td></tr>
 <tr class="separator:a172560a7199c07a507db7b51a08057c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada68c8b906930852f7ac416a7b1195d8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#ada68c8b906930852f7ac416a7b1195d8">hal::netlist_utils::get_complex_gate_chain</a> (Gate *start_gate, const std::vector&lt; GateType * &gt; &amp;chain_types, const std::map&lt; GateType *, std::set&lt; std::string &gt;&gt; &amp;input_pins, const std::map&lt; GateType *, std::set&lt; std::string &gt;&gt; &amp;output_pins, const std::function&lt; bool(const Gate *)&gt; &amp;filter)</td></tr>
 <tr class="separator:ada68c8b906930852f7ac416a7b1195d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4518c493c609a0dfa92855af711baed"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#ad4518c493c609a0dfa92855af711baed">hal::netlist_utils::get_shortest_path</a> (Gate *start_gate, Gate *end_gate, bool searchBothDirections)</td></tr>
+<tr class="separator:ad4518c493c609a0dfa92855af711baed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -177,7 +181,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="netlist__utils_8h.html">netlist_utils.h</a></li>
-    <li class="footer">Generated on Tue Jul 6 2021 18:41:54 for HAL by
+    <li class="footer">Generated on Fri Jul 9 2021 13:27:40 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -215,9 +215,9 @@ $(document).ready(function(){initNavTree('include_2hal__core_2netlist_2netlist_8
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* create_net(<span class="keyword">const</span> std::string&amp; name = <span class="stringliteral">&quot;&quot;</span>);</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        <span class="keywordtype">bool</span> delete_net(<a class="code" href="classhal_1_1_net.html">Net</a>* net);</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        <span class="keywordtype">bool</span> delete_net(<a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>);</div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <span class="keywordtype">bool</span> is_net_in_netlist(<a class="code" href="classhal_1_1_net.html">Net</a>* net) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <span class="keywordtype">bool</span> is_net_in_netlist(<a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
 <div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* get_net_by_id(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> net_id) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
@@ -225,17 +225,17 @@ $(document).ready(function(){initNavTree('include_2hal__core_2netlist_2netlist_8
 <div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        std::vector&lt;Net*&gt; get_nets(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_net.html">Net</a>*)&gt;&amp; filter) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160; </div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        <span class="keywordtype">bool</span> mark_global_input_net(<a class="code" href="classhal_1_1_net.html">Net</a>* net);</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        <span class="keywordtype">bool</span> mark_global_input_net(<a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>);</div>
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <span class="keywordtype">bool</span> mark_global_output_net(<a class="code" href="classhal_1_1_net.html">Net</a>* net);</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <span class="keywordtype">bool</span> mark_global_output_net(<a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>);</div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160; </div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        <span class="keywordtype">bool</span> unmark_global_input_net(<a class="code" href="classhal_1_1_net.html">Net</a>* net);</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        <span class="keywordtype">bool</span> unmark_global_input_net(<a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>);</div>
 <div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160; </div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        <span class="keywordtype">bool</span> unmark_global_output_net(<a class="code" href="classhal_1_1_net.html">Net</a>* net);</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        <span class="keywordtype">bool</span> unmark_global_output_net(<a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>);</div>
 <div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160; </div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        <span class="keywordtype">bool</span> is_global_input_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* net) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        <span class="keywordtype">bool</span> is_global_input_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160; </div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        <span class="keywordtype">bool</span> is_global_output_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* net) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        <span class="keywordtype">bool</span> is_global_output_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160; </div>
 <div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        <span class="keyword">const</span> std::vector&lt;Net*&gt;&amp; get_global_input_nets() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160; </div>
@@ -253,9 +253,9 @@ $(document).ready(function(){initNavTree('include_2hal__core_2netlist_2netlist_8
 <div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160; </div>
 <div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;        <a class="code" href="classhal_1_1_module.html">Module</a>* create_module(<span class="keyword">const</span> std::string&amp; name, <a class="code" href="classhal_1_1_module.html">Module</a>* parent, <span class="keyword">const</span> std::vector&lt;Gate*&gt;&amp; gates = {});</div>
 <div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160; </div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        <span class="keywordtype">bool</span> delete_module(Module* module);</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        <span class="keywordtype">bool</span> delete_module(Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
 <div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160; </div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        <span class="keywordtype">bool</span> is_module_in_netlist(Module* module) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        <span class="keywordtype">bool</span> is_module_in_netlist(Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160; </div>
 <div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;        Module* get_module_by_id(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> module_id) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160; </div>
@@ -414,7 +414,9 @@ $(document).ready(function(){initNavTree('include_2hal__core_2netlist_2netlist_8
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_html"><div class="ttname"><a href="classhal_1_1_gate.html">hal::Gate</a></div><div class="ttdef"><b>Definition:</b> <a href="gate_8h_source.html#l00055">gate.h:55</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_shortest_path_html_ac79d7240087e23efb58eecfe4c0a38fd"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">hal::ShortestPath::net</a></div><div class="ttdeci">const Net * net(const Gate *g0, const Gate *g1)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00843">graph_graphics_view.cpp:843</a></div></div>
 <div class="ttc" id="agroup__gui_html_ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42"><div class="ttname"><a href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42">hal::ItemType::Module</a></div><div class="ttdeci">@ Module</div></div>
+<div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00852">graph_graphics_view.cpp:852</a></div></div>
 <div class="ttc" id="agroup__gui_html_ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16"><div class="ttname"><a href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ItemType::Gate</a></div><div class="ttdeci">@ Gate</div></div>
 <div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00053">net.h:53</a></div></div>
 <div class="ttc" id="adefines_8h_html_aec41e5f8e4b7aef2540e84268692fa84"><div class="ttname"><a href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a></div><div class="ttdeci">int32_t i32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00038">defines.h:38</a></div></div>
@@ -429,7 +431,7 @@ $(document).ready(function(){initNavTree('include_2hal__core_2netlist_2netlist_8
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></li>
-    <li class="footer">Generated on Tue Jul 6 2021 18:41:52 for HAL by
+    <li class="footer">Generated on Fri Jul 9 2021 13:27:39 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

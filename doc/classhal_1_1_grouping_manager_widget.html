@@ -102,7 +102,7 @@ Inheritance diagram for hal::GroupingManagerWidget:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_grouping_manager_widget__inherit__graph.png" border="0" usemap="#hal_1_1_grouping_manager_widget_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_grouping_manager_widget_inherit__map" id="hal_1_1_grouping_manager_widget_inherit__map">
-<area shape="rect" title="User interface for Groupings." alt="" coords="21,652,268,1272"/>
+<area shape="rect" title="User interface for Groupings." alt="" coords="21,652,268,1301"/>
 <area shape="rect" href="classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="5,175,284,604"/>
 <area shape="rect" href="classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="91,5,199,127"/>
 </map>
@@ -112,7 +112,7 @@ Collaboration diagram for hal::GroupingManagerWidget:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_grouping_manager_widget__coll__graph.png" border="0" usemap="#hal_1_1_grouping_manager_widget_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_grouping_manager_widget_coll__map" id="hal_1_1_grouping_manager_widget_coll__map">
-<area shape="rect" title="User interface for Groupings." alt="" coords="280,815,527,1435"/>
+<area shape="rect" title="User interface for Groupings." alt="" coords="280,815,527,1464"/>
 <area shape="rect" href="classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="264,395,543,765"/>
 <area shape="rect" href="classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="5,108,113,229"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qvboxlayout.html" title=" " alt="" coords="138,115,285,222"/>
@@ -132,6 +132,14 @@ Public Slots</h2></td></tr>
 <tr class="separator:a7d582c72de6099cb85e03f71d5efec6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d60c2d0600edff342fb17abb6ffe38e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_manager_widget.html#a4d60c2d0600edff342fb17abb6ffe38e">handleGraphSelectionChanged</a> (void *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>)</td></tr>
 <tr class="separator:a4d60c2d0600edff342fb17abb6ffe38e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af07b20178f33bddf3265659dd4543983"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_manager_widget.html#af07b20178f33bddf3265659dd4543983">handleToolboxPredecessor</a> ()</td></tr>
+<tr class="separator:af07b20178f33bddf3265659dd4543983"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a349446bc097bedb28f7d25de29d6d070"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_manager_widget.html#a349446bc097bedb28f7d25de29d6d070">handleToolboxSuccessor</a> ()</td></tr>
+<tr class="separator:a349446bc097bedb28f7d25de29d6d070"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5000938ff5eae0033f20f091ded0870"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_manager_widget.html#ae5000938ff5eae0033f20f091ded0870">handleToolboxPredecessorDistance</a> ()</td></tr>
+<tr class="separator:ae5000938ff5eae0033f20f091ded0870"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adecd36035cf3a093196b47871c462775"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_manager_widget.html#adecd36035cf3a093196b47871c462775">handleToolboxSuccessorDistance</a> ()</td></tr>
+<tr class="separator:adecd36035cf3a093196b47871c462775"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_slots_classhal_1_1_content_widget"><td colspan="2" onclick="javascript:toggleInherit('pub_slots_classhal_1_1_content_widget')"><img src="closed.png" alt="-"/>&#160;Public Slots inherited from <a class="el" href="classhal_1_1_content_widget.html">hal::ContentWidget</a></td></tr>
 <tr class="memitem:a710c4f22b31bec0e46b1183fbd8b5778 inherit pub_slots_classhal_1_1_content_widget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a710c4f22b31bec0e46b1183fbd8b5778">remove</a> ()</td></tr>
 <tr class="separator:a710c4f22b31bec0e46b1183fbd8b5778 inherit pub_slots_classhal_1_1_content_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1641,6 +1649,126 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="af07b20178f33bddf3265659dd4543983"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af07b20178f33bddf3265659dd4543983">&#9670;&nbsp;</a></span>handleToolboxPredecessor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GroupingManagerWidget::handleToolboxPredecessor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Adds all predecessor of the currently selected gate or module to a new grouping. </p>
+
+<p class="definition">Definition at line <a class="el" href="grouping__manager__widget_8cpp_source.html#l00264">264</a> of file <a class="el" href="grouping__manager__widget_8cpp_source.html">grouping_manager_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="user__action__compound_8cpp_source.html#l00023">hal::UserActionCompound::addAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#append">QVector::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00029">hal::UserActionCompound::exec()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00083">hal::Net::get_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00167">hal::Net::get_sources()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Grouping</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#isEmpty">QVector::isEmpty()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>, <a class="el" href="user__action__compound_8h_source.html#l00042">hal::UserActionCompound::setUseCreatedObject()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#takeFirst">QVector::takeFirst()</a>.</p>
+
+</div>
+</div>
+<a id="ae5000938ff5eae0033f20f091ded0870"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5000938ff5eae0033f20f091ded0870">&#9670;&nbsp;</a></span>handleToolboxPredecessorDistance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GroupingManagerWidget::handleToolboxPredecessorDistance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Performs a BFS with a max-depth of three and creates a new grouping for the predecessors of each depth. </p>
+
+<p class="definition">Definition at line <a class="el" href="grouping__manager__widget_8cpp_source.html#l00334">334</a> of file <a class="el" href="grouping__manager__widget_8cpp_source.html">grouping_manager_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="user__action__compound_8cpp_source.html#l00023">hal::UserActionCompound::addAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#append">QVector::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#clear">QVector::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00029">hal::UserActionCompound::exec()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Grouping</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#isEmpty">QVector::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>, and <a class="el" href="user__action__compound_8h_source.html#l00042">hal::UserActionCompound::setUseCreatedObject()</a>.</p>
+
+</div>
+</div>
+<a id="a349446bc097bedb28f7d25de29d6d070"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a349446bc097bedb28f7d25de29d6d070">&#9670;&nbsp;</a></span>handleToolboxSuccessor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GroupingManagerWidget::handleToolboxSuccessor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Adds all successor of the currently selected gate or module to a new grouping. </p>
+
+<p class="definition">Definition at line <a class="el" href="grouping__manager__widget_8cpp_source.html#l00299">299</a> of file <a class="el" href="grouping__manager__widget_8cpp_source.html">grouping_manager_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="user__action__compound_8cpp_source.html#l00023">hal::UserActionCompound::addAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#append">QVector::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00029">hal::UserActionCompound::exec()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00248">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00083">hal::Net::get_id()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Grouping</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#isEmpty">QVector::isEmpty()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>, <a class="el" href="user__action__compound_8h_source.html#l00042">hal::UserActionCompound::setUseCreatedObject()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#takeFirst">QVector::takeFirst()</a>.</p>
+
+</div>
+</div>
+<a id="adecd36035cf3a093196b47871c462775"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adecd36035cf3a093196b47871c462775">&#9670;&nbsp;</a></span>handleToolboxSuccessorDistance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GroupingManagerWidget::handleToolboxSuccessorDistance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Performs a BFS with a max-depth of three and creates a new grouping for the successors of each depth. </p>
+
+<p class="definition">Definition at line <a class="el" href="grouping__manager__widget_8cpp_source.html#l00380">380</a> of file <a class="el" href="grouping__manager__widget_8cpp_source.html">grouping_manager_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="user__action__compound_8cpp_source.html#l00023">hal::UserActionCompound::addAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#append">QVector::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#clear">QVector::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00029">hal::UserActionCompound::exec()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Grouping</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#isEmpty">QVector::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>, and <a class="el" href="user__action__compound_8h_source.html#l00042">hal::UserActionCompound::setUseCreatedObject()</a>.</p>
+
+</div>
+</div>
 <a id="aae28563e5626e3e9cf6f9b86f61e88cd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aae28563e5626e3e9cf6f9b86f61e88cd">&#9670;&nbsp;</a></span>newGroupingIconPath()</h2>
 
@@ -2415,7 +2543,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_grouping_manager_widget.html">GroupingManagerWidget</a></li>
-    <li class="footer">Generated on Tue Jul 6 2021 18:41:55 for HAL by
+    <li class="footer">Generated on Fri Jul 9 2021 13:27:42 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
