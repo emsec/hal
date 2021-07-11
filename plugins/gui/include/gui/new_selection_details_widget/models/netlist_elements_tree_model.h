@@ -63,12 +63,6 @@ namespace hal
           * refer to the Qt documentation.
           */
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
         ///@}
 
         /**
@@ -110,17 +104,17 @@ namespace hal
         void netRemoved(Net* n);
         void moduleNameChanged(Module* m);
         void moduleTypeChanged(Module* m);
-//        void moduleRemoved(Module* m);//at this point, nothing is to do anymore but to remove the item->all other events (assigning/submodremoving are done before)
-//        void moduleSubmoduleRemoved(Module* m, int removed_module);
-//        //void moduleParentChanged(Module* m);
+        //void moduleRemoved(Module* m);// -> mandatory events to implement: submodule_added. submodule_removed
+        void moduleSubmoduleRemoved(Module* m, int removed_module);
+        //void moduleParentChanged(Module* m); //is not needed, submod_removed and submod_added are sufficient
 
 //        //optional
-//        void gateCreated(Gate* g); / = assigned to top_module, no need to catch this
-//        void netCreated(Net* n);
+//        void gateCreated(Gate* g); // = assigned to top_module, no need to catch this
+//        void netCreated(Net* n); // this could be hart...
 //        void moduleCreated(Module* m);
         void moduleGateAssigned(Module* m, int assigned_gate); //const u32
         void moduleGateRemoved(Module* m, int removed_gate); //const u32 //same as assign_gate(top)
-//        void moduleSubmoduleAdded(Module* m, int added_module);
+        void moduleSubmoduleAdded(Module* m, int added_module);
 
 
         //Column identifier
@@ -138,6 +132,7 @@ namespace hal
         QIcon mGateIcon;
         QIcon mNetIcon;
         QString mItemTypeKey = "type"; //also save value in enum (if it is possible with QVariant)
+        QString mRepresentedIDKey = "id";
         //must(?) be stored for handler methods
         bool mGatesDisplayed;
         bool mNetsDisplayed;
