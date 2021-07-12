@@ -878,8 +878,7 @@ namespace hal
                 return false;
             }
 
-            parent_component =
-                GateTypeComponent::create_latch_component(nullptr, BooleanFunction::from_string(cell.latch->data_in, input_pins), BooleanFunction::from_string(cell.latch->enable, input_pins));
+            parent_component = GateTypeComponent::create_latch_component(BooleanFunction::from_string(cell.latch->data_in, input_pins), BooleanFunction::from_string(cell.latch->enable, input_pins));
 
             LatchComponent* latch_component = parent_component->convert_to<LatchComponent>();
             if (!cell.latch->clear.empty())

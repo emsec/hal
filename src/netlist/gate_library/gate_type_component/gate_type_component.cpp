@@ -33,14 +33,9 @@ namespace hal
         return std::make_unique<FFComponent>(std::move(component), next_state_bf, clock_bf);
     }
 
-    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_latch_component(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf)
+    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_latch_component(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf)
     {
-        if (component == nullptr)
-        {
-            return nullptr;
-        }
-
-        return std::make_unique<LatchComponent>(std::move(component), data_in_bf, enable_bf);
+        return std::make_unique<LatchComponent>(data_in_bf, enable_bf);
     }
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_component(std::unique_ptr<GateTypeComponent> component)

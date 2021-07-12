@@ -399,9 +399,9 @@ namespace hal
             return nullptr;
         }
 
-        std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_latch_component(
-            nullptr, BooleanFunction::from_string(latch_config["data_in"].GetString(), input_pins), BooleanFunction::from_string(latch_config["enable_on"].GetString(), input_pins));
-        LatchComponent* latch_component = component->convert_to<LatchComponent>();
+        std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_latch_component(BooleanFunction::from_string(latch_config["data_in"].GetString(), input_pins),
+                                                                                                 BooleanFunction::from_string(latch_config["enable_on"].GetString(), input_pins));
+        LatchComponent* latch_component              = component->convert_to<LatchComponent>();
         assert(latch_component != nullptr);
 
         if (latch_config.HasMember("clear_on") && latch_config["clear_on"].IsString())

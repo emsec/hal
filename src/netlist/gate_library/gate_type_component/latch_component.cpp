@@ -4,8 +4,7 @@
 
 namespace hal
 {
-    LatchComponent::LatchComponent(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf)
-        : m_component(std::move(component)), m_data_in_bf(data_in_bf), m_enable_bf(enable_bf)
+    LatchComponent::LatchComponent(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf) : m_data_in_bf(data_in_bf), m_enable_bf(enable_bf)
     {
     }
 
@@ -21,24 +20,6 @@ namespace hal
 
     std::set<GateTypeComponent*> LatchComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
-        if (m_component != nullptr)
-        {
-            std::set<GateTypeComponent*> res = m_component->get_components(filter);
-            if (filter)
-            {
-                if (filter(m_component.get()))
-                {
-                    res.insert(m_component.get());
-                }
-            }
-            else
-            {
-                res.insert(m_component.get());
-            }
-
-            return res;
-        }
-
         return {};
     }
 

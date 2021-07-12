@@ -34,7 +34,7 @@ namespace hal
     class LatchComponent : public GateTypeComponent
     {
     public:
-        LatchComponent(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf);
+        LatchComponent(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf);
 
         ComponentType get_type() const override;
         static bool is_class_of(const GateTypeComponent* component);
@@ -58,7 +58,6 @@ namespace hal
 
     private:
         static constexpr ComponentType m_type = ComponentType::latch;
-        std::unique_ptr<GateTypeComponent> m_component;
 
         BooleanFunction m_data_in_bf;
         BooleanFunction m_enable_bf;
