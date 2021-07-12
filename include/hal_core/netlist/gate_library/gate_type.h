@@ -411,9 +411,8 @@ namespace hal
     private:
         friend class GateLibrary;
 
-        u32 m_id;
-
         GateLibrary* m_gate_library;
+        u32 m_id;
         std::string m_name;
         std::set<GateTypeProperty> m_properties;
         std::unique_ptr<GateTypeComponent> m_component;

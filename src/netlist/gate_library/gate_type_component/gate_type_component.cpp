@@ -25,11 +25,6 @@ namespace hal
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ff_component(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf)
     {
-        if (component == nullptr)
-        {
-            return nullptr;
-        }
-
         return std::make_unique<FFComponent>(std::move(component), next_state_bf, clock_bf);
     }
 

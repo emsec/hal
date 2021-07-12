@@ -20,6 +20,7 @@ namespace hal
 
     std::set<GateTypeComponent*> LatchComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
+        UNUSED(filter);
         return {};
     }
 
