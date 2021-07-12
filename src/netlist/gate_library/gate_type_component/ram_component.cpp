@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    RAMComponent::RAMComponent(std::vector<std::unique_ptr<GateTypeComponent>> components) : m_components(std::move(components))
+    RAMComponent::RAMComponent(std::unique_ptr<GateTypeComponent> component) : m_component(std::move(component))
     {
     }
 
@@ -18,26 +18,19 @@ namespace hal
 
     std::set<GateTypeComponent*> RAMComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
-        if (!m_components.empty())
+        if (m_component != nullptr)
         {
-            std::set<GateTypeComponent*> res;
-
-            for (const auto& component : m_components)
+            std::set<GateTypeComponent*> res = m_component->get_components(filter);
+            if (filter)
             {
-                std::set<GateTypeComponent*> sub_components = component->get_components(filter);
-                res.insert(sub_components.begin(), sub_components.end());
-
-                if (filter)
+                if (filter(m_component.get()))
                 {
-                    if (filter(component.get()))
-                    {
-                        res.insert(component.get());
-                    }
+                    res.insert(m_component.get());
                 }
-                else
-                {
-                    res.insert(component.get());
-                }
+            }
+            else
+            {
+                res.insert(m_component.get());
             }
 
             return res;

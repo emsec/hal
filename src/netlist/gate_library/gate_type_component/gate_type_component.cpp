@@ -43,15 +43,15 @@ namespace hal
         return std::make_unique<LatchComponent>(std::move(component), data_in_bf, enable_bf);
     }
 
-    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_component(std::vector<std::unique_ptr<GateTypeComponent>> components)
+    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_component(std::unique_ptr<GateTypeComponent> component)
     {
         // TODO do fancy RAM stuff
-        if (components.empty())
+        if (component == nullptr)
         {
             return nullptr;
         }
 
-        return std::make_unique<RAMComponent>(std::move(components));
+        return std::make_unique<RAMComponent>(std::move(component));
     }
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_mac_component()

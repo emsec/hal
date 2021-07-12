@@ -31,7 +31,7 @@ namespace hal
     class RAMComponent : public GateTypeComponent
     {
     public:
-        RAMComponent(std::vector<std::unique_ptr<GateTypeComponent>> components);
+        RAMComponent(std::unique_ptr<GateTypeComponent> component);
 
         ComponentType get_type() const override;
         static bool is_class_of(const GateTypeComponent* component);
@@ -39,6 +39,6 @@ namespace hal
 
     private:
         static constexpr ComponentType m_type = ComponentType::ram;
-        std::vector<std::unique_ptr<GateTypeComponent>> m_components;    // RAM may have multiple ports
+        std::unique_ptr<GateTypeComponent> m_component;    // RAM may have multiple ports
     };
 }    // namespace hal

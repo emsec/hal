@@ -28,7 +28,7 @@
 namespace hal
 {
     /**
-     * Defines the behavior of the gate type in case both clear and preset are active at the same time.
+     * Defines the behavior of the gate type in case both asynchronous set and reset are active at the same time.
      */
     enum class AsyncSetResetBehavior
     {

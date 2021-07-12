@@ -32,12 +32,42 @@ namespace hal
     public:
         LUTComponent(std::unique_ptr<GateTypeComponent> component, bool init_ascending);
 
+        /**
+         * Get the type of the gate type component.
+         * 
+         * @returns The type of the gate type component.
+         */
         ComponentType get_type() const override;
+
+        /**
+         * Check whether a component is a LUTComponent.
+         * 
+         * @param[in] component - The component to check.
+         * @returns True if component is a LUTComponent, false otherwise.
+         */
         static bool is_class_of(const GateTypeComponent* component);
 
+        /**
+         * Get the sub-components of the gate type component.
+         * A user-defined filter may be applied to the result set, but is disabled by default.
+         * 
+         * @param[in] filter - The user-defined filter function applied to all candidate components.
+         * @returns The sub-components of the gate type component.
+         */
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
+        /**
+         * Get the bit-order of the initialization string.
+         *
+         * @returns True if ascending bit-order, false otherwise.
+         */
         bool is_init_ascending() const;
+
+        /**
+         * Set the bit-order of the initialization string.
+         *
+         * @param[in] ascending - True if ascending bit-order, false otherwise.
+         */
         void set_init_ascending(bool init_ascending = true);
 
     private:
