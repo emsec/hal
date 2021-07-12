@@ -12,8 +12,8 @@ namespace hal
         // use root item to store header information
         //mRootItem = new TreeItem(QList<QVariant>() << "Name" << "ID" << "Type");
         setHeaderLabels(QList<QVariant>() << "Name" << "ID" << "Type");
-        setModule(gNetlist->get_module_by_id(1), true, true, true);
-        //setContent(QList<int>() << 1, QList<int>(), QList<int>());
+        //setModule(gNetlist->get_module_by_id(1), true, true, true);
+        setContent(QList<int>() << 1, QList<int>(), QList<int>());
 
         // CONNECTIONS
         connect(gNetlistRelay, &NetlistRelay::gateNameChanged, this, &NetlistElementsTreeModel::gateNameChanged);
@@ -24,6 +24,7 @@ namespace hal
         connect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &NetlistElementsTreeModel::moduleGateRemoved);
         connect(gNetlistRelay, &NetlistRelay::moduleGateAssigned, this, &NetlistElementsTreeModel::moduleGateAssigned);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &NetlistElementsTreeModel::moduleSubmoduleRemoved);
+        connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleAdded, this, &NetlistElementsTreeModel::moduleSubmoduleAdded);
     }
 
     NetlistElementsTreeModel::~NetlistElementsTreeModel()
@@ -299,7 +300,34 @@ namespace hal
 
     void NetlistElementsTreeModel::moduleSubmoduleAdded(Module *m, int added_module)
     {
+        beginResetModel();
+        Module* addedModule = gNetlist->get_module_by_id(added_module);
 
+        //special case when a module is represented with setModule
+        if(mCurrentlyDisplayingModule && (int)m->get_id() == mModId)
+        {
+            TreeItem* addedSubmodItem = new TreeItem(QList<QVariant>() << QString::fromStdString(addedModule->get_name()) << addedModule->get_id()
+                                                     << QString::fromStdString(addedModule->get_type()));
+            moduleRecursive(addedModule, addedSubmodItem, mGatesDisplayed, mNetsDisplayed);
+            addedSubmodItem->setAdditionalData(mItemTypeKey, itemType::module);
+            addedSubmodItem->setAdditionalData(mRepresentedIDKey, addedModule->get_id());
+            mRootItem->insertChild(0, addedSubmodItem);
+            mModuleToTreeitems.insert(addedModule, addedSubmodItem);
+            return;
+        }
+
+        //standard case for all displayed things
+        for(TreeItem* parentModItem : mModuleToTreeitems.values(m))
+        {
+            TreeItem* addedSubmodItem = new TreeItem(QList<QVariant>() << QString::fromStdString(addedModule->get_name()) << addedModule->get_id()
+                                                     << QString::fromStdString(addedModule->get_type()));
+            moduleRecursive(addedModule, addedSubmodItem, mGatesDisplayed, mNetsDisplayed);
+            addedSubmodItem->setAdditionalData(mItemTypeKey, itemType::module);
+            addedSubmodItem->setAdditionalData(mRepresentedIDKey, addedModule->get_id());
+            parentModItem->insertChild(0, addedSubmodItem);
+            mModuleToTreeitems.insert(addedModule, addedSubmodItem);
+        }
+        endResetModel();
     }
 
     void NetlistElementsTreeModel::moduleRecursive(Module* mod, TreeItem* modItem, bool showGates, bool showNets)
