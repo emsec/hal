@@ -92,21 +92,20 @@ namespace hal
         )");
 
         py_gate_type_component.def("get_components", &GateTypeComponent::get_components, py::arg("filter") = nullptr, R"(
-            Get the sub-components of the gate type component.
-            A user-defined filter may be applied to the result set, but is disabled by default.
+            Get all components matching the filter condition (if provided) as a set. 
+            Returns an empty set if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
 
-            :param lambda filter: The user-defined filter function applied to all candidate components.
-            :returns: The sub-components of the gate type component.
+            :param lambda filter: The filter applied to all candidate components, disabled by default.
+            :returns: The components.
             :rtype: set[hal_py.GateTypeComponent]
         )");
 
         py_gate_type_component.def("get_component", &GateTypeComponent::get_component, py::arg("filter") = nullptr, R"(
-            Get a single sub-component of the gate type component.
-            A user-defined filter may be applied to the result set, but is disabled by default.
-            If more no or than one components match the filter condition, a nullptr is returned.
+            Get a single component matching the filter condition (if provided).
+            Returns None if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
 
-            :param lambda filter: The user-defined filter function applied to all candidate components.
-            :returns: The sub-component of the gate type component or None.
+            :param lambda filter: The filter applied to all candidate components.
+            :returns: The component or None.
             :rtype: hal_py.GateTypeComponent or None
         )");
 
@@ -116,10 +115,17 @@ namespace hal
 
         py_lut_component.def_static("is_class_of", &LUTComponent::is_class_of, py::arg("component"), R"(
             Check whether a component is a LUTComponent.
-            
+
             :param hal_py.GateTypeComponent component: The component to check.
             :returns: True if component is a LUTComponent, False otherwise.
             :rtype: bool
+        )");
+
+        py_lut_component.def_property("init_ascending", &LUTComponent::is_init_ascending, &LUTComponent::set_init_ascending, R"(
+            The bit-order of the initialization string. 
+            True if ascending, False otherwise.
+
+            :type: bool
         )");
 
         py_lut_component.def("is_init_ascending", &LUTComponent::is_init_ascending, R"(
@@ -139,24 +145,80 @@ namespace hal
             A FF component specifying the FF gate type's functionality.
         )");
 
+        // TODO implement pybinds
+
         py::class_<LatchComponent, GateTypeComponent, RawPtrWrapper<LatchComponent>> py_latch_component(m, "LatchComponent", R"(
             A latch component specifying the latch gate type's functionality.
         )");
+
+        // TODO implement pybinds
 
         py::class_<RAMComponent, GateTypeComponent, RawPtrWrapper<RAMComponent>> py_ram_component(m, "RAMComponent", R"(
             A RAM component specifying the RAM gate type's functionality.
         )");
 
+        // TODO implement pybinds
+
         py::class_<MACComponent, GateTypeComponent, RawPtrWrapper<MACComponent>> py_mac_component(m, "MACComponent", R"(
             A MAC component specifying the MAC gate type's functionality.
         )");
+
+        // TODO implement pybinds
 
         py::class_<InitComponent, GateTypeComponent, RawPtrWrapper<InitComponent>> py_init_component(m, "InitComponent", R"(
             An initialization component specifying the initialization behavior of a gate type.
         )");
 
+        py_init_component.def_static("is_class_of", &InitComponent::is_class_of, py::arg("component"), R"(
+            Check whether a component is an InitComponent.
+
+            :param hal_py.GateTypeComponent component: The component to check.
+            :returns: True if component is a InitComponent, False otherwise.
+            :rtype: bool
+        )");
+
+        py_init_component.def_property("init_category", &InitComponent::get_init_category, &InitComponent::set_init_category, R"(
+            The category in which to find the initialization data.
+            
+            :type: str
+        )");
+
+        py_init_component.def("get_init_category", &InitComponent::get_init_category, R"(
+            Get the category in which to find the initialization data.
+
+            :returns: The data category.
+            :rtype: str
+        )");
+
+        py_init_component.def("set_init_category", &InitComponent::set_init_category, py::arg("init_category"), R"(
+            Set the category in which to find the initialization data.
+
+            :param str init_category: The data category.
+        )");
+
+        py_init_component.def_property("init_identifier", &InitComponent::get_init_identifier, &InitComponent::set_init_identifier, R"(
+            The identifier at which to find the initialization data.
+            
+            :type: str
+        )");
+
+        py_init_component.def("get_init_identifier", &InitComponent::get_init_identifier, R"(
+            Get the identifier at which to find the initialization data.
+
+            :returns: The data identifier.
+            :rtype: str
+        )");
+
+        py_init_component.def("set_init_identifier", &InitComponent::set_init_identifier, py::arg("init_identifier"), R"(
+            Set the identifier at which to find the initialization data.
+
+            :param str init_identifier: The data identifier.
+        )");
+
         py::class_<RAMPortComponent, GateTypeComponent, RawPtrWrapper<RAMPortComponent>> py_ram_port_component(m, "RAMPortComponent", R"(
             A RAM port component specifying the behavior of a port belonging to a RAM gate type.
         )");
+
+        // TODO implement pybinds
     }
 }    // namespace hal

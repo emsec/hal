@@ -32,15 +32,56 @@ namespace hal
     public:
         InitComponent(const std::string& init_category, const std::string& init_identifier);
 
+        /**
+         * Get the type of the gate type component.
+         * 
+         * @returns The type of the gate type component.
+         */
         ComponentType get_type() const override;
+
+        /**
+         * Check whether a component is an InitComponent.
+         * 
+         * @param[in] component - The component to check.
+         * @returns True if component is an InitComponent, false otherwise.
+         */
         static bool is_class_of(const GateTypeComponent* component);
 
+        /**
+         * Get the sub-components of the gate type component.
+         * A user-defined filter may be applied to the result set, but is disabled by default.
+         * 
+         * @param[in] filter - The user-defined filter function applied to all candidate components.
+         * @returns The sub-components of the gate type component.
+         */
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
+        /**
+         * Get the category in which to find the initialization data.
+         *
+         * @returns The data category.
+         */
         const std::string& get_init_category() const;
+
+        /**
+         * Set the category in which to find the initialization data.
+         *
+         * @param[in] init_category - The data category.
+         */
         void set_init_category(const std::string& init_category);
 
+        /**
+         * Get the identifier at which to find the initialization data.
+         *
+         * @returns The data identifier.
+         */
         const std::string get_init_identifier() const;
+
+        /**
+         * Set the identifier at which to find the initialization data.
+         *
+         * @param[in] init_identifier - The data identifier.
+         */
         void set_init_identifier(const std::string& init_identifier);
 
     private:

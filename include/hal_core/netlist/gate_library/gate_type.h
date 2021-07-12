@@ -94,7 +94,6 @@ namespace hal
     {
     public:
         /**
-         * TODO pybind
          * Get all components matching the filter condition (if provided) as a set. 
          * Returns an empty set if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
          * 
@@ -104,17 +103,15 @@ namespace hal
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
 
         /**
-         * TODO pybind
          * Get a single component matching the filter condition (if provided).
          * Returns a nullptr if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
          * 
          * @param[in] filter - The filter applied to all candidate components.
-         * @returns The component.
+         * @returns The component or a nullptr.
          */
         GateTypeComponent* get_component(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
 
         /**
-         * TODO pybind
          * TODO documentation
          */
         template<typename T>

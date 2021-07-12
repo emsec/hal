@@ -85,21 +85,20 @@ namespace hal
         }
 
         /**
-         * Get the sub-components of the gate type component.
-         * A user-defined filter may be applied to the result set, but is disabled by default.
+         * Get all components matching the filter condition (if provided) as a set. 
+         * Returns an empty set if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
          * 
-         * @param[in] filter - The user-defined filter function applied to all candidate components.
-         * @returns The sub-components of the gate type component.
+         * @param[in] filter - The filter applied to all candidate components, disabled by default.
+         * @returns The components.
          */
         virtual std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const = 0;
 
         /**
-         * Get a single sub-component of the gate type component.
-         * A user-defined filter may be applied to the result set, but is disabled by default.
-         * If more no or than one components match the filter condition, a nullptr is returned.
+         * Get a single component matching the filter condition (if provided).
+         * Returns a nullptr if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
          * 
-         * @param[in] filter - The user-defined filter function applied to all candidate components.
-         * @returns The sub-component of the gate type component or a nullptr.
+         * @param[in] filter - The filter applied to all candidate components.
+         * @returns The component or a nullptr.
          */
         GateTypeComponent* get_component(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
 
