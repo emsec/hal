@@ -28,6 +28,12 @@ namespace hal
             .value("ram_port", GateTypeComponent::ComponentType::ram_port, R"(RAM port component type.)")
             .export_values();
 
+        py_gate_type_component.def_property_readonly("type", &GateTypeComponent::get_type, R"(
+            The type of the gate type component.
+
+            :type: hal_py.GateTypeComponent.ComponentType
+        )");
+
         py_gate_type_component.def("get_type", &GateTypeComponent::get_type, R"(
             Get the type of the gate type component.
 
@@ -35,60 +41,66 @@ namespace hal
             :rtype: hal_py.GateTypeComponent.ComponentType
         )");
 
-        py_gate_type_component.def("convert_to_lut_component", &GateTypeComponent::convert_to<LUTComponent>, R"(
-            Convert the gate type component to a LUT component.
-            A check is performed to determine whether the conversion is legal and None is returned in case it is not.
-            
-            :returns: The LUT component or None.
-            :rtype: hal_py.LUTComponent
-        )");
+        // py_gate_type_component.def("convert_to_lut_component", &GateTypeComponent::convert_to<LUTComponent>, R"(
+        //     Convert the gate type component to a LUT component.
+        //     A check is performed to determine whether the conversion is legal and None is returned in case it is not.
 
-        py_gate_type_component.def("convert_to_ff_component", &GateTypeComponent::convert_to<FFComponent>, R"(
-            Convert the gate type component to a FF component.
-            A check is performed to determine whether the conversion is legal and None is returned in case it is not.
-            
-            :returns: The FF component or None.
-            :rtype: hal_py.FFComponent
-        )");
+        //     :returns: The LUT component or None.
+        //     :rtype: hal_py.LUTComponent
+        // )");
 
-        py_gate_type_component.def("convert_to_latch_component", &GateTypeComponent::convert_to<LatchComponent>, R"(
-            Convert the gate type component to a latch component.
-            A check is performed to determine whether the conversion is legal and None is returned in case it is not.
-            
-            :returns: The latch component or None.
-            :rtype: hal_py.LatchComponent
-        )");
+        // py_gate_type_component.def("convert_to_ff_component", &GateTypeComponent::convert_to<FFComponent>, R"(
+        //     Convert the gate type component to a FF component.
+        //     A check is performed to determine whether the conversion is legal and None is returned in case it is not.
 
-        py_gate_type_component.def("convert_to_ram_component", &GateTypeComponent::convert_to<RAMComponent>, R"(
-            Convert the gate type component to a RAM component.
-            A check is performed to determine whether the conversion is legal and None is returned in case it is not.
-            
-            :returns: The RAM component or None.
-            :rtype: hal_py.RAMComponent
-        )");
+        //     :returns: The FF component or None.
+        //     :rtype: hal_py.FFComponent
+        // )");
 
-        py_gate_type_component.def("convert_to_mac_component", &GateTypeComponent::convert_to<MACComponent>, R"(
-            Convert the gate type component to a MAC component.
-            A check is performed to determine whether the conversion is legal and None is returned in case it is not.
-            
-            :returns: The MAC component or None.
-            :rtype: hal_py.MACComponent
-        )");
+        // py_gate_type_component.def("convert_to_latch_component", &GateTypeComponent::convert_to<LatchComponent>, R"(
+        //     Convert the gate type component to a latch component.
+        //     A check is performed to determine whether the conversion is legal and None is returned in case it is not.
 
-        py_gate_type_component.def("convert_to_init_component", &GateTypeComponent::convert_to<InitComponent>, R"(
-            Convert the gate type component to a initialization component.
-            A check is performed to determine whether the conversion is legal and None is returned in case it is not.
-            
-            :returns: The initializiation component or None.
-            :rtype: hal_py.InitComponent
-        )");
+        //     :returns: The latch component or None.
+        //     :rtype: hal_py.LatchComponent
+        // )");
 
-        py_gate_type_component.def("convert_to_ram_port_component", &GateTypeComponent::convert_to<RAMPortComponent>, R"(
-            Convert the gate type component to a RAM port component.
-            A check is performed to determine whether the conversion is legal and None is returned in case it is not.
-            
-            :returns: The RAM port component or None.
-            :rtype: hal_py.RAMPortComponent
+        // py_gate_type_component.def("convert_to_ram_component", &GateTypeComponent::convert_to<RAMComponent>, R"(
+        //     Convert the gate type component to a RAM component.
+        //     A check is performed to determine whether the conversion is legal and None is returned in case it is not.
+
+        //     :returns: The RAM component or None.
+        //     :rtype: hal_py.RAMComponent
+        // )");
+
+        // py_gate_type_component.def("convert_to_mac_component", &GateTypeComponent::convert_to<MACComponent>, R"(
+        //     Convert the gate type component to a MAC component.
+        //     A check is performed to determine whether the conversion is legal and None is returned in case it is not.
+
+        //     :returns: The MAC component or None.
+        //     :rtype: hal_py.MACComponent
+        // )");
+
+        // py_gate_type_component.def("convert_to_init_component", &GateTypeComponent::convert_to<InitComponent>, R"(
+        //     Convert the gate type component to a initialization component.
+        //     A check is performed to determine whether the conversion is legal and None is returned in case it is not.
+
+        //     :returns: The initializiation component or None.
+        //     :rtype: hal_py.InitComponent
+        // )");
+
+        // py_gate_type_component.def("convert_to_ram_port_component", &GateTypeComponent::convert_to<RAMPortComponent>, R"(
+        //     Convert the gate type component to a RAM port component.
+        //     A check is performed to determine whether the conversion is legal and None is returned in case it is not.
+
+        //     :returns: The RAM port component or None.
+        //     :rtype: hal_py.RAMPortComponent
+        // )");
+
+        py_gate_type_component.def_property_readonly("components", &GateTypeComponent::get_components, R"(
+            All components of the gate type component as a set.
+
+            :type: set[hal_py.GateTypeComponent]
         )");
 
         py_gate_type_component.def("get_components", &GateTypeComponent::get_components, py::arg("filter") = nullptr, R"(
@@ -145,25 +157,221 @@ namespace hal
             A FF component specifying the FF gate type's functionality.
         )");
 
-        // TODO implement pybinds
+        py_ff_component.def_static("is_class_of", &FFComponent::is_class_of, py::arg("component"), R"(
+            Check whether a component is a FFComponent.
+
+            :param hal_py.GateTypeComponent component: The component to check.
+            :returns: True if component is a FFComponent, False otherwise.
+            :rtype: bool
+        )");
+
+        py_ff_component.def_property("next_state_function", &FFComponent::get_next_state_function, &FFComponent::set_next_state_function, R"(
+            The Boolean function describing the next internal state of the flip-flop.
+        )");
+
+        py_ff_component.def("get_next_state_function", &FFComponent::get_next_state_function, R"(
+            Get the Boolean function describing the next internal state of the flip-flop.
+
+            :returns: The function describing the internal state.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_ff_component.def("set_next_state_function", &FFComponent::set_next_state_function, py::arg("next_state_bf"), R"(
+            Set the Boolean function describing the next internal state of the flip-flop.
+
+            :param hal_py.BooleanFunction next_state_bf: The function describing the internal state.
+        )");
+
+        py_ff_component.def_property("clock_function", &FFComponent::get_clock_function, &FFComponent::set_clock_function, R"(
+            The Boolean function describing the clock input of the flip-flop.
+        )");
+
+        py_ff_component.def("get_clock_function", &FFComponent::get_clock_function, R"(
+            Get the Boolean function describing the clock input of the flip-flop.
+
+            :returns: The function describing the clock input.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_ff_component.def("set_clock_function", &FFComponent::set_clock_function, py::arg("clock_bf"), R"(
+            Set the Boolean function describing the clock input of the flip-flop.
+
+            :param hal_py.BooleanFunction clock_bf: The function describing the clock input.
+        )");
+
+        py_ff_component.def_property("async_reset_function", &FFComponent::get_async_reset_function, &FFComponent::set_async_reset_function, R"(
+            The Boolean function describing the asynchronous reset behavior of the flip-flop.
+            Is an empty function if asynchronous reset is not supported by the flip-flop.
+        )");
+
+        py_ff_component.def("get_async_reset_function", &FFComponent::get_async_reset_function, R"(
+            Get the Boolean function describing the asynchronous reset behavior of the flip-flop.
+            Returns an empty function if asynchronous reset is not supported by the flip-flop.
+
+            :returns: The function describing the asynchronous reset behavior.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_ff_component.def("set_async_reset_function", &FFComponent::set_async_reset_function, py::arg("async_reset_bf"), R"(
+            Set the Boolean function describing the asynchronous reset behavior of the flip-flop.
+
+            :param hal_py.BooleanFunction async_reset_bf: The function describing the asynchronous reset behavior.
+        )");
+
+        py_ff_component.def_property("async_set_function", &FFComponent::get_async_set_function, &FFComponent::set_async_set_function, R"(
+            The Boolean function describing the asynchronous set behavior of the flip-flop.
+            Is an empty function if asynchronous set is not supported by the flip-flop.
+        )");
+
+        py_ff_component.def("get_async_set_function", &FFComponent::get_async_set_function, R"(
+            Get the Boolean function describing the asynchronous set behavior of the flip-flop.
+            Returns an empty function if asynchronous set is not supported by the flip-flop.
+
+            :returns: The function describing the asynchronous set behavior.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_ff_component.def("set_async_set_function", &FFComponent::set_async_set_function, py::arg("async_set_bf"), R"(
+            Set the Boolean function describing the asynchronous set behavior of the flip-flop.
+
+            :param hal_py.BooleanFunction async_set_bf: The function describing the asynchronous set behavior.
+        )");
+
+        py_ff_component.def("get_async_set_reset_behavior", &FFComponent::get_async_set_reset_behavior, R"(
+            Get the behavior of the internal state and the negated internal state when both asynchronous set and reset are active at the same time.
+
+            :returns: The values specifying the behavior for the internal and negated internal state.
+            :rytpe: tuple(hal_py.AsyncSetResetBehavior, hal_py.AsyncSetResetBehavior)
+        )");
+
+        py_ff_component.def("set_async_set_reset_behavior", &FFComponent::set_async_set_reset_behavior, py::arg("behav_state"), py::arg("behav_neg_state"), R"(
+            Set the behavior of the internal state and the negated internal state when both asynchronous set and reset are active at the same time.
+
+            :param hal_py.AsyncSetResetBehavior behav_state: The behavior of the internal state.
+            :param hal_py.AsyncSetResetBehavior behav_neg_state: The behavior of the negated internal state.
+        )");
 
         py::class_<LatchComponent, GateTypeComponent, RawPtrWrapper<LatchComponent>> py_latch_component(m, "LatchComponent", R"(
             A latch component specifying the latch gate type's functionality.
         )");
 
-        // TODO implement pybinds
+        py_latch_component.def_static("is_class_of", &LatchComponent::is_class_of, py::arg("component"), R"(
+            Check whether a component is a LatchComponent.
+
+            :param hal_py.GateTypeComponent component: The component to check.
+            :returns: True if component is a LatchComponent, False otherwise.
+            :rtype: bool
+        )");
+
+        py_latch_component.def_property("data_in_function", &LatchComponent::get_data_in_function, &LatchComponent::set_data_in_function, R"(
+            The Boolean function describing the data input of the latch.
+        )");
+
+        py_latch_component.def("get_data_in_function", &LatchComponent::get_data_in_function, R"(
+            Get the Boolean function describing the data input of the latch.
+
+            :returns: The function describing the data input.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_latch_component.def("set_data_in_function", &LatchComponent::set_data_in_function, py::arg("data_in_bf"), R"(
+            Set the Boolean function describing the data input of the latch.
+
+            :param hal_py.BooleanFunction data_in_bf: The function describing the data input.
+        )");
+
+        py_latch_component.def_property("enable_function", &LatchComponent::get_enable_function, &LatchComponent::set_enable_function, R"(
+            The Boolean function describing the enable behavior of the latch.
+        )");
+
+        py_latch_component.def("get_enable_function", &LatchComponent::get_enable_function, R"(
+            Get the Boolean function describing the enable behavior of the latch.
+
+            :returns: The function describing the enable behavior.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_latch_component.def("set_enable_function", &LatchComponent::set_enable_function, py::arg("enable_bf"), R"(
+            Set the Boolean function describing the enable behavior of the latch.
+
+            :param hal_py.BooleanFunction enable_bf: The function describing the enable behavior.
+        )");
+
+        py_latch_component.def_property("async_reset_function", &LatchComponent::get_async_reset_function, &LatchComponent::set_async_reset_function, R"(
+            The Boolean function describing the asynchronous reset behavior of the latch.
+            Is an empty function if asynchronous reset is not supported by the latch.
+        )");
+
+        py_latch_component.def("get_async_reset_function", &LatchComponent::get_async_reset_function, R"(
+            Get the Boolean function describing the asynchronous reset behavior of the latch.
+            Returns an empty function if asynchronous reset is not supported by the latch.
+
+            :returns: The function describing the asynchronous reset behavior.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_latch_component.def("set_async_reset_function", &LatchComponent::set_async_reset_function, py::arg("async_reset_bf"), R"(
+            Set the Boolean function describing the asynchronous reset behavior of the latch.
+
+            :param hal_py.BooleanFunction async_reset_bf: The function describing the asynchronous reset behavior.
+        )");
+
+        py_latch_component.def_property("async_set_function", &LatchComponent::get_async_set_function, &LatchComponent::set_async_set_function, R"(
+            The Boolean function describing the asynchronous set behavior of the latch.
+            Is an empty function if asynchronous set is not supported by the latch.
+        )");
+
+        py_latch_component.def("get_async_set_function", &LatchComponent::get_async_set_function, R"(
+            Get the Boolean function describing the asynchronous set behavior of the latch.
+            Returns an empty function if asynchronous set is not supported by the latch.
+
+            :returns: The function describing the asynchronous set behavior.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_latch_component.def("set_async_set_function", &LatchComponent::set_async_set_function, py::arg("async_set_bf"), R"(
+            Set the Boolean function describing the asynchronous set behavior of the latch.
+
+            :param hal_py.BooleanFunction async_set_bf: The function describing the asynchronous set behavior.
+        )");
+
+        py_latch_component.def("get_async_set_reset_behavior", &LatchComponent::get_async_set_reset_behavior, R"(
+            Get the behavior of the internal state and the negated internal state when both asynchronous set and reset are active at the same time.
+
+            :returns: The values specifying the behavior for the internal and negated internal state.
+            :rytpe: tuple(hal_py.AsyncSetResetBehavior, hal_py.AsyncSetResetBehavior)
+        )");
+
+        py_latch_component.def("set_async_set_reset_behavior", &LatchComponent::set_async_set_reset_behavior, py::arg("behav_state"), py::arg("behav_neg_state"), R"(
+            Set the behavior of the internal state and the negated internal state when both asynchronous set and reset are active at the same time.
+
+            :param hal_py.AsyncSetResetBehavior behav_state: The behavior of the internal state.
+            :param hal_py.AsyncSetResetBehavior behav_neg_state: The behavior of the negated internal state.
+        )");
 
         py::class_<RAMComponent, GateTypeComponent, RawPtrWrapper<RAMComponent>> py_ram_component(m, "RAMComponent", R"(
             A RAM component specifying the RAM gate type's functionality.
         )");
 
-        // TODO implement pybinds
+        py_ram_component.def_static("is_class_of", &RAMComponent::is_class_of, py::arg("component"), R"(
+            Check whether a component is a RAMComponent.
+
+            :param hal_py.GateTypeComponent component: The component to check.
+            :returns: True if component is a RAMComponent, False otherwise.
+            :rtype: bool
+        )");
 
         py::class_<MACComponent, GateTypeComponent, RawPtrWrapper<MACComponent>> py_mac_component(m, "MACComponent", R"(
             A MAC component specifying the MAC gate type's functionality.
         )");
 
-        // TODO implement pybinds
+        py_mac_component.def_static("is_class_of", &MACComponent::is_class_of, py::arg("component"), R"(
+            Check whether a component is a MACComponent.
+
+            :param hal_py.GateTypeComponent component: The component to check.
+            :returns: True if component is a MACComponent, False otherwise.
+            :rtype: bool
+        )");
 
         py::class_<InitComponent, GateTypeComponent, RawPtrWrapper<InitComponent>> py_init_component(m, "InitComponent", R"(
             An initialization component specifying the initialization behavior of a gate type.
@@ -219,6 +427,12 @@ namespace hal
             A RAM port component specifying the behavior of a port belonging to a RAM gate type.
         )");
 
-        // TODO implement pybinds
+        py_ram_port_component.def_static("is_class_of", &RAMPortComponent::is_class_of, py::arg("component"), R"(
+            Check whether a component is a RAMPortComponent.
+
+            :param hal_py.GateTypeComponent component: The component to check.
+            :returns: True if component is a RAMPortComponent, False otherwise.
+            :rtype: bool
+        )");
     }
 }    // namespace hal

@@ -1,5 +1,7 @@
 #include "netlist_simulator/netlist_simulator.h"
 
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 
@@ -143,7 +145,13 @@ namespace hal
                 const std::unordered_map<std::string, PinType>& pin_types = gate_type->get_pin_types();
 
                 // extract init string
-                std::string init_str = std::get<1>(gate->get_data(gate_type->get_config_data_category(), gate_type->get_config_data_identifier()));
+                const InitComponent* init_component =
+                    gate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+                if (init_component == nullptr)
+                {
+                    continue;
+                }
+                const std::string& init_str = std::get<1>(gate->get_data(init_component->get_init_category(), init_component->get_init_identifier()));
 
                 if (!init_str.empty())
                 {
@@ -326,11 +334,14 @@ namespace hal
                     sim_gate->input_values[pin] = BooleanFunction::X;
                 }
 
-                auto gate_type            = gate->get_type();
-                sim_gate->clock_func      = gate->get_boolean_function("clock");
-                sim_gate->preset_func     = gate->get_boolean_function("preset");
-                sim_gate->clear_func      = gate->get_boolean_function("clear");
-                sim_gate->next_state_func = gate->get_boolean_function("next_state");
+                const GateType* gate_type = gate->get_type();
+                const FFComponent* ff_component =
+                    gate_type->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
+                assert(ff_component != nullptr);
+                sim_gate->clock_func      = ff_component->get_clock_function();
+                sim_gate->next_state_func = ff_component->get_next_state_function();
+                sim_gate->preset_func     = ff_component->get_async_set_function();
+                sim_gate->clear_func      = ff_component->get_async_reset_function();
                 for (auto pin : gate_type->get_pins_of_type(PinType::state))
                 {
                     if (Net* net = gate->get_fan_out_net(pin); net != nullptr)
@@ -349,7 +360,7 @@ namespace hal
                 {
                     sim_gate->clock_nets.push_back(gate->get_fan_in_net(pin));
                 }
-                auto behavior                      = gate_type->get_clear_preset_behavior();
+                auto behavior                      = ff_component->get_async_set_reset_behavior();
                 sim_gate->sr_behavior_out          = behavior.first;
                 sim_gate->sr_behavior_out_inverted = behavior.second;
             }
@@ -749,25 +760,25 @@ namespace hal
         }
     }
 
-    SignalValue NetlistSimulator::process_clear_preset_behavior(GateType::ClearPresetBehavior behavior, SignalValue previous_output)
+    SignalValue NetlistSimulator::process_clear_preset_behavior(AsyncSetResetBehavior behavior, SignalValue previous_output)
     {
-        if (behavior == GateType::ClearPresetBehavior::N)
+        if (behavior == AsyncSetResetBehavior::N)
         {
             return previous_output;
         }
-        else if (behavior == GateType::ClearPresetBehavior::X)
+        else if (behavior == AsyncSetResetBehavior::X)
         {
             return SignalValue::X;
         }
-        else if (behavior == GateType::ClearPresetBehavior::L)
+        else if (behavior == AsyncSetResetBehavior::L)
         {
             return SignalValue::ZERO;
         }
-        else if (behavior == GateType::ClearPresetBehavior::H)
+        else if (behavior == AsyncSetResetBehavior::H)
         {
             return SignalValue::ONE;
         }
-        else if (behavior == GateType::ClearPresetBehavior::T)
+        else if (behavior == AsyncSetResetBehavior::T)
         {
             return toggle(previous_output);
         }

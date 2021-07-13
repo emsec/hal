@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/net.h"
 #include "netlist_simulator/simulation.h"
@@ -212,8 +213,8 @@ namespace hal
             std::vector<Net*> state_output_nets;
             std::vector<Net*> state_inverted_output_nets;
             std::vector<Net*> clock_nets;
-            GateType::ClearPresetBehavior sr_behavior_out;
-            GateType::ClearPresetBehavior sr_behavior_out_inverted;
+            AsyncSetResetBehavior sr_behavior_out;
+            AsyncSetResetBehavior sr_behavior_out_inverted;
             SignalValue output;
             SignalValue inv_output;
         };
@@ -229,6 +230,6 @@ namespace hal
         void prepare_clock_events(u64 nanoseconds);
         void process_events(u64 timeout);
 
-        SignalValue process_clear_preset_behavior(GateType::ClearPresetBehavior behavior, SignalValue previous_output);
+        SignalValue process_clear_preset_behavior(AsyncSetResetBehavior behavior, SignalValue previous_output);
     };
 }    // namespace hal

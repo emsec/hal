@@ -64,6 +64,12 @@ namespace hal
             A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
         )");
 
+        py_gate_type.def_property_readonly("components", &GateType::get_components, R"(
+            All components of the gate type as a set.
+
+            :type: set[hal_py.GateTypeComponent]
+        )");
+
         py_gate_type.def("get_components", &GateType::get_components, py::arg("filter") = nullptr, R"(
             Get all components matching the filter condition (if provided) as a set. 
             Returns an empty set if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
