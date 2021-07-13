@@ -7,6 +7,8 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/event_handler.h"
 
 #include <iostream>
@@ -995,10 +997,9 @@ namespace hal
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
 
             int i = 1;
-            lut_gate->set_data(lut_type->get_config_data_category(),
-                            lut_type->get_config_data_identifier(),
-                            "bit_vector",
-                            i_to_hex_string(i, 2));
+            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+            ASSERT_NE(init_component, nullptr);
+            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifier(), "bit_vector", i_to_hex_string(i, 2));
 
             // Testing the access via the function get_boolean_function
             EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()), get_truth_table_from_i(i, 8));
@@ -1014,12 +1015,12 @@ namespace hal
             GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
 
+            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+            ASSERT_NE(init_component, nullptr);
+
             for (int i = 0x0; i <= 0xff; i++) 
             {
-                lut_gate->set_data(lut_type->get_config_data_category(),
-                                lut_type->get_config_data_identifier(),
-                                "bit_vector",
-                                i_to_hex_string(i));
+                lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifier(), "bit_vector", i_to_hex_string(i));
                 EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()),
                         get_truth_table_from_hex_string(i_to_hex_string(i), 8, false));
             }
@@ -1029,18 +1030,21 @@ namespace hal
             auto nl = test_utils::create_empty_netlist();
             GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
-            lut_type->set_lut_init_ascending(false);
+
+            LUTComponent* lut_component = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::lut; });
+            ASSERT_NE(lut_component, nullptr);
+            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+            ASSERT_NE(init_component, nullptr);
+
+            lut_component->set_init_ascending(false);
 
             for (int i = 0x0; i <= 0xff; i++) {
-                lut_gate->set_data(lut_type->get_config_data_category(),
-                                lut_type->get_config_data_identifier(),
-                                "bit_vector",
-                                i_to_hex_string(i));
+                lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifier(), "bit_vector", i_to_hex_string(i));
                 EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()),
                         get_truth_table_from_hex_string(i_to_hex_string(i), 8, true));
             }
 
-            lut_type->set_lut_init_ascending(true);
+            lut_component->set_init_ascending(true);
         }
         {
             // Add a boolean function to a lut pin
@@ -1048,11 +1052,14 @@ namespace hal
             GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
 
+            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+            ASSERT_NE(init_component, nullptr);
+
             BooleanFunction lut_bf = BooleanFunction::from_string("I0 & I1 & I2");
             lut_gate->add_boolean_function("O", lut_bf);
             EXPECT_EQ(lut_gate->get_boolean_functions().size(), 1);
             EXPECT_EQ(lut_gate->get_boolean_function("O"), lut_bf);
-            EXPECT_EQ(lut_gate->get_data(lut_type->get_config_data_category(), lut_type->get_config_data_identifier()), std::make_tuple(std::string("bit_vector"), std::string("1")));
+            EXPECT_EQ(lut_gate->get_data(init_component->get_init_category(), init_component->get_init_identifier()), std::make_tuple(std::string("bit_vector"), std::string("1")));
         }
         // NEGATIVE
         {
@@ -1061,7 +1068,10 @@ namespace hal
             GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
 
-            lut_gate->set_data(lut_type->get_config_data_category(), lut_type->get_config_data_identifier(), "bit_vector", "");
+            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+            ASSERT_NE(init_component, nullptr);
+
+            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifier(), "bit_vector", "");
             EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()), get_truth_table_from_i(0, 8));
         }
         {
@@ -1071,7 +1081,10 @@ namespace hal
             GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
 
-            lut_gate->set_data(lut_type->get_config_data_category(), lut_type->get_config_data_identifier(), "bit_vector", "NOHx");
+            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+            ASSERT_NE(init_component, nullptr);
+
+            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifier(), "bit_vector", "NOHx");
             EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()), std::vector<BooleanFunction::Value>(8, BooleanFunction::X));
 
         }

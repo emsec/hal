@@ -1,5 +1,9 @@
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "netlist_test_utils.h"
 
 #include "gtest/gtest.h"
@@ -610,75 +614,137 @@ namespace hal
     }
 
     /**
-     * Testing config data category and identifier.
-     *
-     * Functions: set_config_data_category, get_config_data_category, set_config_data_identifier, get_config_data_identifier
+     * Testing LUT gate type component.
      */
-    TEST_F(GateTypeTest, check_config_data)
+    TEST_F(GateTypeTest, check_lut_gt)
     {
         TEST_START
 
         GateLibrary gl("no_path", "example_gl");
         
-        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::lut});
+        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("category1", "identifier1"), true));
         ASSERT_NE(gt, nullptr);
 
-        // category
-        gt->set_config_data_category("category1");
-        EXPECT_EQ(gt->get_config_data_category(), "category1");
-        gt->set_config_data_category("category2");
-        EXPECT_EQ(gt->get_config_data_category(), "category2");
-
-        // identifier
-        gt->set_config_data_identifier("identifier1");
-        EXPECT_EQ(gt->get_config_data_identifier(), "identifier1");
-        gt->set_config_data_identifier("identifier2");
-        EXPECT_EQ(gt->get_config_data_identifier(), "identifier2");
-
+        LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::lut; });
+        ASSERT_NE(lut_component, nullptr);
+        InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+        ASSERT_NE(init_component, nullptr);
+        EXPECT_EQ(lut_component->is_init_ascending(), true);
+        EXPECT_EQ(init_component->get_init_category(), "category1");
+        EXPECT_EQ(init_component->get_init_identifier(), "identifier1");
+        lut_component->set_init_ascending(false);
+        init_component->set_init_category("category2");
+        init_component->set_init_identifier("identifier2");
+        EXPECT_EQ(lut_component->is_init_ascending(), false);
+        EXPECT_EQ(init_component->get_init_category(), "category2");
+        EXPECT_EQ(init_component->get_init_identifier(), "identifier2");
+        
         TEST_END
     }
 
     /**
-     * Testing LUT initialization string order.
-     *
-     * Functions: set_lut_init_ascending, is_lut_init_ascending
+     * Testing FF gate type component.
      */
-    TEST_F(GateTypeTest, check_init_order)
+    TEST_F(GateTypeTest, check_ff_gt)
     {
         TEST_START
+        {
+            GateLibrary gl("no_path", "example_gl");
 
-        GateLibrary gl("no_path", "example_gl");
-        
-        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::lut});
-        ASSERT_NE(gt, nullptr);
+            GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string("D"), BooleanFunction::from_string("C")));
+            ASSERT_NE(gt, nullptr);
+            FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() ==  GateTypeComponent::ComponentType::ff; });
+            ASSERT_NE(ff_component, nullptr);
+            InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+            EXPECT_EQ(init_component, nullptr);
 
-        gt->set_lut_init_ascending(true);
-        EXPECT_TRUE(gt->is_lut_init_ascending());
+            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("C"));
+            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("D"));
+            EXPECT_TRUE(ff_component->get_async_reset_function().is_empty());
+            EXPECT_TRUE(ff_component->get_async_set_function().is_empty());
+            EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::undef, AsyncSetResetBehavior::undef));
 
-        gt->set_lut_init_ascending(false);
-        EXPECT_FALSE(gt->is_lut_init_ascending());
+            ff_component->set_clock_function(BooleanFunction::from_string("CLK"));
+            ff_component->set_next_state_function(BooleanFunction::from_string("DIN"));
+            ff_component->set_async_reset_function(BooleanFunction::from_string("RST"));
+            ff_component->set_async_set_function(BooleanFunction::from_string("SET"));
+            ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L);
 
+            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK"));
+            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("DIN"));
+            EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("RST"));
+            EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("SET"));
+            EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L));
+        }
+        {
+            GateLibrary gl("no_path", "example_gl");
+
+            GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_init_component("category1", "category2"), BooleanFunction::from_string("D"), BooleanFunction::from_string("C")));
+            ASSERT_NE(gt, nullptr);
+            FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() ==  GateTypeComponent::ComponentType::ff; });
+            ASSERT_NE(ff_component, nullptr);
+            InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+            ASSERT_NE(init_component, nullptr);
+
+            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("C"));
+            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("D"));
+            EXPECT_TRUE(ff_component->get_async_reset_function().is_empty());
+            EXPECT_TRUE(ff_component->get_async_set_function().is_empty());
+            EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::undef, AsyncSetResetBehavior::undef));
+            EXPECT_EQ(init_component->get_init_category(), "category1");
+            EXPECT_EQ(init_component->get_init_identifier(), "identifier1");
+
+            ff_component->set_clock_function(BooleanFunction::from_string("CLK"));
+            ff_component->set_next_state_function(BooleanFunction::from_string("DIN"));
+            ff_component->set_async_reset_function(BooleanFunction::from_string("RST"));
+            ff_component->set_async_set_function(BooleanFunction::from_string("SET"));
+            ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L);
+            init_component->set_init_category("category2");
+            init_component->set_init_identifier("identifier2");
+
+            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK"));
+            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("DIN"));
+            EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("RST"));
+            EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("SET"));
+            EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L));
+            EXPECT_EQ(init_component->get_init_category(), "category2");
+            EXPECT_EQ(init_component->get_init_identifier(), "identifier2");
+        }
         TEST_END
     }
 
     /**
-     * Testing clear-preset behavior handling.
-     *
-     * Functions: set_clear_preset_behavior, get_clear_preset_behavior
+     * Testing Latch gate type component.
      */
-    TEST_F(GateTypeTest, check_clear_preset)
+    TEST_F(GateTypeTest, check_latch_gt)
     {
         TEST_START
-
+    
         GateLibrary gl("no_path", "example_gl");
 
-        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff});
+        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::latch}, GateTypeComponent::create_latch_component(BooleanFunction::from_string("D"), BooleanFunction::from_string("E")));
         ASSERT_NE(gt, nullptr);
+        LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* component){ return component->get_type() ==  GateTypeComponent::ComponentType::latch; });
+        ASSERT_NE(latch_component, nullptr);
 
-        EXPECT_EQ(gt->get_clear_preset_behavior(), std::make_pair(GateType::ClearPresetBehavior::undef, GateType::ClearPresetBehavior::undef));
-        gt->set_clear_preset_behavior(GateType::ClearPresetBehavior::L, GateType::ClearPresetBehavior::H);
-        EXPECT_EQ(gt->get_clear_preset_behavior(), std::make_pair(GateType::ClearPresetBehavior::L, GateType::ClearPresetBehavior::H));
-        
+        EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::from_string("E"));
+        EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::from_string("D"));
+        EXPECT_TRUE(latch_component->get_async_reset_function().is_empty());
+        EXPECT_TRUE(latch_component->get_async_set_function().is_empty());
+        EXPECT_EQ(latch_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::undef, AsyncSetResetBehavior::undef));
+
+        latch_component->set_enable_function(BooleanFunction::from_string("EN"));
+        latch_component->set_data_in_function(BooleanFunction::from_string("DIN"));
+        latch_component->set_async_reset_function(BooleanFunction::from_string("RST"));
+        latch_component->set_async_set_function(BooleanFunction::from_string("SET"));
+        latch_component->set_async_set_reset_behavior(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L);
+
+        EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::from_string("EN"));
+        EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::from_string("DIN"));
+        EXPECT_EQ(latch_component->get_async_reset_function(), BooleanFunction::from_string("RST"));
+        EXPECT_EQ(latch_component->get_async_set_function(), BooleanFunction::from_string("SET"));
+        EXPECT_EQ(latch_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L));
+    
         TEST_END
     }
 }    //namespace hal
