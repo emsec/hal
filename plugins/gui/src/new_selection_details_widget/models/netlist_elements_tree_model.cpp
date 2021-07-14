@@ -155,8 +155,12 @@ namespace hal
             gateItem->getParent()->removeChild(gateItem);
             endRemoveRows();
             mGateToTreeitems.remove(g, gateItem);
-            //a whole lot more complex for modules, because deleting a module item deletes all children, these should be first
-            //removed from the maps (i think), and: what is with beginRemoveRows??->simply calling beginResetModel might be the easiest solution..
+            if(mNetsDisplayed && ( (gateItem->getParent() == mRootItem && mCurrentlyDisplayingModule) || gateItem->getParent() != mRootItem))
+            {
+                beginResetModel();
+                updateInternalNetsOfModule(gateItem->getParent());//perhaps for all parents? go until the mRootItem node?
+                endResetModel();
+            }
             delete gateItem;
         }
     }
@@ -181,8 +185,6 @@ namespace hal
             netItem->getParent()->removeChild(netItem);
             endRemoveRows();
             mNetToTreeitems.remove(n, netItem);
-            //a whole lot more complex for modules, because deleting a module item deletes all children, these should be first
-            //removed from the maps (i think), and: what is with beginRemoveRows??->simply calling beginResetModel might be the easiest solution..
             delete netItem;
         }
     }
@@ -240,6 +242,8 @@ namespace hal
         for(TreeItem* removedSubItem : tmpSubmodItems)
         {
             removedSubItem->getParent()->removeChild(removedSubItem);
+            if(mNetsDisplayed)
+                updateInternalNetsOfModule(removedSubItem->getParent());
             delete removedSubItem;
         }
         endResetModel();
@@ -269,8 +273,10 @@ namespace hal
             gateItem->setAdditionalData(mRepresentedIDKey, assignedGate->get_id());
             beginResetModel();//only do that if "all" nets are invalidated that this module holds
             mRootItem->insertChild(indexToInsert, gateItem);
-            endResetModel();
             mGateToTreeitems.insert(assignedGate, gateItem);
+            if(mNetsDisplayed)
+                updateInternalNetsOfModule(mRootItem);
+            endResetModel();
             return;
         }
         //standard case in which you do the same as obove, but just go through each module item
@@ -284,10 +290,14 @@ namespace hal
                                               << assignedGate->get_id() << QString::fromStdString(assignedGate->get_type()->get_name()));
             gateItem->setAdditionalData(mItemTypeKey, itemType::gate);
             gateItem->setAdditionalData(mRepresentedIDKey, assignedGate->get_id());
-            beginInsertRows(getIndexFromItem(modItem), indexToInsert, indexToInsert);
+            //beginInsertRows(getIndexFromItem(modItem), indexToInsert, indexToInsert);
+            beginResetModel();
             modItem->insertChild(indexToInsert, gateItem);
-            endInsertRows();
+            //endInsertRows();
             mGateToTreeitems.insert(assignedGate, gateItem);
+            if(mNetsDisplayed)
+                updateInternalNetsOfModule(modItem);
+            endResetModel();
             return;
         }
     }
@@ -313,6 +323,8 @@ namespace hal
             addedSubmodItem->setAdditionalData(mRepresentedIDKey, addedModule->get_id());
             mRootItem->insertChild(0, addedSubmodItem);
             mModuleToTreeitems.insert(addedModule, addedSubmodItem);
+            if(mNetsDisplayed)
+                updateInternalNetsOfModule(mRootItem);
             return;
         }
 
@@ -326,6 +338,8 @@ namespace hal
             addedSubmodItem->setAdditionalData(mRepresentedIDKey, addedModule->get_id());
             parentModItem->insertChild(0, addedSubmodItem);
             mModuleToTreeitems.insert(addedModule, addedSubmodItem);
+            if(mNetsDisplayed)
+                updateInternalNetsOfModule(parentModItem);
         }
         endResetModel();
     }
@@ -380,6 +394,28 @@ namespace hal
         case itemType::gate: return mGateIcon;
         case itemType::net: return mNetIcon;
         default: return mGateIcon;
+        }
+    }
+
+    void NetlistElementsTreeModel::updateInternalNetsOfModule(TreeItem *moduleItem)
+    {
+        int moduleId = (moduleItem == mRootItem) ? mModId : moduleItem->getAdditionalData(mRepresentedIDKey).toInt();
+        Module* mod = gNetlist->get_module_by_id(moduleId);
+        //remove and delte the last child of the module-item until no net items are left
+        while(moduleItem->getChildCount() > 0 && moduleItem->getChild(moduleItem->getChildCount()-1)->getAdditionalData(mItemTypeKey).toInt() == itemType::net)
+        {
+            TreeItem* lastNetItem = moduleItem->removeChildAtPos(moduleItem->getChildCount()-1);
+            mNetToTreeitems.remove(gNetlist->get_net_by_id(lastNetItem->getAdditionalData(mRepresentedIDKey).toUInt()), lastNetItem);
+            delete lastNetItem;
+        }
+        //append (potentionally) new internal nets
+        for(Net* n : mod->get_internal_nets())
+        {
+            TreeItem* netItem = new TreeItem(QList<QVariant>() << QString::fromStdString(n->get_name()) << n->get_id() << "");
+            netItem->setAdditionalData(mItemTypeKey, itemType::net);
+            netItem->setAdditionalData(mRepresentedIDKey, n->get_id());
+            mNetToTreeitems.insert(n, netItem);
+            moduleItem->appendChild(netItem);
         }
     }
 

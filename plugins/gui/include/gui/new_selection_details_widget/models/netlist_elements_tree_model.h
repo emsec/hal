@@ -160,6 +160,15 @@ namespace hal
          */
         QIcon getIconFromItem(TreeItem* item) const;
 
+        /**
+         * Utility function to remove all net items of the given module item and
+         * add the (potentionally) updated internal nets. Usually used when a gate is added
+         * or removed from a gate (internal nets might change as a result).
+         *
+         * @param moduleItem - The module item to modify.
+         */
+        void updateInternalNetsOfModule(TreeItem* moduleItem);
+
     };
 
 }
