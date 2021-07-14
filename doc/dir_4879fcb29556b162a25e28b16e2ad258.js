@@ -1,5 +1,16 @@
 var dir_4879fcb29556b162a25e28b16e2ad258 =
 [
+    [ "gate_dialog.h", "gate__dialog_8h.html", [
+      [ "GateDialog", "classhal_1_1_gate_dialog.html", "classhal_1_1_gate_dialog" ]
+    ] ],
+    [ "gate_select_model.h", "gate__select__model_8h.html", [
+      [ "GateSelectEntry", "classhal_1_1_gate_select_entry.html", "classhal_1_1_gate_select_entry" ],
+      [ "GateSelectModel", "classhal_1_1_gate_select_model.html", "classhal_1_1_gate_select_model" ],
+      [ "GateSelectProxy", "classhal_1_1_gate_select_proxy.html", "classhal_1_1_gate_select_proxy" ],
+      [ "GateSelectPicker", "classhal_1_1_gate_select_picker.html", "classhal_1_1_gate_select_picker" ],
+      [ "GateSelectHistory", "classhal_1_1_gate_select_history.html", "classhal_1_1_gate_select_history" ],
+      [ "GateSelectView", "classhal_1_1_gate_select_view.html", "classhal_1_1_gate_select_view" ]
+    ] ],
     [ "module_dialog.h", "module__dialog_8h.html", [
       [ "ModuleDialog", "classhal_1_1_module_dialog.html", "classhal_1_1_module_dialog" ]
     ] ],

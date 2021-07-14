@@ -236,11 +236,11 @@ $(document).ready(function(){initNavTree('action__add__items__to__object_8cpp_so
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            <span class="keywordflow">if</span> (grp)</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            {</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : mModules)</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                    grp-&gt;<a class="code" href="classhal_1_1_grouping.html#a5d08943e459fd9dbfb572afb1c3f1223">assign_module_by_id</a>(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                    grp-&gt;<a class="code" href="classhal_1_1_grouping.html#a5d08943e459fd9dbfb572afb1c3f1223">assign_module_by_id</a>(<span class="keywordtype">id</span>,<span class="keyword">true</span>);</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : mGates)</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                    grp-&gt;<a class="code" href="classhal_1_1_grouping.html#ad71395c6a5fec7d319237a6803c5dfa2">assign_gate_by_id</a>(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                    grp-&gt;<a class="code" href="classhal_1_1_grouping.html#ad71395c6a5fec7d319237a6803c5dfa2">assign_gate_by_id</a>(<span class="keywordtype">id</span>,<span class="keyword">true</span>);</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : mNets)</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                    grp-&gt;<a class="code" href="classhal_1_1_grouping.html#ad253f42f616ed52a57d9384385e1155f">assign_net_by_id</a>(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                    grp-&gt;<a class="code" href="classhal_1_1_grouping.html#ad253f42f616ed52a57d9384385e1155f">assign_net_by_id</a>(<span class="keywordtype">id</span>,<span class="keyword">true</span>);</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;            }</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
@@ -364,7 +364,7 @@ $(document).ready(function(){initNavTree('action__add__items__to__object_8cpp_so
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_5e8fab963b6d7d6d8891b5cad4f241a7.html">user_action</a></li><li class="navelem"><a class="el" href="action__add__items__to__object_8cpp.html">action_add_items_to_object.cpp</a></li>
-    <li class="footer">Generated on Fri Jul 9 2021 13:27:40 for HAL by
+    <li class="footer">Generated on Wed Jul 14 2021 11:42:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

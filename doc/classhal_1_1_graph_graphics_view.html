@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_graph_graphics_view.html'
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-slots">Public Slots</a> &#124;
 <a href="#signals">Signals</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classhal_1_1_graph_graphics_view-members.html">List of all members</a>  </div>
@@ -101,7 +102,7 @@ Inheritance diagram for hal::GraphGraphicsView:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_graph_graphics_view__inherit__graph.png" border="0" usemap="#hal_1_1_graph_graphics_view_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_graph_graphics_view_inherit__map" id="hal_1_1_graph_graphics_view_inherit__map">
-<area shape="rect" title="A view to display the rendered graph (needs a GraphicsScene)." alt="" coords="28,813,213,964"/>
+<area shape="rect" title="A view to display the rendered graph (needs a GraphicsScene)." alt="" coords="28,813,213,979"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qgraphicsview.html" title=" " alt="" coords="36,365,205,765"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qabstractscrollarea.html" title=" " alt="" coords="5,5,236,317"/>
 </map>
@@ -111,12 +112,17 @@ Collaboration diagram for hal::GraphGraphicsView:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_graph_graphics_view__coll__graph.png" border="0" usemap="#hal_1_1_graph_graphics_view_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_graph_graphics_view_coll__map" id="hal_1_1_graph_graphics_view_coll__map">
-<area shape="rect" title="A view to display the rendered graph (needs a GraphicsScene)." alt="" coords="28,813,213,964"/>
+<area shape="rect" title="A view to display the rendered graph (needs a GraphicsScene)." alt="" coords="28,813,213,979"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qgraphicsview.html" title=" " alt="" coords="36,365,205,765"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qabstractscrollarea.html" title=" " alt="" coords="5,5,236,317"/>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:abeb84861a826fdce426fab17c819d6f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_graphics_view.html#abeb84861a826fdce426fab17c819d6f8">handleShortestPath</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> idFrom, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> idTo)</td></tr>
+<tr class="separator:abeb84861a826fdce426fab17c819d6f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
 Signals</h2></td></tr>
 <tr class="memitem:a6452181b33c1d423394489d5c4d82b09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_graphics_view.html#a6452181b33c1d423394489d5c4d82b09">moduleDoubleClicked</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id)</td></tr>
@@ -1480,7 +1486,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>A view to display the rendered graph (needs a <a class="el" href="classhal_1_1_graphics_scene.html" title="Container for a GraphGraphicsView containing gates, nets, and modules.">GraphicsScene</a>). </p>
 <p>The <a class="el" href="classhal_1_1_graph_graphics_view.html" title="A view to display the rendered graph (needs a GraphicsScene).">GraphGraphicsView</a> is the GraphicsView for a <a class="el" href="classhal_1_1_graphics_scene.html" title="Container for a GraphGraphicsView containing gates, nets, and modules.">GraphicsScene</a>. (Its like the camera that shows a section of the scene) </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8h_source.html#l00051">51</a> of file <a class="el" href="graph__graphics__view_8h_source.html">graph_graphics_view.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8h_source.html#l00052">52</a> of file <a class="el" href="graph__graphics__view_8h_source.html">graph_graphics_view.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6040705fd08416554f02ac93fbfabc3a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6040705fd08416554f02ac93fbfabc3a">&#9670;&nbsp;</a></span>GraphGraphicsView()</h2>
@@ -1505,7 +1511,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l00066">66</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l00068">68</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ContextMenuPolicy-enum">Qt::CustomContextMenu</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#customContextMenuRequested">QWidget::customContextMenuRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#OptimizationFlag-enum">QGraphicsView::DontSavePainterState</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#ViewportUpdateMode-enum">QGraphicsView::FullViewportUpdate</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gSelectionRelay</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#acceptDrops-prop">QWidget::setAcceptDrops()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#contextMenuPolicy-prop">QWidget::setContextMenuPolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#mouseTracking-prop">QWidget::setMouseTracking()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#optimizationFlags-prop">QGraphicsView::setOptimizationFlags()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#viewportUpdateMode-prop">QGraphicsView::setViewportUpdateMode()</a>, and <a class="el" href="classhal_1_1_selection_relay.html#ad43860216a9fd0d75aacdf2cf229d07b">hal::SelectionRelay::subfocusChanged()</a>.</p>
 
@@ -1527,9 +1533,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01277">1277</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01469">1469</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l01282">setDragModifier()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l01474">setDragModifier()</a>.</p>
 
 </div>
 </div>
@@ -1556,7 +1562,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l00820">820</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l00824">824</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#centerOn">QGraphicsView::centerOn()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#height-prop">QWidget::height</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#mapFromScene">QGraphicsView::mapFromScene()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#mapToScene">QGraphicsView::mapToScene()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#scale">QGraphicsView::scale()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html#toPoint">QPointF::toPoint()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewport">QAbstractScrollArea::viewport()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#width-prop">QWidget::width</a>.</p>
 
@@ -1577,9 +1583,57 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01267">1267</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01459">1459</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l01272">setGridType()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l01464">setGridType()</a>.</p>
+
+</div>
+</div>
+<a id="abeb84861a826fdce426fab17c819d6f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abeb84861a826fdce426fab17c819d6f8">&#9670;&nbsp;</a></span>handleShortestPath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GraphGraphicsView::handleShortestPath </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>idFrom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>idTo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>highlight shortest path between two gates by putting the items on path into a new group</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">idFrom</td><td>- id of gate where path starts </td></tr>
+    <tr><td class="paramname">idTo</td><td>- id of gate where path ends </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01064">1064</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="user__action__compound_8cpp_source.html#l00023">hal::UserActionCompound::addAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="el" href="graph__layouter_8h_source.html#l00288">hal::GraphLayouter::boxes()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00029">hal::UserActionCompound::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00273">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00083">hal::Net::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00089">hal::Module::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00086">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00096">hal::Gate::get_name()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00381">hal::netlist_utils::get_shortest_path()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00073">hal::GraphWidget::getContext()</a>, <a class="el" href="graph__context_8h_source.html#l00280">hal::GraphContext::getLayouter()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Grouping</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00857">hal::ShortestPath::module()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00848">hal::ShortestPath::net()</a>, and <a class="el" href="user__action__compound_8h_source.html#l00042">hal::UserActionCompound::setUseCreatedObject()</a>.</p>
 
 </div>
 </div>
@@ -1634,9 +1688,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01287">1287</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01479">1479</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l01292">setPanModifier()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l01484">setPanModifier()</a>.</p>
 
 </div>
 </div>
@@ -1656,9 +1710,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01282">1282</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01474">1474</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l01277">dragModifier()</a>.</p>
+<p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l01469">dragModifier()</a>.</p>
 
 </div>
 </div>
@@ -1678,9 +1732,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01272">1272</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01464">1464</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l01267">gridType()</a>.</p>
+<p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l01459">gridType()</a>.</p>
 
 </div>
 </div>
@@ -1700,9 +1754,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01292">1292</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l01484">1484</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l01287">panModifier()</a>.</p>
+<p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l01479">panModifier()</a>.</p>
 
 </div>
 </div>
@@ -1729,7 +1783,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l00829">829</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__graphics__view_8cpp_source.html#l00833">833</a> of file <a class="el" href="graph__graphics__view_8cpp_source.html">graph_graphics_view.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#centerOn">QGraphicsView::centerOn()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#mapToScene">QGraphicsView::mapToScene()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#rect-prop">QWidget::rect</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#scale">QGraphicsView::scale()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html#toPoint">QPointF::toPoint()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewport">QAbstractScrollArea::viewport()</a>.</p>
 
@@ -1745,7 +1799,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graph_graphics_view.html">GraphGraphicsView</a></li>
-    <li class="footer">Generated on Fri Jul 9 2021 13:27:41 for HAL by
+    <li class="footer">Generated on Wed Jul 14 2021 11:42:55 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

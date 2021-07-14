@@ -154,7 +154,8 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classhal_1_1_main_settings_widget.html#a1e897055ae0591dfe20fa9038e7ff3f8">hal::MainSettingsWidget</a>
 </li>
 <li>searchTextChanged()
-: <a class="el" href="classhal_1_1_module_select_proxy.html#a74f40abe799a54b7268c22667bccedcf">hal::ModuleSelectProxy</a>
+: <a class="el" href="classhal_1_1_gate_select_proxy.html#ae362483a81ed5b7a85f5dc065a9ac8cf">hal::GateSelectProxy</a>
+, <a class="el" href="classhal_1_1_module_select_proxy.html#a74f40abe799a54b7268c22667bccedcf">hal::ModuleSelectProxy</a>
 </li>
 <li>secondMoment()
 : <a class="el" href="classhal_1_1_net_layout_metric.html#a7b67459474e6d437093e3bc3ce312a6c">hal::NetLayoutMetric</a>
@@ -167,6 +168,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>selectButton()
 : <a class="el" href="classhal_1_1_expanding_list_widget.html#a777a7da177eb23bf3b532364eb9b3ada">hal::ExpandingListWidget</a>
+</li>
+<li>selectCursor()
+: <a class="el" href="classhal_1_1_graph_tab_widget.html#a77d5304413c680ac00bfe4667993644c">hal::GraphTabWidget</a>
 </li>
 <li>selected()
 : <a class="el" href="classhal_1_1_expanding_list_button.html#a3e3f040d267b3e5645ff9ad18060f4b3">hal::ExpandingListButton</a>
@@ -181,7 +185,8 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classhal_1_1_selection_relay.html#a5d2385019d77d0bd9ed58e54919ef2af">hal::SelectionRelay</a>
 </li>
 <li>selectedId()
-: <a class="el" href="classhal_1_1_module_dialog.html#afb8673a44051e9f192a1b99262786a34">hal::ModuleDialog</a>
+: <a class="el" href="classhal_1_1_gate_dialog.html#a308b3442c6dbd5079d7d95c666322c48">hal::GateDialog</a>
+, <a class="el" href="classhal_1_1_module_dialog.html#afb8673a44051e9f192a1b99262786a34">hal::ModuleDialog</a>
 </li>
 <li>selectedItems()
 : <a class="el" href="classhal_1_1_graph_navigation_tree_widget.html#ada4ed48a1958b0c2b49ba452b7d387ba">hal::GraphNavigationTreeWidget</a>
@@ -764,9 +769,6 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setModuleColor()
 : <a class="el" href="classhal_1_1_module_model.html#aeb0d2caf689cec375e30d0bd9cb41b73">hal::ModuleModel</a>
 </li>
-<li>setModuleSelectCursor()
-: <a class="el" href="classhal_1_1_graph_tab_widget.html#a0011f8b8928c9a1b49bc08aae37b5bcc">hal::GraphTabWidget</a>
-</li>
 <li>setName()
 : <a class="el" href="classhal_1_1_grouping_table_entry.html#ae5d68c30467306fbc0e948e34eb04402">hal::GroupingTableEntry</a>
 </li>
@@ -947,6 +949,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 , <a class="el" href="classhal_1_1_searchbar.html#a7b801c20f3bc6eeeb7886ba89512eaf3">hal::Searchbar</a>
 , <a class="el" href="classhal_1_1_selection_details_widget.html#a2cee888960cc35395fd461c910ea2554">hal::SelectionDetailsWidget</a>
 </li>
+<li>setSelectCursor()
+: <a class="el" href="classhal_1_1_graph_tab_widget.html#a7bcecd90f97068b9db647d4adc51ea92">hal::GraphTabWidget</a>
+</li>
 <li>setSelected()
 : <a class="el" href="classhal_1_1_expanding_list_button.html#a06f2797f7fc177bc7e353481952cf6b7">hal::ExpandingListButton</a>
 </li>
@@ -981,7 +986,8 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classhal_1_1_minimap_scrollbar.html#a5b27c56ea45c540a728f0220b4fe86a9">hal::MinimapScrollbar</a>
 </li>
 <li>setSortMechanism()
-: <a class="el" href="classhal_1_1_grouping_proxy_model.html#a02f249a9a29572677947bba5e856c408">hal::GroupingProxyModel</a>
+: <a class="el" href="classhal_1_1_gate_select_proxy.html#a9d8703ace90a546b66063632e953a328">hal::GateSelectProxy</a>
+, <a class="el" href="classhal_1_1_grouping_proxy_model.html#a02f249a9a29572677947bba5e856c408">hal::GroupingProxyModel</a>
 , <a class="el" href="classhal_1_1_module_proxy_model.html#a84b3c3da406a5a94c7af74fc22c68de5">hal::ModuleProxyModel</a>
 , <a class="el" href="classhal_1_1_module_select_proxy.html#affe600cc244a4b145b7f109c3d853a37">hal::ModuleSelectProxy</a>
 , <a class="el" href="classhal_1_1_selection_tree_proxy_model.html#a3ee4f45a615e4985251a28e137820d46">hal::SelectionTreeProxyModel</a>
@@ -1286,7 +1292,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classhal_1_1_special_log_content_manager.html#a555d10e519884af8567c73e1507194d3">hal::SpecialLogContentManager</a>
 </li>
 <li>statusUpdate()
-: <a class="el" href="classhal_1_1_graph_layouter.html#ae8447c8f8ec1d658d5d92a1c4fc2647b">hal::GraphLayouter</a>
+: <a class="el" href="classhal_1_1_graph_layouter.html#ae14ebe718da18353ec62f51ea2ceff64">hal::GraphLayouter</a>
 </li>
 <li>step()
 : <a class="el" href="classhal_1_1_net_layout_direction.html#a5fd96b6e6c1ac72d5b66ca2f7af0689b">hal::NetLayoutDirection</a>
@@ -1323,7 +1329,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classhal_1_1_graph_context.html#aae3f4b33d0d907a4c05c0011873e36f6">hal::GraphContext</a>
 </li>
 <li>substitute()
-: <a class="el" href="classhal_1_1_boolean_function.html#ae9242e7d969fc9b6eb402fc5c2386153">hal::BooleanFunction</a>
+: <a class="el" href="classhal_1_1_boolean_function.html#aed752c7999a9aa9abd7f573a1eb1e670">hal::BooleanFunction</a>
 </li>
 <li>substitute_helper()
 : <a class="el" href="classhal_1_1_boolean_function.html#a31e50472dfa79164197b207669c9adff">hal::BooleanFunction</a>
@@ -1350,7 +1356,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Jul 9 2021 13:27:43 for HAL by
+    <li class="footer">Generated on Wed Jul 14 2021 11:42:56 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

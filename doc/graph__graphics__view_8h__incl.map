@@ -1,11 +1,12 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/graph_graphics_view.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/graph_graphics_view.h">
-<area shape="rect" id="node1" title=" " alt="" coords="876,5,1054,76"/>
+<area shape="rect" id="node1" title=" " alt="" coords="884,5,1062,76"/>
 <area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="739,392,879,419"/>
-<area shape="rect" id="node7" href="$gui__globals_8h.html" title=" " alt="" coords="836,228,968,255"/>
-<area shape="rect" id="node17" href="$graphics__gate_8h.html" title=" " alt="" coords="774,124,948,180"/>
-<area shape="rect" id="node18" href="$graphics__scene_8h.html" title=" " alt="" coords="972,131,1166,173"/>
-<area shape="rect" id="node19" title=" " alt="" coords="1190,139,1311,165"/>
-<area shape="rect" id="node20" title=" " alt="" coords="1335,139,1408,165"/>
+<area shape="rect" id="node7" href="$gui__globals_8h.html" title=" " alt="" coords="740,228,872,255"/>
+<area shape="rect" id="node16" href="$graphics__gate_8h.html" title=" " alt="" coords="678,124,852,180"/>
+<area shape="rect" id="node17" href="$graphics__scene_8h.html" title=" " alt="" coords="876,131,1070,173"/>
+<area shape="rect" id="node18" title=" " alt="" coords="1094,139,1215,165"/>
+<area shape="rect" id="node19" title=" " alt="" coords="1239,139,1312,165"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1336,139,1404,165"/>
 <area shape="rect" id="node3" title=" " alt="" coords="596,467,686,493"/>
 <area shape="rect" id="node4" title=" " alt="" coords="711,467,798,493"/>
 <area shape="rect" id="node5" title=" " alt="" coords="822,467,908,493"/>
@@ -18,5 +19,4 @@
 <area shape="rect" id="node13" href="$plugin__relay_8h.html" title=" " alt="" coords="1013,303,1184,344"/>
 <area shape="rect" id="node14" href="$python__context_8h.html" title=" " alt="" coords="1208,310,1416,337"/>
 <area shape="rect" id="node15" href="$selection__relay_8h.html" title=" " alt="" coords="1440,303,1586,344"/>
-<area shape="rect" id="node16" href="$gui__api_8h.html" title=" " alt="" coords="1610,310,1766,337"/>
 </map>

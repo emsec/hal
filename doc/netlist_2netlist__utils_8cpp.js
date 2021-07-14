@@ -5,7 +5,7 @@ var netlist_2netlist__utils_8cpp =
     [ "get_complex_gate_chain", "netlist_2netlist__utils_8cpp.html#ada68c8b906930852f7ac416a7b1195d8", null ],
     [ "get_gate_chain", "netlist_2netlist__utils_8cpp.html#a172560a7199c07a507db7b51a08057c7", null ],
     [ "get_nets_at_pins", "netlist_2netlist__utils_8cpp.html#ade1a86f1a00d212317171745c969a6ac", null ],
-    [ "get_next_gates", "netlist_2netlist__utils_8cpp.html#a503e7fdf7bb78de9cfba4a47bc71b862", null ],
+    [ "get_next_gates", "netlist_2netlist__utils_8cpp.html#a20b1517e6064ffac5b416353c47d7178", null ],
     [ "get_next_sequential_gates", "netlist_2netlist__utils_8cpp.html#a1c5a4640b15a8d33e387ab2ff10fc914", null ],
     [ "get_next_sequential_gates", "netlist_2netlist__utils_8cpp.html#ae10e4d2360be0f2493d267fa63d6a350", null ],
     [ "get_next_sequential_gates", "netlist_2netlist__utils_8cpp.html#a213caef6d5d45e37da21f380645c33da", null ],

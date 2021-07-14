@@ -59,6 +59,7 @@ var hierarchy =
     [ "hal::GateLibrary", "classhal_1_1_gate_library.html", null ],
     [ "hal::GateLibraryParser", "classhal_1_1_gate_library_parser.html", null ],
     [ "hal::GateLibraryWriter", "classhal_1_1_gate_library_writer.html", null ],
+    [ "hal::GateSelectEntry", "classhal_1_1_gate_select_entry.html", null ],
     [ "hal::GateType", "classhal_1_1_gate_type.html", null ],
     [ "hal::GraphContextSubscriber", "classhal_1_1_graph_context_subscriber.html", [
       [ "hal::GraphWidget", "classhal_1_1_graph_widget.html", null ]
@@ -170,6 +171,7 @@ var hierarchy =
       [ "hal::MainSettingsList", "classhal_1_1_main_settings_list.html", null ]
     ] ],
     [ "QList< u32 >", "https://doc.qt.io/qt-5/qlist.html", [
+      [ "hal::GateSelectHistory", "classhal_1_1_gate_select_history.html", null ],
       [ "hal::ModuleSelectHistory", "classhal_1_1_module_select_history.html", null ]
     ] ],
     [ "QList< WaitToBeSeatedEntry * >", "https://doc.qt.io/qt-5/qlist.html", [
@@ -183,6 +185,7 @@ var hierarchy =
       [ "hal::ContentManager", "classhal_1_1_content_manager.html", null ],
       [ "hal::FileManager", "classhal_1_1_file_manager.html", null ],
       [ "hal::FileStatusManager", "classhal_1_1_file_status_manager.html", null ],
+      [ "hal::GateSelectPicker", "classhal_1_1_gate_select_picker.html", null ],
       [ "hal::GraphContext", "classhal_1_1_graph_context.html", null ],
       [ "hal::GraphContextManager", "classhal_1_1_graph_context_manager.html", null ],
       [ "hal::GraphLayouter", "classhal_1_1_graph_layouter.html", [
@@ -220,6 +223,7 @@ var hierarchy =
         [ "QAbstractProxyModel", "https://doc.qt.io/qt-5/qabstractproxymodel.html", [
           [ "QSortFilterProxyModel", "https://doc.qt.io/qt-5/qsortfilterproxymodel.html", [
             [ "hal::ContextTableProxyModel", "classhal_1_1_context_table_proxy_model.html", null ],
+            [ "hal::GateSelectProxy", "classhal_1_1_gate_select_proxy.html", null ],
             [ "hal::GroupingProxyModel", "classhal_1_1_grouping_proxy_model.html", null ],
             [ "hal::ModuleProxyModel", "classhal_1_1_module_proxy_model.html", null ],
             [ "hal::ModuleSelectProxy", "classhal_1_1_module_select_proxy.html", null ],
@@ -230,6 +234,7 @@ var hierarchy =
           [ "hal::ChannelModel", "classhal_1_1_channel_model.html", null ],
           [ "hal::ContextTableModel", "classhal_1_1_context_table_model.html", null ],
           [ "hal::DetailsGeneralModel", "classhal_1_1_details_general_model.html", null ],
+          [ "hal::GateSelectModel", "classhal_1_1_gate_select_model.html", null ],
           [ "hal::GroupingTableModel", "classhal_1_1_grouping_table_model.html", null ],
           [ "hal::ModuleSelectModel", "classhal_1_1_module_select_model.html", null ]
         ] ]
@@ -299,6 +304,7 @@ var hierarchy =
         ] ],
         [ "QDialog", "https://doc.qt.io/qt-5/qdialog.html", [
           [ "hal::AboutDialog", "classhal_1_1_about_dialog.html", null ],
+          [ "hal::GateDialog", "classhal_1_1_gate_dialog.html", null ],
           [ "hal::InputDialog", "classhal_1_1_input_dialog.html", null ],
           [ "hal::ModuleDialog", "classhal_1_1_module_dialog.html", null ],
           [ "hal::PythonEditorCodeCompletionDialog", "classhal_1_1_python_editor_code_completion_dialog.html", null ]
@@ -331,6 +337,7 @@ var hierarchy =
           [ "QAbstractScrollArea", "https://doc.qt.io/qt-5/qabstractscrollarea.html", [
             [ "QAbstractItemView", "https://doc.qt.io/qt-5/qabstractitemview.html", [
               [ "QTableView", "https://doc.qt.io/qt-5/qtableview.html", [
+                [ "hal::GateSelectView", "classhal_1_1_gate_select_view.html", null ],
                 [ "hal::ModuleSelectView", "classhal_1_1_module_select_view.html", null ],
                 [ "QTableWidget", "https://doc.qt.io/qt-5/qtablewidget.html", [
                   [ "hal::DataFieldsTable", "classhal_1_1_data_fields_table.html", null ],

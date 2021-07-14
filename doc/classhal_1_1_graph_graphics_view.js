@@ -4,6 +4,7 @@ var classhal_1_1_graph_graphics_view =
     [ "dragModifier", "classhal_1_1_graph_graphics_view.html#a77130e314eac3a7453b67494b613270c", null ],
     [ "gentleZoom", "classhal_1_1_graph_graphics_view.html#af6979d59eec7813f8a06df0dd0132a3e", null ],
     [ "gridType", "classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba", null ],
+    [ "handleShortestPath", "classhal_1_1_graph_graphics_view.html#abeb84861a826fdce426fab17c819d6f8", null ],
     [ "moduleDoubleClicked", "classhal_1_1_graph_graphics_view.html#a6452181b33c1d423394489d5c4d82b09", null ],
     [ "panModifier", "classhal_1_1_graph_graphics_view.html#a2bc64975cbb5fd2c68d83be32d2f04e9", null ],
     [ "setDragModifier", "classhal_1_1_graph_graphics_view.html#a4b1419d80f01aea4229d54ba95f93dc7", null ],

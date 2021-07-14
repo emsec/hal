@@ -123,8 +123,8 @@ Public Slots</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
 Signals</h2></td></tr>
-<tr class="memitem:abb898f4b2a34a907f3a9507ad37b145c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_select_picker.html#abb898f4b2a34a907f3a9507ad37b145c">triggerModuleCursor</a> (bool <a class="el" href="_apache_01_license_8txt.html#a99e0c7c6bd1082fe4cf97f0912e847d7">on</a>)</td></tr>
-<tr class="separator:abb898f4b2a34a907f3a9507ad37b145c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad884fd0bdb9fa37ffde69398e98102de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_select_picker.html#ad884fd0bdb9fa37ffde69398e98102de">triggerCursor</a> (int icurs)</td></tr>
+<tr class="separator:ad884fd0bdb9fa37ffde69398e98102de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -348,7 +348,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="module__select__model_8cpp_source.html#l00255">255</a> of file <a class="el" href="module__select__model_8cpp_source.html">module_select_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00046">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00097">hal::ContentManager::getGraphTabWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00307">hal::GraphTabWidget::setModuleSelectCursor()</a>, and <a class="el" href="classhal_1_1_module_select_picker.html#abb898f4b2a34a907f3a9507ad37b145c">triggerModuleCursor()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00046">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00097">hal::ContentManager::getGraphTabWidget()</a>, <a class="el" href="graph__tab__widget_8h_source.html#l00051">hal::GraphTabWidget::PickModule</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00307">hal::GraphTabWidget::setSelectCursor()</a>, and <a class="el" href="classhal_1_1_module_select_picker.html#ad884fd0bdb9fa37ffde69398e98102de">triggerCursor()</a>.</p>
 
 </div>
 </div>
@@ -410,14 +410,14 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="module__select__model_8cpp_source.html#l00320">320</a> of file <a class="el" href="module__select__model_8cpp_source.html">module_select_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect">QObject::disconnect()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gSelectionRelay</a>, <a class="el" href="module__select__model_8cpp_source.html#l00264">handleSelectionChanged()</a>, <a class="el" href="classhal_1_1_selection_relay.html#a2c60a03847a015475d7f3e5018ca1956">hal::SelectionRelay::selectionChanged()</a>, and <a class="el" href="classhal_1_1_module_select_picker.html#abb898f4b2a34a907f3a9507ad37b145c">triggerModuleCursor()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect">QObject::disconnect()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gSelectionRelay</a>, <a class="el" href="module__select__model_8cpp_source.html#l00264">handleSelectionChanged()</a>, <a class="el" href="classhal_1_1_selection_relay.html#a2c60a03847a015475d7f3e5018ca1956">hal::SelectionRelay::selectionChanged()</a>, and <a class="el" href="classhal_1_1_module_select_picker.html#ad884fd0bdb9fa37ffde69398e98102de">triggerCursor()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__select__model_8cpp_source.html#l00264">handleSelectionChanged()</a>.</p>
 
 </div>
 </div>
-<a id="abb898f4b2a34a907f3a9507ad37b145c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb898f4b2a34a907f3a9507ad37b145c">&#9670;&nbsp;</a></span>triggerModuleCursor</h2>
+<a id="ad884fd0bdb9fa37ffde69398e98102de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad884fd0bdb9fa37ffde69398e98102de">&#9670;&nbsp;</a></span>triggerCursor</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -426,10 +426,10 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void hal::ModuleSelectPicker::triggerModuleCursor </td>
+          <td class="memname">void hal::ModuleSelectPicker::triggerCursor </td>
           <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>on</em></td><td>)</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>icurs</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -454,7 +454,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_module_select_picker.html">ModuleSelectPicker</a></li>
-    <li class="footer">Generated on Fri Jul 9 2021 13:27:42 for HAL by
+    <li class="footer">Generated on Wed Jul 14 2021 11:42:55 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,5 +1,10 @@
 var classhal_1_1_graph_tab_widget =
 [
+    [ "GraphCursor", "classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5", [
+      [ "Select", "classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5ada209b726af014ecbab7ab4863f70a99", null ],
+      [ "PickModule", "classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5a98e85b3e7bd1fe032092e5437350573a", null ],
+      [ "PickGate", "classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5aa4fddc9c6da39d6559cd790176f303e7", null ]
+    ] ],
     [ "KeyboardModifier", "classhal_1_1_graph_tab_widget.html#ac7c6b48b57334893ed0d37bf6a2a59b0", [
       [ "Alt", "classhal_1_1_graph_tab_widget.html#ac7c6b48b57334893ed0d37bf6a2a59b0ad701e42fad85d887af2e397c3b116229", null ],
       [ "Ctrl", "classhal_1_1_graph_tab_widget.html#ac7c6b48b57334893ed0d37bf6a2a59b0a7f094aee497c0689c99d2345bb6d0bf0", null ],
@@ -17,7 +22,7 @@ var classhal_1_1_graph_tab_widget =
     [ "handleNetFocus", "classhal_1_1_graph_tab_widget.html#a92a91a079a63163e9f1f74bbc4c82fa2", null ],
     [ "handleTabChanged", "classhal_1_1_graph_tab_widget.html#acffdd8dc91ee21690d34571252400a0e", null ],
     [ "handleTabCloseRequested", "classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47", null ],
-    [ "isModuleSelectCursor", "classhal_1_1_graph_tab_widget.html#a31282ac72dca0b7a5341335cf3fc80b7", null ],
-    [ "setModuleSelectCursor", "classhal_1_1_graph_tab_widget.html#a0011f8b8928c9a1b49bc08aae37b5bcc", null ],
+    [ "selectCursor", "classhal_1_1_graph_tab_widget.html#a77d5304413c680ac00bfe4667993644c", null ],
+    [ "setSelectCursor", "classhal_1_1_graph_tab_widget.html#a7bcecd90f97068b9db647d4adc51ea92", null ],
     [ "showContext", "classhal_1_1_graph_tab_widget.html#aa18b4eee005357a3cf24788fb67c094e", null ]
 ];
