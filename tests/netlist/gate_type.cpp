@@ -679,7 +679,7 @@ namespace hal
         {
             GateLibrary gl("no_path", "example_gl");
 
-            GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_init_component("category1", "category2"), BooleanFunction::from_string("D"), BooleanFunction::from_string("C")));
+            GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_init_component("category1", "identifier1"), BooleanFunction::from_string("D"), BooleanFunction::from_string("C")));
             ASSERT_NE(gt, nullptr);
             FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() ==  GateTypeComponent::ComponentType::ff; });
             ASSERT_NE(ff_component, nullptr);

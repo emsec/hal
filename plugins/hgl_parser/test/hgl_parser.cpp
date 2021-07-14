@@ -1,4 +1,8 @@
 #include "hgl_parser/hgl_parser.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 
 #include "netlist_test_utils.h"
 
@@ -38,7 +42,7 @@ namespace hal
 
                 // gate types
                 std::unordered_map<std::string, GateType*> gate_types = gl->get_gate_types();
-                ASSERT_EQ(gate_types.size(), 7);
+                ASSERT_EQ(gate_types.size(), 8);
 
                 // combinational gate type
                 {
@@ -67,20 +71,15 @@ namespace hal
                     // Boolean functions
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
                     ASSERT_FALSE(functions.empty());
-                    ASSERT_NE(functions.find("O"), functions.end());
-                    ASSERT_EQ(functions.at("O"), BooleanFunction::from_string("A & B"));
-                    ASSERT_NE(functions.find("O_undefined"), functions.end());
-                    ASSERT_EQ(functions.at("O_undefined"), BooleanFunction::from_string("!A & B"));
-                    ASSERT_NE(functions.find("O_tristate"), functions.end());
-                    ASSERT_EQ(functions.at("O_tristate"), BooleanFunction::from_string("!A & !B"));
+                    EXPECT_NE(functions.find("O"), functions.end());
+                    EXPECT_EQ(functions.at("O"), BooleanFunction::from_string("A & B"));
+                    EXPECT_NE(functions.find("O_undefined"), functions.end());
+                    EXPECT_EQ(functions.at("O_undefined"), BooleanFunction::from_string("!A & B"));
+                    EXPECT_NE(functions.find("O_tristate"), functions.end());
+                    EXPECT_EQ(functions.at("O_tristate"), BooleanFunction::from_string("!A & !B"));
 
-                    // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::undef, GateType::ClearPresetBehavior::undef));
-
-                    // config data and init string
-                    ASSERT_EQ(gt->get_config_data_category(), "");
-                    ASSERT_EQ(gt->get_config_data_identifier(), "");
-                    ASSERT_EQ(gt->is_lut_init_ascending(), true);
+                    // Components
+                    EXPECT_TRUE(gt->get_components().empty());
                 }
 
                 // combinational group gate type
@@ -122,13 +121,8 @@ namespace hal
                     ASSERT_NE(functions.find("O_tristate"), functions.end());
                     ASSERT_EQ(functions.at("O_tristate"), BooleanFunction::from_string("!A(1) & !B(1)", std::vector<std::string>({"A(1)", "B(1)"})));
 
-                    // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::undef, GateType::ClearPresetBehavior::undef));
-
-                    // config data and init string
-                    ASSERT_EQ(gt->get_config_data_category(), "");
-                    ASSERT_EQ(gt->get_config_data_identifier(), "");
-                    ASSERT_EQ(gt->is_lut_init_ascending(), true);
+                    // Components
+                    EXPECT_TRUE(gt->get_components().empty());
                 }
 
                 // ascending LUT gate type
@@ -157,13 +151,16 @@ namespace hal
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
                     ASSERT_TRUE(functions.empty());
 
-                    // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::undef, GateType::ClearPresetBehavior::undef));
+                    // Components
+                    ASSERT_EQ(gt->get_components().size(), 2);
+                    const LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::lut; });
+                    const InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+                    ASSERT_NE(lut_component, nullptr);
+                    ASSERT_NE(init_component, nullptr);
 
-                    // config data and init string
-                    ASSERT_EQ(gt->get_config_data_category(), "generic");
-                    ASSERT_EQ(gt->get_config_data_identifier(), "INIT");
-                    ASSERT_EQ(gt->is_lut_init_ascending(), true);
+                    EXPECT_EQ(init_component->get_init_category(), "generic");
+                    EXPECT_EQ(init_component->get_init_identifier(), "INIT");
+                    EXPECT_EQ(lut_component->is_init_ascending(), true);
                 }
 
                 // descending LUT gate type
@@ -192,16 +189,19 @@ namespace hal
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
                     ASSERT_TRUE(functions.empty());
 
-                    // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::undef, GateType::ClearPresetBehavior::undef));
+                    // Components
+                    ASSERT_EQ(gt->get_components().size(), 2);
+                    const LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::lut; });
+                    const InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+                    ASSERT_NE(lut_component, nullptr);
+                    ASSERT_NE(init_component, nullptr);
 
-                    // config data and init string
-                    ASSERT_EQ(gt->get_config_data_category(), "generic");
-                    ASSERT_EQ(gt->get_config_data_identifier(), "INIT");
-                    ASSERT_EQ(gt->is_lut_init_ascending(), false);
+                    EXPECT_EQ(lut_component->is_init_ascending(), false);
+                    EXPECT_EQ(init_component->get_init_category(), "generic");
+                    EXPECT_EQ(init_component->get_init_identifier(), "INIT");
                 }
 
-                // FF gate type
+                // FF gate type without initialization
                 {
                     GateType* gt = gl->get_gate_type_by_name("gt_ff");
                     ASSERT_NE(gt, nullptr);
@@ -209,7 +209,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 5);
                     EXPECT_EQ(gt->get_name(), "gt_ff");
-                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::ff}));
+                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::ff, GateTypeProperty::sequential}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"CLK", "D", "EN", "R", "S"}));
@@ -228,24 +228,63 @@ namespace hal
                     EXPECT_TRUE(gt->get_pin_groups().empty());
 
                     // Boolean functions
-                    std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
-                    ASSERT_FALSE(functions.empty());
-                    ASSERT_NE(functions.find("next_state"), functions.end());
-                    ASSERT_EQ(functions.at("next_state"), BooleanFunction::from_string("D"));
-                    ASSERT_NE(functions.find("clock"), functions.end());
-                    ASSERT_EQ(functions.at("clock"), BooleanFunction::from_string("CLK & EN"));
-                    ASSERT_NE(functions.find("clear"), functions.end());
-                    ASSERT_EQ(functions.at("clear"), BooleanFunction::from_string("R"));
-                    ASSERT_NE(functions.find("preset"), functions.end());
-                    ASSERT_EQ(functions.at("preset"), BooleanFunction::from_string("S"));
+                    EXPECT_TRUE(gt->get_boolean_functions().empty());
 
-                    // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::L, GateType::ClearPresetBehavior::H));
+                    // Components
+                    ASSERT_EQ(gt->get_components().size(), 1);
+                    const FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
+                    ASSERT_NE(ff_component, nullptr);
 
-                    // config data and init string
-                    ASSERT_EQ(gt->get_config_data_category(), "generic");
-                    ASSERT_EQ(gt->get_config_data_identifier(), "INIT");
-                    ASSERT_EQ(gt->is_lut_init_ascending(), true);
+                    EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::pair(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H));
+                    EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("D"));
+                    EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK & EN"));
+                    EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("R"));
+                    EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("S"));
+                }
+
+                // FF gate type with initialization
+                {
+                    GateType* gt = gl->get_gate_type_by_name("gt_ff_init");
+                    ASSERT_NE(gt, nullptr);
+
+                    // general stuff
+                    EXPECT_EQ(gt->get_id(), 6);
+                    EXPECT_EQ(gt->get_name(), "gt_ff_init");
+                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::ff, GateTypeProperty::sequential}));
+
+                    // pins
+                    EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"CLK", "D", "EN", "R", "S"}));
+                    EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"Q", "QN"}));
+
+                    // pin types
+                    EXPECT_EQ(gt->get_pin_type("CLK"), PinType::clock);
+                    EXPECT_EQ(gt->get_pin_type("D"), PinType::data);
+                    EXPECT_EQ(gt->get_pin_type("EN"), PinType::enable);
+                    EXPECT_EQ(gt->get_pin_type("R"), PinType::reset);
+                    EXPECT_EQ(gt->get_pin_type("S"), PinType::set);
+                    EXPECT_EQ(gt->get_pin_type("Q"), PinType::state);
+                    EXPECT_EQ(gt->get_pin_type("QN"), PinType::neg_state);
+
+                    // pin groups
+                    EXPECT_TRUE(gt->get_pin_groups().empty());
+
+                    // Boolean functions
+                    EXPECT_TRUE(gt->get_boolean_functions().empty());
+
+                    // Components
+                    ASSERT_EQ(gt->get_components().size(), 2);
+                    const FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
+                    const InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+                    ASSERT_NE(ff_component, nullptr);
+                    ASSERT_NE(init_component, nullptr);
+
+                    EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::pair(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H));
+                    EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("D"));
+                    EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK & EN"));
+                    EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("R"));
+                    EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("S"));
+                    EXPECT_EQ(init_component->get_init_category(), "generic");
+                    EXPECT_EQ(init_component->get_init_identifier(), "INIT");
                 }
 
                 // Latch gate type
@@ -254,9 +293,9 @@ namespace hal
                     ASSERT_NE(gt, nullptr);
 
                     // general stuff
-                    EXPECT_EQ(gt->get_id(), 6);
+                    EXPECT_EQ(gt->get_id(), 7);
                     EXPECT_EQ(gt->get_name(), "gt_latch");
-                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::latch}));
+                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::latch, GateTypeProperty::sequential}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"D", "EN", "R", "S"}));
@@ -274,24 +313,18 @@ namespace hal
                     EXPECT_TRUE(gt->get_pin_groups().empty());
 
                     // Boolean functions
-                    std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
-                    ASSERT_FALSE(functions.empty());
-                    ASSERT_NE(functions.find("data"), functions.end());
-                    ASSERT_EQ(functions.at("data"), BooleanFunction::from_string("D"));
-                    ASSERT_NE(functions.find("enable"), functions.end());
-                    ASSERT_EQ(functions.at("enable"), BooleanFunction::from_string("EN"));
-                    ASSERT_NE(functions.find("clear"), functions.end());
-                    ASSERT_EQ(functions.at("clear"), BooleanFunction::from_string("R"));
-                    ASSERT_NE(functions.find("preset"), functions.end());
-                    ASSERT_EQ(functions.at("preset"), BooleanFunction::from_string("S"));
+                    EXPECT_TRUE(gt->get_boolean_functions().empty());
 
-                    // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::N, GateType::ClearPresetBehavior::T));
+                    // Components
+                    ASSERT_EQ(gt->get_components().size(), 1);
+                    const LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::latch; });
+                    ASSERT_NE(latch_component, nullptr);
 
-                    // config data and init string
-                    ASSERT_EQ(gt->get_config_data_category(), "");
-                    ASSERT_EQ(gt->get_config_data_identifier(), "");
-                    ASSERT_EQ(gt->is_lut_init_ascending(), true);
+                    EXPECT_EQ(latch_component->get_async_set_reset_behavior(), std::pair(AsyncSetResetBehavior::N, AsyncSetResetBehavior::T));
+                    EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::from_string("D"));
+                    EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::from_string("EN"));
+                    EXPECT_EQ(latch_component->get_async_reset_function(), BooleanFunction::from_string("R"));
+                    EXPECT_EQ(latch_component->get_async_set_function(), BooleanFunction::from_string("S"));
                 }
 
                 // RAM gate type
@@ -300,7 +333,7 @@ namespace hal
                     ASSERT_NE(gt, nullptr);
 
                     // general stuff
-                    EXPECT_EQ(gt->get_id(), 7);
+                    EXPECT_EQ(gt->get_id(), 8);
                     EXPECT_EQ(gt->get_name(), "gt_ram");
                     EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::ram}));
 
@@ -325,15 +358,10 @@ namespace hal
 
                     // Boolean functions
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
-                    ASSERT_TRUE(functions.empty());
+                    EXPECT_TRUE(functions.empty());
 
-                    // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::undef, GateType::ClearPresetBehavior::undef));
-
-                    // config data and init string
-                    ASSERT_EQ(gt->get_config_data_category(), "");
-                    ASSERT_EQ(gt->get_config_data_identifier(), "");
-                    ASSERT_EQ(gt->is_lut_init_ascending(), true);
+                    // Components
+                    EXPECT_TRUE(gt->get_components().empty());
                 }
             }
         TEST_END

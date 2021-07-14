@@ -182,7 +182,7 @@ namespace hal
 
                 // next_state, clocked_on, clear_on, preset_on
                 latch_config.AddMember("data_in", latch_component->get_data_in_function().to_string(), allocator);
-                latch_config.AddMember("enable", latch_component->get_enable_function().to_string(), allocator);
+                latch_config.AddMember("enable_on", latch_component->get_enable_function().to_string(), allocator);
                 if (BooleanFunction bf = latch_component->get_async_reset_function(); !bf.is_empty())
                 {
                     latch_config.AddMember("clear_on", bf.to_string(), allocator);

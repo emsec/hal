@@ -1,5 +1,9 @@
 #include "hgl_writer/hgl_writer.h"
-
+#include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hgl_parser/hgl_parser.h"
 #include "netlist_test_utils.h"
 
@@ -44,33 +48,28 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_lut_asc", {GateTypeProperty::lut, GateTypeProperty::combinational});
+                GateType* gt = gl->create_gate_type("gt_lut_asc", {GateTypeProperty::lut, GateTypeProperty::combinational}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", "INIT"), true));
 
                 gt->add_input_pins({"I1", "I2"});
                 gt->add_output_pins({"O"});
 
                 gt->assign_pin_type("O", PinType::lut);
-
-                gt->set_config_data_category("generic");
-                gt->set_config_data_identifier("INIT");
-                gt->set_lut_init_ascending(true);
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_lut_desc", {GateTypeProperty::lut, GateTypeProperty::combinational});
+                GateType* gt = gl->create_gate_type("gt_lut_desc", {GateTypeProperty::lut, GateTypeProperty::combinational}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", "INIT"), false));
+
 
                 gt->add_input_pins({"I1", "I2"});
                 gt->add_output_pins({"O"});
 
                 gt->assign_pin_type("O", PinType::lut);
-
-                gt->set_config_data_category("generic");
-                gt->set_config_data_identifier("INIT");
-                gt->set_lut_init_ascending(false);
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_ff", {GateTypeProperty::ff});
+                GateType* gt = gl->create_gate_type("gt_ff", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK & EN")));
+                FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
+                assert(ff_component != nullptr);
 
                 gt->add_input_pins({"CLK", "D", "EN", "R", "S"});
                 gt->add_output_pins({"Q", "QN"});
@@ -83,18 +82,36 @@ namespace hal
                 gt->assign_pin_type("Q", PinType::state);
                 gt->assign_pin_type("QN", PinType::neg_state);
 
-                gt->add_boolean_function("next_state", BooleanFunction::from_string("D"));
-                gt->add_boolean_function("clock", BooleanFunction::from_string("CLK & EN"));
-                gt->add_boolean_function("clear", BooleanFunction::from_string("R"));
-                gt->add_boolean_function("preset", BooleanFunction::from_string("S"));
-
-                gt->set_clear_preset_behavior(GateType::ClearPresetBehavior::L, GateType::ClearPresetBehavior::H);
-                gt->set_config_data_category("generic");
-                gt->set_config_data_identifier("INIT");
+                ff_component->set_async_reset_function(BooleanFunction::from_string("R"));
+                ff_component->set_async_set_function(BooleanFunction::from_string("S"));
+                ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H);
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_latch", {GateTypeProperty::latch});
+                GateType* gt = gl->create_gate_type("gt_ff_init", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_init_component("generic", "INIT"), BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK & EN")));
+                FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
+                assert(ff_component != nullptr);
+
+                gt->add_input_pins({"CLK", "D", "EN", "R", "S"});
+                gt->add_output_pins({"Q", "QN"});
+
+                gt->assign_pin_type("CLK", PinType::clock);
+                gt->assign_pin_type("D", PinType::data);
+                gt->assign_pin_type("EN", PinType::enable);
+                gt->assign_pin_type("R", PinType::reset);
+                gt->assign_pin_type("S", PinType::set);
+                gt->assign_pin_type("Q", PinType::state);
+                gt->assign_pin_type("QN", PinType::neg_state);
+
+                ff_component->set_async_reset_function(BooleanFunction::from_string("R"));
+                ff_component->set_async_set_function(BooleanFunction::from_string("S"));
+                ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H);
+            }
+
+            {
+                GateType* gt = gl->create_gate_type("gt_latch", {GateTypeProperty::latch}, GateTypeComponent::create_latch_component(BooleanFunction::from_string("D"), BooleanFunction::from_string("EN")));
+                LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::latch; });
+                assert(latch_component != nullptr);
 
                 gt->add_input_pins({"D", "EN", "R", "S"});
                 gt->add_output_pins({"Q", "QN"});
@@ -106,12 +123,9 @@ namespace hal
                 gt->assign_pin_type("Q", PinType::state);
                 gt->assign_pin_type("QN", PinType::neg_state);
 
-                gt->add_boolean_function("data", BooleanFunction::from_string("D"));
-                gt->add_boolean_function("enable", BooleanFunction::from_string("EN"));
-                gt->add_boolean_function("clear", BooleanFunction::from_string("R"));
-                gt->add_boolean_function("preset", BooleanFunction::from_string("S"));
-
-                gt->set_clear_preset_behavior(GateType::ClearPresetBehavior::L, GateType::ClearPresetBehavior::H);
+                latch_component->set_async_reset_function(BooleanFunction::from_string("R"));
+                latch_component->set_async_set_function(BooleanFunction::from_string("S"));
+                latch_component->set_async_set_reset_behavior(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H);
             }
 
             {
@@ -193,10 +207,43 @@ namespace hal
             EXPECT_EQ(gt1->get_pin_groups(), gt2->get_pin_groups());
             EXPECT_EQ(gt1->get_pin_types(), gt2->get_pin_types());
             EXPECT_EQ(gt1->get_boolean_functions(), gt2->get_boolean_functions());
-            EXPECT_EQ(gt1->get_clear_preset_behavior(), gt2->get_clear_preset_behavior());
-            EXPECT_EQ(gt1->get_config_data_category(), gt2->get_config_data_category());
-            EXPECT_EQ(gt1->get_config_data_identifier(), gt2->get_config_data_identifier());
-            EXPECT_EQ(gt1->is_lut_init_ascending(), gt2->is_lut_init_ascending());
+
+            if(const LUTComponent* lut_component1 = gt1->get_component_as<LUTComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::lut; }); lut_component1 != nullptr) 
+            {
+                const LUTComponent* lut_component2 = gt2->get_component_as<LUTComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::lut; });
+                ASSERT_NE(lut_component2, nullptr);
+                EXPECT_EQ(lut_component1->is_init_ascending(), lut_component2->is_init_ascending());
+            }
+
+            if(const FFComponent* ff_component1 = gt1->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; }); ff_component1 != nullptr) 
+            {
+                const FFComponent* ff_component2 = gt2->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
+                ASSERT_NE(ff_component2, nullptr);
+                EXPECT_EQ(ff_component1->get_next_state_function(), ff_component2->get_next_state_function());
+                EXPECT_EQ(ff_component1->get_clock_function(), ff_component2->get_clock_function());
+                EXPECT_EQ(ff_component1->get_async_reset_function(), ff_component2->get_async_reset_function());
+                EXPECT_EQ(ff_component1->get_async_set_function(), ff_component2->get_async_set_function());
+                EXPECT_EQ(ff_component1->get_async_set_reset_behavior(), ff_component2->get_async_set_reset_behavior());
+            }
+
+            if(const LatchComponent* latch_component1 = gt1->get_component_as<LatchComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::latch; }); latch_component1 != nullptr) 
+            {
+                const LatchComponent* latch_component2 = gt2->get_component_as<LatchComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::latch; });
+                ASSERT_NE(latch_component2, nullptr);
+                EXPECT_EQ(latch_component1->get_data_in_function(), latch_component2->get_data_in_function());
+                EXPECT_EQ(latch_component1->get_enable_function(), latch_component2->get_enable_function());
+                EXPECT_EQ(latch_component1->get_async_reset_function(), latch_component2->get_async_reset_function());
+                EXPECT_EQ(latch_component1->get_async_set_function(), latch_component2->get_async_set_function());
+                EXPECT_EQ(latch_component1->get_async_set_reset_behavior(), latch_component2->get_async_set_reset_behavior());
+            }
+
+            if(const InitComponent* init_component1 = gt1->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; }); init_component1 != nullptr) 
+            {
+                const InitComponent* init_component2 = gt2->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+                ASSERT_NE(init_component2, nullptr);
+                EXPECT_EQ(init_component1->get_init_category(), init_component2->get_init_category());
+                EXPECT_EQ(init_component1->get_init_identifier(), init_component2->get_init_identifier());
+            }
         }
 
         TEST_END
