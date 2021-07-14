@@ -76,7 +76,7 @@ namespace hal
 
     GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent),
         mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2),
-        mModuleSelectCursor(false)
+        mSelectCursor(Select)
     {
         mContentLayout->addWidget(mTabWidget);
         mTabWidget->setTabsClosable(true);
@@ -304,19 +304,22 @@ namespace hal
         }
     }
 
-    void GraphTabWidget::setModuleSelectCursor(bool on)
+    void GraphTabWidget::setSelectCursor(int icurs)
     {
-        mModuleSelectCursor = on;
+        mSelectCursor = (GraphCursor) icurs;
         int n = mTabWidget->count();
-        if (mModuleSelectCursor)
+        if (mSelectCursor == Select)
         {
-            ;
-            QCursor modCurs(QPixmap(":/icons/module_cursor","PNG"));
-            for (int i=0; i<n; i++)
-                mTabWidget->widget(i)->setCursor(modCurs);
-        }
-        else
             for (int i=0; i<n; i++)
                 mTabWidget->widget(i)->unsetCursor();
+        }
+        else
+        {
+            QCursor gcurs(mSelectCursor == PickModule
+                          ? QPixmap(":/icons/module_cursor","PNG")
+                          : QPixmap(":/icons/gate_cursor","PNG"));
+            for (int i=0; i<n; i++)
+                mTabWidget->widget(i)->setCursor(gcurs);
+        }
     }
 }

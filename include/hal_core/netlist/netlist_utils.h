@@ -100,18 +100,20 @@ namespace hal
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors);
 
         /**
-         * Find predecessors or successors of a gate. If recursive is set it will loop trough entire network until no more
-         * predecessors/succesors are found. If recursive is not set only direct predecessors/successors will be returned.
+         * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors
+         * will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0
+         * there is no limitation and the loop continues until no more predecessors/succesors are found.
+         *
          * If filter function is given only gates matching the filter will be accepted.
          * The result will not include the provided gate itself.
          *
          * @param gate[in] - The initial gate.
          * @param get_successors[in] - If true successors are returned, predecessors otherwise
-         * @param recursive[in] - Enables recursion (see above)
+         * @param depth[in] - Depth of recursion (see above)
          * @param filter[in] - Filter function of type    bool func(const Gate*) const
          * @return Vector of predecessor/successor gates found
          */
-        CORE_API std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, bool recursive = true, const std::function<bool(const Gate*)>& filter = nullptr);
+        CORE_API std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
          * Find all sequential predecessors or successors of a net.

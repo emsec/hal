@@ -177,26 +177,30 @@ namespace hal
         void handleGraphSelectionChanged(void* sender);
 
         /**
-         * Adds all predecessor of the currently selected gate or module to a new grouping.
+         * Adds predecessors of the currently selected gate or module to a new grouping.
+         *
+         * @param maxDepth - Maximum recursion depth. Unlimited if zero.
          */
-        void handleToolboxPredecessor();
+        void handleToolboxPredecessor(int maxDepth = 0);
 
         /**
-         * Adds all successor of the currently selected gate or module to a new grouping.
-         */
-        void handleToolboxSuccessor();
+         * Adds successors of the currently selected gate or module to a new grouping.
+         *
+         * @param maxDepth - Maximum recursion depth. Unlimited if zero.
+        */
+        void handleToolboxSuccessor(int maxDepth = 0);
 
         /**
          * Performs a BFS with a max-depth of three and creates a new grouping
          * for the predecessors of each depth.
          */
-        void handleToolboxPredecessorDistance();
+        void handleToolboxPredecessorDistance(int maxDepth = 3);
 
         /**
          * Performs a BFS with a max-depth of three and creates a new grouping
          * for the successors of each depth.
          */
-        void handleToolboxSuccessorDistance();
+        void handleToolboxSuccessorDistance(int maxDepth = 3);
 
     private Q_SLOTS:
         /**
@@ -301,6 +305,8 @@ namespace hal
         QString mDisabledIconStyle;
 
         void setToolbarButtonsEnabled(bool enabled);
+        void successorToNewGrouping(int maxDepth, bool succ);
+        void newGroupingByDistance(int maxDepth, bool succ);
 
         GroupingTableEntry getCurrentGrouping();
     };
