@@ -25,6 +25,7 @@
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/utilities/enums.h"
 
@@ -60,30 +61,6 @@ namespace hal
 
     template<>
     std::vector<std::string> EnumStrings<GateTypeProperty>::data;
-
-    /**
-     * Defines the type of a pin.
-     */
-    enum class PinType
-    {
-        none,      /**< Default pin. **/
-        power,     /**< Power pin. **/
-        ground,    /**< Ground pin. **/
-        lut,       /**< Pin that generates output from LUT initialization string. **/
-        state,     /**< Pin that generates output from internal state. **/
-        neg_state, /**< Pin that generates output from negated internal state. **/
-        clock,     /**< Clock pin. **/
-        enable,    /**< Enable pin. **/
-        set,       /**< Set/preset pin. **/
-        reset,     /**< Reset/clear pin. **/
-        data,      /**< Data pin. **/
-        address,   /**< Address pin. **/
-        io_pad,    /**< IO pad pin. **/
-        select     /**< Select pin. **/
-    };
-
-    template<>
-    std::vector<std::string> EnumStrings<PinType>::data;
 
     /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
