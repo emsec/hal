@@ -152,16 +152,16 @@ namespace hal
         void set_read_enable_function(const BooleanFunction& read_enable_bf);
 
     private:
-        static constexpr ComponentType m_type = ComponentType::ram_port;
-        std::unique_ptr<GateTypeComponent> m_component;
+        static constexpr ComponentType m_type          = ComponentType::ram_port;
+        std::unique_ptr<GateTypeComponent> m_component = nullptr;
 
-        std::string m_write_data_group;
-        std::string m_read_data_group;
-        std::string m_write_addr_group;
-        std::string m_read_addr_group;
-        BooleanFunction m_write_clock_bf;
-        BooleanFunction m_read_clock_bf;
-        BooleanFunction m_write_enable_bf;
-        BooleanFunction m_read_enable_bf;
+        std::string m_write_data_group    = "";
+        std::string m_read_data_group     = "";
+        std::string m_write_addr_group    = "";
+        std::string m_read_addr_group     = "";
+        BooleanFunction m_write_clock_bf  = BooleanFunction();
+        BooleanFunction m_read_clock_bf   = BooleanFunction();
+        BooleanFunction m_write_enable_bf = BooleanFunction();
+        BooleanFunction m_read_enable_bf  = BooleanFunction();
     };
 }    // namespace hal

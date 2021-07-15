@@ -38,7 +38,7 @@ namespace hal
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
     private:
-        static constexpr ComponentType m_type = ComponentType::ram;
-        std::unique_ptr<GateTypeComponent> m_component;
+        static constexpr ComponentType m_type          = ComponentType::ram;
+        std::unique_ptr<GateTypeComponent> m_component = nullptr;
     };
 }    // namespace hal

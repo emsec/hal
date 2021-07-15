@@ -71,9 +71,9 @@ namespace hal
         void set_init_ascending(bool init_ascending = true);
 
     private:
-        static constexpr ComponentType m_type = ComponentType::lut;
-        std::unique_ptr<GateTypeComponent> m_component;
+        static constexpr ComponentType m_type          = ComponentType::lut;
+        std::unique_ptr<GateTypeComponent> m_component = nullptr;
 
-        bool m_init_ascending;
+        bool m_init_ascending = true;
     };
 }    // namespace hal

@@ -134,10 +134,10 @@ namespace hal
     private:
         static constexpr ComponentType m_type = ComponentType::latch;
 
-        BooleanFunction m_data_in_bf;
-        BooleanFunction m_enable_bf;
-        BooleanFunction m_async_reset_bf;
-        BooleanFunction m_async_set_bf;
+        BooleanFunction m_data_in_bf                                                       = BooleanFunction();
+        BooleanFunction m_enable_bf                                                        = BooleanFunction();
+        BooleanFunction m_async_reset_bf                                                   = BooleanFunction();
+        BooleanFunction m_async_set_bf                                                     = BooleanFunction();
         std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> m_async_set_reset_behavior = {AsyncSetResetBehavior::undef, AsyncSetResetBehavior::undef};
     };
 

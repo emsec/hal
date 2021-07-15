@@ -71,6 +71,7 @@ namespace hal
     {
     public:
         /**
+         * TODO test
          * Get all components matching the filter condition (if provided) as a set. 
          * Returns an empty set if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
          * 
@@ -80,6 +81,7 @@ namespace hal
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
 
         /**
+         * TODO test
          * Get a single component matching the filter condition (if provided).
          * Returns a nullptr if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
          * 
@@ -89,7 +91,14 @@ namespace hal
         GateTypeComponent* get_component(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
 
         /**
-         * TODO documentation
+         * TODO test
+         * Get a single component and convert it to a component of the type specified by the template parameter.
+         * A user-defined filter may be applied to the result set, but is disabled by default.
+         * If more no or than one components match the filter condition, a nullptr is returned.
+         * A check is performed to determine whether the conversion is legal and a nullptr is returned in case it is not.
+         * 
+         * @param[in] filter - The user-defined filter function applied to all candidate components.
+         * @returns The sub-component of the gate type component converted to the target type or a nullptr.
          */
         template<typename T>
         T* get_component_as(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
@@ -104,7 +113,7 @@ namespace hal
         }
 
         /**
-         * TODO pybind
+         * TODO test
          * Check if the gate type contains a component of the specified type.
          * 
          * @param[in] type - The component type to check for.
@@ -127,7 +136,7 @@ namespace hal
         const std::string& get_name() const;
 
         /**
-         * TODO pybind
+         * TODO test
          * Assign a new property to the gate type.
          * 
          * @param[in] property - The property to assign.
@@ -369,11 +378,14 @@ namespace hal
         void add_boolean_functions(const std::unordered_map<std::string, BooleanFunction>& functions);
 
         /**
+         * TODO test
          * Get the Boolean function specified by name.
+         * If no Boolean function matches the name, an empty function is returned.
          * 
-         * @returns A Boolean function.
+         * @param[in] function_name - The name of the Boolean function.
+         * @returns The specified Boolean function.
          */
-        BooleanFunction get_boolean_function(const std::string& function_name) const;
+        const BooleanFunction& get_boolean_function(const std::string& function_name) const;
 
         /**
          * Get all Boolean functions of the gate type.

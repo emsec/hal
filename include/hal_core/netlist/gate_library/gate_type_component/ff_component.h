@@ -132,13 +132,13 @@ namespace hal
         void set_async_set_reset_behavior(const AsyncSetResetBehavior behav_state, const AsyncSetResetBehavior behav_neg_state);
 
     private:
-        static constexpr ComponentType m_type = ComponentType::ff;
-        std::unique_ptr<GateTypeComponent> m_component;
+        static constexpr ComponentType m_type          = ComponentType::ff;
+        std::unique_ptr<GateTypeComponent> m_component = nullptr;
 
-        BooleanFunction m_next_state_bf;
-        BooleanFunction m_clock_bf;
-        BooleanFunction m_async_reset_bf;
-        BooleanFunction m_async_set_bf;
+        BooleanFunction m_next_state_bf                                                    = BooleanFunction();
+        BooleanFunction m_clock_bf                                                         = BooleanFunction();
+        BooleanFunction m_async_reset_bf                                                   = BooleanFunction();
+        BooleanFunction m_async_set_bf                                                     = BooleanFunction();
         std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> m_async_set_reset_behavior = {AsyncSetResetBehavior::undef, AsyncSetResetBehavior::undef};
     };
 }    // namespace hal

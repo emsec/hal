@@ -87,7 +87,7 @@ namespace hal
     private:
         static constexpr ComponentType m_type = ComponentType::init;
 
-        std::string m_init_category;
-        std::string m_init_identifier;
+        std::string m_init_category   = "";
+        std::string m_init_identifier = "";
     };
 }    // namespace hal

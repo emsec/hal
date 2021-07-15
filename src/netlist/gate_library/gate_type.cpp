@@ -354,7 +354,7 @@ namespace hal
         m_functions.insert(functions.begin(), functions.end());
     }
 
-    BooleanFunction GateType::get_boolean_function(const std::string& function_name) const
+    const BooleanFunction& GateType::get_boolean_function(const std::string& function_name) const
     {
         if (const auto it = m_functions.find(function_name); it != m_functions.end())
         {
