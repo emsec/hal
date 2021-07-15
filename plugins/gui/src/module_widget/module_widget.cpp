@@ -105,7 +105,6 @@ namespace hal
             mSearchbar->hide();
             setFocus();
         }
-        updateSearchIcon();
     }
 
     void ModuleWidget::filter(const QString& text)

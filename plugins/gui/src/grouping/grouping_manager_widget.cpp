@@ -597,7 +597,6 @@ namespace hal
             mSearchbar->hide();
             setFocus();
         }
-        updateSearchIcon();
     }
 
     void GroupingManagerWidget::filter(const QString& text)
@@ -622,9 +621,7 @@ namespace hal
 
     void GroupingManagerWidget::enableSearchbar(bool enable)
     {
-        QString iconStyle = enable
-                ? mSearchIconStyle
-                : mDisabledIconStyle;
+        QString iconStyle = enable ? mSearchIconStyle : mDisabledIconStyle;
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mSearchIconPath));
         if (!enable && mSearchbar->isVisible())
         {

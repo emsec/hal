@@ -18,7 +18,7 @@
 
 namespace hal {
     ModuleDialog::ModuleDialog(QWidget* parent)
-        : QDialog(parent), mSelectedId(0), mNewModule(false)
+        : QDialog(parent), mSelectedId(0), mSearchbar(new Searchbar(this)), mNewModule(false)
     {
         setWindowTitle("Move to module …");
         QGridLayout* layout = new QGridLayout(this);
@@ -31,9 +31,7 @@ namespace hal {
         connect(mButtonPick, &QPushButton::pressed, this, &ModuleDialog::handlePickFromGraph);
         layout->addWidget(mButtonPick, 0, 1);
 
-        mSearchbar = new Searchbar(this);
         layout->addWidget(mSearchbar, 1, 0, 1, 2);
-
         mTabWidget = new QTabWidget(this);
         mTreeView  = new QTreeView(mTabWidget);
         mTabWidget->addTab(mTreeView, "Module tree");
@@ -154,11 +152,14 @@ namespace hal {
     void ModuleDialog::handleToggleSearchbar()
     {
         if (mSearchbar->isHidden())
+        {
             mSearchbar->show();
+            mSearchbar->setFocus();
+        }
         else
         {
             mSearchbar->hide();
-            mSearchbar->clear();
+            setFocus();
         }
     }
 

@@ -56,8 +56,7 @@ namespace hal
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
         : ContentWidget("Selection Details", parent), mNumberSelectedItems(0),
           mSelectionToGrouping(new QAction),
-          mSelectionToModule(new QAction),
-          mSearchAction(new QAction)
+          mSelectionToModule(new QAction)
     {
         //needed to load the properties
         ensurePolished();
@@ -322,9 +321,7 @@ namespace hal
 
     void SelectionDetailsWidget::enableSearchbar(bool enable)
     {
-        QString iconStyle = enable
-                ? mSearchIconStyle
-                : mDisabledIconStyle;
+        QString iconStyle = enable ? mSearchIconStyle : mDisabledIconStyle;
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mSearchIconPath));
         if (!enable && mSearchbar->isVisible())
         {
@@ -358,7 +355,6 @@ namespace hal
         if (proxy->isGraphicsBusy()) return;
 
         mSearchbar->clear();
-        proxy->handleFilterTextChanged(QString());
         updateSearchIcon();
 
         mNumberSelectedItems = gSelectionRelay->numberSelectedItems();
@@ -477,17 +473,14 @@ namespace hal
 
         if (mSearchbar->isHidden())
         {
-            mSelectionTreeView->handleFilterTextChanged(mSearchbar->getCurrentTextWithFlags());
             mSearchbar->show();
             mSearchbar->setFocus();
         }
         else
         {
-            mSelectionTreeView->handleFilterTextChanged("");
             mSearchbar->hide();
             setFocus();
         }
-        updateSearchIcon();
     }
 
     void SelectionDetailsWidget::updateSearchIcon()

@@ -423,11 +423,11 @@ namespace hal
 
     QList<QShortcut*> PythonEditor::createShortcuts()
     {
-        QShortcut* shortcutNewFile = new QShortcut(mSettingCreateFile->value().toString(),this );
-        QShortcut* shortcutOpenFile = new QShortcut(mSettingOpenFile->value().toString(),this );
-        QShortcut* shortcutSaveFile = new QShortcut(mSettingSaveFile->value().toString(),this );
-        QShortcut* shortcutSaveFileAs = new QShortcut(mSettingSaveFileAs->value().toString(),this );
-        QShortcut* shortcutRun = new QShortcut(mSettingRunFile->value().toString(),this );
+        QShortcut* shortcutNewFile = new QShortcut(mSettingCreateFile->value().toString(), this);
+        QShortcut* shortcutOpenFile = new QShortcut(mSettingOpenFile->value().toString(), this);
+        QShortcut* shortcutSaveFile = new QShortcut(mSettingSaveFile->value().toString(), this);
+        QShortcut* shortcutSaveFileAs = new QShortcut(mSettingSaveFileAs->value().toString(), this);
+        QShortcut* shortcutRun = new QShortcut(mSettingRunFile->value().toString(), this);
         mSearchShortcut = new QShortcut(mSearchKeysequence, this);
 
         connect(mSearchShortcut, &QShortcut::activated, mSearchAction, &QAction::trigger);

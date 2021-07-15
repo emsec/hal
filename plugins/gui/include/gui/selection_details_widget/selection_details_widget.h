@@ -362,7 +362,6 @@ namespace hal
 
         QAction* mSelectionToGrouping;
         QAction* mSelectionToModule;
-        QAction* mSearchAction;
 
         QString mDisabledIconStyle;
 

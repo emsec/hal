@@ -245,9 +245,7 @@ namespace hal
 
     void ContextManagerWidget::enableSearchbar(bool enable)
     {
-        QString iconStyle = enable
-                ? mSearchIconStyle
-                : mDisabledIconStyle;
+        QString iconStyle = enable ? mSearchIconStyle : mDisabledIconStyle;
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mSearchIconPath));
         if (!enable && mSearchbar->isVisible())
         {
@@ -306,7 +304,6 @@ namespace hal
             mSearchbar->hide();
             setFocus();
         }
-        updateSearchIcon();
     }
 
     QString ContextManagerWidget::disabledIconStyle() const

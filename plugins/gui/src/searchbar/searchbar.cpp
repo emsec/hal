@@ -16,7 +16,7 @@ namespace hal
 {
     Searchbar::Searchbar(QWidget* parent)
         : QFrame(parent), mLayout(new QHBoxLayout()), mSearchIconLabel(new QLabel()), mLineEdit(new QLineEdit()), mClearIconLabel(new QLabel()), mDownButton(new QToolButton()),
-          mUpButton(new QToolButton()), mExactMatchButton(new QToolButton()), mCaseSensitiveButton(new QToolButton()), mClearButton(new QToolButton())
+          mUpButton(new QToolButton()), mCaseSensitiveButton(new QToolButton()), mExactMatchButton(new QToolButton()), mClearButton(new QToolButton())
     {
         setLayout(mLayout);
 
@@ -27,6 +27,7 @@ namespace hal
 
         mSearchIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIcon).pixmap(QSize(16, 16)));
         mLineEdit->setPlaceholderText("Search");
+
         mClearIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mClearIconStyle, mClearIcon).pixmap(QSize(10, 10)));
 
         //Placeholder icons get better ones

@@ -186,11 +186,6 @@ namespace hal
          */
         void handleClearClicked();
 
-        /**
-         * Handles filter adjustments.
-         */
-        void handleFilterAdjusted();
-
     private:
         QHBoxLayout* mLayout;
 
