@@ -93,15 +93,10 @@ namespace hal
             std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
 
             // lut_config, ff_config, latch_config
-            if (gt->has_property(GateTypeProperty::lut))
+            if (LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
+                lut_component != nullptr)
             {
                 rapidjson::Value lut_config(rapidjson::kObjectType);
-
-                LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
-                if (lut_component == nullptr)
-                {
-                    return false;
-                }
 
                 InitComponent* init_component =
                     lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
@@ -126,15 +121,10 @@ namespace hal
 
                 cell.AddMember("lut_config", lut_config, allocator);
             }
-            else if (gt->has_property(GateTypeProperty::ff))
+            else if (FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
+                     ff_component != nullptr)
             {
                 rapidjson::Value ff_config(rapidjson::kObjectType);
-
-                FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
-                if (ff_component == nullptr)
-                {
-                    return false;
-                }
 
                 InitComponent* init_component =
                     ff_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
@@ -169,16 +159,11 @@ namespace hal
 
                 cell.AddMember("ff_config", ff_config, allocator);
             }
-            else if (gt->has_property(GateTypeProperty::latch))
+            else if (LatchComponent* latch_component =
+                         gt->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
+                     latch_component != nullptr)
             {
                 rapidjson::Value latch_config(rapidjson::kObjectType);
-
-                LatchComponent* latch_component =
-                    gt->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
-                if (latch_component == nullptr)
-                {
-                    return false;
-                }
 
                 // next_state, clocked_on, clear_on, preset_on
                 latch_config.AddMember("data_in", latch_component->get_data_in_function().to_string(), allocator);

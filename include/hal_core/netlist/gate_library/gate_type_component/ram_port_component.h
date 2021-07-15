@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
 namespace hal
@@ -30,13 +31,137 @@ namespace hal
     class RAMPortComponent : public GateTypeComponent
     {
     public:
-        RAMPortComponent() = default;
+        RAMPortComponent(std::unique_ptr<GateTypeComponent> component);
 
         ComponentType get_type() const override;
         static bool is_class_of(const GateTypeComponent* component);
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
+        // TODO pybinds below
+
+        /**
+         * Get the name of the pin group forming the write data input.
+         * 
+         * @returns The name of the pin group.
+         */
+        const std::string& get_write_data_group() const;
+
+        /**
+         * Set the name of the pin group forming the write data input.
+         * 
+         * @param[in] write_data_group - The name of the pin group.
+         */
+        void set_write_data_group(const std::string& write_data_group);
+
+        /**
+         * Get the name of the pin group forming the read data output.
+         * 
+         * @returns The name of the pin group.
+         */
+        const std::string& get_read_data_group() const;
+
+        /**
+         * Set the name of the pin group forming the read data output.
+         * 
+         * @param[in] read_data_group - The name of the pin group.
+         */
+        void set_read_data_group(const std::string& read_data_group);
+
+        /**
+         * Get the name of the pin group forming the write address.
+         * 
+         * @returns The name of the pin group.
+         */
+        const std::string& get_write_address_group() const;
+
+        /**
+         * Set the name of the pin group forming the write address.
+         * 
+         * @param[in] write_addr_group - The name of the pin group.
+         */
+        void set_write_address_group(const std::string& write_addr_group);
+
+        /**
+         * Get the name of the pin group forming the read address.
+         * 
+         * @returns The name of the pin group.
+         */
+        const std::string& get_read_address_group() const;
+
+        /**
+         * Set the name of the pin group forming the read address.
+         * 
+         * @param[in] read_addr_group - The name of the pin group.
+         */
+        void set_read_address_group(const std::string& read_addr_group);
+
+        /**
+         * Get the Boolean function determining the write clock.
+         * 
+         * @returns The Boolean function.
+         */
+        const BooleanFunction& get_write_clock_function() const;
+
+        /**
+         * Set the Boolean function determining the write clock.
+         * 
+         * @param[in] write_clock_bf - The Boolean function.
+         */
+        void set_write_clock_function(const BooleanFunction& write_clock_bf);
+
+        /**
+         * Get the Boolean function determining the read clock.
+         * 
+         * @returns The Boolean function.
+         */
+        const BooleanFunction& get_read_clock_function() const;
+
+        /**
+         * Set the Boolean function determining the read clock.
+         * 
+         * @param[in] read_clock_bf - The Boolean function.
+         */
+        void set_read_clock_function(const BooleanFunction& read_clock_bf);
+
+        /**
+         * Get the Boolean function determining the write enable.
+         * 
+         * @returns The Boolean function.
+         */
+        const BooleanFunction& get_write_enable_function() const;
+
+        /**
+         * Set the Boolean function determining the write enable.
+         * 
+         * @param[in] write_enable_bf - The Boolean function.
+         */
+        void set_write_enable_function(const BooleanFunction& write_enable_bf);
+
+        /**
+         * Get the Boolean function determining the read enable.
+         * 
+         * @returns The Boolean function.
+         */
+        const BooleanFunction& get_read_enable_function() const;
+
+        /**
+         * Set the Boolean function determining the read enable.
+         * 
+         * @param[in] read_enable_bf - The Boolean function.
+         */
+        void set_read_enable_function(const BooleanFunction& read_enable_bf);
+
     private:
         static constexpr ComponentType m_type = ComponentType::ram_port;
+        std::unique_ptr<GateTypeComponent> m_component;
+
+        std::string m_write_data_group;
+        std::string m_read_data_group;
+        std::string m_write_addr_group;
+        std::string m_read_addr_group;
+        BooleanFunction m_write_clock_bf;
+        BooleanFunction m_read_clock_bf;
+        BooleanFunction m_write_enable_bf;
+        BooleanFunction m_read_enable_bf;
     };
 }    // namespace hal

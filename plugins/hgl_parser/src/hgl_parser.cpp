@@ -116,42 +116,25 @@ namespace hal
         }
 
         std::unique_ptr<GateTypeComponent> parent_component = nullptr;
-        if (properties.find(GateTypeProperty::lut) != properties.end())
-        {
-            if (!gate_type.HasMember("lut_config") || !gate_type["lut_config"].IsObject())
-            {
-                log_error("hgl_parser", "invalid or missing LUT config for gate type '{}'.", name);
-                return false;
-            }
 
+        if (gate_type.HasMember("lut_config") && gate_type["lut_config"].IsObject())
+        {
             parent_component = parse_lut_config(gate_type["lut_config"], name);
             if (parent_component == nullptr)
             {
                 return false;
             }
         }
-        else if (properties.find(GateTypeProperty::ff) != properties.end())
+        else if (gate_type.HasMember("ff_config") && gate_type["ff_config"].IsObject())
         {
-            if (!gate_type.HasMember("ff_config") || !gate_type["ff_config"].IsObject())
-            {
-                log_error("hgl_parser", "invalid or missing flip-flop config for gate type '{}'.", name);
-                return false;
-            }
-
             parent_component = parse_ff_config(gate_type["ff_config"], name, pin_ctx.pins);
             if (parent_component == nullptr)
             {
                 return false;
             }
         }
-        else if (properties.find(GateTypeProperty::latch) != properties.end())
+        else if (gate_type.HasMember("latch_config") && gate_type["latch_config"].IsObject())
         {
-            if (!gate_type.HasMember("latch_config") || !gate_type["latch_config"].IsObject())
-            {
-                log_error("hgl_parser", "invalid or missing latch config for gate type '{}'.", name);
-                return false;
-            }
-
             parent_component = parse_latch_config(gate_type["latch_config"], name, pin_ctx.pins);
             if (parent_component == nullptr)
             {

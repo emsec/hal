@@ -1,7 +1,5 @@
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 
-#include "hal_core/netlist/gate_library/gate_type.h"
-
 namespace hal
 {
     FFComponent::FFComponent(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf)
@@ -42,7 +40,7 @@ namespace hal
         return {};
     }
 
-        BooleanFunction FFComponent::get_next_state_function() const
+    BooleanFunction FFComponent::get_next_state_function() const
     {
         return m_next_state_bf;
     }

@@ -434,5 +434,157 @@ namespace hal
             :returns: True if component is a RAMPortComponent, False otherwise.
             :rtype: bool
         )");
+
+        py_ram_port_component.def_property("write_data_group", &RAMPortComponent::get_write_data_group, &RAMPortComponent::set_write_data_group, R"(
+            The name of the pin group forming the write data input.
+
+            :type: str
+        )");
+
+        py_ram_port_component.def("get_write_data_group", &RAMPortComponent::get_write_data_group, R"(
+            Get the name of the pin group forming the write data input.
+
+            :returns: The name of the pin group.
+            :rtype: str
+        )");
+
+        py_ram_port_component.def("set_write_data_group", &RAMPortComponent::set_write_data_group, py::arg("write_data_group"), R"(
+            Set the name of the pin group forming the write data input.
+
+            :param str write_data_group: The name of the pin group.
+        )");
+
+        py_ram_port_component.def_property("read_data_group", &RAMPortComponent::get_read_data_group, &RAMPortComponent::set_read_data_group, R"(
+            The name of the pin group forming the read data output.
+
+            :type: str
+        )");
+
+        py_ram_port_component.def("get_read_data_group", &RAMPortComponent::get_read_data_group, R"(
+            Get the name of the pin group forming the read data output.
+
+            :returns: The name of the pin group.
+            :rtype: str
+        )");
+
+        py_ram_port_component.def("set_read_data_group", &RAMPortComponent::set_read_data_group, py::arg("read_data_group"), R"(
+            Set the name of the pin group forming the read data output.
+
+            :param str read_data_group: The name of the pin group.
+        )");
+
+        py_ram_port_component.def_property("write_address_group", &RAMPortComponent::get_write_address_group, &RAMPortComponent::set_write_address_group, R"(
+            The name of the pin group forming the write address.
+
+            :type: str
+        )");
+
+        py_ram_port_component.def("get_write_address_group", &RAMPortComponent::get_write_address_group, R"(
+            Get the name of the pin group forming the write address.
+
+            :returns: The name of the pin group.
+            :rtype: str
+        )");
+
+        py_ram_port_component.def("set_write_address_group", &RAMPortComponent::set_write_address_group, py::arg("write_addr_group"), R"(
+            Set the name of the pin group forming the write address.
+
+            :param str write_addr_group: The name of the pin group.
+        )");
+
+        py_ram_port_component.def_property("read_address_group", &RAMPortComponent::get_read_address_group, &RAMPortComponent::set_read_address_group, R"(
+            The name of the pin group forming the read address.
+
+            :type: str
+        )");
+
+        py_ram_port_component.def("get_read_address_group", &RAMPortComponent::get_read_address_group, R"(
+            Get the name of the pin group forming the read address.
+
+            :returns: The name of the pin group.
+            :rtype: str
+        )");
+
+        py_ram_port_component.def("set_read_address_group", &RAMPortComponent::set_read_address_group, py::arg("read_addr_group"), R"(
+            Set the name of the pin group forming the read address.
+
+            :param str read_addr_group: The name of the pin group.
+        )");
+
+        py_ram_port_component.def_property("write_clock_function", &RAMPortComponent::get_write_clock_function, &RAMPortComponent::set_write_clock_function, R"(
+            The Boolean function determining the write clock.
+
+            :type: hal_py.BooleanFunction
+        )");
+
+        py_ram_port_component.def("get_write_clock_function", &RAMPortComponent::get_write_clock_function, R"(
+            Get the Boolean function determining the write clock.
+
+            :returns: The Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_ram_port_component.def("set_write_clock_function", &RAMPortComponent::set_write_clock_function, py::arg("write_clock_bf"), R"(
+            Set the Boolean function determining the write clock.
+
+            :param hal_py.BooleanFunction write_clock_bf: The Boolean function.
+        )");
+
+        py_ram_port_component.def_property("read_clock_function", &RAMPortComponent::get_read_clock_function, &RAMPortComponent::set_read_clock_function, R"(
+            The Boolean function determining the read clock.
+
+            :type: hal_py.BooleanFunction
+        )");
+
+        py_ram_port_component.def("get_read_clock_function", &RAMPortComponent::get_read_clock_function, R"(
+            Get the Boolean function determining the read clock.
+
+            :returns: The Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_ram_port_component.def("set_read_clock_function", &RAMPortComponent::set_read_clock_function, py::arg("read_clock_bf"), R"(
+            Set the Boolean function determining the read clock.
+
+            :param hal_py.BooleanFunction read_clock_bf: The Boolean function.
+        )");
+
+        py_ram_port_component.def_property("write_enable_function", &RAMPortComponent::get_write_enable_function, &RAMPortComponent::set_write_enable_function, R"(
+            The Boolean function determining the write enable.
+
+            :type: hal_py.BooleanFunction
+        )");
+
+        py_ram_port_component.def("get_write_enable_function", &RAMPortComponent::get_write_enable_function, R"(
+            Get the Boolean function determining the write enable.
+
+            :returns: The Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_ram_port_component.def("set_write_enable_function", &RAMPortComponent::set_write_enable_function, py::arg("write_enable_bf"), R"(
+            Set the Boolean function determining the write enable.
+
+            :param hal_py.BooleanFunction write_enable_bf: The Boolean function.
+        )");
+
+        py_ram_port_component.def_property("read_enable_function", &RAMPortComponent::get_read_enable_function, &RAMPortComponent::set_read_enable_function, R"(
+            The Boolean function determining the read enable.
+
+            :type: hal_py.BooleanFunction
+        )");
+
+        py_ram_port_component.def("get_read_enable_function", &RAMPortComponent::get_read_enable_function, R"(
+            Get the Boolean function determining the read enable.
+
+            :returns: The Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_ram_port_component.def("set_read_enable_function", &RAMPortComponent::set_read_enable_function, py::arg("read_enable_bf"), R"(
+            Set the Boolean function determining the read enable.
+
+            :param hal_py.BooleanFunction read_enable_bf: The Boolean function.
+        )");
     }
 }    // namespace hal

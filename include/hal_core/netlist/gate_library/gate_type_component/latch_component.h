@@ -29,8 +29,6 @@
 
 namespace hal
 {
-    class GateType;
-
     class LatchComponent : public GateTypeComponent
     {
     public:

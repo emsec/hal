@@ -29,8 +29,6 @@
 
 namespace hal
 {
-    class GateType;
-
     class FFComponent : public GateTypeComponent
     {
     public:

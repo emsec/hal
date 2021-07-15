@@ -1,7 +1,5 @@
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 
-#include "hal_core/netlist/gate_library/gate_type.h"
-
 namespace hal
 {
     LatchComponent::LatchComponent(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf) : m_data_in_bf(data_in_bf), m_enable_bf(enable_bf)

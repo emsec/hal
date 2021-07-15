@@ -39,6 +39,6 @@ namespace hal
 
     private:
         static constexpr ComponentType m_type = ComponentType::ram;
-        std::unique_ptr<GateTypeComponent> m_component;    // RAM may have multiple ports
+        std::unique_ptr<GateTypeComponent> m_component;
     };
 }    // namespace hal

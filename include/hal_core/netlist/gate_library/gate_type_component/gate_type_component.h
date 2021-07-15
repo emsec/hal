@@ -58,7 +58,7 @@ namespace hal
         static std::unique_ptr<GateTypeComponent> create_ram_component(std::unique_ptr<GateTypeComponent> component);
         static std::unique_ptr<GateTypeComponent> create_mac_component();
         static std::unique_ptr<GateTypeComponent> create_init_component(const std::string& init_category, const std::string& init_identifier);
-        static std::unique_ptr<GateTypeComponent> create_ram_port_component();
+        static std::unique_ptr<GateTypeComponent> create_ram_port_component(std::unique_ptr<GateTypeComponent> component);
 
         /**
          * Get the type of the gate type component.
