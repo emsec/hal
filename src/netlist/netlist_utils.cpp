@@ -17,6 +17,45 @@ namespace hal
     {
         namespace
         {
+            std::vector<Gate*> get_shortest_path_internal(Gate* start_gate, Gate* end_gate)
+            {
+                if (start_gate == end_gate) return std::vector<Gate*>();
+                std::vector<Gate*> v0;
+                v0.push_back(start_gate);
+                std::unordered_map<Gate*,Gate*> originMap;
+                for (;;)
+                {
+                    std::vector<Gate*> v1;
+                    for (Gate* g0 : v0)
+                    {
+                        for (Gate* g1 : get_next_gates(g0, true, 1))
+                        {
+                            if (originMap.find(g1) != originMap.end()) continue; // already routed to
+                            v1.push_back(g1);
+                            originMap[g1] = g0;
+                            if (g1 == end_gate)
+                            {
+                                // heureka!
+                                std::vector<Gate*> retval;
+                                Gate* g = end_gate;
+                                while (g != start_gate)
+                                {
+                                    retval.insert(retval.begin(),g);
+                                    auto it = originMap.find(g);
+                                    assert(it != originMap.end());
+                                    g = it->second;
+                                }
+                                retval.insert(retval.begin(),start_gate);
+                                return retval;
+                            }
+                        }
+                    }
+                    if (v1.empty()) break;
+                    v0 = v1;
+                }
+                return std::vector<Gate*>();
+            }
+
             static BooleanFunction get_function_of_gate(const Gate* const gate, std::unordered_map<u32, BooleanFunction>& cache)
             {
                 if (auto it = cache.find(gate->get_id()); it != cache.end())
@@ -104,7 +143,7 @@ namespace hal
             }
             else if (net->get_num_of_sources() == 0)
             {
-                log_error("netlist_utils", "target net with ID {} has no sources.", net->get_id());
+                log_error("netlist_utils", "target net with ID {} has no sources.", net->get_id());
                 return BooleanFunction();
             }
 
@@ -301,6 +340,50 @@ namespace hal
             }
 
             return c_netlist;
+        }
+
+        std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth, const std::function<bool(const Gate*)>& filter)
+        {
+            std::vector<Gate*> retval;
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            std::vector<const Gate*> v0;
+            v0.push_back(gate);
+            std::unordered_set<const Gate*> gats_handled;
+            std::unordered_set<const Net*> nets_handled;
+            gats_handled.insert(gate);
+
+            for (int round = 0; !depth || round < depth; round++)
+            {
+                std::vector<const Gate*> v1;
+                for (const Gate* g0 : v0)
+                {
+                    for (const Net* n : get_successors ? g0->get_fan_out_nets() : g0->get_fan_in_nets())
+                    {
+                        if (nets_handled.find(n) != nets_handled.end()) continue;
+                        nets_handled.insert(n);
+
+                        for (const Endpoint* ep : get_successors ? n->get_destinations() : n->get_sources())
+                        {
+                            Gate* g1 = ep->get_gate();
+                            if (gats_handled.find(g1) != gats_handled.end()) continue; // already handled
+                            gats_handled.insert(g1);
+                            v1.push_back(g1);
+                            if (!filter || filter(g1)) retval.push_back(g1);
+                        }
+                    }
+                }
+                if (v1.empty()) break;
+                v0 = v1;
+            }
+            return retval;
+        }
+
+        std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool searchBothDirections)
+        {
+            std::vector<Gate*> path_forward = get_shortest_path_internal(start_gate, end_gate);
+            if (!searchBothDirections) return path_forward;
+            std::vector<Gate*> path_reverse = get_shortest_path_internal(end_gate, start_gate);
+            return (path_reverse.size() < path_forward.size()) ? path_reverse : path_forward;
         }
 
         namespace
@@ -932,7 +1015,7 @@ namespace hal
                 if (successors.size() > 1)
                 {
                     log_debug("netlist_utils",
-                              "detected more than one valid successor gate for gate '{}' with ID {} in netlist with ID {}.",
+                              "detected more than one valid successor gate for gate '{}' with ID {} in netlist with ID {}.",
                               current_gate->get_name(),
                               current_gate->get_id(),
                               current_gate->get_netlist()->get_id());
@@ -982,7 +1065,7 @@ namespace hal
                 if (predecessors.size() > 1)
                 {
                     log_debug("netlist_utils",
-                              "detected more than one valid predecessor gate for gate '{}' with ID {} in netlist with ID {}.",
+                              "detected more than one valid predecessor gate for gate '{}' with ID {} in netlist with ID {}.",
                               current_gate->get_name(),
                               current_gate->get_id(),
                               current_gate->get_netlist()->get_id());
@@ -1057,7 +1140,7 @@ namespace hal
                 if (successors.size() > 1)
                 {
                     log_debug("netlist_utils",
-                              "detected more than one valid successor gate for gate '{}' with ID {} in netlist with ID {}.",
+                              "detected more than one valid successor gate for gate '{}' with ID {} in netlist with ID {}.",
                               current_gate->get_name(),
                               current_gate->get_id(),
                               current_gate->get_netlist()->get_id());
@@ -1122,7 +1205,7 @@ namespace hal
                 if (predecessors.size() > 1)
                 {
                     log_debug("netlist_utils",
-                              "detected more than one valid predecessor gate for gate '{}' with ID {} in netlist with ID {}.",
+                              "detected more than one valid predecessor gate for gate '{}' with ID {} in netlist with ID {}.",
                               current_gate->get_name(),
                               current_gate->get_id(),
                               current_gate->get_netlist()->get_id());

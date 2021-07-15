@@ -195,6 +195,32 @@ namespace hal
          */
         void handleGraphSelectionChanged(void* sender);
 
+        /**
+         * Adds predecessors of the currently selected gate or module to a new grouping.
+         *
+         * @param maxDepth - Maximum recursion depth. Unlimited if zero.
+         */
+        void handleToolboxPredecessor(int maxDepth = 0);
+
+        /**
+         * Adds successors of the currently selected gate or module to a new grouping.
+         *
+         * @param maxDepth - Maximum recursion depth. Unlimited if zero.
+        */
+        void handleToolboxSuccessor(int maxDepth = 0);
+
+        /**
+         * Performs a BFS with a max-depth of three and creates a new grouping
+         * for the predecessors of each depth.
+         */
+        void handleToolboxPredecessorDistance(int maxDepth = 3);
+
+        /**
+         * Performs a BFS with a max-depth of three and creates a new grouping
+         * for the successors of each depth.
+         */
+        void handleToolboxSuccessorDistance(int maxDepth = 3);
+
     private Q_SLOTS:
         /**
          * Q_SLOT to toggle the searchbar. If the searchbar was hidden it will be shown. If it was shown it will be hidden.
@@ -251,28 +277,6 @@ namespace hal
          */
         void handleToolboxClicked();
 
-        /**
-         * Adds all predecessor of the currently selected gate or module to a new grouping.
-         */
-        void handleToolboxPredecessor();
-
-        /**
-         * Adds all successor of the currently selected gate or module to a new grouping.
-         */
-        void handleToolboxSuccessor();
-
-        /**
-         * Performs a BFS with a max-depth of three and creates a new grouping
-         * for the predecessors of each depth.
-         */
-        void handleToolboxPredecessorDistance();
-
-        /**
-         * Performs a BFS with a max-depth of three and creates a new grouping
-         * for the successors of each depth.
-         */
-        void handleToolboxSuccessorDistance();
-
     private:
         class ToolboxModuleHash
         {
@@ -327,6 +331,9 @@ namespace hal
         QString mSearchActiveIconStyle;
 
         QString mDisabledIconStyle;
+
+        void successorToNewGrouping(int maxDepth, bool succ);
+        void newGroupingByDistance(int maxDepth, bool succ);
 
         GroupingTableEntry getCurrentGrouping();
     };

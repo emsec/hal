@@ -100,6 +100,22 @@ namespace hal
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors);
 
         /**
+         * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors
+         * will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0
+         * there is no limitation and the loop continues until no more predecessors/succesors are found.
+         *
+         * If filter function is given only gates matching the filter will be accepted.
+         * The result will not include the provided gate itself.
+         *
+         * @param gate[in] - The initial gate.
+         * @param get_successors[in] - If true successors are returned, predecessors otherwise
+         * @param depth[in] - Depth of recursion (see above)
+         * @param filter[in] - Filter function of type    bool func(const Gate*) const
+         * @return Vector of predecessor/successor gates found
+         */
+        CORE_API std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
+
+        /**
          * Find all sequential predecessors or successors of a net.
          * Traverses combinational logic of all input or output nets until sequential gates are found.
          * The use of the cache is recommended in case of extensive usage of this function. 
@@ -270,5 +286,18 @@ namespace hal
                                                   const std::map<GateType*, std::set<std::string>>& input_pins  = {},
                                                   const std::map<GateType*, std::set<std::string>>& output_pins = {},
                                                   const std::function<bool(const Gate*)>& filter                = nullptr);
+
+        /**
+         * Find shortest path (= result set with lowest number of gates) that connect the start gate with end gate. The gate
+         * where the search started from will be the first in the result vector, the end gate will be the last. If there is
+         * no such path an empty vector is returned. If there is more than one path with the same distance the first one
+         * accidentally found is returned.
+         *
+         * @param[in] start_gate - The gate to start from
+         * @param[in] end_gate - The gate to connect to
+         * @param[in] searchBothDirections - Will also test whether a shorter path from end -> start exists.
+         * @return A vector of gates that conenct start with and (possibly in reverse order)
+         */
+        std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool searchBothDirections=false);
     }    // namespace netlist_utils
 }    // namespace hal
