@@ -406,6 +406,7 @@ namespace hal
                             u32 new_group_id = ++id_counter;
 
                             output->group_control_fingerprint_map[new_group_id] = netlist_abstr.gate_to_fingerprint.at(*best_group.begin());
+                            output->operations_on_group_allowed[new_group_id]   = initial_grouping->operations_on_group_allowed.at(best_choice);
 
                             output->gates_of_group[new_group_id].insert(best_group.begin(), best_group.end());
                             for (const auto& sg : best_group)
@@ -434,6 +435,7 @@ namespace hal
                         u32 new_group_id = ++id_counter;
 
                         output->group_control_fingerprint_map[new_group_id] = netlist_abstr.gate_to_fingerprint.at(g);
+                        output->operations_on_group_allowed[new_group_id]   = true;
 
                         output->gates_of_group[new_group_id].insert(g);
                         output->parent_group_of_gate[g] = new_group_id;
