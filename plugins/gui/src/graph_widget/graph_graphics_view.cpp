@@ -671,11 +671,11 @@ namespace hal
                 if (isGate)
                 {
                     recursionLevelMenu(preSucMenu->addMenu("Add successors to view …"),           true, &GraphGraphicsView::handleAddSuccessorToView);
-                    recursionLevelMenu(preSucMenu->addMenu("Highlight successors …"),             true, &GraphGraphicsView::handleHighlightSuccessor, true);
-                    recursionLevelMenu(preSucMenu->addMenu("Highlight successors by distance …"), true, &GraphGraphicsView::handleSuccessorDistance);
                     action = preSucMenu->addAction("Add path to successor to view …");
                     action->setData(true);
                     connect(action, &QAction::triggered, this, &GraphGraphicsView::handleShortestPathToView);
+                    recursionLevelMenu(preSucMenu->addMenu("Highlight successors …"),             true, &GraphGraphicsView::handleHighlightSuccessor, true);
+                    recursionLevelMenu(preSucMenu->addMenu("Highlight successors by distance …"), true, &GraphGraphicsView::handleSuccessorDistance);
                     action = preSucMenu->addAction("Highlight path to successor …");
                     action->setData(true);
                     connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPath);
@@ -690,11 +690,11 @@ namespace hal
                 if (isGate)
                 {
                     recursionLevelMenu(preSucMenu->addMenu("Add predecessors to view …"),           false, &GraphGraphicsView::handleAddPredecessorToView);
-                    recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors …"),             false, &GraphGraphicsView::handleHighlightPredecessor, true);
-                    recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors by distance …"), false, &GraphGraphicsView::handlePredecessorDistance);
                     action = preSucMenu->addAction("Add path to predecessor to view …");
                     action->setData(false);
                     connect(action, &QAction::triggered, this, &GraphGraphicsView::handleShortestPathToView);
+                    recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors …"),             false, &GraphGraphicsView::handleHighlightPredecessor, true);
+                    recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors by distance …"), false, &GraphGraphicsView::handlePredecessorDistance);
                     action = preSucMenu->addAction("Highlight path to predecessor …");
                     action->setData(false);
                     connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPath);
