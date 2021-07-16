@@ -32,10 +32,12 @@
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/module_dialog/module_dialog.h"
+#include "gui/module_dialog/gate_dialog.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/utilities/log.h"
 
 #include <QAction>
@@ -53,6 +55,7 @@
 #include <QWheelEvent>
 #include <QWidgetAction>
 #include <QDebug>
+#include <QMetaMethod>
 
 #include <algorithm>
 #include <qmath.h>
@@ -662,13 +665,45 @@ namespace hal
             if (isGate || isModule)
             {
                 action = context_menu.addAction("  Isolate in new view");
-                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleIsolationViewAction);
+                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleIsolationViewAction);
 
-                action = context_menu.addAction("  Add successors to view");
-                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleSelectOutputs);
+                QMenu* preSucMenu = context_menu.addMenu("  Successor/Predecessor …");
+                if (isGate)
+                {
+                    recursionLevelMenu(preSucMenu->addMenu("Add successors to view …"),           true, &GraphGraphicsView::handleAddSuccessorToView);
+                    recursionLevelMenu(preSucMenu->addMenu("Highlight successors …"),             true, &GraphGraphicsView::handleHighlightSuccessor, true);
+                    recursionLevelMenu(preSucMenu->addMenu("Highlight successors by distance …"), true, &GraphGraphicsView::handleSuccessorDistance);
+                    action = preSucMenu->addAction("Add path to successor to view …");
+                    action->setData(true);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleShortestPathToView);
+                    action = preSucMenu->addAction("Highlight path to successor …");
+                    action->setData(true);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPath);
+                }
+                else
+                {
+                    action = preSucMenu->addAction("Add successors to view …");
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleSelectOutputs);
+                }
 
-                action = context_menu.addAction("  Add predecessors to view");
-                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleSelectInputs);
+                preSucMenu->addSeparator();
+                if (isGate)
+                {
+                    recursionLevelMenu(preSucMenu->addMenu("Add predecessors to view …"),           false, &GraphGraphicsView::handleAddPredecessorToView);
+                    recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors …"),             false, &GraphGraphicsView::handleHighlightPredecessor, true);
+                    recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors by distance …"), false, &GraphGraphicsView::handlePredecessorDistance);
+                    action = preSucMenu->addAction("Add path to predecessor to view …");
+                    action->setData(false);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleShortestPathToView);
+                    action = preSucMenu->addAction("Highlight path to predecessor …");
+                    action->setData(false);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPath);
+                }
+                else
+                {
+                    action = preSucMenu->addAction("Add predecessors to view …");
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleSelectInputs);
+                }
 
                 action = context_menu.addAction("  Remove from view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
@@ -676,10 +711,10 @@ namespace hal
                 Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
 
                 // only allow move actions on anything that is not the top module
-                if (gContentManager->getGraphTabWidget()->isModuleSelectCursor())
+                if (gContentManager->getGraphTabWidget()->selectCursor() != GraphTabWidget::Select)
                 {
-                    action = context_menu.addAction("  Cancel pick-module mode");
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleCancelPickModule);
+                    action = context_menu.addAction("  Cancel pick-item mode");
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleCancelPickMode);
                 }
                 else
                 {
@@ -802,9 +837,265 @@ namespace hal
         centerOn(target_pos.toPoint());
     }
 
-    void GraphGraphicsView::handleCancelPickModule()
+    void GraphGraphicsView::handleCancelPickMode()
     {
         ModuleSelectPicker::terminateCurrentPicker();
+        GateSelectPicker::terminateCurrentPicker();
+    }
+
+    namespace ShortestPath
+    {
+        const Net* net(const Gate* g0, const Gate* g1)
+        {
+            for (const Net* n0 : g0->get_fan_out_nets())
+                for (const Net* n1 : g1->get_fan_in_nets())
+                    if (n0 == n1)
+                        return n0;
+            return nullptr;
+        }
+
+        const Module* module(const Gate* g, const NodeBoxes& boxes)
+        {
+            const Module* parent = g->get_module();
+            while (parent)
+            {
+                Node nd(parent->get_id(),Node::Module);
+                if (boxes.boxForNode(nd)) return parent;
+                parent = parent->get_parent_module();
+            }
+            return nullptr;
+        }
+
+    }
+
+    void GraphGraphicsView::handleAddSuccessorToView()
+    {
+        Q_ASSERT(mItem->itemType()==ItemType::Gate);
+
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        addSuccessorToView(level, true);
+    }
+
+    void GraphGraphicsView::handleAddPredecessorToView()
+    {
+        Q_ASSERT(mItem->itemType()==ItemType::Gate);
+
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        addSuccessorToView(level, false);
+    }
+
+    void GraphGraphicsView::addSuccessorToView(int maxLevel, bool succ)
+    {
+
+        QSet<u32> gatsNew;
+        QSet<Gate*> gatsHandled;
+
+        Gate* gOrigin = gNetlist->get_gate_by_id(mItem->id());
+        Q_ASSERT(gOrigin);
+        gatsHandled.insert(gOrigin);
+
+        const NodeBoxes& boxes = mGraphWidget->getContext()->getLayouter()->boxes();
+        const NodeBox* lastBox = boxes.boxForGate(gOrigin);
+        Q_ASSERT(lastBox);
+        int x = lastBox->x();
+        int yOrigin = lastBox->y();
+        int deltaX = succ ? 1 : -1;
+
+        PlacementHint plc(PlacementHint::Standard);
+
+        for (int loop = 0; !maxLevel || loop<maxLevel; loop++)
+        {
+            x += deltaX;
+            int y = 0;
+            QList<Gate*> foundList;
+
+            for (Gate* g : netlist_utils::get_next_gates(gOrigin, succ, loop+1))
+            {
+                if (gatsHandled.contains(g)) continue;
+                gatsHandled.insert(g);
+                if (boxes.boxForGate(g)) continue; // already in view
+                foundList.append(g);
+            }
+
+            if (foundList.isEmpty()) break;
+            for (Gate* g: foundList)
+            {
+                gatsNew.insert(g->get_id());
+                QPoint point(x, yOrigin + y);
+                y = y > 0 ? -y : -y+1;
+                Node nd(g->get_id(),Node::Gate);
+                if (!boxes.boxForPoint(point)) // not occupied yet
+                {
+                    if (plc.mode() == PlacementHint::Standard)
+                        plc = PlacementHint(PlacementHint::GridPosition);
+                    plc.addGridPosition(nd,point);
+                }
+            }
+        }
+
+        ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gatsNew);
+        act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+        act->setPlacementHint(plc);
+        act->exec();
+    }
+
+
+    void GraphGraphicsView::handleHighlightSuccessor()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        gContentManager->getGroupingManagerWidget()->handleToolboxSuccessor(level);
+    }
+
+    void GraphGraphicsView::handleHighlightPredecessor()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        gContentManager->getGroupingManagerWidget()->handleToolboxPredecessor(level);
+    }
+
+    void GraphGraphicsView::handleSuccessorDistance()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        gContentManager->getGroupingManagerWidget()->handleToolboxSuccessorDistance(level);
+    }
+
+    void GraphGraphicsView::handlePredecessorDistance()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        gContentManager->getGroupingManagerWidget()->handleToolboxPredecessorDistance(level);
+    }
+
+    void GraphGraphicsView::handleShortestPathToView()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        bool succ = send->data().toBool();
+
+        QSet<u32> selectableGates;
+        Gate* gOrigin = gNetlist->get_gate_by_id(mItem->id());
+        Q_ASSERT(gOrigin);
+
+        for (Gate* g : netlist_utils::get_next_gates(gOrigin,succ))
+            selectableGates.insert(g->get_id());
+
+        GateDialog gd(mItem->id(),succ,selectableGates,this);
+        gd.hidePicker();
+
+        if (gd.exec() != QDialog::Accepted) return;
+
+        Gate* gTarget = gNetlist->get_gate_by_id(gd.selectedId());
+        Q_ASSERT(gTarget);
+
+        std::vector<Gate*> spath;
+        if (succ)
+            spath = netlist_utils::get_shortest_path(gOrigin,gTarget);
+        else
+        {
+            spath = netlist_utils::get_shortest_path(gTarget,gOrigin);
+            std::reverse(spath.begin(), spath.end());
+        }
+        if (spath.empty()) return;
+        auto it = spath.begin() + 1;
+        const NodeBoxes& boxes = mGraphWidget->getContext()->getLayouter()->boxes();
+        const NodeBox* lastBox = boxes.boxForGate(gOrigin);
+        Q_ASSERT(lastBox);
+        QPoint point(lastBox->x(),lastBox->y());
+        QPoint deltaX(succ ? 1 : -1, 0);
+        PlacementHint plc(PlacementHint::Standard);
+
+        QSet<u32> gats;
+
+        while (it != spath.end())
+        {
+            point += deltaX;
+            Gate* g = *(it++);
+            if (boxes.boxForGate(g)) continue; // already in view
+            gats.insert(g->get_id());
+            Node nd(g->get_id(),Node::Gate);
+            if (!boxes.boxForPoint(point)) // not occupied yet
+            {
+                if (plc.mode() == PlacementHint::Standard)
+                    plc = PlacementHint(PlacementHint::GridPosition);
+                plc.addGridPosition(nd,point);
+            }
+            gOrigin = g;
+        }
+
+        ActionAddItemsToObject* act = new ActionAddItemsToObject({},gats);
+        act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+        act->setPlacementHint(plc);
+        act->exec();
+    }
+
+    void GraphGraphicsView::handleQueryShortestPath()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        bool succ = send->data().toBool();
+
+        QSet<u32> selectableGates;
+        for (Gate* g : netlist_utils::get_next_gates(gNetlist->get_gate_by_id(mItem->id()),succ))
+            selectableGates.insert(g->get_id());
+
+        GateDialog gd(mItem->id(),succ,selectableGates,this);
+
+        if (gd.exec() != QDialog::Accepted) return;
+
+        u32 targetId = gd.selectedId();
+        if (!targetId) return;
+
+        if (succ)
+            handleShortestPath(mItem->id(),targetId);
+        else
+            handleShortestPath(targetId,mItem->id());
+    }
+
+    void GraphGraphicsView::handleShortestPath(u32 idFrom, u32 idTo)
+    {
+        Gate* g0 = gNetlist->get_gate_by_id(idFrom);
+        Q_ASSERT(g0);
+        Gate* g1 = gNetlist->get_gate_by_id(idTo);
+        Q_ASSERT(g1);
+        std::vector<Gate*> spath = netlist_utils::get_shortest_path(g0,g1);
+
+        QSet<u32> mods;
+        QSet<u32> gats;
+        QSet<u32> nets;
+
+        Gate* previousGate = nullptr;
+        for (Gate* g : spath)
+        {
+            const Module* pm = ShortestPath::module(g,mGraphWidget->getContext()->getLayouter()->boxes());
+            if (pm) mods.insert(pm->get_id());
+            gats.insert(g->get_id());
+            if (previousGate)
+            {
+                const Net* n = ShortestPath::net(previousGate,g);
+                if (n) nets.insert(n->get_id());
+            }
+            previousGate = g;
+        }
+
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Grouping,
+                                              QString("Path from %1[%2] to %3[%4]")
+                                              .arg(QString::fromStdString(g0->get_name())).arg(g0->get_id())
+                                              .arg(QString::fromStdString(g1->get_name())).arg(g1->get_id())));
+        act->addAction(new ActionAddItemsToObject(mods,gats,nets));
+        act->addAction(new ActionSetSelectionFocus());
+        act->exec();
     }
 
     void GraphGraphicsView::handleModuleDialog()
@@ -1194,4 +1485,5 @@ namespace hal
     {
         mPanModifier = panModifier;
     }
+
 }    // namespace hal

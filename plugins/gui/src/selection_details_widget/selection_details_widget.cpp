@@ -340,7 +340,7 @@ namespace hal
                 ? mToModuleIconStyle
                 : mDisabledIconStyle;
         mSelectionToModule->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mToModuleIconPath));
-        mSelectionToModule->setEnabled(!gContentManager->getGraphTabWidget()->isModuleSelectCursor()
+        mSelectionToModule->setEnabled(gContentManager->getGraphTabWidget()->selectCursor()==GraphTabWidget::Select
                                        && nodes > 0);
     }
 
@@ -373,7 +373,7 @@ namespace hal
             canMoveToModule(gSelectionRelay->numberSelectedNodes());
             enableSearchbar(true);
 
-            bool toModuleEnabled = !gContentManager->getGraphTabWidget()->isModuleSelectCursor();
+            bool toModuleEnabled = gContentManager->getGraphTabWidget()->selectCursor()==GraphTabWidget::Select;
             mSelectionToGrouping->setEnabled(true);
             mSelectionToModule->setEnabled(toModuleEnabled);
             mSelectionToGrouping->setIcon(gui_utility::getStyledSvgIcon(mToGroupingIconStyle, mToGroupingIconPath));

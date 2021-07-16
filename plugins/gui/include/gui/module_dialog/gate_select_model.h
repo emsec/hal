@@ -28,102 +28,78 @@
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
 #include <QTableView>
-#include <QColor>
+#include <QSet>
 #include <QList>
 
 namespace hal {
 
+    class Gate;
     class Module;
     class Searchbar;
 
     /**
-     * @brief The ModuleSelectEntry class comprises a single entry of the module selection table
+     * @brief The GateSelectEntry class comprises a single entry of the module selection table
      */
-    class ModuleSelectEntry
+    class GateSelectEntry
     {
         u32 mId;
         QString mName;
         QString mType;
-        QColor mColor;
     public:
-        ModuleSelectEntry(Module* m);
+        GateSelectEntry(Gate* g);
 
         /**
          * @brief data returns data from requested column
          * @param icol column number (0, 1, 2, 3)
-         * @return 0=module color  1=Id  2=name   3=type
+         * @return 0=Id  1=name   2=type
          */
         QVariant data(int icol) const;
-        QColor color() const { return mColor; }
         u32 id() const { return mId; }
     };
 
-    /**
-     * @brief The ModuleSelectExclude class is used to determine which modules can't be selected
-     *
-     * Member variables are the gates and modules currently selected and a set of non-selectable
-     * modules. The 'blacklisted' modules are identical with a selected one, or a (grand?-)child,
-     * or a direct parent.
-     */
-    class ModuleSelectExclude {
-        QList<u32> mGates;
-        QList<u32> mModules;
-        QSet<u32> mExclude;
-    public:
-        ModuleSelectExclude();
-        bool isAccepted(u32 modId) const { return !mExclude.contains(modId); }
-
-        /**
-         * @brief selectionToString function is used to generate selection as text for message box
-         * @return selected items as formatted string
-         */
-        QString selectionToString() const;
-        QSet<u32> modules() const { return QSet<u32>::fromList(mModules); }
-        QSet<u32> gates()   const { return QSet<u32>::fromList(mGates);   }
-    };
 
     /**
-     * @brief The ModuleSelectModel class is the source model for module selection
+     * @brief The GateSelectModel class is the source model for module selection
      */
-    class ModuleSelectModel : public QAbstractTableModel
+    class GateSelectModel : public QAbstractTableModel
     {
         Q_OBJECT
 
-        QList<ModuleSelectEntry> mEntries;
+        QList<GateSelectEntry> mEntries;
+        QSet<u32> mSelectableGates;
 
     public:
         /**
-         * @brief ModuleSelectModel constructor
+         * @brief GateSelectModel constructor
          * @param history if true a list of modules previously selected gets generated
          * @param parent the parent object
          */
-        ModuleSelectModel(bool history, QObject* parent=nullptr);
+        GateSelectModel(bool history, const QSet<u32>& selectable = QSet<u32>(), QObject* parent=nullptr);
 
         int rowCount(const QModelIndex &parent = QModelIndex()) const override;
         int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-        u32 moduleId(int irow) const;
-        QColor moduleColor(int irow) const;
+        u32 gateId(int irow) const;
+        static bool isAccepted(u32 gateId, const QSet<u32>& selectable);
     };
 
     /**
-     * @brief The ModuleSelectProxy class allows sorting and filtering of module tables
+     * @brief The GateSelectProxy class allows sorting and filtering of module tables
      */
-    class ModuleSelectProxy : public QSortFilterProxyModel
+    class GateSelectProxy : public QSortFilterProxyModel
     {
         Q_OBJECT
 
     public:
-        ModuleSelectProxy(QObject* parent = nullptr);
+        GateSelectProxy(QObject* parent = nullptr);
 
     public Q_SLOTS:
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
         void searchTextChanged(const QString& txt);
 
     protected:
-        static bool lessThan(const QColor& a, const QColor& b);
         bool lessThan(const QModelIndex &sourceLeft, const QModelIndex &sourceRight) const override;
 
     private:
@@ -131,57 +107,60 @@ namespace hal {
     };
 
     /**
-     * @brief The ModuleSelectPicker class instance gets spawned to pick module from graph
+     * @brief The GateSelectPicker class instance gets spawned to pick module from graph
      */
-    class ModuleSelectPicker : public QObject
+    class GateSelectPicker : public QObject
     {
         Q_OBJECT
-        ModuleSelectExclude mSelectExclude;
-        static ModuleSelectPicker* sCurrentPicker;
+        u32 mOrigin;
+        bool mPickSuccessor;
+        QSet<u32> mSelectableGates;
+        static GateSelectPicker* sCurrentPicker;
 
     public:
-        ModuleSelectPicker();
+        GateSelectPicker(u32 orig, bool succ, const QSet<u32>& selectable);
 
         static void terminateCurrentPicker();
 
     Q_SIGNALS:
         void triggerCursor(int icurs);
+        void gatesPicked(u32 idFrom, u32 idTo);
 
     public Q_SLOTS:
         void handleSelectionChanged(void* sender);
     };
 
     /**
-     * @brief The ModuleSelectHistory class singleton comprises a list of user selected modules
+     * @brief The GateSelectHistory class singleton comprises a list of user selected modules
      */
-    class ModuleSelectHistory : public QList<u32>
+    class GateSelectHistory : public QList<u32>
     {
-        static ModuleSelectHistory* inst;
-        ModuleSelectHistory() {;}
+        static GateSelectHistory* inst;
+        GateSelectHistory() {;}
     public:
-        static ModuleSelectHistory* instance();
+        static GateSelectHistory* instance();
         void add(u32 id);
     };
 
     /**
-     * @brief The ModuleSelectView class is the table widget for module selection
+     * @brief The GateSelectView class is the table widget for module selection
      */
-    class ModuleSelectView : public QTableView
+    class GateSelectView : public QTableView
     {
         Q_OBJECT
 
     public:
         /**
-         * @brief ModuleSelectView constructor
+         * @brief GateSelectView constructor
          * @param history if true a list of modules previously selected gets generated
          * @param sbar the filter-string editor to connect with
          * @param parent the parent widget
          */
-        ModuleSelectView(bool history, Searchbar* sbar,
+        GateSelectView(bool history, Searchbar* sbar, const QSet<u32>& selectable,
                           QWidget* parent=nullptr);
 
     Q_SIGNALS:
-        void moduleSelected(u32 modId, bool doubleClick);
+        void gateSelected(u32 gatId, bool doubleClick);
 
     private Q_SLOTS:
         void handleCurrentChanged(const QModelIndex& current, const QModelIndex& previous);

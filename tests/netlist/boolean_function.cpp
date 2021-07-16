@@ -1,6 +1,9 @@
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/boolean_function/solver.h"
+#include "hal_core/netlist/boolean_function/types.h"
+
 #include <iostream>
 #include <type_traits>
 
@@ -619,5 +622,186 @@ namespace hal {
                 EXPECT_EQ(bf.get_dnf_clauses(), exp_clauses);
             }
         TEST_END
+    }
+
+    TEST_F(BooleanFunctionTest, QueryConfig) {
+        {
+            const auto config = SMT::QueryConfig()
+                .with_solver(SMT::SolverType::Z3)
+                .with_local_solver()
+                .with_model_generation()
+                .with_timeout(42);
+
+            EXPECT_EQ(config.solver, SMT::SolverType::Z3);
+            EXPECT_EQ(config.local, true);
+            EXPECT_EQ(config.generate_model, true);
+            EXPECT_EQ(config.timeout_in_seconds, 42);
+        }
+        {
+        const auto config = SMT::QueryConfig()
+            .with_solver(SMT::SolverType::Boolector)
+            .with_remote_solver()
+            .without_model_generation();
+
+        EXPECT_EQ(config.solver, SMT::SolverType::Boolector);
+        EXPECT_EQ(config.local, false);
+        EXPECT_EQ(config.generate_model, false);
+        }
+    }
+
+    TEST_F(BooleanFunctionTest, SatisfiableConstraint) {
+        auto [a, b] = std::make_tuple(BooleanFunction("A"), BooleanFunction("B"));
+
+        auto formulas = std::vector<std::vector<SMT::Constraint>>({
+            {
+                SMT::Constraint(a & b, BooleanFunction::ONE)
+            },
+            {
+                SMT::Constraint(a | b, BooleanFunction::ONE),
+                SMT::Constraint(a, BooleanFunction::ONE),
+                SMT::Constraint(b, BooleanFunction::ZERO),
+            },
+            {
+                SMT::Constraint(a & b, BooleanFunction::ONE),
+                SMT::Constraint(a, BooleanFunction::ONE),
+                SMT::Constraint(b, BooleanFunction::ONE),
+            },
+            {
+                SMT::Constraint((a & ~b) | (~a & b), BooleanFunction::ONE),
+                SMT::Constraint(a, BooleanFunction::ONE),
+            }
+        });
+
+        for (auto&& constraints : formulas) {
+            const auto solver = SMT::Solver(std::move(constraints));
+
+            for (auto&& solver_type : {SMT::SolverType::Z3, SMT::SolverType::Boolector}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+                    continue;
+                }
+
+                auto [status, result] = solver.query(
+                    SMT::QueryConfig()
+                        .with_solver(solver_type)
+                        .with_local_solver()
+                        .with_model_generation()
+                        .with_timeout(1000)
+                );
+
+                EXPECT_TRUE(status);
+                EXPECT_EQ(result.type, SMT::ResultType::Sat);
+                EXPECT_TRUE(result.model.has_value());
+            }
+        }
+    }
+
+    TEST_F(BooleanFunctionTest, UnSatisfiableConstraint) {
+        auto [a, b] = std::make_tuple(BooleanFunction("A"), BooleanFunction("B"));
+
+        auto formulas = std::vector<std::vector<SMT::Constraint>>({
+            {
+                SMT::Constraint(a, b),
+                SMT::Constraint(a, BooleanFunction::ONE),
+                SMT::Constraint(b, BooleanFunction::ZERO),
+            },
+            {
+                SMT::Constraint(a | b, BooleanFunction::ONE),
+                SMT::Constraint(a, BooleanFunction::ZERO),
+                SMT::Constraint(b, BooleanFunction::ZERO),
+            },
+            {
+                SMT::Constraint(a & b, BooleanFunction::ONE),
+                SMT::Constraint(a, BooleanFunction::ZERO),
+                SMT::Constraint(b, BooleanFunction::ONE),
+            },
+            {
+                SMT::Constraint(a & b, BooleanFunction::ONE),
+                SMT::Constraint(a, BooleanFunction::ONE),
+                SMT::Constraint(b, BooleanFunction::ZERO),
+            },
+            {
+                SMT::Constraint((a & ~b) | (~a & b), BooleanFunction::ONE),
+                SMT::Constraint(a, BooleanFunction::ONE),
+                SMT::Constraint(b, BooleanFunction::ONE),
+            }
+        });
+
+        for (auto&& constraints : formulas) {
+            const auto solver = SMT::Solver(std::move(constraints));
+
+            for (auto&& solver_type : {SMT::SolverType::Z3, SMT::SolverType::Boolector}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+                    continue;
+                }
+
+                auto [status, result] = solver.query(
+                    SMT::QueryConfig()
+                        .with_solver(solver_type)
+                        .with_local_solver()
+                        .with_model_generation()
+                        .with_timeout(1000)
+                );
+
+                EXPECT_TRUE(status);
+                EXPECT_EQ(result.type, SMT::ResultType::UnSat);
+                EXPECT_FALSE(result.model.has_value());
+            }
+        }
+    }
+
+    TEST_F(BooleanFunctionTest, Model) {
+        auto [a, b] = std::make_tuple(BooleanFunction("A"), BooleanFunction("B"));
+
+        auto formulas = std::vector<std::tuple<std::vector<SMT::Constraint>, SMT::Model>>({
+            {
+                {
+                    SMT::Constraint(a & b, BooleanFunction::ONE)
+                },
+                SMT::Model({{"A", {1, 1}}, {"B", {1, 1}}})
+            },
+            {
+                {
+                    SMT::Constraint(a | b, BooleanFunction::ONE),
+                    SMT::Constraint(b, BooleanFunction::ZERO),
+                },
+                SMT::Model({{"A", {1, 1}}, {"B", {0, 1}}})
+            },
+            {
+                {
+                    SMT::Constraint(a & b, BooleanFunction::ONE),
+                    SMT::Constraint(a, BooleanFunction::ONE),
+                },
+                SMT::Model({{"A", {1, 1}}, {"B", {1, 1}}})
+            },
+            {
+                {
+                    SMT::Constraint((~a & b) | (a & ~b), BooleanFunction::ONE),
+                    SMT::Constraint(a, BooleanFunction::ONE),
+                },
+                SMT::Model({{"A", {1, 1}}, {"B", {0, 1}}})
+            }
+        });
+
+        for (auto&& [constraints, model] : formulas) {
+            const auto solver = SMT::Solver(std::move(constraints));
+
+            for (auto&& solver_type : {SMT::SolverType::Z3, SMT::SolverType::Boolector}) {
+                if (!SMT::Solver::has_local_solver_for(solver_type)) {
+                    continue;
+                }
+
+                auto [status, result] = solver.query(
+                    SMT::QueryConfig()
+                        .with_solver(solver_type)
+                        .with_local_solver()
+                        .with_model_generation()
+                        .with_timeout(1000)
+                );
+
+                EXPECT_EQ(status, true);
+                EXPECT_EQ(result.type, SMT::ResultType::Sat);
+                EXPECT_EQ(*result.model, model);
+            }
+        }
     }
 } //namespace hal

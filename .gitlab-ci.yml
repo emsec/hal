@@ -152,7 +152,7 @@ test:package:ubuntu:
 test:check-core-documentation:
   stage: test
   script:
-    - python3 tools/check_documentation.py include/
+    - python3 tools/check_documentation.py include/ -i include/hal_core/utilities/process.h
   cache: {}
 
 deploy-ppa:

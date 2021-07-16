@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added successor / predecessor utilities to gate context menu
+  * added utility function to calculate shortest path between two gates
+  * shortest path can be highlighted by grouping color or separated in view
+  * can highlight predecessors or successors up to a user given level
+  * can assign different grouping colors according to distance from origin
 * added user action system to enable recording and reverting actions within the GUI
   * moved most GUI actions to the new user action system, including interactions with the graph view and view management
   * user actions can be recorded and exported as a macro file allowing easier debugging and crash reporting
@@ -25,6 +30,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * fixed multiple connections of a single net to the same gate not being shown properly
   * fixed incorrect placement of new gates and modules in cone view when navigating starting from a net
   * preserve location of gate when moving it to new module
+* Added generic SMT solver interface.
+  * Added translation from `BooleanFunction` to SMT-LIB.
+  * Added `BooleanFunction::Node` data structure to extend functionality to generic ASTs.
+  * Added support for z3 and boolector SMT solvers.
+  * Added cpp-subprocess library to handle communication with SMT solver.
+  * Added Boost Spirit x3 library to generate grammar-based parser from SMT-LIB models to C++ data structures.
 * improved netlist parsers
   * split VHDL and Verilog parsers into two independent plugins
   * netlist parsers now take the path to the netlist file as input instead of a `std::stringstream`

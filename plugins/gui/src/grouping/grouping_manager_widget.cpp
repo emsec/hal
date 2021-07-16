@@ -261,123 +261,72 @@ namespace hal
                 mHash[g] = sm;
     }
 
-    void GroupingManagerWidget::handleToolboxPredecessor()
+    void GroupingManagerWidget::handleToolboxPredecessor(int maxDepth)
+    {
+        successorToNewGrouping(maxDepth, false);
+    }
+
+    void GroupingManagerWidget::handleToolboxSuccessor(int maxDepth)
+    {
+        successorToNewGrouping(maxDepth, true);
+    }
+
+    void GroupingManagerWidget::successorToNewGrouping(int maxDepth, bool succ)
     {
         QSet<u32> mods, gats, nets;
         ToolboxNode tbn;
         ToolboxModuleHash tmh(tbn.mNode);
         QVector<Net*> todoNet;
-        QSet<Node> handled;
-        todoNet.append(QVector<Net*>::fromStdVector(tbn.inputNets()));
-        handled.insert(tbn.mNode);
-        while (!todoNet.isEmpty())
-        {
-            Net* n = todoNet.takeFirst();
-            nets.insert(n->get_id());
-            for (Endpoint* ep : n->get_sources())
-            {
-                ToolboxNode nextNode(ep, &tmh);
-                if (handled.contains(nextNode.mNode)) continue;
-                switch (nextNode.mNode.type()) {
-                case Node::Module:  mods.insert(nextNode.mNode.id()); break;
-                case Node::Gate:    gats.insert(nextNode.mNode.id()); break;
-                default: continue;
-                }
-                todoNet.append(QVector<Net*>::fromStdVector(nextNode.inputNets()));
-                handled.insert(nextNode.mNode);
-            }
-        }
-
-        UserActionCompound* act = new UserActionCompound;
-        act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::Grouping,
-                                              tbn.mName + " predecessor"));
-        act->addAction(new ActionAddItemsToObject(mods,gats,nets));
-        act->exec();
-    }
-
-    void GroupingManagerWidget::handleToolboxSuccessor()
-    {
-        QSet<u32> mods, gats, nets;
-        ToolboxNode tbn;
-        ToolboxModuleHash tmh(tbn.mNode);
-        QVector<Net*> todoNet;
-        QSet<Node> handled;
-        todoNet.append(QVector<Net*>::fromStdVector(tbn.outputNets()));
-        handled.insert(tbn.mNode);
-        while (!todoNet.isEmpty())
-        {
-            Net* n = todoNet.takeFirst();
-            nets.insert(n->get_id());
-            for (Endpoint* ep : n->get_destinations())
-            {
-                ToolboxNode nextNode(ep, &tmh);
-                if (handled.contains(nextNode.mNode)) continue;
-                switch (nextNode.mNode.type()) {
-                case Node::Module:  mods.insert(nextNode.mNode.id()); break;
-                case Node::Gate:    gats.insert(nextNode.mNode.id()); break;
-                default: continue;
-                }
-                todoNet.append(QVector<Net*>::fromStdVector(nextNode.outputNets()));
-                handled.insert(nextNode.mNode);
-            }
-        }
-
-        UserActionCompound* act = new UserActionCompound;
-        act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::Grouping,
-                                              tbn.mName + " predecessor"));
-        act->addAction(new ActionAddItemsToObject(mods,gats,nets));
-        act->exec();
-    }
-
-    void GroupingManagerWidget::handleToolboxPredecessorDistance()
-    {
-        ToolboxNode tbn;
-        ToolboxModuleHash tmh(tbn.mNode);
-        QVector<Net*> thisSrc;
-        QVector<Net*> nextSrc;
-        QSet<Node> handledNode;
+        QSet<Node> handledBox;
         QSet<Net*> handledNet;
-        nextSrc.append(QVector<Net*>::fromStdVector(tbn.inputNets()));
-        handledNode.insert(tbn.mNode);
-        for (int iround=1; iround<=3; iround++)
+        todoNet.append(QVector<Net*>::fromStdVector(succ ? tbn.outputNets() : tbn.inputNets()));
+        handledBox.insert(tbn.mNode);
+        for (int loop=0; !maxDepth || loop<maxDepth; loop++)
         {
-            if (nextSrc.isEmpty()) break;
-            thisSrc = nextSrc;
-            nextSrc.clear();
-            QSet<u32> mods, gats, nets;
-            for (Net* n : thisSrc)
+            if (todoNet.isEmpty()) break;
+            QVector<Net*> nextRound;
+            for (Net* n : todoNet)
             {
                 if (handledNet.contains(n)) continue;
                 handledNet.insert(n);
                 nets.insert(n->get_id());
-                for (Endpoint* ep : n->get_sources())
+                for (Endpoint* ep : (succ ? n->get_destinations() : n->get_sources()))
                 {
                     ToolboxNode nextNode(ep, &tmh);
-                    if (handledNode.contains(nextNode.mNode)) continue;
-                    handledNode.insert(nextNode.mNode);
+                    if (handledBox.contains(nextNode.mNode)) continue;
+                    handledBox.insert(nextNode.mNode);
                     switch (nextNode.mNode.type()) {
                     case Node::Module:  mods.insert(nextNode.mNode.id()); break;
                     case Node::Gate:    gats.insert(nextNode.mNode.id()); break;
                     default: continue;
                     }
-                    nextSrc.append(QVector<Net*>::fromStdVector(nextNode.inputNets()));
-                }
+                    nextRound.append(QVector<Net*>::fromStdVector(succ
+                                                                  ? nextNode.outputNets()
+                                                                  : nextNode.inputNets()));
+                }                
             }
-            if (!mods.isEmpty() || !nets.isEmpty() || !gats.isEmpty())
-            {
-                UserActionCompound* act = new UserActionCompound;
-                act->setUseCreatedObject();
-                act->addAction(new ActionCreateObject(UserActionObjectType::Grouping,
-                                                      QString("%1 step to %2").arg(iround).arg(tbn.mName)));
-                act->addAction(new ActionAddItemsToObject(mods,gats,nets));
-                act->exec();
-            }
+            todoNet = nextRound;
         }
+
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Grouping,
+                                              tbn.mName + (succ ? " successor" : " predecessor")));
+        act->addAction(new ActionAddItemsToObject(mods,gats,nets));
+        act->exec();
     }
 
-    void GroupingManagerWidget::handleToolboxSuccessorDistance()
+    void GroupingManagerWidget::handleToolboxPredecessorDistance(int maxDepth)
+    {
+        newGroupingByDistance(maxDepth,false);
+    }
+
+    void GroupingManagerWidget::handleToolboxSuccessorDistance(int maxDepth)
+    {
+        newGroupingByDistance(maxDepth,true);
+    }
+
+    void GroupingManagerWidget::newGroupingByDistance(int maxDepth, bool succ)
     {
         ToolboxNode tbn;
         ToolboxModuleHash tmh(tbn.mNode);
@@ -385,9 +334,9 @@ namespace hal
         QVector<Net*> nextDst;
         QSet<Node> handledNode;
         QSet<Net*> handledNet;
-        nextDst.append(QVector<Net*>::fromStdVector(tbn.outputNets()));
+        nextDst.append(QVector<Net*>::fromStdVector(succ ? tbn.outputNets() : tbn.inputNets()));
         handledNode.insert(tbn.mNode);
-        for (int iround=1; iround<=3; iround++)
+        for (int iround=1; iround<=maxDepth; iround++)
         {
             if (nextDst.isEmpty()) break;
             thisDst = nextDst;
@@ -398,7 +347,7 @@ namespace hal
                 if (handledNet.contains(n)) continue;
                 handledNet.insert(n);
                 nets.insert(n->get_id());
-                for (Endpoint* ep : n->get_destinations())
+                for (Endpoint* ep : succ ? n->get_destinations() : n->get_sources())
                 {
                     ToolboxNode nextNode(ep, &tmh);
                     if (handledNode.contains(nextNode.mNode)) continue;
@@ -408,7 +357,9 @@ namespace hal
                     case Node::Gate:    gats.insert(nextNode.mNode.id()); break;
                     default: continue;
                     }
-                    nextDst.append(QVector<Net*>::fromStdVector(nextNode.outputNets()));
+                    nextDst.append(QVector<Net*>::fromStdVector(succ
+                                                                ? nextNode.outputNets()
+                                                                : nextNode.inputNets()));
                 }
             }
             if (!mods.isEmpty() || !nets.isEmpty() || !gats.isEmpty())

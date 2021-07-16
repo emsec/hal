@@ -48,6 +48,8 @@ namespace hal
         Q_OBJECT
 
     public:
+        enum GraphCursor { Select, PickModule, PickGate };
+
         /**
          * Constructor.
          *
@@ -88,7 +90,7 @@ namespace hal
         /**
          * returns whether shape of cursor has been changed to indicate pick-select-module mode
          */
-        bool isModuleSelectCursor() const { return mModuleSelectCursor; }
+        GraphCursor selectCursor() const { return mSelectCursor; }
 
         enum KeyboardModifier{Alt, Ctrl, Shift};
         Q_ENUM(KeyboardModifier)
@@ -156,11 +158,12 @@ namespace hal
         void handleCustomContextMenuRequested(const QPoint &pos);
 
         /**
-         * Change shape of cursor to indicate that a module should be picked by user
+         * Change shape of cursor to indicate that a module or gate should be picked by user.
+         * Possible values are provided by GraphCursor enumeration.
          *
-         * @param on - true=on,  false=off
+         * @param icurs - 0 = standard select, 1 = module pick, 2 = gate pick
          */
-        void setModuleSelectCursor(bool on);
+        void setSelectCursor(int icurs);
 
         /**
          * Q_SLOT to close a single tab.
@@ -199,6 +202,6 @@ namespace hal
         static bool initSettings();
 
         QMap<KeyboardModifier, Qt::KeyboardModifier> mKeyModifierMap;
-        bool mModuleSelectCursor;
+        GraphCursor mSelectCursor;
     };
 }
