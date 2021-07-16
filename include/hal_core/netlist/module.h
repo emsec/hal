@@ -167,6 +167,7 @@ namespace hal
         Netlist* get_netlist() const;
 
         /**
+         * TODO test
          * Get all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
          *
          * @returns A sorted vector of nets.
