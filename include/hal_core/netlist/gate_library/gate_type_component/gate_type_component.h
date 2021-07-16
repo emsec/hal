@@ -73,7 +73,6 @@ namespace hal
         /**
          * Create a new LatchComponent with given child component and the Boolean functions describing the data input and the enable signal.
          * 
-         * @param[in] component - Another component to be added as a child component.
          * @param[in] data_in_bf - The function describing the internal state.
          * @param[in] enable_bf - The function describing the enable behavior.
          * @returns The LatchComponent.
@@ -98,7 +97,6 @@ namespace hal
         /**
          * Create a new InitComponent with given child component and the category and identifier pointing to the initialization data.
          * 
-         * @param[in] component - Another component to be added as a child component.
          * @param[in] init_category - The data category.
          * @param[in] init_identifier - The data identifier.
          * @returns The InitComponent.
@@ -112,7 +110,7 @@ namespace hal
          * @param[in] write_data_group - The name of the write data pin group.
          * @param[in] read_data_group - The name of the read data pin group.
          * @param[in] write_addr_group - The name of the write address pin group.
-         * @param[in] write_addr_group - The name of the read address pin group.
+         * @param[in] read_addr_group - The name of the read address pin group.
          * @param[in] write_clock_bf - The write clock Boolean function.
          * @param[in] read_clock_bf - The read clock Boolean function.
          * @param[in] write_enable_bf - The write enable Boolean function.

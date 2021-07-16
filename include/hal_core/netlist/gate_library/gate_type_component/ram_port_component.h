@@ -38,7 +38,7 @@ namespace hal
          * @param[in] write_data_group - The name of the write data pin group.
          * @param[in] read_data_group - The name of the read data pin group.
          * @param[in] write_addr_group - The name of the write address pin group.
-         * @param[in] write_addr_group - The name of the read address pin group.
+         * @param[in] read_addr_group - The name of the read address pin group.
          * @param[in] write_clock_bf - The write clock Boolean function.
          * @param[in] read_clock_bf - The read clock Boolean function.
          * @param[in] write_enable_bf - The write enable Boolean function.
