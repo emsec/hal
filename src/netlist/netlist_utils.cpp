@@ -378,10 +378,10 @@ namespace hal
             return retval;
         }
 
-        std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool searchBothDirections)
+        std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions)
         {
             std::vector<Gate*> path_forward = get_shortest_path_internal(start_gate, end_gate);
-            if (!searchBothDirections) return path_forward;
+            if (!search_both_directions) return path_forward;
             std::vector<Gate*> path_reverse = get_shortest_path_internal(end_gate, start_gate);
             return (path_reverse.size() < path_forward.size()) ? path_reverse : path_forward;
         }
