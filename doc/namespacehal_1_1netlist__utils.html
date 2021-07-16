@@ -99,8 +99,8 @@ Functions</h2></td></tr>
 <tr class="separator:a491fd812517e94f3ee40e64813d7f9c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20b1517e6064ffac5b416353c47d7178"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#a20b1517e6064ffac5b416353c47d7178">get_next_gates</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, bool get_successors, int depth, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;filter)</td></tr>
 <tr class="separator:a20b1517e6064ffac5b416353c47d7178"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4518c493c609a0dfa92855af711baed"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#ad4518c493c609a0dfa92855af711baed">get_shortest_path</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *start_gate, <a class="el" href="classhal_1_1_gate.html">Gate</a> *end_gate, bool searchBothDirections)</td></tr>
-<tr class="separator:ad4518c493c609a0dfa92855af711baed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1a25bab50809b70de16197c6ff34409"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#ac1a25bab50809b70de16197c6ff34409">get_shortest_path</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *start_gate, <a class="el" href="classhal_1_1_gate.html">Gate</a> *end_gate, bool search_both_directions)</td></tr>
+<tr class="separator:ac1a25bab50809b70de16197c6ff34409"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae10e4d2360be0f2493d267fa63d6a350"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#ae10e4d2360be0f2493d267fa63d6a350">get_next_sequential_gates</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, bool get_successors, std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;cache)</td></tr>
 <tr class="separator:ae10e4d2360be0f2493d267fa63d6a350"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2f10749460ef2bf67a20b9705a8c062"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#af2f10749460ef2bf67a20b9705a8c062">get_next_sequential_gates</a> (const <a class="el" href="classhal_1_1_net.html">Net</a> *net, bool get_successors, std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;cache)</td></tr>
@@ -251,7 +251,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins. The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate. However, the start gate must be of the first gate type of the repeating sequence. For every gate type, a pair of input and output pins can be specified through which the gates are interconnected. If a nullptr is given for a gate type, any gate fulfilling the other properties will be considered. If an empty set is given for input or output pins, every pin of the respective gate will be considered. Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.</p>
+<p>TODO test Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins. The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate. However, the start gate must be of the first gate type of the repeating sequence. For every gate type, a pair of input and output pins can be specified through which the gates are interconnected. If a nullptr is given for a gate type, any gate fulfilling the other properties will be considered. If an empty set is given for input or output pins, every pin of the respective gate will be considered. Before adding a gate to the chain, an optional user-defined filter is evaluated on every candidate gate.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">start_gate</td><td>- The gate at which to start the chain detection. </td></tr>
@@ -416,18 +416,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0 there is no limitation and the loop continues until no more predecessors/succesors are found.</p>
-<p>If filter function is given only gates matching the filter will be accepted. The result will not include the provided gate itself.</p>
+<p>TODO test Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0 there is no limitation and the loop continues until no more predecessors/succesors are found.</p>
+<p>If a filter function is given only gates matching the filter will be added to the result vector. The result will not include the provided gate itself.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">gate[in]</td><td>- The initial gate. </td></tr>
-    <tr><td class="paramname">get_successors[in]</td><td>- If true successors are returned, predecessors otherwise </td></tr>
-    <tr><td class="paramname">depth[in]</td><td>- Depth of recursion (see above) </td></tr>
-    <tr><td class="paramname">filter[in]</td><td>- Filter function of type bool func(const Gate*) const </td></tr>
+    <tr><td class="paramname">get_successors[in]</td><td>- If true successors are returned, predecessors otherwise. </td></tr>
+    <tr><td class="paramname">depth[in]</td><td>- Depth of recursion. </td></tr>
+    <tr><td class="paramname">filter[in]</td><td>- Filter function. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Vector of predecessor/successor gates found </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of predecessor/successor gates found. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00345">345</a> of file <a class="el" href="netlist_2netlist__utils_8cpp_source.html">netlist_utils.cpp</a>.</p>
 
@@ -821,8 +821,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad4518c493c609a0dfa92855af711baed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad4518c493c609a0dfa92855af711baed">&#9670;&nbsp;</a></span>get_shortest_path()</h2>
+<a id="ac1a25bab50809b70de16197c6ff34409"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1a25bab50809b70de16197c6ff34409">&#9670;&nbsp;</a></span>get_shortest_path()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -843,7 +843,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>searchBothDirections</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>search_both_directions</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -852,16 +852,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Find shortest path (= result set with lowest number of gates) that connect the start gate with end gate. The gate where the search started from will be the first in the result vector, the end gate will be the last. If there is no such path an empty vector is returned. If there is more than one path with the same distance the first one accidentally found is returned.</p>
+<p>TODO test Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. The gate where the search started from will be the first in the result vector, the end gate will be the last. If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">start_gate</td><td>- The gate to start from </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">end_gate</td><td>- The gate to connect to </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">searchBothDirections</td><td>- Will also test whether a shorter path from end -&gt; start exists. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_gate</td><td>- The gate to start from. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end_gate</td><td>- The gate to connect to. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">search_both_directions</td><td>- Set to true to also test whether a shorter path from end to start exists. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A vector of gates that conenct start with and (possibly in reverse order) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector of gates that connect the start with end gate (possibly in reverse order). </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00381">381</a> of file <a class="el" href="netlist_2netlist__utils_8cpp_source.html">netlist_utils.cpp</a>.</p>
 
@@ -1052,7 +1052,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Rename LUTs that implement simple functions to better reflect their functionality.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated:</a></b></dt><dd>DEPRECATED <br  />
+ Rename LUTs that implement simple functions to better reflect their functionality.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">netlist</td><td>- The target netlist. </td></tr>
@@ -1099,7 +1100,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Replace the given gate with a gate of the specified gate type. A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs. A pin can be omitted if no connection at that pin is desired.</p>
+<p>TODO test Replace the given gate with a gate of the specified gate type. A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs. A pin can be omitted if no connection at that pin is desired.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate to be replaced. </td></tr>
@@ -1124,7 +1125,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1netlist__utils.html">netlist_utils</a></li>
-    <li class="footer">Generated on Wed Jul 14 2021 11:42:56 for HAL by
+    <li class="footer">Generated on Fri Jul 16 2021 09:24:16 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
