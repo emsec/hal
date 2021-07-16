@@ -7,6 +7,7 @@
 
 #include <QHeaderView>
 #include <QVBoxLayout>
+#include <QSignalMapper>
 
 namespace hal
 {
@@ -26,9 +27,8 @@ namespace hal
         mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
 
         mSelector = new ChannelSelector();
-        //sSelector = new SeveritySelector();
 
-        connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
+        //connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
 
         ChannelModel* model = ChannelModel::get_instance();
@@ -51,13 +51,18 @@ namespace hal
         connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         Toolbar->addWidget(selector);
 
-        SeveritySelector* infoSelector = new SeveritySelector(this);
+
+        //infoSelector = new SeveritySelector(this);
+        connect(infoSelector, SIGNAL(stateChanged(int)), this, SLOT(handleSeverityChanged(int)));
         infoSelector->setText("Info");
+
         Toolbar->addWidget(infoSelector);
-        SeveritySelector* warningSelector = new SeveritySelector(this);
+
+        warningSelector = new SeveritySelector(this);
         warningSelector->setText("Warning");
         Toolbar->addWidget(warningSelector);
-        SeveritySelector* errorSelector = new SeveritySelector(this);
+
+        errorSelector = new SeveritySelector(this);
         errorSelector->setText("Error");
         Toolbar->addWidget(errorSelector);
     }
@@ -97,6 +102,15 @@ namespace hal
         {
             mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg));
         }
+    }
+
+    void LoggerWidget::handleSeverityChanged(int state)
+    {
+        SeveritySelector *senderSelector = (SeveritySelector*) sender();
+        QString t = senderSelector->text();
+        //if (sender() == infoSelector) {
+        //    int i = state;
+        //}
     }
 
     void LoggerWidget::handleFirstUserInteraction(int value)
