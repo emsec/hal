@@ -354,63 +354,78 @@ $(document).ready(function(){initNavTree('graph__tab__widget_8cpp_source.html','
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html">QMenu</a> contextMenu(<span class="stringliteral">&quot;Context menu&quot;</span>, <span class="keyword">this</span>);</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">addAction</a>(<span class="stringliteral">&quot;Close This Tab&quot;</span>, [<span class="keyword">this</span>, index](){</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">addAction</a>(<span class="stringliteral">&quot;Close&quot;</span>, [<span class="keyword">this</span>, index](){</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            <a class="code" href="classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47">handleTabCloseRequested</a>(index);</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        });</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">addAction</a>(<span class="stringliteral">&quot;Close Other Tabs&quot;</span>, [<span class="keyword">this</span>, index](){</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            handleCloseTabsToRight(index);</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            handleCloseTabsToLeft(index);</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        });</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">addAction</a>(<span class="stringliteral">&quot;Close Tabs To Right&quot;</span>, [<span class="keyword">this</span>, index](){</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            handleCloseTabsToRight(index);</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        });</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">addAction</a>(<span class="stringliteral">&quot;Close Tabs To Left&quot;</span>, [<span class="keyword">this</span>, index](){</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;            handleCloseTabsToLeft(index);</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        });</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160; </div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#exec">exec</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#mapToGlobal">mapToGlobal</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a>));</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#addSeparator">addSeparator</a>();</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">addAction</a>(<span class="stringliteral">&quot;Close all&quot;</span>, [<span class="keyword">this</span>, index](){</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            <a class="code" href="classhal_1_1_graph_tab_widget.html#a12b63972aee6ffe0fa5fc088a936aea9">handleCloseAllTabs</a>();</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        });</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">addAction</a>(<span class="stringliteral">&quot;Close all others&quot;</span>, [<span class="keyword">this</span>, index](){</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            <a class="code" href="classhal_1_1_graph_tab_widget.html#a5992de7f8b9b4d6cff2895314d27ac86">handleCloseTabsToRight</a>(index);</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            <a class="code" href="classhal_1_1_graph_tab_widget.html#a7e533025ac0f06e3fef98b0ece51259c">handleCloseTabsToLeft</a>(index);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        });</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160; </div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">addAction</a>(<span class="stringliteral">&quot;Close all right&quot;</span>, [<span class="keyword">this</span>, index](){</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            <a class="code" href="classhal_1_1_graph_tab_widget.html#a5992de7f8b9b4d6cff2895314d27ac86">handleCloseTabsToRight</a>(index);</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        });</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160; </div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    }</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keywordtype">void</span> GraphTabWidget::handleCloseTabsToRight(<span class="keywordtype">int</span> index)</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    {</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <span class="comment">// Close last tab until tab at index is the last tab</span></div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keywordflow">while</span> (index != mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">count</a>()-1)</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;            <a class="code" href="classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47">handleTabCloseRequested</a>(mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">count</a>()-1);</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    }</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="keywordtype">void</span> GraphTabWidget::handleCloseTabsToLeft(<span class="keywordtype">int</span> index)</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    {</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="comment">// Close first tab until tab at index is the first tab</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="keywordflow">while</span> (index != 0)</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        {</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            <a class="code" href="classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47">handleTabCloseRequested</a>(0);</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;            index-=1;</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        }</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    }</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
-<div class="line"><a name="l00307"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_tab_widget.html#a7bcecd90f97068b9db647d4adc51ea92">  307</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_tab_widget.html#a7bcecd90f97068b9db647d4adc51ea92">GraphTabWidget::setSelectCursor</a>(<span class="keywordtype">int</span> icurs)</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    {</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        mSelectCursor = (<a class="code" href="classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5">GraphCursor</a>) icurs;</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="keywordtype">int</span> n = mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">count</a>();</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="keywordflow">if</span> (mSelectCursor == <a class="code" href="classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5ada209b726af014ecbab7ab4863f70a99">Select</a>)</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        {</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;n; i++)</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#widget">widget</a>(i)-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">unsetCursor</a>();</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        }</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">addAction</a>(<span class="stringliteral">&quot;Close all left&quot;</span>, [<span class="keyword">this</span>, index](){</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;            <a class="code" href="classhal_1_1_graph_tab_widget.html#a7e533025ac0f06e3fef98b0ece51259c">handleCloseTabsToLeft</a>(index);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        });</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        contextMenu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#exec">exec</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#mapToGlobal">mapToGlobal</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a>));</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    }</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00296"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_tab_widget.html#a5992de7f8b9b4d6cff2895314d27ac86">  296</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_tab_widget.html#a5992de7f8b9b4d6cff2895314d27ac86">GraphTabWidget::handleCloseTabsToRight</a>(<span class="keywordtype">int</span> index)</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    {</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="comment">// Close last tab until tab at index is the last tab</span></div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="keywordflow">while</span> (index != mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">count</a>()-1)</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            <a class="code" href="classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47">handleTabCloseRequested</a>(mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">count</a>()-1);</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    }</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160; </div>
+<div class="line"><a name="l00303"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_tab_widget.html#a7e533025ac0f06e3fef98b0ece51259c">  303</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_tab_widget.html#a7e533025ac0f06e3fef98b0ece51259c">GraphTabWidget::handleCloseTabsToLeft</a>(<span class="keywordtype">int</span> index)</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    {</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <span class="comment">// Close first tab until tab at index is the first tab</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        <span class="keywordflow">while</span> (index != 0)</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        {</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            <a class="code" href="classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47">handleTabCloseRequested</a>(0);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            index-=1;</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        }</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    }</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160; </div>
+<div class="line"><a name="l00313"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_tab_widget.html#a12b63972aee6ffe0fa5fc088a936aea9">  313</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_tab_widget.html#a12b63972aee6ffe0fa5fc088a936aea9">GraphTabWidget::handleCloseAllTabs</a>()</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    {</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keywordtype">int</span> count = mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">count</a>();</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; count; i++)</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        {</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qcursor.html">QCursor</a> gcurs(mSelectCursor == <a class="code" href="classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5a98e85b3e7bd1fe032092e5437350573a">PickModule</a></div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                          ? <a class="codeRef" href="https://doc.qt.io/qt-5/qpixmap.html">QPixmap</a>(<span class="stringliteral">&quot;:/icons/module_cursor&quot;</span>,<span class="stringliteral">&quot;PNG&quot;</span>)</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                          : <a class="codeRef" href="https://doc.qt.io/qt-5/qpixmap.html">QPixmap</a>(<span class="stringliteral">&quot;:/icons/gate_cursor&quot;</span>,<span class="stringliteral">&quot;PNG&quot;</span>));</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;n; i++)</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#widget">widget</a>(i)-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">setCursor</a>(gcurs);</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        }</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    }</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;}</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <a class="code" href="classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47">handleTabCloseRequested</a>(0);</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        }</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    }</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
+<div class="line"><a name="l00322"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_tab_widget.html#a7bcecd90f97068b9db647d4adc51ea92">  322</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_tab_widget.html#a7bcecd90f97068b9db647d4adc51ea92">GraphTabWidget::setSelectCursor</a>(<span class="keywordtype">int</span> icurs)</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    {</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        mSelectCursor = (<a class="code" href="classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5">GraphCursor</a>) icurs;</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordtype">int</span> n = mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">count</a>();</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keywordflow">if</span> (mSelectCursor == <a class="code" href="classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5ada209b726af014ecbab7ab4863f70a99">Select</a>)</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        {</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;n; i++)</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#widget">widget</a>(i)-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">unsetCursor</a>();</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        }</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        {</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qcursor.html">QCursor</a> gcurs(mSelectCursor == <a class="code" href="classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5a98e85b3e7bd1fe032092e5437350573a">PickModule</a></div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                          ? <a class="codeRef" href="https://doc.qt.io/qt-5/qpixmap.html">QPixmap</a>(<span class="stringliteral">&quot;:/icons/module_cursor&quot;</span>,<span class="stringliteral">&quot;PNG&quot;</span>)</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                          : <a class="codeRef" href="https://doc.qt.io/qt-5/qpixmap.html">QPixmap</a>(<span class="stringliteral">&quot;:/icons/gate_cursor&quot;</span>,<span class="stringliteral">&quot;PNG&quot;</span>));</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;n; i++)</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#widget">widget</a>(i)-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">setCursor</a>(gcurs);</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        }</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    }</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqlist_html_append"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#append">QList::append</a></div><div class="ttdeci">void append(const T &amp;value)</div></div>
@@ -431,10 +446,11 @@ $(document).ready(function(){initNavTree('graph__tab__widget_8cpp_source.html','
 <div class="ttc" id="aqshortcut_html_activated"><div class="ttname"><a href="https://doc.qt.io/qt-5/qshortcut.html#activated">QShortcut::activated</a></div><div class="ttdeci">void activated()</div></div>
 <div class="ttc" id="aclasshal_1_1_content_widget_html_ac99228c611d75a8b5f459f77254258f6"><div class="ttname"><a href="classhal_1_1_content_widget.html#ac99228c611d75a8b5f459f77254258f6">hal::ContentWidget::name</a></div><div class="ttdeci">QString name()</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8cpp_source.html#l00076">content_widget.cpp:76</a></div></div>
 <div class="ttc" id="aqtabwidget_html_setTabText"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtabwidget.html#setTabText">QTabWidget::setTabText</a></div><div class="ttdeci">void setTabText(int index, const QString &amp;label)</div></div>
-<div class="ttc" id="aclasshal_1_1_context_manager_widget_html_a0cc9123f8f2e759fedb353e61007dd39"><div class="ttname"><a href="classhal_1_1_context_manager_widget.html#a0cc9123f8f2e759fedb353e61007dd39">hal::ContextManagerWidget::selectViewContext</a></div><div class="ttdeci">void selectViewContext(GraphContext *context)</div><div class="ttdef"><b>Definition:</b> <a href="context__manager__widget_8cpp_source.html#l00208">context_manager_widget.cpp:208</a></div></div>
+<div class="ttc" id="aclasshal_1_1_context_manager_widget_html_a0cc9123f8f2e759fedb353e61007dd39"><div class="ttname"><a href="classhal_1_1_context_manager_widget.html#a0cc9123f8f2e759fedb353e61007dd39">hal::ContextManagerWidget::selectViewContext</a></div><div class="ttdeci">void selectViewContext(GraphContext *context)</div><div class="ttdef"><b>Definition:</b> <a href="context__manager__widget_8cpp_source.html#l00217">context_manager_widget.cpp:217</a></div></div>
 <div class="ttc" id="asettings__item__keybind_8h_html"><div class="ttname"><a href="settings__item__keybind_8h.html">settings_item_keybind.h</a></div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_widget_html_ac922c09975a0de4105b344addd4eff2b"><div class="ttname"><a href="classhal_1_1_graph_widget.html#ac922c09975a0de4105b344addd4eff2b">hal::GraphWidget::view</a></div><div class="ttdeci">GraphGraphicsView * view()</div><div class="ttdef"><b>Definition:</b> <a href="graph__widget_8cpp_source.html#l00922">graph_widget.cpp:922</a></div></div>
+<div class="ttc" id="aqmenu_html_addSeparator"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmenu.html#addSeparator">QMenu::addSeparator</a></div><div class="ttdeci">QAction * addSeparator()</div></div>
 <div class="ttc" id="aclasshal_1_1_graph_widget_html_a5a6cbeadb67e9674001cd5302e339b56"><div class="ttname"><a href="classhal_1_1_graph_widget.html#a5a6cbeadb67e9674001cd5302e339b56">hal::GraphWidget::getContext</a></div><div class="ttdeci">GraphContext * getContext() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__widget_8cpp_source.html#l00073">graph_widget.cpp:73</a></div></div>
 <div class="ttc" id="aqkeysequence_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qkeysequence.html">QKeySequence</a></div></div>
 <div class="ttc" id="aqmenu_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmenu.html">QMenu</a></div></div>
@@ -451,8 +467,10 @@ $(document).ready(function(){initNavTree('graph__tab__widget_8cpp_source.html','
 <div class="ttc" id="aqtabwidget_html_count-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">QTabWidget::count</a></div><div class="ttdeci">count</div></div>
 <div class="ttc" id="aqobject_html_connect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect</a></div><div class="ttdeci">QMetaObject::Connection connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type)</div></div>
 <div class="ttc" id="aclasshal_1_1_settings_item_dropdown_html_a75a0260ac558e16ff4fe6bc67b1b2e7b"><div class="ttname"><a href="classhal_1_1_settings_item_dropdown.html#a75a0260ac558e16ff4fe6bc67b1b2e7b">hal::SettingsItemDropdown::value</a></div><div class="ttdeci">virtual QVariant value() const override</div><div class="ttdef"><b>Definition:</b> <a href="settings__item__dropdown_8cpp_source.html#l00021">settings_item_dropdown.cpp:21</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_tab_widget_html_a7bcecd90f97068b9db647d4adc51ea92"><div class="ttname"><a href="classhal_1_1_graph_tab_widget.html#a7bcecd90f97068b9db647d4adc51ea92">hal::GraphTabWidget::setSelectCursor</a></div><div class="ttdeci">void setSelectCursor(int icurs)</div><div class="ttdef"><b>Definition:</b> <a href="graph__tab__widget_8cpp_source.html#l00307">graph_tab_widget.cpp:307</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_tab_widget_html_a7bcecd90f97068b9db647d4adc51ea92"><div class="ttname"><a href="classhal_1_1_graph_tab_widget.html#a7bcecd90f97068b9db647d4adc51ea92">hal::GraphTabWidget::setSelectCursor</a></div><div class="ttdeci">void setSelectCursor(int icurs)</div><div class="ttdef"><b>Definition:</b> <a href="graph__tab__widget_8cpp_source.html#l00322">graph_tab_widget.cpp:322</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_tab_widget_html_a12b63972aee6ffe0fa5fc088a936aea9"><div class="ttname"><a href="classhal_1_1_graph_tab_widget.html#a12b63972aee6ffe0fa5fc088a936aea9">hal::GraphTabWidget::handleCloseAllTabs</a></div><div class="ttdeci">void handleCloseAllTabs()</div><div class="ttdef"><b>Definition:</b> <a href="graph__tab__widget_8cpp_source.html#l00313">graph_tab_widget.cpp:313</a></div></div>
 <div class="ttc" id="aqboxlayout_html_addWidget"><div class="ttname"><a href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">QBoxLayout::addWidget</a></div><div class="ttdeci">void addWidget(QWidget *widget, int stretch, Qt::Alignment alignment)</div></div>
+<div class="ttc" id="aclasshal_1_1_graph_tab_widget_html_a7e533025ac0f06e3fef98b0ece51259c"><div class="ttname"><a href="classhal_1_1_graph_tab_widget.html#a7e533025ac0f06e3fef98b0ece51259c">hal::GraphTabWidget::handleCloseTabsToLeft</a></div><div class="ttdeci">void handleCloseTabsToLeft(int index)</div><div class="ttdef"><b>Definition:</b> <a href="graph__tab__widget_8cpp_source.html#l00303">graph_tab_widget.cpp:303</a></div></div>
 <div class="ttc" id="aqshortcut_html_key-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qshortcut.html#key-prop">QShortcut::setKey</a></div><div class="ttdeci">void setKey(const QKeySequence &amp;key)</div></div>
 <div class="ttc" id="aqmenu_html_addAction"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmenu.html#addAction">QMenu::addAction</a></div><div class="ttdeci">QAction * addAction(const QString &amp;text)</div></div>
 <div class="ttc" id="aclasshal_1_1_graph_graphics_view_html_a2a0580d1bee10998a43badc5f8435c31"><div class="ttname"><a href="classhal_1_1_graph_graphics_view.html#a2a0580d1bee10998a43badc5f8435c31">hal::GraphGraphicsView::setPanModifier</a></div><div class="ttdeci">void setPanModifier(Qt::KeyboardModifier panModifier)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l01484">graph_graphics_view.cpp:1484</a></div></div>
@@ -490,6 +508,7 @@ $(document).ready(function(){initNavTree('graph__tab__widget_8cpp_source.html','
 <div class="ttc" id="agraph__graphics__view_8h_html"><div class="ttname"><a href="graph__graphics__view_8h.html">graph_graphics_view.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_settings_item_keybind_html_a2552a08bf7d57dc2e5853d6766cd8a06"><div class="ttname"><a href="classhal_1_1_settings_item_keybind.html#a2552a08bf7d57dc2e5853d6766cd8a06">hal::SettingsItemKeybind::keySequenceChanged</a></div><div class="ttdeci">void keySequenceChanged(QKeySequence value)</div></div>
 <div class="ttc" id="aqtabwidget_html_tabBar"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtabwidget.html#tabBar">QTabWidget::tabBar</a></div><div class="ttdeci">QTabBar * tabBar() const const</div></div>
+<div class="ttc" id="aclasshal_1_1_graph_tab_widget_html_a5992de7f8b9b4d6cff2895314d27ac86"><div class="ttname"><a href="classhal_1_1_graph_tab_widget.html#a5992de7f8b9b4d6cff2895314d27ac86">hal::GraphTabWidget::handleCloseTabsToRight</a></div><div class="ttdeci">void handleCloseTabsToRight(int index)</div><div class="ttdef"><b>Definition:</b> <a href="graph__tab__widget_8cpp_source.html#l00296">graph_tab_widget.cpp:296</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_aea2f27a5a0c94855351e9f7031eb6694"><div class="ttname"><a href="classhal_1_1_graph_context.html#aea2f27a5a0c94855351e9f7031eb6694">hal::GraphContext::name</a></div><div class="ttdeci">QString name() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00390">graph_context.cpp:390</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_tab_widget_html_a3a028176881287f11d73e85ff954a3ca"><div class="ttname"><a href="classhal_1_1_graph_tab_widget.html#a3a028176881287f11d73e85ff954a3ca">hal::GraphTabWidget::ensureSelectionVisible</a></div><div class="ttdeci">void ensureSelectionVisible()</div><div class="ttdef"><b>Definition:</b> <a href="graph__tab__widget_8cpp_source.html#l00136">graph_tab_widget.cpp:136</a></div></div>
 <div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00038">net_layout_point.h:38</a></div></div>
@@ -518,7 +537,7 @@ $(document).ready(function(){initNavTree('graph__tab__widget_8cpp_source.html','
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_a1b7db7167f2937e2250f195ff4732f6.html">graph_tab_widget</a></li><li class="navelem"><a class="el" href="graph__tab__widget_8cpp.html">graph_tab_widget.cpp</a></li>
-    <li class="footer">Generated on Fri Jul 16 2021 11:30:18 for HAL by
+    <li class="footer">Generated on Fri Jul 16 2021 11:38:34 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

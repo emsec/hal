@@ -171,6 +171,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7bcecd90f97068b9db647d4adc51ea92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08124b835c3b1422248924f54dc5fb47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47">handleTabCloseRequested</a> (int index)</td></tr>
 <tr class="separator:a08124b835c3b1422248924f54dc5fb47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5992de7f8b9b4d6cff2895314d27ac86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_tab_widget.html#a5992de7f8b9b4d6cff2895314d27ac86">handleCloseTabsToRight</a> (int index)</td></tr>
+<tr class="separator:a5992de7f8b9b4d6cff2895314d27ac86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e533025ac0f06e3fef98b0ece51259c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_tab_widget.html#a7e533025ac0f06e3fef98b0ece51259c">handleCloseTabsToLeft</a> (int index)</td></tr>
+<tr class="separator:a7e533025ac0f06e3fef98b0ece51259c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12b63972aee6ffe0fa5fc088a936aea9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_tab_widget.html#a12b63972aee6ffe0fa5fc088a936aea9">handleCloseAllTabs</a> ()</td></tr>
+<tr class="separator:a12b63972aee6ffe0fa5fc088a936aea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhal_1_1_content_widget"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhal_1_1_content_widget')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhal_1_1_content_widget.html">hal::ContentWidget</a></td></tr>
 <tr class="memitem:af68367a14bc24cff90ccc5d55dfd213b inherit pub_methods_classhal_1_1_content_widget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#af68367a14bc24cff90ccc5d55dfd213b">ContentWidget</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="el" href="classhal_1_1_content_widget.html#ac99228c611d75a8b5f459f77254258f6">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>=nullptr)</td></tr>
 <tr class="separator:af68367a14bc24cff90ccc5d55dfd213b inherit pub_methods_classhal_1_1_content_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1380,6 +1386,92 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a12b63972aee6ffe0fa5fc088a936aea9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12b63972aee6ffe0fa5fc088a936aea9">&#9670;&nbsp;</a></span>handleCloseAllTabs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GraphTabWidget::handleCloseAllTabs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Q_SLOT to close all tabs. </p>
+
+<p class="definition">Definition at line <a class="el" href="graph__tab__widget_8cpp_source.html#l00313">313</a> of file <a class="el" href="graph__tab__widget_8cpp_source.html">graph_tab_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">QTabWidget::count</a>, and <a class="el" href="graph__tab__widget_8cpp_source.html#l00143">handleTabCloseRequested()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00260">handleCustomContextMenuRequested()</a>.</p>
+
+</div>
+</div>
+<a id="a7e533025ac0f06e3fef98b0ece51259c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e533025ac0f06e3fef98b0ece51259c">&#9670;&nbsp;</a></span>handleCloseTabsToLeft()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GraphTabWidget::handleCloseTabsToLeft </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Q_SLOT to close all tabs which are left to the right-clicked.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>- The index of the right-clicked tab within the <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html">QTabWidget</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="graph__tab__widget_8cpp_source.html#l00303">303</a> of file <a class="el" href="graph__tab__widget_8cpp_source.html">graph_tab_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="graph__tab__widget_8cpp_source.html#l00143">handleTabCloseRequested()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00260">handleCustomContextMenuRequested()</a>.</p>
+
+</div>
+</div>
+<a id="a5992de7f8b9b4d6cff2895314d27ac86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5992de7f8b9b4d6cff2895314d27ac86">&#9670;&nbsp;</a></span>handleCloseTabsToRight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GraphTabWidget::handleCloseTabsToRight </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Q_SLOT to close all tabs which are right to the right-clicked.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>- The index of the right-clicked tab within the <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html">QTabWidget</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="graph__tab__widget_8cpp_source.html#l00296">296</a> of file <a class="el" href="graph__tab__widget_8cpp_source.html">graph_tab_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">QTabWidget::count</a>, and <a class="el" href="graph__tab__widget_8cpp_source.html#l00143">handleTabCloseRequested()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00260">handleCustomContextMenuRequested()</a>.</p>
+
+</div>
+</div>
 <a id="a65385d3e9ab4b904019a3da3332c1a0a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a65385d3e9ab4b904019a3da3332c1a0a">&#9670;&nbsp;</a></span>handleContextRemoved()</h2>
 
@@ -1468,7 +1560,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__tab__widget_8cpp_source.html#l00260">260</a> of file <a class="el" href="graph__tab__widget_8cpp_source.html">graph_tab_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">QMenu::addAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmenu.html#exec">QMenu::exec()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00143">handleTabCloseRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#mapToGlobal">QWidget::mapToGlobal()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">QWidget::pos</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtabbar.html#tabAt">QTabBar::tabAt()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#tabBar">QTabWidget::tabBar()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">QMenu::addAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmenu.html#addSeparator">QMenu::addSeparator()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmenu.html#exec">QMenu::exec()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00313">handleCloseAllTabs()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00303">handleCloseTabsToLeft()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00296">handleCloseTabsToRight()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00143">handleTabCloseRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#mapToGlobal">QWidget::mapToGlobal()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">QWidget::pos</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtabbar.html#tabAt">QTabBar::tabAt()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#tabBar">QTabWidget::tabBar()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00077">GraphTabWidget()</a>.</p>
 
@@ -1591,7 +1683,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__tab__widget_8cpp_source.html#l00126">126</a> of file <a class="el" href="graph__tab__widget_8cpp_source.html">graph_tab_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="plugin__gui_8cpp_source.html#l00046">hal::gContentManager</a>, <a class="el" href="graph__widget_8cpp_source.html#l00073">hal::GraphWidget::getContext()</a>, <a class="el" href="content__manager_8cpp_source.html#l00117">hal::ContentManager::getContextManagerWidget()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00208">hal::ContextManagerWidget::selectViewContext()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#widget">QTabWidget::widget()</a>.</p>
+<p class="reference">References <a class="el" href="plugin__gui_8cpp_source.html#l00046">hal::gContentManager</a>, <a class="el" href="graph__widget_8cpp_source.html#l00073">hal::GraphWidget::getContext()</a>, <a class="el" href="content__manager_8cpp_source.html#l00117">hal::ContentManager::getContextManagerWidget()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00217">hal::ContextManagerWidget::selectViewContext()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#widget">QTabWidget::widget()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00077">GraphTabWidget()</a>.</p>
 
@@ -1624,7 +1716,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#removeTab">QTabWidget::removeTab()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00077">GraphTabWidget()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00176">handleContextRemoved()</a>, and <a class="el" href="graph__tab__widget_8cpp_source.html#l00260">handleCustomContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00077">GraphTabWidget()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00313">handleCloseAllTabs()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00303">handleCloseTabsToLeft()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00296">handleCloseTabsToRight()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00176">handleContextRemoved()</a>, and <a class="el" href="graph__tab__widget_8cpp_source.html#l00260">handleCustomContextMenuRequested()</a>.</p>
 
 </div>
 </div>
@@ -1654,7 +1746,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__tab__widget_8h_source.html#l00093">93</a> of file <a class="el" href="graph__tab__widget_8h_source.html">graph_tab_widget.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="selection__details__widget_8cpp_source.html#l00347">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="selection__details__widget_8cpp_source.html#l00344">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
 
 </div>
 </div>
@@ -1681,7 +1773,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__tab__widget_8cpp_source.html#l00307">307</a> of file <a class="el" href="graph__tab__widget_8cpp_source.html">graph_tab_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__tab__widget_8cpp_source.html#l00322">322</a> of file <a class="el" href="graph__tab__widget_8cpp_source.html">graph_tab_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">QTabWidget::count</a>, <a class="el" href="graph__tab__widget_8h_source.html#l00051">PickModule</a>, <a class="el" href="graph__tab__widget_8h_source.html#l00051">Select</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::setCursor()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">QWidget::unsetCursor()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#widget">QTabWidget::widget()</a>.</p>
 
@@ -1716,7 +1808,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#currentIndex-prop">QTabWidget::setCurrentIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setFocus-1">QWidget::setFocus()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#widget">QTabWidget::widget()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="context__manager__widget_8cpp_source.html#l00121">hal::ContextManagerWidget::handleOpenContextClicked()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__manager__widget_8cpp_source.html#l00125">hal::ContextManagerWidget::handleOpenContextClicked()</a>.</p>
 
 </div>
 </div>
@@ -1730,7 +1822,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graph_tab_widget.html">GraphTabWidget</a></li>
-    <li class="footer">Generated on Fri Jul 16 2021 11:30:21 for HAL by
+    <li class="footer">Generated on Fri Jul 16 2021 11:38:36 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
