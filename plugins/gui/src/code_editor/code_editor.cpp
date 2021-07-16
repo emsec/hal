@@ -196,7 +196,7 @@ namespace hal
         mMinimap->update();
     }
 
-    void CodeEditor::search(const QString& string)
+    void CodeEditor::search(const QString& string, QTextDocument::FindFlags options)
     {
         QList<QTextEdit::ExtraSelection> extraSelections;
 
@@ -204,7 +204,7 @@ namespace hal
         QColor color            = QColor(12, 15, 19);
         QColor mBackgroundColor = QColor(255, 255, 0);
 
-        while (find(string))
+        while (find(string, options))
         {
             QTextEdit::ExtraSelection extra;
             extra.format.setForeground(QBrush(color));
