@@ -47,12 +47,12 @@ namespace hal
         //Toolbar->addWidget(mSelector);
 
         //selector will be deleted within the toolbars destructor
-        ChannelSelector* selector = new ChannelSelector();
+        ChannelSelector* selector = new ChannelSelector(this);
         connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         Toolbar->addWidget(selector);
 
 
-        //infoSelector = new SeveritySelector(this);
+        infoSelector = new SeveritySelector(this);
         connect(infoSelector, SIGNAL(stateChanged(int)), this, SLOT(handleSeverityChanged(int)));
         infoSelector->setText("Info");
 
@@ -107,10 +107,12 @@ namespace hal
     void LoggerWidget::handleSeverityChanged(int state)
     {
         SeveritySelector *senderSelector = (SeveritySelector*) sender();
+        qDebug("before");
         QString t = senderSelector->text();
-        //if (sender() == infoSelector) {
-        //    int i = state;
-        //}
+        if (sender() == infoSelector) {
+            qDebug("sender = infoSelector");
+        }
+        qDebug("after");
     }
 
     void LoggerWidget::handleFirstUserInteraction(int value)
