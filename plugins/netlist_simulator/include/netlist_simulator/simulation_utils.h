@@ -24,17 +24,14 @@
 #pragma once
 
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
-    /**
-     * Represents the logic value that a signal can take.
-     */
-    enum SignalValue
+    namespace simulation_utils
     {
-        ZERO = BooleanFunction::ZERO, /**< Represents a logical 0. */
-        ONE  = BooleanFunction::ONE,  /**< Represents a logical 1. */
-        X    = BooleanFunction::X,    /**< Represents an undefined value. */
-        Z    = 42                     /**< Represents high impedance (currently not supported by the simulator). */
-    };
+        BooleanFunction::Value toggle(BooleanFunction::Value v);
+        BooleanFunction::Value process_clear_preset_behavior(AsyncSetResetBehavior behavior, BooleanFunction::Value previous_output);
+    }    // namespace simulation_utils
 }    // namespace hal

@@ -104,13 +104,13 @@ namespace hal
                 Set the signal for a specific wire to control input signals between simulation cycles.
             
                 :param hal_py.Net net: The net to set a signal value for.
-                :param netlist_simulator.SignalValue value: The value to set.
+                :param hal_py.BooleanFunction.Value value: The value to set.
             )")
 
             .def("load_initial_values", &NetlistSimulator::load_initial_values, py::arg("value"), R"(
                 Load the specified initial value into the current state of all sequential elements.
 
-                :param netlist_simulator.SignalValue value: The initial value to load.
+                :param hal_py.BooleanFunction.Value value: The initial value to load.
             )")
 
             .def("load_initial_values_from_netlist", &NetlistSimulator::load_initial_values_from_netlist, R"(
@@ -179,7 +179,7 @@ namespace hal
                 :param hal_py.Net net: The net to inspect.
                 :param int time: The time in picoseconds.
                 :returns: The net's signal value.
-                :rtype: netlist_simulator.SignalValue
+                :rtype: hal_py.BooleanFunction.Value
             )")
 
             .def("add_event", &Simulation::add_event, py::arg("event"), R"(
@@ -194,13 +194,6 @@ namespace hal
                 :returns: A map from net to associated events for that net sorted by time.
             )");
 
-        py::enum_<SignalValue>(m, "SignalValue", R"(Represents the logic value that a signal can take.)")
-            .value("ZERO", SignalValue::ZERO, R"(Represents a logical 0.)")
-            .value("ONE", SignalValue::ONE, R"(Represents a logical 1.)")
-            .value("X", SignalValue::X, R"(Represents an undefined value.)")
-            .value("Z", SignalValue::Z, R"(Represents high impedance (currently not supported by the simulator).)")
-            .export_values();
-
         py::class_<Event>(m, "Event")
             .def(py::init<>(), R"(Construct a new event.)")
 
@@ -213,7 +206,7 @@ namespace hal
             .def_readwrite("new_value", &Event::new_value, R"(
                 The new value caused by the event.
 
-                :type: netlist_simulator.SignalValue
+                :type: hal_py.BooleanFunction.Value
             )")
 
             .def_readwrite("time", &Event::time, R"(

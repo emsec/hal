@@ -83,8 +83,8 @@ namespace hal
                 return "X";
             };
 
-            std::set<Net*> a_nets;
-            std::set<Net*> b_nets;
+            std::set<const Net*> a_nets;
+            std::set<const Net*> b_nets;
             for (auto it : a_events)
             {
                 a_nets.insert(it.first);
@@ -96,7 +96,7 @@ namespace hal
 
             std::cout << "finding mismatches..." << std::endl;
 
-            std::map<std::string, Net*> sorted_unmatching_events;
+            std::map<std::string, const Net*> sorted_unmatching_events;
 
             for (auto it : a_events)
             {
@@ -113,7 +113,7 @@ namespace hal
             std::cout << "printing mismatches..." << std::endl;
 
             u64 earliest_mismatch = -1;
-            std::vector<Net*> earliest_mismatch_nets;
+            std::vector<const Net*> earliest_mismatch_nets;
             auto update_mismatch = [&](auto ev) {
                 if (ev.time < earliest_mismatch)
                 {
@@ -211,7 +211,7 @@ namespace hal
                 if (a_events.size() > b_events.size())
                 {
                     std::cout << "more nets are captured in the vcd file:" << std::endl;
-                    std::vector<Net*> mismatch;
+                    std::vector<const Net*> mismatch;
                     std::set_difference(a_nets.begin(), a_nets.end(), b_nets.begin(), b_nets.end(), std::back_inserter(mismatch));
                     for (auto x : mismatch)
                     {
@@ -221,7 +221,7 @@ namespace hal
                 else
                 {
                     std::cout << "more nets are captured in the simulation output:" << std::endl;
-                    std::vector<Net*> mismatch;
+                    std::vector<const Net*> mismatch;
                     std::set_difference(b_nets.begin(), b_nets.end(), a_nets.begin(), a_nets.end(), std::back_inserter(mismatch));
                     for (auto x : mismatch)
                     {
@@ -293,15 +293,15 @@ namespace hal
             //map for storing the variable names from the vcd and their identifiers
             std::map<std::string, std::string> identifier_to_net_name;
             //map for storing the u32 id of the net and its corresponding signal value at a specific cycle
-            std::map<Net*, SignalValue> current_state;
+            std::map<const Net*, BooleanFunction::Value> current_state;
 
             //map for storing gate names and corresponding u32 id for all nets of the netlist
-            std::map<std::string, Net*> net_name_to_net;
+            std::map<std::string, const Net*> net_name_to_net;
             //Fill map
             for (auto net : netlist->get_nets())
             {
                 net_name_to_net[net->get_name()] = net;
-                current_state[net]               = SignalValue::Z;
+                current_state[net]               = BooleanFunction::Value::Z;
             }
 
             int time = 0;    //current timestamp of vcd file
@@ -332,7 +332,7 @@ namespace hal
                 if (line.empty())
                     continue;
                 std::string identifier = line.substr(1, line.length());
-                Net* current_net       = nullptr;
+                const Net* current_net = nullptr;
                 if (auto it = identifier_to_net_name.find(identifier); it != identifier_to_net_name.end())
                 {
                     if (auto it2 = net_name_to_net.find(it->second); it2 != net_name_to_net.end())
@@ -361,12 +361,12 @@ namespace hal
                         std::cout << "ERROR: no net found for identifier " << identifier << std::endl;
                         return Simulation();
                     }
-                    if (current_state[current_net] != SignalValue::ZERO)
+                    if (current_state[current_net] != BooleanFunction::Value::ZERO)
                     {
                         Event e;
                         e.affected_net = current_net;
                         e.time         = time;
-                        e.new_value    = SignalValue::ZERO;
+                        e.new_value    = BooleanFunction::Value::ZERO;
                         vcd_trace.add_event(e);
                         current_state[current_net] = e.new_value;
                     }
@@ -378,12 +378,12 @@ namespace hal
                         std::cout << "ERROR: no net found for identifier " << identifier << std::endl;
                         return Simulation();
                     }
-                    if (current_state[current_net] != SignalValue::ONE)
+                    if (current_state[current_net] != BooleanFunction::Value::ONE)
                     {
                         Event e;
                         e.affected_net = current_net;
                         e.time         = time;
-                        e.new_value    = SignalValue::ONE;
+                        e.new_value    = BooleanFunction::Value::ONE;
                         vcd_trace.add_event(e);
                         current_state[current_net] = e.new_value;
                     }
@@ -395,12 +395,12 @@ namespace hal
                         std::cout << "ERROR: no net found for identifier " << identifier << std::endl;
                         return Simulation();
                     }
-                    if (current_state[current_net] != SignalValue::X)
+                    if (current_state[current_net] != BooleanFunction::Value::X)
                     {
                         Event e;
                         e.affected_net = current_net;
                         e.time         = time;
-                        e.new_value    = SignalValue::X;
+                        e.new_value    = BooleanFunction::Value::X;
                         vcd_trace.add_event(e);
                         current_state[current_net] = e.new_value;
                     }
@@ -460,20 +460,20 @@ namespace hal
         {
             measure_block_time("simulation");
             //Testbench
-            sim->set_input(A, SignalValue::ZERO);    //A=0
-            sim->set_input(B, SignalValue::ZERO);    //B=0
+            sim->set_input(A, BooleanFunction::Value::ZERO);    //A=0
+            sim->set_input(B, BooleanFunction::Value::ZERO);    //B=0
             sim->simulate(10 * 1000);
 
-            sim->set_input(A, SignalValue::ZERO);    //A=0
-            sim->set_input(B, SignalValue::ONE);     //B=1
+            sim->set_input(A, BooleanFunction::Value::ZERO);    //A=0
+            sim->set_input(B, BooleanFunction::Value::ONE);     //B=1
             sim->simulate(10 * 1000);
 
-            sim->set_input(A, SignalValue::ONE);     //A=1
-            sim->set_input(B, SignalValue::ZERO);    //B=0
+            sim->set_input(A, BooleanFunction::Value::ONE);     //A=1
+            sim->set_input(B, BooleanFunction::Value::ZERO);    //B=0
             sim->simulate(10 * 1000);
 
-            sim->set_input(A, SignalValue::ONE);    //A=1
-            sim->set_input(B, SignalValue::ONE);    //B=1
+            sim->set_input(A, BooleanFunction::Value::ONE);    //A=1
+            sim->set_input(B, BooleanFunction::Value::ONE);    //B=1
             sim->simulate(10 * 1000);
         }
 
@@ -539,23 +539,23 @@ namespace hal
         {
             measure_block_time("simulation");
             //testbench
-            sim->set_input(Clock_enable_B, SignalValue::ONE);    //#Clock_enable_B <= '1';
-            sim->set_input(reset, SignalValue::ZERO);            //#Reset <= '0';
+            sim->set_input(Clock_enable_B, BooleanFunction::Value::ONE);    //#Clock_enable_B <= '1';
+            sim->set_input(reset, BooleanFunction::Value::ZERO);            //#Reset <= '0';
             sim->simulate(40 * 1000);                            //#WAIT FOR 40 NS; -> simulate 4 clock cycle  - cycle 0, 1, 2, 3
 
-            sim->set_input(Clock_enable_B, SignalValue::ZERO);    //#Clock_enable_B <= '0';
+            sim->set_input(Clock_enable_B, BooleanFunction::Value::ZERO);    //#Clock_enable_B <= '0';
             sim->simulate(110 * 1000);                            //#WAIT FOR 110 NS; -> simulate 11 clock cycle  - cycle 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
 
-            sim->set_input(reset, SignalValue::ONE);    //#Reset <= '1';
+            sim->set_input(reset, BooleanFunction::Value::ONE);    //#Reset <= '1';
             sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 15, 16
 
-            sim->set_input(reset, SignalValue::ZERO);    //#Reset <= '0';
+            sim->set_input(reset, BooleanFunction::Value::ZERO);    //#Reset <= '0';
             sim->simulate(70 * 1000);                    //#WAIT FOR 70 NS; -> simulate 7 clock cycle  - cycle 17, 18, 19, 20, 21, 22, 23
 
-            sim->set_input(Clock_enable_B, SignalValue::ONE);    //#Clock_enable_B <= '1';
+            sim->set_input(Clock_enable_B, BooleanFunction::Value::ONE);    //#Clock_enable_B <= '1';
             sim->simulate(23 * 1000);                            //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 24, 25
 
-            sim->set_input(reset, SignalValue::ONE);    //#Reset <= '1';
+            sim->set_input(reset, BooleanFunction::Value::ONE);    //#Reset <= '1';
             sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 26, 27
                                                         //#3 additional traces á 10 NS to get 300 NS simulation time
             sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 28, 29
@@ -614,7 +614,7 @@ namespace hal
 
         sim->add_clock_period(clk, 10000);
 
-        std::set<Net*> key_set, plaintext_set;
+        std::set<const Net*> key_set, plaintext_set;
         auto start = *(nl->get_nets([](auto net) { return net->get_name() == "START"; }).begin());
 
         for (int i = 0; i < 16; i++)
@@ -646,48 +646,48 @@ namespace hal
             //testbench
 
             for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
-                sim->set_input(net, SignalValue::ZERO);
+                sim->set_input(net, BooleanFunction::Value::ZERO);
 
             for (auto net : key_set)    //KEY <= (OTHERS => '0');
-                sim->set_input(net, SignalValue::ZERO);
+                sim->set_input(net, BooleanFunction::Value::ZERO);
 
-            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
             sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
 
-            sim->set_input(start, SignalValue::ONE);    //START <= '1';
+            sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
             sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
 
-            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
             sim->simulate(100 * 1000);                   //WAIT FOR 100 NS;
 
             for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '1');
-                sim->set_input(net, SignalValue::ONE);
+                sim->set_input(net, BooleanFunction::Value::ONE);
 
             for (auto net : key_set)    //KEY <= (OTHERS => '1');
-                sim->set_input(net, SignalValue::ONE);
+                sim->set_input(net, BooleanFunction::Value::ONE);
 
-            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
             sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
 
-            sim->set_input(start, SignalValue::ONE);    //START <= '1';
+            sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
             sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
 
-            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
             sim->simulate(100 * 1000);                   //WAIT FOR 100 NS;
 
             for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
-                sim->set_input(net, SignalValue::ZERO);
+                sim->set_input(net, BooleanFunction::Value::ZERO);
 
             for (auto net : key_set)    //KEY <= (OTHERS => '0');
-                sim->set_input(net, SignalValue::ZERO);
+                sim->set_input(net, BooleanFunction::Value::ZERO);
 
-            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-
-            sim->simulate(10 * 1000);
-            sim->set_input(start, SignalValue::ONE);    //START <= '1';
+            sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
 
             sim->simulate(10 * 1000);
-            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
+
+            sim->simulate(10 * 1000);
+            sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
 
             sim->simulate(30 * 1000);
         }
@@ -760,7 +760,7 @@ namespace hal
 
         auto rst = *(nl->get_nets([](auto net) { return net->get_name() == "rst"; }).begin());
 
-        std::vector<Net*> input_bits;
+        std::vector<const Net*> input_bits;
         for (int i = 0; i < 512; i++)
         {
             std::string name = "msg_block_in_" + std::to_string(i);
@@ -795,21 +795,21 @@ namespace hal
                 u8 byte = std::stoul(hex_input.substr(i, 2), nullptr, 16);
                 for (u32 j = 0; j < 8; ++j)
                 {
-                    sim->set_input(input_bits[i * 4 + j], (SignalValue)((byte >> (7 - j)) & 1));
+                    sim->set_input(input_bits[i * 4 + j], (BooleanFunction::Value)((byte >> (7 - j)) & 1));
                 }
             }
 
-            sim->set_input(rst, SignalValue::ONE);       //RST <= '1';
-            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            sim->set_input(rst, BooleanFunction::Value::ONE);       //RST <= '1';
+            sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
             sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
 
-            sim->set_input(rst, SignalValue::ZERO);    //RST <= '0';
+            sim->set_input(rst, BooleanFunction::Value::ZERO);    //RST <= '0';
             sim->simulate(10 * 1000);                  //WAIT FOR 10 NS;
 
-            sim->set_input(start, SignalValue::ONE);    //START <= '1';
+            sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
             sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
 
-            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
             sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
 
             sim->simulate(2000 * 1000);
