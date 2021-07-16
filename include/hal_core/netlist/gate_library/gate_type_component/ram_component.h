@@ -27,14 +27,38 @@
 
 namespace hal
 {
-    // TODO implement functionality
     class RAMComponent : public GateTypeComponent
     {
     public:
+        /**
+         * Construct a new RAMComponent with given child component.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         */
         RAMComponent(std::unique_ptr<GateTypeComponent> component);
 
+        /**
+         * Get the type of the gate type component.
+         * 
+         * @returns The type of the gate type component.
+         */
         ComponentType get_type() const override;
+
+        /**
+         * Check whether a component is a RAMComponent.
+         * 
+         * @param[in] component - The component to check.
+         * @returns True if component is a RAMComponent, false otherwise.
+         */
         static bool is_class_of(const GateTypeComponent* component);
+
+        /**
+         * Get the sub-components of the gate type component.
+         * A user-defined filter may be applied to the result set, but is disabled by default.
+         * 
+         * @param[in] filter - The user-defined filter function applied to all candidate components.
+         * @returns The sub-components of the gate type component.
+         */
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
     private:

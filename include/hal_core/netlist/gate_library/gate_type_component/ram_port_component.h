@@ -31,13 +31,54 @@ namespace hal
     class RAMPortComponent : public GateTypeComponent
     {
     public:
-        RAMPortComponent(std::unique_ptr<GateTypeComponent> component);
+        /**
+         * Construct a new RAMPortComponent with given child component, the write/read data/address pin groups, and the write/read clock/enable functions.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] write_data_group - The name of the write data pin group.
+         * @param[in] read_data_group - The name of the read data pin group.
+         * @param[in] write_addr_group - The name of the write address pin group.
+         * @param[in] write_addr_group - The name of the read address pin group.
+         * @param[in] write_clock_bf - The write clock Boolean function.
+         * @param[in] read_clock_bf - The read clock Boolean function.
+         * @param[in] write_enable_bf - The write enable Boolean function.
+         * @param[in] read_enable_bf - The read enable Boolean function.
+         */
+        RAMPortComponent(std::unique_ptr<GateTypeComponent> component,
+                         const std::string& write_data_group,
+                         const std::string& read_data_group,
+                         const std::string& write_addr_group,
+                         const std::string& read_addr_group,
+                         const BooleanFunction& write_clock_bf,
+                         const BooleanFunction& read_clock_bf,
+                         const BooleanFunction& write_enable_bf,
+                         const BooleanFunction& read_enable_bf);
 
+        /**
+         * Get the type of the gate type component.
+         * 
+         * @returns The type of the gate type component.
+         */
         ComponentType get_type() const override;
+
+        /**
+         * Check whether a component is a RAMPortComponent.
+         * 
+         * @param[in] component - The component to check.
+         * @returns True if component is a RAMPortComponent, false otherwise.
+         */
         static bool is_class_of(const GateTypeComponent* component);
+
+        /**
+         * Get the sub-components of the gate type component.
+         * A user-defined filter may be applied to the result set, but is disabled by default.
+         * 
+         * @param[in] filter - The user-defined filter function applied to all candidate components.
+         * @returns The sub-components of the gate type component.
+         */
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
-        // TODO pybinds below
+        // TODO pybinds and tests
 
         /**
          * Get the name of the pin group forming the write data input.

@@ -30,6 +30,13 @@ namespace hal
     class InitComponent : public GateTypeComponent
     {
     public:
+        /**
+         * Construct a new InitComponent with given child component and the category and identifier pointing to the initialization data.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] init_category - The data category.
+         * @param[in] init_identifier - The data identifier.
+         */
         InitComponent(const std::string& init_category, const std::string& init_identifier);
 
         /**

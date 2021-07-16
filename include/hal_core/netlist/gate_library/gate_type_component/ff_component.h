@@ -32,6 +32,13 @@ namespace hal
     class FFComponent : public GateTypeComponent
     {
     public:
+        /**
+         * Construct a new FFComponent with given child component and the Boolean functions describing the next state and the clock signal.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] next_state_bf - The function describing the internal state.
+         * @param[in] clock_bf - The function describing the clock input.
+         */
         FFComponent(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf);
 
         /**

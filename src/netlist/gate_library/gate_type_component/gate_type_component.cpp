@@ -55,10 +55,18 @@ namespace hal
         return std::make_unique<InitComponent>(init_category, init_identifier);
     }
 
-    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_port_component(std::unique_ptr<GateTypeComponent> component)
+    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_port_component(std::unique_ptr<GateTypeComponent> component,
+                                                                                    const std::string& write_data_group,
+                                                                                    const std::string& read_data_group,
+                                                                                    const std::string& write_addr_group,
+                                                                                    const std::string& read_addr_group,
+                                                                                    const BooleanFunction& write_clock_bf,
+                                                                                    const BooleanFunction& read_clock_bf,
+                                                                                    const BooleanFunction& write_enable_bf,
+                                                                                    const BooleanFunction& read_enable_bf)
     {
-        // TODO do fancy RAM stuff
-        return std::make_unique<RAMPortComponent>(std::move(component));
+        return std::make_unique<RAMPortComponent>(
+            std::move(component), write_data_group, read_data_group, write_addr_group, read_addr_group, write_clock_bf, read_clock_bf, write_enable_bf, read_enable_bf);
     }
 
     GateTypeComponent* GateTypeComponent::get_component(const std::function<bool(const GateTypeComponent*)>& filter) const

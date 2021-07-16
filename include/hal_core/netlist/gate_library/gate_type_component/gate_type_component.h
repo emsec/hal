@@ -51,14 +51,83 @@ namespace hal
             ram_port /**< RAM port component type. */
         };
 
-        // factory methods
+        /**
+         * Create a new LUTComponent with given child component and bit-order.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] init_ascending - True if ascending bit-order, false otherwise.
+         * @returns The LUTComponent.
+         */
         static std::unique_ptr<GateTypeComponent> create_lut_component(std::unique_ptr<GateTypeComponent> component, bool init_ascending);
+
+        /**
+         * Create a new FFComponent with given child component and tzhe Boolean functions describing the next state and the clock signal.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] next_state_bf - The function describing the internal state.
+         * @param[in] clock_bf - The function describing the clock input.
+         * @returns The FFComponent.
+         */
         static std::unique_ptr<GateTypeComponent> create_ff_component(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf);
+
+        /**
+         * Create a new LatchComponent with given child component and the Boolean functions describing the data input and the enable signal.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] data_in_bf - The function describing the internal state.
+         * @param[in] enable_bf - The function describing the enable behavior.
+         * @returns The LatchComponent.
+         */
         static std::unique_ptr<GateTypeComponent> create_latch_component(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf);
+
+        /**
+         * Create a new RAMComponent with given child component.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @returns The RAMComponent.
+         */
         static std::unique_ptr<GateTypeComponent> create_ram_component(std::unique_ptr<GateTypeComponent> component);
+
+        /**
+         * Create a new MACComponent.
+         * 
+         * @returns The MACComponent.
+         */
         static std::unique_ptr<GateTypeComponent> create_mac_component();
+
+        /**
+         * Create a new InitComponent with given child component and the category and identifier pointing to the initialization data.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] init_category - The data category.
+         * @param[in] init_identifier - The data identifier.
+         * @returns The InitComponent.
+         */
         static std::unique_ptr<GateTypeComponent> create_init_component(const std::string& init_category, const std::string& init_identifier);
-        static std::unique_ptr<GateTypeComponent> create_ram_port_component(std::unique_ptr<GateTypeComponent> component);
+
+        /**
+         * Create a new RAMPortComponent with given child component, the write/read data/address pin groups, and the write/read clock/enable functions.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] write_data_group - The name of the write data pin group.
+         * @param[in] read_data_group - The name of the read data pin group.
+         * @param[in] write_addr_group - The name of the write address pin group.
+         * @param[in] write_addr_group - The name of the read address pin group.
+         * @param[in] write_clock_bf - The write clock Boolean function.
+         * @param[in] read_clock_bf - The read clock Boolean function.
+         * @param[in] write_enable_bf - The write enable Boolean function.
+         * @param[in] read_enable_bf - The read enable Boolean function.
+         * @returns The RAMPortComponent.
+         */
+        static std::unique_ptr<GateTypeComponent> create_ram_port_component(std::unique_ptr<GateTypeComponent> component,
+                                                                            const std::string& write_data_group,
+                                                                            const std::string& read_data_group,
+                                                                            const std::string& write_addr_group,
+                                                                            const std::string& read_addr_group,
+                                                                            const BooleanFunction& write_clock_bf,
+                                                                            const BooleanFunction& read_clock_bf,
+                                                                            const BooleanFunction& write_enable_bf,
+                                                                            const BooleanFunction& read_enable_bf);
 
         /**
          * Get the type of the gate type component.

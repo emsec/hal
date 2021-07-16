@@ -32,6 +32,13 @@ namespace hal
     class LatchComponent : public GateTypeComponent
     {
     public:
+        /**
+         * Construct a new LatchComponent with given child component and the Boolean functions describing the data input and the enable signal.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] data_in_bf - The function describing the internal state.
+         * @param[in] enable_bf - The function describing the enable behavior.
+         */
         LatchComponent(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf);
 
         /**

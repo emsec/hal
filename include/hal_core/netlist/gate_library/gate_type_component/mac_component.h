@@ -30,10 +30,33 @@ namespace hal
     class MACComponent : public GateTypeComponent
     {
     public:
+        /**
+         * Construct a new MACComponent.
+         */
         MACComponent() = default;
 
+        /**
+         * Get the type of the gate type component.
+         * 
+         * @returns The type of the gate type component.
+         */
         ComponentType get_type() const override;
+
+        /**
+         * Check whether a component is a MACComponent.
+         * 
+         * @param[in] component - The component to check.
+         * @returns True if component is a MACComponent, false otherwise.
+         */
         static bool is_class_of(const GateTypeComponent* component);
+
+        /**
+         * Get the sub-components of the gate type component.
+         * A user-defined filter may be applied to the result set, but is disabled by default.
+         * 
+         * @param[in] filter - The user-defined filter function applied to all candidate components.
+         * @returns The sub-components of the gate type component.
+         */
         std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
     private:

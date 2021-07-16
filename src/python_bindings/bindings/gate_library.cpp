@@ -80,9 +80,11 @@ namespace hal
             :type: dict[str,hal_py.GateType]
         )");
 
-        py_gate_library.def("get_gate_types", &GateLibrary::get_gate_types, R"(
+        py_gate_library.def("get_gate_types", &GateLibrary::get_gate_types, py::arg("filter") = nullptr, R"(
             Get all gate types of the library.
+            In case a filter is applied, only the gate types matching the filter condition are returned.
 
+            :param lambda filter: The user-defined filter function.
             :returns: A dict from gate type names to gate types.
             :rtype: dict[str,hal_py.GateType]
         )");

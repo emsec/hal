@@ -30,6 +30,12 @@ namespace hal
     class LUTComponent : public GateTypeComponent
     {
     public:
+        /**
+         * Construct a new LUTComponent with given child component and bit-order.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] init_ascending - True if ascending bit-order, false otherwise.
+         */
         LUTComponent(std::unique_ptr<GateTypeComponent> component, bool init_ascending);
 
         /**
@@ -66,7 +72,7 @@ namespace hal
         /**
          * Set the bit-order of the initialization string.
          *
-         * @param[in] ascending - True if ascending bit-order, false otherwise.
+         * @param[in] init_ascending - True if ascending bit-order, false otherwise.
          */
         void set_init_ascending(bool init_ascending = true);
 

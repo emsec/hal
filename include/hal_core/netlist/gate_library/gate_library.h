@@ -102,7 +102,9 @@ namespace hal
         /**
          * TODO pybind
          * Get all gate types of the library.
+         * In case a filter is applied, only the gate types matching the filter condition are returned.
          *
+         * @param[in] filter - The user-defined filter function.
          * @returns A map from gate type names to gate types.
          */
         std::unordered_map<std::string, GateType*> get_gate_types(const std::function<bool(const GateType*)>& filter = nullptr) const;
