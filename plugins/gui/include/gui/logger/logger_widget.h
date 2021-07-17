@@ -104,12 +104,12 @@ namespace hal
         void handleChannelUpdated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
 
         /**
-         * Q_SLOT to handle that the currently selected logger channel has been changed (e.g. by choosing another one
-         * in the ChannelSelector combobox).
+         * Q_SLOT to handle that the currently selected filter has been changed (e.g. by choosing another one in the
+         * the ChannelSelector combobox or by toggling a severity checkbox).
          *
-         * @param index - The new channel index
+         * @param p - New channel index or state of the severity checkbox
          */
-        void handleCurrentChannelChanged(int index);
+        void handleCurrentFilterChanged(int index);
 
         /**
          * Q_SLOT to handle interactions with the scrollbar. After the first scrollbar interaction the scrollbar wont
@@ -123,14 +123,14 @@ namespace hal
         void scrollToBottom();
 
         QPlainTextEdit* mPlainTextEdit;
-        ChannelSelector* mSelector;
+        //ChannelSelector* mSelector;
 
-        SeveritySelector* infoSelector;
-        SeveritySelector* warningSelector;
-        SeveritySelector* errorSelector;
-        bool infoSeverity;
-        bool warningSeverity;
-        bool errorSeverity;
+        SeveritySelector* mInfoSelector;
+        SeveritySelector* mWarningSelector;
+        SeveritySelector* mErrorSelector;
+        bool mInfoSeverity;
+        bool mWarningSeverity;
+        bool mErrorSeverity;
 
 
         LoggerMarshall* mLogMarshall;

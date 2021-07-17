@@ -27,9 +27,9 @@ namespace hal
         mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
 
         //mSelector = new ChannelSelector();
-        infoSeverity = true;
-        warningSeverity = true;
-        errorSeverity = true;
+        mInfoSeverity = true;
+        mWarningSeverity = true;
+        mErrorSeverity = true;
 
         //connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
@@ -41,6 +41,7 @@ namespace hal
     LoggerWidget::~LoggerWidget()
     {
         //cant set the parent correct, so just delete them in the constructor
+
         //delete mSelector;
     }
 
@@ -54,23 +55,23 @@ namespace hal
         Toolbar->addWidget(selector);
 
 
-        infoSelector = new SeveritySelector(this);
-        infoSelector->setChecked(true);
-        connect(infoSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
-        infoSelector->setText("Info");
-        Toolbar->addWidget(infoSelector);
+        mInfoSelector = new SeveritySelector(this);
+        mInfoSelector->setChecked(true);
+        connect(mInfoSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
+        mInfoSelector->setText("Info");
+        Toolbar->addWidget(mInfoSelector);
 
-        warningSelector = new SeveritySelector(this);
-        warningSelector->setChecked(true);
-        connect(warningSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
-        warningSelector->setText("Warning");
-        Toolbar->addWidget(warningSelector);
+        mWarningSelector = new SeveritySelector(this);
+        mWarningSelector->setChecked(true);
+        connect(mWarningSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
+        mWarningSelector->setText("Warning");
+        Toolbar->addWidget(mWarningSelector);
 
-        errorSelector = new SeveritySelector(this);
-        errorSelector->setChecked(true);
-        connect(errorSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
-        errorSelector->setText("Error");
-        Toolbar->addWidget(errorSelector);
+        mErrorSelector = new SeveritySelector(this);
+        mErrorSelector->setChecked(true);
+        connect(mErrorSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
+        mErrorSelector->setText("Error");
+        Toolbar->addWidget(mErrorSelector);
     }
 
     QPlainTextEdit* LoggerWidget::getPlainTextEdit()
@@ -87,19 +88,19 @@ namespace hal
     {
         if (mCurrentChannel == "")
         {
-            handleCurrentChannelChanged(0);
+            handleCurrentFilterChanged(0);
         }
         if (logger_name != mCurrentChannel)
             return;
 
         bool filter = false;
-        if ((t == spdlog::level::level_enum::info) && infoSeverity) {
+        if ((t == spdlog::level::level_enum::info) && mInfoSeverity) {
             filter = true;
         }
-        else if ((t == spdlog::level::level_enum::warn) && warningSeverity) {
+        else if ((t == spdlog::level::level_enum::warn) && mWarningSeverity) {
             filter = true;
         }
-        else if ((t == spdlog::level::level_enum::err) && errorSeverity) {
+        else if ((t == spdlog::level::level_enum::err) && mErrorSeverity) {
             filter = true;
         }
 
@@ -109,39 +110,39 @@ namespace hal
         }
     }
 
-    void LoggerWidget::handleCurrentChannelChanged(int p)
+    void LoggerWidget::handleCurrentFilterChanged(int p)
     {
-        if (sender() == infoSelector)
+        if (sender() == mInfoSelector)
         {
             if (p == 2)
             {
-                infoSeverity = true;
+                mInfoSeverity = true;
             }
             else
             {
-                infoSeverity = false;
+                mInfoSeverity = false;
             }
         }
-        else if (sender() == warningSelector)
+        else if (sender() == mWarningSelector)
         {
             if (p == 2)
             {
-                warningSeverity = true;
+                mWarningSeverity = true;
             }
             else
             {
-                warningSeverity = false;
+                mWarningSeverity = false;
             }
         }
-        else if (sender() == errorSelector)
+        else if (sender() == mErrorSelector)
         {
             if (p == 2)
             {
-                errorSeverity = true;
+                mErrorSeverity = true;
             }
             else
             {
-                errorSeverity = false;
+                mErrorSeverity = false;
             }
         }
         else
@@ -159,13 +160,13 @@ namespace hal
         for (ChannelEntry* entry : *(item->getList()))
         {
             bool filter = false;
-            if ((entry->mMsgType == spdlog::level::level_enum::info) && infoSeverity) {
+            if ((entry->mMsgType == spdlog::level::level_enum::info) && mInfoSeverity) {
                 filter = true;
             }
-            else if ((entry->mMsgType == spdlog::level::level_enum::warn) && warningSeverity) {
+            else if ((entry->mMsgType == spdlog::level::level_enum::warn) && mWarningSeverity) {
                 filter = true;
             }
-            else if ((entry->mMsgType == spdlog::level::level_enum::err) && errorSeverity) {
+            else if ((entry->mMsgType == spdlog::level::level_enum::err) && mErrorSeverity) {
                 filter = true;
             }
 
