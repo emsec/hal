@@ -111,8 +111,6 @@ namespace hal
          */
         void handleCurrentChannelChanged(int index);
 
-        void handleSeverityChanged(int state);
-
         /**
          * Q_SLOT to handle interactions with the scrollbar. After the first scrollbar interaction the scrollbar wont
          * be locked at the bottom anymore (e.g. after a resize event).
@@ -126,7 +124,7 @@ namespace hal
 
         QPlainTextEdit* mPlainTextEdit;
         ChannelSelector* mSelector;
-        //SeveritySelector* sSelector;
+
         SeveritySelector* infoSelector;
         SeveritySelector* warningSelector;
         SeveritySelector* errorSelector;

@@ -26,7 +26,7 @@ namespace hal
 
         mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
 
-        mSelector = new ChannelSelector();
+        //mSelector = new ChannelSelector();
         infoSeverity = true;
         warningSeverity = true;
         errorSeverity = true;
@@ -42,7 +42,7 @@ namespace hal
     {
         //cant set the parent correct, so just delete them in the constructor
         //delete sSelector;
-        delete mSelector;
+        //delete mSelector;
     }
 
     void LoggerWidget::setupToolbar(Toolbar* Toolbar)
@@ -93,22 +93,57 @@ namespace hal
         if (logger_name != mCurrentChannel)
             return;
 
-        mLogMarshall->appendLog(t, QString::fromStdString(msg));
+        bool filter = false;
+        if ((t == spdlog::level::level_enum::info) && infoSeverity) {
+            filter = true;
+        }
+        else if ((t == spdlog::level::level_enum::warn) && warningSeverity) {
+            filter = true;
+        }
+        else if ((t == spdlog::level::level_enum::err) && errorSeverity) {
+            filter = true;
+        }
+
+        if (filter)
+        {
+            mLogMarshall->appendLog(t, QString::fromStdString(msg));
+        }
     }
 
     void LoggerWidget::handleCurrentChannelChanged(int p)
     {
         if (sender() == infoSelector)
         {
-            infoSeverity = !infoSeverity;
+            if (p == 2)
+            {
+                infoSeverity = true;
+            }
+            else
+            {
+                infoSeverity = false;
+            }
         }
         else if (sender() == warningSelector)
         {
-            warningSeverity = !warningSeverity;
+            if (p == 2)
+            {
+                warningSeverity = true;
+            }
+            else
+            {
+                warningSeverity = false;
+            }
         }
         else if (sender() == errorSelector)
         {
-            errorSeverity = !errorSeverity;
+            if (p == 2)
+            {
+                errorSeverity = true;
+            }
+            else
+            {
+                errorSeverity = false;
+            }
         }
         else
         {
