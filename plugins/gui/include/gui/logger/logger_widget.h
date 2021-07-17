@@ -107,7 +107,7 @@ namespace hal
          * Q_SLOT to handle that the currently selected filter has been changed (e.g. by choosing another one in the
          * the ChannelSelector combobox or by toggling a severity checkbox).
          *
-         * @param p - New channel index or state of the severity checkbox
+         * @param p - New channel index or new state of a severity checkbox
          */
         void handleCurrentFilterChanged(int index);
 
@@ -128,9 +128,15 @@ namespace hal
         SeveritySelector* mInfoSelector;
         SeveritySelector* mWarningSelector;
         SeveritySelector* mErrorSelector;
+//        SeveritySelector* mTraceSelector;
+//        SeveritySelector* mDebugSelector;
+//        SeveritySelector* mCriticalSelector;
         bool mInfoSeverity;
         bool mWarningSeverity;
         bool mErrorSeverity;
+//        bool mTraceSeverity;
+//        bool mDebugSeverity;
+//        bool mCriticalSeverity;
 
 
         LoggerMarshall* mLogMarshall;

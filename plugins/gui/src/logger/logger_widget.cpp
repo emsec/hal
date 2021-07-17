@@ -51,25 +51,25 @@ namespace hal
 
         //selector will be deleted within the toolbars destructor
         ChannelSelector* selector = new ChannelSelector(this);
-        connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
+        connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
         Toolbar->addWidget(selector);
 
 
         mInfoSelector = new SeveritySelector(this);
         mInfoSelector->setChecked(true);
-        connect(mInfoSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
+        connect(mInfoSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
         mInfoSelector->setText("Info");
         Toolbar->addWidget(mInfoSelector);
 
         mWarningSelector = new SeveritySelector(this);
         mWarningSelector->setChecked(true);
-        connect(mWarningSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
+        connect(mWarningSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
         mWarningSelector->setText("Warning");
         Toolbar->addWidget(mWarningSelector);
 
         mErrorSelector = new SeveritySelector(this);
         mErrorSelector->setChecked(true);
-        connect(mErrorSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
+        connect(mErrorSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
         mErrorSelector->setText("Error");
         Toolbar->addWidget(mErrorSelector);
     }
@@ -114,36 +114,15 @@ namespace hal
     {
         if (sender() == mInfoSelector)
         {
-            if (p == 2)
-            {
-                mInfoSeverity = true;
-            }
-            else
-            {
-                mInfoSeverity = false;
-            }
+            mInfoSeverity = (p == 2) ? true : false;
         }
         else if (sender() == mWarningSelector)
         {
-            if (p == 2)
-            {
-                mWarningSeverity = true;
-            }
-            else
-            {
-                mWarningSeverity = false;
-            }
+            mWarningSeverity = (p == 2) ? true : false;
         }
         else if (sender() == mErrorSelector)
         {
-            if (p == 2)
-            {
-                mErrorSeverity = true;
-            }
-            else
-            {
-                mErrorSeverity = false;
-            }
+            mErrorSeverity = (p == 2) ? true : false;
         }
         else
         {
