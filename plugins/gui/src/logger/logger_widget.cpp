@@ -41,7 +41,6 @@ namespace hal
     LoggerWidget::~LoggerWidget()
     {
         //cant set the parent correct, so just delete them in the constructor
-        //delete sSelector;
         //delete mSelector;
     }
 
