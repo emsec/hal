@@ -55,14 +55,15 @@ namespace hal
         infoSelector = new SeveritySelector(this);
         connect(infoSelector, SIGNAL(stateChanged(int)), this, SLOT(handleSeverityChanged(int)));
         infoSelector->setText("Info");
-
         Toolbar->addWidget(infoSelector);
 
         warningSelector = new SeveritySelector(this);
+        connect(warningSelector, SIGNAL(stateChanged(int)), this, SLOT(handleSeverityChanged(int)));
         warningSelector->setText("Warning");
         Toolbar->addWidget(warningSelector);
 
         errorSelector = new SeveritySelector(this);
+        connect(errorSelector, SIGNAL(stateChanged(int)), this, SLOT(handleSeverityChanged(int)));
         errorSelector->setText("Error");
         Toolbar->addWidget(errorSelector);
     }
@@ -107,12 +108,15 @@ namespace hal
     void LoggerWidget::handleSeverityChanged(int state)
     {
         SeveritySelector *senderSelector = (SeveritySelector*) sender();
-        qDebug("before");
-        QString t = senderSelector->text();
-        if (sender() == infoSelector) {
+        if (senderSelector == infoSelector) {
             qDebug("sender = infoSelector");
         }
-        qDebug("after");
+        else if (senderSelector == warningSelector) {
+            qDebug("sender = warningSelector");
+        }
+        else if (senderSelector == errorSelector) {
+            qDebug("sender = errorSelector");
+        }
     }
 
     void LoggerWidget::handleFirstUserInteraction(int value)
