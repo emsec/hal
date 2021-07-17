@@ -114,15 +114,15 @@ namespace hal
     {
         if (sender() == mInfoSelector)
         {
-            mInfoSeverity = (p == 2) ? true : false;
+            mInfoSeverity = (p == 2);
         }
         else if (sender() == mWarningSelector)
         {
-            mWarningSeverity = (p == 2) ? true : false;
+            mWarningSeverity = (p == 2);
         }
         else if (sender() == mErrorSelector)
         {
-            mErrorSeverity = (p == 2) ? true : false;
+            mErrorSeverity = (p == 2);
         }
         else
         {

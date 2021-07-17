@@ -130,7 +130,7 @@ namespace hal
         SeveritySelector* mErrorSelector;
 //        SeveritySelector* mTraceSelector;
 //        SeveritySelector* mDebugSelector;
-//        SeveritySelector* mCriticalSelector;
+//       SeveritySelector* mCriticalSelector;
         bool mInfoSeverity;
         bool mWarningSeverity;
         bool mErrorSeverity;
