@@ -122,6 +122,10 @@ namespace hal
         static const int sIdColumn = 1;
         static const int sTypeColumn = 2;
 
+        //additional data keys
+        const QString keyItemType = "type"; //also save value in enum (if it is possible with QVariant)
+        const QString keyRepresentedID = "id";
+
         enum itemType{module = 0, gate = 1, net = 2};
         Q_ENUM(itemType)
 
@@ -131,8 +135,6 @@ namespace hal
         QIcon mModuleIcon;
         QIcon mGateIcon;
         QIcon mNetIcon;
-        QString mItemTypeKey = "type"; //also save value in enum (if it is possible with QVariant)
-        QString mRepresentedIDKey = "id";
         //must(?) be stored for handler methods
         bool mGatesDisplayed;
         bool mNetsDisplayed;

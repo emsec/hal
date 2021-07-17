@@ -24,15 +24,30 @@
 #pragma once
 
 #include <QTreeView>
+#include "hal_core/defines.h"
 
 namespace hal
 {
+    class Module;
+    class NetlistElementsTreeModel;
 
     class ModuleElementsTree : public QTreeView
     {
         Q_OBJECT
 
+    public:
         ModuleElementsTree(QWidget* parent = nullptr);
+
+        void update(u32 moduleID);
+        void update(Module* m);
+
+        void removeContent();
+
+        void handleContextMenuRequested(const QPoint &pos);
+
+    private:
+        NetlistElementsTreeModel* mNetlistElementsModel;
+        int mModuleID;
     };
 
 }

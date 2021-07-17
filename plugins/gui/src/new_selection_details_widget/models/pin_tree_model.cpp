@@ -51,7 +51,7 @@ namespace hal
             QString pinType = QString::fromStdString(enum_to_string(gateType->get_pin_type(pin)));
             QString pinDirection = QString::fromStdString(enum_to_string(gateType->get_pin_direction(pin)));
             TreeItem* currentPinItem = new TreeItem(QList<QVariant>() << QString::fromStdString(pin) << pinDirection << pinType << netName);
-            currentPinItem->setAdditionalData(mTypeKey, itemType::pin);
+            currentPinItem->setAdditionalData(keyType, itemType::pin);
             //input pin has no grouping, put at the end
             if(grouping.empty())
             {
@@ -64,7 +64,7 @@ namespace hal
                 {
                     //assume all items in the same grouping habe the same direction and type, so the grouping-item has also these types
                     groupingsItem = new TreeItem(QList<QVariant>() << QString::fromStdString(grouping) << pinDirection << pinType << "");
-                    groupingsItem->setAdditionalData(mTypeKey, itemType::grouping);
+                    groupingsItem->setAdditionalData(keyType, itemType::grouping);
                     mRootItem->appendChild(groupingsItem);
                     mPinGroupingToTreeItem.insert(grouping, groupingsItem);
                 }

@@ -28,24 +28,26 @@
 
 namespace hal
 {
-    class Module;
-    class PortTreeModel;
+    class PinTreeModel;
+    class Gate;
 
-    class ModulePortsTree : public QTreeView
+    class GatePinTree : public QTreeView
     {
         Q_OBJECT
     public:
-        ModulePortsTree(QWidget* parent = nullptr);
+        GatePinTree(QWidget* parent = nullptr);
 
-        void update(u32 moduleID);
-        void update(Module* m);
+        void update(u32 gateID);
+        void update(Gate* g);
 
         void removeContent();
 
         void handleContextMenuRequested(const QPoint &pos);
+
     private:
-        PortTreeModel* mPortModel;
-        int mModuleID;
+        PinTreeModel* mPinModel;
+        int mGateID;
 
     };
+
 }

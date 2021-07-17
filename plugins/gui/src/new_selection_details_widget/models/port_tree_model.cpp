@@ -22,6 +22,12 @@ namespace hal
         delete mRootItem;
     }
 
+    void PortTreeModel::clear()
+    {
+        BaseTreeModel::clear();
+        mModuleId = -1;
+    }
+
     void PortTreeModel::setModule(Module *m)
     {
         clear();

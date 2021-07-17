@@ -50,6 +50,11 @@ namespace hal
         ~PortTreeModel();
 
         /**
+         *  Overwritten BaseTreeModel function.
+         */
+        void clear() override;
+
+        /**
          * Sets up the model to display the module's ports.
          *
          * @param m - The module for which to display the ports.

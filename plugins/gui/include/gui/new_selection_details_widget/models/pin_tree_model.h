@@ -66,13 +66,15 @@ public:
     static const int sTypeColumn = 2;
     static const int sConnectedNetColumn = 3;
 
+    //additional data keys
+    const QString keyType = "type";
+
     enum itemType {grouping = 0, pin = 1};
     Q_ENUM(itemType)
 
 private:
     int mGateId;
     QMap<std::string, TreeItem*> mPinGroupingToTreeItem;
-    QString mTypeKey = "type";
 
     //helper method to prevent code redundance
     void appendInputOutputPins(Gate* g, std::vector<std::string> inputOrOutputPins, bool areInputPins);
