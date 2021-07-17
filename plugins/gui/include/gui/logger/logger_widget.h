@@ -130,8 +130,13 @@ namespace hal
         SeveritySelector* infoSelector;
         SeveritySelector* warningSelector;
         SeveritySelector* errorSelector;
+        bool infoSeverity;
+        bool warningSeverity;
+        bool errorSeverity;
+
 
         LoggerMarshall* mLogMarshall;
+        int mCurrentChannelIndex;
         std::string mCurrentChannel;
         QReadWriteLock mLock;
         QScrollBar* mPlainTextEditScrollbar;

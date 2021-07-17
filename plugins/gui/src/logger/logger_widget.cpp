@@ -27,6 +27,9 @@ namespace hal
         mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
 
         mSelector = new ChannelSelector();
+        infoSeverity = true;
+        warningSeverity = true;
+        errorSeverity = true;
 
         //connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
@@ -53,17 +56,20 @@ namespace hal
 
 
         infoSelector = new SeveritySelector(this);
-        connect(infoSelector, SIGNAL(stateChanged(int)), this, SLOT(handleSeverityChanged(int)));
+        infoSelector->setChecked(true);
+        connect(infoSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         infoSelector->setText("Info");
         Toolbar->addWidget(infoSelector);
 
         warningSelector = new SeveritySelector(this);
-        connect(warningSelector, SIGNAL(stateChanged(int)), this, SLOT(handleSeverityChanged(int)));
+        warningSelector->setChecked(true);
+        connect(warningSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         warningSelector->setText("Warning");
         Toolbar->addWidget(warningSelector);
 
         errorSelector = new SeveritySelector(this);
-        connect(errorSelector, SIGNAL(stateChanged(int)), this, SLOT(handleSeverityChanged(int)));
+        errorSelector->setChecked(true);
+        connect(errorSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         errorSelector->setText("Error");
         Toolbar->addWidget(errorSelector);
     }
@@ -90,10 +96,27 @@ namespace hal
         mLogMarshall->appendLog(t, QString::fromStdString(msg));
     }
 
-    void LoggerWidget::handleCurrentChannelChanged(int index)
+    void LoggerWidget::handleCurrentChannelChanged(int p)
     {
+        if (sender() == infoSelector)
+        {
+            infoSeverity = !infoSeverity;
+        }
+        else if (sender() == warningSelector)
+        {
+            warningSeverity = !warningSeverity;
+        }
+        else if (sender() == errorSelector)
+        {
+            errorSeverity = !errorSeverity;
+        }
+        else
+        {
+            mCurrentChannelIndex = p;
+        }
+
         ChannelModel* model = ChannelModel::get_instance();
-        ChannelItem* item   = static_cast<ChannelItem*>((model->index(index, 0, QModelIndex())).internalPointer());
+        ChannelItem* item   = static_cast<ChannelItem*>((model->index(mCurrentChannelIndex, 0, QModelIndex())).internalPointer());
 
         mCurrentChannel = item->name().toStdString();
 
@@ -101,21 +124,21 @@ namespace hal
         QWriteLocker item_locker(item->getLock());
         for (ChannelEntry* entry : *(item->getList()))
         {
-            mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg));
-        }
-    }
+            bool filter = false;
+            if ((entry->mMsgType == spdlog::level::level_enum::info) && infoSeverity) {
+                filter = true;
+            }
+            else if ((entry->mMsgType == spdlog::level::level_enum::warn) && warningSeverity) {
+                filter = true;
+            }
+            else if ((entry->mMsgType == spdlog::level::level_enum::err) && errorSeverity) {
+                filter = true;
+            }
 
-    void LoggerWidget::handleSeverityChanged(int state)
-    {
-        SeveritySelector *senderSelector = (SeveritySelector*) sender();
-        if (senderSelector == infoSelector) {
-            qDebug("sender = infoSelector");
-        }
-        else if (senderSelector == warningSelector) {
-            qDebug("sender = warningSelector");
-        }
-        else if (senderSelector == errorSelector) {
-            qDebug("sender = errorSelector");
+            if (filter)
+            {
+            mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg));
+            }
         }
     }
 
