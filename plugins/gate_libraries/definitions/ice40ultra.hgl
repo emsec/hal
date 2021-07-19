@@ -791,6 +791,626 @@
             ]
         },
         {
+            "name": "SB_RAM256x16",
+            "types": [
+                "sequential",
+                "ram"
+            ],
+            "pins": [
+                {
+                    "name": "WE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "WCLK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "WCLKE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "RE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "RCLKE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "RCLK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "WADDR(0)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "WADDR(1)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "WADDR(2)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "WADDR(3)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "WADDR(4)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "WADDR(5)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "WADDR(6)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "WADDR(7)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "RADDR(0)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "RADDR(1)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "RADDR(2)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "RADDR(3)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "RADDR(4)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "RADDR(5)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "RADDR(6)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "RADDR(7)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "MASK(0)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(1)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(2)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(3)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(4)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(5)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(6)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(7)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(8)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(9)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(10)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(11)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(12)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(13)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(14)",
+                    "direction": "input"
+                },
+                {
+                    "name": "MASK(15)",
+                    "direction": "input"
+                },
+                {
+                    "name": "WDATA(0)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(1)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(2)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(3)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(4)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(5)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(6)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(7)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(8)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(9)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(10)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(11)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(12)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(13)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(14)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "WDATA(15)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(0)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(1)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(2)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(3)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(4)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(5)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(6)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(7)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(8)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(9)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(10)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(11)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(12)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(13)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(14)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "RDATA(15)",
+                    "direction": "output",
+                    "type": "data"
+                }
+            ],
+            "groups": [
+                {
+                    "name": "WDATA",
+                    "pins": [
+                        {
+                            "0": "WDATA(0)"
+                        },
+                        {
+                            "1": "WDATA(1)"
+                        },
+                        {
+                            "2": "WDATA(2)"
+                        },
+                        {
+                            "3": "WDATA(3)"
+                        },
+                        {
+                            "4": "WDATA(4)"
+                        },
+                        {
+                            "5": "WDATA(5)"
+                        },
+                        {
+                            "6": "WDATA(6)"
+                        },
+                        {
+                            "7": "WDATA(7)"
+                        },
+                        {
+                            "8": "WDATA(8)"
+                        },
+                        {
+                            "9": "WDATA(9)"
+                        },
+                        {
+                            "10": "WDATA(10)"
+                        },
+                        {
+                            "11": "WDATA(11)"
+                        },
+                        {
+                            "12": "WDATA(12)"
+                        },
+                        {
+                            "13": "WDATA(13)"
+                        },
+                        {
+                            "14": "WDATA(14)"
+                        },
+                        {
+                            "15": "WDATA(15)"
+                        }
+                    ]
+                },
+                {
+                    "name": "WADDR",
+                    "pins": [
+                        {
+                            "0": "WADDR(0)"
+                        },
+                        {
+                            "1": "WADDR(1)"
+                        },
+                        {
+                            "2": "WADDR(2)"
+                        },
+                        {
+                            "3": "WADDR(3)"
+                        },
+                        {
+                            "4": "WADDR(4)"
+                        },
+                        {
+                            "5": "WADDR(5)"
+                        },
+                        {
+                            "6": "WADDR(6)"
+                        },
+                        {
+                            "7": "WADDR(7)"
+                        }
+                    ]
+                },
+                {
+                    "name": "RDATA",
+                    "pins": [
+                        {
+                            "0": "RDATA(0)"
+                        },
+                        {
+                            "1": "RDATA(1)"
+                        },
+                        {
+                            "2": "RDATA(2)"
+                        },
+                        {
+                            "3": "RDATA(3)"
+                        },
+                        {
+                            "4": "RDATA(4)"
+                        },
+                        {
+                            "5": "RDATA(5)"
+                        },
+                        {
+                            "6": "RDATA(6)"
+                        },
+                        {
+                            "7": "RDATA(7)"
+                        },
+                        {
+                            "8": "RDATA(8)"
+                        },
+                        {
+                            "9": "RDATA(9)"
+                        },
+                        {
+                            "10": "RDATA(10)"
+                        },
+                        {
+                            "11": "RDATA(11)"
+                        },
+                        {
+                            "12": "RDATA(12)"
+                        },
+                        {
+                            "13": "RDATA(13)"
+                        },
+                        {
+                            "14": "RDATA(14)"
+                        },
+                        {
+                            "15": "RDATA(15)"
+                        }
+                    ]
+                },
+                {
+                    "name": "RADDR",
+                    "pins": [
+                        {
+                            "0": "RADDR(0)"
+                        },
+                        {
+                            "1": "RADDR(1)"
+                        },
+                        {
+                            "2": "RADDR(2)"
+                        },
+                        {
+                            "3": "RADDR(3)"
+                        },
+                        {
+                            "4": "RADDR(4)"
+                        },
+                        {
+                            "5": "RADDR(5)"
+                        },
+                        {
+                            "6": "RADDR(6)"
+                        },
+                        {
+                            "7": "RADDR(7)"
+                        }
+                    ]
+                },
+                {
+                    "name": "MASK",
+                    "pins": [
+                        {
+                            "0": "MASK(0)"
+                        },
+                        {
+                            "1": "MASK(1)"
+                        },
+                        {
+                            "2": "MASK(2)"
+                        },
+                        {
+                            "3": "MASK(3)"
+                        },
+                        {
+                            "4": "MASK(4)"
+                        },
+                        {
+                            "5": "MASK(5)"
+                        },
+                        {
+                            "6": "MASK(6)"
+                        },
+                        {
+                            "7": "MASK(7)"
+                        },
+                        {
+                            "8": "MASK(8)"
+                        },
+                        {
+                            "9": "MASK(9)"
+                        },
+                        {
+                            "10": "MASK(10)"
+                        },
+                        {
+                            "11": "MASK(11)"
+                        },
+                        {
+                            "12": "MASK(12)"
+                        },
+                        {
+                            "13": "MASK(13)"
+                        },
+                        {
+                            "14": "MASK(14)"
+                        },
+                        {
+                            "15": "MASK(15)"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "SB_IO",
+            "types": [
+                "io"
+            ],
+            "pins": [
+                {
+                    "name": "PACKAGE_PIN",
+                    "direction": "inout",
+                    "type": "io_pad"
+                },
+                {
+                    "name": "LATCH_INPUT_VALUE",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CLOCK_ENABLE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "INPUT_CLK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "OUTPUT_CLK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "OUTPUT_ENABLE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "D_OUT_0",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "D_OUT_1",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "D_IN_0",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "D_IN_1",
+                    "direction": "output",
+                    "type": "data"
+                }
+            ]
+        },
+        {
             "name": "SB_RAM40_4K",
             "types": [
                 "sequential",
