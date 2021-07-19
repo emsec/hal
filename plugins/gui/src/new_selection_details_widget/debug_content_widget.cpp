@@ -33,8 +33,8 @@ namespace hal {
         TreeItem* someChildItem = new TreeItem(QList<QVariant>() << "Test1" << "Test2");
         someRootItem->appendChild(someChildItem);
         baseModel->setContent(QList<TreeItem*>() << someRootItem);
-        //mTreeView->setModel(pinModel);
-        mTreeView->setModel(model);
+        mTreeView->setModel(pinModel);
+        //mTreeView->setModel(model);
         mContentLayout->addWidget(mTreeView);
 
         //--------End NetlistElementsModel

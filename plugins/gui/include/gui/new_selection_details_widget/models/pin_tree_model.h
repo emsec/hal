@@ -54,11 +54,24 @@ public:
     ~PinTreeModel();
 
     /**
+     * Overwritten BaseTreeModel function.
+     */
+    void clear() override;
+
+    /**
      * Sets the gate of the pins this model will represent.
      *
      * @param g - The gate of the pins.
      */
     void setGate(Gate* g);
+
+    /**
+     * Get the ID of the gate that is currently displayed. If no gate is
+     * currently displayed, -1 is returned.
+     *
+     * @return The gate's id.
+     */
+    int getCurrentGateID();
 
     //column identifier
     static const int sNameColumn = 0;
@@ -68,6 +81,7 @@ public:
 
     //additional data keys
     const QString keyType = "type";
+    const QString keyRepresentedNetID = "netID"; //might not be needed
 
     enum itemType {grouping = 0, pin = 1};
     Q_ENUM(itemType)

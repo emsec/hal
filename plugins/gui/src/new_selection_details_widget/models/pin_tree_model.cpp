@@ -22,21 +22,72 @@ namespace hal
 
     }
 
+    void PinTreeModel::clear()
+    {
+        BaseTreeModel::clear();
+        mPinGroupingToTreeItem.clear();
+        mGateId = -1;
+
+    }
+
     void PinTreeModel::setGate(Gate *g)
     {
-        //1. display all input grouping items at the beginning, try to keep order by iterate over input-pins instead of groupings
-        //2. display all input pins not belonging to any group after that
-        //3. thereafter do the same for output pins
-
         clear();
-        mPinGroupingToTreeItem.clear();
-        mGateId = g->get_id();
 
         beginResetModel();
-        appendInputOutputPins(g, g->get_input_pins(), true);
-        appendInputOutputPins(g, g->get_output_pins(), false);
+        GateType* gateType = g->get_type();
+        for(auto pin : gateType->get_pins())
+        {
+            TreeItem* pinItem = new TreeItem();
+            //get all infos for that pin
+            std::string grouping = gateType->get_pin_group(pin);
+            QString pinDirection = QString::fromStdString(enum_to_string(gateType->get_pin_direction(pin)));
+            QString pinType = QString::fromStdString(enum_to_string(gateType->get_pin_type(pin)));
+            //evaluate netname (in case of inout multiple possible nets), method depends on pindirection (kind of ugly switch)
+            QString netName;
+            switch(gateType->get_pin_direction(pin))
+            {
+                case PinDirection::input:
+                    netName = (g->get_fan_in_net(pin)) ? QString::fromStdString(g->get_fan_in_net(pin)->get_name()) : "" ; break;
+                case PinDirection::output:
+                    netName = (g->get_fan_out_net(pin)) ? QString::fromStdString(g->get_fan_out_net(pin)->get_name()) : "" ; break;
+                case PinDirection::inout: //must take input and output net into account
+                    if(g->get_fan_in_net(pin)) netName += QString::fromStdString(g->get_fan_in_net(pin)->get_name());
+                    if(g->get_fan_out_net(pin))
+                    {
+                        if(!netName.isEmpty()) netName += " / "; //add / when there is a input net to seperate it from the output net
+                        netName += QString::fromStdString(g->get_fan_out_net(pin)->get_name());
+                    }
+                    break;
+                default: break; //none and internal, dont know how to handle internal (whatever an internal pin is)
+            }
 
+            pinItem->setData(QList<QVariant>() << QString::fromStdString(pin) << pinDirection << pinType << netName);
+            pinItem->setAdditionalData(keyType, itemType::pin);
+            if(!grouping.empty())
+            {
+                TreeItem* groupingsItem = mPinGroupingToTreeItem.value(grouping, nullptr); //since its a map, its okay
+                if(!groupingsItem)
+                {
+                    //assume all items in the same grouping habe the same direction and type, so the grouping-item has also these types
+                    groupingsItem = new TreeItem(QList<QVariant>() << QString::fromStdString(grouping) << pinDirection << pinType << "");
+                    groupingsItem->setAdditionalData(keyType, itemType::grouping);
+                    mRootItem->appendChild(groupingsItem);
+                    mPinGroupingToTreeItem.insert(grouping, groupingsItem);
+                }
+                groupingsItem->appendChild(pinItem);
+
+            }
+            else
+                mRootItem->appendChild(pinItem);
+
+        }
         endResetModel();
+    }
+
+    int PinTreeModel::getCurrentGateID()
+    {
+        return mGateId;
     }
 
     void PinTreeModel::appendInputOutputPins(Gate* g, std::vector<std::string> inputOrOutputPins, bool areInputPins)
