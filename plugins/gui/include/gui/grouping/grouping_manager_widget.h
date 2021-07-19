@@ -70,6 +70,9 @@ namespace hal
         Q_PROPERTY(QString colorSelectIconStyle READ colorSelectIconStyle WRITE setColorSelectIconStyle)
         Q_PROPERTY(QString toSelectionIconPath READ toSelectionIconPath WRITE setToSelectionIconPath)
         Q_PROPERTY(QString toSelectionIconStyle READ toSelectionIconStyle WRITE setToSelectionIconStyle)
+        Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
+        Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
+        Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
 
     public:
         /**
@@ -111,6 +114,9 @@ namespace hal
         QString toSelectionIconPath() const;
         QString toSelectionIconStyle() const;
         QString disabledIconStyle() const;
+        QString searchIconPath() const;
+        QString searchIconStyle() const;
+        QString searchActiveIconStyle() const;
         ///@}
 
         /** @name Q_PROPERTY WRITE Functions
@@ -131,6 +137,9 @@ namespace hal
         void setColorSelectIconStyle(const QString& style);
         void setToSelectionIconPath(const QString& path);
         void setToSelectionIconStyle(const QString& style);
+        void setSearchIconPath(const QString &path);
+        void setSearchIconStyle(const QString &style);
+        void setSearchActiveIconStyle(const QString &style);
         ///@}
 
         /**
@@ -146,6 +155,16 @@ namespace hal
          * @return The proxy model.
          */
         GroupingProxyModel* getProxyModel() const {return mProxyModel; }
+
+        /**
+         * Enable/Disable the toolbar buttons which require a valid selection
+         */
+        void setToolbarButtonsEnabled(bool enable);
+
+        /**
+         * Enable/Disable the searchbar and update icon accordingly
+         */
+        void enableSearchbar(bool enable);
 
     public Q_SLOTS:
         /**
@@ -177,26 +196,30 @@ namespace hal
         void handleGraphSelectionChanged(void* sender);
 
         /**
-         * Adds all predecessor of the currently selected gate or module to a new grouping.
+         * Adds predecessors of the currently selected gate or module to a new grouping.
+         *
+         * @param maxDepth - Maximum recursion depth. Unlimited if zero.
          */
-        void handleToolboxPredecessor();
+        void handleToolboxPredecessor(int maxDepth = 0);
 
         /**
-         * Adds all successor of the currently selected gate or module to a new grouping.
-         */
-        void handleToolboxSuccessor();
+         * Adds successors of the currently selected gate or module to a new grouping.
+         *
+         * @param maxDepth - Maximum recursion depth. Unlimited if zero.
+        */
+        void handleToolboxSuccessor(int maxDepth = 0);
 
         /**
          * Performs a BFS with a max-depth of three and creates a new grouping
          * for the predecessors of each depth.
          */
-        void handleToolboxPredecessorDistance();
+        void handleToolboxPredecessorDistance(int maxDepth = 3);
 
         /**
          * Performs a BFS with a max-depth of three and creates a new grouping
          * for the successors of each depth.
          */
-        void handleToolboxSuccessorDistance();
+        void handleToolboxSuccessorDistance(int maxDepth = 3);
 
     private Q_SLOTS:
         /**
@@ -210,6 +233,11 @@ namespace hal
          * @param text - The filter string
          */
         void filter(const QString& text);
+
+        /**
+         * Q_SLOT to update the search icon style. The search icon style indicates wether a filter is applied or not.
+         */
+        void updateSearchIcon();
 
         /**
          * Q_SLOT to create a new grouping. Called when the 'Create Grouping'-buttons was clicked.
@@ -298,9 +326,14 @@ namespace hal
         QString mToSelectionIconPath;
         QString mToSelectionIconStyle;
 
+        QString mSearchIconPath;
+        QString mSearchIconStyle;
+        QString mSearchActiveIconStyle;
+
         QString mDisabledIconStyle;
 
-        void setToolbarButtonsEnabled(bool enabled);
+        void successorToNewGrouping(int maxDepth, bool succ);
+        void newGroupingByDistance(int maxDepth, bool succ);
 
         GroupingTableEntry getCurrentGrouping();
     };

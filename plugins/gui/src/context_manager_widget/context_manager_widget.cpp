@@ -36,7 +36,7 @@
 namespace hal
 {
     ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
-        : ContentWidget("Views", parent), mNewViewAction(new QAction(this)), mRenameAction(new QAction(this)), mDuplicateAction(new QAction(this)),
+        : ContentWidget("Views", parent), mSearchbar(new Searchbar(this)), mNewViewAction(new QAction(this)), mRenameAction(new QAction(this)), mDuplicateAction(new QAction(this)),
           mDeleteAction(new QAction(this)), mOpenAction(new QAction(this))
     {
         //needed to load the properties
@@ -62,6 +62,7 @@ namespace hal
         mRenameAction->setText("Rename view");
         mDuplicateAction->setText("Duplicate view");
         mDeleteAction->setText("Delete view");
+        mSearchAction->setText("Search");
 
         //mOpenAction->setEnabled(false);
         //mRenameAction->setEnabled(false);
@@ -89,9 +90,10 @@ namespace hal
 
 
         mContentLayout->addWidget(mContextTableView);
-        mContentLayout->addWidget(&mSearchbar);
+        mContentLayout->addWidget(mSearchbar);
 
-        mSearchbar.hide();
+        mSearchbar->hide();
+        enableSearchbar(mContextTableProxyModel->rowCount() > 0);
 
         connect(mOpenAction, &QAction::triggered, this, &ContextManagerWidget::handleOpenContextClicked);
         connect(mNewViewAction, &QAction::triggered, this, &ContextManagerWidget::handleCreateContextClicked);
@@ -103,9 +105,11 @@ namespace hal
         connect(mContextTableView, &QTableView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
         connect(mContextTableView, &QTableView::doubleClicked, this, &ContextManagerWidget::handleOpenContextClicked);
         connect(mContextTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContextManagerWidget::handleSelectionChanged);
+        connect(mContextTableModel, &ContextTableModel::rowsRemoved, this, &ContextManagerWidget::handleDataChanged);
+        connect(mContextTableModel, &ContextTableModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
 
-        connect(&mSearchbar, &Searchbar::textEdited, mContextTableProxyModel, &ContextTableProxyModel::handleFilterTextChanged);
-        connect(&mSearchbar, &Searchbar::textEdited, this, &ContextManagerWidget::handleFilterTextChanged);
+        connect(mSearchbar, &Searchbar::textEdited, mContextTableProxyModel, &ContextTableProxyModel::handleFilterTextChanged);
+        connect(mSearchbar, &Searchbar::textEdited, this, &ContextManagerWidget::updateSearchIcon);
     }
 
     void ContextManagerWidget::handleCreateContextClicked()
@@ -197,12 +201,17 @@ namespace hal
         context_menu.exec(mContextTableView->viewport()->mapToGlobal(point));
     }
 
-    void ContextManagerWidget::handleFilterTextChanged(const QString& filter_text)
+    void ContextManagerWidget::handleDataChanged()
     {
-        if(filter_text.isEmpty())
-            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+        enableSearchbar(mContextTableProxyModel->rowCount() > 0);
+    }
+
+    void ContextManagerWidget::updateSearchIcon()
+    {
+        if (mSearchbar->filterApplied() && mSearchbar->isVisible())
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
         else
-            mSearchAction->setIcon(gui_utility::getStyledSvgIcon("all->#30ac4f", mSearchIconPath)); //color test, integrate into stylsheet later
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
     }
 
     void ContextManagerWidget::selectViewContext(GraphContext* context)
@@ -232,6 +241,18 @@ namespace hal
         toolbar->addAction(mRenameAction);
         toolbar->addAction(mDeleteAction);
         toolbar->addAction(mSearchAction);
+    }
+
+    void ContextManagerWidget::enableSearchbar(bool enable)
+    {
+        QString iconStyle = enable ? mSearchIconStyle : mDisabledIconStyle;
+        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mSearchIconPath));
+        if (!enable && mSearchbar->isVisible())
+        {
+            mSearchbar->hide();
+            setFocus();
+        }
+        mSearchAction->setEnabled(enable);
     }
 
     void ContextManagerWidget::setToolbarButtonsEnabled(bool enabled)
@@ -270,14 +291,18 @@ namespace hal
 
     void ContextManagerWidget::toggleSearchbar()
     {
-        if (mSearchbar.isHidden())
+        if (!mSearchAction->isEnabled())
+            return;
+
+        if (mSearchbar->isHidden())
         {
-            mSearchbar.show();
-            mSearchbar.setFocus();
+            mSearchbar->show();
+            mSearchbar->setFocus();
         }
         else
         {
-            mSearchbar.hide();
+            mSearchbar->hide();
+            setFocus();
         }
     }
 
@@ -346,6 +371,11 @@ namespace hal
         return mSearchIconStyle;
     }
 
+    QString ContextManagerWidget::searchActiveIconStyle() const
+    {
+        return mSearchActiveIconStyle;
+    }
+
     void ContextManagerWidget::setDisabledIconStyle(const QString& style)
     {
         mDisabledIconStyle = style;
@@ -409,5 +439,10 @@ namespace hal
     void ContextManagerWidget::setSearchIconStyle(const QString& style)
     {
         mSearchIconStyle = style;
+    }
+
+    void ContextManagerWidget::setSearchActiveIconStyle(const QString& style)
+    {
+        mSearchActiveIconStyle = style;
     }
 }

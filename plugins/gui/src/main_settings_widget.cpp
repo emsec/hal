@@ -110,7 +110,6 @@ namespace hal
         mSearchbarLayout->setContentsMargins(0, 0, 0, 0);
         mSearchbarLayout->setSpacing(0);
         mSearchbarLayout->addWidget(mSearchbar);
-        mSearchbar->setModeButtonText("Settings");
 
         mScrollArea->setFrameStyle(QFrame::NoFrame);
         mVerticalLayout->addWidget(mScrollArea);

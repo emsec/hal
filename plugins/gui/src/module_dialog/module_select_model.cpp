@@ -256,9 +256,9 @@ namespace hal
     {
         if (sCurrentPicker)
             sCurrentPicker->deleteLater();
-        connect(this, &ModuleSelectPicker::triggerModuleCursor, gContentManager->getGraphTabWidget(), &GraphTabWidget::setModuleSelectCursor);
+        connect(this, &ModuleSelectPicker::triggerCursor, gContentManager->getGraphTabWidget(), &GraphTabWidget::setSelectCursor);
         sCurrentPicker = this;
-        Q_EMIT(triggerModuleCursor(true));
+        Q_EMIT(triggerCursor(GraphTabWidget::PickModule));
     }
 
     void ModuleSelectPicker::handleSelectionChanged(void* sender)
@@ -323,7 +323,7 @@ namespace hal
             return;
         ModuleSelectPicker* toDelete = sCurrentPicker;
         sCurrentPicker               = nullptr;
-        toDelete->triggerModuleCursor(false);
+        toDelete->triggerCursor(false);
         disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, toDelete, &ModuleSelectPicker::handleSelectionChanged);
         toDelete->deleteLater();
     }

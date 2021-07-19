@@ -28,7 +28,7 @@ namespace hal
                     std::vector<Gate*> v1;
                     for (Gate* g0 : v0)
                     {
-                        for (Gate* g1 : get_next_gates(g0, true, false))
+                        for (Gate* g1 : get_next_gates(g0, true, 1))
                         {
                             if (originMap.find(g1) != originMap.end()) continue; // already routed to
                             v1.push_back(g1);
@@ -342,31 +342,31 @@ namespace hal
             return c_netlist;
         }
 
-        std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, bool recursive, const std::function<bool(const Gate*)>& filter)
+        std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth, const std::function<bool(const Gate*)>& filter)
         {
             std::vector<Gate*> retval;
             std::unordered_map<u32, std::vector<Gate*>> cache;
             std::vector<const Gate*> v0;
             v0.push_back(gate);
-            std::unordered_set<const Gate*> gatsHandled;
-            std::unordered_set<const Net*> netsHandled;
-            gatsHandled.insert(gate);
+            std::unordered_set<const Gate*> gats_handled;
+            std::unordered_set<const Net*> nets_handled;
+            gats_handled.insert(gate);
 
-            for (int round = 0; recursive || round < 1; round++)
+            for (int round = 0; !depth || round < depth; round++)
             {
                 std::vector<const Gate*> v1;
                 for (const Gate* g0 : v0)
                 {
                     for (const Net* n : get_successors ? g0->get_fan_out_nets() : g0->get_fan_in_nets())
                     {
-                        if (netsHandled.find(n) != netsHandled.end()) continue;
-                        netsHandled.insert(n);
+                        if (nets_handled.find(n) != nets_handled.end()) continue;
+                        nets_handled.insert(n);
 
                         for (const Endpoint* ep : get_successors ? n->get_destinations() : n->get_sources())
                         {
                             Gate* g1 = ep->get_gate();
-                            if (gatsHandled.find(g1) != gatsHandled.end()) continue; // already handled
-                            gatsHandled.insert(g1);
+                            if (gats_handled.find(g1) != gats_handled.end()) continue; // already handled
+                            gats_handled.insert(g1);
                             v1.push_back(g1);
                             if (!filter || filter(g1)) retval.push_back(g1);
                         }
@@ -378,10 +378,10 @@ namespace hal
             return retval;
         }
 
-        std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool searchBothDirections)
+        std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions)
         {
             std::vector<Gate*> path_forward = get_shortest_path_internal(start_gate, end_gate);
-            if (!searchBothDirections) return path_forward;
+            if (!search_both_directions) return path_forward;
             std::vector<Gate*> path_reverse = get_shortest_path_internal(end_gate, start_gate);
             return (path_reverse.size() < path_forward.size()) ? path_reverse : path_forward;
         }

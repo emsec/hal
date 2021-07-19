@@ -148,11 +148,11 @@ namespace hal
             if (grp)
             {
                 for (u32 id : mModules)
-                    grp->assign_module_by_id(id);
+                    grp->assign_module_by_id(id,true);
                 for (u32 id : mGates)
-                    grp->assign_gate_by_id(id);
+                    grp->assign_gate_by_id(id,true);
                 for (u32 id : mNets)
-                    grp->assign_net_by_id(id);
+                    grp->assign_net_by_id(id,true);
             }
             else
                 return false;
