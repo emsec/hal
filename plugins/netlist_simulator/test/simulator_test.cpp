@@ -870,43 +870,102 @@ namespace hal
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
         Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
 
-        // //prepare simulation
-        // sim->add_gates(nl->get_gates());
-        // sim->load_initial_values_from_netlist();
+        std::cout << "read simulation file" << std::endl;
 
-        // // retrieve nets
-        // auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
 
-        // sim->add_clock_period(clk, 10000);
+        //prepare simulation
+        sim->add_gates(nl->get_gates());
+        sim->load_initial_values_from_netlist();
 
-        // auto start = *(nl->get_nets([](auto net) { return net->get_name() == "data_ready"; }).begin());
+        // retrieve nets
+        auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
 
-        // auto rst = *(nl->get_nets([](auto net) { return net->get_name() == "rst"; }).begin());
+        sim->add_clock_period(clk, 10000);
 
-        // std::vector<Net*> input_bits;
-        // for (int i = 0; i < 512; i++)
-        // {
-        //     std::string name = "msg_block_in_" + std::to_string(i);
-        //     input_bits.push_back(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
-        // }
+        std::vector<Net*> din;
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_0"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_1"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_2"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_3"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_4"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_5"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_6"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_7"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_8"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_9"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_10"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_11"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_12"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_13"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_14"; }).begin()));
+        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_15"; }).begin()));
 
-        // int input_nets_amount = input_bits.size();
+        std::vector<Net*> read_addr;
+        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_0"; }).begin()));
+        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_1"; }).begin()));
+        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_2"; }).begin()));
+        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_3"; }).begin()));
+        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_4"; }).begin()));
+        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_5"; }).begin()));
+        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_6"; }).begin()));
+        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_7"; }).begin()));
 
-        // if (clk != nullptr)
-        //     input_nets_amount++;
+        std::vector<Net*> write_addr;
+        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_0"; }).begin()));
+        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_1"; }).begin()));
+        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_2"; }).begin()));
+        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_3"; }).begin()));
+        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_4"; }).begin()));
+        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_5"; }).begin()));
+        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_6"; }).begin()));
+        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_7"; }).begin()));
 
-        // if (rst != nullptr)
-        //     input_nets_amount++;
 
-        // if (start != nullptr)
-        //     input_nets_amount++;
+        auto write_en = *(nl->get_nets([](auto net) { return net->get_name() == "write_en"; }).begin());
+        auto read_en = *(nl->get_nets([](auto net) { return net->get_name() == "read_en"; }).begin());
+        auto rclke = *(nl->get_nets([](auto net) { return net->get_name() == "rclke"; }).begin());
+        auto wclke = *(nl->get_nets([](auto net) { return net->get_name() == "wclke"; }).begin());
 
-        // if (input_nets_amount != sim->get_input_nets().size())
-        //     FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
 
-        // //start simulation
-        // std::cout << "starting simulation" << std::endl;
-        // //testbench
+        u32 input_nets_amount = 0;
+
+        if (clk != nullptr)
+            input_nets_amount++;
+
+        for (const auto& din_net : din){
+            if (din_net != nullptr)
+                input_nets_amount++;
+        }
+
+        for (const auto& write_addr_net : write_addr){
+            if (write_addr_net != nullptr)
+                input_nets_amount++;
+        }
+
+        for (const auto& read_addr_net : read_addr){
+            if (read_addr_net != nullptr)
+                input_nets_amount++;
+        }
+
+
+        if (write_en != nullptr)
+            input_nets_amount++;
+
+        if (read_en != nullptr)
+            input_nets_amount++;
+
+        if (rclke != nullptr)
+            input_nets_amount++;
+
+        if (wclke != nullptr)
+            input_nets_amount++;
+
+        if (input_nets_amount != sim->get_input_nets().size())
+            FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
+
+        //start simulation
+        std::cout << "starting simulation" << std::endl;
+        //testbench
 
         // {
         //     measure_block_time("simulation");
@@ -940,7 +999,7 @@ namespace hal
 
         // // Test if maps are equal
 
-        // EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
+        //EXPECT_TRUE(true, true);
         TEST_END
     }
 }    // namespace hal
