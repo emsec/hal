@@ -128,15 +128,11 @@ namespace hal
         SeveritySelector* mInfoSelector;
         SeveritySelector* mWarningSelector;
         SeveritySelector* mErrorSelector;
-//        SeveritySelector* mTraceSelector;
-//        SeveritySelector* mDebugSelector;
-//       SeveritySelector* mCriticalSelector;
+        SeveritySelector* mDebugSelector;
         bool mInfoSeverity;
         bool mWarningSeverity;
         bool mErrorSeverity;
-//        bool mTraceSeverity;
-//        bool mDebugSeverity;
-//        bool mCriticalSeverity;
+        bool mDebugSeverity;
 
 
         LoggerMarshall* mLogMarshall;

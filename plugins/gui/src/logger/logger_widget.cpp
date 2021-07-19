@@ -8,6 +8,7 @@
 #include <QHeaderView>
 #include <QVBoxLayout>
 #include <QSignalMapper>
+#include <QPushButton>
 
 namespace hal
 {
@@ -30,6 +31,7 @@ namespace hal
         mInfoSeverity = true;
         mWarningSeverity = true;
         mErrorSeverity = true;
+
 
         //connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
@@ -54,6 +56,11 @@ namespace hal
         connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
         Toolbar->addWidget(selector);
 
+        mDebugSelector = new SeveritySelector(this);
+        mDebugSelector->setChecked(true);
+        connect(mDebugSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
+        mDebugSelector->setText("Debug");
+        Toolbar->addWidget(mDebugSelector);
 
         mInfoSelector = new SeveritySelector(this);
         mInfoSelector->setChecked(true);
@@ -72,6 +79,7 @@ namespace hal
         connect(mErrorSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
         mErrorSelector->setText("Error");
         Toolbar->addWidget(mErrorSelector);
+
     }
 
     QPlainTextEdit* LoggerWidget::getPlainTextEdit()
@@ -103,6 +111,12 @@ namespace hal
         else if ((t == spdlog::level::level_enum::err) && mErrorSeverity) {
             filter = true;
         }
+        else if ((t == spdlog::level::level_enum::debug) && mDebugSeverity) {
+            filter = true;
+        }
+        else if (t == spdlog::level::level_enum::critical) {
+            filter = true;
+        }
 
         if (filter)
         {
@@ -123,6 +137,10 @@ namespace hal
         else if (sender() == mErrorSelector)
         {
             mErrorSeverity = (p == 2);
+        }
+        else if (sender() == mDebugSelector)
+        {
+            mDebugSeverity = (p == 2);
         }
         else
         {
@@ -146,6 +164,12 @@ namespace hal
                 filter = true;
             }
             else if ((entry->mMsgType == spdlog::level::level_enum::err) && mErrorSeverity) {
+                filter = true;
+            }
+            else if ((entry->mMsgType == spdlog::level::level_enum::debug) && mDebugSelector) {
+                filter = true;
+            }
+            else if (entry->mMsgType == spdlog::level::level_enum::critical) {
                 filter = true;
             }
 
