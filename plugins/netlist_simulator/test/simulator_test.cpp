@@ -820,4 +820,127 @@ namespace hal
         EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
         TEST_END
     }
+    TEST_F(SimulatorTest, bram)
+    {
+        // return;
+        TEST_START
+
+        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
+        auto sim    = plugin->create_simulator();
+
+        //path to netlist
+        std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/bram_netlist.v";
+        if (!utils::file_exists(path_netlist))
+            FAIL() << "netlist for bram not found: " << path_netlist;
+
+        std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/bram_netlist.hal";
+
+        //create netlist from path
+        auto lib = gate_library_manager::get_gate_library_by_name("ICE40ULTRA");
+        if (lib == nullptr)
+        {
+            FAIL() << "ICE40ULTRA gate library not found";
+        }
+
+        std::unique_ptr<Netlist> nl;
+        {
+            std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
+            if (utils::file_exists(path_netlist_hal))
+            {
+                std::cout << ".hal file found for test netlist, loading this one." << std::endl;
+                nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
+            }
+            else
+            {
+                NO_COUT_BLOCK;
+                nl = netlist_parser_manager::parse(path_netlist, lib);
+                netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
+            }
+            if (nl == nullptr)
+            {
+                FAIL() << "netlist couldn't be parsed";
+            }
+        }
+
+        //path to vcd
+        std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/trace.vcd";
+        if (!utils::file_exists(path_vcd))
+            FAIL() << "dump for bram not found: " << path_vcd;
+
+        //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
+        Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
+
+        // //prepare simulation
+        // sim->add_gates(nl->get_gates());
+        // sim->load_initial_values_from_netlist();
+
+        // // retrieve nets
+        // auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
+
+        // sim->add_clock_period(clk, 10000);
+
+        // auto start = *(nl->get_nets([](auto net) { return net->get_name() == "data_ready"; }).begin());
+
+        // auto rst = *(nl->get_nets([](auto net) { return net->get_name() == "rst"; }).begin());
+
+        // std::vector<Net*> input_bits;
+        // for (int i = 0; i < 512; i++)
+        // {
+        //     std::string name = "msg_block_in_" + std::to_string(i);
+        //     input_bits.push_back(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
+        // }
+
+        // int input_nets_amount = input_bits.size();
+
+        // if (clk != nullptr)
+        //     input_nets_amount++;
+
+        // if (rst != nullptr)
+        //     input_nets_amount++;
+
+        // if (start != nullptr)
+        //     input_nets_amount++;
+
+        // if (input_nets_amount != sim->get_input_nets().size())
+        //     FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
+
+        // //start simulation
+        // std::cout << "starting simulation" << std::endl;
+        // //testbench
+
+        // {
+        //     measure_block_time("simulation");
+
+        //     // msg <= x"61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
+        //     std::string hex_input = "61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
+        //     for (u32 i = 0; i < hex_input.size(); i += 2)
+        //     {
+        //         u8 byte = std::stoul(hex_input.substr(i, 2), nullptr, 16);
+        //         for (u32 j = 0; j < 8; ++j)
+        //         {
+        //             sim->set_input(input_bits[i * 4 + j], (SignalValue)((byte >> (7 - j)) & 1));
+        //         }
+        //     }
+
+        //     sim->set_input(rst, SignalValue::ONE);       //RST <= '1';
+        //     sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+        //     sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
+
+        //     sim->set_input(rst, SignalValue::ZERO);    //RST <= '0';
+        //     sim->simulate(10 * 1000);                  //WAIT FOR 10 NS;
+
+        //     sim->set_input(start, SignalValue::ONE);    //START <= '1';
+        //     sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
+
+        //     sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+        //     sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
+
+        //     sim->simulate(2000 * 1000);
+        // }
+
+        // // Test if maps are equal
+
+        // EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
+        TEST_END
+    }
 }    // namespace hal
