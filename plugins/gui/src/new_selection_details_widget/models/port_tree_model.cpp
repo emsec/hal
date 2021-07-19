@@ -15,6 +15,10 @@ namespace hal
     {
         setHeaderLabels(QList<QVariant>() << "Name" << "Direction" << "Type" << "Connected Net");
         setModule(gNetlist->get_module_by_id(1));
+
+        //connections
+        connect(gNetlistRelay, &NetlistRelay::moduleInputPortNameChanged, this, &PortTreeModel::handleModuleInputOutputPortNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleOutputPortNameChanged, this, &PortTreeModel::handleModuleInputOutputPortNameChanged);
     }
 
     PortTreeModel::~PortTreeModel()
@@ -58,6 +62,14 @@ namespace hal
             mRootItem->appendChild(portItem);
         }
         endResetModel();
+    }
+
+    void PortTreeModel::handleModuleInputOutputPortNameChanged(Module *m, int associated_data)
+    {
+        Q_UNUSED(associated_data)
+
+        if((int)m->get_id() == mModuleId)
+            setModule(m);
     }
 
 

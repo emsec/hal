@@ -61,6 +61,11 @@ namespace hal
          */
         void setModule(Module* m);
 
+        /**
+         * Method to catch the module event with the same name.
+         */
+        void handleModuleInputOutputPortNameChanged(Module* m, int associated_data);
+
     private:
         int mModuleId;
     };
