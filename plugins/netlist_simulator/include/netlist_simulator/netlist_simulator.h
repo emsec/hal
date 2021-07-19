@@ -231,6 +231,29 @@ namespace hal
             void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
         };
 
+        struct SimulationGateRAM : public SimulationGateSequential
+        {
+            struct Port
+            {
+                const Net* clock_net;
+                BooleanFunction clock_func;
+                BooleanFunction enable_func;
+                bool is_write;
+
+                std::vector<const Net*> address_nets;
+                std::vector<const Net*> input_data_nets;
+                std::vector<const Net*> output_data_nets;
+            };
+
+            std::vector<Port> ports;
+            std::vector<u64> data;
+
+            std::vector<size_t> clocked_port_indices;
+
+            bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
+            void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
+        };
+
         std::unordered_map<const Net*, std::vector<std::pair<SimulationGate*, std::vector<std::string>>>> m_successors;
         std::vector<std::unique_ptr<SimulationGate>> m_sim_gates;
 
