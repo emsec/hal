@@ -1,5 +1,7 @@
 var NAVTREEINDEX14 =
 {
+"classsubprocess_1_1detail_1_1_streams.html#af057a5301d763a38e0593da7b895a386":[13,0,2,0,8,12],
+"classsubprocess_1_1detail_1_1_streams.html#afd5efc8cdde937c4c8f64b59203546ef":[13,0,2,0,8,4],
 "classsubprocess_1_1preexec__func.html":[13,0,2,14],
 "classsubprocess_1_1preexec__func.html#a06bb2e5927a08b9f2c94fdbbd02ac99a":[13,0,2,14,2],
 "classsubprocess_1_1preexec__func.html#a286f68bbf6643f94c7005e4a74891629":[13,0,2,14,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX14 =
 "dir_d705d28a920178c6eb392b5d5cea17ed.html":[14,0,1,0,2,0],
 "dir_dae99150d71d3c2700aeaa72401f9109.html":[14,0,1,0,2,31],
 "dir_dd14da78325049390552e6d64a95d249.html":[14,0,1,0,2,44],
-"dir_ddd94d52bf54f9ecc737da5a4ae4acea.html":[14,0,1,0,0,0,17,0],
-"dir_ded422ec9f163017e5e46b66204ec4a3.html":[14,0,2,2,0],
-"dir_e38d30ad5fdfbbbb9f510436ddb9cdb4.html":[14,0,0,0,1,4]
+"dir_ddd94d52bf54f9ecc737da5a4ae4acea.html":[14,0,1,0,0,0,17,0]
 };

@@ -434,7 +434,7 @@ $(document).ready(function(){initNavTree('graph__layouter_8cpp_source.html','');
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> Endpoint* src : n-&gt;get_sources())</div>
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            {</div>
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                <span class="comment">// FIND SRC BOX</span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                <span class="keyword">const</span> NodeBox* srcBox = mBoxes.<a class="code" href="classhal_1_1_node_boxes.html#a01bb6442e1fbf9a28caf7d053e848b90">boxForGate</a>(src-&gt;get_gate());</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                <span class="keyword">const</span> NodeBox* srcBox = mBoxes.<a class="code" href="classhal_1_1_node_boxes.html#a6243707f0b24d9aaf124f3d82786483b">boxForGate</a>(src-&gt;get_gate());</div>
 <div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                <span class="keywordflow">if</span> (!srcBox)</div>
 <div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                    <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160; </div>
@@ -449,7 +449,7 @@ $(document).ready(function(){initNavTree('graph__layouter_8cpp_source.html','');
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> Endpoint* dst : n-&gt;get_destinations())</div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;            {</div>
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                <span class="comment">// find dst box</span></div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                <span class="keyword">const</span> NodeBox* dstBox = mBoxes.<a class="code" href="classhal_1_1_node_boxes.html#a01bb6442e1fbf9a28caf7d053e848b90">boxForGate</a>(dst-&gt;get_gate());</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                <span class="keyword">const</span> NodeBox* dstBox = mBoxes.<a class="code" href="classhal_1_1_node_boxes.html#a6243707f0b24d9aaf124f3d82786483b">boxForGate</a>(dst-&gt;get_gate());</div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                <span class="keywordflow">if</span> (!dstBox)</div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;                    <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160; </div>
@@ -2875,7 +2875,6 @@ $(document).ready(function(){initNavTree('graph__layouter_8cpp_source.html','');
 <div class="ttc" id="aqhash-iterator_html_key"><div class="ttname"><a href="https://doc.qt.io/qt-5/qhash-iterator.html#key">QHash::iterator::key</a></div><div class="ttdeci">const Key &amp; key() const const</div></div>
 <div class="ttc" id="aqpointf_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_box_html_ab2601570ab043da7e3dc5ad1285bf555"><div class="ttname"><a href="classhal_1_1_node_box.html#ab2601570ab043da7e3dc5ad1285bf555">hal::NodeBox::y</a></div><div class="ttdeci">int y() const</div><div class="ttdoc">y getter for Y-grid position</div><div class="ttdef"><b>Definition:</b> <a href="node__box_8h_source.html#l00097">node_box.h:97</a></div></div>
-<div class="ttc" id="aclasshal_1_1_node_boxes_html_a01bb6442e1fbf9a28caf7d053e848b90"><div class="ttname"><a href="classhal_1_1_node_boxes.html#a01bb6442e1fbf9a28caf7d053e848b90">hal::NodeBoxes::boxForGate</a></div><div class="ttdeci">NodeBox * boxForGate(Gate *g) const</div><div class="ttdoc">boxForGate find NodeBox by Gate pointer.</div><div class="ttdef"><b>Definition:</b> <a href="node__box_8h_source.html#l00166">node_box.h:166</a></div></div>
 <div class="ttc" id="aclasshal_1_1_net_layout_direction_html_a804a82ac3192d771ed7a64fe9137f142af87cff0d56794b900c3a50094c7955c8"><div class="ttname"><a href="classhal_1_1_net_layout_direction.html#a804a82ac3192d771ed7a64fe9137f142af87cff0d56794b900c3a50094c7955c8">hal::NetLayoutDirection::Left</a></div><div class="ttdeci">@ Left</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00048">net_layout_point.h:48</a></div></div>
 <div class="ttc" id="aqset_html_size"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#size">QSet::size</a></div><div class="ttdeci">int size() const const</div></div>
 <div class="ttc" id="aqobject_html_connect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect</a></div><div class="ttdeci">QMetaObject::Connection connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type)</div></div>
@@ -2899,6 +2898,7 @@ $(document).ready(function(){initNavTree('graph__layouter_8cpp_source.html','');
 <div class="ttc" id="aqobject_html_deleteLater"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater</a></div><div class="ttdeci">void deleteLater()</div></div>
 <div class="ttc" id="aqrect_html_bottom"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrect.html#bottom">QRect::bottom</a></div><div class="ttdeci">int bottom() const const</div></div>
 <div class="ttc" id="aqtextstream_html_FieldAlignment-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtextstream.html#FieldAlignment-enum">QTextStream::AlignRight</a></div><div class="ttdeci">AlignRight</div></div>
+<div class="ttc" id="aclasshal_1_1_node_boxes_html_a6243707f0b24d9aaf124f3d82786483b"><div class="ttname"><a href="classhal_1_1_node_boxes.html#a6243707f0b24d9aaf124f3d82786483b">hal::NodeBoxes::boxForGate</a></div><div class="ttdeci">NodeBox * boxForGate(const Gate *g) const</div><div class="ttdoc">boxForGate find NodeBox by Gate pointer.</div><div class="ttdef"><b>Definition:</b> <a href="node__box_8h_source.html#l00166">node_box.h:166</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_boxes_html_ac1e881a35e4dea4d4b842b1562f5228e"><div class="ttname"><a href="classhal_1_1_node_boxes.html#ac1e881a35e4dea4d4b842b1562f5228e">hal::NodeBoxes::boxForItem</a></div><div class="ttdeci">NodeBox * boxForItem(GraphicsNode *item) const</div><div class="ttdoc">boxForItem find NodeBox by graphics item</div><div class="ttdef"><b>Definition:</b> <a href="node__box_8h_source.html#l00191">node_box.h:191</a></div></div>
 <div class="ttc" id="aqrect_html_top"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrect.html#top">QRect::top</a></div><div class="ttdeci">int top() const const</div></div>
 <div class="ttc" id="aqhash_html_size"><div class="ttname"><a href="https://doc.qt.io/qt-5/qhash.html#size">QHash::size</a></div><div class="ttdeci">int size() const const</div></div>
@@ -2977,7 +2977,7 @@ $(document).ready(function(){initNavTree('graph__layouter_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="dir_fda276515715e6a42081e8e393a99d09.html">layouters</a></li><li class="navelem"><a class="el" href="graph__layouter_8cpp.html">graph_layouter.cpp</a></li>
-    <li class="footer">Generated on Mon Jul 19 2021 09:02:09 for HAL by
+    <li class="footer">Generated on Tue Jul 20 2021 09:48:06 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

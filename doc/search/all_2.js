@@ -270,7 +270,7 @@ var searchData=
   ['bouvetisland_1037',['BouvetIsland',['https://doc.qt.io/qt-5/qlocale.html#Country-enum',1,'QLocale']]],
   ['box_1038',['Box',['https://doc.qt.io/qt-5/qframe.html#Shape-enum',1,'QFrame']]],
   ['boxes_1039',['boxes',['../classhal_1_1_graph_layouter.html#af3c01b3f53761de10a07641a4fef1b7e',1,'hal::GraphLayouter']]],
-  ['boxforgate_1040',['boxForGate',['../classhal_1_1_node_boxes.html#a01bb6442e1fbf9a28caf7d053e848b90',1,'hal::NodeBoxes']]],
+  ['boxforgate_1040',['boxForGate',['../classhal_1_1_node_boxes.html#a6243707f0b24d9aaf124f3d82786483b',1,'hal::NodeBoxes']]],
   ['boxforitem_1041',['boxForItem',['../classhal_1_1_node_boxes.html#ac1e881a35e4dea4d4b842b1562f5228e',1,'hal::NodeBoxes']]],
   ['boxfornode_1042',['boxForNode',['../classhal_1_1_node_boxes.html#a62e47d8055ce50851c7848b589821bfa',1,'hal::NodeBoxes']]],
   ['boxforpoint_1043',['boxForPoint',['../classhal_1_1_node_boxes.html#a74acd8de6a4294621705b71f10771a07',1,'hal::NodeBoxes']]],

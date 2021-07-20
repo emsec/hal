@@ -1,5 +1,7 @@
 var NAVTREEINDEX13 =
 {
+"classhal_1_1_tab_widget.html#a208648799f8927cd9d4cdd2670b91743":[11,0,2,7,2],
+"classhal_1_1_tab_widget.html#a30f23ce9feff8559abbbff432bfe124e":[11,0,2,7,3],
 "classhal_1_1_tab_widget.html#a3b134235e20afb30c03d9cb7e91b4c80":[11,0,2,7,10],
 "classhal_1_1_tab_widget.html#a4ab3514a0cbfdd9b327959e1a5d48205":[11,0,2,7,8],
 "classhal_1_1_tab_widget.html#a561969c197ed97474257c40ec7d35a79":[11,0,2,7,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX13 =
 "classsubprocess_1_1detail_1_1_streams.html#ac8d36f16af4b3437b082b94174c5706b":[13,0,2,0,8,27],
 "classsubprocess_1_1detail_1_1_streams.html#adff2cf35ebb10e8bc8ff39b55ff11564":[13,0,2,0,8,20],
 "classsubprocess_1_1detail_1_1_streams.html#ae144230818f582c3680a13540175121f":[13,0,2,0,8,5],
-"classsubprocess_1_1detail_1_1_streams.html#aea4fa1a8cb831261687c4a2744a9f24e":[13,0,2,0,8,22],
-"classsubprocess_1_1detail_1_1_streams.html#af057a5301d763a38e0593da7b895a386":[13,0,2,0,8,12],
-"classsubprocess_1_1detail_1_1_streams.html#afd5efc8cdde937c4c8f64b59203546ef":[13,0,2,0,8,4]
+"classsubprocess_1_1detail_1_1_streams.html#aea4fa1a8cb831261687c4a2744a9f24e":[13,0,2,0,8,22]
 };
