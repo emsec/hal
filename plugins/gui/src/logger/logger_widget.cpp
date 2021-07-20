@@ -48,32 +48,33 @@ namespace hal
         //selector will be deleted within the toolbars destructor
         selector = new ChannelSelector(this);
         connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
+        selector->setStyleSheet("QCombobox {background-color : rgb(32, 43, 63); border-radius: 2px;}");
         Toolbar->addWidget(selector);
 
         mDebugButton = new QPushButton("Debug", this);
         mDebugButton->setCheckable(true);
-        mDebugButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89) } ");
+        mDebugButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mDebugButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mDebugButton);
 
         mInfoButton = new QPushButton("Info", this);
         mInfoButton->setCheckable(true);
         mInfoButton->setChecked(true);
-        mInfoButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89) } ");
+        mInfoButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mInfoButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mInfoButton);
 
         mWarningButton = new QPushButton("Warning", this);
         mWarningButton->setCheckable(true);
         mWarningButton->setChecked(true);
-        mWarningButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89) } ");
+        mWarningButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mWarningButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mWarningButton);
 
         mErrorButton = new QPushButton("Error", this);
         mErrorButton->setCheckable(true);
         mErrorButton->setChecked(true);
-        mErrorButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89) } ");
+        mErrorButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mErrorButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mErrorButton);
     }
