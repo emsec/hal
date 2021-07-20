@@ -1,7 +1,6 @@
 #include "gui/logger/logger_widget.h"
 #include "gui/channel_manager/channel_model.h"
 #include "gui/channel_manager/channel_selector.h"
-#include "gui/severity_manager/severity_selector.h"
 #include "gui/logger/logger_marshall.h"
 #include "gui/toolbar/toolbar.h"
 
@@ -28,14 +27,10 @@ namespace hal
 
         mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
 
-        //mSelector = new ChannelSelector();
         mInfoSeverity = true;
         mWarningSeverity = true;
         mErrorSeverity = true;
-        mDebugSeverity = true;
 
-
-        //connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
 
         ChannelModel* model = ChannelModel::get_instance();
@@ -44,14 +39,11 @@ namespace hal
 
     LoggerWidget::~LoggerWidget()
     {
-        //cant set the parent correct, so just delete them in the constructor
 
-        //delete mSelector;
     }
 
     void LoggerWidget::setupToolbar(Toolbar* Toolbar)
     {
-        //Toolbar->addWidget(mSelector);
 
         //selector will be deleted within the toolbars destructor
         selector = new ChannelSelector(this);
@@ -60,56 +52,30 @@ namespace hal
 
         mDebugButton = new QPushButton("Debug", this);
         mDebugButton->setCheckable(true);
-        mDebugButton->setChecked(true);
-        mDebugButton->setStyleSheet("QPushButton { border : none } QPushButton:checked { background-color : grey } ");
+        mDebugButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89) } ");
         connect(mDebugButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mDebugButton);
 
         mInfoButton = new QPushButton("Info", this);
         mInfoButton->setCheckable(true);
         mInfoButton->setChecked(true);
-        mInfoButton->setStyleSheet("QPushButton { border : none } QPushButton:checked { background-color : grey } ");
+        mInfoButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89) } ");
         connect(mInfoButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mInfoButton);
 
         mWarningButton = new QPushButton("Warning", this);
         mWarningButton->setCheckable(true);
         mWarningButton->setChecked(true);
-        mWarningButton->setStyleSheet("QPushButton { border : none } QPushButton:checked { background-color : grey } ");
+        mWarningButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89) } ");
         connect(mWarningButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mWarningButton);
 
         mErrorButton = new QPushButton("Error", this);
         mErrorButton->setCheckable(true);
         mErrorButton->setChecked(true);
-        mErrorButton->setStyleSheet("QPushButton { border : none } QPushButton:checked { background-color : grey } ");
+        mErrorButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89) } ");
         connect(mErrorButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mErrorButton);
-
-//        mDebugSelector = new SeveritySelector(this);
-//        mDebugSelector->setChecked(true);
-//        connect(mDebugSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
-//        mDebugSelector->setText("Debug");
-//        Toolbar->addWidget(mDebugSelector);
-
-//        mInfoSelector = new SeveritySelector(this);
-//        mInfoSelector->setChecked(true);
-//        connect(mInfoSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
-//        mInfoSelector->setText("Info");
-//        Toolbar->addWidget(mInfoSelector);
-
-//        mWarningSelector = new SeveritySelector(this);
-//        mWarningSelector->setChecked(true);
-//        connect(mWarningSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
-//        mWarningSelector->setText("Warning");
-//        Toolbar->addWidget(mWarningSelector);
-
-//        mErrorSelector = new SeveritySelector(this);
-//        mErrorSelector->setChecked(true);
-//        connect(mErrorSelector, SIGNAL(stateChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
-//        mErrorSelector->setText("Error");
-//        Toolbar->addWidget(mErrorSelector);
-
     }
 
     QPlainTextEdit* LoggerWidget::getPlainTextEdit()
@@ -157,32 +123,6 @@ namespace hal
 
     void LoggerWidget::handleCurrentFilterChanged(int p)
     {
-
-//        if (sender() == debugButton) {
-//            QPushButton* tmpButton = (QPushButton*) sender();
-//            mDebugSeverity = tmpButton->isChecked();
-
-//        }
-//        if (sender() == mInfoSelector)
-//        {
-//            mInfoSeverity = (p == 2);
-//        }
-//        else if (sender() == mWarningSelector)
-//        {
-//            mWarningSeverity = (p == 2);
-//        }
-//        else if (sender() == mErrorSelector)
-//        {
-//            mErrorSeverity = (p == 2);
-//        }
-//        else if (sender() == mDebugSelector)
-//        {
-//            mDebugSeverity = (p == 2);
-//        }
-//        else
-//        {
-//            mCurrentChannelIndex = p;
-//        }
         if ((sender() == selector) || p == 0) {
             mCurrentChannelIndex = p;
         }
