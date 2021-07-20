@@ -211,7 +211,7 @@ namespace hal
                                  "Depth 3", "Depth 4", "Depth 5", nullptr};
             for (int inx = 1; txt[inx]; inx++)
             {
-                QAction* act = menu->addAction(QString(txt[inx]).arg(s));
+                QAction* act = menu->addAction(inx==1 ? QString(txt[1]).arg(s) : QString(txt[inx]));
                 act->setData(inx);
                 connect(act, &QAction::triggered, this, slot);
             }

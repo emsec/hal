@@ -43,6 +43,7 @@ namespace hal
     class Grouping;
     class GroupingProxyModel;
     class Searchbar;
+    class GraphicsItem;
 
     /**
      * @ingroup utility_widgets-grouping
@@ -166,6 +167,24 @@ namespace hal
          */
         void enableSearchbar(bool enable);
 
+        /**
+         * Creates a new grouping for successors or predecessors of item.
+         *
+         * @param maxDepth - maximum recursion depth in view
+         * @param succ - if true successors are highlighted, predecessors otherwise
+         * @param item - the item to start from. If null recursion starts from first selected item.
+         */
+        void newGroupingSuccOrPred(int maxDepth, bool succ, const GraphicsItem* item);
+
+        /**
+         * Creates groupings dependend on distance to start item.
+         *
+         * @param maxDepth - maximum recursion depth in view
+         * @param succ - if true successors are highlighted, predecessors otherwise
+         * @param item - the item to start from. If null recursion starts from first selected item.
+         */
+        void newGroupingByDistance(int maxDepth, bool succ, const GraphicsItem* item);
+
     public Q_SLOTS:
         /**
          * Q_SLOT to handle that the last entry of GroupingTableModel was deleted.
@@ -198,28 +217,26 @@ namespace hal
         /**
          * Adds predecessors of the currently selected gate or module to a new grouping.
          *
-         * @param maxDepth - Maximum recursion depth. Unlimited if zero.
          */
-        void handleToolboxPredecessor(int maxDepth = 0);
+        void handleToolboxPredecessor();
 
         /**
          * Adds successors of the currently selected gate or module to a new grouping.
          *
-         * @param maxDepth - Maximum recursion depth. Unlimited if zero.
-        */
-        void handleToolboxSuccessor(int maxDepth = 0);
+         */
+        void handleToolboxSuccessor();
 
         /**
          * Performs a BFS with a max-depth of three and creates a new grouping
          * for the predecessors of each depth.
          */
-        void handleToolboxPredecessorDistance(int maxDepth = 3);
+        void handleToolboxPredecessorDistance();
 
         /**
          * Performs a BFS with a max-depth of three and creates a new grouping
          * for the successors of each depth.
          */
-        void handleToolboxSuccessorDistance(int maxDepth = 3);
+        void handleToolboxSuccessorDistance();
 
     private Q_SLOTS:
         /**
@@ -291,6 +308,7 @@ namespace hal
             QString mName;
             Node mNode;
             ToolboxNode(Endpoint* ep = nullptr, const ToolboxModuleHash* tmh = nullptr);
+            ToolboxNode(const GraphicsItem* item);
             std::vector<Net*> inputNets() const;
             std::vector<Net*> outputNets() const;
         };
@@ -331,9 +349,6 @@ namespace hal
         QString mSearchActiveIconStyle;
 
         QString mDisabledIconStyle;
-
-        void successorToNewGrouping(int maxDepth, bool succ);
-        void newGroupingByDistance(int maxDepth, bool succ);
 
         GroupingTableEntry getCurrentGrouping();
     };

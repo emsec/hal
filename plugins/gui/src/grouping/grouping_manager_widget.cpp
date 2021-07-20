@@ -15,6 +15,7 @@
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/action/action.h"
+#include "gui/gui_def.h"
 #include "hal_core/utilities/log.h"
 
 #include <QAction>
@@ -221,6 +222,23 @@ namespace hal
         }
     }
 
+    GroupingManagerWidget::ToolboxNode::ToolboxNode(const GraphicsItem* item)
+    {
+        switch(item->itemType())
+        {
+        case ItemType::Module:
+            mNode = Node(item->id(),Node::Module);
+            mName = QString::fromStdString(gNetlist->get_module_by_id(mNode.id())->get_name());
+            break;
+        case ItemType::Gate:
+            mNode = Node(item->id(),Node::Gate);
+            mName = QString::fromStdString(gNetlist->get_gate_by_id(mNode.id())->get_name());
+            break;
+        default:
+            break;
+        }
+    }
+
     std::vector<Net*> GroupingManagerWidget::ToolboxNode::inputNets() const
     {
         switch (mNode.type()) {
@@ -265,20 +283,21 @@ namespace hal
                 mHash[g] = sm;
     }
 
-    void GroupingManagerWidget::handleToolboxPredecessor(int maxDepth)
+    void GroupingManagerWidget::handleToolboxPredecessor()
     {
-        successorToNewGrouping(maxDepth, false);
+        newGroupingSuccOrPred(0, false, nullptr);
     }
 
-    void GroupingManagerWidget::handleToolboxSuccessor(int maxDepth)
+    void GroupingManagerWidget::handleToolboxSuccessor()
     {
-        successorToNewGrouping(maxDepth, true);
+        newGroupingSuccOrPred(0, true, nullptr);
     }
 
-    void GroupingManagerWidget::successorToNewGrouping(int maxDepth, bool succ)
+    void GroupingManagerWidget::newGroupingSuccOrPred(int maxDepth, bool succ, const GraphicsItem* item)
     {
         QSet<u32> mods, gats, nets;
         ToolboxNode tbn;
+        if (item) tbn = ToolboxNode(item);
         ToolboxModuleHash tmh(tbn.mNode);
         QVector<Net*> todoNet;
         QSet<Node> handledBox;
@@ -320,19 +339,20 @@ namespace hal
         act->exec();
     }
 
-    void GroupingManagerWidget::handleToolboxPredecessorDistance(int maxDepth)
+    void GroupingManagerWidget::handleToolboxPredecessorDistance()
     {
-        newGroupingByDistance(maxDepth,false);
+        newGroupingByDistance(3,false,nullptr);
     }
 
-    void GroupingManagerWidget::handleToolboxSuccessorDistance(int maxDepth)
+    void GroupingManagerWidget::handleToolboxSuccessorDistance()
     {
-        newGroupingByDistance(maxDepth,true);
+        newGroupingByDistance(3,true,nullptr);
     }
 
-    void GroupingManagerWidget::newGroupingByDistance(int maxDepth, bool succ)
+    void GroupingManagerWidget::newGroupingByDistance(int maxDepth, bool succ, const GraphicsItem* item)
     {
         ToolboxNode tbn;
+        if (item) tbn = ToolboxNode(item);
         ToolboxModuleHash tmh(tbn.mNode);
         QVector<Net*> thisDst;
         QVector<Net*> nextDst;

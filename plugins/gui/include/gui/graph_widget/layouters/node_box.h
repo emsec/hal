@@ -163,7 +163,7 @@ namespace hal {
          * if the gate is part of a module rendered as box. The method ist mostly
          * used to find boxes by net endpoints.
          */
-        NodeBox* boxForGate(Gate* g) const { return mGateHash.value(g); }
+        NodeBox* boxForGate(const Gate* g) const { return mGateHash.value(g); }
 
         /**
          * @brief boxForPoint find NodeBox by grid position
@@ -192,7 +192,7 @@ namespace hal {
 
         QSet<u32> filterNotInView(const QSet<u32>& gats) const;
     private:
-        QHash<Gate*,NodeBox*>         mGateHash;
+        QHash<const Gate*,NodeBox*>   mGateHash;
         QHash<QPoint,NodeBox*>        mPointHash;
         QHash<Node,NodeBox*>          mNodeHash;
         QHash<GraphicsNode*,NodeBox*> mItemHash;

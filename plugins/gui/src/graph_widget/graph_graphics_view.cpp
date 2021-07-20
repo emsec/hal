@@ -47,6 +47,7 @@
 #include <QInputDialog>
 #include <QLabel>
 #include <QLineEdit>
+#include <QList>
 #include <QMenu>
 #include <QMessageBox>
 #include <QMimeData>
@@ -55,8 +56,6 @@
 #include <QWheelEvent>
 #include <QWidgetAction>
 #include <QDebug>
-#include <QMetaMethod>
-
 #include <algorithm>
 #include <qmath.h>
 
@@ -653,6 +652,44 @@ namespace hal
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRenameAction);
             }
 
+            if (isGate || isModule)
+            {
+
+                QMenu* preSucMenu = context_menu.addMenu("  Successor/Predecessor …");
+                recursionLevelMenu(preSucMenu->addMenu("Add successors to view …"),           true, &GraphGraphicsView::handleAddSuccessorToView);
+                if (isGate)
+                {
+                    action = preSucMenu->addAction("Add path to successor to view …");
+                    action->setData(true);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleShortestPathToView);
+                }
+                recursionLevelMenu(preSucMenu->addMenu("Highlight successors …"),             true, &GraphGraphicsView::handleHighlightSuccessor, true);
+                recursionLevelMenu(preSucMenu->addMenu("Highlight successors by distance …"), true, &GraphGraphicsView::handleSuccessorDistance);
+                if (isGate)
+                {
+                    action = preSucMenu->addAction("Highlight path to successor …");
+                    action->setData(true);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPath);
+                }
+
+                preSucMenu->addSeparator();
+                recursionLevelMenu(preSucMenu->addMenu("Add predecessors to view …"),           false, &GraphGraphicsView::handleAddPredecessorToView);
+                if (isGate)
+                {
+                    action = preSucMenu->addAction("Add path to predecessor to view …");
+                    action->setData(false);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleShortestPathToView);
+                }
+                recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors …"),             false, &GraphGraphicsView::handleHighlightPredecessor, true);
+                recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors by distance …"), false, &GraphGraphicsView::handlePredecessorDistance);
+                if (isGate)
+                {
+                    action = preSucMenu->addAction("Highlight path to predecessor …");
+                    action->setData(false);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPath);
+                }
+            }
+
             if (gSelectionRelay->numberSelectedNodes() > 1)
             {
                 context_menu.addSeparator();
@@ -666,44 +703,6 @@ namespace hal
             {
                 action = context_menu.addAction("  Isolate in new view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleIsolationViewAction);
-
-                QMenu* preSucMenu = context_menu.addMenu("  Successor/Predecessor …");
-                if (isGate)
-                {
-                    recursionLevelMenu(preSucMenu->addMenu("Add successors to view …"),           true, &GraphGraphicsView::handleAddSuccessorToView);
-                    action = preSucMenu->addAction("Add path to successor to view …");
-                    action->setData(true);
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleShortestPathToView);
-                    recursionLevelMenu(preSucMenu->addMenu("Highlight successors …"),             true, &GraphGraphicsView::handleHighlightSuccessor, true);
-                    recursionLevelMenu(preSucMenu->addMenu("Highlight successors by distance …"), true, &GraphGraphicsView::handleSuccessorDistance);
-                    action = preSucMenu->addAction("Highlight path to successor …");
-                    action->setData(true);
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPath);
-                }
-                else
-                {
-                    action = preSucMenu->addAction("Add successors to view …");
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleSelectOutputs);
-                }
-
-                preSucMenu->addSeparator();
-                if (isGate)
-                {
-                    recursionLevelMenu(preSucMenu->addMenu("Add predecessors to view …"),           false, &GraphGraphicsView::handleAddPredecessorToView);
-                    action = preSucMenu->addAction("Add path to predecessor to view …");
-                    action->setData(false);
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleShortestPathToView);
-                    recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors …"),             false, &GraphGraphicsView::handleHighlightPredecessor, true);
-                    recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors by distance …"), false, &GraphGraphicsView::handlePredecessorDistance);
-                    action = preSucMenu->addAction("Highlight path to predecessor …");
-                    action->setData(false);
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPath);
-                }
-                else
-                {
-                    action = preSucMenu->addAction("Add predecessors to view …");
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleSelectInputs);
-                }
 
                 action = context_menu.addAction("  Remove from view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
@@ -870,8 +869,6 @@ namespace hal
 
     void GraphGraphicsView::handleAddSuccessorToView()
     {
-        Q_ASSERT(mItem->itemType()==ItemType::Gate);
-
         QAction* send = static_cast<QAction*>(sender());
         Q_ASSERT(send);
         int level = send->data().toInt();
@@ -880,8 +877,6 @@ namespace hal
 
     void GraphGraphicsView::handleAddPredecessorToView()
     {
-        Q_ASSERT(mItem->itemType()==ItemType::Gate);
-
         QAction* send = static_cast<QAction*>(sender());
         Q_ASSERT(send);
         int level = send->data().toInt();
@@ -892,40 +887,61 @@ namespace hal
     {
 
         QSet<u32> gatsNew;
-        QSet<Gate*> gatsHandled;
+        QSet<const Gate*> gatsHandled;
 
-        Gate* gOrigin = gNetlist->get_gate_by_id(mItem->id());
-        Q_ASSERT(gOrigin);
-        gatsHandled.insert(gOrigin);
+        QList<const Gate*> startList;
+        Node startNode;
+
+        switch (mItem->itemType())
+        {
+        case ItemType::Gate:
+            startNode = Node(mItem->id(),Node::Gate);
+            startList.append(gNetlist->get_gate_by_id(mItem->id()));
+            break;
+        case ItemType::Module:
+            startNode = Node(mItem->id(),Node::Module);
+            for (const Gate* g : gNetlist->get_module_by_id(mItem->id())->get_gates(nullptr,true))
+                startList.append(g);
+            break;
+        default:
+            return;
+        }
+
+        Q_ASSERT(startList.size());
+
+        for (const Gate* g : startList)
+            gatsHandled.insert(g);
 
         const NodeBoxes& boxes = mGraphWidget->getContext()->getLayouter()->boxes();
-        const NodeBox* lastBox = boxes.boxForGate(gOrigin);
-        Q_ASSERT(lastBox);
-        int x = lastBox->x();
-        int yOrigin = lastBox->y();
-        int deltaX = succ ? 1 : -1;
+        const NodeBox* box = boxes.boxForNode(startNode);
+        Q_ASSERT(box);
+        int xOrigin = box->x();
+        int yOrigin = box->y();
+        int xDir = succ ? 1 : -1;
 
         PlacementHint plc(PlacementHint::Standard);
 
         for (int loop = 0; !maxLevel || loop<maxLevel; loop++)
         {
-            x += deltaX;
             int y = 0;
-            QList<Gate*> foundList;
+            QList<const Gate*> foundList;
 
-            for (Gate* g : netlist_utils::get_next_gates(gOrigin, succ, loop+1))
+            for (const Gate* gOrigin : startList)
             {
-                if (gatsHandled.contains(g)) continue;
-                gatsHandled.insert(g);
-                if (boxes.boxForGate(g)) continue; // already in view
-                foundList.append(g);
+                for (const Gate* g : netlist_utils::get_next_gates(gOrigin, succ, 1))
+                {
+                    if (gatsHandled.contains(g)) continue;
+                    gatsHandled.insert(g);
+                    if (boxes.boxForGate(g)) continue; // already in view
+                    foundList.append(g);
+                }
             }
 
             if (foundList.isEmpty()) break;
-            for (Gate* g: foundList)
+            for (const Gate* g: foundList)
             {
                 gatsNew.insert(g->get_id());
-                QPoint point(x, yOrigin + y);
+                QPoint point(xOrigin + (loop+1) * xDir, yOrigin + y);
                 y = y > 0 ? -y : -y+1;
                 Node nd(g->get_id(),Node::Gate);
                 if (!boxes.boxForPoint(point)) // not occupied yet
@@ -935,6 +951,7 @@ namespace hal
                     plc.addGridPosition(nd,point);
                 }
             }
+            startList = foundList;
         }
 
         ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gatsNew);
@@ -949,7 +966,7 @@ namespace hal
         QAction* send = static_cast<QAction*>(sender());
         Q_ASSERT(send);
         int level = send->data().toInt();
-        gContentManager->getGroupingManagerWidget()->handleToolboxSuccessor(level);
+        gContentManager->getGroupingManagerWidget()->newGroupingSuccOrPred(level,true,mItem);
     }
 
     void GraphGraphicsView::handleHighlightPredecessor()
@@ -957,7 +974,7 @@ namespace hal
         QAction* send = static_cast<QAction*>(sender());
         Q_ASSERT(send);
         int level = send->data().toInt();
-        gContentManager->getGroupingManagerWidget()->handleToolboxPredecessor(level);
+        gContentManager->getGroupingManagerWidget()->newGroupingSuccOrPred(level,false,mItem);
     }
 
     void GraphGraphicsView::handleSuccessorDistance()
@@ -965,7 +982,7 @@ namespace hal
         QAction* send = static_cast<QAction*>(sender());
         Q_ASSERT(send);
         int level = send->data().toInt();
-        gContentManager->getGroupingManagerWidget()->handleToolboxSuccessorDistance(level);
+        gContentManager->getGroupingManagerWidget()->newGroupingByDistance(level,true,mItem);
     }
 
     void GraphGraphicsView::handlePredecessorDistance()
@@ -973,7 +990,7 @@ namespace hal
         QAction* send = static_cast<QAction*>(sender());
         Q_ASSERT(send);
         int level = send->data().toInt();
-        gContentManager->getGroupingManagerWidget()->handleToolboxPredecessorDistance(level);
+        gContentManager->getGroupingManagerWidget()->newGroupingByDistance(level,false,mItem);
     }
 
     void GraphGraphicsView::handleShortestPathToView()
