@@ -36,6 +36,7 @@
 #include <QWidget>
 #include <QtCore/qreadwritelock.h>
 #include <QScrollBar>
+#include <QPushButton>
 
 namespace hal
 {
@@ -111,6 +112,8 @@ namespace hal
          */
         void handleCurrentFilterChanged(int index);
 
+        void handleSeverityChanged(bool state);
+
         /**
          * Q_SLOT to handle interactions with the scrollbar. After the first scrollbar interaction the scrollbar wont
          * be locked at the bottom anymore (e.g. after a resize event).
@@ -124,11 +127,15 @@ namespace hal
 
         QPlainTextEdit* mPlainTextEdit;
         //ChannelSelector* mSelector;
-
-        SeveritySelector* mInfoSelector;
-        SeveritySelector* mWarningSelector;
-        SeveritySelector* mErrorSelector;
-        SeveritySelector* mDebugSelector;
+        ChannelSelector* selector;
+        QPushButton* mDebugButton;
+        QPushButton* mInfoButton;
+        QPushButton* mWarningButton;
+        QPushButton* mErrorButton;
+//        SeveritySelector* mInfoSelector;
+//        SeveritySelector* mWarningSelector;
+//        SeveritySelector* mErrorSelector;
+//        SeveritySelector* mDebugSelector;
         bool mInfoSeverity;
         bool mWarningSeverity;
         bool mErrorSeverity;
