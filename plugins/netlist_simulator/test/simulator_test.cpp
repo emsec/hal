@@ -49,6 +49,7 @@ namespace hal
             NO_COUT_BLOCK;
             plugin_manager::load_all_plugins();
             gate_library_manager::get_gate_library("XILINX_UNISIM.hgl");
+            gate_library_manager::get_gate_library("ice40ultra.hgl");
         }
 
         virtual void TearDown()
@@ -725,6 +726,7 @@ namespace hal
             if (utils::file_exists(path_netlist_hal))
             {
                 std::cout << ".hal file found for test netlist, loading this one." << std::endl;
+                NO_COUT_BLOCK;
                 nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
             }
             else
@@ -835,11 +837,10 @@ namespace hal
 
         std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/bram_netlist.hal";
 
-        //create netlist from path
         auto lib = gate_library_manager::get_gate_library_by_name("ICE40ULTRA");
         if (lib == nullptr)
         {
-            FAIL() << "ICE40ULTRA gate library not found";
+            FAIL() << "ice40ultra gate library not found";
         }
 
         std::unique_ptr<Netlist> nl;
@@ -877,7 +878,6 @@ namespace hal
         sim->add_gates(nl->get_gates());
         sim->load_initial_values_from_netlist();
 
-        // retrieve nets
         auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
 
         sim->add_clock_period(clk, 10000);
@@ -929,7 +929,11 @@ namespace hal
 
         u32 input_nets_amount = 0;
 
+        // clk has to be counted twice?
         if (clk != nullptr)
+            input_nets_amount++;
+
+       if (clk != nullptr)
             input_nets_amount++;
 
         for (const auto& din_net : din){
@@ -961,45 +965,134 @@ namespace hal
             input_nets_amount++;
 
         if (input_nets_amount != sim->get_input_nets().size())
+        {
+            for (const auto& net : sim->get_input_nets())
+            {
+                std::cout << net->get_name() << std::endl;
+            }
             FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
+
+        }
 
         //start simulation
         std::cout << "starting simulation" << std::endl;
         //testbench
 
-        // {
-        //     measure_block_time("simulation");
+        {
+            measure_block_time("simulation");
+            for (const auto& input_net : sim->get_input_nets())
+            {
+                sim->set_input(input_net, SignalValue::ZERO);
 
-        //     // msg <= x"61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
-        //     std::string hex_input = "61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
-        //     for (u32 i = 0; i < hex_input.size(); i += 2)
-        //     {
-        //         u8 byte = std::stoul(hex_input.substr(i, 2), nullptr, 16);
-        //         for (u32 j = 0; j < 8; ++j)
-        //         {
-        //             sim->set_input(input_bits[i * 4 + j], (SignalValue)((byte >> (7 - j)) & 1));
-        //         }
-        //     }
+                // TODO @speith, warum ist clk zweimal drin?
+                if (input_net->get_name() == "clk"){
+                    std::cout << "clk" << std::endl;
+                }
+            }
 
-        //     sim->set_input(rst, SignalValue::ONE);       //RST <= '1';
-        //     sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-        //     sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
 
-        //     sim->set_input(rst, SignalValue::ZERO);    //RST <= '0';
-        //     sim->simulate(10 * 1000);                  //WAIT FOR 10 NS;
+            uint16_t data_write = 0xffff;
+            uint16_t data_read = 0x0000;
+            uint8_t addr = 0xff;
 
-        //     sim->set_input(start, SignalValue::ONE);    //START <= '1';
-        //     sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
+            // write data without wclke
+            // set_write_addr(addr);
+            for (const auto& write_addr_net : write_addr)
+            {
+                sim->set_input(write_addr_net, SignalValue::ONE);
+            }
+            // write_data(data_write);
+            for (const auto& din_net : din)
+            {
+                sim->set_input(din_net, SignalValue::ONE);
+            }
 
-        //     sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-        //     sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
+            //TODO @speith: check units? *1000 correct?
+            sim->simulate(1 * 1000); // tb->wait_for_n_clocks(1);
 
-        //     sim->simulate(2000 * 1000);
-        // }
+            sim->set_input(write_en, SignalValue::ONE); // set_write_en(0x1);
 
-        // // Test if maps are equal
+            sim->simulate(1 * 1000); // tb->wait_for_n_clocks(1);
 
-        //EXPECT_TRUE(true, true);
+            sim->set_input(write_en, SignalValue::ZERO); // set_write_en(0x0);
+            sim->simulate(1 * 1000); // tb->wait_for_n_clocks(1);
+
+            // // read data without rclke
+            sim->set_input(read_en, SignalValue::ZERO); // set_read_en(0x1);
+            // set_read_addr(addr);
+            for (const auto& read_addr_net : read_addr)
+            {
+                sim->set_input(read_addr_net, SignalValue::ONE);
+            }
+
+            sim->simulate(2 * 1000);// tb->wait_for_n_clocks(2);
+
+            // data_read = read_data();
+
+            sim->simulate(5 * 1000);// tb->wait_for_n_clocks(5);
+            // printf("sent %08x, received: %08x\n", data_write, data_read);
+
+            // // write data with wclke
+            // set_write_addr(addr);
+            for (const auto& write_addr_net : write_addr)
+            {
+                sim->set_input(write_addr_net, SignalValue::ONE);
+            }
+            // write_data(data_write)
+            for (const auto& din_net : din)
+            {
+                sim->set_input(din_net, SignalValue::ONE);
+            }
+
+            sim->simulate(1 * 1000);// tb->wait_for_n_clocks(1);
+
+            sim->set_input(write_en, SignalValue::ONE); // set_write_en(0x1);
+            sim->set_input(wclke, SignalValue::ONE); // set_wclke(0x1);
+
+            sim->simulate(1 * 1000);// tb->wait_for_n_clocks(1);
+
+            sim->set_input(write_en, SignalValue::ZERO); // set_write_en(0x0);
+            sim->set_input(wclke, SignalValue::ZERO); // set_wclke(0x0);
+
+            sim->simulate(1 * 1000);// tb->wait_for_n_clocks(1);
+
+            // // read data without rclke
+            sim->set_input(read_en, SignalValue::ZERO); // set_read_en(0x1);
+            // set_read_addr(addr);
+            for (const auto& read_addr_net : read_addr)
+            {
+                sim->set_input(read_addr_net, SignalValue::ONE);
+            }
+
+            sim->simulate(2 * 1000); // tb->wait_for_n_clocks(2);
+
+            // data_read = read_data();
+
+            sim->simulate(5 * 1000);// tb->wait_for_n_clocks(5);
+            // printf("sent %08x, received: %08x\n", data_write, data_read);
+
+            // // read data with rclke
+            sim->set_input(read_en, SignalValue::ZERO); // set_read_en(0x1);
+            // set_read_addr(addr);
+            for (const auto& read_addr_net : read_addr)
+            {
+                sim->set_input(read_addr_net, SignalValue::ONE);
+            }
+            sim->set_input(rclke, SignalValue::ONE); // set_rclke(0x1);
+
+            sim->simulate(2 * 1000); // tb->wait_for_n_clocks(2);
+            sim->set_input(rclke, SignalValue::ZERO); // set_rclke(0x0);
+
+            // data_read = read_data();
+
+            sim->simulate(5 * 1000);// tb->wait_for_n_clocks(5);
+            // printf("sent %08x, received: %08x\n", data_write, data_read);
+
+            sim->simulate(100 * 1000); // tb->wait_for_n_clocks(100);
+        }
+
+        // Test if maps are equal
+        EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
         TEST_END
     }
 }    // namespace hal

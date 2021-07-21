@@ -2021,64 +2021,6 @@
             ]
         },
         {
-            "name": "SB_IO",
-            "types": [
-                "io"
-            ],
-            "pins": [
-                {
-                    "name": "PACKAGE_PIN",
-                    "direction": "inout",
-                    "type": "io_pad"
-                },
-                {
-                    "name": "LATCH_INPUT_VALUE",
-                    "direction": "input",
-                    "type": "data"
-                },
-                {
-                    "name": "CLOCK_ENABLE",
-                    "direction": "input",
-                    "type": "enable"
-                },
-                {
-                    "name": "INPUT_CLK",
-                    "direction": "input",
-                    "type": "clock"
-                },
-                {
-                    "name": "OUTPUT_CLK",
-                    "direction": "input",
-                    "type": "clock"
-                },
-                {
-                    "name": "OUTPUT_ENABLE",
-                    "direction": "input",
-                    "type": "enable"
-                },
-                {
-                    "name": "D_OUT_0",
-                    "direction": "input",
-                    "type": "data"
-                },
-                {
-                    "name": "D_OUT_1",
-                    "direction": "input",
-                    "type": "data"
-                },
-                {
-                    "name": "D_IN_0",
-                    "direction": "output",
-                    "type": "data"
-                },
-                {
-                    "name": "D_IN_1",
-                    "direction": "output",
-                    "type": "data"
-                }
-            ]
-        },
-        {
             "name": "SB_GB_IO",
             "types": [
                 "io"
