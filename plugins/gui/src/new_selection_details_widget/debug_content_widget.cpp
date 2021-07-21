@@ -13,11 +13,13 @@
 #include "gui/new_selection_details_widget/new_net_details_widget/net_info_table.h"
 #include "gui/new_selection_details_widget/new_module_details_widget/module_info_table.h"
 #include "gui/new_selection_details_widget/data_table_widget.h"
+#include "gui/new_selection_details_widget/groupings_of_item_widget.h"
 
 namespace hal {
     DebugContentWidget::DebugContentWidget(QWidget *parent) : ContentWidget("Debug Widget", parent)
     {
         //mContentLayout->addWidget(new DataTableWidget(this));
+        //mContentLayout->addWidget(new GroupingsOfItemWidget(this));
 
         //--------For NetlistElementsModel
         //NOTE: I've commented it out temporarily, because it SIGSEGVs sometimes (in netlists without gate id 2)
