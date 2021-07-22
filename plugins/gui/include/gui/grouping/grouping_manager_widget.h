@@ -44,6 +44,7 @@ namespace hal
     class Grouping;
     class GroupingProxyModel;
     class Searchbar;
+    class GraphicsItem;
 
     /**
      * @ingroup utility_widgets-grouping
@@ -71,6 +72,9 @@ namespace hal
         Q_PROPERTY(QString colorSelectIconStyle READ colorSelectIconStyle WRITE setColorSelectIconStyle)
         Q_PROPERTY(QString toSelectionIconPath READ toSelectionIconPath WRITE setToSelectionIconPath)
         Q_PROPERTY(QString toSelectionIconStyle READ toSelectionIconStyle WRITE setToSelectionIconStyle)
+        Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
+        Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
+        Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
 
     public:
         /**
@@ -112,6 +116,9 @@ namespace hal
         QString toSelectionIconPath() const;
         QString toSelectionIconStyle() const;
         QString disabledIconStyle() const;
+        QString searchIconPath() const;
+        QString searchIconStyle() const;
+        QString searchActiveIconStyle() const;
         ///@}
 
         /** @name Q_PROPERTY WRITE Functions
@@ -132,6 +139,9 @@ namespace hal
         void setColorSelectIconStyle(const QString& style);
         void setToSelectionIconPath(const QString& path);
         void setToSelectionIconStyle(const QString& style);
+        void setSearchIconPath(const QString &path);
+        void setSearchIconStyle(const QString &style);
+        void setSearchActiveIconStyle(const QString &style);
         ///@}
 
         /**
@@ -147,6 +157,34 @@ namespace hal
          * @return The proxy model.
          */
         GroupingProxyModel* getProxyModel() const {return mProxyModel; }
+
+        /**
+         * Enable/Disable the toolbar buttons which require a valid selection
+         */
+        void setToolbarButtonsEnabled(bool enable);
+
+        /**
+         * Enable/Disable the searchbar and update icon accordingly
+         */
+        void enableSearchbar(bool enable);
+
+        /**
+         * Creates a new grouping for successors or predecessors of item.
+         *
+         * @param maxDepth - maximum recursion depth in view
+         * @param succ - if true successors are highlighted, predecessors otherwise
+         * @param item - the item to start from. If null recursion starts from first selected item.
+         */
+        void newGroupingSuccOrPred(int maxDepth, bool succ, const GraphicsItem* item);
+
+        /**
+         * Creates groupings dependend on distance to start item.
+         *
+         * @param maxDepth - maximum recursion depth in view
+         * @param succ - if true successors are highlighted, predecessors otherwise
+         * @param item - the item to start from. If null recursion starts from first selected item.
+         */
+        void newGroupingByDistance(int maxDepth, bool succ, const GraphicsItem* item);
 
     public Q_SLOTS:
         /**
@@ -177,6 +215,30 @@ namespace hal
          */
         void handleGraphSelectionChanged(void* sender);
 
+        /**
+         * Adds predecessors of the currently selected gate or module to a new grouping.
+         *
+         */
+        void handleToolboxPredecessor();
+
+        /**
+         * Adds successors of the currently selected gate or module to a new grouping.
+         *
+         */
+        void handleToolboxSuccessor();
+
+        /**
+         * Performs a BFS with a max-depth of three and creates a new grouping
+         * for the predecessors of each depth.
+         */
+        void handleToolboxPredecessorDistance();
+
+        /**
+         * Performs a BFS with a max-depth of three and creates a new grouping
+         * for the successors of each depth.
+         */
+        void handleToolboxSuccessorDistance();
+
     private Q_SLOTS:
         /**
          * Q_SLOT to toggle the searchbar. If the searchbar was hidden it will be shown. If it was shown it will be hidden.
@@ -189,6 +251,11 @@ namespace hal
          * @param text - The filter string
          */
         void filter(const QString& text);
+
+        /**
+         * Q_SLOT to update the search icon style. The search icon style indicates wether a filter is applied or not.
+         */
+        void updateSearchIcon();
 
         /**
          * Q_SLOT to create a new grouping. Called when the 'Create Grouping'-buttons was clicked.
@@ -228,28 +295,6 @@ namespace hal
          */
         void handleToolboxClicked();
 
-        /**
-         * Adds all predecessor of the currently selected gate or module to a new grouping.
-         */
-        void handleToolboxPredecessor();
-
-        /**
-         * Adds all successor of the currently selected gate or module to a new grouping.
-         */
-        void handleToolboxSuccessor();
-
-        /**
-         * Performs a BFS with a max-depth of three and creates a new grouping
-         * for the predecessors of each depth.
-         */
-        void handleToolboxPredecessorDistance();
-
-        /**
-         * Performs a BFS with a max-depth of three and creates a new grouping
-         * for the successors of each depth.
-         */
-        void handleToolboxSuccessorDistance();
-
     private:
         class ToolboxModuleHash
         {
@@ -264,6 +309,7 @@ namespace hal
             QString mName;
             Node mNode;
             ToolboxNode(Endpoint* ep = nullptr, const ToolboxModuleHash* tmh = nullptr);
+            ToolboxNode(const GraphicsItem* item);
             std::vector<Net*> inputNets() const;
             std::vector<Net*> outputNets() const;
         };
@@ -299,10 +345,12 @@ namespace hal
         QString mToSelectionIconPath;
         QString mToSelectionIconStyle;
 
+        QString mSearchIconPath;
+        QString mSearchIconStyle;
+        QString mSearchActiveIconStyle;
+
         QString mDisabledIconStyle;
         GroupingColorSerializer mColorSerializer;
-
-        void setToolbarButtonsEnabled(bool enabled);
 
         GroupingTableEntry getCurrentGrouping();
     };

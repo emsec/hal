@@ -140,6 +140,7 @@ namespace hal
         connect(mTabWidget, &QTabWidget::tabCloseRequested, this, &PythonEditor::handleTabCloseRequested);
         mContentLayout->addWidget(mSearchbar);
         mSearchbar->hide();
+        mSearchbar->setEmitTextWithFlags(false);
 
         mActionOpenFile->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
@@ -147,6 +148,7 @@ namespace hal
         mActionRun->setIcon(gui_utility::getStyledSvgIcon(mRunIconStyle, mRunIconPath));
         mActionToggleMinimap->setIcon(gui_utility::getStyledSvgIcon(mToggleMinimapIconStyle, mToggleMinimapIconPath));
         mActionNewFile->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
+        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
         mActionOpenFile->setText("Open Script");
         mActionSave->setText("Save");
@@ -154,6 +156,9 @@ namespace hal
         mActionRun->setText("Execute Script");
         mActionNewFile->setText("New File");
         mActionToggleMinimap->setText("Toggle Minimap");
+        mSearchAction->setText("Search");
+
+        setToolbarButtonsEnabled(true);
 
         connect(mActionOpenFile, &Action::triggered, this, &PythonEditor::handleActionOpenFile);
         connect(mActionSave, &Action::triggered, this, &PythonEditor::handleActionSaveFile);
@@ -164,6 +169,7 @@ namespace hal
         connect(mSearchAction, &QAction::triggered, this, &PythonEditor::toggleSearchbar);
 
         connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::handleSearchbarTextEdited);
+        connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::updateSearchIcon);
         connect(mTabWidget, &QTabWidget::currentChanged, this, &PythonEditor::handleCurrentTabChanged);
 
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &PythonEditor::handleFileOpened);
@@ -427,20 +433,51 @@ namespace hal
     void PythonEditor::handleSearchbarTextEdited(const QString& text)
     {
         if (mTabWidget->count() > 0)
-            dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text);
+            dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text, getFindFlags());
+
+        if (mSearchbar->filterApplied())
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
+        else
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
     }
 
     void PythonEditor::handleCurrentTabChanged(int index)
     {
         Q_UNUSED(index)
 
+        bool enable = mTabWidget->count() > 0;
+
+        QStringList iconPath, iconStyle;
+
+        QAction* entryBasedAction[] = { mActionSave, mActionSaveAs,
+                                        mActionRun, mActionToggleMinimap, mSearchAction, nullptr};
+
+        iconStyle << mSaveIconStyle << mSaveAsIconStyle
+                              << mRunIconStyle << mToggleMinimapIconStyle << mSearchIconStyle;
+        iconPath << mSaveIconPath << mSaveAsIconPath
+                             << mRunIconPath << mToggleMinimapIconPath << mSearchIconPath;
+
+        for (int iacc = 0; entryBasedAction[iacc]; iacc++)
+        {
+            entryBasedAction[iacc]->setEnabled(enable);
+            entryBasedAction[iacc]->setIcon(
+                        gui_utility::getStyledSvgIcon(enable
+                                                         ? iconStyle.at(iacc)
+                                                         : disabledIconStyle(),
+                                                         iconPath.at(iacc)));
+        }
+
         if (!mTabWidget->currentWidget())
+        {
+            mSearchbar->hide();
             return;
+        }
 
         PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
 
+
         if (!mSearchbar->isHidden())
-            current_editor->search(mSearchbar->getCurrentText());
+            current_editor->search(mSearchbar->getCurrentText(), getFindFlags());
         else if (!current_editor->extraSelections().isEmpty())
             current_editor->search("");
 
@@ -448,6 +485,8 @@ namespace hal
             mFileModifiedBar->setHidden(false);
         else
             mFileModifiedBar->setHidden(true);
+
+        updateSearchIcon();
     }
 
     PythonEditor::~PythonEditor()
@@ -462,15 +501,16 @@ namespace hal
         Toolbar->addAction(mActionSaveAs);
         Toolbar->addAction(mActionRun);
         Toolbar->addAction(mActionToggleMinimap);
+        Toolbar->addAction(mSearchAction);
     }
 
     QList<QShortcut*> PythonEditor::createShortcuts()
     {
-        QShortcut* shortcutNewFile = new QShortcut(mSettingCreateFile->value().toString(),this );
-        QShortcut* shortcutOpenFile = new QShortcut(mSettingOpenFile->value().toString(),this );
-        QShortcut* shortcutSaveFile = new QShortcut(mSettingSaveFile->value().toString(),this );
-        QShortcut* shortcutSaveFileAs = new QShortcut(mSettingSaveFileAs->value().toString(),this );
-        QShortcut* shortcutRun = new QShortcut(mSettingRunFile->value().toString(),this );
+        QShortcut* shortcutNewFile = new QShortcut(mSettingCreateFile->value().toString(), this);
+        QShortcut* shortcutOpenFile = new QShortcut(mSettingOpenFile->value().toString(), this);
+        QShortcut* shortcutSaveFile = new QShortcut(mSettingSaveFile->value().toString(), this);
+        QShortcut* shortcutSaveFileAs = new QShortcut(mSettingSaveFileAs->value().toString(), this);
+        QShortcut* shortcutRun = new QShortcut(mSettingRunFile->value().toString(), this);
         mSearchShortcut = new QShortcut(mSearchKeysequence, this);
 
         connect(mSearchShortcut, &QShortcut::activated, mSearchAction, &QAction::trigger);
@@ -747,6 +787,15 @@ namespace hal
         return true;
     }
 
+    void PythonEditor::setToolbarButtonsEnabled(bool enable)
+    {
+        mActionSave->setEnabled(enable);
+        mActionSaveAs->setEnabled(enable);
+        mActionRun->setEnabled(enable);
+        mActionToggleMinimap->setEnabled(enable);
+        mSearchAction->setEnabled(enable);
+    }
+
     void PythonEditor::handleActionSaveFile()
     {
         this->saveFile(QueryIfEmpty);
@@ -815,6 +864,12 @@ namespace hal
         connect(action, &QAction::triggered, this, &PythonEditor::handleActionCloseRightTabs);
         action = context_menu.addAction("Close all left");
         connect(action, &QAction::triggered, this, &PythonEditor::handleActionCloseLeftTabs);
+
+        context_menu.addSeparator();
+        action = context_menu.addAction("Save");
+        connect(action, &QAction::triggered, this, &PythonEditor::handleActionSaveFile);
+        action = context_menu.addAction("Save as");
+        connect(action, &QAction::triggered, this, &PythonEditor::handleActionSaveFileAs);
 
         context_menu.addSeparator();
         action                     = context_menu.addAction("Show in system explorer");
@@ -1039,6 +1094,16 @@ namespace hal
         mNewFileCounter = 0;
         mLastClickTime  = 0;
         handleActionNewTab();
+    }
+
+    void PythonEditor::updateSearchIcon()
+    {
+        if (mSearchbar->filterApplied() && mSearchbar->isVisible())
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
+        else if (!mSearchAction->isEnabled())
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mSearchIconPath));
+        else
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
     }
 
     bool PythonEditor::eventFilter(QObject* obj, QEvent* event)
@@ -1378,6 +1443,11 @@ namespace hal
         }
     }
 
+    QString PythonEditor::disabledIconStyle() const
+    {
+        return mDisabledIconStyle;
+    }
+
     QString PythonEditor::openIconPath() const
     {
         return mOpenIconPath;
@@ -1436,6 +1506,11 @@ namespace hal
     QString PythonEditor::toggleMinimapIconStyle() const
     {
         return mToggleMinimapIconStyle;
+    }
+
+    void PythonEditor::setDisabledIconStyle(const QString& style)
+    {
+        mDisabledIconStyle = style;
     }
 
     void PythonEditor::setOpenIconPath(const QString& path)
@@ -1500,23 +1575,61 @@ namespace hal
 
     void PythonEditor::toggleSearchbar()
     {
+        if (!mSearchAction->isEnabled())
+            return;
+
         if (mSearchbar->isHidden())
         {
             mSearchbar->show();
-            if (mTabWidget->currentWidget())
-                dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(mSearchbar->getCurrentText());
             mSearchbar->setFocus();
         }
         else
         {
             mSearchbar->hide();
             if (mTabWidget->currentWidget())
-            {
-                dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search("");
                 mTabWidget->currentWidget()->setFocus();
-            }
             else
                 this->setFocus();
         }
+    }
+
+    QTextDocument::FindFlags PythonEditor::getFindFlags()
+    {
+        QTextDocument::FindFlags options = QTextDocument::FindFlags();
+        if (mSearchbar->caseSensitiveChecked())
+            options = options | QTextDocument::FindCaseSensitively;
+        if (mSearchbar->exactMatchChecked())
+            options = options | QTextDocument::FindWholeWords;
+        return options;
+    }
+
+    QString PythonEditor::searchIconPath() const
+    {
+        return mSearchIconPath;
+    }
+
+    QString PythonEditor::searchIconStyle() const
+    {
+        return mSearchIconStyle;
+    }
+
+    QString PythonEditor::searchActiveIconStyle() const
+    {
+        return mSearchActiveIconStyle;
+    }
+
+    void PythonEditor::setSearchIconPath(const QString& path)
+    {
+        mSearchIconPath = path;
+    }
+
+    void PythonEditor::setSearchIconStyle(const QString& style)
+    {
+        mSearchIconStyle = style;
+    }
+
+    void PythonEditor::setSearchActiveIconStyle(const QString& style)
+    {
+        mSearchActiveIconStyle = style;
     }
 }

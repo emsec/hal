@@ -45,7 +45,8 @@ namespace hal
         void initialize() override;
 
         /**
-         * Generates the state graph of a finite state machine and returns a mapping from each state to a vector of all its possible successor states.
+         * Generates the state graph of a finite state machine and returns a mapping from each state to a vector of all its possible transitions.
+         * A transition consits of a successor state and a vector of input mappings that lead to such a transition.
          *
          * @param[in] nl - Pointer to the netlist.
          * @param[in] state_reg - A vector containing all the gates of the fsm representing the state register.
@@ -53,9 +54,9 @@ namespace hal
          * @param[in] initial_state - A mapping from the state registers to their initial value. If omitted the intial state will be set to 0.
          * @param[in] graph_path - Path where the transition state graph in dot format is saved.
          * @param[in] timeout - Timeout value for the sat solvers. Defaults to 600000 ms.
-         * @returns A mapping from each state to all its successors states.
+         * @returns A mapping from each state to all its possible transitions.
          */
-        std::map<u64, std::vector<u64>> solve_fsm(Netlist* nl,
+        std::map<u64, std::map<u64, std::vector<std::map<u32, u8>>>> solve_fsm(Netlist* nl,
                                                   const std::vector<Gate*> state_reg,
                                                   const std::vector<Gate*> transition_logic,
                                                   const std::map<Gate*, bool> initial_state = {},

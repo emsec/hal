@@ -206,7 +206,7 @@ namespace hal
 
                 if (mSubfocus == Subfocus::Left)
                 {
-                    size = g->get_input_pins().size();
+                    size = g->get_type()->get_input_pins().size();
 
                     if (!size)     // CHECK NECESSARY ???
                         return;    // INVALID STATE, FIX OR IGNORE ???
@@ -216,7 +216,7 @@ namespace hal
 
                 if (mSubfocus == Subfocus::Right)
                 {
-                    size = g->get_output_pins().size();
+                    size = g->get_type()->get_output_pins().size();
 
                     if (!size)     // CHECK NECESSARY ???
                         return;    // INVALID STATE, FIX OR IGNORE ???
@@ -299,7 +299,7 @@ namespace hal
 
                 if (mSubfocus == Subfocus::Left)
                 {
-                    size = g->get_input_pins().size();
+                    size = g->get_type()->get_input_pins().size();
 
                     if (!size)     // CHECK NECESSARY ???
                         return;    // INVALID STATE, FIX OR IGNORE ???
@@ -309,7 +309,7 @@ namespace hal
 
                 if (mSubfocus == Subfocus::Right)
                 {
-                    size = g->get_output_pins().size();
+                    size = g->get_type()->get_output_pins().size();
 
                     if (!size)     // CHECK NECESSARY ???
                         return;    // INVALID STATE, FIX OR IGNORE ???
@@ -469,6 +469,17 @@ namespace hal
 
         Q_EMIT subfocusChanged(nullptr);
     }
+
+    QList<Node> SelectionRelay::selectedNodesList() const
+    {
+        QList<Node> retval;
+        for (u32 mid : selectedModulesList())
+            retval.append(Node(mid,Node::Module));
+        for (u32 gid : selectedGatesList())
+            retval.append(Node(gid,Node::Gate));
+        return retval;
+    }
+
 #ifdef HAL_STUDY
     void SelectionRelay::evaluateSelectionChanged(void *sender)
     {

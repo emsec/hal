@@ -115,6 +115,12 @@ namespace hal
         Grouping* get_grouping() const;
 
         /**
+         * Get submodule depth of module
+         * @returns 0=top_level module, 1=submodule from top_level, 2=submodule from submodule, ...
+         */
+        int get_submodule_depth() const;
+
+        /**
          * Get the parent module of this module.<br>
          * For the top module, a \p nullptr is returned.
          *
@@ -167,6 +173,7 @@ namespace hal
         Netlist* get_netlist() const;
 
         /**
+         * TODO test
          * Get all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
          *
          * @returns A sorted vector of nets.

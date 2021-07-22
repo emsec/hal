@@ -242,7 +242,7 @@ namespace hal
         std::string key        = m_type->get_config_data_identifier();
         std::string config_str = std::get<1>(get_data(category, key));
         auto is_ascending      = m_type->is_lut_init_ascending();
-        auto inputs            = get_input_pins();
+        auto inputs            = get_type()->get_input_pins();
 
         BooleanFunction result = BooleanFunction::ZERO;
 
@@ -347,7 +347,7 @@ namespace hal
             auto output_pins = m_type->get_output_pins();
             if (!output_pins.empty() && name == output_pins[0])
             {
-                auto tt = func.get_truth_table(get_input_pins());
+                auto tt = func.get_truth_table(get_type()->get_input_pins());
 
                 u64 config_value = 0;
                 if (!m_type->is_lut_init_ascending())

@@ -30,6 +30,7 @@
 
 #include <QGraphicsView>
 #include <QAction>
+#include <QMenu>
 
 namespace hal
 {
@@ -38,7 +39,7 @@ namespace hal
 
     namespace graph_widget_constants
     {
-    enum class grid_type;
+        enum class grid_type;
     }
 
     /**
@@ -92,6 +93,15 @@ namespace hal
          */
         void moduleDoubleClicked(u32 id);
 
+    public Q_SLOTS:
+        /**
+         * highlight shortest path between two gates by putting the items on path into a new group
+         *
+         * @param idFrom - id of gate where path starts
+         * @param idTo - id of gate where path ends
+         */
+        void handleShortestPath(u32 idFrom, u32 idTo);
+
     private Q_SLOTS:
         void conditionalUpdate();
         void handleIsolationViewAction();
@@ -102,19 +112,27 @@ namespace hal
         void handleChangeTypeAction();
         void adjustMinScale();
 
-        void handleFoldSingleAction();
-        void handleFoldAllAction();
+        void handleFoldParentSingle();
+        void handleFoldParentAll();
         void handleUnfoldSingleAction();
         void handleUnfoldAllAction();
 
+        void handleShortestPathToView();
+        void handleQueryShortestPath();
         void handleSelectOutputs();
         void handleSelectInputs();
         void handleGroupingUnassign();
         void handleGroupingAssignNew();
         void handleGroupingAssingExisting();
 
+        void handleAddSuccessorToView();
+        void handleAddPredecessorToView();
+        void handleHighlightSuccessor();
+        void handleHighlightPredecessor();
+        void handleSuccessorDistance();
+        void handlePredecessorDistance();
         void handleModuleDialog();
-        void handleCancelPickModule();
+        void handleCancelPickMode();
 
     private:
         void paintEvent(QPaintEvent* event) override;
@@ -138,6 +156,8 @@ namespace hal
         void toggleAntialiasing();
 
         bool itemDraggable(GraphicsItem* item);
+
+        void addSuccessorToView(int maxLevel, bool succ);
 
         struct LayouterPoint
         {
@@ -182,6 +202,26 @@ namespace hal
         QPointF mTargetViewportPos;
 
         qreal mMinScale;
+
+        template <typename Func1>
+        void recursionLevelMenu(QMenu* menu, bool succ, Func1 slot, bool addUnlimited=false)
+        {
+            QString s = succ ? "successors" : "predecessors";
+            const char* txt[] = {"All %1", "Depth 1 (direct %1)", "Depth 2",
+                                 "Depth 3", "Depth 4", "Depth 5", nullptr};
+            for (int inx = 1; txt[inx]; inx++)
+            {
+                QAction* act = menu->addAction(inx==1 ? QString(txt[1]).arg(s) : QString(txt[inx]));
+                act->setData(inx);
+                connect(act, &QAction::triggered, this, slot);
+            }
+            if (addUnlimited)
+            {
+                QAction* act = menu->addAction(QString(txt[0]).arg(s));
+                act->setData(0);
+                connect(act, &QAction::triggered, this, slot);
+            }
+        }
 
         static const QString sAssignToGrouping;
     };

@@ -31,6 +31,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <map> 
 
 namespace hal
 {
@@ -48,6 +49,7 @@ namespace hal
 
             std::unordered_map<u32, std::unordered_set<u32>> gates_of_group;
             std::unordered_map<u32, u32> parent_group_of_gate;
+            std::map<u32, bool> operations_on_group_allowed;
 
             bool operator==(const Grouping& other) const;
             bool operator!=(const Grouping& other) const;
@@ -63,6 +65,7 @@ namespace hal
             std::set<u32> get_register_stage_intersect_of_group(u32 group_id);
 
             bool are_groups_allowed_to_merge(u32 group_1_id, u32 group_2_id);
+            bool is_group_allowed_to_split(u32 group_id);
 
         private:
             /* caches */

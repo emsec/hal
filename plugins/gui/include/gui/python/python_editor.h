@@ -81,6 +81,7 @@ namespace hal
     class PythonEditor : public ContentWidget, public PythonContextSubscriber
     {
         Q_OBJECT
+        Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
         Q_PROPERTY(QString openIconPath READ openIconPath WRITE setOpenIconPath)
         Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
         Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath)
@@ -93,6 +94,9 @@ namespace hal
         Q_PROPERTY(QString newFileIconStyle READ newFileIconStyle WRITE setNewFileIconStyle)
         Q_PROPERTY(QString toggleMinimapIconPath READ toggleMinimapIconPath WRITE setToggleMinimapIconPath)
         Q_PROPERTY(QString toggleMinimapIconStyle READ toggleMinimapIconStyle WRITE setToggleMinimapIconStyle)
+        Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
+        Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
+        Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
 
     public:
         explicit PythonEditor(QWidget* parent = nullptr);
@@ -258,6 +262,13 @@ namespace hal
          */
         bool confirmDiscardForRange(int start, int end, int exclude = -1);
 
+        /**
+         * Enable/Disable toolbar buttons, which depend on a CodeEditor object (e.g. Save, Run, Show Minimap...)
+         *
+         * @param enable - Wether to enable or disable the buttons
+         */
+        void setToolbarButtonsEnabled(bool enable);
+
         // =====================================================================
         //   Q_PROPERTY functions
         // =====================================================================
@@ -265,6 +276,13 @@ namespace hal
         /** @name Q_PROPERTY Functions
          */
         ///@{
+
+        /**
+         * Q_PROPERTY READ function for the 'disabled'-icon style.
+         *
+         * @returns the 'disabled'-icon style
+         */
+        QString disabledIconStyle() const;
 
         /**
          * Q_PROPERTY READ function for the 'open file'-icon path.
@@ -351,6 +369,34 @@ namespace hal
         QString toggleMinimapIconStyle() const;
 
         /**
+         * Q_PROPERTY READ function for the 'search'-icon path.
+         *
+         * @returns the 'search'-icon path
+         */
+        QString searchIconPath() const;
+
+        /**
+         * Q_PROPERTY READ function for the 'search'-icon style.
+         *
+         * @returns the 'search'-icon style
+         */
+        QString searchIconStyle() const;
+
+        /**
+         * Q_PROPERTY READ function for the 'active search'-icon style.
+         *
+         * @returns the 'active search'-icon style
+         */
+        QString searchActiveIconStyle() const;
+
+        /**
+         * Q_PROPERTY WRITE function for the 'disabled'-icon style.
+         *
+         * @param style - the new style
+         */
+        void setDisabledIconStyle(const QString& style);
+
+        /**
          * Q_PROPERTY WRITE function for the 'open file'-icon path.
          *
          * @param path - the new path
@@ -433,6 +479,27 @@ namespace hal
          * @param style - the new style
          */
         void setToggleMinimapIconStyle(const QString& style);
+
+        /**
+         * Q_PROPERTY WRITE function for the 'search'-icon path.
+         *
+         * @param path - the new path
+         */
+        void setSearchIconPath(const QString &path);
+
+        /**
+         * Q_PROPERTY WRITE function for the 'search'-icon style.
+         *
+         * @param style - the new style
+         */
+        void setSearchIconStyle(const QString &style);
+
+        /**
+         * Q_PROPERTY WRITE function for the 'active search'-icon style.
+         *
+         * @param style - the new style
+         */
+        void setSearchActiveIconStyle(const QString &style);
         ///@}
 
         /**
@@ -456,6 +523,8 @@ namespace hal
          * @returns true on success
          */
         bool handleDeserializationFromHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
+
+        QTextDocument::FindFlags getFindFlags();
 
     Q_SIGNALS:
         void forwardStdout(const QString& output);
@@ -502,7 +571,7 @@ namespace hal
         void handleSearchbarTextEdited(const QString& text);
 
         /**
-         * Q_SLOT to handle that the used has selected another tab, so that the index of the current tab has changed.
+         * Q_SLOT to handle that the user has selected another tab, so that the index of the current tab has changed.
          *
          * @param index - The index of the newly selected tab
          */
@@ -548,6 +617,11 @@ namespace hal
          * @param fileName - the absolute path of the file that is about to be closed
          */
         void handleFileAboutToClose(const QString& fileName);
+
+        /**
+         * Q_SLOT to update the search icon style. The search icon style indicates wether a filter is applied or not.
+         */
+        void updateSearchIcon();
 
     protected:
         /**
@@ -690,6 +764,8 @@ namespace hal
         Action* mActionToggleMinimap;
         Action* mActionNewFile;
 
+        QString mDisabledIconStyle;
+
         QString mOpenIconStyle;
         QString mOpenIconPath;
 
@@ -707,6 +783,10 @@ namespace hal
 
         QString mToggleMinimapIconStyle;
         QString mToggleMinimapIconPath;
+
+        QString mSearchIconPath;
+        QString mSearchIconStyle;
+        QString mSearchActiveIconStyle;
 
         QTabWidget* mTabWidget;
         int mTabRightclicked = -1;

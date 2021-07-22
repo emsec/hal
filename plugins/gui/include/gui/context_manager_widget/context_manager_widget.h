@@ -68,6 +68,7 @@ namespace hal
         Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
+        Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
 
     public:
         /**
@@ -105,6 +106,11 @@ namespace hal
          */
         virtual void setupToolbar(Toolbar* toolbar) override;
 
+        /**
+         * Enable/Disable the searchbar and update icon accordingly
+         */
+        void enableSearchbar(bool enable);
+
         /** @name Q_PROPERTY READ Functions
          */
         ///@{
@@ -121,6 +127,7 @@ namespace hal
         QString openIconStyle() const;
         QString searchIconPath() const;
         QString searchIconStyle() const;
+        QString searchActiveIconStyle() const;
         ///@}
 
         /** @name Q_PROPERTY WRITE Functions
@@ -139,12 +146,23 @@ namespace hal
         void setOpenIconStyle(const QString &style);
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
+        void setSearchActiveIconStyle(const QString &style);
         ///@}
 
     public Q_SLOTS:
         //void handleContextCreated(GraphContext* context);
         //void handleContextRenamed(GraphContext* context);
         //void handleContextRemoved(GraphContext* context);
+
+        /**
+         * Q_SLOT to handle dataChanged signal. Enables searchbar if rowCount of model is greater zero.
+         */
+        void handleDataChanged();
+
+        /**
+         * Q_SLOT to update the search icon style. The search icon style indicates wether a filter is applied or not.
+         */
+        void updateSearchIcon();
 
     private:
         GraphTabWidget* mTabView;
@@ -153,7 +171,7 @@ namespace hal
         ContextTableModel* mContextTableModel;
         ContextTableProxyModel* mContextTableProxyModel;
 
-        Searchbar mSearchbar;
+        Searchbar* mSearchbar;
 
         QString mDisabledIconStyle;
 
@@ -179,6 +197,7 @@ namespace hal
 
         QString mSearchIconPath;
         QString mSearchIconStyle;
+        QString mSearchActiveIconStyle;
 
         void handleCreateContextClicked();
         void handleRenameContextClicked();
@@ -187,7 +206,6 @@ namespace hal
 
         void handleContextMenuRequest(const QPoint& point);
         void handleSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
-        void handleFilterTextChanged(const QString& filter_text);
 
         void setToolbarButtonsEnabled(bool enabled);
 
