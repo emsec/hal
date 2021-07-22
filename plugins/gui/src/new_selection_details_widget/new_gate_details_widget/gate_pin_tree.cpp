@@ -2,6 +2,8 @@
 #include "gui/new_selection_details_widget/models/pin_tree_model.h"
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
+#include <QHeaderView>
+#include <QtDebug>
 
 namespace hal
 {
@@ -9,13 +11,16 @@ namespace hal
     GatePinTree::GatePinTree(QWidget *parent) : QTreeView(parent), mPinModel(new PinTreeModel(this)), mGateID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        header()->setStretchLastSection(true);
+        setModel(mPinModel);
 
         //connections
         connect(this, &QTreeView::customContextMenuRequested, this, &GatePinTree::handleContextMenuRequested);
 
     }
 
-    void GatePinTree::update(u32 gateID)
+    void GatePinTree::setContent(u32 gateID)
     {
         Gate* g = gNetlist->get_gate_by_id(gateID);
         if(!g) return;
@@ -24,7 +29,7 @@ namespace hal
         mGateID = gateID;
     }
 
-    void GatePinTree::update(Gate *g)
+    void GatePinTree::setContent(Gate *g)
     {
         if(!g) return;
 
@@ -40,7 +45,12 @@ namespace hal
 
     void GatePinTree::handleContextMenuRequested(const QPoint &pos)
     {
-        Q_UNUSED(pos)
+        QModelIndex idx = indexAt(pos);
+        if(!idx.isValid())
+            return;
+
+        TreeItem* clickedItem = mPinModel->getItemFromIndex(idx);
+        qDebug() << "clicked name of item " << clickedItem->getData(0).toString();
 
     }
 

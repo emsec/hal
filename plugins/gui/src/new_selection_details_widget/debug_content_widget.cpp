@@ -5,6 +5,7 @@
 #include "gui/new_selection_details_widget/models/base_tree_model.h"
 #include "gui/new_selection_details_widget/models/pin_tree_model.h"
 #include "gui/new_selection_details_widget/models/port_tree_model.h"
+#include "gui/new_selection_details_widget/new_gate_details_widget/gate_pin_tree.h"
 #include <QTreeView>
 #include <QHeaderView>
 //---------------------------
@@ -19,25 +20,28 @@ namespace hal {
     DebugContentWidget::DebugContentWidget(QWidget *parent) : ContentWidget("Debug Widget", parent)
     {
         //mContentLayout->addWidget(new DataTableWidget(this));
-        mContentLayout->addWidget(new GroupingsOfItemWidget(this));
+        //mContentLayout->addWidget(new GroupingsOfItemWidget(this));
 
         //--------For NetlistElementsModel
         //NOTE: I've commented it out temporarily, because it SIGSEGVs sometimes (in netlists without gate id 2)
-        /*QTreeView* mTreeView = new QTreeView(this);
-        mTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        mTreeView->header()->setStretchLastSection(true);
-        NetlistElementsTreeModel* model = new NetlistElementsTreeModel(mTreeView);
-        BaseTreeModel* baseModel = new BaseTreeModel(mTreeView);
-        PinTreeModel* pinModel = new PinTreeModel(mTreeView);
-        PortTreeModel* portModel = new PortTreeModel(mTreeView);
-        baseModel->setHeaderLabels(QList<QVariant>() << "Label1" << "Label2");
-        TreeItem* someRootItem = new TreeItem(QList<QVariant>() << "parent1" << "parent2");
-        TreeItem* someChildItem = new TreeItem(QList<QVariant>() << "Test1" << "Test2");
-        someRootItem->appendChild(someChildItem);
-        baseModel->setContent(QList<TreeItem*>() << someRootItem);
-        mTreeView->setModel(pinModel);
-        //mTreeView->setModel(model);
-        mContentLayout->addWidget(mTreeView);*/
+//        QTreeView* mTreeView = new QTreeView(this);
+//        mTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//        mTreeView->header()->setStretchLastSection(true);
+//        NetlistElementsTreeModel* model = new NetlistElementsTreeModel(mTreeView);
+//        BaseTreeModel* baseModel = new BaseTreeModel(mTreeView);
+//        PinTreeModel* pinModel = new PinTreeModel(mTreeView);
+//        PortTreeModel* portModel = new PortTreeModel(mTreeView);
+//        baseModel->setHeaderLabels(QList<QVariant>() << "Label1" << "Label2");
+//        TreeItem* someRootItem = new TreeItem(QList<QVariant>() << "parent1" << "parent2");
+//        TreeItem* someChildItem = new TreeItem(QList<QVariant>() << "Test1" << "Test2");
+//        someRootItem->appendChild(someChildItem);
+//        baseModel->setContent(QList<TreeItem*>() << someRootItem);
+//        mTreeView->setModel(pinModel);
+//        //mTreeView->setModel(model);
+//        mContentLayout->addWidget(mTreeView);
+        GatePinTree* gp = new GatePinTree(this);
+        gp->setContent(19);
+        mContentLayout->addWidget(gp);
 
         //--------End NetlistElementsModel
 

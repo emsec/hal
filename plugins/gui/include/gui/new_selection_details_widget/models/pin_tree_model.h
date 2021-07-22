@@ -73,6 +73,16 @@ public:
      */
     int getCurrentGateID();
 
+    /**
+     * Get the connected nets for a given treeitem (represents a pin). If the
+     * item is grouping type or the pin has no connected net, an empty list
+     * is returned. In case of an inout pin, even multiple connected nets are possible.
+     *
+     * @param item - The treeitem from which to get the connected nets.
+     * @return A list of net ids.
+     */
+    QList<int> getNetIDsOfTreeItem(TreeItem* item);
+
     //column identifier
     static const int sNameColumn = 0;
     static const int sDirectionColumn = 1;
@@ -81,7 +91,7 @@ public:
 
     //additional data keys
     const QString keyType = "type";
-    const QString keyRepresentedNetID = "netID"; //might not be needed
+    const QString keyRepresentedNetsID = "netID"; //might not be needed
 
     enum itemType {grouping = 0, pin = 1};
     Q_ENUM(itemType)
@@ -89,9 +99,6 @@ public:
 private:
     int mGateId;
     QMap<std::string, TreeItem*> mPinGroupingToTreeItem;
-
-    //helper method to prevent code redundance
-    void appendInputOutputPins(Gate* g, std::vector<std::string> inputOrOutputPins, bool areInputPins);
 
 };
 

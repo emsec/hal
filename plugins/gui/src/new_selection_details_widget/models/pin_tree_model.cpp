@@ -13,7 +13,11 @@ namespace hal
     PinTreeModel::PinTreeModel(QObject *parent) : BaseTreeModel(parent)
     {
         setHeaderLabels(QList<QVariant>() << "Name" << "Direction" << "Type" << "Connected Net");
-        setGate(gNetlist->get_gate_by_id(19));
+        //setGate(gNetlist->get_gate_by_id(19));
+
+        //added to store a list of (multiple) net ids in a given treeitem (perhaps dont do this
+        //at all, handle it in the view? (since the gate-id and pin name is accessable, the nets can be evaluated there
+        qRegisterMetaType<QList<int>>();
     }
 
     PinTreeModel::~PinTreeModel()
@@ -43,20 +47,39 @@ namespace hal
             std::string grouping = gateType->get_pin_group(pin);
             QString pinDirection = QString::fromStdString(enum_to_string(gateType->get_pin_direction(pin)));
             QString pinType = QString::fromStdString(enum_to_string(gateType->get_pin_type(pin)));
+
             //evaluate netname (in case of inout multiple possible nets), method depends on pindirection (kind of ugly switch)
-            QString netName;
+            QString netName = "";
+            QList<int> netIDs;
             switch(gateType->get_pin_direction(pin))
             {
                 case PinDirection::input:
-                    netName = (g->get_fan_in_net(pin)) ? QString::fromStdString(g->get_fan_in_net(pin)->get_name()) : "" ; break;
+                    if(g->get_fan_in_net(pin))
+                    {
+                        netName = QString::fromStdString(g->get_fan_in_net(pin)->get_name());
+                        netIDs.append(g->get_fan_in_net(pin)->get_id());
+                    }
+                    break;
+                    //netName = (g->get_fan_in_net(pin)) ? QString::fromStdString(g->get_fan_in_net(pin)->get_name()) : "" ; break;
                 case PinDirection::output:
-                    netName = (g->get_fan_out_net(pin)) ? QString::fromStdString(g->get_fan_out_net(pin)->get_name()) : "" ; break;
+                    if(g->get_fan_out_net(pin))
+                    {
+                        netName = QString::fromStdString(g->get_fan_out_net(pin)->get_name());
+                        netIDs.append(g->get_fan_out_net(pin)->get_id());
+                    }
+                    break;
+                    //netName = (g->get_fan_out_net(pin)) ? QString::fromStdString(g->get_fan_out_net(pin)->get_name()) : "" ; break;
                 case PinDirection::inout: //must take input and output net into account
-                    if(g->get_fan_in_net(pin)) netName += QString::fromStdString(g->get_fan_in_net(pin)->get_name());
+                    if(g->get_fan_in_net(pin))
+                    {
+                        netName += QString::fromStdString(g->get_fan_in_net(pin)->get_name());
+                        netIDs.append(g->get_fan_in_net(pin)->get_id());
+                    }
                     if(g->get_fan_out_net(pin))
                     {
                         if(!netName.isEmpty()) netName += " / "; //add / when there is a input net to seperate it from the output net
                         netName += QString::fromStdString(g->get_fan_out_net(pin)->get_name());
+                        netIDs.append(g->get_fan_out_net(pin)->get_id());
                     }
                     break;
                 default: break; //none and internal, dont know how to handle internal (whatever an internal pin is)
@@ -64,6 +87,7 @@ namespace hal
 
             pinItem->setData(QList<QVariant>() << QString::fromStdString(pin) << pinDirection << pinType << netName);
             pinItem->setAdditionalData(keyType, itemType::pin);
+            pinItem->setAdditionalData(keyRepresentedNetsID, QVariant::fromValue(netIDs));
             if(!grouping.empty())
             {
                 TreeItem* groupingsItem = mPinGroupingToTreeItem.value(grouping, nullptr); //since its a map, its okay
@@ -90,40 +114,8 @@ namespace hal
         return mGateId;
     }
 
-    void PinTreeModel::appendInputOutputPins(Gate* g, std::vector<std::string> inputOrOutputPins, bool areInputPins)
+    QList<int> PinTreeModel::getNetIDsOfTreeItem(TreeItem *item)
     {
-        GateType* gateType = g->get_type();
-        QVector<TreeItem*> appendAtTheEnd;
-        for(auto pin : inputOrOutputPins)
-        {
-            std::string grouping = gateType->get_pin_group(pin); //is ok, underlying structure is a unordered_map->fast
-            Net* connectedNet = areInputPins ? g->get_fan_in_net(pin) : g->get_fan_out_net(pin);
-            QString netName = (connectedNet) ? QString::fromStdString(connectedNet->get_name()) : "";
-            QString pinType = QString::fromStdString(enum_to_string(gateType->get_pin_type(pin)));
-            QString pinDirection = QString::fromStdString(enum_to_string(gateType->get_pin_direction(pin)));
-            TreeItem* currentPinItem = new TreeItem(QList<QVariant>() << QString::fromStdString(pin) << pinDirection << pinType << netName);
-            currentPinItem->setAdditionalData(keyType, itemType::pin);
-            //input pin has no grouping, put at the end
-            if(grouping.empty())
-            {
-                appendAtTheEnd.append(currentPinItem);
-            }
-            else
-            {
-                TreeItem* groupingsItem = mPinGroupingToTreeItem.value(grouping, nullptr); //since its a map, its okay
-                if(!groupingsItem)
-                {
-                    //assume all items in the same grouping habe the same direction and type, so the grouping-item has also these types
-                    groupingsItem = new TreeItem(QList<QVariant>() << QString::fromStdString(grouping) << pinDirection << pinType << "");
-                    groupingsItem->setAdditionalData(keyType, itemType::grouping);
-                    mRootItem->appendChild(groupingsItem);
-                    mPinGroupingToTreeItem.insert(grouping, groupingsItem);
-                }
-                groupingsItem->appendChild(currentPinItem);
-            }
-        }
-        for(auto pinItem : appendAtTheEnd)
-            mRootItem->appendChild(pinItem);
+        return item->getAdditionalData(keyRepresentedNetsID).value<QList<int>>();
     }
-
 }
