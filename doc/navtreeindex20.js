@@ -1,5 +1,8 @@
 var NAVTREEINDEX20 =
 {
+"python__console_8h_source.html":[14,0,1,0,0,0,34,1],
+"python__console__history_8cpp.html":[14,0,1,0,2,32,2],
+"python__console__history_8cpp_source.html":[14,0,1,0,2,32,2],
 "python__console__history_8h.html":[14,0,1,0,0,0,34,2],
 "python__console__history_8h_source.html":[14,0,1,0,0,0,34,2],
 "python__console__qss__adapter_8cpp.html":[14,0,1,0,2,32,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX20 =
 "structhal_1_1_boolean_function_1_1_node.html#ae926a5d0a485dff0e850c7d29525d42a":[11,1,0,7,11],
 "structhal_1_1_boolean_function_1_1_node.html#ae95126e9bf34699a42902690a18ab094":[11,1,0,7,13],
 "structhal_1_1_boolean_function_1_1_node.html#aebe72808608e7f3f34d4b147cff3c88c":[11,1,0,7,12],
-"structhal_1_1_boolean_function_1_1_node_type.html":[11,1,0,8],
-"structhal_1_1_boolean_function_1_1_operand_node.html":[11,1,0,10],
-"structhal_1_1_boolean_function_1_1_operand_node.html#a4a6f11ecf459b46ffb1d38e9c55eca92":[11,1,0,10,7],
-"structhal_1_1_boolean_function_1_1_operand_node.html#a695cd350ce87ecb0126c15c3c4dda66c":[11,1,0,10,4]
+"structhal_1_1_boolean_function_1_1_node_type.html":[11,1,0,8]
 };

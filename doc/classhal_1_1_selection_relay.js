@@ -52,6 +52,7 @@ var classhal_1_1_selection_relay =
     [ "selectedNets", "classhal_1_1_selection_relay.html#a31fbada76372c95e06abfaa47993daf8", null ],
     [ "selectedNetsList", "classhal_1_1_selection_relay.html#a5040a3c88a222ef3a487021f5916d220", null ],
     [ "selectedNetsVector", "classhal_1_1_selection_relay.html#aa97c117d86cb49862e79b52a742901c1", null ],
+    [ "selectedNodesList", "classhal_1_1_selection_relay.html#a412b6703ed3b76ba5c5a04b558c83b47", null ],
     [ "selectionChanged", "classhal_1_1_selection_relay.html#a2c60a03847a015475d7f3e5018ca1956", null ],
     [ "setFocus", "classhal_1_1_selection_relay.html#a188cf58279acb2970352895c82406ff7", null ],
     [ "setFocusDirect", "classhal_1_1_selection_relay.html#a4d63d678058a1a8e18570aecc1bba819", null ],

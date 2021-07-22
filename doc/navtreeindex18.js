@@ -1,5 +1,8 @@
 var NAVTREEINDEX18 =
 {
+"namespacehal_1_1netlist__writer__manager.html":[12,0,0,18],
+"namespacehal_1_1plugin__manager.html":[12,0,0,19],
+"namespacehal_1_1style.html":[12,0,0,22],
 "namespacehal_1_1utils.html":[12,0,0,23],
 "namespacehal_1_1utils.html":[13,0,0,3],
 "namespacemembers.html":[12,1,0,0],
@@ -12,8 +15,8 @@ var NAVTREEINDEX18 =
 "namespacemembers_enum.html":[12,1,4],
 "namespacemembers_eval.html":[12,1,5],
 "namespacemembers_f.html":[12,1,0,6],
-"namespacemembers_func.html":[12,1,1],
 "namespacemembers_func.html":[12,1,1,0],
+"namespacemembers_func.html":[12,1,1],
 "namespacemembers_func_a.html":[12,1,1,1],
 "namespacemembers_func_b.html":[12,1,1,2],
 "namespacemembers_func_c.html":[12,1,1,3],
@@ -59,10 +62,10 @@ var NAVTREEINDEX18 =
 "namespaces.html":[12,0],
 "namespacestd.html":[12,0,3],
 "namespacestd.html":[13,0,1],
-"namespacesubprocess.html":[12,0,4],
 "namespacesubprocess.html":[13,0,2],
-"namespacesubprocess_1_1detail.html":[12,0,4,0],
+"namespacesubprocess.html":[12,0,4],
 "namespacesubprocess_1_1detail.html":[13,0,2,0],
+"namespacesubprocess_1_1detail.html":[12,0,4,0],
 "namespacesubprocess_1_1util.html":[12,0,4,1],
 "net_8h.html":[14,0,0,0,1,13],
 "net_8h_source.html":[14,0,0,0,1,13],
@@ -246,8 +249,5 @@ var NAVTREEINDEX18 =
 "netlist__relay_8h.html":[14,0,1,0,0,0,31,0],
 "netlist__relay_8h_source.html":[14,0,1,0,0,0,31,0],
 "netlist__serializer_8h.html":[14,0,0,0,1,5,0],
-"netlist__serializer_8h.html#a4a821370b9753da547dcbe238a249f97":[14,0,0,0,1,5,0,0],
-"netlist__serializer_8h.html#a85f064e341bdd5a3968ef10be72b2fe8":[14,0,0,0,1,5,0,1],
-"netlist__serializer_8h_source.html":[14,0,0,0,1,5,0],
-"netlist__utils_8h.html":[14,0,0,0,1,17]
+"netlist__serializer_8h.html#a4a821370b9753da547dcbe238a249f97":[14,0,0,0,1,5,0,0]
 };

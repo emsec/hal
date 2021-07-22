@@ -330,7 +330,7 @@ $(document).ready(function(){initNavTree('netlist_2gate_8cpp_source.html',''); i
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        std::string key        = m_type-&gt;<a class="code" href="classhal_1_1_gate_type.html#af2a7664c7e36cc1e8a21e860ac13b8d1">get_config_data_identifier</a>();</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        std::string config_str = std::get&lt;1&gt;(<a class="code" href="classhal_1_1_data_container.html#a15ddfdb9e6d693c4e29d535ad2be215b">get_data</a>(category, key));</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="keyword">auto</span> is_ascending      = m_type-&gt;<a class="code" href="classhal_1_1_gate_type.html#aaef08742626f332e70f6575ac3f69d1b">is_lut_init_ascending</a>();</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keyword">auto</span> inputs            = <a class="code" href="classhal_1_1_gate.html#a0a6692d6ed8bff35f957d205fbaeeedb">get_input_pins</a>();</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keyword">auto</span> inputs            = <a class="code" href="classhal_1_1_gate.html#a24e1a29c3fc812588acb673c214af128">get_type</a>()-&gt;<a class="code" href="classhal_1_1_gate_type.html#a8a90fb08834cb0074cdf5921f8b6fd0e">get_input_pins</a>();</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a> result = <a class="code" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fbac487892e83456269ce717a99dffe1d49">BooleanFunction::ZERO</a>;</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
@@ -435,7 +435,7 @@ $(document).ready(function(){initNavTree('netlist_2gate_8cpp_source.html',''); i
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            <span class="keyword">auto</span> output_pins = m_type-&gt;<a class="code" href="classhal_1_1_gate_type.html#a6187126b28eb574fca729c2418b628c5">get_output_pins</a>();</div>
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            <span class="keywordflow">if</span> (!output_pins.empty() &amp;&amp; name == output_pins[0])</div>
 <div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;            {</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                <span class="keyword">auto</span> tt = func.<a class="code" href="classhal_1_1_boolean_function.html#a79f7213798c1927842874c8271fba751">get_truth_table</a>(<a class="code" href="classhal_1_1_gate.html#a0a6692d6ed8bff35f957d205fbaeeedb">get_input_pins</a>());</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                <span class="keyword">auto</span> tt = func.<a class="code" href="classhal_1_1_boolean_function.html#a79f7213798c1927842874c8271fba751">get_truth_table</a>(<a class="code" href="classhal_1_1_gate.html#a24e1a29c3fc812588acb673c214af128">get_type</a>()-&gt;<a class="code" href="classhal_1_1_gate.html#a0a6692d6ed8bff35f957d205fbaeeedb">get_input_pins</a>());</div>
 <div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;                <a class="code" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> config_value = 0;</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;                <span class="keywordflow">if</span> (!m_type-&gt;<a class="code" href="classhal_1_1_gate_type.html#aaef08742626f332e70f6575ac3f69d1b">is_lut_init_ascending</a>())</div>
@@ -789,7 +789,7 @@ $(document).ready(function(){initNavTree('netlist_2gate_8cpp_source.html',''); i
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="netlist_2gate_8cpp.html">gate.cpp</a></li>
-    <li class="footer">Generated on Tue Jul 20 2021 09:48:07 for HAL by
+    <li class="footer">Generated on Thu Jul 22 2021 14:22:48 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

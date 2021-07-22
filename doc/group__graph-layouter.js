@@ -199,6 +199,7 @@ var group__graph_layouter =
     [ "NodeBox", "classhal_1_1_node_box.html", [
       [ "NodeBox", "classhal_1_1_node_box.html#a62fbc6ee8c9025499ef9dba16d97935f", null ],
       [ "getNode", "classhal_1_1_node_box.html#ab41d97e469fda8d0b49340f04f86029c", null ],
+      [ "gridPosition", "classhal_1_1_node_box.html#ac6c6fde7e4fe21bec776050f6debd747", null ],
       [ "id", "classhal_1_1_node_box.html#af5e865b7aad512658e4838e629857ff1", null ],
       [ "inputPadding", "classhal_1_1_node_box.html#a4f8de71a00584648424ac1cc89d0a428", null ],
       [ "item", "classhal_1_1_node_box.html#a61fca21ae5e7791de439c83c6c85d86c", null ],
@@ -213,8 +214,8 @@ var group__graph_layouter =
       [ "addBox", "classhal_1_1_node_boxes.html#a2ece4aaa0d759749b7fc4f920690f0f9", null ],
       [ "boxForGate", "classhal_1_1_node_boxes.html#a6243707f0b24d9aaf124f3d82786483b", null ],
       [ "boxForItem", "classhal_1_1_node_boxes.html#ac1e881a35e4dea4d4b842b1562f5228e", null ],
-      [ "boxForNode", "classhal_1_1_node_boxes.html#a62e47d8055ce50851c7848b589821bfa", null ],
-      [ "boxForPoint", "classhal_1_1_node_boxes.html#a74acd8de6a4294621705b71f10771a07", null ],
+      [ "boxForNode", "classhal_1_1_node_boxes.html#a531029937aea187639d0352767e5c5b9", null ],
+      [ "boxForPoint", "classhal_1_1_node_boxes.html#a565dd4e735d88251d4ca76ee9c439b36", null ],
       [ "clearBoxes", "classhal_1_1_node_boxes.html#acd5c031ae03afcda8893f0d729c05936", null ],
       [ "filterNotInView", "classhal_1_1_node_boxes.html#aca3eafb47c2269d1c6dbd858df864912", null ]
     ] ],

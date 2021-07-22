@@ -22,6 +22,7 @@ var classhal_1_1_module =
     [ "get_output_port_names", "classhal_1_1_module.html#a10150aa54cd2364ffdd0b6bdaa40a8aa", null ],
     [ "get_output_port_net", "classhal_1_1_module.html#af87a954ee4e669bc0f67727f75001222", null ],
     [ "get_parent_module", "classhal_1_1_module.html#a1af5f0f3f5ea75b8762d65d5fcfab3e3", null ],
+    [ "get_submodule_depth", "classhal_1_1_module.html#a533cbe33380469fe81fcead287efc437", null ],
     [ "get_submodules", "classhal_1_1_module.html#af1256fe9a3080693b07d7e657d9a31ba", null ],
     [ "get_type", "classhal_1_1_module.html#af2e1a399775172613cc78fcb2d493e3e", null ],
     [ "is_top_module", "classhal_1_1_module.html#a5ed13732e904b8bf1b3bc670f637acc2", null ],

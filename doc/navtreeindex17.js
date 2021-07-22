@@ -1,5 +1,8 @@
 var NAVTREEINDEX17 =
 {
+"grouping__event__handler_8h.html#a381475055b75a348f0df23fb5f845650":[14,0,0,0,1,1,2,3],
+"grouping__event__handler_8h.html#a9c3c4c047fde08f7dade713326d5f820":[14,0,0,0,1,1,2,0],
+"grouping__event__handler_8h.html#a9c3c4c047fde08f7dade713326d5f820a13ae09ca843d402b4c7dfa1349d56aff":[14,0,0,0,1,1,2,0,4],
 "grouping__event__handler_8h.html#a9c3c4c047fde08f7dade713326d5f820a2f4381fbabe7e3a9613b575831011719":[14,0,0,0,1,1,2,0,7],
 "grouping__event__handler_8h.html#a9c3c4c047fde08f7dade713326d5f820a81430a2ed6ab4d779817a481d55bac5b":[14,0,0,0,1,1,2,0,8],
 "grouping__event__handler_8h.html#a9c3c4c047fde08f7dade713326d5f820a8c58566ddd8463dcbe72f27df1c98513":[14,0,0,0,1,1,2,0,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX17 =
 "namespacehal_1_1netlist__factory.html":[12,0,0,14],
 "namespacehal_1_1netlist__parser__manager.html":[12,0,0,15],
 "namespacehal_1_1netlist__serializer.html":[12,0,0,16],
-"namespacehal_1_1netlist__utils.html":[12,0,0,17],
-"namespacehal_1_1netlist__writer__manager.html":[12,0,0,18],
-"namespacehal_1_1plugin__manager.html":[12,0,0,19],
-"namespacehal_1_1style.html":[12,0,0,22]
+"namespacehal_1_1netlist__utils.html":[12,0,0,17]
 };

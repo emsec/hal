@@ -129,6 +129,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9bcc555241bfad8b6abccaecb2f021ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b32ef344fda511501b3eefcb34abfdc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_grouping.html">Grouping</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module.html#a8b32ef344fda511501b3eefcb34abfdc">get_grouping</a> () const</td></tr>
 <tr class="separator:a8b32ef344fda511501b3eefcb34abfdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a533cbe33380469fe81fcead287efc437"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module.html#a533cbe33380469fe81fcead287efc437">get_submodule_depth</a> () const</td></tr>
+<tr class="separator:a533cbe33380469fe81fcead287efc437"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1af5f0f3f5ea75b8762d65d5fcfab3e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_module.html">Module</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module.html#a1af5f0f3f5ea75b8762d65d5fcfab3e3">get_parent_module</a> () const</td></tr>
 <tr class="separator:a1af5f0f3f5ea75b8762d65d5fcfab3e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2110d4088efee9b9313fce0171d9bc40"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module.html#a2110d4088efee9b9313fce0171d9bc40">set_parent_module</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *new_parent)</td></tr>
@@ -247,7 +249,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00260">260</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00268">268</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00167">hal::Netlist::create_module()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00075">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00878">hal::netlist_utils::replace_gate()</a>.</p>
 
@@ -289,9 +291,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the gate is in the module, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00283">283</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00291">291</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__details__widget_8cpp_source.html#l00384">hal::GateDetailsWidget::handleModuleNameChanged()</a>, <a class="el" href="gate__details__widget_8cpp_source.html#l00372">hal::GateDetailsWidget::handleModuleRemoved()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00478">hal::ModuleDetailsWidget::handleNetDestinationAdded()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00492">hal::ModuleDetailsWidget::handleNetDestinationRemoved()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00450">hal::ModuleDetailsWidget::handleNetSourceAdded()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00464">hal::ModuleDetailsWidget::handleNetSourceRemoved()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00265">remove_gate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__details__widget_8cpp_source.html#l00384">hal::GateDetailsWidget::handleModuleNameChanged()</a>, <a class="el" href="gate__details__widget_8cpp_source.html#l00372">hal::GateDetailsWidget::handleModuleRemoved()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00478">hal::ModuleDetailsWidget::handleNetDestinationAdded()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00492">hal::ModuleDetailsWidget::handleNetDestinationRemoved()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00450">hal::ModuleDetailsWidget::handleNetSourceAdded()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00464">hal::ModuleDetailsWidget::handleNetSourceRemoved()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00273">remove_gate()</a>.</p>
 
 </div>
 </div>
@@ -331,7 +333,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the other module is a submodule, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00221">221</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00229">229</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -373,7 +375,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The gate if found, a nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00303">303</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00311">311</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -416,9 +418,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The vector of all gates. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00324">324</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00332">332</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wait__to__be__seated_8cpp_source.html#l00136">hal::WaitToBeSeatedList::add()</a>, <a class="el" href="node__box_8cpp_source.html#l00055">hal::NodeBoxes::addBox()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__fold__module_8cpp_source.html#l00033">hal::ActionFoldModule::exec()</a>, <a class="el" href="action__unfold__module_8cpp_source.html#l00051">hal::ActionUnfoldModule::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00170">hal::GraphContext::foldModuleAction()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00410">get_input_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00480">get_internal_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00356">get_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00445">get_output_nets()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00162">hal::GraphContextManager::handleModuleColorChanged()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00261">hal::ModuleDetailsWidget::handleNetlistMarkedGlobalInout()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00213">hal::ModuleDetailsWidget::handleNetlistMarkedGlobalInput()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00237">hal::ModuleDetailsWidget::handleNetlistMarkedGlobalOutput()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00333">hal::ModuleDetailsWidget::handleNetlistUnmarkedGlobalInout()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00285">hal::ModuleDetailsWidget::handleNetlistUnmarkedGlobalInput()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00309">hal::ModuleDetailsWidget::handleNetlistUnmarkedGlobalOutput()</a>, <a class="el" href="graph__context_8cpp_source.html#l00276">hal::GraphContext::isShowingModule()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wait__to__be__seated_8cpp_source.html#l00136">hal::WaitToBeSeatedList::add()</a>, <a class="el" href="node__box_8cpp_source.html#l00055">hal::NodeBoxes::addBox()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__fold__module_8cpp_source.html#l00033">hal::ActionFoldModule::exec()</a>, <a class="el" href="action__unfold__module_8cpp_source.html#l00051">hal::ActionUnfoldModule::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00170">hal::GraphContext::foldModuleAction()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00418">get_input_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00488">get_internal_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00364">get_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00453">get_output_nets()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00162">hal::GraphContextManager::handleModuleColorChanged()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00261">hal::ModuleDetailsWidget::handleNetlistMarkedGlobalInout()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00213">hal::ModuleDetailsWidget::handleNetlistMarkedGlobalInput()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00237">hal::ModuleDetailsWidget::handleNetlistMarkedGlobalOutput()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00333">hal::ModuleDetailsWidget::handleNetlistUnmarkedGlobalInout()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00285">hal::ModuleDetailsWidget::handleNetlistUnmarkedGlobalInput()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00309">hal::ModuleDetailsWidget::handleNetlistUnmarkedGlobalOutput()</a>, <a class="el" href="graph__context_8cpp_source.html#l00276">hal::GraphContext::isShowingModule()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>.</p>
 
 </div>
 </div>
@@ -464,7 +466,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00089">89</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2grouping_8cpp_source.html#l00282">hal::Grouping::contains_module()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="gui__api_8cpp_source.html#l00348">hal::GuiApi::deselectModule()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__create__object_8cpp_source.html#l00055">hal::ActionCreateObject::exec()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00075">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="plugins_2gui_2src_2gui__utils_2netlist_8cpp_source.html#l00015">hal::gui_utility::firstCommonAncestor()</a>, <a class="el" href="graph__context_8cpp_source.html#l00170">hal::GraphContext::foldModuleAction()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00670">get_input_port_net()</a>, <a class="el" href="netlist_2grouping_8cpp_source.html#l00254">hal::Grouping::get_module_ids()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00684">get_output_port_net()</a>, <a class="el" href="details__general__model_8h_source.html#l00195">hal::DetailsGeneralCommonInfo&lt; T &gt;::getPythonBase()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00259">hal::SelectionDetailsWidget::groupingUnassignActionFactory()</a>, <a class="el" href="event__log_8cpp_source.html#l00166">hal::event_log::handle_grouping_event()</a>, <a class="el" href="event__log_8cpp_source.html#l00218">hal::event_log::handle_module_event()</a>, <a class="el" href="details__general__model_8cpp_source.html#l00167">hal::DetailsGeneralModel::handleDoubleClick()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00162">hal::GraphContextManager::handleModuleColorChanged()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00204">hal::GraphContextManager::handleModuleGateAssigned()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00389">hal::ModuleDetailsWidget::handleModuleGateAssigned()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00214">hal::GraphContextManager::handleModuleGateRemoved()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00402">hal::ModuleDetailsWidget::handleModuleGateRemoved()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00269">hal::GraphContextManager::handleModuleInputPortNameChanged()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00415">hal::ModuleDetailsWidget::handleModuleInputPortNameChanged()</a>, <a class="el" href="selection__tree__model_8cpp_source.html#l00221">hal::SelectionTreeModel::handleModuleItemChanged()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00148">hal::GraphContextManager::handleModuleNameChanged()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00357">hal::ModuleDetailsWidget::handleModuleNameChanged()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00277">hal::GraphContextManager::handleModuleOutputPortNameChanged()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00423">hal::ModuleDetailsWidget::handleModuleOutputPortNameChanged()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00141">hal::GraphContextManager::handleModuleRemoved()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00176">hal::GraphContextManager::handleModuleSubmoduleAdded()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00186">hal::GraphContextManager::handleModuleSubmoduleRemoved()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00155">hal::GraphContextManager::handleModuleTypeChanged()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00431">hal::ModuleDetailsWidget::handleModuleTypeChanged()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00264">hal::ModuleSelectPicker::handleSelectionChanged()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01081">hal::GraphGraphicsView::handleShortestPath()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00363">hal::ModuleDetailsWidget::handleSubmoduleAdded()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00376">hal::ModuleDetailsWidget::handleSubmoduleRemoved()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00856">hal::ShortestPath::module()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00036">hal::ModuleSelectEntry::ModuleSelectEntry()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00193">hal::ModuleSelectExclude::ModuleSelectExclude()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00061">hal::ModuleSelectModel::ModuleSelectModel()</a>, <a class="el" href="graph__context_8cpp_source.html#l00413">hal::GraphContext::nodeForGate()</a>, <a class="el" href="module__widget_8cpp_source.html#l00230">hal::ModuleWidget::openModuleInView()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>, <a class="el" href="plugins_2gui_2src_2gui__utils_2netlist_8cpp_source.html#l00073">hal::gui_utility::parentModules()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00220">hal::ModuleSelectExclude::selectionToString()</a>, <a class="el" href="gui__api_8cpp_source.html#l00167">hal::GuiApi::selectModule()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00139">set_parent_module()</a>, <a class="el" href="graph__navigation__widget_8cpp_source.html#l00328">hal::GraphNavigationWidget::setup()</a>, and <a class="el" href="module__shader_8cpp_source.html#l00036">hal::ModuleShader::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2grouping_8cpp_source.html#l00282">hal::Grouping::contains_module()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="gui__api_8cpp_source.html#l00348">hal::GuiApi::deselectModule()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__create__object_8cpp_source.html#l00055">hal::ActionCreateObject::exec()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00075">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="plugins_2gui_2src_2gui__utils_2netlist_8cpp_source.html#l00015">hal::gui_utility::firstCommonAncestor()</a>, <a class="el" href="graph__context_8cpp_source.html#l00170">hal::GraphContext::foldModuleAction()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00678">get_input_port_net()</a>, <a class="el" href="netlist_2grouping_8cpp_source.html#l00254">hal::Grouping::get_module_ids()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00692">get_output_port_net()</a>, <a class="el" href="details__general__model_8h_source.html#l00195">hal::DetailsGeneralCommonInfo&lt; T &gt;::getPythonBase()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00259">hal::SelectionDetailsWidget::groupingUnassignActionFactory()</a>, <a class="el" href="event__log_8cpp_source.html#l00166">hal::event_log::handle_grouping_event()</a>, <a class="el" href="event__log_8cpp_source.html#l00218">hal::event_log::handle_module_event()</a>, <a class="el" href="details__general__model_8cpp_source.html#l00167">hal::DetailsGeneralModel::handleDoubleClick()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00162">hal::GraphContextManager::handleModuleColorChanged()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00204">hal::GraphContextManager::handleModuleGateAssigned()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00389">hal::ModuleDetailsWidget::handleModuleGateAssigned()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00214">hal::GraphContextManager::handleModuleGateRemoved()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00402">hal::ModuleDetailsWidget::handleModuleGateRemoved()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00269">hal::GraphContextManager::handleModuleInputPortNameChanged()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00415">hal::ModuleDetailsWidget::handleModuleInputPortNameChanged()</a>, <a class="el" href="selection__tree__model_8cpp_source.html#l00221">hal::SelectionTreeModel::handleModuleItemChanged()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00148">hal::GraphContextManager::handleModuleNameChanged()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00357">hal::ModuleDetailsWidget::handleModuleNameChanged()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00277">hal::GraphContextManager::handleModuleOutputPortNameChanged()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00423">hal::ModuleDetailsWidget::handleModuleOutputPortNameChanged()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00141">hal::GraphContextManager::handleModuleRemoved()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00176">hal::GraphContextManager::handleModuleSubmoduleAdded()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00186">hal::GraphContextManager::handleModuleSubmoduleRemoved()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00155">hal::GraphContextManager::handleModuleTypeChanged()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00431">hal::ModuleDetailsWidget::handleModuleTypeChanged()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00264">hal::ModuleSelectPicker::handleSelectionChanged()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01093">hal::GraphGraphicsView::handleShortestPath()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00363">hal::ModuleDetailsWidget::handleSubmoduleAdded()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00376">hal::ModuleDetailsWidget::handleSubmoduleRemoved()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00868">hal::ShortestPath::module()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00036">hal::ModuleSelectEntry::ModuleSelectEntry()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00193">hal::ModuleSelectExclude::ModuleSelectExclude()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00061">hal::ModuleSelectModel::ModuleSelectModel()</a>, <a class="el" href="graph__context_8cpp_source.html#l00413">hal::GraphContext::nodeForGate()</a>, <a class="el" href="module__widget_8cpp_source.html#l00230">hal::ModuleWidget::openModuleInView()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>, <a class="el" href="plugins_2gui_2src_2gui__utils_2netlist_8cpp_source.html#l00073">hal::gui_utility::parentModules()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00220">hal::ModuleSelectExclude::selectionToString()</a>, <a class="el" href="gui__api_8cpp_source.html#l00167">hal::GuiApi::selectModule()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00147">set_parent_module()</a>, <a class="el" href="graph__navigation__widget_8cpp_source.html#l00328">hal::GraphNavigationWidget::setup()</a>, and <a class="el" href="module__shader_8cpp_source.html#l00036">hal::ModuleShader::update()</a>.</p>
 
 </div>
 </div>
@@ -485,11 +487,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Get all nets that are either a global input to the netlist or have at least one source outside of the module.</p>
 <dl class="section return"><dt>Returns</dt><dd>A sorted vector of input nets. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00410">410</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00418">418</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00324">get_gates()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00167">hal::Net::get_sources()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00600">hal::Netlist::is_global_input_net()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00847">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00332">get_gates()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00167">hal::Net::get_sources()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00600">hal::Netlist::is_global_input_net()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00859">hal::ShortestPath::net()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2module_8cpp_source.html#l00588">get_input_port_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00698">get_input_port_names()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00356">get_nets()</a>, <a class="el" href="graphics__module_8cpp_source.html#l00008">hal::GraphicsModule::GraphicsModule()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00437">hal::ModuleDetailsWidget::handleNetNameChanged()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00285">hal::SelectionRelay::navigateDown()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00192">hal::SelectionRelay::navigateUp()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00510">set_input_port_name()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2module_8cpp_source.html#l00596">get_input_port_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00706">get_input_port_names()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00364">get_nets()</a>, <a class="el" href="graphics__module_8cpp_source.html#l00008">hal::GraphicsModule::GraphicsModule()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00437">hal::ModuleDetailsWidget::handleNetNameChanged()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00285">hal::SelectionRelay::navigateDown()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00192">hal::SelectionRelay::navigateUp()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00518">set_input_port_name()</a>.</p>
 
 </div>
 </div>
@@ -517,9 +519,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The input port name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00588">588</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00596">596</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00083">hal::Net::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00410">get_input_nets()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00093">hal::Net::get_name()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00847">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00083">hal::Net::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00418">get_input_nets()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00093">hal::Net::get_name()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00859">hal::ShortestPath::net()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__rename__object_8cpp_source.html#l00052">hal::ActionRenameObject::exec()</a>, <a class="el" href="graphics__module_8cpp_source.html#l00008">hal::GraphicsModule::GraphicsModule()</a>, and <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -542,9 +544,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the mapping of all input nets to their corresponding port names.</p>
 <dl class="section return"><dt>Returns</dt><dd>The map from input net to port name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00698">698</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00706">706</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00410">get_input_nets()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00847">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00418">get_input_nets()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00859">hal::ShortestPath::net()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>.</p>
 
@@ -574,9 +576,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The input net or a nullptr. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00670">670</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00678">678</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00089">get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00094">get_name()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00847">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00089">get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00094">get_name()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00859">hal::ShortestPath::net()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>.</p>
 
@@ -599,9 +601,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.</p>
 <dl class="section return"><dt>Returns</dt><dd>A sorted vector of internal nets. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00480">480</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00488">488</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00248">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00324">get_gates()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00847">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00248">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00332">get_gates()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00859">hal::ShortestPath::net()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -626,7 +628,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00094">94</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00094">hal::NetlistRelay::changeModuleName()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__rename__object_8cpp_source.html#l00052">hal::ActionRenameObject::exec()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00670">get_input_port_net()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00684">get_output_port_net()</a>, <a class="el" href="event__log_8cpp_source.html#l00166">hal::event_log::handle_grouping_event()</a>, <a class="el" href="event__log_8cpp_source.html#l00218">hal::event_log::handle_module_event()</a>, <a class="el" href="content__manager_8cpp_source.html#l00122">hal::ContentManager::handleOpenDocument()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00264">hal::ModuleSelectPicker::handleSelectionChanged()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00036">hal::ModuleSelectEntry::ModuleSelectEntry()</a>, <a class="el" href="selection__tree__item_8cpp_source.html#l00108">hal::SelectionTreeItemModule::name()</a>, <a class="el" href="module__widget_8cpp_source.html#l00230">hal::ModuleWidget::openModuleInView()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00220">hal::ModuleSelectExclude::selectionToString()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00139">set_parent_module()</a>, and <a class="el" href="module__model_8cpp_source.html#l00289">hal::ModuleModel::updateModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00094">hal::NetlistRelay::changeModuleName()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__rename__object_8cpp_source.html#l00052">hal::ActionRenameObject::exec()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00678">get_input_port_net()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00692">get_output_port_net()</a>, <a class="el" href="event__log_8cpp_source.html#l00166">hal::event_log::handle_grouping_event()</a>, <a class="el" href="event__log_8cpp_source.html#l00218">hal::event_log::handle_module_event()</a>, <a class="el" href="content__manager_8cpp_source.html#l00122">hal::ContentManager::handleOpenDocument()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00264">hal::ModuleSelectPicker::handleSelectionChanged()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00036">hal::ModuleSelectEntry::ModuleSelectEntry()</a>, <a class="el" href="selection__tree__item_8cpp_source.html#l00108">hal::SelectionTreeItemModule::name()</a>, <a class="el" href="module__widget_8cpp_source.html#l00230">hal::ModuleWidget::openModuleInView()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00220">hal::ModuleSelectExclude::selectionToString()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00147">set_parent_module()</a>, and <a class="el" href="module__model_8cpp_source.html#l00289">hal::ModuleModel::updateModule()</a>.</p>
 
 </div>
 </div>
@@ -647,9 +649,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the netlist this module is associated with.</p>
 <dl class="section return"><dt>Returns</dt><dd>The netlist. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00247">247</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00255">255</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="event__log_8cpp_source.html#l00218">hal::event_log::handle_module_event()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00139">set_parent_module()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="event__log_8cpp_source.html#l00218">hal::event_log::handle_module_event()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00147">set_parent_module()</a>.</p>
 
 </div>
 </div>
@@ -670,9 +672,9 @@ Additional Inherited Members</h2></td></tr>
 <p>TODO test Get all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.</p>
 <dl class="section return"><dt>Returns</dt><dd>A sorted vector of nets. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00356">356</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00364">364</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00324">get_gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00410">get_input_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00445">get_output_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00191">get_submodules()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00856">hal::ShortestPath::module()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00847">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00332">get_gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00418">get_input_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00453">get_output_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00199">get_submodules()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00868">hal::ShortestPath::module()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00859">hal::ShortestPath::net()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -695,7 +697,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the next free input port ID.</p>
 <dl class="section return"><dt>Returns</dt><dd>The next input port ID. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00772">772</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00780">780</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -718,7 +720,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the next free output port ID.</p>
 <dl class="section return"><dt>Returns</dt><dd>The next output port ID. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00782">782</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00790">790</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -741,11 +743,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Get all nets that are either a global output to the netlist or have at least one destination outside of the module.</p>
 <dl class="section return"><dt>Returns</dt><dd>A sorted vector of output nets. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00445">445</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00453">453</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00248">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00324">get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00605">hal::Netlist::is_global_output_net()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00847">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00248">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00332">get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00605">hal::Netlist::is_global_output_net()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00859">hal::ShortestPath::net()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2module_8cpp_source.html#l00356">get_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00629">get_output_port_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00733">get_output_port_names()</a>, <a class="el" href="graphics__module_8cpp_source.html#l00008">hal::GraphicsModule::GraphicsModule()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00437">hal::ModuleDetailsWidget::handleNetNameChanged()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00285">hal::SelectionRelay::navigateDown()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00192">hal::SelectionRelay::navigateUp()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00549">set_output_port_name()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2module_8cpp_source.html#l00364">get_nets()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00637">get_output_port_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00741">get_output_port_names()</a>, <a class="el" href="graphics__module_8cpp_source.html#l00008">hal::GraphicsModule::GraphicsModule()</a>, <a class="el" href="module__details__widget_8cpp_source.html#l00437">hal::ModuleDetailsWidget::handleNetNameChanged()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00285">hal::SelectionRelay::navigateDown()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00192">hal::SelectionRelay::navigateUp()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00557">set_output_port_name()</a>.</p>
 
 </div>
 </div>
@@ -773,9 +775,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The output port name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00629">629</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00637">637</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00083">hal::Net::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00093">hal::Net::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00445">get_output_nets()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00847">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00083">hal::Net::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00093">hal::Net::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00453">get_output_nets()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00859">hal::ShortestPath::net()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__rename__object_8cpp_source.html#l00052">hal::ActionRenameObject::exec()</a>, <a class="el" href="graphics__module_8cpp_source.html#l00008">hal::GraphicsModule::GraphicsModule()</a>, and <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -798,9 +800,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the mapping of all output nets to their corresponding port names.</p>
 <dl class="section return"><dt>Returns</dt><dd>The map from output net to port name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00733">733</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00741">741</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00445">get_output_nets()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00847">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00453">get_output_nets()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00859">hal::ShortestPath::net()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>.</p>
 
@@ -830,9 +832,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The output net or a nullptr. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00684">684</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00692">692</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00089">get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00094">get_name()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00847">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00089">get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00094">get_name()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00859">hal::ShortestPath::net()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>.</p>
 
@@ -858,7 +860,29 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00134">134</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00075">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="plugins_2gui_2src_2gui__utils_2netlist_8cpp_source.html#l00015">hal::gui_utility::firstCommonAncestor()</a>, <a class="el" href="event__log_8cpp_source.html#l00218">hal::event_log::handle_module_event()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00856">hal::ShortestPath::module()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00193">hal::ModuleSelectExclude::ModuleSelectExclude()</a>, <a class="el" href="graph__context_8cpp_source.html#l00413">hal::GraphContext::nodeForGate()</a>, and <a class="el" href="plugins_2gui_2src_2gui__utils_2netlist_8cpp_source.html#l00073">hal::gui_utility::parentModules()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00075">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="plugins_2gui_2src_2gui__utils_2netlist_8cpp_source.html#l00015">hal::gui_utility::firstCommonAncestor()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00139">get_submodule_depth()</a>, <a class="el" href="event__log_8cpp_source.html#l00218">hal::event_log::handle_module_event()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00868">hal::ShortestPath::module()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00193">hal::ModuleSelectExclude::ModuleSelectExclude()</a>, <a class="el" href="graph__context_8cpp_source.html#l00413">hal::GraphContext::nodeForGate()</a>, and <a class="el" href="plugins_2gui_2src_2gui__utils_2netlist_8cpp_source.html#l00073">hal::gui_utility::parentModules()</a>.</p>
+
+</div>
+</div>
+<a id="a533cbe33380469fe81fcead287efc437"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a533cbe33380469fe81fcead287efc437">&#9670;&nbsp;</a></span>get_submodule_depth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int hal::Module::get_submodule_depth </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get submodule depth of module </p><dl class="section return"><dt>Returns</dt><dd>0=top_level module, 1=submodule from top_level, 2=submodule from submodule, ... </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00139">139</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00134">get_parent_module()</a>.</p>
 
 </div>
 </div>
@@ -899,9 +923,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The vector of submodules. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00191">191</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00199">199</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__item_8cpp_source.html#l00033">hal::ModuleItem::appendExistingChildIfAny()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__fold__module_8cpp_source.html#l00033">hal::ActionFoldModule::exec()</a>, <a class="el" href="action__unfold__module_8cpp_source.html#l00051">hal::ActionUnfoldModule::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00170">hal::GraphContext::foldModuleAction()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00356">get_nets()</a>, <a class="el" href="module__model_8cpp_source.html#l00190">hal::ModuleModel::init()</a>, <a class="el" href="graph__context_8cpp_source.html#l00276">hal::GraphContext::isShowingModule()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00193">hal::ModuleSelectExclude::ModuleSelectExclude()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00139">set_parent_module()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00193">hal::GraphContext::unfoldModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__item_8cpp_source.html#l00033">hal::ModuleItem::appendExistingChildIfAny()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__fold__module_8cpp_source.html#l00033">hal::ActionFoldModule::exec()</a>, <a class="el" href="action__unfold__module_8cpp_source.html#l00051">hal::ActionUnfoldModule::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00170">hal::GraphContext::foldModuleAction()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00364">get_nets()</a>, <a class="el" href="module__model_8cpp_source.html#l00190">hal::ModuleModel::init()</a>, <a class="el" href="graph__context_8cpp_source.html#l00276">hal::GraphContext::isShowingModule()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00193">hal::ModuleSelectExclude::ModuleSelectExclude()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00023">operator==()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00147">set_parent_module()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00193">hal::GraphContext::unfoldModule()</a>.</p>
 
 </div>
 </div>
@@ -945,7 +969,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Returns true only if the module is the top module of the netlist.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if the module is the top module, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00242">242</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00250">250</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00878">hal::netlist_utils::replace_gate()</a>.</p>
 
@@ -1007,7 +1031,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00023">23</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00324">get_gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00089">get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00698">get_input_port_names()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00670">get_input_port_net()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00094">get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00733">get_output_port_names()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00684">get_output_port_net()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00191">get_submodules()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00114">get_type()</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00847">hal::ShortestPath::net()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00332">get_gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00089">get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00706">get_input_port_names()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00678">get_input_port_net()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00094">get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00741">get_output_port_names()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00692">get_output_port_net()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00199">get_submodules()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00114">get_type()</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00859">hal::ShortestPath::net()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2module_8cpp_source.html#l00084">operator!=()</a>.</p>
 
@@ -1038,9 +1062,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00265">265</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00273">273</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00283">contains_gate()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00086">hal::Gate::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00096">hal::Gate::get_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00191">hal::Netlist::get_top_module()</a>, and <a class="el" href="log_8h_source.html#l00075">log_error</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00291">contains_gate()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00086">hal::Gate::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00096">hal::Gate::get_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00191">hal::Netlist::get_top_module()</a>, and <a class="el" href="log_8h_source.html#l00075">log_error</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -1069,9 +1093,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00252">252</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00260">260</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00139">set_parent_module()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00147">set_parent_module()</a>.</p>
 
 </div>
 </div>
@@ -1109,9 +1133,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00510">510</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00518">518</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00083">hal::Net::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00410">get_input_nets()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00093">hal::Net::get_name()</a>, <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa2f271574434c0b35c248148f6a9803d4">hal::ModuleEvent::input_port_name_changed</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="event__handler_8cpp_source.html#l00063">hal::EventHandler::notify()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00083">hal::Net::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00418">get_input_nets()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00093">hal::Net::get_name()</a>, <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa2f271574434c0b35c248148f6a9803d4">hal::ModuleEvent::input_port_name_changed</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="event__handler_8cpp_source.html#l00063">hal::EventHandler::notify()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__rename__object_8cpp_source.html#l00052">hal::ActionRenameObject::exec()</a>, and <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -1171,7 +1195,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00767">767</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00775">775</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -1200,7 +1224,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00777">777</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00785">785</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -1240,9 +1264,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00549">549</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00557">557</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00083">hal::Net::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00093">hal::Net::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00445">get_output_nets()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="event__handler_8cpp_source.html#l00063">hal::EventHandler::notify()</a>, and <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5b4ec692a3ed15d168fd5ee741450a15">hal::ModuleEvent::output_port_name_changed</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00083">hal::Net::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00093">hal::Net::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00453">get_output_nets()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="event__handler_8cpp_source.html#l00063">hal::EventHandler::notify()</a>, and <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5b4ec692a3ed15d168fd5ee741450a15">hal::ModuleEvent::output_port_name_changed</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__rename__object_8cpp_source.html#l00052">hal::ActionRenameObject::exec()</a>, and <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>.</p>
 
@@ -1273,11 +1297,11 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the parent was changed, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00139">139</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2module_8cpp_source.html#l00147">147</a> of file <a class="el" href="netlist_2module_8cpp_source.html">module.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00089">get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00094">get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00247">get_netlist()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00191">get_submodules()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="event__handler_8cpp_source.html#l00063">hal::EventHandler::notify()</a>, <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fabf5556db5f4ae80fdd39c0332197241a">hal::ModuleEvent::parent_changed</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00252">set_cache_dirty()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00139">set_parent_module()</a>, <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faad2650767a6bde46731f82ac16b5a690">hal::ModuleEvent::submodule_added</a>, and <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa82d919bd772ab56d1f06bf9d8c4bc32c">hal::ModuleEvent::submodule_removed</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00089">get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00094">get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00255">get_netlist()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00199">get_submodules()</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="event__handler_8cpp_source.html#l00063">hal::EventHandler::notify()</a>, <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fabf5556db5f4ae80fdd39c0332197241a">hal::ModuleEvent::parent_changed</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00260">set_cache_dirty()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00147">set_parent_module()</a>, <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faad2650767a6bde46731f82ac16b5a690">hal::ModuleEvent::submodule_added</a>, and <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa82d919bd772ab56d1f06bf9d8c4bc32c">hal::ModuleEvent::submodule_removed</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00075">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00139">set_parent_module()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00167">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00075">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="python__bindings_2bindings_2module_8cpp_source.html#l00005">hal::module_init()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00147">set_parent_module()</a>.</p>
 
 </div>
 </div>
@@ -1333,7 +1357,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="module_8h_source.html#l00351">351</a> of file <a class="el" href="module_8h_source.html">module.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module_8h_source.html#l00357">357</a> of file <a class="el" href="module_8h_source.html">module.h</a>.</p>
 
 </div>
 </div>
@@ -1347,7 +1371,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_module.html">Module</a></li>
-    <li class="footer">Generated on Tue Jul 20 2021 09:48:09 for HAL by
+    <li class="footer">Generated on Thu Jul 22 2021 14:22:50 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
