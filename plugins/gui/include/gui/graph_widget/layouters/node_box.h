@@ -97,6 +97,12 @@ namespace hal {
         int y() const { return mY; }
 
         /**
+         * Convenience getter for grid position as QPoint
+         * @return grid position
+         */
+        QPoint gridPosition() const { return QPoint(mX,mY); }
+
+        /**
          * @brief setItem
          * @param item_
          */
@@ -170,7 +176,7 @@ namespace hal {
          * @param p integer grid position
          * @return pointer to NodeBox or nullptr if none found
          */
-        NodeBox* boxForPoint(QPoint p) const { return mPointHash.value(p); }
+        NodeBox* boxForPoint(const QPoint& p) const { return mPointHash.value(p); }
 
         /**
          * @brief boxForNode find NodeBox by node
@@ -179,7 +185,7 @@ namespace hal {
          *
          * Used to search gates or modules by ID.
          */
-        NodeBox* boxForNode(Node& n) const { return mNodeHash.value(n); }
+        NodeBox* boxForNode(const Node& n) const { return mNodeHash.value(n); }
 
         /**
          * @brief boxForItem find NodeBox by graphics item

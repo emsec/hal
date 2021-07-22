@@ -613,7 +613,7 @@ namespace hal
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRenameAction);
 
                 action = context_menu.addAction("  Fold parent module");
-                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleFoldSingleAction);
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleFoldParentSingle);
             }
             else if (isModule)
             {
@@ -632,6 +632,12 @@ namespace hal
 
                 action = context_menu.addAction("  Change module type");
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleChangeTypeAction);
+
+                if (gNetlist->get_module_by_id(mItem->id())->get_parent_module())
+                {
+                    action = context_menu.addAction("  Fold parent module");
+                    QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleFoldParentSingle);
+                }
 
                 action = context_menu.addAction("  Unfold module");
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleUnfoldSingleAction);
@@ -701,6 +707,12 @@ namespace hal
 
             if (isGate || isModule)
             {
+                if (gSelectionRelay->numberSelectedNodes() > 1)
+                {
+                    action = context_menu.addAction("  Fold all parent modules");
+                    QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleFoldParentAll);
+                }
+
                 action = context_menu.addAction("  Isolate in new view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleIsolationViewAction);
 
@@ -764,14 +776,14 @@ namespace hal
 
             if (gSelectionRelay->numberSelectedNodes() > 1)
             {
+                /* there is currently no action that works on gates only
                 if (gSelectionRelay->numberSelectedGates())
                 {
                     context_menu.addSeparator();
                     context_menu.addAction("All selected gates:")->setEnabled(false);
 
-                    action = context_menu.addAction("  Fold all parent modules");
-                    QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleFoldAllAction);
                 }
+                */
                 if (gSelectionRelay->numberSelectedModules())
                 {
                     context_menu.addSeparator();
@@ -1266,23 +1278,36 @@ namespace hal
         }
     }
 
-    void GraphGraphicsView::handleFoldSingleAction()
+    void GraphGraphicsView::handleFoldParentSingle()
     {
-        auto context = mGraphWidget->getContext();
-        u32 gateId = mItem->id();
-        if (context->isGateUnfolded(gateId))
+        const Module* parentModule = nullptr;
+        Node childNode;
+        u32 id = mItem->id();
+        GraphContext* context = mGraphWidget->getContext();
+        switch (mItem->itemType())
         {
-            Module* m = gNetlist->get_gate_by_id(gateId)->get_module();
-            if (!m) return;
-
-            PlacementHint plc(PlacementHint::GridPosition);
-            plc.addGridPosition(Node(m->get_id(),Node::Module),
-                                context->getLayouter()->nodeToPositionMap().value(Node(gateId,Node::Gate)));
-            ActionFoldModule* act = new ActionFoldModule(m->get_id());
-            act->setContextId(context->id());
-            act->setPlacementHint(plc);
-            act->exec();
+        case ItemType::Module:
+            parentModule = gNetlist->get_module_by_id(id)->get_parent_module();
+            childNode = Node(id, Node::Module);
+            break;
+        case ItemType::Gate:
+            parentModule = gNetlist->get_gate_by_id(id)->get_module();
+            childNode = Node(id, Node::Gate);
+            break;
+        default:
+            return;
         }
+
+        if (!parentModule || childNode.type()==Node::None) return;
+        NodeBox* box = context->getLayouter()->boxes().boxForNode(childNode);
+        if (!box) return;
+
+        PlacementHint plc(PlacementHint::GridPosition);
+        plc.addGridPosition(Node(parentModule->get_id(),Node::Module),box->gridPosition());
+        ActionFoldModule* act = new ActionFoldModule(parentModule->get_id());
+        act->setContextId(context->id());
+        act->setPlacementHint(plc);
+        act->exec();
     }
 
     void GraphGraphicsView::handleUnfoldSingleAction()
@@ -1304,25 +1329,43 @@ namespace hal
         act->exec();
     }
 
-    void GraphGraphicsView::handleFoldAllAction()
+    void GraphGraphicsView::handleFoldParentAll()
     {
-        auto context = mGraphWidget->getContext();
+        GraphContext* context = mGraphWidget->getContext();
+        const NodeBoxes boxes = context->getLayouter()->boxes();
 
-        QSet<Module*> modSet;
+        QSet<const Module*> modSet;
 
-        for (u32 id : gSelectionRelay->selectedGatesList())
+        for (Node& nd : gSelectionRelay->selectedNodesList())
         {
-            if (context->isGateUnfolded(id))
-                modSet.insert(gNetlist->get_gate_by_id(id)->get_module());
+            if (!context->getLayouter()->boxes().boxForNode(nd)) continue; // not in view
+
+            switch (nd.type())
+            {
+            case Node::Gate:
+                modSet.insert(gNetlist->get_gate_by_id(nd.id())->get_module());
+                break;
+            case Node::Module:
+                modSet.insert(gNetlist->get_module_by_id(nd.id())->get_parent_module());
+            default:
+                continue;
+            }
         }
 
-        for (Module* m : modSet)
-            if (m)
-            {
-                ActionFoldModule* act = new ActionFoldModule(m->get_id());
-                act->setContextId(context->id());
-                act->exec();
-            }
+        QMultiMap<int,const Module*> modDepth;
+        for (const Module* m : modSet)
+            if (m) modDepth.insertMulti(m->get_submodule_depth(),m);
+
+        QMapIterator<int,const Module*> it(modDepth);
+        it.toBack();
+        while (it.hasPrevious())
+        {
+            it.previous();
+            const Module* m = it.value();
+            ActionFoldModule* act = new ActionFoldModule(m->get_id());
+            act->setContextId(context->id());
+            act->exec();
+        }
     }
 
     void GraphGraphicsView::handleUnfoldAllAction()

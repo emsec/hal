@@ -112,8 +112,8 @@ namespace hal
         void handleChangeTypeAction();
         void adjustMinScale();
 
-        void handleFoldSingleAction();
-        void handleFoldAllAction();
+        void handleFoldParentSingle();
+        void handleFoldParentAll();
         void handleUnfoldSingleAction();
         void handleUnfoldAllAction();
 
