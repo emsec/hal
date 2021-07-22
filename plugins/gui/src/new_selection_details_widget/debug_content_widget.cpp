@@ -19,11 +19,11 @@ namespace hal {
     DebugContentWidget::DebugContentWidget(QWidget *parent) : ContentWidget("Debug Widget", parent)
     {
         //mContentLayout->addWidget(new DataTableWidget(this));
-        //mContentLayout->addWidget(new GroupingsOfItemWidget(this));
+        mContentLayout->addWidget(new GroupingsOfItemWidget(this));
 
         //--------For NetlistElementsModel
         //NOTE: I've commented it out temporarily, because it SIGSEGVs sometimes (in netlists without gate id 2)
-        QTreeView* mTreeView = new QTreeView(this);
+        /*QTreeView* mTreeView = new QTreeView(this);
         mTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         mTreeView->header()->setStretchLastSection(true);
         NetlistElementsTreeModel* model = new NetlistElementsTreeModel(mTreeView);
@@ -37,7 +37,7 @@ namespace hal {
         baseModel->setContent(QList<TreeItem*>() << someRootItem);
         mTreeView->setModel(pinModel);
         //mTreeView->setModel(model);
-        mContentLayout->addWidget(mTreeView);
+        mContentLayout->addWidget(mTreeView);*/
 
         //--------End NetlistElementsModel
 

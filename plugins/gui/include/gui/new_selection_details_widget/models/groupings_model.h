@@ -42,7 +42,7 @@ namespace hal {
     {
         Q_OBJECT
 
-        bool mDisableEvents;
+        //bool mDisableEvents;
 
         QList<GroupingTableEntry> mGroupings;
         QString mAboutToRename;
@@ -50,7 +50,6 @@ namespace hal {
         ItemType mItemType;
         u32 mItemId;
 
-        //static QString generateUniqueName(const QString& suggestion, const QSet<QString>& existingNames);
     public:
         /**
          * Constructor.
@@ -102,7 +101,7 @@ namespace hal {
          * @param role - The access role
          * @returns <b>true</b> on success
          */
-        bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+        bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
         /**
           * Gets the table entry that contains the grouping at a given row index.
@@ -110,141 +109,44 @@ namespace hal {
           * @param irow - The row index
           * @returns the grouping table entry
           */
-        GroupingTableEntry groupingAt(int irow) const { return mGroupings.at(irow); }
+        GroupingTableEntry getGroupingEntryAtRow(int row) const { return mGroupings.at(row); }
 
         void setGate(Gate* gate);
         void setModule(Module* module);
         void setNet(Net* net);
 
-        /**
-         * Remove the row at index row.
-         *
-         * @param row - The row index
-         * @param count - Unused and ignored (always one row is deleted at a time)
-         * @param parent - Unused and ingnored
-         * @returns <b>true</b> on success
-         */
-        //bool removeRows(int row, int count=1, const QModelIndex &parent=QModelIndex()) override;
+        // Debug Only
+        void setGroupings(QList<Grouping*> groupingList);
 
-        /**
-         * Returns <b>true</b> if <i>input</i> is a unique and valid grouping name. Returns <b>false</b> otherwise.
-         *
-         * @param input - A grouping name
-         * @returns <b>true</b> if <i>input</i> is a unique and valid grouping name.
-         *          Returns <b>false</b> otherwise
-         */
-        //bool validate(const QString &input);
+        bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
-        /**
-         * This function is used to prevent the 'validate'-function to return <b>false</b> while renaming a grouping to
-         * its old name. Therefore the old name of the grouping will always considered as valid. <br>
-         * To achieve this one has to call this function to store the old name.
-         *
-         * @param oldName - The old name of the grouping
-         */
-        //void setAboutToRename(const QString& oldName) { mAboutToRename = oldName.trimmed(); }
+    private Q_SLOTS:
 
-         
+        void handleGroupingRemoved(Grouping* grp);
 
-        /**
-         * Adds a grouping to the table. The grouping is created with a unique default name (e.g. 'grouping1').
-         *
-         * @returns the created grouping
-         */
-        //Grouping* addDefaultEntry();
+        void handleGroupingNameChanged(Grouping* grp);
 
-        /**
-         * Searches for a grouping with the given name in the grouping table.
-         *
-         * @param name - The name to search for
-         * @returns the grouping if found. Returns <i>nullptr</i> otherwise.
-         */
-        //Grouping* groupingByName(const QString& name) const;
+        void handleGroupingGateAssigned(Grouping* grp, u32 id);
 
-        /**
-         * Gets the color of an item based on its grouping. If the item has no grouping an invalid color (QColor()) is
-         * returned.
-         *
-         * @param itemType - The type of the item (i.e. Module, Gate or Net)
-         * @param itemId - The id of the item
-         * @returns the color of the grouping of the item. Returns an invalid color if the item has no grouping.
-         */
-        //QColor colorForItem(ItemType itemType, u32 itemId) const;
+        void handleGroupingGateRemoved(Grouping* grp, u32 id);
 
-      /**
-         * Renames the grouping at the given table row of the groupings table.
-         *
-         * @param id - The id of the grouping to rename
-         * @param groupingName - The new name
-         * @returns The old name.
-         */
-        //QString renameGrouping(u32 id, const QString& groupingName);
+        void handleGroupingNetAssigned(Grouping* grp, u32 id);
 
-        /**
-         * Gets a list of all currently used grouping names.
-         *
-         * @returns a string list of used grouping names
-         */
-        //QStringList groupingNames() const;
+        void handleGroupingNetRemoved(Grouping* grp, u32 id);
 
-        
+        void handleGroupingModuleAssigned(Grouping* grp, u32 id);
 
-    public Q_SLOTS:
-        /**
-         * Q_SLOT to handle that a grouping was removed.
-         *
-         * @param grp - The removed grouping.
-         */
-        //void deleteGroupingEvent(Grouping* grp);
+        void handleGroupingModuleRemoved(Grouping* grp, u32 id);
 
-        /**
-         * Changes the color of the grouping with the specified id to the specified color.
-         *
-         * @param id - The grouping id
-         * @param groupingColor - The new color
-         * @returns the color BEFORE the recoloring. If the grouping id is unknown an empty color (QColor()) is returned
-         */
-        //QColor recolorGrouping(u32 id, const QColor& groupingColor);
-
-        //void recoloredGroupingEvent(u32 id, const QColor& groupingColor);
-
-        /**
-         * Q_SLOT to handle that a grouping has been created.
-         *
-         * @param grp - The created grouping
-         */
-        //void createGroupingEvent(Grouping *grp);
-
-        /**
-         * Q_SLOT to handle that a grouping has been renamed.
-         *
-         * @param grp
-         */
-        //void groupingNameChangedEvent(Grouping *grp); // TODO
-
-    Q_SIGNALS:
-        /**
-         * Q_SIGNAL to notify that the color of a grouping has been changed. Emitted by GroupingTableModel::setData if
-         * the color field was modified.
-         *
-         * @param grp - The grouping which color has been changed.
-         */
-        //void groupingColorChanged(Grouping* grp);
-
-        /**
-         * Q_SIGNAL to notify that the grouping table entry at the rearmost position
-         * (i.e. the entry with the highest row index) has been deleted.
-         */
-        //void lastEntryDeleted();
-
-        /**
-         * Q_SIGNAL to notify that a new grouping table entry has been added to the table.
-         *
-         * @param index - The index of the new entry
-         */
-        //void newEntryAdded(QModelIndex& index);
+        void handleGroupingColorChanged(Grouping* grp);
 
     private:
-        //QColor nextColor() const;
+        /**
+         * Find the index of the sepcified Grouping in the GroupingTableEntry list. If the grouping can't be found return -1
+         * @param grp - The specified Grouping
+         * @returns the index of Grouping in the GroupingTableEntry list. (-1) if the grouping isn't found.
+         */
+        int getIndexOfGrouping(Grouping* grp) const;
+
     };
 }

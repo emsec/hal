@@ -52,12 +52,17 @@ namespace hal
         static QString pyCodeModuleModule(u32 moduleId);
         static QString pyCodeModuleData(u32 moduleId, QString category, QString key);
 
+        static QString pyCodeGrouping(u32 groupingId);
+        static QString pyCodeGroupingName(u32 groupingId);
+        static QString pyCodeGroupingId(u32 groupingId);
+
     private:
         static QString buildPyCode(const QString& prefix, const QString& suffix, u32 id);
 
         static const QString gateCodePrefix;
         static const QString netCodePrefix;
         static const QString moduleCodePrefix;
+        static const QString groupingCodePrefix;
 
     };
 }

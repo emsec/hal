@@ -6,13 +6,14 @@
 
 namespace hal
 {
-    const QString PyCodeProvider::gateCodePrefix = "netlist.get_gate_by_id(%1).";
-    const QString PyCodeProvider::netCodePrefix = "netlist.get_net_by_id(%1).";
-    const QString PyCodeProvider::moduleCodePrefix = "netlist.get_module_by_id(%1).";
+    const QString PyCodeProvider::gateCodePrefix = "netlist.get_gate_by_id(%1)";
+    const QString PyCodeProvider::netCodePrefix = "netlist.get_net_by_id(%1)";
+    const QString PyCodeProvider::moduleCodePrefix = "netlist.get_module_by_id(%1)";
+    const QString PyCodeProvider::groupingCodePrefix = "netlist.get_grouping_by_id(%1)";
 
     QString PyCodeProvider::buildPyCode(const QString& prefix, const QString& suffix, u32 id)
     {
-        return QString(prefix + suffix).arg(id);
+        return QString(prefix + "." + suffix).arg(id);
     }
 
     QString PyCodeProvider::pyCodeGateName(u32 gateId)
@@ -131,4 +132,24 @@ namespace hal
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
-}
+
+    QString PyCodeProvider::pyCodeGrouping(u32 groupingId)
+    {
+        return groupingCodePrefix.arg(groupingId);
+    }
+
+    QString PyCodeProvider::pyCodeGroupingName(u32 groupingId)
+    {
+        const QString suffix = QString("get_name()");
+
+        return buildPyCode(groupingCodePrefix, suffix, groupingId);
+    }
+
+    QString PyCodeProvider::pyCodeGroupingId(u32 groupingId)
+    {
+        const QString suffix = QString("get_id()");
+        
+        return buildPyCode(groupingCodePrefix, suffix, groupingId);
+    }
+
+} // namespace hal

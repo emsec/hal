@@ -2,6 +2,8 @@
 #include "gui/content_manager/content_manager.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/gui_globals.h"
+
+#include <algorithm>
 #include <QApplication>
 
 namespace hal {
@@ -12,8 +14,16 @@ namespace hal {
         mGroupings.clear();
         mItemId = 0;
 
-        //connect(gNetlistRelay, &NetlistRelay::groupingRemoved, this, &GroupingsOfItemModel::deleteGroupingEvent);
-        //connect(gNetlistRelay, &NetlistRelay::groupingNameChanged, this, &GroupingsOfItemModel::groupingNameChangedEvent);
+        // Event Connects
+        connect(gNetlistRelay, &NetlistRelay::groupingRemoved, this, &GroupingsOfItemModel::handleGroupingRemoved);
+        connect(gNetlistRelay, &NetlistRelay::groupingNameChanged, this, &GroupingsOfItemModel::handleGroupingNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::groupingGateAssigned, this, &GroupingsOfItemModel::handleGroupingGateAssigned);
+        connect(gNetlistRelay, &NetlistRelay::groupingGateRemoved, this, &GroupingsOfItemModel::handleGroupingGateRemoved);
+        connect(gNetlistRelay, &NetlistRelay::groupingNetAssigned, this, &GroupingsOfItemModel::handleGroupingNetAssigned);
+        connect(gNetlistRelay, &NetlistRelay::groupingNetRemoved, this, &GroupingsOfItemModel::handleGroupingNetRemoved);
+        connect(gNetlistRelay, &NetlistRelay::groupingModuleAssigned, this, &GroupingsOfItemModel::handleGroupingModuleAssigned);
+        connect(gNetlistRelay, &NetlistRelay::groupingModuleRemoved, this, &GroupingsOfItemModel::handleGroupingModuleRemoved);
+        connect(gContentManager->getGroupingManagerWidget()->getModel(), &GroupingTableModel::groupingColorChanged, this, &GroupingsOfItemModel::handleGroupingColorChanged);
     }
 
     int GroupingsOfItemModel::columnCount(const QModelIndex &parent) const
@@ -72,25 +82,16 @@ namespace hal {
 
     bool GroupingsOfItemModel::setData(const QModelIndex &index, const QVariant &value, int role)
     {
-        /*if (role != Qt::EditRole) return false;
-        if (!index.isValid()) return false;
-        switch (index.column()) {
-        case 0:
-            mGroupings[index.row()].setName(value.toString().trimmed());
-            return true;
-        case 2:
-            mGroupings[index.row()].setColor(value.value<QColor>());
-            Q_EMIT groupingColorChanged(mGroupings.at(index.row()).grouping());
-            return true;
-        }*/
         return false;
     }
 
     void GroupingsOfItemModel::setGate(Gate* gate)
     {
         if(gate == nullptr) return;
-        QList<GroupingTableEntry> newGroupingList;
+        mItemId = gate->get_id();
+        mItemType = ItemType::Gate;
 
+        QList<GroupingTableEntry> newGroupingList;
         // Temporary until items can be in multiple groupings
         Grouping* grp = gate->get_grouping();
         if(grp != nullptr){
@@ -105,8 +106,10 @@ namespace hal {
     void GroupingsOfItemModel::setModule(Module* module)
     {
         if(module == nullptr) return;
-        QList<GroupingTableEntry> newGroupingList;
+        mItemId = module->get_id();
+        mItemType = ItemType::Module;
 
+        QList<GroupingTableEntry> newGroupingList;
         // Temporary until items can be in multiple groupings
         Grouping* grp = module->get_grouping();
         if(grp != nullptr){
@@ -121,8 +124,10 @@ namespace hal {
     void GroupingsOfItemModel::setNet(Net* net)
     {
         if(net == nullptr) return;
-        QList<GroupingTableEntry> newGroupingList;
+        mItemId = net->get_id();
+        mItemType = ItemType::Net;
 
+        QList<GroupingTableEntry> newGroupingList;
         // Temporary until items can be in multiple groupings
         Grouping* grp = net->get_grouping();
         if(grp != nullptr){
@@ -134,207 +139,141 @@ namespace hal {
         layoutChanged();
     }
 
-
-
-    // =================== OLD =====================
-
-    /*bool GroupingsOfItemModel::removeRows(int row, int count, const QModelIndex &parent)
+    void GroupingsOfItemModel::setGroupings(QList<Grouping*> groupingList)
     {
-        Q_UNUSED(parent);
-        Q_UNUSED(count);
+        mItemId = 0;
+        mItemType = ItemType::None;
 
-        mDisableEvents = true;
-        int nrows = mGroupings.size();
-        if (row >= nrows) return false;
-        Grouping* grp = mGroupings.at(row).grouping();
-        for (Module* m : grp->get_modules())
-            grp->remove_module(m);
-        for (Gate* g : grp->get_gates())
-            grp->remove_gate(g);
-        for (Net* n : grp->get_nets())
-            grp->remove_net(n);
-        gNetlist->delete_grouping(grp);
-        Q_EMIT layoutAboutToBeChanged();
-        mGroupings.removeAt(row);
-        Q_EMIT layoutChanged();
-        mDisableEvents = false;
-        if (row >= nrows-1)
-            Q_EMIT lastEntryDeleted();
-        return true;
-    }*/
-
-    /*bool GroupingsOfItemModel::validate(const QString &input)
-    {
-        if (input.isEmpty()) return false;
-        if (input == mAboutToRename) return true; // allow existing name on rename
-        for (const GroupingTableEntry& gte : mGroupings)
+        QList<GroupingTableEntry> newGroupingList;
+        for(Grouping* grp : groupingList)
         {
-            if (gte.name() == input.trimmed())
-                return false;
+            if(grp == nullptr)
+                continue;
+            QColor c = gContentManager->getGroupingManagerWidget()->getModel()->colorForGrouping(grp);
+            newGroupingList.append(GroupingTableEntry(grp, c));
+            layoutAboutToBeChanged();
+            mGroupings = newGroupingList;
+            layoutChanged();
         }
-        return true;
-    }*/
-
-    /*Grouping* GroupingsOfItemModel::addDefaultEntry()
-    {
-        QSet<QString> existingNames;
-        u32 maxId = 0;
-        for (const GroupingTableEntry& gte : mGroupings)
-        {
-            if (gte.id()>maxId) maxId = gte.id();
-            existingNames.insert(gte.name());
-        }
-
-        mDisableEvents = true;
-        Q_EMIT layoutAboutToBeChanged();
-        GroupingTableEntry gte(generateUniqueName(QString("grouping%1").arg(maxId+1),existingNames),
-                               nextColor());
-        int n = mGroupings.size();
-        mGroupings.append(gte);
-        Q_EMIT layoutChanged();
-        mDisableEvents = false;
-
-        QModelIndex inx = index(n,0);
-        Q_EMIT newEntryAdded(inx);
-        return gte.grouping();
-    }*/
-
-
-    /*void GroupingsOfItemModel::deleteGroupingEvent(Grouping* grp)
-    {
-        if (mDisableEvents) return;
-        for (auto it = mGroupings.begin(); it!=mGroupings.end(); ++it)
-            if (it->grouping() == grp)
-            {
-                Q_EMIT layoutAboutToBeChanged();
-                it = mGroupings.erase(it);
-                Q_EMIT layoutChanged();
-                return;
-            }
-    }*/
-
-    /*void GroupingsOfItemModel::createGroupingEvent(Grouping *grp)
-    {
-        if (mDisableEvents) return;
-        Q_EMIT layoutAboutToBeChanged();
-        int n = mGroupings.size();
-        mGroupings.append(GroupingTableEntry(grp,nextColor()));
-        Q_EMIT layoutChanged();
-        QModelIndex inx = index(n,0);
-        Q_EMIT newEntryAdded(inx);
-    }*/
-
-    /*void GroupingsOfItemModel::groupingNameChangedEvent(Grouping *grp)
-    {
-        if (mDisableEvents) return;
-        int irow = 0;
-        for (auto it = mGroupings.begin(); it!=mGroupings.end(); ++it)
-        {
-            if (it->grouping() == grp)
-            {
-                it->setName(QString::fromStdString(grp->get_name()));
-                QModelIndex inx = index(irow,0);
-                Q_EMIT dataChanged(inx,inx);
-            }
-            ++irow;
-        }
-    }*/
-
-    /*QString GroupingsOfItemModel::renameGrouping(u32 id, const QString& groupingName)
-    {
-        for (int irow=0; irow < mGroupings.size(); irow++)
-        {
-            if (mGroupings.at(irow).id() != id) continue;
-            mDisableEvents = true;
-            QString oldName = mGroupings.at(irow).name();
-            mGroupings[irow].setName(groupingName);
-            Grouping* grp = mGroupings[irow].grouping();
-            grp->set_name(groupingName.toStdString());
-            QModelIndex inx = index(irow,0);
-            Q_EMIT dataChanged(inx,inx);
-            mDisableEvents = false;
-            return oldName;
-        }
-        return QString();
-    }*/
-
-    /*QColor GroupingsOfItemModel::recolorGrouping(u32 id, const QColor& groupingColor)
-    {
-        for (int irow=0; irow < mGroupings.size(); irow++)
-        {
-            if (mGroupings.at(irow).id() != id) continue;
-            mDisableEvents = true;
-            QColor oldColor = mGroupings.at(irow).color();
-            mGroupings[irow].setColor(groupingColor);
-            QModelIndex inx = index(irow,2);
-            Q_EMIT dataChanged(inx,inx);
-            Q_EMIT groupingColorChanged(mGroupings.at(irow).grouping());
-            mDisableEvents = false;
-            return oldColor;
-        }
-        return QColor();
-    }*/
-
-    /*QString GroupingsOfItemModel::generateUniqueName(const QString& suggestion, const QSet<QString>& existingNames)
-    {
-        QString retval = suggestion;
-        int itry = 0;
-        while (existingNames.contains(retval) && itry < 27*26)
-        {
-            retval = suggestion;
-            if (itry >= 26) retval += (char) ('a' + itry/26 -1);
-            retval += (char) ('a' + itry%26);
-            ++itry;
-        }
-        return retval;
-    }*/
-
-    /*QColor GroupingsOfItemModel::colorForItem(ItemType itemType, u32 itemId) const
-    {
-        Grouping* itemGrouping = nullptr;
-        const Module* m = nullptr;
-        const Gate* g = nullptr;
-        const Net* n = nullptr;
-        switch (itemType) {
-        case ItemType::Module:
-            m = gNetlist->get_module_by_id(itemId);
-            if (m) itemGrouping = m->get_grouping();
-            break;
-        case ItemType::Gate:
-            g = gNetlist->get_gate_by_id(itemId);
-            if (g) itemGrouping = g->get_grouping();
-            break;
-        case ItemType::Net:
-            n = gNetlist->get_net_by_id(itemId);
-            if (n) itemGrouping = n->get_grouping();
-            break;
-        default:
-            break;
-        }
-        if (itemGrouping)
-        {
-            for (const GroupingTableEntry& gte : mGroupings)
-                if (gte.grouping() == itemGrouping)
-                    return gte.color();
-
-        }
-        return QColor();
-    }*/
-
-    /*Grouping* GroupingsOfItemModel::groupingByName(const QString& name) const
-    {
-        for (const GroupingTableEntry& gte : mGroupings)
-            if (gte.name() == name)
-                return gte.grouping();
-        return nullptr;
     }
 
-    QStringList GroupingsOfItemModel::groupingNames() const
+    bool GroupingsOfItemModel::removeRows(int row, int count, const QModelIndex &parent)
     {
-        QStringList retval;
-        for (const GroupingTableEntry& gte : mGroupings)
-            retval << gte.name();
-        return retval;
-    }*/
+        if((row + count) > mGroupings.size() || row < 0 || count < 1){
+            return false;
+        }
+        layoutAboutToBeChanged();
+        mGroupings.erase(mGroupings.begin() + row, mGroupings.begin() + (row + count));
+        layoutChanged();
+        return true;
+    }
+
+    // ================================================
+    //  Event Handler
+    // ================================================
+
+
+
+    void GroupingsOfItemModel::handleGroupingRemoved(Grouping* grp)
+    {
+        int idx = getIndexOfGrouping(grp);
+        if(idx < 0)
+            return;
+        removeRow(idx);
+    }
+
+    void GroupingsOfItemModel::handleGroupingNameChanged(Grouping* grp)
+    {
+        int idx = getIndexOfGrouping(grp);
+        if(idx < 0)
+            return;
+        mGroupings[idx].setName(QString::fromStdString(grp->get_name()));
+        dataChanged(index(idx,0),index(idx,0));
+    }
+
+    // These 'assigned' handler functions are temporary since there is no support for multiple groupings per item (yet).
+
+    void GroupingsOfItemModel::handleGroupingGateAssigned(Grouping* grp, u32 id)
+    {
+        if(mItemType == ItemType::Gate && mItemId == id)
+        {
+            setGate(gNetlist->get_gate_by_id(id));
+        }
+    }
+
+    void GroupingsOfItemModel::handleGroupingGateRemoved(Grouping* grp, u32 id)
+    {
+        if(mItemType == ItemType::Gate && mItemId == id)
+        {
+            int idx = getIndexOfGrouping(grp);
+            if(idx < 0)
+                return;
+            removeRow(idx);
+        }
+    }
+
+    void GroupingsOfItemModel::handleGroupingNetAssigned(Grouping* grp, u32 id)
+    {
+        if(mItemType == ItemType::Net && mItemId == id)
+        {
+            setNet(gNetlist->get_net_by_id(id));
+        }
+    }
+
+    void GroupingsOfItemModel::handleGroupingNetRemoved(Grouping* grp, u32 id)
+    {
+        if(mItemType == ItemType::Net && mItemId == id)
+        {
+            int idx = getIndexOfGrouping(grp);
+            if(idx < 0)
+                return;
+            removeRow(idx);
+        }
+    }
+
+    void GroupingsOfItemModel::handleGroupingModuleAssigned(Grouping* grp, u32 id)
+    {
+        if(mItemType == ItemType::Module && mItemId == id)
+        {
+            setModule(gNetlist->get_module_by_id(id));
+        }
+    }
+
+    void GroupingsOfItemModel::handleGroupingModuleRemoved(Grouping* grp, u32 id)
+    {
+        if(mItemType == ItemType::Module && mItemId == id)
+        {
+            int idx = getIndexOfGrouping(grp);
+            if(idx < 0)
+                return;
+            removeRow(idx);
+        }
+    }
+
+    void GroupingsOfItemModel::handleGroupingColorChanged(Grouping* grp)
+    {
+        int idx = getIndexOfGrouping(grp);
+        if(idx < 0)
+            return;
+        mGroupings[idx].setColor(gContentManager->getGroupingManagerWidget()->getModel()->colorForGrouping(grp));
+        dataChanged(index(idx,2),index(idx,2));
+    }
+
+
+    int GroupingsOfItemModel::getIndexOfGrouping(Grouping* grp) const
+    {
+        auto res = std::find_if(mGroupings.begin(), mGroupings.end(), 
+            [grp](GroupingTableEntry grpEntry) 
+            { 
+                return grpEntry.grouping() == grp; 
+            });
+        if(res != mGroupings.end()){
+            return (res-mGroupings.begin());
+        }
+        else{
+            return -1;
+        }
+    }
+
 
 } // namespace hal
