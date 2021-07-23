@@ -16,22 +16,22 @@ all: generic_tb
 veri_all: library verilate
 
 %: %.cpp
-	$(VERILATOR) $(INCLUDE) $(VFLAGS) $@.cpp bram_netlist.v SB_RAM256x16.v
-	$(SUBMAKE) $(VDIRFB)/ -f Vbram_netlist.mk
+	$(VERILATOR) $(INCLUDE) $(VFLAGS) $@.cpp dsp_netlist.v DSP.v
+	$(SUBMAKE) $(VDIRFB)/ -f Vdsp_netlist.mk
 	make run
 
 run:
-	$(VDIRFB)/Vbram_netlist
+	$(VDIRFB)/Vdsp_netlist
 
 .PHONY: verilate
 verilate: $(VDIRFB)/Vbram_netlist.h
 
 $(VDIRFB)/Vbram_netlist.h:
-	$(VERILATOR) $(VFLAGS) generic_tb.cpp bram_netlist.v SB_RAM256x16.v
+	$(VERILATOR) $(VFLAGS) generic_tb.cpp dsp_netlist.v DSP.v
 
 .PHONY: library
-library: $(VDIRFB)/Vbram_netlist.h
-	$(SUBMAKE) $(VDIRFB)/ -f Vbram_netlist.mk
+library: $(VDIRFB)/Vdsp_netlist.h
+	$(SUBMAKE) $(VDIRFB)/ -f Vdsp_netlist.mk
 
 .PHONY: clean
 clean:

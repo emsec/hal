@@ -72,7 +72,7 @@ public:
     {
         m_core = new VA;
         Verilated::traceEverOn(true);
-        m_core->clk = 0;
+        m_core->CLK = 0;
         eval(); // Get our initial values set properly.
     }
     virtual ~TESTB(void)
@@ -119,11 +119,11 @@ public:
         eval();
         if (m_trace)
             m_trace->dump(10 * m_tickcount - 2);
-        m_core->clk = 1;
+        m_core->CLK = 1;
         eval();
         if (m_trace)
             m_trace->dump(10 * m_tickcount);
-        m_core->clk = 0;
+        m_core->CLK = 0;
         eval();
         if (m_trace) {
             m_trace->dump(10 * m_tickcount + 5);

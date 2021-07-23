@@ -162,27 +162,27 @@ begin
 end	// initial  
 
 //-------------------------- Default input signals -------------------------------------// 
-assign (weak0,weak1) CE 	= 1'b1; 
-assign (weak0,weak1) A  	= 16'b0; 
-assign (weak0,weak1) B  	= 16'b0; 
-assign (weak0,weak1) C  	= 16'b0; 
-assign (weak0,weak1) D  	= 16'b0; 
-assign (weak0,weak1) AHOLD 	= 1'b0; 
-assign (weak0,weak1) BHOLD 	= 1'b0; 
-assign (weak0,weak1) CHOLD 	= 1'b0; 
-assign (weak0,weak1) DHOLD    	= 1'b0; 
-assign (weak0,weak1) IRSTTOP  	= 1'b0; 
-assign (weak0,weak1) IRSTBOT  	= 1'b0; 
-assign (weak0,weak1) ORSTTOP  	= 1'b0; 
-assign (weak0,weak1) ORSTBOT  	= 1'b0; 
-assign (weak0,weak1) OLOADTOP 	= 1'b0; 
-assign (weak0,weak1) OLOADBOT 	= 1'b0; 
-assign (weak0,weak1) ADDSUBTOP	= 1'b0; 
-assign (weak0,weak1) ADDSUBBOT  = 1'b0; 
-assign (weak0,weak1) OHOLDTOP   = 1'b0; 
-assign (weak0,weak1) OHOLDBOT	= 1'b0;   
-assign (weak0,weak1) CI		= 1'b0;   
-assign (weak0,weak1) ACCUMCI	= 1'b0;   
+// assign (weak0,weak1) CE 	= 1'b1; 
+// assign (weak0,weak1) A  	= 16'b0; 
+// assign (weak0,weak1) B  	= 16'b0; 
+// assign (weak0,weak1) C  	= 16'b0; 
+// assign (weak0,weak1) D  	= 16'b0; 
+// assign (weak0,weak1) AHOLD 	= 1'b0; 
+// assign (weak0,weak1) BHOLD 	= 1'b0; 
+// assign (weak0,weak1) CHOLD 	= 1'b0; 
+// assign (weak0,weak1) DHOLD    	= 1'b0; 
+// assign (weak0,weak1) IRSTTOP  	= 1'b0; 
+// assign (weak0,weak1) IRSTBOT  	= 1'b0; 
+// assign (weak0,weak1) ORSTTOP  	= 1'b0; 
+// assign (weak0,weak1) ORSTBOT  	= 1'b0; 
+// assign (weak0,weak1) OLOADTOP 	= 1'b0; 
+// assign (weak0,weak1) OLOADBOT 	= 1'b0; 
+// assign (weak0,weak1) ADDSUBTOP	= 1'b0; 
+// assign (weak0,weak1) ADDSUBBOT  = 1'b0; 
+// assign (weak0,weak1) OHOLDTOP   = 1'b0; 
+// assign (weak0,weak1) OHOLDBOT	= 1'b0;   
+// assign (weak0,weak1) CI		= 1'b0;   
+// assign (weak0,weak1) ACCUMCI	= 1'b0;   
 
 
 //---------------------------Logic section --------------------------------------------// 

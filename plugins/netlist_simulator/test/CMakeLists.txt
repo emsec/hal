@@ -39,6 +39,8 @@ if(BUILD_TESTS)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/sha256/sha256_flat.vhd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/sha256/sha256_flat.vhd COPYONLY)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/bram/trace.vcd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/bram/trace.vcd COPYONLY)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/bram/bram_netlist.v ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/bram/bram_netlist.v COPYONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/dsp/trace.vcd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/dsp/trace.vcd COPYONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/dsp/dsp_netlist.v ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/dsp/dsp_netlist.v COPYONLY)
 
 
     include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/plugins/netlist_simulator/include)
