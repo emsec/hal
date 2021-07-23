@@ -1,8 +1,42 @@
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "netlist_simulator/netlist_simulator.h"
 #include "netlist_simulator/simulation_utils.h"
 
 namespace hal
 {
+    NetlistSimulator::SimulationGateFF::SimulationGateFF(const Gate* gate) : SimulationGateSequential(gate)
+    {
+        const GateType* gate_type       = gate->get_type();
+        const FFComponent* ff_component = gate_type->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
+        assert(ff_component != nullptr);
+        m_clock_func      = ff_component->get_clock_function();
+        m_next_state_func = ff_component->get_next_state_function();
+        m_preset_func     = ff_component->get_async_set_function();
+        m_clear_func      = ff_component->get_async_reset_function();
+        for (const std::string& pin : gate_type->get_pins_of_type(PinType::state))
+        {
+            if (const Net* net = gate->get_fan_out_net(pin); net != nullptr)
+            {
+                m_state_output_nets.push_back(gate->get_fan_out_net(pin));
+            }
+        }
+        for (const std::string& pin : gate_type->get_pins_of_type(PinType::neg_state))
+        {
+            if (const Net* net = gate->get_fan_out_net(pin); net != nullptr)
+            {
+                m_state_inverted_output_nets.push_back(gate->get_fan_out_net(pin));
+            }
+        }
+        for (const std::string& pin : gate_type->get_pins_of_type(PinType::clock))
+        {
+            m_clock_nets.push_back(gate->get_fan_in_net(pin));
+        }
+        auto behavior              = ff_component->get_async_set_reset_behavior();
+        m_sr_behavior_out          = behavior.first;
+        m_sr_behavior_out_inverted = behavior.second;
+    }
+
     bool NetlistSimulator::SimulationGateFF::simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
     {
         // compute delay, currently just a placeholder
@@ -10,16 +44,16 @@ namespace hal
 
         // is the event triggering a clock pin?
         // if so remember to process the flipflop later!
-        if (std::find(clock_nets.begin(), clock_nets.end(), event.affected_net) != clock_nets.end())
+        if (std::find(m_clock_nets.begin(), m_clock_nets.end(), event.affected_net) != m_clock_nets.end())
         {
             // return true if the event was completely handled
             // -> true if the gate is NOT clocked at this point
-            return (clock_func.evaluate(input_values) != BooleanFunction::ONE);
+            return (m_clock_func.evaluate(m_input_values) != BooleanFunction::ONE);
         }
         else    // not a clock pin -> only check for asynchronous signals
         {
-            BooleanFunction::Value async_set   = preset_func.evaluate(input_values);
-            BooleanFunction::Value async_reset = clear_func.evaluate(input_values);
+            BooleanFunction::Value async_set   = m_preset_func.evaluate(m_input_values);
+            BooleanFunction::Value async_reset = m_clear_func.evaluate(m_input_values);
 
             // check whether an asynchronous set or reset ist triggered
             if (async_set == BooleanFunction::ONE || async_reset == BooleanFunction::ONE)
@@ -31,25 +65,25 @@ namespace hal
                 {
                     // both signals set? -> evaluate special behavior
                     BooleanFunction::Value old_output = BooleanFunction::Value::X;
-                    if (!state_output_nets.empty())
+                    if (!m_state_output_nets.empty())
                     {
-                        const Net* out_net = state_output_nets[0];
+                        const Net* out_net = m_state_output_nets[0];
                         if (auto it = simulation.m_events.find(out_net); it != simulation.m_events.end())
                         {
                             old_output = it->second.back().new_value;
                         }
                     }
                     BooleanFunction::Value old_output_inv = BooleanFunction::Value::X;
-                    if (!state_inverted_output_nets.empty())
+                    if (!m_state_inverted_output_nets.empty())
                     {
-                        auto out_net = state_inverted_output_nets[0];
+                        auto out_net = m_state_inverted_output_nets[0];
                         if (auto it = simulation.m_events.find(out_net); it != simulation.m_events.end())
                         {
                             old_output_inv = it->second.back().new_value;
                         }
                     }
-                    result     = simulation_utils::process_clear_preset_behavior(sr_behavior_out, old_output);
-                    inv_result = simulation_utils::process_clear_preset_behavior(sr_behavior_out_inverted, old_output_inv);
+                    result     = simulation_utils::process_clear_preset_behavior(m_sr_behavior_out, old_output);
+                    inv_result = simulation_utils::process_clear_preset_behavior(m_sr_behavior_out_inverted, old_output_inv);
                 }
                 else if (async_set == BooleanFunction::ONE)
                 {
@@ -65,11 +99,11 @@ namespace hal
                 }
 
                 // generate events
-                for (auto out_net : state_output_nets)
+                for (auto out_net : m_state_output_nets)
                 {
                     new_events[std::make_pair(out_net, event.time + delay)] = result;
                 }
-                for (auto out_net : state_inverted_output_nets)
+                for (auto out_net : m_state_inverted_output_nets)
                 {
                     new_events[std::make_pair(out_net, event.time + delay)] = inv_result;
                 }
@@ -85,15 +119,15 @@ namespace hal
         u64 delay = 0;
 
         // compute output
-        BooleanFunction::Value result     = next_state_func.evaluate(input_values);
+        BooleanFunction::Value result     = m_next_state_func.evaluate(m_input_values);
         BooleanFunction::Value inv_result = simulation_utils::toggle(result);
 
         // generate events
-        for (const Net* out_net : state_output_nets)
+        for (const Net* out_net : m_state_output_nets)
         {
             new_events[std::make_pair(out_net, current_time + delay)] = result;
         }
-        for (const Net* out_net : state_inverted_output_nets)
+        for (const Net* out_net : m_state_inverted_output_nets)
         {
             new_events[std::make_pair(out_net, current_time + delay)] = inv_result;
         }

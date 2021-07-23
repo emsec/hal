@@ -188,11 +188,12 @@ namespace hal
 
         struct SimulationGate
         {
-            Gate* gate;
-            std::vector<std::string> input_pins;
-            std::vector<const Net*> input_nets;
-            std::unordered_map<std::string, BooleanFunction::Value> input_values;
+            const Gate* m_gate;
+            std::vector<std::string> m_input_pins;
+            std::vector<const Net*> m_input_nets;
+            std::unordered_map<std::string, BooleanFunction::Value> m_input_values;
 
+            SimulationGate(const Gate* gate);
             virtual ~SimulationGate() = default;
 
             virtual bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) = 0;
@@ -200,32 +201,38 @@ namespace hal
 
         struct SimulationGateCombinational : public SimulationGate
         {
-            std::vector<std::string> output_pins;
-            std::vector<const Net*> output_nets;
-            std::unordered_map<const Net*, BooleanFunction> functions;
+            std::vector<std::string> m_output_pins;
+            std::vector<const Net*> m_output_nets;
+            std::unordered_map<const Net*, BooleanFunction> m_functions;
+
+            SimulationGateCombinational(const Gate* gate);
 
             bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
         };
 
         struct SimulationGateSequential : public SimulationGate
         {
+            SimulationGateSequential(const Gate* gate);
+
             virtual bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) = 0;
             virtual void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)                              = 0;
         };
 
         struct SimulationGateFF : public SimulationGateSequential
         {
-            BooleanFunction clock_func;
-            BooleanFunction clear_func;
-            BooleanFunction preset_func;
-            BooleanFunction next_state_func;
-            std::vector<const Net*> state_output_nets;
-            std::vector<const Net*> state_inverted_output_nets;
-            std::vector<const Net*> clock_nets;
-            AsyncSetResetBehavior sr_behavior_out;
-            AsyncSetResetBehavior sr_behavior_out_inverted;
-            BooleanFunction::Value output;
-            BooleanFunction::Value inv_output;
+            BooleanFunction m_clock_func;
+            BooleanFunction m_clear_func;
+            BooleanFunction m_preset_func;
+            BooleanFunction m_next_state_func;
+            std::vector<const Net*> m_state_output_nets;
+            std::vector<const Net*> m_state_inverted_output_nets;
+            std::vector<const Net*> m_clock_nets;
+            AsyncSetResetBehavior m_sr_behavior_out;
+            AsyncSetResetBehavior m_sr_behavior_out_inverted;
+            BooleanFunction::Value m_output;
+            BooleanFunction::Value m_inv_output;
+
+            SimulationGateFF(const Gate* gate);
 
             bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
             void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
@@ -240,15 +247,15 @@ namespace hal
                 BooleanFunction enable_func;
                 bool is_write;
 
-                std::vector<const Net*> address_nets;
-                std::vector<const Net*> input_data_nets;
-                std::vector<const Net*> output_data_nets;
+                std::vector<std::string> address_pins;
+                std::vector<std::string> data_pins;
             };
 
-            std::vector<Port> ports;
-            std::vector<u64> data;
+            std::vector<Port> m_ports;
+            std::vector<u64> m_data;
+            std::vector<size_t> m_clocked_port_indices;
 
-            std::vector<size_t> clocked_port_indices;
+            SimulationGateRAM(const Gate* gate);
 
             bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
             void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;

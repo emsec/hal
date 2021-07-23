@@ -92,6 +92,7 @@ namespace hal
 
         for (Gate* gate : m_simulation_set)
         {
+            // TODO move into simulation gates
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
                 GateType* gate_type                                       = gate->get_type();
@@ -130,6 +131,7 @@ namespace hal
 
         for (Gate* gate : m_simulation_set)
         {
+            // TODO move into simulation gates
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
                 GateType* gate_type                                       = gate->get_type();
@@ -299,105 +301,28 @@ namespace hal
         // precompute everything that is gate-related
         for (auto gate : m_simulation_set)
         {
-            std::vector<std::string> input_pins;
-            std::vector<const Net*> input_nets;
-
-            // gather input pins + respective nets at same positions of vectors for fast iteration
-            for (auto pin : gate->get_type()->get_input_pins())
-            {
-                input_pins.push_back(pin);
-                input_nets.push_back(gate->get_fan_in_net(pin));
-            }
-
             SimulationGate* sim_gate_base = nullptr;
 
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
-                auto sim_gate_owner = std::make_unique<SimulationGateFF>();
-                auto sim_gate       = sim_gate_owner.get();
-                sim_gate_base       = sim_gate;
+                std::unique_ptr<SimulationGateFF> sim_gate_owner = std::make_unique<SimulationGateFF>(gate);
+                SimulationGateFF* sim_gate                       = sim_gate_owner.get();
+                sim_gate_base                                    = sim_gate;
                 m_sim_gates.push_back(std::move(sim_gate_owner));
-                sim_gate->input_pins = input_pins;
-                sim_gate->input_nets = input_nets;
-                for (auto pin : input_pins)
-                {
-                    sim_gate->input_values[pin] = BooleanFunction::X;
-                }
-
-                const GateType* gate_type = gate->get_type();
-                const FFComponent* ff_component =
-                    gate_type->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
-                assert(ff_component != nullptr);
-                sim_gate->clock_func      = ff_component->get_clock_function();
-                sim_gate->next_state_func = ff_component->get_next_state_function();
-                sim_gate->preset_func     = ff_component->get_async_set_function();
-                sim_gate->clear_func      = ff_component->get_async_reset_function();
-                for (auto pin : gate_type->get_pins_of_type(PinType::state))
-                {
-                    if (const Net* net = gate->get_fan_out_net(pin); net != nullptr)
-                    {
-                        sim_gate->state_output_nets.push_back(gate->get_fan_out_net(pin));
-                    }
-                }
-                for (auto pin : gate_type->get_pins_of_type(PinType::neg_state))
-                {
-                    if (const Net* net = gate->get_fan_out_net(pin); net != nullptr)
-                    {
-                        sim_gate->state_inverted_output_nets.push_back(gate->get_fan_out_net(pin));
-                    }
-                }
-                for (auto pin : gate_type->get_pins_of_type(PinType::clock))
-                {
-                    sim_gate->clock_nets.push_back(gate->get_fan_in_net(pin));
-                }
-                auto behavior                      = ff_component->get_async_set_reset_behavior();
-                sim_gate->sr_behavior_out          = behavior.first;
-                sim_gate->sr_behavior_out_inverted = behavior.second;
+            }
+            else if (gate->get_type()->has_property(GateTypeProperty::ram))
+            {
+                std::unique_ptr<SimulationGateRAM> sim_gate_owner = std::make_unique<SimulationGateRAM>(gate);
+                SimulationGateRAM* sim_gate                       = sim_gate_owner.get();
+                sim_gate_base                                     = sim_gate;
+                m_sim_gates.push_back(std::move(sim_gate_owner));
             }
             else if (gate->get_type()->has_property(GateTypeProperty::combinational))
             {
-                auto sim_gate_owner = std::make_unique<SimulationGateCombinational>();
-                auto sim_gate       = sim_gate_owner.get();
-                sim_gate_base       = sim_gate;
+                std::unique_ptr<SimulationGateCombinational> sim_gate_owner = std::make_unique<SimulationGateCombinational>(gate);
+                SimulationGateCombinational* sim_gate                       = sim_gate_owner.get();
+                sim_gate_base                                               = sim_gate;
                 m_sim_gates.push_back(std::move(sim_gate_owner));
-                sim_gate->input_pins = input_pins;
-                sim_gate->input_nets = input_nets;
-                for (auto pin : input_pins)
-                {
-                    sim_gate->input_values[pin] = BooleanFunction::X;
-                }
-
-                auto all_functions = gate->get_boolean_functions();
-
-                sim_gate->output_pins = gate->get_type()->get_output_pins();
-
-                for (auto pin : sim_gate->output_pins)
-                {
-                    auto out_net = gate->get_fan_out_net(pin);
-                    sim_gate->output_nets.push_back(out_net);
-
-                    auto func = all_functions.at(pin);
-
-                    while (true)
-                    {
-                        auto vars = func.get_variables();
-                        bool exit = true;
-                        for (auto other_pin : sim_gate->output_pins)
-                        {
-                            if (std::find(vars.begin(), vars.end(), other_pin) != vars.end())
-                            {
-                                func = func.substitute(other_pin, all_functions.at(other_pin));
-                                exit = false;
-                            }
-                        }
-                        if (exit)
-                        {
-                            break;
-                        }
-                    }
-
-                    sim_gate->functions.emplace(out_net, func);
-                }
             }
             else
             {
@@ -407,11 +332,9 @@ namespace hal
                 return;
             }
 
-            sim_gate_base->gate = gate;
-
             sim_gates_map.emplace(gate, sim_gate_base);
 
-            auto out_nets = gate->get_fan_out_nets();
+            std::vector<Net*> out_nets = gate->get_fan_out_nets();
             all_nets.insert(out_nets.begin(), out_nets.end());
         }
 
@@ -600,7 +523,7 @@ namespace hal
                     {
                         for (auto& pin : pins)
                         {
-                            gate->input_values[pin] = event.new_value;
+                            gate->m_input_values[pin] = event.new_value;
                         }
                         if (!gate->simulate(m_simulation, event, new_events))
                         {
