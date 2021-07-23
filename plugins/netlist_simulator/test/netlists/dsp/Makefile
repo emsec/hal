@@ -7,7 +7,7 @@ VERILATOR := verilator
 UTILS := ./utils/utils.cpp
 INCLUDE := -I./utils/
 
-VFLAGS :=  -Wall -Wno-fatal --MMD -trace  --Mdir $(VDIRFB) --exe $(UTILS) -cc -DSIM_VERILATOR --trace-depth 1
+VFLAGS :=  -Wall -Wno-fatal --MMD -trace  --Mdir $(VDIRFB) --exe $(UTILS) -cc -DSIM_VERILATOR --trace-depth 3
 
 
 .PHONY: all

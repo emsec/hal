@@ -1071,7 +1071,7 @@ namespace hal
             // printf("sent %08x, received: %08x\n", data_write, data_read);
 
             // // read data with rclke
-            sim->set_input(read_en, SignalValue::ZERO);    // set_read_en(0x1);
+            sim->set_input(read_en, SignalValue::ONE);    // set_read_en(0x1);
             // set_read_addr(addr);
             for (const auto& read_addr_net : read_addr)
             {
@@ -1086,6 +1086,27 @@ namespace hal
 
             sim->simulate(5 * 1000);    // tb->wait_for_n_clocks(5);
             // printf("sent %08x, received: %08x\n", data_write, data_read);
+
+            // read some address and see what the result from INIT value is
+            sim->set_input(read_en, SignalValue::ONE);    // set_read_en(0x1);
+
+            // todo: bitorder could be wrong?
+            //set_read_addr(0x66); // 1010 1010
+            sim->set_input(read_addr.at(0), SignalValue::ZERO);
+            sim->set_input(read_addr.at(1), SignalValue::ONE);
+            sim->set_input(read_addr.at(2), SignalValue::ZERO);
+            sim->set_input(read_addr.at(3), SignalValue::ONE);
+            sim->set_input(read_addr.at(4), SignalValue::ZERO);
+            sim->set_input(read_addr.at(5), SignalValue::ONE);
+            sim->set_input(read_addr.at(6), SignalValue::ZERO);
+            sim->set_input(read_addr.at(7), SignalValue::ONE);
+
+            sim->set_input(rclke, SignalValue::ONE);    //set_rclke(0x1);
+
+            sim->simulate(2 * 1000);                     // tb->wait_for_n_clocks(2);
+            sim->set_input(rclke, SignalValue::ZERO);    // set_rclke(0x0);
+
+            //data_read = read_data();
 
             sim->simulate(100 * 1000);    // tb->wait_for_n_clocks(100);
         }
@@ -1243,7 +1264,7 @@ namespace hal
 
         u32 input_nets_amount = 0;
 
-        if (clk != nullptr)
+        if (CLK != nullptr)
             input_nets_amount++;
 
         for (const auto& A_net : A)
@@ -1330,112 +1351,7 @@ namespace hal
             for (const auto& input_net : sim->get_input_nets())
             {
                 sim->set_input(input_net, SignalValue::ZERO);
-
-                // TODO @speith, warum ist clk zweimal drin?
-                if (input_net->get_name() == "clk")
-                {
-                    std::cout << "clk" << std::endl;
-                }
             }
-
-            uint16_t data_write = 0xffff;
-            uint16_t data_read  = 0x0000;
-            uint8_t addr        = 0xff;
-
-            // write data without wclke
-            // set_write_addr(addr);
-            for (const auto& write_addr_net : write_addr)
-            {
-                sim->set_input(write_addr_net, SignalValue::ONE);
-            }
-            // write_data(data_write);
-            for (const auto& din_net : din)
-            {
-                sim->set_input(din_net, SignalValue::ONE);
-            }
-
-            //TODO @speith: check units? *1000 correct?
-            sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
-
-            sim->set_input(write_en, SignalValue::ONE);    // set_write_en(0x1);
-
-            sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
-
-            sim->set_input(write_en, SignalValue::ZERO);    // set_write_en(0x0);
-            sim->simulate(1 * 1000);                        // tb->wait_for_n_clocks(1);
-
-            // // read data without rclke
-            sim->set_input(read_en, SignalValue::ZERO);    // set_read_en(0x1);
-            // set_read_addr(addr);
-            for (const auto& read_addr_net : read_addr)
-            {
-                sim->set_input(read_addr_net, SignalValue::ONE);
-            }
-
-            sim->simulate(2 * 1000);    // tb->wait_for_n_clocks(2);
-
-            // data_read = read_data();
-
-            sim->simulate(5 * 1000);    // tb->wait_for_n_clocks(5);
-            // printf("sent %08x, received: %08x\n", data_write, data_read);
-
-            // // write data with wclke
-            // set_write_addr(addr);
-            for (const auto& write_addr_net : write_addr)
-            {
-                sim->set_input(write_addr_net, SignalValue::ONE);
-            }
-            // write_data(data_write)
-            for (const auto& din_net : din)
-            {
-                sim->set_input(din_net, SignalValue::ONE);
-            }
-
-            sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
-
-            sim->set_input(write_en, SignalValue::ONE);    // set_write_en(0x1);
-            sim->set_input(wclke, SignalValue::ONE);       // set_wclke(0x1);
-
-            sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
-
-            sim->set_input(write_en, SignalValue::ZERO);    // set_write_en(0x0);
-            sim->set_input(wclke, SignalValue::ZERO);       // set_wclke(0x0);
-
-            sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
-
-            // // read data without rclke
-            sim->set_input(read_en, SignalValue::ZERO);    // set_read_en(0x1);
-            // set_read_addr(addr);
-            for (const auto& read_addr_net : read_addr)
-            {
-                sim->set_input(read_addr_net, SignalValue::ONE);
-            }
-
-            sim->simulate(2 * 1000);    // tb->wait_for_n_clocks(2);
-
-            // data_read = read_data();
-
-            sim->simulate(5 * 1000);    // tb->wait_for_n_clocks(5);
-            // printf("sent %08x, received: %08x\n", data_write, data_read);
-
-            // // read data with rclke
-            sim->set_input(read_en, SignalValue::ZERO);    // set_read_en(0x1);
-            // set_read_addr(addr);
-            for (const auto& read_addr_net : read_addr)
-            {
-                sim->set_input(read_addr_net, SignalValue::ONE);
-            }
-            sim->set_input(rclke, SignalValue::ONE);    // set_rclke(0x1);
-
-            sim->simulate(2 * 1000);                     // tb->wait_for_n_clocks(2);
-            sim->set_input(rclke, SignalValue::ZERO);    // set_rclke(0x0);
-
-            // data_read = read_data();
-
-            sim->simulate(5 * 1000);    // tb->wait_for_n_clocks(5);
-            // printf("sent %08x, received: %08x\n", data_write, data_read);
-
-            sim->simulate(100 * 1000);    // tb->wait_for_n_clocks(100);
         }
 
         // Test if maps are equal
