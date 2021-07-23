@@ -19,6 +19,8 @@
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
+#include "hal_core/utilities/project_manager.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include <QDir>
 #include <QApplication>
@@ -56,14 +58,50 @@ namespace hal
 
     static void handleProgramArguments(const ProgramArguments& args)
     {
-        if (args.is_option_set("--input-file"))
+        enum OpenArgs { None = 0, OpenProject = 1, DefaultImport = 2, ImportToProject = 3 } openArgs = None;
+        ProjectManager* pm = ProjectManager::instance();
+        std::filesystem::path fileName;
+        ProjectDirectory projDir;
+        QString gateLibraryPath;
+        if (args.is_option_set("--project-dir"))
         {
-            auto fileName = std::filesystem::path(args.get_parameter("--input-file"));
+            openArgs = (OpenArgs) (openArgs|OpenProject);
+            projDir = ProjectDirectory(args.get_parameter("--project-dir"));
+            log_info("gui", "GUI started with project {}.", projDir.string());
+        }
+        if (args.is_option_set("--import-netlist"))
+        {
+            openArgs = (OpenArgs) (openArgs|DefaultImport);
+            fileName = std::filesystem::path(args.get_parameter("--import-netlist"));
             log_info("gui", "GUI started with file {}.", fileName.string());
-            QString gateLibraryPath;
             if (args.is_option_set("--gate-library"))
                 gateLibraryPath = QString::fromStdString(args.get_parameter("--gate-library"));
-            FileManager::get_instance()->deprecatedOpenFile(QString::fromStdString(fileName.string()),gateLibraryPath);
+        }
+        switch (openArgs)
+        {
+        case None:
+            return;
+        case OpenProject:
+            FileManager::get_instance()->openProject(QString::fromStdString(projDir.string()));
+            break;
+        case DefaultImport:
+            projDir = ProjectDirectory(fileName);
+            [[fallthrough]];
+            // continue with Import
+        case ImportToProject:
+            if (!pm->create_project_directory(projDir.string()))
+            {
+                log_error("gui", "Cannot create project directory {}.", projDir.string());
+                return;
+            }
+            else
+            {
+                LogManager& lm              = LogManager::get_instance();
+                std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
+                lm.set_file_name(lpath);
+                FileManager::get_instance()->deprecatedOpenFile(QString::fromStdString(fileName.string()),gateLibraryPath);
+            }
+            break;
         }
     }
 

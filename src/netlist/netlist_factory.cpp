@@ -56,13 +56,13 @@ namespace hal
 
         std::unique_ptr<Netlist> load_netlist(const ProgramArguments& args)
         {
-            if (!args.is_option_set("--input-file"))
+            if (!args.is_option_set("--import-netlist"))
             {
                 log_critical("netlist", "no file to process specified.");
                 return nullptr;
             }
 
-            std::filesystem::path netlist_file = std::filesystem::path(args.get_parameter("--input-file"));
+            std::filesystem::path netlist_file = std::filesystem::path(args.get_parameter("--import-netlist"));
 
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
             {
