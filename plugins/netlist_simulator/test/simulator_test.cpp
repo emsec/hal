@@ -410,6 +410,14 @@ namespace hal
 
             return vcd_trace;
         }
+
+        void set_16_bit_net_vector(NetlistSimulator* sim, std::vector<Net*> nets, uint16_t number)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                sim->set_input(nets.at(i), (0x1 & number << i) ? SignalValue::ONE : SignalValue::ZERO);
+            }
+        }
     };    // namespace hal
 
     TEST_F(SimulatorTest, half_adder)
@@ -994,10 +1002,8 @@ namespace hal
             uint16_t data_read  = 0x0000;
             uint8_t addr        = 0xff;
 
-
-            sim->simulate(1 * 1000); // tb->wait_for_n_clocks(1);
-            sim->simulate(5 * 1000); // tb->wait_for_n_clocks(5);
-
+            sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
+            sim->simulate(5 * 1000);    // tb->wait_for_n_clocks(5);
 
             // write data without wclke
             // set_write_addr(addr);
@@ -1120,6 +1126,7 @@ namespace hal
         EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
         TEST_END
     }
+
     TEST_F(SimulatorTest, dsp_lattice)
     {
         // return;
@@ -1357,6 +1364,112 @@ namespace hal
             {
                 sim->set_input(input_net, SignalValue::ZERO);
             }
+
+            set_16_bit_net_vector(sim.get(), A, 6666);     // set_a(6666);
+            set_16_bit_net_vector(sim.get(), B, 1234);     // set_b(1234);
+            set_16_bit_net_vector(sim.get(), C, 4371);     // set_c(4371);
+            set_16_bit_net_vector(sim.get(), D, 43714);    // set_d(43714);
+
+            // tb->m_core->AHOLD     = 0x0;
+            // tb->m_core->BHOLD     = 0x0;
+            // tb->m_core->CHOLD     = 0x0;
+            // tb->m_core->DHOLD     = 0x0;
+            // tb->m_core->OHOLDTOP  = 0x0;
+            // tb->m_core->OHOLDBOT  = 0x0;
+            // tb->m_core->OLOADTOP  = 0x0;
+            // tb->m_core->OLOADBOT  = 0x0;
+            // tb->m_core->ADDSUBTOP = 0x0;
+            // tb->m_core->ADDSUBBOT = 0x0;
+            // tb->m_core->CI        = 0x0;
+            // tb->m_core->CE        = 0x0;
+            // --> already done before :)
+
+            // tb->opentrace("trace.vcd");
+
+            sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
+
+            sim->set_input(CE, SignalValue::ZERO);    // tb->m_core->CE = 0x0;
+
+            sim->set_input(IRSTTOP, SignalValue::ONE);    // tb->m_core->IRSTTOP = 0x1;
+            sim->set_input(IRSTBOT, SignalValue::ONE);    // tb->m_core->IRSTBOT = 0x1;
+            sim->set_input(ORSTTOP, SignalValue::ONE);    // tb->m_core->ORSTTOP = 0x1;
+            sim->set_input(ORSTBOT, SignalValue::ONE);    // tb->m_core->ORSTBOT = 0x1;
+
+            sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
+
+            sim->set_input(CE, SignalValue::ONE);    // tb->m_core->CE = 0x1;
+
+            sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
+
+            sim->set_input(IRSTTOP, SignalValue::ZERO);    // tb->m_core->IRSTTOP = 0x0;
+            sim->set_input(IRSTBOT, SignalValue::ZERO);    // tb->m_core->IRSTBOT = 0x0;
+            sim->set_input(ORSTTOP, SignalValue::ZERO);    // tb->m_core->ORSTTOP = 0x0;
+            sim->set_input(ORSTBOT, SignalValue::ZERO);    // tb->m_core->ORSTBOT = 0x0;
+
+            sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
+
+            sim->set_input(AHOLD, SignalValue::ONE);    // tb->m_core->AHOLD = 0x1;
+            sim->simulate(5 * 1000);                    // tb->wait_for_n_clocks(5);
+
+            sim->set_input(OHOLDTOP, SignalValue::ONE);    // tb->m_core->OHOLDTOP = 0x1;
+            sim->set_input(OHOLDBOT, SignalValue::ONE);    // tb->m_core->OHOLDBOT = 0x1;
+            sim->simulate(5 * 1000);                       // tb->wait_for_n_clocks(5);
+
+            sim->set_input(AHOLD, SignalValue::ZERO);       // tb->m_core->AHOLD    = 0x0;
+            sim->set_input(OHOLDTOP, SignalValue::ZERO);    // tb->m_core->OHOLDTOP = 0x0;
+            sim->set_input(OHOLDBOT, SignalValue::ZERO);    // tb->m_core->OHOLDBOT = 0x0;
+            sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
+
+            sim->set_input(OLOADTOP, SignalValue::ONE);     // tb->m_core->OLOADTOP  = 0x1;
+            sim->set_input(ADDSUBTOP, SignalValue::ONE);    // tb->m_core->ADDSUBTOP = 0x1;
+            sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
+
+            sim->set_input(OLOADTOP, SignalValue::ZERO);     // tb->m_core->OLOADTOP  = 0x0;
+            sim->set_input(ADDSUBTOP, SignalValue::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
+            sim->set_input(ADDSUBBOT, SignalValue::ONE);     // tb->m_core->ADDSUBBOT = 0x1;
+            sim->simulate(5 * 1000);                         // tb->wait_for_n_clocks(5);
+
+            sim->set_input(ORSTTOP, SignalValue::ONE);    // tb->m_core->ORSTTOP = 0x1;
+            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+            sim->set_input(ADDSUBBOT, SignalValue::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
+            sim->set_input(ORSTTOP, SignalValue::ZERO);      // tb->m_core->ORSTTOP   = 0x0;
+            sim->simulate(5 * 1000);                         // tb->wait_for_n_clocks(5);
+
+            sim->set_input(IRSTTOP, SignalValue::ONE);    // tb->m_core->IRSTTOP = 0x1;
+            sim->set_input(CHOLD, SignalValue::ONE);      // tb->m_core->CHOLD   = 0x1;
+            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+            sim->set_input(IRSTTOP, SignalValue::ZERO);    // tb->m_core->IRSTTOP = 0x0;
+            sim->set_input(CHOLD, SignalValue::ZERO);      // tb->m_core->CHOLD   = 0x0;
+
+            set_16_bit_net_vector(sim.get(), A, 1632);      // set_a(1632);
+            set_16_bit_net_vector(sim.get(), B, 764254);    // set_b(764254);
+            set_16_bit_net_vector(sim.get(), C, 12523);     // set_c(12523);
+            set_16_bit_net_vector(sim.get(), D, 263);       // set_d(263);
+            sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
+
+            sim->set_input(OLOADTOP, SignalValue::ONE);    // tb->m_core->OLOADTOP = 0x1;
+            sim->set_input(OLOADBOT, SignalValue::ONE);    // tb->m_core->OLOADBOT = 0x1;
+            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+            sim->set_input(OLOADTOP, SignalValue::ZERO);    // tb->m_core->OLOADTOP = 0x0;
+            sim->set_input(OLOADBOT, SignalValue::ZERO);    // tb->m_core->OLOADBOT = 0x0;
+            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+            sim->set_input(ADDSUBTOP, SignalValue::ONE);    // tb->m_core->ADDSUBTOP = 0x1;
+            sim->set_input(ADDSUBBOT, SignalValue::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
+            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+            sim->set_input(ADDSUBTOP, SignalValue::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
+            sim->set_input(ADDSUBBOT, SignalValue::ONE);    // tb->m_core->ADDSUBBOT = 0x1;
+            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+            sim->set_input(ADDSUBTOP, SignalValue::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
+            sim->set_input(ADDSUBBOT, SignalValue::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
+            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+            sim->simulate(5 * 1000);    // tb->wait_for_n_clocks(5);
         }
 
         // Test if maps are equal
