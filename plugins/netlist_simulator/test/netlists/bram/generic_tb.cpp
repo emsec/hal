@@ -185,14 +185,14 @@ int main(int argc, char** argv)
 
     // read some address and see what the result from INIT value is
     set_read_en(0x1);
-    set_read_addr(0x60);
+    set_read_addr(0x66);
     set_rclke(0x1);
 
     tb->wait_for_n_clocks(2);
     set_rclke(0x0);
 
     data_read = read_data();
-    printf("addr %02x, received: %04x\n", 0x60, data_read);
+    printf("addr %02x, received: %04x\n", 0x66, data_read);
 
     tb->wait_for_n_clocks(100);
 
