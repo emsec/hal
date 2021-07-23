@@ -1149,90 +1149,167 @@ namespace hal
         sim->add_gates(nl->get_gates());
         sim->load_initial_values_from_netlist();
 
-        auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
+        auto CLK = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
 
-        sim->add_clock_period(clk, 10000);
+        sim->add_clock_period(CLK, 10000);
 
-        std::vector<Net*> din;
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_0"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_1"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_2"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_3"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_4"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_5"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_6"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_7"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_8"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_9"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_10"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_11"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_12"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_13"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_14"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_15"; }).begin()));
+        std::vector<Net*> A;
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_0"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_1"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_2"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_3"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_4"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_5"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_6"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_7"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_8"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_9"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_10"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_11"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_12"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_13"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_14"; }).begin()));
+        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_15"; }).begin()));
 
-        std::vector<Net*> read_addr;
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_0"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_1"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_2"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_3"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_4"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_5"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_6"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_7"; }).begin()));
+        std::vector<Net*> B;
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_0"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_1"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_2"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_3"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_4"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_5"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_6"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_7"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_8"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_9"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_10"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_11"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_12"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_13"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_14"; }).begin()));
+        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_15"; }).begin()));
 
-        std::vector<Net*> write_addr;
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_0"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_1"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_2"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_3"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_4"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_5"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_6"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_7"; }).begin()));
+        std::vector<Net*> C;
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_0"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_1"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_2"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_3"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_4"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_5"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_6"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_7"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_8"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_9"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_10"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_11"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_12"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_13"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_14"; }).begin()));
+        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_15"; }).begin()));
 
-        auto write_en = *(nl->get_nets([](auto net) { return net->get_name() == "write_en"; }).begin());
-        auto read_en  = *(nl->get_nets([](auto net) { return net->get_name() == "read_en"; }).begin());
-        auto rclke    = *(nl->get_nets([](auto net) { return net->get_name() == "rclke"; }).begin());
-        auto wclke    = *(nl->get_nets([](auto net) { return net->get_name() == "wclke"; }).begin());
+        std::vector<Net*> D;
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_0"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_1"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_2"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_3"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_4"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_5"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_6"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_7"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_8"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_9"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_10"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_11"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_12"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_13"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_14"; }).begin()));
+        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_15"; }).begin()));
+
+        auto IRSTTOP   = *(nl->get_nets([](auto net) { return net->get_name() == "IRSTTOP"; }).begin());
+        auto IRSTBOT   = *(nl->get_nets([](auto net) { return net->get_name() == "IRSTBOT"; }).begin());
+        auto ORSTTOP   = *(nl->get_nets([](auto net) { return net->get_name() == "ORSTTOP"; }).begin());
+        auto ORSTBOT   = *(nl->get_nets([](auto net) { return net->get_name() == "ORSTBOT"; }).begin());
+        auto AHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "AHOLD"; }).begin());
+        auto BHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "BHOLD"; }).begin());
+        auto CHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "CHOLD"; }).begin());
+        auto DHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "DHOLD"; }).begin());
+        auto OHOLDTOP  = *(nl->get_nets([](auto net) { return net->get_name() == "OHOLDTOP"; }).begin());
+        auto OHOLDBOT  = *(nl->get_nets([](auto net) { return net->get_name() == "OHOLDBOT"; }).begin());
+        auto OLOADTOP  = *(nl->get_nets([](auto net) { return net->get_name() == "OLOADTOP"; }).begin());
+        auto OLOADBOT  = *(nl->get_nets([](auto net) { return net->get_name() == "OLOADBOT"; }).begin());
+        auto ADDSUBTOP = *(nl->get_nets([](auto net) { return net->get_name() == "ADDSUBTOP"; }).begin());
+        auto ADDSUBBOT = *(nl->get_nets([](auto net) { return net->get_name() == "ADDSUBBOT"; }).begin());
+        auto CI        = *(nl->get_nets([](auto net) { return net->get_name() == "CI"; }).begin());
 
         u32 input_nets_amount = 0;
 
-        // clk has to be counted twice?
         if (clk != nullptr)
             input_nets_amount++;
 
-        if (clk != nullptr)
-            input_nets_amount++;
-
-        for (const auto& din_net : din)
+        for (const auto& A_net : A)
         {
-            if (din_net != nullptr)
+            if (A_net != nullptr)
+                input_nets_amount++;
+        }
+        for (const auto& B_net : B)
+        {
+            if (B_net != nullptr)
+                input_nets_amount++;
+        }
+        for (const auto& C_net : C)
+        {
+            if (C_net != nullptr)
+                input_nets_amount++;
+        }
+        for (const auto& D_net : D)
+        {
+            if (D_net != nullptr)
                 input_nets_amount++;
         }
 
-        for (const auto& write_addr_net : write_addr)
-        {
-            if (write_addr_net != nullptr)
-                input_nets_amount++;
-        }
-
-        for (const auto& read_addr_net : read_addr)
-        {
-            if (read_addr_net != nullptr)
-                input_nets_amount++;
-        }
-
-        if (write_en != nullptr)
+        if (IRSTTOP != nullptr)
             input_nets_amount++;
 
-        if (read_en != nullptr)
+        if (IRSTBOT != nullptr)
             input_nets_amount++;
 
-        if (rclke != nullptr)
+        if (ORSTTOP != nullptr)
             input_nets_amount++;
 
-        if (wclke != nullptr)
+        if (ORSTBOT != nullptr)
+            input_nets_amount++;
+
+        if (AHOLD != nullptr)
+            input_nets_amount++;
+
+        if (BHOLD != nullptr)
+            input_nets_amount++;
+
+        if (CHOLD != nullptr)
+            input_nets_amount++;
+
+        if (DHOLD != nullptr)
+            input_nets_amount++;
+
+        if (OHOLDTOP != nullptr)
+            input_nets_amount++;
+
+        if (OHOLDBOT != nullptr)
+            input_nets_amount++;
+
+        if (OLOADTOP != nullptr)
+            input_nets_amount++;
+
+        if (OLOADBOT != nullptr)
+            input_nets_amount++;
+
+        if (ADDSUBTOP != nullptr)
+            input_nets_amount++;
+
+        if (ADDSUBBOT != nullptr)
+            input_nets_amount++;
+
+        if (CI != nullptr)
             input_nets_amount++;
 
         if (input_nets_amount != sim->get_input_nets().size())
