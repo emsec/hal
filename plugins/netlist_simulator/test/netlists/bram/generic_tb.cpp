@@ -113,10 +113,10 @@ int main(int argc, char** argv)
     tb->m_core->rclke = 0x0;
     tb->m_core->wclke = 0x0;
 
-    tb->wait_for_n_clocks(1);
-
     tb->opentrace("trace.vcd");
 
+
+    tb->wait_for_n_clocks(1);
     tb->wait_for_n_clocks(5);
 
     // write data without wclke

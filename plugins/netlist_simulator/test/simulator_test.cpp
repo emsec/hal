@@ -994,6 +994,11 @@ namespace hal
             uint16_t data_read  = 0x0000;
             uint8_t addr        = 0xff;
 
+
+            sim->simulate(1 * 1000); // tb->wait_for_n_clocks(1);
+            sim->simulate(5 * 1000); // tb->wait_for_n_clocks(5);
+
+
             // write data without wclke
             // set_write_addr(addr);
             for (const auto& write_addr_net : write_addr)
