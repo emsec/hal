@@ -116,6 +116,24 @@ public:
         // connection modules may have made changes, for which some
         // logic depends.  This forces that logic to be recalculated
         // before the top of the clock.
+        if (m_tickcount == 1)
+        {
+            eval();
+            if (m_trace)
+                m_trace->dump(10 * 0);
+            m_core->CLK = 1;
+            eval();
+            if (m_trace)
+                m_trace->dump(10 * 0);
+            m_core->CLK = 0;
+            eval();
+            if (m_trace)
+            {
+                m_trace->dump(10 * 0 + 5);
+                m_trace->flush();
+            }
+        }
+
         eval();
         if (m_trace)
             m_trace->dump(10 * m_tickcount - 2);
@@ -125,7 +143,8 @@ public:
             m_trace->dump(10 * m_tickcount);
         m_core->CLK = 0;
         eval();
-        if (m_trace) {
+        if (m_trace)
+        {
             m_trace->dump(10 * m_tickcount + 5);
             m_trace->flush();
         }

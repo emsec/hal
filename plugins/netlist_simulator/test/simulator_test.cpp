@@ -1273,6 +1273,7 @@ namespace hal
         auto ADDSUBTOP = *(nl->get_nets([](auto net) { return net->get_name() == "ADDSUBTOP"; }).begin());
         auto ADDSUBBOT = *(nl->get_nets([](auto net) { return net->get_name() == "ADDSUBBOT"; }).begin());
         auto CI        = *(nl->get_nets([](auto net) { return net->get_name() == "CI"; }).begin());
+        auto CE        = *(nl->get_nets([](auto net) { return net->get_name() == "CE"; }).begin());
 
         u32 input_nets_amount = 0;
 
@@ -1343,6 +1344,9 @@ namespace hal
             input_nets_amount++;
 
         if (CI != nullptr)
+            input_nets_amount++;
+
+        if (CE != nullptr)
             input_nets_amount++;
 
         if (input_nets_amount != sim->get_input_nets().size())

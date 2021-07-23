@@ -43,37 +43,37 @@
 
 #include "utils.h"
 
-#include <stdint.h>
-#include <stdio.h>
-#include <verilated_vcd_c.h>
-
 #include <fstream>
 #include <iostream>
+#include <stdint.h>
+#include <stdio.h>
 #include <string>
+#include <verilated_vcd_c.h>
 
 #define TBASSERT(TB, A)        \
-    do {                       \
-        if (!(A)) {            \
+    do                         \
+    {                          \
+        if (!(A))              \
+        {                      \
             (TB).closetrace(); \
         }                      \
         assert(A);             \
     } while (0);
 
-template <class VA>
-class TESTB {
+template<class VA>
+class TESTB
+{
 public:
     VA* m_core;
     VerilatedVcdC* m_trace;
     unsigned long m_tickcount;
 
-    TESTB(void)
-        : m_trace(NULL)
-        , m_tickcount(0l)
+    TESTB(void) : m_trace(NULL), m_tickcount(0l)
     {
         m_core = new VA;
         Verilated::traceEverOn(true);
         m_core->clk = 0;
-        eval(); // Get our initial values set properly.
+        eval();    // Get our initial values set properly.
     }
     virtual ~TESTB(void)
     {
@@ -90,22 +90,27 @@ public:
 
     virtual void opentrace(const char* vcdname)
     {
-        if (!m_trace) {
+        if (!m_trace)
+        {
             m_trace = new VerilatedVcdC;
-            m_core->trace(m_trace, 99);
+            m_core->trace(m_trace, 0);
             m_trace->open(vcdname);
         }
     }
 
     virtual void closetrace(void)
     {
-        if (m_trace) {
+        if (m_trace)
+        {
             m_trace->close();
             m_trace = NULL;
         }
     }
 
-    virtual void eval(void) { m_core->eval(); }
+    virtual void eval(void)
+    {
+        m_core->eval();
+    }
 
     virtual void tick(void)
     {
@@ -116,6 +121,24 @@ public:
         // connection modules may have made changes, for which some
         // logic depends.  This forces that logic to be recalculated
         // before the top of the clock.
+        if (m_tickcount == 1)
+        {
+            eval();
+            if (m_trace)
+                m_trace->dump(10 * 0);
+            m_core->clk = 1;
+            eval();
+            if (m_trace)
+                m_trace->dump(10 * 0);
+            m_core->clk = 0;
+            eval();
+            if (m_trace)
+            {
+                m_trace->dump(10 * 0 + 5);
+                m_trace->flush();
+            }
+        }
+
         eval();
         if (m_trace)
             m_trace->dump(10 * m_tickcount - 2);
@@ -125,7 +148,8 @@ public:
             m_trace->dump(10 * m_tickcount);
         m_core->clk = 0;
         eval();
-        if (m_trace) {
+        if (m_trace)
+        {
             m_trace->dump(10 * m_tickcount + 5);
             m_trace->flush();
         }
@@ -135,7 +159,8 @@ public:
     {
         int counter = 0;
 
-        while (counter < ticks) {
+        while (counter < ticks)
+        {
             tick();
             counter++;
         }
