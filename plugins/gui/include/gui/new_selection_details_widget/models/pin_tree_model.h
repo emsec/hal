@@ -41,6 +41,9 @@ class PinTreeModel : public BaseTreeModel
 
 public:
 
+    //metatype declaration at the end of file
+    enum class itemType {grouping = 0, pin = 1};
+
     /**
      * The constructor.
      *
@@ -83,6 +86,15 @@ public:
      */
     QList<int> getNetIDsOfTreeItem(TreeItem* item);
 
+    /**
+     * Get the type (enum) of a given item.
+     *
+     * @param item - The item for which the type is requested.
+     * @return The item's type.
+     */
+    itemType getTypeOfItem(TreeItem* item);
+
+
     //column identifier
     static const int sNameColumn = 0;
     static const int sDirectionColumn = 1;
@@ -93,9 +105,6 @@ public:
     const QString keyType = "type";
     const QString keyRepresentedNetsID = "netID"; //might not be needed
 
-    enum itemType {grouping = 0, pin = 1};
-    Q_ENUM(itemType)
-
 private:
     int mGateId;
     QMap<std::string, TreeItem*> mPinGroupingToTreeItem;
@@ -103,3 +112,5 @@ private:
 };
 
 }
+
+Q_DECLARE_METATYPE(hal::PinTreeModel::itemType)

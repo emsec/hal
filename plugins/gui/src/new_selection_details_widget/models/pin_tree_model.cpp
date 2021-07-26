@@ -7,6 +7,7 @@
 #include <QDebug>
 #include "hal_core/utilities/enums.h"
 
+
 namespace hal
 {
 
@@ -18,6 +19,7 @@ namespace hal
         //added to store a list of (multiple) net ids in a given treeitem (perhaps dont do this
         //at all, handle it in the view? (since the gate-id and pin name is accessable, the nets can be evaluated there
         qRegisterMetaType<QList<int>>();
+        //qRegisterMetaType<itemType2>();
     }
 
     PinTreeModel::~PinTreeModel()
@@ -86,7 +88,7 @@ namespace hal
             }
 
             pinItem->setData(QList<QVariant>() << QString::fromStdString(pin) << pinDirection << pinType << netName);
-            pinItem->setAdditionalData(keyType, itemType::pin);
+            pinItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
             pinItem->setAdditionalData(keyRepresentedNetsID, QVariant::fromValue(netIDs));
             if(!grouping.empty())
             {
@@ -95,7 +97,7 @@ namespace hal
                 {
                     //assume all items in the same grouping habe the same direction and type, so the grouping-item has also these types
                     groupingsItem = new TreeItem(QList<QVariant>() << QString::fromStdString(grouping) << pinDirection << pinType << "");
-                    groupingsItem->setAdditionalData(keyType, itemType::grouping);
+                    groupingsItem->setAdditionalData(keyType, QVariant::fromValue(itemType::grouping));
                     mRootItem->appendChild(groupingsItem);
                     mPinGroupingToTreeItem.insert(grouping, groupingsItem);
                 }
@@ -117,5 +119,10 @@ namespace hal
     QList<int> PinTreeModel::getNetIDsOfTreeItem(TreeItem *item)
     {
         return item->getAdditionalData(keyRepresentedNetsID).value<QList<int>>();
+    }
+
+    PinTreeModel::itemType PinTreeModel::getTypeOfItem(TreeItem *item)
+    {
+        return item->getAdditionalData(keyType).value<itemType>();
     }
 }

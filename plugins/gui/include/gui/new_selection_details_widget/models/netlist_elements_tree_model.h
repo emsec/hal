@@ -42,6 +42,11 @@ namespace hal
     {
         Q_OBJECT
     public:
+
+        //metatype declaration at the end of file
+        enum class itemType {module = 0, gate = 1, net = 2};
+
+
         /**
          * The constructor.
          *
@@ -97,6 +102,23 @@ namespace hal
          */
         void setModule(Module* mod, bool showGates = true, bool showNets = true, bool displayModulesRecursive = true);
 
+        /**
+         * Get the type (enum) of a given item.
+         *
+         * @param item - The item for which the type is requested.
+         * @return The item's type.
+         */
+        itemType getTypeOfItem(TreeItem* item) const;
+
+        /**
+         * Get the module/gate/net id that the given item represents.
+         * To know the type of the item, call getTypeOfItem().
+         *
+         * @param item - The item from which to extract the id.
+         * @return The corresponding module, gate, or net id.
+         */
+        int getRepresentedIdOfItem(TreeItem* item) const;
+
         // HANDLER METHODS TO HANDLE EVENTS
         void gateNameChanged(Gate* g);
         void gateRemoved(Gate* g);
@@ -125,9 +147,6 @@ namespace hal
         //additional data keys
         const QString keyItemType = "type"; //also save value in enum (if it is possible with QVariant)
         const QString keyRepresentedID = "id";
-
-        enum itemType{module = 0, gate = 1, net = 2};
-        Q_ENUM(itemType)
 
     private:
         //TreeItem* mRootItem;
@@ -174,3 +193,5 @@ namespace hal
     };
 
 }
+
+Q_DECLARE_METATYPE(hal::NetlistElementsTreeModel::itemType)

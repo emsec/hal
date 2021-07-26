@@ -6,6 +6,7 @@
 #include "gui/new_selection_details_widget/models/pin_tree_model.h"
 #include "gui/new_selection_details_widget/models/port_tree_model.h"
 #include "gui/new_selection_details_widget/new_gate_details_widget/gate_pin_tree.h"
+#include "gui/new_selection_details_widget/new_module_details_widget/module_elements_tree.h"
 #include <QTreeView>
 #include <QHeaderView>
 //---------------------------
@@ -39,9 +40,12 @@ namespace hal {
 //        mTreeView->setModel(pinModel);
 //        //mTreeView->setModel(model);
 //        mContentLayout->addWidget(mTreeView);
-        GatePinTree* gp = new GatePinTree(this);
-        gp->setContent(19);
-        mContentLayout->addWidget(gp);
+//        GatePinTree* gp = new GatePinTree(this);
+//        gp->setContent(19);
+//        mContentLayout->addWidget(gp);
+        ModuleElementsTree* met = new ModuleElementsTree(this);
+        met->setContent(1);
+        mContentLayout->addWidget(met);
 
         //--------End NetlistElementsModel
 

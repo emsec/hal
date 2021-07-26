@@ -50,6 +50,12 @@ namespace hal
             return;
 
         TreeItem* clickedItem = mPinModel->getItemFromIndex(idx);
+        switch(mPinModel->getTypeOfItem(clickedItem))
+        {
+            case PinTreeModel::itemType::pin: qDebug() << "Im a pin!!"; break;
+            case PinTreeModel::itemType::grouping: qDebug() << "Im a grouping!"; break;
+        }
+
         qDebug() << "clicked name of item " << clickedItem->getData(0).toString();
 
     }
