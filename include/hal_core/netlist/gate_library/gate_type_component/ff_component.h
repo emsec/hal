@@ -58,12 +58,12 @@ namespace hal
 
         /**
          * Get the sub-components of the gate type component.
-         * A user-defined filter may be applied to the result set, but is disabled by default.
+         * A user-defined filter may be applied to the result vector, but is disabled by default.
          * 
          * @param[in] filter - The user-defined filter function applied to all candidate components.
          * @returns The sub-components of the gate type component.
          */
-        std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
+        std::vector<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
         /**
          * Get the Boolean function describing the next internal state of the flip-flop.

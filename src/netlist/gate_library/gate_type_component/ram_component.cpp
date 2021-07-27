@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    RAMComponent::RAMComponent(std::unique_ptr<GateTypeComponent> component) : m_component(std::move(component))
+    RAMComponent::RAMComponent(std::unique_ptr<GateTypeComponent> component, const u32 bit_size) : m_component(std::move(component)), m_bit_size(bit_size)
     {
     }
 
@@ -16,26 +16,36 @@ namespace hal
         return component->get_type() == m_type;
     }
 
-    std::set<GateTypeComponent*> RAMComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
+    std::vector<GateTypeComponent*> RAMComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
         if (m_component != nullptr)
         {
-            std::set<GateTypeComponent*> res = m_component->get_components(filter);
+            std::vector<GateTypeComponent*> res = m_component->get_components(filter);
             if (filter)
             {
                 if (filter(m_component.get()))
                 {
-                    res.insert(m_component.get());
+                    res.push_back(m_component.get());
                 }
             }
             else
             {
-                res.insert(m_component.get());
+                res.push_back(m_component.get());
             }
 
             return res;
         }
 
         return {};
+    }
+
+    u32 RAMComponent::get_bit_size() const
+    {
+        return m_bit_size;
+    }
+
+    void RAMComponent::set_bit_size(const u32 bit_size)
+    {
+        m_bit_size = bit_size;
     }
 }    // namespace hal

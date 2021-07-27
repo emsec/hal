@@ -34,8 +34,9 @@ namespace hal
          * Construct a new RAMComponent with given child component.
          * 
          * @param[in] component - Another component to be added as a child component.
+         * @param[in] bit_size - The size of the RAM in bits.
          */
-        RAMComponent(std::unique_ptr<GateTypeComponent> component);
+        RAMComponent(std::unique_ptr<GateTypeComponent> component, const u32 bit_size);
 
         /**
          * Get the type of the gate type component.
@@ -54,15 +55,33 @@ namespace hal
 
         /**
          * Get the sub-components of the gate type component.
-         * A user-defined filter may be applied to the result set, but is disabled by default.
+         * A user-defined filter may be applied to the result vector, but is disabled by default.
          * 
          * @param[in] filter - The user-defined filter function applied to all candidate components.
          * @returns The sub-components of the gate type component.
          */
-        std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
+        std::vector<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
+
+        // TODO pybinds and tests
+
+        /**
+         * Get the size of the RAM in bits.
+         * 
+         * @returns The size of the RAM in bits.
+         */
+        u32 get_bit_size() const;
+
+        /**
+         * Set the size of the RAM in bits.
+         * 
+         * @param[in] bit_size - The size of the RAM in bits.
+         */
+        void set_bit_size(const u32 bit_size);
 
     private:
         static constexpr ComponentType m_type          = ComponentType::ram;
         std::unique_ptr<GateTypeComponent> m_component = nullptr;
+
+        u32 m_bit_size;
     };
 }    // namespace hal

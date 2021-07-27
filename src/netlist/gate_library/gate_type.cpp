@@ -20,21 +20,21 @@ namespace hal
     {
     }
 
-    std::set<GateTypeComponent*> GateType::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
+    std::vector<GateTypeComponent*> GateType::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
         if (m_component != nullptr)
         {
-            std::set<GateTypeComponent*> res = m_component->get_components(filter);
+            std::vector<GateTypeComponent*> res = m_component->get_components(filter);
             if (filter)
             {
                 if (filter(m_component.get()))
                 {
-                    res.insert(m_component.get());
+                    res.push_back(m_component.get());
                 }
             }
             else
             {
-                res.insert(m_component.get());
+                res.push_back(m_component.get());
             }
 
             return res;
@@ -45,7 +45,7 @@ namespace hal
 
     GateTypeComponent* GateType::get_component(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
-        std::set<GateTypeComponent*> components = this->get_components(filter);
+        std::vector<GateTypeComponent*> components = this->get_components(filter);
 
         if (components.size() == 1)
         {
@@ -354,7 +354,7 @@ namespace hal
         m_functions.insert(functions.begin(), functions.end());
     }
 
-    const BooleanFunction& GateType::get_boolean_function(const std::string& function_name) const
+    const BooleanFunction GateType::get_boolean_function(const std::string& function_name) const
     {
         if (const auto it = m_functions.find(function_name); it != m_functions.end())
         {

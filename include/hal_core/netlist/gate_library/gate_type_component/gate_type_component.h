@@ -83,9 +83,10 @@ namespace hal
          * Create a new RAMComponent with given child component.
          * 
          * @param[in] component - Another component to be added as a child component.
+         * @param[in] bit_size - The size of the RAM in bits.
          * @returns The RAMComponent.
          */
-        static std::unique_ptr<GateTypeComponent> create_ram_component(std::unique_ptr<GateTypeComponent> component);
+        static std::unique_ptr<GateTypeComponent> create_ram_component(std::unique_ptr<GateTypeComponent> component, const u32 bit_size);
 
         /**
          * Create a new MACComponent.
@@ -107,25 +108,18 @@ namespace hal
          * Create a new RAMPortComponent with given child component, the write/read data/address pin groups, and the write/read clock/enable functions.
          * 
          * @param[in] component - Another component to be added as a child component.
-         * @param[in] write_data_group - The name of the write data pin group.
-         * @param[in] read_data_group - The name of the read data pin group.
-         * @param[in] write_addr_group - The name of the write address pin group.
-         * @param[in] read_addr_group - The name of the read address pin group.
-         * @param[in] write_clock_bf - The write clock Boolean function.
-         * @param[in] read_clock_bf - The read clock Boolean function.
-         * @param[in] write_enable_bf - The write enable Boolean function.
-         * @param[in] read_enable_bf - The read enable Boolean function.
+         * @param[in] data_group - The name of the read or write data pin group.
+         * @param[in] addr_group - The name of the read or write address pin group.
+         * @param[in] clock_bf - The read or write clock's Boolean function.
+         * @param[in] enable_bf - The read or write enable's Boolean function.
          * @returns The RAMPortComponent.
          */
         static std::unique_ptr<GateTypeComponent> create_ram_port_component(std::unique_ptr<GateTypeComponent> component,
-                                                                            const std::string& write_data_group,
-                                                                            const std::string& read_data_group,
-                                                                            const std::string& write_addr_group,
-                                                                            const std::string& read_addr_group,
-                                                                            const BooleanFunction& write_clock_bf,
-                                                                            const BooleanFunction& read_clock_bf,
-                                                                            const BooleanFunction& write_enable_bf,
-                                                                            const BooleanFunction& read_enable_bf);
+                                                                            const std::string& data_group,
+                                                                            const std::string& addr_group,
+                                                                            const BooleanFunction& clock_bf,
+                                                                            const BooleanFunction& enable_bf,
+                                                                            bool is_write);
 
         /**
          * Get the type of the gate type component.
@@ -152,13 +146,27 @@ namespace hal
         }
 
         /**
-         * Get all components matching the filter condition (if provided) as a set. 
-         * Returns an empty set if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
+         * @copydoc GateTypeComponent::convert_to
+         */
+        template<typename T>
+        const T* convert_to() const
+        {
+            if (T::is_class_of(this))
+            {
+                return static_cast<const T*>(this);
+            }
+
+            return nullptr;
+        }
+
+        /**
+         * Get all components matching the filter condition (if provided) as a vector. 
+         * Returns an empty vector if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
          * 
          * @param[in] filter - The filter applied to all candidate components, disabled by default.
          * @returns The components.
          */
-        virtual std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const = 0;
+        virtual std::vector<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const = 0;
 
         /**
          * Get a single component matching the filter condition (if provided).

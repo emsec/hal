@@ -1,3 +1,5 @@
+#include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
 #include "netlist_simulator/netlist_simulator.h"
 #include "netlist_simulator/simulation_utils.h"
 
@@ -81,8 +83,44 @@ namespace hal
 
     NetlistSimulator::SimulationGateRAM::SimulationGateRAM(const Gate* gate) : SimulationGateSequential(gate)
     {
+        const GateType* gate_type         = gate->get_type();
+        const RAMComponent* ram_component = gate_type->get_component_as<RAMComponent>([](const GateTypeComponent* c) { return RAMComponent::is_class_of(c); });
+        assert(ram_component != nullptr);
+
+        m_bit_size = ram_component->get_bit_size();
+
+        for (const GateTypeComponent* component : ram_component->get_components([](const GateTypeComponent* c) { return RAMPortComponent::is_class_of(c); }))
+        {
+            const RAMPortComponent* port_component = component->convert_to<RAMPortComponent>();
+
+            Port simulation_port = {.clock_func = port_component->get_clock_function(), .enable_func = port_component->get_enable_function(), .is_write = port_component->is_write_port()};
+
+            for (const auto& [index, pin] : gate_type->get_pins_of_group(port_component->get_data_group()))
+            {
+                simulation_port.data_pins.push_back(pin);
+            }
+
+            for (const auto& [index, pin] : gate_type->get_pins_of_group(port_component->get_address_group()))
+            {
+                simulation_port.address_pins.push_back(pin);
+            }
+
+            // determine clock net
+            for (const std::string& var : simulation_port.clock_func.get_variables())
+            {
+                if (gate_type->get_pin_type(var) == PinType::clock)
+                {
+                    simulation_port.clock_net = gate->get_fan_out_net(var);
+                }
+            }
+
+            assert(simulation_port.clock_net != nullptr);
+        }
+    }
+
+    void NetlistSimulator::SimulationGateRAM::initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value)
+    {
         // TODO do init stuff here
-        // no reading of init data here, will be outsourced to differnet function
         // make sure to read INIT data from right to left in 64 bit chunks
         // length of init needs to be determined somewhere
     }
@@ -132,14 +170,15 @@ namespace hal
                 address_values.push_back(m_input_values.at(pin));
             }
 
-            u32 address = values_to_int(address_values);
+            u32 address   = values_to_int(address_values);
+            u32 data_size = port.data_pins.size();
 
             if (!port.is_write)
             {
                 // read data from internal memory
-                u32 port_size                                   = port.data_pins.size();
-                u32 read_data                                   = get_data_word(m_data, address, port_size);
-                std::vector<BooleanFunction::Value> data_values = int_to_values(read_data, port_size);
+
+                u32 read_data                                   = get_data_word(m_data, address, data_size);
+                std::vector<BooleanFunction::Value> data_values = int_to_values(read_data, data_size);
 
                 assert(data_values.size() == port.data_pins.size());
 
@@ -159,7 +198,7 @@ namespace hal
                     data_values.push_back(m_input_values.at(pin));
                 }
                 u32 write_data = values_to_int(data_values);
-                set_data_word(m_data, write_data, address, port.data_pins.size());
+                set_data_word(m_data, write_data, address, data_size);
             }
         }
 

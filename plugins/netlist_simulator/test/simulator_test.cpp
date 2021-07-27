@@ -452,9 +452,9 @@ namespace hal
 
         //prepare simulation
         sim->add_gates(nl->get_gates());
-        sim->load_initial_values_from_netlist();
-        auto A = *(nl->get_nets([](auto net) { return net->get_name() == "A"; }).begin());
-        auto B = *(nl->get_nets([](auto net) { return net->get_name() == "B"; }).begin());
+        sim->initialize_sequential_gates();
+        Net* A = *(nl->get_nets([](auto net) { return net->get_name() == "A"; }).begin());
+        Net* B = *(nl->get_nets([](auto net) { return net->get_name() == "B"; }).begin());
 
         //start simulation
         {
@@ -522,16 +522,16 @@ namespace hal
 
         //prepare simulation
         sim->add_gates(nl->get_gates());
-        sim->load_initial_values_from_netlist();
+        sim->initialize_sequential_gates();
 
         // retrieve nets
-        auto reset          = *(nl->get_nets([](auto net) { return net->get_name() == "Reset"; }).begin());
-        auto clock          = *(nl->get_nets([](auto net) { return net->get_name() == "Clock"; }).begin());
-        auto Clock_enable_B = *(nl->get_nets([](auto net) { return net->get_name() == "Clock_enable_B"; }).begin());
-        auto output_0       = *(nl->get_nets([](auto net) { return net->get_name() == "Output_0"; }).begin());
-        auto output_1       = *(nl->get_nets([](auto net) { return net->get_name() == "Output_1"; }).begin());
-        auto output_2       = *(nl->get_nets([](auto net) { return net->get_name() == "Output_2"; }).begin());
-        auto output_3       = *(nl->get_nets([](auto net) { return net->get_name() == "Output_3"; }).begin());
+        Net* reset          = *(nl->get_nets([](const Net* net) { return net->get_name() == "Reset"; }).begin());
+        Net* clock          = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock"; }).begin());
+        Net* Clock_enable_B = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock_enable_B"; }).begin());
+        Net* output_0       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_0"; }).begin());
+        Net* output_1       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_1"; }).begin());
+        Net* output_2       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_2"; }).begin());
+        Net* output_3       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_3"; }).begin());
 
         sim->add_clock_period(clock, 10000);
 
@@ -607,7 +607,7 @@ namespace hal
 
         //prepare simulation
         sim->add_gates(nl->get_gates());
-        sim->load_initial_values_from_netlist();
+        sim->initialize_sequential_gates();
 
         // retrieve nets
         auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
@@ -749,7 +749,7 @@ namespace hal
 
         //prepare simulation
         sim->add_gates(nl->get_gates());
-        sim->load_initial_values_from_netlist();
+        sim->initialize_sequential_gates();
 
         // retrieve nets
         auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());

@@ -24,27 +24,49 @@ namespace hal
 
     void NetlistSimulator::add_gates(const std::vector<Gate*>& gates)
     {
-        m_simulation_set.insert(gates.begin(), gates.end());
+        if (!m_is_initialized)
+        {
+            m_simulation_set.insert(gates.begin(), gates.end());
 
-        compute_input_nets();
-        compute_output_nets();
-
-        m_needs_initialization = true;
+            compute_input_nets();
+            compute_output_nets();
+        }
+        else
+        {
+            log_error("netlist_simulator", "cannot add gates after the simulation was started.");
+            return;
+        }
     }
 
     void NetlistSimulator::add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero)
     {
-        u64 period = 1'000'000'000'000ul / frequency;
-        add_clock_period(clock_net, period, start_at_zero);
+        if (!m_is_initialized)
+        {
+            u64 period = 1'000'000'000'000ul / frequency;
+            add_clock_period(clock_net, period, start_at_zero);
+        }
+        else
+        {
+            log_error("netlist_simulator", "cannot add a clock frequency after the simulation was started.");
+            return;
+        }
     }
 
     void NetlistSimulator::add_clock_period(const Net* clock_net, u64 period, bool start_at_zero)
     {
-        Clock c;
-        c.clock_net     = clock_net;
-        c.switch_time   = period / 2;
-        c.start_at_zero = start_at_zero;
-        m_clocks.push_back(c);
+        if (!m_is_initialized)
+        {
+            Clock c;
+            c.clock_net     = clock_net;
+            c.switch_time   = period / 2;
+            c.start_at_zero = start_at_zero;
+            m_clocks.push_back(c);
+        }
+        else
+        {
+            log_error("netlist_simulator", "cannot add a clock period after the simulation was started.");
+            return;
+        }
     }
 
     const std::unordered_set<Gate*>& NetlistSimulator::get_gates() const
@@ -85,6 +107,32 @@ namespace hal
         m_event_queue.push_back(e);
     }
 
+    void NetlistSimulator::initialize_sequential_gates(const std::function<bool(const Gate*)>& filter)
+    {
+        if (!m_is_initialized)
+        {
+            m_init_seq_gates.push_back(std::make_tuple(true, BooleanFunction::Value::X, filter));
+        }
+        else
+        {
+            log_error("netlist_simulator", "cannot initialize sequential gates after the simulation was started.");
+            return;
+        }
+    }
+
+    void NetlistSimulator::initialize_sequential_gates(BooleanFunction::Value value, const std::function<bool(const Gate*)>& filter)
+    {
+        if (!m_is_initialized)
+        {
+            m_init_seq_gates.push_back(std::make_tuple(false, value, filter));
+        }
+        else
+        {
+            log_error("netlist_simulator", "cannot initialize sequential gates after the simulation was started.");
+            return;
+        }
+    }
+
     void NetlistSimulator::load_initial_values(BooleanFunction::Value value)
     {
         // has to work even if the simulation was not started, i.e., initialize was not called yet
@@ -92,7 +140,6 @@ namespace hal
 
         for (Gate* gate : m_simulation_set)
         {
-            // TODO move into simulation gates
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
                 GateType* gate_type                                       = gate->get_type();
@@ -131,7 +178,6 @@ namespace hal
 
         for (Gate* gate : m_simulation_set)
         {
-            // TODO move into simulation gates
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
                 GateType* gate_type                                       = gate->get_type();
@@ -193,7 +239,7 @@ namespace hal
 
     void NetlistSimulator::simulate(u64 picoseconds)
     {
-        if (m_needs_initialization)
+        if (!m_is_initialized)
         {
             initialize();
         }
@@ -209,7 +255,7 @@ namespace hal
         m_id_counter   = 0;
         m_simulation   = Simulation();
         m_event_queue.clear();
-        m_needs_initialization = true;
+        m_is_initialized = false;
     }
 
     void NetlistSimulator::set_simulation_state(const Simulation& state)
@@ -294,9 +340,11 @@ namespace hal
         measure_block_time("NetlistSimulator::initialize()");
         m_successors.clear();
         m_sim_gates.clear();
+        m_sim_gates_raw.clear();
 
         std::unordered_map<Gate*, SimulationGate*> sim_gates_map;
         std::unordered_set<const Net*> all_nets;
+        std::map<const Net*, BooleanFunction::Value> init_events;
 
         // precompute everything that is gate-related
         for (auto gate : m_simulation_set)
@@ -309,6 +357,14 @@ namespace hal
                 SimulationGateFF* sim_gate                       = sim_gate_owner.get();
                 sim_gate_base                                    = sim_gate;
                 m_sim_gates.push_back(std::move(sim_gate_owner));
+
+                for (const auto& [from_netlist, value, filter] : m_init_seq_gates)
+                {
+                    if (!filter || filter(gate))
+                    {
+                        sim_gate->initialize(init_events, from_netlist, value);
+                    }
+                }
             }
             else if (gate->get_type()->has_property(GateTypeProperty::ram))
             {
@@ -316,6 +372,14 @@ namespace hal
                 SimulationGateRAM* sim_gate                       = sim_gate_owner.get();
                 sim_gate_base                                     = sim_gate;
                 m_sim_gates.push_back(std::move(sim_gate_owner));
+
+                for (const auto& [from_netlist, value, filter] : m_init_seq_gates)
+                {
+                    if (!filter || filter(gate))
+                    {
+                        sim_gate->initialize(init_events, from_netlist, value);
+                    }
+                }
             }
             else if (gate->get_type()->has_property(GateTypeProperty::combinational))
             {
@@ -333,6 +397,7 @@ namespace hal
             }
 
             sim_gates_map.emplace(gate, sim_gate_base);
+            m_sim_gates_raw.push_back(sim_gate_base);
 
             std::vector<Net*> out_nets = gate->get_fan_out_nets();
             all_nets.insert(out_nets.begin(), out_nets.end());
@@ -375,28 +440,30 @@ namespace hal
             {
                 for (auto n : g->get_fan_out_nets())
                 {
-                    Event e;
-                    e.affected_net = n;
-                    e.new_value    = BooleanFunction::Value::ZERO;
-                    e.time         = m_current_time;
-                    m_event_queue.push_back(e);
+                    init_events[n] = BooleanFunction::Value::ZERO;
                 }
             }
             else if (g->is_vcc_gate())
             {
                 for (auto n : g->get_fan_out_nets())
                 {
-                    Event e;
-                    e.affected_net = n;
-                    e.new_value    = BooleanFunction::Value::ONE;
-                    e.time         = m_current_time;
-                    m_event_queue.push_back(e);
+                    init_events[n] = BooleanFunction::Value::ONE;
                 }
             }
         }
 
+        // set initial values
+        for (const auto& [net, value] : init_events)
+        {
+            Event e;
+            e.affected_net = net;
+            e.new_value    = value;
+            e.time         = m_current_time;
+            m_event_queue.push_back(e);
+        }
+
         // set initialization flag only if this point is reached
-        m_needs_initialization = false;
+        m_is_initialized = true;
     }
 
     void NetlistSimulator::prepare_clock_events(u64 picoseconds)

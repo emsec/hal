@@ -33,15 +33,14 @@ namespace hal
         return std::make_unique<LatchComponent>(data_in_bf, enable_bf);
     }
 
-    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_component(std::unique_ptr<GateTypeComponent> component)
+    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_component(std::unique_ptr<GateTypeComponent> component, const u32 bit_size)
     {
-        // TODO do fancy RAM stuff
         if (component == nullptr)
         {
             return nullptr;
         }
 
-        return std::make_unique<RAMComponent>(std::move(component));
+        return std::make_unique<RAMComponent>(std::move(component), bit_size);
     }
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_mac_component()
@@ -56,22 +55,18 @@ namespace hal
     }
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_port_component(std::unique_ptr<GateTypeComponent> component,
-                                                                                    const std::string& write_data_group,
-                                                                                    const std::string& read_data_group,
-                                                                                    const std::string& write_addr_group,
-                                                                                    const std::string& read_addr_group,
-                                                                                    const BooleanFunction& write_clock_bf,
-                                                                                    const BooleanFunction& read_clock_bf,
-                                                                                    const BooleanFunction& write_enable_bf,
-                                                                                    const BooleanFunction& read_enable_bf)
+                                                                                    const std::string& data_group,
+                                                                                    const std::string& addr_group,
+                                                                                    const BooleanFunction& clock_bf,
+                                                                                    const BooleanFunction& enable_bf,
+                                                                                    bool is_write)
     {
-        return std::make_unique<RAMPortComponent>(
-            std::move(component), write_data_group, read_data_group, write_addr_group, read_addr_group, write_clock_bf, read_clock_bf, write_enable_bf, read_enable_bf);
+        return std::make_unique<RAMPortComponent>(std::move(component), data_group, addr_group, clock_bf, enable_bf, is_write);
     }
 
     GateTypeComponent* GateTypeComponent::get_component(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
-        std::set<GateTypeComponent*> components = this->get_components(filter);
+        std::vector<GateTypeComponent*> components = this->get_components(filter);
 
         if (components.size() == 1)
         {

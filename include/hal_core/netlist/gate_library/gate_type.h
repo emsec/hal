@@ -72,13 +72,13 @@ namespace hal
     public:
         /**
          * TODO test
-         * Get all components matching the filter condition (if provided) as a set. 
-         * Returns an empty set if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
+         * Get all components matching the filter condition (if provided) as a vector. 
+         * Returns an empty vector if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
          * 
          * @param[in] filter - The filter applied to all candidate components, disabled by default.
          * @returns The components.
          */
-        std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
+        std::vector<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
 
         /**
          * TODO test
@@ -98,7 +98,7 @@ namespace hal
          * A check is performed to determine whether the conversion is legal and a nullptr is returned in case it is not.
          * 
          * @param[in] filter - The user-defined filter function applied to all candidate components.
-         * @returns The sub-component of the gate type component converted to the target type or a nullptr.
+         * @returns The component converted to the target type or a nullptr.
          */
         template<typename T>
         T* get_component_as(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
@@ -385,7 +385,7 @@ namespace hal
          * @param[in] function_name - The name of the Boolean function.
          * @returns The specified Boolean function.
          */
-        const BooleanFunction& get_boolean_function(const std::string& function_name) const;
+        const BooleanFunction get_boolean_function(const std::string& function_name) const;
 
         /**
          * Get all Boolean functions of the gate type.

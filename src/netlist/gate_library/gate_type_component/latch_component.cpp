@@ -16,7 +16,7 @@ namespace hal
         return component->get_type() == m_type;
     }
 
-    std::set<GateTypeComponent*> LatchComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
+    std::vector<GateTypeComponent*> LatchComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
         UNUSED(filter);
         return {};

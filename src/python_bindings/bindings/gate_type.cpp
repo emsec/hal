@@ -65,18 +65,18 @@ namespace hal
         )");
 
         py_gate_type.def_property_readonly("components", &GateType::get_components, R"(
-            All components of the gate type as a set.
+            All components of the gate type as a list.
 
-            :type: set[hal_py.GateTypeComponent]
+            :type: list[hal_py.GateTypeComponent]
         )");
 
         py_gate_type.def("get_components", &GateType::get_components, py::arg("filter") = nullptr, R"(
-            Get all components matching the filter condition (if provided) as a set. 
-            Returns an empty set if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
+            Get all components matching the filter condition (if provided) as a list. 
+            Returns an empty list if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
 
             :param lambda filter: The filter applied to all candidate components, disabled by default.
             :returns: The components.
-            :rtype: set[hal_py.GateTypeComponent]
+            :rtype: list[hal_py.GateTypeComponent]
         )");
 
         py_gate_type.def("get_component", &GateType::get_component, py::arg("filter") = nullptr, R"(
@@ -84,7 +84,7 @@ namespace hal
             Returns None if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
 
             :param lambda filter: The filter applied to all candidate components.
-            :returns: The component.
+            :returns: The component or None.
             :rtype: hal_py.GateTypeComponent or None
         )");
 

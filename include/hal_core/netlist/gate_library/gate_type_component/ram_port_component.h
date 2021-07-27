@@ -35,24 +35,18 @@ namespace hal
          * Construct a new RAMPortComponent with given child component, the write/read data/address pin groups, and the write/read clock/enable functions.
          * 
          * @param[in] component - Another component to be added as a child component.
-         * @param[in] write_data_group - The name of the write data pin group.
-         * @param[in] read_data_group - The name of the read data pin group.
-         * @param[in] write_addr_group - The name of the write address pin group.
-         * @param[in] read_addr_group - The name of the read address pin group.
-         * @param[in] write_clock_bf - The write clock Boolean function.
-         * @param[in] read_clock_bf - The read clock Boolean function.
-         * @param[in] write_enable_bf - The write enable Boolean function.
-         * @param[in] read_enable_bf - The read enable Boolean function.
+         * @param[in] data_group - The name of the read or write data pin group.
+         * @param[in] addr_group - The name of the read or write address pin group.
+         * @param[in] clock_bf - The read or write clock's Boolean function.
+         * @param[in] enable_bf - The read or write enable's Boolean function.
+         * @param[in] is_write - True if the port is a write port, false otherwise.
          */
         RAMPortComponent(std::unique_ptr<GateTypeComponent> component,
-                         const std::string& write_data_group,
-                         const std::string& read_data_group,
-                         const std::string& write_addr_group,
-                         const std::string& read_addr_group,
-                         const BooleanFunction& write_clock_bf,
-                         const BooleanFunction& read_clock_bf,
-                         const BooleanFunction& write_enable_bf,
-                         const BooleanFunction& read_enable_bf);
+                         const std::string& data_group,
+                         const std::string& addr_group,
+                         const BooleanFunction& clock_bf,
+                         const BooleanFunction& enable_bf,
+                         bool is_write);
 
         /**
          * Get the type of the gate type component.
@@ -71,138 +65,93 @@ namespace hal
 
         /**
          * Get the sub-components of the gate type component.
-         * A user-defined filter may be applied to the result set, but is disabled by default.
+         * A user-defined filter may be applied to the result vector, but is disabled by default.
          * 
          * @param[in] filter - The user-defined filter function applied to all candidate components.
          * @returns The sub-components of the gate type component.
          */
-        std::set<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
+        std::vector<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
-        // TODO pybinds and tests
+        // TODO tests
 
         /**
-         * Get the name of the pin group forming the write data input.
+         * Get the name of the read or write data pin group.
          * 
          * @returns The name of the pin group.
          */
-        const std::string& get_write_data_group() const;
+        const std::string& get_data_group() const;
 
         /**
-         * Set the name of the pin group forming the write data input.
+         * Set the name of the read or write data pin group.
          * 
-         * @param[in] write_data_group - The name of the pin group.
+         * @param[in] data_group - The name of the pin group.
          */
-        void set_write_data_group(const std::string& write_data_group);
+        void set_data_group(const std::string& data_group);
 
         /**
-         * Get the name of the pin group forming the read data output.
-         * 
-         * @returns The name of the pin group.
-         */
-        const std::string& get_read_data_group() const;
-
-        /**
-         * Set the name of the pin group forming the read data output.
-         * 
-         * @param[in] read_data_group - The name of the pin group.
-         */
-        void set_read_data_group(const std::string& read_data_group);
-
-        /**
-         * Get the name of the pin group forming the write address.
+         * Get the name of the read or write address pin group.
          * 
          * @returns The name of the pin group.
          */
-        const std::string& get_write_address_group() const;
+        const std::string& get_address_group() const;
 
         /**
-         * Set the name of the pin group forming the write address.
+         * Set the name of the read or write address pin group.
          * 
-         * @param[in] write_addr_group - The name of the pin group.
+         * @param[in] addr_group - The name of the pin group.
          */
-        void set_write_address_group(const std::string& write_addr_group);
+        void set_address_group(const std::string& addr_group);
 
         /**
-         * Get the name of the pin group forming the read address.
-         * 
-         * @returns The name of the pin group.
-         */
-        const std::string& get_read_address_group() const;
-
-        /**
-         * Set the name of the pin group forming the read address.
-         * 
-         * @param[in] read_addr_group - The name of the pin group.
-         */
-        void set_read_address_group(const std::string& read_addr_group);
-
-        /**
-         * Get the Boolean function determining the write clock.
+         * Get the Boolean function determining the read or write clock.
          * 
          * @returns The Boolean function.
          */
-        const BooleanFunction& get_write_clock_function() const;
+        const BooleanFunction& get_clock_function() const;
 
         /**
-         * Set the Boolean function determining the write clock.
+         * Set the Boolean function determining the read or write clock.
          * 
-         * @param[in] write_clock_bf - The Boolean function.
+         * @param[in] clock_bf - The Boolean function.
          */
-        void set_write_clock_function(const BooleanFunction& write_clock_bf);
+        void set_clock_function(const BooleanFunction& clock_bf);
 
         /**
-         * Get the Boolean function determining the read clock.
-         * 
-         * @returns The Boolean function.
-         */
-        const BooleanFunction& get_read_clock_function() const;
-
-        /**
-         * Set the Boolean function determining the read clock.
-         * 
-         * @param[in] read_clock_bf - The Boolean function.
-         */
-        void set_read_clock_function(const BooleanFunction& read_clock_bf);
-
-        /**
-         * Get the Boolean function determining the write enable.
+         * Get the Boolean function determining the read or write enable.
          * 
          * @returns The Boolean function.
          */
-        const BooleanFunction& get_write_enable_function() const;
+        const BooleanFunction& get_enable_function() const;
 
         /**
-         * Set the Boolean function determining the write enable.
+         * Set the Boolean function determining the read or write enable.
          * 
-         * @param[in] write_enable_bf - The Boolean function.
+         * @param[in] enable_bf - The Boolean function.
          */
-        void set_write_enable_function(const BooleanFunction& write_enable_bf);
+        void set_enable_function(const BooleanFunction& enable_bf);
 
         /**
-         * Get the Boolean function determining the read enable.
+         * Check whether the port is a write or a read port.
          * 
-         * @returns The Boolean function.
+         * @returns True if the port is a write port, false if it is a read port.
          */
-        const BooleanFunction& get_read_enable_function() const;
+        bool is_write_port() const;
 
         /**
-         * Set the Boolean function determining the read enable.
+         * Set the port to be a write or a read port.
          * 
-         * @param[in] read_enable_bf - The Boolean function.
+         * @param[in] is_write - True to set the port to be a write port, false to set it to be a read port.
          */
-        void set_read_enable_function(const BooleanFunction& read_enable_bf);
+        void set_write_port(bool is_write);
 
     private:
         static constexpr ComponentType m_type          = ComponentType::ram_port;
         std::unique_ptr<GateTypeComponent> m_component = nullptr;
 
-        std::string m_write_data_group    = "";
-        std::string m_read_data_group     = "";
-        std::string m_write_addr_group    = "";
-        std::string m_read_addr_group     = "";
-        BooleanFunction m_write_clock_bf  = BooleanFunction();
-        BooleanFunction m_read_clock_bf   = BooleanFunction();
-        BooleanFunction m_write_enable_bf = BooleanFunction();
-        BooleanFunction m_read_enable_bf  = BooleanFunction();
+        std::string m_data_group    = "";
+        std::string m_addr_group    = "";
+        BooleanFunction m_clock_bf  = BooleanFunction();
+        BooleanFunction m_enable_bf = BooleanFunction();
+        bool m_is_write;
     };
 }    // namespace hal

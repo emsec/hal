@@ -16,21 +16,21 @@ namespace hal
         return component->get_type() == m_type;
     }
 
-    std::set<GateTypeComponent*> LUTComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
+    std::vector<GateTypeComponent*> LUTComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
         if (m_component != nullptr)
         {
-            std::set<GateTypeComponent*> res = m_component->get_components(filter);
+            std::vector<GateTypeComponent*> res = m_component->get_components(filter);
             if (filter)
             {
                 if (filter(m_component.get()))
                 {
-                    res.insert(m_component.get());
+                    res.push_back(m_component.get());
                 }
             }
             else
             {
-                res.insert(m_component.get());
+                res.push_back(m_component.get());
             }
 
             return res;

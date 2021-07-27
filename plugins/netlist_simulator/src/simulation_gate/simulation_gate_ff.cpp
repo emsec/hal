@@ -37,6 +37,59 @@ namespace hal
         m_sr_behavior_out_inverted = behavior.second;
     }
 
+    void NetlistSimulator::SimulationGateFF::initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value = BooleanFunction::Value::X)
+    {
+        GateType* gate_type                                       = m_gate->get_type();
+        const std::unordered_map<std::string, PinType>& pin_types = gate_type->get_pin_types();
+
+        BooleanFunction::Value inv_value = simulation_utils::toggle(value);
+
+        if (from_netlist == true)
+        {
+            // extract init string
+            const InitComponent* init_component = gate_type->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
+            if (init_component == nullptr)
+            {
+                log_error("netlist_simulator", "cannot find initialization data for flip-flop '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+                return;
+            }
+            const std::string& init_str = std::get<1>(m_gate->get_data(init_component->get_init_category(), init_component->get_init_identifier()));
+
+            if (!init_str.empty())
+            {
+                // parse init string
+                value = BooleanFunction::Value::X;
+                if (init_str == "1")
+                {
+                    value = BooleanFunction::Value::ONE;
+                }
+                else if (init_str == "0")
+                {
+                    value = BooleanFunction::Value::ZERO;
+                }
+                else
+                {
+                    log_error("netlist_simulator", "init value of flip-flop '{}' with ID {} of type '{}' is neither '1' or '0'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+                }
+
+                inv_value = simulation_utils::toggle(value);
+            }
+        }
+
+        // generate events
+        for (Endpoint* ep : m_gate->get_fan_out_endpoints())
+        {
+            if (pin_types.at(ep->get_pin()) == PinType::state)
+            {
+                new_events[ep->get_net()] = value;
+            }
+            else if (pin_types.at(ep->get_pin()) == PinType::neg_state)
+            {
+                new_events[ep->get_net()] = inv_value;
+            }
+        }
+    }
+
     bool NetlistSimulator::SimulationGateFF::simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
     {
         // compute delay, currently just a placeholder
