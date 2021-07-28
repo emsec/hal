@@ -688,18 +688,6 @@ namespace hal
                     return std::nullopt;
                 }
             }
-            else if (next_token == "data_category")
-            {
-                ff_str.consume(":", true);
-                ff.data_category = ff_str.consume();
-                ff_str.consume(";", true);
-            }
-            else if (next_token == "data_key")
-            {
-                ff_str.consume(":", true);
-                ff.data_identifier = ff_str.consume();
-                ff_str.consume(";", true);
-            }
         } while (ff_str.remaining() > 0);
 
         return ff;
@@ -819,15 +807,8 @@ namespace hal
                 return false;
             }
 
-            std::unique_ptr<GateTypeComponent> init_component = nullptr;
-
-            if (!cell.ff->data_category.empty() && !cell.ff->data_identifier.empty())
-            {
-                init_component = GateTypeComponent::create_init_component(cell.ff->data_category, cell.ff->data_identifier);
-            }
-
-            parent_component = GateTypeComponent::create_ff_component(
-                std::move(init_component), BooleanFunction::from_string(cell.ff->next_state, input_pins), BooleanFunction::from_string(cell.ff->clocked_on, input_pins));
+            parent_component =
+                GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string(cell.ff->next_state, input_pins), BooleanFunction::from_string(cell.ff->clocked_on, input_pins));
 
             FFComponent* ff_component = parent_component->convert_to<FFComponent>();
             if (!cell.ff->clear.empty())

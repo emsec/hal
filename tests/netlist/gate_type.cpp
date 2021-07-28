@@ -622,7 +622,7 @@ namespace hal
 
         GateLibrary gl("no_path", "example_gl");
         
-        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("category1", "identifier1"), true));
+        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("category1", {"identifier1"}), true));
         ASSERT_NE(gt, nullptr);
 
         LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::lut; });
@@ -631,13 +631,13 @@ namespace hal
         ASSERT_NE(init_component, nullptr);
         EXPECT_EQ(lut_component->is_init_ascending(), true);
         EXPECT_EQ(init_component->get_init_category(), "category1");
-        EXPECT_EQ(init_component->get_init_identifier(), "identifier1");
+        EXPECT_EQ(init_component->get_init_identifiers(), std::vector<std::string>({"identifier1"}));
         lut_component->set_init_ascending(false);
         init_component->set_init_category("category2");
-        init_component->set_init_identifier("identifier2");
+        init_component->set_init_identifiers({"identifier2"});
         EXPECT_EQ(lut_component->is_init_ascending(), false);
         EXPECT_EQ(init_component->get_init_category(), "category2");
-        EXPECT_EQ(init_component->get_init_identifier(), "identifier2");
+        EXPECT_EQ(init_component->get_init_identifiers(), std::vector<std::string>({"identifier2"}));
         
         TEST_END
     }
@@ -679,7 +679,7 @@ namespace hal
         {
             GateLibrary gl("no_path", "example_gl");
 
-            GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_init_component("category1", "identifier1"), BooleanFunction::from_string("D"), BooleanFunction::from_string("C")));
+            GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_init_component("category1", {"identifier1"}), BooleanFunction::from_string("D"), BooleanFunction::from_string("C")));
             ASSERT_NE(gt, nullptr);
             FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() ==  GateTypeComponent::ComponentType::ff; });
             ASSERT_NE(ff_component, nullptr);
@@ -692,7 +692,7 @@ namespace hal
             EXPECT_TRUE(ff_component->get_async_set_function().is_empty());
             EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::undef, AsyncSetResetBehavior::undef));
             EXPECT_EQ(init_component->get_init_category(), "category1");
-            EXPECT_EQ(init_component->get_init_identifier(), "identifier1");
+            EXPECT_EQ(init_component->get_init_identifiers(), std::vector<std::string>({"identifier1"}));
 
             ff_component->set_clock_function(BooleanFunction::from_string("CLK"));
             ff_component->set_next_state_function(BooleanFunction::from_string("DIN"));
@@ -700,7 +700,7 @@ namespace hal
             ff_component->set_async_set_function(BooleanFunction::from_string("SET"));
             ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L);
             init_component->set_init_category("category2");
-            init_component->set_init_identifier("identifier2");
+            init_component->set_init_identifiers({"identifier2"});
 
             EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK"));
             EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("DIN"));
@@ -708,7 +708,7 @@ namespace hal
             EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("SET"));
             EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L));
             EXPECT_EQ(init_component->get_init_category(), "category2");
-            EXPECT_EQ(init_component->get_init_identifier(), "identifier2");
+            EXPECT_EQ(init_component->get_init_identifiers(), std::vector<std::string>({"identifier2"}));
         }
         TEST_END
     }

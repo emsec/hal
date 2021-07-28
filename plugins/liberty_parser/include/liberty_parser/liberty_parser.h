@@ -107,8 +107,6 @@ namespace hal
             std::string preset;
             AsyncSetResetBehavior special_behavior_var1 = AsyncSetResetBehavior::undef;
             AsyncSetResetBehavior special_behavior_var2 = AsyncSetResetBehavior::undef;
-            std::string data_category;
-            std::string data_identifier;
         };
 
         struct latch_group

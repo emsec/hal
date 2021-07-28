@@ -31,13 +31,13 @@ namespace hal
     {
     public:
         /**
-         * Construct a new InitComponent with given child component and the category and identifier pointing to the initialization data.
+         * Construct a new InitComponent with given child component, the category and a vector of identifiers pointing to the initialization data.
          * 
          * @param[in] component - Another component to be added as a child component.
          * @param[in] init_category - The data category.
-         * @param[in] init_identifier - The data identifier.
+         * @param[in] init_identifiers - The data identifiers.
          */
-        InitComponent(const std::string& init_category, const std::string& init_identifier);
+        InitComponent(const std::string& init_category, const std::vector<std::string>& init_identifiers);
 
         /**
          * Get the type of the gate type component.
@@ -78,23 +78,23 @@ namespace hal
         void set_init_category(const std::string& init_category);
 
         /**
-         * Get the identifier at which to find the initialization data.
+         * Get the vector of identifiers at which to find initialization data.
          *
-         * @returns The data identifier.
+         * @returns The data identifiers.
          */
-        const std::string get_init_identifier() const;
+        const std::vector<std::string>& get_init_identifiers() const;
 
         /**
-         * Set the identifier at which to find the initialization data.
+         * Set the vector of identifiers at which to find initialization data.
          *
-         * @param[in] init_identifier - The data identifier.
+         * @param[in] init_identifiers - The data identifiers.
          */
-        void set_init_identifier(const std::string& init_identifier);
+        void set_init_identifiers(const std::vector<std::string>& init_identifiers);
 
     private:
         static constexpr ComponentType m_type = ComponentType::init;
 
-        std::string m_init_category   = "";
-        std::string m_init_identifier = "";
+        std::string m_init_category                 = "";
+        std::vector<std::string> m_init_identifiers = {};
     };
 }    // namespace hal

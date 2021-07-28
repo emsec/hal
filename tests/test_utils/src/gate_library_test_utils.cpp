@@ -87,27 +87,27 @@ namespace hal
                 or4->add_boolean_function("O", BooleanFunction::from_string("I0 ^ I1 ^ I2 ^ I3"));
             }
             {
-                GateType* lut2 = lib->create_gate_type("LUT2", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", "INIT"), true));
+                GateType* lut2 = lib->create_gate_type("LUT2", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
                 lut2->add_pins({"I0", "I1"}, PinDirection::input);
                 lut2->add_pin("O", PinDirection::output, PinType::lut);
             }
             {
-                GateType* lut3 = lib->create_gate_type("LUT3", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", "INIT"), true));
+                GateType* lut3 = lib->create_gate_type("LUT3", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
                 lut3->add_pins({"I0", "I1", "I2"}, PinDirection::input);
                 lut3->add_pin("O", PinDirection::output, PinType::lut);
             }
             {
-                GateType* lut4 = lib->create_gate_type("LUT4", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", "INIT"), true));
+                GateType* lut4 = lib->create_gate_type("LUT4", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
                 lut4->add_pins({"I0", "I1", "I2", "I3"}, PinDirection::input);
                 lut4->add_pin("O", PinDirection::output, PinType::lut);
             }
             {
-                GateType* lut5 = lib->create_gate_type("LUT5", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", "INIT"), true));
+                GateType* lut5 = lib->create_gate_type("LUT5", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
                 lut5->add_pins({"I0", "I1", "I2", "I3", "I4"}, PinDirection::input);
                 lut5->add_pin("O", PinDirection::output, PinType::lut);
             }
             {
-                GateType* lut6 = lib->create_gate_type("LUT6", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", "INIT"), true));
+                GateType* lut6 = lib->create_gate_type("LUT6", {GateTypeProperty::combinational, GateTypeProperty::lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
                 lut6->add_pins({"I0", "I1", "I2", "I3", "I4", "I5"}, PinDirection::input);
                 lut6->add_pin("O", PinDirection::output, PinType::lut);
             }

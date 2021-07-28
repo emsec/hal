@@ -117,7 +117,13 @@ namespace hal
 
                 // data_category and data_identifier
                 lut_config.AddMember("data_category", init_component->get_init_category(), allocator);
-                lut_config.AddMember("data_identifier", init_component->get_init_identifier(), allocator);
+
+                rapidjson::Value identifiers(rapidjson::kArrayType);
+                for (const std::string& identifier : init_component->get_init_identifiers())
+                {
+                    identifiers.PushBack(rapidjson::Value{}.SetString(identifier.c_str(), identifier.length(), allocator), allocator);
+                }
+                lut_config.AddMember("data_identifiers", identifiers, allocator);
 
                 cell.AddMember("lut_config", lut_config, allocator);
             }
@@ -132,7 +138,13 @@ namespace hal
                 {
                     // data_category, data_identifier
                     ff_config.AddMember("data_category", init_component->get_init_category(), allocator);
-                    ff_config.AddMember("data_identifier", init_component->get_init_identifier(), allocator);
+
+                    rapidjson::Value identifiers(rapidjson::kArrayType);
+                    for (const std::string& identifier : init_component->get_init_identifiers())
+                    {
+                        identifiers.PushBack(rapidjson::Value{}.SetString(identifier.c_str(), identifier.length(), allocator), allocator);
+                    }
+                    ff_config.AddMember("data_identifiers", identifiers, allocator);
                 }
 
                 // next_state, clocked_on, clear_on, preset_on

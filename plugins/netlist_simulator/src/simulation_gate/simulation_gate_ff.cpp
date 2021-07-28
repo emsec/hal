@@ -53,7 +53,7 @@ namespace hal
                 log_error("netlist_simulator", "cannot find initialization data for flip-flop '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
                 return;
             }
-            const std::string& init_str = std::get<1>(m_gate->get_data(init_component->get_init_category(), init_component->get_init_identifier()));
+            const std::string& init_str = std::get<1>(m_gate->get_data(init_component->get_init_category(), init_component->get_init_identifiers().front()));
 
             if (!init_str.empty())
             {

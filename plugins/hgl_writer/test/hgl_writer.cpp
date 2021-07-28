@@ -48,7 +48,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_lut_asc", {GateTypeProperty::lut, GateTypeProperty::combinational}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", "INIT"), true));
+                GateType* gt = gl->create_gate_type("gt_lut_asc", {GateTypeProperty::lut, GateTypeProperty::combinational}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), true));
 
                 gt->add_input_pins({"I1", "I2"});
                 gt->add_output_pins({"O"});
@@ -57,7 +57,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_lut_desc", {GateTypeProperty::lut, GateTypeProperty::combinational}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", "INIT"), false));
+                GateType* gt = gl->create_gate_type("gt_lut_desc", {GateTypeProperty::lut, GateTypeProperty::combinational}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("generic", {"INIT"}), false));
 
 
                 gt->add_input_pins({"I1", "I2"});
@@ -88,7 +88,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_ff_init", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_init_component("generic", "INIT"), BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK & EN")));
+                GateType* gt = gl->create_gate_type("gt_ff_init", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_init_component("generic", {"INIT"}), BooleanFunction::from_string("D"), BooleanFunction::from_string("CLK & EN")));
                 FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
 
@@ -242,7 +242,7 @@ namespace hal
                 const InitComponent* init_component2 = gt2->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
                 ASSERT_NE(init_component2, nullptr);
                 EXPECT_EQ(init_component1->get_init_category(), init_component2->get_init_category());
-                EXPECT_EQ(init_component1->get_init_identifier(), init_component2->get_init_identifier());
+                EXPECT_EQ(init_component1->get_init_identifiers(), init_component2->get_init_identifiers());
             }
         }
 

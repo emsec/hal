@@ -366,23 +366,23 @@ namespace hal
             :param str init_category: The data category.
         )");
 
-        py_init_component.def_property("init_identifier", &InitComponent::get_init_identifier, &InitComponent::set_init_identifier, R"(
-            The identifier at which to find the initialization data.
+        py_init_component.def_property("init_identifiers", &InitComponent::get_init_identifiers, &InitComponent::set_init_identifiers, R"(
+            The list of identifiers at which to find initialization data.
             
             :type: str
         )");
 
-        py_init_component.def("get_init_identifier", &InitComponent::get_init_identifier, R"(
-            Get the identifier at which to find the initialization data.
+        py_init_component.def("get_init_identifier", &InitComponent::get_init_identifiers, R"(
+            Get the list of identifiers at which to find the initialization data.
 
-            :returns: The data identifier.
-            :rtype: str
+            :returns: The data identifiers.
+            :rtype: list[str]
         )");
 
-        py_init_component.def("set_init_identifier", &InitComponent::set_init_identifier, py::arg("init_identifier"), R"(
-            Set the identifier at which to find the initialization data.
+        py_init_component.def("set_init_identifier", &InitComponent::set_init_identifiers, py::arg("init_identifiers"), R"(
+            Set the list of identifiers at which to find the initialization data.
 
-            :param str init_identifier: The data identifier.
+            :param list[str] init_identifiers: The data identifiers.
         )");
 
         py::class_<RAMPortComponent, GateTypeComponent, RawPtrWrapper<RAMPortComponent>> py_ram_port_component(m, "RAMPortComponent", R"(

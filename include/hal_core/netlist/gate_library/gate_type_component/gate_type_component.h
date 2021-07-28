@@ -96,13 +96,13 @@ namespace hal
         static std::unique_ptr<GateTypeComponent> create_mac_component();
 
         /**
-         * Create a new InitComponent with given child component and the category and identifier pointing to the initialization data.
+         * Create a new InitComponent with given child component, the category and a vector of identifiers pointing to the initialization data.
          * 
          * @param[in] init_category - The data category.
-         * @param[in] init_identifier - The data identifier.
+         * @param[in] init_identifiers - The data identifiers.
          * @returns The InitComponent.
          */
-        static std::unique_ptr<GateTypeComponent> create_init_component(const std::string& init_category, const std::string& init_identifier);
+        static std::unique_ptr<GateTypeComponent> create_init_component(const std::string& init_category, const std::vector<std::string>& init_identifiers);
 
         /**
          * Create a new RAMPortComponent with given child component, the write/read data/address pin groups, and the write/read clock/enable functions.

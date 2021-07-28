@@ -159,7 +159,7 @@ namespace hal
                     ASSERT_NE(init_component, nullptr);
 
                     EXPECT_EQ(init_component->get_init_category(), "generic");
-                    EXPECT_EQ(init_component->get_init_identifier(), "INIT");
+                    EXPECT_EQ(init_component->get_init_identifiers(), std::vector<std::string>({"INIT"}));
                     EXPECT_EQ(lut_component->is_init_ascending(), true);
                 }
 
@@ -198,7 +198,7 @@ namespace hal
 
                     EXPECT_EQ(lut_component->is_init_ascending(), false);
                     EXPECT_EQ(init_component->get_init_category(), "generic");
-                    EXPECT_EQ(init_component->get_init_identifier(), "INIT");
+                    EXPECT_EQ(init_component->get_init_identifiers(), std::vector<std::string>({"INIT"}));
                 }
 
                 // FF gate type without initialization
@@ -284,7 +284,7 @@ namespace hal
                     EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("R"));
                     EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("S"));
                     EXPECT_EQ(init_component->get_init_category(), "generic");
-                    EXPECT_EQ(init_component->get_init_identifier(), "INIT");
+                    EXPECT_EQ(init_component->get_init_identifiers(), std::vector<std::string>({"INIT"}));
                 }
 
                 // Latch gate type

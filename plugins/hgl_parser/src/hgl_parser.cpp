@@ -271,23 +271,37 @@ namespace hal
     {
         if (!lut_config.HasMember("bit_order") || !lut_config["bit_order"].IsString())
         {
-            log_error("hgl_parser", "invalid bit order for LUT gate type '{}'.", gt_name);
+            log_error("hgl_parser", "invalid or missing bit order for LUT gate type '{}'.", gt_name);
             return nullptr;
         }
 
         if (!lut_config.HasMember("data_category") || !lut_config["data_category"].IsString())
         {
-            log_error("hgl_parser", "invalid data category for LUT gate type '{}'.", gt_name);
+            log_error("hgl_parser", "invalid or missing data category for LUT gate type '{}'.", gt_name);
             return nullptr;
         }
 
-        if (!lut_config.HasMember("data_identifier") || !lut_config["data_identifier"].IsString())
+        if ((!lut_config.HasMember("data_identifier") || !lut_config["data_identifier"].IsString()) && (!lut_config.HasMember("data_identifiers") || !lut_config["data_identifiers"].IsArray()))
         {
-            log_error("hgl_parser", "invalid data identifier for LUT gate type '{}'.", gt_name);
+            log_error("hgl_parser", "invalid or missing data identifiers for LUT gate type '{}'.", gt_name);
             return nullptr;
         }
 
-        std::unique_ptr<GateTypeComponent> init_component = GateTypeComponent::create_init_component(lut_config["data_category"].GetString(), lut_config["data_identifier"].GetString());
+        std::vector<std::string> init_identifiers;
+        if (lut_config.HasMember("data_identifier") && lut_config["data_identifier"].IsString())
+        {    // backward compatability
+            init_identifiers.push_back(lut_config["data_identifier"].GetString());
+        }
+        else if (lut_config.HasMember("data_identifiers") && lut_config["data_identifiers"].IsArray())
+        {    // now allows for multiple identifiers (required for BRAM)
+
+            for (const auto& identifier : lut_config["data_identifiers"].GetArray())
+            {
+                init_identifiers.push_back(identifier.GetString());
+            }
+        }
+
+        std::unique_ptr<GateTypeComponent> init_component = GateTypeComponent::create_init_component(lut_config["data_category"].GetString(), init_identifiers);
 
         return GateTypeComponent::create_lut_component(std::move(init_component), std::string(lut_config["bit_order"].GetString()) == "ascending");
     }
@@ -297,10 +311,30 @@ namespace hal
         std::unique_ptr<GateTypeComponent> init_component = nullptr;
         if (ff_config.HasMember("data_category") && ff_config["data_category"].IsString())
         {
+            std::vector<std::string> init_identifiers;
             if (ff_config.HasMember("data_identifier") && ff_config["data_identifier"].IsString())
-            {
-                init_component = GateTypeComponent::create_init_component(ff_config["data_category"].GetString(), ff_config["data_identifier"].GetString());
+            {    // backward compatability
+                init_identifiers.push_back(ff_config["data_identifier"].GetString());
             }
+            else if (ff_config.HasMember("data_identifiers") && ff_config["data_identifiers"].IsArray())
+            {    // now allows for multiple identifiers (required for BRAM)
+
+                for (const auto& identifier : ff_config["data_identifiers"].GetArray())
+                {
+                    init_identifiers.push_back(identifier.GetString());
+                }
+            }
+            else
+            {
+                log_error("hgl_parser", "invalid or missing data identifiers for flip-flop gate type '{}'.", gt_name);
+                return nullptr;
+            }
+            init_component = GateTypeComponent::create_init_component(ff_config["data_category"].GetString(), init_identifiers);
+        }
+        else if ((ff_config.HasMember("data_identifier") && ff_config["data_identifier"].IsString()) || (ff_config.HasMember("data_identifiers") && ff_config["data_identifiers"].IsArray()))
+        {
+            log_error("hgl_parser", "invalid or missing data category for LUT gate type '{}'.", gt_name);
+            return nullptr;
         }
 
         if (!ff_config.HasMember("next_state") || !ff_config["next_state"].IsString())

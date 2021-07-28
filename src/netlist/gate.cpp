@@ -254,7 +254,7 @@ namespace hal
         }
 
         const std::string& category     = init_component->get_init_category();
-        const std::string& key          = init_component->get_init_identifier();
+        const std::string& key          = init_component->get_init_identifiers().front();
         std::string config_str          = std::get<1>(get_data(category, key));
         auto is_ascending               = lut_component->is_init_ascending();
         std::vector<std::string> inputs = m_type->get_input_pins();
@@ -400,7 +400,7 @@ namespace hal
             }
 
             const std::string& category = init_component->get_init_category();
-            const std::string& key      = init_component->get_init_identifier();
+            const std::string& key      = init_component->get_init_identifiers().front();
 
             std::stringstream stream;
             stream << std::hex << config_value;

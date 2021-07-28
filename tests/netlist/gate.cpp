@@ -999,7 +999,7 @@ namespace hal
             int i = 1;
             const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
             ASSERT_NE(init_component, nullptr);
-            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifier(), "bit_vector", i_to_hex_string(i, 2));
+            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i, 2));
 
             // Testing the access via the function get_boolean_function
             EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()), get_truth_table_from_i(i, 8));
@@ -1020,7 +1020,7 @@ namespace hal
 
             for (int i = 0x0; i <= 0xff; i++) 
             {
-                lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifier(), "bit_vector", i_to_hex_string(i));
+                lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i));
                 EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()),
                         get_truth_table_from_hex_string(i_to_hex_string(i), 8, false));
             }
@@ -1039,7 +1039,7 @@ namespace hal
             lut_component->set_init_ascending(false);
 
             for (int i = 0x0; i <= 0xff; i++) {
-                lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifier(), "bit_vector", i_to_hex_string(i));
+                lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i));
                 EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()),
                         get_truth_table_from_hex_string(i_to_hex_string(i), 8, true));
             }
@@ -1059,7 +1059,7 @@ namespace hal
             lut_gate->add_boolean_function("O", lut_bf);
             EXPECT_EQ(lut_gate->get_boolean_functions().size(), 1);
             EXPECT_EQ(lut_gate->get_boolean_function("O"), lut_bf);
-            EXPECT_EQ(lut_gate->get_data(init_component->get_init_category(), init_component->get_init_identifier()), std::make_tuple(std::string("bit_vector"), std::string("1")));
+            EXPECT_EQ(lut_gate->get_data(init_component->get_init_category(), init_component->get_init_identifiers().front()), std::make_tuple(std::string("bit_vector"), std::string("1")));
         }
         // NEGATIVE
         {
@@ -1071,7 +1071,7 @@ namespace hal
             const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
             ASSERT_NE(init_component, nullptr);
 
-            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifier(), "bit_vector", "");
+            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", "");
             EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()), get_truth_table_from_i(0, 8));
         }
         {
@@ -1084,7 +1084,7 @@ namespace hal
             const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
             ASSERT_NE(init_component, nullptr);
 
-            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifier(), "bit_vector", "NOHx");
+            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", "NOHx");
             EXPECT_EQ(lut_gate->get_boolean_function("O").get_truth_table(lut_type->get_input_pins()), std::vector<BooleanFunction::Value>(8, BooleanFunction::X));
 
         }

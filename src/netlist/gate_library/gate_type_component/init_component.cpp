@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    InitComponent::InitComponent(const std::string& init_category, const std::string& init_identifier) : m_init_category(init_category), m_init_identifier(init_identifier)
+    InitComponent::InitComponent(const std::string& init_category, const std::vector<std::string>& init_identifiers) : m_init_category(init_category), m_init_identifiers(init_identifiers)
     {
     }
 
@@ -32,13 +32,13 @@ namespace hal
         m_init_category = init_category;
     }
 
-    const std::string InitComponent::get_init_identifier() const
+    const std::vector<std::string>& InitComponent::get_init_identifiers() const
     {
-        return m_init_identifier;
+        return m_init_identifiers;
     }
 
-    void InitComponent::set_init_identifier(const std::string& init_identifier)
+    void InitComponent::set_init_identifiers(const std::vector<std::string>& init_identifiers)
     {
-        m_init_identifier = init_identifier;
+        m_init_identifiers = init_identifiers;
     }
 }    // namespace hal

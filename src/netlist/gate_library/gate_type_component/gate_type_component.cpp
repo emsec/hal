@@ -49,9 +49,9 @@ namespace hal
         return std::make_unique<MACComponent>();
     }
 
-    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_init_component(const std::string& init_category, const std::string& init_identifier)
+    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_init_component(const std::string& init_category, const std::vector<std::string>& init_identifiers)
     {
-        return std::make_unique<InitComponent>(init_category, init_identifier);
+        return std::make_unique<InitComponent>(init_category, init_identifiers);
     }
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_port_component(std::unique_ptr<GateTypeComponent> component,
