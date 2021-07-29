@@ -28,7 +28,7 @@
 #include "gui/new_selection_details_widget/models/data_table_model.h"
 
 #include "hal_core/netlist/gate.h"
-#include "gui/new_selection_details_widget/models/groupings_model.h"
+#include "gui/new_selection_details_widget/models/groupings_of_item_model.h"
 
 #include <QWidget>
 #include <QTableWidget>
@@ -36,6 +36,18 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * @brief A TableView to display all groupings that contain a specified Gate, Net or Module.
+     *
+     * This TableView uses a GroupingsOfItemModel as its model.
+     * 
+     * Using one of the methods setGate, setNet or setModule a Gate/Net/Module can be specified which Grouping%s
+     * are displayed in the view afterwards.
+     * 
+     * The Model automatically keeps track of changes of the stored Grouping%s. It also adds/removes Grouping%s to/from the
+     * model if the Grouping assigns/unassigns the observed item.  
+     */
     class GroupingsOfItemWidget : public QTableView
     {
     Q_OBJECT
@@ -49,7 +61,33 @@ namespace hal
         */
         GroupingsOfItemWidget(QWidget* parent = nullptr);
 
+        /**
+         * Accesses the underlying GroupingsOfItemModel. 
+         * 
+         * @returns the underlying GroupingsOfItemModel.
+         */
         GroupingsOfItemModel* getModel();
+
+        /**
+         * Specifies a Gate which Grouping%s are the content of this widget. 
+         * 
+         * @param gate - The specified Gate
+         */
+        void setGate(Gate* gate);
+
+        /**
+         * Specifies a Net which Grouping%s are the content of this widget. 
+         * 
+         * @param net - The specified Net
+         */
+        void setNet(Net* net);
+
+        /**
+         * Specifies a Module which Grouping%s are the content of this widget. 
+         * 
+         * @param module - The specified Module
+         */
+        void setModule(Module* module);
 
     public Q_SLOTS:
         /**
@@ -61,15 +99,6 @@ namespace hal
          * @param sti - The focused SelectionTreeItem
          */
         void handleDetailsFocusChanged(const SelectionTreeItem* sti);
-
-
-        void setGate(Gate* gate);
-
-        void setNet(Net* net);
-
-        void setModule(Module* module);
-
-
 
     private Q_SLOTS:
         /**

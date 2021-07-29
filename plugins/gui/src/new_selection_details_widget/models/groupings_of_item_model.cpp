@@ -1,4 +1,4 @@
-#include "gui/new_selection_details_widget/models/groupings_model.h"
+#include "gui/new_selection_details_widget/models/groupings_of_item_model.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/gui_globals.h"

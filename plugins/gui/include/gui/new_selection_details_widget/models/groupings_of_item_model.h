@@ -37,18 +37,21 @@
 
 namespace hal {
 
-
+    /**
+     * @ingroup gui
+     * @brief A TableModel to store all Grouping%s that contain a specified Gate, Net or Module.
+     *
+     * Using one of the methods setGate, setNet or setModule a Gate/Net/Module can be specified which Grouping%s
+     * are stored in this model afterwards. 
+     * 
+     * Each row of the model contains the entries [Grouping Name, Grouping ID, Grouping Color].
+     * 
+     * The Model automatically keeps track of changes of the stored Grouping%s. It also adds/removes Grouping%s to/from the
+     * model if the Grouping assigns/unassigns the observed item.  
+     */
     class GroupingsOfItemModel : public QAbstractTableModel
     {
         Q_OBJECT
-
-        //bool mDisableEvents;
-
-        QList<GroupingTableEntry> mGroupings;
-        QString mAboutToRename;
-
-        ItemType mItemType;
-        u32 mItemId;
 
     public:
         /**
@@ -59,7 +62,7 @@ namespace hal {
         GroupingsOfItemModel(QObject* parent=nullptr);
 
         /**
-         * Returns the amount of columns. Is always 3 (Grouping, ID, Color)
+         * Returns the amount of columns. Is always 3 (Grouping Name, Grouping ID, Grouping Color)
          *
          * @param parent - Then parent model index
          * @returns 3
@@ -111,16 +114,45 @@ namespace hal {
           */
         GroupingTableEntry getGroupingEntryAtRow(int row) const { return mGroupings.at(row); }
 
+        /**
+         * Specifies a Gate which Grouping%s are the content of this model. 
+         * 
+         * @param gate - The specified Gate
+         */
         void setGate(Gate* gate);
+
+        /**
+         * Specifies a Module which Groupings are the content of this model. 
+         * 
+         * @param module - The specified Module
+         */
         void setModule(Module* module);
+
+        /**
+         * Specifies a Net which Groupings are the content of this model. 
+         * 
+         * @param net - The specified Net
+         */
         void setNet(Net* net);
 
-        // Debug Only
+        /**
+         * Debug only
+         * Sets a list of groupings as the content. 
+         */ 
         void setGroupings(QList<Grouping*> groupingList);
 
+        /**
+         * Removes a specified amount of rows starting from a specified row.
+         * 
+         * @param row - The first row to remove. Row index must be valid.
+         * @param count - The amount of rows to remove. Must be greater than 0. 
+         *                All indices (row, ..., row+count-1) must be valid.
+         * @returns true if the specified rows are removed successfully. Returns false for invalid parameters.
+         */
         bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
     private Q_SLOTS:
+        // Slots to handle grouping or item changes that affect the grouping list or its data
 
         void handleGroupingRemoved(Grouping* grp);
 
@@ -147,6 +179,15 @@ namespace hal {
          * @returns the index of Grouping in the GroupingTableEntry list. (-1) if the grouping isn't found.
          */
         int getIndexOfGrouping(Grouping* grp) const;
+
+        /// The List of models Groupings as GroupingTableEntries
+        QList<GroupingTableEntry> mGroupings;
+
+        /// The type of the oberserved item
+        ItemType mItemType;
+
+        /// The id of the observed item
+        u32 mItemId;
 
     };
 }
