@@ -44,7 +44,7 @@ namespace hal
 
         BooleanFunction::Value inv_value = simulation_utils::toggle(value);
 
-        if (from_netlist == true)
+        if (from_netlist)
         {
             // extract init string
             const InitComponent* init_component = gate_type->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });

@@ -1,3 +1,4 @@
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
 #include "netlist_simulator/netlist_simulator.h"
@@ -93,7 +94,10 @@ namespace hal
         {
             const RAMPortComponent* port_component = component->convert_to<RAMPortComponent>();
 
-            Port simulation_port = {.clock_func = port_component->get_clock_function(), .enable_func = port_component->get_enable_function(), .is_write = port_component->is_write_port()};
+            Port simulation_port;
+            simulation_port.clock_func  = port_component->get_clock_function();
+            simulation_port.enable_func = port_component->get_enable_function();
+            simulation_port.is_write    = port_component->is_write_port();
 
             for (const auto& [index, pin] : gate_type->get_pins_of_group(port_component->get_data_group()))
             {
@@ -120,6 +124,66 @@ namespace hal
 
     void NetlistSimulator::SimulationGateRAM::initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value)
     {
+        GateType* gate_type = m_gate->get_type();
+
+        if (from_netlist)
+        {
+            const RAMComponent* ram_component = gate_type->get_component_as<RAMComponent>([](const GateTypeComponent* c) { return RAMComponent::is_class_of(c); });
+            if (ram_component == nullptr)
+            {
+                log_error("netlist_simulator", "cannot find RAM properties for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+                return;
+            }
+
+            const InitComponent* init_component = gate_type->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
+            if (init_component == nullptr)
+            {
+                log_error("netlist_simulator", "cannot find initialization data for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+                return;
+            }
+
+            const std::string& category = init_component->get_init_category();
+
+            for (const std::string& identifier : init_component->get_init_identifiers())
+            {
+                const std::string& data = std::get<1>(m_gate->get_data(category, identifier));
+
+                u32 data_len = data.size();
+                assert(data_len % 16 == 0);
+
+                for (u32 i = 0; i < data_len; i += 16)
+                {
+                    m_data.push_back(strtoull(data.substr(data_len - i - 16, 16).c_str(), nullptr, 16));
+                }
+            }
+
+            if (ram_component->get_bit_size() != m_data.size() * 64)
+            {
+                log_error("netlist_simulator", "initialization data does not fit memory size for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+                m_data.clear();
+                return;
+            }
+        }
+        else
+        {
+            u64 init_val;
+
+            switch (value)
+            {
+                case BooleanFunction::Value::ONE:
+                    init_val = 0xFFFFFFFFFFFFFFFF;
+                    break;
+                case BooleanFunction::Value::ZERO:
+                    init_val = 0x0;
+                    break;
+                case BooleanFunction::Value::X:
+                case BooleanFunction::Value::Z:
+                    break;
+                    // TODO handle
+            }
+            // INIT with fixed value
+        }
+
         // TODO do init stuff here
         // make sure to read INIT data from right to left in 64 bit chunks
         // length of init needs to be determined somewhere
@@ -127,8 +191,8 @@ namespace hal
 
     bool NetlistSimulator::SimulationGateRAM::simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
     {
-        // compute delay, currently just a placeholder
-        u64 delay = 0;
+        UNUSED(simulation);
+        UNUSED(new_events);
 
         // is the event triggering a clock pin? if so, remember the clocked port and process later
         for (size_t i = 0; i < m_ports.size(); i++)
@@ -183,10 +247,10 @@ namespace hal
                 assert(data_values.size() == port.data_pins.size());
 
                 // generate events
-                for (u32 i = 0; i < port.data_pins.size(); i++)
+                for (u32 j = 0; j < port.data_pins.size(); j++)
                 {
-                    const Net* out_net                                        = m_gate->get_fan_out_net(port.data_pins.at(i));
-                    new_events[std::make_pair(out_net, current_time + delay)] = data_values.at(i);
+                    const Net* out_net                                        = m_gate->get_fan_out_net(port.data_pins.at(j));
+                    new_events[std::make_pair(out_net, current_time + delay)] = data_values.at(j);
                 }
             }
             else

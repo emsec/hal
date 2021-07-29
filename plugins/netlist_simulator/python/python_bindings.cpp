@@ -107,6 +107,23 @@ namespace hal
                 :param hal_py.BooleanFunction.Value value: The value to set.
             )")
 
+            .def("initialize_sequential_gates", py::overload_cast<const std::function<bool(const Gate*)>&>(&NetlistSimulator::initialize_sequential_gates), py::arg("filter") = nullptr, R"(
+                Configure the sequential gates matching the (optional) user-defined filter condition with initialization data specified within the netlist.
+                Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
+                This function can only be called before the simulation has started.
+         
+                :param lambda filter: The optional filter to be applied before initialization.
+            )")
+
+            .def("initialize_sequential_gates", py::overload_cast<BooleanFunction::Value, const std::function<bool(const Gate*)>&>(&NetlistSimulator::initialize_sequential_gates), py::arg("value"), py::arg("filter") = nullptr, R"(
+                Configure the sequential gates matching the (optional) user-defined filter condition with the specified value.
+                Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
+                This function can only be called before the simulation has started.
+         
+                :param hal_py.BooleanFunction.Value value: The value to initialize the selected gates with.
+                :param lambda filter: The optional filter to be applied before initialization.
+            )")
+
             .def("load_initial_values", &NetlistSimulator::load_initial_values, py::arg("value"), R"(
                 Load the specified initial value into the current state of all sequential elements.
 
@@ -118,8 +135,14 @@ namespace hal
                 This is especially relevant for FPGA netlists, since these may provide initial values to load on startup.
             )")
 
+            .def("initialize", &NetlistSimulator::initialize, R"(
+                Initialize the simulation.
+                No additional gates or clocks can be added after this point.
+            )")
+
             .def("simulate", &NetlistSimulator::simulate, py::arg("picoseconds"), R"(
                 Simulate for a specific period, advancing the internal state.
+                Automatically initializes the simulation if 'initialize' has not yet been called.
                 Use \p set_input to control specific signals.
          
                 :param int picoseconds: The duration to simulate.

@@ -95,7 +95,6 @@ namespace hal
         void set_input(const Net* net, BooleanFunction::Value value);
 
         /**
-         * TODO new
          * Configure the sequential gates matching the (optional) user-defined filter condition with initialization data specified within the netlist.
          * Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
          * This function can only be called before the simulation has started.
@@ -105,7 +104,6 @@ namespace hal
         void initialize_sequential_gates(const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
-         * TODO new
          * Configure the sequential gates matching the (optional) user-defined filter condition with the specified value.
          * Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
          * This function can only be called before the simulation has started.
@@ -133,7 +131,6 @@ namespace hal
         [[deprecated("Will be removed in a future version. Use initialize_sequential_gates() instead.")]] void load_initial_values_from_netlist();
 
         /**
-         * TODO new
          * Initialize the simulation.
          * No additional gates or clocks can be added after this point.
          */
@@ -141,6 +138,7 @@ namespace hal
 
         /**
          * Simulate for a specific period, advancing the internal state.
+         * Automatically initializes the simulation if 'initialize' has not yet been called.
          * Use 'set_input' to control specific signals.
          *
          * @param[in] picoseconds - The duration to simulate.
