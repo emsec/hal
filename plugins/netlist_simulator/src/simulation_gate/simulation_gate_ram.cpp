@@ -183,10 +183,6 @@ namespace hal
             }
             // INIT with fixed value
         }
-
-        // TODO do init stuff here
-        // make sure to read INIT data from right to left in 64 bit chunks
-        // length of init needs to be determined somewhere
     }
 
     bool NetlistSimulator::SimulationGateRAM::simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
