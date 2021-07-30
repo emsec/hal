@@ -124,6 +124,8 @@ namespace hal
 
     void NetlistSimulator::SimulationGateRAM::initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value)
     {
+        UNUSED(new_events);
+
         GateType* gate_type = m_gate->get_type();
 
         if (from_netlist)
@@ -181,6 +183,7 @@ namespace hal
                     break;
                     // TODO handle
             }
+            // TODO write this shit
             // INIT with fixed value
         }
     }
