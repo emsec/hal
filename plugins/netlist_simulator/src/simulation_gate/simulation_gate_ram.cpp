@@ -114,7 +114,7 @@ namespace hal
             {
                 if (gate_type->get_pin_type(var) == PinType::clock)
                 {
-                    simulation_port.clock_net = gate->get_fan_out_net(var);
+                    simulation_port.clock_net = gate->get_fan_in_net(var);
                 }
             }
 
