@@ -495,7 +495,7 @@ namespace hal
         }
 
         std::unique_ptr<GateTypeComponent> sub_component = nullptr;
-        for (const auto& ram_port : ram_config.GetArray())
+        for (const auto& ram_port : ram_config["ram_ports"].GetArray())
         {
             if (!ram_port.HasMember("data_group") || !ram_port["data_group"].IsString())
             {
@@ -526,6 +526,8 @@ namespace hal
                 log_error("hgl_parser", "invalid or missing 'is_write' specification for RAM port gate type '{}'.", gt_name);
                 return nullptr;
             }
+
+            BooleanFunction fuck = BooleanFunction::from_string(ram_port["clocked_on"].GetString(), input_pins);
 
             sub_component = GateTypeComponent::create_ram_port_component(std::move(sub_component),
                                                                          ram_port["data_group"].GetString(),
