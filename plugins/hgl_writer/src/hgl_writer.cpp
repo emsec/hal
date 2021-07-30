@@ -5,6 +5,8 @@
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
 #include "hal_core/utilities/log.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/prettywriter.h"
@@ -92,14 +94,12 @@ namespace hal
 
             std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
 
-            // lut_config, ff_config, latch_config
-            if (LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
-                lut_component != nullptr)
+            // lut_config, ff_config, latch_config, ram_config
+            if (LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lut_component != nullptr)
             {
                 rapidjson::Value lut_config(rapidjson::kObjectType);
 
-                InitComponent* init_component =
-                    lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+                InitComponent* init_component = lut_component->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
                 if (init_component == nullptr)
                 {
                     return false;
@@ -117,34 +117,20 @@ namespace hal
 
                 // data_category and data_identifier
                 lut_config.AddMember("data_category", init_component->get_init_category(), allocator);
-
-                rapidjson::Value identifiers(rapidjson::kArrayType);
-                for (const std::string& identifier : init_component->get_init_identifiers())
-                {
-                    identifiers.PushBack(rapidjson::Value{}.SetString(identifier.c_str(), identifier.length(), allocator), allocator);
-                }
-                lut_config.AddMember("data_identifiers", identifiers, allocator);
+                lut_config.AddMember("data_identifier", init_component->get_init_identifiers().front(), allocator);
 
                 cell.AddMember("lut_config", lut_config, allocator);
             }
-            else if (FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
-                     ff_component != nullptr)
+            else if (FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); }); ff_component != nullptr)
             {
                 rapidjson::Value ff_config(rapidjson::kObjectType);
 
-                InitComponent* init_component =
-                    ff_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+                InitComponent* init_component = ff_component->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
                 if (init_component != nullptr)
                 {
                     // data_category, data_identifier
                     ff_config.AddMember("data_category", init_component->get_init_category(), allocator);
-
-                    rapidjson::Value identifiers(rapidjson::kArrayType);
-                    for (const std::string& identifier : init_component->get_init_identifiers())
-                    {
-                        identifiers.PushBack(rapidjson::Value{}.SetString(identifier.c_str(), identifier.length(), allocator), allocator);
-                    }
-                    ff_config.AddMember("data_identifiers", identifiers, allocator);
+                    ff_config.AddMember("data_identifier", init_component->get_init_identifiers().front(), allocator);
                 }
 
                 // next_state, clocked_on, clear_on, preset_on
@@ -171,9 +157,7 @@ namespace hal
 
                 cell.AddMember("ff_config", ff_config, allocator);
             }
-            else if (LatchComponent* latch_component =
-                         gt->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
-                     latch_component != nullptr)
+            else if (LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* c) { return LatchComponent::is_class_of(c); }); latch_component != nullptr)
             {
                 rapidjson::Value latch_config(rapidjson::kObjectType);
 
@@ -200,6 +184,47 @@ namespace hal
                 }
 
                 cell.AddMember("latch_config", latch_config, allocator);
+            }
+            else if (RAMComponent* ram_component = gt->get_component_as<RAMComponent>([](const GateTypeComponent* c) { return RAMComponent::is_class_of(c); }); ram_component != nullptr)
+            {
+                rapidjson::Value ram_config(rapidjson::kObjectType);
+
+                InitComponent* init_component = ram_component->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
+                if (init_component == nullptr)
+                {
+                    return false;
+                }
+
+                // data_category, data_identifier
+                ram_config.AddMember("data_category", init_component->get_init_category(), allocator);
+
+                rapidjson::Value identifiers(rapidjson::kArrayType);
+                for (const std::string& identifier : init_component->get_init_identifiers())
+                {
+                    identifiers.PushBack(rapidjson::Value{}.SetString(identifier.c_str(), identifier.length(), allocator), allocator);
+                }
+                ram_config.AddMember("data_identifiers", identifiers, allocator);
+                ram_config.AddMember("bit_size", ram_component->get_bit_size(), allocator);
+
+                rapidjson::Value ram_ports(rapidjson::kArrayType);
+                for (const GateTypeComponent* component : ram_component->get_components([](const GateTypeComponent* c) { return RAMPortComponent::is_class_of(c); }))
+                {
+                    const RAMPortComponent* port_component = component->convert_to<RAMPortComponent>();
+                    if (port_component == nullptr)
+                    {
+                        return false;
+                    }
+
+                    rapidjson::Value port(rapidjson::kObjectType);
+                    port.AddMember("data_group", port_component->get_data_group(), allocator);
+                    port.AddMember("address_group", port_component->get_address_group(), allocator);
+                    port.AddMember("clocked_on", port_component->get_clock_function().to_string(), allocator);
+                    port.AddMember("enabled_on", port_component->get_enable_function().to_string(), allocator);
+                    port.AddMember("is_write", port_component->is_write_port(), allocator);
+                    ram_ports.PushBack(port, allocator);
+                }
+                ram_config.AddMember("ram_ports", ram_ports, allocator);
+                cell.AddMember("ram_config", ram_config, allocator);
             }
 
             // pins
