@@ -181,6 +181,7 @@ namespace hal
                     break;
                     // TODO handle
             }
+            // TODO write this shit
             // INIT with fixed value
         }
     }
