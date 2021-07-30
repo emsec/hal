@@ -136,6 +136,14 @@ namespace hal
         return m_parent;
     }
 
+    int Module::get_submodule_depth() const
+    {
+        int retval = 0;
+        const Module*p = this;
+        while ((p=p->get_parent_module())) ++retval;
+        return retval;
+    }
+
     bool Module::set_parent_module(Module* new_parent)
     {
         if (new_parent == this)

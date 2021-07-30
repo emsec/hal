@@ -308,7 +308,7 @@ namespace hal
 
     void GraphWidget::handleNavigationJumpRequested(const Node &origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
     {
-        bool bail_animation = false;
+//        bool bail_animation = false;
 
         setFocus();
 
@@ -375,7 +375,7 @@ namespace hal
             // FIXME find out how to do this properly
             // If we have added any gates, the scene may have resized. In that case, the animation can be erratic,
             // so we set a mFlag here that we can't run the animation. See end of this method for more details.
-            bail_animation = true;
+            //            bail_animation = true;
         }
         else
         {
@@ -403,7 +403,7 @@ namespace hal
 
             u32 cnt = 0;
             // TODO simplify (we do actually know if we're navigating left or right)
-            for (const auto& pin : g->get_input_pins())
+            for (const auto& pin : g->get_type()->get_input_pins())
             {
                 if (g->get_fan_in_net(pin) == n)    // input net
                 {
@@ -416,7 +416,7 @@ namespace hal
             if (sfoc == SelectionRelay::Subfocus::None)
             {
                 cnt = 0;
-                for (const auto& pin : g->get_output_pins())
+                for (const auto& pin : g->get_type()->get_output_pins())
                 {
                     if (g->get_fan_out_net(pin) == n)    // input net
                     {
@@ -499,7 +499,7 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left)
                 {
-                    std::string pin_type = g->get_input_pins()[gSelectionRelay->subfocusIndex()];
+                    std::string pin_type = g->get_type()->get_input_pins()[gSelectionRelay->subfocusIndex()];
                     Net* n               = g->get_fan_in_net(pin_type);
 
                     if (!n)
@@ -523,7 +523,7 @@ namespace hal
                         mOverlay->show();
                     }
                 }
-                else if (g->get_input_pins().size())
+                else if (g->get_type()->get_input_pins().size())
                 {
                     gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, g->get_id(),
                                               SelectionRelay::Subfocus::Left, 0);
@@ -620,7 +620,7 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right)
                 {
-                    auto n = g->get_fan_out_net(g->get_output_pins()[gSelectionRelay->subfocusIndex()]);
+                    auto n = g->get_fan_out_net(g->get_type()->get_output_pins()[gSelectionRelay->subfocusIndex()]);
                     if (!n)
                         return;
 
@@ -642,7 +642,7 @@ namespace hal
                         mOverlay->show();
                     }
                 }
-                else if (g->get_output_pins().size())
+                else if (g->get_type()->get_output_pins().size())
                 {
                     gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,g->get_id(),
                                               SelectionRelay::Subfocus::Right,0);

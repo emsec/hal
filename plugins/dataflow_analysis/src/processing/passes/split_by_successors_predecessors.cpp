@@ -20,6 +20,15 @@ namespace hal
                 for (const auto& [group_id, gates] : state->gates_of_group)
                 {
                     if (!state->is_group_allowed_to_split(group_id))
+<<<<<<< HEAD
+=======
+                    {
+                        continue;
+                    }
+
+                    std::map<std::set<u32>, std::unordered_set<u32>> characteristics_map;
+                    for (auto gate : gates)
+>>>>>>> 440e4def3f66f3a2997a7800d702baf6b1303d7c
                     {
                         u32 new_group_id = ++id_counter;
 

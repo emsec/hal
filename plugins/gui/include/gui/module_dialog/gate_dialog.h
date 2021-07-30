@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "module_select_model.h"
+#include "gui/module_dialog/gate_select_model.h"
 #include <QDialog>
 #include <QAction>
 #include <QKeySequence>
@@ -37,17 +37,17 @@ class QPushButton;
 
 namespace hal {
 
-    class ModuleProxyModel;
+    class GateProxyModel;
     class Searchbar;
 
     /**
-     * @brief The ModuleDialog class opens a popup window for module selection.
+     * @brief The GateDialog class opens a popup window for module selection.
      *
      * This feature is mainly used to select the target for the 'move to module...' action.
      * Dialog returns 'accepted' upon any selection or when pushing 'Create new module'
      * Dialog returns 'rejected' upon Cancel button and 'Pick from graph' button
      */
-    class ModuleDialog : public QDialog
+    class GateDialog : public QDialog
     {
         Q_OBJECT
     public:
@@ -56,7 +56,9 @@ namespace hal {
          *
          * @param parent - The dialog's parent.
          */
-        ModuleDialog(QWidget* parent=nullptr);
+
+
+        GateDialog(u32 orig, bool succ, const QSet<u32>& selectable = QSet<u32>(), QWidget* parent=nullptr);
 
         /**
          * Get the through this dialog selected id.
@@ -66,15 +68,12 @@ namespace hal {
         u32 selectedId() const { return mSelectedId; }
 
         /**
-         * Get the flag that states if a new module should be created.
-         *
-         * @return True if a new module should be created, False otherwise.
+         * hide picker button
          */
-        bool isNewModule() const { return mNewModule; }
+        void hidePicker();
 
     private Q_SLOTS:
         void handlePickFromGraph();
-        void handleCreateNewModule();
         void handleToggleSearchbar();
         void handleTreeSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
         void handleTreeDoubleClick(const QModelIndex& index);
@@ -103,34 +102,25 @@ namespace hal {
          */
         void keybindToggleSearchbar(const QKeySequence& seq);
 
-        /**
-         * Q_SLOT to overwrite the filter with the regular expression given in <i>text</i>.
-         *
-         * @param text - Contains the regular expression filter as a string
-         */
-        void filter(const QString& text);
-
     private:
         u32 mSelectedId;
+        u32 mOrigin;
+        bool mQuerySuccessor;
+        QSet<u32> mSelectableGates;
         QDialogButtonBox* mButtonBox;
-        ModuleSelectView* mTableView;
+        GateSelectView* mTableView;
         QTreeView* mTreeView;
-        ModuleSelectView* mLastUsed;
+        GateSelectView* mLastUsed;
         QTabWidget* mTabWidget;
 
-        ModuleProxyModel* mModuleTreeProxyModel;
-        ModuleSelectProxy* mModuleTableProxyModel;
-        ModuleSelectModel* mModuleSelectModel;
-
+        GateProxyModel* mGateTreeProxyModel;
         Searchbar* mSearchbar;
         QAction* mToggleSearchbar;
-        ModuleSelectExclude mSelectExclude;
 
         QPushButton* mButtonPick;
-        bool mNewModule;
 
         void enableButtons();
-        u32 treeModuleId(const QModelIndex& index);
+        u32 treeGateId(const QModelIndex& index);
     };
 }
 

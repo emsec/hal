@@ -302,7 +302,9 @@ namespace hal
         gSelectionRelay->clear();
         gSelectionRelay->addGate(gate_id);
 
-        auto pins                          = (sender_table == mSourcePinsTable) ? clicked_gate->get_output_pins() : clicked_gate->get_input_pins();
+        auto pins                          = (sender_table == mSourcePinsTable)
+                ? clicked_gate->get_type()->get_output_pins()
+                : clicked_gate->get_type()->get_input_pins();
         auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
         gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,gate_id,focus,index);
 

@@ -78,6 +78,7 @@
         <file alias="toolbox">icons/toolbox.png</file>
         <file alias="undo2">icons/0104-undo2.svg</file>
         <file alias="module_cursor">icons/module_cursor.png</file>
+        <file alias="gate_cursor">icons/gate_cursor.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="spinner">images/oval.svg</file>
