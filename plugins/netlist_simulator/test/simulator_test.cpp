@@ -415,7 +415,7 @@ namespace hal
         {
             for (int i = 0; i < 16; i++)
             {
-                sim->set_input(nets.at(i), (0x1 & number << i) ? SignalValue::ONE : SignalValue::ZERO);
+                sim->set_input(nets.at(i), (0x1 & number << i) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
             }
         }
     };    // namespace hal
@@ -884,7 +884,7 @@ namespace hal
 
         //prepare simulation
         sim->add_gates(nl->get_gates());
-        sim->load_initial_values_from_netlist();
+        sim->initialize_sequential_gates();
 
         auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
 
@@ -989,7 +989,7 @@ namespace hal
             measure_block_time("simulation");
             for (const auto& input_net : sim->get_input_nets())
             {
-                sim->set_input(input_net, SignalValue::ZERO);
+                sim->set_input(input_net, BooleanFunction::Value::ZERO);
 
                 // TODO @speith, warum ist clk zweimal drin?
                 if (input_net->get_name() == "clk")
@@ -1009,30 +1009,30 @@ namespace hal
             // set_write_addr(addr);
             for (const auto& write_addr_net : write_addr)
             {
-                sim->set_input(write_addr_net, SignalValue::ONE);
+                sim->set_input(write_addr_net, BooleanFunction::Value::ONE);
             }
             // write_data(data_write);
             for (const auto& din_net : din)
             {
-                sim->set_input(din_net, SignalValue::ONE);
+                sim->set_input(din_net, BooleanFunction::Value::ONE);
             }
 
             //TODO @speith: check units? *1000 correct?
             sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
 
-            sim->set_input(write_en, SignalValue::ONE);    // set_write_en(0x1);
+            sim->set_input(write_en, BooleanFunction::Value::ONE);    // set_write_en(0x1);
 
             sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
 
-            sim->set_input(write_en, SignalValue::ZERO);    // set_write_en(0x0);
+            sim->set_input(write_en, BooleanFunction::Value::ZERO);    // set_write_en(0x0);
             sim->simulate(1 * 1000);                        // tb->wait_for_n_clocks(1);
 
             // // read data without rclke
-            sim->set_input(read_en, SignalValue::ZERO);    // set_read_en(0x1);
+            sim->set_input(read_en, BooleanFunction::Value::ZERO);    // set_read_en(0x1);
             // set_read_addr(addr);
             for (const auto& read_addr_net : read_addr)
             {
-                sim->set_input(read_addr_net, SignalValue::ONE);
+                sim->set_input(read_addr_net, BooleanFunction::Value::ONE);
             }
 
             sim->simulate(2 * 1000);    // tb->wait_for_n_clocks(2);
@@ -1046,32 +1046,32 @@ namespace hal
             // set_write_addr(addr);
             for (const auto& write_addr_net : write_addr)
             {
-                sim->set_input(write_addr_net, SignalValue::ONE);
+                sim->set_input(write_addr_net, BooleanFunction::Value::ONE);
             }
             // write_data(data_write)
             for (const auto& din_net : din)
             {
-                sim->set_input(din_net, SignalValue::ONE);
+                sim->set_input(din_net, BooleanFunction::Value::ONE);
             }
 
             sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
 
-            sim->set_input(write_en, SignalValue::ONE);    // set_write_en(0x1);
-            sim->set_input(wclke, SignalValue::ONE);       // set_wclke(0x1);
+            sim->set_input(write_en, BooleanFunction::Value::ONE);    // set_write_en(0x1);
+            sim->set_input(wclke, BooleanFunction::Value::ONE);       // set_wclke(0x1);
 
             sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
 
-            sim->set_input(write_en, SignalValue::ZERO);    // set_write_en(0x0);
-            sim->set_input(wclke, SignalValue::ZERO);       // set_wclke(0x0);
+            sim->set_input(write_en, BooleanFunction::Value::ZERO);    // set_write_en(0x0);
+            sim->set_input(wclke, BooleanFunction::Value::ZERO);       // set_wclke(0x0);
 
             sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
 
             // // read data without rclke
-            sim->set_input(read_en, SignalValue::ZERO);    // set_read_en(0x1);
+            sim->set_input(read_en, BooleanFunction::Value::ZERO);    // set_read_en(0x1);
             // set_read_addr(addr);
             for (const auto& read_addr_net : read_addr)
             {
-                sim->set_input(read_addr_net, SignalValue::ONE);
+                sim->set_input(read_addr_net, BooleanFunction::Value::ONE);
             }
 
             sim->simulate(2 * 1000);    // tb->wait_for_n_clocks(2);
@@ -1082,16 +1082,16 @@ namespace hal
             // printf("sent %08x, received: %08x\n", data_write, data_read);
 
             // // read data with rclke
-            sim->set_input(read_en, SignalValue::ONE);    // set_read_en(0x1);
+            sim->set_input(read_en, BooleanFunction::Value::ONE);    // set_read_en(0x1);
             // set_read_addr(addr);
             for (const auto& read_addr_net : read_addr)
             {
-                sim->set_input(read_addr_net, SignalValue::ONE);
+                sim->set_input(read_addr_net, BooleanFunction::Value::ONE);
             }
-            sim->set_input(rclke, SignalValue::ONE);    // set_rclke(0x1);
+            sim->set_input(rclke, BooleanFunction::Value::ONE);    // set_rclke(0x1);
 
             sim->simulate(2 * 1000);                     // tb->wait_for_n_clocks(2);
-            sim->set_input(rclke, SignalValue::ZERO);    // set_rclke(0x0);
+            sim->set_input(rclke, BooleanFunction::Value::ZERO);    // set_rclke(0x0);
 
             // data_read = read_data();
 
@@ -1099,23 +1099,23 @@ namespace hal
             // printf("sent %08x, received: %08x\n", data_write, data_read);
 
             // read some address and see what the result from INIT value is
-            sim->set_input(read_en, SignalValue::ONE);    // set_read_en(0x1);
+            sim->set_input(read_en, BooleanFunction::Value::ONE);    // set_read_en(0x1);
 
             // todo: bitorder could be wrong?
             //set_read_addr(0x66); // 1010 1010
-            sim->set_input(read_addr.at(0), SignalValue::ZERO);
-            sim->set_input(read_addr.at(1), SignalValue::ONE);
-            sim->set_input(read_addr.at(2), SignalValue::ZERO);
-            sim->set_input(read_addr.at(3), SignalValue::ONE);
-            sim->set_input(read_addr.at(4), SignalValue::ZERO);
-            sim->set_input(read_addr.at(5), SignalValue::ONE);
-            sim->set_input(read_addr.at(6), SignalValue::ZERO);
-            sim->set_input(read_addr.at(7), SignalValue::ONE);
+            sim->set_input(read_addr.at(0), BooleanFunction::Value::ZERO);
+            sim->set_input(read_addr.at(1), BooleanFunction::Value::ONE);
+            sim->set_input(read_addr.at(2), BooleanFunction::Value::ZERO);
+            sim->set_input(read_addr.at(3), BooleanFunction::Value::ONE);
+            sim->set_input(read_addr.at(4), BooleanFunction::Value::ZERO);
+            sim->set_input(read_addr.at(5), BooleanFunction::Value::ONE);
+            sim->set_input(read_addr.at(6), BooleanFunction::Value::ZERO);
+            sim->set_input(read_addr.at(7), BooleanFunction::Value::ONE);
 
-            sim->set_input(rclke, SignalValue::ONE);    //set_rclke(0x1);
+            sim->set_input(rclke, BooleanFunction::Value::ONE);    //set_rclke(0x1);
 
             sim->simulate(2 * 1000);                     // tb->wait_for_n_clocks(2);
-            sim->set_input(rclke, SignalValue::ZERO);    // set_rclke(0x0);
+            sim->set_input(rclke, BooleanFunction::Value::ZERO);    // set_rclke(0x0);
 
             //data_read = read_data();
 
@@ -1127,357 +1127,357 @@ namespace hal
         TEST_END
     }
 
-    TEST_F(SimulatorTest, dsp_lattice)
-    {
-        // return;
-        TEST_START
-
-        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
-        auto sim    = plugin->create_simulator();
-
-        //path to netlist
-        std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/dsp/dsp_netlist.v";
-        if (!utils::file_exists(path_netlist))
-            FAIL() << "netlist for dsp not found: " << path_netlist;
-
-        std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/dsp/dsp_netlist.hal";
-
-        auto lib = gate_library_manager::get_gate_library_by_name("ICE40ULTRA");
-        if (lib == nullptr)
-        {
-            FAIL() << "ice40ultra gate library not found";
-        }
-
-        std::unique_ptr<Netlist> nl;
-        {
-            std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
-            if (utils::file_exists(path_netlist_hal))
-            {
-                std::cout << ".hal file found for test netlist, loading this one." << std::endl;
-                nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
-            }
-            else
-            {
-                NO_COUT_BLOCK;
-                nl = netlist_parser_manager::parse(path_netlist, lib);
-                netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
-            }
-            if (nl == nullptr)
-            {
-                FAIL() << "netlist couldn't be parsed";
-            }
-        }
-
-        //path to vcd
-        std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/dsp/trace.vcd";
-        if (!utils::file_exists(path_vcd))
-            FAIL() << "dump for bram not found: " << path_vcd;
-
-        //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
-        Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
-
-        std::cout << "read simulation file" << std::endl;
-
-        //prepare simulation
-        sim->add_gates(nl->get_gates());
-        sim->load_initial_values_from_netlist();
-
-        auto CLK = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
-
-        sim->add_clock_period(CLK, 10000);
-
-        std::vector<Net*> A;
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_0"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_1"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_2"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_3"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_4"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_5"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_6"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_7"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_8"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_9"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_10"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_11"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_12"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_13"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_14"; }).begin()));
-        A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_15"; }).begin()));
-
-        std::vector<Net*> B;
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_0"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_1"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_2"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_3"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_4"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_5"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_6"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_7"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_8"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_9"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_10"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_11"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_12"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_13"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_14"; }).begin()));
-        B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_15"; }).begin()));
-
-        std::vector<Net*> C;
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_0"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_1"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_2"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_3"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_4"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_5"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_6"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_7"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_8"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_9"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_10"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_11"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_12"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_13"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_14"; }).begin()));
-        C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_15"; }).begin()));
-
-        std::vector<Net*> D;
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_0"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_1"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_2"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_3"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_4"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_5"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_6"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_7"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_8"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_9"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_10"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_11"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_12"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_13"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_14"; }).begin()));
-        D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_15"; }).begin()));
-
-        auto IRSTTOP   = *(nl->get_nets([](auto net) { return net->get_name() == "IRSTTOP"; }).begin());
-        auto IRSTBOT   = *(nl->get_nets([](auto net) { return net->get_name() == "IRSTBOT"; }).begin());
-        auto ORSTTOP   = *(nl->get_nets([](auto net) { return net->get_name() == "ORSTTOP"; }).begin());
-        auto ORSTBOT   = *(nl->get_nets([](auto net) { return net->get_name() == "ORSTBOT"; }).begin());
-        auto AHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "AHOLD"; }).begin());
-        auto BHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "BHOLD"; }).begin());
-        auto CHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "CHOLD"; }).begin());
-        auto DHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "DHOLD"; }).begin());
-        auto OHOLDTOP  = *(nl->get_nets([](auto net) { return net->get_name() == "OHOLDTOP"; }).begin());
-        auto OHOLDBOT  = *(nl->get_nets([](auto net) { return net->get_name() == "OHOLDBOT"; }).begin());
-        auto OLOADTOP  = *(nl->get_nets([](auto net) { return net->get_name() == "OLOADTOP"; }).begin());
-        auto OLOADBOT  = *(nl->get_nets([](auto net) { return net->get_name() == "OLOADBOT"; }).begin());
-        auto ADDSUBTOP = *(nl->get_nets([](auto net) { return net->get_name() == "ADDSUBTOP"; }).begin());
-        auto ADDSUBBOT = *(nl->get_nets([](auto net) { return net->get_name() == "ADDSUBBOT"; }).begin());
-        auto CI        = *(nl->get_nets([](auto net) { return net->get_name() == "CI"; }).begin());
-        auto CE        = *(nl->get_nets([](auto net) { return net->get_name() == "CE"; }).begin());
-
-        u32 input_nets_amount = 0;
-
-        if (CLK != nullptr)
-            input_nets_amount++;
-
-        for (const auto& A_net : A)
-        {
-            if (A_net != nullptr)
-                input_nets_amount++;
-        }
-        for (const auto& B_net : B)
-        {
-            if (B_net != nullptr)
-                input_nets_amount++;
-        }
-        for (const auto& C_net : C)
-        {
-            if (C_net != nullptr)
-                input_nets_amount++;
-        }
-        for (const auto& D_net : D)
-        {
-            if (D_net != nullptr)
-                input_nets_amount++;
-        }
-
-        if (IRSTTOP != nullptr)
-            input_nets_amount++;
-
-        if (IRSTBOT != nullptr)
-            input_nets_amount++;
-
-        if (ORSTTOP != nullptr)
-            input_nets_amount++;
-
-        if (ORSTBOT != nullptr)
-            input_nets_amount++;
-
-        if (AHOLD != nullptr)
-            input_nets_amount++;
-
-        if (BHOLD != nullptr)
-            input_nets_amount++;
-
-        if (CHOLD != nullptr)
-            input_nets_amount++;
-
-        if (DHOLD != nullptr)
-            input_nets_amount++;
-
-        if (OHOLDTOP != nullptr)
-            input_nets_amount++;
-
-        if (OHOLDBOT != nullptr)
-            input_nets_amount++;
-
-        if (OLOADTOP != nullptr)
-            input_nets_amount++;
-
-        if (OLOADBOT != nullptr)
-            input_nets_amount++;
-
-        if (ADDSUBTOP != nullptr)
-            input_nets_amount++;
-
-        if (ADDSUBBOT != nullptr)
-            input_nets_amount++;
-
-        if (CI != nullptr)
-            input_nets_amount++;
-
-        if (CE != nullptr)
-            input_nets_amount++;
-
-        if (input_nets_amount != sim->get_input_nets().size())
-        {
-            for (const auto& net : sim->get_input_nets())
-            {
-                std::cout << net->get_name() << std::endl;
-            }
-            FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
-        }
-
-        //start simulation
-        std::cout << "starting simulation" << std::endl;
-        //testbench
-
-        {
-            measure_block_time("simulation");
-            for (const auto& input_net : sim->get_input_nets())
-            {
-                sim->set_input(input_net, SignalValue::ZERO);
-            }
-
-            set_16_bit_net_vector(sim.get(), A, 6666);     // set_a(6666);
-            set_16_bit_net_vector(sim.get(), B, 1234);     // set_b(1234);
-            set_16_bit_net_vector(sim.get(), C, 4371);     // set_c(4371);
-            set_16_bit_net_vector(sim.get(), D, 43714);    // set_d(43714);
-
-            // tb->m_core->AHOLD     = 0x0;
-            // tb->m_core->BHOLD     = 0x0;
-            // tb->m_core->CHOLD     = 0x0;
-            // tb->m_core->DHOLD     = 0x0;
-            // tb->m_core->OHOLDTOP  = 0x0;
-            // tb->m_core->OHOLDBOT  = 0x0;
-            // tb->m_core->OLOADTOP  = 0x0;
-            // tb->m_core->OLOADBOT  = 0x0;
-            // tb->m_core->ADDSUBTOP = 0x0;
-            // tb->m_core->ADDSUBBOT = 0x0;
-            // tb->m_core->CI        = 0x0;
-            // tb->m_core->CE        = 0x0;
-            // --> already done before :)
-
-            // tb->opentrace("trace.vcd");
-
-            sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
-
-            sim->set_input(CE, SignalValue::ZERO);    // tb->m_core->CE = 0x0;
-
-            sim->set_input(IRSTTOP, SignalValue::ONE);    // tb->m_core->IRSTTOP = 0x1;
-            sim->set_input(IRSTBOT, SignalValue::ONE);    // tb->m_core->IRSTBOT = 0x1;
-            sim->set_input(ORSTTOP, SignalValue::ONE);    // tb->m_core->ORSTTOP = 0x1;
-            sim->set_input(ORSTBOT, SignalValue::ONE);    // tb->m_core->ORSTBOT = 0x1;
-
-            sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
-
-            sim->set_input(CE, SignalValue::ONE);    // tb->m_core->CE = 0x1;
-
-            sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
-
-            sim->set_input(IRSTTOP, SignalValue::ZERO);    // tb->m_core->IRSTTOP = 0x0;
-            sim->set_input(IRSTBOT, SignalValue::ZERO);    // tb->m_core->IRSTBOT = 0x0;
-            sim->set_input(ORSTTOP, SignalValue::ZERO);    // tb->m_core->ORSTTOP = 0x0;
-            sim->set_input(ORSTBOT, SignalValue::ZERO);    // tb->m_core->ORSTBOT = 0x0;
-
-            sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
-
-            sim->set_input(AHOLD, SignalValue::ONE);    // tb->m_core->AHOLD = 0x1;
-            sim->simulate(5 * 1000);                    // tb->wait_for_n_clocks(5);
-
-            sim->set_input(OHOLDTOP, SignalValue::ONE);    // tb->m_core->OHOLDTOP = 0x1;
-            sim->set_input(OHOLDBOT, SignalValue::ONE);    // tb->m_core->OHOLDBOT = 0x1;
-            sim->simulate(5 * 1000);                       // tb->wait_for_n_clocks(5);
-
-            sim->set_input(AHOLD, SignalValue::ZERO);       // tb->m_core->AHOLD    = 0x0;
-            sim->set_input(OHOLDTOP, SignalValue::ZERO);    // tb->m_core->OHOLDTOP = 0x0;
-            sim->set_input(OHOLDBOT, SignalValue::ZERO);    // tb->m_core->OHOLDBOT = 0x0;
-            sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
-
-            sim->set_input(OLOADTOP, SignalValue::ONE);     // tb->m_core->OLOADTOP  = 0x1;
-            sim->set_input(ADDSUBTOP, SignalValue::ONE);    // tb->m_core->ADDSUBTOP = 0x1;
-            sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
-
-            sim->set_input(OLOADTOP, SignalValue::ZERO);     // tb->m_core->OLOADTOP  = 0x0;
-            sim->set_input(ADDSUBTOP, SignalValue::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
-            sim->set_input(ADDSUBBOT, SignalValue::ONE);     // tb->m_core->ADDSUBBOT = 0x1;
-            sim->simulate(5 * 1000);                         // tb->wait_for_n_clocks(5);
-
-            sim->set_input(ORSTTOP, SignalValue::ONE);    // tb->m_core->ORSTTOP = 0x1;
-            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-            sim->set_input(ADDSUBBOT, SignalValue::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
-            sim->set_input(ORSTTOP, SignalValue::ZERO);      // tb->m_core->ORSTTOP   = 0x0;
-            sim->simulate(5 * 1000);                         // tb->wait_for_n_clocks(5);
-
-            sim->set_input(IRSTTOP, SignalValue::ONE);    // tb->m_core->IRSTTOP = 0x1;
-            sim->set_input(CHOLD, SignalValue::ONE);      // tb->m_core->CHOLD   = 0x1;
-            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-            sim->set_input(IRSTTOP, SignalValue::ZERO);    // tb->m_core->IRSTTOP = 0x0;
-            sim->set_input(CHOLD, SignalValue::ZERO);      // tb->m_core->CHOLD   = 0x0;
-
-            set_16_bit_net_vector(sim.get(), A, 1632);      // set_a(1632);
-            set_16_bit_net_vector(sim.get(), B, 764254);    // set_b(764254);
-            set_16_bit_net_vector(sim.get(), C, 12523);     // set_c(12523);
-            set_16_bit_net_vector(sim.get(), D, 263);       // set_d(263);
-            sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
-
-            sim->set_input(OLOADTOP, SignalValue::ONE);    // tb->m_core->OLOADTOP = 0x1;
-            sim->set_input(OLOADBOT, SignalValue::ONE);    // tb->m_core->OLOADBOT = 0x1;
-            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-            sim->set_input(OLOADTOP, SignalValue::ZERO);    // tb->m_core->OLOADTOP = 0x0;
-            sim->set_input(OLOADBOT, SignalValue::ZERO);    // tb->m_core->OLOADBOT = 0x0;
-            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-            sim->set_input(ADDSUBTOP, SignalValue::ONE);    // tb->m_core->ADDSUBTOP = 0x1;
-            sim->set_input(ADDSUBBOT, SignalValue::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
-            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-            sim->set_input(ADDSUBTOP, SignalValue::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
-            sim->set_input(ADDSUBBOT, SignalValue::ONE);    // tb->m_core->ADDSUBBOT = 0x1;
-            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-            sim->set_input(ADDSUBTOP, SignalValue::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
-            sim->set_input(ADDSUBBOT, SignalValue::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
-            sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-            sim->simulate(5 * 1000);    // tb->wait_for_n_clocks(5);
-        }
-
-        // Test if maps are equal
-        EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
-        TEST_END
-    }
+    // TEST_F(SimulatorTest, dsp_lattice)
+    // {
+    //     // return;
+    //     TEST_START
+
+    //     auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
+    //     auto sim    = plugin->create_simulator();
+
+    //     //path to netlist
+    //     std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/dsp/dsp_netlist.v";
+    //     if (!utils::file_exists(path_netlist))
+    //         FAIL() << "netlist for dsp not found: " << path_netlist;
+
+    //     std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/dsp/dsp_netlist.hal";
+
+    //     auto lib = gate_library_manager::get_gate_library_by_name("ICE40ULTRA");
+    //     if (lib == nullptr)
+    //     {
+    //         FAIL() << "ice40ultra gate library not found";
+    //     }
+
+    //     std::unique_ptr<Netlist> nl;
+    //     {
+    //         std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
+    //         if (utils::file_exists(path_netlist_hal))
+    //         {
+    //             std::cout << ".hal file found for test netlist, loading this one." << std::endl;
+    //             nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
+    //         }
+    //         else
+    //         {
+    //             NO_COUT_BLOCK;
+    //             nl = netlist_parser_manager::parse(path_netlist, lib);
+    //             netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
+    //         }
+    //         if (nl == nullptr)
+    //         {
+    //             FAIL() << "netlist couldn't be parsed";
+    //         }
+    //     }
+
+    //     //path to vcd
+    //     std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/dsp/trace.vcd";
+    //     if (!utils::file_exists(path_vcd))
+    //         FAIL() << "dump for bram not found: " << path_vcd;
+
+    //     //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
+    //     Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
+
+    //     std::cout << "read simulation file" << std::endl;
+
+    //     //prepare simulation
+    //     sim->add_gates(nl->get_gates());
+    //     sim->initialize_sequential_gates();
+
+    //     auto CLK = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
+
+    //     sim->add_clock_period(CLK, 10000);
+
+    //     std::vector<Net*> A;
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_0"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_1"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_2"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_3"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_4"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_5"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_6"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_7"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_8"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_9"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_10"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_11"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_12"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_13"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_14"; }).begin()));
+    //     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_15"; }).begin()));
+
+    //     std::vector<Net*> B;
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_0"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_1"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_2"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_3"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_4"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_5"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_6"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_7"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_8"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_9"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_10"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_11"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_12"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_13"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_14"; }).begin()));
+    //     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_15"; }).begin()));
+
+    //     std::vector<Net*> C;
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_0"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_1"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_2"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_3"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_4"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_5"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_6"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_7"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_8"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_9"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_10"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_11"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_12"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_13"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_14"; }).begin()));
+    //     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_15"; }).begin()));
+
+    //     std::vector<Net*> D;
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_0"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_1"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_2"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_3"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_4"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_5"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_6"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_7"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_8"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_9"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_10"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_11"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_12"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_13"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_14"; }).begin()));
+    //     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_15"; }).begin()));
+
+    //     auto IRSTTOP   = *(nl->get_nets([](auto net) { return net->get_name() == "IRSTTOP"; }).begin());
+    //     auto IRSTBOT   = *(nl->get_nets([](auto net) { return net->get_name() == "IRSTBOT"; }).begin());
+    //     auto ORSTTOP   = *(nl->get_nets([](auto net) { return net->get_name() == "ORSTTOP"; }).begin());
+    //     auto ORSTBOT   = *(nl->get_nets([](auto net) { return net->get_name() == "ORSTBOT"; }).begin());
+    //     auto AHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "AHOLD"; }).begin());
+    //     auto BHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "BHOLD"; }).begin());
+    //     auto CHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "CHOLD"; }).begin());
+    //     auto DHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "DHOLD"; }).begin());
+    //     auto OHOLDTOP  = *(nl->get_nets([](auto net) { return net->get_name() == "OHOLDTOP"; }).begin());
+    //     auto OHOLDBOT  = *(nl->get_nets([](auto net) { return net->get_name() == "OHOLDBOT"; }).begin());
+    //     auto OLOADTOP  = *(nl->get_nets([](auto net) { return net->get_name() == "OLOADTOP"; }).begin());
+    //     auto OLOADBOT  = *(nl->get_nets([](auto net) { return net->get_name() == "OLOADBOT"; }).begin());
+    //     auto ADDSUBTOP = *(nl->get_nets([](auto net) { return net->get_name() == "ADDSUBTOP"; }).begin());
+    //     auto ADDSUBBOT = *(nl->get_nets([](auto net) { return net->get_name() == "ADDSUBBOT"; }).begin());
+    //     auto CI        = *(nl->get_nets([](auto net) { return net->get_name() == "CI"; }).begin());
+    //     auto CE        = *(nl->get_nets([](auto net) { return net->get_name() == "CE"; }).begin());
+
+    //     u32 input_nets_amount = 0;
+
+    //     if (CLK != nullptr)
+    //         input_nets_amount++;
+
+    //     for (const auto& A_net : A)
+    //     {
+    //         if (A_net != nullptr)
+    //             input_nets_amount++;
+    //     }
+    //     for (const auto& B_net : B)
+    //     {
+    //         if (B_net != nullptr)
+    //             input_nets_amount++;
+    //     }
+    //     for (const auto& C_net : C)
+    //     {
+    //         if (C_net != nullptr)
+    //             input_nets_amount++;
+    //     }
+    //     for (const auto& D_net : D)
+    //     {
+    //         if (D_net != nullptr)
+    //             input_nets_amount++;
+    //     }
+
+    //     if (IRSTTOP != nullptr)
+    //         input_nets_amount++;
+
+    //     if (IRSTBOT != nullptr)
+    //         input_nets_amount++;
+
+    //     if (ORSTTOP != nullptr)
+    //         input_nets_amount++;
+
+    //     if (ORSTBOT != nullptr)
+    //         input_nets_amount++;
+
+    //     if (AHOLD != nullptr)
+    //         input_nets_amount++;
+
+    //     if (BHOLD != nullptr)
+    //         input_nets_amount++;
+
+    //     if (CHOLD != nullptr)
+    //         input_nets_amount++;
+
+    //     if (DHOLD != nullptr)
+    //         input_nets_amount++;
+
+    //     if (OHOLDTOP != nullptr)
+    //         input_nets_amount++;
+
+    //     if (OHOLDBOT != nullptr)
+    //         input_nets_amount++;
+
+    //     if (OLOADTOP != nullptr)
+    //         input_nets_amount++;
+
+    //     if (OLOADBOT != nullptr)
+    //         input_nets_amount++;
+
+    //     if (ADDSUBTOP != nullptr)
+    //         input_nets_amount++;
+
+    //     if (ADDSUBBOT != nullptr)
+    //         input_nets_amount++;
+
+    //     if (CI != nullptr)
+    //         input_nets_amount++;
+
+    //     if (CE != nullptr)
+    //         input_nets_amount++;
+
+    //     if (input_nets_amount != sim->get_input_nets().size())
+    //     {
+    //         for (const auto& net : sim->get_input_nets())
+    //         {
+    //             std::cout << net->get_name() << std::endl;
+    //         }
+    //         FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
+    //     }
+
+    //     //start simulation
+    //     std::cout << "starting simulation" << std::endl;
+    //     //testbench
+
+    //     {
+    //         measure_block_time("simulation");
+    //         for (const auto& input_net : sim->get_input_nets())
+    //         {
+    //             sim->set_input(input_net, BooleanFunction::Value::ZERO);
+    //         }
+
+    //         set_16_bit_net_vector(sim.get(), A, 6666);     // set_a(6666);
+    //         set_16_bit_net_vector(sim.get(), B, 1234);     // set_b(1234);
+    //         set_16_bit_net_vector(sim.get(), C, 4371);     // set_c(4371);
+    //         set_16_bit_net_vector(sim.get(), D, 43714);    // set_d(43714);
+
+    //         // tb->m_core->AHOLD     = 0x0;
+    //         // tb->m_core->BHOLD     = 0x0;
+    //         // tb->m_core->CHOLD     = 0x0;
+    //         // tb->m_core->DHOLD     = 0x0;
+    //         // tb->m_core->OHOLDTOP  = 0x0;
+    //         // tb->m_core->OHOLDBOT  = 0x0;
+    //         // tb->m_core->OLOADTOP  = 0x0;
+    //         // tb->m_core->OLOADBOT  = 0x0;
+    //         // tb->m_core->ADDSUBTOP = 0x0;
+    //         // tb->m_core->ADDSUBBOT = 0x0;
+    //         // tb->m_core->CI        = 0x0;
+    //         // tb->m_core->CE        = 0x0;
+    //         // --> already done before :)
+
+    //         // tb->opentrace("trace.vcd");
+
+    //         sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
+
+    //         sim->set_input(CE, BooleanFunction::Value::ZERO);    // tb->m_core->CE = 0x0;
+
+    //         sim->set_input(IRSTTOP, BooleanFunction::Value::ONE);    // tb->m_core->IRSTTOP = 0x1;
+    //         sim->set_input(IRSTBOT, BooleanFunction::Value::ONE);    // tb->m_core->IRSTBOT = 0x1;
+    //         sim->set_input(ORSTTOP, BooleanFunction::Value::ONE);    // tb->m_core->ORSTTOP = 0x1;
+    //         sim->set_input(ORSTBOT, BooleanFunction::Value::ONE);    // tb->m_core->ORSTBOT = 0x1;
+
+    //         sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
+
+    //         sim->set_input(CE, BooleanFunction::Value::ONE);    // tb->m_core->CE = 0x1;
+
+    //         sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
+
+    //         sim->set_input(IRSTTOP, BooleanFunction::Value::ZERO);    // tb->m_core->IRSTTOP = 0x0;
+    //         sim->set_input(IRSTBOT, BooleanFunction::Value::ZERO);    // tb->m_core->IRSTBOT = 0x0;
+    //         sim->set_input(ORSTTOP, BooleanFunction::Value::ZERO);    // tb->m_core->ORSTTOP = 0x0;
+    //         sim->set_input(ORSTBOT, BooleanFunction::Value::ZERO);    // tb->m_core->ORSTBOT = 0x0;
+
+    //         sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
+
+    //         sim->set_input(AHOLD, BooleanFunction::Value::ONE);    // tb->m_core->AHOLD = 0x1;
+    //         sim->simulate(5 * 1000);                    // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(OHOLDTOP, BooleanFunction::Value::ONE);    // tb->m_core->OHOLDTOP = 0x1;
+    //         sim->set_input(OHOLDBOT, BooleanFunction::Value::ONE);    // tb->m_core->OHOLDBOT = 0x1;
+    //         sim->simulate(5 * 1000);                       // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(AHOLD, BooleanFunction::Value::ZERO);       // tb->m_core->AHOLD    = 0x0;
+    //         sim->set_input(OHOLDTOP, BooleanFunction::Value::ZERO);    // tb->m_core->OHOLDTOP = 0x0;
+    //         sim->set_input(OHOLDBOT, BooleanFunction::Value::ZERO);    // tb->m_core->OHOLDBOT = 0x0;
+    //         sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(OLOADTOP, BooleanFunction::Value::ONE);     // tb->m_core->OLOADTOP  = 0x1;
+    //         sim->set_input(ADDSUBTOP, BooleanFunction::Value::ONE);    // tb->m_core->ADDSUBTOP = 0x1;
+    //         sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(OLOADTOP, BooleanFunction::Value::ZERO);     // tb->m_core->OLOADTOP  = 0x0;
+    //         sim->set_input(ADDSUBTOP, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
+    //         sim->set_input(ADDSUBBOT, BooleanFunction::Value::ONE);     // tb->m_core->ADDSUBBOT = 0x1;
+    //         sim->simulate(5 * 1000);                         // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(ORSTTOP, BooleanFunction::Value::ONE);    // tb->m_core->ORSTTOP = 0x1;
+    //         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(ADDSUBBOT, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
+    //         sim->set_input(ORSTTOP, BooleanFunction::Value::ZERO);      // tb->m_core->ORSTTOP   = 0x0;
+    //         sim->simulate(5 * 1000);                         // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(IRSTTOP, BooleanFunction::Value::ONE);    // tb->m_core->IRSTTOP = 0x1;
+    //         sim->set_input(CHOLD, BooleanFunction::Value::ONE);      // tb->m_core->CHOLD   = 0x1;
+    //         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(IRSTTOP, BooleanFunction::Value::ZERO);    // tb->m_core->IRSTTOP = 0x0;
+    //         sim->set_input(CHOLD, BooleanFunction::Value::ZERO);      // tb->m_core->CHOLD   = 0x0;
+
+    //         set_16_bit_net_vector(sim.get(), A, 1632);      // set_a(1632);
+    //         set_16_bit_net_vector(sim.get(), B, 764254);    // set_b(764254); // TODO @nils this is shit
+    //         set_16_bit_net_vector(sim.get(), C, 12523);     // set_c(12523);
+    //         set_16_bit_net_vector(sim.get(), D, 263);       // set_d(263);
+    //         sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(OLOADTOP, BooleanFunction::Value::ONE);    // tb->m_core->OLOADTOP = 0x1;
+    //         sim->set_input(OLOADBOT, BooleanFunction::Value::ONE);    // tb->m_core->OLOADBOT = 0x1;
+    //         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(OLOADTOP, BooleanFunction::Value::ZERO);    // tb->m_core->OLOADTOP = 0x0;
+    //         sim->set_input(OLOADBOT, BooleanFunction::Value::ZERO);    // tb->m_core->OLOADBOT = 0x0;
+    //         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(ADDSUBTOP, BooleanFunction::Value::ONE);    // tb->m_core->ADDSUBTOP = 0x1;
+    //         sim->set_input(ADDSUBBOT, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
+    //         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(ADDSUBTOP, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
+    //         sim->set_input(ADDSUBBOT, BooleanFunction::Value::ONE);    // tb->m_core->ADDSUBBOT = 0x1;
+    //         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+    //         sim->set_input(ADDSUBTOP, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
+    //         sim->set_input(ADDSUBBOT, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
+    //         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
+
+    //         sim->simulate(5 * 1000);    // tb->wait_for_n_clocks(5);
+    //     }
+
+    //     // Test if maps are equal
+    //     EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
+    //     TEST_END
+    // }
 }    // namespace hal
