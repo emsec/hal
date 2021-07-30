@@ -78,10 +78,6 @@ namespace hal
                         auto gates                                             = state->gates_of_group.at(old_group);
                         new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(*gates.begin());
                         new_state->operations_on_group_allowed[new_group_id]   = state->operations_on_group_allowed.at(old_group);
-<<<<<<< HEAD
-
-=======
->>>>>>> 440e4def3f66f3a2997a7800d702baf6b1303d7c
                         new_state->gates_of_group[new_group_id].insert(gates.begin(), gates.end());
                         for (const auto& sg : gates)
                         {
