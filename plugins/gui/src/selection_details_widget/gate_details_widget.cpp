@@ -245,7 +245,7 @@ namespace hal
             gSelectionRelay->clear();
             gSelectionRelay->addGate(ep->get_gate()->get_id());
 
-            auto pins                          = ep->get_gate()->get_output_pins();
+            auto pins                          = ep->get_gate()->get_type()->get_output_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
             gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,
                                       ep->get_gate()->get_id(),
@@ -292,7 +292,7 @@ namespace hal
             gSelectionRelay->clear();
             gSelectionRelay->addGate(ep->get_gate()->get_id());
 
-            auto pins                          = ep->get_gate()->get_input_pins();
+            auto pins                          = ep->get_gate()->get_type()->get_input_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
             gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,
                                       ep->get_gate()->get_id(),
@@ -437,12 +437,12 @@ namespace hal
 
         //update (2)input-pin section
         mInputPinsTable->clearContents();
-        mInputPinsSection->setRowCount(g->get_input_pins().size());
-        mInputPinsTable->setRowCount(g->get_input_pins().size());
+        mInputPinsSection->setRowCount(g->get_type()->get_input_pins().size());
+        mInputPinsTable->setRowCount(g->get_type()->get_input_pins().size());
         mInputPinsTable->setMaximumHeight(mInputPinsTable->verticalHeader()->length());
         mInputPinsTable->setMinimumHeight(mInputPinsTable->verticalHeader()->length());
         int index = 0;
-        for(const auto &pin : g->get_input_pins())
+        for(const auto &pin : g->get_type()->get_input_pins())
         {
             QTableWidgetItem* pin_name = new QTableWidgetItem(QString::fromStdString(pin));
             QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x2b05));
@@ -473,12 +473,12 @@ namespace hal
 
         //update(3) output pins section
         mOutputPinsTable->clearContents();
-        mOutputPinsSection->setRowCount(g->get_output_pins().size());
-        mOutputPinsTable->setRowCount(g->get_output_pins().size());
+        mOutputPinsSection->setRowCount(g->get_type()->get_output_pins().size());
+        mOutputPinsTable->setRowCount(g->get_type()->get_output_pins().size());
         mOutputPinsTable->setMaximumHeight(mOutputPinsTable->verticalHeader()->length());
         mOutputPinsTable->setMinimumHeight(mOutputPinsTable->verticalHeader()->length());
         index = 0;
-        for(const auto &pin : g->get_output_pins())
+        for(const auto &pin : g->get_type()->get_output_pins())
         {
             QTableWidgetItem* pin_name = new QTableWidgetItem(QString::fromStdString(pin));
             QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x27a1));
@@ -579,7 +579,7 @@ namespace hal
             auto g = gNetlist->get_gate_by_id(*to_gates.constBegin());
 
             u32 index_cnt = 0;
-            for (const auto& pin : g->get_input_pins())
+            for (const auto& pin : g->get_type()->get_input_pins())
             {
                 if (g->get_fan_in_net(pin) == n)
                 {

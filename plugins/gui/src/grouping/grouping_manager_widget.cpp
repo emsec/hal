@@ -15,6 +15,7 @@
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/action/action.h"
+#include "gui/gui_def.h"
 #include "hal_core/utilities/log.h"
 
 #include <QAction>
@@ -50,6 +51,7 @@ namespace hal
         mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
         mColorSelectAction->setIcon(gui_utility::getStyledSvgIcon(mColorSelectIconStyle, mColorSelectIconPath));
         mToSelectionAction->setIcon(gui_utility::getStyledSvgIcon(mToSelectionIconStyle, mToSelectionIconPath));
+        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
         mNewGroupingAction->setToolTip("New");
         mToolboxAction->setToolTip("Toolbox");
@@ -57,6 +59,7 @@ namespace hal
         mColorSelectAction->setToolTip("Color");
         mDeleteAction->setToolTip("Delete");
         mToSelectionAction->setToolTip("To selection");
+        mSearchAction->setToolTip("Search");
 
         mNewGroupingAction->setText("Create new grouping");
         mToolboxAction->setText("Create grouping toolbox");
@@ -64,6 +67,7 @@ namespace hal
         mColorSelectAction->setText("Select color for grouping");
         mDeleteAction->setText("Delete grouping");
         mToSelectionAction->setText("Add grouping to selection");
+        mSearchAction->setText("Search");
 
         //mOpenAction->setEnabled(false);
         //mRenameAction->setEnabled(false);
@@ -98,6 +102,7 @@ namespace hal
         mSearchbar->hide();
 
         connect(mSearchbar, &Searchbar::textEdited, this, &GroupingManagerWidget::filter);
+        connect(mSearchbar, &Searchbar::textEdited, this, &GroupingManagerWidget::updateSearchIcon);
 
         connect(mNewGroupingAction, &QAction::triggered, this, &GroupingManagerWidget::handleCreateGroupingClicked);
         connect(mToolboxAction, &QAction::triggered, this, &GroupingManagerWidget::handleToolboxClicked);
@@ -217,6 +222,23 @@ namespace hal
         }
     }
 
+    GroupingManagerWidget::ToolboxNode::ToolboxNode(const GraphicsItem* item)
+    {
+        switch(item->itemType())
+        {
+        case ItemType::Module:
+            mNode = Node(item->id(),Node::Module);
+            mName = QString::fromStdString(gNetlist->get_module_by_id(mNode.id())->get_name());
+            break;
+        case ItemType::Gate:
+            mNode = Node(item->id(),Node::Gate);
+            mName = QString::fromStdString(gNetlist->get_gate_by_id(mNode.id())->get_name());
+            break;
+        default:
+            break;
+        }
+    }
+
     std::vector<Net*> GroupingManagerWidget::ToolboxNode::inputNets() const
     {
         switch (mNode.type()) {
@@ -261,20 +283,21 @@ namespace hal
                 mHash[g] = sm;
     }
 
-    void GroupingManagerWidget::handleToolboxPredecessor(int maxDepth)
+    void GroupingManagerWidget::handleToolboxPredecessor()
     {
-        successorToNewGrouping(maxDepth, false);
+        newGroupingSuccOrPred(0, false, nullptr);
     }
 
-    void GroupingManagerWidget::handleToolboxSuccessor(int maxDepth)
+    void GroupingManagerWidget::handleToolboxSuccessor()
     {
-        successorToNewGrouping(maxDepth, true);
+        newGroupingSuccOrPred(0, true, nullptr);
     }
 
-    void GroupingManagerWidget::successorToNewGrouping(int maxDepth, bool succ)
+    void GroupingManagerWidget::newGroupingSuccOrPred(int maxDepth, bool succ, const GraphicsItem* item)
     {
         QSet<u32> mods, gats, nets;
         ToolboxNode tbn;
+        if (item) tbn = ToolboxNode(item);
         ToolboxModuleHash tmh(tbn.mNode);
         QVector<Net*> todoNet;
         QSet<Node> handledBox;
@@ -316,19 +339,20 @@ namespace hal
         act->exec();
     }
 
-    void GroupingManagerWidget::handleToolboxPredecessorDistance(int maxDepth)
+    void GroupingManagerWidget::handleToolboxPredecessorDistance()
     {
-        newGroupingByDistance(maxDepth,false);
+        newGroupingByDistance(3,false,nullptr);
     }
 
-    void GroupingManagerWidget::handleToolboxSuccessorDistance(int maxDepth)
+    void GroupingManagerWidget::handleToolboxSuccessorDistance()
     {
-        newGroupingByDistance(maxDepth,true);
+        newGroupingByDistance(3,true,nullptr);
     }
 
-    void GroupingManagerWidget::newGroupingByDistance(int maxDepth, bool succ)
+    void GroupingManagerWidget::newGroupingByDistance(int maxDepth, bool succ, const GraphicsItem* item)
     {
         ToolboxNode tbn;
+        if (item) tbn = ToolboxNode(item);
         ToolboxModuleHash tmh(tbn.mNode);
         QVector<Net*> thisDst;
         QVector<Net*> nextDst;
@@ -470,14 +494,16 @@ namespace hal
         toolbar->addAction(mColorSelectAction);
         toolbar->addAction(mToSelectionAction);
         toolbar->addAction(mDeleteAction);
+        toolbar->addAction(mSearchAction);
+        mSearchAction->setEnabled(mGroupingTableModel->rowCount() > 0);
     }
 
-    void GroupingManagerWidget::setToolbarButtonsEnabled(bool enabled)
+    void GroupingManagerWidget::setToolbarButtonsEnabled(bool enable)
     {
-        mRenameAction->setEnabled(enabled);
-        mColorSelectAction->setEnabled(enabled);
-        mToSelectionAction->setEnabled(enabled);
-        mDeleteAction->setEnabled(enabled);
+        mRenameAction->setEnabled(enable);
+        mColorSelectAction->setEnabled(enable);
+        mToSelectionAction->setEnabled(enable);
+        mDeleteAction->setEnabled(enable);
     }
 
     void GroupingManagerWidget::handleNewEntryAdded(const QModelIndex& modelIndexName)
@@ -524,28 +550,56 @@ namespace hal
                                                          : disabledIconStyle(),
                                                          iconPath.at(iacc)));
         }
+        enableSearchbar(mGroupingTableModel->rowCount() > 0);
     }
 
     void GroupingManagerWidget::toggleSearchbar()
     {
+        if (!mSearchAction->isEnabled())
+            return;
+
         if (mSearchbar->isHidden())
         {
             mSearchbar->show();
             mSearchbar->setFocus();
         }
         else
+        {
             mSearchbar->hide();
+            setFocus();
+        }
     }
 
     void GroupingManagerWidget::filter(const QString& text)
     {
-        QRegExp* regex = new QRegExp(text);
+
+        QRegularExpression* regex = new QRegularExpression(text);
         if (regex->isValid())
         {
-            mProxyModel->setFilterRegExp(*regex);
+            mProxyModel->setFilterRegularExpression(*regex);
             QString output = "Groupings widget regular expression '" + text + "' entered.";
             log_info("user", output.toStdString());
         }
+    }
+
+    void GroupingManagerWidget::updateSearchIcon()
+    {
+        if (mSearchbar->filterApplied() && mSearchbar->isVisible())
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
+        else
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+    }
+
+    void GroupingManagerWidget::enableSearchbar(bool enable)
+    {
+        QString iconStyle = enable ? mSearchIconStyle : mDisabledIconStyle;
+        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mSearchIconPath));
+        if (!enable && mSearchbar->isVisible())
+        {
+            mSearchbar->hide();
+            setFocus();
+        }
+        mSearchAction->setEnabled(enable);
     }
 
     QString GroupingManagerWidget::disabledIconStyle() const
@@ -676,5 +730,35 @@ namespace hal
     void GroupingManagerWidget::setToSelectionIconStyle(const QString& style)
     {
         mToSelectionIconStyle = style;
+    }
+
+    QString GroupingManagerWidget::searchIconPath() const
+    {
+        return mSearchIconPath;
+    }
+
+    QString GroupingManagerWidget::searchIconStyle() const
+    {
+        return mSearchIconStyle;
+    }
+
+    QString GroupingManagerWidget::searchActiveIconStyle() const
+    {
+        return mSearchActiveIconStyle;
+    }
+
+    void GroupingManagerWidget::setSearchIconPath(const QString& path)
+    {
+        mSearchIconPath = path;
+    }
+
+    void GroupingManagerWidget::setSearchIconStyle(const QString& style)
+    {
+        mSearchIconStyle = style;
+    }
+
+    void GroupingManagerWidget::setSearchActiveIconStyle(const QString& style)
+    {
+        mSearchActiveIconStyle = style;
     }
 }

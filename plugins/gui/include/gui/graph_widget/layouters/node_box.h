@@ -97,6 +97,12 @@ namespace hal {
         int y() const { return mY; }
 
         /**
+         * Convenience getter for grid position as QPoint
+         * @return grid position
+         */
+        QPoint gridPosition() const { return QPoint(mX,mY); }
+
+        /**
          * @brief setItem
          * @param item_
          */
@@ -163,14 +169,14 @@ namespace hal {
          * if the gate is part of a module rendered as box. The method ist mostly
          * used to find boxes by net endpoints.
          */
-        NodeBox* boxForGate(Gate* g) const { return mGateHash.value(g); }
+        NodeBox* boxForGate(const Gate* g) const { return mGateHash.value(g); }
 
         /**
          * @brief boxForPoint find NodeBox by grid position
          * @param p integer grid position
          * @return pointer to NodeBox or nullptr if none found
          */
-        NodeBox* boxForPoint(QPoint p) const { return mPointHash.value(p); }
+        NodeBox* boxForPoint(const QPoint& p) const { return mPointHash.value(p); }
 
         /**
          * @brief boxForNode find NodeBox by node
@@ -179,7 +185,7 @@ namespace hal {
          *
          * Used to search gates or modules by ID.
          */
-        NodeBox* boxForNode(Node& n) const { return mNodeHash.value(n); }
+        NodeBox* boxForNode(const Node& n) const { return mNodeHash.value(n); }
 
         /**
          * @brief boxForItem find NodeBox by graphics item
@@ -192,7 +198,7 @@ namespace hal {
 
         QSet<u32> filterNotInView(const QSet<u32>& gats) const;
     private:
-        QHash<Gate*,NodeBox*>         mGateHash;
+        QHash<const Gate*,NodeBox*>   mGateHash;
         QHash<QPoint,NodeBox*>        mPointHash;
         QHash<Node,NodeBox*>          mNodeHash;
         QHash<GraphicsNode*,NodeBox*> mItemHash;

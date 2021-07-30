@@ -112,8 +112,8 @@ namespace hal
         void handleChangeTypeAction();
         void adjustMinScale();
 
-        void handleFoldSingleAction();
-        void handleFoldAllAction();
+        void handleFoldParentSingle();
+        void handleFoldParentAll();
         void handleUnfoldSingleAction();
         void handleUnfoldAllAction();
 
@@ -206,13 +206,19 @@ namespace hal
         template <typename Func1>
         void recursionLevelMenu(QMenu* menu, bool succ, Func1 slot, bool addUnlimited=false)
         {
-            QString s = succ ? "successor" : "predecessor";
-            const char* txt[] = {"tree of all %1s in netlist", "only direct %1s", "%1s on 1st and 2nd level",
-                                 "%1s up to level 3", "%1s up to level 4", "%1s up to level 5", nullptr};
-            for (int inx = addUnlimited ? 0 : 1; txt[inx]; inx++)
+            QString s = succ ? "successors" : "predecessors";
+            const char* txt[] = {"All %1", "Depth 1 (direct %1)", "Depth 2",
+                                 "Depth 3", "Depth 4", "Depth 5", nullptr};
+            for (int inx = 1; txt[inx]; inx++)
             {
-                QAction* act = menu->addAction(QString(txt[inx]).arg(s));
+                QAction* act = menu->addAction(inx==1 ? QString(txt[1]).arg(s) : QString(txt[inx]));
                 act->setData(inx);
+                connect(act, &QAction::triggered, this, slot);
+            }
+            if (addUnlimited)
+            {
+                QAction* act = menu->addAction(QString(txt[0]).arg(s));
+                act->setData(0);
                 connect(act, &QAction::triggered, this, slot);
             }
         }

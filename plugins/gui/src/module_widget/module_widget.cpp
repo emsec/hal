@@ -3,6 +3,8 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/gui_globals.h"
+#include "gui/gui_utils/graphics.h"
+#include "gui/toolbar/toolbar.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
@@ -29,9 +31,15 @@ namespace hal
     ModuleWidget::ModuleWidget(QWidget* parent)
         : ContentWidget("Modules", parent),
           mTreeView(new ModuleTreeView(this)),
-          mModuleProxyModel(new ModuleProxyModel(this))
+          mModuleProxyModel(new ModuleProxyModel(this)),
+          mSearchbar(new Searchbar(this))
     {
+        ensurePolished();
+
         connect(mTreeView, &QTreeView::customContextMenuRequested, this, &ModuleWidget::handleTreeViewContextMenuRequested);
+
+        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+        mSearchAction->setToolTip("Search");
 
         mModuleProxyModel->setFilterKeyColumn(-1);
         mModuleProxyModel->setDynamicSortFilter(true);
@@ -49,25 +57,26 @@ namespace hal
         mTreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mTreeView->expandAll();
         mContentLayout->addWidget(mTreeView);
-        mContentLayout->addWidget(&mSearchbar);
-        mSearchbar.hide();
+        mContentLayout->addWidget(mSearchbar);
+        mSearchbar->hide();
 
         mIgnoreSelectionChange = false;
 
         gSelectionRelay->registerSender(this, name());
 
-        connect(&mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::filter);
+        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::filter);
         connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleWidget::handleTreeSelectionChanged);
         connect(mTreeView, &ModuleTreeView::doubleClicked, this, &ModuleWidget::handleItemDoubleClicked);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleWidget::handleSelectionChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleWidget::handleModuleRemoved);
 
         connect(mSearchAction, &QAction::triggered, this, &ModuleWidget::toggleSearchbar);
+        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::updateSearchIcon);
     }
 
-    void ModuleWidget::setupToolbar(Toolbar* Toolbar)
+    void ModuleWidget::setupToolbar(Toolbar* toolbar)
     {
-        Q_UNUSED(Toolbar)
+        toolbar->addAction(mSearchAction);
     }
 
     QList<QShortcut*> ModuleWidget::createShortcuts()
@@ -83,21 +92,28 @@ namespace hal
 
     void ModuleWidget::toggleSearchbar()
     {
-        if (mSearchbar.isHidden())
+        if (!mSearchAction->isEnabled())
+            return;
+
+        if (mSearchbar->isHidden())
         {
-            mSearchbar.show();
-            mSearchbar.setFocus();
+            mSearchbar->show();
+            mSearchbar->setFocus();
         }
         else
-            mSearchbar.hide();
+        {
+            mSearchbar->hide();
+            setFocus();
+        }
     }
 
     void ModuleWidget::filter(const QString& text)
     {
-        QRegExp* regex = new QRegExp(text);
+        QRegularExpression* regex = new QRegularExpression(text);
         if (regex->isValid())
         {
-            mModuleProxyModel->setFilterRegExp(*regex);
+            mModuleProxyModel->setFilterRegularExpression(*regex);
+            mTreeView->expandAll();
             QString output = "navigation regular expression '" + text + "' entered.";
             log_info("user", output.toStdString());
         }
@@ -264,8 +280,46 @@ namespace hal
         return gNetlistRelay->getModuleModel()->getItem(mModuleProxyModel->mapToSource(index));
     }
 
+    void ModuleWidget::updateSearchIcon()
+    {
+        if (mSearchbar->filterApplied() && mSearchbar->isVisible())
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
+        else
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+    }
+
     ModuleProxyModel* ModuleWidget::proxyModel()
     {
         return mModuleProxyModel;
+    }
+
+    QString ModuleWidget::searchIconPath() const
+    {
+        return mSearchIconPath;
+    }
+
+    QString ModuleWidget::searchIconStyle() const
+    {
+        return mSearchIconStyle;
+    }
+
+    QString ModuleWidget::searchActiveIconStyle() const
+    {
+        return mSearchActiveIconStyle;
+    }
+
+    void ModuleWidget::setSearchIconPath(const QString& path)
+    {
+        mSearchIconPath = path;
+    }
+
+    void ModuleWidget::setSearchIconStyle(const QString& style)
+    {
+        mSearchIconStyle = style;
+    }
+
+    void ModuleWidget::setSearchActiveIconStyle(const QString& style)
+    {
+        mSearchActiveIconStyle = style;
     }
 }

@@ -258,7 +258,7 @@ namespace hal
                     }
                     log_info("dataflow", "  total: {} unique states", ctx.result.unique_groupings.size());
                 }
-
+                
                 return ctx.result;
             }
 

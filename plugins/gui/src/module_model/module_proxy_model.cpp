@@ -16,7 +16,7 @@ namespace hal
 
     bool ModuleProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
     {
-        if(filterRegExp().isEmpty())
+        if(filterRegularExpression().pattern().isEmpty())
             return true;
 
         QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
@@ -24,9 +24,9 @@ namespace hal
         {
             auto item = static_cast<ModuleItem*>(sourceIndex.internalPointer());
             if(item->childCount() == 0)
-                return sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegExp());
+                return sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegularExpression());
 
-            bool shouldBeDisplayed = sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegExp());;
+            bool shouldBeDisplayed = sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegularExpression());;
             //go through all children and return the check of itself and the check of the children
             for(int i = 0; i < item->childCount(); i++)
             {

@@ -19,10 +19,11 @@ namespace hal
         {
             std::vector<Gate*> get_shortest_path_internal(Gate* start_gate, Gate* end_gate)
             {
-                if (start_gate == end_gate) return std::vector<Gate*>();
+                if (start_gate == end_gate)
+                    return std::vector<Gate*>();
                 std::vector<Gate*> v0;
                 v0.push_back(start_gate);
-                std::unordered_map<Gate*,Gate*> originMap;
+                std::unordered_map<Gate*, Gate*> originMap;
                 for (;;)
                 {
                     std::vector<Gate*> v1;
@@ -30,7 +31,8 @@ namespace hal
                     {
                         for (Gate* g1 : get_next_gates(g0, true, 1))
                         {
-                            if (originMap.find(g1) != originMap.end()) continue; // already routed to
+                            if (originMap.find(g1) != originMap.end())
+                                continue;    // already routed to
                             v1.push_back(g1);
                             originMap[g1] = g0;
                             if (g1 == end_gate)
@@ -40,17 +42,18 @@ namespace hal
                                 Gate* g = end_gate;
                                 while (g != start_gate)
                                 {
-                                    retval.insert(retval.begin(),g);
+                                    retval.insert(retval.begin(), g);
                                     auto it = originMap.find(g);
                                     assert(it != originMap.end());
                                     g = it->second;
                                 }
-                                retval.insert(retval.begin(),start_gate);
+                                retval.insert(retval.begin(), start_gate);
                                 return retval;
                             }
                         }
                     }
-                    if (v1.empty()) break;
+                    if (v1.empty())
+                        break;
                     v0 = v1;
                 }
                 return std::vector<Gate*>();
@@ -359,20 +362,24 @@ namespace hal
                 {
                     for (const Net* n : get_successors ? g0->get_fan_out_nets() : g0->get_fan_in_nets())
                     {
-                        if (nets_handled.find(n) != nets_handled.end()) continue;
+                        if (nets_handled.find(n) != nets_handled.end())
+                            continue;
                         nets_handled.insert(n);
 
                         for (const Endpoint* ep : get_successors ? n->get_destinations() : n->get_sources())
                         {
                             Gate* g1 = ep->get_gate();
-                            if (gats_handled.find(g1) != gats_handled.end()) continue; // already handled
+                            if (gats_handled.find(g1) != gats_handled.end())
+                                continue;    // already handled
                             gats_handled.insert(g1);
                             v1.push_back(g1);
-                            if (!filter || filter(g1)) retval.push_back(g1);
+                            if (!filter || filter(g1))
+                                retval.push_back(g1);
                         }
                     }
                 }
-                if (v1.empty()) break;
+                if (v1.empty())
+                    break;
                 v0 = v1;
             }
             return retval;
@@ -381,7 +388,8 @@ namespace hal
         std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions)
         {
             std::vector<Gate*> path_forward = get_shortest_path_internal(start_gate, end_gate);
-            if (!search_both_directions) return path_forward;
+            if (!search_both_directions)
+                return path_forward;
             std::vector<Gate*> path_reverse = get_shortest_path_internal(end_gate, start_gate);
             return (path_reverse.size() < path_forward.size()) ? path_reverse : path_forward;
         }
@@ -587,9 +595,6 @@ namespace hal
         {
             u32 num_gates = 0;
 
-            Net* gnd_net = netlist->get_gnd_gates().front()->get_fan_out_nets().front();
-            Net* vcc_net = netlist->get_vcc_gates().front()->get_fan_out_nets().front();
-
             for (const auto& gate : netlist->get_gates())
             {
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
@@ -685,6 +690,15 @@ namespace hal
                 {
                     Net* out_net = out_endpoint->get_net();
 
+                    const std::vector<Gate*>& gnd_gates = netlist->get_gnd_gates();
+                    const std::vector<Gate*>& vcc_gates = netlist->get_vcc_gates();
+                    if (gnd_gates.empty() || vcc_gates.empty())
+                    {
+                        continue;
+                    }
+                    Net* gnd_net = gnd_gates.front()->get_fan_out_nets().front();
+                    Net* vcc_net = vcc_gates.front()->get_fan_out_nets().front();
+
                     for (Endpoint* in_endpoint : fan_in)
                     {
                         // remove the input endpoint otherwise
@@ -718,7 +732,7 @@ namespace hal
                 }
             }
 
-            log_info("netlist_utils", "removed {} buffer gates from the netlist.", num_gates);
+            log_info("netlist_utils", "removed {} buffer gates from the netlist with ID {}.", num_gates, netlist->get_id());
         }
 
         void remove_unused_lut_endpoints(Netlist* netlist)
@@ -726,7 +740,13 @@ namespace hal
             u32 num_eps = 0;
 
             // net connected to GND
-            Net* gnd_net = *(*netlist->get_gnd_gates().begin())->get_fan_out_nets().begin();
+            const std::vector<Gate*>& gnd_gates = netlist->get_gnd_gates();
+            if (gnd_gates.empty())
+            {
+                log_error("netlist_utils", "cannot remove unused LUT endpoints because no GND net is available within netlist with ID {}.", netlist->get_id());
+                return;
+            }
+            Net* gnd_net = gnd_gates.front()->get_fan_out_nets().front();
 
             // iterate all LUT gates
             for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_property(GateTypeProperty::lut); }))
