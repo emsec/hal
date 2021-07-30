@@ -20,7 +20,7 @@ namespace hal
         return m_path;
     }
 
-    GateType* GateLibrary::create_gate_type(const std::string& name, std::set<GateTypeProperty> properties)
+    GateType* GateLibrary::create_gate_type(const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
     {
         if (m_gate_type_map.find(name) != m_gate_type_map.end())
         {
@@ -28,7 +28,7 @@ namespace hal
             return nullptr;
         }
 
-        std::unique_ptr<GateType> gt = std::unique_ptr<GateType>(new GateType(this, get_unique_gate_type_id(), name, properties));
+        std::unique_ptr<GateType> gt = std::unique_ptr<GateType>(new GateType(this, get_unique_gate_type_id(), name, properties, std::move(component)));
 
         auto res = gt.get();
         m_gate_type_map.emplace(name, res);
@@ -68,12 +68,25 @@ namespace hal
             return it->second;
         }
 
-        log_error("gate_library", "could not get the specified gate type, as there exists no gate type called '{}' within gate library '{}'.", name, m_name);
+        log_error("gate_library", "could not find the specified gate type, as there exists no gate type called '{}' within gate library '{}'.", name, m_name);
         return nullptr;
     }
 
-    std::unordered_map<std::string, GateType*> GateLibrary::get_gate_types() const
+    std::unordered_map<std::string, GateType*> GateLibrary::get_gate_types(const std::function<bool(const GateType*)>& filter) const
     {
+        if (filter)
+        {
+            std::unordered_map<std::string, GateType*> res;
+            for (const auto& type : m_gate_types)
+            {
+                if (filter(type.get()))
+                {
+                    res[type->get_name()] = type.get();
+                }
+            }
+            return res;
+        }
+
         return m_gate_type_map;
     }
 

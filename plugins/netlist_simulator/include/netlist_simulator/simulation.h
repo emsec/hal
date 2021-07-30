@@ -42,7 +42,7 @@ namespace hal
          * @param[in] time - The time in   .
          * @returns The net's signal value.
          */
-        SignalValue get_net_value(Net* net, u64 time) const;
+        BooleanFunction::Value get_net_value(const Net* net, u64 time) const;
 
         /**
          * Adds a custom event to the simulation.
@@ -56,11 +56,11 @@ namespace hal
          *
          * @returns A map from net to associated events for that net sorted by time.
          */
-        std::unordered_map<Net*, std::vector<Event>> get_events() const;
+        std::unordered_map<const Net*, std::vector<Event>> get_events() const;
 
     private:
         friend class NetlistSimulator;
-        std::unordered_map<Net*, std::vector<Event>> m_events;
+        std::unordered_map<const Net*, std::vector<Event>> m_events;
     };
 
 }    // namespace hal

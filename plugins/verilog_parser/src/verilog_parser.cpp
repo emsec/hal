@@ -489,7 +489,7 @@ namespace hal
                     return false;
                 }
             }
-            else if (next_token == "wire")
+            else if (next_token == "wire" || next_token == "tri")
             {
                 if (!parse_signal_definition(module, internal_attributes))
                 {
@@ -685,7 +685,8 @@ namespace hal
 
     bool VerilogParser::parse_signal_definition(VerilogModule& module, std::map<std::string, std::string>& attributes)
     {
-        m_token_stream.consume("wire", true);
+        // consume "wire" or "tri"
+        m_token_stream.consume();
 
         TokenStream<std::string> signal_stream = m_token_stream.extract_until(";");
         m_token_stream.consume(";", true);

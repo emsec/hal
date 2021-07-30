@@ -23,6 +23,7 @@ namespace hal
                         u32 new_group_id = ++id_counter;
 
                         new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(*gates.begin());
+                        new_state->operations_on_group_allowed[new_group_id]   = state->operations_on_group_allowed.at(group_id);
 
                         new_state->gates_of_group[new_group_id].insert(gates.begin(), gates.end());
                         for (const auto& sg : gates)

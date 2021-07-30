@@ -1,8 +1,8 @@
 # require explicit add of unfinished libraries
 *
+!example_library.hgl
 !XILINX_SIMPRIM.hgl
 !XILINX_UNISIM.hgl
-!XILINX_UNISIM_ISE.hgl
 !ice40ultra.hgl
 !lsi_10k.hgl
 !NangateOpenCellLibrary.hgl

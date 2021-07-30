@@ -1,4 +1,4 @@
-//  MIT License
+﻿//  MIT License
 //
 //  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 //  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
@@ -172,6 +172,25 @@ namespace hal
          */
         void handleTabCloseRequested(int index);
 
+        /**
+         * Q_SLOT to close all tabs which are right to the right-clicked.
+         *
+         * @param index - The index of the right-clicked tab within the QTabWidget
+         */
+        void handleCloseTabsToRight(int index);
+
+        /**
+         * Q_SLOT to close all tabs which are left to the right-clicked.
+         *
+         * @param index - The index of the right-clicked tab within the QTabWidget
+         */
+        void handleCloseTabsToLeft(int index);
+
+        /**
+         * Q_SLOT to close all tabs.
+         */
+        void handleCloseAllTabs();
+
     private:
         QTabWidget* mTabWidget;
         QVBoxLayout* mLayout;
@@ -186,9 +205,6 @@ namespace hal
 
         void zoomInShortcut();
         void zoomOutShortcut();
-
-        void handleCloseTabsToRight(int index);
-        void handleCloseTabsToLeft(int index);
 
         static SettingsItemDropdown* sSettingGridType;
         static SettingsItemDropdown* sSettingDragModifier;

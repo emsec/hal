@@ -967,6 +967,10 @@ hal--PythonEditor
     y2         : 1,
     stop       : 0 rgb(33, 40, 44),
     stop       : 1 rgb(23, 30, 34));
+
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-searchIconStyle: "all->#e8e8e8";
+    qproperty-searchIconPath: ":/icons/search";
 }
 
 hal--PythonEditor hal--CodeEditor
@@ -1044,6 +1048,8 @@ hal--PythonEditor
 {
     background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb(33, 40, 44), stop:1 rgb(23, 30, 34));
 
+    qproperty-disabledIconStyle: "all->#515050";
+
     qproperty-openIconStyle: "all->#3192C5";
     qproperty-openIconPath: ":/icons/folder";
 
@@ -1082,6 +1088,10 @@ hal--GroupingManagerWidget
 
     qproperty-toSelectionIconStyle: "all->#e8e8e8";
     qproperty-toSelectionIconPath: ":/icons/to_selection";
+
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-searchIconStyle: "all->#e8e8e8";
+    qproperty-searchIconPath: ":/icons/search";
 }
 
 hal--ContextManagerWidget
@@ -1104,6 +1114,7 @@ hal--ContextManagerWidget
     qproperty-openIconPath: ":/icons/open-alt";
 
     qproperty-searchIconStyle: "all->#e8e8e8";
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-searchIconPath: ":/icons/search";
 }
 
@@ -1117,6 +1128,13 @@ hal--SelectionDetailsWidget
     qproperty-toGroupingIconPath: ":/icons/to_grouping";
     qproperty-toModuleIconStyle: "all->#e8e8e8";
     qproperty-toModuleIconPath: ":/icons/to_module";
+}
+
+hal--ModuleWidget
+{
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-searchIconStyle: "all->#e8e8e8";
+    qproperty-searchIconPath: ":/icons/search";
 }
 
 hal--MainWindow

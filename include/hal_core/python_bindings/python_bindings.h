@@ -26,6 +26,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
@@ -106,6 +107,13 @@ namespace hal
      * @param[in] m - the python module
      */
     void gate_type_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL gate type components in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void gate_type_components_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL LUT gate type in a python module.
