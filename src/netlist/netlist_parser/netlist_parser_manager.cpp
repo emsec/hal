@@ -204,7 +204,7 @@ namespace hal
             return std::move(netlists.at(0));
         }
 
-        std::vector<std::unique_ptr<Netlist>> parse_all(const std::filesystem::path& file_name, const std::filesystem::path &gatelib_name)
+        std::vector<std::unique_ptr<Netlist>> parse_all(const std::filesystem::path& file_name)
         {
             ParserFactory factory = get_parser_factory_for_file(file_name);
             if (!factory)
@@ -212,10 +212,7 @@ namespace hal
                 return {};
             }
 
-            GateLibrary* gl = gatelib_name.empty()
-                    ? nullptr
-                    : gate_library_manager::get_gate_library(gatelib_name);
-            return dispatch_parse(file_name, factory(), gl, false);
+            return dispatch_parse(file_name, factory(), nullptr, false);
         }
     }    // namespace netlist_parser_manager
 }    // namespace hal

@@ -342,6 +342,25 @@ namespace hal
             return;
         }
 
+        if (!gatelibraryPath.isEmpty())
+        {
+            log_info("gui", "Trying to use gate library {}.", gatelibraryPath.toStdString());
+            auto netlist = netlist_factory::load_netlist(filename.toStdString(), gatelibraryPath.toStdString());
+
+            if (netlist)
+            {
+                gNetlistOwner = std::move(netlist);
+                gNetlist       = gNetlistOwner.get();
+                gNetlistRelay->registerNetlistCallbacks();
+                fileSuccessfullyLoaded(logical_file_name);
+                return;
+            }
+            else
+            {
+                log_error("gui", "Failed using gate library {}.", gatelibraryPath.toStdString());
+            }
+        }
+
         QString lib_file_name = filename.left(filename.lastIndexOf('.')) + ".lib";
         if (QFileInfo::exists(lib_file_name) && QFileInfo(lib_file_name).isFile())
         {
@@ -368,7 +387,7 @@ namespace hal
         log_info("gui", "Searching for (other) compatible netlists.");
 
         // event_controls::enable_all(false);
-        std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(filename.toStdString(),gatelibraryPath.toStdString());
+        std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(filename.toStdString());
         // event_controls::enable_all(true);
 
         if (netlists.empty())

@@ -6,6 +6,7 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/program_arguments.h"
+#include "hal_core/utilities/project_manager.h"
 
 #include <fstream>
 #include <unistd.h>
@@ -54,6 +55,25 @@ namespace hal
             return netlist_serializer::deserialize_from_file(netlist_file);
         }
 
+        std::unique_ptr<Netlist> load_hal_project(const std::filesystem::path& project_dir)
+        {
+            if (!std::filesystem::is_directory(project_dir))
+            {
+                log_critical("netlist", "could not access hal project '{}'.", project_dir.string());
+                return nullptr;
+            }
+
+            ProjectManager* pm = ProjectManager::instance();
+            if (!pm->open_project_directory(project_dir.string()))
+            {
+                log_critical("netlist", "could not open hal project '{}'.", project_dir.string());
+                return nullptr;
+            }
+
+            std::unique_ptr<Netlist> retval = std::move(pm->get_netlist());
+            return retval;
+        }
+
         std::unique_ptr<Netlist> load_netlist(const ProgramArguments& args)
         {
             if (!args.is_option_set("--import-netlist"))
@@ -72,6 +92,7 @@ namespace hal
 
             auto extension = netlist_file.extension();
 
+
             if (extension == ".hal")
             {
                 return netlist_serializer::deserialize_from_file(netlist_file);
@@ -80,7 +101,7 @@ namespace hal
             return netlist_parser_manager::parse(netlist_file, args);
         }
 
-        std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& netlist_file, const std::filesystem::path& gatelib_file)
+        std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& netlist_file)
         {
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
             {
@@ -88,7 +109,7 @@ namespace hal
                 return {};
             }
 
-            return netlist_parser_manager::parse_all(netlist_file, gatelib_file);
+            return netlist_parser_manager::parse_all(netlist_file);
         }
     }    // namespace netlist_factory
 }    // namespace hal

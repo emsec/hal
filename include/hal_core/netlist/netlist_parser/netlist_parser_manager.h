@@ -94,6 +94,6 @@ namespace hal
           * @param[in] gatelib_name - The gate library path, might be empty
           * @returns A vector containing one netlist per matching gate library.
           */
-        std::vector<std::unique_ptr<Netlist>> parse_all(const std::filesystem::path& file_name, const std::filesystem::path& gatelib_name = std::filesystem::path());
+        std::vector<std::unique_ptr<Netlist>> parse_all(const std::filesystem::path& file_name);
     }    // namespace netlist_parser_manager
 }    // namespace hal

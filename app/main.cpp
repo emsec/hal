@@ -242,6 +242,7 @@ int main(int argc, const char* argv[])
     }
 
     std::filesystem::path proj_path;
+    std::filesystem::path import_nl;
     bool openExisting = true;
 
     if (args.is_option_set("--empty-project"))
@@ -253,9 +254,10 @@ int main(int argc, const char* argv[])
     {
         proj_path = std::filesystem::path(args.get_parameter("--project-dir"));
     }
-    else if (args.is_option_set("--import-netlist"))
+    if (args.is_option_set("--import-netlist"))
     {
-        proj_path = std::filesystem::path(args.get_parameter("--import-netlist"));
+        import_nl = std::filesystem::path(args.get_parameter("--import-netlist"));
+        if (proj_path.empty()) proj_path = import_nl;
         openExisting = false;
     }
 
