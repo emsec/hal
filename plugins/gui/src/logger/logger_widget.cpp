@@ -9,6 +9,7 @@
 #include <QSignalMapper>
 #include <QPushButton>
 #include <QLabel>
+#include <QSpacerItem>
 
 namespace hal
 {
@@ -53,30 +54,42 @@ namespace hal
 
         mDebugButton = new QPushButton("Debug", this);
         mDebugButton->setCheckable(true);
-        mDebugButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        mDebugButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mDebugButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mDebugButton);
 
         mInfoButton = new QPushButton("Info", this);
         mInfoButton->setCheckable(true);
         mInfoButton->setChecked(true);
-        mInfoButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        mInfoButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mInfoButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mInfoButton);
 
         mWarningButton = new QPushButton("Warning", this);
         mWarningButton->setCheckable(true);
         mWarningButton->setChecked(true);
-        mWarningButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        mWarningButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mWarningButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mWarningButton);
 
         mErrorButton = new QPushButton("Error", this);
         mErrorButton->setCheckable(true);
         mErrorButton->setChecked(true);
-        mErrorButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        mErrorButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mErrorButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mErrorButton);
+
+        Toolbar->addSpacer();
+
+        mMuteButton = new QPushButton("Mute all", this);
+        mMuteButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) }  QPushButton:pressed { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        connect(mMuteButton, SIGNAL(clicked(bool)), this, SLOT(handleSeverityChanged(bool)));
+        Toolbar->addWidget(mMuteButton);
+
+        mVerboseButton = new QPushButton("Show all", this);
+        mVerboseButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) }  QPushButton:pressed { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
+        connect(mVerboseButton, SIGNAL(clicked(bool)), this, SLOT(handleSeverityChanged(bool)));
+        Toolbar->addWidget(mVerboseButton);
     }
 
     QPlainTextEdit* LoggerWidget::getPlainTextEdit()
@@ -179,6 +192,20 @@ namespace hal
         else if (sender() == mErrorButton)
         {
             mErrorSeverity = state;
+        }
+        else if (sender() == mMuteButton)
+        {
+            mDebugButton->setChecked(false);
+            mInfoButton->setChecked(false);
+            mWarningButton->setChecked(false);
+            mErrorButton->setChecked(false);
+        }
+        else if (sender() == mVerboseButton)
+        {
+            mDebugButton->setChecked(true);
+            mInfoButton->setChecked(true);
+            mWarningButton->setChecked(true);
+            mErrorButton->setChecked(true);
         }
 
         handleCurrentFilterChanged(1);

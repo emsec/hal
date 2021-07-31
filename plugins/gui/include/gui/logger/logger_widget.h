@@ -42,7 +42,6 @@ namespace hal
 {
     class LoggerMarshall;
     class ChannelSelector;
-    class SeveritySelector;
 
     /**
      * @ingroup logging
@@ -113,7 +112,6 @@ namespace hal
         void handleCurrentFilterChanged(int index);
 
         void handleSeverityChanged(bool state);
-
         /**
          * Q_SLOT to handle interactions with the scrollbar. After the first scrollbar interaction the scrollbar wont
          * be locked at the bottom anymore (e.g. after a resize event).
@@ -126,16 +124,13 @@ namespace hal
         void scrollToBottom();
 
         QPlainTextEdit* mPlainTextEdit;
-        //ChannelSelector* mSelector;
         ChannelSelector* selector;
+        QPushButton* mMuteButton;
+        QPushButton* mVerboseButton;
         QPushButton* mDebugButton;
         QPushButton* mInfoButton;
         QPushButton* mWarningButton;
         QPushButton* mErrorButton;
-//        SeveritySelector* mInfoSelector;
-//        SeveritySelector* mWarningSelector;
-//        SeveritySelector* mErrorSelector;
-//        SeveritySelector* mDebugSelector;
         bool mInfoSeverity;
         bool mWarningSeverity;
         bool mErrorSeverity;
