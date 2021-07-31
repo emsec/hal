@@ -3,6 +3,8 @@
 #include "gui/channel_manager/channel_selector.h"
 #include "gui/logger/logger_marshall.h"
 #include "gui/toolbar/toolbar.h"
+#include "gui/logger/logger_settings.h"
+#include "gui/settings/settings_manager.h"
 
 #include <QHeaderView>
 #include <QVBoxLayout>
@@ -10,6 +12,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QSpacerItem>
+
 
 namespace hal
 {
@@ -28,9 +31,7 @@ namespace hal
 
         mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
 
-        mInfoSeverity = true;
-        mWarningSeverity = true;
-        mErrorSeverity = true;
+        restoreSettings();
 
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
 
@@ -54,27 +55,28 @@ namespace hal
 
         mDebugButton = new QPushButton("Debug", this);
         mDebugButton->setCheckable(true);
+        mDebugButton->setChecked(mDebugSeverity);
         mDebugButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mDebugButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mDebugButton);
 
         mInfoButton = new QPushButton("Info", this);
         mInfoButton->setCheckable(true);
-        mInfoButton->setChecked(true);
+        mInfoButton->setChecked(mInfoSeverity);
         mInfoButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mInfoButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mInfoButton);
 
         mWarningButton = new QPushButton("Warning", this);
         mWarningButton->setCheckable(true);
-        mWarningButton->setChecked(true);
+        mWarningButton->setChecked(mWarningSeverity);
         mWarningButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mWarningButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mWarningButton);
 
         mErrorButton = new QPushButton("Error", this);
         mErrorButton->setCheckable(true);
-        mErrorButton->setChecked(true);
+        mErrorButton->setChecked(mErrorSeverity);
         mErrorButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
         connect(mErrorButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mErrorButton);
@@ -209,7 +211,7 @@ namespace hal
         }
 
         handleCurrentFilterChanged(1);
-
+        saveSettings();
     }
 
     void LoggerWidget::handleFirstUserInteraction(int value)
@@ -231,5 +233,20 @@ namespace hal
     void LoggerWidget::scrollToBottom()
     {
         mPlainTextEditScrollbar->setValue(mPlainTextEditScrollbar->maximum());
+    }
+
+    void LoggerWidget::saveSettings()
+    {
+        LoggerSettings settings = { mDebugSeverity, mInfoSeverity, mWarningSeverity, mErrorSeverity };
+        SettingsManager::instance()->saveLoggerSettings(settings);
+    }
+
+    void LoggerWidget::restoreSettings()
+    {
+        LoggerSettings settings = SettingsManager::instance()->loggerSettings();
+        mDebugSeverity = settings.debugSeverity;
+        mInfoSeverity = settings.infoSeverity;
+        mWarningSeverity = settings.warningSeverity;
+        mErrorSeverity = settings.errorSeverity;
     }
 }

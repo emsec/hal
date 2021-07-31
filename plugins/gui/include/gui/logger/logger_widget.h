@@ -121,6 +121,9 @@ namespace hal
         void handleFirstUserInteraction(int value);
 
     private:
+        void saveSettings();
+        void restoreSettings();
+
         void scrollToBottom();
 
         QPlainTextEdit* mPlainTextEdit;
