@@ -7,7 +7,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 
 #include <iostream>
 #include <iomanip>

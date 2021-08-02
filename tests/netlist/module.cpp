@@ -1,5 +1,5 @@
 #include "hal_core/netlist/module.h"
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"

@@ -28,8 +28,6 @@
 
 #include <iostream>
 
-// TODO convert namespace to class
-
 namespace hal
 {
     /** forward declaration */
@@ -70,10 +68,11 @@ namespace hal
     public:
         enum class event
         {
-            created,            ///< no associated_data
-            removed,            ///< no associated_data
-            name_changed,       ///< no associated_data
-            location_changed    ///< no associated_data
+            created,                    ///< no associated_data
+            removed,                    ///< no associated_data
+            name_changed,               ///< no associated_data
+            location_changed,           ///< no associated_data
+            boolean_function_changed    ///< no associated_data
         };
     };
 
