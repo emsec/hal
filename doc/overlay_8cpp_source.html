@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('overlay_8cpp_source.html',''); initRes
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        handleParentChanged();</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    }</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classhal_1_1_overlay.html#ad02b4f9d2f46eef138c0174d690d816c">   16</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_overlay.html#ad02b4f9d2f46eef138c0174d690d816c">Overlay::eventFilter</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* watched, <a class="codeRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a>* <a class="code" href="namespacehal_1_1gate__event__handler.html#a9f136def1005f377aca10767cdcaa4ed">event</a>)</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classhal_1_1_overlay.html#ad02b4f9d2f46eef138c0174d690d816c">   16</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_overlay.html#ad02b4f9d2f46eef138c0174d690d816c">Overlay::eventFilter</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* watched, <a class="codeRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a>* event)</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    {</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keywordflow">if</span> (watched == <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>())</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        {</div>
@@ -115,7 +115,7 @@ $(document).ready(function(){initNavTree('overlay_8cpp_source.html',''); initRes
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#eventFilter">QFrame::eventFilter</a>(watched, <a class="code" href="classhal_1_1_overlay.html#a42073feeb39994116f3ad46c2b6dada9">event</a>);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    }</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classhal_1_1_overlay.html#a42073feeb39994116f3ad46c2b6dada9">   30</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_overlay.html#a42073feeb39994116f3ad46c2b6dada9">Overlay::event</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a>* <a class="code" href="namespacehal_1_1gate__event__handler.html#a9f136def1005f377aca10767cdcaa4ed">event</a>)</div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classhal_1_1_overlay.html#a42073feeb39994116f3ad46c2b6dada9">   30</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_overlay.html#a42073feeb39994116f3ad46c2b6dada9">Overlay::event</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qevent.html">QEvent</a>* event)</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    {</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_overlay.html#a42073feeb39994116f3ad46c2b6dada9">event</a>-&gt;type() == <a class="codeRef" href="https://doc.qt.io/qt-5/qevent.html#Type-enum">QEvent::ParentAboutToChange</a>)</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        {</div>
@@ -135,7 +135,7 @@ $(document).ready(function(){initNavTree('overlay_8cpp_source.html',''); initRes
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html#event">QFrame::event</a>(<a class="code" href="classhal_1_1_overlay.html#a42073feeb39994116f3ad46c2b6dada9">event</a>);</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    }</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classhal_1_1_overlay.html#a4317f126e9be859c9d5329a7eb413273">   50</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_overlay.html#a4317f126e9be859c9d5329a7eb413273">Overlay::mousePressEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a>* <a class="code" href="namespacehal_1_1gate__event__handler.html#a9f136def1005f377aca10767cdcaa4ed">event</a>)</div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classhal_1_1_overlay.html#a4317f126e9be859c9d5329a7eb413273">   50</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_overlay.html#a4317f126e9be859c9d5329a7eb413273">Overlay::mousePressEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a>* event)</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_overlay.html#a48e35482396e82b697d7985da12bda5a">clicked</a>();</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">event</span>-&gt;accept(); <span class="comment">// ACCEPT EXPLICITLY</span></div>
@@ -158,7 +158,6 @@ $(document).ready(function(){initNavTree('overlay_8cpp_source.html',''); initRes
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_removeEventFilter"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#removeEventFilter">QObject::removeEventFilter</a></div><div class="ttdeci">void removeEventFilter(QObject *obj)</div></div>
-<div class="ttc" id="anamespacehal_1_1gate__event__handler_html_a9f136def1005f377aca10767cdcaa4ed"><div class="ttname"><a href="namespacehal_1_1gate__event__handler.html#a9f136def1005f377aca10767cdcaa4ed">hal::gate_event_handler::event</a></div><div class="ttdeci">event</div><div class="ttdef"><b>Definition:</b> <a href="gate__event__handler_8h_source.html#l00047">gate_event_handler.h:47</a></div></div>
 <div class="ttc" id="aqevent_html_Type-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qevent.html#Type-enum">QEvent::Resize</a></div><div class="ttdeci">Resize</div></div>
 <div class="ttc" id="aqframe_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qframe.html">QFrame</a></div></div>
 <div class="ttc" id="aqframe_html_event"><div class="ttname"><a href="https://doc.qt.io/qt-5/qframe.html#event">QFrame::event</a></div><div class="ttdeci">virtual bool event(QEvent *e) override</div></div>
@@ -184,7 +183,7 @@ $(document).ready(function(){initNavTree('overlay_8cpp_source.html',''); initRes
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_1c9b88aaa7e03862471afceea6cd4425.html">overlay</a></li><li class="navelem"><a class="el" href="overlay_8cpp.html">overlay.cpp</a></li>
-    <li class="footer">Generated on Fri Jul 30 2021 10:26:08 for HAL by
+    <li class="footer">Generated on Mon Aug 2 2021 05:54:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -155,7 +155,7 @@ $(document).ready(function(){initNavTree('content__frame_8cpp_source.html',''); 
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(widget, &amp;<a class="code" href="classhal_1_1_content_widget.html#aa4b2e0e8c067b51bab780dfdbe345ac6">ContentWidget::name_changed</a>, <span class="keyword">this</span>, &amp;<a class="code" href="classhal_1_1_content_frame.html#a7c366e534baa60b6a26153f020d6c1d5">ContentFrame::handleNameChanged</a>);</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classhal_1_1_content_frame.html#ae1f6b74e7aefce77534ce5f2170af106">   70</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_frame.html#ae1f6b74e7aefce77534ce5f2170af106">ContentFrame::childEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qchildevent.html">QChildEvent</a>* <a class="code" href="namespacehal_1_1gate__event__handler.html#a9f136def1005f377aca10767cdcaa4ed">event</a>)</div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classhal_1_1_content_frame.html#ae1f6b74e7aefce77534ce5f2170af106">   70</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_content_frame.html#ae1f6b74e7aefce77534ce5f2170af106">ContentFrame::childEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qchildevent.html">QChildEvent</a>* event)</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    {</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">if</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>-&gt;removed() &amp;&amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>-&gt;child() == mWidget)</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        {</div>
@@ -188,7 +188,7 @@ $(document).ready(function(){initNavTree('content__frame_8cpp_source.html',''); 
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#windowTitle-prop">setWindowTitle</a>(name);</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    }</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">void</span> ContentFrame::closeEvent(<a class="codeRef" href="https://doc.qt.io/qt-5/qcloseevent.html">QCloseEvent</a>* <a class="code" href="namespacehal_1_1gate__event__handler.html#a9f136def1005f377aca10767cdcaa4ed">event</a>)</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">void</span> ContentFrame::closeEvent(<a class="codeRef" href="https://doc.qt.io/qt-5/qcloseevent.html">QCloseEvent</a>* event)</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    {</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        Q_UNUSED(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>)</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <a class="code" href="classhal_1_1_content_frame.html#a3424a240a9313a6bf2188c70a93920b9">reattachWidget</a>();</div>
@@ -196,7 +196,6 @@ $(document).ready(function(){initNavTree('content__frame_8cpp_source.html',''); 
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacehal_1_1gate__event__handler_html_a9f136def1005f377aca10767cdcaa4ed"><div class="ttname"><a href="namespacehal_1_1gate__event__handler.html#a9f136def1005f377aca10767cdcaa4ed">hal::gate_event_handler::event</a></div><div class="ttdeci">event</div><div class="ttdef"><b>Definition:</b> <a href="gate__event__handler_8h_source.html#l00047">gate_event_handler.h:47</a></div></div>
 <div class="ttc" id="aqt_html_AlignmentFlag-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignTop</a></div><div class="ttdeci">AlignTop</div></div>
 <div class="ttc" id="aqwidget_html_setParent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#setParent">QWidget::setParent</a></div><div class="ttdeci">void setParent(QWidget *parent)</div></div>
 <div class="ttc" id="aqvboxlayout_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a></div></div>
@@ -257,7 +256,7 @@ $(document).ready(function(){initNavTree('content__frame_8cpp_source.html',''); 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_3b30566547d4a2b2a3a8078fb6e47c77.html">content_frame</a></li><li class="navelem"><a class="el" href="content__frame_8cpp.html">content_frame.cpp</a></li>
-    <li class="footer">Generated on Fri Jul 30 2021 10:26:07 for HAL by
+    <li class="footer">Generated on Mon Aug 2 2021 05:54:28 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

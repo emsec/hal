@@ -88,7 +88,7 @@ $(document).ready(function(){initNavTree('netlist_2grouping_8cpp_source.html',''
 <div class="contents">
 <a href="netlist_2grouping_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="grouping_8h.html">hal_core/netlist/grouping.h</a>&quot;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="event__handler_8h.html">hal_core/netlist/event_handler.h</a>&quot;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="event__handler_8h.html">hal_core/netlist/event_system/event_handler.h</a>&quot;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gate_8h.html">hal_core/netlist/gate.h</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="module_8h.html">hal_core/netlist/module.h</a>&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="net_8h.html">hal_core/netlist/net.h</a>&quot;</span></div>
@@ -412,7 +412,7 @@ $(document).ready(function(){initNavTree('netlist_2grouping_8cpp_source.html',''
 <div class="ttc" id="aclasshal_1_1_gate_html_afc66cb905518bd5b03c1323caea00b81"><div class="ttname"><a href="classhal_1_1_gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id</a></div><div class="ttdeci">u32 get_id() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate_8cpp_source.html#l00086">gate.cpp:86</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00868">graph_graphics_view.cpp:868</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html_ab5e29819702448bdd0315d3282e2eaae"><div class="ttname"><a href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">hal::Netlist::get_net_by_id</a></div><div class="ttdeci">Net * get_net_by_id(u32 net_id) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00432">netlist.cpp:432</a></div></div>
-<div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00053">net.h:53</a></div></div>
+<div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00052">net.h:52</a></div></div>
 <div class="ttc" id="aclasshal_1_1_grouping_html_a46a985bf29ce9e631f7c0ae27cc82f2e"><div class="ttname"><a href="classhal_1_1_grouping.html#a46a985bf29ce9e631f7c0ae27cc82f2e">hal::Grouping::contains_net</a></div><div class="ttdeci">bool contains_net(Net *net) const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2grouping_8cpp_source.html#l00200">grouping.cpp:200</a></div></div>
 <div class="ttc" id="aclasshal_1_1_grouping_html_a5a855be1c6d8b725d3ae27b99308e8b2"><div class="ttname"><a href="classhal_1_1_grouping.html#a5a855be1c6d8b725d3ae27b99308e8b2">hal::Grouping::remove_net_by_id</a></div><div class="ttdeci">bool remove_net_by_id(const u32 net_id)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2grouping_8cpp_source.html#l00189">grouping.cpp:189</a></div></div>
 <div class="ttc" id="aclasshal_1_1_grouping_html_a52d25681e817a8bb3b30296fcce3364a"><div class="ttname"><a href="classhal_1_1_grouping.html#a52d25681e817a8bb3b30296fcce3364a">hal::Grouping::remove_module_by_id</a></div><div class="ttdeci">bool remove_module_by_id(const u32 module_id)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2grouping_8cpp_source.html#l00271">grouping.cpp:271</a></div></div>
@@ -441,7 +441,7 @@ $(document).ready(function(){initNavTree('netlist_2grouping_8cpp_source.html',''
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="netlist_2grouping_8cpp.html">grouping.cpp</a></li>
-    <li class="footer">Generated on Fri Jul 30 2021 10:26:08 for HAL by
+    <li class="footer">Generated on Mon Aug 2 2021 05:54:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

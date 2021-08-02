@@ -1,10 +1,10 @@
 <map id="/home/runner/work/hal/hal/include/hal_core/netlist/module.h" name="/home/runner/work/hal/hal/include/hal_core/netlist/module.h">
-<area shape="rect" id="node1" title=" " alt="" coords="573,5,743,61"/>
+<area shape="rect" id="node1" title=" " alt="" coords="585,5,755,61"/>
 <area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="331,288,471,315"/>
 <area shape="rect" id="node7" href="$data__container_8h.html" title=" " alt="" coords="23,199,178,240"/>
 <area shape="rect" id="node8" title=" " alt="" coords="255,288,306,315"/>
 <area shape="rect" id="node9" title=" " alt="" coords="40,288,95,315"/>
-<area shape="rect" id="node11" href="$event__handler_8h.html" title=" " alt="" coords="577,109,739,151"/>
+<area shape="rect" id="node11" href="$event__handler_8h.html" title=" " alt="" coords="577,109,763,151"/>
 <area shape="rect" id="node13" title=" " alt="" coords="895,288,981,315"/>
 <area shape="rect" id="node14" title=" " alt="" coords="691,288,734,315"/>
 <area shape="rect" id="node15" title=" " alt="" coords="758,288,817,315"/>

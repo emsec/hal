@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/src/netlist/event_handler.cpp File Reference</title>
+<title>HAL: /home/runner/work/hal/hal/src/netlist/event_system/event_handler.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -88,7 +88,7 @@ $(document).ready(function(){initNavTree('event__handler_8cpp.html',''); initRes
 <div class="title">event_handler.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="event__handler_8h_source.html">hal_core/netlist/event_handler.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="event__handler_8h_source.html">hal_core/netlist/event_system/event_handler.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="event__log_8h_source.html">hal_core/netlist/event_system/event_log.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="grouping_8h_source.html">hal_core/netlist/grouping.h</a>&quot;</code><br />
@@ -97,24 +97,24 @@ $(document).ready(function(){initNavTree('event__handler_8cpp.html',''); initRes
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for event_handler.cpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="event__handler_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2src_2netlist_2event__handler_8cpp" alt=""/></div>
-<map name="_2home_2runner_2work_2hal_2hal_2src_2netlist_2event__handler_8cpp" id="_2home_2runner_2work_2hal_2hal_2src_2netlist_2event__handler_8cpp">
-<area shape="rect" title=" " alt="" coords="421,5,591,61"/>
-<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="242,288,405,329"/>
-<area shape="rect" href="event__log_8h.html" title=" " alt="" coords="366,109,529,151"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="755,206,921,233"/>
-<area shape="rect" href="module_8h.html" title=" " alt="" coords="55,206,242,233"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="551,206,730,233"/>
-<area shape="rect" href="grouping_8h.html" title=" " alt="" coords="922,117,1117,143"/>
-<area shape="rect" href="callback__hook_8h.html" title=" " alt="" coords="551,377,682,419"/>
-<area shape="rect" href="enums_8h.html" title=" " alt="" coords="245,377,375,419"/>
-<area shape="rect" title=" " alt="" coords="167,467,247,493"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="384,467,524,493"/>
-<area shape="rect" title=" " alt="" coords="701,467,788,493"/>
-<area shape="rect" title=" " alt="" coords="989,467,1052,493"/>
-<area shape="rect" href="net_8h.html" title=" " alt="" coords="368,206,527,233"/>
-<area shape="rect" title=" " alt="" coords="859,295,983,322"/>
-<area shape="rect" href="netlist__internal__manager_8h.html" title=" " alt="" coords="997,199,1164,240"/>
+<div class="center"><img src="event__handler_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2src_2netlist_2event__system_2event__handler_8cpp" alt=""/></div>
+<map name="_2home_2runner_2work_2hal_2hal_2src_2netlist_2event__system_2event__handler_8cpp" id="_2home_2runner_2work_2hal_2hal_2src_2netlist_2event__system_2event__handler_8cpp">
+<area shape="rect" title=" " alt="" coords="442,5,642,61"/>
+<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="230,288,415,329"/>
+<area shape="rect" href="event__log_8h.html" title=" " alt="" coords="365,109,528,151"/>
+<area shape="rect" href="gate_8h.html" title=" " alt="" coords="754,206,920,233"/>
+<area shape="rect" href="module_8h.html" title=" " alt="" coords="54,206,241,233"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="550,206,729,233"/>
+<area shape="rect" href="grouping_8h.html" title=" " alt="" coords="910,117,1105,143"/>
+<area shape="rect" href="callback__hook_8h.html" title=" " alt="" coords="544,377,674,419"/>
+<area shape="rect" href="enums_8h.html" title=" " alt="" coords="237,377,368,419"/>
+<area shape="rect" title=" " alt="" coords="157,467,237,493"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="376,467,516,493"/>
+<area shape="rect" title=" " alt="" coords="694,467,780,493"/>
+<area shape="rect" title=" " alt="" coords="982,467,1044,493"/>
+<area shape="rect" href="net_8h.html" title=" " alt="" coords="367,206,526,233"/>
+<area shape="rect" title=" " alt="" coords="851,295,975,322"/>
+<area shape="rect" href="netlist__internal__manager_8h.html" title=" " alt="" coords="996,199,1163,240"/>
 </map>
 </div>
 </div>
@@ -130,8 +130,8 @@ Namespaces</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="event__handler_8cpp.html">event_handler.cpp</a></li>
-    <li class="footer">Generated on Fri Jul 30 2021 10:26:09 for HAL by
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_b501f277d7b770addc1a9f85203c26bf.html">event_system</a></li><li class="navelem"><a class="el" href="event__handler_8cpp.html">event_handler.cpp</a></li>
+    <li class="footer">Generated on Mon Aug 2 2021 05:54:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
