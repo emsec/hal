@@ -49,28 +49,118 @@ namespace hal
     void ModuleElementsTree::handleContextMenuRequested(const QPoint &pos)
     {
         TreeItem* clickedItem = mNetlistElementsModel->getItemFromIndex(indexAt(pos));
+        int id = mNetlistElementsModel->getRepresentedIdOfItem(clickedItem);
+        NetlistElementsTreeModel::itemType type = mNetlistElementsModel->getTypeOfItem(clickedItem);
         QMenu menu;
+
         //Strings for first menu entry (python get net/gate/module)
-        QString getObjectDescription, pythonGetObject;
-        switch (mNetlistElementsModel->getTypeOfItem(clickedItem))
+        QString pythonGetObject, pythonGetName, pythonGetType, pythonGetId;
+        QString plainName, plainType = "not defined";
+        QList<QString> descriptions;
+
+        auto createCommonDescriptionList = [](QString objectType){
+          QList<QString> descriptionList =
+          {
+              QString("Extract %1 as python code").arg(objectType),
+              "Extract name as python code",
+              "Extract type as python code",
+              "Extract id as python code" //does this even makes sense???
+          };
+          return descriptionList;
+        };
+
+        switch (type)
         {
             case NetlistElementsTreeModel::itemType::module:
-                getObjectDescription = "Extract module as python code";
-                pythonGetObject = PyCodeProvider::pyCodeModule(mNetlistElementsModel->getRepresentedIdOfItem(clickedItem)); break;
+                descriptions = createCommonDescriptionList("module");
+                pythonGetObject = PyCodeProvider::pyCodeModule(id);
+                pythonGetName = PyCodeProvider::pyCodeModuleName(id);
+                pythonGetType = PyCodeProvider::pyCodeModuleType(id);
+                pythonGetId = PyCodeProvider::pyCodeModule(id) + ".get_id()"; // kind of retarded, change that..
+                break;
             case NetlistElementsTreeModel::itemType::gate:
-                getObjectDescription = "Extract gate as python code";
-                pythonGetObject = PyCodeProvider::pyCodeGate(mNetlistElementsModel->getRepresentedIdOfItem(clickedItem)); break;
+                descriptions = createCommonDescriptionList("gate");
+                pythonGetObject = PyCodeProvider::pyCodeGate(id);
+                pythonGetName = PyCodeProvider::pyCodeGateName(id);
+                pythonGetType = PyCodeProvider::pyCodeGateType(id);
+                pythonGetId = PyCodeProvider::pyCodeGate(id) + ".get_id()"; // same as above..
+                break;
             case NetlistElementsTreeModel::itemType::net:
-                getObjectDescription = "Extract net as python code";
-                pythonGetObject = PyCodeProvider::pyCodeNet(mNetlistElementsModel->getRepresentedIdOfItem(clickedItem)); break;
+                descriptions = createCommonDescriptionList("net");
+                pythonGetObject = PyCodeProvider::pyCodeNet(id);
+                pythonGetName = PyCodeProvider::pyCodeNetName(id);
+                pythonGetType = PyCodeProvider::pyCodeNetType(id);
+                pythonGetId = PyCodeProvider::pyCodeNet(id) + ".get_id()"; //same as above
+                break;
         }
 
-        menu.addAction(QIcon(":/icons/python"), getObjectDescription,
+        menu.addAction(QIcon(":/icons/python"), descriptions.at(0),
            [pythonGetObject]()
            {
                QApplication::clipboard()->setText(pythonGetObject);
            }
         );
+
+        menu.addAction(QIcon(":/icons/python"), descriptions.at(1),
+           [pythonGetName]()
+           {
+               QApplication::clipboard()->setText(pythonGetName);
+           }
+        );
+
+        menu.addAction(QIcon(":/icons/python"), descriptions.at(2),
+           [pythonGetType]()
+           {
+               QApplication::clipboard()->setText(pythonGetType);
+           }
+        );
+
+        menu.addAction(QIcon(":/icons/python"), descriptions.at(3),
+           [pythonGetId]()
+           {
+               QApplication::clipboard()->setText(pythonGetId);
+           }
+        );
+
+        menu.addSection("here comes the plaintext");
+
+        menu.addAction("Extract name as plain text",
+           [clickedItem]()
+           {
+               QApplication::clipboard()->setText(clickedItem->getData(NetlistElementsTreeModel::sNameColumn).toString());
+           }
+        );
+
+        menu.addAction("Extract type as plain text",
+           [clickedItem]()
+           {
+               QApplication::clipboard()->setText(clickedItem->getData(NetlistElementsTreeModel::sTypeColumn).toString());
+           }
+        );
+
+        menu.addAction("Extract id as plain text",
+           [id]()
+           {
+               QApplication::clipboard()->setText(QString::number(id));
+           }
+        );
+
+        menu.addSection("Misc");
+
+        menu.addAction("Add to current selection",
+           [this, id, type]()
+           {
+            switch(type)
+            {
+                case NetlistElementsTreeModel::itemType::module: gSelectionRelay->addModule(id); break;
+                case NetlistElementsTreeModel::itemType::gate: gSelectionRelay->addGate(id); break;
+                case NetlistElementsTreeModel::itemType::net: gSelectionRelay->addNet(id); break;
+            }
+            gSelectionRelay->relaySelectionChanged(this);
+           }
+        );
+
+
 
 
         menu.move(this->mapToGlobal(pos));
