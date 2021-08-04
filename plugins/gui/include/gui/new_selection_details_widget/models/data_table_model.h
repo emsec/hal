@@ -108,6 +108,12 @@ namespace hal {
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
+        /**
+         * Accesses the DataEntry at the specified row. 
+         * 
+         * @param row - The specified row
+         * @returns the DataEntry at the specified row
+         */
         DataEntry getEntryAtRow(int row) const;
 
         /**
@@ -127,12 +133,11 @@ namespace hal {
             QString valueToolTip;
         };
 
-        RowStyle getRowStyleByEntry(const DataEntry& entry) const;
+        RowStyle getRowStyleByEntry(const DataEntry& entry, int rowIdx) const;
 
         // Map: [category, key] -> row style of the respective entry
         QMap<QPair<QString, QString>, RowStyle> mEntryToRowStyle;
         QList<DataEntry> mDataEntries;
-        QFont mKeyFont;
 
     };
 }

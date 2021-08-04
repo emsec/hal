@@ -2,6 +2,7 @@
 #include "gui/new_selection_details_widget/models/data_table_model.h"
 #include <algorithm>
 #include <QToolTip>
+#include <QRandomGenerator>
 #include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"
 
 
@@ -9,9 +10,7 @@ namespace hal
 {
     DataTableModel::DataTableModel(QObject* parent) : QAbstractTableModel(parent) 
     {
-        mKeyFont = QFont("Iosevka");
-        mKeyFont.setBold(true);
-        mKeyFont.setPixelSize(13);
+
     }
 
     int DataTableModel::columnCount(const QModelIndex &parent) const
@@ -49,12 +48,6 @@ namespace hal
 
         else if (role == Qt::TextAlignmentRole){
             return Qt::AlignLeft;
-        }
-
-        else if (role == Qt::FontRole){
-            if (index.column() == 0 && style.keyFont != QFont()){
-                return mKeyFont;
-            }
         }
 
         else if (role == Qt::ToolTipRole){
@@ -128,15 +121,17 @@ namespace hal
                 });
 
         // Compute the appearance
+        int rowIdx = 0;
         for(const DataEntry entry : mDataEntries)
         {
-            mEntryToRowStyle[QPair(entry.category, entry.key)] = getRowStyleByEntry(entry);
+            mEntryToRowStyle[QPair(entry.category, entry.key)] = getRowStyleByEntry(entry, rowIdx);
+            rowIdx++;
         }
 
         Q_EMIT layoutChanged();
     }
 
-    DataTableModel::RowStyle DataTableModel::getRowStyleByEntry(const DataEntry& entry) const
+    DataTableModel::RowStyle DataTableModel::getRowStyleByEntry(const DataEntry& entry, int rowIdx) const
     {
         RowStyle style;
         style.keyFont = QFont();
@@ -163,18 +158,21 @@ namespace hal
         else
         {
             style.valueString = entry.value;
-            // Sets value tooltips if the data type is unknown
-            style.valueToolTip = entry.dataType;
         }
 
-        if(entry.category == "generic")
+
+        // Hacky solution to prevent that the tooltip in neighboring rows does not change position if the tooltip entry is the same.
+        // Therefore, two different space types are used so that Qt thinks these are different entries.
+        if(rowIdx%2 == 0)
         {
-            style.keyFont = mKeyFont;
+            style.keyToolTip = entry.category + " ";
+            style.valueToolTip = entry.dataType + " ";
         }
-        // If the category is not "generic" the font is not fat and a tooltip displays the category.
         else
         {
-            style.keyToolTip = entry.category;
+            //U+00A0 is a no-break space and therefore another type of space
+            style.keyToolTip = entry.category + QChar(0x00A0); 
+            style.valueToolTip = entry.dataType + QChar(0x00A0);
         }
         
         return style;

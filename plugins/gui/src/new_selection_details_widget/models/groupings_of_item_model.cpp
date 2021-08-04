@@ -82,6 +82,9 @@ namespace hal {
 
     bool GroupingsOfItemModel::setData(const QModelIndex &index, const QVariant &value, int role)
     {
+        Q_UNUSED(index)
+        Q_UNUSED(value)
+        Q_UNUSED(role)
         return false;
     }
 
@@ -159,6 +162,7 @@ namespace hal {
 
     bool GroupingsOfItemModel::removeRows(int row, int count, const QModelIndex &parent)
     {
+        Q_UNUSED(parent)
         if((row + count) > mGroupings.size() || row < 0 || count < 1){
             return false;
         }
@@ -195,6 +199,7 @@ namespace hal {
 
     void GroupingsOfItemModel::handleGroupingGateAssigned(Grouping* grp, u32 id)
     {
+        Q_UNUSED(grp)
         if(mItemType == ItemType::Gate && mItemId == id)
         {
             setGate(gNetlist->get_gate_by_id(id));
@@ -203,6 +208,7 @@ namespace hal {
 
     void GroupingsOfItemModel::handleGroupingGateRemoved(Grouping* grp, u32 id)
     {
+        Q_UNUSED(grp)
         if(mItemType == ItemType::Gate && mItemId == id)
         {
             int idx = getIndexOfGrouping(grp);
@@ -214,6 +220,7 @@ namespace hal {
 
     void GroupingsOfItemModel::handleGroupingNetAssigned(Grouping* grp, u32 id)
     {
+        Q_UNUSED(grp);
         if(mItemType == ItemType::Net && mItemId == id)
         {
             setNet(gNetlist->get_net_by_id(id));
@@ -233,6 +240,7 @@ namespace hal {
 
     void GroupingsOfItemModel::handleGroupingModuleAssigned(Grouping* grp, u32 id)
     {
+        Q_UNUSED(grp)
         if(mItemType == ItemType::Module && mItemId == id)
         {
             setModule(gNetlist->get_module_by_id(id));
