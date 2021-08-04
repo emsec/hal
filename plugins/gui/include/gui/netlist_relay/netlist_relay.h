@@ -400,6 +400,14 @@ namespace hal
          */
         void gateNameChanged(Gate* g) const;
 
+        /**
+         * Q_SIGNAL to notify that the set of boolean functions of a gate has been changed. <br>
+         * Relays the following hal-core event: <i>GateEvent::event::boolean_function_changed</i>
+         *
+         * @param g - The gate which boolean functions haven been changed
+         */
+        void gateBooleanFunctionChanged(Gate* g) const;
+
         /*=======================================
            Net Event Signals
          ========================================*/

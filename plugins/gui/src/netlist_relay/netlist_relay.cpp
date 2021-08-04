@@ -511,6 +511,13 @@ namespace hal
             Q_EMIT gateNameChanged(gat);
             break;
         }
+        case GateEvent::event::boolean_function_changed:
+        {
+            //< no associated_data
+
+            Q_EMIT gateBooleanFunctionChanged(gat);
+            break;
+        }
         default:
             break;
         }
