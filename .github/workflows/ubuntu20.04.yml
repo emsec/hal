@@ -81,6 +81,7 @@ jobs:
         run: |
           mkdir -p build/doc
           cd build
+          export BUILD_TYPE=Debug
           cp $GITHUB_WORKSPACE/documentation/index.html doc/
           $GITHUB_WORKSPACE/tools/genversion.py $GITHUB_WORKSPACE
           cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/ -DPYBIND11_PYTHON_VERSION=3.6
@@ -129,6 +130,7 @@ jobs:
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: |
           cd build
+          export BUILD_TYPE=Debug
           mkdir -p doc/doc
           cmake --build . --target doc --clean-first --config $BUILD_TYPE
           cp -R documentation/cpp-doc/html/* doc/doc/
@@ -145,6 +147,7 @@ jobs:
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: |
           cd build
+          export BUILD_TYPE=Debug
           mkdir -p doc/pydoc
           cmake --build . --target pydoc --clean-first --config $BUILD_TYPE
           cp -R documentation/python-doc/html/* doc/pydoc/

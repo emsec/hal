@@ -56,15 +56,15 @@ namespace hal
         mBottomSplitter->hide();
 
         mLeftSplitter->setChildrenCollapsible(false);
-        mLeftSplitter->setMinimumWidth(240);
+        mLeftSplitter->setMinimumWidth(340);
         mLeftSplitter->setMinimumHeight(240);
 
         mRightSplitter->setChildrenCollapsible(false);
-        mRightSplitter->setMinimumWidth(240);
+        mRightSplitter->setMinimumWidth(340);
         mRightSplitter->setMinimumHeight(240);
 
         mBottomSplitter->setChildrenCollapsible(false);
-        mBottomSplitter->setMinimumWidth(240);
+        mBottomSplitter->setMinimumWidth(340);
         mBottomSplitter->setMinimumHeight(240);
 
         mVerticalSplitter->setChildrenCollapsible(false);

@@ -20,6 +20,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * existing modules can be selected from a table, tree-view, or using a module picker within the graph view
   * enables searching for existing modules
   * added cursor to indicate that user is in module pick mode
+* added successor / predecessor utilities to gate and module context menu
+  * shortest path between two gates can be highlighted or added to current view 
+  * predecessors or successors can be highlighted or added to the current view up to a user-specified depth
+  * different grouping colors can be assigned depending on the distance from the origin
+* improved layouter
+  * fixed routing errors for complex cable swaps
+  * fixed multiple connections of a single net to the same gate not being shown properly
+  * fixed incorrect placement of new gates and modules in cone view when navigating starting from a net
+  * preserve location of gate when moving it to new module
+* Added generic SMT solver interface.
+  * Added translation from `BooleanFunction` to SMT-LIB.
+  * Added `BooleanFunction::Node` data structure to extend functionality to generic ASTs.
+  * Added support for z3 and boolector SMT solvers.
+  * Added cpp-subprocess library to handle communication with SMT solver.
+  * Added Boost Spirit x3 library to generate grammar-based parser from SMT-LIB models to C++ data structures.
 * improved netlist parsers
   * split VHDL and Verilog parsers into two independent plugins
   * netlist parsers now take the path to the netlist file as input instead of a `std::stringstream`
@@ -34,6 +49,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added function `get_common_inputs` to get inputs that are common across multiple gates
   * added function `replace_gate` to replace a gate with an instance of another gate type
   * added function `get_gate_chain` and `get_complex_gate_chain` to find gates that are arranged in a chain
+  * added function `get_shortest_path` to compute the shortest path between two gates
+  * added function `get_next_gates` to get the predecessors or successors of a gate up to a user-specified depth
+* `dataflow_analysis` plugin
+  * can now take groups of flip-flops as input that should not be touched during analysis
+  * this is meant to aid the dataflow analysis by passing control registeres identified beforehand, which prevents them from being merged into the datapath
+* new internal event system 
+  * binds event handlers to a netlist instance
+  * facilitates listening to the events of selected netlists only
+* improved search
+  * all searchbars now come with options for "Exact Match" and "Case Sensitive" search, as well as a "Clear" button
+  * added search icons to the Python editor and the module widget
+  * disabled the search filter whenever the searchbar is not visible within a widget
 * miscellaneous API changes and additions
   * added function `is_top_module` to class `Module` to determine whether a module is the top module
   * added function `get_nets` to class `Module` to get all nets that are connected to any of the gates or submodules of a module
@@ -44,7 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added `Save As...` option to save `.hal` files under a different name
   * added `Export ...` menu to export the netlist using any of the registered netlist writers
   * added `Remove from view` action to context menu for gates and modules
-  * added grouping toolbox feature to highlight successors or predecessors
+  * added context menu options to close multiple view tabs at once
   * added an indicator showing whether views have been modified
   * added HAL version number to the info shown in `About`
   * when trying to create a view for a module that is already associated with an (unchanged) view, the existing view is activated instead of creating a new view
@@ -55,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * fixed drag'n'drop bug related to negative coordinates
   * fixed liberty parser aborting on unknown `pg_type`
   * fixed stylesheets
+  * fixed improper handling of GND and VCC nets within the `solve_fsm` plugin
 
 ## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`

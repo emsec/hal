@@ -47,6 +47,7 @@ compile:package:ubuntu:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
+    - export BUILD_TYPE=MinSizeRel
     - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=ON -DENABLE_PPA=ON -DPACKAGE_DEB=ON
     - export CCACHE_DIR=$(pwd)/../ccache
     - ninja debuild_$(lsb_release -c -s)
@@ -78,6 +79,7 @@ compile:test:ubuntu:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
+    - export BUILD_TYPE=Debug
     - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
     - export CCACHE_DIR=$(pwd)/../ccache
     - cmake --build . --target all --clean-first -- -j4
@@ -94,6 +96,7 @@ compile:doc:doxygen:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
+    - export BUILD_TYPE=Debug
     - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
     - cmake --build . --target doc --clean-first -- -j4
   artifacts:
@@ -113,6 +116,7 @@ compile:doc:python:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
+    - export BUILD_TYPE=Debug
     - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
     - cmake --build . --target pydoc --clean-first -- -j4
   artifacts:
@@ -148,7 +152,7 @@ test:package:ubuntu:
 test:check-core-documentation:
   stage: test
   script:
-    - python3 tools/check_documentation.py include/
+    - python3 tools/check_documentation.py include/ -i include/hal_core/utilities/process.h
   cache: {}
 
 deploy-ppa:
@@ -171,6 +175,7 @@ deploy-ppa:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
+    - export BUILD_TYPE=MinSizeRel
     - cmake .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=OFF -DENABLE_PPA=ON -DUPLOAD_PPA=ON -DPACKAGE_DEB=ON -DSIMULATE_DPUT=OFF -DPPA_GPG_PASSPHRASE_FILE=$PW_FILE_NAME -DPPA_GPG_KEY_ID="C61868710D13DD90"
     - make dput_$(lsb_release -c -s)
     - rm $PW_FILE_NAME

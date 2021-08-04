@@ -27,6 +27,7 @@
 #include "gui/content_widget/content_widget.h"
 #include "hal_core/utilities/log.h"
 #include "gui/gui_utils/graphics.h"
+
 #include <QLabel>
 #include <QMenu>
 #include <QPlainTextEdit>
@@ -38,9 +39,7 @@
 
 namespace hal
 {
-    class FilterTabBar;
     class LoggerMarshall;
-    struct FilterItem;
     class ChannelSelector;
 
     /**
@@ -78,20 +77,12 @@ namespace hal
         QPlainTextEdit* getPlainTextEdit();
 
         /**
-         * Gets the FilterTabBar of this widget.
-         *
-         * @returns the FilterTabBar of this widget
-         */
-        FilterTabBar* getTabBar();
-
-        /**
          * Overrides the QWidget resizeEvent. After resizing the logger should be scrolled to the bottom, but only
          * if the user hasn't interacted with the scrollbar before.
          *
          * @param event
          */
         void resizeEvent(QResizeEvent* event) override;
-
 
     public Q_SLOTS:
         /**
@@ -130,7 +121,6 @@ namespace hal
     private:
         void scrollToBottom();
 
-        FilterTabBar* mTabBar;
         QPlainTextEdit* mPlainTextEdit;
         ChannelSelector* mSelector;
         LoggerMarshall* mLogMarshall;

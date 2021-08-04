@@ -25,6 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/data_container.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 
 #include <functional>
@@ -114,6 +115,12 @@ namespace hal
         Grouping* get_grouping() const;
 
         /**
+         * Get submodule depth of module
+         * @returns 0=top_level module, 1=submodule from top_level, 2=submodule from submodule, ...
+         */
+        int get_submodule_depth() const;
+
+        /**
          * Get the parent module of this module.<br>
          * For the top module, a \p nullptr is returned.
          *
@@ -166,6 +173,7 @@ namespace hal
         Netlist* get_netlist() const;
 
         /**
+         * TODO test
          * Get all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
          *
          * @returns A sorted vector of nets.
@@ -347,7 +355,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Module(u32 id, Module* parent, const std::string& name, NetlistInternalManager* internal_manager);
+        Module(NetlistInternalManager* internal_manager, EventHandler* event_handler, u32 id, Module* parent, const std::string& name);
 
         Module(const Module&) = delete;               //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
@@ -387,5 +395,7 @@ namespace hal
         mutable std::vector<Net*> m_output_nets;
         mutable bool m_internal_nets_dirty;
         mutable std::vector<Net*> m_internal_nets;
+
+        EventHandler* m_event_handler;
     };
 }    // namespace hal

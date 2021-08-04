@@ -62,7 +62,7 @@ For all kinds of inquiries, please contact us using our dedicated e-mail address
 
 ## Ubuntu 20.04
 
-HAL releases are available via it's own ppa, which can be found here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal)
+HAL releases are available via it's own ppa, which can be found here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal). If you wish to always work with the most recent version of HAL, we recommend building HAL yourself.
 
 
 <a name="build-instructions"></a>

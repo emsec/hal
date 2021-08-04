@@ -40,8 +40,6 @@ namespace hal
      * The Searchbar consists of a QLineEdit which can be filled with a substring to search for. If the text within
      * the searchbar changes, a signal textEdited is emitted. Other objects that use the input of the Searchbar may
      * want to connect to this signal to update their respective view.
-     *
-     * The searchbar also contains a 'Mode'-button. When clicked the signal modeClicked is emitted.
      */
     class Searchbar : public QFrame
     {
@@ -50,6 +48,10 @@ namespace hal
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString clearIcon READ clearIcon WRITE setClearIcon)
         Q_PROPERTY(QString clearIconStyle READ clearIconStyle WRITE setClearIconStyle)
+        Q_PROPERTY(QString caseSensitivityIcon READ caseSensitivityIcon WRITE setCaseSensitivityIcon)
+        Q_PROPERTY(QString caseSensitivityIconStyle READ caseSensitivityIconStyle WRITE setCaseSensitivityIconStyle)
+        Q_PROPERTY(QString exactMatchIcon READ exactMatchIcon WRITE setExactMatchIcon)
+        Q_PROPERTY(QString exactMatchIconStyle READ exactMatchIconStyle WRITE setExactMatchIconStyle)
 
     public:
         /**
@@ -65,6 +67,10 @@ namespace hal
         QString searchIconStyle() const;
         QString clearIcon() const;
         QString clearIconStyle() const;
+        QString caseSensitivityIcon() const;
+        QString caseSensitivityIconStyle() const;
+        QString exactMatchIcon() const;
+        QString exactMatchIconStyle() const;
         ///@}
 
         /// @name Q_PROPERTY WRITE Functions
@@ -73,6 +79,10 @@ namespace hal
         void setSearchIconStyle(const QString& style);
         void setClearIcon(const QString& icon);
         void setClearIconStyle(const QString& style);
+        void setCaseSensitivityIcon(const QString& icon);
+        void setCaseSensitivityIconStyle(const QString& style);
+        void setExactMatchIcon(const QString& icon);
+        void setExactMatchIconStyle(const QString& style);
         ///@}
 
         /**
@@ -84,16 +94,19 @@ namespace hal
         void setPlaceholderText(const QString& text);
 
         /**
-         * Sets the label text of the 'Mode'-button.
-         *
-         * @param text - The new 'Mode'-button text
-         */
-        void setModeButtonText(const QString& text);
-
-        /**
          * Empties the Searchbar's QLineEdit.
          */
         void clear();
+
+        /**
+         * Emits textEdited with empty string when hide() is called
+         */
+        void hideEvent(QHideEvent *) override;
+
+        /**
+         * Emits textEdited with getCurrentText() when show() is called
+         */
+        void showEvent(QShowEvent *) override;
 
         /**
          * Gets the current Searchbar input, i.e. the current text in the Searchbar's QLineEdit.
@@ -103,9 +116,45 @@ namespace hal
         QString getCurrentText();
 
         /**
+         * Gets the current Searchbar input with regex modifier.
+         *
+         * @return the current search string
+         */
+        QString getCurrentTextWithFlags();
+
+        /**
+         * Adds flags ("Exact Match" or "Case Sensitive") as regex modifiers to text.
+         *
+         * @return text with regex modifiers as QString
+         */
+        QString addFlags(const QString& text);
+
+        /**
          * Reinitializes the appearance of the Searchbar.
          */
         void repolish();
+
+        /**
+         * @return mExactMatch->isChecked()
+         */
+        bool exactMatchChecked();
+
+        /**
+         * @return mCaseSensitive->isChecked()
+         */
+        bool caseSensitiveChecked();
+
+        /**
+         * A filter is applied when the searchbar contains text or (at least) one of the flags
+         * ("Exact Match" or "Case Sensitive") is checked.
+         *
+         * @return if a filter is applied
+         */
+        bool filterApplied();
+
+        void setEmitTextWithFlags(bool);
+
+        bool getEmitTextWithFlags();
 
     Q_SIGNALS:
         /**
@@ -121,18 +170,11 @@ namespace hal
          */
         void returnPressed();
 
-        /**
-         * Q_SIGNAL that is emitted whenever the 'Mode'-Button has been clicked.
-         */
-        void modeClicked();
-
     public Q_SLOTS:
         /**
-         * Handles changes within the QLineEdit. Emits the signal textEdited.
-         *
-         * @param text - The new search string
+         * Emits textEdited with respect to mEmitTextWithFlags.
          */
-        void handleTextEdited(const QString& text);
+        void emitTextEdited();
 
         /**
          * Handles Return/Enter key pressed. Emits the signal returnPressed.
@@ -140,9 +182,9 @@ namespace hal
         void handleReturnPressed();
 
         /**
-         * Handles 'Mode'-Button clicks. Emits the signal modeClicked.
+         * Handles "Clear"-Button clicks.
          */
-        void handleModeClicked();
+        void handleClearClicked();
 
     private:
         QHBoxLayout* mLayout;
@@ -150,13 +192,24 @@ namespace hal
         QLabel* mSearchIconLabel;
         QLineEdit* mLineEdit;
         QLabel* mClearIconLabel;
-        QPushButton* mModeButton;
+
         QToolButton* mDownButton;
         QToolButton* mUpButton;
+        QToolButton* mCaseSensitiveButton;
+        QToolButton* mExactMatchButton;
+        QToolButton* mClearButton;
 
         QString mSearchIcon;
         QString mSearchIconStyle;
         QString mClearIcon;
         QString mClearIconStyle;
+        QString mCaseSensitivityIcon;
+        QString mCaseSensitivityIconStyle;
+        QString mExactMatchIcon;
+        QString mExactMatchIconStyle;
+
+        // One can decide wether to receive the text (emitted by textEdited) with or without regex modifier
+        // If set to false, one has to manually implement 'Exact Match'/'Case Sensitive' functionality
+        bool mEmitTextWithFlags = true;
     };
 }

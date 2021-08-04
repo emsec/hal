@@ -145,7 +145,7 @@ namespace hal {
         static void terminateCurrentPicker();
 
     Q_SIGNALS:
-        void triggerModuleCursor(bool on);
+        void triggerCursor(int icurs);
 
     public Q_SLOTS:
         void handleSelectionChanged(void* sender);

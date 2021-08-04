@@ -45,9 +45,104 @@ namespace hal {
         routeAllCorner(0,3);
         routeAllCorner(1,2);
         routeAllCorner(1,3);
+        routeAllMultiPin(0);
+        routeAllMultiPin(1);
         calculateRect();
     }
 
+
+    void NetLayoutJunction::routeAllMultiPin(NetLayoutDirection leftOrRight)
+    {
+        int nEntries = mEntries.mEntries[leftOrRight.index()].size();
+
+        QHash<u32,NetLayoutJunctionMultiPin> multiPinHash;
+
+        for (int iroad=0; iroad<nEntries; iroad++)
+        {
+            u32 id = mEntries.mEntries[leftOrRight.index()].at(iroad);
+            if (!id) continue; // pin not connected to any net
+
+            bool isRouted = false;
+
+            for (const NetLayoutJunctionRange& rng : mOccupied[0].value(iroad))
+            {
+                if (rng.isEntry(leftOrRight.index()))
+                {
+                    isRouted = true;
+                    break;
+                }
+            }
+
+            if (isRouted)
+                multiPinHash[id].setRoad(iroad);
+            else
+                multiPinHash[id].mConnector.append(iroad);
+        }
+
+        for (auto it = multiPinHash.begin(); it!= multiPinHash.end(); ++it)
+        {
+            if (it.value().mConnector.isEmpty()) continue;
+            routeSingleMultiPin(it.key(), leftOrRight, it.value());
+        }
+
+
+    }
+
+    void NetLayoutJunction::routeSingleMultiPin(u32 netId, NetLayoutDirection leftOrRight, const NetLayoutJunctionMultiPin& nmpin)
+    {
+        int ymin = nmpin.mRoad;
+        int ymax = nmpin.mRoad;
+        for (int iroad : nmpin.mConnector)
+        {
+            if (iroad < ymin) ymin = iroad;
+            if (iroad > ymax) ymax = iroad;
+        }
+
+        int x0, x1, dx;
+        if (leftOrRight.isLeft())
+        {
+            x0 = -1;
+            x1 = NetLayoutJunctionRange::sMinInf;
+            dx = -1;
+        }
+        else
+        {
+            x0 = maxRoad[NetLayoutDirection::Right];
+            x1 = NetLayoutJunctionRange::sMaxInf;
+            dx = 1;
+        }
+
+        for (int x=x0; x!=x1; x+=dx)
+        {
+            QList<int> roads;
+            QList<NetLayoutJunctionRange> rngs;
+            roads.append(x); // vertical first
+            rngs.append(NetLayoutJunctionRange(netId,ymin,ymax));
+            for (int iroad : nmpin.mConnector)
+            {
+                roads.append(iroad);
+                if (leftOrRight.isLeft())
+                    rngs.append(NetLayoutJunctionRange(netId,x1,x));
+                else
+                    rngs.append(NetLayoutJunctionRange(netId,x,x1));
+            }
+            bool hasConflict = false;
+            for (int i=0; i<roads.size();i++)
+            {
+                if (conflict(i?0:1,roads.at(i),rngs.at(i)))
+                {
+                    hasConflict = true;
+                    break;
+                }
+            }
+            if (!hasConflict)
+            {
+                for (int i=0; i<roads.size();i++)
+                    place(i?0:1,roads.at(i),rngs.at(i));
+                break;
+            }
+        }
+    }
 
     void NetLayoutJunction::calculateRect()
     {
@@ -178,9 +273,9 @@ namespace hal {
                 int roadLink = itNet.value().roadNumber(ilink);
                 int jhoriz = 1-ihoriz;
                 int roadj;
-                if (canJoin(jhoriz,road0,itNet.key(),ilink))
+                if (canJoin(jhoriz,road0,itNet.key(),roadLink))
                     roadj = road0;
-                else if (canJoin(jhoriz,road1,itNet.key(),ilink))
+                else if (canJoin(jhoriz,road1,itNet.key(),roadLink))
                     roadj = road1;
                 else
                 {
@@ -234,6 +329,9 @@ namespace hal {
         QHash<int,int> straightConnected;
         u32 searchPattern = dirFrom.toPattern() | dirTo.toPattern();
 
+        QSet<int> connectedInput, connectedOutput;
+        QList<u32> detourIds;
+
         for (u32 netId : mEntries.mEntries[dirFrom.index()])
         {
             if (netId==0) continue;
@@ -243,14 +341,31 @@ namespace hal {
             {
                 int iroadIn  = itNet.value().roadNumber(dirFrom);
                 int iroadOut = itNet.value().roadNumber(dirTo);
-                if (straightConnected.value(iroadOut,-1) == iroadIn) // swap detected
-                    routeSingleSwap(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
-                else
-                    routeSingleStraight(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
+                if (connectedInput.contains(iroadOut) && connectedOutput.contains(iroadIn))
+                {
+                    // swap detected, cannot route directly
+                    detourIds.append(netId);
+                    continue;
+                }
+                routeSingleStraight(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
                 straightConnected[iroadIn] = iroadOut;
                 if (itNet.value().numberEntries() % 2 ==0)
                     itNet->setPlaced();
+                connectedInput.insert(iroadIn);
+                connectedOutput.insert(iroadOut);
             }
+        }
+
+        for (u32 netId : detourIds)
+        {
+            auto itNet = mNetsInput.find(netId);
+            Q_ASSERT(itNet != mNetsInput.end());
+            int iroadIn  = itNet.value().roadNumber(dirFrom);
+            int iroadOut = itNet.value().roadNumber(dirTo);
+            routeSingleDetour(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
+            straightConnected[iroadIn] = iroadOut;
+            if (itNet.value().numberEntries() % 2 ==0)
+                itNet->setPlaced();
         }
     }
 
@@ -278,7 +393,7 @@ namespace hal {
                                              range.endPosition(1)));
     }
 
-    void NetLayoutJunction::routeSingleSwap(u32 netId, int iMain, int iroadIn, int iroadOut)
+    void NetLayoutJunction::routeSingleDetour(u32 netId, int iMain, int iroadIn, int iroadOut)
     {
         int iJump = 1-iMain;
         int iroadJump0 = -1;
@@ -574,6 +689,14 @@ namespace hal {
         return NetLayoutJunctionWire(hor, rd, mFirst, mLast);
     }
 
+    bool NetLayoutJunctionRange::canJoin(const NetLayoutJunctionRange& other) const
+    {
+        if (mNetId != other.mNetId) return false;
+        if (mFirst > other.mLast) return false;
+        if (other.mFirst > mLast) return false;
+        return true;
+    }
+
     bool NetLayoutJunctionRange::canJoin(u32 netId, int pos) const
     {
         if (netId != mNetId) return false;
@@ -592,6 +715,13 @@ namespace hal {
         return mLast * sSceneDelta + sSceneFirst;
     }
 
+    bool NetLayoutJunctionRange::operator==(const NetLayoutJunctionRange& other) const
+    {
+        return (mNetId == other.mNetId &&
+                mFirst == other.mFirst &&
+                mLast  == other.mLast);
+    }
+
     bool NetLayoutJunctionRange::conflict(const NetLayoutJunctionRange& other) const
     {
         if (mNetId == other.mNetId) return false;
@@ -603,6 +733,29 @@ namespace hal {
     {
         if (!inx) return mFirst;
         return mLast;
+    }
+
+    bool NetLayoutJunctionRange::isEntry(int inx) const
+    {
+        if (inx) return (mLast == sMaxInf);
+        return         (mFirst == sMinInf);
+    }
+
+    void NetLayoutJunctionRange::expand(const NetLayoutJunctionRange &other)
+    {
+        if (other.mFirst < mFirst) mFirst = other.mFirst;
+        if (other.mLast  > mLast)  mLast  = other.mLast;
+    }
+
+    void NetLayoutJunctionOccupied::add(const NetLayoutJunctionRange& rng)
+    {
+        for (auto it = begin(); it!= end(); ++it)
+            if (it->canJoin(rng))
+            {
+                it->expand(rng);
+                return;
+            }
+        append(rng);
     }
 
     bool NetLayoutJunctionOccupied::canJoin(u32 netId, int pos) const

@@ -25,6 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/data_container.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 
 #include <functional>
 #include <map>
@@ -177,7 +178,7 @@ namespace hal
          *
          * @returns The (first) source endpoint.
          */
-        [[deprecated("Use get_sources() instead.")]] Endpoint* get_source() const;
+        [[deprecated("Will be removed in a future version. Use get_sources() instead.")]] Endpoint* get_source() const;
 
         /*
          *      dst specific functions
@@ -309,7 +310,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        explicit Net(NetlistInternalManager* internal_manager, const u32 id, const std::string& name = "");
+        explicit Net(NetlistInternalManager* internal_manager, EventHandler* event_handler, const u32 id, const std::string& name = "");
 
         Net(const Net&) = delete;
         Net(Net&&)      = delete;
@@ -332,5 +333,7 @@ namespace hal
         std::vector<std::unique_ptr<Endpoint>> m_sources;
         std::vector<Endpoint*> m_destinations_raw;
         std::vector<Endpoint*> m_sources_raw;
+
+        EventHandler* m_event_handler;
     };
 }    // namespace hal

@@ -29,7 +29,6 @@
 #include "gui/searchbar/searchbar.h"
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/module_widget/module_tree_view.h"
-#include "hal_core/netlist/event_system/module_event_handler.h"
 #include "hal_core/netlist/module.h"
 
 #include <QAction>
@@ -54,6 +53,9 @@ namespace hal
     class ModuleWidget : public ContentWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
+        Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
+        Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
 
     public:
         /**
@@ -68,7 +70,7 @@ namespace hal
          *
          * @param Toolbar - The toolbar to configure
          */
-        virtual void setupToolbar(Toolbar* Toolbar) override;
+        virtual void setupToolbar(Toolbar* toolbar) override;
 
         /**
          * Creates and registers the shortcuts associated with the ModuleWidget.
@@ -93,6 +95,22 @@ namespace hal
          */
         ModuleProxyModel* proxyModel();
 
+        /** @name Q_PROPERTY READ Functions
+         */
+        ///@{
+        QString searchIconPath() const;
+        QString searchIconStyle() const;
+        QString searchActiveIconStyle() const;
+        ///@}
+
+        /** @name Q_PROPERTY WRITE Functions
+         */
+        ///@{
+        void setSearchIconPath(const QString &path);
+        void setSearchIconStyle(const QString &style);
+        void setSearchActiveIconStyle(const QString &style);
+        ///@}
+
     public Q_SLOTS:
         /**
          * Q_SLOT to open/close the searchbar of the ModuleWidget depending on whether it is already open or not.
@@ -105,6 +123,11 @@ namespace hal
          * @param text - Contains the regular expression filter as a string
          */
         void filter(const QString& text);
+
+        /**
+         * Q_SLOT to update the search icon style. The search icon style indicates wether a filter is applied or not.
+         */
+        void updateSearchIcon();
 
         /**
          * Q_SLOT to open and handle the context menu of a module in the ModuleWidget.
@@ -144,9 +167,14 @@ namespace hal
          */
         void handleModuleRemoved(Module* module, u32 module_id);
 
+
     private:
         ModuleTreeView* mTreeView;
-        Searchbar mSearchbar;
+        Searchbar* mSearchbar;
+
+        QString mSearchIconPath;
+        QString mSearchIconStyle;
+        QString mSearchActiveIconStyle;
 
         QAction* mFilterAction;
 

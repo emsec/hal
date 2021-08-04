@@ -27,6 +27,7 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/data_container.h"
 #include "hal_core/netlist/endpoint.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <functional>
@@ -252,18 +253,22 @@ namespace hal
          */
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get a list of all input pin types of the gate.
          *
          * @returns A vector of input pin types.
          */
-        std::vector<std::string> get_input_pins() const;
+        [[deprecated("Will be removed in a future version. Use get_type()->get_input_pins() instead.")]] std::vector<std::string> get_input_pins() const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get a list of all output pin types of the gate.
          *
          * @returns A vector of output pin types.
          */
-        std::vector<std::string> get_output_pins() const;
+        [[deprecated("Will be removed in a future version. Use get_type()->get_output_pins() instead.")]] std::vector<std::string> get_output_pins() const;
 
         /**
          * Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
@@ -392,7 +397,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Gate(NetlistInternalManager* mgr, u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
+        Gate(NetlistInternalManager* mgr, EventHandler* event_handler, u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
 
         Gate(const Gate&) = delete;
         Gate(Gate&&)      = delete;
@@ -431,5 +436,7 @@ namespace hal
 
         /* dedicated functions */
         std::unordered_map<std::string, BooleanFunction> m_functions;
+
+        EventHandler* m_event_handler;
     };
 }    // namespace hal

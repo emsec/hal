@@ -25,6 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_config.h"
+#include "gui/gui_def.h"
 #include <vector>
 #include <QObject>
 #include <QPair>
@@ -242,6 +243,12 @@ namespace hal
          */
         QList<u32> selectedModulesList() const { return mSelectedModules.toList(); }
 
+        /**
+         * Get a list of all selected modules and gates as nodes
+         *
+         * @return the list of nodes
+         */
+        QList<Node> selectedNodesList() const;
 
         /**
          * Gets a list of ids of all selected gates as an std::vector.

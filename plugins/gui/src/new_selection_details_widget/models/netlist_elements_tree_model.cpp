@@ -3,6 +3,7 @@
 #include "hal_core/netlist/gate.h"
 #include "gui/gui_globals.h"
 #include <QDebug>
+#include <QQueue>
 
 namespace hal
 {

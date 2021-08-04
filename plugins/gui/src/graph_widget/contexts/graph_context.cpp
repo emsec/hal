@@ -4,12 +4,10 @@
 
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/layouters/layouter_task.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_def.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/user_action/user_action_manager.h"
-#include "gui/style/style_manager.h"
 #include <QVector>
 #include <QJsonArray>
 #include "gui/main_window/main_window.h"
@@ -201,13 +199,26 @@ namespace hal
             auto m = gNetlist->get_module_by_id(id);
             QSet<u32> gates;
             QSet<u32> modules;
-            for (const auto& g : m->get_gates())
+
+            Node singleContentNode;
+
+            for (const Gate* g : m->get_gates())
             {
+                singleContentNode = Node(g->get_id(),Node::Gate);
                 gates.insert(g->get_id());
             }
-            for (auto sm : m->get_submodules())
+            for (const Module* sm : m->get_submodules())
             {
+                singleContentNode = Node(sm->get_id(),Node::Module);
                 modules.insert(sm->get_id());
+            }
+
+            PlacementHint plc;
+            if (gates.size() + modules.size() == 1)
+            {
+                plc = PlacementHint(PlacementHint::GridPosition);
+                plc.addGridPosition(singleContentNode,
+                                    mLayouter->nodeToPositionMap().value(Node(id,Node::Module)));
             }
 
             // That would unfold the empty module into nothing, meaning there would
@@ -216,7 +227,7 @@ namespace hal
 
             beginChange();
             remove({id}, {});
-            add(modules, gates);
+            add(modules, gates, plc);
             endChange();
         }
         setDirty(false);
@@ -327,6 +338,28 @@ namespace hal
         }
 
         return false;
+    }
+
+    Node GraphContext::getNetSource(const Net *n) const
+    {
+        for (Endpoint* ep : n->get_sources())
+        {
+            Gate* g = ep->get_gate();
+            NodeBox* box = mLayouter->boxes().boxForGate(g);
+            if (box) return box->getNode();
+        }
+        return Node();
+    }
+
+    Node GraphContext::getNetDestination(const Net* n) const
+    {
+        for (Endpoint* ep : n->get_destinations())
+        {
+            Gate* g = ep->get_gate();
+            NodeBox* box = mLayouter->boxes().boxForGate(g);
+            if (box) return box->getNode();
+        }
+        return Node();
     }
 
     const QSet<u32>& GraphContext::modules() const
@@ -558,7 +591,6 @@ namespace hal
     void GraphContext::handleStyleChanged(int istyle)
     {
         Q_UNUSED(istyle);
-        StyleManager::get_instance()->repolish();
         handleLayouterFinished();
     }
 

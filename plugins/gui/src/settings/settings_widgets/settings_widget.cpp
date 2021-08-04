@@ -74,7 +74,7 @@ namespace hal
     bool SettingsWidget::matchLabel(const QString& needle)
     {
         if (!mSettingsItem) return false;
-        return mSettingsItem->label().indexOf(needle,0,Qt::CaseInsensitive) >= 0;
+        return QRegularExpression(needle).match(mSettingsItem->label()).hasMatch();
     }
 
     void SettingsWidget::trigger_setting_updated()

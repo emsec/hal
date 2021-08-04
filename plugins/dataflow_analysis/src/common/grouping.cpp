@@ -208,5 +208,14 @@ namespace hal
             }
             return merged_allowed_register_stage;
         }
+
+        bool Grouping::is_group_allowed_to_split(u32 group_id)
+        {
+            if (this->operations_on_group_allowed[group_id])
+            {
+                return true;
+            }
+            return false;
+        }
     }    // namespace dataflow
 }    // namespace hal

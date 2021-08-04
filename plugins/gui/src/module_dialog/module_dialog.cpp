@@ -7,6 +7,7 @@
 #include "gui/searchbar/searchbar.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
+#include "hal_core/utilities/log.h"
 
 #include <QDialogButtonBox>
 #include <QGridLayout>
@@ -17,7 +18,7 @@
 
 namespace hal {
     ModuleDialog::ModuleDialog(QWidget* parent)
-        : QDialog(parent), mSelectedId(0), mNewModule(false)
+        : QDialog(parent), mSelectedId(0), mSearchbar(new Searchbar(this)), mNewModule(false)
     {
         setWindowTitle("Move to module …");
         QGridLayout* layout = new QGridLayout(this);
@@ -30,15 +31,13 @@ namespace hal {
         connect(mButtonPick, &QPushButton::pressed, this, &ModuleDialog::handlePickFromGraph);
         layout->addWidget(mButtonPick, 0, 1);
 
-        mSearchbar = new Searchbar(this);
         layout->addWidget(mSearchbar, 1, 0, 1, 2);
-
         mTabWidget = new QTabWidget(this);
         mTreeView  = new QTreeView(mTabWidget);
         mTabWidget->addTab(mTreeView, "Module tree");
 
-        mTableView = new ModuleSelectView(false,mSearchbar,mTabWidget);
-        connect(mTableView,&ModuleSelectView::moduleSelected,this,&ModuleDialog::handleTableSelection);
+        mTableView = new ModuleSelectView(false, mSearchbar, mTabWidget);
+        connect(mTableView, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
         if (!ModuleSelectHistory::instance()->isEmpty())
@@ -55,13 +54,19 @@ namespace hal {
 
         layout->addWidget(mTabWidget, 2, 0, 1, 2);
 
+        mModuleSelectModel = new ModuleSelectModel(false);
+        mModuleTableProxyModel = new ModuleSelectProxy();
+        mModuleTableProxyModel->setFilterKeyColumn(-1);
+        mModuleTableProxyModel->setDynamicSortFilter(true);
+        mModuleTableProxyModel->setSourceModel(mModuleSelectModel);
+        mTableView->setModel(mModuleTableProxyModel);
+
         mModuleTreeProxyModel = new ModuleProxyModel(this);
         mModuleTreeProxyModel->setFilterKeyColumn(-1);
         mModuleTreeProxyModel->setDynamicSortFilter(true);
         mModuleTreeProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
-       //mModuleProxyModel->setRecursiveFilteringEnabled(true);
-        mModuleTreeProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
         mTreeView->setModel(mModuleTreeProxyModel);
+        mTreeView->expandAll();
 
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
         layout->addWidget(mButtonBox, 3, 1);
@@ -73,11 +78,12 @@ namespace hal {
         mTabWidget->setCurrentIndex(1);
         enableButtons();
 
-        connect(mToggleSearchbar,&QAction::triggered,this,&ModuleDialog::handleToggleSearchbar);
-        connect(ContentManager::sSettingSearch,&SettingsItemKeybind::keySequenceChanged,this,&ModuleDialog::keybindToggleSearchbar);
+        connect(mToggleSearchbar, &QAction::triggered, this, &ModuleDialog::handleToggleSearchbar);
+        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleDialog::filter);
+        connect(ContentManager::sSettingSearch, &SettingsItemKeybind::keySequenceChanged, this, &ModuleDialog::keybindToggleSearchbar);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-        connect(mTreeView->selectionModel(),&QItemSelectionModel::currentChanged,this,&ModuleDialog::handleTreeSelectionChanged);
+        connect(mTreeView->selectionModel(), &QItemSelectionModel::currentChanged, this, &ModuleDialog::handleTreeSelectionChanged);
     }
 
     void ModuleDialog::enableButtons()
@@ -146,17 +152,33 @@ namespace hal {
     void ModuleDialog::handleToggleSearchbar()
     {
         if (mSearchbar->isHidden())
+        {
             mSearchbar->show();
+            mSearchbar->setFocus();
+        }
         else
         {
             mSearchbar->hide();
-            mSearchbar->clear();
+            setFocus();
         }
     }
 
     void ModuleDialog::keybindToggleSearchbar(const QKeySequence& seq)
     {
         mToggleSearchbar->setShortcut(seq);
+    }
+
+    void ModuleDialog::filter(const QString& text)
+    {
+        QRegularExpression* regex = new QRegularExpression(text);
+        if (regex->isValid())
+        {
+            mModuleTreeProxyModel->setFilterRegularExpression(*regex);
+            mModuleTableProxyModel->setFilterRegularExpression(*regex);
+            mTreeView->expandAll();
+            QString output = "navigation regular expression '" + text + "' entered.";
+            log_info("user", output.toStdString());
+        }
     }
 }
 
