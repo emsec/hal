@@ -35,6 +35,14 @@
 
 namespace hal
 {
+    ExternalContent* ExternalContent::inst = nullptr;
+
+    ExternalContent* ExternalContent::instance()
+    {
+        if (!inst) inst = new ExternalContent;
+        return inst;
+    }
+
     SettingsItemDropdown* ContentManager::sSettingSortMechanism;
     SettingsItemKeybind* ContentManager::sSettingSearch;
     bool ContentManager::sSettingsInitialized = initializeSettins();
@@ -223,6 +231,13 @@ namespace hal
         gGraphContextManager->restoreFromFile();
         new_context->setDirty(false);
 
+        int count = 6;
+        for (ContentFactory* cf : *ExternalContent::instance())
+        {
+            ContentWidget* cw = cf->contentFactory();
+            mMainWindow->addContent(cw, count++, content_anchor::right);
+            cw->open();
+        }
     }
 
     void ContentManager::setWindowTitle(const QString &filename)
