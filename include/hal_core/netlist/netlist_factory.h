@@ -32,6 +32,7 @@ namespace hal
     /* forward declaration */
     class Netlist;
     class GateLibrary;
+    class ProjectDirectory;
 
     /**
      * @file
@@ -83,7 +84,7 @@ namespace hal
          * @param[in] args - Command line arguments.
          * @returns The netlist on success, nullptr otherwise.
          */
-        NETLIST_API std::unique_ptr<Netlist> load_netlist(const ProgramArguments& args);        
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const ProjectDirectory& pdir, const ProgramArguments& args);
 
         /**
           * Create a netlist from a given file for each matching pre-loaded gate library.

@@ -306,7 +306,7 @@ int main(int argc, const char* argv[])
     }
     else
     {
-        netlist = netlist_factory::load_netlist(args);
+        netlist = netlist_factory::load_netlist(pm->get_project_directory(), args);
     }
 
     if (netlist == nullptr)

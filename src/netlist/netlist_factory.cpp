@@ -7,6 +7,7 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/program_arguments.h"
 #include "hal_core/utilities/project_manager.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include <fstream>
 #include <unistd.h>
@@ -74,15 +75,11 @@ namespace hal
             return retval;
         }
 
-        std::unique_ptr<Netlist> load_netlist(const ProgramArguments& args)
+        std::unique_ptr<Netlist> load_netlist(const ProjectDirectory& pdir, const ProgramArguments& args)
         {
-            if (!args.is_option_set("--import-netlist"))
-            {
-                log_critical("netlist", "no file to process specified.");
-                return nullptr;
-            }
-
-            std::filesystem::path netlist_file = std::filesystem::path(args.get_parameter("--import-netlist"));
+            std::filesystem::path netlist_file = args.is_option_set("--import-netlist")
+                    ? std::filesystem::path(args.get_parameter("--import-netlist"))
+                    : pdir.get_default_filename();
 
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
             {
@@ -91,7 +88,6 @@ namespace hal
             }
 
             auto extension = netlist_file.extension();
-
 
             if (extension == ".hal")
             {
