@@ -3,7 +3,10 @@
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
 #include <QHeaderView>
-#include <QtDebug>
+#include <QClipboard>
+#include <QApplication>
+#include <QMenu>
+#include "gui/new_selection_details_widget/py_code_provider.h"
 
 namespace hal
 {
@@ -50,13 +53,55 @@ namespace hal
             return;
 
         TreeItem* clickedItem = mPinModel->getItemFromIndex(idx);
-        switch(mPinModel->getTypeOfItem(clickedItem))
+        QMenu menu;
+
+        //extract the net(s) if its a pin, a list of the pinnames if its a grouping
+        if(mPinModel->getTypeOfItem(clickedItem) == PinTreeModel::itemType::pin)
         {
-            case PinTreeModel::itemType::pin: qDebug() << "Im a pin!!"; break;
-            case PinTreeModel::itemType::grouping: qDebug() << "Im a grouping!"; break;
+            QList<int> netIdsOfItem = mPinModel->getNetIDsOfTreeItem(clickedItem);
+            QString pythonCommandNetIds, pythonCommandName;
+
+            if(netIdsOfItem.size() == 1)
+            {
+                pythonCommandNetIds = PyCodeProvider::pyCodeNet(netIdsOfItem.at(0));
+                pythonCommandName = PyCodeProvider::pyCodeNetName(netIdsOfItem.at(0));
+            }
+            else if(netIdsOfItem.size() == 2)
+            {
+                pythonCommandNetIds = "netInput = " + PyCodeProvider::pyCodeNet(netIdsOfItem.at(0)) + "\nnetOutput = " + PyCodeProvider::pyCodeNet(netIdsOfItem.at(1));
+                pythonCommandName = "netInputName = " + PyCodeProvider::pyCodeNetName(netIdsOfItem.at(0)) + "\nnetOutputName = " + PyCodeProvider::pyCodeNetName(netIdsOfItem.at(1));
+            }
+
+            menu.addAction(QIcon(":/icons/python"), "Extract net(s) as python code",
+                [pythonCommandNetIds]()
+                {
+                    QApplication::clipboard()->setText(pythonCommandNetIds);
+                });
+
+            //name can only be extracted as python code if its a net
+            menu.addAction(QIcon(":/icons/python"), "Extract net(s) name(s) as python code",
+                [pythonCommandName]()
+                {
+                    QApplication::clipboard()->setText(pythonCommandName);
+                });
+
+        }else
+        {
+            QString pythonList = "[";
+            for(auto childPin : clickedItem->getChildren())
+                pythonList += childPin->getData(PinTreeModel::sNameColumn).toString() + ", ";
+            pythonList = pythonList.left(pythonList.size()-2);
+            pythonList += "]";
+
+            menu.addAction(QIcon(":/icons/python"), "Extract pingroup as python list",
+                [pythonList]()
+                {
+                    QApplication::clipboard()->setText(pythonList);
+                });
         }
 
-        qDebug() << "clicked name of item " << clickedItem->getData(0).toString();
+        menu.move(mapToGlobal(pos));
+        menu.exec();
 
     }
 
