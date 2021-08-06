@@ -41,17 +41,17 @@ namespace hal {
         QString groupName() const { return mGroupName; }
     private Q_SLOTS:
         void handleNewGroupingClicked();
-        void handleRemoveGroupingClicked();
         void handleToggleSearchbar();
         void handleFilterTextChanged(const QString& text);
+        void handleDoubleClicked(const QModelIndex& index);
         void handleSelectionChanged();
     private:
+        QString getGroupName(const QModelIndex& proxyIndex);
+
         GroupingTableModel* mGroupingTableModel;
         QTableView* mGroupingTableView;
         GroupingProxyModel* mProxyModel;
-
         QDialogButtonBox* mButtonBox;
-
         Searchbar* mSearchbar;
 
         QString mGroupName;

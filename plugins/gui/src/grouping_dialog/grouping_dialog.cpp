@@ -1,3 +1,4 @@
+#include "gui/grouping/grouping_color_delegate.h"
 #include "gui/grouping_dialog/grouping_dialog.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/user_action/action_create_object.h"
@@ -38,16 +39,22 @@ namespace hal {
         layout->addWidget(mSearchbar, 1, 0, 1, 3);
 
         mProxyModel->setSourceModel(mGroupingTableModel);
+        mProxyModel->setSortMechanism(gui_utility::natural);
         mProxyModel->setSortRole(Qt::UserRole);
 
         mGroupingTableView->setModel(mProxyModel);
         mGroupingTableView->setSelectionMode(QAbstractItemView::SingleSelection);
         mGroupingTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        mGroupingTableView->setItemDelegateForColumn(2, new GroupingColorDelegate(mGroupingTableView));
+        mGroupingTableView->setSortingEnabled(true);
+        mGroupingTableView->sortByColumn(0, Qt::SortOrder::AscendingOrder);
+
         mGroupingTableView->verticalHeader()->hide();
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
         mGroupingTableView->horizontalHeader()->setDefaultAlignment(Qt::AlignHCenter | Qt::AlignCenter);
+
         layout->addWidget(mGroupingTableView, 2, 0, 1, 3);
 
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
@@ -58,20 +65,12 @@ namespace hal {
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
         connect(mGroupingTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &GroupingDialog::handleSelectionChanged);
+        connect(mGroupingTableView, &QTableView::doubleClicked, this, &GroupingDialog::handleDoubleClicked);
     }
 
     void GroupingDialog::handleNewGroupingClicked()
     {
         ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::Grouping);
-        act->exec();
-    }
-
-    void GroupingDialog::handleRemoveGroupingClicked()
-    {
-        int irow = mProxyModel->mapToSource(mGroupingTableView->currentIndex()).row();
-        u32 grpId = mGroupingTableModel->groupingAt(irow).id();
-        ActionDeleteObject* act = new ActionDeleteObject;
-        act->setObject(UserActionObject(grpId,UserActionObjectType::Grouping));
         act->exec();
     }
 
@@ -89,6 +88,12 @@ namespace hal {
         }
     }
 
+    void GroupingDialog::handleDoubleClicked(const QModelIndex& index)
+    {
+        mGroupName = getGroupName(index);
+        accept();
+    }
+
     void GroupingDialog::handleFilterTextChanged(const QString& text)
     {
         mProxyModel->setFilterRegularExpression(text);
@@ -96,13 +101,21 @@ namespace hal {
 
     void GroupingDialog::handleSelectionChanged()
     {
-        auto rowId = mGroupingTableView->selectionModel()->selectedRows().at(0).row();
-        mGroupName = mGroupingTableModel->groupingAt(rowId).name();
-        if (mGroupingTableView->selectionModel()->selectedRows().empty())
+        auto selectedRows = mGroupingTableView->selectionModel()->selectedRows();
+        if (selectedRows.empty())
         {
             mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-        } else {
-            mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
         }
+        else
+        {
+            mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+            mGroupName = getGroupName(selectedRows.at(0));
+        }
+    }
+
+    QString GroupingDialog::getGroupName(const QModelIndex& proxyIndex)
+    {
+        auto sourceIndex = mProxyModel->mapToSource(proxyIndex);
+        return mGroupingTableModel->groupingAt(sourceIndex.row()).name();
     }
 }
