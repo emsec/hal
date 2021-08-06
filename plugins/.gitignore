@@ -25,6 +25,8 @@
 !python_shell/**/*
 !solve_fsm*
 !solve_fsm/**/*
+!vcd_viewer*
+!vcd_viewer/**/*
 !verilog_parser*
 !verilog_parser/**/*
 !verilog_writer*
