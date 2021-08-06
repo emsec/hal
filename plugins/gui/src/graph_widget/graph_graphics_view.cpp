@@ -697,7 +697,7 @@ namespace hal
                 }
             }
 
-            if (gSelectionRelay->numberSelectedNodes() > 1)
+            if (gSelectionRelay->numberSelectedItems() > 1)
             {
                 context_menu.addSeparator();
                 context_menu.addAction("Entire selection:")->setEnabled(false);
@@ -736,12 +736,6 @@ namespace hal
                         connect(action, &QAction::triggered, this, &GraphGraphicsView::handleModuleDialog);
                     }
                 }
-
-                action = context_menu.addAction("  Assign to grouping …");
-                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingDialog);
-
-                action = context_menu.addAction("  Remove grouping assignment …");
-                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
             }
 
             if (gSelectionRelay->numberSelectedNodes() > 1)
@@ -763,6 +757,12 @@ namespace hal
                     QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleUnfoldAllAction);
                 }
             }
+
+            action = context_menu.addAction("  Assign to grouping …");
+            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingDialog);
+
+            action = context_menu.addAction("  Remove grouping assignment …");
+            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
         }
 
         // if (!item || isNet)
@@ -1373,7 +1373,6 @@ namespace hal
     {
         GroupingDialog gd(this);
         if (gd.exec() != QDialog::Accepted) return;
-        handleGroupingUnassign();
         gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction(gd.groupName());
     }
 
