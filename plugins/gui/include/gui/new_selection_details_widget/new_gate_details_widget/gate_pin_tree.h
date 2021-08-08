@@ -30,6 +30,7 @@ namespace hal
 {
     class PinTreeModel;
     class Gate;
+    class TreeItem;
 
     class GatePinTree : public QTreeView
     {
@@ -47,6 +48,10 @@ namespace hal
     private:
         PinTreeModel* mPinModel;
         int mGateID;
+
+        //helper functions
+        void buildPythonMenuForPin(QMenu &menu, TreeItem* clickedPinItem);
+        void buildPythonMenuForPinGroup(QMenu &menu, TreeItem* clickedPinIGrouptem);
 
     };
 

@@ -39,6 +39,7 @@ namespace hal
     void PinTreeModel::setGate(Gate *g)
     {
         clear();
+        mGateId = g->get_id();
 
         beginResetModel();
         GateType* gateType = g->get_type();

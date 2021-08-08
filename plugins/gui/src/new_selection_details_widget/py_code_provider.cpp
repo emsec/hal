@@ -35,6 +35,16 @@ namespace hal
         return buildPyCode(gateCodePrefix, suffix, gateId);
     }
 
+    QString PyCodeProvider::pyCodeGateTypePinDirection(u32 gateID, QString pin)
+    {
+        return pyCodeGateType(gateID) + QString(".get_pin_direction(\"%1\")").arg(pin);
+    }
+
+    QString PyCodeProvider::pyCodeGateTypePinType(u32 gateID, QString pin)
+    {
+        return pyCodeGateType(gateID) + QString(".get_pin_type(\"%1\")").arg(pin);
+    }
+
     QString PyCodeProvider::pyCodeGateBooleanFunction(u32 gateId, QString booleanFunctionName)
     {
         const QString suffix = QString("get_boolean_function(\"%1\")").arg(booleanFunctionName);
