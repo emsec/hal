@@ -14,8 +14,11 @@ namespace hal {
         QString mName;
         int mValue;
         QPoint mMousePoint;
+        QPoint mMouseRelative;
         QRectF mDeleteRect;
+        int mState;
 
+        WaveLabel* mGhostShape;
         static QPixmap* sXdelete;
 
         QBrush valueBackground() const;
@@ -24,16 +27,21 @@ namespace hal {
         void mouseDoubleClickEvent(QMouseEvent *event) override;
         void mousePressEvent(QMouseEvent *event) override;
         void mouseReleaseEvent(QMouseEvent *event) override;
+        void mouseMoveEvent(QMouseEvent *event) override;
 
     Q_SIGNALS:
         void doubleClicked(int inx);
         void triggerDelete(int inx);
+        void triggerSwap(int inx, int iypos);
+        void triggerMove(int inx, int iypos);
 
     public:
         explicit WaveLabel(int inx, const QString& nam, QWidget *parent = nullptr);
         void setDataIndex(int inx) { mDataIndex = inx; }
         void setValue(int val);
         void paintEvent(QPaintEvent *event) override;
+        int state() const { return mState; }
+        void setState(int v) { mState = v; }
         static QPixmap* piXdelete();
     };
 }

@@ -13,7 +13,7 @@ namespace hal {
         int tValue(float t) const;
         void setStartvalue(int val);
         bool insertToggleTime(int t);
-
+        QString textValue(const QMap<int,int>::const_iterator& it) const;
         static WaveData* clockFactory(int start, int cycle, int duration);
     };
 }

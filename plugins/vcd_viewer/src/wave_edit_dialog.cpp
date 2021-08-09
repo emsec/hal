@@ -5,7 +5,6 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QIcon>
-#include <QDebug>
 #include <QPixmap>
 #include <QPainter>
 #include <QHeaderView>
@@ -71,7 +70,6 @@ namespace hal {
     {
         QPushButton* but = static_cast<QPushButton*>(sender());
         if (!but) return;
-        qDebug() << "delete clicked" << but->property("row").toInt();
     }
 
     //-------------------------------------------
@@ -108,7 +106,7 @@ namespace hal {
             switch (index.column())
             {
             case 0: return it.key();
-            case 1: return it.value();
+            case 1: return mWaveData.textValue(it);
             case 2: return QString();
             default: return QVariant();
             }

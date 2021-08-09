@@ -8,7 +8,7 @@ namespace hal {
     QPixmap* WaveLabel::sXdelete = nullptr;
 
     WaveLabel::WaveLabel(int inx, const QString &nam, QWidget *parent)
-        : QWidget(parent), mDataIndex(inx), mName(nam), mValue(0)
+        : QWidget(parent), mDataIndex(inx), mName(nam), mValue(0), mState(0), mGhostShape(nullptr)
     {;}
 
     QPixmap* WaveLabel::piXdelete()
@@ -33,15 +33,51 @@ namespace hal {
     void WaveLabel::mousePressEvent(QMouseEvent *event)
     {
         mMousePoint = event->pos();
+        mMouseRelative = mMousePoint - pos();
+        update();
+    }
+
+    void WaveLabel::mouseMoveEvent(QMouseEvent *event)
+    {
+        QPoint delta = event->pos() - mMousePoint;
+        if (abs(delta.x())>=2 && abs(delta.y())>=2)
+        {
+            mState = 1;
+            QWidget* w = static_cast<QWidget*>(parent());
+            if (!mGhostShape)
+            {
+                mGhostShape = new WaveLabel(-1, mName, w);
+                mGhostShape->mValue = mValue;
+                mGhostShape->mState = 3;
+                mGhostShape->setFixedWidth(width());
+                mGhostShape->show();
+            }
+            QPoint gpos = event->pos()-mMouseRelative;
+            mGhostShape->move(gpos);
+            Q_EMIT triggerMove(mDataIndex, gpos.y());
+            update();
+        }
     }
 
     void WaveLabel::mouseReleaseEvent(QMouseEvent *event)
     {
+        if (mGhostShape)
+        {
+            WaveLabel* del = mGhostShape;
+            mGhostShape = nullptr;
+            del->deleteLater();
+        }
+        mState = 0;
         QPoint delta = event->pos() - mMousePoint;
         if (abs(delta.x())<2 && abs(delta.y())<2)
+        {
             if (mDeleteRect.contains(mMousePoint))
                 Q_EMIT triggerDelete(mDataIndex);
-        mMousePoint.setX(-99999);
+        }
+        else if (abs(delta.y())>height())
+            Q_EMIT triggerSwap(mDataIndex, (event->pos()-mMouseRelative).y());
+        mMousePoint = QPoint(-99999,0);
+        update();
     }
 
     QBrush WaveLabel::valueBackground() const
@@ -67,7 +103,16 @@ namespace hal {
         QPainter paint(this);
         paint.setRenderHint(QPainter::Antialiasing,true);
         paint.setRenderHint(QPainter::TextAntialiasing,true);
-        paint.fillRect(rect(),QBrush(QColor("#C0102040"))); // TODO : style
+        QColor bgcol("#206080");
+        switch (mState)
+        {
+        case 0: bgcol = QColor("#102040"); break;
+        case 1: bgcol.setAlpha(255); break;
+        case 2: bgcol = QColor("#108040"); break;
+        case 3: bgcol.setAlpha(80); break;
+        }
+
+        paint.fillRect(rect(),QBrush(bgcol)); // TODO : style
         paint.setPen(QPen(Qt::gray,0.3));
         paint.drawRoundedRect(rect(),15.,15.);
         QFont font = paint.font();
@@ -76,6 +121,8 @@ namespace hal {
         paint.setFont(font);
         paint.setPen(QPen(Qt::white,0));
         paint.drawText(rect(), Qt::AlignHCenter | Qt::AlignVCenter, mName);
+
+        if (mState >= 3) return;
         float h = height();
         float bm = 0.12;
         QRectF rBullet(bm*h,bm*h,(1-2*bm)*h,(1-2*bm)*h);

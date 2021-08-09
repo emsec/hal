@@ -1,12 +1,12 @@
 #pragma once
 
-#include <QGraphicsLineItem>
+#include <QGraphicsItem>
 
 namespace hal {
 
     class WaveScene;
 
-    class WaveCursor : public QGraphicsLineItem
+    class WaveCursor : public QGraphicsItem
     {
         float mXmag;
     public:
@@ -14,6 +14,7 @@ namespace hal {
         void xScaleChanged(float mag);
         QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
         QRectF boundingRect() const override;
         QPainterPath shape() const override;
     };

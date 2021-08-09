@@ -38,6 +38,7 @@ namespace hal {
         float yPosition(int dataIndex) const;
         const WaveData* waveData(int dataIndex) const;
         void setWaveData(int dataIndex, WaveData* wd);
+        void moveToIndex(int indexFrom, int indexTo);
         void deleteWave(int dataIndex);
         int addWave(WaveData* wd);
         void generateDataSample();

@@ -8,8 +8,8 @@
 
 #include <QResizeEvent>
 #include <QWheelEvent>
-#include <QDebug>
 #include <QScrollBar>
+#include <QResizeEvent>
 
 namespace hal {
 
@@ -23,93 +23,163 @@ namespace hal {
         addWidget(mFrame);
         mWaveView = new WaveView(this);
         mWaveView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        mWaveScene = new WaveScene(mWaveView);
+
+        connect(mWaveView,&WaveView::changedXscale,mWaveScene,&WaveScene::xScaleChanged);
+        mWaveView->setScene(mWaveScene);
+
+        connect(mWaveScene,&WaveScene::cursorMoved,this,&WaveWidget::handleCursorMoved);
+        connect(mWaveView,&WaveView::relativeYScroll,this,&WaveWidget::handleYScroll);
+
     }
 
-    /*
-    void WaveWidget::deleteWave(int dataIndex)
+    void WaveWidget::updateIndices()
     {
-        WaveScene* sc = static_cast<WaveScene*>(scene());
-        WaveLabel* wl = mValues.at(dataIndex);
-        mValues.removeAt(dataIndex);
-        sc->deleteWave(dataIndex);
         int n = mValues.size();
-        for (int i=dataIndex; i<n; i++)
+        float xpos = mWaveScene->cursorPos();
+        for (int i=0; i<n; i++)
         {
-            float xpos = sc->cursorPos();
             mValues.at(i)->setDataIndex(i);
             updateLabel(i,xpos);
         }
-        wl->deleteLater();
         mWaveIndices.clear();
         for (int i=0; i<n; i++)
-            mWaveIndices.insert(sc->waveData(i)->name(),i);
+            mWaveIndices.insert(mWaveScene->waveData(i)->name(),i);
     }
-*/
+
+    void WaveWidget::deleteWave(int dataIndex)
+    {
+        WaveLabel* wl = mValues.at(dataIndex);
+        mValues.removeAt(dataIndex);
+        mWaveScene->deleteWave(dataIndex);
+        updateIndices();
+        wl->deleteLater();
+    }
 
     void WaveWidget::addOrReplaceWave(WaveData* wd)
     {
-        mWaveView->addOrReplaceWave(wd);
+        auto it = mWaveIndices.find(wd->name());
+        if (it != mWaveIndices.end())
+        {
+            mWaveScene->setWaveData(it.value(),wd);
+            return;
+        }
+        int inx = mWaveScene->addWave(wd);
+        Q_ASSERT(mValues.size() == inx);
+        WaveLabel* wl = new WaveLabel(inx,mWaveScene->waveData(inx)->name(),mFrame);
+        connect(wl,&WaveLabel::doubleClicked,this,&WaveWidget::editWaveData);
+        connect(wl,&WaveLabel::triggerDelete,this,&WaveWidget::deleteWave);
+        connect(wl,&WaveLabel::triggerSwap,this,&WaveWidget::handleLabelSwap);
+        connect(wl,&WaveLabel::triggerMove,this,&WaveWidget::handleLabelMove);
+        wl->setFixedWidth(250);
+        wl->show();
+        mValues.append(wl);
+        mWaveIndices.insert(wd->name(),inx);
+        updateLabel(inx,mWaveScene->cursorPos());
+        resizeEvent(nullptr);
+    }
+
+    void WaveWidget::resizeEvent(QResizeEvent *event)
+    {
+        int w = event ? event->size().width() : width();
+        int maxw = w / 2;
+        int minw = 10;
+        int n = mValues.size();
+        for (int i=0; i<n; i++)
+            if (mValues.at(i)->width()>minw)
+                minw = mValues.at(i)->width();
+        minw += 6;
+        if (minw > maxw) minw = maxw;
+        setSizes(QList<int>() << minw << w - minw );
     }
 
     const WaveData* WaveWidget::waveDataByName(const QString& name) const
     {
-        return mWaveView->waveDataByName(name);
+        int inx = mWaveIndices.value(name,-1);
+        if (inx < 0) return nullptr;
+        return mWaveScene->waveData(inx);
     }
-/*
+
     void WaveWidget::editWaveData(int dataIndex)
     {
-        WaveScene* sc = static_cast<WaveScene*>(scene());
-        const WaveData* editorInput = sc->waveData(dataIndex);
+        const WaveData* editorInput = mWaveScene->waveData(dataIndex);
         if (!editorInput) return;
         WaveData wd(*editorInput);
         WaveEditDialog wed(wd,this);
         if (wed.exec() != QDialog::Accepted) return;
-        sc->setWaveData(dataIndex,wed.dataFactory());
-    }
-
-
-    void WaveWidget::restoreCursor()
-    {
-        WaveScene* sc = dynamic_cast<WaveScene*>(scene());
-        int x0 = mapFromScene(0,0).x();
-        if (mCursorPixelPos < x0)
-            // last cursor pixel pos not in diagram
-            sc->setCursorPos(sc->cursorPos(),false);
-        else
-        {
-            QPointF sCurs = mapToScene(mCursorPixelPos,0);
-            sc->setCursorPos(sCurs.x(),false);
-        }
+        mWaveScene->setWaveData(dataIndex,wed.dataFactory()); // TODO : sanitize input data
     }
 
     void WaveWidget::updateLabel(int dataIndex, float xpos)
     {
-        WaveScene* sc = dynamic_cast<WaveScene*>(scene());
-        if (!sc) return;
         WaveLabel* wl = mValues.at(dataIndex);
-        QPoint pos = mapFromScene(QPointF(xpos,sc->yPosition(dataIndex)-1));
-
-        int ix = pos.x();
-
-        if (ix < 0 || ix >= width())
-            ix = 0;
-        else
-            mCursorPixelPos = ix;
-        pos.setX(ix + 5);
-        wl->setValue(sc->waveData(dataIndex)->tValue(xpos));
+        if (wl->state()>=2) return;
+        QPoint pos = mWaveView->mapFromScene(QPointF(xpos,mWaveScene->yPosition(dataIndex)-1));
+        pos.setX(3);
+        wl->setValue(mWaveScene->waveData(dataIndex)->tValue(xpos));
         wl->move(pos);
+    }
+
+    void WaveWidget::handleYScroll(int dy)
+    {
+        for (WaveLabel* wl : mValues)
+            wl->move(3,wl->pos().y() + dy);
     }
 
     void WaveWidget::handleCursorMoved(float xpos)
     {
-        WaveScene* sc = dynamic_cast<WaveScene*>(scene());
-        if (!sc) return;
+        mWaveView->handleCursorMoved(xpos);
 
-        if (xpos == mLastCursorPos) return;
-        mLastCursorPos = xpos;
-
-        for (int i=0; i<sc->numberWaves(); i++)
+        for (int i=0; i<mWaveScene->numberWaves(); i++)
             updateLabel(i,xpos);
     }
-    */
+
+    void WaveWidget::handleLabelMove(int isource, int ypos)
+    {
+        int itarget = targetIndex(ypos);
+        int n = mValues.size();
+        for (int i=0; i<n; i++)
+        {
+            if (i == isource) continue;
+            WaveLabel* wl = mValues.at(i);
+            wl->setState(i == itarget ? 2 : 0);
+            wl->update();
+        }
+        update();
+    }
+
+    int WaveWidget::targetIndex(int ypos)
+    {
+        int n = mValues.size() -1;
+        if (n <= 0) return -1;
+        int labh = mValues.at(0)->height();
+        int y0 = + mValues.at(0)->pos().y();
+        int yn = + mValues.at(n)->pos().y();
+
+        int retval = (int) floor ( (1.5 + labh + ypos - y0) * n / (yn - y0));
+        if (retval > n) return -1;
+        return retval;
+    }
+
+    void WaveWidget::handleLabelSwap(int isource, int ypos)
+    {
+
+        int n = mValues.size();
+        for (int i=0; i<n; i++)
+            mValues.at(i)->setState(0);
+
+        int itarget = targetIndex(ypos);
+        if (itarget >= 0 && itarget != isource)
+        {
+            WaveLabel* wl = mValues.at(isource);
+            mValues.removeAt(isource);
+            mValues.insert(itarget < isource ? itarget : itarget-1, wl);
+            updateIndices();
+            mWaveScene->moveToIndex(isource,itarget);
+        }
+        for (int i=0; i<n; i++)
+            mValues.at(i)->update();
+        update();
+    }
+
 }

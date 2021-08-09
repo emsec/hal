@@ -15,9 +15,6 @@ namespace hal {
     {
         Q_OBJECT
 
-        QMap<QString,int> mWaveIndices;
-
-        QVector<WaveLabel*> mValues;
         float mXmag, mYmag, mDx, mDy, mXmagMin;
 
         float mLastCursorPos;
@@ -25,14 +22,12 @@ namespace hal {
         int mCursorPixelPos;
 
         void restoreCursor();
-        void updateLabel(int dataIndex, float xpos);
     Q_SIGNALS:
         void changedXscale(float m11);
+        void relativeYScroll(int dy);
 
-    private Q_SLOTS:
+    public Q_SLOTS:
         void handleCursorMoved(float xpos);
-        void editWaveData(int dataIndex);
-        void deleteWave(int dataIndex);
 
     protected:
         void wheelEvent(QWheelEvent *event) override;
@@ -41,9 +36,6 @@ namespace hal {
 
     public:
         WaveView(QWidget* parent=nullptr);
-        void addOrReplaceWave(WaveData* wd);
-        const WaveData* waveDataByName(const QString& name) const;
-
     };
 
 }

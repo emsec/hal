@@ -54,4 +54,24 @@ namespace hal {
         if (it != constBegin()) --it;
         return it.value();
     }
+
+    QString WaveData::textValue(const QMap<int,int>::const_iterator& it) const
+    {
+        if (it == constEnd()) return QString();
+        switch (it.value()) {
+        case -2 : return "z";
+        case -1 : return "x";
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+            return QString() + (char) ('0' + it.value());
+        }
+        return QString();
+    }
+
 }

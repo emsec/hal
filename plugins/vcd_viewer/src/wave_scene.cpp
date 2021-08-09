@@ -67,6 +67,22 @@ namespace hal {
         return maxw;
     }
 
+    void WaveScene::moveToIndex(int indexFrom, int indexTo)
+    {
+        if (indexFrom==indexTo) return;
+        WaveItem* wi = mWaveItems.at(indexFrom);
+        mWaveItems.removeAt(indexFrom);
+        mWaveItems.insert(indexTo < indexFrom ? indexTo : indexTo-1, wi);
+        int i0 = indexFrom < indexTo ? indexFrom : indexTo;
+        int i1 = indexFrom < indexTo ? indexTo : indexFrom;
+        for (int i= i0; i<=i1; i++)
+        {
+            WaveItem* wii = mWaveItems.at(i);
+            wii->setYoffset(yPosition(i));
+            wii->update();
+        }
+    }
+
     void WaveScene::xScaleChanged(float m11)
     {
         mTimescale->xScaleChanged(m11);

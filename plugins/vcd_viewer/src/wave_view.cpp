@@ -15,86 +15,7 @@ namespace hal {
     WaveView::WaveView(QWidget *parent)
         : QGraphicsView(parent),
           mXmag(1), mYmag(1), mDx(0), mDy(0), mLastCursorPos(0), mLastWidth(0), mCursorPixelPos(20)
-    {
-        WaveScene* sc = new WaveScene(this);
-        connect(this,&WaveView::changedXscale,sc,&WaveScene::xScaleChanged);
-        setScene(sc);
-
-        connect(sc,&WaveScene::cursorMoved,this,&WaveView::handleCursorMoved);
-
-        int n = sc->numberWaves();
-        if (!n) return;
-
-        for (int i=0; i<n; i++)
-        {
-            WaveLabel* wl = new WaveLabel(i,sc->waveData(i)->name(),this);
-            connect(wl,&WaveLabel::doubleClicked,this,&WaveView::editWaveData);
-            connect(wl,&WaveLabel::triggerDelete,this,&WaveView::deleteWave);
-            wl->setFixedWidth(250);
-            wl->show();
-            mValues.append(wl);
-        }
-    }
-
-    void WaveView::deleteWave(int dataIndex)
-    {
-        WaveScene* sc = static_cast<WaveScene*>(scene());
-        WaveLabel* wl = mValues.at(dataIndex);
-        mValues.removeAt(dataIndex);
-        sc->deleteWave(dataIndex);
-        int n = mValues.size();
-        for (int i=dataIndex; i<n; i++)
-        {
-            float xpos = sc->cursorPos();
-            mValues.at(i)->setDataIndex(i);
-            updateLabel(i,xpos);
-        }
-        wl->deleteLater();
-        mWaveIndices.clear();
-        for (int i=0; i<n; i++)
-            mWaveIndices.insert(sc->waveData(i)->name(),i);
-    }
-
-    void WaveView::addOrReplaceWave(WaveData* wd)
-    {
-        WaveScene* sc = static_cast<WaveScene*>(scene());
-        auto it = mWaveIndices.find(wd->name());
-        if (it != mWaveIndices.end())
-        {
-            sc->setWaveData(it.value(),wd);
-            return;
-        }
-        int inx = sc->addWave(wd);
-        Q_ASSERT(mValues.size() == inx);
-        WaveLabel* wl = new WaveLabel(inx,sc->waveData(inx)->name(),this);
-        connect(wl,&WaveLabel::doubleClicked,this,&WaveView::editWaveData);
-        connect(wl,&WaveLabel::triggerDelete,this,&WaveView::deleteWave);
-        wl->setFixedWidth(250);
-        wl->show();
-        mValues.append(wl);
-        mWaveIndices.insert(wd->name(),inx);
-        updateLabel(inx,sc->cursorPos());
-   //     resizeEvent(nullptr);
-    }
-
-    const WaveData* WaveView::waveDataByName(const QString& name) const
-    {
-        int inx = mWaveIndices.value(name,-1);
-        if (inx<0) return nullptr;
-        WaveScene* sc = static_cast<WaveScene*>(scene());
-        return sc->waveData(inx);
-    }
-
-    void WaveView::editWaveData(int dataIndex)
-    {
-        WaveScene* sc = static_cast<WaveScene*>(scene());
-        const WaveData* editorInput = sc->waveData(dataIndex);
-        if (!editorInput) return;
-        WaveData wd(*editorInput);
-        WaveEditDialog wed(wd,this);
-        if (wed.exec() != QDialog::Accepted) return;
-        sc->setWaveData(dataIndex,wed.dataFactory());
-    }
+    {;}
 
     void WaveView::resizeEvent(QResizeEvent *event)
     {
@@ -121,22 +42,19 @@ namespace hal {
         }
 
         setTransform(QTransform(mXmag, 0, 0, mYmag, mDx, mDy),false);
-        Q_EMIT (changedXscale(mXmag));
+        Q_EMIT changedXscale(mXmag);
 
         WaveScene* sc = static_cast<WaveScene*>(scene());
         float xw = width()/mXmag;
         ensureVisible(QRectF(0,sceneRect().top(),xw,sceneRect().height()));
         sc->setCursorPos(xw/10,false);
-
-        float xpos = sc->cursorPos();
-        for (int i=0; i<mValues.size(); i++)
-            updateLabel(i,xpos);
     }
 
     void WaveView::scrollContentsBy(int dx, int dy)
     {
         QGraphicsView::scrollContentsBy(dx,dy);
         if (dx) restoreCursor();
+        Q_EMIT relativeYScroll(dy);
     }
 
     void WaveView::wheelEvent(QWheelEvent *event)
@@ -181,24 +99,6 @@ namespace hal {
         }
     }
 
-    void WaveView::updateLabel(int dataIndex, float xpos)
-    {
-        WaveScene* sc = dynamic_cast<WaveScene*>(scene());
-        if (!sc) return;
-        WaveLabel* wl = mValues.at(dataIndex);
-        QPoint pos = mapFromScene(QPointF(xpos,sc->yPosition(dataIndex)-1));
-
-        int ix = pos.x();
-
-        if (ix < 0 || ix >= width())
-            ix = 0;
-        else
-            mCursorPixelPos = ix;
-        pos.setX(ix + 5);
-        wl->setValue(sc->waveData(dataIndex)->tValue(xpos));
-        wl->move(pos);
-    }
-
     void WaveView::handleCursorMoved(float xpos)
     {
         WaveScene* sc = dynamic_cast<WaveScene*>(scene());
@@ -207,7 +107,9 @@ namespace hal {
         if (xpos == mLastCursorPos) return;
         mLastCursorPos = xpos;
 
-        for (int i=0; i<sc->numberWaves(); i++)
-            updateLabel(i,xpos);
+        QPoint pos = mapFromScene(QPointF(xpos,0));
+        int ix = pos.x();
+        if (ix >= 0 && ix < width())
+            mCursorPixelPos = ix;
     }
 }
