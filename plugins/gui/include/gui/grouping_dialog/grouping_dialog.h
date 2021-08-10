@@ -45,6 +45,7 @@ namespace hal {
         void handleFilterTextChanged(const QString& text);
         void handleDoubleClicked(const QModelIndex& index);
         void handleSelectionChanged();
+        void accept() override;
     private:
         QString getGroupName(const QModelIndex& proxyIndex);
 
@@ -53,7 +54,10 @@ namespace hal {
         GroupingProxyModel* mProxyModel;
         QDialogButtonBox* mButtonBox;
         Searchbar* mSearchbar;
+        QTabWidget* mTabWidget;
+        QTableView* mLastUsed;
 
         QString mGroupName;
+        u32 mGroupId;
     };
 }

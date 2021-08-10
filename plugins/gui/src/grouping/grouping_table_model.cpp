@@ -1,6 +1,10 @@
 #include "gui/grouping/grouping_table_model.h"
+#include "gui/grouping/grouping_proxy_model.h"
+#include "gui/grouping/grouping_color_delegate.h"
 #include "gui/gui_globals.h"
+
 #include <QApplication>
+#include <QHeaderView>
 
 namespace hal {
     GroupingTableEntry::GroupingTableEntry(const QString& n, const QColor &c)
@@ -34,23 +38,43 @@ namespace hal {
     }
 
 
-    GroupingTableModel::GroupingTableModel(QObject* parent)
+    GroupingTableModel::GroupingTableModel(bool history, QObject* parent)
         : QAbstractTableModel(parent), mDisableEvents(false)
     {
         //on creation load all already existing groupings from the netlist into the model
-        for(auto grp : gNetlist->get_groupings())
+        if (history)
         {
-            mDisableEvents = true;
-            Q_EMIT layoutAboutToBeChanged();
-            GroupingTableEntry gte(grp->get_id(), nextColor());
-            int n = mGroupings.size();
-            mGroupings.append(gte);
-            Q_EMIT layoutChanged();
-            mDisableEvents = false;
+            for(auto id : *GroupingTableHistory::instance())
+            {
+                mDisableEvents = true;
+                Q_EMIT layoutAboutToBeChanged();
+                GroupingTableEntry gte(id, nextColor());
+                int n = mGroupings.size();
+                mGroupings.append(gte);
+                Q_EMIT layoutChanged();
+                mDisableEvents = false;
 
-            QModelIndex inx = index(n,0);
-            Q_EMIT newEntryAdded(inx);
+                QModelIndex inx = index(n,0);
+                Q_EMIT newEntryAdded(inx);
+            }
         }
+        else
+        {
+            for(auto grp : gNetlist->get_groupings())
+            {
+                mDisableEvents = true;
+                Q_EMIT layoutAboutToBeChanged();
+                GroupingTableEntry gte(grp->get_id(), nextColor());
+                int n = mGroupings.size();
+                mGroupings.append(gte);
+                Q_EMIT layoutChanged();
+                mDisableEvents = false;
+
+                QModelIndex inx = index(n,0);
+                Q_EMIT newEntryAdded(inx);
+            }
+        }
+
 
         connect(gNetlistRelay, &NetlistRelay::groupingCreated, this, &GroupingTableModel::createGroupingEvent);
         connect(gNetlistRelay, &NetlistRelay::groupingRemoved, this, &GroupingTableModel::deleteGroupingEvent);
@@ -332,4 +356,40 @@ namespace hal {
         return retval;
     }
 
+    //---------------- HISTORY ----------------------------------------
+    GroupingTableHistory* GroupingTableHistory::inst = nullptr;
+
+    GroupingTableHistory* GroupingTableHistory::instance()
+    {
+        if (!inst)
+            inst = new GroupingTableHistory;
+        return inst;
+    }
+
+    void GroupingTableHistory::add(u32 id)
+    {
+        removeAll(id);
+        prepend(id);
+    }
+
+    //---------------- VIEW -------------------------------------------
+    GroupingTableView::GroupingTableView(bool history, QWidget* parent)
+    {
+        setSelectionMode(QAbstractItemView::SingleSelection);
+        setSelectionBehavior(QAbstractItemView::SelectRows);
+        setItemDelegateForColumn(2, new GroupingColorDelegate(this));
+        setSortingEnabled(true);
+        sortByColumn(0, Qt::SortOrder::AscendingOrder);
+
+        GroupingProxyModel* prox = new GroupingProxyModel(this);
+        GroupingTableModel* modl = new GroupingTableModel(history, this);
+        prox->setSourceModel(modl);
+        setModel(prox);
+
+        verticalHeader()->hide();
+        horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+        horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+        horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+        horizontalHeader()->setDefaultAlignment(Qt::AlignHCenter | Qt::AlignCenter);
+    }
 }

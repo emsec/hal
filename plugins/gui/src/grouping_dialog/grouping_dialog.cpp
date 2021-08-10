@@ -14,8 +14,9 @@ namespace hal {
         : QDialog(parent),
           mProxyModel(new GroupingProxyModel(this)),
           mGroupingTableView(new QTableView(this)),
-          mGroupingTableModel(new GroupingTableModel(this)),
-          mSearchbar(new Searchbar(this))
+          mGroupingTableModel(new GroupingTableModel(false, this)),
+          mSearchbar(new Searchbar(this)),
+          mTabWidget(new QTabWidget(this))
     {
         setWindowTitle("Move to grouping …");
         QGridLayout* layout = new QGridLayout(this);
@@ -55,7 +56,21 @@ namespace hal {
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
         mGroupingTableView->horizontalHeader()->setDefaultAlignment(Qt::AlignHCenter | Qt::AlignCenter);
 
-        layout->addWidget(mGroupingTableView, 2, 0, 1, 3);
+        mTabWidget->addTab(mGroupingTableView, "Groupings");
+
+        if (!GroupingTableHistory::instance()->isEmpty())
+        {
+            mLastUsed = new GroupingTableView(true, this);
+            if (mLastUsed->model()->rowCount())
+            {
+                connect(mLastUsed->selectionModel(), &QItemSelectionModel::selectionChanged, this, &GroupingDialog::handleSelectionChanged);
+                mTabWidget->addTab(mLastUsed, "Recent selection");
+            }
+            else
+                delete mLastUsed;
+        }
+
+        layout->addWidget(mTabWidget, 2, 0, 1, 3);
 
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
         mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
@@ -110,6 +125,8 @@ namespace hal {
         {
             mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
             mGroupName = getGroupName(selectedRows.at(0));
+            auto sourceIndex = mProxyModel->mapToSource(selectedRows.at(0));
+            mGroupId = mGroupingTableModel->groupingAt(sourceIndex.row()).id();
         }
     }
 
@@ -117,5 +134,11 @@ namespace hal {
     {
         auto sourceIndex = mProxyModel->mapToSource(proxyIndex);
         return mGroupingTableModel->groupingAt(sourceIndex.row()).name();
+    }
+
+    void GroupingDialog::accept()
+    {
+        GroupingTableHistory::instance()->add(mGroupId);
+        QDialog::accept();
     }
 }

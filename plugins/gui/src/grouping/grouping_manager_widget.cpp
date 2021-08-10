@@ -73,7 +73,7 @@ namespace hal
         //mRenameAction->setEnabled(false);
         //mDeleteAction->setEnabled(false);
 
-        mGroupingTableModel = new GroupingTableModel;
+        mGroupingTableModel = new GroupingTableModel(false, this);
 
         mProxyModel->setSourceModel(mGroupingTableModel);
         mProxyModel->setSortRole(Qt::UserRole);

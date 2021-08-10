@@ -26,6 +26,7 @@
 #include <QAbstractTableModel>
 #include <QString>
 #include <QColor>
+#include <QTableView>
 #include <QList>
 
 #include "hal_core/defines.h"
@@ -141,7 +142,7 @@ namespace hal {
          *
          * @param parent - The parent widget
          */
-        GroupingTableModel(QObject* parent=nullptr);
+        GroupingTableModel(bool history, QObject* parent=nullptr);
 
         /**
          * Returns the amount of columns. Is always 3 (Grouping, ID, Color)
@@ -320,5 +321,22 @@ namespace hal {
 
     private:
         QColor nextColor() const;
+    };
+
+    class GroupingTableHistory : public QList<u32>
+    {
+        static GroupingTableHistory* inst;
+        GroupingTableHistory() {;}
+    public:
+        static GroupingTableHistory* instance();
+        void add(u32 id);
+    };
+
+    class GroupingTableView : public QTableView
+    {
+        Q_OBJECT
+
+    public:
+        GroupingTableView(bool history, QWidget* parent=nullptr);
     };
 }
