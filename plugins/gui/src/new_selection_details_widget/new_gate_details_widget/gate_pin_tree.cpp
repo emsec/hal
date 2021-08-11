@@ -57,14 +57,7 @@ namespace hal
         QMenu menu;
         PinTreeModel::itemType type = mPinModel->getTypeOfItem(clickedItem);
 
-        if(type == PinTreeModel::itemType::pin)
-            buildPythonMenuForPin(menu, clickedItem);
-        else
-            buildPythonMenuForPinGroup(menu, clickedItem);
-
         //PLAINTEXT: NAME, DIRECTION, TYPE
-        menu.addSection("plaintext extraction");
-
         menu.addAction("Extract name as plain text",
             [clickedItem](){
             QApplication::clipboard()->setText(clickedItem->getData(PinTreeModel::sNameColumn).toString());
@@ -80,9 +73,18 @@ namespace hal
             QApplication::clipboard()->setText(clickedItem->getData(PinTreeModel::sTypeColumn).toString());
         });
 
-        //add, when the clicked item is a pin, the add-to-selection choice if possible
-        QList<int> netIds = mPinModel->getNetIDsOfTreeItem(clickedItem);
-        if(type == PinTreeModel::itemType::pin && netIds.size() != 0)
+        //Add nets to selection if possible
+        QList<int> netIds;
+        if(type == PinTreeModel::itemType::pin)
+        {
+            netIds = mPinModel->getNetIDsOfTreeItem(clickedItem);
+        }
+        else
+        {
+            for(auto childItem : clickedItem->getChildren())
+                netIds.append(mPinModel->getNetIDsOfTreeItem(childItem));
+        }
+        if(netIds.size() != 0)
         {
             menu.addSection("Misc");
             menu.addAction("Add net(s) to current selection",
@@ -92,6 +94,13 @@ namespace hal
                 gSelectionRelay->relaySelectionChanged(this);
             });
         }
+
+        menu.addSection("Python");
+
+        if(type == PinTreeModel::itemType::pin)
+            buildPythonMenuForPin(menu, clickedItem);
+        else
+            buildPythonMenuForPinGroup(menu, clickedItem);
 
         menu.move(mapToGlobal(pos));
         menu.exec();
@@ -152,7 +161,7 @@ namespace hal
         // 1. PYTHON LIST OF PIN GROUPS
         QString pythonList = "[";
         for(auto childPin : clickedPinIGrouptem->getChildren())
-            pythonList += childPin->getData(PinTreeModel::sNameColumn).toString() + ", ";
+            pythonList += "\"" + childPin->getData(PinTreeModel::sNameColumn).toString() + "\", ";
         pythonList = pythonList.left(pythonList.size()-2);
         pythonList += "]";
 
