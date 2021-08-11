@@ -54,7 +54,7 @@ namespace hal
         QMenu menu;
 
         //Strings for first menu entry (python get net/gate/module)
-        QString pythonGetObject, pythonGetName, pythonGetType, pythonGetId;
+        QString pythonGetObject, pythonGetName, pythonGetType;
         QString plainName, plainType = "not defined";
         QList<QString> descriptions;
 
@@ -63,8 +63,7 @@ namespace hal
           {
               QString("Extract %1 as python code").arg(objectType),
               "Extract name as python code",
-              "Extract type as python code",
-              "Extract id as python code" //does this even makes sense???
+              "Extract type as python code"
           };
           return descriptionList;
         };
@@ -76,53 +75,22 @@ namespace hal
                 pythonGetObject = PyCodeProvider::pyCodeModule(id);
                 pythonGetName = PyCodeProvider::pyCodeModuleName(id);
                 pythonGetType = PyCodeProvider::pyCodeModuleType(id);
-                pythonGetId = PyCodeProvider::pyCodeModule(id) + ".get_id()"; // kind of retarded, change that..
                 break;
             case NetlistElementsTreeModel::itemType::gate:
                 descriptions = createCommonDescriptionList("gate");
                 pythonGetObject = PyCodeProvider::pyCodeGate(id);
                 pythonGetName = PyCodeProvider::pyCodeGateName(id);
                 pythonGetType = PyCodeProvider::pyCodeGateType(id);
-                pythonGetId = PyCodeProvider::pyCodeGate(id) + ".get_id()"; // same as above..
                 break;
             case NetlistElementsTreeModel::itemType::net:
                 descriptions = createCommonDescriptionList("net");
                 pythonGetObject = PyCodeProvider::pyCodeNet(id);
                 pythonGetName = PyCodeProvider::pyCodeNetName(id);
                 pythonGetType = PyCodeProvider::pyCodeNetType(id);
-                pythonGetId = PyCodeProvider::pyCodeNet(id) + ".get_id()"; //same as above
                 break;
         }
 
-        menu.addAction(QIcon(":/icons/python"), descriptions.at(0),
-           [pythonGetObject]()
-           {
-               QApplication::clipboard()->setText(pythonGetObject);
-           }
-        );
-
-        menu.addAction(QIcon(":/icons/python"), descriptions.at(1),
-           [pythonGetName]()
-           {
-               QApplication::clipboard()->setText(pythonGetName);
-           }
-        );
-
-        menu.addAction(QIcon(":/icons/python"), descriptions.at(2),
-           [pythonGetType]()
-           {
-               QApplication::clipboard()->setText(pythonGetType);
-           }
-        );
-
-        menu.addAction(QIcon(":/icons/python"), descriptions.at(3),
-           [pythonGetId]()
-           {
-               QApplication::clipboard()->setText(pythonGetId);
-           }
-        );
-
-        menu.addSection("here comes the plaintext");
+        //menu.addSection("here comes the plaintext");
 
         menu.addAction("Extract name as plain text",
            [clickedItem]()
@@ -160,7 +128,28 @@ namespace hal
            }
         );
 
+        menu.addSection("Python Code");
 
+        menu.addAction(QIcon(":/icons/python"), descriptions.at(0),
+           [pythonGetObject]()
+           {
+               QApplication::clipboard()->setText(pythonGetObject);
+           }
+        );
+
+        menu.addAction(QIcon(":/icons/python"), descriptions.at(1),
+           [pythonGetName]()
+           {
+               QApplication::clipboard()->setText(pythonGetName);
+           }
+        );
+
+        menu.addAction(QIcon(":/icons/python"), descriptions.at(2),
+           [pythonGetType]()
+           {
+               QApplication::clipboard()->setText(pythonGetType);
+           }
+        );
 
 
         menu.move(this->mapToGlobal(pos));

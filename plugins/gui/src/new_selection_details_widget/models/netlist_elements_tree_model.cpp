@@ -342,6 +342,8 @@ namespace hal
             mModuleToTreeitems.insert(addedModule, addedSubmodItem);
             if(mNetsDisplayed)
                 updateInternalNetsOfModule(mRootItem);
+
+            endResetModel();
             return;
         }
 
