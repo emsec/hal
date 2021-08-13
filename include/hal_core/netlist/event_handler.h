@@ -128,6 +128,7 @@ namespace hal
             created,            ///< no associated_data
             removed,            ///< no associated_data
             name_changed,       ///< no associated_data
+            color_changed,      ///< no associated_data
             gate_assigned,      ///< associated_data = id of inserted gate
             gate_removed,       ///< associated_data = id of removed gate
             net_assigned,       ///< associated_data = id of inserted net

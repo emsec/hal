@@ -155,7 +155,7 @@ namespace hal
          *
          * @return The proxy model.
          */
-        GroupingProxyModel* getProxyModel() const {return mProxyModel; }
+        GroupingProxyModel* getProxyModel() const { return mProxyModel; }
 
         /**
          * Enable/Disable the toolbar buttons which require a valid selection

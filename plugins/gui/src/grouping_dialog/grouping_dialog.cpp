@@ -26,11 +26,6 @@ namespace hal {
         connect(butNew, &QPushButton::pressed, this, &GroupingDialog::handleNewGroupingClicked);
         layout->addWidget(butNew, 0, 0);
 
-//        QPushButton* butRemove = new QPushButton("Remove grouping", this);
-//        butRemove->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-//        connect(butRemove, &QPushButton::pressed, this, &GroupingDialog::handleRemoveGroupingClicked);
-//        layout->addWidget(butRemove, 0, 1);
-
         QPushButton* butSearch = new QPushButton("Search", this);
         butSearch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         connect(butSearch, &QPushButton::pressed, this, &GroupingDialog::handleToggleSearchbar);

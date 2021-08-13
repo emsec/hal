@@ -41,30 +41,27 @@ namespace hal {
      * @brief An entry within a GroupingTableModel.
      *
      * The GroupingTableEntry represents one entry in the groupings table. Therefore it stores information about
-     * the grouping and its color. It also provides and interface to change these fields.
+     * the grouping. It also provides and interface to change these fields.
      */
     class GroupingTableEntry
     {
         Grouping* mGrouping;
-        QColor  mColor;
     public:
         /**
          * Constructor. <br>
          * Creates a new grouping in the netlist.
          *
          * @param n - The name of the grouping
-         * @param c - The color of the grouping
          */
-        GroupingTableEntry(const QString& n, const QColor& c); // constructor for new grouping
+        GroupingTableEntry(const QString& n); // constructor for new grouping
 
         /**
          * Constructor. <br>
          * Initializes the GroupingTableEntry with an already existing grouping of the netlist.
          *
          * @param existingId - The id of an already existing grouping of the netlist.
-         * @param c - The color of the grouping
          */
-        GroupingTableEntry(u32 existingId, const QColor& c);  // entry wraps existing group object
+        GroupingTableEntry(u32 existingId);  // entry wraps existing group object
 
         /**
          * Constructor. <br>
@@ -73,8 +70,8 @@ namespace hal {
          * @param grp - The grouping to represent
          * @param c - The color of the grouping
          */
-        GroupingTableEntry(Grouping* grp, const QColor&c)
-            : mGrouping(grp), mColor(c) {;}
+        GroupingTableEntry(Grouping* grp)
+            : mGrouping(grp) {;}
 
         /**
          * Gets the id of the grouping.
@@ -95,7 +92,7 @@ namespace hal {
          *
          * @returns the color of the grouping
          */
-        QColor color() const { return mColor; }
+        QColor color() const;
 
         /**
          * Sets the name of the grouping.
@@ -109,7 +106,7 @@ namespace hal {
          *
          * @param c - the new color for the grouping
          */
-        void setColor(const QColor& c) { mColor = c; }
+        void setColor(const QColor& c);
 
         /**
          * Accesses the grouping this entry represents.
@@ -117,6 +114,9 @@ namespace hal {
          * @returns the grouping
          */
         Grouping* grouping() const { return mGrouping; }
+
+    private:
+        QColor toQColor(Color c) const;
     };
 
     /**
@@ -297,6 +297,13 @@ namespace hal {
          */
         void groupingNameChangedEvent(Grouping *grp);
 
+        /**
+         * Q_SLOT to handle that a grouping has been recolored.
+         *
+         * @param grp
+         */
+        void groupingColorChangedEvent(Grouping *grp);
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL to notify that the color of a grouping has been changed. Emitted by GroupingTableModel::setData if
@@ -318,9 +325,6 @@ namespace hal {
          * @param index - The index of the new entry
          */
         void newEntryAdded(QModelIndex& index);
-
-    private:
-        QColor nextColor() const;
     };
 
     class GroupingTableHistory : public QList<u32>

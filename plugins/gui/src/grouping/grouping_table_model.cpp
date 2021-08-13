@@ -7,14 +7,20 @@
 #include <QHeaderView>
 
 namespace hal {
-    GroupingTableEntry::GroupingTableEntry(const QString& n, const QColor &c)
-        : mGrouping(nullptr), mColor(c)
+
+    QColor toQColor(Color c)
+    {
+        return QColor::fromHsv(c.h,c.s,c.v);
+    }
+
+    GroupingTableEntry::GroupingTableEntry(const QString& n)
+        : mGrouping(nullptr)
     {
         mGrouping = gNetlist->create_grouping(n.toStdString());
     }
 
-    GroupingTableEntry::GroupingTableEntry(u32 existingId, const QColor& c)
-        : mGrouping(nullptr), mColor(c)
+    GroupingTableEntry::GroupingTableEntry(u32 existingId)
+        : mGrouping(nullptr)
     {
         mGrouping = gNetlist->get_grouping_by_id(existingId);
     }
@@ -31,12 +37,28 @@ namespace hal {
         return QString::fromStdString(mGrouping->get_name());
     }
 
+    QColor GroupingTableEntry::color() const
+    {
+        if (!mGrouping) return QString();
+        return toQColor(mGrouping->get_color());
+    }
+
     void GroupingTableEntry::setName(const QString &n)
     {
         if (!mGrouping) return;
         mGrouping->set_name(n.toStdString());
     }
 
+    void GroupingTableEntry::setColor(const QColor& c)
+    {
+        if (!mGrouping) return;
+        mGrouping->set_color(Color(c.hue(), c.saturation(), c.value()));
+    }
+
+    QColor GroupingTableEntry::toQColor(Color c) const
+    {
+        return QColor::fromHsv(c.h,c.s,c.v);
+    }
 
     GroupingTableModel::GroupingTableModel(bool history, QObject* parent)
         : QAbstractTableModel(parent), mDisableEvents(false)
@@ -48,7 +70,7 @@ namespace hal {
             {
                 mDisableEvents = true;
                 Q_EMIT layoutAboutToBeChanged();
-                GroupingTableEntry gte(id, nextColor());
+                GroupingTableEntry gte(id);
                 int n = mGroupings.size();
                 mGroupings.append(gte);
                 Q_EMIT layoutChanged();
@@ -64,7 +86,7 @@ namespace hal {
             {
                 mDisableEvents = true;
                 Q_EMIT layoutAboutToBeChanged();
-                GroupingTableEntry gte(grp->get_id(), nextColor());
+                GroupingTableEntry gte(grp->get_id());
                 int n = mGroupings.size();
                 mGroupings.append(gte);
                 Q_EMIT layoutChanged();
@@ -79,6 +101,7 @@ namespace hal {
         connect(gNetlistRelay, &NetlistRelay::groupingCreated, this, &GroupingTableModel::createGroupingEvent);
         connect(gNetlistRelay, &NetlistRelay::groupingRemoved, this, &GroupingTableModel::deleteGroupingEvent);
         connect(gNetlistRelay, &NetlistRelay::groupingNameChanged, this, &GroupingTableModel::groupingNameChangedEvent);
+        connect(gNetlistRelay, &NetlistRelay::groupingColorChanged, this, &GroupingTableModel::groupingColorChangedEvent);
     }
 
     int GroupingTableModel::columnCount(const QModelIndex &parent) const
@@ -194,34 +217,27 @@ namespace hal {
         u32 maxId = 0;
         for (const GroupingTableEntry& gte : mGroupings)
         {
-            if (gte.id()>maxId) maxId = gte.id();
+            if (gte.id() > maxId) maxId = gte.id();
             existingNames.insert(gte.name());
         }
 
         mDisableEvents = true;
         Q_EMIT layoutAboutToBeChanged();
-        GroupingTableEntry gte(generateUniqueName(QString("grouping%1").arg(maxId+1),existingNames),
-                               nextColor());
+        GroupingTableEntry gte(generateUniqueName(QString("grouping%1").arg(maxId+1), existingNames));
         int n = mGroupings.size();
         mGroupings.append(gte);
         Q_EMIT layoutChanged();
         mDisableEvents = false;
 
-        QModelIndex inx = index(n,0);
+        QModelIndex inx = index(n, 0);
         Q_EMIT newEntryAdded(inx);
         return gte.grouping();
-    }
-
-    QColor GroupingTableModel::nextColor() const
-    {
-        int baseCol = mGroupings.size() * 37;
-        return QColor::fromHsv(baseCol%255,200,std::max(250-baseCol/255*50,50));
     }
 
     void GroupingTableModel::deleteGroupingEvent(Grouping* grp)
     {
         if (mDisableEvents) return;
-        for (auto it = mGroupings.begin(); it!=mGroupings.end(); ++it)
+        for (auto it = mGroupings.begin(); it != mGroupings.end(); ++it)
             if (it->grouping() == grp)
             {
                 Q_EMIT layoutAboutToBeChanged();
@@ -237,9 +253,9 @@ namespace hal {
         if (mDisableEvents) return;
         Q_EMIT layoutAboutToBeChanged();
         int n = mGroupings.size();
-        mGroupings.append(GroupingTableEntry(grp,nextColor()));
+        mGroupings.append(GroupingTableEntry(grp));
         Q_EMIT layoutChanged();
-        QModelIndex inx = index(n,0);
+        QModelIndex inx = index(n, 0);
         Q_EMIT newEntryAdded(inx);
     }
 
@@ -247,13 +263,29 @@ namespace hal {
     {
         if (mDisableEvents) return;
         int irow = 0;
-        for (auto it = mGroupings.begin(); it!=mGroupings.end(); ++it)
+        for (auto it = mGroupings.begin(); it != mGroupings.end(); ++it)
         {
             if (it->grouping() == grp)
             {
                 it->setName(QString::fromStdString(grp->get_name()));
-                QModelIndex inx = index(irow,0);
-                Q_EMIT dataChanged(inx,inx);
+                QModelIndex inx = index(irow, 0);
+                Q_EMIT dataChanged(inx, inx);
+            }
+            ++irow;
+        }
+    }
+
+    void GroupingTableModel::groupingColorChangedEvent(Grouping *grp)
+    {
+        if (mDisableEvents) return;
+        int irow = 0;
+        for (auto it = mGroupings.begin(); it != mGroupings.end(); ++it)
+        {
+            if (it->grouping() == grp)
+            {
+                it->setColor(toQColor(grp->get_color()));
+                QModelIndex inx = index(irow, 0);
+                Q_EMIT dataChanged(inx, inx);
             }
             ++irow;
         }
@@ -261,32 +293,30 @@ namespace hal {
 
     QString GroupingTableModel::renameGrouping(u32 id, const QString& groupingName)
     {
-        for (int irow=0; irow < mGroupings.size(); irow++)
+        for (int irow = 0; irow < mGroupings.size(); irow++)
         {
             if (mGroupings.at(irow).id() != id) continue;
             mDisableEvents = true;
             QString oldName = mGroupings.at(irow).name();
             mGroupings[irow].setName(groupingName);
-            Grouping* grp = mGroupings[irow].grouping();
-            grp->set_name(groupingName.toStdString());
-            QModelIndex inx = index(irow,0);
-            Q_EMIT dataChanged(inx,inx);
+            QModelIndex inx = index(irow, 0);
+            Q_EMIT dataChanged(inx, inx);
             mDisableEvents = false;
             return oldName;
         }
         return QString();
     }
 
-    QColor GroupingTableModel::recolorGrouping(u32 id, const QColor& groupingColor)
+    QColor GroupingTableModel::recolorGrouping(u32 id, const QColor& c)
     {
-        for (int irow=0; irow < mGroupings.size(); irow++)
+        for (int irow = 0; irow < mGroupings.size(); irow++)
         {
             if (mGroupings.at(irow).id() != id) continue;
             mDisableEvents = true;
             QColor oldColor = mGroupings.at(irow).color();
-            mGroupings[irow].setColor(groupingColor);
-            QModelIndex inx = index(irow,2);
-            Q_EMIT dataChanged(inx,inx);
+            mGroupings[irow].setColor(c);
+            QModelIndex inx = index(irow, 2);
+            Q_EMIT dataChanged(inx, inx);
             Q_EMIT groupingColorChanged(mGroupings.at(irow).grouping());
             mDisableEvents = false;
             return oldColor;
