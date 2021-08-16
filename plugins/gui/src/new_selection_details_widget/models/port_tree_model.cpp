@@ -46,7 +46,7 @@ namespace hal
             //Endpoint* ep = key ? key->get_sources().at(0) : nullptr;
             //QString type = (key && ep) ? QString::fromStdString(enum_to_string(ep->get_gate()->get_type()->get_pin_type(ep->get_pin()))) : "";
             QString netName = key ? QString::fromStdString(key->get_name()) : "";
-            TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << portDirection << "" << netName);
+            TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << "Curr. not available" << "Curr. not available" << netName);
             mRootItem->appendChild(portItem);
         }
 
@@ -58,7 +58,7 @@ namespace hal
             //Endpoint* ep = key ? key->get_sources().at(0) : nullptr;
             //QString type = (key && ep) ? QString::fromStdString(enum_to_string(ep->get_gate()->get_type()->get_pin_type(ep->get_pin()))) : "";
             QString netName = key ? QString::fromStdString(key->get_name()) : "";
-            TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << portDirection << "" << netName);
+            TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << "Curr. not available" << "Curr. not available" << netName);
             mRootItem->appendChild(portItem);
         }
         endResetModel();
