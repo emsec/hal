@@ -102,23 +102,9 @@ namespace hal
             RecentFileItem* item = new RecentFileItem(gGuiState->value("file").toString(), this);
             connect(item, &RecentFileItem::removeRequested, this, &RecentFilesWidget::handleRemoveRequested);
 
-            QFileInfo info(file);
+            FileManager::DirectoryStatus stat = FileManager::directoryStatus(file);
 
-            bool disabl = false;
-            if (info.exists())
-            {
-                if (info.isDir())
-                {
-                    disabl = !QFileInfo(QDir(info.absoluteFilePath()).absoluteFilePath(QString::fromStdString(ProjectManager::s_project_file))).exists();
-                }
-                else
-                    disabl = !info.isFile();
-            }
-            else
-                disabl = true;
-
-            if (disabl)
-                item->setDisabled(disabl);
+            item->setEnabled(stat==FileManager::ProjectDirectory || stat==FileManager::IsFile);
 
             mItems.append(item);
             mLayout->addWidget(item);

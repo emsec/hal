@@ -125,6 +125,17 @@ namespace hal
             return ProgramOptions();
         }
 
+        bool can_parse(const std::filesystem::path& file_name)
+        {
+            std::string extension = utils::to_lower(file_name.extension().string());
+            if (!extension.empty() && extension[0] != '.')
+            {
+                extension = "." + extension;
+            }
+
+            return (m_extension_to_parser.find(extension) != m_extension_to_parser.end());
+        }
+
         void register_parser(const std::string& name, const ParserFactory& parser_factory, const std::vector<std::string>& supported_file_extensions)
         {
             for (auto ext : supported_file_extensions)

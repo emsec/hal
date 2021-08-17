@@ -27,6 +27,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QDir>
 
 class QFileSystemWatcher;
 
@@ -91,6 +92,17 @@ namespace hal
          */
         void emitProjectSaved(QString& projectDir, QString& file);
 
+        /**
+         * Return values for static method directoryStatus
+         */
+        enum DirectoryStatus { ProjectDirectory=2, OtherDirectory=1, IsFile=0, NotSelectable=-1, NotExisting=-2 };
+
+        /**
+         * This function checks whether a given path name is a hal directory (contains .project.json)
+         * @param pathname - the path name to be tested
+         * @return DirectoryStatus enum (see above)
+         */
+        static DirectoryStatus directoryStatus(const QString& pathname);
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted when a file is successfully opened.
@@ -221,21 +233,17 @@ namespace hal
         void displayErrorMessage(QString error_message);
 
         /**
-         * Constructs the shadowfile's name and path based on a given file. It is the same path and name as the
-         * 'original' file, but with a '~' prepended to its name.
-         *
-         * @param file - The 'original' file.
-         * @return The complete path with the name of the shadowfile.
+         * Deletes shadow (=autosave) project directory if existing.
          */
-        QString getShadowFile(QString file);
+        void removeShadowDirectory();
 
         /**
-         * Deletes a shadowfile if one exists.
+         * Crash repair: recursively move shadow (=autosave) files into project directory.
+         * @param shDir - The shadow directory
          */
-        void removeShadowFile();
+        void moveShadowToProject(const QDir& shDir) const;
 
         QString mFileName;
-        QString mShadowFileName;
         QFileSystemWatcher* mFileWatcher;
         bool mFileOpen;
         QTimer* mTimer;

@@ -1,4 +1,5 @@
 #include "gui/file_manager/project_dir_dialog.h"
+#include "gui/file_manager/file_manager.h"
 #include "hal_core/utilities/project_manager.h"
 #include <QDebug>
 #include <QDialogButtonBox>
@@ -33,8 +34,7 @@ namespace hal {
 
     bool ProjectDirDialog::isSelectable(const QString &path) const
     {
-        QDir currentDir(path.isEmpty() ? directory() : path);
-        return QFileInfo(currentDir.absoluteFilePath(QString::fromStdString(ProjectManager::s_project_file))).exists();
+        return (FileManager::directoryStatus(path) == FileManager::ProjectDirectory);
     }
 
     bool ProjectDirDialog::eventFilter(QObject* obj, QEvent* event)

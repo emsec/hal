@@ -36,7 +36,6 @@ namespace hal {
     {
         friend class ProjectManager;
 
-        static const std::string s_shadow_dir;
     public:
         ProjectDirectory(const std::string& dirname = std::string());
 
@@ -49,5 +48,6 @@ namespace hal {
         std::filesystem::path get_shadow_dir() const;
 
         static ProjectDirectory generateRandom();
+        static const std::string s_shadow_dir;
     };
 }

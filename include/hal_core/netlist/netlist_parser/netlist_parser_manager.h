@@ -95,5 +95,12 @@ namespace hal
           * @returns A vector containing one netlist per matching gate library.
           */
         std::vector<std::unique_ptr<Netlist>> parse_all(const std::filesystem::path& file_name);
+
+        /**
+         * Checks whether there is a parser registered for file extension
+         * @param file_name - The input file
+         * @return true if parser could be found.
+         */
+        bool can_parse(const std::filesystem::path& file_name);
     }    // namespace netlist_parser_manager
 }    // namespace hal

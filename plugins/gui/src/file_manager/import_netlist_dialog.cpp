@@ -99,7 +99,7 @@ namespace hal {
 
     QString ImportNetlistDialog::projectDirectory() const
     {
-        return mProjectdir;
+        return mEditProjectdir->text();
     }
 
     void ImportNetlistDialog::handleGateLibraryPathChanged(const QString& txt)
