@@ -294,6 +294,14 @@ namespace hal
          */
         void handleToolboxClicked();
 
+        /**
+         * Q_SLOT to handle doubleClicked signal. Calls handleRenameGroupingClicked if index.column()==0
+         * and handleColorSelectClicked if index.column()==2.
+         *
+         * @param index - The sender that emitted the change.
+         */
+        void handleDoubleClicked(const QModelIndex & index);
+
     private:
         class ToolboxModuleHash
         {
