@@ -43,16 +43,13 @@ namespace hal
         int s;
         int v;
 
-        Color(int _h = 0, int _s = 0, int _v = 0)
+        Color(int _h = 0, int _s = 0, int _v = 0) : h(_h), s(_s), v(_v)
         {
-            h = _h;
-            s = _s;
-            v = _v;
         }
 
         std::string toString()
         {
-            return "h: " + std::to_string(h) + "s: " + std::to_string(s) + "v: " + std::to_string(v);
+            return "h=" + std::to_string(h) + " s=" + std::to_string(s) + " v=" + std::to_string(v);
         }
     };
 

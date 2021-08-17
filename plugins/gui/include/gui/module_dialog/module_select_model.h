@@ -184,7 +184,7 @@ namespace hal {
         void moduleSelected(u32 modId, bool doubleClick);
 
     private Q_SLOTS:
-        void handleCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
+        void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
         void handleDoubleClick(const QModelIndex& index);
     };
 }

@@ -36,28 +36,29 @@ namespace hal {
     class GroupingDialog : public QDialog
     {
         Q_OBJECT
+
     public:
         GroupingDialog(QWidget* parent=nullptr);
-        QString groupName() const { return mGroupName; }
+        u32 groupId() const { return mGroupId; }
+
     private Q_SLOTS:
         void handleNewGroupingClicked();
         void handleToggleSearchbar();
         void handleFilterTextChanged(const QString& text);
-        void handleDoubleClicked(const QModelIndex& index);
-        void handleSelectionChanged();
+        void handleCurrentTabChanged(int index);
+        void handleGroupingSelected(u32 groupId, bool doubleClick);
         void accept() override;
+
     private:
-        QString getGroupName(const QModelIndex& proxyIndex);
-
-        GroupingTableModel* mGroupingTableModel;
-        QTableView* mGroupingTableView;
-        GroupingProxyModel* mProxyModel;
-        QDialogButtonBox* mButtonBox;
+        QAction* mToggleSearchbar;
         Searchbar* mSearchbar;
-        QTabWidget* mTabWidget;
-        QTableView* mLastUsed;
 
-        QString mGroupName;
+        GroupingTableView* mGroupingTableView;
+        GroupingTableView* mLastUsed;
+
+        QDialogButtonBox* mButtonBox;
+        QTabWidget* mTabWidget;
+
         u32 mGroupId;
     };
 }

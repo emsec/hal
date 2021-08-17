@@ -1,4 +1,4 @@
-#include "gui/grouping/grouping_table_model.h"
+﻿#include "gui/grouping/grouping_table_model.h"
 #include "gui/grouping/grouping_proxy_model.h"
 #include "gui/grouping/grouping_color_delegate.h"
 #include "gui/gui_globals.h"
@@ -61,7 +61,7 @@ namespace hal {
     }
 
     GroupingTableModel::GroupingTableModel(bool history, QObject* parent)
-        : QAbstractTableModel(parent), mDisableEvents(false)
+        : QAbstractTableModel(parent), mDisableEvents(false), mIsHistory(history)
     {
         //on creation load all already existing groupings from the netlist into the model
         if (history)
@@ -76,7 +76,7 @@ namespace hal {
                 Q_EMIT layoutChanged();
                 mDisableEvents = false;
 
-                QModelIndex inx = index(n,0);
+                QModelIndex inx = index(n, 0);
                 Q_EMIT newEntryAdded(inx);
             }
         }
@@ -92,7 +92,7 @@ namespace hal {
                 Q_EMIT layoutChanged();
                 mDisableEvents = false;
 
-                QModelIndex inx = index(n,0);
+                QModelIndex inx = index(n, 0);
                 Q_EMIT newEntryAdded(inx);
             }
         }
@@ -250,7 +250,7 @@ namespace hal {
 
     void GroupingTableModel::createGroupingEvent(Grouping *grp)
     {
-        if (mDisableEvents) return;
+        if (mDisableEvents || mIsHistory) return;
         Q_EMIT layoutAboutToBeChanged();
         int n = mGroupings.size();
         mGroupings.append(GroupingTableEntry(grp));
@@ -403,23 +403,58 @@ namespace hal {
     }
 
     //---------------- VIEW -------------------------------------------
-    GroupingTableView::GroupingTableView(bool history, QWidget* parent)
+    GroupingTableView::GroupingTableView(bool history, QWidget* parent) : QTableView(parent)
     {
-        setSelectionMode(QAbstractItemView::SingleSelection);
-        setSelectionBehavior(QAbstractItemView::SelectRows);
-        setItemDelegateForColumn(2, new GroupingColorDelegate(this));
-        setSortingEnabled(true);
-        sortByColumn(0, Qt::SortOrder::AscendingOrder);
-
         GroupingProxyModel* prox = new GroupingProxyModel(this);
         GroupingTableModel* modl = new GroupingTableModel(history, this);
         prox->setSourceModel(modl);
         setModel(prox);
 
-        verticalHeader()->hide();
+        setItemDelegateForColumn(2, new GroupingColorDelegate(this));
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+        setSortingEnabled(true);
+        sortByColumn(0, Qt::SortOrder::AscendingOrder);
+
+        setSelectionMode(QAbstractItemView::SingleSelection);
+        setSelectionBehavior(QAbstractItemView::SelectRows);
+
+        QFont font = horizontalHeader()->font();
+        font.setBold(true);
+        horizontalHeader()->setFont(font);
         horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
         horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
         horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
         horizontalHeader()->setDefaultAlignment(Qt::AlignHCenter | Qt::AlignCenter);
+        verticalHeader()->hide();
+
+        connect(selectionModel(), &QItemSelectionModel::selectionChanged, this, &GroupingTableView::handleSelectionChanged);
+        connect(this, &QTableView::doubleClicked, this, &GroupingTableView::handleDoubleClick);
+    }
+
+    void GroupingTableView::handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+    {
+        Q_UNUSED(deselected);
+        if (selected.indexes().empty())
+        {
+            Q_EMIT(groupingSelected(0, false));
+            return;
+        }
+        const GroupingProxyModel* prox = static_cast<const GroupingProxyModel*>(model());
+        Q_ASSERT(prox);
+        const GroupingTableModel* modl = static_cast<const GroupingTableModel*>(prox->sourceModel());
+        QModelIndex sourceIndex        = prox->mapToSource(selected.indexes().at(0));
+        u32 groupId                    = modl->groupingAt(sourceIndex.row()).id();
+        Q_EMIT(groupingSelected(groupId, false));
+    }
+
+    void GroupingTableView::handleDoubleClick(const QModelIndex& index)
+    {
+        const GroupingProxyModel* prox = static_cast<const GroupingProxyModel*>(model());
+        Q_ASSERT(prox);
+        const GroupingTableModel* modl = static_cast<const GroupingTableModel*>(prox->sourceModel());
+        QModelIndex sourceIndex        = prox->mapToSource(index);
+        u32 groupId                    = modl->groupingAt(sourceIndex.row()).id();
+        Q_EMIT(groupingSelected(groupId, true));
     }
 }

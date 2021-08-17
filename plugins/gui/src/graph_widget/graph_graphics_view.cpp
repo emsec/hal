@@ -738,6 +738,12 @@ namespace hal
                 }
             }
 
+            action = context_menu.addAction("  Assign to grouping …");
+            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingDialog);
+
+            action = context_menu.addAction("  Remove grouping assignment …");
+            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
+
             if (gSelectionRelay->numberSelectedNodes() > 1)
             {
                 /* there is currently no action that works on gates only
@@ -757,12 +763,6 @@ namespace hal
                     QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleUnfoldAllAction);
                 }
             }
-
-            action = context_menu.addAction("  Assign to grouping …");
-            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingDialog);
-
-            action = context_menu.addAction("  Remove grouping assignment …");
-            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
         }
 
         // if (!item || isNet)
@@ -1373,7 +1373,8 @@ namespace hal
     {
         GroupingDialog gd(this);
         if (gd.exec() != QDialog::Accepted) return;
-        gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction(gd.groupName());
+        QString groupName = QString::fromStdString(gNetlist->get_grouping_by_id(gd.groupId())->get_name());
+        gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction(groupName);
     }
 
     void GraphGraphicsView::handleGroupingAssignNew()

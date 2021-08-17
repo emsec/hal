@@ -325,6 +325,9 @@ namespace hal {
          * @param index - The index of the new entry
          */
         void newEntryAdded(QModelIndex& index);
+
+    private:
+        bool mIsHistory = false;
     };
 
     class GroupingTableHistory : public QList<u32>
@@ -342,5 +345,12 @@ namespace hal {
 
     public:
         GroupingTableView(bool history, QWidget* parent=nullptr);
+
+    Q_SIGNALS:
+        void groupingSelected(u32 id, bool doubleClick);
+
+    private Q_SLOTS:
+        void handleDoubleClick(const QModelIndex& index);
+        void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     };
 }
