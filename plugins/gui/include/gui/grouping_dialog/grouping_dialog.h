@@ -38,16 +38,46 @@ namespace hal {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param parent - The dialog's parent.
+         */
         GroupingDialog(QWidget* parent=nullptr);
+
+        /**
+         * Get the grouping id which was selected through this dialog.
+         *
+         * @return The selected id.
+         */
         u32 groupId() const { return mGroupId; }
+
+    public Q_SLOTS:
+        /**
+         * Enables the dialog buttons if groupId is not zero and vice versa. If groupId is not zero and
+         * doubleClick is true, the dialog is accepted.
+         *
+         * @param groupId - The selected id.
+         * @param doubleClick - True if grouping table view emitted doubleClicked signal.
+         */
+        void handleGroupingSelected(u32 groupId, bool doubleClick);
+
+        /**
+         * Updates the grouping history and accepts the dialog.
+         */
+        void accept() override;
+
+        /**
+         * Overwrites the filter with the regular expression given in text.
+         *
+         * @param text - Contains the regular expression filter as a string
+         */
+        void filter(const QString& text);
 
     private Q_SLOTS:
         void handleNewGroupingClicked();
         void handleToggleSearchbar();
-        void handleFilterTextChanged(const QString& text);
         void handleCurrentTabChanged(int index);
-        void handleGroupingSelected(u32 groupId, bool doubleClick);
-        void accept() override;
 
     private:
         QAction* mToggleSearchbar;

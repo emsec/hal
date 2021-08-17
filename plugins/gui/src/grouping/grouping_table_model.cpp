@@ -55,17 +55,12 @@ namespace hal {
         mGrouping->set_color(Color(c.hue(), c.saturation(), c.value()));
     }
 
-    QColor GroupingTableEntry::toQColor(Color c) const
-    {
-        return QColor::fromHsv(c.h,c.s,c.v);
-    }
-
     GroupingTableModel::GroupingTableModel(bool history, QObject* parent)
         : QAbstractTableModel(parent), mDisableEvents(false), mIsHistory(history)
     {
-        //on creation load all already existing groupings from the netlist into the model
         if (history)
         {
+            // if history is set to true, only load the groupings from GroupingTableHistory into the model
             for(auto id : *GroupingTableHistory::instance())
             {
                 mDisableEvents = true;
@@ -82,6 +77,7 @@ namespace hal {
         }
         else
         {
+            // on creation load all already existing groupings from the netlist into the model
             for(auto grp : gNetlist->get_groupings())
             {
                 mDisableEvents = true;

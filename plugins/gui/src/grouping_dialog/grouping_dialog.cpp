@@ -5,6 +5,7 @@
 #include "gui/user_action/action_delete_object.h"
 #include "gui/gui_globals.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
+#include "hal_core/utilities/log.h"
 
 #include <QGridLayout>
 #include <QPushButton>
@@ -59,7 +60,7 @@ namespace hal {
         addAction(mToggleSearchbar);
 
         connect(mTabWidget, &QTabWidget::currentChanged, this, &GroupingDialog::handleCurrentTabChanged);
-        connect(mSearchbar, &Searchbar::textEdited, this, &GroupingDialog::handleFilterTextChanged);
+        connect(mSearchbar, &Searchbar::textEdited, this, &GroupingDialog::filter);
         connect(mToggleSearchbar, &QAction::triggered, this, &GroupingDialog::handleToggleSearchbar);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -86,9 +87,13 @@ namespace hal {
         }
     }
 
-    void GroupingDialog::handleFilterTextChanged(const QString& text)
+    void GroupingDialog::filter(const QString& text)
     {
         static_cast<GroupingProxyModel*>(mGroupingTableView->model())->setFilterRegularExpression(text);
+        if (mTabWidget->widget(1))
+            static_cast<GroupingProxyModel*>(mLastUsed->model())->setFilterRegularExpression(text);
+        QString output = "navigation regular expression '" + text + "' entered.";
+        log_info("user", output.toStdString());
     }
 
     void GroupingDialog::handleCurrentTabChanged(int index)

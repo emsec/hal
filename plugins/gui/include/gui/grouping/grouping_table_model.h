@@ -114,9 +114,6 @@ namespace hal {
          * @returns the grouping
          */
         Grouping* grouping() const { return mGrouping; }
-
-    private:
-        QColor toQColor(Color c) const;
     };
 
     /**

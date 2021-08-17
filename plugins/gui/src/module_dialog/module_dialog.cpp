@@ -183,15 +183,12 @@ namespace hal {
 
     void ModuleDialog::filter(const QString& text)
     {
-        QRegularExpression* regex = new QRegularExpression(text);
-        if (regex->isValid())
-        {
-            mModuleTreeProxyModel->setFilterRegularExpression(*regex);
-            static_cast<ModuleSelectProxy*>(mTableView->model())->setFilterRegularExpression(*regex);
-            mTreeView->expandAll();
-            QString output = "navigation regular expression '" + text + "' entered.";
-            log_info("user", output.toStdString());
-        }
+        mModuleTreeProxyModel->setFilterRegularExpression(text);
+        static_cast<ModuleSelectProxy*>(mTableView->model())->setFilterRegularExpression(text);
+        if (mTabWidget->widget(2))
+            static_cast<ModuleSelectProxy*>(mLastUsed->model())->setFilterRegularExpression(text);
+        QString output = "navigation regular expression '" + text + "' entered.";
+        log_info("user", output.toStdString());
     }
 }
 
