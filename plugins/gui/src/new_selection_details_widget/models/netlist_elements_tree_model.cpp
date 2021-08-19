@@ -265,11 +265,12 @@ namespace hal
         Gate* assignedGate = gNetlist->get_gate_by_id(assigned_gate);
 
         //helper lambda function to parametrize the moduleItem parent (not worth own named class function)
-        auto appendNewGateToModule = [this, assignedGate](TreeItem* modItem, Module *m, int assigned_gate){
+        auto appendNewGateToModule = [this, assignedGate](TreeItem* modItem){
             int indexToInsert = 0;
             for(; indexToInsert < modItem->getChildCount(); indexToInsert++)
                 if(getTypeOfItem(modItem->getChild(indexToInsert)) != itemType::module)
                     break;
+
             TreeItem* gateItem = new TreeItem(QList<QVariant>() << QString::fromStdString(assignedGate->get_name())
                                               << assignedGate->get_id() << QString::fromStdString(assignedGate->get_type()->get_name()));
             gateItem->setAdditionalData(keyItemType, QVariant::fromValue(itemType::gate));
@@ -286,11 +287,11 @@ namespace hal
 
         //special case when we actually displaying the content of a module through setModule
         if(mCurrentlyDisplayingModule && mModId == (int)m->get_id())
-            appendNewGateToModule(mRootItem,m, assigned_gate);
+            appendNewGateToModule(mRootItem);
 
         //standard case in which you do the same as obove, but just go through each module item
         for(TreeItem* modItem : mModuleToTreeitems.values(m))
-            appendNewGateToModule(modItem, m, assigned_gate);
+            appendNewGateToModule(modItem);
     }
 
     void NetlistElementsTreeModel::moduleGateRemoved(Module *m, int removed_gate)
