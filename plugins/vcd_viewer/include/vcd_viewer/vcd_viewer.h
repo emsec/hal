@@ -24,6 +24,8 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/content_manager/content_manager.h"
@@ -34,15 +36,16 @@
 #include <sstream>
 #include <QString>
 #include <QMap>
+#include <QCheckBox>
+#include <vector>
 
 namespace hal
 {
     /* forward declaration */
     class Netlist;
-    class Net;
-    class Gate;
     class WaveWidget;
     class WaveData;
+    class Toolbar;
 
     class NETLIST_API VcdViewerFactory : public ContentFactory
     {
@@ -59,6 +62,9 @@ namespace hal
         Q_OBJECT
 
     public:
+
+        enum SimulationState { SimulationSelectGates, SimulationClockSet, SimulationInputGenerate, SimulationShowResults };
+
         VcdViewer(QWidget* parent = nullptr);
         ~VcdViewer() = default;
 
@@ -73,17 +79,23 @@ namespace hal
         void handleSimulSettings();
         void handleOpenInputFile();
         void handleRunSimulation();
+        void handleSelectGates();
+        void handleClockSet();
 
         void handleSelectionChanged(void* sender);
 
     private:
         void initSimulator();
+        void setClock(Net*n, int period, int start=0);
 
+        SimulationState mState;
         NetlistSimulator* mSimulator;
         std::unique_ptr<NetlistSimulator> mOwner;
+        std::vector<Net*> mInputNets;
         Net* mClkNet;
+        std::vector<Gate*> mSimulateGates;
 
-        QMap<QString,const WaveData*> mResults;
+        QMap<u32,const WaveData*> mResultMap;
 
         QAction* mSimulSettingsAction;
         QAction* mOpenInputfileAction;

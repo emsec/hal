@@ -3,6 +3,8 @@
 #include "vcd_viewer/wave_widget.h"
 #include "vcd_viewer/wave_data.h"
 #include "vcd_viewer/vcd_serializer.h"
+#include "vcd_viewer/gate_selection_dialog.h"
+#include "vcd_viewer/clock_set_dialog.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
@@ -21,6 +23,7 @@
 #include <QColor>
 #include <QFileDialog>
 #include <QAction>
+#include <QMenu>
 #include <QVBoxLayout>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "netlist_simulator/plugin_netlist_simulator.h"
@@ -34,11 +37,12 @@ namespace hal
     }
 
     VcdViewer::VcdViewer(QWidget *parent)
-        : ContentWidget("VcdViewer",parent), mClkNet(nullptr)
+        : ContentWidget("VcdViewer",parent), mState(SimulationSelectGates), mClkNet(nullptr)
     {
         mSimulSettingsAction = new QAction(this);
         mOpenInputfileAction = new QAction(this);
         mRunSimulationAction = new QAction(this);
+
 
         mSimulSettingsAction->setIcon(gui_utility::getStyledSvgIcon("all->#808080",":/icons/preferences"));
         mOpenInputfileAction->setIcon(gui_utility::getStyledSvgIcon("all->#FFFFFF",":/icons/folder"));
@@ -53,7 +57,6 @@ namespace hal
         connect(mRunSimulationAction, &QAction::triggered, this, &VcdViewer::handleRunSimulation);
 
         mWaveWidget = new WaveWidget(this);
-        initSimulator();
         mContentLayout->addWidget(mWaveWidget);
         if (gSelectionRelay)
             connect(gSelectionRelay,&SelectionRelay::selectionChanged,this,&VcdViewer::handleSelectionChanged);
@@ -76,6 +79,7 @@ namespace hal
             qDebug() << "Cannot create new simulator";
             return;
         }
+        mSimulator->reset();
         qDebug() << "sim has gates " << mSimulator->get_gates().size();
         if (!gNetlist)
         {
@@ -83,29 +87,19 @@ namespace hal
             return;
         }
         qDebug() << "net has gates " << gNetlist->get_gates().size();
-        mSimulator->add_gates(gNetlist->get_gates());
-        for (Net* n : gNetlist->get_nets())
-            if (n->get_name() == "CLK")
-            {
-                mClkNet = n;
-                break;
-            }
-        if (!mClkNet)
-        {
-            qDebug() << "No clock found";
-            return;
-        }
+        mSimulator->add_gates(mSimulateGates);
 
-        for (Net* n : mSimulator->get_input_nets())
+
+        mClkNet = nullptr;
+        mInputNets = mSimulator->get_input_nets();
+        for (Net* n : mInputNets)
         {
-            if (n==mClkNet) continue;
-            WaveData* wd = new WaveData(QString("%1[%2]").arg(QString::fromStdString(n->get_name())).arg(n->get_id()));
+            WaveData* wd = new WaveData(n);
             wd->insert(0,0);
             mWaveWidget->addOrReplaceWave(wd);
-            qDebug() << "input net" << n->get_id() << n->get_name().c_str();
         }
-        mSimulator->add_clock_frequency(mClkNet,1000000);
         mSimulator->set_iteration_timeout(1000);
+        mState = SimulationClockSet;
     }
 
     void VcdViewer::setupToolbar(Toolbar* toolbar)
@@ -113,11 +107,28 @@ namespace hal
         toolbar->addAction(mSimulSettingsAction);
         toolbar->addAction(mOpenInputfileAction);
         toolbar->addAction(mRunSimulationAction);
+
     }
 
     void VcdViewer::handleSimulSettings()
     {
-         qDebug() << "simulation settings";
+         QMenu* settingMenu = new QMenu(this);
+         QAction* act;
+         act = new QAction("Select gates for simulation", settingMenu);
+         connect(act, &QAction::triggered, this, &VcdViewer::handleSelectGates);
+         settingMenu->addAction(act);
+         act = new QAction("Select clock net", settingMenu);
+         connect(act, &QAction::triggered, this, &VcdViewer::handleClockSet);
+         act->setEnabled(mState==SimulationClockSet);
+         settingMenu->addAction(act);
+         settingMenu->addSeparator();
+         act = new QAction("Visualize net state by color", settingMenu);
+         act->setCheckable(true);
+         act->setChecked(mWaveWidget->isVisulizeNetState());
+         connect (act, &QAction::triggered, mWaveWidget, &WaveWidget::setVisualizeNetState);
+         settingMenu->addAction(act);
+
+         settingMenu->exec(mapToGlobal(QPoint(10,3)));
     }
 
     void VcdViewer::handleOpenInputFile()
@@ -132,17 +143,22 @@ namespace hal
 
     void VcdViewer::handleRunSimulation()
     {
-        mResults.clear();
+        mResultMap.clear();
         if (!mClkNet)
         {
             qDebug() << "no clock found";
+            return;
+        }
+        if (mState != SimulationInputGenerate)
+        {
+            qDebug() << "wrong state" << mState;
             return;
         }
         QMultiMap<int,QPair<Net*,SignalValue>> inputMap;
         for (Net* n : mSimulator->get_input_nets())
         {
             if (n==mClkNet) continue;
-            const WaveData* wd = mWaveWidget->waveDataByName(QString("%1[%2]").arg(QString::fromStdString(n->get_name())).arg(n->get_id()));
+            const WaveData* wd = mWaveWidget->waveDataByNetId(n->get_id());
             for (auto it=wd->constBegin(); it != wd->constEnd(); ++it)
             {
                 SignalValue sv;
@@ -167,12 +183,57 @@ namespace hal
             }
             mSimulator->set_input(it.value().first,it.value().second);
         }
+
+        for (Net* n : gNetlist->get_nets())
+        {
+            WaveData* wd = WaveData::simulationResultFactory(n, mSimulator);
+            if (wd) mResultMap.insert(wd->id(),wd);
+        }
+
+        /*
         mSimulator->generate_vcd("result.vcd",0,t);
 
         VcdSerializer reader(this);
         for (WaveData* wd : reader.deserialize("result.vcd"))
             mResults.insert(wd->name(),wd);
-        qDebug() << "results" << mResults.size();
+            */
+        qDebug() << "results" << mResultMap.size();
+        mState = SimulationShowResults;
+    }
+
+    void VcdViewer::handleClockSet()
+    {
+        ClockSetDialog csd(mInputNets, this);
+        if (csd.exec() != QDialog::Accepted) return;
+
+        int period = csd.period();
+        if (period <= 0) return;
+
+        int start = csd.startValue();
+        mClkNet = mInputNets.at(csd.netIndex());
+
+        mSimulator->add_clock_period(mClkNet,period,start==0);
+        WaveData* wd = WaveData::clockFactory(mClkNet, start, period, 2000);
+        mWaveWidget->addOrReplaceWave(wd);
+        mState = SimulationInputGenerate;
+    }
+
+    void VcdViewer::setClock(Net *n, int period, int start)
+    {
+        mClkNet = n;
+        mSimulator->add_clock_period(mClkNet,period,start==0);
+        WaveData* wd = WaveData::clockFactory(mClkNet, start, period, 2000);
+        mWaveWidget->addOrReplaceWave(wd);
+        mState = SimulationInputGenerate;
+    }
+
+    void VcdViewer::handleSelectGates()
+    {
+        GateSelectionDialog gsd(this);
+        if (gsd.exec() != QDialog::Accepted) return;
+
+        mSimulateGates = gsd.selectedGates();
+        initSimulator();
     }
 
     void VcdViewer::handleSelectionChanged(void* sender)
@@ -182,11 +243,9 @@ namespace hal
         {
             Net* n = gNetlist->get_net_by_id(nid);
             if (!n) continue;
-            QString name = QString::fromStdString(n->get_name());
-            const WaveData* wd = mResults.value(name);
+            const WaveData* wd = mResultMap.value(n->get_id());
             if (!wd) continue;
-            name += QString("[%1]").arg(n->get_id());
-            WaveData* wdCopy = new WaveData(name, *wd);
+            WaveData* wdCopy = new WaveData(*wd);
             mWaveWidget->addOrReplaceWave(wdCopy);
         }
     }

@@ -22,6 +22,16 @@
 
 namespace hal
 {
+    SettingsItemCheckbox* GraphContextManager::sSettingNetGroupingToPins =
+            new SettingsItemCheckbox(
+                "Net Grouping Color to Gate Pins",
+                "graph_view/net_grp_pin",
+                true,
+                "Appearance:Graph View",
+                "If set net grouping colors are also applied to input and output pins of gates"
+                );
+
+
     GraphContextManager::GraphContextManager() : mContextTableModel(new ContextTableModel()), mMaxContextId(0)
     {    
         mSettingDebugGrid = new SettingsItemCheckbox(

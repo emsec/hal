@@ -160,6 +160,14 @@ namespace hal
          */
         bool generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<Net*> nets = {}) const;
 
+        /**
+         * Get vector of simulated events for net
+         *
+         * @param[in] n - The net for which events where simulated
+         * @return Vector of events
+         */
+        std::vector<Event> get_simulation_events(Net *n) const;
+
     private:
         friend class NetlistSimulatorPlugin;
         NetlistSimulator();

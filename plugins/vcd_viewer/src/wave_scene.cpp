@@ -11,7 +11,7 @@ namespace hal {
     WaveScene::WaveScene(QObject* parent)
         : QGraphicsScene(parent), mClearTimer(nullptr)
     {
-        setSceneRect(QRectF(0,0,1000,5));
+        setSceneRect(QRectF(0,0,1500,20));
         mCursor = new WaveCursor();
         addItem(mCursor);
 
@@ -26,20 +26,23 @@ namespace hal {
 
     void WaveScene::generateDataSample()
     {
+        /*
         int freq[5] = {50, 100, 200, 400, 800};
+        u32 ids[5] = {9, 7, 6, 4, 8};
 
         QList<const WaveData*> wlist;
         for (int i=0; i<5; i++)
-            wlist.append(WaveData::clockFactory(0, freq[i], 2000));
+            wlist.append(WaveData::clockFactory(ids[i], QString("INPUT_%1[%2]").arg(i).arg(ids[i]), 0, freq[i], 2000));
 
         VcdSerializer writer(this);
-        writer.serialize("dummy.vcd", wlist);
-        QList<WaveData*> wparse = writer.deserialize("dummy.vcd");
+        writer.serialize("fsmin.vcd", wlist);
+        QList<WaveData*> wparse = writer.deserialize("fsmin.vcd");
 
         for (WaveData* wd : wparse)
         {
             addWave(wd);
         }
+        */
     }
 
     int WaveScene::addWave(WaveData* wd)
@@ -59,6 +62,7 @@ namespace hal {
     float WaveScene::adjustSceneRect()
     {
         int n = mWaveItems.size();
+        if (n<5) n=5;
         float maxw = 1000;
         for (WaveItem* itm : mWaveItems)
             if (itm->boundingRect().width() > maxw)

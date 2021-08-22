@@ -17,6 +17,7 @@ namespace hal {
         QPoint mMouseRelative;
         QRectF mDeleteRect;
         int mState;
+        bool mHighlight;
 
         WaveLabel* mGhostShape;
         static QPixmap* sXdelete;
@@ -39,9 +40,11 @@ namespace hal {
         explicit WaveLabel(int inx, const QString& nam, QWidget *parent = nullptr);
         void setDataIndex(int inx) { mDataIndex = inx; }
         void setValue(int val);
+        void setHighlight(bool hl);
         void paintEvent(QPaintEvent *event) override;
         int state() const { return mState; }
         void setState(int v) { mState = v; }
         static QPixmap* piXdelete();
+        QString text() const { return mName; }
     };
 }

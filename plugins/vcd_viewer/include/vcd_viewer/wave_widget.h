@@ -7,6 +7,7 @@
 #include <QMap>
 #include <QSplitter>
 #include <QFrame>
+#include <hal_core/defines.h>
 
 namespace hal {
 
@@ -14,6 +15,7 @@ namespace hal {
     class WaveData;
     class WaveView;
     class WaveScene;
+    class SelectionTreeItem;
 
     class WaveWidget : public QSplitter
     {
@@ -22,7 +24,11 @@ namespace hal {
     public:
         WaveWidget(QWidget* parent=nullptr);
         void addOrReplaceWave(WaveData* wd);
-        const WaveData* waveDataByName(const QString& name) const;
+        const WaveData* waveDataByNetId(u32 id) const;
+        bool isVisulizeNetState() const { return mVisualizeNetState; }
+
+    public Q_SLOTS:
+        void setVisualizeNetState(bool state);
 
     private Q_SLOTS:
         void handleCursorMoved(float xpos);
@@ -32,21 +38,25 @@ namespace hal {
 
         void editWaveData(int dataIndex);
         void deleteWave(int dataIndex);
+        void handleSelectionHighlight(const QVector<const SelectionTreeItem*>& highlight);
 
     protected:
         void resizeEvent(QResizeEvent *event) override;
 
     private:
-        QMap<QString,int> mWaveIndices;
+        QMap<u32,int> mWaveIndices;
         QVector<WaveLabel*> mValues;
 
         void updateLabel(int dataIndex, float xpos);
         void updateIndices();
         int  targetIndex(int ypos);
+        void visualizeCurrentNetState(float xpos);
 
         WaveView *mWaveView;
         WaveScene *mWaveScene;
         QFrame *mFrame;
+        bool mVisualizeNetState;
+        u32 mGroupIds[3];
     };
 
 }

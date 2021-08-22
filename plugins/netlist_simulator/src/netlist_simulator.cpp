@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <unordered_map>
 
 template<typename T>
 static T toggle(T v)
@@ -204,6 +205,8 @@ namespace hal
 
     void NetlistSimulator::reset()
     {
+        m_clocks.clear();
+        m_simulation_set.clear();
         m_current_time = 0;
         m_id_counter   = 0;
         m_simulation   = Simulation();
@@ -285,6 +288,16 @@ namespace hal
         return m_timeout_iterations;
     }
 
+    std::vector<Event> NetlistSimulator::get_simulation_events(Net* n) const
+    {
+        std::unordered_map<Net*, std::vector<Event>> sim_events = m_simulation.get_events();
+        auto it = sim_events.find(n);
+        if (it == sim_events.end())
+            return std::vector<Event>();
+        return it->second;
+    }
+
+
     /*
      * This function precomputes all the stuff that shall be cached for simulation.
      */
@@ -304,7 +317,7 @@ namespace hal
             std::vector<Net*> input_nets;
 
             // gather input pins + respective nets at same positions of vectors for fast iteration
-            for (auto pin : gate->get_input_pins())
+            for (auto pin : gate->get_type()->get_input_pins())
             {
                 input_pins.push_back(pin);
                 input_nets.push_back(gate->get_fan_in_net(pin));
@@ -369,7 +382,7 @@ namespace hal
 
                 auto all_functions = gate->get_boolean_functions();
 
-                sim_gate->output_pins = gate->get_output_pins();
+                sim_gate->output_pins = gate->get_type()->get_output_pins();
 
                 for (auto pin : sim_gate->output_pins)
                 {

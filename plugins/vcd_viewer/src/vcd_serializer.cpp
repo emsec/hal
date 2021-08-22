@@ -151,6 +151,7 @@ QMap<int,int>::const_iterator mIterator;
 
         QRegularExpression reHead("\\$(\\w*) (.*)\\$end");
         QRegularExpression reWire("wire (\\d+) ([^ ]+) (.*) $");
+        QRegularExpression reWiid("\\[(\\d+)\\]$");
         for (QByteArray line : ff.readAll().split('\n'))
         {
             if (parseHeader)
@@ -163,7 +164,9 @@ QMap<int,int>::const_iterator mIterator;
                     else if (mHead.captured(1) == "var")
                     {
                         QRegularExpressionMatch mWire = reWire.match(mHead.captured(2));
-                        mWaves.insert(mWire.captured(2),new WaveData(mWire.captured(3)));
+                        QString wireName = mWire.captured(3);
+                        QRegularExpressionMatch mWiid = reWiid.match(wireName);
+                        mWaves.insert(mWire.captured(2),new WaveData(mWiid.captured(1).toUInt(),wireName));
                     }
                 }
             }

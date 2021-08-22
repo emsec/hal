@@ -8,7 +8,7 @@ namespace hal {
     QPixmap* WaveLabel::sXdelete = nullptr;
 
     WaveLabel::WaveLabel(int inx, const QString &nam, QWidget *parent)
-        : QWidget(parent), mDataIndex(inx), mName(nam), mValue(0), mState(0), mGhostShape(nullptr)
+        : QWidget(parent), mDataIndex(inx), mName(nam), mValue(0), mState(0), mHighlight(false), mGhostShape(nullptr)
     {;}
 
     QPixmap* WaveLabel::piXdelete()
@@ -28,6 +28,13 @@ namespace hal {
     {
         Q_UNUSED(event);
         Q_EMIT doubleClicked(mDataIndex);
+    }
+
+    void WaveLabel::setHighlight(bool hl)
+    {
+        if (hl == mHighlight) return;
+        mHighlight = hl;
+        update();
     }
 
     void WaveLabel::mousePressEvent(QMouseEvent *event)
@@ -106,7 +113,7 @@ namespace hal {
         QColor bgcol("#206080");
         switch (mState)
         {
-        case 0: bgcol = QColor("#102040"); break;
+        case 0: bgcol = mHighlight ? QColor("#108080") : QColor("#102040"); break;
         case 1: bgcol.setAlpha(255); break;
         case 2: bgcol = QColor("#108040"); break;
         case 3: bgcol.setAlpha(80); break;
