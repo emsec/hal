@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 
 #include <QMap>
 #include <QObject>
