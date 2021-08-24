@@ -1,8 +1,9 @@
 #include "gui/new_selection_details_widget/general_table_widget.h"
 
 #include <QMenu>
-
 #include <QHeaderView>
+#include <QApplication>
+#include <QClipboard>
 
 namespace hal
 {
@@ -26,22 +27,11 @@ namespace hal
 
         //setMaximumHeight(verticalHeader()->length());
         //resizeColumnToContents(0);
-
-
         //mGeneralView->resizeColumnsToContents();
         //mGeneralView->setFixedSize(DetailsTableUtilities::tableViewSize(mGeneralView,mGeneralModel->rowCount(),mGeneralModel->columnCount()));
 
-
-
-
         connect(this, &GeneralTableWidget::customContextMenuRequested, this, &GeneralTableWidget::serveContextMenu);
         connect(this, &GeneralTableWidget::doubleClicked, this, &GeneralTableWidget::handleDoubleClick);
-    }
-
-    void GeneralTableWidget::setContent(u32 elementId)
-    {
-        update(elementId);
-        adjustSize();
     }
 
     void GeneralTableWidget::setRow(const QString& key, const QString& val, QMenu* contextMenu, std::function<void()> doubleClickAction)
@@ -130,9 +120,14 @@ namespace hal
             for (int i = 0; i < rows; i++)
                 h += rowHeight(i);
 
-            w + 5; //no contemporary source exists why 5 is the magic number here (my guess would be it's the width of the hidden scrollbar)
+            w = w + 5; //no contemporary source exists why 5 is the magic number here (my guess would be it's the width of the hidden scrollbar)
         }
 
         setFixedSize(QSize(w, h)); 
+    }
+
+    void GeneralTableWidget::copyToClipboard(const QString& text) const
+    {
+        QApplication::clipboard()->setText(text);
     }
 }

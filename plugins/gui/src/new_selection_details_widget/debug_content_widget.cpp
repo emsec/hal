@@ -18,6 +18,7 @@
 #include "gui/new_selection_details_widget/groupings_of_item_widget.h"
 #include <QScrollArea>
 #include <QGridLayout>
+#include "gui/gui_globals.h"
 
 
 //--------------------
@@ -91,12 +92,13 @@ namespace hal {
         //General Info Tables
         GateInfoTable* gateTable = new GateInfoTable(this); //hardcoded to show gate with id 11 in constructor atm
         scrollAreaLayout->addWidget(gateTable);
-
+        gateTable->setGate(gNetlist->get_gate_by_id(11));
         NetInfoTable* netTable = new NetInfoTable(this); //hardcoded to show net with id 17 in constructor atm
         scrollAreaLayout->addWidget(netTable);
-
+        netTable->setNet(gNetlist->get_net_by_id(17));
         ModuleInfoTable* moduleTable = new ModuleInfoTable(this); //hardcoded to show module with id 1 in constructor atm
         scrollAreaLayout->addWidget(moduleTable);
+        moduleTable->setModule(gNetlist->get_module_by_id(1));
         //-----------------------------------------------------------------------------------------------------------------------
 
         EndpointTableModel* sourceModel = new EndpointTableModel(EndpointTableModel::Type::source, this);

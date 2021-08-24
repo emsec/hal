@@ -31,19 +31,22 @@ namespace hal
 
         mNumDstsEntryContextMenu = new QMenu();
         mNumDstsEntryContextMenu->addAction("copyNumDsts", std::bind(&NetInfoTable::copyNumberOfDsts, this));
-
-        setContent(17);
     }
 
-    void NetInfoTable::update(u32 netId)
+    void NetInfoTable::setNet(hal::Net* net)
     {
-        mNet = gNetlist->get_net_by_id(netId);
+        if(gNetlist->is_net_in_netlist(net))
+        {
+            mNet = net;
 
-        setRow("Name", name(), mNameEntryContextMenu);
-        setRow("Id", id(), mIdEntryContextMenu);
-        setRow("Type", type(), mTypeEntryContextMenu);
-        setRow("No. of Sources", numberOfSrcs(), mNumSrcsEntryContextMenu);
-        setRow("No. of Destinations", numberOfDsts(), mNumDstsEntryContextMenu);
+            setRow("Name", name(), mNameEntryContextMenu);
+            setRow("Id", id(), mIdEntryContextMenu);
+            setRow("Type", type(), mTypeEntryContextMenu);
+            setRow("No. of Sources", numberOfSrcs(), mNumSrcsEntryContextMenu);
+            setRow("No. of Destinations", numberOfDsts(), mNumDstsEntryContextMenu);
+
+            adjustSize();
+        }
     }
 
     QString NetInfoTable::name() const
@@ -58,7 +61,7 @@ namespace hal
 
     QString NetInfoTable::type() const
     {
-        QString type = "Internal";
+        QString type = "";
 
         if(mNet->is_global_input_net())
             type = "Global input";
@@ -66,6 +69,8 @@ namespace hal
             type = "Global output";
         else if(mNet->is_unrouted())
             type = "Unrouted";
+        else
+            type = "Internal";
         
         return type;
     }
@@ -87,36 +92,36 @@ namespace hal
 
     void NetInfoTable::copyName() const
     {
-        QApplication::clipboard()->setText(name());
+        copyToClipboard(name());
     }
 
     void NetInfoTable::pyCopyName() const
     {
-        QApplication::clipboard()->setText(PyCodeProvider::pyCodeNetName(mNet->get_id()));
+        copyToClipboard(PyCodeProvider::pyCodeNetName(mNet->get_id()));
     }
 
     void NetInfoTable::copyId() const
     {
-        QApplication::clipboard()->setText(id());
+        copyToClipboard(id());
     }
 
     void NetInfoTable::copyType() const
     {
-        QApplication::clipboard()->setText(type());
+        copyToClipboard(type());
     }
     
     void NetInfoTable::pyCopyType() const
     {
-        QApplication::clipboard()->setText(PyCodeProvider::pyCodeNetType(mNet->get_id()));
+        copyToClipboard(PyCodeProvider::pyCodeNetType(mNet->get_id()));
     }
     
     void NetInfoTable::copyNumberOfSrcs() const
     {
-        QApplication::clipboard()->setText(numberOfSrcs());
+        copyToClipboard(numberOfSrcs());
     }
 
     void NetInfoTable::copyNumberOfDsts() const
     {
-        QApplication::clipboard()->setText(numberOfDsts());
+        copyToClipboard(numberOfDsts());
     }
 }

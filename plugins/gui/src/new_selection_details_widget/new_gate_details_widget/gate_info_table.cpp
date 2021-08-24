@@ -40,22 +40,25 @@ namespace hal
         mModuleEntryContextMenu->addAction("pyCopyModule", std::bind(&GateInfoTable::pyCopyModule, this));
 
         mModuleDoubleClickedAction = std::bind(&GateInfoTable::navModule, this);
-
-        setContent(11);
     }
 
-    void GateInfoTable::update(u32 gateId)
+    void GateInfoTable::setGate(hal::Gate* gate)
     {
-        mGate = gNetlist->get_gate_by_id(gateId);
+        if(gNetlist->is_gate_in_netlist(gate))
+        {
+            mGate = gate;
 
-        setRow("Name", name(), mNameEntryContextMenu);
-        setRow("Id", id(), mIdEntryContextMenu);
-        setRow("Type", type(), mTypeEntryContextMenu);
-        setRow("Gate Type properties", properties(), mPropertiesEntryContextMenu);
-        setRow("Location", location(), mLocationEntryContextMenu);
-        setRow("Module", module(), mModuleEntryContextMenu, mModuleDoubleClickedAction);
+            setRow("Name", name(), mNameEntryContextMenu);
+            setRow("Id", id(), mIdEntryContextMenu);
+            setRow("Type", type(), mTypeEntryContextMenu);
+            setRow("Gate Type properties", properties(), mPropertiesEntryContextMenu);
+            setRow("Location", location(), mLocationEntryContextMenu);
+            setRow("Module", parentModule(), mModuleEntryContextMenu, mModuleDoubleClickedAction);
+
+            adjustSize();
+        }
     }
-
+    
     QString GateInfoTable::name() const
     {
         return QString::fromStdString(mGate->get_name());
@@ -110,7 +113,7 @@ namespace hal
         return location;
     }
 
-    QString GateInfoTable::module() const
+    QString GateInfoTable::parentModule() const
     {
         Module* module = mGate->get_module();
 
@@ -124,57 +127,57 @@ namespace hal
 
     void GateInfoTable::copyName() const
     {
-        QApplication::clipboard()->setText(name());
+        copyToClipboard(name());
     }
 
     void GateInfoTable::pyCopyName() const
     {
-        QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateName(mGate->get_id()));
+        copyToClipboard(PyCodeProvider::pyCodeGateName(mGate->get_id()));
     }
 
     void GateInfoTable::copyId() const
     {
-        QApplication::clipboard()->setText(id());
+        copyToClipboard(id());
     }
 
     void GateInfoTable::copyType() const
     {
-        QApplication::clipboard()->setText(type());
+        copyToClipboard(type());
     }
 
     void GateInfoTable::pyCopyType() const
     {
-        QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateType(mGate->get_id()));
+        copyToClipboard(PyCodeProvider::pyCodeGateType(mGate->get_id()));
     }
 
     void GateInfoTable::copyproperties() const
     {
-        QApplication::clipboard()->setText(properties());
+        copyToClipboard(properties());
     }
 
     void GateInfoTable::pyCopyproperties() const
     {
-        QApplication::clipboard()->setText(PyCodeProvider::pyCodeProperties(mGate->get_id()));
+        copyToClipboard(PyCodeProvider::pyCodeProperties(mGate->get_id()));
     }
 
     void GateInfoTable::copyLocation() const
     {
-        QApplication::clipboard()->setText(location());
+        copyToClipboard(location());
     }
 
     void GateInfoTable::pyCopyLocation() const
     {
-        QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateLocation(mGate->get_id()));
+        copyToClipboard(PyCodeProvider::pyCodeGateLocation(mGate->get_id()));
     }
 
     void GateInfoTable::copyModule() const
     {
-        QApplication::clipboard()->setText(module());
+        copyToClipboard(parentModule());
     }
 
     void GateInfoTable::pyCopyModule() const
     {
-        QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateModule(mGate->get_id()));
+        copyToClipboard(PyCodeProvider::pyCodeGateModule(mGate->get_id()));
     }
 
     void GateInfoTable::navModule()
