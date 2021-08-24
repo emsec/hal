@@ -25,7 +25,7 @@
 
 #include "hal_core/netlist/netlist_internal_manager.h"
 #include "hal_core/netlist/event_handler.h"
-
+#include "hal_core/utilities/utils.h"
 
 #include <functional>
 #include <unordered_map>
@@ -36,22 +36,6 @@ namespace hal
     class Gate;
     class Net;
     class Module;
-
-    struct Color
-    {
-        int h;
-        int s;
-        int v;
-
-        Color(int _h = 0, int _s = 0, int _v = 0) : h(_h), s(_s), v(_v)
-        {
-        }
-
-        std::string toString()
-        {
-            return "h=" + std::to_string(h) + " s=" + std::to_string(s) + " v=" + std::to_string(v);
-        }
-    };
 
     /**
      * A grouping is an unstructured collection of gates, nets, and modules that do not need to be connected in any way.<br>
@@ -90,21 +74,21 @@ namespace hal
          *
          * @param[in] c - The new color.
          */
-        void set_color(Color c);
+        void set_color(utils::Color c);
 
         /**
          * Get the color of the grouping.
          *
          * @returns The color.
          */
-        Color get_color() const;
+        utils::Color get_color() const;
 
         /**
          * Generates a new color distinct from previous colors. Called for each new grouping.
          *
          * @returns The next color.
          */
-        Color next_color();
+        utils::Color next_color();
 
         /**
          * Get the netlist this grouping is associated with.
@@ -360,7 +344,7 @@ namespace hal
 
         u32 m_id;
         std::string m_name;
-        Color m_color;
+        utils::Color m_color;
         NetlistInternalManager* m_internal_manager;
 
         std::vector<Gate*> m_gates;

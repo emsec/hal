@@ -44,21 +44,21 @@ namespace hal
         return m_name;
     }
 
-    Color Grouping::get_color() const
+    utils::Color Grouping::get_color() const
     {
         return m_color;
     }
 
-    void Grouping::set_color(Color c)
+    void Grouping::set_color(utils::Color c)
     {
         m_color = c;
         m_event_handler->notify(GroupingEvent::event::color_changed, this);
     }
 
-    Color Grouping::next_color()
+    utils::Color Grouping::next_color()
     {
         int baseCol = (get_id()-1) * 37;
-        return Color(baseCol%255, 200, std::max(250-baseCol/255*50,50));
+        return utils::Color(baseCol%255, 200, std::max(250-baseCol/255*50,50));
     }
 
     Netlist* Grouping::get_netlist() const

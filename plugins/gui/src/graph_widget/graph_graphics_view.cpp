@@ -588,7 +588,6 @@ namespace hal
         QGraphicsItem* item = itemAt(pos);
         bool isGate         = false;
         bool isModule       = false;
-        bool isMultiSelect  = false;
         bool isNet          = false;
 
         if (item)
@@ -702,9 +701,6 @@ namespace hal
                 context_menu.addSeparator();
                 context_menu.addAction("Entire selection:")->setEnabled(false);
             }
-
-            if (gSelectionRelay->numberSelectedItems() > 1)
-                isMultiSelect = true;
 
             if (isGate || isModule)
             {

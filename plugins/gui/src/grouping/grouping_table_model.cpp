@@ -8,7 +8,7 @@
 
 namespace hal {
 
-    QColor toQColor(Color c)
+    QColor toQColor(utils::Color c)
     {
         return QColor::fromHsv(c.h,c.s,c.v);
     }
@@ -52,7 +52,7 @@ namespace hal {
     void GroupingTableEntry::setColor(const QColor& c)
     {
         if (!mGrouping) return;
-        mGrouping->set_color(Color(c.hue(), c.saturation(), c.value()));
+        mGrouping->set_color(utils::Color(c.hue(), c.saturation(), c.value()));
     }
 
     GroupingTableModel::GroupingTableModel(bool history, QObject* parent)
