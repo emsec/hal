@@ -24,7 +24,7 @@
 #pragma once
 
 #include <QList>
-
+#include <QVariant>
 
 
 namespace hal
