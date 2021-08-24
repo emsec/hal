@@ -14,6 +14,7 @@
 #include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/user_action_object.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
+#include "gui/selection_details_widget/gate_details_tab_widget.h"
 
 
 #include "gui/gui_globals.h"
@@ -88,11 +89,16 @@ namespace hal
 
         mSelectionDetails = new QWidget(mSplitter);
         QVBoxLayout* selDetailsLayout = new QVBoxLayout(mSelectionDetails);
+        selDetailsLayout->setContentsMargins(0,0,0,0);
+        selDetailsLayout->setSpacing(0);
 
         mStackedWidget = new QStackedWidget(mSelectionDetails);
 
         mGateDetails = new GateDetailsWidget(mSelectionDetails);
         mStackedWidget->addWidget(mGateDetails);
+
+        mGateDetailsTabs = new GateDetailsTabWidget(mSelectionDetails);
+        mStackedWidget->addWidget(mGateDetailsTabs);
 
         mNetDetails = new NetDetailsWidget(mSelectionDetails);
         mStackedWidget->addWidget(mNetDetails);
@@ -439,9 +445,12 @@ namespace hal
 //            if (mNumberSelectedItems==1) set_name("Module Details");
             break;
         case SelectionTreeItem::GateItem:
+            //qDebug() << "Gate Selected";
             mModuleDetails->update(0);
-            mGateDetails->update(sti->id());
-            mStackedWidget->setCurrentWidget(mGateDetails);
+            //mGateDetails->update(sti->id());
+            //mStackedWidget->setCurrentWidget(mGateDetails);
+            mGateDetailsTabs->setGate(gNetlist->get_gate_by_id(sti->id()));
+            mStackedWidget->setCurrentWidget(mGateDetailsTabs);
 //            if (mNumberSelectedItems==1) set_name("Gate Details");
             break;
         case SelectionTreeItem::NetItem:
