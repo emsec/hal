@@ -20,7 +20,7 @@ namespace hal
 
     std::string VcdViewerPlugin::get_version() const
     {
-        return std::string("0.1");
+        return std::string("0.7");
     }
 
     std::set<std::string> VcdViewerPlugin::get_dependencies() const
@@ -38,6 +38,7 @@ namespace hal
 
     void VcdViewerPlugin::on_unload()
     {
+        // TODO: ExternalContent unregister
         mVcdViewer->deleteLater();
     }
 }    // namespace hal

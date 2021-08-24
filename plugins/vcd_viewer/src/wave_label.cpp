@@ -7,6 +7,8 @@ namespace hal {
 
     QPixmap* WaveLabel::sXdelete = nullptr;
 
+    const char* WaveLabel::sStateColor[3] = {"#707071", "#102080", "#802010"};
+
     WaveLabel::WaveLabel(int inx, const QString &nam, QWidget *parent)
         : QWidget(parent), mDataIndex(inx), mName(nam), mValue(0), mState(0), mHighlight(false), mGhostShape(nullptr)
     {;}
@@ -89,9 +91,8 @@ namespace hal {
 
     QBrush WaveLabel::valueBackground() const
     {
-        if (!mValue) return QBrush(Qt::white);
-        if (mValue>0) return QBrush(Qt::green);
-        return QBrush(Qt::lightGray);
+        int inx = mValue < -1 || mValue > 1 ? 0 : mValue + 1;
+        return QBrush(QColor(sStateColor[inx]));
     }
 
     QString WaveLabel::valueString() const
@@ -139,7 +140,9 @@ namespace hal {
 
         font.setPointSize(10);
         paint.setFont(font);
+        paint.setPen(QPen(Qt::white,0));
         paint.drawText(rBullet, Qt::AlignHCenter | Qt::AlignVCenter, valueString());
+        paint.setPen(QPen(Qt::black,0.4));
         float dm = 0.25;
         mDeleteRect = QRectF(width()+(2*dm-1)*h,0,(1-2*dm)*h,(1-2*dm)*h);
         QPixmap* pix = piXdelete();

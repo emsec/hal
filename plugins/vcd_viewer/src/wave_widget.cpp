@@ -72,7 +72,6 @@ namespace hal {
     {
         GroupingTableModel* gtm = gContentManager->getGroupingManagerWidget()->getModel();
         static const char* grpNames[3] = {"x state", "0 state", "1 state"};
-        static const char* grpColor[3] = {"#707071", "#102080", "#802010"};
         if (state == mVisualizeNetState) return;
         if ((mVisualizeNetState = state))
         {
@@ -82,7 +81,7 @@ namespace hal {
                 if (!grp)
                 {
                     grp = gNetlist->create_grouping(grpNames[i]);
-                    gtm->recolorGrouping(grp->get_id(),QColor(grpColor[i]));
+                    gtm->recolorGrouping(grp->get_id(),QColor(WaveLabel::sStateColor[i]));
                 }
                 mGroupIds[i] = grp->get_id();
             }

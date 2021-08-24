@@ -22,4 +22,18 @@ namespace hal
     {
         return std::unique_ptr<NetlistSimulator>(new NetlistSimulator());
     }
+
+    std::shared_ptr<NetlistSimulator> NetlistSimulatorPlugin::get_shared_simulator(const std::string& module_name)
+    {
+        auto it = m_shared_simulator_map.find(module_name);
+        if (it == m_shared_simulator_map.end())
+        {
+            std::shared_ptr<NetlistSimulator> retval = create_simulator();
+            m_shared_simulator_map[module_name] = retval;
+            return retval;
+        }
+        return it->second;
+    }
+
+
 }

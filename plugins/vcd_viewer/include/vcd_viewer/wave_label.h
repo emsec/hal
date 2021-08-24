@@ -46,5 +46,6 @@ namespace hal {
         void setState(int v) { mState = v; }
         static QPixmap* piXdelete();
         QString text() const { return mName; }
+        static const char* sStateColor[3];
     };
 }

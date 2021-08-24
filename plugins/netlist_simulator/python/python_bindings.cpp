@@ -53,6 +53,16 @@ namespace hal
 
                 :returns: The simulator instance.
                 :rtype: netlist_simulator.NetlistSimulator
+            )")
+
+            .def("get_shared_simulator",
+                 &NetlistSimulatorPlugin::get_shared_simulator,
+                 py::arg("owner"), R"(
+                 Get netlist simulator instance owned by external module.
+
+                 :param str owner: The owner of netlist simulator.
+                 :returns: The simulator instance.
+                 :rtype: netlist_simulator.NetlistSimulator
             )");
 
         py::class_<NetlistSimulator>(m, "NetlistSimulator")

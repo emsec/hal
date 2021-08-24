@@ -80,9 +80,16 @@ namespace hal {
 
         float x0 = mData->lastKey();
         float x1 = mRect.width();
+        float  y = mYoffset;
         if (x0 < x1)
         {
-            float y = mYoffset - mData->last();
+            if (mData->last() < 0)
+            {
+                y -= 0.5;
+                painter->setPen(QPen(QBrush(Qt::cyan),0.,Qt::DotLine));
+            }
+            else
+                y -= mData->last();
             painter->drawLine(QLineF(x0,y,x1,y));
         }
     }

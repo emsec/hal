@@ -19,10 +19,12 @@ namespace hal {
         int netIndex() const { return mComboNet->currentIndex(); }
         int period() const { return mSpinPeriod->value(); }
         int startValue() const { return mSpinStartValue->value(); }
+        int duration() const { return mSpinDuration->value(); }
     private:
         QComboBox* mComboNet;
         QSpinBox* mSpinPeriod;
         QSpinBox* mSpinStartValue;
+        QSpinBox* mSpinDuration;
         QDialogButtonBox* mButtonBox;
     };
 }

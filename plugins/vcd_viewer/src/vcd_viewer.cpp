@@ -4,6 +4,7 @@
 #include "vcd_viewer/wave_data.h"
 #include "vcd_viewer/vcd_serializer.h"
 #include "vcd_viewer/gate_selection_dialog.h"
+#include "vcd_viewer/plugin_vcd_viewer.h"
 #include "vcd_viewer/clock_set_dialog.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
@@ -22,6 +23,7 @@
 #include <QDebug>
 #include <QColor>
 #include <QFileDialog>
+#include <QStatusBar>
 #include <QAction>
 #include <QMenu>
 #include <QVBoxLayout>
@@ -57,9 +59,26 @@ namespace hal
         connect(mRunSimulationAction, &QAction::triggered, this, &VcdViewer::handleRunSimulation);
 
         mWaveWidget = new WaveWidget(this);
+        mWaveWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         mContentLayout->addWidget(mWaveWidget);
+        mStatusBar = new QStatusBar(this);
+        mStatusBar->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+        mContentLayout->addWidget(mStatusBar);
         if (gSelectionRelay)
             connect(gSelectionRelay,&SelectionRelay::selectionChanged,this,&VcdViewer::handleSelectionChanged);
+        setState(SimulationSelectGates);
+    }
+
+    void VcdViewer::setState(SimulationState stat)
+    {
+        mState = stat;
+        switch (mState)
+        {
+        case SimulationSelectGates:   mStatusBar->showMessage("Select gates for simulation");                   break;
+        case SimulationClockSet:      mStatusBar->showMessage("Select and set clock");                          break;
+        case SimulationInputGenerate: mStatusBar->showMessage("Generate input and start simulation when done"); break;
+        case SimulationShowResults:   mStatusBar->showMessage("Select wires in graph to show results");         break;
+        }
     }
 
     void VcdViewer::initSimulator()
@@ -71,9 +90,7 @@ namespace hal
             return;
         }
         qDebug() << "access to plugin" << simPlug->get_name().c_str() << simPlug->get_version().c_str();
-        auto sim = simPlug->create_simulator();
-        mOwner = std::move(sim);
-        mSimulator = mOwner.get();
+        mSimulator = simPlug->get_shared_simulator("vcd_viewer");
         if (!mSimulator)
         {
             qDebug() << "Cannot create new simulator";
@@ -99,7 +116,7 @@ namespace hal
             mWaveWidget->addOrReplaceWave(wd);
         }
         mSimulator->set_iteration_timeout(1000);
-        mState = SimulationClockSet;
+        setState(SimulationClockSet);
     }
 
     void VcdViewer::setupToolbar(Toolbar* toolbar)
@@ -186,7 +203,7 @@ namespace hal
 
         for (Net* n : gNetlist->get_nets())
         {
-            WaveData* wd = WaveData::simulationResultFactory(n, mSimulator);
+            WaveData* wd = WaveData::simulationResultFactory(n, mSimulator.get());
             if (wd) mResultMap.insert(wd->id(),wd);
         }
 
@@ -198,7 +215,7 @@ namespace hal
             mResults.insert(wd->name(),wd);
             */
         qDebug() << "results" << mResultMap.size();
-        mState = SimulationShowResults;
+        setState(SimulationShowResults);
     }
 
     void VcdViewer::handleClockSet()
@@ -212,10 +229,11 @@ namespace hal
         int start = csd.startValue();
         mClkNet = mInputNets.at(csd.netIndex());
 
+        mDuration = csd.duration();
         mSimulator->add_clock_period(mClkNet,period,start==0);
-        WaveData* wd = WaveData::clockFactory(mClkNet, start, period, 2000);
+        WaveData* wd = WaveData::clockFactory(mClkNet, start, period, mDuration);
         mWaveWidget->addOrReplaceWave(wd);
-        mState = SimulationInputGenerate;
+        setState(SimulationInputGenerate);
     }
 
     void VcdViewer::setClock(Net *n, int period, int start)
@@ -224,7 +242,7 @@ namespace hal
         mSimulator->add_clock_period(mClkNet,period,start==0);
         WaveData* wd = WaveData::clockFactory(mClkNet, start, period, 2000);
         mWaveWidget->addOrReplaceWave(wd);
-        mState = SimulationInputGenerate;
+        setState(SimulationInputGenerate);
     }
 
     void VcdViewer::handleSelectGates()

@@ -28,6 +28,7 @@
 namespace hal
 {
     class VcdViewer;
+    class NetlistSimulator;
 
     class PLUGIN_API VcdViewerPlugin : public BasePluginInterface
     {

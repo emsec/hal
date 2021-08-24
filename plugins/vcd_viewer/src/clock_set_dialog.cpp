@@ -35,9 +35,16 @@ namespace hal {
         mSpinStartValue->setMaximum(1);
         layout->addWidget(mSpinStartValue,2,1);
 
+        layout->addWidget(new QLabel("Duration:",this),3,0);
+        mSpinDuration = new QSpinBox(this);
+        mSpinDuration->setMinimum(0);
+        mSpinDuration->setMaximum(1000000);
+        mSpinDuration->setValue(2000);
+        layout->addWidget(mSpinDuration,3,1);
+
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-        layout->addWidget(mButtonBox,3,1);
+        layout->addWidget(mButtonBox,4,1);
     }
 }

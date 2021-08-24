@@ -11,12 +11,13 @@ if(PL_VCD_VIEWER OR BUILD_ALL_PLUGINS)
 
     file(GLOB_RECURSE VCD_VIEWER_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
     file(GLOB_RECURSE VCD_VIEWER_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+    file(GLOB_RECURSE VCD_VIEWER_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
     qt5_wrap_cpp(MOC_HDR ${VCD_VIEWER_INC})
 
     # Create the '__init__.py' file in the hal_plugins directory as there might not be a any plugins available yet.
     file(WRITE ${CMAKE_BINARY_DIR}/lib/hal_plugins/__init__.py "")
 
-    add_library(vcd_viewer SHARED ${VCD_VIEWER_INC} ${VCD_VIEWER_SRC} ${MOC_HDR})
+    add_library(vcd_viewer SHARED ${VCD_VIEWER_INC} ${VCD_VIEWER_SRC} ${VCD_VIEWER_PYTHON_SRC} ${MOC_HDR})
 
     set_target_properties(vcd_viewer PROPERTIES PREFIX "")
 
