@@ -31,8 +31,9 @@ namespace hal
     ModuleWidget::ModuleWidget(QWidget* parent)
         : ContentWidget("Modules", parent),
           mTreeView(new ModuleTreeView(this)),
-          mModuleProxyModel(new ModuleProxyModel(this)),
-          mSearchbar(new Searchbar(this))
+          mSearchbar(new Searchbar(this)),
+          mModuleProxyModel(new ModuleProxyModel(this))
+
     {
         ensurePolished();
 

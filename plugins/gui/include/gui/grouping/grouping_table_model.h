@@ -26,6 +26,7 @@
 #include <QAbstractTableModel>
 #include <QString>
 #include <QColor>
+#include <QTableView>
 #include <QList>
 
 #include "hal_core/defines.h"
@@ -40,30 +41,27 @@ namespace hal {
      * @brief An entry within a GroupingTableModel.
      *
      * The GroupingTableEntry represents one entry in the groupings table. Therefore it stores information about
-     * the grouping and its color. It also provides and interface to change these fields.
+     * the grouping. It also provides and interface to change these fields.
      */
     class GroupingTableEntry
     {
         Grouping* mGrouping;
-        QColor  mColor;
     public:
         /**
          * Constructor. <br>
          * Creates a new grouping in the netlist.
          *
          * @param n - The name of the grouping
-         * @param c - The color of the grouping
          */
-        GroupingTableEntry(const QString& n, const QColor& c); // constructor for new grouping
+        GroupingTableEntry(const QString& n); // constructor for new grouping
 
         /**
          * Constructor. <br>
          * Initializes the GroupingTableEntry with an already existing grouping of the netlist.
          *
          * @param existingId - The id of an already existing grouping of the netlist.
-         * @param c - The color of the grouping
          */
-        GroupingTableEntry(u32 existingId, const QColor& c);  // entry wraps existing group object
+        GroupingTableEntry(u32 existingId);  // entry wraps existing group object
 
         /**
          * Constructor. <br>
@@ -72,8 +70,8 @@ namespace hal {
          * @param grp - The grouping to represent
          * @param c - The color of the grouping
          */
-        GroupingTableEntry(Grouping* grp, const QColor&c)
-            : mGrouping(grp), mColor(c) {;}
+        GroupingTableEntry(Grouping* grp)
+            : mGrouping(grp) {;}
 
         /**
          * Gets the id of the grouping.
@@ -94,7 +92,7 @@ namespace hal {
          *
          * @returns the color of the grouping
          */
-        QColor color() const { return mColor; }
+        QColor color() const;
 
         /**
          * Sets the name of the grouping.
@@ -108,7 +106,7 @@ namespace hal {
          *
          * @param c - the new color for the grouping
          */
-        void setColor(const QColor& c) { mColor = c; }
+        void setColor(const QColor& c);
 
         /**
          * Accesses the grouping this entry represents.
@@ -141,7 +139,7 @@ namespace hal {
          *
          * @param parent - The parent widget
          */
-        GroupingTableModel(QObject* parent=nullptr);
+        GroupingTableModel(bool history, QObject* parent=nullptr);
 
         /**
          * Returns the amount of columns. Is always 3 (Grouping, ID, Color)
@@ -296,6 +294,13 @@ namespace hal {
          */
         void groupingNameChangedEvent(Grouping *grp);
 
+        /**
+         * Q_SLOT to handle that a grouping has been recolored.
+         *
+         * @param grp
+         */
+        void groupingColorChangedEvent(Grouping *grp);
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL to notify that the color of a grouping has been changed. Emitted by GroupingTableModel::setData if
@@ -319,6 +324,30 @@ namespace hal {
         void newEntryAdded(QModelIndex& index);
 
     private:
-        QColor nextColor() const;
+        bool mIsHistory = false;
+    };
+
+    class GroupingTableHistory : public QList<u32>
+    {
+        static GroupingTableHistory* inst;
+        GroupingTableHistory() {;}
+    public:
+        static GroupingTableHistory* instance();
+        void add(u32 id);
+    };
+
+    class GroupingTableView : public QTableView
+    {
+        Q_OBJECT
+
+    public:
+        GroupingTableView(bool history, QWidget* parent=nullptr);
+
+    Q_SIGNALS:
+        void groupingSelected(u32 id, bool doubleClick);
+
+    private Q_SLOTS:
+        void handleDoubleClick(const QModelIndex& index);
+        void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     };
 }

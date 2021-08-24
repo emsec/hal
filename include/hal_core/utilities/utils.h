@@ -681,5 +681,23 @@ namespace hal
         private:
             std::filesystem::path p_;
         };
+
+        /**
+         * Class for color in HSV representation (hue, saturation, value).<br>
+         * Used for grouping colors. Default is black.
+         */
+        struct CORE_API Color
+        {
+            int h;
+            int s;
+            int v;
+
+            Color(int _h = 0, int _s = 0, int _v = 0) : h(_h), s(_s), v(_v) {}
+
+            std::string toString()
+            {
+                return "h=" + std::to_string(h) + " s=" + std::to_string(s) + " v=" + std::to_string(v);
+            }
+        };
     }    // namespace utils
 }    // namespace hal
