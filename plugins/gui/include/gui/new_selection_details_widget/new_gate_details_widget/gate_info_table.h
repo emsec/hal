@@ -42,13 +42,12 @@ namespace hal
          */
         GateInfoTable(QWidget* parent = nullptr);
 
-
         /**
-        * Updates the table with the data of the gate with the given id.
+        * Updates the table with the data of the gate.
         *
-        * @param gateId - The id of the gate.
+        * @param gate - The gate.
         */
-        void update(u32 gateId);
+        void setGate(hal::Gate* gate);
 
     private:
 
@@ -59,7 +58,7 @@ namespace hal
         QString type() const;
         QString properties() const;
         QString location() const;
-        QString module() const; 
+        QString parentModule() const; 
 
         void changeName();
         void copyName() const;

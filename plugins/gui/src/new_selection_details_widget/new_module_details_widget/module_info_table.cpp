@@ -43,22 +43,24 @@ namespace hal
         mNumOfNetsContextMenu->addAction("copyNumOfNets", std::bind(&ModuleInfoTable::copyNumberOfNets, this));
 
         mModuleDoubleClickedAction = std::bind(&ModuleInfoTable::navModule, this);
-
-        //debug - remove later
-        setContent(1);
     }
 
-    void ModuleInfoTable::update(u32 moduleId)
+    void ModuleInfoTable::setModule(hal::Module* module)
     {
-        mModule = gNetlist->get_module_by_id(moduleId);
+        if(gNetlist->is_module_in_netlist(module))
+        {
+            mModule = module;
 
-        setRow("Name", name(), mNameEntryContextMenu);
-        setRow("Id", id(), mIdEntryContextMenu);
-        setRow("Type", type(), mTypeEntryContextMenu);
-        setRow("Parent Module", module(), mModuleEntryContextMenu, mModuleDoubleClickedAction);
-        setRow("No. of Gates", numberOfGates(), mNumOfGatesContextMenu);
-        setRow("No. of Submodules", numberOfSubModules(), mNumOfSubmodulesContextMenu);
-        setRow("No. of Nets", numberOfNets(), mNumOfNetsContextMenu);
+            setRow("Name", name(), mNameEntryContextMenu);
+            setRow("Id", id(), mIdEntryContextMenu);
+            setRow("Type", type(), mTypeEntryContextMenu);
+            setRow("Parent Module", parentModule(), mModuleEntryContextMenu, mModuleDoubleClickedAction);
+            setRow("No. of Gates", numberOfGates(), mNumOfGatesContextMenu);
+            setRow("No. of Submodules", numberOfSubModules(), mNumOfSubmodulesContextMenu);
+            setRow("No. of Nets", numberOfNets(), mNumOfNetsContextMenu);
+            
+            adjustSize();
+        }
     }
 
     QString ModuleInfoTable::name() const
@@ -81,7 +83,7 @@ namespace hal
         return type;
     }
 
-    QString ModuleInfoTable::module() const
+    QString ModuleInfoTable::parentModule() const
     {
         QString parentModule = "None";
 
@@ -126,17 +128,17 @@ namespace hal
 
     void ModuleInfoTable::copyName() const
     {
-        QApplication::clipboard()->setText(name());
+        copyToClipboard(name());
     }
 
     void ModuleInfoTable::pyCopyName() const
     {
-        QApplication::clipboard()->setText(PyCodeProvider::pyCodeModuleName(mModule->get_id()));
+        copyToClipboard(PyCodeProvider::pyCodeModuleName(mModule->get_id()));
     }
 
     void ModuleInfoTable::copyId() const
     {
-        QApplication::clipboard()->setText(id());
+        copyToClipboard(id());
     }
 
     void ModuleInfoTable::changeType() const
@@ -146,37 +148,37 @@ namespace hal
 
     void ModuleInfoTable::copyType() const
     {
-        QApplication::clipboard()->setText(type());
+        copyToClipboard(type());
     }
 
     void ModuleInfoTable::pyCopyType() const
     {
-        QApplication::clipboard()->setText(PyCodeProvider::pyCodeModuleType(mModule->get_id()));
+        copyToClipboard(PyCodeProvider::pyCodeModuleType(mModule->get_id()));
     }
 
     void ModuleInfoTable::copyModule() const
     {
-        QApplication::clipboard()->setText(module());
+        copyToClipboard(parentModule());
     }
 
     void ModuleInfoTable::pyCopyModule() const
     {
-        QApplication::clipboard()->setText(PyCodeProvider::pyCodeModuleModule(mModule->get_id()));
+        copyToClipboard(PyCodeProvider::pyCodeModuleModule(mModule->get_id()));
     }
 
     void ModuleInfoTable::copyNumberOfGates() const
     {
-        QApplication::clipboard()->setText(numberOfGates());
+        copyToClipboard(numberOfGates());
     }
 
     void ModuleInfoTable::copyNumberOfSubmodules() const
     {
-        QApplication::clipboard()->setText(numberOfSubModules());
+        copyToClipboard(numberOfSubModules());
     }
 
     void ModuleInfoTable::copyNumberOfNets() const
     {
-        QApplication::clipboard()->setText(numberOfNets());
+        copyToClipboard(numberOfNets());
     }
 
     void ModuleInfoTable::navModule()

@@ -36,7 +36,7 @@ namespace hal
     public:
 
         ModuleInfoTable(QWidget* parent = nullptr);
-        void update(u32 moduleId);
+        void setModule(hal::Module* module);
 
     private:
 
@@ -45,7 +45,7 @@ namespace hal
         QString name() const;
         QString id() const;
         QString type() const;
-        QString module() const;
+        QString parentModule() const;
         QString numberOfGates() const;
         QString numberOfSubModules() const;
         QString numberOfNets() const;

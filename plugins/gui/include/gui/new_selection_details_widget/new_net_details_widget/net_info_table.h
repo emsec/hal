@@ -36,7 +36,7 @@ namespace hal
     public:
 
         NetInfoTable(QWidget* parent = nullptr);
-        void update(u32 netId);
+        void setNet(hal::Net* net);
 
     private:
 

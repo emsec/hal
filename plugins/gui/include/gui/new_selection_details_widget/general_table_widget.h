@@ -43,13 +43,6 @@ namespace hal
          */
         GeneralTableWidget(QWidget* parent = nullptr);
 
-        /**
-         * Updates the table with the data of the element with the given id and adjusts it's size.
-         *
-         * @param elementId - The id of the element.
-         */
-        virtual void setContent(u32 elementId);
-
     protected:
         /**
          * Appends a row to the table.
@@ -59,6 +52,18 @@ namespace hal
          * @param contextMenu - The context menu that will be displayed when right clicking the row.
          */
         void setRow(const QString& key, const QString& val, QMenu* contextMenu = nullptr, std::function<void()> doubleClickAction = nullptr);
+
+        /**
+         * Copies text to the clipboard.
+         *
+         * @param text - The text that gets copied to the clipboard.
+         */
+        void copyToClipboard(const QString& text) const;
+
+        /**
+        * Adjusts the size of the table so that all elements will fit.
+        */
+        void adjustSize();
 
     private:
         /**
@@ -74,19 +79,6 @@ namespace hal
         * @param index - The index that has been double clicked on.
         */
         void handleDoubleClick(const QModelIndex& index) const;
-
-        /**
-        * Updates the table with the data of the element with the given id.
-        *
-        * @param id - The id of the element.
-        */
-        virtual void update(u32 id) = 0;
-
-        /**
-        * Adjusts the size of the table so that all elements will fit.
-        */
-        void adjustSize();
-
 
         QMap<QString, QTableWidgetItem*> mKeyItemMap;
         QMap<int, QMenu*> mRowMenuMap;
