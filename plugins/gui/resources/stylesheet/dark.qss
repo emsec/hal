@@ -1269,3 +1269,14 @@ hal--DockButton
     qproperty-checkedColor: #808080;
     qproperty-hoverColor: #666769;
 }
+
+hal--DetailsFrameWidget QLabel
+{
+    font: bold "Iosevka";
+    font-size: 12px;
+    background: #1a1a1a;
+    border:1px solid #999999;
+    color: #eeeeee;
+    min-height: 20px;
+    qproperty-alignment: 'AlignCenter';
+}

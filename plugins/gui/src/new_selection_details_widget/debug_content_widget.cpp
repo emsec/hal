@@ -19,6 +19,16 @@
 #include <QScrollArea>
 #include <QGridLayout>
 
+
+//--------------------
+#include "gui/new_selection_details_widget/new_net_details_widget/net_endpoint_table.h"
+#include "gui/new_selection_details_widget/models/endpoint_table_model.h"
+
+#include "gui/new_selection_details_widget/new_net_details_widget/net_module_table.h"
+#include "gui/new_selection_details_widget/models/module_table_model.h"
+
+#include "gui/new_selection_details_widget/details_frame_widget.h"
+
 namespace hal {
     DebugContentWidget::DebugContentWidget(QWidget *parent) : ContentWidget("Debug Widget", parent)
     {
@@ -88,6 +98,26 @@ namespace hal {
         ModuleInfoTable* moduleTable = new ModuleInfoTable(this); //hardcoded to show module with id 1 in constructor atm
         scrollAreaLayout->addWidget(moduleTable);
         //-----------------------------------------------------------------------------------------------------------------------
+
+        EndpointTableModel* sourceModel = new EndpointTableModel(EndpointTableModel::Type::source, this);
+        NetEndpointTable* sourceTable = new NetEndpointTable(sourceModel, this);
+        sourceTable->setContent(28);
+        scrollAreaLayout->addWidget(sourceTable);
+
+        EndpointTableModel* destinationModel = new EndpointTableModel(EndpointTableModel::Type::destination, this);
+        NetEndpointTable* destinatinTable = new NetEndpointTable(destinationModel, this);
+        destinatinTable->setContent(28);
+        //scrollAreaLayout->addWidget(destinatinTable);
+
+        ModuleTableModel* moduleModel = new ModuleTableModel(this);
+        NetModuleTable* netModuleTable = new NetModuleTable(moduleModel, this);
+        destinatinTable->setContent(28);
+        scrollAreaLayout->addWidget(netModuleTable);
+
+        DetailsFrameWidget* frame = new DetailsFrameWidget(destinatinTable, this);
+        scrollAreaLayout->addWidget(frame);
+
+        connect(destinatinTable, &NetEndpointTable::update_text, frame, &DetailsFrameWidget::setText);
     }
 
 } // namespace hal
