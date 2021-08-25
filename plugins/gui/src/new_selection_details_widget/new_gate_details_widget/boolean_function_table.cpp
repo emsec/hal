@@ -7,7 +7,8 @@
 #include <QClipboard>
 
 namespace hal {
-    BooleanFunctionTable::BooleanFunctionTable(QWidget *parent) : QTableView(parent),
+    BooleanFunctionTable::BooleanFunctionTable(QWidget *parent, const QString& frameTitle) : QTableView(parent),
+    mFrameTitle(frameTitle),
     mBooleanFunctionTableModel(new BooleanFunctionTableModel(this))
     {
         this->setModel(mBooleanFunctionTableModel);
@@ -46,6 +47,7 @@ namespace hal {
         adjustTableSizes();
         this->clearSelection();
         this->update();
+        Q_EMIT updateText(mFrameTitle);
     }
 
     //TODO: can be (partially) used later in the gate details widget

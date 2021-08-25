@@ -67,6 +67,10 @@ namespace hal
          */
         void setBooleanFunction(BooleanFunction bf, QString functionName);
 
+    
+    Q_SIGNALS:
+        void updateText(const QString& text);
+
     private Q_SLOTS:
 
         /**
@@ -93,6 +97,8 @@ namespace hal
 
         LUTTableModel* mLutModel;
         QTableView* mLutTableView;
+
+        const QString mFrameTitle = "Truth Table";
 
     };
 }

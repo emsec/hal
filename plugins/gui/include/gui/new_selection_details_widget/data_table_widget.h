@@ -57,6 +57,9 @@ namespace hal
 
         DataTableModel* getModel();
 
+    Q_SIGNALS:
+        void updateText(const QString& text);
+
     public Q_SLOTS:
         /**
          * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
@@ -74,8 +77,6 @@ namespace hal
         void setNet(Net* net);
 
         void setModule(Module* module);
-
-
 
     private Q_SLOTS:
         /**
@@ -101,6 +102,8 @@ namespace hal
         DataTableModel* mDataTableModel;
         DataContainerType mCurrentObjectType;
         u32 mCurrentObjectId;
+
+        const QString mFrameTitle = "Data";
 
     };
 } // namespace hal

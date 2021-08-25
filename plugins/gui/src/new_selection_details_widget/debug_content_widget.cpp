@@ -53,11 +53,28 @@ namespace hal {
         mContentLayout->addWidget(scrollArea);
         
 
-        // --- Add your widgets here ---
+        // === Add your widgets here ===
 
-        scrollAreaLayout->addWidget(new DataTableWidget(this));
-        scrollAreaLayout->addWidget(new GroupingsOfItemWidget(this));
-        scrollAreaLayout->addWidget(new LUTTableWidget(this));
+        // --- Fabian Widgets ---
+        DataTableWidget* dataTableWidget = new DataTableWidget(this);
+        GroupingsOfItemWidget* groupingsOfItemWidget = new GroupingsOfItemWidget(this);
+        LUTTableWidget* lutTableWidget = new LUTTableWidget(this);
+        BooleanFunctionTable* booleanFunctionTable = new BooleanFunctionTable(this, "<Custom Boolean Function Title>");
+
+        DetailsFrameWidget* dataTableWidgetFrame = new DetailsFrameWidget(dataTableWidget, this);
+        DetailsFrameWidget* groupingsOfItemWidgetFrame = new DetailsFrameWidget(groupingsOfItemWidget, this);
+        DetailsFrameWidget* lutTableWidgetFrame = new DetailsFrameWidget(lutTableWidget, this);
+        DetailsFrameWidget* booleanFunctionTableFrame = new DetailsFrameWidget(booleanFunctionTable, this);
+
+        scrollAreaLayout->addWidget(dataTableWidgetFrame);
+        scrollAreaLayout->addWidget(groupingsOfItemWidgetFrame);
+        scrollAreaLayout->addWidget(lutTableWidgetFrame);
+        scrollAreaLayout->addWidget(booleanFunctionTableFrame);
+
+        connect(dataTableWidget,        &DataTableWidget::updateText,       dataTableWidgetFrame,       &DetailsFrameWidget::setText);
+        connect(groupingsOfItemWidget,  &GroupingsOfItemWidget::updateText, groupingsOfItemWidgetFrame, &DetailsFrameWidget::setText);
+        connect(lutTableWidget,         &LUTTableWidget::updateText,        lutTableWidgetFrame,        &DetailsFrameWidget::setText);
+        connect(booleanFunctionTable,   &BooleanFunctionTable::updateText,  booleanFunctionTableFrame,  &DetailsFrameWidget::setText);
 
 
         //--------For NetlistElementsModel

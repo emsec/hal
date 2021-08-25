@@ -234,6 +234,7 @@ namespace hal {
          */
         QSharedPointer<BooleanFunctionTableEntry> getEntryAtRow(int row) const;
 
+
     private:
         QList<QSharedPointer<BooleanFunctionTableEntry>> mEntries;
 
