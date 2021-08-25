@@ -53,18 +53,22 @@ namespace hal
             }
 
             /* merge groups known before execution */
-            for (const auto& gates_to_merge : known_groups)
+            for (const auto& gates : known_groups)
             {
+                if (gates.empty())
+                {
+                    continue;
+                }
+                
                 u32 new_group_id = ++new_id_counter;
 
-                for (const auto& gate_id : gates_to_merge)
+                new_state->operations_on_group_allowed[new_group_id] = false;
+                new_state->group_control_fingerprint_map[new_group_id] = this->gate_to_fingerprint.at(*gates.begin());
+                new_state->gates_of_group[new_group_id].insert(gates.begin(), gates.end());
+
+                for (const auto& gate_id : gates)
                 {
-                    new_state->group_control_fingerprint_map[new_group_id] = this->gate_to_fingerprint.at(gate_id);
-
-                    new_state->gates_of_group[new_group_id].insert(gate_id);
                     new_state->parent_group_of_gate[gate_id] = new_group_id;
-
-                    new_state->operations_on_group_allowed[new_group_id] = false;
                 }
             }
 

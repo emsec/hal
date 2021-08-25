@@ -233,7 +233,7 @@ namespace hal
         }
         */
 
-                std::shared_ptr<Grouping> generate_output(const Configuration& config, const std::shared_ptr<Grouping>& initial_grouping, const scoring& scores)
+                std::shared_ptr<Grouping> generate_output(const Configuration& config, const std::shared_ptr<Grouping>& initial_grouping, scoring& scores)
                 {
                     measure_block_time("majority voting");
                     auto& netlist_abstr = initial_grouping->netlist_abstr;
@@ -245,6 +245,44 @@ namespace hal
                         const std::set<u32>* group;
                         float score;
                     };
+
+
+                    // mark all sequential gates as unassigned gates
+                    std::vector<u32> unassigned_gates;
+                    unassigned_gates.reserve(netlist_abstr.all_sequential_gates.size());
+                    std::transform(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end(), std::back_inserter(unassigned_gates), [](auto& g) { return g->get_id(); });
+
+                    // sort unassignes gates to be able to use std::algorithms
+                    std::sort(unassigned_gates.begin(), unassigned_gates.end());
+
+                    std::shared_ptr<Grouping> output = std::make_shared<Grouping>(netlist_abstr);
+
+                    u32 id_counter = -1;
+
+
+                    // copy known groups to final result and erase from scorings
+                    for (const auto& [group_id, gates] : initial_grouping->gates_of_group)
+                    {
+                        if (!initial_grouping->operations_on_group_allowed.at(group_id))
+                        {
+                            u32 new_group_id = ++id_counter;
+
+                            output->group_control_fingerprint_map[new_group_id] = initial_grouping->netlist_abstr.gate_to_fingerprint.at(*gates.begin());
+                            output->operations_on_group_allowed[new_group_id]   = false;
+
+                            output->gates_of_group[new_group_id].insert(gates.begin(), gates.end());
+                            for (const auto& sg : gates)
+                            {
+                                output->parent_group_of_gate[sg] = new_group_id;   
+                            }
+
+                            std::set<u32> sorted_gates(gates.begin(), gates.end());
+                            scores.erase(sorted_gates);
+                            unassigned_gates.erase(std::remove_if(unassigned_gates.begin(), unassigned_gates.end(), [&sorted_gates](auto id) { return sorted_gates.find(id) != sorted_gates.end(); }),
+                                               unassigned_gates.end());     
+                        }
+                    }
+
 
                     std::vector<candidate> sorted_results;
 
@@ -279,18 +317,6 @@ namespace hal
 
                         return a.score > b.score;
                     });
-
-                    // mark all sequential gates as unassigned gates
-                    std::vector<u32> unassigned_gates;
-                    unassigned_gates.reserve(netlist_abstr.all_sequential_gates.size());
-                    std::transform(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end(), std::back_inserter(unassigned_gates), [](auto& g) { return g->get_id(); });
-
-                    // sort unassignes gates to be able to use std::algorithms
-                    std::sort(unassigned_gates.begin(), unassigned_gates.end());
-
-                    std::shared_ptr<Grouping> output = std::make_shared<Grouping>(netlist_abstr);
-
-                    u32 id_counter = -1;
 
                     const float percent_scan = 0.1f;
 
@@ -406,7 +432,7 @@ namespace hal
                             u32 new_group_id = ++id_counter;
 
                             output->group_control_fingerprint_map[new_group_id] = netlist_abstr.gate_to_fingerprint.at(*best_group.begin());
-                            output->operations_on_group_allowed[new_group_id]   = initial_grouping->operations_on_group_allowed.at(best_choice);
+                            output->operations_on_group_allowed[new_group_id]   = true;
 
                             output->gates_of_group[new_group_id].insert(best_group.begin(), best_group.end());
                             for (const auto& sg : best_group)
@@ -430,6 +456,7 @@ namespace hal
                     }
                     progress_bar.clear();
 
+
                     for (auto g : unassigned_gates)
                     {
                         u32 new_group_id = ++id_counter;
@@ -440,6 +467,7 @@ namespace hal
                         output->gates_of_group[new_group_id].insert(g);
                         output->parent_group_of_gate[g] = new_group_id;
                     }
+
                     return output;
                 }
 
