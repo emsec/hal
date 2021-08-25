@@ -89,6 +89,9 @@ namespace hal
          */
         void setModule(Module* module);
 
+    Q_SIGNALS:
+        void updateText(const QString& text);
+
     public Q_SLOTS:
         /**
          * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
@@ -110,13 +113,21 @@ namespace hal
 
         void handleContextMenuRequest(const QPoint &pos);
 
+        void handleLayoutChanged(const QList<QPersistentModelIndex> &parents, QAbstractItemModel::LayoutChangeHint hint);
+
     private:
 
         void adjustTableSizes();
 
+        void notifyNewTitle();
+
         ItemType mCurrentObjectType;
         u32 mCurrentObjectId;
         GroupingsOfItemModel* mGroupingsOfItemModel;
+
+        const QString mFrameTitleNoItem = "Groupings (0)";
+        const QString mFrameTitleSingleItem = "Grouping";
+        const QString mFrameTitleMultipleItems = "Groupings (%1)";
 
     };
 } // namespace hal

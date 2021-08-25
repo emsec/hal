@@ -51,7 +51,7 @@ namespace hal
         *
         * @param parent - The parent widget
         */
-        BooleanFunctionTable(QWidget* parent = nullptr);
+        BooleanFunctionTable(QWidget* parent = nullptr, const QString& frameTitle = "Boolean Functions");
 
         /**
          * Access the boolean function table model of this table.
@@ -59,6 +59,9 @@ namespace hal
          * @returns the BooleanFunctionTableModel
          */
         BooleanFunctionTableModel* getModel();
+
+    Q_SIGNALS:
+        void updateText(const QString& text);
 
 
     public Q_SLOTS:
@@ -79,8 +82,6 @@ namespace hal
          */
         void setEntries(QList<QSharedPointer<BooleanFunctionTableEntry>> entries);
 
-
-
     private Q_SLOTS:
         /**
          * Handles the resize event. The table is sized, so that the output column is bigger than the input columns.
@@ -100,6 +101,7 @@ namespace hal
         BooleanFunctionTableModel* mBooleanFunctionTableModel;
         Gate* mCurrentGate;
         u32 mCurrentGateId;
+        QString mFrameTitle;
 
     };
 } // namespace hal

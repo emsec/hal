@@ -26,6 +26,7 @@ namespace hal {
         SelectionTreeView* t = gContentManager->getSelectionDetailsWidget()->selectionTreeView();
         connect(t, &SelectionTreeView::triggerSelection, this, &GroupingsOfItemWidget::handleDetailsFocusChanged);
         connect(this, &QTableView::customContextMenuRequested, this, &GroupingsOfItemWidget::handleContextMenuRequest);
+        connect(mGroupingsOfItemModel, &GroupingsOfItemModel::layoutChanged, this, &GroupingsOfItemWidget::handleLayoutChanged);
     }
 
     GroupingsOfItemModel* GroupingsOfItemWidget::getModel()
@@ -63,6 +64,7 @@ namespace hal {
         mCurrentObjectId = gate->get_id();
         mGroupingsOfItemModel->setGate(gate);
         adjustTableSizes();
+        notifyNewTitle();
     }
 
     void GroupingsOfItemWidget::setNet(Net* net)
@@ -74,6 +76,7 @@ namespace hal {
         mCurrentObjectId = net->get_id();
         mGroupingsOfItemModel->setNet(net);
         adjustTableSizes();
+        notifyNewTitle();
     }
 
     void GroupingsOfItemWidget::setModule(Module* module)
@@ -85,6 +88,7 @@ namespace hal {
         mCurrentObjectId = module->get_id();
         mGroupingsOfItemModel->setModule(module);
         adjustTableSizes();
+        notifyNewTitle();
     }
     
 
@@ -210,10 +214,31 @@ namespace hal {
         menu.exec();*/
     }
 
+    void GroupingsOfItemWidget::handleLayoutChanged(const QList<QPersistentModelIndex> &parents, QAbstractItemModel::LayoutChangeHint hint)
+    {
+        Q_UNUSED(parents);
+        Q_UNUSED(hint);
+        notifyNewTitle();
+    }
+
     void GroupingsOfItemWidget::adjustTableSizes()
     {
         resizeColumnsToContents();  
         this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch); 
+    }
+
+    void GroupingsOfItemWidget::notifyNewTitle()
+    {
+        int n = mGroupingsOfItemModel->rowCount();
+        if(n < 1){
+            Q_EMIT updateText(mFrameTitleNoItem);
+        }
+        else if(n == 1){
+            Q_EMIT updateText(mFrameTitleSingleItem);
+        }
+        else { // n > 1
+            Q_EMIT updateText(mFrameTitleMultipleItems.arg(n));
+        }
     }
 
 

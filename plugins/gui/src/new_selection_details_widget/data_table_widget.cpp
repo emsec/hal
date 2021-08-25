@@ -59,6 +59,7 @@ namespace hal {
         mCurrentObjectId = gate->get_id();
         mDataTableModel->updateData(gate->get_data_map());
         adjustTableSizes();
+        Q_EMIT updateText(mFrameTitle);
     }
 
     void DataTableWidget::setNet(Net* net)
@@ -70,6 +71,7 @@ namespace hal {
         mCurrentObjectId = net->get_id();
         mDataTableModel->updateData(net->get_data_map());
         adjustTableSizes();
+        Q_EMIT updateText(mFrameTitle);
     }
 
     void DataTableWidget::setModule(Module* module)
@@ -81,6 +83,7 @@ namespace hal {
         mCurrentObjectId = module->get_id();
         mDataTableModel->updateData(module->get_data_map());
         adjustTableSizes();
+        Q_EMIT updateText(mFrameTitle);
     }
     
 

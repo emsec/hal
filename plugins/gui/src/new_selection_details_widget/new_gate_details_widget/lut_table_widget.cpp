@@ -28,6 +28,7 @@ namespace hal{
         this->clearSelection();
         this->update();
         adjustColumnSizes();
+        Q_EMIT updateText(mFrameTitle);
     }
 
     void LUTTableWidget::handleDetailsFocusChanged(const SelectionTreeItem* sti){
