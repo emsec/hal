@@ -21,6 +21,7 @@ namespace hal
 
         //connections
         connect(this, &QTreeView::customContextMenuRequested, this, &ModuleElementsTree::handleContextMenuRequested);
+        connect(mNetlistElementsModel, &NetlistElementsTreeModel::numberOfSubmodulesChanged, this, &ModuleElementsTree::handleNumberSubmodulesChanged);
     }
 
     void ModuleElementsTree::setContent(u32 moduleID)
@@ -30,6 +31,8 @@ namespace hal
 
         mNetlistElementsModel->setModule(m);
         mModuleID = moduleID;
+
+        //Q_EMIT updateText(QString("Submodules(%1)").arg(m->get_submodules().size()));
     }
 
     void ModuleElementsTree::setContent(Module *m)
@@ -38,6 +41,8 @@ namespace hal
 
         mNetlistElementsModel->setModule(m);
         mModuleID = m->get_id();
+
+        //Q_EMIT updateText(QString("Submodules(%1)").arg(m->get_submodules().size()));
     }
 
     void ModuleElementsTree::removeContent()
@@ -154,6 +159,11 @@ namespace hal
 
         menu.move(this->mapToGlobal(pos));
         menu.exec();
+    }
+
+    void ModuleElementsTree::handleNumberSubmodulesChanged(const int number)
+    {
+        Q_EMIT updateText(QString("Submodules(%1)").arg(number));
     }
 
 }

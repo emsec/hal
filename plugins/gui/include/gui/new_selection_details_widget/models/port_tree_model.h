@@ -66,6 +66,10 @@ namespace hal
          */
         void handleModuleInputOutputPortNameChanged(Module* m, int associated_data);
 
+    Q_SIGNALS:
+
+        void numberOfPortsChanged(const int newNumber);
+
     private:
         int mModuleId;
     };

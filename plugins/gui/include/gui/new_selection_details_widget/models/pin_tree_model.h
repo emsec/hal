@@ -94,6 +94,13 @@ public:
      */
     itemType getTypeOfItem(TreeItem* item);
 
+    /**
+     * Get the number of displayed pins (the number of pins of all types).
+     *
+     * @return The number of pins.
+     */
+    int getNumberOfDisplayedPins();
+
 
     //column identifier
     static const int sNameColumn = 0;

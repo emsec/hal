@@ -62,6 +62,8 @@ namespace hal
             mRootItem->appendChild(portItem);
         }
         endResetModel();
+
+        Q_EMIT numberOfPortsChanged((m->get_input_port_names().size() + m->get_output_port_names().size()));
     }
 
     void PortTreeModel::handleModuleInputOutputPortNameChanged(Module *m, int associated_data)
@@ -69,7 +71,10 @@ namespace hal
         Q_UNUSED(associated_data)
 
         if((int)m->get_id() == mModuleId)
+        {
             setModule(m);
+            Q_EMIT numberOfPortsChanged((m->get_input_port_names().size() + m->get_output_port_names().size()));
+        }
     }
 
 

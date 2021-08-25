@@ -43,9 +43,22 @@ namespace hal
         void removeContent();
 
         void handleContextMenuRequested(const QPoint &pos);
+
+    Q_SIGNALS:
+
+        /**
+         * Q_SIGNAL that is emitted when the number of ports changes. Emits the
+         * complete new headline.
+         *
+         * @param newHeadline - The new headline.
+         */
+        void updateText(const QString& newHeadline);
+
     private:
         PortTreeModel* mPortModel;
         int mModuleID;
+
+        void handleNumberOfPortsChanged(int newNumberPorts);
 
     };
 }

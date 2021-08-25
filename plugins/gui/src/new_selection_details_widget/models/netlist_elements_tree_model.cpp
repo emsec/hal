@@ -131,6 +131,7 @@ namespace hal
                 netIds.append(net->get_id());
 
         setContent(subModIds, gateIds, netIds, displayModulesRecursive, showGates, showNets);
+        Q_EMIT numberOfSubmodulesChanged(mod->get_submodules().size());
     }
 
     NetlistElementsTreeModel::itemType NetlistElementsTreeModel::getTypeOfItem(TreeItem *item) const
@@ -219,7 +220,6 @@ namespace hal
 
     void NetlistElementsTreeModel::moduleSubmoduleRemoved(Module *m, int removed_module)
     {
-        Q_UNUSED(m)
         //1. go through the actual TreeItems through a BFS and remove them from the maps
         //2. delete the associated module tree items (beginResetModel)
         Module* removedMod = gNetlist->get_module_by_id(removed_module);
@@ -255,6 +255,12 @@ namespace hal
             delete removedSubItem;
         }
         endResetModel();
+
+        if((int)m->get_id() == mModId)
+            Q_EMIT numberOfSubmodulesChanged(m->get_submodules().size());
+
+        if(removed_module == mModId)
+            clear();
     }
 
     void NetlistElementsTreeModel::moduleGateAssigned(Module *m, int assigned_gate)
@@ -322,7 +328,10 @@ namespace hal
 
         //special case when a module is represented with setModule
         if(mCurrentlyDisplayingModule && (int)m->get_id() == mModId)
+        {
             appendNewSubmodItem(mRootItem);
+            Q_EMIT numberOfSubmodulesChanged(m->get_submodules().size());
+        }
 
         //standard case for all displayed things
         for(TreeItem* parentModItem : mModuleToTreeitems.values(m))

@@ -11,6 +11,7 @@ namespace hal
 
         //connections
         connect(this, &QTreeView::customContextMenuRequested, this, &ModulePortsTree::handleContextMenuRequested);
+        connect(mPortModel, &PortTreeModel::numberOfPortsChanged, this, &ModulePortsTree::handleNumberOfPortsChanged);
 
     }
 
@@ -41,6 +42,11 @@ namespace hal
     void ModulePortsTree::handleContextMenuRequested(const QPoint &pos)
     {
         Q_UNUSED(pos)
+    }
+
+    void ModulePortsTree::handleNumberOfPortsChanged(int newNumberPorts)
+    {
+        Q_EMIT updateText(QString("Ports(%1)").arg(newNumberPorts));
     }
 
 

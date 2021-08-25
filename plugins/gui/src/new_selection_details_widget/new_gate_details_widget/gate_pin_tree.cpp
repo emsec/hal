@@ -31,6 +31,8 @@ namespace hal
 
         mPinModel->setGate(g);
         mGateID = gateID;
+
+        Q_EMIT updateText(QString("Pins(%1)").arg(mPinModel->getNumberOfDisplayedPins()));
     }
 
     void GatePinTree::setContent(Gate *g)
@@ -39,6 +41,8 @@ namespace hal
 
         mPinModel->setGate(g);
         mGateID = g->get_id();
+
+        Q_EMIT updateText(QString("Pins(%1)").arg(mPinModel->getNumberOfDisplayedPins()));
     }
 
     void GatePinTree::removeContent()

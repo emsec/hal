@@ -45,6 +45,15 @@ namespace hal
 
         void handleContextMenuRequested(const QPoint &pos);
 
+    Q_SIGNALS:
+
+        /**
+         * Emits the new headline when the number of displayed pins changes.
+         *
+         * @param newHeadline - The new complete headline.
+         */
+        void updateText(const QString& newHeadline);
+
     private:
         PinTreeModel* mPinModel;
         int mGateID;

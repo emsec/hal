@@ -45,9 +45,19 @@ namespace hal
 
         void handleContextMenuRequested(const QPoint &pos);
 
+    Q_SIGNALS:
+
+        /**
+         * @brief updateText
+         * @param newHeadline
+         */
+        void updateText(const QString& newHeadline);
+
     private:
         NetlistElementsTreeModel* mNetlistElementsModel;
         int mModuleID;
+
+        void handleNumberSubmodulesChanged(const int number);
     };
 
 }

@@ -148,6 +148,18 @@ namespace hal
         const QString keyItemType = "type"; //also save value in enum (if it is possible with QVariant)
         const QString keyRepresentedID = "id";
 
+
+    Q_SIGNALS:
+
+        /**
+         * Signal that is emitted when the number of direct submodules changed
+         * in the case the displayed content is displayed by using the method
+         * setModule().
+         *
+         * @param newNumber - The new number of direct submodules.
+         */
+        void numberOfSubmodulesChanged(const int newNumber);
+
     private:
         //TreeItem* mRootItem;
         //Note: make these somehow static (does not work with pointer...?)

@@ -126,4 +126,13 @@ namespace hal
     {
         return item->getAdditionalData(keyType).value<itemType>();
     }
+
+    int PinTreeModel::getNumberOfDisplayedPins()
+    {
+        Gate* g = gNetlist->get_gate_by_id(mGateId);
+        if(!g)
+            return 0;
+
+        return g->get_type()->get_pins().size();
+    }
 }
