@@ -47,6 +47,10 @@ namespace hal {
 
         std::filesystem::path get_shadow_dir() const;
 
+        std::filesystem::path get_canonical_path() const;
+
+        std::filesystem::path get_relative_file_path(const std::string& filename) const;
+
         static ProjectDirectory generateRandom();
         static const std::string s_shadow_dir;
     };

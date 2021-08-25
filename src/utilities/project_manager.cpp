@@ -51,9 +51,9 @@ namespace hal {
         return it->second;
     }
 
-    bool ProjectManager::open_project_directory(const std::string& path)
+    bool ProjectManager::open_project(const std::string& path)
     {
-        m_proj_dir = ProjectDirectory(path);
+        if (!path.empty()) m_proj_dir = ProjectDirectory(path);
         if (!std::filesystem::exists(m_proj_dir)) return false;
         if (deserialize())
         {
@@ -61,6 +61,11 @@ namespace hal {
             return true;
         }
         return false;
+    }
+
+    void ProjectManager::set_project_directory(const std::string& path)
+    {
+        m_proj_dir = ProjectDirectory(path);
     }
 
     const ProjectDirectory &ProjectManager::get_project_directory() const
@@ -95,26 +100,19 @@ namespace hal {
         m_gatelib_path = glpath;
     }
 
-    bool ProjectManager::serialize_netlist(Netlist* netlist, bool shadow, const std::string& fname)
+    bool ProjectManager::serialize_project(Netlist* netlist, bool shadow)
     {
         if (!netlist) return false;
 
         m_netlist_save = netlist;
         const GateLibrary* gl = m_netlist_save->get_gate_library();
         if (gl) m_gatelib_path = gl->get_path().string();
-        if (fname.empty())
-        {
-            if (shadow)
-                m_netlist_file = m_proj_dir.get_shadow_filename(".hal");
-            else
-                m_netlist_file = m_proj_dir.get_default_filename(".hal");
-        }
+        if (shadow)
+            m_netlist_file = m_proj_dir.get_shadow_filename(".hal");
         else
-        {
-            m_netlist_file = fname;
-        }
+            m_netlist_file = m_proj_dir.get_default_filename(".hal");
 
-        if (!netlist_serializer::xserialize_to_file(m_netlist_save, m_netlist_file)) return false;
+        if (!netlist_serializer::serialize_to_file(m_netlist_save, m_netlist_file)) return false;
 
         if (!serialize_external(shadow)) return false;
 
@@ -141,7 +139,6 @@ namespace hal {
         FILE* fp = fopen(projFilePath.string().c_str(), "r");
         if (fp == NULL)
         {
-//            log_error("hgl_parser", "unable to open '{}' for reading.", file_path.string());
             log_error("project_manager", "cannot open project file '{}'.", projFilePath.string());
             return false;
         }
@@ -158,8 +155,17 @@ namespace hal {
             std::filesystem::path netlistPath(m_proj_dir);
             netlistPath.append(m_netlist_file);
             m_netlist_load = netlist_factory::load_netlist(netlistPath.string());
+            if (!m_netlist_load)
+            {
+                log_error("project_manager", "cannot load netlist {}.", netlistPath.string());
+                return false;
+            }
         }
-        else return false;
+        else
+        {
+            log_error("project_manager", "no 'netlist' token found in project file {}.", projFilePath.string());
+            return false;
+        }
 
         if (doc.HasMember("serializer"))
         {
@@ -207,8 +213,8 @@ namespace hal {
 
         JsonWriteDocument doc;
         doc["serialization_format_version"] = SERIALIZATION_FORMAT_VERSION;
-        doc["netlist"] = m_netlist_file;
-        doc["gate_library"] = m_gatelib_path;
+        doc["netlist"]      = m_proj_dir.get_relative_file_path(m_netlist_file).string();
+        doc["gate_library"] = m_proj_dir.get_relative_file_path(m_gatelib_path).string();
 
         if (!m_filename.empty())
         {

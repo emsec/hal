@@ -59,6 +59,13 @@ namespace hal
 
         bool serialize_to_projectfile(bool shadow) const;
         bool serialize_external(bool shadow);
+
+        /**
+         * Deserialize hal project
+         *
+         * @return true if OK, false if any error
+         */
+        bool deserialize();
     public:
         /**
          * Returns the singleton instance which gets constructed upon first call
@@ -110,20 +117,6 @@ namespace hal
         std::unique_ptr<Netlist>& get_netlist();
 
         /**
-         * Serialize hal project
-         *
-         * @return true if OK, false if any error
-         */
-//        bool yserialize() const;
-
-        /**
-         * Deserialize hal project
-         *
-         * @return true if OK, false if any error
-         */
-        bool deserialize();
-
-        /**
          * Dump for debugging purpose
          */
         void dump() const;
@@ -131,26 +124,39 @@ namespace hal
         /**
          * Set gate library path name
          *
-         * @param fname name of gate library path
+         * @glpath path to gate library
          */
         void set_gatelib_path(const std::string& glpath);
 
         /**
-         * Serialize netlist to project directory
+         * Serialize netlist and dependend data to project directory
          *
          * @param netlist Netlist to save
          * @param shadow true if called from autosave procedure
-         * @param fname user provided filename. Use default filename if empty
          */
-        bool serialize_netlist(Netlist* netlist, bool shadow = false, const std::string& fname = std::string());
+        bool serialize_project(Netlist* netlist, bool shadow = false);
 
         /**
-         * Open project in directory path
+         * Open hal project in directory <path>
          *
-         * @param path to project directory
+         * @param path to project directory, might be empty if previously set by set_project_directory()
          * @return true on success, false on error
          */
-        bool open_project_directory(const std::string& path);
+        bool open_project(const std::string& path = std::string());
+
+        /**
+         * Returns project directory
+         *
+         * @return project directory
+         */
+        const ProjectDirectory& get_project_directory() const;
+
+        /**
+         * Set project directory
+         *
+         * @param path to project directory
+         */
+        void set_project_directory(const std::string& path);
 
         /**
          * Create project directory. Project directory must not exist
@@ -168,14 +174,7 @@ namespace hal
         std::string get_netlist_filename() const;
 
         /**
-         * Returns project directory
-         *
-         * @return project directory
-         */
-        const ProjectDirectory& get_project_directory() const;
-
-        /**
-         * The name of the file with project info (without path)
+         * File name of project info file (mandatory for all hal projects)
          */
         static const std::string s_project_file;
     };

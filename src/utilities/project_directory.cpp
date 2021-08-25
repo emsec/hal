@@ -28,11 +28,17 @@ namespace hal {
         return ProjectDirectory();
     }
 
+    std::filesystem::path ProjectDirectory::get_canonical_path() const
+    {
+        if (empty()) return std::filesystem::path();
+        return std::filesystem::canonical(*this);
+    }
+
     std::filesystem::path ProjectDirectory::get_default_filename(const std::string& extension) const
     {
         std::string name(filename());
         name += extension.empty() ?  std::string(".hal") : extension;
-        std::filesystem::path retval(*this);
+        std::filesystem::path retval(get_canonical_path());
         retval.append(name);
         return retval;
     }
@@ -40,7 +46,7 @@ namespace hal {
     std::filesystem::path ProjectDirectory::get_filename(const std::string &relative_filename) const
     {
         std::filesystem::path rel(relative_filename);
-        std::filesystem::path retval(*this);
+        std::filesystem::path retval(get_canonical_path());
         if (rel.is_relative())
             retval.append(relative_filename);
         else
@@ -59,8 +65,20 @@ namespace hal {
 
     std::filesystem::path ProjectDirectory::get_shadow_dir() const
     {
-        std::filesystem::path retval(*this);
+        std::filesystem::path retval(get_canonical_path());
         retval.append(s_shadow_dir);
+        return retval;
+    }
+
+    std::filesystem::path ProjectDirectory::get_relative_file_path(const std::string &filename) const
+    {
+        std::filesystem::path retval(filename);
+        if (retval.is_relative() || filename.empty() || empty()) return retval;
+        std::string relative = filename;
+        std::string canonical_dir = get_canonical_path().string() + '/';
+        int n = canonical_dir.size();
+        if (!relative.compare(0,n,canonical_dir))
+            return (std::filesystem::path(relative.substr(n)));
         return retval;
     }
 }

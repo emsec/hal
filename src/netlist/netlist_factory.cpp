@@ -65,7 +65,7 @@ namespace hal
             }
 
             ProjectManager* pm = ProjectManager::instance();
-            if (!pm->open_project_directory(project_dir.string()))
+            if (!pm->open_project(project_dir.string()))
             {
                 log_critical("netlist", "could not open hal project '{}'.", project_dir.string());
                 return nullptr;

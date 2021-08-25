@@ -6,7 +6,6 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
-#include "hal_core/utilities/hal_file_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/project_manager.h"
 #include "rapidjson/filereadstream.h"
@@ -524,7 +523,7 @@ namespace hal
             }
         }    // namespace
 
-        bool xserialize_to_file(Netlist* nl, const std::filesystem::path& hal_file)
+        bool serialize_to_file(Netlist* nl, const std::filesystem::path& hal_file)
         {
             if (nl == nullptr)
             {
@@ -547,12 +546,6 @@ namespace hal
             document.AddMember("serialization_format_version", SERIALIZATION_FORMAT_VERSION, document.GetAllocator());
 
             serialize(nl, document);
-
-            if (!hal_file_manager::serialize(hal_file, nl, document))
-            {
-                log_info("netlist_persistent", "serialization failed");
-                return false;
-            }
 
             rapidjson::StringBuffer strbuf;
 #if PRETTY_JSON_OUTPUT == 1
@@ -617,11 +610,6 @@ namespace hal
 
             if (netlist)
             {
-                if (!hal_file_manager::deserialize(hal_file, netlist.get(), document))
-                {
-                    log_info("netlist_persistent", "deserialization failed");
-                    return nullptr;
-                }
                 log_info("netlist_persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
             }
 

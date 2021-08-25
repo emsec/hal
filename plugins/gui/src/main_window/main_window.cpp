@@ -695,7 +695,7 @@ namespace hal
                 return QString();
             }
 
-            if (pm->create_project_directory(saveProjectDir.toStdString()))
+            if (!pm->create_project_directory(saveProjectDir.toStdString()))
             {
                 QMessageBox::warning(this,"Save Error", "cannot create folder " + saveProjectDir);
                 return QString();
@@ -704,7 +704,7 @@ namespace hal
 
         QString qNetlistPath = QString::fromStdString(pm->get_project_directory().get_default_filename(".hal"));
 
-        if (!pm->serialize_netlist(gNetlist))
+        if (!pm->serialize_project(gNetlist))
         {
             log_warning("gui", "error saving netlist to <" + qNetlistPath.toStdString() + ">");
             return QString();

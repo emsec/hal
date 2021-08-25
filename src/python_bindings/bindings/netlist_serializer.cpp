@@ -8,7 +8,7 @@ namespace hal
             HAL Netlist Serializer functions.
         )");
 
-        py_netlist_serializer.def("serialize_to_file", netlist_serializer::xserialize_to_file, py::arg("netlist"), py::arg("hal_file"), R"(
+        py_netlist_serializer.def("serialize_to_file", netlist_serializer::serialize_to_file, py::arg("netlist"), py::arg("hal_file"), R"(
             Serializes a netlist into a .hal file.
         
             :param hal_py.Netlist netlist: The netlist to serialize.

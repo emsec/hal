@@ -18,7 +18,7 @@ namespace hal
 {
     RecentFileItem::RecentFileItem(const QString& file, QWidget* parent)
         : QFrame(parent), mWidget(new QWidget()), mHorizontalLayout(new QHBoxLayout()), mIconLabel(new QLabel()), mVerticalLayout(new QVBoxLayout()), mNameLabel(new QLabel()),
-          mPathLabel(new QLabel()), mAnimation(new QPropertyAnimation()), mRemoveButton(new QToolButton(this)), mHover(false), mDisabled(false), mProject(true)
+          mPathLabel(new QLabel()), mAnimation(new QPropertyAnimation()), mRemoveButton(new QToolButton(this)), mHover(false), mMissing(false), mProject(true)
     {
         mHorizontalLayout->setContentsMargins(0, 0, 0, 0);
         mHorizontalLayout->setSpacing(0);
@@ -56,13 +56,16 @@ namespace hal
         QFontMetrics font_metrics = mPathLabel->fontMetrics();
         mPathLabel->setText(font_metrics.elidedText(mPath, Qt::TextElideMode::ElideLeft, width));
 
+        if (!info.exists())
+            setMissing(true);
+
         repolish();
     }
 
     void RecentFileItem::enterEvent(QEvent* event)
     {
         Q_UNUSED(event)
-        if(mDisabled)
+        if(mMissing)
             return;
 
         mHover = true;
@@ -72,7 +75,7 @@ namespace hal
     void RecentFileItem::leaveEvent(QEvent* event)
     {
         Q_UNUSED(event)
-        if(mDisabled)
+        if(mMissing)
             return;
 
         mHover = false;
@@ -83,7 +86,7 @@ namespace hal
     {
         Q_UNUSED(event)
 
-        if(mDisabled)
+        if(mMissing)
             return;
 
         if(event->button() == Qt::MouseButton::LeftButton)
@@ -144,9 +147,9 @@ namespace hal
         return mHover;
     }
 
-    bool RecentFileItem::disabled() const
+    bool RecentFileItem::missing() const
     {
-        return mDisabled;
+        return mMissing;
     }
 
     bool RecentFileItem::isProject() const
@@ -169,9 +172,9 @@ namespace hal
         mHover = active;
     }
 
-    void RecentFileItem::setDisabled(bool disable)
+    void RecentFileItem::setMissing(bool miss)
     {
-        mDisabled = disable;
+        mMissing = miss;
         mNameLabel->setText(mNameLabel->text().append(" [Missing]"));
         mHover = false;
     }

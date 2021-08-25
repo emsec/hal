@@ -104,7 +104,8 @@ namespace hal
 
             FileManager::DirectoryStatus stat = FileManager::directoryStatus(file);
 
-            item->setEnabled(stat==FileManager::ProjectDirectory || stat==FileManager::IsFile);
+            if (!item->missing())
+                item->setEnabled(stat==FileManager::ProjectDirectory || stat==FileManager::IsFile);
 
             mItems.append(item);
             mLayout->addWidget(item);

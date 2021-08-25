@@ -44,7 +44,7 @@ namespace hal
     {
         Q_OBJECT
         Q_PROPERTY(bool hover READ hover)
-        Q_PROPERTY(bool disabled READ disabled)
+        Q_PROPERTY(bool missing READ missing)
         Q_PROPERTY(bool isProject READ isProject)
         Q_PROPERTY(QString iconPath READ iconPath WRITE setIconPath)
         Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
@@ -111,7 +111,7 @@ namespace hal
          */
         ///@{
         bool hover() const;
-        bool disabled() const;
+        bool missing() const;
         bool isProject() const;
         QString iconPath();
         QString iconStyle();
@@ -121,7 +121,7 @@ namespace hal
          */
         ///@{
         void setHoverActive(bool active);
-        void setDisabled(bool disable);
+        void setMissing(bool miss);
         void setIconPath(const QString& path);
         void setIconStyle(const QString& style);
         ///@}
@@ -148,7 +148,7 @@ namespace hal
         QString mPath;
 
         bool mHover;
-        bool mDisabled;
+        bool mMissing;
         bool mProject;
 
         QString mIconPath;

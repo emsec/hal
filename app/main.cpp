@@ -271,7 +271,7 @@ int main(int argc, const char* argv[])
     ProjectManager* pm = ProjectManager::instance();
     if (openExisting)
     {
-        if (!pm->open_project_directory(proj_path.string()))
+        if (!pm->open_project(proj_path.string()))
         {
             log_error("core", "Cannot open project <" + proj_path.string() + ">");
             return cleanup();
@@ -377,7 +377,7 @@ int main(int argc, const char* argv[])
 
     if (!volatile_mode)
     {
-        pm->serialize_netlist(netlist.get());
+        pm->serialize_project(netlist.get());
     }
 
     /* handle file writer */

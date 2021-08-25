@@ -133,6 +133,8 @@ namespace hal
                 extension = "." + extension;
             }
 
+            if (extension == ".hal") return true;
+
             return (m_extension_to_parser.find(extension) != m_extension_to_parser.end());
         }
 

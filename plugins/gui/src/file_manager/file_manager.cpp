@@ -99,7 +99,7 @@ namespace hal
         if (pm->get_project_status() != ProjectManager::None && mAutosaveEnabled)
         {
             log_info("gui", "saving a backup in case something goes wrong...");
-            ProjectManager::instance()->serialize_netlist(gNetlist, true);
+            ProjectManager::instance()->serialize_project(gNetlist, true);
         }
     }
 
@@ -274,7 +274,7 @@ namespace hal
     void FileManager::moveShadowToProject(const QDir& shDir) const
     {
         QString replaceToken = "/" + QString::fromStdString(ProjectDirectory::s_shadow_dir) + "/";
-        for (QFileInfo finfo : shDir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot))
+        for (QFileInfo finfo : shDir.entryInfoList(QDir::Dirs | QDir::Files | QDir::Hidden | QDir::NoDotAndDotDot))
         {
             QString targetPath(finfo.absoluteFilePath());
             targetPath.replace(replaceToken,"/");
@@ -286,7 +286,9 @@ namespace hal
             }
             else if (finfo.isFile())
             {
-                qDebug() << finfo.absoluteFilePath() << "->" << targetPath;
+                if (QFileInfo(targetPath).exists()) QFile::remove(targetPath);
+                QFile::copy(finfo.absoluteFilePath(),targetPath);
+                log_info("gui", "File restored from autosave: {}.", targetPath.toStdString());
             }
             else
             {
@@ -298,6 +300,7 @@ namespace hal
     void FileManager::openProject(QString projPath)
     {
         ProjectManager* pm = ProjectManager::instance();
+        pm->set_project_directory(projPath.toStdString());
 
         QDir shDir(QString::fromStdString(pm->get_project_directory().get_shadow_dir()));
         QFileInfo shInfo(shDir.absoluteFilePath(QString::fromStdString(ProjectManager::s_project_file)));
@@ -311,25 +314,8 @@ namespace hal
                 moveShadowToProject(shDir);
             }
         }
-        /*
-        if (filename.endsWith(".hal"))
-        {
-            QString shadow_file_name = getShadowFile(filename);
 
-            if (QFileInfo::exists(shadow_file_name) && QFileInfo(shadow_file_name).isFile())
-            {
-                QString message =
-                    "It seems that HAL crashed during your last session. Last autosave was on " + QFileInfo(shadow_file_name).lastModified().toString("dd.MM.yyyy hh:mm") + ". Restore that state?";
-                if (QMessageBox::question(nullptr, "HAL did not exit cleanly", message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-                {
-                    // logical_file_name is not changed
-                    filename = shadow_file_name;
-                }
-            }
-        }
-        */
-
-        if (!pm->open_project_directory(projPath.toStdString()))
+        if (!pm->open_project())
         {
             QString errorMsg = QString("Error opening project <%1>").arg(projPath);
             log_error("gui", "{}", errorMsg.toStdString());
