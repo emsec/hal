@@ -3,6 +3,7 @@
 #include "hal_core/netlist/net.h"
 
 #include "gui/gui_globals.h"
+#include "gui/netlist_relay/netlist_relay.h"
 #include "gui/new_selection_details_widget/py_code_provider.h"
 
 #include <QDebug>
@@ -31,6 +32,19 @@ namespace hal
 
         mNumDstsEntryContextMenu = new QMenu();
         mNumDstsEntryContextMenu->addAction("copyNumDsts", std::bind(&NetInfoTable::copyNumberOfDsts, this));
+
+        connect(gNetlistRelay, &NetlistRelay::netRemoved, this, &NetInfoTable::handleNetRemoved);
+        connect(gNetlistRelay, &NetlistRelay::netNameChanged, this, &NetInfoTable::handleNetNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::netSourceAdded, this, &NetInfoTable::handleSrcDstChanged);
+        connect(gNetlistRelay, &NetlistRelay::netSourceRemoved, this, &NetInfoTable::handleSrcDstChanged);
+        connect(gNetlistRelay, &NetlistRelay::netDestinationAdded, this, &NetInfoTable::handleSrcDstChanged);
+        connect(gNetlistRelay, &NetlistRelay::netDestinationRemoved, this, &NetInfoTable::handleSrcDstChanged);
+        connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalInput, this, &NetInfoTable::handleNetTypeChanged);
+        connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalInput, this, &NetInfoTable::handleNetTypeChanged);
+        connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalOutput, this, &NetInfoTable::handleNetTypeChanged);
+        connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalOutput, this, &NetInfoTable::handleNetTypeChanged);
+        connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalInout, this, &NetInfoTable::handleNetTypeChanged);
+        connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalInout, this, &NetInfoTable::handleNetTypeChanged);
     }
 
     void NetInfoTable::setNet(hal::Net* net)
@@ -123,5 +137,50 @@ namespace hal
     void NetInfoTable::copyNumberOfDsts() const
     {
         copyToClipboard(numberOfDsts());
+    }
+
+    void NetInfoTable::handleNetRemoved(Net* net)
+    {
+        if(mNet == net)
+        {
+            mNet = nullptr;
+
+            const QString notification("Displayed net has been deleted.");
+
+            setRow("Name", notification, nullptr);
+            setRow("Id", notification, nullptr);
+            setRow("Type", notification, nullptr);
+            setRow("No. of Sources", notification, nullptr);
+            setRow("No. of Destinations", notification, nullptr);
+
+            adjustSize();
+        }
+    }
+
+    void NetInfoTable::handleNetNameChanged(Net* net)
+    {
+        if(mNet == net)
+            refresh();
+    }
+
+    void NetInfoTable::handleNetTypeChanged(Netlist* netlist, const u32 netId)
+    {
+        Q_UNUSED(netlist)
+
+        if(mNet->get_id() == netId)
+            refresh();
+    }
+
+    void NetInfoTable::handleSrcDstChanged(Net* net, u32 srcDstGateId)
+    {
+        Q_UNUSED(srcDstGateId)
+
+        if(mNet == net)
+            refresh();
+    }
+
+    void NetInfoTable::refresh()
+    {
+        setNet(mNet);
     }
 }
