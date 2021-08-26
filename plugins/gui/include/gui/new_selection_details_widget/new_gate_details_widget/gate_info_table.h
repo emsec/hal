@@ -51,6 +51,7 @@ namespace hal
         void setGate(Gate* gate);
 
     private:
+
         /**
          * Returns the gate's name in a suitable manner for tables and the clipboard.
          *
@@ -159,29 +160,40 @@ namespace hal
         void navModule();
 
         /**
-         * Handle deletion of displayed gate.
+         * Handle relayed deletion of a gate.
+         * 
+         *  @param gate - Gate which has been removed.
          */
         void handleGateRemoved(Gate* gate);
         
         /**
-         * Handle name change of displayed gate.
+         * Handle relayed name change of a gate.
+         * 
+         * @param gate - Gate which name has been changed.
          */
         void handleGateNameChanged(Gate* gate);
 
         /**
-         * Handle location change of displayed gate.
+         * Handle relayed location change of a gate.
+         * 
+         * @param gate - Gate which location has been changed.
          */
         void handleGateLocationChanged(Gate* gate);
 
         /**
-         * Handle name change of parent module of displayed gate.
+         * Handle relayed name change of a module.
+         * 
+         * @param - Module which name has been changed.
          */
-        void handleModuleNameChanged(Module* m);
+        void handleModuleNameChanged(Module* module);
 
         /**
-         * Handle change of parent module of displayed gate.
+         * Handle relayed change of a gate assignment.
+         * 
+         * @param module - Module which a gate has been asssigned to.
+         * @param gateId - The id of the assigned gate.
          */
-        void handleModuleGateAssigned(Module* m, const u32 assigned_gate);
+        void handleModuleGateAssigned(Module* module, const u32 gateId);
 
         /**
          * Refreshes the table with the data of the currently set gate.

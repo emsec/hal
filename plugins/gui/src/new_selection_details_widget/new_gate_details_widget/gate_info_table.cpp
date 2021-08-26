@@ -201,12 +201,12 @@ namespace hal
 
             const QString notification("Displayed gate has been deleted.");
 
-            setRow("Name", notification, mNameEntryContextMenu);
-            setRow("Id", notification, mIdEntryContextMenu);
-            setRow("Type", notification, mTypeEntryContextMenu);
-            setRow("Gate Type properties", notification, mPropertiesEntryContextMenu);
-            setRow("Location", notification, mLocationEntryContextMenu);
-            setRow("Module", notification, mModuleEntryContextMenu, mModuleDoubleClickedAction);
+            setRow("Name", notification, nullptr);
+            setRow("Id", notification, nullptr);
+            setRow("Type", notification, nullptr);
+            setRow("Gate Type properties", notification, nullptr);
+            setRow("Location", notification, nullptr);
+            setRow("Module", notification, nullptr, nullptr);
 
             adjustSize();
         }
@@ -224,15 +224,17 @@ namespace hal
             refresh();
     }
 
-    void GateInfoTable::handleModuleNameChanged(Module* m)
+    void GateInfoTable::handleModuleNameChanged(Module* module)
     {
-        if(mGate->get_module() == m)
+        if(mGate->get_module() == module)
             refresh();
     }
 
-    void GateInfoTable::handleModuleGateAssigned(Module* m, const u32 assigned_gate)
+    void GateInfoTable::handleModuleGateAssigned(Module* module, const u32 gateId)
     {
-        if(mGate->get_id() == assigned_gate)
+        Q_UNUSED(module)
+
+        if(mGate->get_id() == gateId)
             refresh();
     }
 
