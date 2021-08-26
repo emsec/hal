@@ -407,6 +407,14 @@ namespace hal
          * @param g - The gate which boolean functions haven been changed
          */
         void gateBooleanFunctionChanged(Gate* g) const;
+        
+        /**
+         * Q_SIGNAL to notify that the location of a gate has been changed. <br>
+         * Relays the following hal-core event: <i>GateEvent::event::location_changed</i>
+         *
+         * @param g - The gate which position has been changed
+         */
+        void gateLocationChanged(Gate* g) const;
 
         /*=======================================
            Net Event Signals
