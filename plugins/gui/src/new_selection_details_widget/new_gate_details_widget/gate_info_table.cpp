@@ -3,13 +3,11 @@
 #include "hal_core/utilities/enums.h"
 
 #include "gui/gui_globals.h"
-
+#include "gui/netlist_relay/netlist_relay.h"
 #include "gui/new_selection_details_widget/py_code_provider.h"
 
 #include <QDebug>
 #include <QMenu>
-#include <QApplication>
-#include <QClipboard>
 
 namespace hal
 {
@@ -40,9 +38,15 @@ namespace hal
         mModuleEntryContextMenu->addAction("pyCopyModule", std::bind(&GateInfoTable::pyCopyModule, this));
 
         mModuleDoubleClickedAction = std::bind(&GateInfoTable::navModule, this);
+
+        connect(gNetlistRelay, &NetlistRelay::gateRemoved, this, &GateInfoTable::handleGateRemoved);
+        connect(gNetlistRelay, &NetlistRelay::gateNameChanged, this, &GateInfoTable::handleGateNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::gateLocationChanged, this, &GateInfoTable::handleGateLocationChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &GateInfoTable::handleModuleNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleGateAssigned, this, &GateInfoTable::handleModuleGateAssigned);
     }
 
-    void GateInfoTable::setGate(hal::Gate* gate)
+    void GateInfoTable::setGate(Gate* gate)
     {
         if(gNetlist->is_gate_in_netlist(gate))
         {
@@ -187,5 +191,53 @@ namespace hal
         gSelectionRelay->clear();
         gSelectionRelay->addModule(parentModuleId);
         gSelectionRelay->relaySelectionChanged(this);
+    }
+
+    void GateInfoTable::handleGateRemoved(Gate* gate)
+    {
+        if(mGate == gate)
+        {
+            mGate = nullptr;
+
+            const QString notification("Displayed gate has been deleted.");
+
+            setRow("Name", notification, mNameEntryContextMenu);
+            setRow("Id", notification, mIdEntryContextMenu);
+            setRow("Type", notification, mTypeEntryContextMenu);
+            setRow("Gate Type properties", notification, mPropertiesEntryContextMenu);
+            setRow("Location", notification, mLocationEntryContextMenu);
+            setRow("Module", notification, mModuleEntryContextMenu, mModuleDoubleClickedAction);
+
+            adjustSize();
+        }
+    }
+
+    void GateInfoTable::handleGateNameChanged(Gate* gate)
+    {
+        if(mGate == gate)
+            refresh();
+    }
+
+    void GateInfoTable::handleGateLocationChanged(Gate* gate)
+    {
+        if(mGate == gate)
+            refresh();
+    }
+
+    void GateInfoTable::handleModuleNameChanged(Module* m)
+    {
+        if(mGate->get_module() == m)
+            refresh();
+    }
+
+    void GateInfoTable::handleModuleGateAssigned(Module* m, const u32 assigned_gate)
+    {
+        if(mGate->get_id() == assigned_gate)
+            refresh();
+    }
+
+    void GateInfoTable::refresh()
+    {
+        setGate(mGate);
     }
 }

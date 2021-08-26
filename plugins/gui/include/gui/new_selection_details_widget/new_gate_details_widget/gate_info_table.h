@@ -28,6 +28,7 @@
 namespace hal
 {
     class Gate;
+    class Module;
 
     class GateInfoTable : public GeneralTableWidget
     {
@@ -47,37 +48,147 @@ namespace hal
         *
         * @param gate - The gate.
         */
-        void setGate(hal::Gate* gate);
+        void setGate(Gate* gate);
 
     private:
-
-        Gate* mGate;
-
+        /**
+         * Returns the gate's name in a suitable manner for tables and the clipboard.
+         *
+         * @return name - The gate's name.
+         */
         QString name() const;
+       
+        /**
+         * Returns the gate's id in a suitable manner for tables and the clipboard.
+         *
+         * @return id - The gate's id.
+         */
         QString id() const;
+
+        /**
+         * Returns the gate's type in a suitable manner for tables and the clipboard.
+         *
+         * @return type - The gate's type.
+         */
         QString type() const;
+
+        /**
+         * Returns the gate's type propierties in a suitable manner for tables and the clipboard.
+         *
+         * @return gate type properties - The gate's type properties.
+         */
         QString properties() const;
+
+        /**
+         * Returns the gate's location in a suitable manner for tables and the clipboard.
+         *
+         * @return location - The gate's location.
+         */
         QString location() const;
+
+        /**
+         * Returns the gate's parent module in a suitable manner for tables and the clipboard.
+         *
+         * @return parent module - The gate's parent module.
+         */
         QString parentModule() const; 
 
+        /**
+         * Opens a Dialog to change the gate's name.
+         */
         void changeName();
+
+        /**
+         * Copies the gate's name to the clipboard.
+         */
         void copyName() const;
+
+        /**
+         * Copies the python code to retrieve the gate's name to the clipboard.
+         */
         void pyCopyName() const;
 
+        /**
+         * Copies the gate's id to the clipboard.
+         */
         void copyId() const;
 
+        /**
+         * Copies the gate's type to the clipboard.
+         */
         void copyType() const;
+
+        /**
+         * Copies the python code to retrieve the gate's type to the clipboard.
+         */
         void pyCopyType() const;
 
+        /**
+         * Copies the gate's type properties to the clipboard.
+         */
         void copyproperties() const;
+
+        /**
+         * Copies the python code to retrieve the gate's type properties to the clipboard.
+         */
         void pyCopyproperties() const;
 
+        /**
+         * Copies the gate's location to the clipboard.
+         */
         void copyLocation() const;
+
+        /**
+         * Copies the python code to retrieve the gate's location to the clipboard.
+         */
         void pyCopyLocation() const;
         
+        /**
+         * Copies the gate's parent module to the clipboard.
+         */
         void copyModule() const;
+
+        /**
+         * Copies the python code to retrieve the gate's parent module to the clipboard.
+         */
         void pyCopyModule() const;
+
+        /**
+         * Changes the selection to the gate's parent module.
+         */
         void navModule();
+
+        /**
+         * Handle deletion of displayed gate.
+         */
+        void handleGateRemoved(Gate* gate);
+        
+        /**
+         * Handle name change of displayed gate.
+         */
+        void handleGateNameChanged(Gate* gate);
+
+        /**
+         * Handle location change of displayed gate.
+         */
+        void handleGateLocationChanged(Gate* gate);
+
+        /**
+         * Handle name change of parent module of displayed gate.
+         */
+        void handleModuleNameChanged(Module* m);
+
+        /**
+         * Handle change of parent module of displayed gate.
+         */
+        void handleModuleGateAssigned(Module* m, const u32 assigned_gate);
+
+        /**
+         * Refreshes the table with the data of the currently set gate.
+         */
+        void refresh();
+
+        Gate* mGate;
 
         QMenu* mNameEntryContextMenu;
         QMenu* mIdEntryContextMenu;
