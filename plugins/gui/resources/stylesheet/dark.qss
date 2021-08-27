@@ -28,28 +28,6 @@ QPushButton
     min-width      : 50px;
 }
 
-QPushButton:default
-{
-    background-color : rgba(228, 228, 228, 0.1);
-}
-
-QPushButton:hover
-{
-    background-color : rgba(128, 128, 128, 0.2);
-}
-
-QPushButton:checked
-{
-    color        : rgba(32, 36, 37, 1);
-    background   : rgba(114, 140, 0, 1);
-    border-color : rgba(114, 140, 0, 1);
-}
-
-QPushButton:disabled
-{
-    color : rgba(128, 128, 128, 1);
-}
-
 QMenuBar
 {
     background-color : rgba(60, 63, 65, 1);
@@ -1270,13 +1248,51 @@ hal--DockButton
     qproperty-hoverColor: #666769;
 }
 
-hal--DetailsFrameWidget QLabel
+QPushButton:default
+{
+    background-color : rgba(228, 228, 228, 0.1);
+}
+
+QPushButton:hover
+{
+    background-color : rgba(128, 128, 128, 0.2);
+}
+
+QPushButton:checked
+{
+    color        : rgba(32, 36, 37, 1);
+    background   : rgba(114, 140, 0, 1);
+    border-color : rgba(114, 140, 0, 1);
+}
+
+QPushButton:disabled
+{
+    color : rgba(128, 128, 128, 1);
+}
+
+hal--DetailsFrameWidget QPushButton
 {
     font: bold "Iosevka";
     font-size: 12px;
     background: #1a1a1a;
-    border:1px solid #999999;
+    border-color: #666666;
+    border-width: 1px;
+    color: #bbbbbb;
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:checked
+{
+    font: bold "Iosevka";
+    font-size: 12px;
+    background: #1a1a1a;
+    border-color: #999999;
+    border-width: 1px;
     color: #eeeeee;
-    min-height: 20px;
-    qproperty-alignment: 'AlignCenter';
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:hover
+{
+    background-color : rgba(128, 128, 128, 0.2);
 }

@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include <QLabel>
+#include <QPushButton>
 #include <QWidget>
 #include <QVBoxLayout>
 
@@ -34,13 +34,16 @@ class DetailsFrameWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit DetailsFrameWidget(QWidget* widget, QWidget* parent = nullptr);
+    explicit DetailsFrameWidget(QWidget* widget, const QString& text, QWidget* parent = nullptr);
 
     void setText(const QString& text);
 
+    void handleButtonClicked(bool checked);
+
 private:
     QVBoxLayout* m_layout;
-    QLabel* m_label;
+    QPushButton* m_button;
+    QWidget* m_widget;
 
 };
 }
