@@ -238,7 +238,7 @@ namespace hal
         {
             mModule = nullptr;
 
-            const QString notification("Displayed module has been deleted.");
+            const QString notification("Displayed module has been removed.");
 
             setRow("Name", notification, nullptr);
             setRow("Id", notification, nullptr);

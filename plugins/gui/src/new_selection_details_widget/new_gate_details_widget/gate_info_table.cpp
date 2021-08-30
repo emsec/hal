@@ -210,7 +210,7 @@ namespace hal
         {
             mGate = nullptr;
 
-            const QString notification("Displayed gate has been deleted.");
+            const QString notification("Displayed gate has been removed.");
 
             setRow("Name", notification, nullptr);
             setRow("Id", notification, nullptr);

@@ -128,7 +128,7 @@ namespace hal
         void copyNumberOfDsts() const;
 
         /**
-         * Handle relayed deletion of a net.
+         * Handle relayed removal of a net.
          * 
          *  @param net - Net which has been removed.
          */

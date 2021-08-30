@@ -154,7 +154,7 @@ namespace hal
         {
             mNet = nullptr;
 
-            const QString notification("Displayed net has been deleted.");
+            const QString notification("Displayed net has been removed.");
 
             setRow("Name", notification, nullptr);
             setRow("Id", notification, nullptr);

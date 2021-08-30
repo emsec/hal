@@ -160,7 +160,7 @@ namespace hal
         void navModule();
 
         /**
-         * Handle relayed deletion of a gate.
+         * Handle relayed removal of a gate.
          * 
          *  @param gate - Gate which has been removed.
          */
