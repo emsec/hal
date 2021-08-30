@@ -15,28 +15,28 @@ namespace hal
     GateInfoTable::GateInfoTable(QWidget* parent) : GeneralTableWidget(parent)
     {
         mNameEntryContextMenu = new QMenu();
-        mNameEntryContextMenu->addAction("changeName", std::bind(&GateInfoTable::changeName, this));
-        mNameEntryContextMenu->addAction("copyName", std::bind(&GateInfoTable::copyName, this));
-        mNameEntryContextMenu->addAction("pyCopyName", std::bind(&GateInfoTable::pyCopyName, this));
+        mNameEntryContextMenu->addAction("Change gate name", std::bind(&GateInfoTable::changeName, this));
+        mNameEntryContextMenu->addAction("Copy gate name to clipboard", std::bind(&GateInfoTable::copyName, this));
+        mNameEntryContextMenu->addAction("Copy python code that gets the gate's name to clipboard", std::bind(&GateInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
-        mIdEntryContextMenu->addAction("copyId", std::bind(&GateInfoTable::copyId, this));
+        mIdEntryContextMenu->addAction("Copy gate id to clipboard", std::bind(&GateInfoTable::copyId, this));
 
         mTypeEntryContextMenu = new QMenu();
-        mTypeEntryContextMenu->addAction("copyType", std::bind(&GateInfoTable::copyType, this));
-        mTypeEntryContextMenu->addAction("pyCopyType", std::bind(&GateInfoTable::pyCopyType, this));
+        mTypeEntryContextMenu->addAction("Copy gate type to clipboard", std::bind(&GateInfoTable::copyType, this));
+        mTypeEntryContextMenu->addAction("Copy python code that gets the gate's type to clipboard", std::bind(&GateInfoTable::pyCopyType, this));
 
         mPropertiesEntryContextMenu = new QMenu();
-        mPropertiesEntryContextMenu->addAction("copyProperties", std::bind(&GateInfoTable::copyproperties, this));
-        mPropertiesEntryContextMenu->addAction("pyCopyProperties", std::bind(&GateInfoTable::pyCopyproperties, this));
+        mPropertiesEntryContextMenu->addAction("Copy gate type properties to clipboard", std::bind(&GateInfoTable::copyproperties, this));
+        mPropertiesEntryContextMenu->addAction("Copy python code that gets the gate's type properties to clipboard", std::bind(&GateInfoTable::pyCopyproperties, this));
 
         mLocationEntryContextMenu = new QMenu();
-        mLocationEntryContextMenu->addAction("copyLocation", std::bind(&GateInfoTable::copyLocation, this));
-        mLocationEntryContextMenu->addAction("pyCopyLocation", std::bind(&GateInfoTable::pyCopyLocation, this));
+        mLocationEntryContextMenu->addAction("Copy gate location to clipboard", std::bind(&GateInfoTable::copyLocation, this));
+        mLocationEntryContextMenu->addAction("Copy python code that gets the gate's location to clipboard", std::bind(&GateInfoTable::pyCopyLocation, this));
 
         mModuleEntryContextMenu = new QMenu();
-        mModuleEntryContextMenu->addAction("copyModule", std::bind(&GateInfoTable::copyModule, this));
-        mModuleEntryContextMenu->addAction("pyCopyModule", std::bind(&GateInfoTable::pyCopyModule, this));
+        mModuleEntryContextMenu->addAction("Copy parent module name to clipboard", std::bind(&GateInfoTable::copyModule, this));
+        mModuleEntryContextMenu->addAction("Copy python code that gets the gate's parent module to clipboard", std::bind(&GateInfoTable::pyCopyModule, this));
 
         mModuleDoubleClickedAction = std::bind(&GateInfoTable::navModule, this);
 
