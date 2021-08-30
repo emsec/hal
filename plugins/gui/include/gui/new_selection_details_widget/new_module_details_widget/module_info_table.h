@@ -214,5 +214,14 @@ namespace hal
         QMenu* mNumOfNetsContextMenu;
 
         std::function<void()> mModuleDoubleClickedAction;
+
+        static const QString nameRowKey;
+        static const QString idRowKey;
+        static const QString typeRowKey;
+        static const QString moduleRowKey;
+        static const QString noOfGatesRowKey;
+        static const QString noOfModulesRowKey;
+        static const QString noOfNetsRowKey;
+
     }; 
 }

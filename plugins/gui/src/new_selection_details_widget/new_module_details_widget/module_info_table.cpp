@@ -12,6 +12,14 @@
 
 namespace hal
 {
+    const QString ModuleInfoTable::nameRowKey = "Name";
+    const QString ModuleInfoTable::idRowKey = "Id";
+    const QString ModuleInfoTable::typeRowKey = "Module Type";
+    const QString ModuleInfoTable::moduleRowKey = "Parent module";
+    const QString ModuleInfoTable::noOfGatesRowKey = "No. of Gates";
+    const QString ModuleInfoTable::noOfModulesRowKey = "No. of Submodules";
+    const QString ModuleInfoTable::noOfNetsRowKey = "No. of Gates";
+
     ModuleInfoTable::ModuleInfoTable(QWidget* parent) : GeneralTableWidget(parent)
     {
         mNameEntryContextMenu = new QMenu();
@@ -62,13 +70,13 @@ namespace hal
         {
             mModule = module;
 
-            setRow("Name", name(), mNameEntryContextMenu);
-            setRow("Id", id(), mIdEntryContextMenu);
-            setRow("Type", type(), mTypeEntryContextMenu);
-            setRow("Parent Module", parentModule(), mModuleEntryContextMenu, mModuleDoubleClickedAction);
-            setRow("No. of Gates", numberOfGates(), mNumOfGatesContextMenu);
-            setRow("No. of Submodules", numberOfSubModules(), mNumOfSubmodulesContextMenu);
-            setRow("No. of Nets", numberOfNets(), mNumOfNetsContextMenu);
+            setRow(nameRowKey, name(), mNameEntryContextMenu);
+            setRow(idRowKey, id(), mIdEntryContextMenu);
+            setRow(typeRowKey, type(), mTypeEntryContextMenu);
+            setRow(moduleRowKey, parentModule(), mModuleEntryContextMenu, mModuleDoubleClickedAction);
+            setRow(noOfGatesRowKey, numberOfGates(), mNumOfGatesContextMenu);
+            setRow(noOfModulesRowKey, numberOfSubModules(), mNumOfSubmodulesContextMenu);
+            setRow(noOfNetsRowKey, numberOfNets(), mNumOfNetsContextMenu);
             
             adjustSize();
         }
@@ -240,13 +248,13 @@ namespace hal
 
             const QString notification("Displayed module has been removed.");
 
-            setRow("Name", notification, nullptr);
-            setRow("Id", notification, nullptr);
-            setRow("Type", notification, nullptr);
-            setRow("Parent Module", notification, nullptr, nullptr);
-            setRow("No. of Gates", notification, nullptr);
-            setRow("No. of Submodules", notification, nullptr);
-            setRow("No. of Nets", notification, nullptr);
+            setRow(nameRowKey, notification, nullptr);
+            setRow(idRowKey, notification, nullptr);
+            setRow(typeRowKey, notification, nullptr);
+            setRow(moduleRowKey, notification, nullptr, nullptr);
+            setRow(noOfGatesRowKey, notification, nullptr);
+            setRow(noOfModulesRowKey, notification, nullptr);
+            setRow(noOfNetsRowKey, notification, nullptr);
 
             adjustSize();
         }
