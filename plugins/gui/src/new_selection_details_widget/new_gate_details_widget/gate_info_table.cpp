@@ -5,9 +5,10 @@
 #include "gui/gui_globals.h"
 #include "gui/netlist_relay/netlist_relay.h"
 #include "gui/new_selection_details_widget/py_code_provider.h"
+#include "gui/user_action/action_rename_object.h"
 
-#include <QDebug>
 #include <QMenu>
+#include <QInputDialog>
 
 namespace hal
 {
@@ -126,7 +127,18 @@ namespace hal
 
     void GateInfoTable::changeName()
     {
-        qDebug() << "changeName()";
+        QString oldName = QString::fromStdString(mGate->get_name());
+        QString prompt = "Change gate name";
+
+        bool confirm;
+        QString newName = QInputDialog::getText(this, prompt, "New name:", QLineEdit::Normal, oldName, &confirm);
+
+        if (confirm)
+        {
+            ActionRenameObject* act = new ActionRenameObject(newName);
+            act->setObject(UserActionObject(mGate->get_id(), UserActionObjectType::ObjectType::Gate));
+            act->exec();
+        }
     }
 
     void GateInfoTable::copyName() const
