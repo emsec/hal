@@ -239,19 +239,19 @@ namespace hal
             refresh();
     }
 
-    void ModuleInfoTable::handleSubmoduleChanged(Module* module, u32 affectedModuleId)
+    void ModuleInfoTable::handleSubmoduleChanged(Module* parentModule, u32 affectedModuleId)
     {
         Q_UNUSED(affectedModuleId);
 
-        if(mModule == module || mModule->contains_module(module))
+        if(mModule == parentModule || mModule->contains_module(parentModule))
             refresh();
     }
 
-    void ModuleInfoTable::handleGateChanged(Module* module, u32 affectedGateId)
+    void ModuleInfoTable::handleGateChanged(Module* parentModule, u32 affectedGateId)
     {
         Q_UNUSED(affectedGateId);
 
-        if(mModule == module || mModule->contains_module(module))
+        if(mModule == parentModule || mModule->contains_module(parentModule))
             refresh();
     }
 

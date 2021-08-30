@@ -36,51 +36,172 @@ namespace hal
 
     public:
 
+        /**
+         * The constructor.
+         *
+         * @param parent - The widget's parent.
+         */
         ModuleInfoTable(QWidget* parent = nullptr);
+
+        /**
+        * Updates the table with the data of the module.
+        *
+        * @param module - The module.
+        */
         void setModule(hal::Module* module);
 
     private:
 
+        /**
+         * Returns the module's name in a suitable manner for tables and the clipboard.
+         *
+         * @return name - The module's name.
+         */
         QString name() const;
+
+        /**
+         * Returns the module's id in a suitable manner for tables and the clipboard.
+         *
+         * @return id - The module's id.
+         */
         QString id() const;
+
+        /**
+         * Returns the module's type in a suitable manner for tables and the clipboard.
+         *
+         * @return type - The module's type.
+         */        
         QString type() const;
+
+        /**
+         * Returns the module's parent module in a suitable manner for tables and the clipboard.
+         *
+         * @return parent module - The module's parent module.
+         */
         QString parentModule() const;
+
+        /**
+         * Returns the number of gates contained in the module in a suitable mannfer for table and the clipboard.
+         */
         QString numberOfGates() const;
+
+        /**
+         * Returns the number of submodules contained in the module in a suitable mannfer for table and the clipboard.
+         */
         QString numberOfSubModules() const;
+
+        /**
+         * Returns the number of nets contained in the module in a suitable mannfer for table and the clipboard.
+         */
         QString numberOfNets() const;
 
+        /**
+         * Opens a Dialog to change the modules's name.
+         */
         void changeName();
+
+        /**
+         * Copies the module's name to the clipboard.
+         */
         void copyName() const;
+
+        /**
+         * Copies the python code to retrieve the module's name to the clipboard.
+         */
         void pyCopyName() const;
 
+        /**
+         * Copies the module's id to the clipboard.
+         */
         void copyId() const;
 
+        /**
+         * Opens a Dialog to change the modules's type.
+         */
         void changeType() const;
+
+        /**
+         * Copies the module's type to the clipboard.
+         */
         void copyType() const;
+
+        /**
+         * Copies the python code to retrieve the module's type to the clipboard.
+         */
         void pyCopyType() const;
 
+        /**
+         * Copies the module's parent module to the clipboard.
+         */
         void copyModule() const;
+
+        /**
+         * Copies the python code to retrieve the module's parent module to the clipboard.
+         */
         void pyCopyModule() const;
 
+        /**
+         * Copies the number of gates contained in the module to the clipboard.
+         */
         void copyNumberOfGates() const;
-        
+
+        /**
+         * Copies the number of submodules contained in the module to the clipboard.
+         */
         void copyNumberOfSubmodules() const;
 
+        /**
+         * Copies the number of nets contained in the module to the clipboard.
+         */
         void copyNumberOfNets() const;
 
+        /**
+         * Changes the selection to the modules's parent module.
+         */
         void navModule();
 
-        void refresh();
-
+        /**
+         * Handle relayed removal of a module.
+         * 
+         * @param module - Module which has been removed.
+         */
         void handleModuleRemoved(Module* module);
 
+        /**
+         * Handle relayed change of a module. Handled changes include name change, type change and change of module type. 
+         * 
+         * @param module - Module which has been changed.
+         */
         void handleModuleChanged(Module* module);
 
-        void handleSubmoduleChanged(Module* module, u32 affectedModuleId);
+        /**
+         * Handle relayed change of a submodule. Handled changes include addition and removal of submodules to another module.
+         * 
+         * @param module - Parent module of the changed module.
+         * @param affectedModuleId - The id of the module which has been changed.
+         */
+        void handleSubmoduleChanged(Module* parentModule, u32 affectedModuleId);
 
-        void handleGateChanged(Module* module, u32 affectedGateId);
+        /**
+         * Handle relayed change of a gate. Handled changes include addition and removal of gates to a module.
+         * 
+         * @param module - Parent module of the changed gate.
+         * @param affectedGateId - The id of the gate which has been changed.
+         */
+        void handleGateChanged(Module* parentModule, u32 affectedGateId);
 
+        /**
+         * Handle relayed change of a net. Handled changes include source / destination addition and removal.
+         * 
+         * @param Net - Net which has been changed.
+         * @param affectedGateId - The id of the gate which is / was source / destination.
+         */
         void handleNetChaned(Net* net, u32 affectedGateId);
+
+        /**
+         * Refreshes the table with the data of the currently set gate.
+         */
+        void refresh();
 
         Module* mModule;
 
