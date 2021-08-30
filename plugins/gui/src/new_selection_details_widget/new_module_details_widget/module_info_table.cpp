@@ -25,7 +25,7 @@ namespace hal
         mNameEntryContextMenu = new QMenu();
         mNameEntryContextMenu->addAction("Change module name", std::bind(&ModuleInfoTable::changeName, this));
         mNameEntryContextMenu->addAction("Copy module name to clipboard", std::bind(&ModuleInfoTable::copyName, this));
-        mNameEntryContextMenu->addAction("Copy python code that gets the module's name to clipboard", std::bind(&ModuleInfoTable::pyCopyName, this));
+        mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Copy python code that gets the module's name to clipboard", std::bind(&ModuleInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
         mIdEntryContextMenu->addAction("Copy module id to clipboard", std::bind(&ModuleInfoTable::copyId, this));
@@ -33,11 +33,11 @@ namespace hal
         mTypeEntryContextMenu = new QMenu();
         mTypeEntryContextMenu->addAction("Change module type", std::bind(&ModuleInfoTable::changeType, this));
         mTypeEntryContextMenu->addAction("Copy module type to clipboard", std::bind(&ModuleInfoTable::copyType, this));
-        mTypeEntryContextMenu->addAction("Copy python code that gets the module's type to clipboard", std::bind(&ModuleInfoTable::pyCopyType, this));
+        mTypeEntryContextMenu->addAction(QIcon(":/icons/python"), "Copy python code that gets the module's type to clipboard", std::bind(&ModuleInfoTable::pyCopyType, this));
 
         mModuleEntryContextMenu = new QMenu();
         mModuleEntryContextMenu->addAction("Copy parent module name to clipboard", std::bind(&ModuleInfoTable::copyModule, this));
-        mModuleEntryContextMenu->addAction("Copy python code that gets the module's parent module to clipboard", std::bind(&ModuleInfoTable::pyCopyModule, this));
+        mModuleEntryContextMenu->addAction(QIcon(":/icons/python"), "Copy python code that gets the module's parent module to clipboard", std::bind(&ModuleInfoTable::pyCopyModule, this));
 
         mNumOfGatesContextMenu = new QMenu();
         mNumOfGatesContextMenu->addAction("Copy number of gates to clipboard", std::bind(&ModuleInfoTable::copyNumberOfGates, this));

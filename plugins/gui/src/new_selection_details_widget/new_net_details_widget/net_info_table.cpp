@@ -22,14 +22,14 @@ namespace hal
         mNameEntryContextMenu = new QMenu();
         mNameEntryContextMenu->addAction("Change net name", std::bind(&NetInfoTable::changeName, this));
         mNameEntryContextMenu->addAction("Copy net name to clipboard", std::bind(&NetInfoTable::copyName, this));
-        mNameEntryContextMenu->addAction("Copy python code that gets the net's name to clipboard", std::bind(&NetInfoTable::pyCopyName, this));
+        mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Copy python code that gets the net's name to clipboard", std::bind(&NetInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
         mIdEntryContextMenu->addAction("Copy net id to clipboard", std::bind(&NetInfoTable::copyId, this));
 
         mTypeEntryContextMenu = new QMenu();
         mTypeEntryContextMenu->addAction("Copy net type to clipboard", std::bind(&NetInfoTable::copyType, this));
-        mTypeEntryContextMenu->addAction("Copy python code that gets the net's type to clipboard", std::bind(&NetInfoTable::pyCopyType, this));
+        mTypeEntryContextMenu->addAction(QIcon(":/icons/python"), "Copy python code that gets the net's type to clipboard", std::bind(&NetInfoTable::pyCopyType, this));
 
         mNumSrcsEntryContextMenu = new QMenu();
         mNumSrcsEntryContextMenu->addAction("Copy number of sources to clipboard", std::bind(&NetInfoTable::copyNumberOfSrcs, this));
