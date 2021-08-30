@@ -169,5 +169,11 @@ namespace hal
         QMenu* mTypeEntryContextMenu;
         QMenu* mNumSrcsEntryContextMenu;
         QMenu* mNumDstsEntryContextMenu;
+
+        static const QString nameRowKey;
+        static const QString idRowKey;
+        static const QString typeRowKey;
+        static const QString noOfSrcRowKey;
+        static const QString noOfDstRowKey;
     };
 }

@@ -11,6 +11,12 @@
 
 namespace hal
 {
+    const QString NetInfoTable::nameRowKey = "Name";
+    const QString NetInfoTable::idRowKey = "Id";
+    const QString NetInfoTable::typeRowKey = "Type";
+    const QString NetInfoTable::noOfSrcRowKey = "No. of Sources";
+    const QString NetInfoTable::noOfDstRowKey = "No. of Destinations";
+
     NetInfoTable::NetInfoTable(QWidget* parent) : GeneralTableWidget(parent)
     {
         mNameEntryContextMenu = new QMenu();
@@ -51,11 +57,11 @@ namespace hal
         {
             mNet = net;
 
-            setRow("Name", name(), mNameEntryContextMenu);
-            setRow("Id", id(), mIdEntryContextMenu);
-            setRow("Type", type(), mTypeEntryContextMenu);
-            setRow("No. of Sources", numberOfSrcs(), mNumSrcsEntryContextMenu);
-            setRow("No. of Destinations", numberOfDsts(), mNumDstsEntryContextMenu);
+            setRow(nameRowKey, name(), mNameEntryContextMenu);
+            setRow(idRowKey, id(), mIdEntryContextMenu);
+            setRow(typeRowKey, type(), mTypeEntryContextMenu);
+            setRow(noOfSrcRowKey, numberOfSrcs(), mNumSrcsEntryContextMenu);
+            setRow(noOfDstRowKey, numberOfDsts(), mNumDstsEntryContextMenu);
 
             adjustSize();
         }
@@ -156,11 +162,11 @@ namespace hal
 
             const QString notification("Displayed net has been removed.");
 
-            setRow("Name", notification, nullptr);
-            setRow("Id", notification, nullptr);
-            setRow("Type", notification, nullptr);
-            setRow("No. of Sources", notification, nullptr);
-            setRow("No. of Destinations", notification, nullptr);
+            setRow(nameRowKey, notification, nullptr);
+            setRow(idRowKey, notification, nullptr);
+            setRow(typeRowKey, notification, nullptr);
+            setRow(noOfSrcRowKey, notification, nullptr);
+            setRow(noOfDstRowKey, notification, nullptr);
 
             adjustSize();
         }
