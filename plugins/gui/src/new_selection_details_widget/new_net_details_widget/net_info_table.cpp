@@ -5,11 +5,10 @@
 #include "gui/gui_globals.h"
 #include "gui/netlist_relay/netlist_relay.h"
 #include "gui/new_selection_details_widget/py_code_provider.h"
+#include "gui/user_action/action_rename_object.h"
 
-#include <QDebug>
 #include <QMenu>
-#include <QApplication>
-#include <QClipboard>
+#include <QInputDialog>
 
 namespace hal
 {
@@ -101,7 +100,18 @@ namespace hal
 
     void NetInfoTable::changeName()
     {
-        qDebug() << "changeName";
+        QString oldName = QString::fromStdString(mNet->get_name());
+        QString prompt = "Change net name";
+
+        bool confirm;
+        QString newName = QInputDialog::getText(this, prompt, "New name:", QLineEdit::Normal, oldName, &confirm);
+
+        if (confirm)
+        {
+            ActionRenameObject* act = new ActionRenameObject(newName);
+            act->setObject(UserActionObject(mNet->get_id(), UserActionObjectType::ObjectType::Net));
+            act->exec();
+        }
     }
 
     void NetInfoTable::copyName() const
