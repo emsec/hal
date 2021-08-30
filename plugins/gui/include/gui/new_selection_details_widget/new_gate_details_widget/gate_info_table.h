@@ -210,5 +210,12 @@ namespace hal
         QMenu* mModuleEntryContextMenu;
 
         std::function<void()> mModuleDoubleClickedAction;
+
+        static const QString nameRowKey;
+        static const QString idRowKey;
+        static const QString typeRowKey;
+        static const QString gateTypePropertiesRowKey;
+        static const QString locationRowKey;
+        static const QString moduleRowKey;
     };
 }

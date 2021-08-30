@@ -11,6 +11,13 @@
 
 namespace hal
 {
+    const QString GateInfoTable::nameRowKey = "Name";
+    const QString GateInfoTable::idRowKey = "Id";
+    const QString GateInfoTable::typeRowKey = "Type";
+    const QString GateInfoTable::gateTypePropertiesRowKey = "Gate type properties";
+    const QString GateInfoTable::locationRowKey = "Location";
+    const QString GateInfoTable::moduleRowKey = "Parent module";
+
     GateInfoTable::GateInfoTable(QWidget* parent) : GeneralTableWidget(parent)
     {
         mNameEntryContextMenu = new QMenu();
@@ -52,12 +59,12 @@ namespace hal
         {
             mGate = gate;
 
-            setRow("Name", name(), mNameEntryContextMenu);
-            setRow("Id", id(), mIdEntryContextMenu);
-            setRow("Type", type(), mTypeEntryContextMenu);
-            setRow("Gate Type properties", properties(), mPropertiesEntryContextMenu);
-            setRow("Location", location(), mLocationEntryContextMenu);
-            setRow("Module", parentModule(), mModuleEntryContextMenu, mModuleDoubleClickedAction);
+            setRow(nameRowKey , name(), mNameEntryContextMenu);
+            setRow(idRowKey, id(), mIdEntryContextMenu);
+            setRow(typeRowKey, type(), mTypeEntryContextMenu);
+            setRow(gateTypePropertiesRowKey, properties(), mPropertiesEntryContextMenu);
+            setRow(locationRowKey, location(), mLocationEntryContextMenu);
+            setRow(moduleRowKey, parentModule(), mModuleEntryContextMenu, mModuleDoubleClickedAction);
 
             adjustSize();
         }
@@ -212,12 +219,12 @@ namespace hal
 
             const QString notification("Displayed gate has been removed.");
 
-            setRow("Name", notification, nullptr);
-            setRow("Id", notification, nullptr);
-            setRow("Type", notification, nullptr);
-            setRow("Gate Type properties", notification, nullptr);
-            setRow("Location", notification, nullptr);
-            setRow("Module", notification, nullptr, nullptr);
+            setRow(nameRowKey, notification, nullptr);
+            setRow(idRowKey, notification, nullptr);
+            setRow(typeRowKey, notification, nullptr);
+            setRow(gateTypePropertiesRowKey, notification, nullptr);
+            setRow(locationRowKey, notification, nullptr);
+            setRow(moduleRowKey, notification, nullptr, nullptr);
 
             adjustSize();
         }
