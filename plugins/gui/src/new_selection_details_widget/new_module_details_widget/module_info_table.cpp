@@ -18,7 +18,7 @@ namespace hal
     const QString ModuleInfoTable::moduleRowKey = "Parent module";
     const QString ModuleInfoTable::noOfGatesRowKey = "No. of Gates";
     const QString ModuleInfoTable::noOfModulesRowKey = "No. of Submodules";
-    const QString ModuleInfoTable::noOfNetsRowKey = "No. of Gates";
+    const QString ModuleInfoTable::noOfNetsRowKey = "No. of Nets";
 
     ModuleInfoTable::ModuleInfoTable(QWidget* parent) : GeneralTableWidget(parent)
     {
@@ -284,11 +284,12 @@ namespace hal
 
     void ModuleInfoTable::handleNetChaned(Net* net, u32 affectedGateId)
     {
-        Q_UNUSED(affectedGateId);
+        Q_UNUSED(net);
 
-        std::vector<Net*> internalNets = mModule->get_internal_nets();
+        Gate* affectedGate = gNetlist->get_gate_by_id(affectedGateId);
+        std::vector<Gate*> allChildGates = mModule->get_gates(nullptr, true);
 
-        if(std::find(std::begin(internalNets), std::end(internalNets), net) != std::end(internalNets))
+        if(std::find(std::begin(allChildGates), std::end(allChildGates), affectedGate) != std::end(allChildGates))
             refresh();
     }
 }
