@@ -43,6 +43,19 @@ namespace hal
         mNumOfNetsContextMenu->addAction("copyNumOfNets", std::bind(&ModuleInfoTable::copyNumberOfNets, this));
 
         mModuleDoubleClickedAction = std::bind(&ModuleInfoTable::navModule, this);
+
+        connect(gNetlistRelay, &NetlistRelay::moduleRemoved, this, &ModuleInfoTable::handleModuleRemoved);
+        connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &ModuleInfoTable::handleModuleChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleParentChanged, this, &ModuleInfoTable::handleModuleChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleTypeChanged, this, &ModuleInfoTable::handleModuleChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleAdded, this, &ModuleInfoTable::handleSubmoduleChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleInfoTable::handleSubmoduleChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleGateAssigned, this, &ModuleInfoTable::handleGateChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &ModuleInfoTable::handleGateChanged);
+        connect(gNetlistRelay, &NetlistRelay::netSourceAdded, this, &ModuleInfoTable::handleNetChaned);
+        connect(gNetlistRelay, &NetlistRelay::netSourceRemoved, this, &ModuleInfoTable::handleNetChaned);
+        connect(gNetlistRelay, &NetlistRelay::netDestinationAdded, this, &ModuleInfoTable::handleNetChaned);
+        connect(gNetlistRelay, &NetlistRelay::netDestinationRemoved, this, &ModuleInfoTable::handleNetChaned);
     }
 
     void ModuleInfoTable::setModule(hal::Module* module)
@@ -193,5 +206,62 @@ namespace hal
             gSelectionRelay->addModule(parentModuleId);
             gSelectionRelay->relaySelectionChanged(this);
         }
+    }
+
+    void ModuleInfoTable::refresh()
+    {
+        setModule(mModule);
+    }
+
+    void ModuleInfoTable::handleModuleRemoved(Module* module)
+    {
+        if(mModule == module)
+        {
+            mModule = nullptr;
+
+            const QString notification("Displayed module has been deleted.");
+
+            setRow("Name", notification, nullptr);
+            setRow("Id", notification, nullptr);
+            setRow("Type", notification, nullptr);
+            setRow("Parent Module", notification, nullptr, nullptr);
+            setRow("No. of Gates", notification, nullptr);
+            setRow("No. of Submodules", notification, nullptr);
+            setRow("No. of Nets", notification, nullptr);
+
+            adjustSize();
+        }
+    }
+
+    void ModuleInfoTable::handleModuleChanged(Module* module)
+    {
+        if(mModule == module)
+            refresh();
+    }
+
+    void ModuleInfoTable::handleSubmoduleChanged(Module* module, u32 affectedModuleId)
+    {
+        Q_UNUSED(affectedModuleId);
+
+        if(mModule == module || mModule->contains_module(module))
+            refresh();
+    }
+
+    void ModuleInfoTable::handleGateChanged(Module* module, u32 affectedGateId)
+    {
+        Q_UNUSED(affectedGateId);
+
+        if(mModule == module || mModule->contains_module(module))
+            refresh();
+    }
+
+    void ModuleInfoTable::handleNetChaned(Net* net, u32 affectedGateId)
+    {
+        Q_UNUSED(affectedGateId);
+
+        std::vector<Net*> internalNets = mModule->get_internal_nets();
+
+        if(std::find(std::begin(internalNets), std::end(internalNets), net) != std::end(internalNets))
+            refresh();
     }
 }

@@ -28,6 +28,7 @@
 namespace hal
 {
     class Module;
+    class Net;
 
     class ModuleInfoTable : public GeneralTableWidget
     {
@@ -39,8 +40,6 @@ namespace hal
         void setModule(hal::Module* module);
 
     private:
-
-        Module* mModule;
 
         QString name() const;
         QString id() const;
@@ -70,6 +69,20 @@ namespace hal
         void copyNumberOfNets() const;
 
         void navModule();
+
+        void refresh();
+
+        void handleModuleRemoved(Module* module);
+
+        void handleModuleChanged(Module* module);
+
+        void handleSubmoduleChanged(Module* module, u32 affectedModuleId);
+
+        void handleGateChanged(Module* module, u32 affectedGateId);
+
+        void handleNetChaned(Net* net, u32 affectedGateId);
+
+        Module* mModule;
 
         QMenu* mNameEntryContextMenu;
         QMenu* mIdEntryContextMenu;
