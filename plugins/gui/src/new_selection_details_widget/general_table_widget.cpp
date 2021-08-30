@@ -38,7 +38,21 @@ namespace hal
     {
         if(mKeyItemMap.contains(key))
         {
-            mKeyItemMap.value(key)->setText(val);
+            QTableWidgetItem* valItem = mKeyItemMap.value(key);
+            
+            valItem->setText(val);
+
+            if(contextMenu == nullptr)
+            {
+                int rowIndex = valItem->row();
+                mRowMenuMap.remove(rowIndex);
+            }
+
+            if(doubleClickAction == nullptr)
+            {
+                int rowIndex = valItem->row();
+                mRowDoubleClickActionMap.remove(rowIndex);
+            }
         }
         else
         {
