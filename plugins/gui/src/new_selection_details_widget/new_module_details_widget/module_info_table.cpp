@@ -2,15 +2,14 @@
 
 #include "hal_core/netlist/module.h"
 
-#include "gui/new_selection_details_widget/py_code_provider.h"
 #include "gui/gui_globals.h"
-
+#include "gui/new_selection_details_widget/py_code_provider.h"
 #include "gui/selection_details_widget/details_table_utilities.h"
+#include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/action_set_object_type.h"
 
-#include <QDebug>
 #include <QMenu>
-#include <QApplication>
-#include <QClipboard>
+#include <QInputDialog>
 
 namespace hal
 {
@@ -136,7 +135,18 @@ namespace hal
 
     void ModuleInfoTable::changeName()
     {
-        qDebug() << "changeName()";
+        QString oldName = QString::fromStdString(mModule->get_name());
+        QString prompt = "Change module name";
+
+        bool confirm;
+        QString newName = QInputDialog::getText(this, prompt, "New name:", QLineEdit::Normal, oldName, &confirm);
+
+        if (confirm)
+        {
+            ActionRenameObject* act = new ActionRenameObject(newName);
+            act->setObject(UserActionObject(mModule->get_id(), UserActionObjectType::ObjectType::Module));
+            act->exec();
+        }
     }
 
     void ModuleInfoTable::copyName() const
@@ -154,9 +164,19 @@ namespace hal
         copyToClipboard(id());
     }
 
-    void ModuleInfoTable::changeType() const
+    void ModuleInfoTable::changeType()
     {
-        qDebug() << "changeType()";
+        const QString type = QString::fromStdString(mModule->get_type());
+        bool confirm;
+
+        const QString newType = QInputDialog::getText(this, "Change module type", "New type:", QLineEdit::Normal, type, &confirm);
+
+        if (confirm)
+        {
+            ActionSetObjectType* act = new ActionSetObjectType(newType);
+            act->setObject(UserActionObject(mModule->get_id(),UserActionObjectType::Module));
+            act->exec();
+        }
     }
 
     void ModuleInfoTable::copyType() const

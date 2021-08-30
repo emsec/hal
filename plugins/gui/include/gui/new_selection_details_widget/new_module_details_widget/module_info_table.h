@@ -118,7 +118,7 @@ namespace hal
         /**
          * Opens a Dialog to change the modules's type.
          */
-        void changeType() const;
+        void changeType();
 
         /**
          * Copies the module's type to the clipboard.
