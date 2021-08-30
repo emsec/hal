@@ -4,7 +4,6 @@
 
 #include "gui/gui_globals.h"
 #include "gui/new_selection_details_widget/py_code_provider.h"
-#include "gui/selection_details_widget/details_table_utilities.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_type.h"
 

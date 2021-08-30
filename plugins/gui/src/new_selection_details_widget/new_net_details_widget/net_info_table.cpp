@@ -3,7 +3,6 @@
 #include "hal_core/netlist/net.h"
 
 #include "gui/gui_globals.h"
-#include "gui/netlist_relay/netlist_relay.h"
 #include "gui/new_selection_details_widget/py_code_provider.h"
 #include "gui/user_action/action_rename_object.h"
 
