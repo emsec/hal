@@ -21,10 +21,10 @@ namespace hal
         QLabel* t4 = new QLabel("Ich bin eine Tabelle4 mit ziemlich viel inhalt balbalblalbalblab", this); 
 
         //frames for low level widgets
-        DetailsFrameWidget* frame1 = new DetailsFrameWidget(t1, this);
-        DetailsFrameWidget* frame2 = new DetailsFrameWidget(t2, this);
-        DetailsFrameWidget* frame3 = new DetailsFrameWidget(t3, this);
-        DetailsFrameWidget* frame4 = new DetailsFrameWidget(t4, this);
+        DetailsFrameWidget* frame1 = new DetailsFrameWidget(t1, "test", this);
+        DetailsFrameWidget* frame2 = new DetailsFrameWidget(t2, "test", this);
+        DetailsFrameWidget* frame3 = new DetailsFrameWidget(t3, "test", this);
+        DetailsFrameWidget* frame4 = new DetailsFrameWidget(t4, "test", this);
 
         //container for tab content
         QWidget* container = new QWidget(this);

@@ -61,10 +61,10 @@ namespace hal {
         LUTTableWidget* lutTableWidget = new LUTTableWidget(this);
         BooleanFunctionTable* booleanFunctionTable = new BooleanFunctionTable(this, "<Custom Boolean Function Title>");
 
-        DetailsFrameWidget* dataTableWidgetFrame = new DetailsFrameWidget(dataTableWidget, this);
-        DetailsFrameWidget* groupingsOfItemWidgetFrame = new DetailsFrameWidget(groupingsOfItemWidget, this);
-        DetailsFrameWidget* lutTableWidgetFrame = new DetailsFrameWidget(lutTableWidget, this);
-        DetailsFrameWidget* booleanFunctionTableFrame = new DetailsFrameWidget(booleanFunctionTable, this);
+        DetailsFrameWidget* dataTableWidgetFrame = new DetailsFrameWidget(dataTableWidget, "test", this);
+        DetailsFrameWidget* groupingsOfItemWidgetFrame = new DetailsFrameWidget(groupingsOfItemWidget, "test", this);
+        DetailsFrameWidget* lutTableWidgetFrame = new DetailsFrameWidget(lutTableWidget, "test", this);
+        DetailsFrameWidget* booleanFunctionTableFrame = new DetailsFrameWidget(booleanFunctionTable, "test", this);
 
         scrollAreaLayout->addWidget(dataTableWidgetFrame);
         scrollAreaLayout->addWidget(groupingsOfItemWidgetFrame);
@@ -133,7 +133,7 @@ namespace hal {
         destinatinTable->setContent(28);
         scrollAreaLayout->addWidget(netModuleTable);
 
-        DetailsFrameWidget* frame = new DetailsFrameWidget(destinatinTable, this);
+        DetailsFrameWidget* frame = new DetailsFrameWidget(destinatinTable, "test", this);
         scrollAreaLayout->addWidget(frame);
 
         connect(destinatinTable, &NetEndpointTable::update_text, frame, &DetailsFrameWidget::setText);
