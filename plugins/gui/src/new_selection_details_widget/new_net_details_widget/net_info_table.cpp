@@ -15,22 +15,22 @@ namespace hal
     NetInfoTable::NetInfoTable(QWidget* parent) : GeneralTableWidget(parent)
     {
         mNameEntryContextMenu = new QMenu();
-        mNameEntryContextMenu->addAction("changeName", std::bind(&NetInfoTable::changeName, this));
-        mNameEntryContextMenu->addAction("copyName", std::bind(&NetInfoTable::copyName, this));
-        mNameEntryContextMenu->addAction("pyCopyName", std::bind(&NetInfoTable::pyCopyName, this));
+        mNameEntryContextMenu->addAction("Change net name", std::bind(&NetInfoTable::changeName, this));
+        mNameEntryContextMenu->addAction("Copy net name to clipboard", std::bind(&NetInfoTable::copyName, this));
+        mNameEntryContextMenu->addAction("Copy python code that gets the net's name to clipboard", std::bind(&NetInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
-        mIdEntryContextMenu->addAction("copyId", std::bind(&NetInfoTable::copyId, this));
+        mIdEntryContextMenu->addAction("Copy net id to clipboard", std::bind(&NetInfoTable::copyId, this));
 
         mTypeEntryContextMenu = new QMenu();
-        mTypeEntryContextMenu->addAction("copyType", std::bind(&NetInfoTable::copyType, this));
-        mTypeEntryContextMenu->addAction("pyCopyType", std::bind(&NetInfoTable::pyCopyType, this));
+        mTypeEntryContextMenu->addAction("Copy net type to clipboard", std::bind(&NetInfoTable::copyType, this));
+        mTypeEntryContextMenu->addAction("Copy python code that gets the net's type to clipboard", std::bind(&NetInfoTable::pyCopyType, this));
 
         mNumSrcsEntryContextMenu = new QMenu();
-        mNumSrcsEntryContextMenu->addAction("copyNumSrcs", std::bind(&NetInfoTable::copyNumberOfSrcs, this));
+        mNumSrcsEntryContextMenu->addAction("Copy number of sources to clipboard", std::bind(&NetInfoTable::copyNumberOfSrcs, this));
 
         mNumDstsEntryContextMenu = new QMenu();
-        mNumDstsEntryContextMenu->addAction("copyNumDsts", std::bind(&NetInfoTable::copyNumberOfDsts, this));
+        mNumDstsEntryContextMenu->addAction("Copy number of destinations to clipboard", std::bind(&NetInfoTable::copyNumberOfDsts, this));
 
         connect(gNetlistRelay, &NetlistRelay::netRemoved, this, &NetInfoTable::handleNetRemoved);
         connect(gNetlistRelay, &NetlistRelay::netNameChanged, this, &NetInfoTable::handleNetNameChanged);
