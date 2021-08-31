@@ -22,8 +22,8 @@ namespace hal
         mDestinationsFrame = new DetailsFrameWidget(new QWidget(this), "Destinations", this); // replace QWidget
 
 
-        QList<DetailsFrameWidget*> framesPinsTab({mSourcesFrame, mDestinationsFrame});
-        addTab("Pins", framesPinsTab);
+        QList<DetailsFrameWidget*> framesSrcDstTab({mSourcesFrame, mDestinationsFrame});
+        addTab("Src / Dst", framesSrcDstTab);
 
         //data tab
         mDataFrame = new DetailsFrameWidget(new QWidget(this), "Data", this); //replace QWidget
