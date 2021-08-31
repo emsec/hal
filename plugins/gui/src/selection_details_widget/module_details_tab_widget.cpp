@@ -7,6 +7,8 @@ namespace hal
 {
     ModuleDetailsTabWidget::ModuleDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
     {
+        setIcon(":/icons/sel_module");
+
         //create all widgets and replace the qWidgets in the frames with them
 
         //general tab

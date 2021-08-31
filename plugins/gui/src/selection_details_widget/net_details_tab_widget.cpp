@@ -7,6 +7,8 @@ namespace hal
 {
     NetDetailsTabWidget::NetDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
     {
+        setIcon(":/icons/sel_net");
+
         //create all widgets and replace the qWidgets in the frames with them
 
         //general tab

@@ -51,5 +51,12 @@ namespace hal
          * @param frames - Frames which build the content of the tab.
          */
         int addTab(const QString& label, QList<DetailsFrameWidget*> frames);
+
+        /**
+         *  Set the top right corner icon of the tab details widget.
+         *
+         * @param fileName - Icon name from gui ressources file.
+         */
+        void setIcon(const QString& fileName);
     };
 }

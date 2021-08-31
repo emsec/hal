@@ -7,6 +7,8 @@ namespace hal
 {
     GateDetailsTabWidget::GateDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
     {
+        setIcon(":/icons/sel_gate");
+
         //create all widgets and replace the qWidgets in the frames with them
 
         //general tab

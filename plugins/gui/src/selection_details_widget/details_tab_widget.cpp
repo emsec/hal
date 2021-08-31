@@ -3,7 +3,10 @@
 #include "gui/new_selection_details_widget/details_frame_widget.h"
 
 #include <QVBoxLayout>
-#include <QScrollArea> 
+#include <QScrollArea>
+#include <QLabel> 
+#include <QIcon>
+#include <QPixmap>
 
 namespace hal
 {
@@ -30,5 +33,17 @@ namespace hal
             containerlLayout->addWidget(frame);
 
         return QTabWidget::addTab(scrollArea, label);
+    }
+
+    void DetailsTabWidget::setIcon(const QString& fileName)
+    {
+        QIcon* icon = new QIcon(fileName);
+        QPixmap scaledIcon = icon->pixmap(24, 24); //assures better quality, icon scaling so smooth, so silky
+
+        QLabel* iconContainer = new QLabel(this);
+        iconContainer->setPixmap(scaledIcon);
+        iconContainer->setContentsMargins(5, 2, 5, 1);
+
+        setCornerWidget(iconContainer);
     }
 }
