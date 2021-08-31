@@ -23,15 +23,13 @@
 
 #pragma once
 
-#include "gui/selection_details_widget/details_tab_widget.h"
-#include "hal_core/netlist/gate_library/gate_type.h"
+#include <QTabWidget>
 
 namespace hal
 {
-    class Gate;
     class DetailsFrameWidget;
 
-    class GateDetailsTabWidget : public DetailsTabWidget
+    class DetailsTabWidget : public QTabWidget
     {
         Q_OBJECT
 
@@ -42,49 +40,16 @@ namespace hal
          *
          * @param parent - The widget's parent.
          */
-         GateDetailsTabWidget(QWidget* parent = nullptr);
+        DetailsTabWidget(QWidget* parent = nullptr);
+
+    protected:
 
         /**
-         * Sets the gate which details are shown in the tabs and various widgets.
+         * Adds a tab to the widget with the provided label. The contents of the tab are determined by the frame list.
          *
-         * @param gate - The gate.
+         * @param label - Label text in the tab bar.
+         * @param frames - Frames which build the content of the tab.
          */
-        void setGate(Gate* gate);
-
-    private:
-        /**
-         * Shows the tab "(LUT / FF / LATCH)" and their corresponding type widgets depending on which gate type property is provided.
-         * 
-         * @param gateTypeProperty - The widget's parent.
-         */
-        void showMultiTab(GateTypeProperty gateTypeProperty);
-
-        /**
-         * Hides the "(LUT / FF / LATCH)" tab.
-         *
-         */
-        void hideMultiTab();
-
-        bool mMultiTabVisible = true;
-
-        DetailsFrameWidget* mGateInformationFrame;
-        DetailsFrameWidget* mGroupingsFrame;
-
-        DetailsFrameWidget* mPinsFrame;
-
-        DetailsFrameWidget* mFfFrame;
-
-        DetailsFrameWidget* mLatchFrame;
-
-        DetailsFrameWidget* mLutFrame;
-        DetailsFrameWidget* mTruthTableFrame;
-
-        DetailsFrameWidget* mBooleanFunctionsFrame;
-
-        DetailsFrameWidget* mDataFrame;
-
-        int mMultiTabIndex;
-
-        QWidget* mMultiTabContent; 
+        int addTab(const QString& label, QList<DetailsFrameWidget*> frames);
     };
 }

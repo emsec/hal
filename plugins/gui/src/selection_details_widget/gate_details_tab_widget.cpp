@@ -1,61 +1,132 @@
 #include "gui/selection_details_widget/gate_details_tab_widget.h"
 
 #include "gui/new_selection_details_widget/details_frame_widget.h"
-
-#include <QVBoxLayout>
-#include <QScrollArea>
-#include <QLabel> //debug
-
+#include "hal_core/netlist/gate.h"
 
 namespace hal
 {
-    GateDetailsTabWidget::GateDetailsTabWidget(QWidget* parent) : QTabWidget(parent)
+    GateDetailsTabWidget::GateDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
+    {
+        //create all widgets and replace the qWidgets in the frames with them
+
+        //general tab
+        mGateInformationFrame = new DetailsFrameWidget(new QWidget(this), "Gate Information", this); //replace QWidget
+        mGroupingsFrame = new DetailsFrameWidget(new QWidget(this), "Groupings", this); //replace QWidget
+
+        QList<DetailsFrameWidget*> framesGeneralTab({mGateInformationFrame, mGroupingsFrame});
+        addTab("General", framesGeneralTab);
+
+        //pins tab
+        mPinsFrame = new DetailsFrameWidget(new QWidget(this), "Pins", this); // replace QWidget
+
+        QList<DetailsFrameWidget*> framesPinsTab({mPinsFrame});
+        addTab("Pins", framesPinsTab);
+
+        //(ff / latch / lut) tab - would love to use seperate tabs, but it's a hassle to hide multiple individual tabs witouth setTabVisible() from qt 5.15
+        mFfFrame = new DetailsFrameWidget(new QWidget(this), "FF Information", this); //replace QWidget
+        mLatchFrame = new DetailsFrameWidget(new QWidget(this), "Latch Information", this); //replace QWidget
+        mLutFrame = new DetailsFrameWidget(new QWidget(this), "LUT Information", this); //replace QWidget
+        mTruthTableFrame = new DetailsFrameWidget(new QWidget(this), "Truth Table", this); //replace QWidget
+
+        QList<DetailsFrameWidget*> framesFfLatchLutTab({mFfFrame, mLatchFrame, mLutFrame, mTruthTableFrame});
+        mMultiTabIndex = addTab("(FF / Latch / LUT)", framesFfLatchLutTab); //save index of multi tab -> needed for show / hide
+        mMultiTabContent = widget(mMultiTabIndex); // save content of multi tab -> needed for show / hide
+
+        //boolean functions tab
+        mBooleanFunctionsFrame = new DetailsFrameWidget(new QWidget(this), "Boolean Functions", this); //replace QWidget
+
+        QList<DetailsFrameWidget*> framesBooleanFunctionsTab({mBooleanFunctionsFrame});
+        addTab("Boolean Functions", framesBooleanFunctionsTab);
+
+        //data tab
+        mDataFrame = new DetailsFrameWidget(new QWidget(this), "Data", this); //replace QWidget
+
+        QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
+        addTab("Data", framesDataTab);
+
+        //connect widgets with frames for refreshing the headers when necessary
+    }
+ 
+    void GateDetailsTabWidget::setGate(Gate* gate)
     {
         
-        //workflow for single tab
+        GateType* type = gate->get_type();
 
-        //low level widgets (tables, trees, etc...) but as members in production
-        QLabel* t1 = new QLabel("Ich bin eine Tabelle1 mit ziemlich viel inhalt balbalblalbalblab", this);
-        QLabel* t2 = new QLabel("Ich bin eine Tabelle2 mit ziemlich viel inhalt balbalblalbalblab", this); 
-        QLabel* t3 = new QLabel("Ich bin eine Tabelle3 mit ziemlich viel inhalt balbalblalbalblab", this); 
-        QLabel* t4 = new QLabel("Ich bin eine Tabelle4 mit ziemlich viel inhalt balbalblalbalblab", this); 
+        if(type)
+        {
+            std::set<hal::GateTypeProperty> properties = type->get_properties();
 
-        //frames for low level widgets
-        DetailsFrameWidget* frame1 = new DetailsFrameWidget(t1, "test", this);
-        DetailsFrameWidget* frame2 = new DetailsFrameWidget(t2, "test", this);
-        DetailsFrameWidget* frame3 = new DetailsFrameWidget(t3, "test", this);
-        DetailsFrameWidget* frame4 = new DetailsFrameWidget(t4, "test", this);
+            auto relevantProperty = std::find_if(std::begin(properties), std::end(properties), [](GateTypeProperty gtp)
+            {
+                return gtp == GateTypeProperty::lut || gtp == GateTypeProperty::latch || gtp == GateTypeProperty::ff;
+            });
 
-        //container for tab content
-        QWidget* container = new QWidget(this);
-        container->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            if(relevantProperty != std::end(properties))
+                showMultiTab(*relevantProperty);
+            else
+                hideMultiTab();
+        }
+        else
+        {
+            hideMultiTab();
+        }
 
-        //layout for tab content container
-        QVBoxLayout* containerLayout = new QVBoxLayout(container);
-        containerLayout->setContentsMargins(0, 0, 0, 0);
-        containerLayout->setSpacing(30);
-        containerLayout->setSizeConstraint(QLayout::SetNoConstraint);
-
-        container->setLayout(containerLayout); //do we need this line or is line 34 sufficient?
-        containerLayout->addWidget(frame1);
-        containerLayout->addWidget(frame2);
-        containerLayout->addWidget(frame3);
-        containerLayout->addWidget(frame4);
-
-        //scroll area for container
-        QScrollArea* scrollArea = new QScrollArea(this);
-        scrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-        scrollArea->setWidgetResizable( true );
-        scrollArea->setWidget(container);
-
-        //put container in tab
-        addTab(scrollArea, "Test1");
-
-        //connect frames signal slots
+        //pass gate to widgets
     }
 
-    void GateDetailsTabWidget::setGate(hal::Gate* gate)
+    void GateDetailsTabWidget::hideMultiTab()
     {
-        //member widgets of lowest level have setGate as interface, pass it to theme here
+        if(mMultiTabVisible)
+        {
+            removeTab(mMultiTabIndex);
+            mMultiTabVisible = false;
+        }
+    }
+
+    void GateDetailsTabWidget::showMultiTab(GateTypeProperty gateTypeProperty)
+    {
+        QString label = "";
+
+        switch(gateTypeProperty)
+        {
+            case GateTypeProperty::lut:
+            {
+                mLutFrame->setVisible(true);
+                mTruthTableFrame->setVisible(true);
+                mFfFrame->setVisible(false);
+                mLatchFrame->setVisible(false);
+                label = "LUT";
+                break;
+            }                    
+            case GateTypeProperty::ff:
+            {
+                mLutFrame->setVisible(false);
+                mTruthTableFrame->setVisible(false);
+                mFfFrame->setVisible(true);
+                mLatchFrame->setVisible(false);
+                label = "FF";
+                break;
+            }
+            case GateTypeProperty::latch:
+            {
+                mLutFrame->setVisible(false);
+                mTruthTableFrame->setVisible(false);
+                mFfFrame->setVisible(false);
+                mLatchFrame->setVisible(true);
+                label = "Latch";
+                break;
+            }
+            default: break;
+        }
+
+        if(!mMultiTabVisible)
+        {
+            insertTab(mMultiTabIndex, mMultiTabContent, label);
+            mMultiTabVisible = true;
+        }
+        else
+        {
+            setTabText(mMultiTabIndex, label);
+        }
     }
 }
