@@ -16,6 +16,7 @@
 #include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "gui/selection_details_widget/gate_details_tab_widget.h"
 #include "gui/selection_details_widget/net_details_tab_widget.h"
+#include "gui/selection_details_widget/module_details_tab_widget.h"
 
 
 #include "gui/gui_globals.h"
@@ -109,6 +110,9 @@ namespace hal
 
         mModuleDetails = new ModuleDetailsWidget(this);
         mStackedWidget->addWidget(mModuleDetails);
+
+        mModuleDetailsTabs = new ModuleDetailsTabWidget();
+        mStackedWidget->addWidget(mModuleDetailsTabs);
 
         mItemDeletedLabel = new QLabel(mSelectionDetails);
         mItemDeletedLabel->setText("Currently selected item has been removed. Please consider relayouting the Graph.");
@@ -444,8 +448,10 @@ namespace hal
 //            set_name("Selection Details");
             break;
         case SelectionTreeItem::ModuleItem:
-            mModuleDetails->update(sti->id());
-            mStackedWidget->setCurrentWidget(mModuleDetails);
+            //mModuleDetails->update(sti->id());
+            //mStackedWidget->setCurrentWidget(mModuleDetails);
+            mModuleDetailsTabs->setModule(gNetlist->get_module_by_id(sti->id()));
+            mStackedWidget->setCurrentWidget(mModuleDetailsTabs);
 //            if (mNumberSelectedItems==1) set_name("Module Details");
             break;
         case SelectionTreeItem::GateItem:
