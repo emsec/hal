@@ -45,6 +45,7 @@ namespace hal
     class UserActionObject;
     class SettingsItemCheckbox;
     class GateDetailsTabWidget;
+    class NetDetailsTabWidget;
 
     /**
      * @ingroup utility_widgets-selection_details
@@ -384,5 +385,6 @@ namespace hal
         static SettingsItemCheckbox* sSettingHideEmpty;
 
         GateDetailsTabWidget* mGateDetailsTabs;
+        NetDetailsTabWidget* mNetDetailsTabs;
     };
 }

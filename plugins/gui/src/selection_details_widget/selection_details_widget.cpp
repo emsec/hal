@@ -15,6 +15,7 @@
 #include "gui/user_action/user_action_object.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "gui/selection_details_widget/gate_details_tab_widget.h"
+#include "gui/selection_details_widget/net_details_tab_widget.h"
 
 
 #include "gui/gui_globals.h"
@@ -102,6 +103,9 @@ namespace hal
 
         mNetDetails = new NetDetailsWidget(mSelectionDetails);
         mStackedWidget->addWidget(mNetDetails);
+
+        mNetDetailsTabs = new NetDetailsTabWidget(mSelectionDetails);
+        mStackedWidget->addWidget(mNetDetailsTabs);
 
         mModuleDetails = new ModuleDetailsWidget(this);
         mStackedWidget->addWidget(mModuleDetails);
@@ -455,8 +459,10 @@ namespace hal
             break;
         case SelectionTreeItem::NetItem:
             mModuleDetails->update(0);
-            mNetDetails->update(sti->id());
-            mStackedWidget->setCurrentWidget(mNetDetails);
+            //mNetDetails->update(sti->id());
+            //mStackedWidget->setCurrentWidget(mNetDetails);
+            mNetDetailsTabs->setNet(gNetlist->get_net_by_id(sti->id()));
+            mStackedWidget->setCurrentWidget(mNetDetailsTabs);
 //            if (mNumberSelectedItems==1) set_name("Net Details");
             break;
         default:
