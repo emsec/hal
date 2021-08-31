@@ -29,6 +29,7 @@ namespace hal
 {
     class Module;
     class DetailsFrameWidget;
+    class ModuleInfoTable;
 
     class ModuleDetailsTabWidget : public DetailsTabWidget
     {
@@ -59,5 +60,7 @@ namespace hal
         DetailsFrameWidget* mItemsFrame;
 
         DetailsFrameWidget* mDataFrame;
+
+        ModuleInfoTable* mModuleInfoTable;
     };
 }

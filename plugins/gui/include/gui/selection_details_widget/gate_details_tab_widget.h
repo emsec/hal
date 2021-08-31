@@ -30,6 +30,7 @@ namespace hal
 {
     class Gate;
     class DetailsFrameWidget;
+    class GateInfoTable;
 
     class GateDetailsTabWidget : public DetailsTabWidget
     {
@@ -86,5 +87,7 @@ namespace hal
         int mMultiTabIndex;
 
         QWidget* mMultiTabContent; 
+
+        GateInfoTable* mGateInfoTable;
     };
 }

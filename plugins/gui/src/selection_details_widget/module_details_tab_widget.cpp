@@ -1,6 +1,8 @@
 #include "gui/selection_details_widget/module_details_tab_widget.h"
 
 #include "gui/new_selection_details_widget/details_frame_widget.h"
+#include "gui/new_selection_details_widget/new_module_details_widget/module_info_table.h"
+
 #include "hal_core/netlist/module.h"
 
 namespace hal
@@ -10,9 +12,10 @@ namespace hal
         setIcon(":/icons/sel_module");
 
         //create all widgets and replace the qWidgets in the frames with them
+        mModuleInfoTable = new ModuleInfoTable(this);
 
         //general tab
-        mModuleInformationFrame = new DetailsFrameWidget(new QWidget(this), "Module Information", this); //replace QWidget
+        mModuleInformationFrame = new DetailsFrameWidget(mModuleInfoTable, "Module Information", this);
         mGroupingsFrame = new DetailsFrameWidget(new QWidget(this), "Groupings", this); //replace QWidget
 
         QList<DetailsFrameWidget*> framesGeneralTab({mModuleInformationFrame, mGroupingsFrame});
@@ -41,6 +44,7 @@ namespace hal
  
     void ModuleDetailsTabWidget::setModule(Module* module)
     {
-        //pass module to widgets
+        //pass module or other stuff to widgets
+        mModuleInfoTable->setModule(module);
     }
 }

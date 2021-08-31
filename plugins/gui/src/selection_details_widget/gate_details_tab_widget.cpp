@@ -1,6 +1,8 @@
 #include "gui/selection_details_widget/gate_details_tab_widget.h"
 
 #include "gui/new_selection_details_widget/details_frame_widget.h"
+#include "gui/new_selection_details_widget/new_gate_details_widget/gate_info_table.h"
+
 #include "hal_core/netlist/gate.h"
 
 namespace hal
@@ -10,9 +12,10 @@ namespace hal
         setIcon(":/icons/sel_gate");
 
         //create all widgets and replace the qWidgets in the frames with them
+        mGateInfoTable = new GateInfoTable(this);
 
         //general tab
-        mGateInformationFrame = new DetailsFrameWidget(new QWidget(this), "Gate Information", this); //replace QWidget
+        mGateInformationFrame = new DetailsFrameWidget(mGateInfoTable, "Gate Information", this);
         mGroupingsFrame = new DetailsFrameWidget(new QWidget(this), "Groupings", this); //replace QWidget
 
         QList<DetailsFrameWidget*> framesGeneralTab({mGateInformationFrame, mGroupingsFrame});
@@ -73,7 +76,8 @@ namespace hal
             hideMultiTab();
         }
 
-        //pass gate to widgets
+        //pass gate or other stuff to widgets
+        mGateInfoTable->setGate(gate);
     }
 
     void GateDetailsTabWidget::hideMultiTab()

@@ -29,6 +29,7 @@ namespace hal
 {
     class Net;
     class DetailsFrameWidget;
+    class NetInfoTable;
 
     class NetDetailsTabWidget : public DetailsTabWidget
     {
@@ -59,5 +60,7 @@ namespace hal
         DetailsFrameWidget* mDestinationsFrame;
 
         DetailsFrameWidget* mDataFrame;
+
+        NetInfoTable* mNetInfoTable;
     };
 }

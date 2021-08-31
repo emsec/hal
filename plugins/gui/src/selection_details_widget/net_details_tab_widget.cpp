@@ -1,6 +1,8 @@
 #include "gui/selection_details_widget/net_details_tab_widget.h"
 
 #include "gui/new_selection_details_widget/details_frame_widget.h"
+#include "gui/new_selection_details_widget/new_net_details_widget/net_info_table.h"
+
 #include "hal_core/netlist/net.h"
 
 namespace hal
@@ -10,9 +12,10 @@ namespace hal
         setIcon(":/icons/sel_net");
 
         //create all widgets and replace the qWidgets in the frames with them
+        mNetInfoTable = new NetInfoTable(this);
 
         //general tab
-        mNetInformationFrame = new DetailsFrameWidget(new QWidget(this), "Net Information", this); //replace QWidget
+        mNetInformationFrame = new DetailsFrameWidget(mNetInfoTable, "Net Information", this);
         mGroupingsFrame = new DetailsFrameWidget(new QWidget(this), "Groupings", this); //replace QWidget
         mModulesFrame = new DetailsFrameWidget(new QWidget(this), "Modules", this); //replace QWidget
 
@@ -38,6 +41,7 @@ namespace hal
  
     void NetDetailsTabWidget::setNet(Net* net)
     {
-        //pass net to widgets
+        //pass net or other stuff to widgets
+        mNetInfoTable->setNet(net);
     }
 }
