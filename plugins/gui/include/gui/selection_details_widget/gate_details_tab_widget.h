@@ -67,6 +67,13 @@ namespace hal
          */
         void hideMultiTab();
 
+        /**
+         * Checks wheter the "(LUT / FF / LATCH)" tab must be hidden or shown depending on gate and changes the visibility of the tab depending on the result of the check.
+         *
+         * @param gate - The gate to check.
+         */
+        void hideOrShorMultiTab(Gate* gate);
+
         bool mMultiTabVisible = true; 
         int mMultiTabIndex;
         QWidget* mMultiTabContent;

@@ -53,31 +53,38 @@ namespace hal
  
     void GateDetailsTabWidget::setGate(Gate* gate)
     {
-        
+        //pass gate or other stuff to widgets
+        mGateInfoTable->setGate(gate);
+        mPinsTree->setGate(gate);
+
+        hideOrShorMultiTab(gate);
+    }
+
+    void GateDetailsTabWidget::hideOrShorMultiTab(Gate* gate)
+    {
+        bool mustHide = false;
+
         GateType* type = gate->get_type();
 
         if(type)
         {
-            std::set<hal::GateTypeProperty> properties = type->get_properties();
+            std::set<hal::GateTypeProperty> gateTypeProperties = type->get_properties();
+            std::set<hal::GateTypeProperty> relevantProperties {GateTypeProperty::lut, GateTypeProperty::latch, GateTypeProperty::ff};
 
-            auto relevantProperty = std::find_if(std::begin(properties), std::end(properties), [](GateTypeProperty gtp)
-            {
-                return gtp == GateTypeProperty::lut || gtp == GateTypeProperty::latch || gtp == GateTypeProperty::ff;
-            });
+            auto releventFind = find_first_of(begin(gateTypeProperties), end(gateTypeProperties), begin(relevantProperties), end(relevantProperties));
 
-            if(relevantProperty != std::end(properties))
-                showMultiTab(*relevantProperty);
+            if(releventFind != end(gateTypeProperties))
+                showMultiTab(*releventFind);
             else
-                hideMultiTab();
+                mustHide = true;
         }
         else
         {
-            hideMultiTab();
+            mustHide = true;
         }
 
-        //pass gate or other stuff to widgets
-        mGateInfoTable->setGate(gate);
-        mPinsTree->setGate(gate);
+        if(mustHide)
+            hideMultiTab();
     }
 
     void GateDetailsTabWidget::hideMultiTab()
