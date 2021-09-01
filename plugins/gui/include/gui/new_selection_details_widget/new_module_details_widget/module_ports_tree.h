@@ -44,6 +44,8 @@ namespace hal
 
         void handleContextMenuRequested(const QPoint &pos);
 
+        void adjustSize();
+
     Q_SIGNALS:
 
         /**

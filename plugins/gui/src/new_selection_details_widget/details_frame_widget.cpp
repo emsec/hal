@@ -5,7 +5,6 @@ namespace hal
 DetailsFrameWidget::DetailsFrameWidget(QWidget* widget, const QString& text, QWidget* parent) : QWidget(parent)
 {
     m_layout = new QVBoxLayout(this);
-
     m_layout->setContentsMargins(6, 6, 6, 6);
     m_layout->setSpacing(6);
 
