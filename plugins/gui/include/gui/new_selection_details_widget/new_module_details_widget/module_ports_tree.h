@@ -37,8 +37,8 @@ namespace hal
     public:
         ModulePortsTree(QWidget* parent = nullptr);
 
-        void update(u32 moduleID);
-        void update(Module* m);
+        void setModule(u32 moduleID);
+        void setModule(Module* m);
 
         void removeContent();
 

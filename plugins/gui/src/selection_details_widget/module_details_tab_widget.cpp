@@ -2,6 +2,8 @@
 
 #include "gui/new_selection_details_widget/details_frame_widget.h"
 #include "gui/new_selection_details_widget/new_module_details_widget/module_info_table.h"
+#include "gui/new_selection_details_widget/new_module_details_widget/module_ports_tree.h"
+#include "gui/new_selection_details_widget/new_module_details_widget/module_elements_tree.h"
 
 #include "hal_core/netlist/module.h"
 
@@ -11,10 +13,8 @@ namespace hal
     {
         setIcon(":/icons/sel_module");
 
-        //create all widgets and replace the qWidgets in the frames with them
-        mModuleInfoTable = new ModuleInfoTable(this);
-
         //general tab
+        mModuleInfoTable = new ModuleInfoTable(this);
         mModuleInformationFrame = new DetailsFrameWidget(mModuleInfoTable, "Module Information", this);
         mGroupingsFrame = new DetailsFrameWidget(new QWidget(this), "Groupings", this); //replace QWidget
 
@@ -22,29 +22,32 @@ namespace hal
         addTab("General", framesGeneralTab);
 
         //ports tab
-        mPortsFrame = new DetailsFrameWidget(new QWidget(this), "Ports", this); // replace QWidget
+        mPortsTree = new ModulePortsTree(this);
+        mPortsFrame = new DetailsFrameWidget(mPortsTree, "Ports", this);
+        connect(mPortsTree, &ModulePortsTree::updateText, mPortsFrame, &DetailsFrameWidget::setText);
 
         QList<DetailsFrameWidget*> framesPortTab({mPortsFrame});
         addTab("Ports", framesPortTab);
 
-        //items tab
-        mItemsFrame = new DetailsFrameWidget(new QWidget(this), "Ports", this); // replace QWidget
+        //elements tab
+        mElementsTree = new ModuleElementsTree(this);
+        mElementsFrame = new DetailsFrameWidget(mElementsTree, "Elements", this);
 
-        QList<DetailsFrameWidget*> framesItemsTab({mItemsFrame});
-        addTab("Items", framesItemsTab);
+        QList<DetailsFrameWidget*> framesElementsTab({mElementsFrame});
+        addTab("Elements", framesElementsTab);
 
         //data tab
         mDataFrame = new DetailsFrameWidget(new QWidget(this), "Data", this); //replace QWidget
 
         QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
         addTab("Data", framesDataTab);
-
-        //connect widgets with frames for refreshing the headers when necessary
     }
  
     void ModuleDetailsTabWidget::setModule(Module* module)
     {
         //pass module or other stuff to widgets
         mModuleInfoTable->setModule(module);
+        mPortsTree->setModule(module);
+        mElementsTree->setModule(module);
     }
 }

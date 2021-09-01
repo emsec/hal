@@ -38,8 +38,8 @@ namespace hal
     public:
         GatePinTree(QWidget* parent = nullptr);
 
-        void setContent(u32 gateID);
-        void setContent(Gate* g);
+        void setGate(u32 gateID);
+        void setGate(Gate* g);
 
         void removeContent();
 

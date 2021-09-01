@@ -2,6 +2,7 @@
 
 #include "gui/new_selection_details_widget/details_frame_widget.h"
 #include "gui/new_selection_details_widget/new_gate_details_widget/gate_info_table.h"
+#include "gui/new_selection_details_widget/new_gate_details_widget/gate_pin_tree.h"
 
 #include "hal_core/netlist/gate.h"
 
@@ -11,10 +12,8 @@ namespace hal
     {
         setIcon(":/icons/sel_gate");
 
-        //create all widgets and replace the qWidgets in the frames with them
-        mGateInfoTable = new GateInfoTable(this);
-
         //general tab
+        mGateInfoTable = new GateInfoTable(this);
         mGateInformationFrame = new DetailsFrameWidget(mGateInfoTable, "Gate Information", this);
         mGroupingsFrame = new DetailsFrameWidget(new QWidget(this), "Groupings", this); //replace QWidget
 
@@ -22,7 +21,9 @@ namespace hal
         addTab("General", framesGeneralTab);
 
         //pins tab
-        mPinsFrame = new DetailsFrameWidget(new QWidget(this), "Pins", this); // replace QWidget
+        mPinsTree = new GatePinTree(this);
+        mPinsFrame = new DetailsFrameWidget(mPinsTree, "Pins", this);
+        connect(mPinsTree, &GatePinTree::updateText, mPinsFrame, &DetailsFrameWidget::setText);
 
         QList<DetailsFrameWidget*> framesPinsTab({mPinsFrame});
         addTab("Pins", framesPinsTab);
@@ -48,8 +49,6 @@ namespace hal
 
         QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
         addTab("Data", framesDataTab);
-
-        //connect widgets with frames for refreshing the headers when necessary
     }
  
     void GateDetailsTabWidget::setGate(Gate* gate)
@@ -78,6 +77,7 @@ namespace hal
 
         //pass gate or other stuff to widgets
         mGateInfoTable->setGate(gate);
+        mPinsTree->setGate(gate);
     }
 
     void GateDetailsTabWidget::hideMultiTab()

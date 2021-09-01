@@ -91,14 +91,14 @@ namespace hal {
         TreeItem* someChildItem = new TreeItem(QList<QVariant>() << "Test1" << "Test2");
         someRootItem->appendChild(someChildItem);
         baseModel->setContent(QList<TreeItem*>() << someRootItem);
-        mTreeView->setModel(pinModel);
+        mTreeView->setModel(portModel);
         //mTreeView->setModel(model);
         scrollAreaLayout->addWidget(mTreeView);
         GatePinTree* gp = new GatePinTree(this);
-        gp->setContent(19);
+        gp->setGate(19);
         scrollAreaLayout->addWidget(gp);
         ModuleElementsTree* met = new ModuleElementsTree(this);
-        met->setContent(1);
+        met->setModule(1);
         
         scrollAreaLayout->addWidget(met);
 

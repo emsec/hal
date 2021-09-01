@@ -38,8 +38,8 @@ namespace hal
     public:
         ModuleElementsTree(QWidget* parent = nullptr);
 
-        void setContent(u32 moduleID);
-        void setContent(Module* m);
+        void setModule(u32 moduleID);
+        void setModule(Module* m);
 
         void removeContent();
 

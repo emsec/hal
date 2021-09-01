@@ -31,6 +31,7 @@ namespace hal
     class Gate;
     class DetailsFrameWidget;
     class GateInfoTable;
+    class GatePinTree;
 
     class GateDetailsTabWidget : public DetailsTabWidget
     {
@@ -56,7 +57,7 @@ namespace hal
         /**
          * Shows the tab "(LUT / FF / LATCH)" and their corresponding type widgets depending on which gate type property is provided.
          * 
-         * @param gateTypeProperty - The widget's parent.
+         * @param gateTypeProperty - The property.
          */
         void showMultiTab(GateTypeProperty gateTypeProperty);
 
@@ -66,28 +67,40 @@ namespace hal
          */
         void hideMultiTab();
 
-        bool mMultiTabVisible = true;
+        bool mMultiTabVisible = true; 
+        int mMultiTabIndex;
+        QWidget* mMultiTabContent;
 
+        //general tab
+        GateInfoTable* mGateInfoTable;
         DetailsFrameWidget* mGateInformationFrame;
+        //add groupings-widget in this line
         DetailsFrameWidget* mGroupingsFrame;
 
+        //pins tab
+        GatePinTree* mPinsTree;
         DetailsFrameWidget* mPinsFrame;
 
+        //ff tab
+        //put ff-widget in this line
         DetailsFrameWidget* mFfFrame;
 
+        //latch tab
+        //put latch-widget in this line
         DetailsFrameWidget* mLatchFrame;
 
+        //lut tab
+        //put lut-widget in this line
         DetailsFrameWidget* mLutFrame;
+        //put truthtable-widget in this line
         DetailsFrameWidget* mTruthTableFrame;
 
+        //boolean function tab
+        //put boolean-function in this line
         DetailsFrameWidget* mBooleanFunctionsFrame;
 
+        //data tab
+        //put data-table in this line
         DetailsFrameWidget* mDataFrame;
-
-        int mMultiTabIndex;
-
-        QWidget* mMultiTabContent; 
-
-        GateInfoTable* mGateInfoTable;
     };
 }

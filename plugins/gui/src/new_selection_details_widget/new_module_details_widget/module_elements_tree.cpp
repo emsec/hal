@@ -24,22 +24,22 @@ namespace hal
         connect(mNetlistElementsModel, &NetlistElementsTreeModel::numberOfSubmodulesChanged, this, &ModuleElementsTree::handleNumberSubmodulesChanged);
     }
 
-    void ModuleElementsTree::setContent(u32 moduleID)
+    void ModuleElementsTree::setModule(u32 moduleID)
     {
         Module* m = gNetlist->get_module_by_id(moduleID);
         if(!m) return;
 
-        mNetlistElementsModel->setModule(m);
+        mNetlistElementsModel->setModule(m, true, true, false);
         mModuleID = moduleID;
 
         //Q_EMIT updateText(QString("Submodules(%1)").arg(m->get_submodules().size()));
     }
 
-    void ModuleElementsTree::setContent(Module *m)
+    void ModuleElementsTree::setModule(Module *m)
     {
         if(!m) return;
 
-        mNetlistElementsModel->setModule(m);
+        mNetlistElementsModel->setModule(m, true, true, false);
         mModuleID = m->get_id();
 
         //Q_EMIT updateText(QString("Submodules(%1)").arg(m->get_submodules().size()));

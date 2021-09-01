@@ -24,7 +24,7 @@ namespace hal
 
     }
 
-    void GatePinTree::setContent(u32 gateID)
+    void GatePinTree::setGate(u32 gateID)
     {
         Gate* g = gNetlist->get_gate_by_id(gateID);
         if(!g) return;
@@ -32,17 +32,17 @@ namespace hal
         mPinModel->setGate(g);
         mGateID = gateID;
 
-        Q_EMIT updateText(QString("Pins(%1)").arg(mPinModel->getNumberOfDisplayedPins()));
+        Q_EMIT updateText(QString("Pins (%1)").arg(mPinModel->getNumberOfDisplayedPins()));
     }
 
-    void GatePinTree::setContent(Gate *g)
+    void GatePinTree::setGate(Gate *g)
     {
         if(!g) return;
 
         mPinModel->setGate(g);
         mGateID = g->get_id();
 
-        Q_EMIT updateText(QString("Pins(%1)").arg(mPinModel->getNumberOfDisplayedPins()));
+        Q_EMIT updateText(QString("Pins (%1)").arg(mPinModel->getNumberOfDisplayedPins()));
     }
 
     void GatePinTree::removeContent()

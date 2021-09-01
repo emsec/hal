@@ -30,6 +30,8 @@ namespace hal
     class Module;
     class DetailsFrameWidget;
     class ModuleInfoTable;
+    class ModulePortsTree;
+    class ModuleElementsTree;
 
     class ModuleDetailsTabWidget : public DetailsTabWidget
     {
@@ -52,15 +54,23 @@ namespace hal
         void setModule(Module* module);
 
     private:
+
+        //general tab
+        ModuleInfoTable* mModuleInfoTable;
         DetailsFrameWidget* mModuleInformationFrame;
+        //put groupings-widget in this line
         DetailsFrameWidget* mGroupingsFrame;
 
+        //ports tab
+        ModulePortsTree* mPortsTree;
         DetailsFrameWidget* mPortsFrame;
 
-        DetailsFrameWidget* mItemsFrame;
+        //elements tab
+        ModuleElementsTree* mElementsTree;
+        DetailsFrameWidget* mElementsFrame;
 
+        //data tab
+        //put data-widget in this line
         DetailsFrameWidget* mDataFrame;
-
-        ModuleInfoTable* mModuleInfoTable;
     };
 }
