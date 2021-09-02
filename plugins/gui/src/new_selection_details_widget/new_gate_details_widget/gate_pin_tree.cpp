@@ -12,7 +12,7 @@
 namespace hal
 {
 
-    GatePinTree::GatePinTree(QWidget *parent) : QTreeView(parent), mPinModel(new PinTreeModel(this)), mGateID(-1)
+    GatePinTree::GatePinTree(QWidget *parent) : SizeAdjustableTreeView(parent), mPinModel(new PinTreeModel(this)), mGateID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -32,6 +32,8 @@ namespace hal
         mPinModel->setGate(g);
         mGateID = gateID;
 
+        adjustSizeToContents();
+
         Q_EMIT updateText(QString("Pins (%1)").arg(mPinModel->getNumberOfDisplayedPins()));
     }
 
@@ -41,6 +43,8 @@ namespace hal
 
         mPinModel->setGate(g);
         mGateID = g->get_id();
+
+        adjustSizeToContents();
 
         Q_EMIT updateText(QString("Pins (%1)").arg(mPinModel->getNumberOfDisplayedPins()));
     }

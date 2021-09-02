@@ -123,7 +123,12 @@ namespace hal
 
     TreeItem *BaseTreeModel::getItemFromIndex(QModelIndex index) const
     {
-         return (index.isValid()) ? static_cast<TreeItem*>(index.internalPointer()) : nullptr;
+        return (index.isValid()) ? static_cast<TreeItem*>(index.internalPointer()) : nullptr;
+    }
+
+    TreeItem *BaseTreeModel::getRootItem() const
+    {
+        return mRootItem;
     }
 
 }

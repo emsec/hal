@@ -4,14 +4,13 @@
 #include "gui/gui_globals.h"
 #include <QMenu>
 #include <QHeaderView>
-#include <QDebug>
 #include <QApplication>
 #include <QClipboard>
 
 namespace hal
 {
 
-    ModuleElementsTree::ModuleElementsTree(QWidget *parent) : QTreeView(parent), mNetlistElementsModel(new NetlistElementsTreeModel(this)),
+    ModuleElementsTree::ModuleElementsTree(QWidget *parent) : SizeAdjustableTreeView(parent), mNetlistElementsModel(new NetlistElementsTreeModel(this)),
         mModuleID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
@@ -29,8 +28,9 @@ namespace hal
         Module* m = gNetlist->get_module_by_id(moduleID);
         if(!m) return;
 
-        mNetlistElementsModel->setModule(m, true, true, false);
+        mNetlistElementsModel->setModule(m, true, true, true);
         mModuleID = moduleID;
+        adjustSizeToContents();
 
         //Q_EMIT updateText(QString("Submodules(%1)").arg(m->get_submodules().size()));
     }
@@ -39,8 +39,9 @@ namespace hal
     {
         if(!m) return;
 
-        mNetlistElementsModel->setModule(m, true, true, false);
+        mNetlistElementsModel->setModule(m, true, true, true);
         mModuleID = m->get_id();
+        adjustSizeToContents();
 
         //Q_EMIT updateText(QString("Submodules(%1)").arg(m->get_submodules().size()));
     }
@@ -53,7 +54,11 @@ namespace hal
 
     void ModuleElementsTree::handleContextMenuRequested(const QPoint &pos)
     {
-        TreeItem* clickedItem = mNetlistElementsModel->getItemFromIndex(indexAt(pos));
+        QModelIndex clickedIndex = indexAt(pos);
+        if(!clickedIndex.isValid())
+            return;
+
+        TreeItem* clickedItem = mNetlistElementsModel->getItemFromIndex(clickedIndex);
         int id = mNetlistElementsModel->getRepresentedIdOfItem(clickedItem);
         NetlistElementsTreeModel::itemType type = mNetlistElementsModel->getTypeOfItem(clickedItem);
         QMenu menu;

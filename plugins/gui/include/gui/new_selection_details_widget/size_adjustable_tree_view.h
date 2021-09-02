@@ -22,47 +22,34 @@
 //  SOFTWARE.
 
 #pragma once
-
 #include <QTreeView>
-#include "gui/new_selection_details_widget/size_adjustable_tree_view.h"
-#include "hal_core/defines.h"
 
 namespace hal
 {
-    class PinTreeModel;
-    class Gate;
-    class TreeItem;
-
-    class GatePinTree : public SizeAdjustableTreeView
+    class SizeAdjustableTreeView : public QTreeView
     {
         Q_OBJECT
     public:
-        GatePinTree(QWidget* parent = nullptr);
+        SizeAdjustableTreeView(QWidget* parent = nullptr);
 
-        void setGate(u32 gateID);
-        void setGate(Gate* g);
-
-        void removeContent();
-
-        void handleContextMenuRequested(const QPoint &pos);
+        /**
+         * Adjust the size of the view depending on its elements, sets a
+         * fixed height and a minimum width.
+         * Only works if the underlying model is either a BaseTreeModel
+         * or a model that is derived from it.
+         */
+        void adjustSizeToContents();
 
     Q_SIGNALS:
 
         /**
-         * Emits the new headline when the number of displayed pins changes.
-         *
-         * @param newHeadline - The new complete headline.
+         * SIGNAL that is emitted when adjustSizeToContents was called. The embeding widget
+         * must update its layout/geometry/content (debug purposes for now)
          */
-        void updateText(const QString& newHeadline);
+        void adjustSizeToContentsCalled();
 
     private:
-        PinTreeModel* mPinModel;
-        int mGateID;
-
-        //helper functions
-        void buildPythonMenuForPin(QMenu &menu, TreeItem* clickedPinItem);
-        void buildPythonMenuForPinGroup(QMenu &menu, TreeItem* clickedPinIGrouptem);
-
+        void handleExpandedOrCollapsed(const QModelIndex &index);
     };
 
 }

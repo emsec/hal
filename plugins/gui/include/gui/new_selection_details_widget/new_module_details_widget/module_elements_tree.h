@@ -24,6 +24,7 @@
 #pragma once
 
 #include <QTreeView>
+#include "gui/new_selection_details_widget/size_adjustable_tree_view.h"
 #include "hal_core/defines.h"
 
 namespace hal
@@ -31,7 +32,7 @@ namespace hal
     class Module;
     class NetlistElementsTreeModel;
 
-    class ModuleElementsTree : public QTreeView
+    class ModuleElementsTree : public SizeAdjustableTreeView
     {
         Q_OBJECT
 

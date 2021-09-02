@@ -127,6 +127,14 @@ namespace hal
          */
         TreeItem* getItemFromIndex(QModelIndex index) const;
 
+        /**
+         * Convenient function to get the root item to which the tree is appended
+         * (the root item is not shown/displayed).
+         *
+         * @return The root item.
+         */
+        TreeItem* getRootItem() const;
+
     protected:
         TreeItem* mRootItem;
     };
