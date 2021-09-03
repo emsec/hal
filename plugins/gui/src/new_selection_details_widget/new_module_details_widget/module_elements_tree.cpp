@@ -28,7 +28,7 @@ namespace hal
         Module* m = gNetlist->get_module_by_id(moduleID);
         if(!m) return;
 
-        mNetlistElementsModel->setModule(m, true, true, true);
+        mNetlistElementsModel->setModule(m, true, false, false);
         mModuleID = moduleID;
         adjustSizeToContents();
 
@@ -39,7 +39,7 @@ namespace hal
     {
         if(!m) return;
 
-        mNetlistElementsModel->setModule(m, true, true, true);
+        mNetlistElementsModel->setModule(m, true, false, false);
         mModuleID = m->get_id();
         adjustSizeToContents();
 

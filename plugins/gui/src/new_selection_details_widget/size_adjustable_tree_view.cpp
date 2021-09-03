@@ -44,7 +44,8 @@ namespace hal
             for(auto item : baseModel->getRootItem()->getChildren())
                 queue.enqueue(item);
 
-            int indexRowHeight = indexRowSizeHint(baseModel->getIndexFromItem(baseModel->getRootItem()->getChild(0)));
+            //int indexRowHeight = indexRowSizeHint(baseModel->getIndexFromItem(baseModel->getRootItem()->getChild(0)));
+            int indexRowHeight = rowHeight(baseModel->getIndexFromItem(baseModel->getRootItem()->getChild(0)));
 
             while(!queue.isEmpty())
             {
@@ -69,11 +70,43 @@ namespace hal
         updateGeometry();
         update();
 
+
+    }
+
+    void SizeAdjustableTreeView::setModel(QAbstractItemModel *model)
+    {
+        if(this->model())
+        {
+            disconnect(this->model(), &QAbstractItemModel::rowsInserted, this, &SizeAdjustableTreeView::handleRowsInsertedOrRemoved);
+            disconnect(this->model(), &QAbstractItemModel::rowsRemoved, this, &SizeAdjustableTreeView::handleRowsInsertedOrRemoved);
+            disconnect(this->model(), &QAbstractItemModel::modelReset, this, &SizeAdjustableTreeView::handleModelReset);
+        }
+
+        QTreeView::setModel(model);//all normal view connects
+
+        //own connects, triggered after all connects in setModel (hopefully)
+        if(!model) return; //dont connect a nullptr
+        connect(model, &QAbstractItemModel::rowsInserted, this, &SizeAdjustableTreeView::handleRowsInsertedOrRemoved);
+        connect(model, &QAbstractItemModel::rowsRemoved, this, &SizeAdjustableTreeView::handleRowsInsertedOrRemoved);
+        connect(model, &QAbstractItemModel::modelReset, this, &SizeAdjustableTreeView::handleModelReset);
     }
 
     void SizeAdjustableTreeView::handleExpandedOrCollapsed(const QModelIndex &index)
     {
         Q_UNUSED(index)
+        adjustSizeToContents();
+    }
+
+    void SizeAdjustableTreeView::handleRowsInsertedOrRemoved(const QModelIndex &parent, int first, int last)
+    {
+        Q_UNUSED(parent)
+        Q_UNUSED(first)
+        Q_UNUSED(last)
+        adjustSizeToContents();
+    }
+
+    void SizeAdjustableTreeView::handleModelReset()
+    {
         adjustSizeToContents();
     }
 

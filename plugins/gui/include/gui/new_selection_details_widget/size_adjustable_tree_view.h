@@ -40,6 +40,13 @@ namespace hal
          */
         void adjustSizeToContents();
 
+        /**
+         * Overwritten function to connect to own signals.
+         *
+         * @param model - The model to set to.
+         */
+        void setModel(QAbstractItemModel *model) override;
+
     Q_SIGNALS:
 
         /**
@@ -50,6 +57,8 @@ namespace hal
 
     private:
         void handleExpandedOrCollapsed(const QModelIndex &index);
+        void handleRowsInsertedOrRemoved(const QModelIndex &parent, int first, int last);
+        void handleModelReset();
     };
 
 }
