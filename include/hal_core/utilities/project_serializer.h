@@ -37,12 +37,35 @@ namespace hal {
         std::string m_name;
 
     public:
+        /**
+         * Constructor
+         * @param name Tag name for serializer to be identified by project manager
+         */
         ProjectSerializer(const std::string& name);
 
+        /**
+         * Virtual destructor
+         */
         virtual ~ProjectSerializer();
 
+        /**
+         * Abstract serialize method to be implemented by derived class. If there was
+         * no need for serialization or serialization failed an empty file name should
+         * be returned.
+         * @param netlist The netlist to be serialized
+         * @param savedir Target project directory
+         * @return relative name of file name that was used for serialization
+         */
         virtual std::string serialize(Netlist* netlist, const std::filesystem::path& savedir) = 0;
 
+        /**
+         * Abstract deserialize method to be implemented by derived class. Note that
+         * it can be assumed upon calling this method that the deserialization of the
+         * netlist has been successful. Caller will provide project directory name
+         * but not the filename. The latter one can be queried from ProjectManager.
+         * @param netlist The netlist already deserialized
+         * @param loaddir Project directory to load files from
+         */
         virtual void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) = 0;
    };
 }

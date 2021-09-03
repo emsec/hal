@@ -61,7 +61,7 @@ namespace hal
         bool serialize_external(bool shadow);
 
         /**
-         * Deserialize hal project
+         * Internal method to deserialize hal project, called by open_project()
          *
          * @return true if OK, false if any error
          */
@@ -95,9 +95,10 @@ namespace hal
         ProjectStatus get_project_status() const;
 
         /**
-         * Set current project status to new value (None, Opened, Saved)
+         * Set current project status to new value (None, Opened, Saved).
+         * Must be called when project got closed.
          *
-         * @param stat
+         * @param stat New project status value.
          */
         void set_project_status(ProjectStatus stat);
 

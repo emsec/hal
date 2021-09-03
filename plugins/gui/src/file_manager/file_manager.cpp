@@ -506,6 +506,7 @@ namespace hal
         gNetlist = nullptr;
 
         gNetlistRelay->debugHandleFileClosed();
+        ProjectManager::instance()->set_project_status(ProjectManager::None);
 
         Q_EMIT fileClosed();
     }

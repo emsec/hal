@@ -6,8 +6,8 @@
 namespace hal {
     const std::string ProjectDirectory::s_shadow_dir = "autosave";
 
-    ProjectDirectory::ProjectDirectory(const std::string& dirname)
-        : std::filesystem::path(dirname)
+    ProjectDirectory::ProjectDirectory(const std::string& path_)
+        : std::filesystem::path(path_)
     {
         replace_extension(); // remove any extension
     }
