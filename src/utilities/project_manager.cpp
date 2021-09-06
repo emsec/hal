@@ -9,8 +9,11 @@
 #include "hal_core/utilities/project_serializer.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_factory.h"
 
-const int SERIALIZATION_FORMAT_VERSION = 9;
+const int SERIALIZATION_FORMAT_VERSION = 10;
 
 namespace hal {
     ProjectManager* ProjectManager::inst = nullptr;
