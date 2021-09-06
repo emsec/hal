@@ -52,8 +52,8 @@ namespace hal {
          * Abstract serialize method to be implemented by derived class. If there was
          * no need for serialization or serialization failed an empty file name should
          * be returned.
-         * @param netlist The netlist to be serialized
-         * @param savedir Target project directory
+         * @param[in] netlist The netlist to be serialized
+         * @param[in] savedir Target project directory
          * @return relative name of file name that was used for serialization
          */
         virtual std::string serialize(Netlist* netlist, const std::filesystem::path& savedir) = 0;
@@ -63,8 +63,8 @@ namespace hal {
          * it can be assumed upon calling this method that the deserialization of the
          * netlist has been successful. Caller will provide project directory name
          * but not the filename. The latter one can be queried from ProjectManager.
-         * @param netlist The netlist already deserialized
-         * @param loaddir Project directory to load files from
+         * @param[in] netlist The netlist already deserialized
+         * @param[in] loaddir Project directory to load files from
          */
         virtual void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) = 0;
    };

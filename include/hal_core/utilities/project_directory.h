@@ -47,14 +47,14 @@ namespace hal {
         /**
          * Returns the default file name which is a file with the same as the name as
          * the project directory plus an extension.
-         * @param extension Extension of default file name. If empty '.hal' is assumed
+         * @param[in] extension Extension of default file name. If empty '.hal' is assumed
          * @return Absolute path to file
          */
         std::filesystem::path get_default_filename(const std::string& extension = std::string()) const;
 
         /**
          * Returns absolute path to file within project directory
-         * @param relative_filename Relative file name in project directory
+         * @param[in] relative_filename Relative file name in project directory
          * @return Absolute path of file
          */
         std::filesystem::path get_filename(const std::string& relative_filename) const;
@@ -62,7 +62,7 @@ namespace hal {
         /**
          * Similar to get_default_filename() but will return file name which is located
          * in the autosave (aka shadow) directory.
-         * @param extension Extension of shadow file name. If empty '.hal' is assumed
+         * @param[in] extension Extension of shadow file name. If empty '.hal' is assumed
          * @return Absolute path to file
          */
         std::filesystem::path get_shadow_filename(const std::string& extension = std::string()) const;
@@ -84,7 +84,7 @@ namespace hal {
          * If filename is within project directory the relative file name will
          * be returned. Otherwise this method will return parameter filename
          * without modifications.
-         * @param filename Absolute path to file
+         * @param[in] filename Absolute path to file
          * @return Relative file name if file in project directory
          */
         std::filesystem::path get_relative_file_path(const std::string& filename) const;

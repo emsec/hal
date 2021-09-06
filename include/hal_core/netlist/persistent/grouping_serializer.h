@@ -35,8 +35,20 @@ namespace hal {
     public:
         GroupingSerializer();
 
+        /**
+         * Serialize elements of class Grouping to separate file
+         * @param[in] netlist Netlist that might contain groupings
+         * @param[in] savedir Project directory to save to
+         * @return
+         */
         std::string serialize(Netlist* netlist, const std::filesystem::path& savedir) override;
 
+        /**
+         * Deserialize elements of class Grouping from file. File will be queried
+         * from ProjectManager
+         * @param[in] netlist Target netlist to restore groupings
+         * @param[in] loaddir Project directory to load file from
+         */
         void deserialize(Netlist* netlist, const std::filesystem::path& loaddir) override;
     };
 }

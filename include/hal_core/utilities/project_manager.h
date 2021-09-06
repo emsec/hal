@@ -76,14 +76,14 @@ namespace hal
         /**
          * Registers an external serializer identified by unique tagname
          *
-         * @param tagname unique tagname of serializer
-         * @param serializer serializer instance which must be derived from ProjectSerializer
+         * @param[in] tagname unique tagname of serializer
+         * @param[in] serializer serializer instance which must be derived from ProjectSerializer
          */
         void register_serializer(const std::string& tagname, ProjectSerializer* serializer);
 
         /**
          * Unregisters external serializer identified by tagname
-         * @param tagname unique tagname of serializer
+         * @param[in] tagname unique tagname of serializer
          */
         void unregister_serializer(const std::string& tagname);
 
@@ -98,14 +98,14 @@ namespace hal
          * Set current project status to new value (None, Opened, Saved).
          * Must be called when project got closed.
          *
-         * @param stat New project status value.
+         * @param[in] stat New project status value.
          */
         void set_project_status(ProjectStatus stat);
 
         /**
          * Returns name of file to be parsed by external serializer
          *
-         * @param tagname unique tagname of serializer
+         * @param[in] tagname unique tagname of serializer
          * @return relative file name
          */
         std::string get_filename(const std::string& tagname);
@@ -125,22 +125,23 @@ namespace hal
         /**
          * Set gate library path name
          *
-         * @glpath path to gate library
+         * @param[in] glpath path to gate library
          */
         void set_gatelib_path(const std::string& glpath);
 
         /**
          * Serialize netlist and dependend data to project directory
          *
-         * @param netlist Netlist to save
-         * @param shadow true if called from autosave procedure
+         * @param[in] netlist Netlist to save
+         * @param[in] shadow true if called from autosave procedure
+         * @return true if serialization of core netlist was successful, false otherwise
          */
         bool serialize_project(Netlist* netlist, bool shadow = false);
 
         /**
          * Open hal project in directory <path>
          *
-         * @param path to project directory, might be empty if previously set by set_project_directory()
+         * @param[in] path to project directory, might be empty if previously set by set_project_directory()
          * @return true on success, false on error
          */
         bool open_project(const std::string& path = std::string());
@@ -155,14 +156,14 @@ namespace hal
         /**
          * Set project directory
          *
-         * @param path to project directory
+         * @param[in] path to project directory
          */
         void set_project_directory(const std::string& path);
 
         /**
          * Create project directory. Project directory must not exist
          *
-         * @param path to project directory
+         * @param[in] path to project directory
          * @return true on success, false on error
          */
         bool create_project_directory(const std::string& path);
