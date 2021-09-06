@@ -15,11 +15,9 @@ namespace hal{
         this->setSelectionMode(QAbstractItemView::SingleSelection);
         this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-        SelectionTreeView* t = gContentManager->getSelectionDetailsWidget()->selectionTreeView();
+        setFrameStyle(QFrame::NoFrame);
 
         this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-        connect(t, &SelectionTreeView::triggerSelection, this, &LUTTableWidget::handleDetailsFocusChanged);
     }
 
     void LUTTableWidget::setBooleanFunction(BooleanFunction bf, QString functionName)
@@ -27,36 +25,11 @@ namespace hal{
         mLutModel->setBooleanFunction(bf, functionName);
         this->clearSelection();
         this->update();
-        adjustColumnSizes();
-        Q_EMIT updateText(mFrameTitle);
+        adjustTableSizes();
     }
 
-    void LUTTableWidget::handleDetailsFocusChanged(const SelectionTreeItem* sti){
-        if(sti == nullptr){
-            return;
-        }
-
-        if(sti->itemType() == SelectionTreeItem::TreeItemType::GateItem){
-            Gate* g = gNetlist->get_gate_by_id(sti->id());
-            updateGate(g);
-        }
-    }
-
-    void LUTTableWidget::updateGate(Gate* gate){
-        if(gate == nullptr)
-            return;
-
-        std::unordered_set<std::basic_string<char>> lutPins = gate->get_type()->get_pins_of_type(PinType::lut);
-        // The table is only updated if the gate has a LUT pin
-        if(lutPins.size() > 0){
-            // All LUT pins have the same boolean function
-            std::basic_string<char> outPin = *lutPins.begin();
-            BooleanFunction lutFunction = gate->get_boolean_function(outPin);
-            setBooleanFunction(lutFunction, QString::fromStdString(outPin));
-        }
-    }
-
-    void LUTTableWidget::adjustColumnSizes(){
+    void LUTTableWidget::adjustTableSizes(){
+        // Columns
         int w = this->size().width();
         int colCount = mLutModel->columnCount();
 
@@ -67,11 +40,21 @@ namespace hal{
             this->horizontalHeader()->resizeSection(c, inputWidth);
         }
         this->horizontalHeader()->setSectionResizeMode(colCount-1, QHeaderView::Stretch);
+        
+        // Rows
+        this->resizeRowsToContents();
+        int h = horizontalHeader()->height() + 4;
+        for (int i = 0; i < mLutModel->rowCount(); i++)
+            h += rowHeight(i);
+
+        setMaximumHeight(h);
+        setMinimumHeight(h);
+
     }
 
     void LUTTableWidget::resizeEvent(QResizeEvent *event) {
         QTableView::resizeEvent(event);
-        adjustColumnSizes();
+        adjustTableSizes();
     }
 
 } // namespace hal

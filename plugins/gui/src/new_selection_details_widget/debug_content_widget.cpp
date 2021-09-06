@@ -59,22 +59,21 @@ namespace hal {
         DataTableWidget* dataTableWidget = new DataTableWidget(this);
         GroupingsOfItemWidget* groupingsOfItemWidget = new GroupingsOfItemWidget(this);
         LUTTableWidget* lutTableWidget = new LUTTableWidget(this);
-        BooleanFunctionTable* booleanFunctionTable = new BooleanFunctionTable(this, "<Custom Boolean Function Title>");
+        //BooleanFunctionTable* booleanFunctionTable = new BooleanFunctionTable(this);
 
         DetailsFrameWidget* dataTableWidgetFrame = new DetailsFrameWidget(dataTableWidget, "test", this);
         DetailsFrameWidget* groupingsOfItemWidgetFrame = new DetailsFrameWidget(groupingsOfItemWidget, "test", this);
         DetailsFrameWidget* lutTableWidgetFrame = new DetailsFrameWidget(lutTableWidget, "test", this);
-        DetailsFrameWidget* booleanFunctionTableFrame = new DetailsFrameWidget(booleanFunctionTable, "test", this);
+        //DetailsFrameWidget* booleanFunctionTableFrame = new DetailsFrameWidget(booleanFunctionTable, "test", this);
 
         scrollAreaLayout->addWidget(dataTableWidgetFrame);
         scrollAreaLayout->addWidget(groupingsOfItemWidgetFrame);
         scrollAreaLayout->addWidget(lutTableWidgetFrame);
-        scrollAreaLayout->addWidget(booleanFunctionTableFrame);
+        //scrollAreaLayout->addWidget(booleanFunctionTableFrame);
 
-        connect(dataTableWidget,        &DataTableWidget::updateText,       dataTableWidgetFrame,       &DetailsFrameWidget::setText);
+        //connect(dataTableWidget,        &DataTableWidget::updateText,       dataTableWidgetFrame,       &DetailsFrameWidget::setText);
         connect(groupingsOfItemWidget,  &GroupingsOfItemWidget::updateText, groupingsOfItemWidgetFrame, &DetailsFrameWidget::setText);
-        connect(lutTableWidget,         &LUTTableWidget::updateText,        lutTableWidgetFrame,        &DetailsFrameWidget::setText);
-        connect(booleanFunctionTable,   &BooleanFunctionTable::updateText,  booleanFunctionTableFrame,  &DetailsFrameWidget::setText);
+        //connect(lutTableWidget,         &LUTTableWidget::updateText,        lutTableWidgetFrame,        &DetailsFrameWidget::setText);
 
 
         //--------For NetlistElementsModel

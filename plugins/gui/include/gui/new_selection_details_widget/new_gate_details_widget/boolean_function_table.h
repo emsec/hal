@@ -51,7 +51,7 @@ namespace hal
         *
         * @param parent - The parent widget
         */
-        BooleanFunctionTable(QWidget* parent = nullptr, const QString& frameTitle = "Boolean Functions");
+        BooleanFunctionTable(QWidget* parent = nullptr);
 
         /**
          * Access the boolean function table model of this table.
@@ -60,21 +60,8 @@ namespace hal
          */
         BooleanFunctionTableModel* getModel();
 
-    Q_SIGNALS:
-        void updateText(const QString& text);
-
 
     public Q_SLOTS:
-        /**
-         * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
-         * boolean functions content if necessary.
-         *
-         * TODO: This is only a temporary slot for debug purposes. Normally the boolean function table is filled via setEntries(...)
-         *
-         * @param sti - The focused SelectionTreeItem
-         */
-        void handleDetailsFocusChanged(const SelectionTreeItem* sti);
-
         /**
          * Sets (and overwrites) the list of table entries that are displayed in this boolean function table.
          *
@@ -95,13 +82,9 @@ namespace hal
     private:
         void adjustTableSizes();
 
-        // TODO: Only for debug purposes.Can be paritially reused later.
-        void setGate(Gate* gate);
-
         BooleanFunctionTableModel* mBooleanFunctionTableModel;
         Gate* mCurrentGate;
         u32 mCurrentGateId;
-        QString mFrameTitle;
 
     };
 } // namespace hal

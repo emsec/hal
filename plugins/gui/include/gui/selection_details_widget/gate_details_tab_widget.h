@@ -25,6 +25,10 @@
 
 #include "gui/selection_details_widget/details_tab_widget.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "gui/new_selection_details_widget/new_gate_details_widget/boolean_function_table.h"
+#include "gui/new_selection_details_widget/new_gate_details_widget/lut_table_widget.h"
+#include "gui/new_selection_details_widget/data_table_widget.h"
+#include "gui/new_selection_details_widget/groupings_of_item_widget.h"
 
 namespace hal
 {
@@ -32,10 +36,17 @@ namespace hal
     class DetailsFrameWidget;
     class GateInfoTable;
     class GatePinTree;
+    class BooleanFunctionTable;
+    class LUTTableWidget;
+    class DataTableWidget;
+    class GroupingsOfItemWidget;
 
     class GateDetailsTabWidget : public DetailsTabWidget
     {
         Q_OBJECT
+
+    private:
+        enum GateTypeCategory {none, lut, ff, latch};
 
     public:
 
@@ -54,12 +65,13 @@ namespace hal
         void setGate(Gate* gate);
 
     private:
+
         /**
          * Shows the tab "(LUT / FF / LATCH)" and their corresponding type widgets depending on which gate type property is provided.
          * 
          * @param gateTypeProperty - The property.
          */
-        void showMultiTab(GateTypeProperty gateTypeProperty);
+        void showMultiTab(GateDetailsTabWidget::GateTypeCategory gateTypeCategory);
 
         /**
          * Hides the "(LUT / FF / LATCH)" tab.
@@ -72,7 +84,17 @@ namespace hal
          *
          * @param gate - The gate to check.
          */
-        void hideOrShorMultiTab(Gate* gate);
+        void hideOrShorMultiTab(GateTypeCategory gateTypeCategory);
+
+        /**
+         * Collects the gate's boolean functions and setups the boolean function tables and the lut truth table
+         */
+        void setupBooleanFunctionTables(Gate* gate, GateTypeCategory gateTypeCategory);
+
+        /**
+         * Gets the category the gate belongs to (i.e. LUT / FF / LATCH / Nothing).
+         */
+        GateTypeCategory getGateTypeCategory(Gate* gate) const;
 
         bool mMultiTabVisible = true; 
         int mMultiTabIndex;
@@ -81,7 +103,8 @@ namespace hal
         //general tab
         GateInfoTable* mGateInfoTable;
         DetailsFrameWidget* mGateInformationFrame;
-        //add groupings-widget in this line
+
+        GroupingsOfItemWidget* mGroupingsOfItemTable;
         DetailsFrameWidget* mGroupingsFrame;
 
         //pins tab
@@ -89,25 +112,26 @@ namespace hal
         DetailsFrameWidget* mPinsFrame;
 
         //ff tab
-        //put ff-widget in this line
+        BooleanFunctionTable* mFfFunctionTable;
         DetailsFrameWidget* mFfFrame;
 
         //latch tab
-        //put latch-widget in this line
+        BooleanFunctionTable* mLatchFunctionTable;
         DetailsFrameWidget* mLatchFrame;
 
         //lut tab
-        //put lut-widget in this line
+        BooleanFunctionTable* mLutFunctionTable;
         DetailsFrameWidget* mLutFrame;
-        //put truthtable-widget in this line
+
+        LUTTableWidget* mLutTable;
         DetailsFrameWidget* mTruthTableFrame;
 
         //boolean function tab
-        //put boolean-function in this line
+        BooleanFunctionTable* mFullFunctionTable;
         DetailsFrameWidget* mBooleanFunctionsFrame;
 
         //data tab
-        //put data-table in this line
+        DataTableWidget* mDataTable;
         DetailsFrameWidget* mDataFrame;
     };
 }

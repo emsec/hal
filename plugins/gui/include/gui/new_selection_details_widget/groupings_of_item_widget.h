@@ -101,7 +101,7 @@ namespace hal
          *
          * @param sti - The focused SelectionTreeItem
          */
-        void handleDetailsFocusChanged(const SelectionTreeItem* sti);
+        //void handleDetailsFocusChanged(const SelectionTreeItem* sti);
 
     private Q_SLOTS:
         /**
@@ -115,11 +115,13 @@ namespace hal
 
         void handleLayoutChanged(const QList<QPersistentModelIndex> &parents, QAbstractItemModel::LayoutChangeHint hint);
 
+
     private:
+        void updateAppearance();
 
         void adjustTableSizes();
 
-        void notifyNewTitle();
+        void notifyNewTitle(int elementCount);
 
         ItemType mCurrentObjectType;
         u32 mCurrentObjectId;

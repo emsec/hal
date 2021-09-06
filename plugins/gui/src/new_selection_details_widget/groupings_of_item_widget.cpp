@@ -17,14 +17,13 @@ namespace hal {
         this->setSelectionBehavior(QAbstractItemView::SelectRows);
         this->setSelectionMode(QAbstractItemView::SingleSelection);
         this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-        this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         this->verticalHeader()->setVisible(false);
         setItemDelegateForColumn(2,new GroupingColorDelegate(this));
-        //this->horizontalHeader()->setVisible(false);
+        setFrameStyle(QFrame::NoFrame);
+        updateAppearance();
         adjustTableSizes();
-
-        SelectionTreeView* t = gContentManager->getSelectionDetailsWidget()->selectionTreeView();
-        connect(t, &SelectionTreeView::triggerSelection, this, &GroupingsOfItemWidget::handleDetailsFocusChanged);
+        
         connect(this, &QTableView::customContextMenuRequested, this, &GroupingsOfItemWidget::handleContextMenuRequest);
         connect(mGroupingsOfItemModel, &GroupingsOfItemModel::layoutChanged, this, &GroupingsOfItemWidget::handleLayoutChanged);
     }
@@ -32,27 +31,6 @@ namespace hal {
     GroupingsOfItemModel* GroupingsOfItemWidget::getModel()
     {
         return mGroupingsOfItemModel;
-    }
-
-    void GroupingsOfItemWidget::handleDetailsFocusChanged(const SelectionTreeItem* sti)
-    {
-        if(sti == nullptr){
-            return;
-        }
-
-        if(sti->itemType() == SelectionTreeItem::TreeItemType::GateItem){
-            Gate* g = gNetlist->get_gate_by_id(sti->id());
-            setGate(g);
-        }
-        else if(sti->itemType() == SelectionTreeItem::TreeItemType::NetItem){
-            Net* n = gNetlist->get_net_by_id(sti->id());
-            setNet(n);
-        }
-        else if(sti->itemType() == SelectionTreeItem::TreeItemType::ModuleItem){
-            Module* m = gNetlist->get_module_by_id(sti->id());
-            setModule(m);
-        }
-        clearSelection();
     }
 
     void GroupingsOfItemWidget::setGate(Gate *gate)
@@ -63,8 +41,8 @@ namespace hal {
         mCurrentObjectType = ItemType::Gate;
         mCurrentObjectId = gate->get_id();
         mGroupingsOfItemModel->setGate(gate);
+        updateAppearance();
         adjustTableSizes();
-        notifyNewTitle();
     }
 
     void GroupingsOfItemWidget::setNet(Net* net)
@@ -75,8 +53,8 @@ namespace hal {
         mCurrentObjectType = ItemType::Net;
         mCurrentObjectId = net->get_id();
         mGroupingsOfItemModel->setNet(net);
+        updateAppearance();
         adjustTableSizes();
-        notifyNewTitle();
     }
 
     void GroupingsOfItemWidget::setModule(Module* module)
@@ -87,8 +65,8 @@ namespace hal {
         mCurrentObjectType = ItemType::Module;
         mCurrentObjectId = module->get_id();
         mGroupingsOfItemModel->setModule(module);
+        updateAppearance();
         adjustTableSizes();
-        notifyNewTitle();
     }
     
 
@@ -218,26 +196,45 @@ namespace hal {
     {
         Q_UNUSED(parents);
         Q_UNUSED(hint);
-        notifyNewTitle();
+        updateAppearance();
+    }
+
+    void GroupingsOfItemWidget::updateAppearance()
+    {
+        int n = mGroupingsOfItemModel->rowCount();
+        notifyNewTitle(n);
+        if(n < 1){
+            this->setVisible(false);
+        }
+        else{
+            this->setVisible(true);
+        }
     }
 
     void GroupingsOfItemWidget::adjustTableSizes()
     {
         resizeColumnsToContents();  
         this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch); 
+
+        // Config Height
+        int h = horizontalHeader()->height() + 4;
+        for (int i = 0; i < mGroupingsOfItemModel->rowCount(); i++)
+            h += rowHeight(i);
+
+        setMaximumHeight(h);
+        setMinimumHeight(h);
     }
 
-    void GroupingsOfItemWidget::notifyNewTitle()
+    void GroupingsOfItemWidget::notifyNewTitle(int elementCount)
     {
-        int n = mGroupingsOfItemModel->rowCount();
-        if(n < 1){
+        if(elementCount < 1){
             Q_EMIT updateText(mFrameTitleNoItem);
         }
-        else if(n == 1){
+        else if(elementCount == 1){
             Q_EMIT updateText(mFrameTitleSingleItem);
         }
-        else { // n > 1
-            Q_EMIT updateText(mFrameTitleMultipleItems.arg(n));
+        else { // elementCount > 1
+            Q_EMIT updateText(mFrameTitleMultipleItems.arg(elementCount));
         }
     }
 

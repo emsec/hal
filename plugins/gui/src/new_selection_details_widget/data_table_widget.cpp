@@ -19,35 +19,14 @@ namespace hal {
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         this->verticalHeader()->setVisible(false);
         this->horizontalHeader()->setVisible(false);
+        setFrameStyle(QFrame::NoFrame);
 
-        SelectionTreeView* t = gContentManager->getSelectionDetailsWidget()->selectionTreeView();
-        connect(t, &SelectionTreeView::triggerSelection, this, &DataTableWidget::handleDetailsFocusChanged);
         connect(this, &QTableView::customContextMenuRequested, this, &DataTableWidget::handleContextMenuRequest);
     }
 
     DataTableModel* DataTableWidget::getModel()
     {
         return mDataTableModel;
-    }
-
-    void DataTableWidget::handleDetailsFocusChanged(const SelectionTreeItem* sti)
-    {
-        if(sti == nullptr){
-            return;
-        }
-
-        if(sti->itemType() == SelectionTreeItem::TreeItemType::GateItem){
-            Gate* g = gNetlist->get_gate_by_id(sti->id());
-            setGate(g);
-        }
-        else if(sti->itemType() == SelectionTreeItem::TreeItemType::NetItem){
-            Net* n = gNetlist->get_net_by_id(sti->id());
-            setNet(n);
-        }
-        else if(sti->itemType() == SelectionTreeItem::TreeItemType::ModuleItem){
-            Module* m = gNetlist->get_module_by_id(sti->id());
-            setModule(m);
-        }
     }
 
     void DataTableWidget::setGate(Gate *gate)
@@ -58,8 +37,8 @@ namespace hal {
         mCurrentObjectType = DataContainerType::GATE;
         mCurrentObjectId = gate->get_id();
         mDataTableModel->updateData(gate->get_data_map());
+        clearSelection();
         adjustTableSizes();
-        Q_EMIT updateText(mFrameTitle);
     }
 
     void DataTableWidget::setNet(Net* net)
@@ -70,8 +49,8 @@ namespace hal {
         mCurrentObjectType = DataContainerType::NET;
         mCurrentObjectId = net->get_id();
         mDataTableModel->updateData(net->get_data_map());
+        clearSelection();
         adjustTableSizes();
-        Q_EMIT updateText(mFrameTitle);
     }
 
     void DataTableWidget::setModule(Module* module)
@@ -82,8 +61,8 @@ namespace hal {
         mCurrentObjectType = DataContainerType::MODULE;
         mCurrentObjectId = module->get_id();
         mDataTableModel->updateData(module->get_data_map());
+        clearSelection();
         adjustTableSizes();
-        Q_EMIT updateText(mFrameTitle);
     }
     
 
@@ -130,6 +109,14 @@ namespace hal {
         this->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
         this->setWordWrap(true);
         this->resizeRowsToContents();
+
+        // Configure the widget height
+        int h = 0;
+        for (int i = 0; i < mDataTableModel->rowCount(); i++)
+            h += rowHeight(i);
+
+        setMaximumHeight(h);
+        setMinimumHeight(h);
     }
 
 

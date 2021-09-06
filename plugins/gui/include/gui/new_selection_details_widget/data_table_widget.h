@@ -57,8 +57,8 @@ namespace hal
 
         DataTableModel* getModel();
 
-    Q_SIGNALS:
-        void updateText(const QString& text);
+    //Q_SIGNALS:
+        //void updateText(const QString& text);
 
     public Q_SLOTS:
         /**
@@ -69,7 +69,7 @@ namespace hal
          *
          * @param sti - The focused SelectionTreeItem
          */
-        void handleDetailsFocusChanged(const SelectionTreeItem* sti);
+        //void handleDetailsFocusChanged(const SelectionTreeItem* sti);
 
 
         void setGate(Gate* gate);

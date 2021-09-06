@@ -67,21 +67,6 @@ namespace hal
          */
         void setBooleanFunction(BooleanFunction bf, QString functionName);
 
-    
-    Q_SIGNALS:
-        void updateText(const QString& text);
-
-    private Q_SLOTS:
-
-        /**
-         * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
-         * LUT content if necessary.
-         * TODO: Temporary for debug. Use setBooleanFunction later.
-         *
-         * @param sti - The focused SelectionTreeItem
-         */
-        void handleDetailsFocusChanged(const SelectionTreeItem* sti);
-
     protected Q_SLOTS:
         /**
          * Handles the resize event. The table is sized, so that the output column is bigger than the input columns.
@@ -91,9 +76,7 @@ namespace hal
         void resizeEvent(QResizeEvent* event) override;
 
     private:
-        /// TODO: Debug only
-        void updateGate(Gate* gate);
-        void adjustColumnSizes();
+        void adjustTableSizes();
 
         LUTTableModel* mLutModel;
         QTableView* mLutTableView;
