@@ -40,15 +40,18 @@ namespace hal
     public:
         NetModuleTable(ModuleTableModel* model, QWidget* parent = nullptr);
 
-        void setContent(u32 netID);
-        void setContent(Net* n);
+        void setNet(u32 netID);
+        void setNet(Net* n);
 
         void removeContent();
 
         void handleContextMenuRequested(const QPoint& pos);
 
+    Q_SIGNALS:
+        void updateText(const QString& text);
+
     private:
-        ModuleTableModel* mSourceModel;
+        ModuleTableModel* mModuleTableModel;
 
     };
 

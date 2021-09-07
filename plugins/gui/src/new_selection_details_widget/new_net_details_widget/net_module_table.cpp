@@ -14,13 +14,13 @@
 namespace hal
 {
 
-    NetModuleTable::NetModuleTable(ModuleTableModel* model, QWidget* parent) : QTableView(parent), mSourceModel(model)
+    NetModuleTable::NetModuleTable(ModuleTableModel* model, QWidget* parent) : QTableView(parent), mModuleTableModel(model)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         horizontalHeader()->setStretchLastSection(true);
         verticalHeader()->hide();
-        setModel(mSourceModel);
+        setModel(mModuleTableModel);
 
         setSelectionBehavior(QAbstractItemView::SelectRows);
 
@@ -29,24 +29,28 @@ namespace hal
 
     }
 
-    void NetModuleTable::setContent(u32 netID)
+    void NetModuleTable::setNet(u32 netID)
     {
         Net* n = gNetlist->get_net_by_id(netID);
 
-        setContent(n);
+        setNet(n);
     }
 
-    void NetModuleTable::setContent(Net* n)
+    void NetModuleTable::setNet(Net* n)
     {
         if (!n)
             return;
 
-        mSourceModel->setNet(n);
+        mModuleTableModel->setNet(n);
+
+        QModelIndex unused;
+
+        Q_EMIT updateText("Modules (" + QString::number(mModuleTableModel->rowCount(unused)) + ")");
     }
 
     void NetModuleTable::removeContent()
     {
-        mSourceModel->clear();
+        mModuleTableModel->clear();
     }
 
     void NetModuleTable::handleContextMenuRequested(const QPoint& pos)
@@ -56,7 +60,7 @@ namespace hal
         if(!idx.isValid())
             return;
 
-        u32 gateID = mSourceModel->getModuleIDFromIndex(idx);
+        u32 gateID = mModuleTableModel->getModuleIDFromIndex(idx);
 
         QMenu menu;
 
