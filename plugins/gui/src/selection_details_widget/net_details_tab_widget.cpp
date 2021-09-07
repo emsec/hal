@@ -16,7 +16,11 @@ namespace hal
 
         //general tab
         mNetInformationFrame = new DetailsFrameWidget(mNetInfoTable, "Net Information", this);
-        mGroupingsFrame = new DetailsFrameWidget(new QWidget(this), "Groupings", this); //replace QWidget
+
+        mGroupingsOfItemTable = new GroupingsOfItemWidget;
+        mGroupingsFrame = new DetailsFrameWidget(mGroupingsOfItemTable, "Groupings", this);
+        connect(mGroupingsOfItemTable,  &GroupingsOfItemWidget::updateText, mGroupingsFrame, &DetailsFrameWidget::setText);
+
         mModulesFrame = new DetailsFrameWidget(new QWidget(this), "Modules", this); //replace QWidget
 
         QList<DetailsFrameWidget*> framesGeneralTab({mNetInformationFrame, mGroupingsFrame, mModulesFrame});
@@ -31,7 +35,8 @@ namespace hal
         addTab("Src / Dst", framesSrcDstTab);
 
         //data tab
-        mDataFrame = new DetailsFrameWidget(new QWidget(this), "Data", this); //replace QWidget
+        mDataTable = new DataTableWidget(this);
+        mDataFrame = new DetailsFrameWidget(mDataTable, "Data", this);
 
         QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
         addTab("Data", framesDataTab);
@@ -43,5 +48,7 @@ namespace hal
     {
         //pass net or other stuff to widgets
         mNetInfoTable->setNet(net);
+        mGroupingsOfItemTable->setNet(net);
+        mDataTable->setNet(net);
     }
 }

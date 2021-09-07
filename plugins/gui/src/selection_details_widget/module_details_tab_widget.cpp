@@ -16,7 +16,10 @@ namespace hal
         //general tab
         mModuleInfoTable = new ModuleInfoTable(this);
         mModuleInformationFrame = new DetailsFrameWidget(mModuleInfoTable, "Module Information", this);
-        mGroupingsFrame = new DetailsFrameWidget(new QWidget(this), "Groupings", this); //replace QWidget
+
+        mGroupingsOfItemTable = new GroupingsOfItemWidget;
+        mGroupingsFrame = new DetailsFrameWidget(mGroupingsOfItemTable, "Groupings", this);
+        connect(mGroupingsOfItemTable,  &GroupingsOfItemWidget::updateText, mGroupingsFrame, &DetailsFrameWidget::setText);
 
         QList<DetailsFrameWidget*> framesGeneralTab({mModuleInformationFrame, mGroupingsFrame});
         addTab("General", framesGeneralTab);
@@ -37,7 +40,8 @@ namespace hal
         addTab("Elements", framesElementsTab);
 
         //data tab
-        mDataFrame = new DetailsFrameWidget(new QWidget(this), "Data", this); //replace QWidget
+        mDataTable = new DataTableWidget(this);
+        mDataFrame = new DetailsFrameWidget(mDataTable, "Data", this);
 
         QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
         addTab("Data", framesDataTab);
@@ -49,5 +53,7 @@ namespace hal
         mModuleInfoTable->setModule(module);
         mPortsTree->setModule(module);
         mElementsTree->setModule(module);
+        mGroupingsOfItemTable->setModule(module);
+        mDataTable->setModule(module);
     }
 }

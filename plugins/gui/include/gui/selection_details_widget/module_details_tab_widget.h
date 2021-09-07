@@ -24,6 +24,8 @@
 #pragma once
 
 #include "gui/selection_details_widget/details_tab_widget.h"
+#include "gui/new_selection_details_widget/data_table_widget.h"
+#include "gui/new_selection_details_widget/groupings_of_item_widget.h"
 
 namespace hal
 {
@@ -32,6 +34,8 @@ namespace hal
     class ModuleInfoTable;
     class ModulePortsTree;
     class ModuleElementsTree;
+    class DataTableWidget;
+    class GroupingsOfItemWidget;
 
     class ModuleDetailsTabWidget : public DetailsTabWidget
     {
@@ -58,7 +62,8 @@ namespace hal
         //general tab
         ModuleInfoTable* mModuleInfoTable;
         DetailsFrameWidget* mModuleInformationFrame;
-        //put groupings-widget in this line
+
+        GroupingsOfItemWidget* mGroupingsOfItemTable;
         DetailsFrameWidget* mGroupingsFrame;
 
         //ports tab
@@ -70,7 +75,8 @@ namespace hal
         DetailsFrameWidget* mElementsFrame;
 
         //data tab
-        //put data-widget in this line
+        DataTableWidget* mDataTable;
         DetailsFrameWidget* mDataFrame;
+
     };
 }

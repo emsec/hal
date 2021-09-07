@@ -72,7 +72,7 @@ namespace hal {
         //scrollAreaLayout->addWidget(booleanFunctionTableFrame);
 
         //connect(dataTableWidget,        &DataTableWidget::updateText,       dataTableWidgetFrame,       &DetailsFrameWidget::setText);
-        connect(groupingsOfItemWidget,  &GroupingsOfItemWidget::updateText, groupingsOfItemWidgetFrame, &DetailsFrameWidget::setText);
+        //connect(groupingsOfItemWidget,  &GroupingsOfItemWidget::updateText, groupingsOfItemWidgetFrame, &DetailsFrameWidget::setText);
         //connect(lutTableWidget,         &LUTTableWidget::updateText,        lutTableWidgetFrame,        &DetailsFrameWidget::setText);
 
 

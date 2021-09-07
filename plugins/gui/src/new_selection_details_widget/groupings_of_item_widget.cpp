@@ -204,10 +204,10 @@ namespace hal {
         int n = mGroupingsOfItemModel->rowCount();
         notifyNewTitle(n);
         if(n < 1){
-            this->setVisible(false);
+            this->horizontalHeader()->setVisible(false);
         }
         else{
-            this->setVisible(true);
+            this->horizontalHeader()->setVisible(true);
         }
     }
 
