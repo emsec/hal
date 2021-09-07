@@ -22,12 +22,6 @@
 
 
 //--------------------
-#include "gui/new_selection_details_widget/new_net_details_widget/net_endpoint_table.h"
-#include "gui/new_selection_details_widget/models/endpoint_table_model.h"
-
-#include "gui/new_selection_details_widget/new_net_details_widget/net_module_table.h"
-#include "gui/new_selection_details_widget/models/module_table_model.h"
-
 #include "gui/new_selection_details_widget/details_frame_widget.h"
 
 namespace hal {
@@ -116,26 +110,6 @@ namespace hal {
         scrollAreaLayout->addWidget(moduleTable);
         moduleTable->setModule(gNetlist->get_module_by_id(1));
         //-----------------------------------------------------------------------------------------------------------------------
-
-        EndpointTableModel* sourceModel = new EndpointTableModel(EndpointTableModel::Type::source, this);
-        NetEndpointTable* sourceTable = new NetEndpointTable(sourceModel, this);
-        sourceTable->setContent(28);
-        scrollAreaLayout->addWidget(sourceTable);
-
-        EndpointTableModel* destinationModel = new EndpointTableModel(EndpointTableModel::Type::destination, this);
-        NetEndpointTable* destinatinTable = new NetEndpointTable(destinationModel, this);
-        destinatinTable->setContent(28);
-        //scrollAreaLayout->addWidget(destinatinTable);
-
-        ModuleTableModel* moduleModel = new ModuleTableModel(this);
-        NetModuleTable* netModuleTable = new NetModuleTable(moduleModel, this);
-        destinatinTable->setContent(28);
-        scrollAreaLayout->addWidget(netModuleTable);
-
-        DetailsFrameWidget* frame = new DetailsFrameWidget(destinatinTable, "test", this);
-        scrollAreaLayout->addWidget(frame);
-
-        connect(destinatinTable, &NetEndpointTable::update_text, frame, &DetailsFrameWidget::setText);
     }
 
 } // namespace hal

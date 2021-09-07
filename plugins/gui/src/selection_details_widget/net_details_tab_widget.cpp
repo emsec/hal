@@ -3,6 +3,12 @@
 #include "gui/new_selection_details_widget/details_frame_widget.h"
 #include "gui/new_selection_details_widget/new_net_details_widget/net_info_table.h"
 
+#include "gui/new_selection_details_widget/new_net_details_widget/net_endpoint_table.h"
+#include "gui/new_selection_details_widget/models/endpoint_table_model.h"
+
+#include "gui/new_selection_details_widget/new_net_details_widget/net_module_table.h"
+#include "gui/new_selection_details_widget/models/module_table_model.h"
+
 #include "hal_core/netlist/net.h"
 
 namespace hal
@@ -16,20 +22,28 @@ namespace hal
 
         //general tab
         mNetInformationFrame = new DetailsFrameWidget(mNetInfoTable, "Net Information", this);
-
         mGroupingsOfItemTable = new GroupingsOfItemWidget;
         mGroupingsFrame = new DetailsFrameWidget(mGroupingsOfItemTable, "Groupings", this);
         connect(mGroupingsOfItemTable,  &GroupingsOfItemWidget::updateText, mGroupingsFrame, &DetailsFrameWidget::setText);
 
-        mModulesFrame = new DetailsFrameWidget(new QWidget(this), "Modules", this); //replace QWidget
+        ModuleTableModel* moduleModel = new ModuleTableModel(this);
+        mNetModuleTable = new NetModuleTable(moduleModel, this);
+
+        mModulesFrame = new DetailsFrameWidget(mNetModuleTable, "Modules", this);
 
         QList<DetailsFrameWidget*> framesGeneralTab({mNetInformationFrame, mGroupingsFrame, mModulesFrame});
         addTab("General", framesGeneralTab);
 
         //sources / destinations tab
-        mSourcesFrame = new DetailsFrameWidget(new QWidget(this), "Sources", this); // replace QWidget
-        mDestinationsFrame = new DetailsFrameWidget(new QWidget(this), "Destinations", this); // replace QWidget
 
+        EndpointTableModel* sourceModel = new EndpointTableModel(EndpointTableModel::Type::source, this);
+        mSourcesTable = new NetEndpointTable(sourceModel, this);
+
+        EndpointTableModel* destinationModel = new EndpointTableModel(EndpointTableModel::Type::destination, this);
+        mDestinationsTable = new NetEndpointTable(destinationModel, this);
+
+        mSourcesFrame = new DetailsFrameWidget(mSourcesTable, "Sources", this);
+        mDestinationsFrame = new DetailsFrameWidget(mDestinationsTable, "Destinations", this);
 
         QList<DetailsFrameWidget*> framesSrcDstTab({mSourcesFrame, mDestinationsFrame});
         addTab("Src / Dst", framesSrcDstTab);
@@ -42,6 +56,10 @@ namespace hal
         addTab("Data", framesDataTab);
 
         //connect widgets with frames for refreshing the headers when necessary
+        connect(mNetModuleTable, &NetModuleTable::updateText, mModulesFrame, &DetailsFrameWidget::setText);
+
+        connect(mSourcesTable, &NetEndpointTable::updateText, mSourcesFrame, &DetailsFrameWidget::setText);
+        connect(mDestinationsTable, &NetEndpointTable::updateText, mDestinationsFrame, &DetailsFrameWidget::setText);
     }
  
     void NetDetailsTabWidget::setNet(Net* net)
@@ -49,6 +67,10 @@ namespace hal
         //pass net or other stuff to widgets
         mNetInfoTable->setNet(net);
         mGroupingsOfItemTable->setNet(net);
-        mDataTable->setNet(net);
+
+	mNetModuleTable->setNet(net);
+        mSourcesTable->setNet(net);
+        mDestinationsTable->setNet(net);
+	mDataTable->setNet(net);
     }
 }

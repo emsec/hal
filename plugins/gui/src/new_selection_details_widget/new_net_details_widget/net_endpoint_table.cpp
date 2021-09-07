@@ -14,43 +14,42 @@
 namespace hal
 {
 
-    NetEndpointTable::NetEndpointTable(EndpointTableModel* model, QWidget* parent) : QTableView(parent), mSourceModel(model)
+    NetEndpointTable::NetEndpointTable(EndpointTableModel* model, QWidget* parent) : QTableView(parent), mEndpointModel(model)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         horizontalHeader()->setStretchLastSection(true);
         verticalHeader()->hide();
-        setModel(mSourceModel);
+        setModel(mEndpointModel);
 
         setSelectionBehavior(QAbstractItemView::SelectRows);
 
         //connections
         connect(this, &QTableView::customContextMenuRequested, this, &NetEndpointTable::handleContextMenuRequested);
-
-
-        // DEBUG
-        connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &NetEndpointTable::debugHandleShortcut);
-
     }
 
-    void NetEndpointTable::setContent(u32 netID)
+    void NetEndpointTable::setNet(u32 netID)
     {
         Net* n = gNetlist->get_net_by_id(netID);
 
-        setContent(n);
+        setNet(n);
     }
 
-    void NetEndpointTable::setContent(Net* n)
+    void NetEndpointTable::setNet(Net* n)
     {
         if (!n)
             return;
 
-        mSourceModel->setNet(n);
+        mEndpointModel->setNet(n);
+
+        QModelIndex unused;
+
+        Q_EMIT updateText(mEndpointModel->typeString() + " (" + QString::number(mEndpointModel->rowCount(unused)) + ")");
     }
 
     void NetEndpointTable::removeContent()
     {
-        mSourceModel->clear();
+        mEndpointModel->clear();
     }
 
     void NetEndpointTable::handleContextMenuRequested(const QPoint& pos)
@@ -60,7 +59,7 @@ namespace hal
         if(!idx.isValid())
             return;
 
-        u32 gateID = mSourceModel->getGateIDFromIndex(idx);
+        u32 gateID = mEndpointModel->getGateIDFromIndex(idx);
 
         QMenu menu;
 
@@ -75,16 +74,6 @@ namespace hal
 
         menu.move(mapToGlobal(pos));
         menu.exec();
-    }
-
-    void NetEndpointTable::debugHandleShortcut(void* sender)
-    {
-        qDebug() << "called correctly";
-        static int counter = 1;
-
-        Q_EMIT update_text("Destinations (" + QString::number(counter) + ")");
-
-        ++counter;
     }
 
 }

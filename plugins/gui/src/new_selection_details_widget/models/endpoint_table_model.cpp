@@ -118,4 +118,12 @@ namespace hal
     {
         return mEntries[index.row()].id;
     }
+
+    QString EndpointTableModel::typeString()
+    {
+        if (mType == source)
+            return "Sources";
+        else
+            return "Destinations";
+    }
 }

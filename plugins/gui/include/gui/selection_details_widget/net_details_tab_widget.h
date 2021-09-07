@@ -32,6 +32,8 @@ namespace hal
     class Net;
     class DetailsFrameWidget;
     class NetInfoTable;
+    class NetEndpointTable;
+    class NetModuleTable;
     class GroupingsOfItemWidget;
     class DataTableWidget;
 
@@ -71,5 +73,10 @@ namespace hal
         DetailsFrameWidget* mDataFrame;
 
         NetInfoTable* mNetInfoTable;
+
+        NetModuleTable* mNetModuleTable;
+
+        NetEndpointTable* mSourcesTable;
+        NetEndpointTable* mDestinationsTable;
     };
 }

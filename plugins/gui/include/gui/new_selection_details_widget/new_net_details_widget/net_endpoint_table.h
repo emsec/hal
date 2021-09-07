@@ -39,20 +39,18 @@ namespace hal
     public:
         NetEndpointTable(EndpointTableModel* model, QWidget* parent = nullptr);
 
-        void setContent(u32 netID);
-        void setContent(Net* n);
+        void setNet(u32 netID);
+        void setNet(Net* n);
 
         void removeContent();
 
         void handleContextMenuRequested(const QPoint& pos);
 
-        void debugHandleShortcut(void *sender);
-
     Q_SIGNALS:
-        void update_text(const QString& text);
+        void updateText(const QString& text);
 
     private:
-        EndpointTableModel* mSourceModel;
+        EndpointTableModel* mEndpointModel;
 
     };
 

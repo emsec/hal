@@ -127,6 +127,8 @@ public:
      */
     u32 getGateIDFromIndex(const QModelIndex& index);
 
+    QString typeString();
+
 private:
     u32 mNetId;
     QList<Entry> mEntries;
