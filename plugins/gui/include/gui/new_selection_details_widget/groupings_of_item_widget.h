@@ -37,7 +37,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup utility_widgets-selection_details
      * @brief A TableView to display all groupings that contain a specified Gate, Net or Module.
      *
      * This TableView uses a GroupingsOfItemModel as its model.
@@ -91,17 +91,6 @@ namespace hal
 
     Q_SIGNALS:
         void updateText(const QString& text);
-
-    public Q_SLOTS:
-        /**
-         * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
-         * data model's content if necessary.
-         *
-         * TODO: This is only a temporary slot for debug purposes. Normally the boolean function table is filled via setEntries(...)
-         *
-         * @param sti - The focused SelectionTreeItem
-         */
-        //void handleDetailsFocusChanged(const SelectionTreeItem* sti);
 
     private Q_SLOTS:
         /**

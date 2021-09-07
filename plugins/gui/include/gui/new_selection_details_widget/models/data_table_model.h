@@ -46,12 +46,15 @@ namespace hal {
     {
         Q_OBJECT
     public:
+        /**
+         * Used to store one data entry (i.e. the data in one data field).
+         */
         struct DataEntry
         {
-            QString category;
-            QString key; // 0 or 1 per entry
-            QString dataType;
-            QString value; // "0", "1", "X" or "Z"
+            QString category; /// The data's category
+            QString key; /// The data's key
+            QString dataType; // The data type
+            QString value; // The value of the data 
         };
 
         /**

@@ -41,6 +41,12 @@ namespace hal
     class DataTableWidget;
     class GroupingsOfItemWidget;
 
+    /**
+     * @ingroup utility_widgets-selection_details
+     * @brief The DetailsTabWidget that is responsible for showing Gate details
+     * 
+     * This tab widget contains and manages the tabs that are shown when selecting a Gate in the SelectionDetailsWidet's tree.
+     */
     class GateDetailsTabWidget : public DetailsTabWidget
     {
         Q_OBJECT
@@ -49,7 +55,6 @@ namespace hal
         enum GateTypeCategory {none, lut, ff, latch};
 
     public:
-
         /**
          * The constructor.
          *
@@ -65,29 +70,27 @@ namespace hal
         void setGate(Gate* gate);
 
     private:
-
         /**
          * Shows the tab "(LUT / FF / LATCH)" and their corresponding type widgets depending on which gate type property is provided.
          * 
-         * @param gateTypeProperty - The property.
+         * @param gateTypeProperty - The category type the gate is of (i.e. LUT, latch, FF or Nothing).
          */
         void showMultiTab(GateDetailsTabWidget::GateTypeCategory gateTypeCategory);
 
         /**
          * Hides the "(LUT / FF / LATCH)" tab.
-         *
          */
         void hideMultiTab();
 
         /**
          * Checks wheter the "(LUT / FF / LATCH)" tab must be hidden or shown depending on gate and changes the visibility of the tab depending on the result of the check.
          *
-         * @param gate - The gate to check.
+         * @param gateTypeCategory - The gate category the gate that should be shown is of. Decides which tab is shown.
          */
         void hideOrShorMultiTab(GateTypeCategory gateTypeCategory);
 
         /**
-         * Collects the gate's boolean functions and setups the boolean function tables and the lut truth table
+         * Collects the gate's boolean functions and setups the boolean function tables and the lut truth table.
          */
         void setupBooleanFunctionTables(Gate* gate, GateTypeCategory gateTypeCategory);
 

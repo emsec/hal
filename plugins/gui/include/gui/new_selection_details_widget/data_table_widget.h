@@ -38,9 +38,11 @@ namespace hal
     /**
      * @ingroup utility_widgets-selection_details
      *
-     * @brief 
+     * @brief A widget to display the data of a DataContainer (Module, Gate or Net)
      * 
-     * TODO: docu
+     * A widget to display the data of a DataContainer (Module, Gate or Net) using the DataTableModel. 
+     * The DataContainer to be shown can be configured via setGate/setModule/setNet. Is is currently not
+     * possible to observe data changes since no corresponding signal is implemented in the HAL core.
      */
     class DataTableWidget : public QTableView
     {
@@ -55,27 +57,34 @@ namespace hal
         */
         DataTableWidget(QWidget* parent = nullptr);
 
+        /**
+         * Accesses the undelying data table model used by the QTableView. 
+         * 
+         * @returns the underlying data table model.
+         */
         DataTableModel* getModel();
 
-    //Q_SIGNALS:
-        //void updateText(const QString& text);
-
     public Q_SLOTS:
+
         /**
-         * Handles that the focus in the selection details tree has been changed. Updates the currently displayed
-         * data model's content if necessary.
-         *
-         * TODO: This is only a temporary slot for debug purposes. Normally the boolean function table is filled via setEntries(...)
-         *
-         * @param sti - The focused SelectionTreeItem
+         * Configures the DataTableWidget to show the data of the specified gate.
+         * 
+         * @param gate - The specified gate 
          */
-        //void handleDetailsFocusChanged(const SelectionTreeItem* sti);
-
-
         void setGate(Gate* gate);
 
+        /**
+         * Configures the DataTableWidget to show the data of the specified net.
+         * 
+         * @param net - The specified net 
+         */
         void setNet(Net* net);
 
+        /**
+         * Configures the DataTableWidget to show the data of the specified module.
+         * 
+         * @param module - The specified module 
+         */
         void setModule(Module* module);
 
     private Q_SLOTS:
@@ -102,8 +111,5 @@ namespace hal
         DataTableModel* mDataTableModel;
         DataContainerType mCurrentObjectType;
         u32 mCurrentObjectId;
-
-        const QString mFrameTitle = "Data";
-
     };
 } // namespace hal

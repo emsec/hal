@@ -37,6 +37,12 @@ namespace hal
     class GroupingsOfItemWidget;
     class DataTableWidget;
 
+    /**
+     * @ingroup utility_widgets-selection_details
+     * @brief The DetailsTabWidget that is responsible for showing Module details
+     * 
+     * This tab widget contains and manages the tabs that are shown when selecting a Module in the SelectionDetailsWidet's tree.
+     */
     class NetDetailsTabWidget : public DetailsTabWidget
     {
         Q_OBJECT
