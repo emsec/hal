@@ -30,6 +30,21 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
+        py_netlist_utils.def("get_next_gates", &netlist_utils::get_next_gates, py::arg("gate"), py::arg("get_successors"), py::arg("depth") = 0, py::arg("filter") = nullptr, R"(
+            Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
+            Higher number of depth causes as many steps of recursive calls. 
+            If depth is set to 0 there is no limitation and the loop  continues until no more predecessors/succesors are found.
+            If a filter function is given only gates matching the filter will be added to the result vector.
+            The result will not include the provided gate itself.
+
+            :param hal_py.Gate gate: The initial gate.
+            :param bool get_successors: True to return successors, False for Predecessors.
+            :param int depth: Depth of recursion.
+            :param lambda filter: User-defined filter function.
+            :returns: List of predecessor/successor gates.
+            :rtype: list[hal_py.Gate]
+        )");
+
         py_netlist_utils.def("get_next_sequential_gates",
                              py::overload_cast<const Gate*, bool, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_next_sequential_gates),
                              py::arg("gate"),
@@ -253,6 +268,18 @@ namespace hal
             :param dict[hal_py.GateType,set[str]] output_pins: The output pins through which the gates are allowed to be connected.
             :param lambda filter: A filter that is evaluated on all candidates.
             :returns: A list of gates that form a chain.
+            :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist_utils.def("get_shortest_path", &netlist_utils::get_shortest_path, py::arg("start_gate"), py::arg("end_gate"), py::arg("search_both_directions") = false, R"(
+            Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. 
+            The gate where the search started from will be the first in the result vector, the end gate will be the last. 
+            If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
+
+            :param hal_py.Gate start_gate: The gate to start from.
+            :param hal_py.Gate end_gate: The gate to connect to.
+            :param bool search_both_directions: True to additionally check whether a shorter path from end to start exists, False otherwise.
+            :returns: A list of gates that connect the start with end gate (possibly in reverse order).
             :rtype: list[hal_py.Gate]
         )");
     }

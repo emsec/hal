@@ -1,18 +1,17 @@
 #include "netlist_simulator/simulation.h"
 
+#include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/net.h"
 
 namespace hal
 {
-    SignalValue Simulation::get_net_value(Net* net, u64 time) const
+    BooleanFunction::Value Simulation::get_net_value(const Net* net, u64 time) const
     {
-        auto it = m_events.find(net);
+        BooleanFunction::Value result = BooleanFunction::Value::X;
 
-        SignalValue result = SignalValue::X;
-
-        if (it != m_events.end())
+        if (auto it = m_events.find(net); it != m_events.end())
         {
-            for (auto& e : it->second)
+            for (const Event& e : it->second)
             {
                 if (e.time > time)
                 {
@@ -29,7 +28,7 @@ namespace hal
         m_events[event.affected_net].push_back(event);
     }
 
-    std::unordered_map<Net*, std::vector<Event>> Simulation::get_events() const
+    std::unordered_map<const Net*, std::vector<Event>> Simulation::get_events() const
     {
         return m_events;
     }

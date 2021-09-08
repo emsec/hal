@@ -1,6 +1,8 @@
 #include "netlist_test_utils.h"
 #include "liberty_parser/liberty_parser.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include <experimental/filesystem>
 
 namespace hal {
@@ -54,54 +56,9 @@ namespace hal {
                     gt->get_boolean_functions().find("O_undefined") != gt->get_boolean_functions().end()); // x_function
                 EXPECT_EQ(gt->get_boolean_functions().at("O_undefined"),
                           BooleanFunction::from_string("!I", std::vector<std::string>({"I"})));
-            }
-        TEST_END
-    }
 
-    /**
-     * Testing the creation of a LUT Gate type
-     *
-     * Functions: parse
-     */
-    TEST_F(LibertyParserTest, check_lut) {
-        TEST_START
-            {
-                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/test2.lib";
-                LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
-
-                ASSERT_NE(gl, nullptr);
-
-                // Check that the ascending LUT gate type was created
-                auto gate_types = gl->get_gate_types();
-                ASSERT_EQ(gate_types.size(), 2);
-                auto gt_it_asc = gate_types.find("TEST_LUT_ASC");
-                ASSERT_TRUE(gt_it_asc != gate_types.end());
-                GateType* gt_asc = gt_it_asc->second;
-                EXPECT_EQ(gt_asc->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
-
-                // Check the content of the created gate type
-                EXPECT_EQ(gt_asc->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
-                EXPECT_EQ(gt_asc->get_output_pins(), std::vector<std::string>({"O0", "O1", "O2", "O3"}));
-                ASSERT_TRUE(gt_asc->get_boolean_functions().find("O1") != gt_asc->get_boolean_functions().end());
-                EXPECT_EQ(gt_asc->get_boolean_functions().at("O1"),
-                          BooleanFunction::from_string("I0 ^ I1", std::vector<std::string>({"I0", "I1"})));
-                ASSERT_TRUE(gt_asc->get_boolean_functions().find("O3") != gt_asc->get_boolean_functions().end());
-                EXPECT_EQ(gt_asc->get_boolean_functions().at("O3"),
-                          BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0", "I1"})));
-                EXPECT_EQ(gt_asc->get_pins_of_type(PinType::lut), std::unordered_set<std::string>({"O0", "O2"}));
-                EXPECT_EQ(gt_asc->get_config_data_category(), "test_category");
-                EXPECT_EQ(gt_asc->get_config_data_identifier(), "test_identifier");
-                EXPECT_EQ(gt_asc->is_lut_init_ascending(), true);
-
-                // Check that the descending LUT gate type was created
-                auto gt_it_desc = gate_types.find("TEST_LUT_DESC");
-                ASSERT_TRUE(gt_it_desc != gate_types.end());
-                GateType* gt_desc = gt_it_desc->second;
-                EXPECT_EQ(gt_desc->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
-
-                // Check the content of the created gate type
-                EXPECT_EQ(gt_desc->is_lut_init_ascending(), false);
+                // Components
+                ASSERT_EQ(gt->get_components().size(), 0);
             }
         TEST_END
     }
@@ -132,29 +89,22 @@ namespace hal {
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"CLK", "CE", "D", "R", "S"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"Q", "QN", "O"}));
                 EXPECT_EQ(gt->get_pins_of_type(PinType::clock), std::unordered_set<std::string>({"CLK"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
                 EXPECT_EQ(gt->get_boolean_functions().at("O"),
                           BooleanFunction::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
-                // -- Check the boolean functions of the ff group that are parsed (currently only next_state, clock_on(clock), preset(set) and clear(reset) are parsed )
-                ASSERT_TRUE(gt->get_boolean_functions().find("next_state") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("next_state"),
-                          BooleanFunction::from_string("D", std::vector<std::string>({"D"})));
-                ASSERT_TRUE(gt->get_boolean_functions().find("clock") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("clock"),
-                          BooleanFunction::from_string("CLK", std::vector<std::string>({"CLK"})));
-                ASSERT_TRUE(gt->get_boolean_functions().find("preset") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("preset"),
-                          BooleanFunction::from_string("S", std::vector<std::string>({"S"})));
-                ASSERT_TRUE(gt->get_boolean_functions().find("clear") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("clear"),
-                          BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
-                // -- Check the output pins
-                EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
-                EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
-                // -- Check the set-reset behaviour
-                EXPECT_EQ(gt->get_clear_preset_behavior(),
-                          std::make_pair(GateType::ClearPresetBehavior::L,
-                                         GateType::ClearPresetBehavior::H));
+                
+                // Components
+                ASSERT_EQ(gt->get_components().size(), 1);
+                const FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
+                ASSERT_NE(ff_component, nullptr);
+
+                EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("D"));
+                EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK"));
+                EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("R"));
+                EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("S"));
+                EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H));
             }
         TEST_END
     }
@@ -184,31 +134,22 @@ namespace hal {
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"G", "D", "S", "R"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"Q", "QN", "O"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
                 EXPECT_EQ(gt->get_boolean_functions().at("O"),
                           BooleanFunction::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
-                // -- Check the boolean functions of the latch group that are parsed (currently only enable, data_in, preset(set) and clear(reset) are parsed)
-                ASSERT_TRUE(
-                    gt->get_boolean_functions().find("enable") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("enable"),
-                          BooleanFunction::from_string("G", std::vector<std::string>({"G"})));
-                ASSERT_TRUE(gt->get_boolean_functions().find("data") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("data"),
-                          BooleanFunction::from_string("D", std::vector<std::string>({"D"})));
-                ASSERT_TRUE(
-                    gt->get_boolean_functions().find("preset") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("preset"),
-                          BooleanFunction::from_string("S", std::vector<std::string>({"S"})));
-                ASSERT_TRUE(gt->get_boolean_functions().find("clear") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("clear"),
-                          BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
-                // -- Check the output pins
-                EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
-                EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
-                // -- Check the clear-preset behaviour
-                EXPECT_EQ(gt->get_clear_preset_behavior(),
-                          std::make_pair(GateType::ClearPresetBehavior::N,
-                                         GateType::ClearPresetBehavior::T));
+
+                // Components
+                ASSERT_EQ(gt->get_components().size(), 1);
+                const LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::latch; });
+                ASSERT_NE(latch_component, nullptr);
+
+                EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::from_string("D"));
+                EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::from_string("G"));
+                EXPECT_EQ(latch_component->get_async_reset_function(), BooleanFunction::from_string("R"));
+                EXPECT_EQ(latch_component->get_async_set_function(), BooleanFunction::from_string("S"));
+                EXPECT_EQ(latch_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::N, AsyncSetResetBehavior::T));
             }
         TEST_END
     }
@@ -287,15 +228,6 @@ namespace hal {
                 // For a latch, use an undefined clear_preset_var1 behaviour (not in {L,H,N,T,X})
                 NO_COUT_TEST_BLOCK;
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test4.lib";
-                LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
-
-                EXPECT_EQ(gl, nullptr);
-            }
-            {
-                // Use an undefined direction in the lut group block (not in {ascending, descending})
-                NO_COUT_TEST_BLOCK;
-                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test5.lib";
                 LibertyParser liberty_parser;
                 std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
