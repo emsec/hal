@@ -55,13 +55,6 @@ namespace hal
         static FileManager* get_instance();
 
         /**
-         * Checks if the option 'input-file' was passed via the command line so that the given file can be opened.
-         *
-         * @param args - The program arguments that were passed to hal.
-         */
-        void handleProgramArguments(const ProgramArguments& args);
-
-        /**
          * Get the filename of the currently opened file. When no file is open an empty string is returned.
          *
          * @return The filename.

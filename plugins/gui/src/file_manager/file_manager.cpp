@@ -78,16 +78,6 @@ namespace hal
         return &manager;
     }
 
-    void FileManager::handleProgramArguments(const ProgramArguments& args)
-    {
-        if (args.is_option_set("--input-file"))
-        {
-            auto fileName = std::filesystem::path(args.get_parameter("--input-file"));
-            log_info("gui", "GUI started with file {}.", fileName.string());
-            importFile(QString::fromStdString(fileName.string()));
-        }
-    }
-
     bool FileManager::fileOpen() const
     {
         return mFileOpen;
