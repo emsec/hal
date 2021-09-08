@@ -115,7 +115,6 @@ int main(int argc, char** argv)
 
     tb->opentrace("trace.vcd");
 
-
     tb->wait_for_n_clocks(1);
     tb->wait_for_n_clocks(5);
 
@@ -197,6 +196,11 @@ int main(int argc, char** argv)
     tb->wait_for_n_clocks(100);
 
     printf("simulation done\n");
+
+    if (tb->m_trace)
+    {
+        tb->m_trace->dump(tb->m_tickcount);
+    }
 
     return 0;
 }

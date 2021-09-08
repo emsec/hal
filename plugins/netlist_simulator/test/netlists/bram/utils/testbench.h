@@ -41,8 +41,6 @@
 #ifndef TESTB_H
 #define TESTB_H
 
-#include "utils.h"
-
 #include <fstream>
 #include <iostream>
 #include <stdint.h>
@@ -116,43 +114,15 @@ public:
     {
         m_tickcount++;
 
-        // Make sure we have our evaluations straight before the top
-        // of the clock.  This is necessary since some of the
-        // connection modules may have made changes, for which some
-        // logic depends.  This forces that logic to be recalculated
-        // before the top of the clock.
-        if (m_tickcount == 1)
-        {
-            eval();
-            if (m_trace)
-                m_trace->dump(10 * 0);
-            m_core->clk = 1;
-            eval();
-            if (m_trace)
-                m_trace->dump(10 * 0);
-            m_core->clk = 0;
-            eval();
-            if (m_trace)
-            {
-                m_trace->dump(10 * 0 + 5);
-                m_trace->flush();
-            }
-        }
+        // Toggle the clock
 
-        eval();
-        if (m_trace)
-            m_trace->dump(10 * m_tickcount - 2);
+        // Rising edge
         m_core->clk = 1;
-        eval();
-        if (m_trace)
-            m_trace->dump(10 * m_tickcount);
+        m_core->eval();
+
+        // Falling edge
         m_core->clk = 0;
-        eval();
-        if (m_trace)
-        {
-            m_trace->dump(10 * m_tickcount + 5);
-            m_trace->flush();
-        }
+        m_core->eval();
     }
 
     virtual void wait_for_n_clocks(int ticks)
