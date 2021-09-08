@@ -112,6 +112,7 @@ namespace hal
          * @param[in] addr_group - The name of the read or write address pin group.
          * @param[in] clock_bf - The read or write clock's Boolean function.
          * @param[in] enable_bf - The read or write enable's Boolean function.
+         * @param[in] is_write - Set true for write port, false for read port.
          * @returns The RAMPortComponent.
          */
         static std::unique_ptr<GateTypeComponent> create_ram_port_component(std::unique_ptr<GateTypeComponent> component,
