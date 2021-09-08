@@ -1,4 +1,4 @@
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 
 #include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/gate.h"
@@ -25,7 +25,7 @@ namespace hal
                                                                        "unmarked_global_inout"};
 
     template<>
-    std::vector<std::string> EnumStrings<GateEvent::event>::data = {"created", "removed", "name_changed", "location_changed"};
+    std::vector<std::string> EnumStrings<GateEvent::event>::data = {"created", "removed", "name_changed", "location_changed", "boolean_function_changed"};
 
     template<>
     std::vector<std::string> EnumStrings<NetEvent::event>::data = {"created", "removed", "name_changed", "src_added", "src_removed", "dst_added", "dst_removed"};

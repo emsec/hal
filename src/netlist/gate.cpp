@@ -1,7 +1,7 @@
 #include "hal_core/netlist/gate.h"
 
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -383,6 +383,7 @@ namespace hal
         }
 
         m_functions.emplace(name, func);
+        m_event_handler->notify(GateEvent::event::boolean_function_changed, this);
     }
 
     bool Gate::mark_vcc_gate()

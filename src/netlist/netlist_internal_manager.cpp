@@ -1,7 +1,7 @@
 #include "hal_core/netlist/netlist_internal_manager.h"
 
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/grouping.h"
