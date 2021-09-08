@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('python__bindings_8h.html',''); initRes
 <div class="textblock"><code>#include &quot;<a class="el" href="defines_8h_source.html">hal_core/defines.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="boolean__function_8h_source.html">hal_core/netlist/boolean_function.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="async__set__reset__behavior_8h_source.html">hal_core/netlist/gate_library/enums/async_set_reset_behavior.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate__library_8h_source.html">hal_core/netlist/gate_library/gate_library.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate__library__manager_8h_source.html">hal_core/netlist/gate_library/gate_library_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate__library__parser__manager_8h_source.html">hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h</a>&quot;</code><br />
@@ -139,6 +140,8 @@ Functions</h2></td></tr>
 <tr class="separator:gae67f2029fac093c1e1990401edbcfd0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad09c61daaa174b451b0519d0f54a2382"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gad09c61daaa174b451b0519d0f54a2382">hal::gate_type_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gad09c61daaa174b451b0519d0f54a2382"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga47cca28fcf2bad0acf2c75810014d6ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga47cca28fcf2bad0acf2c75810014d6ef">hal::gate_type_components_init</a> (py::module &amp;m)</td></tr>
+<tr class="separator:ga47cca28fcf2bad0acf2c75810014d6ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaab97b444976a9d5305e3efc20b8bfad6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gaab97b444976a9d5305e3efc20b8bfad6">hal::gate_type_lut_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gaab97b444976a9d5305e3efc20b8bfad6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga23445061a41678f413471f3459e241d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga23445061a41678f413471f3459e241d4">hal::gate_type_sequential_init</a> (py::module &amp;m)</td></tr>
@@ -225,6 +228,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gae67f2029fac093c1e1990401edbcfd0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gae67f2029fac093c1e1990401edbcfd0a">hal::core_utils_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gae67f2029fac093c1e1990401edbcfd0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:ga47cca28fcf2bad0acf2c75810014d6ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga47cca28fcf2bad0acf2c75810014d6ef">hal::gate_type_components_init</a> (py::module &amp;m)</td></tr>
+<tr class="separator:ga47cca28fcf2bad0acf2c75810014d6ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:ga12b7d19dc09194a879bf4d0b8b7641c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga12b7d19dc09194a879bf4d0b8b7641c7">hal::path_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:ga12b7d19dc09194a879bf4d0b8b7641c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
@@ -247,6 +253,8 @@ Functions</h2></td></tr>
 <tr class="separator:gacd94e2b9ac19cb0a128446c71673aabf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad09c61daaa174b451b0519d0f54a2382"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gad09c61daaa174b451b0519d0f54a2382">hal::gate_type_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gad09c61daaa174b451b0519d0f54a2382"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga47cca28fcf2bad0acf2c75810014d6ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga47cca28fcf2bad0acf2c75810014d6ef">hal::gate_type_components_init</a> (py::module &amp;m)</td></tr>
+<tr class="separator:ga47cca28fcf2bad0acf2c75810014d6ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga0b8291fb8af058d824b23bcd16a86821"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821">hal::grouping_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:ga0b8291fb8af058d824b23bcd16a86821"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa664b51c68ac4d2b40e58e0c17aaec22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22">hal::module_init</a> (py::module &amp;m)</td></tr>
@@ -280,7 +288,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_6b3eaace1e5cb9cf9685601c4832ce47.html">python_bindings</a></li><li class="navelem"><a class="el" href="python__bindings_8h.html">python_bindings.h</a></li>
-    <li class="footer">Generated on Wed Sep 8 2021 15:27:43 for HAL by
+    <li class="footer">Generated on Wed Sep 8 2021 16:45:06 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

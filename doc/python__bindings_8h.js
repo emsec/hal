@@ -8,6 +8,7 @@ var python__bindings_8h =
     [ "gate_init", "python__bindings_8h.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81", null ],
     [ "gate_library_init", "python__bindings_8h.html#ga3e97835fd6fda5f038f92cefbcdcf57b", null ],
     [ "gate_library_manager_init", "python__bindings_8h.html#gacd94e2b9ac19cb0a128446c71673aabf", null ],
+    [ "gate_type_components_init", "python__bindings_8h.html#ga47cca28fcf2bad0acf2c75810014d6ef", null ],
     [ "gate_type_init", "python__bindings_8h.html#gad09c61daaa174b451b0519d0f54a2382", null ],
     [ "gate_type_lut_init", "python__bindings_8h.html#gaab97b444976a9d5305e3efc20b8bfad6", null ],
     [ "gate_type_sequential_init", "python__bindings_8h.html#ga23445061a41678f413471f3459e241d4", null ],

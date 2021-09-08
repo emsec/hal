@@ -131,50 +131,50 @@ $(document).ready(function(){initNavTree('gate__library_8h_source.html',''); ini
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        std::filesystem::path <a class="code" href="namespacehal_1_1netlist__utils.html#a40a29d9840accd02a1add80413c37747">get_path</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* create_gate_type(<span class="keyword">const</span> std::string&amp; name, std::set&lt;GateTypeProperty&gt; properties = {<a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa294da9f271b64311147582da631ee638">GateTypeProperty::combinational</a>});</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordtype">bool</span> contains_gate_type(<a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gate_type) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordtype">bool</span> contains_gate_type_by_name(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* get_gate_type_by_name(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; get_gate_types() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordtype">bool</span> mark_vcc_gate_type(<a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gate_type);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; get_vcc_gate_types() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordtype">bool</span> mark_gnd_gate_type(<a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gate_type);</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; get_gnd_gate_types() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keywordtype">void</span> add_include(<span class="keyword">const</span> std::string&amp; inc);</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        std::vector&lt;std::string&gt; get_includes() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        std::string m_name;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        std::filesystem::path m_path;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> m_next_gate_type_id;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        std::vector&lt;std::unique_ptr&lt;GateType&gt;&gt; m_gate_types;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_gate_type_map;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_vcc_gate_types;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_gnd_gate_types;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* create_gate_type(<span class="keyword">const</span> std::string&amp; name, std::set&lt;GateTypeProperty&gt; properties = {<a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa294da9f271b64311147582da631ee638">GateTypeProperty::combinational</a>}, std::unique_ptr&lt;GateTypeComponent&gt; component = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordtype">bool</span> contains_gate_type(<a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gate_type) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordtype">bool</span> contains_gate_type_by_name(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* get_gate_type_by_name(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; get_gate_types(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type.html">GateType</a>*)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordtype">bool</span> mark_vcc_gate_type(<a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gate_type);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; get_vcc_gate_types() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordtype">bool</span> mark_gnd_gate_type(<a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gate_type);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; get_gnd_gate_types() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keywordtype">void</span> add_include(<span class="keyword">const</span> std::string&amp; inc);</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        std::vector&lt;std::string&gt; get_includes() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        std::string m_name;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        std::filesystem::path m_path;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> m_next_gate_type_id;</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        std::vector&lt;std::string&gt; m_includes;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        std::vector&lt;std::unique_ptr&lt;GateType&gt;&gt; m_gate_types;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_gate_type_map;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_vcc_gate_types;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_gnd_gate_types;</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> get_unique_gate_type_id();</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    };</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        std::vector&lt;std::string&gt; m_includes;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> get_unique_gate_type_id();</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    };</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclasshal_1_1_gate_type_html"><div class="ttname"><a href="classhal_1_1_gate_type.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__type_8h_source.html#l00106">gate_type.h:106</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_type_html"><div class="ttname"><a href="classhal_1_1_gate_type.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__type_8h_source.html#l00070">gate_type.h:70</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="agate__type_8h_html"><div class="ttname"><a href="gate__type_8h.html">gate_type.h</a></div></div>
@@ -187,7 +187,7 @@ $(document).ready(function(){initNavTree('gate__library_8h_source.html',''); ini
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="dir_99c48257bccc675a80b3dd868bdc8162.html">gate_library</a></li><li class="navelem"><a class="el" href="gate__library_8h.html">gate_library.h</a></li>
-    <li class="footer">Generated on Wed Sep 8 2021 15:27:41 for HAL by
+    <li class="footer">Generated on Wed Sep 8 2021 16:45:05 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

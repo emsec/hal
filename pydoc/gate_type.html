@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type &mdash; hal_py v3.2.6-480-g0563c1b77 documentation</title>
+  <title>Gate Type &mdash; hal_py v3.2.6-481-gdf8370569 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.6-480-g0563c1b77
+                v3.2.6-481-gdf8370569
               </div>
             
           
@@ -184,28 +184,6 @@
 <dt id="hal_py.GateType.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.GateType.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="hal_py.GateType.ClearPresetBehavior">
-<em class="property">class </em><code class="descname">ClearPresetBehavior</code><a class="headerlink" href="#hal_py.GateType.ClearPresetBehavior" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Defines the behavior of the gate type in case both clear and preset are active at the same time.</div></blockquote>
-<p>Members:</p>
-<blockquote>
-<div><p>L : Set the internal state to ‘0’.</p>
-<p>H : Set the internal state to ‘1’.</p>
-<p>N : Do not change the internal state.</p>
-<p>T : Toggle, i.e., invert the internal state.</p>
-<p>X : Set the internal state to ‘X’.</p>
-<p>undef : Invalid bahavior, used by default.</p>
-</div></blockquote>
-<dl class="attribute">
-<dt id="hal_py.GateType.ClearPresetBehavior.name">
-<code class="descname">name</code><a class="headerlink" href="#hal_py.GateType.ClearPresetBehavior.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: handle) -&gt; str</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="method">
@@ -388,6 +366,20 @@
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="hal_py.GateType.assign_property">
+<code class="descname">assign_property</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>property: hal_py.GateTypeProperty</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.assign_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a new property to the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>property</strong> (<em>hal_py.GateTypeProperty</em>) – The property to assign.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="hal_py.GateType.boolean_functions">
 <code class="descname">boolean_functions</code><a class="headerlink" href="#hal_py.GateType.boolean_functions" title="Permalink to this definition">¶</a></dt>
@@ -403,28 +395,14 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hal_py.GateType.config_data_category">
-<code class="descname">config_data_category</code><a class="headerlink" href="#hal_py.GateType.config_data_category" title="Permalink to this definition">¶</a></dt>
-<dd><p>The category in which to find the configuration data associated with this gate type.</p>
+<dt id="hal_py.GateType.components">
+<code class="descname">components</code><a class="headerlink" href="#hal_py.GateType.components" title="Permalink to this definition">¶</a></dt>
+<dd><p>All components of the gate type as a list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.GateType.config_data_identifier">
-<code class="descname">config_data_identifier</code><a class="headerlink" href="#hal_py.GateType.config_data_identifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>The identifier used to specify the configuration data associated with this gate type.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[hal_py.GateTypeComponent]</td>
 </tr>
 </tbody>
 </table>
@@ -439,6 +417,25 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_boolean_function">
+<code class="descname">get_boolean_function</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>function_name: str</em><span class="sig-paren">)</span> &#x2192; hal::BooleanFunction<a class="headerlink" href="#hal_py.GateType.get_boolean_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Boolean function specified by name.
+If no Boolean function matches the name, an empty function is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>function_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the Boolean function.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The specified Boolean function.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
 </tr>
 </tbody>
 </table>
@@ -461,48 +458,38 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="hal_py.GateType.get_clear_preset_behavior">
-<code class="descname">get_clear_preset_behavior</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Tuple[hal_py.GateType.ClearPresetBehavior, hal_py.GateType.ClearPresetBehavior]<a class="headerlink" href="#hal_py.GateType.get_clear_preset_behavior" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the behavior of the internal state and the negated internal state when both clear and preset are active at the same time.</p>
+<dt id="hal_py.GateType.get_component">
+<code class="descname">get_component</code><span class="sig-paren">(</span><em>self: hal_py.GateType, filter: Callable[[hal::GateTypeComponent], bool] = None</em><span class="sig-paren">)</span> &#x2192; hal::GateTypeComponent<a class="headerlink" href="#hal_py.GateType.get_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a single component matching the filter condition (if provided).
+Returns None if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The values specifying the behavior for the internal and negated internal state.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – The filter applied to all candidate components.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Rytpe:</th><td class="field-body">tuple(hal_py.GateType.ClearPresetBehavior, hal_py.GateType.ClearPresetBehavior)</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The component or None.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.GateTypeComponent or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="hal_py.GateType.get_config_data_category">
-<code class="descname">get_config_data_category</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.GateType.get_config_data_category" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the category in which to find the configuration data associated with this gate type.</p>
+<dt id="hal_py.GateType.get_components">
+<code class="descname">get_components</code><span class="sig-paren">(</span><em>self: hal_py.GateType, filter: Callable[[hal::GateTypeComponent], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal::GateTypeComponent]<a class="headerlink" href="#hal_py.GateType.get_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all components matching the filter condition (if provided) as a list. 
+Returns an empty list if (i) the gate type does not contain any components or (ii) no component matches the filter condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The data category.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – The filter applied to all candidate components, disabled by default.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The components.</td>
 </tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.GateType.get_config_data_identifier">
-<code class="descname">get_config_data_identifier</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.GateType.get_config_data_identifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the identifier used to specify the configuration data associated with this gate type.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The data identifier.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[hal_py.GateTypeComponent]</td>
 </tr>
 </tbody>
 </table>
@@ -801,6 +788,24 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="hal_py.GateType.has_component_of_type">
+<code class="descname">has_component_of_type</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>type: hal::GateTypeComponent::ComponentType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.has_component_of_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the gate type contains a component of the specified type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<em>hal_py.GateTypeComponent.ComponentType</em>) – The component type to check for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the gate type contains a component of the speciifed type, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.GateType.has_property">
 <code class="descname">has_property</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>arg0: hal_py.GateTypeProperty</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.has_property" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether the gate type has the specified property.</p>
@@ -840,36 +845,6 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.GateType.is_lut_init_ascending">
-<code class="descname">is_lut_init_ascending</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.is_lut_init_ascending" title="Permalink to this definition">¶</a></dt>
-<dd><p>For LUT gate types, get the bit-order of the initialization string.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if ascending bit-order, false otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.GateType.lut_init_ascending">
-<code class="descname">lut_init_ascending</code><a class="headerlink" href="#hal_py.GateType.lut_init_ascending" title="Permalink to this definition">¶</a></dt>
-<dd><p>For LUT gate types, defines the bit-order of the initialization string. True if ascending bit-order, false otherwise.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -968,66 +943,6 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[hal_py.GateTypeProperty]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.GateType.set_clear_preset_behavior">
-<code class="descname">set_clear_preset_behavior</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>cp1: hal_py.GateType.ClearPresetBehavior</em>, <em>cp2: hal_py.GateType.ClearPresetBehavior</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.set_clear_preset_behavior" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the behavior that describes the internal state when both clear and preset are active at the same time.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>cp1</strong> (<a class="reference internal" href="#hal_py.GateType.ClearPresetBehavior" title="hal_py.GateType.ClearPresetBehavior"><em>hal_py.GateType.ClearPresetBehavior</em></a>) – The value specifying the behavior for the internal state.</li>
-<li><strong>cp2</strong> (<a class="reference internal" href="#hal_py.GateType.ClearPresetBehavior" title="hal_py.GateType.ClearPresetBehavior"><em>hal_py.GateType.ClearPresetBehavior</em></a>) – The value specifying the behavior for the negated internal state.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.GateType.set_config_data_category">
-<code class="descname">set_config_data_category</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>category: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.set_config_data_category" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the category in which to find the configuration data associated with this gate type.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The data category.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.GateType.set_config_data_identifier">
-<code class="descname">set_config_data_identifier</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>identifier: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.set_config_data_identifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the identifier used to specify the configuration data associated with this gate type.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>identifier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The data identifier.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.GateType.set_lut_init_ascending">
-<code class="descname">set_lut_init_ascending</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>ascending: bool</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.set_lut_init_ascending" title="Permalink to this definition">¶</a></dt>
-<dd><p>For LUT gate types, set the bit-order of the initialization string.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ascending</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – True if ascending bit-order, false otherwise.</td>
 </tr>
 </tbody>
 </table>

@@ -115,11 +115,11 @@ $(document).ready(function(){initNavTree('gate__library__parser__manager_8cpp_so
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = m_extension_to_parser.find(extension); it != m_extension_to_parser.end())</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                    <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;hdl_parser&quot;</span>, <span class="stringliteral">&quot;selected gate library parser &#39;{}&#39;.&quot;</span>, it-&gt;second.first);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                    <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;selected gate library parser &#39;{}&#39;.&quot;</span>, it-&gt;second.first);</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                    <span class="keywordflow">return</span> it-&gt;second.second;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                }</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;hdl_parser&quot;</span>, <span class="stringliteral">&quot;no gate library parser registered for file extension &#39;{}&#39;.&quot;</span>, extension);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;no gate library parser registered for file extension &#39;{}&#39;.&quot;</span>, extension);</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#ac953effd3772be75aa045d1723121dc1">ParserFactory</a>();</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            }</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        }    <span class="comment">// namespace</span></div>
@@ -210,7 +210,7 @@ $(document).ready(function(){initNavTree('gate__library__parser__manager_8cpp_so
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_ff3bf91c1fe6286d1ab9e3da0ed2d8ad.html">gate_library</a></li><li class="navelem"><a class="el" href="dir_af5bf037fd1b511d58f51ce14d34b46e.html">gate_library_parser</a></li><li class="navelem"><a class="el" href="gate__library__parser__manager_8cpp.html">gate_library_parser_manager.cpp</a></li>
-    <li class="footer">Generated on Wed Sep 8 2021 15:27:43 for HAL by
+    <li class="footer">Generated on Wed Sep 8 2021 16:45:06 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

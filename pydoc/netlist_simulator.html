@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Simulator &mdash; hal_py v3.2.6-480-g0563c1b77 documentation</title>
+  <title>Netlist Simulator &mdash; hal_py v3.2.6-481-gdf8370569 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v3.2.6-480-g0563c1b77
+                v3.2.6-481-gdf8370569
               </div>
             
           
@@ -405,14 +405,64 @@ Only elements in the simulation set are considered during simulation.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.initialize">
+<code class="descname">initialize</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the simulation.
+No additional gates or clocks can be added after this point.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.initialize_sequential_gates">
+<code class="descname">initialize_sequential_gates</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#netlist_simulator.NetlistSimulator.initialize_sequential_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">initialize_sequential_gates(self: netlist_simulator.NetlistSimulator, filter: Callable[[hal_py.Gate], bool] = None) -&gt; None</p>
+<blockquote>
+<div><p>Configure the sequential gates matching the (optional) user-defined filter condition with initialization data specified within the netlist.
+Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
+This function can only be called before the simulation has started.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param lambda filter:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The optional filter to be applied before initialization.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">initialize_sequential_gates(self: netlist_simulator.NetlistSimulator, value: hal_py.BooleanFunction.Value, filter: Callable[[hal_py.Gate], bool] = None) -&gt; None</p>
+<blockquote>
+<div><p>Configure the sequential gates matching the (optional) user-defined filter condition with the specified value.
+Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
+This function can only be called before the simulation has started.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.BooleanFunction.Value value:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The value to initialize the selected gates with.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param lambda filter:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The optional filter to be applied before initialization.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
 <dt id="netlist_simulator.NetlistSimulator.load_initial_values">
-<code class="descname">load_initial_values</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>value: hal::SignalValue</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.load_initial_values" title="Permalink to this definition">¶</a></dt>
+<code class="descname">load_initial_values</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>value: hal_py.BooleanFunction.Value</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.load_initial_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the specified initial value into the current state of all sequential elements.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference internal" href="#netlist_simulator.SignalValue" title="netlist_simulator.SignalValue"><em>netlist_simulator.SignalValue</em></a>) – The initial value to load.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value"><em>hal_py.BooleanFunction.Value</em></a>) – The initial value to load.</td>
 </tr>
 </tbody>
 </table>
@@ -434,7 +484,7 @@ Does not remove gates/nets from the simulation set.</p>
 
 <dl class="method">
 <dt id="netlist_simulator.NetlistSimulator.set_input">
-<code class="descname">set_input</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>net: hal_py.Net</em>, <em>value: hal::SignalValue</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.set_input" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_input</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>net: hal_py.Net</em>, <em>value: hal_py.BooleanFunction.Value</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.set_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the signal for a specific wire to control input signals between simulation cycles.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -442,7 +492,7 @@ Does not remove gates/nets from the simulation set.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net to set a signal value for.</li>
-<li><strong>value</strong> (<a class="reference internal" href="#netlist_simulator.SignalValue" title="netlist_simulator.SignalValue"><em>netlist_simulator.SignalValue</em></a>) – The value to set.</li>
+<li><strong>value</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value"><em>hal_py.BooleanFunction.Value</em></a>) – The value to set.</li>
 </ul>
 </td>
 </tr>
@@ -485,6 +535,7 @@ Does not influence gates/nets added to the simulation set.</p>
 <dt id="netlist_simulator.NetlistSimulator.simulate">
 <code class="descname">simulate</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>picoseconds: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.simulate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simulate for a specific period, advancing the internal state.
+Automatically initializes the simulation if ‘initialize’ has not yet been called.
 Use p set_input to control specific signals.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -536,7 +587,7 @@ Use p set_input to control specific signals.</p>
 
 <dl class="method">
 <dt id="netlist_simulator.Simulation.get_net_value">
-<code class="descname">get_net_value</code><span class="sig-paren">(</span><em>self: netlist_simulator.Simulation</em>, <em>net: hal_py.Net</em>, <em>time: int</em><span class="sig-paren">)</span> &#x2192; hal::SignalValue<a class="headerlink" href="#netlist_simulator.Simulation.get_net_value" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_net_value</code><span class="sig-paren">(</span><em>self: netlist_simulator.Simulation</em>, <em>net: hal_py.Net</em>, <em>time: int</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction.Value<a class="headerlink" href="#netlist_simulator.Simulation.get_net_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the signal value of a specific net at a specific point in time specified in picoseconds.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -551,30 +602,11 @@ Use p set_input to control specific signals.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The net’s signal value.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#netlist_simulator.SignalValue" title="netlist_simulator.SignalValue">netlist_simulator.SignalValue</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value">hal_py.BooleanFunction.Value</a></p>
 </td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="netlist_simulator.SignalValue">
-<em class="property">class </em><code class="descclassname">netlist_simulator.</code><code class="descname">SignalValue</code><a class="headerlink" href="#netlist_simulator.SignalValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represents the logic value that a signal can take.</p>
-<p>Members:</p>
-<blockquote>
-<div><p>ZERO : Represents a logical 0.</p>
-<p>ONE : Represents a logical 1.</p>
-<p>X : Represents an undefined value.</p>
-<p>Z : Represents high impedance (currently not supported by the simulator).</p>
-</div></blockquote>
-<dl class="attribute">
-<dt id="netlist_simulator.SignalValue.name">
-<code class="descname">name</code><a class="headerlink" href="#netlist_simulator.SignalValue.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: handle) -&gt; str</p>
 </dd></dl>
 
 </dd></dl>
@@ -656,7 +688,7 @@ Use p set_input to control specific signals.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#netlist_simulator.SignalValue" title="netlist_simulator.SignalValue">netlist_simulator.SignalValue</a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value">hal_py.BooleanFunction.Value</a></td>
 </tr>
 </tbody>
 </table>

@@ -61,6 +61,15 @@ var hierarchy =
     [ "hal::GateLibraryWriter", "classhal_1_1_gate_library_writer.html", null ],
     [ "hal::GateSelectEntry", "classhal_1_1_gate_select_entry.html", null ],
     [ "hal::GateType", "classhal_1_1_gate_type.html", null ],
+    [ "hal::GateTypeComponent", "classhal_1_1_gate_type_component.html", [
+      [ "hal::FFComponent", "classhal_1_1_f_f_component.html", null ],
+      [ "hal::InitComponent", "classhal_1_1_init_component.html", null ],
+      [ "hal::LatchComponent", "classhal_1_1_latch_component.html", null ],
+      [ "hal::LUTComponent", "classhal_1_1_l_u_t_component.html", null ],
+      [ "hal::MACComponent", "classhal_1_1_m_a_c_component.html", null ],
+      [ "hal::RAMComponent", "classhal_1_1_r_a_m_component.html", null ],
+      [ "hal::RAMPortComponent", "classhal_1_1_r_a_m_port_component.html", null ]
+    ] ],
     [ "hal::GraphContextSubscriber", "classhal_1_1_graph_context_subscriber.html", [
       [ "hal::GraphWidget", "classhal_1_1_graph_widget.html", null ]
     ] ],

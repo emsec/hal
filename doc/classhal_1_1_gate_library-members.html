@@ -92,10 +92,10 @@ $(document).ready(function(){initNavTree('classhal_1_1_gate_library.html',''); i
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#a8a704f948603b277844a8f8bb20fa6a9">add_include</a>(const std::string &amp;inc)</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#a87ff461bac5e8b03736eb909fe9eee5a">contains_gate_type</a>(GateType *gate_type) const</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#a03084dff2c24ba07925c4487547fc730">contains_gate_type_by_name</a>(const std::string &amp;name) const</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#ae695647b4859b38f36a71ad3d01b0132">create_gate_type</a>(const std::string &amp;name, std::set&lt; GateTypeProperty &gt; properties={GateTypeProperty::combinational})</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#aa02f23d1517dad7a2d24b2c089cea84a">create_gate_type</a>(const std::string &amp;name, std::set&lt; GateTypeProperty &gt; properties={GateTypeProperty::combinational}, std::unique_ptr&lt; GateTypeComponent &gt; component=nullptr)</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#a5ad57ba019b35e2ceb386c3b0be1e0b1">GateLibrary</a>(const std::filesystem::path &amp;path, const std::string &amp;name)</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#a515857dc13b6592f77f192009d24a708">get_gate_type_by_name</a>(const std::string &amp;name) const</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#ae1d158602d866d6b198213d2407c6313">get_gate_types</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#a4af85f352307e0cead8336be95cf2fea">get_gate_types</a>(const std::function&lt; bool(const GateType *)&gt; &amp;filter=nullptr) const</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#abc606af53f4d9c1fc42e029851410e1e">get_gnd_gate_types</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#a955208e223376a19c808f83d486311d2">get_includes</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classhal_1_1_gate_library.html#aef64b8371779e27c778227552deb3a6d">get_name</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_gate_library.html">hal::GateLibrary</a></td><td class="entry"></td></tr>
@@ -109,7 +109,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_gate_library.html',''); i
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Sep 8 2021 15:27:44 for HAL by
+    <li class="footer">Generated on Wed Sep 8 2021 16:45:07 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
