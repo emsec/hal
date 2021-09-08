@@ -457,7 +457,7 @@ namespace hal
 
     std::unique_ptr<GateTypeComponent> HGLParser::parse_ram_config(const rapidjson::Value& ram_config, const std::string& gt_name, const std::vector<std::string>& input_pins)
     {
-        std::unique_ptr<GateTypeComponent> init_component = nullptr;
+        std::unique_ptr<GateTypeComponent> sub_component = nullptr;
         if (ram_config.HasMember("data_category") && ram_config["data_category"].IsString())
         {
             std::vector<std::string> init_identifiers;
@@ -474,7 +474,7 @@ namespace hal
                 log_error("hgl_parser", "invalid or missing 'data_identifiers' specification for RAM gate type '{}'.", gt_name);
                 return nullptr;
             }
-            init_component = GateTypeComponent::create_init_component(ram_config["data_category"].GetString(), init_identifiers);
+            sub_component = GateTypeComponent::create_init_component(ram_config["data_category"].GetString(), init_identifiers);
         }
         else if (ram_config.HasMember("data_identifiers") && ram_config["data_identifiers"].IsArray())
         {
@@ -494,7 +494,6 @@ namespace hal
             return nullptr;
         }
 
-        std::unique_ptr<GateTypeComponent> sub_component = nullptr;
         for (const auto& ram_port : ram_config["ram_ports"].GetArray())
         {
             if (!ram_port.HasMember("data_group") || !ram_port["data_group"].IsString())

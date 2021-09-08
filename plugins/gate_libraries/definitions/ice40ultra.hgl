@@ -1995,7 +1995,7 @@
             "address_group": "RADDR",
             "clocked_on": "RCLK & RCLKE",
             "enabled_on": "RE",
-            "is_write": true
+            "is_write": false
           }
         ]
       }
