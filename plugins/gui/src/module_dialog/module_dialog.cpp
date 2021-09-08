@@ -54,12 +54,10 @@ namespace hal {
 
         layout->addWidget(mTabWidget, 2, 0, 1, 2);
 
-        mModuleSelectModel = new ModuleSelectModel(false);
-        mModuleTableProxyModel = new ModuleSelectProxy();
+        mModuleTableProxyModel = static_cast<ModuleSelectProxy*>(mTableView->model());
         mModuleTableProxyModel->setFilterKeyColumn(-1);
         mModuleTableProxyModel->setDynamicSortFilter(true);
-        mModuleTableProxyModel->setSourceModel(mModuleSelectModel);
-        mTableView->setModel(mModuleTableProxyModel);
+        mModuleSelectModel = static_cast<ModuleSelectModel*>(mModuleTreeProxyModel->sourceModel());
 
         mModuleTreeProxyModel = new ModuleProxyModel(this);
         mModuleTreeProxyModel->setFilterKeyColumn(-1);

@@ -1,5 +1,5 @@
 #include "netlist_test_utils.h"
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 
 namespace hal {
     using test_utils::MIN_GATE_ID;

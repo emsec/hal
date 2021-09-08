@@ -72,7 +72,7 @@ namespace hal
          */
         std::vector<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
-        // TODO tests
+        // TODO add tests for functions below
 
         /**
          * Get the name of the read or write data pin group.
