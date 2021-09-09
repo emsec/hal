@@ -66,7 +66,7 @@ namespace hal {
         return groupingFilePath.filename().string();
     }
 
-    void GroupingSerializer::deserialize(Netlist* netlist, const std::filesystem::__cxx11::path &loaddir)
+    void GroupingSerializer::deserialize(Netlist* netlist, const std::filesystem::path &loaddir)
     {        
         std::string relname = ProjectManager::instance()->get_filename(m_name);
         if (relname.empty()) return;
