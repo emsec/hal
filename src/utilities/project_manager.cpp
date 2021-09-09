@@ -11,7 +11,6 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/netlist.h"
-#include "hal_core/netlist/netlist_factory.h"
 
 const int SERIALIZATION_FORMAT_VERSION = 10;
 
@@ -157,7 +156,8 @@ namespace hal {
             m_netlist_file = doc["netlist"].GetString();
             std::filesystem::path netlistPath(m_proj_dir);
             netlistPath.append(m_netlist_file);
-            m_netlist_load = netlist_factory::load_netlist(netlistPath.string());
+            auto nl = netlist_factory::load_netlist(netlistPath.string());
+            m_netlist_load = std::move(nl);
             if (!m_netlist_load)
             {
                 log_error("project_manager", "cannot load netlist {}.", netlistPath.string());
