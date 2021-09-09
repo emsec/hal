@@ -270,29 +270,32 @@ namespace hal
 
     void NetlistSimulator::compute_input_nets()
     {
-        m_input_nets.clear();
-        for (auto gate : m_simulation_set)
+        std::set<const Net*> input_nets_set;
+        for (const Gate* gate : m_simulation_set)
         {
-            for (auto net : gate->get_fan_in_nets())
+            for (const Net* net : gate->get_fan_in_nets())
             {
                 // "input net" is either a global input...
                 if (net->is_global_input_net())
                 {
-                    m_input_nets.push_back(net);
+                    input_nets_set.insert(net);
                 }
                 else    // ... or has a source outside of the simulation set
                 {
-                    for (auto src : net->get_sources())
+                    for (const Endpoint* src : net->get_sources())
                     {
                         if (m_simulation_set.find(src->get_gate()) == m_simulation_set.end())
                         {
-                            m_input_nets.push_back(net);
+                            input_nets_set.insert(net);
                             break;
                         }
                     }
                 }
             }
         }
+
+        m_input_nets.clear();
+        m_input_nets.insert(m_input_nets.end(), input_nets_set.begin(), input_nets_set.end());
     }
 
     void NetlistSimulator::compute_output_nets()
