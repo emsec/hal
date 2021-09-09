@@ -1054,7 +1054,7 @@ namespace hal
             itxLast = itNext;
         }
 
-        int iy0 = mNodeBoundingBox.y();
+        int iy0 = mNodeBoundingBox.y()*2;
         float y0 = mCoordY[iy0].preLanes() * sLaneSpacing + sVRoadPadding;
         mCoordY[iy0].setOffset(y0);
         mYValues.append(mCoordY.value(iy0).lanePosition(0));
