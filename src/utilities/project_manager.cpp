@@ -156,8 +156,7 @@ namespace hal {
             m_netlist_file = doc["netlist"].GetString();
             std::filesystem::path netlistPath(m_proj_dir);
             netlistPath.append(m_netlist_file);
-            auto nl = netlist_factory::load_netlist(netlistPath.string());
-            m_netlist_load = std::move(nl);
+            m_netlist_load = netlist_factory::load_netlist(netlistPath);
             if (!m_netlist_load)
             {
                 log_error("project_manager", "cannot load netlist {}.", netlistPath.string());
