@@ -936,10 +936,6 @@ namespace hal
 
         u32 input_nets_amount = 0;
 
-        // clk has to be counted twice?
-        if (clk != nullptr)
-            input_nets_amount++;
-
         if (clk != nullptr)
             input_nets_amount++;
 
@@ -991,12 +987,6 @@ namespace hal
             for (const auto& input_net : sim->get_input_nets())
             {
                 sim->set_input(input_net, BooleanFunction::Value::ZERO);
-
-                // TODO @speith, warum ist clk zweimal drin?
-                if (input_net->get_name() == "clk")
-                {
-                    std::cout << "clk" << std::endl;
-                }
             }
 
             uint16_t data_write = 0xffff;
@@ -1018,7 +1008,6 @@ namespace hal
                 sim->set_input(din_net, BooleanFunction::Value::ONE);
             }
 
-            //TODO @speith: check units? *clock_period correct?
             sim->simulate(1 * clock_period);    // tb->wait_for_n_clocks(1);
 
             sim->set_input(write_en, BooleanFunction::Value::ONE);    // set_write_en(0x1);
@@ -1026,7 +1015,7 @@ namespace hal
             sim->simulate(1 * clock_period);    // tb->wait_for_n_clocks(1);
 
             sim->set_input(write_en, BooleanFunction::Value::ZERO);    // set_write_en(0x0);
-            sim->simulate(1 * clock_period);                        // tb->wait_for_n_clocks(1);
+            sim->simulate(1 * clock_period);                           // tb->wait_for_n_clocks(1);
 
             // // read data without rclke
             sim->set_input(read_en, BooleanFunction::Value::ZERO);    // set_read_en(0x1);
@@ -1091,7 +1080,7 @@ namespace hal
             }
             sim->set_input(rclke, BooleanFunction::Value::ONE);    // set_rclke(0x1);
 
-            sim->simulate(2 * clock_period);                     // tb->wait_for_n_clocks(2);
+            sim->simulate(2 * clock_period);                        // tb->wait_for_n_clocks(2);
             sim->set_input(rclke, BooleanFunction::Value::ZERO);    // set_rclke(0x0);
 
             // data_read = read_data();
@@ -1115,7 +1104,7 @@ namespace hal
 
             sim->set_input(rclke, BooleanFunction::Value::ONE);    //set_rclke(0x1);
 
-            sim->simulate(2 * clock_period);                     // tb->wait_for_n_clocks(2);
+            sim->simulate(2 * clock_period);                        // tb->wait_for_n_clocks(2);
             sim->set_input(rclke, BooleanFunction::Value::ZERO);    // set_rclke(0x0);
 
             //data_read = read_data();
