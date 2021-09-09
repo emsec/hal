@@ -28,7 +28,7 @@ namespace hal
             }
 
             // before replacing input pins with their connected net id, check if the function depends on other output pins
-            auto output_pins = gate->get_output_pins();
+            auto output_pins = gate->get_type()->get_output_pins();
             while (true)
             {
                 auto vars = bf.get_variables();
@@ -47,7 +47,7 @@ namespace hal
             }
 
             // replace input pins with their connected net id
-            for (auto const& input_pin : gate->get_input_pins())
+            for (auto const& input_pin : gate->get_type()->get_input_pins())
             {
                 const auto& input_net = gate->get_fan_in_net(input_pin);
                 if (!input_net)
@@ -186,7 +186,7 @@ namespace hal
 
             // TODO should this also take internal pins into account?
             // before replacing input pins with their connected net id, check if the function depends on other output pins
-            auto output_pins = gate->get_output_pins();
+            std::vector<std::string> output_pins = gate->get_type()->get_output_pins();
             while (true)
             {
                 auto vars = bf.get_variables();
