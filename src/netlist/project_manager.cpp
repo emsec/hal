@@ -1,4 +1,4 @@
-#include "hal_core/utilities/project_manager.h"
+#include "hal_core/netlist/project_manager.h"
 
 #include <filesystem>
 #include <rapidjson/filereadstream.h>
@@ -6,7 +6,7 @@
 #include <fstream>
 
 #include "hal_core/utilities/log.h"
-#include "hal_core/utilities/project_serializer.h"
+#include "hal_core/netlist/project_serializer.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/netlist/gate_library/gate_library.h"

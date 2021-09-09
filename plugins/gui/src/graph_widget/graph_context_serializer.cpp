@@ -1,5 +1,5 @@
 #include "gui/graph_widget/graph_context_serializer.h"
-#include "hal_core/utilities/project_manager.h"
+#include "hal_core/netlist/project_manager.h"
 #include "gui/gui_globals.h"
 #include <QString>
 

@@ -1,6 +1,6 @@
 #include "hal_core/netlist/persistent/grouping_serializer.h"
 #include "hal_core/utilities/project_directory.h"
-#include "hal_core/utilities/project_manager.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/json_write_document.h"
 #include <filesystem>
 #include <fstream>

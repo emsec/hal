@@ -1,5 +1,5 @@
 #include "gui/welcome_screen/recent_files_widget.h"
-#include "hal_core/utilities/project_manager.h"
+#include "hal_core/netlist/project_manager.h"
 
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_globals.h"

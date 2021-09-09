@@ -27,7 +27,7 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/netlist/event_system/event_log.h"
-#include "hal_core/utilities/project_manager.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
 
 #include <QApplication>

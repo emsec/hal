@@ -1,6 +1,6 @@
 #include "gui/file_manager/project_dir_dialog.h"
 #include "gui/file_manager/file_manager.h"
-#include "hal_core/utilities/project_manager.h"
+#include "hal_core/netlist/project_manager.h"
 #include <QDebug>
 #include <QDialogButtonBox>
 #include <QEvent>

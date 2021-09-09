@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "hal_core/utilities/project_serializer.h"
+#include "hal_core/netlist/project_serializer.h"
 
 namespace hal {
     class GroupingTableModel;

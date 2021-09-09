@@ -29,7 +29,7 @@
 #include "gui/action/action.h"
 #include "gui/python/python_context_subscriber.h"
 
-#include "hal_core/utilities/project_serializer.h"
+#include "hal_core/netlist/project_serializer.h"
 #include "hal_core/utilities/json_write_document.h"
 
 #include <QEvent>

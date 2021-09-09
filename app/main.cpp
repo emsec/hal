@@ -12,7 +12,7 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/program_arguments.h"
 #include "hal_core/utilities/program_options.h"
-#include "hal_core/utilities/project_manager.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/utils.h"
 #include "hal_version.h"
 

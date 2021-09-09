@@ -30,7 +30,7 @@
 #include <fstream>
 #include <QDesktopServices>
 #include "gui/file_manager/file_manager.h"
-#include "hal_core/utilities/project_manager.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
 #include <QDebug>
 #include <QDir>

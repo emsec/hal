@@ -1,5 +1,5 @@
 #include "gui/grouping/grouping_color_serializer.h"
-#include "hal_core/utilities/project_manager.h"
+#include "hal_core/netlist/project_manager.h"
 
 #include "gui/gui_globals.h"
 #include "gui/grouping/grouping_manager_widget.h"

@@ -6,7 +6,7 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "hal_core/utilities/log.h"
-#include "hal_core/utilities/project_manager.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
 
 #include "gui/settings/settings_items/settings_item_checkbox.h"
