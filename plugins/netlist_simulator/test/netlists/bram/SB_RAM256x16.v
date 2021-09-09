@@ -221,7 +221,7 @@ always @(posedge WCLK_g) begin
  		$display("WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK,"WADDR: %d   RADDR:%d\n",WADDR, RADDR); 
  		$fdisplay(SB_RAM256X16_RDATA_log_file,"Warning: Write-Read collision detected, Data read value is XXXX\n");
 		$fdisplay(SB_RAM256X16_RDATA_log_file,"WCLK Time: %.3f   RCLK Time:%.3f  ",time_WCLK, time_RCLK, "WADDR: %d   RADDR:%d\n",WADDR, RADDR); 	
- 		-> Collision_e;
+// 		-> Collision_e;
 	end
 end
 
@@ -234,7 +234,7 @@ always @ (posedge WCLK_g)
 begin
 	if	(WE)
 	begin
-		-> Write_e;
+//		-> Write_e;
 		for	(i=0;i<=BUS_WIDTH-1; i=i+1)
 		begin
 			if	(MASK[i] !=1)
@@ -259,7 +259,7 @@ always @ (posedge RCLK_g)
 begin
 	if	(RE)
 	begin
-		-> Read_e;
+//		-> Read_e;
 		if	(Time_Collision_Detected & Address_Collision_Detected) 
 			RDATA <= 16'hXXXX;
 		else

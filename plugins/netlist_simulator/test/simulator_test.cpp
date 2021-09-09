@@ -1104,11 +1104,12 @@ namespace hal
             sim->set_input(rclke, BooleanFunction::Value::ONE);    // rclke      <= '1';
 
             sim->simulate(2 * clock_period);                     // WAIT FOR 20 NS; 
-            //sim->set_input(rclke, BooleanFunction::Value::ZERO);    // rclke      <= '0';
+            sim->set_input(rclke, BooleanFunction::Value::ZERO);    // rclke      <= '0';
 
             //data_read = read_data();
 
             sim->simulate(100 * clock_period);    // WAIT FOR 100*10 NS;
+            sim->simulate(1 * clock_period / 2);    // WAIT FOR 100*10 NS;
         }
 
         // Test if maps are equal
