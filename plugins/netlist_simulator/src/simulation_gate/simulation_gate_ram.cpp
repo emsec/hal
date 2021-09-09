@@ -126,19 +126,17 @@ namespace hal
 
     void NetlistSimulator::SimulationGateRAM::initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value)
     {
-        UNUSED(new_events);
-
         GateType* gate_type = m_gate->get_type();
+
+        const RAMComponent* ram_component = gate_type->get_component_as<RAMComponent>([](const GateTypeComponent* c) { return RAMComponent::is_class_of(c); });
+        if (ram_component == nullptr)
+        {
+            log_error("netlist_simulator", "cannot find RAM properties for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+            return;
+        }
 
         if (from_netlist)
         {
-            const RAMComponent* ram_component = gate_type->get_component_as<RAMComponent>([](const GateTypeComponent* c) { return RAMComponent::is_class_of(c); });
-            if (ram_component == nullptr)
-            {
-                log_error("netlist_simulator", "cannot find RAM properties for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
-                return;
-            }
-
             const InitComponent* init_component = gate_type->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
             if (init_component == nullptr)
             {
@@ -182,11 +180,31 @@ namespace hal
                     break;
                 case BooleanFunction::Value::X:
                 case BooleanFunction::Value::Z:
-                    break;
                     // TODO handle
+                    break;
             }
-            // TODO write this shit
-            // INIT with fixed value
+
+            assert(ram_component->get_bit_size() % 64 == 0);
+            u32 num_words = ram_component->get_bit_size() / 64;
+
+            for (u32 i = 0; i < num_words; i++)
+            {
+                m_data.push_back(init_val);
+            }
+        }
+
+        // generate initial output events (all zero)
+        for (const Port& port : m_ports)
+        {
+            if (!port.is_write)
+            {
+                u32 data_size = port.data_pins.size();
+                for (u32 j = 0; j < data_size; j++)
+                {
+                    const Net* out_net  = m_gate->get_fan_out_net(port.data_pins.at(j));
+                    new_events[out_net] = BooleanFunction::Value::ZERO;
+                }
+            }
         }
     }
 
