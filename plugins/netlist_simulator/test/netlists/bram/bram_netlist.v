@@ -56,11 +56,6 @@ output dout_13 ;
 output dout_14 ;
 output dout_15 ;
 
-wire rclk;
-wire wclk;
-
-assign rclk = clk;
-assign wclk = clk;
 
 
 
@@ -83,11 +78,11 @@ SB_RAM256x16 #(
     .INIT_F(256'hf820f814f80af800f7f9f7f2f7eef7eaf7e8f7e8f7e9f7ecf7f0f7f6f7fef806)
 ) ram256x16_inst (
     .WE(write_en),
-    .WCLK(wclk),
+    .WCLK(clk),
     .WCLKE(wclke),
     .RE(read_en),
     .RCLKE(rclke),
-    .RCLK(rclk),
+    .RCLK(clk),
     .MASK(),
     .WADDR({waddr_7 , waddr_6 , waddr_5 , waddr_4 , waddr_3 , waddr_2 , waddr_1 , waddr_0 }),
     .RADDR({raddr_7 ,raddr_6 ,raddr_5 ,raddr_4 ,raddr_3 ,raddr_2 ,raddr_1 ,raddr_0 }),

@@ -888,8 +888,8 @@ namespace hal
 
         auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
 
-        u32 clock_period = 10;
-        sim->add_clock_period(clk, clock_period, false);
+        u32 clock_period = 10000;
+        sim->add_clock_period(clk, clock_period);
 
         std::vector<Net*> din;
         din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_0"; }).begin()));
