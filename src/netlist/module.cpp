@@ -549,6 +549,9 @@ namespace hal
 
         m_named_input_nets.insert(input_net);
         m_input_port_names.insert(port_name);
+        auto lastName = m_input_net_to_port_name.find(input_net);
+        if (lastName != m_input_net_to_port_name.end())
+            m_input_port_names.erase(lastName->second);
         m_input_net_to_port_name[input_net] = port_name;
 
         m_event_handler->notify(ModuleEvent::event::input_port_name_changed, this, input_net->get_id());
@@ -588,6 +591,9 @@ namespace hal
 
         m_named_output_nets.insert(output_net);
         m_output_port_names.insert(port_name);
+        auto lastName = m_output_net_to_port_name.find(output_net);
+        if (lastName != m_output_net_to_port_name.end())
+            m_output_port_names.erase(lastName->second);
         m_output_net_to_port_name[output_net] = port_name;
 
         m_event_handler->notify(ModuleEvent::event::output_port_name_changed, this, output_net->get_id());
