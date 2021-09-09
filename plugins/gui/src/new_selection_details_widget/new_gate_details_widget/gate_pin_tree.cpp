@@ -138,13 +138,6 @@ namespace hal
                 QApplication::clipboard()->setText(pythonCommandNetIds);
             });
 
-        //name can only be extracted as python code if its a net
-//        menu.addAction(QIcon(":/icons/python"), "Extract net(s) name(s) as python code",
-//            [pythonCommandName]()
-//            {
-//                QApplication::clipboard()->setText(pythonCommandName);
-//            });
-
         // 2.) DIRECTION
         QString pythonCommandDirection = PyCodeProvider::pyCodeGateTypePinDirection(mPinModel->getCurrentGateID(), clickedPinItem->getData(PinTreeModel::sNameColumn).toString());
         menu.addAction(QIcon(":/icons/python"), "Extract pin direction as python code",

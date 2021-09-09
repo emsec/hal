@@ -46,7 +46,6 @@ namespace hal
         //metatype declaration at the end of file
         enum class itemType {module = 0, gate = 1, net = 2};
 
-
         /**
          * The constructor.
          *
@@ -119,24 +118,21 @@ namespace hal
          */
         int getRepresentedIdOfItem(TreeItem* item) const;
 
-        // HANDLER METHODS TO HANDLE EVENTS
+        /** @name Event Handler Functions
+         */
+        ///@{
         void gateNameChanged(Gate* g);
         void gateRemoved(Gate* g);
         void netNameChanged(Net* n);
         void netRemoved(Net* n);
         void moduleNameChanged(Module* m);
         void moduleTypeChanged(Module* m);
-        //void moduleRemoved(Module* m);// -> mandatory events to implement: submodule_added. submodule_removed
         void moduleSubmoduleRemoved(Module* m, int removed_module);
-        //void moduleParentChanged(Module* m); //is not needed, submod_removed and submod_added are sufficient
-
-//        //optional
-//        void gateCreated(Gate* g); // = assigned to top_module, no need to catch this
-//        void netCreated(Net* n); // this could be hart...
-//        void moduleCreated(Module* m);
+        //optional
         void moduleGateAssigned(Module* m, int assigned_gate); //const u32
         void moduleGateRemoved(Module* m, int removed_gate); //const u32 //same as assign_gate(top)
-        void moduleSubmoduleAdded(Module* m, int added_module);
+        void moduleSubmoduleAdded(Module* m, int added_module); 
+        ///@}
 
 
         //Column identifier
@@ -161,15 +157,15 @@ namespace hal
         void numberOfSubmodulesChanged(const int newNumber);
 
     private:
-        //TreeItem* mRootItem;
         //Note: make these somehow static (does not work with pointer...?)
         QIcon mModuleIcon;
         QIcon mGateIcon;
         QIcon mNetIcon;
-        //must(?) be stored for handler methods
+
         bool mGatesDisplayed;
         bool mNetsDisplayed;
         bool mDisplaySubmodRecursive;
+
         //boolean needed for a special case when displaying a module that is called with setModule
         bool mCurrentlyDisplayingModule;
         int mModId;

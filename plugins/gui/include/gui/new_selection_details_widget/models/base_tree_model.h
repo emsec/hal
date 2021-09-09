@@ -39,7 +39,11 @@ namespace hal
     {
         Q_OBJECT
     public:
-        //make this private perhaps, depends on implementation
+        /**
+         * The constructor.
+         *
+         * @param parent - The model's parent.
+         */
         BaseTreeModel(QObject* parent = nullptr);
 
         /** @name Overwritten model functions

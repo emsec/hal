@@ -32,25 +32,54 @@ namespace hal
     class Module;
     class NetlistElementsTreeModel;
 
+    /**
+     * @brief A widget to display the specific (direct submodules, gates) items of a given module.
+     */
     class ModuleElementsTree : public SizeAdjustableTreeView
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param parent - The widget's parent.
+         */
         ModuleElementsTree(QWidget* parent = nullptr);
 
+        /**
+         * Sets the module and updates its model to display the module's
+         * direct submodules and gates.
+         *
+         * @param moduleID - The module id.
+         */
         void setModule(u32 moduleID);
-        void setModule(Module* m);
-
-        void removeContent();
-
-        void handleContextMenuRequested(const QPoint &pos);
-
-    Q_SIGNALS:
 
         /**
-         * @brief updateText
-         * @param newHeadline
+         * Sets the module and updates its model to display the module's
+         * direct submodules and gates.
+         *
+         * @param moduleID - The module.
+         */
+        void setModule(Module* m);
+
+        /**
+         * Resets the model and shows an empty view as a result.
+         */
+        void removeContent();
+
+        /** @name Event Handler Functions
+         */
+        ///@{
+        void handleContextMenuRequested(const QPoint &pos);
+        ///@}
+
+    Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted when the number of direct submodules changes.
+         * (Primarily used to update 'the' section header in the details widget)
+         *
+         * @param newHeadline - The new headline.
          */
         void updateText(const QString& newHeadline);
 

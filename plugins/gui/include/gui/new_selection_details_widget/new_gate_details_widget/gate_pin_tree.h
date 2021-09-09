@@ -33,21 +33,46 @@ namespace hal
     class Gate;
     class TreeItem;
 
+    /**
+     * @brief A widget to display the pins of a given gate.
+     */
     class GatePinTree : public SizeAdjustableTreeView
     {
         Q_OBJECT
     public:
+        /**
+         * The constructor.
+         *
+         * @param parent - The widget's parent.
+         */
         GatePinTree(QWidget* parent = nullptr);
 
+        /**
+         * Sets the gates and updates its model to display the gate's pins.
+         *
+         * @param gateID - The gate id.
+         */
         void setGate(u32 gateID);
+
+        /**
+         * Sets the gates and updates its model to display the gate's pins.
+         *
+         * @param gateID - The gate.
+         */
         void setGate(Gate* g);
 
+        /**
+         * Resets the model and shows an empty view as a result.
+         */
         void removeContent();
 
+        /** @name Event Handler Functions
+         */
+        ///@{
         void handleContextMenuRequested(const QPoint &pos);
+        ///@}
 
     Q_SIGNALS:
-
         /**
          * Emits the new headline when the number of displayed pins changes.
          *

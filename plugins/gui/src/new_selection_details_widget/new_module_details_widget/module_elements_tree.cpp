@@ -28,11 +28,7 @@ namespace hal
         Module* m = gNetlist->get_module_by_id(moduleID);
         if(!m) return;
 
-        mNetlistElementsModel->setModule(m, true, false, false);
-        mModuleID = moduleID;
-        adjustSizeToContents();
-
-        //Q_EMIT updateText(QString("Submodules(%1)").arg(m->get_submodules().size()));
+        setModule(m);
     }
 
     void ModuleElementsTree::setModule(Module *m)
@@ -42,8 +38,6 @@ namespace hal
         mNetlistElementsModel->setModule(m, true, false, false);
         mModuleID = m->get_id();
         adjustSizeToContents();
-
-        //Q_EMIT updateText(QString("Submodules(%1)").arg(m->get_submodules().size()));
     }
 
     void ModuleElementsTree::removeContent()
@@ -160,7 +154,6 @@ namespace hal
                QApplication::clipboard()->setText(pythonGetType);
            }
         );
-
 
         menu.move(this->mapToGlobal(pos));
         menu.exec();

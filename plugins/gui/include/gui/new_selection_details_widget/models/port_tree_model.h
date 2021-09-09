@@ -61,13 +61,19 @@ namespace hal
          */
         void setModule(Module* m);
 
-        /**
-         * Method to catch the module event with the same name.
+        /** @name Event Handler Functions
          */
+        ///@{
         void handleModuleInputOutputPortNameChanged(Module* m, int associated_data);
+        ///@}
 
     Q_SIGNALS:
-
+        /**
+         * Q_SIGNAL that is emitted when the number of the model's port changed.
+         * (Primarily used to update 'the' section header in the details widget)
+         *
+         * @param newNumber - The new port count.
+         */
         void numberOfPortsChanged(const int newNumber);
 
     private:

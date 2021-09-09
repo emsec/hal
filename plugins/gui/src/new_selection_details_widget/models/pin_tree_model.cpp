@@ -14,12 +14,10 @@ namespace hal
     PinTreeModel::PinTreeModel(QObject *parent) : BaseTreeModel(parent)
     {
         setHeaderLabels(QList<QVariant>() << "Name" << "Direction" << "Type" << "Connected Net");
-        //setGate(gNetlist->get_gate_by_id(19));
 
         //added to store a list of (multiple) net ids in a given treeitem (perhaps dont do this
         //at all, handle it in the view? (since the gate-id and pin name is accessable, the nets can be evaluated there
         qRegisterMetaType<QList<int>>();
-        //qRegisterMetaType<itemType2>();
     }
 
     PinTreeModel::~PinTreeModel()
