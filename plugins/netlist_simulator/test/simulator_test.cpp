@@ -993,123 +993,141 @@ namespace hal
             uint16_t data_read  = 0x0000;
             uint8_t addr        = 0xff;
 
-            sim->simulate(1 * clock_period);    // tb->wait_for_n_clocks(1);
-            sim->simulate(5 * clock_period);    // tb->wait_for_n_clocks(5);
+            sim->simulate(1 * clock_period);    // WAIT FOR 10 NS;
 
             // write data without wclke
-            // set_write_addr(addr);
+            // waddr       <= x"ff";
             for (const auto& write_addr_net : write_addr)
             {
                 sim->set_input(write_addr_net, BooleanFunction::Value::ONE);
             }
-            // write_data(data_write);
+            // din         <= x"ffff";
             for (const auto& din_net : din)
             {
                 sim->set_input(din_net, BooleanFunction::Value::ONE);
             }
 
+<<<<<<< HEAD
+            sim->simulate(1 * clock_period);    // WAIT FOR 10 NS;
+=======
             sim->simulate(1 * clock_period);    // tb->wait_for_n_clocks(1);
+>>>>>>> 5189f0fcbf3bd7acf35a25190320a4475e9cef47
 
-            sim->set_input(write_en, BooleanFunction::Value::ONE);    // set_write_en(0x1);
+            sim->set_input(write_en, BooleanFunction::Value::ONE);    // write_en    <= '1';
 
-            sim->simulate(1 * clock_period);    // tb->wait_for_n_clocks(1);
+            sim->simulate(1 * clock_period);    // WAIT FOR 10 NS;
 
+<<<<<<< HEAD
+            sim->set_input(write_en, BooleanFunction::Value::ZERO);    // write_en    <= '0';
+            sim->simulate(1 * clock_period);                        // WAIT FOR 10 NS;
+=======
             sim->set_input(write_en, BooleanFunction::Value::ZERO);    // set_write_en(0x0);
             sim->simulate(1 * clock_period);                           // tb->wait_for_n_clocks(1);
+>>>>>>> 5189f0fcbf3bd7acf35a25190320a4475e9cef47
 
-            // // read data without rclke
-            sim->set_input(read_en, BooleanFunction::Value::ZERO);    // set_read_en(0x1);
-            // set_read_addr(addr);
+            // read data without rclke
+            sim->set_input(read_en, BooleanFunction::Value::ZERO);    // read_en     <= '1';
+            
+            // raddr       <= x"ff";
             for (const auto& read_addr_net : read_addr)
             {
                 sim->set_input(read_addr_net, BooleanFunction::Value::ONE);
             }
 
-            sim->simulate(2 * clock_period);    // tb->wait_for_n_clocks(2);
+            sim->simulate(2 * clock_period);    // WAIT FOR 20 NS; 
 
-            // data_read = read_data();
 
-            sim->simulate(5 * clock_period);    // tb->wait_for_n_clocks(5);
+            sim->simulate(5 * clock_period);    // WAIT FOR 50 NS;
             // printf("sent %08x, received: %08x\n", data_write, data_read);
 
             // // write data with wclke
-            // set_write_addr(addr);
+            //  waddr   <= x"ff";
             for (const auto& write_addr_net : write_addr)
             {
                 sim->set_input(write_addr_net, BooleanFunction::Value::ONE);
             }
-            // write_data(data_write)
+            // din     <= x"ffff";
             for (const auto& din_net : din)
             {
                 sim->set_input(din_net, BooleanFunction::Value::ONE);
             }
 
-            sim->simulate(1 * clock_period);    // tb->wait_for_n_clocks(1);
+            sim->simulate(1 * clock_period);    // WAIT FOR 10 NS;
 
-            sim->set_input(write_en, BooleanFunction::Value::ONE);    // set_write_en(0x1);
-            sim->set_input(wclke, BooleanFunction::Value::ONE);       // set_wclke(0x1);
+            sim->set_input(write_en, BooleanFunction::Value::ONE);    // write_en    <= '1';
+            sim->set_input(wclke, BooleanFunction::Value::ONE);       // wclke       <= '1';
 
-            sim->simulate(1 * clock_period);    // tb->wait_for_n_clocks(1);
+            sim->simulate(1 * clock_period);    // WAIT FOR 10 NS;
 
-            sim->set_input(write_en, BooleanFunction::Value::ZERO);    // set_write_en(0x0);
-            sim->set_input(wclke, BooleanFunction::Value::ZERO);       // set_wclke(0x0);
+            sim->set_input(write_en, BooleanFunction::Value::ZERO);    // write_en    <= '0';
+            sim->set_input(wclke, BooleanFunction::Value::ZERO);       // wclke       <= '0';
 
-            sim->simulate(1 * clock_period);    // tb->wait_for_n_clocks(1);
+            sim->simulate(1 * clock_period);    // WAIT FOR 10 NS;
 
             // // read data without rclke
-            sim->set_input(read_en, BooleanFunction::Value::ZERO);    // set_read_en(0x1);
-            // set_read_addr(addr);
+            sim->set_input(read_en, BooleanFunction::Value::ONE);    // read_en    <= '1';
+            
+            
+            // raddr      <= x"ff";
             for (const auto& read_addr_net : read_addr)
             {
                 sim->set_input(read_addr_net, BooleanFunction::Value::ONE);
             }
 
-            sim->simulate(2 * clock_period);    // tb->wait_for_n_clocks(2);
+            sim->simulate(2 * clock_period);    // WAIT FOR 20 NS;
 
             // data_read = read_data();
 
-            sim->simulate(5 * clock_period);    // tb->wait_for_n_clocks(5);
+            sim->simulate(5 * clock_period);    // WAIT FOR 50 NS;
             // printf("sent %08x, received: %08x\n", data_write, data_read);
 
             // // read data with rclke
-            sim->set_input(read_en, BooleanFunction::Value::ONE);    // set_read_en(0x1);
-            // set_read_addr(addr);
+            sim->set_input(read_en, BooleanFunction::Value::ONE);    // read_en    <= '1';
+            // raddr      <= x"ff";
             for (const auto& read_addr_net : read_addr)
             {
                 sim->set_input(read_addr_net, BooleanFunction::Value::ONE);
             }
-            sim->set_input(rclke, BooleanFunction::Value::ONE);    // set_rclke(0x1);
+            sim->set_input(rclke, BooleanFunction::Value::ONE);    // rclke      <= '1';
 
+<<<<<<< HEAD
+            sim->simulate(2 * clock_period);                     // WAIT FOR 20 NS;     
+            sim->set_input(rclke, BooleanFunction::Value::ZERO);    // rclke      <= '0';
+=======
             sim->simulate(2 * clock_period);                        // tb->wait_for_n_clocks(2);
             sim->set_input(rclke, BooleanFunction::Value::ZERO);    // set_rclke(0x0);
+>>>>>>> 5189f0fcbf3bd7acf35a25190320a4475e9cef47
 
-            // data_read = read_data();
 
-            sim->simulate(5 * clock_period);    // tb->wait_for_n_clocks(5);
-            // printf("sent %08x, received: %08x\n", data_write, data_read);
+            sim->simulate(5 * clock_period);    // WAIT FOR 50 NS;
 
             // read some address and see what the result from INIT value is
-            sim->set_input(read_en, BooleanFunction::Value::ONE);    // set_read_en(0x1);
+            sim->set_input(read_en, BooleanFunction::Value::ONE);    // read_en    <= '1';
 
             // todo: bitorder could be wrong?
-            //set_read_addr(0x66); // 1010 1010
-            sim->set_input(read_addr.at(0), BooleanFunction::Value::ZERO);
-            sim->set_input(read_addr.at(1), BooleanFunction::Value::ONE);
-            sim->set_input(read_addr.at(2), BooleanFunction::Value::ZERO);
-            sim->set_input(read_addr.at(3), BooleanFunction::Value::ONE);
-            sim->set_input(read_addr.at(4), BooleanFunction::Value::ZERO);
-            sim->set_input(read_addr.at(5), BooleanFunction::Value::ONE);
-            sim->set_input(read_addr.at(6), BooleanFunction::Value::ZERO);
-            sim->set_input(read_addr.at(7), BooleanFunction::Value::ONE);
+            //raddr      <= x"66"; // 1010 1010
+            sim->set_input(read_addr.at(7), BooleanFunction::Value::ZERO);
+            sim->set_input(read_addr.at(6), BooleanFunction::Value::ONE);
+            sim->set_input(read_addr.at(5), BooleanFunction::Value::ZERO);
+            sim->set_input(read_addr.at(4), BooleanFunction::Value::ONE);
+            sim->set_input(read_addr.at(3), BooleanFunction::Value::ZERO);
+            sim->set_input(read_addr.at(2), BooleanFunction::Value::ONE);
+            sim->set_input(read_addr.at(1), BooleanFunction::Value::ZERO);
+            sim->set_input(read_addr.at(0), BooleanFunction::Value::ONE);
 
-            sim->set_input(rclke, BooleanFunction::Value::ONE);    //set_rclke(0x1);
+            sim->set_input(rclke, BooleanFunction::Value::ONE);    // rclke      <= '1';
 
+<<<<<<< HEAD
+            sim->simulate(2 * clock_period);                     // WAIT FOR 20 NS; 
+            sim->set_input(rclke, BooleanFunction::Value::ZERO);    // rclke      <= '0';
+=======
             sim->simulate(2 * clock_period);                        // tb->wait_for_n_clocks(2);
             sim->set_input(rclke, BooleanFunction::Value::ZERO);    // set_rclke(0x0);
+>>>>>>> 5189f0fcbf3bd7acf35a25190320a4475e9cef47
 
             //data_read = read_data();
 
-            sim->simulate(100 * clock_period);    // tb->wait_for_n_clocks(100);
+            sim->simulate(100 * clock_period);    // WAIT FOR 100*10 NS;
         }
 
         // Test if maps are equal
@@ -1380,7 +1398,7 @@ namespace hal
 
     //         // tb->opentrace("trace.vcd");
 
-    //         sim->simulate(1 * 1000);    // tb->wait_for_n_clocks(1);
+    //         sim->simulate(1 * 1000);    // WAIT FOR 10 NS;
 
     //         sim->set_input(CE, BooleanFunction::Value::ZERO);    // tb->m_core->CE = 0x0;
 
