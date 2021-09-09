@@ -119,6 +119,8 @@ namespace hal
             }
 
             assert(simulation_port.clock_net != nullptr);
+
+            m_ports.push_back(simulation_port);
         }
     }
 
@@ -148,7 +150,7 @@ namespace hal
 
             for (const std::string& identifier : init_component->get_init_identifiers())
             {
-                const std::string& data = std::get<1>(m_gate->get_data(category, identifier));
+                const std::string data = std::get<1>(m_gate->get_data(category, identifier));
 
                 u32 data_len = data.size();
                 assert(data_len % 16 == 0);
