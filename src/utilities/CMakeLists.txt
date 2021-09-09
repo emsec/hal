@@ -21,6 +21,8 @@ target_link_libraries(utilities
                         spdlog::spdlog
                         ${CMAKE_DL_LIBS}
                         RapidJSON::RapidJSON
+		      PRIVATE
+		        hal::netlist
                       )
 install(TARGETS utilities
         EXPORT hal
