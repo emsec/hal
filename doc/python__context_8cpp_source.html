@@ -332,8 +332,8 @@ $(document).ready(function(){initNavTree('python__context_8cpp_source.html','');
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; entry : list)</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;            {</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                <span class="keyword">auto</span> a = entry.attr(<span class="stringliteral">&quot;name_with_symbols&quot;</span>).cast&lt;std::string&gt;();</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                <span class="keyword">auto</span> b = entry.attr(<span class="stringliteral">&quot;complete&quot;</span>).cast&lt;std::string&gt;();</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                ret_val.emplace_back(a, b);</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                <span class="keyword">auto</span> <a class="code" href="namespacehal_1_1gui__utility.html#a6f7dc31d2638295f8b4e0abcf35a53a4">b</a> = entry.attr(<span class="stringliteral">&quot;complete&quot;</span>).cast&lt;std::string&gt;();</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                ret_val.emplace_back(a, <a class="code" href="namespacehal_1_1gui__utility.html#a6f7dc31d2638295f8b4e0abcf35a53a4">b</a>);</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            }</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        }</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <span class="keywordflow">catch</span> (py::error_already_set&amp; e)</div>
@@ -409,11 +409,12 @@ $(document).ready(function(){initNavTree('python__context_8cpp_source.html','');
 <div class="ttc" id="anamespacehal_html_ada0064833138221168460e2dafafac6f"><div class="ttname"><a href="namespacehal.html#ada0064833138221168460e2dafafac6f">hal::gGuiApi</a></div><div class="ttdeci">GuiApi * gGuiApi</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00054">plugin_gui.cpp:54</a></div></div>
 <div class="ttc" id="apython__context_8cpp_html_a16c326d0baf4bc62c564559c42b65c28"><div class="ttname"><a href="python__context_8cpp.html#a16c326d0baf4bc62c564559c42b65c28">_PyParser_Grammar</a></div><div class="ttdeci">grammar _PyParser_Grammar</div></div>
 <div class="ttc" id="anamespacehal_html_a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d"><div class="ttname"><a href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::PinDirection::output</a></div><div class="ttdeci">@ output</div></div>
+<div class="ttc" id="anamespacehal_1_1gui__utility_html_a6f7dc31d2638295f8b4e0abcf35a53a4"><div class="ttname"><a href="namespacehal_1_1gui__utility.html#a6f7dc31d2638295f8b4e0abcf35a53a4">hal::gui_utility::b</a></div><div class="ttdeci">const QString &amp; b</div><div class="ttdef"><b>Definition:</b> <a href="sort_8h_source.html#l00073">sort.h:73</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_609dd161604b7aa86c7b630207f12412.html">python</a></li><li class="navelem"><a class="el" href="python__context_8cpp.html">python_context.cpp</a></li>
-    <li class="footer">Generated on Thu Sep 9 2021 15:05:32 for HAL by
+    <li class="footer">Generated on Thu Sep 9 2021 17:55:21 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
