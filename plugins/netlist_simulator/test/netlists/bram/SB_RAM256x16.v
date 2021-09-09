@@ -250,7 +250,7 @@ reg	[15:0]	RDATA;
 
 initial
 begin
-   RDATA = $random;
+   RDATA = 16'h0000;
 end
 
 // Look at the rising edge of the clock
