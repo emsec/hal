@@ -241,14 +241,13 @@ namespace hal
             if (!port.is_write)
             {
                 // read data from internal memory
-
                 u32 read_data                                   = get_data_word(m_data, address, data_size);
                 std::vector<BooleanFunction::Value> data_values = int_to_values(read_data, data_size);
 
-                assert(data_values.size() == port.data_pins.size());
+                assert(data_values.size() == data_size);
 
                 // generate events
-                for (u32 j = 0; j < port.data_pins.size(); j++)
+                for (u32 j = 0; j < data_size; j++)
                 {
                     const Net* out_net                                        = m_gate->get_fan_out_net(port.data_pins.at(j));
                     new_events[std::make_pair(out_net, current_time + delay)] = data_values.at(j);
@@ -256,6 +255,7 @@ namespace hal
             }
             else
             {
+                // TODO add support for masking of write values (e.g., by declaring respective Boolean functions within the gate library)
                 // write data to internal memory
                 std::vector<BooleanFunction::Value> data_values;
                 for (const std::string& pin : port.data_pins)
