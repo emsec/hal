@@ -126,19 +126,17 @@ namespace hal
 
     void NetlistSimulator::SimulationGateRAM::initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value)
     {
-        UNUSED(new_events);
-
         GateType* gate_type = m_gate->get_type();
+
+        const RAMComponent* ram_component = gate_type->get_component_as<RAMComponent>([](const GateTypeComponent* c) { return RAMComponent::is_class_of(c); });
+        if (ram_component == nullptr)
+        {
+            log_error("netlist_simulator", "cannot find RAM properties for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+            return;
+        }
 
         if (from_netlist)
         {
-            const RAMComponent* ram_component = gate_type->get_component_as<RAMComponent>([](const GateTypeComponent* c) { return RAMComponent::is_class_of(c); });
-            if (ram_component == nullptr)
-            {
-                log_error("netlist_simulator", "cannot find RAM properties for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
-                return;
-            }
-
             const InitComponent* init_component = gate_type->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
             if (init_component == nullptr)
             {
@@ -182,11 +180,31 @@ namespace hal
                     break;
                 case BooleanFunction::Value::X:
                 case BooleanFunction::Value::Z:
-                    break;
-                    // TODO handle
+                    log_error("netlist_simulator", "RAM gate '{}' with ID {} of type {} cannot be initialized with value '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name(), value);
+                    return;
             }
-            // TODO write this shit
-            // INIT with fixed value
+
+            assert(ram_component->get_bit_size() % 64 == 0);
+            u32 num_words = ram_component->get_bit_size() / 64;
+
+            for (u32 i = 0; i < num_words; i++)
+            {
+                m_data.push_back(init_val);
+            }
+        }
+
+        // generate initial output events (all zero)
+        for (const Port& port : m_ports)
+        {
+            if (!port.is_write)
+            {
+                u32 data_size = port.data_pins.size();
+                for (u32 j = 0; j < data_size; j++)
+                {
+                    const Net* out_net  = m_gate->get_fan_out_net(port.data_pins.at(j));
+                    new_events[out_net] = BooleanFunction::Value::ZERO;
+                }
+            }
         }
     }
 
@@ -215,9 +233,11 @@ namespace hal
         // compute delay, currently just a placeholder
         u64 delay = 0;
 
-        for (size_t i : m_clocked_port_indices)
+        std::unordered_map<std::string, BooleanFunction> functions = m_gate->get_boolean_functions();
+
+        for (size_t index : m_clocked_port_indices)
         {
-            Port& port = m_ports.at(i);
+            Port& port = m_ports.at(index);
 
             if (port.enable_func.evaluate(m_input_values) != BooleanFunction::ONE)
             {
@@ -241,26 +261,34 @@ namespace hal
             if (!port.is_write)
             {
                 // read data from internal memory
-
                 u32 read_data                                   = get_data_word(m_data, address, data_size);
                 std::vector<BooleanFunction::Value> data_values = int_to_values(read_data, data_size);
 
-                assert(data_values.size() == port.data_pins.size());
+                assert(data_values.size() == data_size);
 
                 // generate events
-                for (u32 j = 0; j < port.data_pins.size(); j++)
+                for (u32 i = 0; i < data_size; i++)
                 {
-                    const Net* out_net                                        = m_gate->get_fan_out_net(port.data_pins.at(j));
-                    new_events[std::make_pair(out_net, current_time + delay)] = data_values.at(j);
+                    const Net* out_net                                        = m_gate->get_fan_out_net(port.data_pins.at(i));
+                    new_events[std::make_pair(out_net, current_time + delay)] = data_values.at(i);
                 }
             }
             else
             {
                 // write data to internal memory
-                std::vector<BooleanFunction::Value> data_values;
-                for (const std::string& pin : port.data_pins)
+                std::vector<BooleanFunction::Value> data_values = int_to_values(get_data_word(m_data, address, data_size), data_size);
+
+                for (u32 i = 0; i < data_size; i++)
                 {
-                    data_values.push_back(m_input_values.at(pin));
+                    const std::string& pin = port.data_pins.at(i);
+
+                    // do not change memory content of masking function specified and not evaluating to 1
+                    if (auto func_it = functions.find(pin); func_it != functions.end() && func_it->second.evaluate(m_input_values) != BooleanFunction::Value::ONE)
+                    {
+                        continue;
+                    }
+
+                    data_values[i] = m_input_values.at(pin);
                 }
                 u32 write_data = values_to_int(data_values);
                 set_data_word(m_data, write_data, address, data_size);
