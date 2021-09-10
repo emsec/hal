@@ -79,6 +79,21 @@ namespace hal
         m_data = map;
     }
 
+    bool DataContainer::has_data(const std::string& category, const std::string& key) const
+    {
+        if (category.empty() || key.empty())
+        {
+            return false;
+        }
+
+        if (auto it = m_data.find(std::make_tuple(category, key)); it == m_data.end())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     std::tuple<std::string, std::string> DataContainer::get_data(const std::string& category, const std::string& key) const
     {
         if (category.empty() || key.empty())

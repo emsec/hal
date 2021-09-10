@@ -40,46 +40,6 @@ namespace hal
             u64 mask     = ~((((u64)1 << width) - 1) << start_bit);
             data.at(row) = (data.at(row) & mask) ^ ((u64)in_data << start_bit);
         }
-
-        std::vector<BooleanFunction::Value> int_to_values(u32 integer, u32 len)
-        {
-            if (len > 32)
-            {
-                return {};
-            }
-
-            std::vector<BooleanFunction::Value> res;
-            for (u32 i = 0; i < len; i++)
-            {
-                res.push_back((BooleanFunction::Value)((integer >> i) & 1));
-            }
-
-            return res;
-        }
-
-        u32 values_to_int(const std::vector<BooleanFunction::Value>& values)
-        {
-            u32 len = values.size();
-
-            if (len > 32)
-            {
-                return 0;
-            }
-
-            u32 res = 0;
-            for (u32 i = 0; i < len; i++)
-            {
-                BooleanFunction::Value val = values.at(i);
-                if (val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z)
-                {
-                    return 0;
-                }
-
-                res ^= (u32)val << i;
-            }
-
-            return res;
-        }
     }    // namespace
 
     NetlistSimulator::SimulationGateRAM::SimulationGateRAM(const Gate* gate) : SimulationGateSequential(gate)
@@ -244,25 +204,20 @@ namespace hal
                 continue;
             }
 
-            if (port.clock_func.evaluate(m_input_values) != BooleanFunction::ONE)
-            {
-                continue;
-            }
-
             std::vector<BooleanFunction::Value> address_values;
             for (const std::string& pin : port.address_pins)
             {
                 address_values.push_back(m_input_values.at(pin));
             }
 
-            u32 address   = values_to_int(address_values);
+            u32 address   = simulation_utils::values_to_int(address_values);
             u32 data_size = port.data_pins.size();
 
             if (!port.is_write)
             {
                 // read data from internal memory
                 u32 read_data                                   = get_data_word(m_data, address, data_size);
-                std::vector<BooleanFunction::Value> data_values = int_to_values(read_data, data_size);
+                std::vector<BooleanFunction::Value> data_values = simulation_utils::int_to_values(read_data, data_size);
 
                 assert(data_values.size() == data_size);
 
@@ -276,7 +231,7 @@ namespace hal
             else
             {
                 // write data to internal memory
-                std::vector<BooleanFunction::Value> data_values = int_to_values(get_data_word(m_data, address, data_size), data_size);
+                std::vector<BooleanFunction::Value> data_values = simulation_utils::int_to_values(get_data_word(m_data, address, data_size), data_size);
 
                 for (u32 i = 0; i < data_size; i++)
                 {
@@ -290,7 +245,7 @@ namespace hal
 
                     data_values[i] = m_input_values.at(pin);
                 }
-                u32 write_data = values_to_int(data_values);
+                u32 write_data = simulation_utils::values_to_int(data_values);
                 set_data_word(m_data, write_data, address, data_size);
             }
         }

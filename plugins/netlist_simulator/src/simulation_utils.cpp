@@ -38,5 +38,45 @@ namespace hal
             log_error("netlist_simulator", "unsupported set/reset behavior {}.", behavior);
             return BooleanFunction::Value::X;
         }
+
+        std::vector<BooleanFunction::Value> int_to_values(u32 integer, u32 len)
+        {
+            if (len > 32)
+            {
+                return {};
+            }
+
+            std::vector<BooleanFunction::Value> res;
+            for (u32 i = 0; i < len; i++)
+            {
+                res.push_back((BooleanFunction::Value)((integer >> i) & 1));
+            }
+
+            return res;
+        }
+
+        u32 values_to_int(const std::vector<BooleanFunction::Value>& values)
+        {
+            u32 len = values.size();
+
+            if (len > 32)
+            {
+                return 0;
+            }
+
+            u32 res = 0;
+            for (u32 i = 0; i < len; i++)
+            {
+                BooleanFunction::Value val = values.at(i);
+                if (val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z)
+                {
+                    return 0;
+                }
+
+                res ^= (u32)val << i;
+            }
+
+            return res;
+        }
     }    // namespace simulation_utils
 }    // namespace hal
