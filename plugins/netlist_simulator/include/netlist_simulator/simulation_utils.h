@@ -33,5 +33,7 @@ namespace hal
     {
         BooleanFunction::Value toggle(BooleanFunction::Value v);
         BooleanFunction::Value process_clear_preset_behavior(AsyncSetResetBehavior behavior, BooleanFunction::Value previous_output);
+        std::vector<BooleanFunction::Value> int_to_values(u32 integer, u32 len);
+        u32 values_to_int(const std::vector<BooleanFunction::Value>& values);
     }    // namespace simulation_utils
 }    // namespace hal
