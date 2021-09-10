@@ -179,9 +179,23 @@ namespace hal
             Port& port = m_ports.at(i);
             if (event.affected_net == port.clock_net && port.clock_func.evaluate(m_input_values) == BooleanFunction::ONE)
             {
-                m_clocked_port_indices.push_back(i);
-                return false;
+                if (port.enable_func.evaluate(m_input_values) == BooleanFunction::Value::ONE)
+                {
+                    if (port.is_write)
+                    {
+                        m_clocked_write_ports.push_back(i);
+                    }
+                    else
+                    {
+                        m_clocked_read_ports.push_back(i);
+                    }
+                }
             }
+        }
+
+        if (!m_clocked_read_ports.empty() || !m_clocked_write_ports.empty())
+        {
+            return false;
         }
 
         // gate fully handled
@@ -195,14 +209,9 @@ namespace hal
 
         std::unordered_map<std::string, BooleanFunction> functions = m_gate->get_boolean_functions();
 
-        for (size_t index : m_clocked_port_indices)
+        for (size_t index : m_clocked_read_ports)
         {
-            Port& port = m_ports.at(index);
-
-            if (port.enable_func.evaluate(m_input_values) != BooleanFunction::ONE)
-            {
-                continue;
-            }
+            Port port = m_ports.at(index);
 
             std::vector<BooleanFunction::Value> address_values;
             for (const std::string& pin : port.address_pins)
@@ -213,43 +222,53 @@ namespace hal
             u32 address   = simulation_utils::values_to_int(address_values);
             u32 data_size = port.data_pins.size();
 
-            if (!port.is_write)
+            // read data from internal memory
+            u32 read_data                                   = get_data_word(m_data, address, data_size);
+            std::vector<BooleanFunction::Value> data_values = simulation_utils::int_to_values(read_data, data_size);
+
+            assert(data_values.size() == data_size);
+
+            // generate events
+            for (u32 i = 0; i < data_size; i++)
             {
-                // read data from internal memory
-                u32 read_data                                   = get_data_word(m_data, address, data_size);
-                std::vector<BooleanFunction::Value> data_values = simulation_utils::int_to_values(read_data, data_size);
-
-                assert(data_values.size() == data_size);
-
-                // generate events
-                for (u32 i = 0; i < data_size; i++)
-                {
-                    const Net* out_net                                        = m_gate->get_fan_out_net(port.data_pins.at(i));
-                    new_events[std::make_pair(out_net, current_time + delay)] = data_values.at(i);
-                }
-            }
-            else
-            {
-                // write data to internal memory
-                std::vector<BooleanFunction::Value> data_values = simulation_utils::int_to_values(get_data_word(m_data, address, data_size), data_size);
-
-                for (u32 i = 0; i < data_size; i++)
-                {
-                    const std::string& pin = port.data_pins.at(i);
-
-                    // do not change memory content of masking function specified and not evaluating to 1
-                    if (auto func_it = functions.find(pin); func_it != functions.end() && func_it->second.evaluate(m_input_values) != BooleanFunction::Value::ONE)
-                    {
-                        continue;
-                    }
-
-                    data_values[i] = m_input_values.at(pin);
-                }
-                u32 write_data = simulation_utils::values_to_int(data_values);
-                set_data_word(m_data, write_data, address, data_size);
+                const Net* out_net                                        = m_gate->get_fan_out_net(port.data_pins.at(i));
+                new_events[std::make_pair(out_net, current_time + delay)] = data_values.at(i);
             }
         }
 
-        m_clocked_port_indices.clear();
+        for (size_t index : m_clocked_write_ports)
+        {
+            Port port = m_ports.at(index);
+
+            std::vector<BooleanFunction::Value> address_values;
+            for (const std::string& pin : port.address_pins)
+            {
+                address_values.push_back(m_input_values.at(pin));
+            }
+
+            u32 address   = simulation_utils::values_to_int(address_values);
+            u32 data_size = port.data_pins.size();
+
+            // write data to internal memory
+            std::vector<BooleanFunction::Value> data_values = simulation_utils::int_to_values(get_data_word(m_data, address, data_size), data_size);
+
+            for (u32 i = 0; i < data_size; i++)
+            {
+                const std::string& pin = port.data_pins.at(i);
+
+                // do not change memory content of masking function specified and not evaluating to 1
+                if (auto func_it = functions.find(pin); func_it != functions.end() && func_it->second.evaluate(m_input_values) != BooleanFunction::Value::ONE)
+                {
+                    continue;
+                }
+
+                data_values[i] = m_input_values.at(pin);
+            }
+            u32 write_data = simulation_utils::values_to_int(data_values);
+            set_data_word(m_data, write_data, address, data_size);
+        }
+
+        m_clocked_read_ports.clear();
+        m_clocked_write_ports.clear();
     }
 }    // namespace hal
