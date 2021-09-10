@@ -1036,7 +1036,6 @@ TEST_F(SimulatorTest, bram_lattice)
         sim->set_input(rclke, BooleanFunction::Value::ONE); // rclke      <= '1';
 
         sim->simulate(2 * clock_period); // WAIT FOR 20 NS;
-        sim->set_input(rclke, BooleanFunction::Value::ZERO); // rclke      <= '0';
 
         //data_read = read_data();
 
@@ -1047,8 +1046,8 @@ TEST_F(SimulatorTest, bram_lattice)
         sim->set_input(write_addr.at(4), BooleanFunction::Value::ZERO);
         sim->set_input(write_addr.at(3), BooleanFunction::Value::ZERO);
         sim->set_input(write_addr.at(2), BooleanFunction::Value::ZERO);
-        sim->set_input(write_addr.at(1), BooleanFunction::Value::ZERO);
-        sim->set_input(write_addr.at(0), BooleanFunction::Value::ZERO);
+        sim->set_input(write_addr.at(1), BooleanFunction::Value::ONE);
+        sim->set_input(write_addr.at(0), BooleanFunction::Value::ONE);
 
         // din         <= x"1111";
         sim->set_input(din.at(15), BooleanFunction::Value::ZERO);
@@ -1084,8 +1083,8 @@ TEST_F(SimulatorTest, bram_lattice)
         sim->set_input(read_addr.at(4), BooleanFunction::Value::ZERO);
         sim->set_input(read_addr.at(3), BooleanFunction::Value::ZERO);
         sim->set_input(read_addr.at(2), BooleanFunction::Value::ZERO);
-        sim->set_input(read_addr.at(1), BooleanFunction::Value::ZERO);
-        sim->set_input(read_addr.at(0), BooleanFunction::Value::ZERO);
+        sim->set_input(read_addr.at(1), BooleanFunction::Value::ONE);
+        sim->set_input(read_addr.at(0), BooleanFunction::Value::ONE);
 
         sim->simulate(2 * clock_period); // WAIT FOR 20 NS;
 
@@ -1111,7 +1110,7 @@ TEST_F(SimulatorTest, bram_lattice)
 
         sim->set_input(read_en, BooleanFunction::Value::ZERO); // read_en    <= 0';
         sim->set_input(rclke, BooleanFunction::Value::ZERO); // rclke       <= '0';
-        sim->simulate(20 * clock_period); // WAIT FOR 20 NS;
+        sim->simulate(2 * clock_period); // WAIT FOR 20 NS;
 
         // mask        <= x"ffff";
         sim->set_input(mask.at(15), BooleanFunction::Value::ONE);
@@ -1130,19 +1129,18 @@ TEST_F(SimulatorTest, bram_lattice)
         sim->set_input(mask.at(2), BooleanFunction::Value::ONE);
         sim->set_input(mask.at(1), BooleanFunction::Value::ONE);
         sim->set_input(mask.at(0), BooleanFunction::Value::ONE);
-        sim->simulate(20 * clock_period); // WAIT FOR 20 NS;
+        sim->simulate(2 * clock_period); // WAIT FOR 20 NS;
 
         sim->set_input(write_en, BooleanFunction::Value::ZERO); // write_en    <= 0';
         sim->set_input(wclke, BooleanFunction::Value::ZERO); // wclke       <= '0';
         sim->set_input(read_en, BooleanFunction::Value::ONE); // read_en    <= 1';
         sim->set_input(rclke, BooleanFunction::Value::ONE); // rclke       <= '1';
-        sim->simulate(20 * clock_period); // WAIT FOR 20 NS;
+        sim->simulate(2 * clock_period); // WAIT FOR 20 NS;
 
-        sim->set_input(write_en, BooleanFunction::Value::ZERO); // write_en    <= 1';
-        sim->set_input(wclke, BooleanFunction::Value::ZERO); // wclke       <= '1';
-        sim->set_input(read_en, BooleanFunction::Value::ONE); // read_en    <= 0';
-        sim->set_input(rclke, BooleanFunction::Value::ONE); // rclke       <= '0';
-        sim->simulate(20 * clock_period); // WAIT FOR 20 NS;
+        sim->set_input(write_en, BooleanFunction::Value::ONE); // write_en    <= 1';
+        sim->set_input(wclke, BooleanFunction::Value::ONE); // wclke       <= '1';
+        sim->set_input(read_en, BooleanFunction::Value::ZERO); // read_en    <= 0';
+        sim->set_input(rclke, BooleanFunction::Value::ZERO); // rclke       <= '0';
 
         // mask        <= x"1111";
         sim->set_input(mask.at(15), BooleanFunction::Value::ZERO);
@@ -1161,7 +1159,7 @@ TEST_F(SimulatorTest, bram_lattice)
         sim->set_input(mask.at(2), BooleanFunction::Value::ZERO);
         sim->set_input(mask.at(1), BooleanFunction::Value::ZERO);
         sim->set_input(mask.at(0), BooleanFunction::Value::ONE);
-        sim->simulate(20 * clock_period); // WAIT FOR 20 NS;
+        sim->simulate(2 * clock_period); // WAIT FOR 20 NS;
 
         sim->simulate(100 * clock_period); // WAIT FOR 100*10 NS;
         sim->simulate(1 * clock_period / 2); // WAIT FOR 100*10 NS;

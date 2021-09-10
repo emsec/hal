@@ -1,5 +1,5 @@
 $date
-   Thu Sep  9 16:53:55 2021
+   Fri Sep 10 12:56:59 2021
 $end
 $version
   2020.2
@@ -46,22 +46,38 @@ $var wire 1 B din_2 $end
 $var wire 1 C raddr_7 $end
 $var wire 1 D read_en $end
 $var wire 1 E waddr_0 $end
-$var wire 1 F dout_12 $end
-$var wire 1 G dout_6 $end
-$var wire 1 H dout_3 $end
-$var wire 1 I dout_1 $end
-$var wire 1 J dout_10 $end
-$var wire 1 K dout_0 $end
-$var wire 1 L dout_8 $end
-$var wire 1 M dout_11 $end
-$var wire 1 N dout_4 $end
-$var wire 1 O dout_5 $end
-$var wire 1 P dout_2 $end
-$var wire 1 Q dout_9 $end
-$var wire 1 R dout_7 $end
-$var wire 1 S dout_13 $end
-$var wire 1 T dout_14 $end
-$var wire 1 U dout_15 $end
+$var wire 1 F mask_0 $end
+$var wire 1 G mask_1 $end
+$var wire 1 H mask_2 $end
+$var wire 1 I mask_3 $end
+$var wire 1 J mask_4 $end
+$var wire 1 K mask_5 $end
+$var wire 1 L mask_6 $end
+$var wire 1 M mask_7 $end
+$var wire 1 N mask_8 $end
+$var wire 1 O mask_9 $end
+$var wire 1 P mask_10 $end
+$var wire 1 Q mask_11 $end
+$var wire 1 R mask_12 $end
+$var wire 1 S mask_13 $end
+$var wire 1 T mask_14 $end
+$var wire 1 U mask_15 $end
+$var wire 1 V dout_12 $end
+$var wire 1 W dout_6 $end
+$var wire 1 X dout_3 $end
+$var wire 1 Y dout_1 $end
+$var wire 1 Z dout_10 $end
+$var wire 1 [ dout_0 $end
+$var wire 1 \ dout_8 $end
+$var wire 1 ] dout_11 $end
+$var wire 1 ^ dout_4 $end
+$var wire 1 _ dout_5 $end
+$var wire 1 ` dout_2 $end
+$var wire 1 a dout_9 $end
+$var wire 1 b dout_7 $end
+$var wire 1 c dout_13 $end
+$var wire 1 d dout_14 $end
+$var wire 1 e dout_15 $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
@@ -120,6 +136,22 @@ $dumpvars
 0S
 0T
 0U
+0V
+0W
+0X
+0Y
+0Z
+0[
+0\
+0]
+0^
+0_
+0`
+0a
+0b
+0c
+0d
+0e
 $end
 #5000
 1!
@@ -247,22 +279,22 @@ $end
 14
 #215000
 1!
-1F
-1G
-1H
-1I
-1J
-1K
-1L
-1M
-1N
-1O
-1P
-1Q
-1R
-1S
-1T
-1U
+1V
+1W
+1X
+1Y
+1Z
+1[
+1\
+1]
+1^
+1_
+1`
+1a
+1b
+1c
+1d
+1e
 #220000
 0!
 #225000
@@ -301,29 +333,54 @@ $end
 0C
 #285000
 1!
-0F
-0G
-0H
-0I
-0K
-0L
-0M
-0P
-0Q
-0S
-0T
-0U
+0V
+0W
+0X
+0Y
+0[
+0\
+0]
+0`
+0a
+0c
+0d
+0e
 #290000
 0!
 #295000
 1!
 #300000
 0!
-04
+0#
+0$
+0)
+1*
+0+
+0,
+0-
+1/
+00
+01
+02
+13
+05
+06
+08
+09
+1:
+0;
+1>
+1?
+0@
+0A
+0B
+1E
 #305000
 1!
 #310000
 0!
+17
+1=
 #315000
 1!
 #320000
@@ -332,20 +389,56 @@ $end
 1!
 #330000
 0!
+0"
+1%
+0&
+0'
+1(
+1.
+0<
+0C
 #335000
 1!
+1V
+0Z
+1[
+1\
+0_
+0b
 #340000
 0!
 #345000
 1!
 #350000
 0!
+1$
+1*
+0+
+1,
+1-
+1/
+00
+01
+05
+18
+19
+1:
+1;
+1?
+0A
+0B
 #355000
 1!
 #360000
 0!
 #365000
 1!
+1Z
+1]
+1a
+1c
+1d
+1e
 #370000
 0!
 #375000
@@ -420,6 +513,8 @@ $end
 1!
 #550000
 0!
+04
+0D
 #555000
 1!
 #560000
@@ -428,6 +523,22 @@ $end
 1!
 #570000
 0!
+1F
+1G
+1H
+1I
+1J
+1K
+1L
+1M
+1N
+1O
+1P
+1Q
+1R
+1S
+1T
+1U
 #575000
 1!
 #580000
@@ -436,6 +547,10 @@ $end
 1!
 #590000
 0!
+14
+07
+0=
+1D
 #595000
 1!
 #600000
@@ -444,6 +559,26 @@ $end
 1!
 #610000
 0!
+04
+17
+1=
+0D
+1F
+0G
+0H
+0I
+1J
+0K
+0L
+0M
+1N
+0O
+0P
+0Q
+1R
+0S
+0T
+0U
 #615000
 1!
 #620000
@@ -719,4 +854,136 @@ $end
 #1295000
 1!
 #1300000
+0!
+#1305000
+1!
+#1310000
+0!
+#1315000
+1!
+#1320000
+0!
+#1325000
+1!
+#1330000
+0!
+#1335000
+1!
+#1340000
+0!
+#1345000
+1!
+#1350000
+0!
+#1355000
+1!
+#1360000
+0!
+#1365000
+1!
+#1370000
+0!
+#1375000
+1!
+#1380000
+0!
+#1385000
+1!
+#1390000
+0!
+#1395000
+1!
+#1400000
+0!
+#1405000
+1!
+#1410000
+0!
+#1415000
+1!
+#1420000
+0!
+#1425000
+1!
+#1430000
+0!
+#1435000
+1!
+#1440000
+0!
+#1445000
+1!
+#1450000
+0!
+#1455000
+1!
+#1460000
+0!
+#1465000
+1!
+#1470000
+0!
+#1475000
+1!
+#1480000
+0!
+#1485000
+1!
+#1490000
+0!
+#1495000
+1!
+#1500000
+0!
+#1505000
+1!
+#1510000
+0!
+#1515000
+1!
+#1520000
+0!
+#1525000
+1!
+#1530000
+0!
+#1535000
+1!
+#1540000
+0!
+#1545000
+1!
+#1550000
+0!
+#1555000
+1!
+#1560000
+0!
+#1565000
+1!
+#1570000
+0!
+#1575000
+1!
+#1580000
+0!
+#1585000
+1!
+#1590000
+0!
+#1595000
+1!
+#1600000
+0!
+#1605000
+1!
+#1610000
+0!
+#1615000
+1!
+#1620000
+0!
+#1625000
+1!
+#1630000
 0!
