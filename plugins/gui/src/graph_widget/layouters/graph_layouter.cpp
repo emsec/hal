@@ -270,11 +270,11 @@ namespace hal
         mMaxLeftIoPaddingForChannelX.clear();
         mMaxRightIoPaddingForChannelX.clear();
 
-        mMinXIndex = 0;
-        mMinYIndex = 0;
+        mMinXIndex = INT_MAX;
+        mMinYIndex = INT_MAX;
 
-        mMaxXIndex = 0;
-        mMaxYIndex = 0;
+        mMaxXIndex = INT_MIN;
+        mMaxYIndex = INT_MIN;
 
         mXValues.clear();
         mYValues.clear();
