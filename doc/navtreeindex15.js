@@ -194,8 +194,8 @@ var NAVTREEINDEX15 =
 "file__status__manager_8h.html":[14,0,1,0,0,0,14,0],
 "file__status__manager_8h_source.html":[14,0,1,0,0,0,14,0],
 "files.html":[14,0],
-"functions.html":[13,3,0,0],
 "functions.html":[13,3,0],
+"functions.html":[13,3,0,0],
 "functions_b.html":[13,3,0,1],
 "functions_c.html":[13,3,0,2],
 "functions_d.html":[13,3,0,3],
@@ -249,5 +249,5 @@ var NAVTREEINDEX15 =
 "functions_type.html":[13,3,3],
 "functions_u.html":[13,3,0,20],
 "functions_v.html":[13,3,0,21],
-"functions_vars.html":[13,3,2]
+"functions_vars.html":[13,3,2,0]
 };

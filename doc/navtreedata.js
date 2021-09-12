@@ -36,17 +36,16 @@ var NAVTREE =
     [ "Build Instructions", "index.html#autotoc_md17", [
       [ "Ubuntu 18.04", "index.html#autotoc_md18", null ],
       [ "Ubuntu 20.04", "index.html#autotoc_md19", null ],
-      [ "macOS", "index.html#autotoc_md20", null ],
-      [ "CMake Options", "index.html#autotoc_md21", null ]
+      [ "CMake Options", "index.html#autotoc_md20", null ]
     ] ],
-    [ "Quickstart Guide", "index.html#autotoc_md22", null ],
-    [ "Contributing", "index.html#autotoc_md23", [
-      [ "Run static checks and clang format locally", "index.html#autotoc_md24", null ],
-      [ "Generate Changelog", "index.html#autotoc_md25", null ]
+    [ "Quickstart Guide", "index.html#autotoc_md21", null ],
+    [ "Contributing", "index.html#autotoc_md22", [
+      [ "Run static checks and clang format locally", "index.html#autotoc_md23", null ],
+      [ "Generate Changelog", "index.html#autotoc_md24", null ]
     ] ],
-    [ "Academic Context", "index.html#autotoc_md26", null ],
-    [ "Licensing", "index.html#autotoc_md27", null ],
-    [ "Disclaimer", "index.html#autotoc_md28", null ],
+    [ "Academic Context", "index.html#autotoc_md25", null ],
+    [ "Licensing", "index.html#autotoc_md26", null ],
+    [ "Disclaimer", "index.html#autotoc_md27", null ],
     [ "LICENSE", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html", [
       [ "SIL Open Font License v1.1", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md4", [
         [ "Preamble", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md5", null ],
@@ -116,11 +115,11 @@ var NAVTREEINDEX =
 "dir_5f4cccbb839d6c6ae068437bcedb0ae8.html",
 "functions_vars.html",
 "group__pybind.html#ga24b748055e4be6a24e7103a78f6f272d",
-"module__widget_8h_source.html",
-"node__box_8h_source.html",
-"python__console__widget_8h_source.html",
-"structhal_1_1_boolean_function_1_1_operand_node.html#a9f3584ad3d9063a5063f432e547782d2",
-"types_8cpp_source.html"
+"modules.html",
+"node__drag__shadow_8cpp.html",
+"python__context_8cpp.html",
+"structhal_1_1_boolean_function_1_1_operand_node.html#a9fa345fd01babeefb7aeaec9be54a1a1",
+"types_8h.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

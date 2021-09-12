@@ -1,6 +1,5 @@
 var NAVTREEINDEX19 =
 {
-"node__box_8h_source.html":[14,0,1,0,0,0,17,2,4],
 "node__drag__shadow_8cpp.html":[14,0,1,0,2,16,1,2,0],
 "node__drag__shadow_8cpp_source.html":[14,0,1,0,2,16,1,2,0],
 "node__drag__shadow_8h.html":[14,0,1,0,0,0,17,1,2,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX19 =
 "python__console__qss__adapter_8h_source.html":[14,0,1,0,0,0,34,3],
 "python__console__widget_8cpp.html":[14,0,1,0,2,32,4],
 "python__console__widget_8cpp_source.html":[14,0,1,0,2,32,4],
-"python__console__widget_8h.html":[14,0,1,0,0,0,34,4]
+"python__console__widget_8h.html":[14,0,1,0,0,0,34,4],
+"python__console__widget_8h_source.html":[14,0,1,0,0,0,34,4]
 };
