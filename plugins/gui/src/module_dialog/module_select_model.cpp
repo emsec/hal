@@ -17,6 +17,8 @@
 namespace hal
 {
     //---------------- HISTORY ----------------------------------------
+    const int ModuleSelectHistory::sMaxEntries = 10;
+
     ModuleSelectHistory* ModuleSelectHistory::inst = nullptr;
 
     ModuleSelectHistory* ModuleSelectHistory::instance()
@@ -30,6 +32,7 @@ namespace hal
     {
         removeAll(id);
         prepend(id);
+        while (size() > sMaxEntries) takeLast();
     }
 
     //---------------- ENTRY ------------------------------------------

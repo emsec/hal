@@ -177,6 +177,7 @@ namespace hal {
         Q_UNUSED(index);
         mTreeView->clearSelection();
         mTableView->clearSelection();
+        mSearchbar->clear();
         if (!ModuleSelectHistory::instance()->isEmpty())
             mLastUsed->clearSelection();
     }

@@ -158,6 +158,8 @@ namespace hal {
     {
         static ModuleSelectHistory* inst;
         ModuleSelectHistory() {;}
+
+        static const int sMaxEntries;
     public:
         static ModuleSelectHistory* instance();
         void add(u32 id);
