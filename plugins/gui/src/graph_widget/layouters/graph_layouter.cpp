@@ -270,11 +270,11 @@ namespace hal
         mMaxLeftIoPaddingForChannelX.clear();
         mMaxRightIoPaddingForChannelX.clear();
 
-        mMinXIndex = 0;
-        mMinYIndex = 0;
+        mMinXIndex = INT_MAX;
+        mMinYIndex = INT_MAX;
 
-        mMaxXIndex = 0;
-        mMaxYIndex = 0;
+        mMaxXIndex = INT_MIN;
+        mMaxYIndex = INT_MIN;
 
         mXValues.clear();
         mYValues.clear();
@@ -1054,7 +1054,7 @@ namespace hal
             itxLast = itNext;
         }
 
-        int iy0 = mNodeBoundingBox.y();
+        int iy0 = mNodeBoundingBox.y()*2;
         float y0 = mCoordY[iy0].preLanes() * sLaneSpacing + sVRoadPadding;
         mCoordY[iy0].setOffset(y0);
         mYValues.append(mCoordY.value(iy0).lanePosition(0));

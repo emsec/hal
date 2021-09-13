@@ -49,20 +49,52 @@ namespace hal
             .value("select", PinType::select, R"(Select pin.)")
             .export_values();
 
+        py::enum_<AsyncSetResetBehavior>(m, "AsyncSetResetBehavior", R"(
+            Defines the behavior of the gate type in case both asynchronous set and reset are active at the same time.
+        )")
+            .value("L", AsyncSetResetBehavior::L, R"(Set the internal state to '0'.)")
+            .value("H", AsyncSetResetBehavior::H, R"(Set the internal state to '1'.)")
+            .value("N", AsyncSetResetBehavior::N, R"(Do not change the internal state.)")
+            .value("T", AsyncSetResetBehavior::T, R"(Toggle, i.e., invert the internal state.)")
+            .value("X", AsyncSetResetBehavior::X, R"(Set the internal state to 'X'.)")
+            .value("undef", AsyncSetResetBehavior::undef, R"(Invalid bahavior, used by default.)")
+            .export_values();
+
         py::class_<GateType, RawPtrWrapper<GateType>> py_gate_type(m, "GateType", R"(
             A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
         )");
 
-        py::enum_<GateType::ClearPresetBehavior>(py_gate_type, "ClearPresetBehavior", R"(
-            Defines the behavior of the gate type in case both clear and preset are active at the same time.
-        )")
-            .value("L", GateType::ClearPresetBehavior::L, R"(Set the internal state to '0'.)")
-            .value("H", GateType::ClearPresetBehavior::H, R"(Set the internal state to '1'.)")
-            .value("N", GateType::ClearPresetBehavior::N, R"(Do not change the internal state.)")
-            .value("T", GateType::ClearPresetBehavior::T, R"(Toggle, i.e., invert the internal state.)")
-            .value("X", GateType::ClearPresetBehavior::X, R"(Set the internal state to 'X'.)")
-            .value("undef", GateType::ClearPresetBehavior::undef, R"(Invalid bahavior, used by default.)")
-            .export_values();
+        py_gate_type.def_property_readonly("components", &GateType::get_components, R"(
+            All components of the gate type as a list.
+
+            :type: list[hal_py.GateTypeComponent]
+        )");
+
+        py_gate_type.def("get_components", &GateType::get_components, py::arg("filter") = nullptr, R"(
+            Get all components matching the filter condition (if provided) as a list. 
+            Returns an empty list if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
+
+            :param lambda filter: The filter applied to all candidate components, disabled by default.
+            :returns: The components.
+            :rtype: list[hal_py.GateTypeComponent]
+        )");
+
+        py_gate_type.def("get_component", &GateType::get_component, py::arg("filter") = nullptr, R"(
+            Get a single component matching the filter condition (if provided).
+            Returns None if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
+
+            :param lambda filter: The filter applied to all candidate components.
+            :returns: The component or None.
+            :rtype: hal_py.GateTypeComponent or None
+        )");
+
+        py_gate_type.def("has_component_of_type", &GateType::has_component_of_type, py::arg("type"), R"(
+            Check if the gate type contains a component of the specified type.
+
+            :param hal_py.GateTypeComponent.ComponentType type: The component type to check for.
+            :returns: True if the gate type contains a component of the speciifed type, False otherwise.
+            :rtype: bool
+        )");
 
         py_gate_type.def_property_readonly("id", &GateType::get_id, R"(
             :type: The unique ID of the gate type.
@@ -92,6 +124,12 @@ namespace hal
             The properties assigned to the gate type.
 
             :type: set[hal_py.GateTypeProperty]
+        )");
+
+        py_gate_type.def("assign_property", &GateType::assign_property, py::arg("property"), R"(
+            Assign a new property to the gate type.
+
+            :param hal_py.GateTypeProperty property: The property to assign.
         )");
 
         py_gate_type.def("get_properties", &GateType::get_properties, R"(
@@ -357,82 +395,20 @@ namespace hal
             :type: dict[str,hal_py.BooleanFunction]
         )");
 
+        py_gate_type.def("get_boolean_function", &GateType::get_boolean_function, py::arg("function_name"), R"(
+            Get the Boolean function specified by name.
+            If no Boolean function matches the name, an empty function is returned.
+
+            :param str function_name: The name of the Boolean function.
+            :returns: The specified Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
         py_gate_type.def("get_boolean_functions", &GateType::get_boolean_functions, R"(
             Get all Boolean functions of the gate type.
 
             :returns: A dict from Boolean function names to Boolean functions.
             :rtype: dict[str,hal_py.BooleanFunction]
-        )");
-
-        py_gate_type.def("set_clear_preset_behavior", &GateType::set_clear_preset_behavior, py::arg("cp1"), py::arg("cp2"), R"(
-            Set the behavior that describes the internal state when both clear and preset are active at the same time.
-
-            :param hal_py.GateType.ClearPresetBehavior cp1: The value specifying the behavior for the internal state.
-            :param hal_py.GateType.ClearPresetBehavior cp2: The value specifying the behavior for the negated internal state.
-        )");
-
-        py_gate_type.def("get_clear_preset_behavior", &GateType::get_clear_preset_behavior, R"(
-            Get the behavior of the internal state and the negated internal state when both clear and preset are active at the same time.
-
-            :returns: The values specifying the behavior for the internal and negated internal state.
-            :rytpe: tuple(hal_py.GateType.ClearPresetBehavior, hal_py.GateType.ClearPresetBehavior)
-        )");
-
-        py_gate_type.def_property("config_data_category", &GateType::get_config_data_category, &GateType::set_config_data_category, R"(
-            The category in which to find the configuration data associated with this gate type.
-
-            :type: str
-        )");
-
-        py_gate_type.def("set_config_data_category", &GateType::set_config_data_category, py::arg("category"), R"(
-            Set the category in which to find the configuration data associated with this gate type.
-
-            :param str category:  The data category.
-        )");
-
-        py_gate_type.def("get_config_data_category", &GateType::get_config_data_category, R"(
-            Get the category in which to find the configuration data associated with this gate type.
-
-            :returns: The data category.
-            :rtype: str
-        )");
-
-        py_gate_type.def_property("config_data_identifier", &GateType::get_config_data_identifier, &GateType::set_config_data_identifier, R"(
-            The identifier used to specify the configuration data associated with this gate type.
-
-            :type: str
-        )");
-
-        py_gate_type.def("set_config_data_identifier", &GateType::set_config_data_identifier, py::arg("identifier"), R"(
-            Set the identifier used to specify the configuration data associated with this gate type.
-
-            :param str identifier: The data identifier.
-        )");
-
-        py_gate_type.def("get_config_data_identifier", &GateType::get_config_data_identifier, R"(
-            Get the identifier used to specify the configuration data associated with this gate type.
-
-            :returns: The data identifier.
-            :rtype: str
-        )");
-
-        py_gate_type.def_property("lut_init_ascending", &GateType::is_lut_init_ascending, &GateType::set_lut_init_ascending, R"(
-            For LUT gate types, defines the bit-order of the initialization string. True if ascending bit-order, false otherwise.
-
-            :type: bool
-        )");
-
-        py_gate_type.def("set_lut_init_ascending", &GateType::set_lut_init_ascending, py::arg("ascending"), R"(
-            For LUT gate types, set the bit-order of the initialization string.
-
-            :param bool ascending: True if ascending bit-order, false otherwise.
-        )");
-
-        py_gate_type.def("is_lut_init_ascending", &GateType::is_lut_init_ascending, R"(
-            For LUT gate types, get the bit-order of the initialization string.
-
-            :returns: True if ascending bit-order, false otherwise.
-            :rtype: bool
         )");
     }
 }    // namespace hal

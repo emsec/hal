@@ -1,6 +1,8 @@
 #include "liberty_parser/liberty_parser.h"
 
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include "hal_core/utilities/log.h"
 
 #include <fstream>
@@ -328,17 +330,6 @@ namespace hal
                 cell.properties.insert(GateTypeProperty::latch);
                 cell.properties.insert(GateTypeProperty::sequential);
                 cell.latch = latch.value();
-            }
-            else if (next_token == "lut")
-            {
-                auto lut = parse_lut(cell_str);
-                if (!lut.has_value())
-                {
-                    return std::nullopt;
-                }
-                cell.properties.insert(GateTypeProperty::lut);
-                cell.properties.insert(GateTypeProperty::combinational);
-                cell.lut = lut.value();
             }
         }
 
@@ -680,7 +671,7 @@ namespace hal
                 Token<std::string> behav_str = ff_str.consume();
                 ff_str.consume(";", true);
 
-                if (auto behav = enum_from_string<GateType::ClearPresetBehavior>(behav_str, GateType::ClearPresetBehavior::undef); behav != GateType::ClearPresetBehavior::undef)
+                if (auto behav = enum_from_string<AsyncSetResetBehavior>(behav_str, AsyncSetResetBehavior::undef); behav != AsyncSetResetBehavior::undef)
                 {
                     if (next_token == "clear_preset_var1")
                     {
@@ -696,18 +687,6 @@ namespace hal
                     log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav_str.string, behav_str.number);
                     return std::nullopt;
                 }
-            }
-            else if (next_token == "data_category")
-            {
-                ff_str.consume(":", true);
-                ff.data_category = ff_str.consume();
-                ff_str.consume(";", true);
-            }
-            else if (next_token == "data_key")
-            {
-                ff_str.consume(":", true);
-                ff.data_identifier = ff_str.consume();
-                ff_str.consume(";", true);
             }
         } while (ff_str.remaining() > 0);
 
@@ -761,7 +740,7 @@ namespace hal
                 Token<std::string> behav_str = latch_str.consume();
                 latch_str.consume(";", true);
 
-                if (auto behav = enum_from_string<GateType::ClearPresetBehavior>(behav_str, GateType::ClearPresetBehavior::undef); behav != GateType::ClearPresetBehavior::undef)
+                if (auto behav = enum_from_string<AsyncSetResetBehavior>(behav_str, AsyncSetResetBehavior::undef); behav != AsyncSetResetBehavior::undef)
                 {
                     if (next_token == "clear_preset_var1")
                     {
@@ -783,102 +762,145 @@ namespace hal
         return latch;
     }
 
-    std::optional<LibertyParser::lut_group> LibertyParser::parse_lut(TokenStream<std::string>& str)
-    {
-        lut_group lut;
-
-        lut.line_number = str.peek().number;
-        str.consume("(", true);
-        lut.name = str.consume().string;
-        str.consume(")", true);
-        str.consume("{", true);
-        auto lut_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
-        str.consume("}", true);
-
-        do
-        {
-            auto next_token = lut_str.consume();
-            if (next_token == "data_category")
-            {
-                lut_str.consume(":", true);
-                lut.data_category = lut_str.consume();
-                lut_str.consume(";", true);
-            }
-            else if (next_token == "data_identifier")
-            {
-                lut_str.consume(":", true);
-                lut.data_identifier = lut_str.consume();
-                lut_str.consume(";", true);
-            }
-            else if (next_token == "bit_order")
-            {
-                lut_str.consume(":", true);
-                auto direction = lut_str.consume();
-
-                if (direction == "ascending" || direction == "descending")
-                {
-                    lut.data_direction = direction;
-                }
-                else
-                {
-                    log_error("liberty_parser", "invalid data direction '{}' near line {}.", direction.string, direction.number);
-                    return std::nullopt;
-                }
-
-                lut_str.consume(";", true);
-            }
-        } while (lut_str.remaining() > 0);
-
-        return lut;
-    }
-
     bool LibertyParser::construct_gate_type(cell_group& cell)
     {
+        // get input and from pin groups
+        bool has_inputs = false;
+        u32 num_outputs = 0;
+        std::string output_func;
         std::vector<std::string> input_pins;
         std::vector<std::string> output_pins;
-
-        std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> groups;
-
-        bool has_inputs        = false;
-        bool has_single_output = false;
-        std::string func;
         for (const auto& pin : cell.pins)
         {
-            if (pin.direction == PinDirection::input)
+            if (pin.direction == PinDirection::input || pin.direction == PinDirection::inout)
             {
+                input_pins.insert(input_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
                 has_inputs = true;
-                break;
             }
-            else if (pin.direction == PinDirection::output)
+            else if (pin.direction == PinDirection::output || pin.direction == PinDirection::inout)
             {
-                if (has_single_output == true)
-                {
-                    has_single_output = false;
-                    break;
-                }
-                else if (pin.pin_names.size() != 1)
-                {
-                    break;
-                }
-                else
-                {
-                    has_single_output = true;
-                    func              = pin.function;
-                }
+                output_pins.insert(output_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
+                num_outputs += pin.pin_names.size();
+                output_func = pin.function;
             }
         }
 
-        if (!has_inputs && has_single_output)
+        std::unique_ptr<GateTypeComponent> parent_component = nullptr;
+        std::unordered_map<std::string, PinType> pin_types;
+        if (!has_inputs && num_outputs == 1)
         {
-            if (func == "0")
+            if (output_func == "0")
             {
                 cell.properties.insert(GateTypeProperty::combinational);
                 cell.properties.insert(GateTypeProperty::ground);
             }
-            else if (func == "1")
+            else if (output_func == "1")
             {
                 cell.properties.insert(GateTypeProperty::combinational);
                 cell.properties.insert(GateTypeProperty::power);
+            }
+        }
+        else if (cell.ff.has_value())
+        {
+            if (cell.ff->clocked_on.empty() || cell.ff->next_state.empty())
+            {
+                return false;
+            }
+
+            parent_component =
+                GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string(cell.ff->next_state, input_pins), BooleanFunction::from_string(cell.ff->clocked_on, input_pins));
+
+            FFComponent* ff_component = parent_component->convert_to<FFComponent>();
+            if (!cell.ff->clear.empty())
+            {
+                ff_component->set_async_reset_function(BooleanFunction::from_string(cell.ff->clear, input_pins));
+            }
+            if (!cell.ff->preset.empty())
+            {
+                ff_component->set_async_set_function(BooleanFunction::from_string(cell.ff->preset, input_pins));
+            }
+
+            ff_component->set_async_set_reset_behavior(cell.ff->special_behavior_var1, cell.ff->special_behavior_var2);
+
+            for (auto& pin : cell.pins)
+            {
+                if (pin.function == cell.ff->state1)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        pin_types[pin_name] = PinType::state;
+                    }
+
+                    pin.function = "";
+                }
+                else if (pin.function == cell.ff->state2)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        pin_types[pin_name] = PinType::neg_state;
+                    }
+
+                    pin.function = "";
+                }
+
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        pin_types[pin_name] = PinType::clock;
+                    }
+                }
+            }
+        }
+        else if (cell.latch.has_value())
+        {
+            if (cell.latch->enable.empty() || cell.latch->data_in.empty())
+            {
+                return false;
+            }
+
+            parent_component = GateTypeComponent::create_latch_component(BooleanFunction::from_string(cell.latch->data_in, input_pins), BooleanFunction::from_string(cell.latch->enable, input_pins));
+
+            LatchComponent* latch_component = parent_component->convert_to<LatchComponent>();
+            if (!cell.latch->clear.empty())
+            {
+                latch_component->set_async_reset_function(BooleanFunction::from_string(cell.latch->clear, input_pins));
+            }
+            if (!cell.latch->preset.empty())
+            {
+                latch_component->set_async_set_function(BooleanFunction::from_string(cell.latch->preset, input_pins));
+            }
+
+            latch_component->set_async_set_reset_behavior(cell.latch->special_behavior_var1, cell.latch->special_behavior_var2);
+
+            for (auto& pin : cell.pins)
+            {
+                if (pin.function == cell.latch->state1)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        pin_types[pin_name] = PinType::state;
+                    }
+
+                    pin.function = "";
+                }
+                else if (pin.function == cell.latch->state2)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        pin_types[pin_name] = PinType::neg_state;
+                    }
+
+                    pin.function = "";
+                }
+
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        pin_types[pin_name] = PinType::clock;
+                    }
+                }
             }
         }
 
@@ -887,254 +909,18 @@ namespace hal
             cell.properties.insert(GateTypeProperty::combinational);
         }
 
-        GateType* gt = m_gate_lib->create_gate_type(cell.name, cell.properties);
+        GateType* gt = m_gate_lib->create_gate_type(cell.name, cell.properties, std::move(parent_component));
 
         // get input and output pins from pin groups
         for (const auto& pin : cell.pins)
         {
-            if (pin.direction == PinDirection::input || pin.direction == PinDirection::inout)
-            {
-                input_pins.insert(input_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
-            }
-
-            if (pin.direction == PinDirection::output || pin.direction == PinDirection::inout)
-            {
-                output_pins.insert(output_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
-            }
-
             gt->add_pins(pin.pin_names, pin.direction);
-        }
 
-        // get input and output pins from bus groups
-        for (const auto& bus : cell.buses)
-        {
-            if (groups.find(bus.first) != groups.end())
-            {
-                log_error("liberty_parser", "pin group must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
-                return false;
-            }
-            groups[bus.first].insert(groups[bus.first].end(), bus.second.pin_indices.begin(), bus.second.pin_indices.end());
-        }
-
-        if (cell.properties.find(GateTypeProperty::ff) != cell.properties.end())
-        {
-            if (!cell.ff.clocked_on.empty())
-            {
-                cell.special_functions["clock"] = cell.ff.clocked_on;
-            }
-
-            if (!cell.ff.next_state.empty())
-            {
-                cell.special_functions["next_state"] = cell.ff.next_state;
-            }
-
-            if (!cell.ff.preset.empty())
-            {
-                cell.special_functions["preset"] = cell.ff.preset;
-            }
-
-            if (!cell.ff.clear.empty())
-            {
-                cell.special_functions["clear"] = cell.ff.clear;
-            }
-
-            gt->set_clear_preset_behavior(cell.ff.special_behavior_var1, cell.ff.special_behavior_var2);
-            gt->set_config_data_category(cell.ff.data_category);
-            gt->set_config_data_identifier(cell.ff.data_identifier);
-
-            for (auto& pin : cell.pins)
-            {
-                if (pin.function == cell.ff.state1)
-                {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        gt->assign_pin_type(pin_name, PinType::state);
-                    }
-
-                    pin.function = "";
-                }
-                else if (pin.function == cell.ff.state2)
-                {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        gt->assign_pin_type(pin_name, PinType::neg_state);
-                    }
-
-                    pin.function = "";
-                }
-
-                if (pin.clock == true)
-                {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        gt->assign_pin_type(pin_name, PinType::clock);
-                    }
-                }
-            }
-
-            for (auto& bus : cell.buses)
-            {
-                for (auto& pin : bus.second.pins)
-                {
-                    if (pin.function == cell.ff.state1)
-                    {
-                        for (const auto& pin_name : pin.pin_names)
-                        {
-                            gt->assign_pin_type(pin_name, PinType::state);
-                        }
-
-                        pin.function = "";
-                    }
-                    else if (pin.function == cell.ff.state2)
-                    {
-                        for (const auto& pin_name : pin.pin_names)
-                        {
-                            gt->assign_pin_type(pin_name, PinType::neg_state);
-                        }
-
-                        pin.function = "";
-                    }
-
-                    if (pin.clock == true)
-                    {
-                        for (const auto& pin_name : pin.pin_names)
-                        {
-                            gt->assign_pin_type(pin_name, PinType::clock);
-                        }
-                    }
-                }
-            }
-        }
-        else if (cell.properties.find(GateTypeProperty::latch) != cell.properties.end())
-        {
-            if (!cell.latch.enable.empty())
-            {
-                cell.special_functions["enable"] = cell.latch.enable;
-            }
-
-            if (!cell.latch.data_in.empty())
-            {
-                cell.special_functions["data"] = cell.latch.data_in;
-            }
-
-            if (!cell.latch.preset.empty())
-            {
-                cell.special_functions["preset"] = cell.latch.preset;
-            }
-
-            if (!cell.latch.clear.empty())
-            {
-                cell.special_functions["clear"] = cell.latch.clear;
-            }
-
-            gt->set_clear_preset_behavior(cell.latch.special_behavior_var1, cell.latch.special_behavior_var2);
-
-            for (auto& pin : cell.pins)
-            {
-                if (pin.function == cell.latch.state1)
-                {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        gt->assign_pin_type(pin_name, PinType::state);
-                    }
-
-                    pin.function = "";
-                }
-                else if (pin.function == cell.latch.state2)
-                {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        gt->assign_pin_type(pin_name, PinType::neg_state);
-                    }
-
-                    pin.function = "";
-                }
-
-                if (pin.clock == true)
-                {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        gt->assign_pin_type(pin_name, PinType::clock);
-                    }
-                }
-            }
-
-            for (auto& bus : cell.buses)
-            {
-                for (auto& pin : bus.second.pins)
-                {
-                    if (pin.function == cell.latch.state1)
-                    {
-                        for (const auto& pin_name : pin.pin_names)
-                        {
-                            gt->assign_pin_type(pin_name, PinType::state);
-                        }
-
-                        pin.function = "";
-                    }
-                    else if (pin.function == cell.latch.state2)
-                    {
-                        for (const auto& pin_name : pin.pin_names)
-                        {
-                            gt->assign_pin_type(pin_name, PinType::neg_state);
-                        }
-
-                        pin.function = "";
-                    }
-
-                    if (pin.clock == true)
-                    {
-                        for (const auto& pin_name : pin.pin_names)
-                        {
-                            gt->assign_pin_type(pin_name, PinType::clock);
-                        }
-                    }
-                }
-            }
-        }
-        else if (cell.properties.find(GateTypeProperty::lut) != cell.properties.end())
-        {
-            gt->set_config_data_category(cell.lut.data_category);
-            gt->set_config_data_identifier(cell.lut.data_identifier);
-            gt->set_lut_init_ascending(cell.lut.data_direction == "ascending");
-
-            for (auto& pin : cell.pins)
-            {
-                if (pin.function == cell.lut.name)
-                {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        gt->assign_pin_type(pin_name, PinType::lut);
-                    }
-
-                    pin.function = "";
-                }
-            }
-
-            for (auto& bus : cell.buses)
-            {
-                for (auto& pin : bus.second.pins)
-                {
-                    if (pin.function == cell.lut.name)
-                    {
-                        for (const auto& pin_name : pin.pin_names)
-                        {
-                            gt->assign_pin_type(pin_name, PinType::lut);
-                        }
-
-                        pin.function = "";
-                    }
-                }
-            }
-        }
-
-        for (const auto& pin : cell.pins)
-        {
             if (pin.power == true)
             {
                 for (const auto& pin_name : pin.pin_names)
                 {
-                    gt->assign_pin_type(pin_name, PinType::power);
+                    pin_types[pin_name] = PinType::power;
                 }
             }
 
@@ -1142,17 +928,22 @@ namespace hal
             {
                 for (const auto& pin_name : pin.pin_names)
                 {
-                    gt->assign_pin_type(pin_name, PinType::ground);
+                    pin_types[pin_name] = PinType::ground;
                 }
             }
         }
 
-        for (const auto& [group, index_to_pin] : groups)
+        for (const auto& [bus_name, bus_info] : cell.buses)
         {
-            if (!gt->assign_pin_group(group, index_to_pin))
+            if (!gt->assign_pin_group(bus_name, bus_info.pin_indices))
             {
                 return false;
             }
+        }
+
+        for (const auto& [pin, type] : pin_types)
+        {
+            gt->assign_pin_type(pin, type);
         }
 
         std::vector<std::string> all_pins = input_pins;
@@ -1193,11 +984,6 @@ namespace hal
                         gt->add_boolean_function(name + "_tristate", function);
                     }
                 }
-            }
-
-            for (const auto& [name, function] : cell.special_functions)
-            {
-                gt->add_boolean_function(name, BooleanFunction::from_string(function, all_pins));
             }
         }
 
@@ -1473,11 +1259,6 @@ namespace hal
                     }
                 }
             }
-        }
-
-        for (const auto& [name, function] : cell.special_functions)
-        {
-            res.emplace(name, BooleanFunction::from_string(prepare_pin_function(cell.buses, function), all_pins));
         }
 
         return res;

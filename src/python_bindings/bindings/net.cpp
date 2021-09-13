@@ -159,7 +159,6 @@ namespace hal
 
             :returns: The (first) source endpoint.
             :rtype: hal_py.Endpoint
-
         )");
 
         py_net.def("add_destination", &Net::add_destination, py::arg("gate"), py::arg("pin"), R"(

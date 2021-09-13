@@ -64,7 +64,6 @@ namespace hal
     {
         UNUSED(args);
         std::string path;
-        u32 layer;
         std::vector<u32> sizes;
 
         if (args.is_option_set("--path"))
