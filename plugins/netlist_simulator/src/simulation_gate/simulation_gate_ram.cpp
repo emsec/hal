@@ -238,15 +238,8 @@ namespace hal
 
         for (size_t index : m_clocked_write_ports)
         {
-            Port port = m_ports.at(index);
-
-            std::vector<BooleanFunction::Value> address_values;
-            for (const std::string& pin : port.address_pins)
-            {
-                address_values.push_back(m_input_values.at(pin));
-            }
-
-            u32 address   = simulation_utils::values_to_int(address_values);
+            Port port     = m_ports.at(index);
+            u32 address   = simulation_utils::get_int_bus_value(m_input_values, port.address_pins);
             u32 data_size = port.data_pins.size();
 
             // write data to internal memory

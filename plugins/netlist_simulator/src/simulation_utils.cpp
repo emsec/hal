@@ -78,5 +78,16 @@ namespace hal
 
             return res;
         }
+
+        u32 get_int_bus_value(const std::unordered_map<std::string, BooleanFunction::Value>& signal_values, const std::vector<std::string>& ordered_pins)
+        {
+            std::vector<BooleanFunction::Value> ordered_values;
+            for (const std::string& pin : ordered_pins)
+            {
+                ordered_values.push_back(signal_values.at(pin));
+            }
+
+            return simulation_utils::values_to_int(ordered_values);
+        }
     }    // namespace simulation_utils
 }    // namespace hal
