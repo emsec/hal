@@ -223,6 +223,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_f_f_component.html#a26af1e05ec08def8ece5890b9296cd8d">hal::FFComponent</a>
 , <a class="el" href="classhal_1_1_r_a_m_port_component.html#aa0dcc4d24215aa62fb80938990dad8d3">hal::RAMPortComponent</a>
 </li>
+<li>get_color()
+: <a class="el" href="classhal_1_1_grouping.html#a309d7952a4c0fc0feb78db56a4c15cbd">hal::Grouping</a>
+</li>
 <li>get_component()
 : <a class="el" href="classhal_1_1_gate_type.html#aa9df15aa0cd043bca80751f0665e0210">hal::GateType</a>
 , <a class="el" href="classhal_1_1_gate_type_component.html#acb0075c46f66aa6004b6cd529cb4c411">hal::GateTypeComponent</a>
@@ -762,7 +765,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_get_in_touch_widget.html#a25e6cbcd27c08366d3170718fde88158">hal::GetInTouchWidget</a>
 </li>
 <li>getItem()
-: <a class="el" href="classhal_1_1_module_model.html#a788da4c0a93921306f941a9a541a2c57">hal::ModuleModel</a>
+: <a class="el" href="classhal_1_1_module_model.html#a9aefc1c8a6482d3641b15507df11f1e0">hal::ModuleModel</a>
 </li>
 <li>getItems()
 : <a class="el" href="classhal_1_1_main_settings_list.html#abc7924b7ef507b3660ef0e0b734a8c0f">hal::MainSettingsList</a>
@@ -819,7 +822,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_grouping_manager_widget.html#a85d39ec7dc82b0f3ce1beaa67f8919a5">hal::GroupingManagerWidget</a>
 </li>
 <li>getPythonBase()
-: <a class="el" href="classhal_1_1_details_general_common_info.html#a6029f98e0d738fedfdbf1a68d9bf0bda">hal::DetailsGeneralCommonInfo&lt; T &gt;</a>
+: <a class="el" href="classhal_1_1_details_general_common_info.html#afb43177e90cfe3748de56a32e5c9b9ab">hal::DetailsGeneralCommonInfo&lt; T &gt;</a>
 </li>
 <li>getPythonEditorWidget()
 : <a class="el" href="classhal_1_1_content_manager.html#a45ddb1fee415ac5ed73bc62fb112c259">hal::ContentManager</a>
@@ -957,18 +960,19 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>gridPosition()
 : <a class="el" href="classhal_1_1_node_box.html#ac6c6fde7e4fe21bec776050f6debd747">hal::NodeBox</a>
+, <a class="el" href="classhal_1_1_placement_hint.html#addeee89e239e71feffce0f710595207d">hal::PlacementHint</a>
 </li>
 <li>GridPosition
 : <a class="el" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30472caec088342be6e3c336a35fcfbc">hal::PlacementHint</a>
-</li>
-<li>gridPosition()
-: <a class="el" href="classhal_1_1_placement_hint.html#addeee89e239e71feffce0f710595207d">hal::PlacementHint</a>
 </li>
 <li>gridType()
 : <a class="el" href="classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba">hal::GraphGraphicsView</a>
 </li>
 <li>GridType
 : <a class="el" href="classhal_1_1_graphics_scene.html#a389c6d75b6d7acbb83523ba1a62637fd">hal::GraphicsScene</a>
+</li>
+<li>groupId()
+: <a class="el" href="classhal_1_1_grouping_dialog.html#a31b2b5118bf361433c6b0566258d2d39">hal::GroupingDialog</a>
 </li>
 <li>grouping()
 : <a class="el" href="classhal_1_1_details_general_common_info.html#afad560cd47b221649575675536c28c81">hal::DetailsGeneralCommonInfo&lt; T &gt;</a>
@@ -989,12 +993,19 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>groupingColorChanged()
 : <a class="el" href="classhal_1_1_grouping_table_model.html#a879da62666d443facf2859a323ddba7e">hal::GroupingTableModel</a>
+, <a class="el" href="classhal_1_1_netlist_relay.html#a1386c8a55dee80d82f38269186dfb14a">hal::NetlistRelay</a>
+</li>
+<li>groupingColorChangedEvent()
+: <a class="el" href="classhal_1_1_grouping_table_model.html#a7601827e6ae19b5e088fe5bdce568c36">hal::GroupingTableModel</a>
 </li>
 <li>GroupingColorDelegate()
 : <a class="el" href="classhal_1_1_grouping_color_delegate.html#a2d08686e780e4c5ab121d92147cfade9">hal::GroupingColorDelegate</a>
 </li>
 <li>groupingCreated()
 : <a class="el" href="classhal_1_1_netlist_relay.html#a29ada1855be416514d0fa3a4a4cb9e01">hal::NetlistRelay</a>
+</li>
+<li>GroupingDialog()
+: <a class="el" href="classhal_1_1_grouping_dialog.html#a9f48d1fbf9224e3cf024583d73461cfb">hal::GroupingDialog</a>
 </li>
 <li>groupingGateAssigned()
 : <a class="el" href="classhal_1_1_netlist_relay.html#a467d0345f9225e4e7378bdb89122e11e">hal::NetlistRelay</a>
@@ -1032,11 +1043,17 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>groupingRemoved()
 : <a class="el" href="classhal_1_1_netlist_relay.html#a84b5e364e0100c725f32b298cdc85e11">hal::NetlistRelay</a>
 </li>
+<li>groupingSelected()
+: <a class="el" href="classhal_1_1_grouping_table_view.html#afa819c0b4723bd0451e4a2ab2541ccba">hal::GroupingTableView</a>
+</li>
 <li>GroupingTableEntry()
-: <a class="el" href="classhal_1_1_grouping_table_entry.html#adec4af9be7f88b85bc98af572e732355">hal::GroupingTableEntry</a>
+: <a class="el" href="classhal_1_1_grouping_table_entry.html#a37d49df1d50dc47ef28cc039bd29a18a">hal::GroupingTableEntry</a>
 </li>
 <li>GroupingTableModel()
-: <a class="el" href="classhal_1_1_grouping_table_model.html#a797c3d434f15925e362ee1a9e9c52f4a">hal::GroupingTableModel</a>
+: <a class="el" href="classhal_1_1_grouping_table_model.html#a361bc539eceb5a6712460cf0522b7897">hal::GroupingTableModel</a>
+</li>
+<li>GroupingTableView()
+: <a class="el" href="classhal_1_1_grouping_table_view.html#a808607d113a3e2633953f4adb6497883">hal::GroupingTableView</a>
 </li>
 <li>groupingUnassignActionFactory()
 : <a class="el" href="classhal_1_1_selection_details_widget.html#ab3e209462aed3084f6482d2c23d9251b">hal::SelectionDetailsWidget</a>
@@ -1053,7 +1070,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Sep 12 2021 23:21:15 for HAL by
+    <li class="footer">Generated on Mon Sep 13 2021 14:28:58 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

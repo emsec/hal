@@ -19,6 +19,7 @@ var dir_8f3a6e7567706389d7af07afaa901854 =
     [ "graph_widget", "dir_62580450d675343767dbe0503393e994.html", "dir_62580450d675343767dbe0503393e994" ],
     [ "graphics_effects", "dir_093e59c7fb79b925f09b3bdeff91a45b.html", "dir_093e59c7fb79b925f09b3bdeff91a45b" ],
     [ "grouping", "dir_b3d26ef66a8e1f570dc589b039460223.html", "dir_b3d26ef66a8e1f570dc589b039460223" ],
+    [ "grouping_dialog", "dir_df03d17cfbe2e7eee2f0a37275fe6f94.html", "dir_df03d17cfbe2e7eee2f0a37275fe6f94" ],
     [ "gui_api", "dir_18daece84518e4419e6cd39b1aee79c8.html", "dir_18daece84518e4419e6cd39b1aee79c8" ],
     [ "gui_utils", "dir_68849dddfdf047b2e33d383b055c9582.html", "dir_68849dddfdf047b2e33d383b055c9582" ],
     [ "input_dialog", "dir_4306e172ec3ba51db6685fbbd77505c2.html", "dir_4306e172ec3ba51db6685fbbd77505c2" ],

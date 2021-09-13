@@ -1,5 +1,5 @@
 <map id="hal::GroupingTableModel" name="hal::GroupingTableModel">
-<area shape="rect" id="node1" title="Table that holds information about all groupings." alt="" coords="75,580,312,789"/>
+<area shape="rect" id="node1" title="Table that holds information about all groupings." alt="" coords="75,580,312,804"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstracttablemodel.html" title=" " alt="" coords="6,380,202,531"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="5,5,197,317"/>
 <area shape="rect" id="node4" href="$classhal_1_1_validator.html" title="Base class for any string validator." alt="" coords="230,402,346,509"/>

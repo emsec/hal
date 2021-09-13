@@ -200,6 +200,8 @@ Signals</h2></td></tr>
 <tr class="separator:a84b5e364e0100c725f32b298cdc85e11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa578cda62756be2eac0bef7e453ddea9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#aa578cda62756be2eac0bef7e453ddea9">groupingNameChanged</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp) const</td></tr>
 <tr class="separator:aa578cda62756be2eac0bef7e453ddea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1386c8a55dee80d82f38269186dfb14a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a1386c8a55dee80d82f38269186dfb14a">groupingColorChanged</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp) const</td></tr>
+<tr class="separator:a1386c8a55dee80d82f38269186dfb14a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a467d0345f9225e4e7378bdb89122e11e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a467d0345f9225e4e7378bdb89122e11e">groupingGateAssigned</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id) const</td></tr>
 <tr class="separator:a467d0345f9225e4e7378bdb89122e11e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af78c105c5f9968ca72b075403a5096e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#af78c105c5f9968ca72b075403a5096e2">groupingGateRemoved</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id) const</td></tr>
@@ -474,7 +476,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00030">30</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00608">debugHandleFileOpened()</a>, <a class="el" href="classhal_1_1_file_manager.html#adce89ed0fffaecd53904a06ced3010f0">hal::FileManager::fileOpened()</a>, and <a class="el" href="file__manager_8cpp_source.html#l00067">hal::FileManager::get_instance()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00611">debugHandleFileOpened()</a>, <a class="el" href="classhal_1_1_file_manager.html#adce89ed0fffaecd53904a06ced3010f0">hal::FileManager::fileOpened()</a>, and <a class="el" href="file__manager_8cpp_source.html#l00067">hal::FileManager::get_instance()</a>.</p>
 
 </div>
 </div>
@@ -528,7 +530,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="action__create__object_8cpp_source.html#l00055">hal::ActionCreateObject::exec()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, and <a class="el" href="action__create__object_8h_source.html#l00055">hal::ActionCreateObject::setParentId()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00122">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
 
 </div>
 </div>
@@ -559,7 +561,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="action__add__items__to__object_8cpp_source.html#l00075">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gSelectionRelay</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, <a class="el" href="selection__relay_8h_source.html#l00279">hal::SelectionRelay::selectedGates()</a>, and <a class="el" href="user__action_8cpp_source.html#l00030">hal::UserAction::setObject()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00122">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
 
 </div>
 </div>
@@ -590,7 +592,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="action__set__object__color_8cpp_source.html#l00043">hal::ActionSetObjectColor::exec()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcolordialog.html#getColor">QColorDialog::getColor()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html#isValid">QColor::isValid()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, <a class="el" href="classhal_1_1_netlist_relay.html#abcb90a65239739807e602c79221bd931">moduleColorChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="user__action_8cpp_source.html#l00030">hal::UserAction::setObject()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00122">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
 
 </div>
 </div>
@@ -621,7 +623,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="action__rename__object_8cpp_source.html#l00052">hal::ActionRenameObject::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00094">hal::Module::get_name()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, and <a class="el" href="user__action_8cpp_source.html#l00030">hal::UserAction::setObject()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00122">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
 
 </div>
 </div>
@@ -652,7 +654,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="action__set__object__type_8cpp_source.html#l00041">hal::ActionSetObjectType::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00114">hal::Module::get_type()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, and <a class="el" href="user__action_8cpp_source.html#l00030">hal::UserAction::setObject()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00122">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
 
 </div>
 </div>
@@ -680,7 +682,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SLOT to handle that a netlist has been closed. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00615">615</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00618">618</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00216">hal::ModuleModel::clear()</a>.</p>
 
@@ -712,7 +714,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SLOT to handle that a netlist has been opened. Used to initially assign all modules a color. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00608">608</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00611">611</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00207">hal::Netlist::get_modules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="el" href="module__model_8cpp_source.html#l00190">hal::ModuleModel::init()</a>, and <a class="el" href="module__model_8cpp_source.html#l00321">hal::ModuleModel::setRandomColor()</a>.</p>
 
@@ -747,7 +749,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="user__action__object_8h_source.html#l00045">hal::UserActionObjectType::Module</a>, and <a class="el" href="user__action_8cpp_source.html#l00030">hal::UserAction::setObject()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00122">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00123">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
 
 </div>
 </div>
@@ -884,7 +886,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00309">hal::ModuleModel::moduleColor()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__select__model_8cpp_source.html#l00036">hal::ModuleSelectEntry::ModuleSelectEntry()</a>, <a class="el" href="module__shader_8cpp_source.html#l00036">hal::ModuleShader::update()</a>, and <a class="el" href="module__model_8cpp_source.html#l00289">hal::ModuleModel::updateModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__select__model_8cpp_source.html#l00039">hal::ModuleSelectEntry::ModuleSelectEntry()</a>, <a class="el" href="module__shader_8cpp_source.html#l00036">hal::ModuleShader::update()</a>, and <a class="el" href="module__model_8cpp_source.html#l00289">hal::ModuleModel::updateModule()</a>.</p>
 
 </div>
 </div>
@@ -907,7 +909,43 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00089">89</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__set__object__color_8cpp_source.html#l00043">hal::ActionSetObjectColor::exec()</a>, <a class="el" href="module__widget_8cpp_source.html#l00258">hal::ModuleWidget::handleSelectionChanged()</a>, <a class="el" href="module__widget_8cpp_source.html#l00193">hal::ModuleWidget::handleTreeSelectionChanged()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00020">hal::ModuleDialog::ModuleDialog()</a>, and <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__delete__object_8cpp_source.html#l00029">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__set__object__color_8cpp_source.html#l00043">hal::ActionSetObjectColor::exec()</a>, <a class="el" href="module__widget_8cpp_source.html#l00259">hal::ModuleWidget::handleSelectionChanged()</a>, <a class="el" href="module__widget_8cpp_source.html#l00194">hal::ModuleWidget::handleTreeSelectionChanged()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00020">hal::ModuleDialog::ModuleDialog()</a>, and <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a1386c8a55dee80d82f38269186dfb14a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1386c8a55dee80d82f38269186dfb14a">&#9670;&nbsp;</a></span>groupingColorChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetlistRelay::groupingColorChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_grouping.html">Grouping</a> *&#160;</td>
+          <td class="paramname"><em>grp</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SIGNAL to notify that a grouping has been recolored. <br  />
+ Relays the following hal-core event: <em><a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a3657ad381110b05b25b1ddfa4221ae09" title="no associated_data">GroupingEvent::event::color_changed</a></em></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">grp</td><td>- The renamed grouping </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00058">hal::GroupingTableModel::GroupingTableModel()</a>.</p>
 
 </div>
 </div>
@@ -943,7 +981,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00037">hal::GroupingTableModel::GroupingTableModel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00058">hal::GroupingTableModel::GroupingTableModel()</a>.</p>
 
 </div>
 </div>
@@ -1167,7 +1205,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00037">hal::GroupingTableModel::GroupingTableModel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00058">hal::GroupingTableModel::GroupingTableModel()</a>.</p>
 
 </div>
 </div>
@@ -1298,7 +1336,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00037">hal::GroupingTableModel::GroupingTableModel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00058">hal::GroupingTableModel::GroupingTableModel()</a>.</p>
 
 </div>
 </div>
@@ -2778,7 +2816,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_netlist_relay.html">NetlistRelay</a></li>
-    <li class="footer">Generated on Sun Sep 12 2021 23:21:14 for HAL by
+    <li class="footer">Generated on Mon Sep 13 2021 14:28:57 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

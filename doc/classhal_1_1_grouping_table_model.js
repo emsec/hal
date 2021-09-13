@@ -1,6 +1,6 @@
 var classhal_1_1_grouping_table_model =
 [
-    [ "GroupingTableModel", "classhal_1_1_grouping_table_model.html#a797c3d434f15925e362ee1a9e9c52f4a", null ],
+    [ "GroupingTableModel", "classhal_1_1_grouping_table_model.html#a361bc539eceb5a6712460cf0522b7897", null ],
     [ "addDefaultEntry", "classhal_1_1_grouping_table_model.html#ac2fb5fccdbbb8ebf826fa1363baf3eb3", null ],
     [ "colorForItem", "classhal_1_1_grouping_table_model.html#acd28f9dfab1c578f0402a991ca994117", null ],
     [ "columnCount", "classhal_1_1_grouping_table_model.html#a1f49d3dade379d7e1c9cd8626431a468", null ],
@@ -10,6 +10,7 @@ var classhal_1_1_grouping_table_model =
     [ "groupingAt", "classhal_1_1_grouping_table_model.html#aa50b2c643776064e12bf9f97558d63e8", null ],
     [ "groupingByName", "classhal_1_1_grouping_table_model.html#a927b652dd8b1a655a4c4df640de9c7e4", null ],
     [ "groupingColorChanged", "classhal_1_1_grouping_table_model.html#a879da62666d443facf2859a323ddba7e", null ],
+    [ "groupingColorChangedEvent", "classhal_1_1_grouping_table_model.html#a7601827e6ae19b5e088fe5bdce568c36", null ],
     [ "groupingNameChangedEvent", "classhal_1_1_grouping_table_model.html#a92f3a6a6f78ad6b490bfcf435cb8cae1", null ],
     [ "groupingNames", "classhal_1_1_grouping_table_model.html#aa9b4e81d1e21622f7373ad73d02be826", null ],
     [ "headerData", "classhal_1_1_grouping_table_model.html#a2fd3d2d951b665d5a4531ccc752c25a3", null ],

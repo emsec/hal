@@ -349,6 +349,7 @@ var group__gui =
       [ "gateRemoved", "classhal_1_1_netlist_relay.html#aaff5f9e3a6d5bd66df2d50ff625e2a71", null ],
       [ "getModuleColor", "classhal_1_1_netlist_relay.html#afe4ad79c97e3b5c42c9568e744f2b369", null ],
       [ "getModuleModel", "classhal_1_1_netlist_relay.html#a8b09fe6aff7f2af5ff9d3da3cd3cc42b", null ],
+      [ "groupingColorChanged", "classhal_1_1_netlist_relay.html#a1386c8a55dee80d82f38269186dfb14a", null ],
       [ "groupingCreated", "classhal_1_1_netlist_relay.html#a29ada1855be416514d0fa3a4a4cb9e01", null ],
       [ "groupingGateAssigned", "classhal_1_1_netlist_relay.html#a467d0345f9225e4e7378bdb89122e11e", null ],
       [ "groupingGateRemoved", "classhal_1_1_netlist_relay.html#af78c105c5f9968ca72b075403a5096e2", null ],

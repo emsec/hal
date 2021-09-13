@@ -33,6 +33,7 @@ var hierarchy =
     ] ],
     [ "subprocess::detail::Child", "classsubprocess_1_1detail_1_1_child.html", null ],
     [ "subprocess::close_fds", "structsubprocess_1_1close__fds.html", null ],
+    [ "hal::utils::Color", "structhal_1_1utils_1_1_color.html", null ],
     [ "subprocess::detail::Communication", "classsubprocess_1_1detail_1_1_communication.html", null ],
     [ "hal::SMT::Constraint", "structhal_1_1_s_m_t_1_1_constraint.html", null ],
     [ "hal::ContentAnchor", "classhal_1_1_content_anchor.html", [
@@ -181,6 +182,7 @@ var hierarchy =
     ] ],
     [ "QList< u32 >", "https://doc.qt.io/qt-5/qlist.html", [
       [ "hal::GateSelectHistory", "classhal_1_1_gate_select_history.html", null ],
+      [ "hal::GroupingTableHistory", "classhal_1_1_grouping_table_history.html", null ],
       [ "hal::ModuleSelectHistory", "classhal_1_1_module_select_history.html", null ]
     ] ],
     [ "QList< WaitToBeSeatedEntry * >", "https://doc.qt.io/qt-5/qlist.html", [
@@ -314,6 +316,7 @@ var hierarchy =
         [ "QDialog", "https://doc.qt.io/qt-5/qdialog.html", [
           [ "hal::AboutDialog", "classhal_1_1_about_dialog.html", null ],
           [ "hal::GateDialog", "classhal_1_1_gate_dialog.html", null ],
+          [ "hal::GroupingDialog", "classhal_1_1_grouping_dialog.html", null ],
           [ "hal::InputDialog", "classhal_1_1_input_dialog.html", null ],
           [ "hal::ModuleDialog", "classhal_1_1_module_dialog.html", null ],
           [ "hal::PythonEditorCodeCompletionDialog", "classhal_1_1_python_editor_code_completion_dialog.html", null ]
@@ -347,6 +350,7 @@ var hierarchy =
             [ "QAbstractItemView", "https://doc.qt.io/qt-5/qabstractitemview.html", [
               [ "QTableView", "https://doc.qt.io/qt-5/qtableview.html", [
                 [ "hal::GateSelectView", "classhal_1_1_gate_select_view.html", null ],
+                [ "hal::GroupingTableView", "classhal_1_1_grouping_table_view.html", null ],
                 [ "hal::ModuleSelectView", "classhal_1_1_module_select_view.html", null ],
                 [ "QTableWidget", "https://doc.qt.io/qt-5/qtablewidget.html", [
                   [ "hal::DataFieldsTable", "classhal_1_1_data_fields_table.html", null ],
@@ -471,8 +475,8 @@ var hierarchy =
       [ "hal::StackedValidator", "classhal_1_1_stacked_validator.html", null ],
       [ "hal::UniqueStringValidator", "classhal_1_1_unique_string_validator.html", null ]
     ] ],
-    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
+    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

@@ -12,6 +12,7 @@ var classhal_1_1_grouping =
     [ "contains_module_by_id", "classhal_1_1_grouping.html#a1de1077d5f9a8b30614fb1b32dd92db0", null ],
     [ "contains_net", "classhal_1_1_grouping.html#a46a985bf29ce9e631f7c0ae27cc82f2e", null ],
     [ "contains_net_by_id", "classhal_1_1_grouping.html#a2b5597f42468c6d313dcbc8daa50e236", null ],
+    [ "get_color", "classhal_1_1_grouping.html#a309d7952a4c0fc0feb78db56a4c15cbd", null ],
     [ "get_gate_ids", "classhal_1_1_grouping.html#a0284ba2eaa2efc592d79303798da0b72", null ],
     [ "get_gates", "classhal_1_1_grouping.html#a2fb20b8ceae1870744ce17af655471e2", null ],
     [ "get_id", "classhal_1_1_grouping.html#aa51b165c52b5548564948f870c8a1891", null ],
@@ -21,12 +22,14 @@ var classhal_1_1_grouping =
     [ "get_net_ids", "classhal_1_1_grouping.html#a524384c5f0299a2bca63564d859f2f45", null ],
     [ "get_netlist", "classhal_1_1_grouping.html#a3f5d53b665b845c866b0b738804176b3", null ],
     [ "get_nets", "classhal_1_1_grouping.html#a2ad367de162bec81f235cbe2d63c7b91", null ],
+    [ "next_color", "classhal_1_1_grouping.html#ad5c72278b32c6120733fc82c78be5fbe", null ],
     [ "remove_gate", "classhal_1_1_grouping.html#a8966a24aef0722573bf686dc44e6b3d5", null ],
     [ "remove_gate_by_id", "classhal_1_1_grouping.html#a1b83008903d2775582ccb0f8e8db77f5", null ],
     [ "remove_module", "classhal_1_1_grouping.html#ac96e144abffc56f497b958552e4f78c4", null ],
     [ "remove_module_by_id", "classhal_1_1_grouping.html#a52d25681e817a8bb3b30296fcce3364a", null ],
     [ "remove_net", "classhal_1_1_grouping.html#a3cc1fbebf759f451e2f8397215eef62f", null ],
     [ "remove_net_by_id", "classhal_1_1_grouping.html#a5a855be1c6d8b725d3ae27b99308e8b2", null ],
+    [ "set_color", "classhal_1_1_grouping.html#a44e409b2c3b5bd480ddff87a4c9cd806", null ],
     [ "set_name", "classhal_1_1_grouping.html#a9ae38c781f4d854660d6fdbe02623813", null ],
     [ "NetlistInternalManager", "classhal_1_1_grouping.html#a71851ef81c1a491be6395f4c883218de", null ]
 ];

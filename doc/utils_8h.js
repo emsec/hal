@@ -2,6 +2,7 @@ var utils_8h =
 [
     [ "RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", "classhal_1_1utils_1_1_recursive_directory_range" ],
     [ "DirectoryRange", "classhal_1_1utils_1_1_directory_range.html", "classhal_1_1utils_1_1_directory_range" ],
+    [ "Color", "structhal_1_1utils_1_1_color.html", "structhal_1_1utils_1_1_color" ],
     [ "clear_bit", "utils_8h.html#a99df1ac028bf7f9696ea4c631ff0ff38", null ],
     [ "ends_with", "utils_8h.html#a0de77a47a2551c69619fd6e3fce84674", null ],
     [ "file_exists", "utils_8h.html#ae94b0047d0de8da3d4e54a9d55ccd327", null ],
