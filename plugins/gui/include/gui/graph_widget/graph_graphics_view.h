@@ -121,6 +121,7 @@ namespace hal
         void handleQueryShortestPath();
         void handleSelectOutputs();
         void handleSelectInputs();
+        void handleGroupingDialog();
         void handleGroupingUnassign();
         void handleGroupingAssignNew();
         void handleGroupingAssingExisting();

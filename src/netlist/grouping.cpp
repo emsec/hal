@@ -13,6 +13,7 @@ namespace hal
     {
         m_id               = id;
         m_name             = name;
+        m_color            = next_color();
         m_internal_manager = internal_manager;
 
         m_event_handler    = event_handler;
@@ -41,6 +42,23 @@ namespace hal
     std::string Grouping::get_name() const
     {
         return m_name;
+    }
+
+    utils::Color Grouping::get_color() const
+    {
+        return m_color;
+    }
+
+    void Grouping::set_color(utils::Color c)
+    {
+        m_color = c;
+        m_event_handler->notify(GroupingEvent::event::color_changed, this);
+    }
+
+    utils::Color Grouping::next_color()
+    {
+        int baseCol = (get_id()-1) * 37;
+        return utils::Color(baseCol%255, 200, std::max(250-baseCol/255*50,50));
     }
 
     Netlist* Grouping::get_netlist() const
