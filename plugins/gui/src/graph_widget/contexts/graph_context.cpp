@@ -599,7 +599,7 @@ namespace hal
         return mTimestamp;
     }
 
-    void GraphContext::readFromFile(const QJsonObject& json)
+    bool GraphContext::readFromFile(const QJsonObject& json)
     {
         if (json.contains("timestamp") && json["timestamp"].isString())
             mTimestamp = QDateTime::fromString(json["timestamp"].toString());
@@ -613,6 +613,7 @@ namespace hal
                 QJsonObject jsonMod = jsonMods.at(imod).toObject();
                 if (!jsonMod.contains("id") || !jsonMod["id"].isDouble()) continue;
                 u32 id = jsonMod["id"].toInt();
+                if (!gNetlist->get_module_by_id(id)) return false;
                 mModules.insert(id);
                 if (!jsonMod.contains("x") || !jsonMod["x"].isDouble()) continue;
                 int x = jsonMod["x"].toInt();
@@ -632,6 +633,7 @@ namespace hal
                 QJsonObject jsonGat = jsonGats.at(igat).toObject();
                 if (!jsonGat.contains("id") || !jsonGat["id"].isDouble()) continue;
                 u32 id = jsonGat["id"].toInt();
+                if (!gNetlist->get_gate_by_id(id)) return false;
                 mGates.insert(id);
                 if (!jsonGat.contains("x") || !jsonGat["x"].isDouble()) continue;
                 int x = jsonGat["x"].toInt();
@@ -651,12 +653,14 @@ namespace hal
                 QJsonObject jsonNet = jsonNets.at(inet).toObject();
                 if (!jsonNet.contains("id") || !jsonNet["id"].isDouble()) continue;
                 u32 id = jsonNet["id"].toInt();
+                if (!gNetlist->get_net_by_id(id)) return false;
                 mNets.insert(id);
             }
         }
 
         scheduleSceneUpdate();
         setDirty(false);
+        return true;
     }
 
     void GraphContext::writeToFile(QJsonObject& json)
