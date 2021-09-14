@@ -932,9 +932,12 @@ namespace hal
 
             instantiation_count[module->m_name]++;
 
-            for (const std::string& signal_identifier : module->m_signals)
+            for( const auto& [signal, expanded_identifiers] : module->m_expanded_signals) 
             {
-                m_signal_name_occurrences[signal_identifier]++;
+                for (const std::string& signal_identifier : expanded_identifiers)
+                {
+                    m_signal_name_occurrences[signal_identifier]++;
+                }      
             }
 
             for (const auto& instance_identifier : module->m_instances)
