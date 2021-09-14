@@ -52,10 +52,8 @@ namespace hal
             unmarked_global_gnd,       ///< associated_data = id of gate
             marked_global_input,       ///< associated_data = id of net
             marked_global_output,      ///< associated_data = id of net
-            marked_global_inout,       ///< associated_data = id of net
             unmarked_global_input,     ///< associated_data = id of net
             unmarked_global_output,    ///< associated_data = id of net
-            unmarked_global_inout,     ///< associated_data = id of net
 
         };
     };

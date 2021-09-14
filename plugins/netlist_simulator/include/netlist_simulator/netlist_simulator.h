@@ -311,8 +311,21 @@ namespace hal
             BooleanFunction m_clock_func;
             u32 m_configuration = 0;
             std::vector<std::vector<const Net*>> m_data_in_nets;
+            std::vector<std::vector<std::string>> m_data_in_pins;
             std::vector<const Net*> m_data_out_nets;
             std::vector<const Net*> m_hold_nets;
+
+            u16 m_in_reg_a      = 0;
+            u16 m_in_reg_b      = 0;
+            u16 m_in_reg_c      = 0;
+            u16 m_in_reg_d      = 0;
+            u16 m_mul_int_reg_1 = 0;    // top
+            u16 m_mul_int_reg_2 = 0;
+            u16 m_mul_int_reg_3 = 0;
+            u16 m_mul_int_reg_4 = 0;    // bottom
+            u32 m_mul_out_reg   = 0;
+            u16 m_acc_out_reg1  = 0;    // top
+            u16 m_acc_out_reg2  = 0;    // bottom
 
             SimulationGateLatticeMAC(const Gate* gate);
 
