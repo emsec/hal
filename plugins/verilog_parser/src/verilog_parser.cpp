@@ -920,9 +920,13 @@ namespace hal
         m_instance_name_occurrences["top_module"]++;
 
         // global input/output signals will be named after ports, so take into account for aliases
-        for (const std::string& port_identifier : top_module.m_port_identifiers)
+        for (const auto& [_, expanded_identifiers] : top_module.m_expanded_port_identifiers)
         {
-            m_signal_name_occurrences[port_identifier]++;
+            UNUSED(_);
+            for (const std::string& port_identifier : expanded_identifiers)
+            {
+                m_signal_name_occurrences[port_identifier]++;
+            }
         }
 
         while (!q.empty())
@@ -932,12 +936,13 @@ namespace hal
 
             instantiation_count[module->m_name]++;
 
-            for( const auto& [signal, expanded_identifiers] : module->m_expanded_signals) 
+            for (const auto& [_, expanded_identifiers] : module->m_expanded_signals)
             {
+                UNUSED(_);
                 for (const std::string& signal_identifier : expanded_identifiers)
                 {
                     m_signal_name_occurrences[signal_identifier]++;
-                }      
+                }
             }
 
             for (const auto& instance_identifier : module->m_instances)
