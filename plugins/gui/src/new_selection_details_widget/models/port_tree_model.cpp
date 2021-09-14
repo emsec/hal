@@ -46,7 +46,7 @@ namespace hal
             //Endpoint* ep = key ? key->get_sources().at(0) : nullptr;
             //QString type = (key && ep) ? QString::fromStdString(enum_to_string(ep->get_gate()->get_type()->get_pin_type(ep->get_pin()))) : "";
             QString netName = key ? QString::fromStdString(key->get_name()) : "";
-            TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << "N/A" << "N/A" << netName);
+            TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << "input(placeholder)" << "N/A" << netName);
             mRootItem->appendChild(portItem);
         }
 
@@ -58,12 +58,31 @@ namespace hal
             //Endpoint* ep = key ? key->get_sources().at(0) : nullptr;
             //QString type = (key && ep) ? QString::fromStdString(enum_to_string(ep->get_gate()->get_type()->get_pin_type(ep->get_pin()))) : "";
             QString netName = key ? QString::fromStdString(key->get_name()) : "";
-            TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << "N/A" << "N/A" << netName);
+            TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << "output(placeholder)" << "N/A" << netName);
             mRootItem->appendChild(portItem);
         }
         endResetModel();
 
         Q_EMIT numberOfPortsChanged((m->get_input_port_names().size() + m->get_output_port_names().size()));
+    }
+
+    Net* PortTreeModel::getNetFromItem(TreeItem *item)
+    {
+        if(mModuleId == -1) //no current module = no represented net
+            return nullptr;
+
+        Module* m = gNetlist->get_module_by_id(mModuleId);
+        if(!m) return nullptr;
+
+        if(item->getData(sDirectionColumn).toString() == "input(placeholder)")//dirty input direction checking
+            return m->get_input_port_net(item->getData(sNameColumn).toString().toStdString());
+        else
+            return m->get_output_port_net(item->getData(sNameColumn).toString().toStdString());
+    }
+
+    int PortTreeModel::getRepresentedModuleId()
+    {
+        return mModuleId;
     }
 
     void PortTreeModel::handleModuleInputOutputPortNameChanged(Module *m, int associated_data)

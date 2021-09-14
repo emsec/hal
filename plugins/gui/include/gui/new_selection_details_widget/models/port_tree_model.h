@@ -28,6 +28,7 @@
 namespace hal
 {
     class Module;
+    class Net;
 
     /**
      * @brief A model to represent the ports of a module.
@@ -61,11 +62,35 @@ namespace hal
          */
         void setModule(Module* m);
 
+        /**
+         * Get the underlying net from an (port) item.
+         * If this model does not represent a module or
+         * an invalid (port) item is given a nullptr is returned.
+         *
+         * @param item - The (port) item.
+         * @return The net or nullptr.
+         */
+        Net* getNetFromItem(TreeItem* item);
+
+        /**
+         * Get the id of the module that is currently represented.
+         * If no module is represented, -1 is returned.
+         *
+         * @return The module id.
+         */
+        int getRepresentedModuleId();
+
         /** @name Event Handler Functions
          */
         ///@{
         void handleModuleInputOutputPortNameChanged(Module* m, int associated_data);
         ///@}
+
+        //column identifier
+        static const int sNameColumn = 0;
+        static const int sDirectionColumn = 1;
+        static const int sTypeColumn = 2;
+        static const int sNetColumn = 3;
 
     Q_SIGNALS:
         /**

@@ -56,7 +56,7 @@ namespace hal
         /**
          * Sets the module and updates its model to display the ports.
          *
-         * @param moduleID - The module.
+         * @param m - The module.
          */
         void setModule(Module* m);
 
@@ -64,6 +64,14 @@ namespace hal
          * Resets the model and shows an empty view as a result.
          */
         void removeContent();
+
+        /**
+         * Get the id of the module that is currently represented.
+         * If no module is represented, -1 is returned.
+         *
+         * @return The module id.
+         */
+        int getRepresentedModuleId();
 
         /** @name Event Handler Functions
          */
