@@ -81,16 +81,34 @@ namespace hal
                     log_warning("netlist_parser", "no (valid) gate library specified, trying to auto-detect gate library...");
                     gate_library_manager::load_all();
 
-                    for (GateLibrary* lib_it : gate_library_manager::get_gate_libraries())
+                    std::unordered_map<std::string,GateLibrary*> glib_map;
+
+                    for (GateLibrary* glib : gate_library_manager::get_gate_libraries())
                     {
+                        if (glib_map.find(glib->get_name()) != glib_map.end())
+                        {
+                            // found already library with name
+                            std::string extension = utils::to_lower(glib->get_path().extension().string());
+                            if (!extension.empty() && extension[0] != '.')
+                            {
+                                extension = "." + extension;
+                            }
+                            if (extension != ".hgl") continue; // .hgl preferred, override
+                        }
+                        glib_map[glib->get_name()] = glib;
+                    }
+
+                    for (auto it = glib_map.begin(); it != glib_map.end(); ++it)
+                    {
+                        GateLibrary* glib = it->second;
                         begin_time = std::chrono::high_resolution_clock::now();
 
-                        log_info("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), lib_it->get_name());
+                        log_info("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), glib->get_name());
 
-                        std::unique_ptr<Netlist> netlist = parser->instantiate(lib_it);
+                        std::unique_ptr<Netlist> netlist = parser->instantiate(glib);
                         if (netlist == nullptr)
                         {
-                            log_error("netlist_parser", "could not instantiate file '{}' using gate library '{}'.", file_name.string(), lib_it->get_name());
+                            log_error("netlist_parser", "could not instantiate file '{}' using gate library '{}'.", file_name.string(), glib->get_name());
                             continue;
                         }
 

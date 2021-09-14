@@ -118,7 +118,6 @@ namespace hal {
         QString seltxt = mComboGatelib->currentText();
         int inx = mGateLibraryMap.value(seltxt,-1);
         if (inx < 0) return QString();
-        qDebug() << "selected gate lib" << mGateLibraryPath.at(inx);
         return mGateLibraryPath.at(inx);
     }
 

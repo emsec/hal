@@ -27,8 +27,10 @@ namespace hal
             {
                 void remove_buffers(NetlistAbstraction& netlist_abstr)
                 {
-                    auto buf_gates = netlist_abstr.nl->get_gates(
-                        [](auto g) { return g->get_type()->get_name().find("BUF") != std::string::npos && g->get_input_pins().size() == 1 && g->get_output_pins().size() == 1; });
+                    auto buf_gates = netlist_abstr.nl->get_gates([](auto g) {
+                        const GateType* gt = g->get_type();
+                        return gt->get_name().find("BUF") != std::string::npos && gt->get_input_pins().size() == 1 && gt->get_output_pins().size() == 1;
+                    });
                     log_info("dataflow", "removing {} buffers", buf_gates.size());
                     for (const auto& g : buf_gates)
                     {
@@ -49,7 +51,7 @@ namespace hal
                 {
                     auto f = g->get_boolean_function();
                     std::vector<std::string> variables;
-                    for (const auto& pin : g->get_input_pins())
+                    for (const auto& pin : g->get_type()->get_input_pins())
                     {
                         auto n = g->get_fan_in_net(pin);
                         if (n != nullptr)
@@ -110,11 +112,11 @@ namespace hal
                         {
                             if (gate_set.size() > 1)
                             {
-                                changes     = true;
-                                auto it     = gate_set.begin();
-                                auto gate_1 = *it;
+                                changes      = true;
+                                auto it      = gate_set.begin();
+                                Gate* gate_1 = *it;
                                 it++;
-                                auto out_pins = gate_1->get_output_pins();
+                                std::vector<std::string> out_pins = gate_1->get_type()->get_output_pins();
 
                                 std::unordered_set<Gate*> affected_gates;
                                 for (; it != gate_set.end(); ++it)
@@ -167,7 +169,7 @@ namespace hal
                     // TODO currently only accepts FFs
                     log_info("dataflow", "identifying sequential gates");
                     netlist_abstr.all_sequential_gates = netlist_abstr.nl->get_gates([&](auto g) { return g->get_type()->has_property(GateTypeProperty::ff); });
-                    std::sort(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end(), [](const Gate* g1, const Gate* g2){return g1->get_id() < g2->get_id();});
+                    std::sort(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end(), [](const Gate* g1, const Gate* g2) { return g1->get_id() < g2->get_id(); });
                     log_info("dataflow", "  #gates: {}", netlist_abstr.nl->get_gates().size());
                     log_info("dataflow", "  #sequential gates: {}", netlist_abstr.all_sequential_gates.size());
                 }

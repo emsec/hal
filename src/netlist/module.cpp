@@ -1,6 +1,6 @@
 #include "hal_core/netlist/module.h"
 
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"
@@ -17,7 +17,7 @@ namespace hal
         m_parent           = parent;
         m_name             = name;
 
-        m_event_handler    = event_handler;
+        m_event_handler = event_handler;
     }
 
     bool Module::operator==(const Module& other) const
@@ -138,9 +138,10 @@ namespace hal
 
     int Module::get_submodule_depth() const
     {
-        int retval = 0;
-        const Module*p = this;
-        while ((p=p->get_parent_module())) ++retval;
+        int retval      = 0;
+        const Module* p = this;
+        while ((p = p->get_parent_module()))
+            ++retval;
         return retval;
     }
 
@@ -549,6 +550,11 @@ namespace hal
 
         m_named_input_nets.insert(input_net);
         m_input_port_names.insert(port_name);
+
+        if (auto prev_name = m_input_net_to_port_name.find(input_net); prev_name != m_input_net_to_port_name.end())
+        {
+            m_input_port_names.erase(prev_name->second);
+        }
         m_input_net_to_port_name[input_net] = port_name;
 
         m_event_handler->notify(ModuleEvent::event::input_port_name_changed, this, input_net->get_id());
@@ -588,6 +594,10 @@ namespace hal
 
         m_named_output_nets.insert(output_net);
         m_output_port_names.insert(port_name);
+        if (auto prev_name = m_output_net_to_port_name.find(output_net); prev_name != m_output_net_to_port_name.end())
+        {
+            m_output_port_names.erase(prev_name->second);
+        }
         m_output_net_to_port_name[output_net] = port_name;
 
         m_event_handler->notify(ModuleEvent::event::output_port_name_changed, this, output_net->get_id());

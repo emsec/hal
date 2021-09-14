@@ -1,6 +1,6 @@
 #include "hal_core/netlist/event_system/event_log.h"
 
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -140,7 +140,7 @@ namespace hal
                 else if (event == NetlistEvent::event::marked_global_inout)
                 {
                     auto net = netlist->get_net_by_id(associated_data);
-                    log_info("event", "marked net '{}' (id {:08x}) as a global inout net in netlist with id {:08x}", net->get_name(), net->get_id(), netlist->get_id());
+                    log_info("event", "marked net '{}' (id {:08x}) as a global input net in netlist with id {:08x}", net->get_name(), net->get_id(), netlist->get_id());
                 }
                 else if (event == NetlistEvent::event::unmarked_global_input)
                 {
@@ -155,7 +155,7 @@ namespace hal
                 else if (event == NetlistEvent::event::unmarked_global_inout)
                 {
                     auto net = netlist->get_net_by_id(associated_data);
-                    log_info("event", "unmarked net '{}' (id {:08x}) as a global inout net in netlist with id {:08x}", net->get_name(), net->get_id(), netlist->get_id());
+                    log_info("event", "unmarked net '{}' (id {:08x}) as a global input net in netlist with id {:08x}", net->get_name(), net->get_id(), netlist->get_id());
                 }
                 else
                 {
@@ -177,7 +177,11 @@ namespace hal
                 }
                 else if (event == GroupingEvent::event::name_changed)
                 {
-                    log_info("event", "changed name of net with id {:08x} to '{}'", grp->get_id(), grp->get_name());
+                    log_info("event", "changed name of grouping with id {:08x} to '{}'", grp->get_id(), grp->get_name());
+                }
+                else if (event == GroupingEvent::event::color_changed)
+                {
+                    log_info("event", "changed color of grouping with id {:08x} to '{}'", grp->get_id(), grp->get_color().toString());
                 }
                 else if (event == GroupingEvent::event::gate_assigned)
                 {

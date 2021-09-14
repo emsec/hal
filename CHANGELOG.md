@@ -5,7 +5,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-* Serialize to and deserialize from hal project directory
   * Layouts from all views are saved and restored
   * Grouping names and colors are saved and restored
   * Command line option -p to open project added
@@ -34,16 +33,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * fixed multiple connections of a single net to the same gate not being shown properly
   * fixed incorrect placement of new gates and modules in cone view when navigating starting from a net
   * preserve location of gate when moving it to new module
-* Added generic SMT solver interface.
-  * Added translation from `BooleanFunction` to SMT-LIB.
-  * Added `BooleanFunction::Node` data structure to extend functionality to generic ASTs.
-  * Added support for z3 and boolector SMT solvers.
-  * Added cpp-subprocess library to handle communication with SMT solver.
-  * Added Boost Spirit x3 library to generate grammar-based parser from SMT-LIB models to C++ data structures.
+* added generic SMT solver interface.
+  * added translation from `BooleanFunction` to SMT-LIB.
+  * added `BooleanFunction::Node` data structure to extend functionality to generic ASTs.
+  * added support for z3 and boolector SMT solvers.
+  * added cpp-subprocess library to handle communication with SMT solver.
+  * added Boost Spirit x3 library to generate grammar-based parser from SMT-LIB models to C++ data structures.
+* improved handling of properties for special gate types such as LUTs and FFs.
+  * properties that only apply to special gate types have been moved out of the `GateType` class and into a designated `GateTypeComponent`
+  * added functions to retrieve a gate type's components based on some filter condition
+  * added special components dealing with RAM properties 
 * improved netlist parsers
   * split VHDL and Verilog parsers into two independent plugins
   * netlist parsers now take the path to the netlist file as input instead of a `std::stringstream`
   * added support for `Z` and `X` assignments to Verilog and VHDL parsers
+  * added `tri` as a synonym for `wire` to the Verilog parser
   * fixed netlist parsers assigning wrong order of inputs for some multi-bit signals
 * improved netlist writers
   * netlist writers now take the output path as input instead of a `std::stringstream`
@@ -79,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added context menu options to close multiple view tabs at once
   * added an indicator showing whether views have been modified
   * added HAL version number to the info shown in `About`
+  * added `Fold parent module` option to module context menu
   * when trying to create a view for a module that is already associated with an (unchanged) view, the existing view is activated instead of creating a new view
 * bugfixes
   * fixed selection details not being updated immediately when renaming or changing a type
@@ -88,6 +93,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * fixed liberty parser aborting on unknown `pg_type`
   * fixed stylesheets
   * fixed improper handling of GND and VCC nets within the `solve_fsm` plugin
+  * fixed module port names not being freed when reassigned a new name
+  * fixed segfault when no VCC or GND gate is present within a netlist
 
 ## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`

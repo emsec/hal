@@ -156,7 +156,7 @@ namespace hal
          *
          * @return The proxy model.
          */
-        GroupingProxyModel* getProxyModel() const {return mProxyModel; }
+        GroupingProxyModel* getProxyModel() const { return mProxyModel; }
 
         /**
          * Enable/Disable the toolbar buttons which require a valid selection
@@ -294,6 +294,14 @@ namespace hal
          * Creates a context menu with four options. A slot that should be connected to the toolbox action.
          */
         void handleToolboxClicked();
+
+        /**
+         * Q_SLOT to handle doubleClicked signal. Calls handleRenameGroupingClicked if index.column()==0
+         * and handleColorSelectClicked if index.column()==2.
+         *
+         * @param index - The sender that emitted the change.
+         */
+        void handleDoubleClicked(const QModelIndex & index);
 
     private:
         class ToolboxModuleHash

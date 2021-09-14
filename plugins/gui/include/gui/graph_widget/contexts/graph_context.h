@@ -327,8 +327,9 @@ namespace hal
          * Reads a context from a given json object.
          *
          * @param json - The object to read from.
+         * @return true if reading was successful, false otherwise
          */
-        void readFromFile(const QJsonObject& json);
+        bool readFromFile(const QJsonObject& json);
 
         /**
          * Sets the dirty state.

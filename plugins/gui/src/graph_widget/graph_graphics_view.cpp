@@ -16,6 +16,7 @@
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
+#include "gui/grouping_dialog/grouping_dialog.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
 #include "gui/implementations/qpoint_extension.h"
@@ -587,7 +588,6 @@ namespace hal
         QGraphicsItem* item = itemAt(pos);
         bool isGate         = false;
         bool isModule       = false;
-        bool isMultiSelect  = false;
         bool isNet          = false;
 
         if (item)
@@ -696,14 +696,11 @@ namespace hal
                 }
             }
 
-            if (gSelectionRelay->numberSelectedNodes() > 1)
+            if (gSelectionRelay->numberSelectedItems() > 1)
             {
                 context_menu.addSeparator();
                 context_menu.addAction("Entire selection:")->setEnabled(false);
             }
-
-            if (gSelectionRelay->numberSelectedItems() > 1)
-                isMultiSelect = true;
 
             if (isGate || isModule)
             {
@@ -735,44 +732,13 @@ namespace hal
                         connect(action, &QAction::triggered, this, &GraphGraphicsView::handleModuleDialog);
                     }
                 }
-
-                Grouping* assignedGrouping = nullptr;
-                if (isGate)
-                {
-                    if (g)
-                        assignedGrouping = g->get_grouping();
-                }
-                if (isModule)
-                {
-                    if (m)
-                        assignedGrouping = m->get_grouping();
-                }
-                QMenu* groupingSubmenu;
-                if (isMultiSelect)
-                    groupingSubmenu = context_menu.addMenu("  Assign all to grouping …");
-                else if (assignedGrouping)
-                    groupingSubmenu = context_menu.addMenu("  Change grouping assignment …");
-                else
-                    groupingSubmenu = context_menu.addMenu("  Assign to grouping …");
-
-                QString assignedGroupingName;
-                if (assignedGrouping && !isMultiSelect)
-                {
-                    action = groupingSubmenu->addAction("Delete current assignment");
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
-                    assignedGroupingName = QString::fromStdString(assignedGrouping->get_name());
-                }
-                action = groupingSubmenu->addAction("New grouping …");
-                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssignNew);
-                for (Grouping* grouping : gNetlist->get_groupings())
-                {
-                    QString groupingName = QString::fromStdString(grouping->get_name());
-                    if (groupingName == assignedGroupingName && !isMultiSelect)
-                        continue;
-                    action = groupingSubmenu->addAction(sAssignToGrouping + groupingName);
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssingExisting);
-                }
             }
+
+            action = context_menu.addAction("  Assign to grouping …");
+            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingDialog);
+
+            action = context_menu.addAction("  Remove grouping assignment …");
+            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
 
             if (gSelectionRelay->numberSelectedNodes() > 1)
             {
@@ -1397,6 +1363,14 @@ namespace hal
         UserActionCompound* compound = new UserActionCompound;
         for (UserAction* act : actList) compound->addAction(act);
         compound->exec();
+    }
+
+    void GraphGraphicsView::handleGroupingDialog()
+    {
+        GroupingDialog gd(this);
+        if (gd.exec() != QDialog::Accepted) return;
+        QString groupName = QString::fromStdString(gNetlist->get_grouping_by_id(gd.groupId())->get_name());
+        gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction(groupName);
     }
 
     void GraphGraphicsView::handleGroupingAssignNew()

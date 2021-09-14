@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 
 #include <QMap>
 #include <QObject>
@@ -497,6 +497,14 @@ namespace hal
          * @param grp - The renamed grouping
          */
         void groupingNameChanged(Grouping* grp) const;
+
+        /**
+         * Q_SIGNAL to notify that a grouping has been recolored. <br>
+         * Relays the following hal-core event: <i>GroupingEvent::event::color_changed</i>
+         *
+         * @param grp - The renamed grouping
+         */
+        void groupingColorChanged(Grouping* grp) const;
 
         /**
          * Q_SIGNAL to notify that a gate has been assigned to a grouping. <br>

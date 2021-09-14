@@ -76,8 +76,9 @@ namespace hal {
         void handlePickFromGraph();
         void handleCreateNewModule();
         void handleToggleSearchbar();
-        void handleTreeSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
+        void handleTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
         void handleTreeDoubleClick(const QModelIndex& index);
+        void handleCurrentTabChanged(int index);
 
     public Q_SLOTS:
         /**

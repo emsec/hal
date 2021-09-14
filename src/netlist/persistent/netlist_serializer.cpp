@@ -439,14 +439,30 @@ namespace hal
                 auto root = document["netlist"].GetObject();
                 assert_availablility("gate_library");
 
-                auto lib = gate_library_manager::get_gate_library(root["gate_library"].GetString());
-                if (lib == nullptr)
+                std::filesystem::path glib_path(root["gate_library"].GetString());
+
+                GateLibrary* glib = gate_library_manager::get_gate_library(glib_path.string());
+
+                if (glib == nullptr)
                 {
-                    log_critical("netlist_persistent", "error loading gate library '{}'.", root["gate_library"].GetString());
-                    return nullptr;
+                    if (glib_path.extension() == ".hgl")
+                        glib_path.replace_extension(".lib");
+                    else
+                        glib_path.replace_extension(".hgl");
+                    glib = gate_library_manager::get_gate_library(glib_path.string());
+
+                    if (glib == nullptr)
+                    {
+                        log_critical("netlist_persistent", "error loading gate library '{}'.", root["gate_library"].GetString());
+                        return nullptr;
+                    }
+                    else
+                    {
+                        log_info("netlist_persistent", "gate library '{}' demanded but using '{}' instead.", root["gate_library"].GetString(), glib_path.string());
+                    }
                 }
 
-                auto nl = std::make_unique<Netlist>(lib);
+                auto nl = std::make_unique<Netlist>(glib);
 
                 assert_availablility("id");
                 nl->set_id(root["id"].GetUint());

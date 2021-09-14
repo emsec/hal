@@ -12,6 +12,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/utilities/log.h"
 
 #include <QDateTime>
 #include <QFile>
@@ -473,7 +474,11 @@ namespace hal
                     context->clear();
                     if (viewName != context->mName)
                         renameGraphContextAction(context,viewName);
-                    context->readFromFile(jsonView);
+                    if (!context->readFromFile(jsonView))
+                    {
+                        log_warning("gui", "failed to read view file {}.", filename.toStdString());
+                        return false;
+                    }
                 }
                 else
                 {
@@ -481,7 +486,11 @@ namespace hal
                     context = new GraphContext(viewId, viewName);
                     context->setLayouter(getDefaultLayouter(context));
                     context->setShader(getDefaultShader(context));
-                    context->readFromFile(jsonView);
+                    if (!context->readFromFile(jsonView))
+                    {
+                        log_warning("gui", "failed to read view file {}.", filename.toStdString());
+                        return false;
+                    }
 
                     mContextTableModel->beginInsertContext(context);
                     mContextTableModel->addContext(context);
