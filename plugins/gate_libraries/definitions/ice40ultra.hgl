@@ -253,6 +253,11 @@
           "type": "clock"
         },
         {
+          "name": "E",
+          "direction": "input",
+          "type": "enable"
+        },
+        {
           "name": "R",
           "direction": "input",
           "type": "reset"
