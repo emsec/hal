@@ -1,5 +1,7 @@
 var NAVTREEINDEX19 =
 {
+"netlist__relay_8cpp.html":[14,0,1,0,2,30,0],
+"netlist__relay_8cpp_source.html":[14,0,1,0,2,30,0],
 "netlist__relay_8h.html":[14,0,1,0,0,0,32,0],
 "netlist__relay_8h_source.html":[14,0,1,0,0,0,32,0],
 "netlist__serializer_8h.html":[14,0,0,0,1,5,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX19 =
 "python__bindings_2bindings_2netlist__writer__manager_8cpp.html#ga24b748055e4be6a24e7103a78f6f272d":[14,0,2,2,0,16,0],
 "python__bindings_2bindings_2netlist__writer__manager_8cpp_source.html":[14,0,2,2,0,16],
 "python__bindings_2bindings_2plugin__manager_8cpp.html":[14,0,2,2,0,19],
-"python__bindings_2bindings_2plugin__manager_8cpp.html#ga9e03e20ad125cd9eb1f4e601ac556777":[14,0,2,2,0,19,0],
-"python__bindings_2bindings_2plugin__manager_8cpp_source.html":[14,0,2,2,0,19],
-"python__bindings_8cpp.html":[14,0,2,2,1]
+"python__bindings_2bindings_2plugin__manager_8cpp.html#ga9e03e20ad125cd9eb1f4e601ac556777":[14,0,2,2,0,19,0]
 };

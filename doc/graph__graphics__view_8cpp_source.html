@@ -600,15 +600,15 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;                    assert(!nodeFrom.isNull());    <span class="comment">// assert that value was found</span></div>
 <div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;                    assert(!nodeTo.isNull());</div>
 <div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;                    layouter-&gt;swapNodePositions(nodeFrom, nodeTo);</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;                }</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;                {</div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;                    ActionMoveNode* act = <span class="keyword">new</span> ActionMoveNode(sourceLayouterPos,targetLayouterPos);</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;                    act-&gt;setObject(UserActionObject(context-&gt;id(),<a class="code" href="classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79ad1400bac44832ef79eafb8ac4d59dee2">UserActionObjectType::Context</a>));</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;                    act-&gt;exec();</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;                }</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;                <span class="comment">// re-layout the nets</span></div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;                context-&gt;scheduleSceneUpdate();</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;                    <span class="comment">// re-layout the nets</span></div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;                    context-&gt;scheduleSceneUpdate();</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;                }</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;                {</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;                    ActionMoveNode* act = <span class="keyword">new</span> ActionMoveNode(sourceLayouterPos,targetLayouterPos);</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;                    act-&gt;setObject(UserActionObject(context-&gt;id(),<a class="code" href="classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79ad1400bac44832ef79eafb8ac4d59dee2">UserActionObjectType::Context</a>));</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;                    act-&gt;exec();</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;                }</div>
 <div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;                context-&gt;setDirty(<span class="keyword">true</span>);</div>
 <div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;            }</div>
 <div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;        }</div>
@@ -803,7 +803,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160; </div>
 <div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;                action = context_menu.addAction(<span class="stringliteral">&quot;  Remove from view&quot;</span>);</div>
 <div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(action, &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#triggered">QAction::triggered</a>, <span class="keyword">this</span>, &amp;GraphGraphicsView::handleRemoveFromView);</div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;                <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>* g   = isGate ? <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(mItem-&gt;<a class="code" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">id</a>()) : <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;                <span class="comment">// Gate* g   = isGate ? gNetlist-&gt;get_gate_by_id(mItem-&gt;id()) : nullptr;</span></div>
 <div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;                <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42">Module</a>* m = isModule ? <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(mItem-&gt;<a class="code" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">id</a>()) : <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160; </div>
 <div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;                <span class="comment">// only allow move actions on anything that is not the top module</span></div>
@@ -1850,7 +1850,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="ttc" id="aqpointf_html_x"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpointf.html#x">QPointF::x</a></div><div class="ttdeci">qreal x() const const</div></div>
 <div class="ttc" id="aqpointf_html_y"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpointf.html#y">QPointF::y</a></div><div class="ttdeci">qreal y() const const</div></div>
 <div class="ttc" id="aclasshal_1_1_gate_html_af5288f4473c529fa29b5a347091ffc2f"><div class="ttname"><a href="classhal_1_1_gate.html#af5288f4473c529fa29b5a347091ffc2f">hal::Gate::get_fan_out_nets</a></div><div class="ttdeci">std::vector&lt; Net * &gt; get_fan_out_nets() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate_8cpp_source.html#l00481">gate.cpp:481</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_context_html_a5e22b0d97a34b99dfe402ee7691830a8"><div class="ttname"><a href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">hal::GraphContext::setDirty</a></div><div class="ttdeci">void setDirty(bool dty)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00714">graph_context.cpp:714</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_context_html_a5e22b0d97a34b99dfe402ee7691830a8"><div class="ttname"><a href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">hal::GraphContext::setDirty</a></div><div class="ttdeci">void setDirty(bool dty)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00716">graph_context.cpp:716</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html_aa963e38a4ce49c0e440be5e36f46369a"><div class="ttname"><a href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">hal::Netlist::get_module_by_id</a></div><div class="ttdeci">Module * get_module_by_id(u32 module_id) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00196">netlist.cpp:196</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a13df27071c670c4bd04c08be3058afe1"><div class="ttname"><a href="classhal_1_1_graph_context.html#a13df27071c670c4bd04c08be3058afe1">hal::GraphContext::beginChange</a></div><div class="ttdeci">void beginChange()</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00085">graph_context.cpp:85</a></div></div>
 <div class="ttc" id="aaction__delete__object_8h_html"><div class="ttname"><a href="action__delete__object_8h.html">action_delete_object.h</a></div></div>
@@ -1928,7 +1928,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="graph__graphics__view_8cpp.html">graph_graphics_view.cpp</a></li>
-    <li class="footer">Generated on Tue Sep 14 2021 15:46:18 for HAL by
+    <li class="footer">Generated on Wed Sep 15 2021 15:16:55 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

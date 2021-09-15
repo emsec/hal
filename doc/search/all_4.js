@@ -96,7 +96,7 @@ var searchData=
   ['decodename_2306',['decodeName',['https://doc.qt.io/qt-5/qfile.html#decodeName',1,'QFile::decodeName(const QByteArray &amp;localFileName)'],['https://doc.qt.io/qt-5/qfile.html#decodeName-1',1,'QFile::decodeName(const char *localFileName)']]],
   ['decodereserved_2307',['DecodeReserved',['https://doc.qt.io/qt-5/qurl.html#ComponentFormattingOption-enum',1,'QUrl']]],
   ['decoderfn_2308',['DecoderFn',['https://doc.qt.io/qt-5/qfile.html#DecoderFn-typedef',1,'QFile']]],
-  ['decomposition_2309',['Decomposition',['https://doc.qt.io/qt-5/qchar.html#Decomposition-enum',1,'QChar::Decomposition()'],['https://doc.qt.io/qt-5/qchar.html#decomposition',1,'QChar::decomposition() const const'],['https://doc.qt.io/qt-5/qchar.html#decomposition-1',1,'QChar::decomposition(uint ucs4)']]],
+  ['decomposition_2309',['decomposition',['https://doc.qt.io/qt-5/qchar.html#decomposition',1,'QChar::decomposition() const const'],['https://doc.qt.io/qt-5/qchar.html#decomposition-1',1,'QChar::decomposition(uint ucs4)'],['https://doc.qt.io/qt-5/qchar.html#Decomposition-enum',1,'QChar::Decomposition()']]],
   ['decompositiontag_2310',['decompositionTag',['https://doc.qt.io/qt-5/qchar.html#decompositionTag',1,'QChar::decompositionTag() const const'],['https://doc.qt.io/qt-5/qchar.html#decompositionTag-1',1,'QChar::decompositionTag(uint ucs4)']]],
   ['decorationpropertyrole_2311',['DecorationPropertyRole',['https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum',1,'Qt']]],
   ['decorationrole_2312',['DecorationRole',['https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum',1,'Qt']]],

@@ -1,5 +1,7 @@
 var NAVTREEINDEX8 =
 {
+"classhal_1_1_module_item.html#ac56874de778f62c292e41bf4400d0a5a":[11,0,25,9],
+"classhal_1_1_module_item.html#afbcc7d4240aae4644bddf7b41fdb298f":[11,0,25,13],
 "classhal_1_1_module_model.html":[11,0,26],
 "classhal_1_1_module_model.html#a03accfc327566211e7d5b261022fe2f1":[11,0,26,11],
 "classhal_1_1_module_model.html#a11a8c0e9f4a7b6565cb157416bd91c0d":[11,0,26,20],
@@ -247,7 +249,5 @@ var NAVTREEINDEX8 =
 "classhal_1_1_net_layout_junction_range.html#ad70b618717d94d8adf4afc32499f54b5":[11,0,0,2,6,0],
 "classhal_1_1_net_layout_junction_range.html#add1ca926748a9e068f4769bb344a4392":[11,0,0,2,6,11],
 "classhal_1_1_net_layout_junction_range.html#adde72abde4912081b3999f4a1829e1a4":[11,0,0,2,6,10],
-"classhal_1_1_net_layout_junction_wire.html":[11,0,0,2,3],
-"classhal_1_1_net_layout_junction_wire.html#a00fb3bdebf38f5b1d36e2573af7f7b4e":[11,0,0,2,3,2],
-"classhal_1_1_net_layout_junction_wire.html#a069a615259d24757ded111a55d287118":[11,0,0,2,3,7]
+"classhal_1_1_net_layout_junction_wire.html":[11,0,0,2,3]
 };

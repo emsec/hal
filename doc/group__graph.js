@@ -53,6 +53,7 @@ var group__graph =
       [ "handleStatusUpdate", "classhal_1_1_graph_widget.html#a684761492343b61c9bb01016df7fd47c", null ],
       [ "handleStatusUpdate", "classhal_1_1_graph_widget.html#a7efe98980c1a11e7e4bac457b6e8ca6a", null ],
       [ "keyPressEvent", "classhal_1_1_graph_widget.html#a2423cbb2324d143cccd840382a88559e", null ],
+      [ "storeViewport", "classhal_1_1_graph_widget.html#ac603af40752859f4bbf29925d2f91143", null ],
       [ "view", "classhal_1_1_graph_widget.html#ac922c09975a0de4105b344addd4eff2b", null ]
     ] ],
     [ "GraphicsQssAdapter", "classhal_1_1_graphics_qss_adapter.html", [

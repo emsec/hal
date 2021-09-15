@@ -99,8 +99,8 @@ Inheritance diagram for hal::GraphContextSubscriber:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_graph_context_subscriber__inherit__graph.png" border="0" usemap="#hal_1_1_graph_context_subscriber_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_graph_context_subscriber_inherit__map" id="hal_1_1_graph_context_subscriber_inherit__map">
-<area shape="rect" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="5,5,268,156"/>
-<area shape="rect" href="classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView." alt="" coords="5,204,268,369"/>
+<area shape="rect" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="5,5,268,171"/>
+<area shape="rect" href="classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView." alt="" coords="5,219,268,384"/>
 </map>
 </div>
 <div class="dynheader">
@@ -108,7 +108,7 @@ Collaboration diagram for hal::GraphContextSubscriber:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_graph_context_subscriber__coll__graph.png" border="0" usemap="#hal_1_1_graph_context_subscriber_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_graph_context_subscriber_coll__map" id="hal_1_1_graph_context_subscriber_coll__map">
-<area shape="rect" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="5,5,268,156"/>
+<area shape="rect" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="5,5,268,171"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -124,6 +124,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac1627c1240fba720824a368b765cbea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7248af2d03d40f7646b410af3db03a5f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context_subscriber.html#a7248af2d03d40f7646b410af3db03a5f">handleStatusUpdate</a> (const int percent)=0</td></tr>
 <tr class="separator:a7248af2d03d40f7646b410af3db03a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a872498becf9c8588543049cec70d8b4c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context_subscriber.html#a872498becf9c8588543049cec70d8b4c">storeViewport</a> ()=0</td></tr>
+<tr class="separator:a872498becf9c8588543049cec70d8b4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62c7395534e0462c50234176e5ad3b62"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context_subscriber.html#a62c7395534e0462c50234176e5ad3b62">handleStatusUpdate</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="plugins_2gui_2_c_make_lists_8txt.html#a0f85e1d15de90d7e8c90ac2c8a621575">message</a>)=0</td></tr>
 <tr class="separator:a62c7395534e0462c50234176e5ad3b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -313,6 +315,34 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a872498becf9c8588543049cec70d8b4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a872498becf9c8588543049cec70d8b4c">&#9670;&nbsp;</a></span>storeViewport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void hal::GraphContextSubscriber::storeViewport </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Subscriber should store the scene mapping to viewport so it can be restored upon handleSceneAvailable </p>
+
+<p>Implemented in <a class="el" href="classhal_1_1_graph_widget.html#ac603af40752859f4bbf29925d2f91143">hal::GraphWidget</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/contexts/<a class="el" href="graph__context__subscriber_8h_source.html">graph_context_subscriber.h</a></li>
 </ul>
@@ -322,7 +352,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graph_context_subscriber.html">GraphContextSubscriber</a></li>
-    <li class="footer">Generated on Tue Sep 14 2021 15:46:21 for HAL by
+    <li class="footer">Generated on Wed Sep 15 2021 15:16:57 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

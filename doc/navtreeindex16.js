@@ -1,5 +1,7 @@
 var NAVTREEINDEX16 =
 {
+"functions_func_~.html":[13,3,1,25],
+"functions_g.html":[13,3,0,6],
 "functions_h.html":[13,3,0,7],
 "functions_i.html":[13,3,0,8],
 "functions_j.html":[13,3,0,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX16 =
 "group__gate__lib__parser.html":[11,1,0,2,0],
 "group__gate__lib__writer.html":[11,1,0,2,1],
 "group__graph-contexts.html":[11,0,0,1],
-"group__graph-layouter.html":[11,0,0,2],
-"group__graph-visuals-gate.html":[11,0,0,0,0],
-"group__graph-visuals-module.html":[11,0,0,0,1]
+"group__graph-layouter.html":[11,0,0,2]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX13 =
 {
+"classhal_1_1_settings_widget_dropdown.html#a1c8b272c74c9da1e40900566e6154545":[11,0,4,19,2],
+"classhal_1_1_settings_widget_dropdown.html#a6d870b7606e98abac9a5feff5a3d3516":[11,0,4,19,0],
 "classhal_1_1_settings_widget_keybind.html":[11,0,4,20],
 "classhal_1_1_settings_widget_keybind.html#a47233e6bd7c567b3dee0ba988872e96e":[11,0,4,20,4],
 "classhal_1_1_settings_widget_keybind.html#a8ab0e2750bf92fee7007ff3c43ab9a73":[11,0,4,20,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX13 =
 "classhal_1_1_wait_to_be_seated_list.html#acc1440d7d55387d6536803dad076a0bb":[11,0,0,2,23,6],
 "classhal_1_1_wait_to_be_seated_list.html#aceda656dff4de2464fc8c7429e2e2bf6":[11,0,0,2,23,0],
 "classhal_1_1_wait_to_be_seated_list.html#ae48c1ed9b4dd591434ff18ef82980045":[11,0,0,2,23,7],
-"classhal_1_1_welcome_screen.html":[11,0,47],
-"classhal_1_1_welcome_screen.html#a121d7795345e410e4f11a68ca5965485":[11,0,47,1],
-"classhal_1_1_welcome_screen.html#a338efc18d7bb5d79cc373d241dbcbbc9":[11,0,47,0]
+"classhal_1_1_welcome_screen.html":[11,0,47]
 };
