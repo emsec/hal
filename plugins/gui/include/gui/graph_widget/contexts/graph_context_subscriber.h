@@ -61,6 +61,11 @@ namespace hal
         virtual void handleStatusUpdate(const int percent) = 0;
 
         /**
+         * Subscriber should store the scene mapping to viewport so it can be restored upon handleSceneAvailable
+         */
+        virtual void storeViewport() = 0;
+
+        /**
          * Called whenever the loading progress message of the layouter of the subscribed context has changed.
          *
          * @param message - The new message

@@ -87,6 +87,11 @@ namespace hal
 
         if (hasFocus())
             mView->setFocus();
+        else if (!mStoreViewport.isNull())
+        {
+            mView->fitInView(mStoreViewport,Qt::KeepAspectRatio);
+            mStoreViewport = QRectF();
+        }
     }
 
     void GraphWidget::handleSceneUnavailable()
@@ -115,6 +120,11 @@ namespace hal
     void GraphWidget::handleStatusUpdate(const QString& message)
     {
         Q_UNUSED(message)
+    }
+
+    void GraphWidget::storeViewport()
+    {
+        mStoreViewport = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
     }
 
     void GraphWidget::keyPressEvent(QKeyEvent* event)
