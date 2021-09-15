@@ -100,6 +100,11 @@ namespace hal
         void handleStatusUpdate(const QString& message) override;
 
         /**
+         * Subscriber should store the scene mapping to viewport so it can be restored upon handleSceneAvailable
+         */
+        void storeViewport() override;
+
+        /**
          * Get the GraphGraphicsView this object manages.
          *
          * @returns the GraphGraphicsView.
@@ -156,5 +161,6 @@ namespace hal
 
         QRectF mRectAfterFocus;
         QRectF mLastTargetRect;
+        QRectF mStoreViewport;
     };
 }

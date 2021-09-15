@@ -512,6 +512,8 @@ namespace hal
                     assert(!nodeFrom.isNull());    // assert that value was found
                     assert(!nodeTo.isNull());
                     layouter->swapNodePositions(nodeFrom, nodeTo);
+                    // re-layout the nets
+                    context->scheduleSceneUpdate();
                 }
                 else
                 {
@@ -519,8 +521,6 @@ namespace hal
                     act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
                     act->exec();
                 }
-                // re-layout the nets
-                context->scheduleSceneUpdate();
                 context->setDirty(true);
             }
         }
@@ -715,7 +715,7 @@ namespace hal
 
                 action = context_menu.addAction("  Remove from view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
-                Gate* g   = isGate ? gNetlist->get_gate_by_id(mItem->id()) : nullptr;
+                // Gate* g   = isGate ? gNetlist->get_gate_by_id(mItem->id()) : nullptr;
                 Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
 
                 // only allow move actions on anything that is not the top module
