@@ -103,9 +103,9 @@ namespace hal
 
         qDebug() << prefix;
 
-        const QString check1 = prefix + "is_global_input_net()";
-        const QString check2 = prefix + "is_global_output_net()";
-        const QString check3 = prefix + "is_unrouted()";
+        const QString check1 = prefix + ".is_global_input_net()";
+        const QString check2 = prefix + ".is_global_output_net()";
+        const QString check3 = prefix + ".is_unrouted()";
 
         const QString result1 = "\"Global Input\"";
         const QString result2 = "\"Global Output\"";
