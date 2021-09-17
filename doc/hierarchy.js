@@ -475,8 +475,8 @@ var hierarchy =
       [ "hal::StackedValidator", "classhal_1_1_stacked_validator.html", null ],
       [ "hal::UniqueStringValidator", "classhal_1_1_unique_string_validator.html", null ]
     ] ],
-    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
+    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

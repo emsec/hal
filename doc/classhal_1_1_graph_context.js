@@ -34,6 +34,7 @@ var classhal_1_1_graph_context =
     [ "setDirty", "classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8", null ],
     [ "setLayouter", "classhal_1_1_graph_context.html#ae73212d0e220914595f086399034a5c0", null ],
     [ "setShader", "classhal_1_1_graph_context.html#a853ead405c7826297099205cd848636c", null ],
+    [ "storeViewport", "classhal_1_1_graph_context.html#a8889a0c74139f131610e6e8606579f6a", null ],
     [ "subscribe", "classhal_1_1_graph_context.html#aae3f4b33d0d907a4c05c0011873e36f6", null ],
     [ "testIfAffected", "classhal_1_1_graph_context.html#a752666f0e3b3552d81ab76186980b7bd", null ],
     [ "unfoldModule", "classhal_1_1_graph_context.html#af5994fa27903de66f5af0453368f3cf3", null ],

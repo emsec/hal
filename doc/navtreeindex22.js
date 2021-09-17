@@ -1,5 +1,11 @@
 var NAVTREEINDEX22 =
 {
+"structsubprocess_1_1output.html#acceb716c651dfc52156ff56d7b090c58":[13,0,2,12,5],
+"structsubprocess_1_1output.html#ae9e3dba23eef8858b8dbfc887db67edc":[13,0,2,12,2],
+"structsubprocess_1_1output.html#af467ee1e3477657b7acf31197bb4b889":[13,0,2,12,1],
+"structsubprocess_1_1session__leader.html":[13,0,2,15],
+"structsubprocess_1_1session__leader.html#a2de89693dc715317dd26d760355fd9ce":[13,0,2,15,1],
+"structsubprocess_1_1session__leader.html#a60c994507df17e6422ff3985ea07e0b3":[13,0,2,15,0],
 "structsubprocess_1_1shell.html":[13,0,2,16],
 "structsubprocess_1_1shell.html#a3e27f8a67ed269294f378ee60aff5153":[13,0,2,16,0],
 "structsubprocess_1_1shell.html#a5b1473441561252063fa619a08023658":[13,0,2,16,1],

@@ -1,5 +1,9 @@
 var NAVTREEINDEX13 =
 {
+"classhal_1_1_settings_widget_checkbox.html#abee4082a10b59c5edf4d19b7e1b668b5":[11,0,4,18,1],
+"classhal_1_1_settings_widget_checkbox.html#aee23d97b393cc9d98e9c169c9430f008":[11,0,4,18,0],
+"classhal_1_1_settings_widget_dropdown.html":[11,0,4,19],
+"classhal_1_1_settings_widget_dropdown.html#a11affd4f89bafea4c787789c6e281825":[11,0,4,19,1],
 "classhal_1_1_settings_widget_dropdown.html#a1c8b272c74c9da1e40900566e6154545":[11,0,4,19,2],
 "classhal_1_1_settings_widget_dropdown.html#a6d870b7606e98abac9a5feff5a3d3516":[11,0,4,19,0],
 "classhal_1_1_settings_widget_keybind.html":[11,0,4,20],
@@ -245,9 +249,5 @@ var NAVTREEINDEX13 =
 "classhal_1_1_wait_to_be_seated_list.html#a15a4b4a9b6fa9c7d23938002dbe5b5f8":[11,0,0,2,23,1],
 "classhal_1_1_wait_to_be_seated_list.html#a1f6f3589eba031742502197d42c9e6cf":[11,0,0,2,23,2],
 "classhal_1_1_wait_to_be_seated_list.html#a5ead74e61ee19bfedc478d4a3a2a86aa":[11,0,0,2,23,3],
-"classhal_1_1_wait_to_be_seated_list.html#a75d46d7bc179b84e993e980e80e315a6":[11,0,0,2,23,5],
-"classhal_1_1_wait_to_be_seated_list.html#acc1440d7d55387d6536803dad076a0bb":[11,0,0,2,23,6],
-"classhal_1_1_wait_to_be_seated_list.html#aceda656dff4de2464fc8c7429e2e2bf6":[11,0,0,2,23,0],
-"classhal_1_1_wait_to_be_seated_list.html#ae48c1ed9b4dd591434ff18ef82980045":[11,0,0,2,23,7],
-"classhal_1_1_welcome_screen.html":[11,0,47]
+"classhal_1_1_wait_to_be_seated_list.html#a75d46d7bc179b84e993e980e80e315a6":[11,0,0,2,23,5]
 };

@@ -1,5 +1,11 @@
 var NAVTREEINDEX19 =
 {
+"netlist__parser__manager_8h.html#a63453fc628a74a43f09af54a8d9620d1":[14,0,0,0,1,3,1,1],
+"netlist__parser__manager_8h.html#a8a4ff1e425ebe75804844cf22c96dca7":[14,0,0,0,1,3,1,5],
+"netlist__parser__manager_8h.html#a9ff28049722e4a8532867f675aad614e":[14,0,0,0,1,3,1,3],
+"netlist__parser__manager_8h.html#af1c82137bddfd220906ff6e8a2366b2d":[14,0,0,0,1,3,1,4],
+"netlist__parser__manager_8h.html#af9b49cc8225fbc08027cb661bd07ac38":[14,0,0,0,1,3,1,2],
+"netlist__parser__manager_8h_source.html":[14,0,0,0,1,3,1],
 "netlist__relay_8cpp.html":[14,0,1,0,2,30,0],
 "netlist__relay_8cpp_source.html":[14,0,1,0,2,30,0],
 "netlist__relay_8h.html":[14,0,1,0,0,0,32,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX19 =
 "python__bindings_2bindings_2netlist__serializer_8cpp.html#ga4294dbde61031dc6505415b4c0efd3f9":[14,0,2,2,0,14,0],
 "python__bindings_2bindings_2netlist__serializer_8cpp_source.html":[14,0,2,2,0,14],
 "python__bindings_2bindings_2netlist__utils_8cpp.html":[14,0,2,2,0,15],
-"python__bindings_2bindings_2netlist__utils_8cpp.html#ga60d7e2dfe01bc847292f5473e2b849d1":[14,0,2,2,0,15,0],
-"python__bindings_2bindings_2netlist__utils_8cpp_source.html":[14,0,2,2,0,15],
-"python__bindings_2bindings_2netlist__writer__manager_8cpp.html":[14,0,2,2,0,16],
-"python__bindings_2bindings_2netlist__writer__manager_8cpp.html#ga24b748055e4be6a24e7103a78f6f272d":[14,0,2,2,0,16,0],
-"python__bindings_2bindings_2netlist__writer__manager_8cpp_source.html":[14,0,2,2,0,16],
-"python__bindings_2bindings_2plugin__manager_8cpp.html":[14,0,2,2,0,19],
-"python__bindings_2bindings_2plugin__manager_8cpp.html#ga9e03e20ad125cd9eb1f4e601ac556777":[14,0,2,2,0,19,0]
+"python__bindings_2bindings_2netlist__utils_8cpp.html#ga60d7e2dfe01bc847292f5473e2b849d1":[14,0,2,2,0,15,0]
 };

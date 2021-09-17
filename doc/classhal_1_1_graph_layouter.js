@@ -10,6 +10,8 @@ var classhal_1_1_graph_layouter =
     [ "done", "classhal_1_1_graph_layouter.html#ae9541edd55ac9b60e92132e48577d1c3", null ],
     [ "dumpNodePositions", "classhal_1_1_graph_layouter.html#a5e128152ac90a4e92d5422555867f952", null ],
     [ "gridPointByItem", "classhal_1_1_graph_layouter.html#ac0a09a36d86d794d397d33bc3f2f52cc", null ],
+    [ "gridXposition", "classhal_1_1_graph_layouter.html#a11adc9ad17bd5cdbcdf7adc8159ed2a9", null ],
+    [ "gridYposition", "classhal_1_1_graph_layouter.html#a6f506de906e016925051225bce07d667", null ],
     [ "layout", "classhal_1_1_graph_layouter.html#a90fc93ef75eb16b89139460b8d7c1046", null ],
     [ "maxNodeHeight", "classhal_1_1_graph_layouter.html#a7c9af1e0be689d31af8f9c7e8710f463", null ],
     [ "maxNodeWidth", "classhal_1_1_graph_layouter.html#a689dc2865b59116339fd4bb4494fe051", null ],

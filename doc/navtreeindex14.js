@@ -1,5 +1,9 @@
 var NAVTREEINDEX14 =
 {
+"classhal_1_1_wait_to_be_seated_list.html#acc1440d7d55387d6536803dad076a0bb":[11,0,0,2,23,6],
+"classhal_1_1_wait_to_be_seated_list.html#aceda656dff4de2464fc8c7429e2e2bf6":[11,0,0,2,23,0],
+"classhal_1_1_wait_to_be_seated_list.html#ae48c1ed9b4dd591434ff18ef82980045":[11,0,0,2,23,7],
+"classhal_1_1_welcome_screen.html":[11,0,47],
 "classhal_1_1_welcome_screen.html#a121d7795345e410e4f11a68ca5965485":[11,0,47,1],
 "classhal_1_1_welcome_screen.html#a338efc18d7bb5d79cc373d241dbcbbc9":[11,0,47,0],
 "classhal_1_1_widget.html":[11,0,48],
@@ -245,9 +249,5 @@ var NAVTREEINDEX14 =
 "dir_2ed75b26237291b0036f5fe6b6ae5a4b.html":[14,0,0,0,0],
 "dir_2f01aef71805269b2578dc41074a59c9.html":[14,0,1,0,0,0,17,1,2],
 "dir_305084980f5b1614aa764d430f06c863.html":[14,0,2,1],
-"dir_3289c0b25645da64c6ebac696b339a89.html":[14,0,1,0,2,25],
-"dir_33f5e9141ebe4d7128195f86684506f2.html":[14,0,1,0,0,0,13],
-"dir_376726fe3cd354f5984220f6b94a7f59.html":[14,0,0,0,1,2,2],
-"dir_38c8d24aef3972a7f87b834274e76e31.html":[14,0,1],
-"dir_3aaf6146c18689ee0974887a814b68ea.html":[14,0,1,0,0,0,34]
+"dir_3289c0b25645da64c6ebac696b339a89.html":[14,0,1,0,2,25]
 };

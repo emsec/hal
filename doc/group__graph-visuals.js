@@ -14,7 +14,8 @@ var group__graph_visuals =
       [ "setDragModifier", "classhal_1_1_graph_graphics_view.html#a4b1419d80f01aea4229d54ba95f93dc7", null ],
       [ "setGridType", "classhal_1_1_graph_graphics_view.html#a1284b4d251c36b76d29fa316da85c03c", null ],
       [ "setPanModifier", "classhal_1_1_graph_graphics_view.html#a2a0580d1bee10998a43badc5f8435c31", null ],
-      [ "viewportCenterZoom", "classhal_1_1_graph_graphics_view.html#a3892fc8c230865246ac588d7fcd397d7", null ]
+      [ "viewportCenterZoom", "classhal_1_1_graph_graphics_view.html#a3892fc8c230865246ac588d7fcd397d7", null ],
+      [ "GraphWidget", "classhal_1_1_graph_graphics_view.html#a883185841d7deb422d7400dafea4e113", null ]
     ] ],
     [ "GraphicsItem", "classhal_1_1_graphics_item.html", [
       [ "GraphicsItem", "classhal_1_1_graphics_item.html#ab8965bbab77c3c96c6fa20a9fa58b7bd", null ],

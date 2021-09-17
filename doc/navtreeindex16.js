@@ -1,5 +1,9 @@
 var NAVTREEINDEX16 =
 {
+"functions_func_v.html":[13,3,1,21],
+"functions_func_w.html":[13,3,1,22],
+"functions_func_x.html":[13,3,1,23],
+"functions_func_y.html":[13,3,1,24],
 "functions_func_~.html":[13,3,1,25],
 "functions_g.html":[13,3,0,6],
 "functions_h.html":[13,3,0,7],
@@ -20,8 +24,8 @@ var NAVTREEINDEX16 =
 "functions_type.html":[13,3,3],
 "functions_u.html":[13,3,0,20],
 "functions_v.html":[13,3,0,21],
-"functions_vars.html":[13,3,2,0],
 "functions_vars.html":[13,3,2],
+"functions_vars.html":[13,3,2,0],
 "functions_vars_b.html":[13,3,2,1],
 "functions_vars_c.html":[13,3,2,2],
 "functions_vars_d.html":[13,3,2,3],
@@ -172,6 +176,8 @@ var NAVTREEINDEX16 =
 "graph__tab__widget_8h.html":[14,0,1,0,0,0,16,0],
 "graph__tab__widget_8h_source.html":[14,0,1,0,0,0,16,0],
 "graph__widget_8cpp.html":[14,0,1,0,2,16,7],
+"graph__widget_8cpp.html#a3a4fcca9520a999bdcb1eb2b49dedd57":[14,0,1,0,2,16,7,0],
+"graph__widget_8cpp.html#a8cc0bf2321acdafebbabe8aa4bdf138e":[14,0,1,0,2,16,7,1],
 "graph__widget_8cpp_source.html":[14,0,1,0,2,16,7],
 "graph__widget_8h.html":[14,0,1,0,0,0,17,7],
 "graph__widget_8h_source.html":[14,0,1,0,0,0,17,7],
@@ -243,11 +249,5 @@ var NAVTREEINDEX16 =
 "group__docking.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f":[11,0,2,8,0],
 "group__docking.html#gga96c899c45d7192341d04caf575c7f02ca6f50993948b855a8efa011b6915164d6":[11,0,2,8,1],
 "group__docking.html#gga96c899c45d7192341d04caf575c7f02cae2a44fa65a0cf99e723e1887fc5eda0a":[11,0,2,8,2],
-"group__events.html":[11,1,0,4],
-"group__file__management.html":[11,0,6],
-"group__gate__lib.html":[11,1,0,2],
-"group__gate__lib__parser.html":[11,1,0,2,0],
-"group__gate__lib__writer.html":[11,1,0,2,1],
-"group__graph-contexts.html":[11,0,0,1],
-"group__graph-layouter.html":[11,0,0,2]
+"group__events.html":[11,1,0,4]
 };
