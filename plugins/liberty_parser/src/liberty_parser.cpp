@@ -775,7 +775,10 @@ namespace hal
             if (pin.direction == PinDirection::input || pin.direction == PinDirection::inout)
             {
                 input_pins.insert(input_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
-                has_inputs = true;
+                if (!pin.power && !pin.ground)
+                {
+                    has_inputs = true;
+                }
             }
             else if (pin.direction == PinDirection::output || pin.direction == PinDirection::inout)
             {
