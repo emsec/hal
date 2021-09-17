@@ -181,6 +181,11 @@ namespace hal
          */
         bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
+        /**
+         * Convenience function to allow calls to GraphWidget::storeViewport via context
+         */
+        void storeViewport();
+
 	void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
 
         /**

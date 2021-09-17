@@ -22,6 +22,7 @@
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/action_rename_object.h"
+#include "gui/settings/settings_items/settings_item_spinbox.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -35,9 +36,19 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
+#include <QGraphicsRectItem>
 
 namespace hal
 {
+    SettingsItemSpinbox* GraphWidget::sSettingAnimationDuration = new SettingsItemSpinbox(
+                "Animation Duration [1/10s]",
+                "graph_view/animation_duration",
+                10,
+                "Appearance:Graph View",
+                "Duration of 'fly to gate' animation when viewport is zooming in on new target. Unit is 1/10 second, thus 20=2sec, 10=1sec. Value of zero turns animation off."
+            );
+
+
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
         : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)),
           mNavigationWidgetV3(new GraphNavigationWidget(false)),
@@ -75,8 +86,41 @@ namespace hal
         return mContext;
     }
 
+    QGraphicsRectItem* gri = nullptr;
+    QGraphicsLineItem* gpp = nullptr;
+
     void GraphWidget::handleSceneAvailable()
     {
+        /*
+        if (mStoreViewport.mValid)
+        {
+            if (gri)
+            {
+                mContext->scene()->removeItem(gri);
+                delete gri;
+                mContext->scene()->removeItem(gpp);
+                delete gpp;
+            }
+            gri = new QGraphicsRectItem(restoreViewport(false));
+            gri->setPen(QPen(Qt::red,0));
+            QPointF centerPos(mContext->getLayouter()->gridXposition(mStoreViewport.mGrid[0].x()),
+                              mContext->getLayouter()->gridYposition(mStoreViewport.mGrid[0].y()));
+            mContext->scene()->addItem(gri);
+
+            gpp = new QGraphicsLineItem(QLineF(mStoreViewport.mGrid[1],centerPos));
+            gpp->setPen(QPen(Qt::yellow,0));
+            mContext->scene()->addItem(gpp);
+        }
+        else if (gri)
+        {
+            mContext->scene()->removeItem(gri);
+            delete gri;
+            mContext->scene()->removeItem(gpp);
+            delete gpp;
+            gri = nullptr;
+        }
+*/
+
         mView->setScene(mContext->scene());
 
         connect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
@@ -87,10 +131,9 @@ namespace hal
 
         if (hasFocus())
             mView->setFocus();
-        else if (!mStoreViewport.isNull())
+        else if (mStoreViewport.mValid)
         {
-            mView->fitInView(mStoreViewport,Qt::KeepAspectRatio);
-            mStoreViewport = QRectF();
+            mView->fitInView(restoreViewport(),Qt::KeepAspectRatio);
         }
     }
 
@@ -124,7 +167,27 @@ namespace hal
 
     void GraphWidget::storeViewport()
     {
-        mStoreViewport = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+        if (!mContext->getLayouter()->done())
+        {
+            mStoreViewport.mValid = false;
+            return;
+        }
+        QRect vg = mView->viewport()->geometry();
+        QPoint viewportCenter = (vg.topLeft() + vg.bottomRight()) / 2;
+        mStoreViewport.mValid = true;
+        mStoreViewport.mRect  = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+        mStoreViewport.mGrid  = mView->closestLayouterPos(mView->mapToScene(QPoint(viewportCenter)));
+    }
+
+    QRectF GraphWidget::restoreViewport(bool reset)
+    {
+        if (!mStoreViewport.mValid) return QRectF();
+        if (reset) mStoreViewport.mValid = false;
+
+        QPointF centerPos(mContext->getLayouter()->gridXposition(mStoreViewport.mGrid[0].x()),
+                          mContext->getLayouter()->gridYposition(mStoreViewport.mGrid[0].y()));
+        QPointF topLeft = mStoreViewport.mRect.topLeft() - mStoreViewport.mGrid[1] + centerPos;
+        return QRectF(topLeft,mStoreViewport.mRect.size());
     }
 
     void GraphWidget::keyPressEvent(QKeyEvent* event)
@@ -857,8 +920,20 @@ namespace hal
 
     void GraphWidget::focusRect(QRectF targetRect, bool applyCenterFix)
     {
-        auto currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+        QRectF currentRect;
+        bool restore = false;
+        if (mStoreViewport.mValid)
+        {
+            currentRect = restoreViewport();
+            mView->fitInView(currentRect, Qt::KeepAspectRatio);
+        }
+        else {
+            currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+        }
 
+        int durationMsec = sSettingAnimationDuration->value().toInt() * 100;
+
+        qDebug() << "animation" << restore << currentRect << targetRect << durationMsec;
         //check prevents jitter bug / resizing bug occuring due to error in 'fitToView'
         //only happens when current and target are the same as on last usage
         //solution -> just disable the focus alltogether if current and target are the same as last time, no need to fire animation again
@@ -874,20 +949,27 @@ namespace hal
                 targetRect.moveCenter(centerFix);
             }
 
-            auto anim = new QVariantAnimation();
-            anim->setDuration(1000);
-            anim->setStartValue(currentRect);
-            anim->setEndValue(targetRect);
+            if (durationMsec)
+            {
+                auto anim = new QVariantAnimation();
+                anim->setDuration(durationMsec);
+                anim->setStartValue(currentRect);
+                anim->setEndValue(targetRect);
 
-            connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
-                mView->fitInView(value.toRectF(), Qt::KeepAspectRatio);
-            });
+                connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
+                    mView->fitInView(value.toRectF(), Qt::KeepAspectRatio);
+                });
 
-            connect(anim, &QVariantAnimation::finished, [this](){
-                mRectAfterFocus = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
-            });
+                connect(anim, &QVariantAnimation::finished, [this](){
+                    mRectAfterFocus = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+                });
 
-            anim->start(QAbstractAnimation::DeleteWhenStopped);
+                anim->start(QAbstractAnimation::DeleteWhenStopped);
+            }
+            else
+            {
+                mView->fitInView(targetRect, Qt::KeepAspectRatio);
+            }
         }
     }
 

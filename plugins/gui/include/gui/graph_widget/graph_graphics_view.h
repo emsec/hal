@@ -53,6 +53,7 @@ namespace hal
     {
         Q_OBJECT
 
+        friend class GraphWidget;
     public:
         /**
          * Constructor.

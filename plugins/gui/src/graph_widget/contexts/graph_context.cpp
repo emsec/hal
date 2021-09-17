@@ -298,10 +298,6 @@ namespace hal
         {
             modules.insert(sm->get_id());
         }
-        // qDebug() << "GATES" << gates;
-        // qDebug() << "MINUS_GATES" << minus_gates;
-        // qDebug() << "PLUS_GATES" << plus_gates;
-        // qDebug() << "MGATES" << mGates;
         return (mGates - mRemovedGates) + mAddedGates == (gates - minus_gates) + plus_gates
                 && (mModules - mRemovedModules) + mAddedModules == (modules - minus_modules) + plus_modules;
     }
@@ -449,13 +445,18 @@ namespace hal
             s->handleStatusUpdate(message);
     }
 
+    void GraphContext::storeViewport()
+    {
+        for (GraphContextSubscriber* s : mSubscribers)
+            s->storeViewport();
+    }
+
     void GraphContext::moveNodeAction(const QPoint& from, const QPoint& to)
     {
         const QMap<QPoint,Node> nodeMap = mLayouter->positionToNodeMap();
         auto it = nodeMap.find(from);
         if (it==nodeMap.constEnd()) return;
-        for (GraphContextSubscriber* s : mSubscribers)
-            s->storeViewport();
+        storeViewport();
         mLayouter->setNodePosition(it.value(),to);
         scheduleSceneUpdate();
     }
@@ -493,6 +494,8 @@ namespace hal
     {
         if (mSceneUpdateInProgress)
             return;
+
+        storeViewport();
 
         if (mUnappliedChanges)
             applyChanges();

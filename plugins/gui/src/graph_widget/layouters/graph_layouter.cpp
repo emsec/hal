@@ -171,6 +171,24 @@ namespace hal
         return mMaxNodeHeight + sMinimumHChannelHeight;
     }
 
+    qreal GraphLayouter::gridXposition(int ix) const
+    {
+        Q_ASSERT(!mXValues.isEmpty());
+        int inx = ix - mMinXIndex;
+        if (inx < 0) return mXValues[0] - inx * defaultGridWidth();
+        if (inx < mXValues.size()) return mXValues[inx];
+        return mXValues.last() + (inx - mXValues.size() - 1) * defaultGridWidth();
+    }
+
+    qreal GraphLayouter::gridYposition(int iy) const
+    {
+        Q_ASSERT(!mYValues.isEmpty());
+        int inx = iy - mMinYIndex;
+        if (inx < 0) return mYValues[0] - inx * defaultGridHeight();
+        if (inx < mYValues.size()) return mYValues[inx];
+        return mYValues.last() + (inx - mYValues.size() - 1) * defaultGridHeight();
+    }
+
     void GraphLayouter::alternateLayout()
     {
         getWireHash();

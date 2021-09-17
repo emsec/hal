@@ -38,6 +38,7 @@ namespace hal
     class GraphContext;
     class GraphGraphicsView;
     class SpinnerWidget;
+    class SettingsItemSpinbox;
     class GraphNavigationWidget;
 
     /**
@@ -161,6 +162,20 @@ namespace hal
 
         QRectF mRectAfterFocus;
         QRectF mLastTargetRect;
-        QRectF mStoreViewport;
+
+        class StoreViewport
+        {
+        public:
+            bool mValid;
+            QRectF mRect;
+            QVector<QPoint> mGrid;
+            StoreViewport() : mValid(false) {;}
+        };
+
+        QRectF restoreViewport(bool reset = true);
+
+        StoreViewport mStoreViewport;
+
+        static SettingsItemSpinbox* sSettingAnimationDuration;
     };
 }
