@@ -100,6 +100,7 @@ namespace hal {
     {
         Q_UNUSED(index);
         mGroupingTableView->clearSelection();
+        mSearchbar->clear();
         if (!GroupingTableHistory::instance()->isEmpty())
             mLastUsed->clearSelection();
     }
