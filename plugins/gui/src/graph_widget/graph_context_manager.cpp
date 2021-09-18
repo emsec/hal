@@ -177,11 +177,37 @@ namespace hal
     void GraphContextManager::handleModuleSubmoduleAdded(Module* m, const u32 added_module) const
     {
 //        dump("ModuleSubmoduleAdded", m->get_id(), added_module);
+
+        QList<u32> module_ids = {};
+        Module* current_module = m;
+
+        do
+        {
+            module_ids.append(current_module->get_id());
+            current_module = current_module->get_parent_module();
+        }
+        while (current_module);
+
         for (GraphContext* context : mContextTableModel->list())
+        {
             if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}))
                 context->add({added_module}, {});
             else
                 context->testIfAffected(m->get_id(), &added_module, nullptr);
+
+            if (context->modules().contains(added_module))
+            {
+                QSet<u32> modules = context->modules();
+                modules.remove(added_module);
+
+                for (u32 id : module_ids)
+                    if (modules.contains(id))
+                    {
+                        context->remove({added_module},{});
+                        return;
+                    }
+            }
+        }
     }
 
     void GraphContextManager::handleModuleSubmoduleRemoved(Module* m, const u32 removed_module)
@@ -205,11 +231,37 @@ namespace hal
     void GraphContextManager::handleModuleGateAssigned(Module* m, const u32 inserted_gate) const
     {
 //        dump("ModuleGateAssigned", m->get_id(), inserted_gate);
+
+        QList<u32> module_ids = {};
+        Module* current_module = m;
+
+        do
+        {
+            module_ids.append(current_module->get_id());
+            current_module = current_module->get_parent_module();
+        }
+        while (current_module);
+
         for (GraphContext* context : mContextTableModel->list())
+        {
             if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
                 context->add({}, {inserted_gate});
             else
                 context->testIfAffected(m->get_id(), nullptr, &inserted_gate);
+
+            if (context->gates().contains(inserted_gate))
+            {
+                QSet<u32> modules = context->modules();
+
+                for (u32 id : module_ids)
+                    if (modules.contains(id))
+                    {
+                        context->remove({},{inserted_gate});
+                        return;
+                    }
+            }
+
+        }
     }
 
     void GraphContextManager::handleModuleGateRemoved(Module* m, const u32 removed_gate)
