@@ -34,6 +34,8 @@ var hierarchy =
     [ "subprocess::detail::Child", "classsubprocess_1_1detail_1_1_child.html", null ],
     [ "subprocess::close_fds", "structsubprocess_1_1close__fds.html", null ],
     [ "hal::utils::Color", "structhal_1_1utils_1_1_color.html", null ],
+    [ "hal::CommonSuccessorPredecessor", "classhal_1_1_common_successor_predecessor.html", null ],
+    [ "hal::CommonSuccessorPredecessorGateQueue", "classhal_1_1_common_successor_predecessor_gate_queue.html", null ],
     [ "subprocess::detail::Communication", "classsubprocess_1_1detail_1_1_communication.html", null ],
     [ "hal::SMT::Constraint", "structhal_1_1_s_m_t_1_1_constraint.html", null ],
     [ "hal::ContentAnchor", "classhal_1_1_content_anchor.html", [

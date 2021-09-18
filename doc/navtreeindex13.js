@@ -1,5 +1,14 @@
 var NAVTREEINDEX13 =
 {
+"classhal_1_1_settings_widget.html#ad170ec64af63ae412c70d34094a8ca42":[11,0,4,17,17],
+"classhal_1_1_settings_widget.html#adc18984437227fe32b71d309000a4848":[11,0,4,17,15],
+"classhal_1_1_settings_widget.html#adee63eab01b1bb092d55799cc235ee2a":[11,0,4,17,24],
+"classhal_1_1_settings_widget.html#adf3733c5cf9ad5fff14b69136a38c748":[11,0,4,17,19],
+"classhal_1_1_settings_widget.html#adf6d3ccc9d55033e4686103f9c7bbaee":[11,0,4,17,6],
+"classhal_1_1_settings_widget.html#af6fe668527de262997dbe0aea34ebe25":[11,0,4,17,11],
+"classhal_1_1_settings_widget.html#afd67912a344b2a4369379c182c49e8af":[11,0,4,17,9],
+"classhal_1_1_settings_widget_checkbox.html":[11,0,4,18],
+"classhal_1_1_settings_widget_checkbox.html#ab48e250600adb4c3c609ed941a27da95":[11,0,4,18,2],
 "classhal_1_1_settings_widget_checkbox.html#abee4082a10b59c5edf4d19b7e1b668b5":[11,0,4,18,1],
 "classhal_1_1_settings_widget_checkbox.html#aee23d97b393cc9d98e9c169c9430f008":[11,0,4,18,0],
 "classhal_1_1_settings_widget_dropdown.html":[11,0,4,19],
@@ -240,14 +249,5 @@ var NAVTREEINDEX13 =
 "classhal_1_1_wait_to_be_seated_entry.html#a5f50430313a8a1356eb11915f2be2370":[11,0,0,2,22,5],
 "classhal_1_1_wait_to_be_seated_entry.html#a7b2586c86a9eb219c90855caa74e8130":[11,0,0,2,22,7],
 "classhal_1_1_wait_to_be_seated_entry.html#a914af9fe2f87682ea758c23ae509d248":[11,0,0,2,22,1],
-"classhal_1_1_wait_to_be_seated_entry.html#a9ab8bb82886be206b60e9325fa68709a":[11,0,0,2,22,6],
-"classhal_1_1_wait_to_be_seated_entry.html#aacc2f6258ee58ad223c001d0855e90fa":[11,0,0,2,22,2],
-"classhal_1_1_wait_to_be_seated_entry.html#ae5b6c62e2594fdadf311054f1e49a8c7":[11,0,0,2,22,3],
-"classhal_1_1_wait_to_be_seated_entry.html#af5af8d559c13d811e7e4890c0be186ec":[11,0,0,2,22,0],
-"classhal_1_1_wait_to_be_seated_list.html":[11,0,0,2,23],
-"classhal_1_1_wait_to_be_seated_list.html#a13ed2e8ca2e3abd34d8727a9b5b65186":[11,0,0,2,23,4],
-"classhal_1_1_wait_to_be_seated_list.html#a15a4b4a9b6fa9c7d23938002dbe5b5f8":[11,0,0,2,23,1],
-"classhal_1_1_wait_to_be_seated_list.html#a1f6f3589eba031742502197d42c9e6cf":[11,0,0,2,23,2],
-"classhal_1_1_wait_to_be_seated_list.html#a5ead74e61ee19bfedc478d4a3a2a86aa":[11,0,0,2,23,3],
-"classhal_1_1_wait_to_be_seated_list.html#a75d46d7bc179b84e993e980e80e315a6":[11,0,0,2,23,5]
+"classhal_1_1_wait_to_be_seated_entry.html#a9ab8bb82886be206b60e9325fa68709a":[11,0,0,2,22,6]
 };

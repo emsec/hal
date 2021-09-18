@@ -45,6 +45,8 @@ var namespacehal =
     [ "CodeEditor", "classhal_1_1_code_editor.html", "classhal_1_1_code_editor" ],
     [ "CodeEditorMinimap", "classhal_1_1_code_editor_minimap.html", "classhal_1_1_code_editor_minimap" ],
     [ "CodeEditorScrollbar", "classhal_1_1_code_editor_scrollbar.html", "classhal_1_1_code_editor_scrollbar" ],
+    [ "CommonSuccessorPredecessor", "classhal_1_1_common_successor_predecessor.html", "classhal_1_1_common_successor_predecessor" ],
+    [ "CommonSuccessorPredecessorGateQueue", "classhal_1_1_common_successor_predecessor_gate_queue.html", "classhal_1_1_common_successor_predecessor_gate_queue" ],
     [ "ContentAnchor", "classhal_1_1_content_anchor.html", "classhal_1_1_content_anchor" ],
     [ "ContentDragRelay", "classhal_1_1_content_drag_relay.html", "classhal_1_1_content_drag_relay" ],
     [ "ContentFrame", "classhal_1_1_content_frame.html", "classhal_1_1_content_frame" ],
