@@ -129,6 +129,8 @@ namespace hal
 
         void handleAddSuccessorToView();
         void handleAddPredecessorToView();
+        void handleAddCommonSuccessorToView();
+        void handleAddCommonPredecessorToView();
         void handleHighlightSuccessor();
         void handleHighlightPredecessor();
         void handleSuccessorDistance();
@@ -160,6 +162,7 @@ namespace hal
         bool itemDraggable(GraphicsItem* item);
 
         void addSuccessorToView(int maxLevel, bool succ);
+        void addCommonSuccessorToView(int maxLevel, bool succ);
 
         struct LayouterPoint
         {

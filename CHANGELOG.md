@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * shortest path between two gates can be highlighted or added to current view 
   * predecessors or successors can be highlighted or added to the current view up to a user-specified depth
   * different grouping colors can be assigned depending on the distance from the origin
+  * common predecessors or successors can be found and added to view
 * improved layouter
   * fixed routing errors for complex cable swaps
   * fixed multiple connections of a single net to the same gate not being shown properly
