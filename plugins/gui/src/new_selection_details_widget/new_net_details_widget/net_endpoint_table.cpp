@@ -44,6 +44,8 @@ namespace hal
 
         QModelIndex unused;
 
+        fitSizeToContent();
+
         Q_EMIT updateText(mEndpointModel->typeString() + " (" + QString::number(mEndpointModel->rowCount(unused)) + ")");
     }
 
@@ -76,4 +78,14 @@ namespace hal
         menu.exec();
     }
 
+    void NetEndpointTable::fitSizeToContent()
+    {
+        resizeRowsToContents();
+        int h = horizontalHeader()->height() + 4;
+        for (int i = 0; i < mEndpointModel->rowCount(); i++)
+            h += rowHeight(i);
+
+        setMaximumHeight(h);
+        setMinimumHeight(h);
+    }
 }

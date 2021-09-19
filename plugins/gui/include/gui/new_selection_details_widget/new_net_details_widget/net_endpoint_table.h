@@ -50,6 +50,8 @@ namespace hal
         void updateText(const QString& text);
 
     private:
+        void fitSizeToContent();
+
         EndpointTableModel* mEndpointModel;
 
     };

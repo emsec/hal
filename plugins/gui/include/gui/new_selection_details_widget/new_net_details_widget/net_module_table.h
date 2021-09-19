@@ -51,6 +51,8 @@ namespace hal
         void updateText(const QString& text);
 
     private:
+        void fitSizeToContent();
+
         ModuleTableModel* mModuleTableModel;
 
     };

@@ -45,6 +45,8 @@ namespace hal
 
         QModelIndex unused;
 
+        fitSizeToContent();
+
         Q_EMIT updateText("Modules (" + QString::number(mModuleTableModel->rowCount(unused)) + ")");
     }
 
@@ -75,6 +77,17 @@ namespace hal
 
         menu.move(mapToGlobal(pos));
         menu.exec();
+    }
+
+    void NetModuleTable::fitSizeToContent()
+    {
+        resizeRowsToContents();
+        int h = horizontalHeader()->height() + 4;
+        for (int i = 0; i < mModuleTableModel->rowCount(); i++)
+            h += rowHeight(i);
+
+        setMaximumHeight(h);
+        setMinimumHeight(h);
     }
 
 }
