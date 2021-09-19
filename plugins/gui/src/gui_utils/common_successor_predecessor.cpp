@@ -2,6 +2,7 @@
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_utils.h"
+#include "hal_core/utilities/log.h"
 
 //#include "hal_core/netlist/
 
@@ -45,12 +46,20 @@ namespace hal {
     CommonSuccessorPredecessor::CommonSuccessorPredecessor(const QList<u32>& gateIds, bool forw, int maxRound)
         : mForward(forw), mMaskAll(0)
     {
+        if (gateIds.size() > 31)
+        {
+            log_warning("gui","Cannot find common {} for more than 31 gates", (forw?"successor":"predecessor"));
+            return;
+        }
+
         for (u32 id : gateIds)
         {
             Gate* g = gNetlist->get_gate_by_id(id);
             Q_ASSERT(g);
             CommonSuccessorPredecessorGateQueue cspgq(mQueues.size(),g);
-            mMaskAll |= cspgq.mask();
+            int msk = cspgq.mask();
+            mMaskAll |= msk;
+            mFoundBit[g] |= msk;
             mQueues.append(cspgq);
         }
 
@@ -67,6 +76,9 @@ namespace hal {
             }
             if (!mFoundSet.isEmpty()) break;
         }
+
+        if (mFoundSet.isEmpty())
+            log_info("gui", "No common {} found.", (forw?"successor":"predecessor"));
     }
 
     QSet<Gate *> CommonSuccessorPredecessor::result() const
