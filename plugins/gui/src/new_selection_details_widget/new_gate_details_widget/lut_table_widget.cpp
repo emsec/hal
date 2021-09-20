@@ -11,8 +11,8 @@ namespace hal{
         mLutModel(new LUTTableModel(this))
     {
         this->setModel(mLutModel);
-        this->setSelectionBehavior(QAbstractItemView::SelectRows);
-        this->setSelectionMode(QAbstractItemView::SingleSelection);
+        this->setSelectionMode(QAbstractItemView::NoSelection);
+        this->setFocusPolicy(Qt::NoFocus);
         this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         setFrameStyle(QFrame::NoFrame);

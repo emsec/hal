@@ -13,8 +13,8 @@ namespace hal {
         mCurrentObjectType=DataContainerType::DATA_CONTAINER;
 
         this->setModel(mDataTableModel);
-        this->setSelectionBehavior(QAbstractItemView::SelectRows);
-        this->setSelectionMode(QAbstractItemView::SingleSelection);
+        this->setSelectionMode(QAbstractItemView::NoSelection);
+        this->setFocusPolicy(Qt::NoFocus);
         this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         this->verticalHeader()->setVisible(false);
@@ -81,8 +81,31 @@ namespace hal {
         }
 
         DataTableModel::DataEntry entry = mDataTableModel->getEntryAtRow(idx.row());
+        QMenu menu;
+        
+        QString clipboardText = QString("%1: %2").arg(entry.key, entry.value);
 
-        QString menuText = "Exctract data as python code (copy to clipboard)";
+        menu.addAction("Copy data entry to clipboard",
+           [clipboardText]()
+           {
+               QApplication::clipboard()->setText( clipboardText );
+           }
+        );
+
+        clipboardText = QString("(%1, %2): (%3, %4)").arg(entry.category, entry.key, entry.dataType, entry.value);
+
+        menu.addAction("Copy data entry to clipboard (with category and data type)",
+           [clipboardText]()
+           {
+               QApplication::clipboard()->setText( clipboardText );
+           }
+        );
+        
+
+        /*====================================
+                  Data from Python 
+          ====================================*/ 
+        menu.addSection("Python");
         QString pythonCode;
 
         if(mCurrentObjectType == DataContainerType::GATE)
@@ -92,13 +115,30 @@ namespace hal {
         else if(mCurrentObjectType == DataContainerType::MODULE)
             pythonCode = PyCodeProvider::pyCodeModuleData(mCurrentObjectId, entry.category, entry.key);         
 
-        QMenu menu;
-        menu.addAction(QIcon(":/icons/python"), menuText,
+        menu.addAction(QIcon(":/icons/python"), "Exctract data as python code (copy to clipboard)",
            [pythonCode]()
            {
                QApplication::clipboard()->setText( pythonCode );
            }
         );
+
+        /*====================================
+                Data Map from Python 
+          ====================================*/ 
+        if(mCurrentObjectType == DataContainerType::GATE)
+            pythonCode = PyCodeProvider::pyCodeGateDataMap(mCurrentObjectId);
+        else if(mCurrentObjectType == DataContainerType::NET)
+            pythonCode = PyCodeProvider::pyCodeNetDataMap(mCurrentObjectId);
+        else if(mCurrentObjectType == DataContainerType::MODULE)
+            pythonCode = PyCodeProvider::pyCodeModuleDataMap(mCurrentObjectId);       
+
+        menu.addAction(QIcon(":/icons/python"), "Exctract data map as python code (copy to clipboard)",
+           [pythonCode]()
+           {
+               QApplication::clipboard()->setText( pythonCode );
+           }
+        );
+
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
     }

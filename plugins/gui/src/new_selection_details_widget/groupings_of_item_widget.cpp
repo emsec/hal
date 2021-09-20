@@ -15,7 +15,8 @@ namespace hal {
 
         this->setModel(mGroupingsOfItemModel);
         this->setSelectionBehavior(QAbstractItemView::SelectRows);
-        this->setSelectionMode(QAbstractItemView::SingleSelection);
+        this->setSelectionMode(QAbstractItemView::NoSelection);
+        this->setFocusPolicy(Qt::NoFocus);
         this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         this->verticalHeader()->setVisible(false);
@@ -88,45 +89,32 @@ namespace hal {
         QMenu menu;
         menu.setTitle(QString("%1 (%2)").arg(e.name(), e.id()));
 
-        // Add python providers
-        QString pythonCode = PyCodeProvider::pyCodeGrouping(e.id());
+
+        /*====================================
+                  Plaintext to Clipboard
+          ====================================*/ 
+        QString toClipboardText = e.name();
         menu.addAction(
-            QIcon(":/icons/python"),
-            "Extract grouping as python code (copy to clipboard)",
-            [pythonCode]()
+            "Copy grouping name to clipboard",
+            [toClipboardText]()
             {
-                QApplication::clipboard()->setText( pythonCode );
+                QApplication::clipboard()->setText( toClipboardText );
             }
         );
 
-        // Add python providers that are dependent from the color
-        if(idx.column() == 0){
-            pythonCode = PyCodeProvider::pyCodeGroupingName(e.id());
-            menu.addAction(
-                QIcon(":/icons/python"),
-                "Extract grouping name as python code (copy to clipboard)",
-                [pythonCode]()
-                {
-                    QApplication::clipboard()->setText( pythonCode );
-                }
-            );
-        }
+        toClipboardText = QString::number(e.id());
+        menu.addAction(
+            "Copy grouping id to clipboard",
+            [toClipboardText]()
+            {
+                QApplication::clipboard()->setText( toClipboardText );
+            }
+        );
 
-        if(idx.column() == 1){
-            pythonCode = PyCodeProvider::pyCodeGroupingId(e.id());
-            menu.addAction(
-                QIcon(":/icons/python"),
-                "Extract grouping id as python code (copy to clipboard)",
-                [pythonCode]()
-                {
-                    QApplication::clipboard()->setText( pythonCode );
-                }
-            );
-        }
-
-        // Grouping List (TODO: When multiple groupings are supported...)
-        
-        // Remove Item from grouping
+        /*====================================
+               Remove item from grouping
+          ====================================*/
+        menu.addSection("Misc");
         if (mCurrentObjectType != ItemType::None && mCurrentObjectId > 0){
             QSet<u32> rmMods;
             QSet<u32> rmGates;
@@ -147,7 +135,6 @@ namespace hal {
                 rmNets.insert(mCurrentObjectId);
             }
                 
-
             menu.addAction(
                 actionText,
                 [e,rmMods,rmGates,rmNets]()
@@ -159,37 +146,48 @@ namespace hal {
                 }
             );
         }
-        
 
+
+        /*====================================
+                   Python to Clipboard 
+          ====================================*/ 
+        menu.addSection("Python");
+        QString pythonCode = PyCodeProvider::pyCodeGrouping(e.id());
+        menu.addAction(
+            QIcon(":/icons/python"),
+            "Extract grouping as python code (copy to clipboard)",
+            [pythonCode]()
+            {
+                QApplication::clipboard()->setText( pythonCode );
+            }
+        );
+
+        // Add python providers that are dependent from the color
+        pythonCode = PyCodeProvider::pyCodeGroupingName(e.id());
+        menu.addAction(
+            QIcon(":/icons/python"),
+            "Extract grouping name as python code (copy to clipboard)",
+            [pythonCode]()
+            {
+                QApplication::clipboard()->setText( pythonCode );
+            }
+        );
+
+        pythonCode = PyCodeProvider::pyCodeGroupingId(e.id());
+        menu.addAction(
+            QIcon(":/icons/python"),
+            "Extract grouping id as python code (copy to clipboard)",
+            [pythonCode]()
+            {
+                QApplication::clipboard()->setText( pythonCode );
+            }
+        );
+
+        // Grouping List (TODO: When multiple groupings are supported...)
+        
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
 
-        // Add python 
-        
-
-        // Grouping python provider
-
-        /*DataTableModel::DataEntry entry = mDataTableModel->getEntryAtRow(idx.row());
-
-        QString menuText = "Exctract data as python code (copy to clipboard)";
-        QString pythonCode;
-
-        if(mCurrentObjectType == DataContainerType::GATE)
-            pythonCode = PyCodeProvider::pyCodeGateData(mCurrentObjectId, entry.category, entry.key);
-        else if(mCurrentObjectType == DataContainerType::NET)
-            pythonCode = PyCodeProvider::pyCodeNetData(mCurrentObjectId, entry.category, entry.key);
-        else if(mCurrentObjectType == DataContainerType::MODULE)
-            pythonCode = PyCodeProvider::pyCodeModuleData(mCurrentObjectId, entry.category, entry.key);         
-
-        QMenu menu;
-        menu.addAction(QIcon(":/icons/python"), menuText,
-           [pythonCode]()
-           {
-               QApplication::clipboard()->setText( pythonCode );
-           }
-        );
-        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
-        menu.exec();*/
     }
 
     void GroupingsOfItemWidget::handleLayoutChanged(const QList<QPersistentModelIndex> &parents, QAbstractItemModel::LayoutChangeHint hint)
@@ -197,6 +195,7 @@ namespace hal {
         Q_UNUSED(parents);
         Q_UNUSED(hint);
         updateAppearance();
+        adjustTableSizes();
     }
 
     void GroupingsOfItemWidget::updateAppearance()

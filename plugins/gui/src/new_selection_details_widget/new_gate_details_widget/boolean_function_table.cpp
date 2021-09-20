@@ -11,8 +11,8 @@ namespace hal {
     mBooleanFunctionTableModel(new BooleanFunctionTableModel(this))
     {
         this->setModel(mBooleanFunctionTableModel);
-        this->setSelectionBehavior(QAbstractItemView::SelectRows);
-        this->setSelectionMode(QAbstractItemView::SingleSelection);
+        this->setSelectionMode(QAbstractItemView::NoSelection);
+        this->setFocusPolicy(Qt::NoFocus);
         this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         this->verticalHeader()->setVisible(false);
@@ -52,6 +52,23 @@ namespace hal {
         QMenu menu;
         QString menuText;
         QString pythonCode;
+
+        /*====================================
+                  Plaintext to Clipboard
+          ====================================*/ 
+
+        QString toClipboardText = entry->getEntryIdentifier() + " = " + entry->getEntryValueString();
+        menu.addAction(
+            "Copy boolean function to clipboard",
+            [toClipboardText]()
+            {
+                QApplication::clipboard()->setText( toClipboardText );
+            }
+        );
+
+        /*====================================
+                Python to Clipboard 
+          ====================================*/ 
 
         // Entry is a boolean function
         if(!entry->isCPBehavior())
