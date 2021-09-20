@@ -472,6 +472,9 @@ namespace hal
                 GraphContext* context = new GraphContext(viewId, viewName);
                 context->setLayouter(getDefaultLayouter(context));
                 context->setShader(getDefaultShader(context));
+                context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
+                connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
+
                 if (!context->readFromFile(jsonView))
                 {
                     log_warning("gui", "failed to read view file {}.", (filename + "v").toStdString());
