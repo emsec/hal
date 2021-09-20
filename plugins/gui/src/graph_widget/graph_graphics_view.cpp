@@ -19,6 +19,7 @@
 #include "gui/grouping_dialog/grouping_dialog.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
+#include "gui/gui_utils/common_successor_predecessor.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/user_action/action_add_items_to_object.h"
@@ -590,6 +591,9 @@ namespace hal
         bool isModule       = false;
         bool isNet          = false;
 
+        bool isMultiGates = gSelectionRelay->selectedGates().size() > 1 &&
+                gSelectionRelay->selectedModules().isEmpty();
+
         if (item)
         {
             mItem   = static_cast<GraphicsItem*>(item);
@@ -663,6 +667,8 @@ namespace hal
 
                 QMenu* preSucMenu = context_menu.addMenu("  Successor/Predecessor …");
                 recursionLevelMenu(preSucMenu->addMenu("Add successors to view …"),           true, &GraphGraphicsView::handleAddSuccessorToView);
+                if (isMultiGates)
+                    recursionLevelMenu(preSucMenu->addMenu("Add common successors to view …"),true, &GraphGraphicsView::handleAddCommonSuccessorToView);
                 if (isGate)
                 {
                     action = preSucMenu->addAction("Add path to successor to view …");
@@ -680,6 +686,8 @@ namespace hal
 
                 preSucMenu->addSeparator();
                 recursionLevelMenu(preSucMenu->addMenu("Add predecessors to view …"),           false, &GraphGraphicsView::handleAddPredecessorToView);
+                if (isMultiGates)
+                    recursionLevelMenu(preSucMenu->addMenu("Add common predecessors to view …"),false, &GraphGraphicsView::handleAddCommonPredecessorToView);
                 if (isGate)
                 {
                     action = preSucMenu->addAction("Add path to predecessor to view …");
@@ -861,6 +869,22 @@ namespace hal
         addSuccessorToView(level, false);
     }
 
+    void GraphGraphicsView::handleAddCommonSuccessorToView()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        addCommonSuccessorToView(level, true);
+    }
+
+    void GraphGraphicsView::handleAddCommonPredecessorToView()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        addCommonSuccessorToView(level, false);
+    }
+
     void GraphGraphicsView::addSuccessorToView(int maxLevel, bool succ)
     {
 
@@ -938,6 +962,22 @@ namespace hal
         act->exec();
     }
 
+
+    void GraphGraphicsView::addCommonSuccessorToView(int maxLevel, bool succ)
+    {
+        CommonSuccessorPredecessor csp(gSelectionRelay->selectedGatesList(),succ,maxLevel);
+        const NodeBoxes& boxes = mGraphWidget->getContext()->getLayouter()->boxes();
+
+        QSet<u32> gatsNew;
+        for (const Gate* g : csp.result())
+        {
+            if (boxes.boxForGate(g)) continue;
+            gatsNew.insert(g->get_id());
+        }
+        ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gatsNew);
+        act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+        act->exec();
+    }
 
     void GraphGraphicsView::handleHighlightSuccessor()
     {

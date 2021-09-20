@@ -285,6 +285,9 @@ namespace hal
         qreal defaultGridWidth() const;
         qreal defaultGridHeight() const;
 
+        qreal gridXposition(int ix) const;
+        qreal gridYposition(int iy) const;
+
         const NodeBoxes& boxes() const { return mBoxes; }
     Q_SIGNALS:
         void statusUpdate(const int percent);
