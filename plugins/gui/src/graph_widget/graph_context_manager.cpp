@@ -200,6 +200,10 @@ namespace hal
                 QSet<u32> modules = context->modules();
                 modules.remove(added_module);
 
+                // modules    : all modules visible in graph context view except recently added
+                // module_ids : all anchestors of recently added module
+                // algorithm  : remove 'recently added' module from view if it was moved to
+                //              (child or grandchild of) another module visible in view
                 for (u32 id : module_ids)
                     if (modules.contains(id))
                     {
