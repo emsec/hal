@@ -224,6 +224,11 @@ namespace hal
     {
         GroupingDialog gd(this);
         if (gd.exec() != QDialog::Accepted) return;
+        if (gd.isNewGrouping())
+        {
+            selectionToGroupingAction();
+            return;
+        }
         QString groupName = QString::fromStdString(gNetlist->get_grouping_by_id(gd.groupId())->get_name());
         selectionToGroupingAction(groupName);
     }

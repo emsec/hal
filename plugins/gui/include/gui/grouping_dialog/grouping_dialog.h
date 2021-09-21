@@ -52,6 +52,13 @@ namespace hal {
          */
         u32 groupId() const { return mGroupId; }
 
+        /**
+         * Get the flag that states if a new grouping should be created.
+         *
+         * @return True if a new grouping should be created, False otherwise.
+         */
+        bool isNewGrouping() const { return mNewGrouping; }
+
     public Q_SLOTS:
         /**
          * Enables the dialog buttons if groupId is not zero and vice versa. If groupId is not zero and
@@ -90,5 +97,6 @@ namespace hal {
         QTabWidget* mTabWidget;
 
         u32 mGroupId;
+        bool mNewGrouping;
     };
 }

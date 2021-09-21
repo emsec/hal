@@ -17,7 +17,8 @@ namespace hal {
         : QDialog(parent),
           mSearchbar(new Searchbar(this)),
           mGroupingTableView(new GroupingTableView(false, this)),
-          mTabWidget(new QTabWidget(this))
+          mTabWidget(new QTabWidget(this)),
+          mNewGrouping(false)
     {
         setWindowTitle("Move to grouping …");
         QGridLayout* layout = new QGridLayout(this);
@@ -69,8 +70,8 @@ namespace hal {
 
     void GroupingDialog::handleNewGroupingClicked()
     {
-        ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::Grouping);
-        act->exec();
+        mNewGrouping = true;
+        QDialog::accept();
     }
 
     void GroupingDialog::handleToggleSearchbar()
