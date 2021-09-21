@@ -544,270 +544,269 @@ $(document).ready(function(){initNavTree('graph__context_8cpp_source.html',''); 
 <div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;        <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html">QMap&lt;QPoint,Node&gt;</a> nodeMap = mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a5691840af28d6c8fd39fa1dccbff5ca2">positionToNodeMap</a>();</div>
 <div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;        <span class="keyword">auto</span> it = nodeMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#find">find</a>(<a class="code" href="_apache_01_license_8txt.html#aaf8226a059307a1b18aac1295b5cf3a2">from</a>);</div>
 <div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;        <span class="keywordflow">if</span> (it==nodeMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#constEnd">constEnd</a>()) <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html#a8889a0c74139f131610e6e8606579f6a">storeViewport</a>();</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a1a91cb2f3e9d19f5849ccbb04f5fe3c4">setNodePosition</a>(it.value(),to);</div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html#a7fe95e9258400d311c60c7fc3a2ad50d">scheduleSceneUpdate</a>();</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;    }</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160; </div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;    <span class="keywordtype">void</span> GraphContext::handleLayouterFinished()</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    {</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        <span class="keywordflow">if</span> (mUnappliedChanges)</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;            applyChanges();</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160; </div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;        <span class="keywordflow">if</span> (mSceneUpdateRequired)</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;        {</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;            startSceneUpdate();</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        }</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;        {</div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;            mShader-&gt;<a class="code" href="classhal_1_1_graph_shader.html#a8114d7f15d905a7367dbdecac3c9532b">update</a>();</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;            mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#aa659e34b122f066720bd70c6abf210d6">scene</a>()-&gt;<a class="code" href="classhal_1_1_graphics_scene.html#a10ff430e7ff392dff7418144c01e30c7">updateVisuals</a>(mShader-&gt;<a class="code" href="classhal_1_1_graph_shader.html#a8edc447a180d18bd35ed60ee170078f9">getShading</a>());</div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160; </div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;            mSceneUpdateInProgress = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160; </div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;            mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#aa659e34b122f066720bd70c6abf210d6">scene</a>()-&gt;<a class="code" href="classhal_1_1_graphics_scene.html#ace55003fd79d1910a836aac3e981e1db">connectAll</a>();</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160; </div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;            <span class="keywordflow">for</span> (GraphContextSubscriber* s : mSubscribers)</div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;                s-&gt;handleSceneAvailable();</div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        }</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;    }</div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160; </div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;    <span class="keywordtype">void</span> GraphContext::evaluateChanges()</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;    {</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;        <span class="keywordflow">if</span> (!mAddedGates.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>() || !mRemovedGates.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>() || !mAddedModules.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>() || !mRemovedModules.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>())</div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;            mUnappliedChanges = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;    }</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160; </div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;    <span class="keywordtype">void</span> GraphContext::update()</div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;    {</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;        <span class="keywordflow">if</span> (mSceneUpdateInProgress)</div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160; </div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html#a8889a0c74139f131610e6e8606579f6a">storeViewport</a>();</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160; </div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;        <span class="keywordflow">if</span> (mUnappliedChanges)</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;            applyChanges();</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160; </div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;        <span class="keywordflow">if</span> (mSceneUpdateRequired)</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;            startSceneUpdate();</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;    }</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160; </div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;    <span class="keywordtype">void</span> GraphContext::applyChanges()</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;    {</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;        mModules -= mRemovedModules;</div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;        mGates -= mRemovedGates;</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160; </div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;        mModules += mAddedModules;</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;        mGates += mAddedGates;</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160; </div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;        mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a17d5e49b37db0df8c9370966c78cdad3">remove</a>(mRemovedModules, mRemovedGates, mNets);</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;        mShader-&gt;<a class="code" href="classhal_1_1_graph_shader.html#a8c486ebf9eba1c825bf7a0afcaca53bf">remove</a>(mRemovedModules, mRemovedGates, mNets);</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160; </div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;        mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; <span class="keywordtype">id</span> : mGates)</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;        {</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;            <span class="keyword">auto</span> g = <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(<span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a> : g-&gt;get_fan_in_nets())</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;            {</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;                <span class="comment">//if(!net-&gt;is_unrouted() || net-&gt;is_global_input_net() || net-&gt;is_global_output_net())</span></div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;                    mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>-&gt;<a class="code" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a>());</div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;            }</div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a> : g-&gt;get_fan_out_nets())</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;            {</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;                <span class="comment">//if(!net-&gt;is_unrouted() || net-&gt;is_global_input_net() || net-&gt;is_global_output_net())</span></div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;                    mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>-&gt;<a class="code" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a>());</div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;            }</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;        }</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; <span class="keywordtype">id</span> : mModules)</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;        {</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;            <span class="keyword">auto</span> m = <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(<span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a> : m-&gt;<a class="code" href="classhal_1_1_module.html#a1a51135930d6989903c0f67fd9cd5298">get_input_nets</a>())</div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;            {</div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;                mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>-&gt;<a class="code" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a>());</div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;            }</div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a> : m-&gt;<a class="code" href="classhal_1_1_module.html#a327a93a6005f1c92e34bdfd3d2e78c7b">get_output_nets</a>())</div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;            {</div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;                mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>-&gt;<a class="code" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a>());</div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;            }</div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;        }</div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160; </div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;        <span class="keywordtype">int</span> placementOrder[4] = { <a class="code" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30472caec088342be6e3c336a35fcfbc">PlacementHint::GridPosition</a>,</div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;                                  <a class="code" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a4b5fc2d9791133271831856bda86028b">PlacementHint::PreferLeft</a>,</div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;                                  <a class="code" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0aad44e118366dfe253a0d2e15d638bbe2">PlacementHint::PreferRight</a>,</div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;                                  <a class="code" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30a5eab0be56e8fce3c17b07aff4f35b">PlacementHint::Standard</a>};</div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160; </div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> iplc = 0; iplc&lt;4; iplc++)</div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;        {</div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> PlacementEntry&amp; plcEntry : mPlacementList[placementOrder[iplc]])</div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;            {</div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> modsForHint = plcEntry.mModules;</div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;                modsForHint &amp;= mAddedModules; <span class="comment">// may contain obsolete entries that we must filter out</span></div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> gatsForHint = plcEntry.mGates;</div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;                gatsForHint &amp;= mAddedGates;</div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;                mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a51184898aba8a3359b1cb4ec8ea29843">add</a>(modsForHint, gatsForHint, mNets, plcEntry.mPlacementHint);</div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;            }</div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;        }</div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160; </div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;        mShader-&gt;<a class="code" href="classhal_1_1_graph_shader.html#a4099553e7de5803daabf65e220a44f6d">add</a>(mAddedModules, mAddedGates, mNets);</div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160; </div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;        mAddedModules.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;        mAddedGates.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160; </div>
-<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;        mRemovedModules.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;        mRemovedGates.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160; </div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;4; i++)</div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;            mPlacementList[i].<a class="code" href="classhal_1_1_graph_context.html#a65bc0bd69534ca9b2cb3e9f1dfe38b28">clear</a>();</div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160; </div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;        mUnappliedChanges     = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;        mSceneUpdateRequired = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;    }</div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160; </div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;    <span class="keywordtype">void</span> GraphContext::startSceneUpdate()</div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;    {</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;        mSceneUpdateRequired = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;        mSceneUpdateInProgress = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160; </div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;        <span class="keywordflow">for</span> (GraphContextSubscriber* s : mSubscribers)</div>
-<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;            s-&gt;handleSceneUnavailable();</div>
-<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160; </div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;        mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#aa659e34b122f066720bd70c6abf210d6">scene</a>()-&gt;<a class="code" href="classhal_1_1_graphics_scene.html#abe36d4d9883465a8a38e210724709b12">disconnectAll</a>();</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160; </div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;    <span class="comment">//    LayouterTask* task = new LayouterTask(mLayouter);</span></div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;    <span class="comment">//    connect(task, &amp;LayouterTask::finished, this, &amp;GraphContext::handleLayouterFinished, Qt::ConnectionType::QueuedConnection);</span></div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;    <span class="comment">//    gThreadPool-&gt;queueTask(task);</span></div>
-<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160; </div>
-<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;        mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a90fc93ef75eb16b89139460b8d7c1046">layout</a>();</div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;        handleLayouterFinished();</div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;    }</div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160; </div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;    <span class="keywordtype">void</span> GraphContext::handleStyleChanged(<span class="keywordtype">int</span> istyle)</div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;    {</div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;        Q_UNUSED(istyle);</div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;        handleLayouterFinished();</div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;    }</div>
-<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160; </div>
-<div class="line"><a name="l00602"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_context.html#a8de86725cd7c23dcc355ece981833502">  602</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qdatetime.html">QDateTime</a> <a class="code" href="classhal_1_1_graph_context.html#a8de86725cd7c23dcc355ece981833502">GraphContext::getTimestamp</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;        <span class="keywordflow">return</span> mTimestamp;</div>
-<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;    }</div>
-<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160; </div>
-<div class="line"><a name="l00607"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_context.html#a492bb57ce6ecf50b7701e524e712cd9e">  607</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_graph_context.html#a492bb57ce6ecf50b7701e524e712cd9e">GraphContext::readFromFile</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a>&amp; json)</div>
-<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;    {</div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;        <span class="keywordflow">if</span> (json.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;timestamp&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;timestamp&quot;</span>].isString())</div>
-<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;            mTimestamp = <a class="codeRef" href="https://doc.qt.io/qt-5/qdatetime.html#fromString">QDateTime::fromString</a>(json[<span class="stringliteral">&quot;timestamp&quot;</span>].toString());</div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160; </div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;        <span class="keywordflow">if</span> (json.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;modules&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;modules&quot;</span>].isArray())</div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;        {</div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonMods = json[<span class="stringliteral">&quot;modules&quot;</span>].toArray();</div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;            <span class="keywordtype">int</span> nmods = jsonMods.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#size">size</a>();</div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> imod=0; imod&lt;nmods; imod++)</div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;            {</div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonMod = jsonMods.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#at">at</a>(imod).<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonvalue.html#toObject-1">toObject</a>();</div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;                <span class="keywordflow">if</span> (!jsonMod.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;id&quot;</span>) || !jsonMod[<span class="stringliteral">&quot;id&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;                <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> = jsonMod[<span class="stringliteral">&quot;id&quot;</span>].toInt();</div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(<span class="keywordtype">id</span>)) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;                mModules.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#insert">insert</a>(<span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;                <span class="keywordflow">if</span> (!jsonMod.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;x&quot;</span>) || !jsonMod[<span class="stringliteral">&quot;x&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;                <span class="keywordtype">int</span> x = jsonMod[<span class="stringliteral">&quot;x&quot;</span>].toInt();</div>
-<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;                <span class="keywordflow">if</span> (!jsonMod.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;y&quot;</span>) || !jsonMod[<span class="stringliteral">&quot;y&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;                <span class="keywordtype">int</span> y = jsonMod[<span class="stringliteral">&quot;y&quot;</span>].toInt();</div>
-<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;                <a class="code" href="classhal_1_1_node.html">Node</a> nd(<span class="keywordtype">id</span>,<a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a2b02efee2cb6afc1c319874996e97f25">Node::Module</a>);</div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;                mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a1a91cb2f3e9d19f5849ccbb04f5fe3c4">setNodePosition</a>(nd,<a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>(x,y));</div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;            }</div>
-<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;        }</div>
-<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160; </div>
-<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;        <span class="keywordflow">if</span> (json.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;gates&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;gates&quot;</span>].isArray())</div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;        {</div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonGats = json[<span class="stringliteral">&quot;gates&quot;</span>].toArray();</div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;            <span class="keywordtype">int</span> ngats = jsonGats.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#size">size</a>();</div>
-<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> igat=0; igat&lt;ngats; igat++)</div>
-<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;            {</div>
-<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonGat = jsonGats.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#at">at</a>(igat).<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonvalue.html#toObject-1">toObject</a>();</div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;                <span class="keywordflow">if</span> (!jsonGat.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;id&quot;</span>) || !jsonGat[<span class="stringliteral">&quot;id&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;                <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> = jsonGat[<span class="stringliteral">&quot;id&quot;</span>].toInt();</div>
-<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(<span class="keywordtype">id</span>)) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;                mGates.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#insert">insert</a>(<span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;                <span class="keywordflow">if</span> (!jsonGat.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;x&quot;</span>) || !jsonGat[<span class="stringliteral">&quot;x&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;                <span class="keywordtype">int</span> x = jsonGat[<span class="stringliteral">&quot;x&quot;</span>].toInt();</div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;                <span class="keywordflow">if</span> (!jsonGat.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;y&quot;</span>) || !jsonGat[<span class="stringliteral">&quot;y&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;                <span class="keywordtype">int</span> y = jsonGat[<span class="stringliteral">&quot;y&quot;</span>].toInt();</div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;                <a class="code" href="classhal_1_1_node.html">Node</a> nd(<span class="keywordtype">id</span>,<a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a62114aae0cfe74a2f09f2bbdced26fa6">Node::Gate</a>);</div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;                mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a1a91cb2f3e9d19f5849ccbb04f5fe3c4">setNodePosition</a>(nd,<a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>(x,y));</div>
-<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;            }</div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;        }</div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160; </div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;        <span class="keywordflow">if</span> (json.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;nets&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;nets&quot;</span>].isArray())</div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;        {</div>
-<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonNets = json[<span class="stringliteral">&quot;nets&quot;</span>].toArray();</div>
-<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;            <span class="keywordtype">int</span> nnets = jsonNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#size">size</a>();</div>
-<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> inet=0; inet&lt;nnets; inet++)</div>
-<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;            {</div>
-<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonNet = jsonNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#at">at</a>(inet).<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonvalue.html#toObject-1">toObject</a>();</div>
-<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;                <span class="keywordflow">if</span> (!jsonNet.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;id&quot;</span>) || !jsonNet[<span class="stringliteral">&quot;id&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;                <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> = jsonNet[<span class="stringliteral">&quot;id&quot;</span>].toInt();</div>
-<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">get_net_by_id</a>(<span class="keywordtype">id</span>)) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;                mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;            }</div>
-<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;        }</div>
-<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160; </div>
-<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html#a7fe95e9258400d311c60c7fc3a2ad50d">scheduleSceneUpdate</a>();</div>
-<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">setDirty</a>(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;    }</div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160; </div>
-<div class="line"><a name="l00671"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_context.html#a246b2047c7dd7a7239779a383e2bb3f9">  671</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#a246b2047c7dd7a7239779a383e2bb3f9">GraphContext::writeToFile</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a>&amp; json)</div>
-<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;    {</div>
-<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;        json[<span class="stringliteral">&quot;id&quot;</span>] = (int) mId;</div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;        json[<span class="stringliteral">&quot;name&quot;</span>] = mName;</div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;        json[<span class="stringliteral">&quot;timestamp&quot;</span>] = mTimestamp.<a class="codeRef" href="https://doc.qt.io/qt-5/qdatetime.html#toString-1">toString</a>();</div>
-<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160; </div>
-<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonMods;</div>
-<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : mModules)</div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;        {</div>
-<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;            <a class="code" href="classhal_1_1_node.html">Node</a> searchMod(<span class="keywordtype">id</span>, <a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a2b02efee2cb6afc1c319874996e97f25">Node::Module</a>);</div>
-<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;            <span class="keyword">const</span> <a class="code" href="classhal_1_1_node_box.html">NodeBox</a>* box = <a class="code" href="classhal_1_1_graph_context.html#ab4ff1193f5bdd31d5863e33832e28c13">getLayouter</a>()-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#af3c01b3f53761de10a07641a4fef1b7e">boxes</a>().<a class="code" href="classhal_1_1_node_boxes.html#a531029937aea187639d0352767e5c5b9">boxForNode</a>(searchMod);</div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;            Q_ASSERT(box);</div>
-<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonMod;</div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            jsonMod[<span class="stringliteral">&quot;id&quot;</span>] = (int) <span class="keywordtype">id</span>;</div>
-<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;            jsonMod[<span class="stringliteral">&quot;x&quot;</span>]  = (int) box-&gt;<a class="code" href="classhal_1_1_node_box.html#a70e5df149126871f4db3b09d75453179">x</a>();</div>
-<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;            jsonMod[<span class="stringliteral">&quot;y&quot;</span>]  = (int) box-&gt;<a class="code" href="classhal_1_1_node_box.html#ab2601570ab043da7e3dc5ad1285bf555">y</a>();</div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;            jsonMods.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#append">append</a>(jsonMod);</div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;        }</div>
-<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;        json[<span class="stringliteral">&quot;modules&quot;</span>] = jsonMods;</div>
-<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160; </div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonGats;</div>
-<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : mGates)</div>
-<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;        {</div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;            <a class="code" href="classhal_1_1_node.html">Node</a> searchGat(<span class="keywordtype">id</span>, <a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a62114aae0cfe74a2f09f2bbdced26fa6">Node::Gate</a>);</div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;            <span class="keyword">const</span> <a class="code" href="classhal_1_1_node_box.html">NodeBox</a>* box = <a class="code" href="classhal_1_1_graph_context.html#ab4ff1193f5bdd31d5863e33832e28c13">getLayouter</a>()-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#af3c01b3f53761de10a07641a4fef1b7e">boxes</a>().<a class="code" href="classhal_1_1_node_boxes.html#a531029937aea187639d0352767e5c5b9">boxForNode</a>(searchGat);</div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;            Q_ASSERT(box);</div>
-<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonGat;</div>
-<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;            jsonGat[<span class="stringliteral">&quot;id&quot;</span>] = (int) <span class="keywordtype">id</span>;</div>
-<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;            jsonGat[<span class="stringliteral">&quot;x&quot;</span>]  = (int) box-&gt;<a class="code" href="classhal_1_1_node_box.html#a70e5df149126871f4db3b09d75453179">x</a>();</div>
-<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;            jsonGat[<span class="stringliteral">&quot;y&quot;</span>]  = (int) box-&gt;<a class="code" href="classhal_1_1_node_box.html#ab2601570ab043da7e3dc5ad1285bf555">y</a>();</div>
-<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;            jsonGats.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#append">append</a>(jsonGat);</div>
-<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;        }</div>
-<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;        json[<span class="stringliteral">&quot;gates&quot;</span>] = jsonGats;</div>
-<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160; </div>
-<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonNets;</div>
-<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : mNets)</div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;        {</div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonNet;</div>
-<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;            jsonNet[<span class="stringliteral">&quot;id&quot;</span>] = (int) <span class="keywordtype">id</span>;</div>
-<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;            jsonNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#append">append</a>(jsonNet);</div>
-<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;        }</div>
-<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;        json[<span class="stringliteral">&quot;nets&quot;</span>] = jsonNets;</div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">setDirty</a>(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;    }</div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160; </div>
-<div class="line"><a name="l00719"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">  719</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">GraphContext::setDirty</a>(<span class="keywordtype">bool</span> dty)</div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;    {</div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;        <span class="keywordflow">if</span> (mDirty==dty) <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;        mDirty = dty;</div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a>(<a class="code" href="classhal_1_1_graph_context.html#ac705654c3f51c4117dc30a8c9fbf69a9">dataChanged</a>());</div>
-<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;    }</div>
-<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;}</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;        mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a1a91cb2f3e9d19f5849ccbb04f5fe3c4">setNodePosition</a>(it.value(),to);</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html#a7fe95e9258400d311c60c7fc3a2ad50d">scheduleSceneUpdate</a>();</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;    }</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160; </div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    <span class="keywordtype">void</span> GraphContext::handleLayouterFinished()</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;    {</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;        <span class="keywordflow">if</span> (mUnappliedChanges)</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;            applyChanges();</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160; </div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;        <span class="keywordflow">if</span> (mSceneUpdateRequired)</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;        {</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;            startSceneUpdate();</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;        }</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        {</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;            mShader-&gt;<a class="code" href="classhal_1_1_graph_shader.html#a8114d7f15d905a7367dbdecac3c9532b">update</a>();</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;            mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#aa659e34b122f066720bd70c6abf210d6">scene</a>()-&gt;<a class="code" href="classhal_1_1_graphics_scene.html#a10ff430e7ff392dff7418144c01e30c7">updateVisuals</a>(mShader-&gt;<a class="code" href="classhal_1_1_graph_shader.html#a8edc447a180d18bd35ed60ee170078f9">getShading</a>());</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160; </div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;            mSceneUpdateInProgress = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160; </div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;            mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#aa659e34b122f066720bd70c6abf210d6">scene</a>()-&gt;<a class="code" href="classhal_1_1_graphics_scene.html#ace55003fd79d1910a836aac3e981e1db">connectAll</a>();</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160; </div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;            <span class="keywordflow">for</span> (GraphContextSubscriber* s : mSubscribers)</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;                s-&gt;handleSceneAvailable();</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        }</div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;    }</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160; </div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;    <span class="keywordtype">void</span> GraphContext::evaluateChanges()</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;    {</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;        <span class="keywordflow">if</span> (!mAddedGates.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>() || !mRemovedGates.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>() || !mAddedModules.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>() || !mRemovedModules.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;            mUnappliedChanges = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;    }</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160; </div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;    <span class="keywordtype">void</span> GraphContext::update()</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;    {</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;        <span class="keywordflow">if</span> (mSceneUpdateInProgress)</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160; </div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html#a8889a0c74139f131610e6e8606579f6a">storeViewport</a>();</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160; </div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;        <span class="keywordflow">if</span> (mUnappliedChanges)</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;            applyChanges();</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160; </div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;        <span class="keywordflow">if</span> (mSceneUpdateRequired)</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;            startSceneUpdate();</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;    }</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160; </div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;    <span class="keywordtype">void</span> GraphContext::applyChanges()</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;    {</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;        mModules -= mRemovedModules;</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;        mGates -= mRemovedGates;</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160; </div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;        mModules += mAddedModules;</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;        mGates += mAddedGates;</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160; </div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;        mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a17d5e49b37db0df8c9370966c78cdad3">remove</a>(mRemovedModules, mRemovedGates, mNets);</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;        mShader-&gt;<a class="code" href="classhal_1_1_graph_shader.html#a8c486ebf9eba1c825bf7a0afcaca53bf">remove</a>(mRemovedModules, mRemovedGates, mNets);</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160; </div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;        mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; <span class="keywordtype">id</span> : mGates)</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;        {</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;            <span class="keyword">auto</span> g = <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a> : g-&gt;get_fan_in_nets())</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;            {</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;                <span class="comment">//if(!net-&gt;is_unrouted() || net-&gt;is_global_input_net() || net-&gt;is_global_output_net())</span></div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;                    mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>-&gt;<a class="code" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a>());</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;            }</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a> : g-&gt;get_fan_out_nets())</div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;            {</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;                <span class="comment">//if(!net-&gt;is_unrouted() || net-&gt;is_global_input_net() || net-&gt;is_global_output_net())</span></div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;                    mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>-&gt;<a class="code" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a>());</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;            }</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;        }</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; <span class="keywordtype">id</span> : mModules)</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;        {</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;            <span class="keyword">auto</span> m = <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a> : m-&gt;<a class="code" href="classhal_1_1_module.html#a1a51135930d6989903c0f67fd9cd5298">get_input_nets</a>())</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;            {</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;                mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>-&gt;<a class="code" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a>());</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;            }</div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> <a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a> : m-&gt;<a class="code" href="classhal_1_1_module.html#a327a93a6005f1c92e34bdfd3d2e78c7b">get_output_nets</a>())</div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;            {</div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;                mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#ac79d7240087e23efb58eecfe4c0a38fd">net</a>-&gt;<a class="code" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a>());</div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;            }</div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;        }</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160; </div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;        <span class="keywordtype">int</span> placementOrder[4] = { <a class="code" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30472caec088342be6e3c336a35fcfbc">PlacementHint::GridPosition</a>,</div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;                                  <a class="code" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a4b5fc2d9791133271831856bda86028b">PlacementHint::PreferLeft</a>,</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;                                  <a class="code" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0aad44e118366dfe253a0d2e15d638bbe2">PlacementHint::PreferRight</a>,</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;                                  <a class="code" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30a5eab0be56e8fce3c17b07aff4f35b">PlacementHint::Standard</a>};</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160; </div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> iplc = 0; iplc&lt;4; iplc++)</div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        {</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> PlacementEntry&amp; plcEntry : mPlacementList[placementOrder[iplc]])</div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;            {</div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> modsForHint = plcEntry.mModules;</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;                modsForHint &amp;= mAddedModules; <span class="comment">// may contain obsolete entries that we must filter out</span></div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> gatsForHint = plcEntry.mGates;</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;                gatsForHint &amp;= mAddedGates;</div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;                mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a51184898aba8a3359b1cb4ec8ea29843">add</a>(modsForHint, gatsForHint, mNets, plcEntry.mPlacementHint);</div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;            }</div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;        }</div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160; </div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;        mShader-&gt;<a class="code" href="classhal_1_1_graph_shader.html#a4099553e7de5803daabf65e220a44f6d">add</a>(mAddedModules, mAddedGates, mNets);</div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160; </div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;        mAddedModules.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;        mAddedGates.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160; </div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;        mRemovedModules.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;        mRemovedGates.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#clear">clear</a>();</div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160; </div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;4; i++)</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;            mPlacementList[i].<a class="code" href="classhal_1_1_graph_context.html#a65bc0bd69534ca9b2cb3e9f1dfe38b28">clear</a>();</div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160; </div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;        mUnappliedChanges     = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;        mSceneUpdateRequired = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;    }</div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160; </div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;    <span class="keywordtype">void</span> GraphContext::startSceneUpdate()</div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;    {</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;        mSceneUpdateRequired = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;        mSceneUpdateInProgress = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160; </div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;        <span class="keywordflow">for</span> (GraphContextSubscriber* s : mSubscribers)</div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;            s-&gt;handleSceneUnavailable();</div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160; </div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;        mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#aa659e34b122f066720bd70c6abf210d6">scene</a>()-&gt;<a class="code" href="classhal_1_1_graphics_scene.html#abe36d4d9883465a8a38e210724709b12">disconnectAll</a>();</div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160; </div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;    <span class="comment">//    LayouterTask* task = new LayouterTask(mLayouter);</span></div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;    <span class="comment">//    connect(task, &amp;LayouterTask::finished, this, &amp;GraphContext::handleLayouterFinished, Qt::ConnectionType::QueuedConnection);</span></div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;    <span class="comment">//    gThreadPool-&gt;queueTask(task);</span></div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160; </div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;        mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a90fc93ef75eb16b89139460b8d7c1046">layout</a>();</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;        handleLayouterFinished();</div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;    }</div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160; </div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;    <span class="keywordtype">void</span> GraphContext::handleStyleChanged(<span class="keywordtype">int</span> istyle)</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;    {</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;        Q_UNUSED(istyle);</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;        handleLayouterFinished();</div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;    }</div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160; </div>
+<div class="line"><a name="l00601"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_context.html#a8de86725cd7c23dcc355ece981833502">  601</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qdatetime.html">QDateTime</a> <a class="code" href="classhal_1_1_graph_context.html#a8de86725cd7c23dcc355ece981833502">GraphContext::getTimestamp</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;        <span class="keywordflow">return</span> mTimestamp;</div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;    }</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160; </div>
+<div class="line"><a name="l00606"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_context.html#a492bb57ce6ecf50b7701e524e712cd9e">  606</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_graph_context.html#a492bb57ce6ecf50b7701e524e712cd9e">GraphContext::readFromFile</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a>&amp; json)</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;    {</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;        <span class="keywordflow">if</span> (json.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;timestamp&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;timestamp&quot;</span>].isString())</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;            mTimestamp = <a class="codeRef" href="https://doc.qt.io/qt-5/qdatetime.html#fromString">QDateTime::fromString</a>(json[<span class="stringliteral">&quot;timestamp&quot;</span>].toString());</div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160; </div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;        <span class="keywordflow">if</span> (json.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;modules&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;modules&quot;</span>].isArray())</div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;        {</div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonMods = json[<span class="stringliteral">&quot;modules&quot;</span>].toArray();</div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;            <span class="keywordtype">int</span> nmods = jsonMods.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#size">size</a>();</div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> imod=0; imod&lt;nmods; imod++)</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;            {</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonMod = jsonMods.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#at">at</a>(imod).<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonvalue.html#toObject-1">toObject</a>();</div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;                <span class="keywordflow">if</span> (!jsonMod.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;id&quot;</span>) || !jsonMod[<span class="stringliteral">&quot;id&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;                <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> = jsonMod[<span class="stringliteral">&quot;id&quot;</span>].toInt();</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(<span class="keywordtype">id</span>)) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;                mModules.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#insert">insert</a>(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;                <span class="keywordflow">if</span> (!jsonMod.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;x&quot;</span>) || !jsonMod[<span class="stringliteral">&quot;x&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;                <span class="keywordtype">int</span> x = jsonMod[<span class="stringliteral">&quot;x&quot;</span>].toInt();</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;                <span class="keywordflow">if</span> (!jsonMod.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;y&quot;</span>) || !jsonMod[<span class="stringliteral">&quot;y&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;                <span class="keywordtype">int</span> y = jsonMod[<span class="stringliteral">&quot;y&quot;</span>].toInt();</div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;                <a class="code" href="classhal_1_1_node.html">Node</a> nd(<span class="keywordtype">id</span>,<a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a2b02efee2cb6afc1c319874996e97f25">Node::Module</a>);</div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;                mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a1a91cb2f3e9d19f5849ccbb04f5fe3c4">setNodePosition</a>(nd,<a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>(x,y));</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;            }</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;        }</div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160; </div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;        <span class="keywordflow">if</span> (json.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;gates&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;gates&quot;</span>].isArray())</div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;        {</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonGats = json[<span class="stringliteral">&quot;gates&quot;</span>].toArray();</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;            <span class="keywordtype">int</span> ngats = jsonGats.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#size">size</a>();</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> igat=0; igat&lt;ngats; igat++)</div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;            {</div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonGat = jsonGats.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#at">at</a>(igat).<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonvalue.html#toObject-1">toObject</a>();</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;                <span class="keywordflow">if</span> (!jsonGat.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;id&quot;</span>) || !jsonGat[<span class="stringliteral">&quot;id&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;                <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> = jsonGat[<span class="stringliteral">&quot;id&quot;</span>].toInt();</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(<span class="keywordtype">id</span>)) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;                mGates.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#insert">insert</a>(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;                <span class="keywordflow">if</span> (!jsonGat.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;x&quot;</span>) || !jsonGat[<span class="stringliteral">&quot;x&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;                <span class="keywordtype">int</span> x = jsonGat[<span class="stringliteral">&quot;x&quot;</span>].toInt();</div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;                <span class="keywordflow">if</span> (!jsonGat.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;y&quot;</span>) || !jsonGat[<span class="stringliteral">&quot;y&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;                <span class="keywordtype">int</span> y = jsonGat[<span class="stringliteral">&quot;y&quot;</span>].toInt();</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;                <a class="code" href="classhal_1_1_node.html">Node</a> nd(<span class="keywordtype">id</span>,<a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a62114aae0cfe74a2f09f2bbdced26fa6">Node::Gate</a>);</div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;                mLayouter-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#a1a91cb2f3e9d19f5849ccbb04f5fe3c4">setNodePosition</a>(nd,<a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>(x,y));</div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;            }</div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;        }</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160; </div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;        <span class="keywordflow">if</span> (json.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;nets&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;nets&quot;</span>].isArray())</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;        {</div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonNets = json[<span class="stringliteral">&quot;nets&quot;</span>].toArray();</div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;            <span class="keywordtype">int</span> nnets = jsonNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#size">size</a>();</div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> inet=0; inet&lt;nnets; inet++)</div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;            {</div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonNet = jsonNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#at">at</a>(inet).<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonvalue.html#toObject-1">toObject</a>();</div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;                <span class="keywordflow">if</span> (!jsonNet.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;id&quot;</span>) || !jsonNet[<span class="stringliteral">&quot;id&quot;</span>].isDouble()) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;                <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> = jsonNet[<span class="stringliteral">&quot;id&quot;</span>].toInt();</div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">get_net_by_id</a>(<span class="keywordtype">id</span>)) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;                mNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;            }</div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;        }</div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160; </div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html#a7fe95e9258400d311c60c7fc3a2ad50d">scheduleSceneUpdate</a>();</div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">setDirty</a>(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;    }</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160; </div>
+<div class="line"><a name="l00670"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_context.html#a246b2047c7dd7a7239779a383e2bb3f9">  670</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#a246b2047c7dd7a7239779a383e2bb3f9">GraphContext::writeToFile</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a>&amp; json)</div>
+<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;    {</div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;        json[<span class="stringliteral">&quot;id&quot;</span>] = (int) mId;</div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;        json[<span class="stringliteral">&quot;name&quot;</span>] = mName;</div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;        json[<span class="stringliteral">&quot;timestamp&quot;</span>] = mTimestamp.<a class="codeRef" href="https://doc.qt.io/qt-5/qdatetime.html#toString-1">toString</a>();</div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160; </div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonMods;</div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : mModules)</div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;        {</div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;            <a class="code" href="classhal_1_1_node.html">Node</a> searchMod(<span class="keywordtype">id</span>, <a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a2b02efee2cb6afc1c319874996e97f25">Node::Module</a>);</div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;            <span class="keyword">const</span> <a class="code" href="classhal_1_1_node_box.html">NodeBox</a>* box = <a class="code" href="classhal_1_1_graph_context.html#ab4ff1193f5bdd31d5863e33832e28c13">getLayouter</a>()-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#af3c01b3f53761de10a07641a4fef1b7e">boxes</a>().<a class="code" href="classhal_1_1_node_boxes.html#a531029937aea187639d0352767e5c5b9">boxForNode</a>(searchMod);</div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;            Q_ASSERT(box);</div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonMod;</div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;            jsonMod[<span class="stringliteral">&quot;id&quot;</span>] = (int) <span class="keywordtype">id</span>;</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            jsonMod[<span class="stringliteral">&quot;x&quot;</span>]  = (int) box-&gt;<a class="code" href="classhal_1_1_node_box.html#a70e5df149126871f4db3b09d75453179">x</a>();</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;            jsonMod[<span class="stringliteral">&quot;y&quot;</span>]  = (int) box-&gt;<a class="code" href="classhal_1_1_node_box.html#ab2601570ab043da7e3dc5ad1285bf555">y</a>();</div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;            jsonMods.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#append">append</a>(jsonMod);</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;        }</div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;        json[<span class="stringliteral">&quot;modules&quot;</span>] = jsonMods;</div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160; </div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonGats;</div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : mGates)</div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;        {</div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;            <a class="code" href="classhal_1_1_node.html">Node</a> searchGat(<span class="keywordtype">id</span>, <a class="code" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34a62114aae0cfe74a2f09f2bbdced26fa6">Node::Gate</a>);</div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;            <span class="keyword">const</span> <a class="code" href="classhal_1_1_node_box.html">NodeBox</a>* box = <a class="code" href="classhal_1_1_graph_context.html#ab4ff1193f5bdd31d5863e33832e28c13">getLayouter</a>()-&gt;<a class="code" href="classhal_1_1_graph_layouter.html#af3c01b3f53761de10a07641a4fef1b7e">boxes</a>().<a class="code" href="classhal_1_1_node_boxes.html#a531029937aea187639d0352767e5c5b9">boxForNode</a>(searchGat);</div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;            Q_ASSERT(box);</div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonGat;</div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;            jsonGat[<span class="stringliteral">&quot;id&quot;</span>] = (int) <span class="keywordtype">id</span>;</div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;            jsonGat[<span class="stringliteral">&quot;x&quot;</span>]  = (int) box-&gt;<a class="code" href="classhal_1_1_node_box.html#a70e5df149126871f4db3b09d75453179">x</a>();</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;            jsonGat[<span class="stringliteral">&quot;y&quot;</span>]  = (int) box-&gt;<a class="code" href="classhal_1_1_node_box.html#ab2601570ab043da7e3dc5ad1285bf555">y</a>();</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;            jsonGats.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#append">append</a>(jsonGat);</div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;        }</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;        json[<span class="stringliteral">&quot;gates&quot;</span>] = jsonGats;</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160; </div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> jsonNets;</div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : mNets)</div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;        {</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a> jsonNet;</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;            jsonNet[<span class="stringliteral">&quot;id&quot;</span>] = (int) <span class="keywordtype">id</span>;</div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;            jsonNets.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#append">append</a>(jsonNet);</div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;        }</div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;        json[<span class="stringliteral">&quot;nets&quot;</span>] = jsonNets;</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">setDirty</a>(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;    }</div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160; </div>
+<div class="line"><a name="l00718"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">  718</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">GraphContext::setDirty</a>(<span class="keywordtype">bool</span> dty)</div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;    {</div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;        <span class="keywordflow">if</span> (mDirty==dty) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;        mDirty = dty;</div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a>(<a class="code" href="classhal_1_1_graph_context.html#ac705654c3f51c4117dc30a8c9fbf69a9">dataChanged</a>());</div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;    }</div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_module_html_af771e486709f93e4abab9f0fe092010b"><div class="ttname"><a href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">hal::Module::get_id</a></div><div class="ttdeci">u32 get_id() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l00089">module.cpp:89</a></div></div>
@@ -829,7 +828,7 @@ $(document).ready(function(){initNavTree('graph__context_8cpp_source.html',''); 
 <div class="ttc" id="aqpoint__extension_8h_html"><div class="ttname"><a href="qpoint__extension_8h.html">qpoint_extension.h</a></div></div>
 <div class="ttc" id="aqdatetime_html_currentDateTime"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdatetime.html#currentDateTime">QDateTime::currentDateTime</a></div><div class="ttdeci">QDateTime currentDateTime()</div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a666418e4708edff1a2e3af19b55ca184"><div class="ttname"><a href="classhal_1_1_graph_context.html#a666418e4708edff1a2e3af19b55ca184">hal::GraphContext::empty</a></div><div class="ttdeci">bool empty() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00236">graph_context.cpp:236</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_context_html_a246b2047c7dd7a7239779a383e2bb3f9"><div class="ttname"><a href="classhal_1_1_graph_context.html#a246b2047c7dd7a7239779a383e2bb3f9">hal::GraphContext::writeToFile</a></div><div class="ttdeci">void writeToFile(QJsonObject &amp;json)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00671">graph_context.cpp:671</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_context_html_a246b2047c7dd7a7239779a383e2bb3f9"><div class="ttname"><a href="classhal_1_1_graph_context.html#a246b2047c7dd7a7239779a383e2bb3f9">hal::GraphContext::writeToFile</a></div><div class="ttdeci">void writeToFile(QJsonObject &amp;json)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00670">graph_context.cpp:670</a></div></div>
 <div class="ttc" id="aclasshal_1_1_user_action_manager_html_a7ded721ef7419eca338d8cc794a67c7e"><div class="ttname"><a href="classhal_1_1_user_action_manager.html#a7ded721ef7419eca338d8cc794a67c7e">hal::UserActionManager::clearWaitCount</a></div><div class="ttdeci">void clearWaitCount()</div><div class="ttdef"><b>Definition:</b> <a href="user__action__manager_8h_source.html#l00112">user_action_manager.h:112</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_box_html_a70e5df149126871f4db3b09d75453179"><div class="ttname"><a href="classhal_1_1_node_box.html#a70e5df149126871f4db3b09d75453179">hal::NodeBox::x</a></div><div class="ttdeci">int x() const</div><div class="ttdoc">x getter for X-grid position</div><div class="ttdef"><b>Definition:</b> <a href="node__box_8h_source.html#l00091">node_box.h:91</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_box_html_ab41d97e469fda8d0b49340f04f86029c"><div class="ttname"><a href="classhal_1_1_node_box.html#ab41d97e469fda8d0b49340f04f86029c">hal::NodeBox::getNode</a></div><div class="ttdeci">Node getNode() const</div><div class="ttdoc">getNode getter for node information</div><div class="ttdef"><b>Definition:</b> <a href="node__box_8h_source.html#l00073">node_box.h:73</a></div></div>
@@ -905,7 +904,7 @@ $(document).ready(function(){initNavTree('graph__context_8cpp_source.html',''); 
 <div class="ttc" id="aclasshal_1_1_graph_context_html_ac5d06178660e25f24c3a5d5e3943ab2e"><div class="ttname"><a href="classhal_1_1_graph_context.html#ac5d06178660e25f24c3a5d5e3943ab2e">hal::GraphContext::GraphContext</a></div><div class="ttdeci">GraphContext(u32 id_, const QString &amp;name, QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00020">graph_context.cpp:20</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_layouter_html_a90fc93ef75eb16b89139460b8d7c1046"><div class="ttname"><a href="classhal_1_1_graph_layouter.html#a90fc93ef75eb16b89139460b8d7c1046">hal::GraphLayouter::layout</a></div><div class="ttdeci">void layout()</div><div class="ttdef"><b>Definition:</b> <a href="graph__layouter_8cpp_source.html#l00213">graph_layouter.cpp:213</a></div></div>
 <div class="ttc" id="aqset_html_empty"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#empty">QSet::empty</a></div><div class="ttdeci">bool empty() const const</div></div>
-<div class="ttc" id="aclasshal_1_1_graph_context_html_a5e22b0d97a34b99dfe402ee7691830a8"><div class="ttname"><a href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">hal::GraphContext::setDirty</a></div><div class="ttdeci">void setDirty(bool dty)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00719">graph_context.cpp:719</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_context_html_a5e22b0d97a34b99dfe402ee7691830a8"><div class="ttname"><a href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">hal::GraphContext::setDirty</a></div><div class="ttdeci">void setDirty(bool dty)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00718">graph_context.cpp:718</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html_aa963e38a4ce49c0e440be5e36f46369a"><div class="ttname"><a href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">hal::Netlist::get_module_by_id</a></div><div class="ttdeci">Module * get_module_by_id(u32 module_id) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00196">netlist.cpp:196</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a13df27071c670c4bd04c08be3058afe1"><div class="ttname"><a href="classhal_1_1_graph_context.html#a13df27071c670c4bd04c08be3058afe1">hal::GraphContext::beginChange</a></div><div class="ttdeci">void beginChange()</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00085">graph_context.cpp:85</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_aea2f27a5a0c94855351e9f7031eb6694"><div class="ttname"><a href="classhal_1_1_graph_context.html#aea2f27a5a0c94855351e9f7031eb6694">hal::GraphContext::name</a></div><div class="ttdeci">QString name() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00386">graph_context.cpp:386</a></div></div>
@@ -926,9 +925,9 @@ $(document).ready(function(){initNavTree('graph__context_8cpp_source.html',''); 
 <div class="ttc" id="a_apache_01_license_8txt_html_aaf8226a059307a1b18aac1295b5cf3a2"><div class="ttname"><a href="_apache_01_license_8txt.html#aaf8226a059307a1b18aac1295b5cf3a2">from</a></div><div class="ttdeci">Apache License January AND DISTRIBUTION Definitions License shall mean the terms and conditions for and distribution as defined by Sections through of this document Licensor shall mean the copyright owner or entity authorized by the copyright owner that is granting the License Legal Entity shall mean the union of the acting entity and all other entities that control are controlled by or are under common control with that entity For the purposes of this definition control direct or to cause the direction or management of such whether by contract or including but not limited to software source documentation and configuration files Object form shall mean any form resulting from mechanical transformation or translation of a Source including but not limited to compiled object generated and conversions to other media types Work shall mean the work of whether in Source or Object made available under the as indicated by a copyright notice that is included in or attached to the whether in Source or Object that is based or other modifications as a an original work of authorship For the purposes of this Derivative Works shall not include works that remain separable from</div><div class="ttdef"><b>Definition:</b> <a href="_apache_01_license_8txt_source.html#l00045">Apache License.txt:45</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_boxes_html_a531029937aea187639d0352767e5c5b9"><div class="ttname"><a href="classhal_1_1_node_boxes.html#a531029937aea187639d0352767e5c5b9">hal::NodeBoxes::boxForNode</a></div><div class="ttdeci">NodeBox * boxForNode(const Node &amp;n) const</div><div class="ttdoc">boxForNode find NodeBox by node</div><div class="ttdef"><b>Definition:</b> <a href="node__box_8h_source.html#l00188">node_box.h:188</a></div></div>
 <div class="ttc" id="aqdatetime_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdatetime.html">QDateTime</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_context_html_a8de86725cd7c23dcc355ece981833502"><div class="ttname"><a href="classhal_1_1_graph_context.html#a8de86725cd7c23dcc355ece981833502">hal::GraphContext::getTimestamp</a></div><div class="ttdeci">QDateTime getTimestamp() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00602">graph_context.cpp:602</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_context_html_a8de86725cd7c23dcc355ece981833502"><div class="ttname"><a href="classhal_1_1_graph_context.html#a8de86725cd7c23dcc355ece981833502">hal::GraphContext::getTimestamp</a></div><div class="ttdeci">QDateTime getTimestamp() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00601">graph_context.cpp:601</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a65bc0bd69534ca9b2cb3e9f1dfe38b28"><div class="ttname"><a href="classhal_1_1_graph_context.html#a65bc0bd69534ca9b2cb3e9f1dfe38b28">hal::GraphContext::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00152">graph_context.cpp:152</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_context_html_a492bb57ce6ecf50b7701e524e712cd9e"><div class="ttname"><a href="classhal_1_1_graph_context.html#a492bb57ce6ecf50b7701e524e712cd9e">hal::GraphContext::readFromFile</a></div><div class="ttdeci">bool readFromFile(const QJsonObject &amp;json)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00607">graph_context.cpp:607</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_context_html_a492bb57ce6ecf50b7701e524e712cd9e"><div class="ttname"><a href="classhal_1_1_graph_context.html#a492bb57ce6ecf50b7701e524e712cd9e">hal::GraphContext::readFromFile</a></div><div class="ttdeci">bool readFromFile(const QJsonObject &amp;json)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00606">graph_context.cpp:606</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a6c91ba6077f73370061bb6c8c47e1994"><div class="ttname"><a href="classhal_1_1_graph_context.html#a6c91ba6077f73370061bb6c8c47e1994">hal::GraphContext::getNetDestination</a></div><div class="ttdeci">Node getNetDestination(const Net *n) const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00350">graph_context.cpp:350</a></div></div>
 <div class="ttc" id="aclasshal_1_1_placement_hint_html_ac5b9ad8472ea00e21577d7224d8517d5"><div class="ttname"><a href="classhal_1_1_placement_hint.html#ac5b9ad8472ea00e21577d7224d8517d5">hal::PlacementHint::mode</a></div><div class="ttdeci">PlacementModeType mode() const</div><div class="ttdoc">mode getter for placement mode type</div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00162">gui_def.h:162</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_layouter_html_ae8447c8f8ec1d658d5d92a1c4fc2647b"><div class="ttname"><a href="classhal_1_1_graph_layouter.html#ae8447c8f8ec1d658d5d92a1c4fc2647b">hal::GraphLayouter::statusUpdate</a></div><div class="ttdeci">void statusUpdate(const int percent)</div></div>
@@ -953,7 +952,7 @@ $(document).ready(function(){initNavTree('graph__context_8cpp_source.html',''); 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="dir_ec8dea6349d7e96bc98730dd976109e3.html">contexts</a></li><li class="navelem"><a class="el" href="graph__context_8cpp.html">graph_context.cpp</a></li>
-    <li class="footer">Generated on Tue Sep 21 2021 11:54:28 for HAL by
+    <li class="footer">Generated on Tue Sep 21 2021 15:29:03 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

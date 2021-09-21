@@ -351,7 +351,7 @@ var searchData=
   ['dirrle_2565',['DirRLE',['https://doc.qt.io/qt-5/qchar.html#Direction-enum',1,'QChar']]],
   ['dirrli_2566',['DirRLI',['https://doc.qt.io/qt-5/qchar.html#Direction-enum',1,'QChar']]],
   ['dirrlo_2567',['DirRLO',['https://doc.qt.io/qt-5/qchar.html#Direction-enum',1,'QChar']]],
-  ['dirs_2568',['DirS',['https://doc.qt.io/qt-5/qchar.html#Direction-enum',1,'QChar::DirS()'],['https://doc.qt.io/qt-5/qdir.html#Filter-enum',1,'QDir::Dirs()']]],
+  ['dirs_2568',['Dirs',['https://doc.qt.io/qt-5/qdir.html#Filter-enum',1,'QDir::Dirs()'],['https://doc.qt.io/qt-5/qchar.html#Direction-enum',1,'QChar::DirS()']]],
   ['dirsfirst_2569',['DirsFirst',['https://doc.qt.io/qt-5/qdir.html#SortFlag-enum',1,'QDir']]],
   ['dirslast_2570',['DirsLast',['https://doc.qt.io/qt-5/qdir.html#SortFlag-enum',1,'QDir']]],
   ['dirty_2571',['dirty',['../classhal_1_1_settings_widget.html#a998bbd517886a37aa7b85dc803c8bf3e',1,'hal::SettingsWidget::dirty()'],['../classhal_1_1_settings_widget.html#a36a748182fbada1567c30a9caa083b5a',1,'hal::SettingsWidget::dirty() const']]],

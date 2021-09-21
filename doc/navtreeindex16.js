@@ -190,8 +190,6 @@ var NAVTREEINDEX16 =
 "graph__tab__widget_8h.html":[14,0,1,0,0,0,16,0],
 "graph__tab__widget_8h_source.html":[14,0,1,0,0,0,16,0],
 "graph__widget_8cpp.html":[14,0,1,0,2,16,7],
-"graph__widget_8cpp.html#a3a4fcca9520a999bdcb1eb2b49dedd57":[14,0,1,0,2,16,7,0],
-"graph__widget_8cpp.html#a8cc0bf2321acdafebbabe8aa4bdf138e":[14,0,1,0,2,16,7,1],
 "graph__widget_8cpp_source.html":[14,0,1,0,2,16,7],
 "graph__widget_8h.html":[14,0,1,0,0,0,17,7],
 "graph__widget_8h_source.html":[14,0,1,0,0,0,17,7],
@@ -249,5 +247,7 @@ var NAVTREEINDEX16 =
 "graphics__node_8cpp_source.html":[14,0,1,0,2,16,1,1,2],
 "graphics__node_8h.html":[14,0,1,0,0,0,17,1,1,2],
 "graphics__node_8h_source.html":[14,0,1,0,0,0,17,1,1,2],
-"graphics__qss__adapter_8cpp.html":[14,0,1,0,2,16,9]
+"graphics__qss__adapter_8cpp.html":[14,0,1,0,2,16,9],
+"graphics__qss__adapter_8cpp_source.html":[14,0,1,0,2,16,9],
+"graphics__qss__adapter_8h.html":[14,0,1,0,0,0,17,10]
 };

@@ -114,12 +114,12 @@ var NAVTREEINDEX =
 "classhal_1_1_wait_to_be_seated_entry.html#a9ab8bb82886be206b60e9325fa68709a",
 "dir_211d0708befd7ecf30b0a5f684cde5b3.html",
 "functions_func_h.html",
-"graphics__qss__adapter_8cpp_source.html",
-"md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md4",
-"netlist__internal__manager_8h_source.html",
-"python__bindings_2bindings_2module_8cpp.html",
-"special__strings_8h.html",
-"structsubprocess_1_1error.html#aef933354c0ef2c5c7f0bc53e9b80b624"
+"graphics__qss__adapter_8h_source.html",
+"md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md6",
+"netlist__parser_8h_source.html",
+"python__bindings_2bindings_2module_8cpp_source.html",
+"special__strings_8h.html#ac3da4b8535486b1c3399c5bb50f57a32",
+"structsubprocess_1_1executable.html#a77b5eed2a3fc35519fde3afb4e5c8a70"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
