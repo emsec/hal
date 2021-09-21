@@ -385,6 +385,8 @@ namespace hal {
     //---------------- HISTORY ----------------------------------------
     GroupingTableHistory* GroupingTableHistory::inst = nullptr;
 
+    const int GroupingTableHistory::sMaxEntries = 10;
+
     GroupingTableHistory* GroupingTableHistory::instance()
     {
         if (!inst)
@@ -396,6 +398,7 @@ namespace hal {
     {
         removeAll(id);
         prepend(id);
+        while (size() > sMaxEntries) takeLast();
     }
 
     //---------------- VIEW -------------------------------------------

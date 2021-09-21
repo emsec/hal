@@ -331,6 +331,8 @@ namespace hal {
     {
         static GroupingTableHistory* inst;
         GroupingTableHistory() {;}
+
+        static const int sMaxEntries;
     public:
         static GroupingTableHistory* instance();
         void add(u32 id);

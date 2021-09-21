@@ -26,6 +26,8 @@
 #include "hal_core/defines.h"
 #include <QHash>
 #include <QList>
+#include <QSet>
+#include "hal_core/netlist/gate.h"
 
 namespace hal {
     class Gate;
