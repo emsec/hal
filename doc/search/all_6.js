@@ -194,7 +194,7 @@ var searchData=
   ['fixedcolumnwidth_3441',['FixedColumnWidth',['https://doc.qt.io/qt-5/qtextedit.html#LineWrapMode-enum',1,'QTextEdit']]],
   ['fixedfont_3442',['FixedFont',['https://doc.qt.io/qt-5/qfontdatabase.html#SystemFont-enum',1,'QFontDatabase']]],
   ['fixedfunctionpipeline_3443',['FixedFunctionPipeline',['https://doc.qt.io/qt-5/qopenglfunctions.html#OpenGLFeature-enum',1,'QOpenGLFunctions']]],
-  ['fixedheight_3444',['FixedHeight',['https://doc.qt.io/qt-5/qtextblockformat.html#LineHeightTypes-enum',1,'QTextBlockFormat::FixedHeight()'],['../classhal_1_1_expanding_list_item.html#ad3384e9860dd575bec2c6718e0bb9bcf',1,'hal::ExpandingListItem::fixedHeight()'],['../classhal_1_1_expanding_list_item.html#a8661400c4e6397ace5b919ad9b9fb670',1,'hal::ExpandingListItem::fixedHeight() const']]],
+  ['fixedheight_3444',['fixedHeight',['../classhal_1_1_expanding_list_item.html#ad3384e9860dd575bec2c6718e0bb9bcf',1,'hal::ExpandingListItem::fixedHeight()'],['../classhal_1_1_expanding_list_item.html#a8661400c4e6397ace5b919ad9b9fb670',1,'hal::ExpandingListItem::fixedHeight() const'],['https://doc.qt.io/qt-5/qtextblockformat.html#LineHeightTypes-enum',1,'QTextBlockFormat::FixedHeight()']]],
   ['fixedlength_3445',['FixedLength',['https://doc.qt.io/qt-5/qtextlength.html#Type-enum',1,'QTextLength']]],
   ['fixednotation_3446',['FixedNotation',['https://doc.qt.io/qt-5/qtextstream.html#RealNumberNotation-enum',1,'QTextStream']]],
   ['fixedpitch_3447',['fixedPitch',['https://doc.qt.io/qt-5/qfont.html#fixedPitch',1,'QFont::fixedPitch()'],['https://doc.qt.io/qt-5/qfontinfo.html#fixedPitch',1,'QFontInfo::fixedPitch()']]],

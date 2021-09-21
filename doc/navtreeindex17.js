@@ -1,5 +1,6 @@
 var NAVTREEINDEX17 =
 {
+"graphics__qss__adapter_8cpp_source.html":[14,0,1,0,2,16,9],
 "graphics__qss__adapter_8h.html":[14,0,1,0,0,0,17,10],
 "graphics__qss__adapter_8h_source.html":[14,0,1,0,0,0,17,10],
 "graphics__scene_8cpp.html":[14,0,1,0,2,16,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX17 =
 "main__window_8cpp_source.html":[14,0,1,0,2,26,1],
 "main__window_8h.html":[14,0,1,0,0,0,28,1],
 "main__window_8h_source.html":[14,0,1,0,0,0,28,1],
-"md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html":[9],
-"md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md4":[9,0]
+"md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html":[9]
 };
