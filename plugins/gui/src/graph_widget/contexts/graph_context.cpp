@@ -456,7 +456,6 @@ namespace hal
         const QMap<QPoint,Node> nodeMap = mLayouter->positionToNodeMap();
         auto it = nodeMap.find(from);
         if (it==nodeMap.constEnd()) return;
-        storeViewport();
         mLayouter->setNodePosition(it.value(),to);
         scheduleSceneUpdate();
     }

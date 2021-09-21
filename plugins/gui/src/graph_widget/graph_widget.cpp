@@ -28,7 +28,6 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/utils.h"
 
-#include <QDebug>
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
@@ -86,41 +85,8 @@ namespace hal
         return mContext;
     }
 
-    QGraphicsRectItem* gri = nullptr;
-    QGraphicsLineItem* gpp = nullptr;
-
     void GraphWidget::handleSceneAvailable()
     {
-        /*
-        if (mStoreViewport.mValid)
-        {
-            if (gri)
-            {
-                mContext->scene()->removeItem(gri);
-                delete gri;
-                mContext->scene()->removeItem(gpp);
-                delete gpp;
-            }
-            gri = new QGraphicsRectItem(restoreViewport(false));
-            gri->setPen(QPen(Qt::red,0));
-            QPointF centerPos(mContext->getLayouter()->gridXposition(mStoreViewport.mGrid[0].x()),
-                              mContext->getLayouter()->gridYposition(mStoreViewport.mGrid[0].y()));
-            mContext->scene()->addItem(gri);
-
-            gpp = new QGraphicsLineItem(QLineF(mStoreViewport.mGrid[1],centerPos));
-            gpp->setPen(QPen(Qt::yellow,0));
-            mContext->scene()->addItem(gpp);
-        }
-        else if (gri)
-        {
-            mContext->scene()->removeItem(gri);
-            delete gri;
-            mContext->scene()->removeItem(gpp);
-            delete gpp;
-            gri = nullptr;
-        }
-*/
-
         mView->setScene(mContext->scene());
 
         connect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
@@ -177,6 +143,7 @@ namespace hal
         mStoreViewport.mValid = true;
         mStoreViewport.mRect  = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
         mStoreViewport.mGrid  = mView->closestLayouterPos(mView->mapToScene(QPoint(viewportCenter)));
+//        qDebug() << "store" << viewportCenter << mStoreViewport.mGrid[0] << mStoreViewport.mGrid[1] << mStoreViewport.mRect;
     }
 
     QRectF GraphWidget::restoreViewport(bool reset)
@@ -384,6 +351,7 @@ namespace hal
 //        bool bail_animation = false;
 
         setFocus();
+        storeViewport();
 
         // ASSERT INPUTS ARE VALID
         auto n = gNetlist->get_net_by_id(via_net);
@@ -921,11 +889,16 @@ namespace hal
     void GraphWidget::focusRect(QRectF targetRect, bool applyCenterFix)
     {
         QRectF currentRect;
-        bool restore = false;
         if (mStoreViewport.mValid)
         {
             currentRect = restoreViewport();
             mView->fitInView(currentRect, Qt::KeepAspectRatio);
+/*
+            QRect vg = mView->viewport()->geometry();
+            QPoint viewportCenter = (vg.topLeft() + vg.bottomRight()) / 2;
+            QVector<QPoint> qp = mView->closestLayouterPos(mView->mapToScene(QPoint(viewportCenter)));
+            qDebug() << "focus" << viewportCenter << qp[0] << qp[1] << currentRect;
+            */
         }
         else {
             currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
@@ -933,7 +906,6 @@ namespace hal
 
         int durationMsec = sSettingAnimationDuration->value().toInt() * 100;
 
-        qDebug() << "animation" << restore << currentRect << targetRect << durationMsec;
         //check prevents jitter bug / resizing bug occuring due to error in 'fitToView'
         //only happens when current and target are the same as on last usage
         //solution -> just disable the focus alltogether if current and target are the same as last time, no need to fire animation again
