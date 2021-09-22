@@ -190,6 +190,10 @@ namespace hal
                 compound->addAction(actMoveNode);
             }
         }
+
+        GraphContext* context = mGraphWidget->getContext();
+        context->setSpecialUpdate(true);
+
         compound->exec();
         gSelectionRelay->clear();
         gSelectionRelay->addModule(compound->object().id());

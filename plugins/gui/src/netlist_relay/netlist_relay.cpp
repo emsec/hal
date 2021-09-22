@@ -373,6 +373,8 @@ namespace hal
                 mModuleModel->setRandomColor(mod->get_id());
             }
 
+            gGraphContextManager->handleModuleCreated(mod);
+
             Q_EMIT moduleCreated(mod);
             break;
         }
@@ -501,6 +503,8 @@ namespace hal
             //< no associated_data
 
            gSelectionRelay->handleGateRemoved(gat->get_id());
+
+           gGraphContextManager->handleGateRemoved(gat);
 
             Q_EMIT gateRemoved(gat);
             break;

@@ -27,7 +27,8 @@ namespace hal
           mUserUpdateCount(0),
           mUnappliedChanges(false),
           mSceneUpdateRequired(false),
-          mSceneUpdateInProgress(false)
+          mSceneUpdateInProgress(false),
+          mSpecialUpdate(false)
     {
         mTimestamp = QDateTime::currentDateTime();
         UserActionManager::instance()->clearWaitCount();
@@ -720,5 +721,10 @@ namespace hal
         if (mDirty==dty) return;
         mDirty = dty;
         Q_EMIT(dataChanged());
+    }
+
+    void GraphContext::setSpecialUpdate(bool state)
+    {
+        mSpecialUpdate = state;
     }
 }

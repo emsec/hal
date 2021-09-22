@@ -350,6 +350,18 @@ namespace hal
          */
         bool isDirty() const {return mDirty; }
 
+        /**
+         * Set the special update state.
+         */
+        void setSpecialUpdate(bool state);
+
+        /**
+         * Get the special update state.
+         *
+         * @return The special update state.
+         */
+        bool getSpecialUpdate() const {return mSpecialUpdate; }
+
     Q_SIGNALS:
         void dataChanged();
 
@@ -394,5 +406,7 @@ namespace hal
         bool mSceneUpdateInProgress;
 
         QDateTime mTimestamp;
+
+        bool mSpecialUpdate;
     };
 }
