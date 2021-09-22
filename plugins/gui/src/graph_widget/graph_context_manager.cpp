@@ -139,6 +139,16 @@ namespace hal
         return false;
     }
 
+    void GraphContextManager::handleModuleCreated(Module* m) const
+    {
+        for (GraphContext* context : mContextTableModel->list())
+            if (context->getSpecialUpdate())
+            {
+                context->add({m->get_id()}, {});
+                context->setSpecialUpdate(false);
+            }
+    }
+
     void GraphContextManager::handleModuleRemoved(Module* m)
     {
         for (GraphContext* context : mContextTableModel->list())
@@ -337,6 +347,13 @@ namespace hal
         for (GraphContext* context : mContextTableModel->list())
             if (context->modules().contains(m->get_id()))
                 context->scheduleSceneUpdate();
+    }
+
+    void GraphContextManager::handleGateRemoved(Gate* g) const
+    {
+        for (GraphContext* context : mContextTableModel->list())
+            if (context->gates().contains(g->get_id()))
+                context->remove({}, {g->get_id()});
     }
 
     void GraphContextManager::handleGateNameChanged(Gate* g) const
