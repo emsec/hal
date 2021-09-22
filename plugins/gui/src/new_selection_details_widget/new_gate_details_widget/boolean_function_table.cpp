@@ -28,7 +28,7 @@ namespace hal {
         return mBooleanFunctionTableModel;
     }
 
-    void BooleanFunctionTable::setEntries(QList<QSharedPointer<BooleanFunctionTableEntry>> entries){
+    void BooleanFunctionTable::setEntries(QVector<QSharedPointer<BooleanFunctionTableEntry>> entries){
         mBooleanFunctionTableModel->setEntries(entries);
         adjustTableSizes();
         this->clearSelection();

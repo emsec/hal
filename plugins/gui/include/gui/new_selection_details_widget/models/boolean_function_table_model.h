@@ -24,7 +24,7 @@
 #pragma once
 
 #include <QAbstractTableModel>
-#include <QList>
+#include <QVector>
 #include <QString>
 #include <QSharedPointer>
 #include "hal_core/netlist/gate.h"
@@ -224,7 +224,7 @@ namespace hal {
          *
          * @param entries - The new entries
          */
-        void setEntries(QList<QSharedPointer<BooleanFunctionTableEntry>> entries);
+        void setEntries(QVector<QSharedPointer<BooleanFunctionTableEntry>> entries);
 
         /**
          * Access an entry at the specified row. The row MUST be valid.
@@ -236,7 +236,7 @@ namespace hal {
 
 
     private:
-        QList<QSharedPointer<BooleanFunctionTableEntry>> mEntries;
+        QVector<QSharedPointer<BooleanFunctionTableEntry>> mEntries;
 
         /// The separator sign between the identifier and the value (e.g. "O [SEPARATOR] I1 & I2")
         QString mSeparator = "=";

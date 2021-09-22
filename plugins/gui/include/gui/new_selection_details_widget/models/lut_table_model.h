@@ -23,11 +23,14 @@
 
 #pragma once
 
+#include "hal_core/netlist/gate.h"
+#include "hal_core/defines.h"
+
 #include <QAbstractTableModel>
 #include <QString>
-#include <hal_core/netlist/gate.h>
+#include <QVector>
 
-#include "hal_core/defines.h"
+
 
 namespace hal {
 
@@ -45,7 +48,7 @@ namespace hal {
 
         struct LutEntry
         {
-            QList<u8> inputBits; // 0 or 1 per entry
+            QVector<u8> inputBits; // 0 or 1 per entry
             QString output; // "0", "1", "X" or "Z"
         };
 
@@ -114,8 +117,8 @@ namespace hal {
         void setBooleanFunction(const BooleanFunction lutFunction, const QString outputPinName);
 
     private:
-        QList<LutEntry> mLutEntries;
-        QList<QString> mInputPins;
+        QVector<LutEntry> mLutEntries;
+        QVector<QString> mInputPins;
         QString mOutputPin;
 
     };

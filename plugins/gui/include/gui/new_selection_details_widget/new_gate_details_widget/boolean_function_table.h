@@ -31,6 +31,7 @@
 
 #include <QLabel>
 #include <QWidget>
+#include <QVector>
 #include <QTableWidget>
 
 
@@ -67,7 +68,7 @@ namespace hal
          *
          * @param entries - The list of boolean function table entries
          */
-        void setEntries(QList<QSharedPointer<BooleanFunctionTableEntry>> entries);
+        void setEntries(QVector<QSharedPointer<BooleanFunctionTableEntry>> entries);
 
     private Q_SLOTS:
         /**

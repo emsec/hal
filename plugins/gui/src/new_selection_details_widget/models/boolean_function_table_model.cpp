@@ -170,7 +170,7 @@ namespace hal {
         return mEntries[row];
     }
 
-    void BooleanFunctionTableModel::setEntries(QList<QSharedPointer<BooleanFunctionTableEntry>> entries){
+    void BooleanFunctionTableModel::setEntries(QVector<QSharedPointer<BooleanFunctionTableEntry>> entries){
         Q_EMIT layoutAboutToBeChanged();
         mEntries = entries;
         Q_EMIT layoutChanged();

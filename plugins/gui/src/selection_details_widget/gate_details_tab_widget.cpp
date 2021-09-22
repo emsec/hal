@@ -3,6 +3,7 @@
 #include "gui/new_selection_details_widget/details_frame_widget.h"
 #include "gui/new_selection_details_widget/new_gate_details_widget/gate_info_table.h"
 #include "gui/new_selection_details_widget/new_gate_details_widget/gate_pin_tree.h"
+#include "gui/gui_globals.h"
 
 
 #include "hal_core/netlist/gate.h"
@@ -53,6 +54,7 @@ namespace hal
 
         QList<DetailsFrameWidget*> framesBooleanFunctionsTab({mBooleanFunctionsFrame});
         addTab("Boolean Functions", framesBooleanFunctionsTab);
+        connect(gNetlistRelay, &NetlistRelay::gateBooleanFunctionChanged, this, &GateDetailsTabWidget::handleGateBooleanFunctionChanged);
 
         //data tab
         mDataTable = new DataTableWidget(this);
@@ -65,6 +67,7 @@ namespace hal
     void GateDetailsTabWidget::setGate(Gate* gate)
     {
         //pass gate or other stuff to widgets
+        mCurrentGate = gate;
         mGateInfoTable->setGate(gate);
         mGroupingsOfItemTable->setGate(gate);
         mPinsTree->setGate(gate);
@@ -75,6 +78,17 @@ namespace hal
         hideOrShorMultiTab(gateTypeCategory);
         setupBooleanFunctionTables(gate, gateTypeCategory);
 
+    }
+
+    void GateDetailsTabWidget::handleGateBooleanFunctionChanged(Gate* g)
+    {
+        if(g == mCurrentGate && g != nullptr)
+        {
+            // Update the boolean function table and the LUT. Since we get no information about which BF changed
+            // we need to collect all BFs once again.
+            GateDetailsTabWidget::GateTypeCategory gateTypeCategory = getGateTypeCategory(g);
+            setupBooleanFunctionTables(g, gateTypeCategory);
+        }
     }
 
     void GateDetailsTabWidget::hideOrShorMultiTab(GateDetailsTabWidget::GateTypeCategory gateTypeCategory)
@@ -237,9 +251,9 @@ namespace hal
             }
         }
 
-        QList<QSharedPointer<BooleanFunctionTableEntry>> specialFunctionList;
-        QList<QSharedPointer<BooleanFunctionTableEntry>> otherFunctionList;
-        QList<QSharedPointer<BooleanFunctionTableEntry>> setPresetBehavior;
+        QVector<QSharedPointer<BooleanFunctionTableEntry>> specialFunctionList;
+        QVector<QSharedPointer<BooleanFunctionTableEntry>> otherFunctionList;
+        QVector<QSharedPointer<BooleanFunctionTableEntry>> setPresetBehavior;
 
         QMap<QString, BooleanFunction>::iterator i;
 
@@ -257,14 +271,22 @@ namespace hal
         {
             case GateDetailsTabWidget::GateTypeCategory::lut:
             {
-                mLutFunctionTable->setEntries(otherFunctionList);
+                 std::unordered_set<std::basic_string<char>> lutPins = gate->get_type()->get_pins_of_type(PinType::lut);
+                // LUT Boolean Function Table only shows the LUT function
+                QVector<QSharedPointer<BooleanFunctionTableEntry>> lutEntries;
+                for(auto bfEntry : otherFunctionList){
+                    if(lutPins.find(bfEntry->getEntryIdentifier().toStdString()) != lutPins.end()){
+                        lutEntries.append(bfEntry);
+                    }
+                }
+                mLutFunctionTable->setEntries(lutEntries);
 
-                // Fill the LUL truth table
-                std::unordered_set<std::basic_string<char>> lutPins = gate->get_type()->get_pins_of_type(PinType::lut);
                 // The table is only updated if the gate has a LUT pin
                 if(lutPins.size() > 0){
                     // All LUT pins have the same boolean function
                     std::basic_string<char> outPin = *lutPins.begin();
+
+                    // Fill the LUL truth table
                     BooleanFunction lutFunction = gate->get_boolean_function(outPin);
                     mLutTable->setBooleanFunction(lutFunction, QString::fromStdString(outPin));
                 }

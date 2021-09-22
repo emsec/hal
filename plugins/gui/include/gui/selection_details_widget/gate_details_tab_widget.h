@@ -69,6 +69,11 @@ namespace hal
          */
         void setGate(Gate* gate);
 
+    private Q_SLOTS:
+
+        void handleGateBooleanFunctionChanged(Gate* g);
+
+
     private:
         /**
          * Shows the tab "(LUT / FF / LATCH)" and their corresponding type widgets depending on which gate type property is provided.
@@ -102,6 +107,8 @@ namespace hal
         bool mMultiTabVisible = true; 
         int mMultiTabIndex;
         QWidget* mMultiTabContent;
+
+        Gate* mCurrentGate;
 
         //general tab
         GateInfoTable* mGateInfoTable;
