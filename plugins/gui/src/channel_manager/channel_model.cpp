@@ -165,3 +165,4 @@ namespace hal
         Q_EMIT updated(t, channel_name, msg_text);
     }
 }    // namespace hal
+

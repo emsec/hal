@@ -13,6 +13,8 @@
 #include <QLabel>
 #include <QSpacerItem>
 
+#include <iostream>
+
 
 namespace hal
 {
@@ -139,14 +141,17 @@ namespace hal
 
     void LoggerWidget::handleCurrentFilterChanged(int p)
     {
+        ChannelModel* model = ChannelModel::get_instance();
         if ((sender() == selector) || p == 0) {
             mCurrentChannelIndex = p;
         }
+        // set ALL Channel
+        if (p == -1) {
+            mCurrentChannelIndex = model->rowCount() - 1;
+            selector->setCurrentIndex(mCurrentChannelIndex);
+        }
 
-
-        ChannelModel* model = ChannelModel::get_instance();
         ChannelItem* item   = static_cast<ChannelItem*>((model->index(mCurrentChannelIndex, 0, QModelIndex())).internalPointer());
-
         mCurrentChannel = item->name().toStdString();
 
         mPlainTextEdit->clear();
@@ -208,6 +213,7 @@ namespace hal
             mInfoButton->setChecked(true);
             mWarningButton->setChecked(true);
             mErrorButton->setChecked(true);
+            handleCurrentFilterChanged(-1);
         }
 
         handleCurrentFilterChanged(1);

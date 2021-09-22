@@ -98,6 +98,7 @@ namespace hal
          */
         void handleLogmanagerCallback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text);
 
+
     Q_SIGNALS:
         /**
          * This signal is emitted at the end of handleLogmanagerCallback (when a new message was received from the logmanager).
