@@ -375,8 +375,6 @@ namespace hal
         void abortLayout();
 
     private Q_SLOTS:
-        void handleLayouterUpdate(const int percent);
-        void handleLayouterUpdate(const QString& message);
         void handleLayouterFinished();
         void handleStyleChanged(int istyle);
 
