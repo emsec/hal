@@ -39,8 +39,6 @@ namespace hal {
         QProgressBar* mProgressBar;
         QLabel*       mLabel;
         QPushButton*  mButAbort;
-    private Q_SLOTS:
-        void handleAbortButton();
 
     public:
         ProgressBar(GraphContext* context, QWidget* parent = nullptr);
