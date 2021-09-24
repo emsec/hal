@@ -117,7 +117,7 @@ namespace hal
         if (!mProgressBar)
         {
             mProgressBar = new ProgressBar(mContext->getLayouter()->canRollback() ? mContext : nullptr);
-            mProgressBar->setMinimumSize(width()*3/4,height()*3/4);
+            mProgressBar->setMinimumSize(width()/2,height()/4);
             mOverlay->setWidget(mProgressBar);
             mProgressBar->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
             mOverlay->show();
