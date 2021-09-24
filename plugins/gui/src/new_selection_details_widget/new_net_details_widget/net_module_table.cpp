@@ -62,17 +62,24 @@ namespace hal
         if(!idx.isValid())
             return;
 
-        u32 gateID = mModuleTableModel->getModuleIDFromIndex(idx);
+        u32 moduleID = mModuleTableModel->getModuleIDFromIndex(idx);
 
         QMenu menu;
 
+        QString portname = mModuleTableModel->getPortNameFromIndex(idx);
+        menu.addAction(QIcon(), "Extract port name as plain text",
+            [portname]()
+            {
+                QApplication::clipboard()->setText(portname);
+            });
+
         //menu.addSection("Python");
 
-        QString pythonCommandGate = PyCodeProvider::pyCodeGate(gateID);
+        QString pythonCommandModule = PyCodeProvider::pyCodeModule(moduleID);
         menu.addAction(QIcon(":/icons/python"), "Extract module as python code",
-            [pythonCommandGate]()
+            [pythonCommandModule]()
             {
-                QApplication::clipboard()->setText(pythonCommandGate);
+                QApplication::clipboard()->setText(pythonCommandModule);
             });
 
         menu.move(mapToGlobal(pos));

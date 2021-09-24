@@ -121,6 +121,14 @@ public:
      */
     u32 getModuleIDFromIndex(const QModelIndex& index);
 
+    /**
+     * Get the name of the port at the index. Index has to be valid.
+     *
+     * @param index - The index in the table
+     * @return The port name.
+     */
+    QString getPortNameFromIndex(const QModelIndex& index);
+
 private:
     u32 mNetId;
     QList<Entry> mEntries;

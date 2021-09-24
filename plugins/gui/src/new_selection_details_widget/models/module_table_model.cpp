@@ -127,4 +127,9 @@ namespace hal
     {
         return mEntries[index.row()].id;
     }
+
+    QString ModuleTableModel::getPortNameFromIndex(const QModelIndex& index)
+    {
+        return mEntries[index.row()].used_port;
+    }
 }
