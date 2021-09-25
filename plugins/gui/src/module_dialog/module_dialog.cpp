@@ -189,7 +189,7 @@ namespace hal {
     {
         mModuleTreeProxyModel->setFilterRegularExpression(text);
         static_cast<ModuleSelectProxy*>(mTableView->model())->setFilterRegularExpression(text);
-        if (mTabWidget->widget(2))
+        if (mLastUsed)
             static_cast<ModuleSelectProxy*>(mLastUsed->model())->setFilterRegularExpression(text);
         QString output = "navigation regular expression '" + text + "' entered.";
         log_info("user", output.toStdString());
