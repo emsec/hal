@@ -53,7 +53,11 @@ namespace hal {
                 mTabWidget->addTab(mLastUsed, "Recent selection");
             }
             else
+            {
                 delete mLastUsed;
+                mLastUsed = NULL;
+            }
+
         }
 
         layout->addWidget(mTabWidget, 2, 0, 1, 3);
@@ -173,8 +177,7 @@ namespace hal {
         mTreeView->clearSelection();
         mTableView->clearSelection();
         mSearchbar->clear();
-        if (!ModuleSelectHistory::instance()->isEmpty())
-            mLastUsed->clearSelection();
+        if (mLastUsed) mLastUsed->clearSelection();
     }
 
     void ModuleDialog::keybindToggleSearchbar(const QKeySequence& seq)
