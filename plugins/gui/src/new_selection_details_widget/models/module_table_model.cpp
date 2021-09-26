@@ -3,6 +3,8 @@
 #include "hal_core/netlist/net.h"
 
 #include "gui/gui_globals.h"
+#include <QSet>
+#include <QDebug>
 
 
 namespace hal
@@ -85,32 +87,42 @@ namespace hal
 
         QList<Entry> newEntryList;
 
-        for (Endpoint* e : net->get_sources())
+        //1. variant: simple brute force through all modules
+        //2. variant: more complex algorithm:
+        //  use net sources/destinations, crawl through parent-modules, keep track of already
+        //  visited modules to not list modules (ports) twice
+
+        //1.variant
+        for(auto const &m : gNetlist->get_modules())
         {
-            Module* m = e->get_gate()->get_module();
+            for(auto const& [key, value] : m->get_input_port_names())//key=net, value=port name
+            {
+                if(key == net)
+                {
+                    Entry newEntry;
 
-            Entry newEntry;
+                    newEntry.name = QString::fromStdString(m->get_name());
+                    newEntry.id = m->get_id();
+                    newEntry.type = QString::fromStdString(m->get_type());
+                    newEntry.used_port = QString::fromStdString(value);
 
-            newEntry.name = QString::fromStdString(m->get_name());
-            newEntry.id = m->get_id();
-            newEntry.type = QString::fromStdString(m->get_type());
-            newEntry.used_port = QString::fromStdString(m->get_output_port_name(net));
+                    newEntryList.append(newEntry);
+                }
+            }
+            for(auto const& [key, value] : m->get_output_port_names())//key=net, value=port name
+            {
+                if(key == net)
+                {
+                    Entry newEntry;
 
-            newEntryList.append(newEntry);
-        }
+                    newEntry.name = QString::fromStdString(m->get_name());
+                    newEntry.id = m->get_id();
+                    newEntry.type = QString::fromStdString(m->get_type());
+                    newEntry.used_port = QString::fromStdString(value);
 
-        for (Endpoint* e : net->get_destinations())
-        {
-            Module* m = e->get_gate()->get_module();
-
-            Entry newEntry;
-
-            newEntry.name = QString::fromStdString(m->get_name());
-            newEntry.id = m->get_id();
-            newEntry.type = QString::fromStdString(m->get_type());
-            newEntry.used_port = QString::fromStdString(m->get_input_port_name(net));
-
-            newEntryList.append(newEntry);
+                    newEntryList.append(newEntry);
+                }
+            }
         }
 
         beginResetModel();
