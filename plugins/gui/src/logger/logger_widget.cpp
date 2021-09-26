@@ -12,6 +12,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QSpacerItem>
+#include <QLineEdit>
 
 #include <iostream>
 
@@ -51,6 +52,8 @@ namespace hal
 
         //selector will be deleted within the toolbars destructor
         selector = new ChannelSelector(this);
+        selector->setEditable(true);
+        connect(selector->lineEdit(), SIGNAL(editingFinished()), this, SLOT(handleCustomChannel()));
         connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
         selector->setStyleSheet("QCombobox {background-color : rgb(32, 43, 63); border-radius: 2px;}");
         Toolbar->addWidget(selector);
@@ -153,6 +156,7 @@ namespace hal
 
         ChannelItem* item   = static_cast<ChannelItem*>((model->index(mCurrentChannelIndex, 0, QModelIndex())).internalPointer());
         mCurrentChannel = item->name().toStdString();
+        selector->setCurrentText(QString::fromStdString(mCurrentChannel));
 
         mPlainTextEdit->clear();
         QWriteLocker item_locker(item->getLock());
@@ -226,6 +230,14 @@ namespace hal
 
         if (!mUserInteractedWithScrollbar)
             mUserInteractedWithScrollbar = true;
+    }
+
+    void LoggerWidget::handleCustomChannel()
+    {
+        std::string channel_name = (selector->currentText()).toStdString();
+        ChannelModel* model = ChannelModel::get_instance();
+        std::cout << channel_name << std::endl;
+        model->handleLogmanagerCallback(spdlog::level::level_enum::debug , channel_name, channel_name + " has manually been added to channellist");
     }
 
     void LoggerWidget::resizeEvent(QResizeEvent* event)

@@ -14,6 +14,7 @@ namespace hal
         mChannelToIgnore = {"UserStudy"};
         LogManager::get_instance().get_gui_callback().add_callback("gui",
             std::bind(&ChannelModel::handleLogmanagerCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        mChannels.prepend("all");
     }
 
     ChannelModel::~ChannelModel()
@@ -108,12 +109,14 @@ namespace hal
             beginRemoveRows(QModelIndex(), offset - 1, offset - 1);
             delete mTemporaryItems.last();
             mTemporaryItems.removeLast();
+            mChannels.removeLast();
             endRemoveRows();
         }
         ChannelItem* item = new ChannelItem(name);
 
         beginInsertRows(QModelIndex(), offset, offset);
         mTemporaryItems.prepend(item);
+        mChannels.prepend(name);
         endInsertRows();
         return item;
     }
@@ -122,6 +125,13 @@ namespace hal
     {
         if(mChannelToIgnore.contains(QString::fromStdString(channel_name)))
             return;
+        if(msg_text == channel_name + " has manually been added to channellist")
+        {
+            if(mChannels.contains(QString::fromStdString(channel_name)))
+            {
+                return;
+            }
+        }
 
         ChannelItem* all_channel = nullptr;
         ChannelItem* item        = nullptr;

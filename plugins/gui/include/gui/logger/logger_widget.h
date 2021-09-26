@@ -120,6 +120,8 @@ namespace hal
          */
         void handleFirstUserInteraction(int value);
 
+        void handleCustomChannel();
+
     private:
         void saveSettings();
         void restoreSettings();
