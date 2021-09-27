@@ -6,8 +6,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * **WARNING:** this release partially breaks the `GateType` API, please make sure to adjust your code accordingly.
-* progress bar during layout
-  * abort layout button
 * added user action system to enable recording and reverting actions within the GUI
   * moved most GUI actions to the new user action system, including interactions with the graph view and view management
   * user actions can be recorded and exported as a macro file allowing easier debugging and crash reporting
@@ -29,10 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * different grouping colors can be assigned depending on the distance from the origin
   * common predecessors or successors can be found and added to view
 * improved layouter
+  * show progress bar during layouting
+  * allow user to abort layouting
+  * preserve graph view location of gate when moving it to new module
   * fixed routing errors for complex cable swaps
   * fixed multiple connections of a single net to the same gate not being shown properly
   * fixed incorrect placement of new gates and modules in cone view when navigating starting from a net
-  * preserve location of gate when moving it to new module
 * added generic SMT solver interface.
   * added translation from `BooleanFunction` to SMT-LIB.
   * added `BooleanFunction::Node` data structure to extend functionality to generic ASTs.
