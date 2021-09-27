@@ -95,33 +95,34 @@ namespace hal
         //1.variant
         for(auto const &m : gNetlist->get_modules())
         {
-            for(auto const& [key, value] : m->get_input_port_names())//key=net, value=port name
+            auto portMap = m->get_input_port_names();
+            auto it = portMap.find(net);
+            if(it != portMap.end())
             {
-                if(key == net)
-                {
-                    Entry newEntry;
+                Entry newEntry;
 
-                    newEntry.name = QString::fromStdString(m->get_name());
-                    newEntry.id = m->get_id();
-                    newEntry.type = QString::fromStdString(m->get_type());
-                    newEntry.used_port = QString::fromStdString(value);
+                newEntry.name = QString::fromStdString(m->get_name());
+                newEntry.id = m->get_id();
+                newEntry.type = QString::fromStdString(m->get_type());
+                newEntry.used_port = QString::fromStdString(it->second);
 
-                    newEntryList.append(newEntry);
-                }
+                newEntryList.append(newEntry);
+
             }
-            for(auto const& [key, value] : m->get_output_port_names())//key=net, value=port name
+
+            portMap = m->get_output_port_names();
+            it = portMap.find(net);
+            if(it != portMap.end())
             {
-                if(key == net)
-                {
-                    Entry newEntry;
+                Entry newEntry;
 
-                    newEntry.name = QString::fromStdString(m->get_name());
-                    newEntry.id = m->get_id();
-                    newEntry.type = QString::fromStdString(m->get_type());
-                    newEntry.used_port = QString::fromStdString(value);
+                newEntry.name = QString::fromStdString(m->get_name());
+                newEntry.id = m->get_id();
+                newEntry.type = QString::fromStdString(m->get_type());
+                newEntry.used_port = QString::fromStdString(it->second);
 
-                    newEntryList.append(newEntry);
-                }
+                newEntryList.append(newEntry);
+
             }
         }
 
