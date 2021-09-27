@@ -206,6 +206,7 @@ var namespacehal =
     [ "PreviewWidget", "classhal_1_1_preview_widget.html", "classhal_1_1_preview_widget" ],
     [ "ProgramArguments", "classhal_1_1_program_arguments.html", "classhal_1_1_program_arguments" ],
     [ "ProgramOptions", "classhal_1_1_program_options.html", "classhal_1_1_program_options" ],
+    [ "ProgressBar", "classhal_1_1_progress_bar.html", "classhal_1_1_progress_bar" ],
     [ "Pyi_base", "classhal_1_1_pyi__base.html", "classhal_1_1_pyi__base" ],
     [ "Pyi_gui", "classhal_1_1_pyi__gui.html", "classhal_1_1_pyi__gui" ],
     [ "PythonCodeEditor", "classhal_1_1_python_code_editor.html", "classhal_1_1_python_code_editor" ],

@@ -9,9 +9,8 @@ var classhal_1_1_graph_widget =
     [ "handleContextAboutToBeDeleted", "classhal_1_1_graph_widget.html#a3b3549b400f6a0caeae429378969c118", null ],
     [ "handleSceneAvailable", "classhal_1_1_graph_widget.html#aa371b03a327e0a469d2504191910fb45", null ],
     [ "handleSceneUnavailable", "classhal_1_1_graph_widget.html#a3405cb6516305d47f45532b4d0fc4a93", null ],
-    [ "handleStatusUpdate", "classhal_1_1_graph_widget.html#a684761492343b61c9bb01016df7fd47c", null ],
-    [ "handleStatusUpdate", "classhal_1_1_graph_widget.html#a7efe98980c1a11e7e4bac457b6e8ca6a", null ],
     [ "keyPressEvent", "classhal_1_1_graph_widget.html#a2423cbb2324d143cccd840382a88559e", null ],
+    [ "showProgress", "classhal_1_1_graph_widget.html#ad451881507bb200fe892e1a04726237f", null ],
     [ "storeViewport", "classhal_1_1_graph_widget.html#ac603af40752859f4bbf29925d2f91143", null ],
     [ "view", "classhal_1_1_graph_widget.html#ac922c09975a0de4105b344addd4eff2b", null ]
 ];

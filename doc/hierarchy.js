@@ -336,6 +336,7 @@ var hierarchy =
             [ "hal::WidgetOverlay", "classhal_1_1_widget_overlay.html", null ]
           ] ],
           [ "hal::PreviewWidget", "classhal_1_1_preview_widget.html", null ],
+          [ "hal::ProgressBar", "classhal_1_1_progress_bar.html", null ],
           [ "hal::RecentFileItem", "classhal_1_1_recent_file_item.html", null ],
           [ "hal::RecentFilesWidget", "classhal_1_1_recent_files_widget.html", null ],
           [ "hal::Searchbar", "classhal_1_1_searchbar.html", null ],
@@ -477,8 +478,8 @@ var hierarchy =
       [ "hal::StackedValidator", "classhal_1_1_stacked_validator.html", null ],
       [ "hal::UniqueStringValidator", "classhal_1_1_unique_string_validator.html", null ]
     ] ],
-    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
+    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

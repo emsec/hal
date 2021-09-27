@@ -99,8 +99,8 @@ Inheritance diagram for hal::GraphContextSubscriber:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_graph_context_subscriber__inherit__graph.png" border="0" usemap="#hal_1_1_graph_context_subscriber_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_graph_context_subscriber_inherit__map" id="hal_1_1_graph_context_subscriber_inherit__map">
-<area shape="rect" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="5,5,268,171"/>
-<area shape="rect" href="classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView." alt="" coords="5,219,268,384"/>
+<area shape="rect" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="5,5,268,156"/>
+<area shape="rect" href="classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView." alt="" coords="5,204,268,369"/>
 </map>
 </div>
 <div class="dynheader">
@@ -108,7 +108,7 @@ Collaboration diagram for hal::GraphContextSubscriber:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_graph_context_subscriber__coll__graph.png" border="0" usemap="#hal_1_1_graph_context_subscriber_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_graph_context_subscriber_coll__map" id="hal_1_1_graph_context_subscriber_coll__map">
-<area shape="rect" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="5,5,268,171"/>
+<area shape="rect" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="5,5,268,156"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -122,12 +122,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5da60d882118956e1832c967c6ac363f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1627c1240fba720824a368b765cbea9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context_subscriber.html#ac1627c1240fba720824a368b765cbea9">handleContextAboutToBeDeleted</a> ()=0</td></tr>
 <tr class="separator:ac1627c1240fba720824a368b765cbea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7248af2d03d40f7646b410af3db03a5f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context_subscriber.html#a7248af2d03d40f7646b410af3db03a5f">handleStatusUpdate</a> (const int percent)=0</td></tr>
-<tr class="separator:a7248af2d03d40f7646b410af3db03a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a872498becf9c8588543049cec70d8b4c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context_subscriber.html#a872498becf9c8588543049cec70d8b4c">storeViewport</a> ()=0</td></tr>
 <tr class="separator:a872498becf9c8588543049cec70d8b4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62c7395534e0462c50234176e5ad3b62"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context_subscriber.html#a62c7395534e0462c50234176e5ad3b62">handleStatusUpdate</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="plugins_2gui_2_c_make_lists_8txt.html#a0f85e1d15de90d7e8c90ac2c8a621575">message</a>)=0</td></tr>
-<tr class="separator:a62c7395534e0462c50234176e5ad3b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bb055b9e6383fb9473a4fd82cdf7736"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context_subscriber.html#a9bb055b9e6383fb9473a4fd82cdf7736">showProgress</a> (int percent, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;text=<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>())=0</td></tr>
+<tr class="separator:a9bb055b9e6383fb9473a4fd82cdf7736"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Interface for any class that wants to subscribe a <a class="el" href="classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets.">GraphContext</a>. </p>
@@ -245,8 +243,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7248af2d03d40f7646b410af3db03a5f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7248af2d03d40f7646b410af3db03a5f">&#9670;&nbsp;</a></span>handleStatusUpdate() <span class="overload">[1/2]</span></h2>
+<a id="a9bb055b9e6383fb9473a4fd82cdf7736"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bb055b9e6383fb9473a4fd82cdf7736">&#9670;&nbsp;</a></span>showProgress()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -255,46 +253,21 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void hal::GraphContextSubscriber::handleStatusUpdate </td>
+          <td class="memname">virtual void hal::GraphContextSubscriber::showProgress </td>
           <td>(</td>
-          <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>percent</em></td><td>)</td>
-          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>percent</em>, </td>
         </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Called whenever the loading progress of the layouter of the subscribed context has changed.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">percent</td><td>- The progress in percent (in range 0-100(?)) </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implemented in <a class="el" href="classhal_1_1_graph_widget.html#a684761492343b61c9bb01016df7fd47c">hal::GraphWidget</a>.</p>
-
-</div>
-</div>
-<a id="a62c7395534e0462c50234176e5ad3b62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62c7395534e0462c50234176e5ad3b62">&#9670;&nbsp;</a></span>handleStatusUpdate() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
         <tr>
-          <td class="memname">virtual void hal::GraphContextSubscriber::handleStatusUpdate </td>
-          <td>(</td>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
-          <td class="paramname"><em>message</em></td><td>)</td>
+          <td class="paramname"><em>text</em> = <code><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>()</code>&#160;</td>
+        </tr>
+        <tr>
           <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -303,15 +276,14 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Called whenever the loading progress message of the layouter of the subscribed context has changed.</p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Show progress in overlay </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">message</td><td>- The new message </td></tr>
+    <tr><td class="paramname">percent</td><td>percent done </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_graph_widget.html#a7efe98980c1a11e7e4bac457b6e8ca6a">hal::GraphWidget</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_graph_widget.html#ad451881507bb200fe892e1a04726237f">hal::GraphWidget</a>.</p>
 
 </div>
 </div>
@@ -352,7 +324,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graph_context_subscriber.html">GraphContextSubscriber</a></li>
-    <li class="footer">Generated on Mon Sep 27 2021 06:55:36 for HAL by
+    <li class="footer">Generated on Mon Sep 27 2021 13:38:08 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

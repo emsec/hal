@@ -1,5 +1,15 @@
 var NAVTREEINDEX20 =
 {
+"python__bindings_2bindings_2gate__library_8cpp.html":[14,0,2,2,0,5],
+"python__bindings_2bindings_2gate__library_8cpp.html#ga3e97835fd6fda5f038f92cefbcdcf57b":[14,0,2,2,0,5,0],
+"python__bindings_2bindings_2gate__library_8cpp_source.html":[14,0,2,2,0,5],
+"python__bindings_2bindings_2gate__library__manager_8cpp.html":[14,0,2,2,0,6],
+"python__bindings_2bindings_2gate__library__manager_8cpp.html#gacd94e2b9ac19cb0a128446c71673aabf":[14,0,2,2,0,6,0],
+"python__bindings_2bindings_2gate__library__manager_8cpp_source.html":[14,0,2,2,0,6],
+"python__bindings_2bindings_2gate__type_8cpp.html":[14,0,2,2,0,7],
+"python__bindings_2bindings_2gate__type_8cpp.html#gad09c61daaa174b451b0519d0f54a2382":[14,0,2,2,0,7,0],
+"python__bindings_2bindings_2gate__type_8cpp_source.html":[14,0,2,2,0,7],
+"python__bindings_2bindings_2grouping_8cpp.html":[14,0,2,2,0,9],
 "python__bindings_2bindings_2grouping_8cpp.html#ga0b8291fb8af058d824b23bcd16a86821":[14,0,2,2,0,9,0],
 "python__bindings_2bindings_2grouping_8cpp_source.html":[14,0,2,2,0,9],
 "python__bindings_2bindings_2module_8cpp.html":[14,0,2,2,0,10],
@@ -239,15 +249,5 @@ var NAVTREEINDEX20 =
 "sort_8h.html":[14,0,1,0,0,0,22,4],
 "sort_8h.html#a0c78df8ac7ca41f8928e0bbd3d5e3b3c":[14,0,1,0,0,0,22,4,6],
 "sort_8h.html#a1e95bade9096c47139daec1bd6600432":[14,0,1,0,0,0,22,4,5],
-"sort_8h.html#a6b35891fb34a786fd160ec0db4833c12":[14,0,1,0,0,0,22,4,4],
-"sort_8h.html#a6f7dc31d2638295f8b4e0abcf35a53a4":[14,0,1,0,0,0,22,4,7],
-"sort_8h.html#a6fda9608ea4fedbaf83dc3e15dc6dd95":[14,0,1,0,0,0,22,4,1],
-"sort_8h.html#a6fda9608ea4fedbaf83dc3e15dc6dd95a34813769720e3dc3e67e973aa7f5addb":[14,0,1,0,0,0,22,4,1,0],
-"sort_8h.html#a6fda9608ea4fedbaf83dc3e15dc6dd95a67a196d7c8ad218a624f114f8de3162a":[14,0,1,0,0,0,22,4,1,2],
-"sort_8h.html#a6fda9608ea4fedbaf83dc3e15dc6dd95acc67434fb814cddc41b10f1542773bea":[14,0,1,0,0,0,22,4,1,1],
-"sort_8h.html#ae6ccc351f66906dee7470b40fda9ce14":[14,0,1,0,0,0,22,4,2],
-"sort_8h.html#aeacb51281299c97ba69b4152275bc686":[14,0,1,0,0,0,22,4,3],
-"sort_8h_source.html":[14,0,1,0,0,0,22,4],
-"special__log__content__manager_8cpp.html":[14,0,1,0,2,21,5],
-"special__log__content__manager_8cpp_source.html":[14,0,1,0,2,21,5]
+"sort_8h.html#a6b35891fb34a786fd160ec0db4833c12":[14,0,1,0,0,0,22,4,4]
 };

@@ -1,9 +1,9 @@
 <map id="hal::GraphLayouter" name="hal::GraphLayouter">
-<area shape="rect" id="node1" title="Base class for all specific layouters." alt="" coords="338,1413,493,1564"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="159,5,326,347"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsscene.html" title=" " alt="" coords="158,396,327,811"/>
-<area shape="rect" id="node5" href="$classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets." alt="" coords="328,835,476,985"/>
-<area shape="rect" id="node3" href="$classhal_1_1_graphics_scene.html" title="Container for a GraphGraphicsView containing gates, nets, and modules." alt="" coords="117,1009,368,1351"/>
-<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmap.html" title=" " alt="" coords="520,1061,720,1299"/>
-<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmap.html" title=" " alt="" coords="744,1068,946,1292"/>
+<area shape="rect" id="node1" title="Base class for all specific layouters." alt="" coords="336,1443,491,1593"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="157,5,324,347"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsscene.html" title=" " alt="" coords="156,396,325,811"/>
+<area shape="rect" id="node5" href="$classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets." alt="" coords="326,835,474,1000"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_scene.html" title="Container for a GraphGraphicsView containing gates, nets, and modules." alt="" coords="115,1024,366,1365"/>
+<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmap.html" title=" " alt="" coords="518,1075,718,1314"/>
+<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmap.html" title=" " alt="" coords="742,1083,944,1307"/>
 </map>

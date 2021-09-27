@@ -104,7 +104,7 @@ Inheritance diagram for hal::GraphWidget:</div>
 <area shape="rect" title="Wraps a GraphContext and a GraphGraphicsView." alt="" coords="160,652,423,817"/>
 <area shape="rect" href="classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="5,175,284,604"/>
 <area shape="rect" href="classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="91,5,199,127"/>
-<area shape="rect" href="classhal_1_1_graph_context_subscriber.html" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="308,307,571,472"/>
+<area shape="rect" href="classhal_1_1_graph_context_subscriber.html" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="308,314,571,465"/>
 </map>
 </div>
 <div class="dynheader">
@@ -119,7 +119,7 @@ Collaboration diagram for hal::GraphWidget:</div>
 <area shape="rect" href="https://doc.qt.io/qt-5/qaction.html" title=" " alt="" coords="309,5,498,332"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qkeysequence.html" title=" " alt="" coords="522,20,666,317"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qshortcut.html" title=" " alt="" coords="706,64,829,273"/>
-<area shape="rect" href="classhal_1_1_graph_context_subscriber.html" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="567,497,829,663"/>
+<area shape="rect" href="classhal_1_1_graph_context_subscriber.html" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="567,505,829,655"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -135,16 +135,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3405cb6516305d47f45532b4d0fc4a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b3549b400f6a0caeae429378969c118"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_widget.html#a3b3549b400f6a0caeae429378969c118">handleContextAboutToBeDeleted</a> () override</td></tr>
 <tr class="separator:a3b3549b400f6a0caeae429378969c118"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a684761492343b61c9bb01016df7fd47c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_widget.html#a684761492343b61c9bb01016df7fd47c">handleStatusUpdate</a> (const int percent) override</td></tr>
-<tr class="separator:a684761492343b61c9bb01016df7fd47c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7efe98980c1a11e7e4bac457b6e8ca6a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_widget.html#a7efe98980c1a11e7e4bac457b6e8ca6a">handleStatusUpdate</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="plugins_2gui_2_c_make_lists_8txt.html#a0f85e1d15de90d7e8c90ac2c8a621575">message</a>) override</td></tr>
-<tr class="separator:a7efe98980c1a11e7e4bac457b6e8ca6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac603af40752859f4bbf29925d2f91143"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_widget.html#ac603af40752859f4bbf29925d2f91143">storeViewport</a> () override</td></tr>
 <tr class="separator:ac603af40752859f4bbf29925d2f91143"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac922c09975a0de4105b344addd4eff2b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_graph_graphics_view.html">GraphGraphicsView</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_widget.html#ac922c09975a0de4105b344addd4eff2b">view</a> ()</td></tr>
 <tr class="separator:ac922c09975a0de4105b344addd4eff2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16b3545213c6ecc75287833bb73bd02d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_widget.html#a16b3545213c6ecc75287833bb73bd02d">ensureSelectionVisible</a> ()</td></tr>
 <tr class="separator:a16b3545213c6ecc75287833bb73bd02d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad451881507bb200fe892e1a04726237f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_widget.html#ad451881507bb200fe892e1a04726237f">showProgress</a> (int percent, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;text=<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>()) override</td></tr>
+<tr class="separator:ad451881507bb200fe892e1a04726237f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ea3d35683d49169fd015c6562348093"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_widget.html#a9ea3d35683d49169fd015c6562348093">focusGate</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> gateId)</td></tr>
 <tr class="separator:a9ea3d35683d49169fd015c6562348093"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad864572edaa5e8641175655181982f30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_widget.html#ad864572edaa5e8641175655181982f30">focusNet</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> netId)</td></tr>
@@ -1203,7 +1201,7 @@ Additional Inherited Members</h2></td></tr>
 <p>The content widget that wraps a graph view of a certain <a class="el" href="classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets.">GraphContext</a>. <br  />
  It represents one tab of the GraphTabWidgets <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html">QTabWidget</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8h_source.html#l00051">51</a> of file <a class="el" href="graph__widget_8h_source.html">graph_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8h_source.html#l00052">52</a> of file <a class="el" href="graph__widget_8h_source.html">graph_widget.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0421e8059b062ba06f1bb84ea141fdc8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0421e8059b062ba06f1bb84ea141fdc8">&#9670;&nbsp;</a></span>GraphWidget()</h2>
@@ -1247,9 +1245,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00051">51</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00054">54</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">QBoxLayout::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#ViewportAnchor-enum">QGraphicsView::AnchorUnderMouse</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html#RenderHint-enum">QPainter::Antialiasing</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#centerOn">QGraphicsView::centerOn()</a>, <a class="el" href="classhal_1_1_overlay.html#a48e35482396e82b697d7985da12bda5a">hal::Overlay::clicked()</a>, <a class="el" href="classhal_1_1_graph_navigation_widget.html#a8eecdcbedaa21ff866f4aaa84454c419">hal::GraphNavigationWidget::closeRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="el" href="content__widget_8h_source.html#l00240">hal::ContentWidget::mContentLayout</a>, <a class="el" href="classhal_1_1_graph_graphics_view.html#a6452181b33c1d423394489d5c4d82b09">hal::GraphGraphicsView::moduleDoubleClicked()</a>, <a class="el" href="classhal_1_1_graph_navigation_widget.html#a69b1831b65c4a85bcdbbd110122978e9">hal::GraphNavigationWidget::navigationRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#Shape-enum">QFrame::NoFrame</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#DragMode-enum">QGraphicsView::RubberBandDrag</a>, <a class="el" href="graph__context_8cpp_source.html#l00377">hal::GraphContext::scene()</a>, <a class="el" href="graph__context_8cpp_source.html#l00393">hal::GraphContext::sceneUpdateInProgress()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#dragMode-prop">QGraphicsView::setDragMode()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#setFrameStyle">QFrame::setFrameStyle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#setRenderHint">QGraphicsView::setRenderHint()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#setScene">QGraphicsView::setScene()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#transformationAnchor-prop">QGraphicsView::setTransformationAnchor()</a>, <a class="el" href="widget__overlay_8cpp_source.html#l00014">hal::WidgetOverlay::setWidget()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00070">hal::GraphContext::subscribe()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">QBoxLayout::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#ViewportAnchor-enum">QGraphicsView::AnchorUnderMouse</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html#RenderHint-enum">QPainter::Antialiasing</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#centerOn">QGraphicsView::centerOn()</a>, <a class="el" href="classhal_1_1_overlay.html#a48e35482396e82b697d7985da12bda5a">hal::Overlay::clicked()</a>, <a class="el" href="classhal_1_1_graph_navigation_widget.html#a8eecdcbedaa21ff866f4aaa84454c419">hal::GraphNavigationWidget::closeRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="el" href="content__widget_8h_source.html#l00240">hal::ContentWidget::mContentLayout</a>, <a class="el" href="classhal_1_1_graph_graphics_view.html#a6452181b33c1d423394489d5c4d82b09">hal::GraphGraphicsView::moduleDoubleClicked()</a>, <a class="el" href="classhal_1_1_graph_navigation_widget.html#a69b1831b65c4a85bcdbbd110122978e9">hal::GraphNavigationWidget::navigationRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#Shape-enum">QFrame::NoFrame</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#DragMode-enum">QGraphicsView::RubberBandDrag</a>, <a class="el" href="graph__context_8cpp_source.html#l00375">hal::GraphContext::scene()</a>, <a class="el" href="graph__context_8cpp_source.html#l00391">hal::GraphContext::sceneUpdateInProgress()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#dragMode-prop">QGraphicsView::setDragMode()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#setFrameStyle">QFrame::setFrameStyle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#setRenderHint">QGraphicsView::setRenderHint()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#setScene">QGraphicsView::setScene()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#transformationAnchor-prop">QGraphicsView::setTransformationAnchor()</a>, <a class="el" href="widget__overlay_8cpp_source.html#l00014">hal::WidgetOverlay::setWidget()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00067">hal::GraphContext::subscribe()</a>.</p>
 
 </div>
 </div>
@@ -1270,9 +1268,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Used to move and scale the camera of the view so that the whole selection can be seen. </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00840">840</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00855">855</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="graph__context_8cpp_source.html#l00367">hal::GraphContext::gates()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00288">hal::GraphicsScene::getGateItem()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00316">hal::GraphicsScene::getModuleItem()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00302">hal::GraphicsScene::getNetItem()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gSelectionRelay</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qrectf.html#marginsAdded">QRectF::marginsAdded()</a>, <a class="el" href="graph__context_8cpp_source.html#l00362">hal::GraphContext::modules()</a>, <a class="el" href="graph__context_8cpp_source.html#l00372">hal::GraphContext::nets()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#rect-prop">QWidget::rect</a>, <a class="el" href="graph__context_8cpp_source.html#l00377">hal::GraphContext::scene()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#sceneBoundingRect">QGraphicsItem::sceneBoundingRect()</a>, <a class="el" href="graph__context_8cpp_source.html#l00393">hal::GraphContext::sceneUpdateInProgress()</a>, <a class="el" href="selection__relay_8h_source.html#l00279">hal::SelectionRelay::selectedGates()</a>, <a class="el" href="selection__relay_8h_source.html#l00230">hal::SelectionRelay::selectedGatesList()</a>, <a class="el" href="selection__relay_8h_source.html#l00293">hal::SelectionRelay::selectedModules()</a>, <a class="el" href="selection__relay_8h_source.html#l00244">hal::SelectionRelay::selectedModulesList()</a>, <a class="el" href="selection__relay_8h_source.html#l00286">hal::SelectionRelay::selectedNets()</a>, and <a class="el" href="selection__relay_8h_source.html#l00237">hal::SelectionRelay::selectedNetsList()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="graph__context_8cpp_source.html#l00365">hal::GraphContext::gates()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00288">hal::GraphicsScene::getGateItem()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00316">hal::GraphicsScene::getModuleItem()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00302">hal::GraphicsScene::getNetItem()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gSelectionRelay</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qrectf.html#marginsAdded">QRectF::marginsAdded()</a>, <a class="el" href="graph__context_8cpp_source.html#l00360">hal::GraphContext::modules()</a>, <a class="el" href="graph__context_8cpp_source.html#l00370">hal::GraphContext::nets()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#rect-prop">QWidget::rect</a>, <a class="el" href="graph__context_8cpp_source.html#l00375">hal::GraphContext::scene()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#sceneBoundingRect">QGraphicsItem::sceneBoundingRect()</a>, <a class="el" href="graph__context_8cpp_source.html#l00391">hal::GraphContext::sceneUpdateInProgress()</a>, <a class="el" href="selection__relay_8h_source.html#l00279">hal::SelectionRelay::selectedGates()</a>, <a class="el" href="selection__relay_8h_source.html#l00230">hal::SelectionRelay::selectedGatesList()</a>, <a class="el" href="selection__relay_8h_source.html#l00293">hal::SelectionRelay::selectedModules()</a>, <a class="el" href="selection__relay_8h_source.html#l00244">hal::SelectionRelay::selectedModulesList()</a>, <a class="el" href="selection__relay_8h_source.html#l00286">hal::SelectionRelay::selectedNets()</a>, and <a class="el" href="selection__relay_8h_source.html#l00237">hal::SelectionRelay::selectedNetsList()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00136">hal::GraphTabWidget::ensureSelectionVisible()</a>.</p>
 
@@ -1294,9 +1292,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00948">948</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00963">963</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00288">hal::GraphicsScene::getGateItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qrectf.html#marginsAdded">QRectF::marginsAdded()</a>, <a class="el" href="graph__context_8cpp_source.html#l00377">hal::GraphContext::scene()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#sceneBoundingRect">QGraphicsItem::sceneBoundingRect()</a>.</p>
+<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00288">hal::GraphicsScene::getGateItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qrectf.html#marginsAdded">QRectF::marginsAdded()</a>, <a class="el" href="graph__context_8cpp_source.html#l00375">hal::GraphContext::scene()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#sceneBoundingRect">QGraphicsItem::sceneBoundingRect()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00181">hal::GraphTabWidget::handleGateFocus()</a>.</p>
 
@@ -1318,9 +1316,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00970">970</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00985">985</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00316">hal::GraphicsScene::getModuleItem()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00846">hal::ShortestPath::module()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00377">hal::GraphContext::scene()</a>.</p>
+<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00316">hal::GraphicsScene::getModuleItem()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00846">hal::ShortestPath::module()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00375">hal::GraphContext::scene()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00195">hal::GraphTabWidget::handleModuleFocus()</a>.</p>
 
@@ -1342,9 +1340,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00959">959</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00974">974</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00302">hal::GraphicsScene::getNetItem()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00837">hal::ShortestPath::net()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00377">hal::GraphContext::scene()</a>.</p>
+<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00302">hal::GraphicsScene::getNetItem()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00837">hal::ShortestPath::net()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00375">hal::GraphContext::scene()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00188">hal::GraphTabWidget::handleNetFocus()</a>.</p>
 
@@ -1367,7 +1365,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets the <a class="el" href="classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets.">GraphContext</a> this <a class="el" href="classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView.">GraphWidget</a> shows.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer of the context. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00083">83</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00086">86</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l01103">hal::GraphGraphicsView::handleShortestPath()</a>, and <a class="el" href="graph__tab__widget_8cpp_source.html#l00126">hal::GraphTabWidget::handleTabChanged()</a>.</p>
 
@@ -1399,7 +1397,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_graph_context_subscriber.html#ac1627c1240fba720824a368b765cbea9">hal::GraphContextSubscriber</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00118">118</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00143">143</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#setScene">QGraphicsView::setScene()</a>.</p>
 
@@ -1432,9 +1430,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_graph_context_subscriber.html#a4b57e630ef0e2f9642b82f7fd6cabebe">hal::GraphContextSubscriber</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00088">88</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00091">91</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_overlay.html#a48e35482396e82b697d7985da12bda5a">hal::Overlay::clicked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#fitInView">QGraphicsView::fitInView()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#focus-prop">QWidget::hasFocus()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AspectRatioMode-enum">Qt::KeepAspectRatio</a>, <a class="el" href="graph__context_8cpp_source.html#l00377">hal::GraphContext::scene()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setFocus-1">QWidget::setFocus()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#setScene">QGraphicsView::setScene()</a>, and <a class="el" href="widget__overlay_8cpp_source.html#l00014">hal::WidgetOverlay::setWidget()</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_overlay.html#a48e35482396e82b697d7985da12bda5a">hal::Overlay::clicked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#fitInView">QGraphicsView::fitInView()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#focus-prop">QWidget::hasFocus()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AspectRatioMode-enum">Qt::KeepAspectRatio</a>, <a class="el" href="graph__context_8cpp_source.html#l00375">hal::GraphContext::scene()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setFocus-1">QWidget::setFocus()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#setScene">QGraphicsView::setScene()</a>, and <a class="el" href="widget__overlay_8cpp_source.html#l00014">hal::WidgetOverlay::setWidget()</a>.</p>
 
 </div>
 </div>
@@ -1465,87 +1463,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_graph_context_subscriber.html#a5da60d882118956e1832c967c6ac363f">hal::GraphContextSubscriber</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00106">106</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00131">131</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="classhal_1_1_overlay.html#a48e35482396e82b697d7985da12bda5a">hal::Overlay::clicked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect">QObject::disconnect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#isHidden">QWidget::isHidden()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#setScene">QGraphicsView::setScene()</a>, <a class="el" href="widget__overlay_8cpp_source.html#l00014">hal::WidgetOverlay::setWidget()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#show">QWidget::show()</a>.</p>
-
-</div>
-</div>
-<a id="a684761492343b61c9bb01016df7fd47c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a684761492343b61c9bb01016df7fd47c">&#9670;&nbsp;</a></span>handleStatusUpdate() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::GraphWidget::handleStatusUpdate </td>
-          <td>(</td>
-          <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>percent</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Currently unused. <br  />
- Update the loading(?) progress of the layouter that layouts the context this graph widget manages.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">percent</td><td>- The progress in percent (in range 0-100(?)) </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="el" href="classhal_1_1_graph_context_subscriber.html#a7248af2d03d40f7646b410af3db03a5f">hal::GraphContextSubscriber</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00124">124</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a7efe98980c1a11e7e4bac457b6e8ca6a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7efe98980c1a11e7e4bac457b6e8ca6a">&#9670;&nbsp;</a></span>handleStatusUpdate() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::GraphWidget::handleStatusUpdate </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
-          <td class="paramname"><em>message</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Currently unused. <br  />
- Update the status message of the layouters progress that layouts the context this graph widget manages.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">message</td><td>- The new status message </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="el" href="classhal_1_1_graph_context_subscriber.html#a62c7395534e0462c50234176e5ad3b62">hal::GraphContextSubscriber</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00129">129</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="plugins_2gui_2_c_make_lists_8txt_source.html#l00015">message()</a>.</p>
 
 </div>
 </div>
@@ -1583,9 +1503,57 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#keyPressEvent">QWidget</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00160">160</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00175">175</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00155">hal::SelectionRelay::clearAndUpdate()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::ControlModifier</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">QWidget::event()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gSelectionRelay</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Down</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Escape</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Left</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Right</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Up</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Z</a>, and <a class="el" href="graph__context_8cpp_source.html#l00393">hal::GraphContext::sceneUpdateInProgress()</a>.</p>
+<p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00155">hal::SelectionRelay::clearAndUpdate()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::ControlModifier</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">QWidget::event()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00051">hal::gSelectionRelay</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Down</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Escape</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Left</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Right</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Up</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Z</a>, and <a class="el" href="graph__context_8cpp_source.html#l00391">hal::GraphContext::sceneUpdateInProgress()</a>.</p>
+
+</div>
+</div>
+<a id="ad451881507bb200fe892e1a04726237f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad451881507bb200fe892e1a04726237f">&#9670;&nbsp;</a></span>showProgress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GraphWidget::showProgress </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>percent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
+          <td class="paramname"><em>text</em> = <code><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Show progress in overlay </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">percent</td><td>percent done </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classhal_1_1_graph_context_subscriber.html#a9bb055b9e6383fb9473a4fd82cdf7736">hal::GraphContextSubscriber</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00115">115</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="graph__layouter_8cpp_source.html#l00263">hal::GraphLayouter::canRollback()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Expanding</a>, <a class="el" href="graph__context_8h_source.html#l00291">hal::GraphContext::getLayouter()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#height-prop">QWidget::height</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Preferred</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimumSize-prop">QWidget::setMinimumSize()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">QWidget::setSizePolicy()</a>, <a class="el" href="progress__bar_8cpp_source.html#l00033">hal::ProgressBar::setText()</a>, <a class="el" href="progress__bar_8cpp_source.html#l00028">hal::ProgressBar::setValue()</a>, <a class="el" href="widget__overlay_8cpp_source.html#l00014">hal::WidgetOverlay::setWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#show">QWidget::show()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#width-prop">QWidget::width</a>.</p>
 
 </div>
 </div>
@@ -1615,9 +1583,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_graph_context_subscriber.html#a872498becf9c8588543049cec70d8b4c">hal::GraphContextSubscriber</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00134">134</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00149">149</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qrect.html#bottomRight">QRect::bottomRight()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00139">hal::GraphLayouter::done()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#geometry-prop">QWidget::geometry</a>, <a class="el" href="graph__context_8h_source.html#l00285">hal::GraphContext::getLayouter()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#mapToScene">QGraphicsView::mapToScene()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qrect.html#topLeft">QRect::topLeft()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewport">QAbstractScrollArea::viewport()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qrect.html#bottomRight">QRect::bottomRight()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00140">hal::GraphLayouter::done()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#geometry-prop">QWidget::geometry</a>, <a class="el" href="graph__context_8h_source.html#l00291">hal::GraphContext::getLayouter()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#mapToScene">QGraphicsView::mapToScene()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qrect.html#topLeft">QRect::topLeft()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewport">QAbstractScrollArea::viewport()</a>.</p>
 
 </div>
 </div>
@@ -1638,7 +1606,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the <a class="el" href="classhal_1_1_graph_graphics_view.html" title="A view to display the rendered graph (needs a GraphicsScene).">GraphGraphicsView</a> this object manages.</p>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classhal_1_1_graph_graphics_view.html" title="A view to display the rendered graph (needs a GraphicsScene).">GraphGraphicsView</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l00986">986</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__widget_8cpp_source.html#l01001">1001</a> of file <a class="el" href="graph__widget_8cpp_source.html">graph_widget.cpp</a>.</p>
 
 </div>
 </div>
@@ -1652,7 +1620,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graph_widget.html">GraphWidget</a></li>
-    <li class="footer">Generated on Mon Sep 27 2021 06:55:36 for HAL by
+    <li class="footer">Generated on Mon Sep 27 2021 13:38:08 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

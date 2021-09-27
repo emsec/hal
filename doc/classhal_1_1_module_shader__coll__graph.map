@@ -1,6 +1,6 @@
 <map id="hal::ModuleShader" name="hal::ModuleShader">
-<area shape="rect" id="node1" title="Specifically stores/updates visual information about a module and its items." alt="" coords="117,419,283,555"/>
-<area shape="rect" id="node2" href="$classhal_1_1_graph_shader.html" title="Base class to store and update visual information about the graph." alt="" coords="129,219,271,369"/>
-<area shape="rect" id="node3" href="$structhal_1_1_graph_shader_1_1_shading.html" title=" " alt="" coords="5,42,200,119"/>
-<area shape="rect" id="node4" href="$classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets." alt="" coords="225,5,373,156"/>
+<area shape="rect" id="node1" title="Specifically stores/updates visual information about a module and its items." alt="" coords="117,433,283,569"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graph_shader.html" title="Base class to store and update visual information about the graph." alt="" coords="129,233,271,384"/>
+<area shape="rect" id="node3" href="$structhal_1_1_graph_shader_1_1_shading.html" title=" " alt="" coords="5,49,200,127"/>
+<area shape="rect" id="node4" href="$classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets." alt="" coords="225,5,373,171"/>
 </map>

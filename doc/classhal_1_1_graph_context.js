@@ -2,6 +2,7 @@ var classhal_1_1_graph_context =
 [
     [ "GraphContext", "classhal_1_1_graph_context.html#ac5d06178660e25f24c3a5d5e3943ab2e", null ],
     [ "~GraphContext", "classhal_1_1_graph_context.html#a38129eb4e0c7ab1bb6d6e2d2a8b01c59", null ],
+    [ "abortLayout", "classhal_1_1_graph_context.html#aeeeccca33af0ed710fe70f8dffb19451", null ],
     [ "add", "classhal_1_1_graph_context.html#a65460fd497821ff48e6106590a71bb83", null ],
     [ "beginChange", "classhal_1_1_graph_context.html#a13df27071c670c4bd04c08be3058afe1", null ],
     [ "clear", "classhal_1_1_graph_context.html#a65bc0bd69534ca9b2cb3e9f1dfe38b28", null ],
@@ -22,6 +23,7 @@ var classhal_1_1_graph_context =
     [ "isShowingModule", "classhal_1_1_graph_context.html#a806b1fe7afef46e9a0f7186880f70cc6", null ],
     [ "isShowingNetDestination", "classhal_1_1_graph_context.html#afc3db090653def123d9a6180e9e4b1ad", null ],
     [ "isShowingNetSource", "classhal_1_1_graph_context.html#af41355727163680dd88cc3dc2a04e901", null ],
+    [ "layoutProgress", "classhal_1_1_graph_context.html#a69a089e64ad1a68b354c6fa315b7372b", null ],
     [ "modules", "classhal_1_1_graph_context.html#a70f5d15c9cd808c74abd1d392e7dad5a", null ],
     [ "moveNodeAction", "classhal_1_1_graph_context.html#a523cca126fa995096cc1d57fc08fa144", null ],
     [ "name", "classhal_1_1_graph_context.html#aea2f27a5a0c94855351e9f7031eb6694", null ],
