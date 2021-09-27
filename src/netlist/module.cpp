@@ -524,6 +524,18 @@ namespace hal
             return false;
         }
 
+        if (port_name.empty())
+        {
+            log_error("module",
+                      "trying to assign empty input port name for net '{}' with ID {} to module '{}' with ID {} in netlist with ID {}.",
+                      input_net->get_name(),
+                      input_net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return false;
+        }
+
         if (m_input_port_names.find(port_name) != m_input_port_names.end())
         {
             log_debug("module",
@@ -567,6 +579,18 @@ namespace hal
         if (output_net == nullptr)
         {
             log_error("module", "nullptr given as output net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
+            return false;
+        }
+
+        if (port_name.empty())
+        {
+            log_error("module",
+                      "trying to assign empty output port name for net '{}' with ID {} to module '{}' with ID {} in netlist with ID {}.",
+                      output_net->get_name(),
+                      output_net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
             return false;
         }
 
