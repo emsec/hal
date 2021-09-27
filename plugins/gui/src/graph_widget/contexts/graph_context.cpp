@@ -676,7 +676,7 @@ namespace hal
             }
         }
 
-        scheduleSceneUpdate();
+        //scheduleSceneUpdate();
         setDirty(false);
         return true;
     }
