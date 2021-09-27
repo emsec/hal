@@ -21,28 +21,34 @@ namespace hal
     GateInfoTable::GateInfoTable(QWidget* parent) : GeneralTableWidget(parent)
     {
         mNameEntryContextMenu = new QMenu();
+        mNameEntryContextMenu->addAction("Extract gate name as plain text", std::bind(&GateInfoTable::copyName, this));
+        mNameEntryContextMenu->addSection("Misc");
         mNameEntryContextMenu->addAction("Change gate name", std::bind(&GateInfoTable::changeName, this));
-        mNameEntryContextMenu->addAction("Copy gate name to clipboard", std::bind(&GateInfoTable::copyName, this));
-        mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Copy python code that gets the gate's name to clipboard", std::bind(&GateInfoTable::pyCopyName, this));
+        mNameEntryContextMenu->addSection("Python");
+        mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract gate name as python code", std::bind(&GateInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
-        mIdEntryContextMenu->addAction("Copy gate id to clipboard", std::bind(&GateInfoTable::copyId, this));
+        mIdEntryContextMenu->addAction("Extract gate id as plain text", std::bind(&GateInfoTable::copyId, this));
 
         mTypeEntryContextMenu = new QMenu();
-        mTypeEntryContextMenu->addAction("Copy gate type to clipboard", std::bind(&GateInfoTable::copyType, this));
-        mTypeEntryContextMenu->addAction(QIcon(":/icons/python"), "Copy python code that gets the gate's type to clipboard", std::bind(&GateInfoTable::pyCopyType, this));
+        mTypeEntryContextMenu->addAction("Extract gate type as plain text", std::bind(&GateInfoTable::copyType, this));
+        mTypeEntryContextMenu->addSection("Python");
+        mTypeEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract gate type as python code", std::bind(&GateInfoTable::pyCopyType, this));
 
         mPropertiesEntryContextMenu = new QMenu();
-        mPropertiesEntryContextMenu->addAction("Copy gate type properties to clipboard", std::bind(&GateInfoTable::copyproperties, this));
-        mPropertiesEntryContextMenu->addAction(QIcon(":/icons/python"), "Copy python code that gets the gate's type properties to clipboard", std::bind(&GateInfoTable::pyCopyproperties, this));
+        mPropertiesEntryContextMenu->addAction("Extract gate type properties as plaintaxt", std::bind(&GateInfoTable::copyproperties, this));
+        mPropertiesEntryContextMenu->addSection("Python");
+        mPropertiesEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract gate type properties as phython code", std::bind(&GateInfoTable::pyCopyproperties, this));
 
         mLocationEntryContextMenu = new QMenu();
-        mLocationEntryContextMenu->addAction("Copy gate location to clipboard", std::bind(&GateInfoTable::copyLocation, this));
-        mLocationEntryContextMenu->addAction(QIcon(":/icons/python"), "Copy python code that gets the gate's location to clipboard", std::bind(&GateInfoTable::pyCopyLocation, this));
+        mLocationEntryContextMenu->addAction("Extract gate location as plain text", std::bind(&GateInfoTable::copyLocation, this));
+        mLocationEntryContextMenu->addSection("Phyton");
+        mLocationEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract gate location as phyton code", std::bind(&GateInfoTable::pyCopyLocation, this));
 
         mModuleEntryContextMenu = new QMenu();
-        mModuleEntryContextMenu->addAction("Copy parent module name to clipboard", std::bind(&GateInfoTable::copyModule, this));
-        mModuleEntryContextMenu->addAction(QIcon(":/icons/python"), "Copy python code that gets the gate's parent module to clipboard", std::bind(&GateInfoTable::pyCopyModule, this));
+        mModuleEntryContextMenu->addAction("Extract parent module name as plain text", std::bind(&GateInfoTable::copyModule, this));
+        mModuleEntryContextMenu->addSection("Python");
+        mModuleEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract parent module name as phyton text", std::bind(&GateInfoTable::pyCopyModule, this));
 
         mModuleDoubleClickedAction = std::bind(&GateInfoTable::navModule, this);
 
@@ -194,7 +200,7 @@ namespace hal
 
     void GateInfoTable::copyModule() const
     {
-        copyToClipboard(parentModule());
+        copyToClipboard(parentModule().replace(QRegularExpression("\\[Id:\\d*]"), ""));
     }
 
     void GateInfoTable::pyCopyModule() const

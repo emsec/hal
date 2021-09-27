@@ -11,7 +11,7 @@ namespace hal
     {
         setColumnCount(2);
         setSelectionBehavior(QAbstractItemView::SelectRows);
-        setSelectionMode(QAbstractItemView::SingleSelection);
+        setSelectionMode(QAbstractItemView::NoSelection);
         setEditTriggers(QAbstractItemView::NoEditTriggers);
 
         horizontalHeader()->hide();
