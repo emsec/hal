@@ -30,11 +30,11 @@ var classhal_1_1_module =
     [ "operator==", "classhal_1_1_module.html#a3357e372a3b5193f519e951af42e0713", null ],
     [ "remove_gate", "classhal_1_1_module.html#a220173f927815a8acc900856bfe6735b", null ],
     [ "set_cache_dirty", "classhal_1_1_module.html#a56b137d16d221ced5cd653149afa870c", null ],
-    [ "set_input_port_name", "classhal_1_1_module.html#a6503f5b2ad22fdc5d235ab4f5bcf24ec", null ],
+    [ "set_input_port_name", "classhal_1_1_module.html#a370196feae56179863816e89fbb5ceb9", null ],
     [ "set_name", "classhal_1_1_module.html#a00c72047157e9a34c9706d2685a90a13", null ],
     [ "set_next_input_port_id", "classhal_1_1_module.html#a2197a122a072e06090271685757c1ac3", null ],
     [ "set_next_output_port_id", "classhal_1_1_module.html#ab96ea1e20b3cd624a024d4c66b288d7e", null ],
-    [ "set_output_port_name", "classhal_1_1_module.html#a85f8916ad7d510b04ee4c81f66303f91", null ],
+    [ "set_output_port_name", "classhal_1_1_module.html#ac075d5707a314cf3a25d5de6992f8946", null ],
     [ "set_parent_module", "classhal_1_1_module.html#a2110d4088efee9b9313fce0171d9bc40", null ],
     [ "set_type", "classhal_1_1_module.html#a9bcc555241bfad8b6abccaecb2f021ce", null ],
     [ "NetlistInternalManager", "classhal_1_1_module.html#a71851ef81c1a491be6395f4c883218de", null ]

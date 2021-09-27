@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v3.2.6-536-g1d2a7e9b8 documentation</title>
+  <title>Module &mdash; hal_py v3.2.6-537-ga500fcea9 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.6-536-g1d2a7e9b8
+                v3.2.6-537-ga500fcea9
               </div>
             
           
@@ -949,16 +949,22 @@ May overwrite an existing entry.</p>
 
 <dl class="method">
 <dt id="hal_py.Module.set_input_port_name">
-<code class="descname">set_input_port_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>input_net: hal_py.Net</em>, <em>port_name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Module.set_input_port_name" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_input_port_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>input_net: hal_py.Net</em>, <em>port_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_input_port_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the name of the port corresponding to the specified input net.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>input_net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The input net.</li>
 <li><strong>port_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The input port name.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -1009,16 +1015,22 @@ May overwrite an existing entry.</p>
 
 <dl class="method">
 <dt id="hal_py.Module.set_output_port_name">
-<code class="descname">set_output_port_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>output_net: hal_py.Net</em>, <em>port_name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Module.set_output_port_name" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_output_port_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>output_net: hal_py.Net</em>, <em>port_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_output_port_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the name of the port corresponding to the specified output net.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>output_net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The output net.</li>
 <li><strong>port_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The output port name.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
 </td>
 </tr>
 </tbody>
