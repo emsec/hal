@@ -52,9 +52,6 @@ namespace hal
             delete mLayouter;
 
         mLayouter = layouter;
-
-        connect(layouter, qOverload<int>(&GraphLayouter::statusUpdate), this, qOverload<int>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
-        connect(layouter, qOverload<const QString&>(&GraphLayouter::statusUpdate), this, qOverload<const QString&>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
     }
 
     void GraphContext::setShader(GraphShader* shader)
@@ -227,6 +224,7 @@ namespace hal
             assert(!gates.empty() || !modules.empty());
 
             beginChange();
+            mLayouter->prepareRollback();
             remove({id}, {});
             add(modules, gates, plc);
             endChange();
@@ -434,16 +432,12 @@ namespace hal
         return mLayouter;
     }*/
 
-    void GraphContext::handleLayouterUpdate(const int percent)
+    void GraphContext::layoutProgress(int percent) const
     {
+        QString text;
+        if (!percent) text = QString("Layout %1[%2]").arg(mName).arg(mId);
         for (GraphContextSubscriber* s : mSubscribers)
-            s->handleStatusUpdate(percent);
-    }
-
-    void GraphContext::handleLayouterUpdate(const QString& message)
-    {
-        for (GraphContextSubscriber* s : mSubscribers)
-            s->handleStatusUpdate(message);
+            s->showProgress(percent, text);
     }
 
     void GraphContext::storeViewport()
@@ -593,6 +587,25 @@ namespace hal
         handleLayouterFinished();
     }
 
+    void GraphContext::abortLayout()
+    {
+        if (!mSceneUpdateInProgress) return;
+        if (!mLayouter->rollback()) return;
+        mGates.clear();
+        mModules.clear();
+        for (const Node& nd : mLayouter->nodeToPositionMap().keys())
+        {
+            switch (nd.type())
+            {
+            case Node::Module: mModules.insert(nd.id()); break;
+            case Node::Gate:   mGates.insert(nd.id()); break;
+            default: break;
+            }
+        }
+        mLayouter->layout();
+        handleLayouterFinished();
+    }
+
     void GraphContext::handleStyleChanged(int istyle)
     {
         Q_UNUSED(istyle);
@@ -663,7 +676,7 @@ namespace hal
             }
         }
 
-        scheduleSceneUpdate();
+        //scheduleSceneUpdate();
         setDirty(false);
         return true;
     }

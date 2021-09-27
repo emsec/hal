@@ -54,22 +54,15 @@ namespace hal
         virtual void handleContextAboutToBeDeleted() = 0;
 
         /**
-         * Called whenever the loading progress of the layouter of the subscribed context has changed.
-         *
-         * @param percent - The progress in percent (in range 0-100(?))
-         */
-        virtual void handleStatusUpdate(const int percent) = 0;
-
-        /**
          * Subscriber should store the scene mapping to viewport so it can be restored upon handleSceneAvailable
          */
         virtual void storeViewport() = 0;
 
         /**
-         * Called whenever the loading progress message of the layouter of the subscribed context has changed.
-         *
-         * @param message - The new message
+         * Show progress in overlay
+         * @param percent percent done
          */
-        virtual void handleStatusUpdate(const QString& message) = 0;
+        virtual void showProgress(int percent, const QString& text=QString()) = 0;
+
     };
 }

@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * **WARNING:** this release partially breaks the `GateType` API, please make sure to adjust your code accordingly.
+* progress bar during layout
+  * abort layout button
 * added user action system to enable recording and reverting actions within the GUI
   * moved most GUI actions to the new user action system, including interactions with the graph view and view management
   * user actions can be recorded and exported as a macro file allowing easier debugging and crash reporting
