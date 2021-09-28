@@ -106,7 +106,13 @@ namespace hal
          */
         bool contextWithNameExists(const QString& name) const;
 
-        //void handle_module_created(Module* m) const;
+        /**
+         * Handler to be called after a module has been created. Used to apply the changes in the affected contexts.<br>
+         *
+         * @param m - The module that has been created
+         */
+        void handleModuleCreated(Module* m) const;
+
         /**
          * Handler to be called after a module has been removed. Used to apply the changes in the affected contexts.<br>
          * The module is already removed from the netlist at this point. However the module isn't deleted yet (not <i>nullptr</i>).
@@ -189,6 +195,14 @@ namespace hal
          * @param net - The net that is connected to the renamed output port
          */
         void handleModuleOutputPortNameChanged(Module* m, const u32 net);
+
+        /**
+         * Handler to be called after a gate has been removed. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param g - The removed gate
+         */
+        void handleGateRemoved(Gate* g) const;
 
         /**
          * Handler to be called after a gate has been renamed. <br>

@@ -109,7 +109,7 @@ namespace hal
 
         mClkNet = nullptr;
         mInputNets = mSimulator->get_input_nets();
-        for (Net* n : mInputNets)
+        for (const Net* n : mInputNets)
         {
             WaveData* wd = new WaveData(n);
             wd->insert(0,0);
@@ -171,23 +171,23 @@ namespace hal
             qDebug() << "wrong state" << mState;
             return;
         }
-        QMultiMap<int,QPair<Net*,SignalValue>> inputMap;
-        for (Net* n : mSimulator->get_input_nets())
+        QMultiMap<int,QPair<const Net*, BooleanFunction::Value>> inputMap;
+        for (const Net* n : mSimulator->get_input_nets())
         {
             if (n==mClkNet) continue;
             const WaveData* wd = mWaveWidget->waveDataByNetId(n->get_id());
             for (auto it=wd->constBegin(); it != wd->constEnd(); ++it)
             {
-                SignalValue sv;
+                BooleanFunction::Value sv;
                 switch (it.value())
                 {
-                case -2: sv = SignalValue::Z; break;
-                case -1: sv = SignalValue::X; break;
-                case  0: sv = SignalValue::ZERO; break;
-                case  1: sv = SignalValue::ONE; break;
+                case -2: sv = BooleanFunction::Value::Z; break;
+                case -1: sv = BooleanFunction::Value::X; break;
+                case  0: sv = BooleanFunction::Value::ZERO; break;
+                case  1: sv = BooleanFunction::Value::ONE; break;
                 default: continue;
                 }
-                inputMap.insertMulti(it.key(),QPair<Net*,SignalValue>(n,sv));
+                inputMap.insertMulti(it.key(),QPair<const Net*,BooleanFunction::Value>(n,sv));
             }
         }
         int t=0;
@@ -236,7 +236,7 @@ namespace hal
         setState(SimulationInputGenerate);
     }
 
-    void VcdViewer::setClock(Net *n, int period, int start)
+    void VcdViewer::setClock(const Net *n, int period, int start)
     {
         mClkNet = n;
         mSimulator->add_clock_period(mClkNet,period,start==0);

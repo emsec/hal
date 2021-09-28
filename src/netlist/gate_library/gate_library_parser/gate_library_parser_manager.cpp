@@ -27,11 +27,11 @@ namespace hal
 
                 if (auto it = m_extension_to_parser.find(extension); it != m_extension_to_parser.end())
                 {
-                    log_info("hdl_parser", "selected gate library parser '{}'.", it->second.first);
+                    log_info("gate_library_parser", "selected gate library parser '{}'.", it->second.first);
                     return it->second.second;
                 }
 
-                log_error("hdl_parser", "no gate library parser registered for file extension '{}'.", extension);
+                log_error("gate_library_parser", "no gate library parser registered for file extension '{}'.", extension);
                 return ParserFactory();
             }
         }    // namespace

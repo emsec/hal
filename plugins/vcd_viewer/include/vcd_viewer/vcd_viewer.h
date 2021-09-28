@@ -89,13 +89,13 @@ namespace hal
 
     private:
         void initSimulator();
-        void setClock(Net*n, int period, int start=0);
+        void setClock(const Net*n, int period, int start=0);
         void setState(SimulationState stat);
 
         SimulationState mState;
         std::shared_ptr<NetlistSimulator> mSimulator;
-        std::vector<Net*> mInputNets;
-        Net* mClkNet;
+        std::vector<const Net*> mInputNets;
+        const Net* mClkNet;
         std::vector<Gate*> mSimulateGates;
         int mDuration;
 

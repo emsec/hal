@@ -114,13 +114,30 @@ namespace hal
                 Set the signal for a specific wire to control input signals between simulation cycles.
             
                 :param hal_py.Net net: The net to set a signal value for.
-                :param netlist_simulator.SignalValue value: The value to set.
+                :param hal_py.BooleanFunction.Value value: The value to set.
+            )")
+
+            .def("initialize_sequential_gates", py::overload_cast<const std::function<bool(const Gate*)>&>(&NetlistSimulator::initialize_sequential_gates), py::arg("filter") = nullptr, R"(
+                Configure the sequential gates matching the (optional) user-defined filter condition with initialization data specified within the netlist.
+                Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
+                This function can only be called before the simulation has started.
+         
+                :param lambda filter: The optional filter to be applied before initialization.
+            )")
+
+            .def("initialize_sequential_gates", py::overload_cast<BooleanFunction::Value, const std::function<bool(const Gate*)>&>(&NetlistSimulator::initialize_sequential_gates), py::arg("value"), py::arg("filter") = nullptr, R"(
+                Configure the sequential gates matching the (optional) user-defined filter condition with the specified value.
+                Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
+                This function can only be called before the simulation has started.
+         
+                :param hal_py.BooleanFunction.Value value: The value to initialize the selected gates with.
+                :param lambda filter: The optional filter to be applied before initialization.
             )")
 
             .def("load_initial_values", &NetlistSimulator::load_initial_values, py::arg("value"), R"(
                 Load the specified initial value into the current state of all sequential elements.
 
-                :param netlist_simulator.SignalValue value: The initial value to load.
+                :param hal_py.BooleanFunction.Value value: The initial value to load.
             )")
 
             .def("load_initial_values_from_netlist", &NetlistSimulator::load_initial_values_from_netlist, R"(
@@ -128,8 +145,14 @@ namespace hal
                 This is especially relevant for FPGA netlists, since these may provide initial values to load on startup.
             )")
 
+            .def("initialize", &NetlistSimulator::initialize, R"(
+                Initialize the simulation.
+                No additional gates or clocks can be added after this point.
+            )")
+
             .def("simulate", &NetlistSimulator::simulate, py::arg("picoseconds"), R"(
                 Simulate for a specific period, advancing the internal state.
+                Automatically initializes the simulation if 'initialize' has not yet been called.
                 Use \p set_input to control specific signals.
          
                 :param int picoseconds: The duration to simulate.
@@ -189,7 +212,7 @@ namespace hal
                 :param hal_py.Net net: The net to inspect.
                 :param int time: The time in picoseconds.
                 :returns: The net's signal value.
-                :rtype: netlist_simulator.SignalValue
+                :rtype: hal_py.BooleanFunction.Value
             )")
 
             .def("add_event", &Simulation::add_event, py::arg("event"), R"(
@@ -204,13 +227,6 @@ namespace hal
                 :returns: A map from net to associated events for that net sorted by time.
             )");
 
-        py::enum_<SignalValue>(m, "SignalValue", R"(Represents the logic value that a signal can take.)")
-            .value("ZERO", SignalValue::ZERO, R"(Represents a logical 0.)")
-            .value("ONE", SignalValue::ONE, R"(Represents a logical 1.)")
-            .value("X", SignalValue::X, R"(Represents an undefined value.)")
-            .value("Z", SignalValue::Z, R"(Represents high impedance (currently not supported by the simulator).)")
-            .export_values();
-
         py::class_<Event>(m, "Event")
             .def(py::init<>(), R"(Construct a new event.)")
 
@@ -223,7 +239,7 @@ namespace hal
             .def_readwrite("new_value", &Event::new_value, R"(
                 The new value caused by the event.
 
-                :type: netlist_simulator.SignalValue
+                :type: hal_py.BooleanFunction.Value
             )")
 
             .def_readwrite("time", &Event::time, R"(

@@ -78,15 +78,14 @@ namespace hal
          * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors
          * will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0
          * there is no limitation and the loop continues until no more predecessors/succesors are found.
-         *
          * If a filter function is given only gates matching the filter will be added to the result vector.
          * The result will not include the provided gate itself.
          *
          * @param gate[in] - The initial gate.
-         * @param get_successors[in] - If true successors are returned, predecessors otherwise.
+         * @param get_successors[in] - True to return successors, false for Predecessors.
          * @param depth[in] - Depth of recursion.
-         * @param filter[in] - Filter function.
-         * @return Vector of predecessor/successor gates found.
+         * @param filter[in] - User-defined filter function.
+         * @return Vector of predecessor/successor gates.
          */
         CORE_API std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
 
@@ -199,10 +198,10 @@ namespace hal
          * 
          * @param[in] gate - The gate.
          * @param[in] pins - The targeted pins.
-         * @param[in] is_inputs - True to look for fan-in nets, false for fan-out.
+         * @param[in] is_input - True to look for fan-in nets, false for fan-out.
          * @returns The set of nets connected to the pins.
          */
-        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_inputs);
+        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_input);
 
         /**
          * Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
@@ -300,7 +299,7 @@ namespace hal
          *
          * @param[in] start_gate - The gate to start from.
          * @param[in] end_gate - The gate to connect to.
-         * @param[in] search_both_directions - Set to true to also test whether a shorter path from end to start exists.
+         * @param[in] search_both_directions - True to additionally check whether a shorter path from end to start exists, false otherwise.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
          */
         std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);

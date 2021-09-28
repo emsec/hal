@@ -158,6 +158,8 @@ namespace hal {
     {
         static ModuleSelectHistory* inst;
         ModuleSelectHistory() {;}
+
+        static const int sMaxEntries;
     public:
         static ModuleSelectHistory* instance();
         void add(u32 id);
@@ -184,7 +186,7 @@ namespace hal {
         void moduleSelected(u32 modId, bool doubleClick);
 
     private Q_SLOTS:
-        void handleCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
+        void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
         void handleDoubleClick(const QModelIndex& index);
     };
 }

@@ -22,7 +22,7 @@ namespace hal {
         void setStartvalue(int val);
         bool insertToggleTime(int t);
         QString textValue(const QMap<int,int>::const_iterator& it) const;
-        static WaveData* clockFactory(Net* n, int start, int period, int duration);
+        static WaveData* clockFactory(const Net* n, int start, int period, int duration);
         static WaveData* simulationResultFactory(Net* n, const NetlistSimulator* sim);
     };
 }

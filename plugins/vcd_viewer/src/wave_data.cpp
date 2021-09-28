@@ -1,7 +1,7 @@
 #include "vcd_viewer/wave_data.h"
 #include "netlist_simulator/netlist_simulator.h"
 #include "netlist_simulator/event.h"
-#include "netlist_simulator/signal_value.h"
+#include "hal_core/netlist/boolean_function.h"
 #include <math.h>
 #include <vector>
 
@@ -19,7 +19,7 @@ namespace hal {
                 .arg(n->get_id()))
     {;}
 
-    WaveData* WaveData::clockFactory(Net *n, int start, int period, int duration)
+    WaveData* WaveData::clockFactory(const Net *n, int start, int period, int duration)
     {
         WaveData* retval = new WaveData(n);
         int val = start;
@@ -41,10 +41,10 @@ namespace hal {
             int val = -1;
             switch (evt.new_value)
             {
-            case SignalValue::Z:    val = -2; break;
-            case SignalValue::X:    val = -1; break;
-            case SignalValue::ZERO: val =  0; break;
-            case SignalValue::ONE:  val =  1; break;
+            case BooleanFunction::Value::Z:    val = -2; break;
+            case BooleanFunction::Value::X:    val = -1; break;
+            case BooleanFunction::Value::ZERO: val =  0; break;
+            case BooleanFunction::Value::ONE:  val =  1; break;
             }
             retval->insert(evt.time,val);
         }

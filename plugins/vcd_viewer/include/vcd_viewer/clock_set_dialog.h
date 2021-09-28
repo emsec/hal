@@ -14,7 +14,7 @@ namespace hal {
     {
         Q_OBJECT
     public:
-        explicit ClockSetDialog(const std::vector<Net*>& inputs, QWidget *parent = nullptr);
+        explicit ClockSetDialog(const std::vector<const Net*>& inputs, QWidget *parent = nullptr);
 
         int netIndex() const { return mComboNet->currentIndex(); }
         int period() const { return mSpinPeriod->value(); }

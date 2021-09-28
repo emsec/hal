@@ -25,8 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/data_container.h"
-#include "hal_core/netlist/event_handler.h"
-
+#include "hal_core/netlist/event_system/event_handler.h"
 
 #include <functional>
 #include <map>

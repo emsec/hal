@@ -12,6 +12,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/utilities/log.h"
 
 #include <QDateTime>
 #include <QFile>
@@ -148,6 +149,16 @@ namespace hal
         return false;
     }
 
+    void GraphContextManager::handleModuleCreated(Module* m) const
+    {
+        for (GraphContext* context : mContextTableModel->list())
+            if (context->getSpecialUpdate())
+            {
+                context->add({m->get_id()}, {});
+                context->setSpecialUpdate(false);
+            }
+    }
+
     void GraphContextManager::handleModuleRemoved(Module* m)
     {
         for (GraphContext* context : mContextTableModel->list())
@@ -186,11 +197,41 @@ namespace hal
     void GraphContextManager::handleModuleSubmoduleAdded(Module* m, const u32 added_module) const
     {
 //        dump("ModuleSubmoduleAdded", m->get_id(), added_module);
+
+        QList<u32> module_ids = {};
+        Module* current_module = m;
+
+        do
+        {
+            module_ids.append(current_module->get_id());
+            current_module = current_module->get_parent_module();
+        }
+        while (current_module);
+
         for (GraphContext* context : mContextTableModel->list())
+        {
             if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}))
                 context->add({added_module}, {});
             else
                 context->testIfAffected(m->get_id(), &added_module, nullptr);
+
+            if (context->modules().contains(added_module))
+            {
+                QSet<u32> modules = context->modules();
+                modules.remove(added_module);
+
+                // modules    : all modules visible in graph context view except recently added
+                // module_ids : all anchestors of recently added module
+                // algorithm  : remove 'recently added' module from view if it was moved to
+                //              (child or grandchild of) another module visible in view
+                for (u32 id : module_ids)
+                    if (modules.contains(id))
+                    {
+                        context->remove({added_module},{});
+                        return;
+                    }
+            }
+        }
     }
 
     void GraphContextManager::handleModuleSubmoduleRemoved(Module* m, const u32 removed_module)
@@ -214,11 +255,37 @@ namespace hal
     void GraphContextManager::handleModuleGateAssigned(Module* m, const u32 inserted_gate) const
     {
 //        dump("ModuleGateAssigned", m->get_id(), inserted_gate);
+
+        QList<u32> module_ids = {};
+        Module* current_module = m;
+
+        do
+        {
+            module_ids.append(current_module->get_id());
+            current_module = current_module->get_parent_module();
+        }
+        while (current_module);
+
         for (GraphContext* context : mContextTableModel->list())
+        {
             if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
                 context->add({}, {inserted_gate});
             else
                 context->testIfAffected(m->get_id(), nullptr, &inserted_gate);
+
+            if (context->gates().contains(inserted_gate))
+            {
+                QSet<u32> modules = context->modules();
+
+                for (u32 id : module_ids)
+                    if (modules.contains(id))
+                    {
+                        context->remove({},{inserted_gate});
+                        return;
+                    }
+            }
+
+        }
     }
 
     void GraphContextManager::handleModuleGateRemoved(Module* m, const u32 removed_gate)
@@ -290,6 +357,13 @@ namespace hal
         for (GraphContext* context : mContextTableModel->list())
             if (context->modules().contains(m->get_id()))
                 context->scheduleSceneUpdate();
+    }
+
+    void GraphContextManager::handleGateRemoved(Gate* g) const
+    {
+        for (GraphContext* context : mContextTableModel->list())
+            if (context->gates().contains(g->get_id()))
+                context->remove({}, {g->get_id()});
     }
 
     void GraphContextManager::handleGateNameChanged(Gate* g) const
@@ -481,7 +555,14 @@ namespace hal
                 GraphContext* context = new GraphContext(viewId, viewName);
                 context->setLayouter(getDefaultLayouter(context));
                 context->setShader(getDefaultShader(context));
-                context->readFromFile(jsonView);
+                context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
+                connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
+
+                if (!context->readFromFile(jsonView))
+                {
+                    log_warning("gui", "failed to read view file {}.", (filename + "v").toStdString());
+                    return;
+                }
 
                 mContextTableModel->beginInsertContext(context);
                 mContextTableModel->addContext(context);

@@ -25,6 +25,8 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/utilities/token_stream.h"
@@ -103,10 +105,8 @@ namespace hal
             std::string next_state;
             std::string clear;
             std::string preset;
-            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::undef;
-            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::undef;
-            std::string data_category;
-            std::string data_identifier;
+            AsyncSetResetBehavior special_behavior_var1 = AsyncSetResetBehavior::undef;
+            AsyncSetResetBehavior special_behavior_var2 = AsyncSetResetBehavior::undef;
         };
 
         struct latch_group
@@ -117,8 +117,8 @@ namespace hal
             std::string data_in;
             std::string clear;
             std::string preset;
-            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::undef;
-            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::undef;
+            AsyncSetResetBehavior special_behavior_var1 = AsyncSetResetBehavior::undef;
+            AsyncSetResetBehavior special_behavior_var2 = AsyncSetResetBehavior::undef;
         };
 
         struct lut_group
@@ -135,13 +135,12 @@ namespace hal
             u32 line_number;
             std::string name;
             std::set<GateTypeProperty> properties;
-            ff_group ff;
-            latch_group latch;
-            lut_group lut;
+            std::optional<ff_group> ff;
+            std::optional<latch_group> latch;
+            std::optional<lut_group> lut;
             std::vector<pin_group> pins;
             std::map<std::string, bus_group> buses;
             std::set<std::string> pin_names;
-            std::map<std::string, std::string> special_functions;
         };
 
         std::unique_ptr<GateLibrary> m_gate_lib;
@@ -162,7 +161,6 @@ namespace hal
         std::optional<bus_group> parse_bus(TokenStream<std::string>& str, cell_group& cell);
         std::optional<ff_group> parse_ff(TokenStream<std::string>& str);
         std::optional<latch_group> parse_latch(TokenStream<std::string>& str);
-        std::optional<lut_group> parse_lut(TokenStream<std::string>& str);
         bool construct_gate_type(cell_group& cell);
 
         void remove_comments(std::string& line, bool& multi_line_comment);

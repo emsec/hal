@@ -341,8 +341,8 @@ namespace hal
         static QColor sGridBaseDotColor;
         static QColor sGridClusterDotColor;
 
-        using QGraphicsScene::addItem;
-        using QGraphicsScene::removeItem;
+ //       using QGraphicsScene::addItem;
+ //       using QGraphicsScene::removeItem;
         using QGraphicsScene::clear;
 
         void drawBackground(QPainter* painter, const QRectF& rect) override;
