@@ -18,7 +18,11 @@
 
 namespace hal {
     ModuleDialog::ModuleDialog(QWidget* parent)
-        : QDialog(parent), mSelectedId(0), mSearchbar(new Searchbar(this)), mNewModule(false)
+        : QDialog(parent),
+          mSelectedId(0),
+          mLastUsed(nullptr),
+          mSearchbar(new Searchbar(this)),
+          mNewModule(false)
     {
         setWindowTitle("Move to module …");
         QGridLayout* layout = new QGridLayout(this);
@@ -55,7 +59,7 @@ namespace hal {
             else
             {
                 delete mLastUsed;
-                mLastUsed = NULL;
+                mLastUsed = nullptr;
             }
 
         }

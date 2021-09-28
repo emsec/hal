@@ -17,6 +17,7 @@ namespace hal {
         : QDialog(parent),
           mSearchbar(new Searchbar(this)),
           mGroupingTableView(new GroupingTableView(false, this)),
+          mLastUsed(nullptr),
           mTabWidget(new QTabWidget(this)),
           mNewGrouping(false)
     {
@@ -49,7 +50,7 @@ namespace hal {
             else
             {
                 delete mLastUsed;
-                mLastUsed = NULL;
+                mLastUsed = nullptr;
             }
         }
 
