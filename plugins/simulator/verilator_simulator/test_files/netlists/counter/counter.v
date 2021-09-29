@@ -17,10 +17,11 @@ wire Output_OBUF_2;
 wire Output_OBUF_1;
 wire Output_OBUF_3;
 wire Output_OBUF_0;
-wire Output_OBUF_3;
+wire temp_3_i_1_n_0;
 wire Clock_enable_B_IBUF;
 wire Clock_IBUF_BUFG;
 wire Clock_IBUF;
+
 
 LUT4 #(
          .INIT(15'h5A52)
