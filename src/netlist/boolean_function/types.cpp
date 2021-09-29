@@ -82,7 +82,8 @@ namespace hal
             // Z3 grammar to parse a model for a satisfiable formula.
             //
             // Example: "((define-fun A () (_ BitVec 1) #b0))"
-            const auto Z3_MODEL_GRAMMAR = x3::lit("(") >> (+SignalAssignmentRule) >> x3::lit(")");
+            const auto Z3_MODEL_GRAMMAR = (x3::lit("(") >> (+SignalAssignmentRule) >> x3::lit(")"))
+                | +(x3::lit("(model") >> +SignalAssignmentRule >> x3::lit(")"));
         }    // namespace ModelParser
 
         QueryConfig& QueryConfig::with_solver(SolverType _solver)

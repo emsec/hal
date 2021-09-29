@@ -18,7 +18,11 @@
 
 namespace hal {
     ModuleDialog::ModuleDialog(QWidget* parent)
-        : QDialog(parent), mSelectedId(0), mSearchbar(new Searchbar(this)), mNewModule(false)
+        : QDialog(parent),
+          mSelectedId(0),
+          mLastUsed(nullptr),
+          mSearchbar(new Searchbar(this)),
+          mNewModule(false)
     {
         setWindowTitle("Move to module …");
         QGridLayout* layout = new QGridLayout(this);
@@ -53,7 +57,11 @@ namespace hal {
                 mTabWidget->addTab(mLastUsed, "Recent selection");
             }
             else
+            {
                 delete mLastUsed;
+                mLastUsed = nullptr;
+            }
+
         }
 
         layout->addWidget(mTabWidget, 2, 0, 1, 3);
@@ -173,8 +181,7 @@ namespace hal {
         mTreeView->clearSelection();
         mTableView->clearSelection();
         mSearchbar->clear();
-        if (!ModuleSelectHistory::instance()->isEmpty())
-            mLastUsed->clearSelection();
+        if (mLastUsed) mLastUsed->clearSelection();
     }
 
     void ModuleDialog::keybindToggleSearchbar(const QKeySequence& seq)
@@ -186,7 +193,7 @@ namespace hal {
     {
         mModuleTreeProxyModel->setFilterRegularExpression(text);
         static_cast<ModuleSelectProxy*>(mTableView->model())->setFilterRegularExpression(text);
-        if (mTabWidget->widget(2))
+        if (mLastUsed)
             static_cast<ModuleSelectProxy*>(mLastUsed->model())->setFilterRegularExpression(text);
         QString output = "navigation regular expression '" + text + "' entered.";
         log_info("user", output.toStdString());
