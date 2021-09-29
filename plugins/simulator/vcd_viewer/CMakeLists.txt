@@ -1,5 +1,5 @@
-option(PL_VCD_VIEWER "PL_VCD_VIEWER" ON)
-if(PL_VCD_VIEWER OR PL_SIMULATOR OR BUILD_ALL_PLUGINS)
+option(PL_VCD_VIEWER "PL_VCD_VIEWER" OFF)
+if(PL_VCD_VIEWER)
 
     find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
@@ -9,9 +9,10 @@ if(PL_VCD_VIEWER OR PL_SIMULATOR OR BUILD_ALL_PLUGINS)
         message(STATUS "Qt5Core not found for vcd_viewer")
     endif(Qt5Core_FOUND)
 
+
     file(GLOB_RECURSE VCD_VIEWER_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
     file(GLOB_RECURSE VCD_VIEWER_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-    file(GLOB_RECURSE VCD_VIEWER_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
+    #file(GLOB_RECURSE VCD_VIEWER_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
     qt5_wrap_cpp(MOC_HDR ${VCD_VIEWER_INC})
 
     # Create the '__init__.py' file in the hal_plugins directory as there might not be a any plugins available yet.
