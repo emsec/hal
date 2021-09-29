@@ -752,7 +752,9 @@ namespace hal {
         TEST_START
             // Add some modules to the example netlist
             auto nl = test_utils::create_example_netlist();
+            ASSERT_NE(nl, nullptr);
             Module* m_0 = nl->create_module("mod_0", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 0), nl->get_gate_by_id(MIN_GATE_ID + 3)});
+            ASSERT_NE(m_0, nullptr);
             {
                 // Get the input port name of a Net, which port name was not specified yet
                 EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)), "I(0)");
@@ -763,21 +765,22 @@ namespace hal {
             }
             {
                 // Set and get an input port name
-                m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3");
+                EXPECT_TRUE(m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3"));
                 EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3");
                 EXPECT_EQ(m_0->get_input_port_net("port_name_net_1_3"), nl->get_net_by_id(MIN_NET_ID + 13));
             }
             {
                 // Set and get an output port name
-                m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "port_name_net_0_4_5");
+                EXPECT_TRUE(m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "port_name_net_0_4_5"));
                 EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045)), "port_name_net_0_4_5");
                 EXPECT_EQ(m_0->get_output_port_net("port_name_net_0_4_5"), nl->get_net_by_id(MIN_NET_ID + 045));
             }
             // Create a new Module with more modules (with 2 input and ouput nets)
             Module* m_1 = nl->create_module("mod_1", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 0), nl->get_gate_by_id(MIN_GATE_ID + 3), nl->get_gate_by_id(MIN_GATE_ID + 7)});
+            ASSERT_NE(m_1, nullptr);
             // Specify exactly one input and output port name
-            m_1->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3");
-            m_1->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "port_name_net_0_4_5");
+            EXPECT_TRUE(m_1->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3"));
+            EXPECT_TRUE(m_1->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "port_name_net_0_4_5"));
 
             {
                 // Get all input port names
@@ -785,6 +788,7 @@ namespace hal {
                     {nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3"},
                     {nl->get_net_by_id(MIN_NET_ID + 20), "I(0)"}
                 };
+                ASSERT_EQ(exp_input_port_names.size(), 2);
                 EXPECT_EQ(m_1->get_input_port_names(), exp_input_port_names);
             }
             {
@@ -793,21 +797,24 @@ namespace hal {
                     {nl->get_net_by_id(MIN_NET_ID + 045), "port_name_net_0_4_5"},
                     {nl->get_net_by_id(MIN_NET_ID + 78), "O(0)"}
                 };
+                ASSERT_EQ(exp_output_port_names.size(), 2);
                 EXPECT_EQ(m_1->get_output_port_names(), exp_output_port_names);
             }
             // Create a new Module with more modules (with 2 input and ouput nets)
             Module* m_2 = nl->create_module("mod_2", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 3)});
+            ASSERT_NE(m_2, nullptr);
             // Add an input and an output port name
-            m_2->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3");
-            m_2->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 30), "port_name_net_3_0");
+            EXPECT_TRUE(m_2->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3"));
+            EXPECT_TRUE(m_2->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 30), "port_name_net_3_0"));
             // Add additional gates to the Module so that the port name nets are no longer input/output nets of the Module
-            m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 1));
-            m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0));
+            ASSERT_TRUE(m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 1)));
+            ASSERT_TRUE(m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0)));
             {
                 // Get all input port names. The old ports shouldn't be contained.
                 std::map<Net*, std::string> exp_input_port_names = {
                     {nl->get_net_by_id(MIN_NET_ID + 20), "I(0)"}
                 };
+                ASSERT_EQ(exp_input_port_names.size(), 1);
                 EXPECT_EQ(m_2->get_input_port_names(), exp_input_port_names);
             }
             {
@@ -815,6 +822,7 @@ namespace hal {
                 std::map<Net*, std::string> exp_output_port_names = {
                     {nl->get_net_by_id(MIN_NET_ID + 045), "O(0)"}
                 };
+                ASSERT_EQ(exp_output_port_names.size(), 1);
                 EXPECT_EQ(m_2->get_output_port_names(), exp_output_port_names);
             }
 
@@ -822,22 +830,34 @@ namespace hal {
             {
                 // Set the input port name of a Net that is no input Net of the Module
                 NO_COUT_TEST_BLOCK;
-                m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 78), "port_name");
+                EXPECT_FALSE(m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 78), "port_name"));
                 EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 78)), "");
                 EXPECT_EQ(m_0->get_input_port_net("port_name"), nullptr);
             }
             {
+                // set empty input port name
+                NO_COUT_TEST_BLOCK;
+                EXPECT_FALSE(m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), ""));
+                EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)), "");
+            }
+            {
                 // Set the output port name of a Net, that is no input Net of the Module
                 NO_COUT_TEST_BLOCK;
-                m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 78), "port_name");
+                EXPECT_FALSE(m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 78), "port_name"));
                 EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID + 78)), "");
                 EXPECT_EQ(m_0->get_output_port_net("port_name"), nullptr);
             }
             {
+                // set empty output port name
+                NO_COUT_TEST_BLOCK;
+                EXPECT_FALSE(m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 45), ""));
+                EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID + 45)), "");
+            }
+            {
                 // Pass a nullptr
                 NO_COUT_TEST_BLOCK;
-                m_0->set_input_port_name(nullptr, "port_name");
-                m_0->set_output_port_name(nullptr, "port_name");
+                EXPECT_FALSE(m_0->set_input_port_name(nullptr, "port_name"));
+                EXPECT_FALSE(m_0->set_output_port_name(nullptr, "port_name"));
                 EXPECT_EQ(m_0->get_input_port_name(nullptr), "");
                 EXPECT_EQ(m_0->get_output_port_name(nullptr), "");
             }

@@ -186,6 +186,12 @@ namespace hal
          */
         void storeViewport();
 
+        /**
+         * Called by layouter to signal progress
+         * @param percent
+         */
+        void layoutProgress(int percent) const;
+
 	void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
 
         /**
@@ -365,9 +371,10 @@ namespace hal
     Q_SIGNALS:
         void dataChanged();
 
+    public Q_SLOTS:
+        void abortLayout();
+
     private Q_SLOTS:
-        void handleLayouterUpdate(const int percent);
-        void handleLayouterUpdate(const QString& message);
         void handleLayouterFinished();
         void handleStyleChanged(int istyle);
 

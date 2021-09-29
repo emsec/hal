@@ -289,15 +289,17 @@ namespace hal
         qreal gridYposition(int iy) const;
 
         const NodeBoxes& boxes() const { return mBoxes; }
-    Q_SIGNALS:
-        void statusUpdate(const int percent);
-        void statusUpdate(const QString& message);
+
+        void prepareRollback();
+        bool canRollback() const;
+        bool rollback();
 
     protected:
         GraphicsScene* mScene;
         const GraphContext* const mContext;
         QMap<Node, QPoint> mNodeToPositionMap;
         QMap<QPoint, Node> mPositionToNodeMap;
+        QMap<Node, QPoint> mNodeToPositionRollback;
 
     private:
         void clearLayoutData();
@@ -412,6 +414,7 @@ namespace hal
         qreal mMaxNodeHeight;
 
         bool mDone;
+        int mRollbackStatus;
 
         QRect mNodeBoundingBox;
         NetLayoutConnectionMetric mConnectionMetric;

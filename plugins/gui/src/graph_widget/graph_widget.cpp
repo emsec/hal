@@ -10,6 +10,7 @@
 #include "gui/spinner_widget/spinner_widget.h"
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
+#include "gui/graph_widget/progress_bar.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 #include "gui/module_widget/module_widget.h"
@@ -36,6 +37,8 @@
 #include <QVBoxLayout>
 #include <QVariantAnimation>
 #include <QGraphicsRectItem>
+#include <QApplication>
+#include <QDebug>
 
 namespace hal
 {
@@ -50,7 +53,7 @@ namespace hal
 
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
         : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)),
-          mNavigationWidgetV3(new GraphNavigationWidget(false)),
+          mNavigationWidgetV3(new GraphNavigationWidget(false)), mProgressBar(nullptr),
           mSpinnerWidget(new SpinnerWidget(this)), mCurrentExpansion(0)
     {
         connect(mNavigationWidgetV3, &GraphNavigationWidget::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);
@@ -92,6 +95,12 @@ namespace hal
         connect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
 
         mOverlay->hide();
+        if (mProgressBar)
+        {
+            ProgressBar* removeBar = mProgressBar;
+            mProgressBar = nullptr;
+            removeBar->deleteLater();
+        }
         mSpinnerWidget->hide();
         mOverlay->setWidget(mNavigationWidgetV3);
 
@@ -101,6 +110,22 @@ namespace hal
         {
             mView->fitInView(restoreViewport(),Qt::KeepAspectRatio);
         }
+    }
+
+    void GraphWidget::showProgress(int percent, const QString &text)
+    {
+        if (!mProgressBar)
+        {
+            mProgressBar = new ProgressBar(mContext->getLayouter()->canRollback() ? mContext : nullptr);
+            mProgressBar->setMinimumSize(width()/2,height()/4);
+            mOverlay->setWidget(mProgressBar);
+            mProgressBar->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+            mOverlay->show();
+        }
+
+        if (!text.isEmpty()) mProgressBar->setText(text);
+        mProgressBar->setValue(percent);
+        qApp->processEvents();
     }
 
     void GraphWidget::handleSceneUnavailable()
@@ -119,16 +144,6 @@ namespace hal
     {
         mView->setScene(nullptr);
         mContext = nullptr;
-    }
-
-    void GraphWidget::handleStatusUpdate(const int percent)
-    {
-        Q_UNUSED(percent)
-    }
-
-    void GraphWidget::handleStatusUpdate(const QString& message)
-    {
-        Q_UNUSED(message)
     }
 
     void GraphWidget::storeViewport()

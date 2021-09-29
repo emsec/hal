@@ -206,8 +206,9 @@ namespace hal
          *
          * @param[in] input_net - The input net.
          * @param[in] port_name - The input port name.
+         * @returns True on success, false otherwise.
          */
-        void set_input_port_name(Net* input_net, const std::string& port_name);
+        bool set_input_port_name(Net* input_net, const std::string& port_name);
 
         /**
          * Get the name of the port corresponding to the specified input net.
@@ -251,8 +252,9 @@ namespace hal
          *
          * @param[in] output_net - The output net.
          * @param[in] port_name - The output port name.
+         * @returns True on success, false otherwise.
          */
-        void set_output_port_name(Net* output_net, const std::string& port_name);
+        bool set_output_port_name(Net* output_net, const std::string& port_name);
 
         /**
          * Get the name of the port corresponding to the specified output net.
