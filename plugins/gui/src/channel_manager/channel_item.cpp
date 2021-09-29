@@ -9,17 +9,6 @@ namespace hal
     {
     }
 
-    QVariant ChannelItem::data(int column) const
-    {
-        switch (column)
-        {
-            case 0:
-                return mName;
-            default:
-                return QVariant();
-        }
-    }
-
     const QString ChannelItem::name() const
     {
         return mName;

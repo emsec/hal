@@ -16,7 +16,6 @@
 
 #include <iostream>
 
-
 namespace hal
 {
     LoggerWidget::LoggerWidget(QWidget* parent) : ContentWidget("Log", parent)
@@ -38,7 +37,7 @@ namespace hal
 
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
 
-        ChannelModel* model = ChannelModel::get_instance();
+        ChannelModel* model = ChannelModel::instance();
         connect(model, SIGNAL(updated(spdlog::level::level_enum, std::string, std::string)), this, SLOT(handleChannelUpdated(spdlog::level::level_enum, std::string, std::string)));
     }
 
@@ -144,7 +143,7 @@ namespace hal
 
     void LoggerWidget::handleCurrentFilterChanged(int p)
     {
-        ChannelModel* model = ChannelModel::get_instance();
+        ChannelModel* model = ChannelModel::instance();
         if ((sender() == selector) || p == 0) {
             mCurrentChannelIndex = p;
         }
@@ -234,8 +233,10 @@ namespace hal
 
     void LoggerWidget::handleCustomChannel()
     {
-        std::string channel_name = (selector->currentText()).toStdString();
-        ChannelModel* model = ChannelModel::get_instance();
+        QString txt = selector->lineEdit()->text();
+        if (txt.isEmpty()) return;
+        std::string channel_name = txt.toStdString();
+        ChannelModel* model = ChannelModel::instance();
         std::cout << channel_name << std::endl;
         model->handleLogmanagerCallback(spdlog::level::level_enum::debug , channel_name, channel_name + " has manually been added to channellist");
     }

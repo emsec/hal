@@ -24,6 +24,9 @@
 #pragma once
 
 #include <QComboBox>
+
+class QKeyEvent;
+
 namespace hal
 {
     /**
@@ -34,6 +37,8 @@ namespace hal
      */
     class ChannelSelector : public QComboBox
     {
+        Q_OBJECT
+
     public:
         /**
          * The constructor. The channel model is set here.
@@ -41,5 +46,7 @@ namespace hal
          * @param parent - The parent of the widget.
          */
         ChannelSelector(QWidget* parent = nullptr);
+
+        void keyPressEvent(QKeyEvent *e) override;
     };
 }
