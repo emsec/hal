@@ -1,8 +1,10 @@
 #include "verilator_simulator/verilator_simulator.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/net.h"
@@ -35,7 +37,7 @@ std::vector<std::string> get_parameters_for_gate(const GateType* gt)
         u32 init_len = 1 << lut_size;
 
         std::stringstream parameter;
-        parameter << "parameter [" << init_len - 1  << ":0]"
+        parameter << "parameter [" << init_len - 1 << ":0]"
                   << " INIT = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ";";
 
         parameters.push_back(parameter.str());
@@ -110,10 +112,9 @@ std::string get_function_for_lut(const GateType* gt)
     }
 
     if (output_pins.size() > 1) {
-        log_error("verilator_simulator", "currently only supporting LUTs with one output, split them into two and set the INIT string correctly :) ! aborting...");
+        log_error("verilator_simulator", "unsupported reached: currently only supporting LUTs with one output, split them into two and set the INIT string correctly :) ! aborting...");
         return function.str();
     }
-
 
     function << "wire [" << lut_size - 1 << ":0] lut_lookup = {";
     for (const auto& input_pin : input_pins) {
@@ -143,6 +144,92 @@ std::string get_function_for_combinational_gate(const GateType* gt)
 std::string get_function_for_ff(const GateType* gt)
 {
     std::stringstream function;
+
+    std::vector<std::string> output_pins = gt->get_output_pins();
+    if (output_pins.size() > 1) {
+        log_error("verilator_simulator", "unsupported reached: currently only supporting FFs with one output! aborting...");
+        return std::string();
+    }
+
+    function << "reg Q_reg;" << std::endl;
+    function << "reg new_clock;" << std::endl;
+    function << std::endl;
+
+    function << "initial begin" << std::endl;
+    function << "\tQ_reg = INIT;" << std::endl;
+    function << "end" << std::endl;
+
+    function << std::endl;
+
+    std::unordered_set<std::string> clock_pins = gt->get_pins_of_type(hal::PinType::clock);
+    if (clock_pins.size() != 1) {
+        log_error("verilator_simulator", "unsupported reached: currently only supporting FFs with one clock! aborting...");
+        return std::string();
+    }
+
+    if (FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); }); ff_component != nullptr) {
+
+        auto clock_function = ff_component->get_clock_function();
+        if (clock_function.is_empty()) {
+            log_error("verilator_simulator", "gate: {} has no clock function in gate_library. you need to set one! aborting...", gt->get_name());
+            return std::string();
+        }
+
+        function << "assign new_clock = " << clock_function << ";" << std::endl;
+        function << "always @(posedge new_clock";
+
+        bool reset_async = false;
+        bool set_async = false;
+
+        if (!ff_component->get_async_reset_function().is_empty()) {
+            reset_async = true;
+            auto reset_function = ff_component->get_async_reset_function();
+            for (const auto& var : reset_function.get_variables()) {
+                function << " or posedge " << var;
+            }
+        }
+
+        if (!ff_component->get_async_set_function().is_empty()) {
+
+            if (!reset_async) {
+                log_error("verilator_simulator", "unsupported reached: FFs with both async reset and set not supported");
+                return std::string();
+            }
+
+            set_async = true;
+            auto set_function = ff_component->get_async_set_function();
+            for (const auto& var : set_function.get_variables()) {
+                function << " or posedge " << var;
+            }
+        }
+        function << ")" << std::endl;
+        function << "begin" << std::endl;
+
+        bool if_used = false;
+
+        // TODO: insert case when FF has both async RESET and SET
+        if (reset_async) {
+            function << (if_used ? "\telse if (" : "\tif (") << ff_component->get_async_reset_function().to_string() << ")" << std::endl;
+            function << "\t\tQ_reg <= 1'b0;" << std::endl;
+            if_used = true;
+        }
+
+        if (set_async) {
+            function << (if_used ? "\telse if (" : "\tif (") << ff_component->get_async_set_function().to_string() << ")" << std::endl;
+            function << "\t\tQ_reg <= 1'b1;" << std::endl;
+            if_used = true;
+        }
+
+        function << (if_used ? "\telse\n" : "");
+        function << (if_used ? "\t" : "") << "\tQ_reg <= " << ff_component->get_next_state_function() << ";" << std::endl;
+        function << "end" << std::endl;
+
+        function << "assign Q = Q_reg;" << std::endl;
+
+    } else {
+        log_error("verilator_simulator", "cannot get FFComponent, aborting...");
+        return function.str();
+    }
 
     return function.str();
 }
