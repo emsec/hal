@@ -206,11 +206,13 @@ std::string get_function_for_ff(const GateType* gt)
             // TODO: insert case when FF has both async RESET and SET
             log_error("verilator_simulator", "unsupported reached: FFs with both async reset and set not supported");
             return std::string();
-        } else if (reset_async) {
+        }
+        if (reset_async) {
             function << (if_used ? "\telse if (" : "\tif (") << ff_component->get_async_reset_function().to_string() << ")" << std::endl;
             function << "\t\tQ_reg <= 1'b0;" << std::endl;
             if_used = true;
-        } else if (set_async) {
+        }
+        if (set_async) {
             function << (if_used ? "\telse if (" : "\tif (") << ff_component->get_async_set_function().to_string() << ")" << std::endl;
             function << "\t\tQ_reg <= 1'b1;" << std::endl;
             if_used = true;
