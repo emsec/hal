@@ -3,6 +3,8 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
@@ -33,7 +35,7 @@ std::vector<std::string> get_parameters_for_gate(const GateType* gt)
         u32 init_len = 1 << lut_size;
 
         std::stringstream parameter;
-        parameter << "parameter [" << init_len << ":0]"
+        parameter << "parameter [" << init_len - 1  << ":0]"
                   << " INIT = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ";";
 
         parameters.push_back(parameter.str());
@@ -94,18 +96,24 @@ std::string get_function_for_lut(const GateType* gt)
     std::stringstream function;
     u32 lut_size = gt->get_input_pins().size();
     u32 init_len = 1 << lut_size;
-
     std::vector<std::string> input_pins = gt->get_input_pins();
-    std::reverse(input_pins.begin(), input_pins.end()); // needs to be reverted due to acces in INIT string
-
     std::vector<std::string> output_pins = gt->get_output_pins();
-    if (output_pins.size() > 1) {
-        log_error("verilator_simulator", "currently only supporting LUTs with one output, aborting");
+
+    // check if LUTComponent exists, if not abort
+    if (LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lut_component != nullptr) {
+        if (!lut_component->is_init_ascending()) {
+            std::reverse(input_pins.begin(), input_pins.end()); // needs to be reverted due to access in INIT string
+        }
+    } else {
+        log_error("verilator_simulator", "cannot get LUTComponent, aborting...");
         return function.str();
     }
 
-    function << "// lut size: " << lut_size << std::endl;
-    function << "// init len: " << init_len << std::endl;
+    if (output_pins.size() > 1) {
+        log_error("verilator_simulator", "currently only supporting LUTs with one output, split them into two and set the INIT string correctly :) ! aborting...");
+        return function.str();
+    }
+
 
     function << "wire [" << lut_size - 1 << ":0] lut_lookup = {";
     for (const auto& input_pin : input_pins) {
@@ -114,7 +122,7 @@ std::string get_function_for_lut(const GateType* gt)
     function.seekp(-2, function.cur); // remove the additional colon and space
     function << "};" << std::endl;
 
-    for (const auto& output_pin : output_pins){
+    for (const auto& output_pin : output_pins) {
         function << "assign " << output_pin << " = INIT[lut_lookup];" << std::endl;
     }
 
