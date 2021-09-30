@@ -209,7 +209,7 @@
         "data_identifier": "INIT",
         "next_state": "D | S",
         "clocked_on": "C",
-        "clear_on": "S"
+        "preset_on": "S"
       },
       "pins": [
         {
@@ -366,7 +366,7 @@
         "data_identifier": "INIT",
         "next_state": "D | S",
         "clocked_on": "E & C",
-        "clear_on": "S"
+        "preset_on": "S"
       },
       "pins": [
         {
@@ -578,7 +578,7 @@
         "data_identifier": "INIT",
         "next_state": "D | S",
         "clocked_on": "!C",
-        "clear_on": "S"
+        "preset_on": "S"
       },
       "pins": [
         {
@@ -730,7 +730,7 @@
         "data_identifier": "INIT",
         "next_state": "D | S",
         "clocked_on": "E & !C",
-        "clear_on": "S"
+        "preset_on": "S"
       },
       "pins": [
         {
