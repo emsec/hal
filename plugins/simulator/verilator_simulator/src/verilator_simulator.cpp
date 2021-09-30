@@ -152,7 +152,7 @@ std::string get_function_for_ff(const GateType* gt)
     }
 
     function << "reg Q_reg;" << std::endl;
-    function << "reg new_clock;" << std::endl;
+    function << "wire new_clock;" << std::endl;
     function << std::endl;
 
     function << "initial begin" << std::endl;
@@ -220,7 +220,18 @@ std::string get_function_for_ff(const GateType* gt)
         function << (if_used ? "\t" : "") << "\tQ_reg <= " << ff_component->get_next_state_function() << ";" << std::endl;
         function << "end" << std::endl;
 
-        function << "assign Q = Q_reg;" << std::endl;
+        for (const auto& output_pin : output_pins) {
+            function << "assign " << output_pin << " = ";
+            if (gt->get_pin_type(output_pin) == hal::PinType::state) {
+                function << "Q_reg";
+            } else if (gt->get_pin_type(output_pin) == hal::PinType::neg_state) {
+                function << "!Q_reg";
+            } else {
+                log_error("verilator_simulator", "unsupported reached: FF has weird outpin '{}' for gate '{}', aborting...", output_pin, gt->get_name());
+                return std::string();
+            }
+            function << ";" << std::endl;
+        }
 
     } else {
         log_error("verilator_simulator", "cannot get FFComponent, aborting...");
