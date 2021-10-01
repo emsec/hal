@@ -9,9 +9,9 @@ sys.path.append("/Users/eve/hal/build/lib/") #this is where your hal python lib 
 os.environ["HAL_BASE_PATH"] = "/Users/eve/hal/build" # hal base path
 import hal_py
 
-netlist_to_read = "/Users/eve/hal/plugins/simulator/verilator_simulator/test_files/netlists/weird_latch/weird_latch.v"
-#netlist_to_read = "/Users/eve/hal/plugins/simulator/verilator_simulator/test_files/netlists/normal_latch/normal_latch.v"
-#netlist_to_read = "/Users/eve/hal/plugins/simulator/verilator_simulator/test_files/netlists/complex_ff/FD3.v"
+#netlist_to_read = "/Users/eve/hal/plugins/simulator/verilator_simulator/test_files/netlists/weird_latch/weird_latch.v"
+netlist_to_read = "/Users/eve/hal/plugins/simulator/verilator_simulator/test_files/netlists/normal_latch/normal_latch.v"
+#netlist_to_read = "/Users/eve/hal/plugins/simulator/verilator_simulator/test_files/netlists/complex_ff/complex_ff.v"
 gate_library_path = "/Users/eve/hal/plugins/gate_libraries/definitions/lsi_10k.hgl"
 
 #initialize HAL

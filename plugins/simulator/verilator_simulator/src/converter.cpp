@@ -11,9 +11,9 @@
 #include "verilator_simulator/verilator_simulator.h"
 
 #include <filesystem>
+#include <set>
 #include <sstream>
 #include <vector>
-#include <set>
 
 namespace hal {
 
@@ -83,10 +83,13 @@ namespace verilator_simulator {
                 parameters.push_back(parameter.str());
 
             } else if (gt->has_property(hal::GateTypeProperty::ff) || gt->has_property(hal::GateTypeProperty::latch)) {
-                std::stringstream parameter;
-                parameter << "parameter [0:0]"
-                          << " INIT = 1'b0;";
-                parameters.push_back(parameter.str());
+                if (InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr) {
+
+                    std::stringstream parameter;
+                    parameter << "parameter [0:0]"
+                              << " INIT = 1'b0;";
+                    parameters.push_back(parameter.str());
+                }
             }
 
             return parameters;
