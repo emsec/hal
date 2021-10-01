@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    LatchComponent::LatchComponent(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf) : m_data_in_bf(data_in_bf), m_enable_bf(enable_bf)
+    LatchComponent::LatchComponent()
     {
     }
 
