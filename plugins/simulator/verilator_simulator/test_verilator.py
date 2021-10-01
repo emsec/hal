@@ -9,8 +9,8 @@ sys.path.append("/Users/eve/hal/build/lib/") #this is where your hal python lib 
 os.environ["HAL_BASE_PATH"] = "/Users/eve/hal/build" # hal base path
 import hal_py
 
-netlist_to_read = "/Users/eve/hal/plugins/simulator/verilator_simulator/test_files/netlists/counter/counter.v"
-gate_library_path = "/Users/eve/hal/plugins/gate_libraries/definitions/XILINX_UNISIM.hgl"
+netlist_to_read = "/Users/eve/hal/plugins/simulator/verilator_simulator/test_files/netlists/complex_ff/FD3.v"
+gate_library_path = "/Users/eve/hal/plugins/gate_libraries/definitions/lsi_10k.hgl"
 
 #initialize HAL
 hal_py.plugin_manager.load_all_plugins()

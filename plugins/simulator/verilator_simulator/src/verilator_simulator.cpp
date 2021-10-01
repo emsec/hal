@@ -207,7 +207,7 @@ std::string get_function_for_ff(const GateType* gt)
         if (reset_async && set_async) {
             auto [behav_state, behave_neg_state] = ff_component->get_async_set_reset_behavior();
 
-            function << (if_used ? "\telse if (" : "\tif (") << ff_component->get_async_reset_function().to_string() << ")" << std::endl;
+            function << (if_used ? "\telse if (" : "\tif (") << ff_component->get_async_reset_function().to_string() << ") begin" << std::endl;
 
             switch (behav_state) {
             case AsyncSetResetBehavior::L:
@@ -225,13 +225,16 @@ std::string get_function_for_ff(const GateType* gt)
             return std::string();
         }
         if (reset_async) {
-            function << (if_used ? "\telse if (" : "\tif (") << ff_component->get_async_reset_function().to_string() << ")" << std::endl;
+            function << (if_used ? "\telse if (" : "\tif (") << ff_component->get_async_reset_function().to_string() << ") begin" << std::endl;
             function << "\t\tQ_reg <= 1'b0;" << std::endl;
+            function << "end" << std::endl;
             if_used = true;
         }
         if (set_async) {
-            function << (if_used ? "\telse if (" : "\tif (") << ff_component->get_async_set_function().to_string() << ")" << std::endl;
+            function << (if_used ? "\telse if (" : "\tif (") << ff_component->get_async_set_function().to_string() << ") begin" << std::endl;
             function << "\t\tQ_reg <= 1'b1;" << std::endl;
+            function << "end" << std::endl;
+
             if_used = true;
         }
 
