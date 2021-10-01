@@ -81,7 +81,7 @@ namespace hal
          * @param[in] subgraph_gates - The gates the subgraph is supposed to consist of.
          * @returns The deep copy of the netlist.
          */
-        CORE_API std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, std::vector<Gate*> subgraph_gates);
+        CORE_API std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<Gate*>& subgraph_gates);
 
         /**
          * TODO test

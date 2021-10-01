@@ -295,7 +295,7 @@ namespace netlist_utils {
         return c_netlist;
     }
 
-    std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, std::vector<Gate*> subgraph_gates)
+     std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<Gate*>& subgraph_gates)
     {
         std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->get_gate_library());
 
@@ -326,7 +326,6 @@ namespace netlist_utils {
                 new_gate->add_boolean_function(name, func);
             }
 
-            // todo: this has to be adjusted, because gates might not exist in the subgraph?
             for (const Endpoint* in_point : gate->get_fan_in_endpoints()) {
                 const auto net_id = in_point->get_net()->get_id();
                 auto c_net = c_netlist->get_net_by_id(net_id);
@@ -342,25 +341,36 @@ namespace netlist_utils {
             }
 
             new_gate->set_data_map(gate->get_data_map());
+
+            // mark gnd and vcc gates
+            if (gate->is_gnd_gate()) {
+                c_netlist->mark_gnd_gate(new_gate);
+            }
+            if (gate->is_vcc_gate()) {
+                c_netlist->mark_vcc_gate(new_gate);
+            }
         }
 
-        // todo: this has to be adjusted, because we now have different global nets
-        // for (const Net* global_input_net : nl->get_global_input_nets()) {
-        //     Net* c_global_input_net = c_netlist->get_net_by_id(global_input_net->get_id());
-        //     c_netlist->mark_global_input_net(c_global_input_net);
-        // }
-        // for (const Net* global_output_net : nl->get_global_output_nets()) {
-        //     Net* c_global_output_net = c_netlist->get_net_by_id(global_output_net->get_id());
-        //     c_netlist->mark_global_output_net(c_global_output_net);
-        // }
-        // for (const Gate* gnd_gate : nl->get_gnd_gates()) {
-        //     Gate* c_gnd_gate = c_netlist->get_gate_by_id(gnd_gate->get_id());
-        //     c_netlist->mark_gnd_gate(c_gnd_gate);
-        // }
-        // for (const Gate* vcc_gate : nl->get_vcc_gates()) {
-        //     Gate* c_vcc_gate = c_netlist->get_gate_by_id(vcc_gate->get_id());
-        //     c_netlist->mark_vcc_gate(c_vcc_gate);
-        // }
+
+        for (Net* c_net : c_netlist->get_nets()) {
+            // mark nets that had a sourc previously but now dont as global inputs
+            if (c_net->get_num_of_sources() == 0) {
+                u32 id = c_net->get_id();
+
+                if (nl->get_net_by_id(id)->get_num_of_sources() != 0) {
+                    c_netlist->mark_global_input_net(c_net);
+                }
+            }
+
+            // mark nets that had a destination previously but now dont as global outputs
+            if (c_net->get_num_of_destinations() == 0) {
+                u32 id = c_net->get_id();
+
+                if (nl->get_net_by_id(id)->get_num_of_destinations() != 0) {
+                    c_netlist->mark_global_output_net(c_net);
+                }
+            }
+        } 
 
         // copy some meta data
         c_netlist->set_design_name(nl->get_design_name());
@@ -383,6 +393,7 @@ namespace netlist_utils {
         c_netlist->set_next_grouping_id(nl->get_next_grouping_id());
         c_netlist->set_used_grouping_ids(nl->get_used_grouping_ids());
         c_netlist->set_free_grouping_ids(nl->get_free_grouping_ids());
+
         return c_netlist;
     }
 
