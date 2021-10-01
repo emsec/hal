@@ -156,8 +156,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a6b00eb30ae108ace3816af92f2c239ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5c8039e44920ea0ab684b7f943641e4"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#aa5c8039e44920ea0ab684b7f943641e4">create_ff_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;next_state_bf, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;clock_bf)</td></tr>
 <tr class="separator:aa5c8039e44920ea0ab684b7f943641e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae06fa2c540b0a7916685523381f0b48c"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#ae06fa2c540b0a7916685523381f0b48c">create_latch_component</a> (const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;data_in_bf, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;enable_bf)</td></tr>
-<tr class="separator:ae06fa2c540b0a7916685523381f0b48c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c88879432e9106c91334ab3df6fab7e"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a7c88879432e9106c91334ab3df6fab7e">create_latch_component</a> ()</td></tr>
+<tr class="separator:a7c88879432e9106c91334ab3df6fab7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90523ddb1cda22842e6e56f3ab41fc03"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a90523ddb1cda22842e6e56f3ab41fc03">create_ram_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> bit_size)</td></tr>
 <tr class="separator:a90523ddb1cda22842e6e56f3ab41fc03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adebe86800325ba44ce254d441ff1ecf9"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#adebe86800325ba44ce254d441ff1ecf9">create_mac_component</a> ()</td></tr>
@@ -241,11 +241,11 @@ template&lt;typename T &gt; </div>
 <p>Convert the gate type component to a component of the type specified by the template parameter. A check is performed to determine whether the conversion is legal and a nullptr is returned in case it is not.</p>
 <dl class="section return"><dt>Returns</dt><dd>The component converted to the target type or a nullptr. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gate__type__component_8h_source.html#l00139">139</a> of file <a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__type__component_8h_source.html#l00137">137</a> of file <a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__type_8h_source.html#l00104">hal::GateType::get_component_as()</a>, and <a class="el" href="gate__type__component_8h_source.html#l00191">get_component_as()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__type_8h_source.html#l00104">hal::GateType::get_component_as()</a>, and <a class="el" href="gate__type__component_8h_source.html#l00189">get_component_as()</a>.</p>
 
 </div>
 </div>
@@ -278,7 +278,7 @@ template&lt;typename T &gt; </div>
 <p>Convert the gate type component to a component of the type specified by the template parameter. A check is performed to determine whether the conversion is legal and a nullptr is returned in case it is not.</p>
 <dl class="section return"><dt>Returns</dt><dd>The component converted to the target type or a nullptr. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gate__type__component_8h_source.html#l00153">153</a> of file <a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__type__component_8h_source.html#l00151">151</a> of file <a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
@@ -385,8 +385,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ae06fa2c540b0a7916685523381f0b48c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae06fa2c540b0a7916685523381f0b48c">&#9670;&nbsp;</a></span>create_latch_component()</h2>
+<a id="a7c88879432e9106c91334ab3df6fab7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c88879432e9106c91334ab3df6fab7e">&#9670;&nbsp;</a></span>create_latch_component()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -397,19 +397,8 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; hal::GateTypeComponent::create_latch_component </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;&#160;</td>
-          <td class="paramname"><em>data_in_bf</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;&#160;</td>
-          <td class="paramname"><em>enable_bf</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -419,13 +408,6 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 <p>Create a new <a class="el" href="classhal_1_1_latch_component.html">LatchComponent</a> with given child component and the Boolean functions describing the data input and the enable signal.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">data_in_bf</td><td>- The function describing the internal state. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">enable_bf</td><td>- The function describing the enable behavior. </td></tr>
-  </table>
-  </dd>
-</dl>
 <dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="classhal_1_1_latch_component.html">LatchComponent</a>. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gate__type__component_8cpp_source.html#l00031">31</a> of file <a class="el" href="gate__type__component_8cpp_source.html">gate_type_component.cpp</a>.</p>
@@ -658,7 +640,7 @@ template&lt;typename T &gt; </div>
 
 <p class="reference">References <a class="el" href="classhal_1_1_gate_type_component.html#a0e836f153556f93f7830390e465cda49">get_components()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00013">hal::gate_type_components_init()</a>, and <a class="el" href="gate__type__component_8h_source.html#l00191">get_component_as()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00013">hal::gate_type_components_init()</a>, and <a class="el" href="gate__type__component_8h_source.html#l00189">get_component_as()</a>.</p>
 
 </div>
 </div>
@@ -696,9 +678,9 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The sub-component of the gate type component converted to the target type or a nullptr. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gate__type__component_8h_source.html#l00191">191</a> of file <a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__type__component_8h_source.html#l00189">189</a> of file <a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a>.</p>
 
-<p class="reference">References <a class="el" href="gate__type__component_8h_source.html#l00139">convert_to()</a>, <a class="el" href="gate__type__component_8cpp_source.html#l00067">get_component()</a>, and <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
+<p class="reference">References <a class="el" href="gate__type__component_8h_source.html#l00137">convert_to()</a>, <a class="el" href="gate__type__component_8cpp_source.html#l00067">get_component()</a>, and <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00358">hal::Gate::add_boolean_function()</a>.</p>
 
@@ -736,7 +718,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The components. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_r_a_m_port_component.html#a6285b6c026b434affa0603ef8772bfe4">hal::RAMPortComponent</a>, <a class="el" href="classhal_1_1_f_f_component.html#ad7093fb5186768112b4fea6da8e0ad85">hal::FFComponent</a>, <a class="el" href="classhal_1_1_latch_component.html#a660756f882293334ad98a13147c2328a">hal::LatchComponent</a>, <a class="el" href="classhal_1_1_init_component.html#aac4ee7240cdbffbe707660784ff5b437">hal::InitComponent</a>, <a class="el" href="classhal_1_1_l_u_t_component.html#a8f6370099b3ee28c75c1829957af989e">hal::LUTComponent</a>, <a class="el" href="classhal_1_1_r_a_m_component.html#a6024f01a0337ec1a435f68ffadac91f2">hal::RAMComponent</a>, and <a class="el" href="classhal_1_1_m_a_c_component.html#a55a877db2c7b6e38d9fdabc22d64bac4">hal::MACComponent</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_r_a_m_port_component.html#a6285b6c026b434affa0603ef8772bfe4">hal::RAMPortComponent</a>, <a class="el" href="classhal_1_1_f_f_component.html#ad7093fb5186768112b4fea6da8e0ad85">hal::FFComponent</a>, <a class="el" href="classhal_1_1_init_component.html#aac4ee7240cdbffbe707660784ff5b437">hal::InitComponent</a>, <a class="el" href="classhal_1_1_latch_component.html#a660756f882293334ad98a13147c2328a">hal::LatchComponent</a>, <a class="el" href="classhal_1_1_l_u_t_component.html#a8f6370099b3ee28c75c1829957af989e">hal::LUTComponent</a>, <a class="el" href="classhal_1_1_r_a_m_component.html#a6024f01a0337ec1a435f68ffadac91f2">hal::RAMComponent</a>, and <a class="el" href="classhal_1_1_m_a_c_component.html#a55a877db2c7b6e38d9fdabc22d64bac4">hal::MACComponent</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00013">hal::gate_type_components_init()</a>, and <a class="el" href="gate__type__component_8cpp_source.html#l00067">get_component()</a>.</p>
 
@@ -767,9 +749,9 @@ template&lt;typename T &gt; </div>
 <p>Get the type of the gate type component.</p>
 <dl class="section return"><dt>Returns</dt><dd>The type of the gate type component. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_r_a_m_port_component.html#a509d54ca8c05e19cb59bfae72ee320dc">hal::RAMPortComponent</a>, <a class="el" href="classhal_1_1_f_f_component.html#af712ce4560686fc8abcb21e2f90feea4">hal::FFComponent</a>, <a class="el" href="classhal_1_1_latch_component.html#a43f80ef032c8417aa340d28b1835acd5">hal::LatchComponent</a>, <a class="el" href="classhal_1_1_init_component.html#affd26afc5cf0e0108707787afdf2f605">hal::InitComponent</a>, <a class="el" href="classhal_1_1_l_u_t_component.html#a7d2a56cb79108b3c044066e1d058ff88">hal::LUTComponent</a>, <a class="el" href="classhal_1_1_r_a_m_component.html#a2282d484dbf158076984091ea07226e1">hal::RAMComponent</a>, and <a class="el" href="classhal_1_1_m_a_c_component.html#ad045c3b171382cf947ab12e19a6f5803">hal::MACComponent</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_r_a_m_port_component.html#a509d54ca8c05e19cb59bfae72ee320dc">hal::RAMPortComponent</a>, <a class="el" href="classhal_1_1_f_f_component.html#af712ce4560686fc8abcb21e2f90feea4">hal::FFComponent</a>, <a class="el" href="classhal_1_1_init_component.html#affd26afc5cf0e0108707787afdf2f605">hal::InitComponent</a>, <a class="el" href="classhal_1_1_latch_component.html#a43f80ef032c8417aa340d28b1835acd5">hal::LatchComponent</a>, <a class="el" href="classhal_1_1_l_u_t_component.html#a7d2a56cb79108b3c044066e1d058ff88">hal::LUTComponent</a>, <a class="el" href="classhal_1_1_r_a_m_component.html#a2282d484dbf158076984091ea07226e1">hal::RAMComponent</a>, and <a class="el" href="classhal_1_1_m_a_c_component.html#ad045c3b171382cf947ab12e19a6f5803">hal::MACComponent</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00013">hal::gate_type_components_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00058">hal::GateType::has_component_of_type()</a>, <a class="el" href="mac__component_8cpp_source.html#l00010">hal::MACComponent::is_class_of()</a>, <a class="el" href="lut__component_8cpp_source.html#l00014">hal::LUTComponent::is_class_of()</a>, <a class="el" href="ram__component_8cpp_source.html#l00014">hal::RAMComponent::is_class_of()</a>, <a class="el" href="init__component_8cpp_source.html#l00014">hal::InitComponent::is_class_of()</a>, <a class="el" href="latch__component_8cpp_source.html#l00014">hal::LatchComponent::is_class_of()</a>, <a class="el" href="ff__component_8cpp_source.html#l00015">hal::FFComponent::is_class_of()</a>, and <a class="el" href="ram__port__component_8cpp_source.html#l00020">hal::RAMPortComponent::is_class_of()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00013">hal::gate_type_components_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00058">hal::GateType::has_component_of_type()</a>, <a class="el" href="mac__component_8cpp_source.html#l00010">hal::MACComponent::is_class_of()</a>, <a class="el" href="lut__component_8cpp_source.html#l00014">hal::LUTComponent::is_class_of()</a>, <a class="el" href="ram__component_8cpp_source.html#l00014">hal::RAMComponent::is_class_of()</a>, <a class="el" href="latch__component_8cpp_source.html#l00014">hal::LatchComponent::is_class_of()</a>, <a class="el" href="init__component_8cpp_source.html#l00014">hal::InitComponent::is_class_of()</a>, <a class="el" href="ff__component_8cpp_source.html#l00015">hal::FFComponent::is_class_of()</a>, and <a class="el" href="ram__port__component_8cpp_source.html#l00020">hal::RAMPortComponent::is_class_of()</a>.</p>
 
 </div>
 </div>
@@ -783,7 +765,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a></li>
-    <li class="footer">Generated on Thu Sep 30 2021 15:39:51 for HAL by
+    <li class="footer">Generated on Fri Oct 1 2021 09:31:24 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

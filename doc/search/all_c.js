@@ -77,7 +77,7 @@ var searchData=
   ['latch_6934',['latch',['../classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a42f3c93a0b1ca287d5456f3fc3200366',1,'hal::GateTypeComponent::latch()'],['../namespacehal.html#adb8da04d2161f277bd489e806a2721caa42f3c93a0b1ca287d5456f3fc3200366',1,'hal::latch()']]],
   ['latch_5fcomponent_2ecpp_6935',['latch_component.cpp',['../latch__component_8cpp.html',1,'']]],
   ['latch_5fcomponent_2eh_6936',['latch_component.h',['../latch__component_8h.html',1,'']]],
-  ['latchcomponent_6937',['LatchComponent',['../classhal_1_1_latch_component.html',1,'hal::LatchComponent'],['../classhal_1_1_latch_component.html#a9ebe0f915e7eaf746071225b3b2c09e5',1,'hal::LatchComponent::LatchComponent()']]],
+  ['latchcomponent_6937',['LatchComponent',['../classhal_1_1_latch_component.html',1,'hal::LatchComponent'],['../classhal_1_1_latch_component.html#a8ca9380c12d23f6eeb16427ab324e3ee',1,'hal::LatchComponent::LatchComponent()']]],
   ['latin_6938',['Latin',['https://doc.qt.io/qt-5/qlocale.html#Language-enum',1,'QLocale::Latin()'],['https://doc.qt.io/qt-5/qfontdatabase.html#WritingSystem-enum',1,'QFontDatabase::Latin()']]],
   ['latin1_6939',['latin1',['https://doc.qt.io/qt-5/qlatin1string.html#latin1',1,'QLatin1String::latin1()'],['https://doc.qt.io/qt-5/qcoreapplication-obsolete.html#Encoding-enum',1,'QCoreApplication::Latin1()']]],
   ['latinamerica_6940',['LatinAmerica',['https://doc.qt.io/qt-5/qlocale.html#Country-enum',1,'QLocale']]],
