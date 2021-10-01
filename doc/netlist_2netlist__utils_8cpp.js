@@ -10,6 +10,7 @@ var netlist_2netlist__utils_8cpp =
     [ "get_next_sequential_gates", "netlist_2netlist__utils_8cpp.html#ae10e4d2360be0f2493d267fa63d6a350", null ],
     [ "get_next_sequential_gates", "netlist_2netlist__utils_8cpp.html#a213caef6d5d45e37da21f380645c33da", null ],
     [ "get_next_sequential_gates", "netlist_2netlist__utils_8cpp.html#af2f10749460ef2bf67a20b9705a8c062", null ],
+    [ "get_partial_netlist", "netlist_2netlist__utils_8cpp.html#a1cb5ef95d0e47368a208f8984e6adae1", null ],
     [ "get_path", "netlist_2netlist__utils_8cpp.html#afed43ba864b63d01b07464dfb114f847", null ],
     [ "get_path", "netlist_2netlist__utils_8cpp.html#a40a29d9840accd02a1add80413c37747", null ],
     [ "get_path", "netlist_2netlist__utils_8cpp.html#a1d92e0a85d024f090e2070c009633ec9", null ],
