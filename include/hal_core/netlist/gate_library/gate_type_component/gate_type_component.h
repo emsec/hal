@@ -73,11 +73,9 @@ namespace hal
         /**
          * Create a new LatchComponent with given child component and the Boolean functions describing the data input and the enable signal.
          * 
-         * @param[in] data_in_bf - The function describing the internal state.
-         * @param[in] enable_bf - The function describing the enable behavior.
          * @returns The LatchComponent.
          */
-        static std::unique_ptr<GateTypeComponent> create_latch_component(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf);
+        static std::unique_ptr<GateTypeComponent> create_latch_component();
 
         /**
          * Create a new RAMComponent with given child component.
