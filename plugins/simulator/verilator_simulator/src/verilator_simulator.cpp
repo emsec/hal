@@ -152,11 +152,13 @@ std::string get_function_for_ff(const GateType* gt)
     }
 
     function << "reg Q_reg;" << std::endl;
+    function << "reg nQ_reg;" << std::endl;
     function << "wire new_clock;" << std::endl;
     function << std::endl;
 
     function << "initial begin" << std::endl;
     function << "\tQ_reg = INIT;" << std::endl;
+    function << "\tnQ_reg = not(INIT);" << std::endl;
     function << "end" << std::endl;
 
     function << std::endl;
@@ -203,6 +205,21 @@ std::string get_function_for_ff(const GateType* gt)
         bool if_used = false;
 
         if (reset_async && set_async) {
+            auto [behav_state, behave_neg_state] = ff_component->get_async_set_reset_behavior();
+
+            function << (if_used ? "\telse if (" : "\tif (") << ff_component->get_async_reset_function().to_string() << ")" << std::endl;
+
+            switch (behav_state) {
+            case AsyncSetResetBehavior::L:
+                /* code */
+                break;
+
+            default:
+                break;
+            }
+
+            if_used = true;
+
             // TODO: insert case when FF has both async RESET and SET
             log_error("verilator_simulator", "unsupported reached: FFs with both async reset and set not supported");
             return std::string();
@@ -306,7 +323,7 @@ namespace verilator_simulator {
             std::string gate_function = get_function_for_gate(gate_type);
 
             if (gate_function.empty()) {
-                log_info("verilator_simulator", "unimplemented reached for gate type: '{}', cannot create simulation model...", gate_type->get_name());
+                log_info("verilator_simulator", "unimplemented reached: gate type: '{}', cannot create simulation model...", gate_type->get_name());
                 return false;
             }
             gate_description << gate_function << std::endl;
