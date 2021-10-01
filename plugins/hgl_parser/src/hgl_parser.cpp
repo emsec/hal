@@ -399,14 +399,14 @@ namespace hal
             latch_component->set_data_in_function(BooleanFunction::from_string(latch_config["data_in"].GetString(), input_pins));
             latch_component->set_enable_function(BooleanFunction::from_string(latch_config["enable_on"].GetString(), input_pins));
         }
-        else if (!latch_config.HasMember("data_in") || !latch_config["data_in"].IsString())
-        {
-            log_error("hgl_parser", "invalid or missing 'data_in' specification for latch gate type '{}'.", gt_name);
-            return nullptr;
-        }
-        else if (!latch_config.HasMember("enable_on") || !latch_config["enable_on"].IsString())
+        else if (latch_config.HasMember("data_in") && latch_config["data_in"].IsString())
         {
             log_error("hgl_parser", "invalid or missing 'enable_on' specification for latch gate type '{}'.", gt_name);
+            return nullptr;
+        }
+        else if (latch_config.HasMember("enable_on") && latch_config["enable_on"].IsString())
+        {
+            log_error("hgl_parser", "invalid or missing 'data_in' specification for latch gate type '{}'.", gt_name);
             return nullptr;
         }
 
