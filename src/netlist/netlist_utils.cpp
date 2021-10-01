@@ -295,7 +295,7 @@ namespace netlist_utils {
         return c_netlist;
     }
 
-     std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<Gate*>& subgraph_gates)
+    std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<Gate*>& subgraph_gates)
     {
         std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->get_gate_library());
 
@@ -351,7 +351,6 @@ namespace netlist_utils {
             }
         }
 
-
         for (Net* c_net : c_netlist->get_nets()) {
             // mark nets that had a sourc previously but now dont as global inputs
             if (c_net->get_num_of_sources() == 0) {
@@ -370,7 +369,7 @@ namespace netlist_utils {
                     c_netlist->mark_global_output_net(c_net);
                 }
             }
-        } 
+        }
 
         // copy some meta data
         c_netlist->set_design_name(nl->get_design_name());
