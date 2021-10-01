@@ -45,6 +45,7 @@ namespace hal
             lut,     /**< LUT component type. */
             ff,      /**< Flip-flop component type. */
             latch,   /**< Latch component type. */
+            state,   /**< State component type. */
             ram,     /**< RAM component type. */
             mac,     /**< MAC component type. */
             init,    /**< Initialization component type. */
@@ -76,6 +77,17 @@ namespace hal
          * @returns The LatchComponent.
          */
         static std::unique_ptr<GateTypeComponent> create_latch_component();
+
+        /**
+         * TODO pybind
+         * Create a new StateComponent with given child component and the internal state identifiers.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] state_identifier - The identifier of the internal state.
+         * @param[in] neg_state_identifier - The identifier of the negated internal state.
+         * @returns The StateComponent.
+         */
+        static std::unique_ptr<GateTypeComponent> create_state_component(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier);
 
         /**
          * Create a new RAMComponent with given child component.

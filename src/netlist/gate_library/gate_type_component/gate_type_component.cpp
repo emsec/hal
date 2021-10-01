@@ -7,6 +7,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/mac_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 
 namespace hal
 {
@@ -31,6 +32,12 @@ namespace hal
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_latch_component()
     {
         return std::make_unique<LatchComponent>();
+    }
+
+    std::unique_ptr<GateTypeComponent>
+        GateTypeComponent::create_state_component(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier)
+    {
+        return std::make_unique<StateComponent>(std::move(component), state_identifier, neg_state_identifier);
     }
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_component(std::unique_ptr<GateTypeComponent> component, const u32 bit_size)
