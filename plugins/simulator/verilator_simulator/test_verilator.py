@@ -5,12 +5,12 @@ import sys, os
 # 
 # sys.path.append("/Users/eve/Documents/Uni/Projekte/hal/build/lib/") #this is where your hal python lib is located
 # os.environ["HAL_BASE_PATH"] = "/Users/eve/Documents/Uni/Projekte/hal/build" # hal base path
-sys.path.append("/Users/eve/hal/build/lib/") #this is where your hal python lib is located
-os.environ["HAL_BASE_PATH"] = "/Users/eve/hal/build" # hal base path
+sys.path.append("/home/langhein/src/hal/build/lib/") #this is where your hal python lib is located
+os.environ["HAL_BASE_PATH"] = "/home/langhein/src/hal/build" # hal base path
 import hal_py
 
-netlist_to_read = "/Users/eve/hal/plugins/simulator/verilator_simulator/test_files/netlists/counter/counter.v"
-gate_library_path = "/Users/eve/hal/plugins/gate_libraries/definitions/XILINX_UNISIM.hgl"
+netlist_to_read = "/home/langhein/src/hal/plugins/simulator/verilator_simulator/test_files/netlists/counter/counter.v"
+gate_library_path = "/home/langhein/src/hal/plugins/gate_libraries/definitions/XILINX_UNISIM.hgl"
 
 #initialize HAL
 hal_py.plugin_manager.load_all_plugins()

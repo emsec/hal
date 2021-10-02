@@ -23,6 +23,13 @@ namespace hal
         return std::unique_ptr<NetlistSimulator>(new NetlistSimulator());
     }
 
+    std::set<std::string> NetlistSimulatorPlugin::get_dependencies() const
+    {
+        std::set<std::string> retval;
+        retval.insert("netlist_simulator_controller");
+        return retval;
+    }
+
     std::shared_ptr<NetlistSimulator> NetlistSimulatorPlugin::get_shared_simulator(const std::string& module_name)
     {
         auto it = m_shared_simulator_map.find(module_name);
