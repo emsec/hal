@@ -76,7 +76,7 @@ namespace verilator_simulator {
             break;
         case 2:
         {
-            const char* cl[] = {"verilator", "-I.", "-Wall", "-Wno-fatal", nullptr };
+            const char* cl[] = {"make", "run", nullptr };
             return converter::get_vector_for_const_char(cl);
         }
             break;
