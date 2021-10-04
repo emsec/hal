@@ -9,11 +9,6 @@ namespace hal {
         return (mSimulationSet.find(g) != mSimulationSet.end());
     }
 
-    const std::unordered_set<const Gate*>& SimulationInput::gates() const
-    {
-        return mSimulationSet;
-    }
-
     void SimulationInput::add_gates(const std::vector<Gate*>& gates)
     {
         mSimulationSet.insert(gates.begin(), gates.end());

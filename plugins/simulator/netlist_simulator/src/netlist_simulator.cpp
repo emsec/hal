@@ -20,6 +20,7 @@ namespace hal
 #define measure_block_time(X)
 
     NetlistSimulator::NetlistSimulator()
+        : SimulationEngineEventDriven("hal_simulator")
     {
         reset();
     }
@@ -78,7 +79,7 @@ namespace hal
         // has to work even if the simulation was not started, i.e., initialize was not called yet
         // so we cannot use the SimulationGateFF type
 
-        for (const Gate* gate : mSimulationInput->gates())
+        for (const Gate* gate : mSimulationInput->get_gates())
         {
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
@@ -116,7 +117,7 @@ namespace hal
         // has to work even if the simulation was not started, i.e., initialize was not called yet
         // so we cannot use the SimulationGateFF type
 
-        for (const Gate* gate : mSimulationInput->gates())
+        for (const Gate* gate : mSimulationInput->get_gates())
         {
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
@@ -229,6 +230,13 @@ namespace hal
         return it->second;
     }
 
+    bool NetlistSimulator::inputEvent(const SimulationInputNetEvent& netEv)
+    {
+        // TODO
+        return true;
+    }
+
+
     /*
      * This function precomputes all the stuff that shall be cached for simulation.
      */
@@ -244,7 +252,7 @@ namespace hal
         std::map<const Net*, BooleanFunction::Value> init_events;
 
         // precompute everything that is gate-related
-        for (const Gate* gate : mSimulationInput->gates())
+        for (const Gate* gate : mSimulationInput->get_gates())
         {
             SimulationGate* sim_gate_base = nullptr;
 
@@ -332,7 +340,7 @@ namespace hal
         }
 
         // create one-time events for global gnd and vcc gates
-        for (auto g : mSimulationInput->gates())
+        for (auto g : mSimulationInput->get_gates())
         {
             if (g->is_gnd_gate())
             {
@@ -554,7 +562,7 @@ namespace hal
 
     bool NetlistSimulator::generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets) const
     {
-        if (mSimulationInput->gates().empty())
+        if (mSimulationInput->get_gates().empty())
         {
             log_error("netlist_simulator", "no gates have been added to the simulator.");
             return false;

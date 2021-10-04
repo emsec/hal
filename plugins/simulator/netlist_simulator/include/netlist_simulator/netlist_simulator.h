@@ -28,6 +28,7 @@
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/net.h"
 #include "netlist_simulator/simulation.h"
+#include "netlist_simulator_controller/simulation_engine.h"
 
 #include <map>
 #include <unordered_set>
@@ -36,7 +37,7 @@ namespace hal
 {
     class SimulationInput;
 
-    class NetlistSimulator
+    class NetlistSimulator : public SimulationEngineEventDriven
     {
     public:
 
@@ -165,6 +166,10 @@ namespace hal
          */
         std::vector<Event> get_simulation_events(Net *n) const;
 
+        std::string resultFilename() const override { return std::string(); } // TODO : name of vcd file if any
+
+        bool inputEvent(const SimulationInputNetEvent& netEv) override;
+
     private:
         friend class NetlistSimulatorPlugin;
 
@@ -246,8 +251,6 @@ namespace hal
             bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
             void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
         };
-
-        SimulationInput* mSimulationInput;
 
         bool m_is_initialized = false;
         std::vector<std::tuple<bool, BooleanFunction::Value, const std::function<bool(const Gate*)>>> m_init_seq_gates;

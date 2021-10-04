@@ -10,7 +10,8 @@ if(PL_VERILATOR_SIMULATOR OR PL_SIMULATOR OR BUILD_ALL_PLUGINS)
                    SHARED
                    HEADER ${VERILATOR_SIMULATOR_INC}
                    SOURCES ${VERILATOR_SIMULATOR_SRC} ${VERILATOR_SIMULATOR_PYTHON_SRC}
-                   PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/verilator_simulator.rst)
+                   PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/verilator_simulator.rst
+                   LINK_LIBRARIES PUBLIC netlist_simulator_controller)
 
 
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")

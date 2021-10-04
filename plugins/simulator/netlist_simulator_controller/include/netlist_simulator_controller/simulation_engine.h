@@ -40,6 +40,16 @@ namespace hal {
          * @return true if successful, false on error
          */
         virtual bool run() = 0;
+
+        /**
+         * Can be implemented by derived class
+         *
+         * Signals the engine that simulation is done
+         * SimulationEngineEventDriven:   all input events have been processed
+         * SimulationEngineScripted:      all comands executed successfully
+         */
+        virtual void done() {;}
+
         std::string name() const { return mName; }
     };
 
@@ -56,18 +66,10 @@ namespace hal {
          * Must be implemented by derived class
          *
          * Passes an event to engine to trigger simulation
-         * @param[in] netInputs Input values (0,1,X,Z) for net id
-         * @param[in] simulationDuration number of cycles to simulate
-         * @return
+         * @param[in] netEv input event asigning input values (0,1,X,Z) for nets and providing number of cycles to simulate
+         * @return true if event was handled successfully, false otherwise
          */
-        virtual bool inputEvent(const std::unordered_map<u32,BooleanFunction::Value>& netInputs, u64 simulationDuration) = 0;
-
-        /**
-         * Can be implemented by derived class
-         *
-         * Signals the engine that all input events have been processed
-         */
-        virtual void done() {;}
+        virtual bool inputEvent(const SimulationInputNetEvent& netEv) = 0;
     };
 
     class SimulationEngineScripted : public SimulationEngine
