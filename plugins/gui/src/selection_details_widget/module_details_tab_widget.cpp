@@ -1,9 +1,9 @@
 #include "gui/selection_details_widget/module_details_tab_widget.h"
 
-#include "gui/new_selection_details_widget/details_frame_widget.h"
-#include "gui/new_selection_details_widget/new_module_details_widget/module_info_table.h"
-#include "gui/new_selection_details_widget/new_module_details_widget/module_ports_tree.h"
-#include "gui/new_selection_details_widget/new_module_details_widget/module_elements_tree.h"
+#include "gui/selection_details_widget/details_frame_widget.h"
+#include "gui/selection_details_widget/module_details_widget/module_info_table.h"
+#include "gui/selection_details_widget/module_details_widget/module_ports_tree.h"
+#include "gui/selection_details_widget/module_details_widget/module_elements_tree.h"
 
 #include "hal_core/netlist/module.h"
 

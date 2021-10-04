@@ -23,66 +23,65 @@
 
 #pragma once
 
-#include "gui/selection_details_widget/details_tab_widget.h"
-#include "gui/selection_details_widget/data_table_widget.h"
-#include "gui/selection_details_widget/groupings_of_item_widget.h"
+#include "lut_table_model.h"
+#include "gui/selection_details_widget/selection_details_widget.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+
+#include <QTableView>
+
 
 namespace hal
 {
-    class Net;
-    class DetailsFrameWidget;
-    class NetInfoTable;
-    class NetEndpointTable;
-    class NetModuleTable;
-    class GroupingsOfItemWidget;
-    class DataTableWidget;
 
     /**
      * @ingroup utility_widgets-selection_details
-     * @brief The DetailsTabWidget that is responsible for showing Module details
-     * 
-     * This tab widget contains and manages the tabs that are shown when selecting a Module in the SelectionDetailsWidet's tree.
+     *
+     * @brief A view for truth-tables (based on the LUTTableModel)
+     *
+     * Passing this model a BooleanFunction (via setBooleanFunction) it stores the truth table of it in a table.
      */
-    class NetDetailsTabWidget : public DetailsTabWidget
+    class LUTTableWidget : public QTableView
     {
-        Q_OBJECT
+    Q_OBJECT
 
     public:
+        /**
+        * Constructor.
+        *
+        * @param parent - The parent widget
+        */
+        LUTTableWidget(QWidget* parent = nullptr);
 
         /**
-         * The constructor.
+         * Accesses the underlying table model of this LUTTableModel.
          *
-         * @param parent - The widget's parent.
+         * @returns the LUTTableModel of this LUTTableWidget
          */
-         NetDetailsTabWidget(QWidget* parent = nullptr);
+        LUTTableModel* getModel() const { return mLutModel; }
 
         /**
-         * Sets the net which details are shown in the tabs and various widgets.
+         * Sets the boolean function that should be shown in the truth table.
          *
-         * @param net - The net.
+         * @param bf - The BooleanFunction
+         * @param functionName - The function name (e.g. "O")
          */
-        void setNet(Net* net);
+        void setBooleanFunction(BooleanFunction bf, QString functionName);
+
+    protected Q_SLOTS:
+        /**
+         * Handles the resize event. The table is sized, so that the output column is bigger than the input columns.
+         *
+         * @param event - The QResizeEvent
+         */
+        void resizeEvent(QResizeEvent* event) override;
 
     private:
-        DetailsFrameWidget* mNetInformationFrame;
+        void adjustTableSizes();
 
-        GroupingsOfItemWidget* mGroupingsOfItemTable;
-        DetailsFrameWidget* mGroupingsFrame;
+        LUTTableModel* mLutModel;
+        QTableView* mLutTableView;
 
-        DetailsFrameWidget* mModulesFrame;
+        const QString mFrameTitle = "Truth Table";
 
-        DetailsFrameWidget* mSourcesFrame;
-
-        DetailsFrameWidget* mDestinationsFrame;
-
-        DataTableWidget* mDataTable;
-        DetailsFrameWidget* mDataFrame;
-
-        NetInfoTable* mNetInfoTable;
-
-        NetModuleTable* mNetModuleTable;
-
-        NetEndpointTable* mSourcesTable;
-        NetEndpointTable* mDestinationsTable;
     };
 }

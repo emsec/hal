@@ -1,13 +1,13 @@
 #include "gui/selection_details_widget/net_details_tab_widget.h"
 
-#include "gui/new_selection_details_widget/details_frame_widget.h"
-#include "gui/new_selection_details_widget/new_net_details_widget/net_info_table.h"
+#include "gui/selection_details_widget/details_frame_widget.h"
+#include "gui/selection_details_widget/net_details_widget/net_info_table.h"
 
-#include "gui/new_selection_details_widget/new_net_details_widget/net_endpoint_table.h"
-#include "gui/new_selection_details_widget/models/endpoint_table_model.h"
+#include "gui/selection_details_widget/net_details_widget/net_endpoint_table.h"
+#include "gui/selection_details_widget/net_details_widget/endpoint_table_model.h"
 
-#include "gui/new_selection_details_widget/new_net_details_widget/net_module_table.h"
-#include "gui/new_selection_details_widget/models/module_table_model.h"
+#include "gui/selection_details_widget/net_details_widget/net_module_table.h"
+#include "gui/selection_details_widget/net_details_widget/module_table_model.h"
 
 #include "hal_core/netlist/net.h"
 

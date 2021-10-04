@@ -29,11 +29,6 @@
 
 #include "gui/gui_utils/special_log_content_manager.h"
 #include "hal_config.h"
-// -----------------------------------------------------------
-//   Temporary Debug Code - TODO: Remove me before merging
-#include "gui/new_selection_details_widget/new_gate_details_widget/lut_table_widget.h"
-
-// -----------------------------------------------------------
 
 namespace hal
 {

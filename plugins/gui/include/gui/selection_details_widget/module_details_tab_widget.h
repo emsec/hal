@@ -24,8 +24,8 @@
 #pragma once
 
 #include "gui/selection_details_widget/details_tab_widget.h"
-#include "gui/new_selection_details_widget/data_table_widget.h"
-#include "gui/new_selection_details_widget/groupings_of_item_widget.h"
+#include "gui/selection_details_widget/data_table_widget.h"
+#include "gui/selection_details_widget/groupings_of_item_widget.h"
 
 namespace hal
 {

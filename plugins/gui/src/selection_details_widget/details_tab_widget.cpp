@@ -1,6 +1,6 @@
 #include "gui/selection_details_widget/details_tab_widget.h"
 
-#include "gui/new_selection_details_widget/details_frame_widget.h"
+#include "gui/selection_details_widget/details_frame_widget.h"
 
 #include <QVBoxLayout>
 #include <QScrollArea>

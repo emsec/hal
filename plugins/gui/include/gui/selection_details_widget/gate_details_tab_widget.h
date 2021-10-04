@@ -25,10 +25,10 @@
 
 #include "gui/selection_details_widget/details_tab_widget.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
-#include "gui/new_selection_details_widget/new_gate_details_widget/boolean_function_table.h"
-#include "gui/new_selection_details_widget/new_gate_details_widget/lut_table_widget.h"
-#include "gui/new_selection_details_widget/data_table_widget.h"
-#include "gui/new_selection_details_widget/groupings_of_item_widget.h"
+#include "gui/selection_details_widget/gate_details_widget/boolean_function_table.h"
+#include "gui/selection_details_widget/gate_details_widget/lut_table_widget.h"
+#include "gui/selection_details_widget/data_table_widget.h"
+#include "gui/selection_details_widget/groupings_of_item_widget.h"
 
 namespace hal
 {

@@ -1,8 +1,8 @@
 #include "gui/selection_details_widget/gate_details_tab_widget.h"
 
-#include "gui/new_selection_details_widget/details_frame_widget.h"
-#include "gui/new_selection_details_widget/new_gate_details_widget/gate_info_table.h"
-#include "gui/new_selection_details_widget/new_gate_details_widget/gate_pin_tree.h"
+#include "gui/selection_details_widget/details_frame_widget.h"
+#include "gui/selection_details_widget/gate_details_widget/gate_info_table.h"
+#include "gui/selection_details_widget/gate_details_widget/gate_pin_tree.h"
 #include "gui/gui_globals.h"
 
 
