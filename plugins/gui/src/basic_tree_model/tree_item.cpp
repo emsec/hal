@@ -1,4 +1,4 @@
-#include "gui/new_selection_details_widget/models/tree_item.h"
+#include "gui/basic_tree_model/tree_item.h"
 
 
 namespace hal

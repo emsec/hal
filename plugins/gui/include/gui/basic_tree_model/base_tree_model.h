@@ -28,7 +28,6 @@
 
 namespace hal
 {
-
     /**
      * @ingroup gui
      * @brief The BaseTreeModel implements generic standard functions of a tree model.

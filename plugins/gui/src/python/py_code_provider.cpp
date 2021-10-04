@@ -1,8 +1,4 @@
-#include "gui/new_selection_details_widget/py_code_provider.h"
-
-//#include <QString>
-
-#include <QDebug>
+#include "gui/python/py_code_provider.h"
 
 namespace hal
 {
@@ -106,8 +102,6 @@ namespace hal
     QString PyCodeProvider::pyCodeNetType(u32 netId)
     {
         const QString prefix = QString(netCodePrefix).arg(netId);
-
-        qDebug() << prefix;
 
         const QString check1 = prefix + ".is_global_input_net()";
         const QString check2 = prefix + ".is_global_output_net()";

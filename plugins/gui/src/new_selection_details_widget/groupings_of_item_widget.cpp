@@ -1,7 +1,7 @@
 #include "gui/new_selection_details_widget/groupings_of_item_widget.h"
 #include "gui/grouping/grouping_color_delegate.h"
 #include "gui/gui_globals.h"
-#include "gui/new_selection_details_widget/py_code_provider.h"
+#include "gui/python/py_code_provider.h"
 #include "gui/user_action/action_remove_items_from_object.h"
 #include <QHeaderView>
 #include <QtWidgets/QMenu>

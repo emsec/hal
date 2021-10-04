@@ -1,4 +1,5 @@
 #include "gui/new_selection_details_widget/models/port_tree_model.h"
+#include "gui/basic_tree_model/tree_item.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/gate.h"

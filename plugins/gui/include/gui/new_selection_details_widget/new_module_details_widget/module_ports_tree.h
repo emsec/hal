@@ -23,8 +23,7 @@
 
 #pragma once
 
-#include <QTreeView>
-#include "gui/new_selection_details_widget/size_adjustable_tree_view.h"
+#include "gui/size_adjustable_tree_view/size_adjustable_tree_view.h"
 #include "hal_core/defines.h"
 
 namespace hal

@@ -1,6 +1,6 @@
 #include "gui/new_selection_details_widget/new_module_details_widget/module_elements_tree.h"
 #include "gui/new_selection_details_widget/models/netlist_elements_tree_model.h"
-#include "gui/new_selection_details_widget/py_code_provider.h"
+#include "gui/python/py_code_provider.h"
 #include "gui/gui_globals.h"
 #include <QMenu>
 #include <QHeaderView>

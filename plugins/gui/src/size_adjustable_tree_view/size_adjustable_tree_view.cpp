@@ -1,8 +1,7 @@
-#include "gui/new_selection_details_widget/size_adjustable_tree_view.h"
-#include "gui/new_selection_details_widget/models/base_tree_model.h"
+#include "gui/size_adjustable_tree_view/size_adjustable_tree_view.h"
+#include "gui/basic_tree_model/base_tree_model.h"
 #include <QHeaderView>
 #include <QQueue>
-#include <QDebug>
 
 namespace hal
 {

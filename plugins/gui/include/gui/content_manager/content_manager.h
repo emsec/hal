@@ -32,7 +32,6 @@
 // -----------------------------------------------------------
 //   Temporary Debug Code - TODO: Remove me before merging
 #include "gui/new_selection_details_widget/new_gate_details_widget/lut_table_widget.h"
-#include "gui/new_selection_details_widget/debug_content_widget.h"
 
 // -----------------------------------------------------------
 
@@ -158,12 +157,6 @@ namespace hal
         static SettingsItemDropdown* sSettingSortMechanism;
         static bool sSettingsInitialized;
         static bool initializeSettins();
-        // -----------------------------------------------------------
-        //   Temporary Debug Code - TODO: Remove me before merging
-        DebugContentWidget* mDebugContentWidget;
-
-
-        // -----------------------------------------------------------
 
 #ifdef HAL_STUDY
         SpecialLogContentManager* mSpecialLogContentManager;

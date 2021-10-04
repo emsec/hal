@@ -223,15 +223,6 @@ namespace hal
         mContextManagerWidget->selectViewContext(new_context);
         gGraphContextManager->restoreFromFile();
         new_context->setDirty(false);
-
-	// -----------------------------------------------------------
-        //   Temporary Debug Code - TODO: Remove me before merging
-        mDebugContentWidget = new DebugContentWidget();
-        mMainWindow->addContent(mDebugContentWidget, 6, content_anchor::bottom);
-        mDebugContentWidget->open();
-        mContent.append(mDebugContentWidget);
-
-        // -----------------------------------------------------------
     }
 
     void ContentManager::setWindowTitle(const QString &filename)

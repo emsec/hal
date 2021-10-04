@@ -6,7 +6,7 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QMenu>
-#include "gui/new_selection_details_widget/py_code_provider.h"
+#include "gui/python/py_code_provider.h"
 #include <QDebug>
 
 #include "gui/gui_globals.h"

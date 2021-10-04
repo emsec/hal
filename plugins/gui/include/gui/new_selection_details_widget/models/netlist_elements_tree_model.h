@@ -25,14 +25,15 @@
 
 #include <QAbstractItemModel>
 #include <QIcon>
-#include "gui/new_selection_details_widget/models/tree_item.h"
-#include "gui/new_selection_details_widget/models/base_tree_model.h"
+//#include "gui/new_selection_details_widget/models/tree_item.h"
+#include "gui/basic_tree_model/base_tree_model.h"
 
 namespace hal
 {
     class Module;
     class Gate;
     class Net;
+    class TreeItem;
 
     /**
      * @ingroup utility_widgets-selection_details

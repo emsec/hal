@@ -1,6 +1,6 @@
 #include "gui/new_selection_details_widget/new_gate_details_widget/boolean_function_table.h"
 #include "gui/gui_globals.h"
-#include "gui/new_selection_details_widget/py_code_provider.h"
+#include "gui/python/py_code_provider.h"
 #include <QHeaderView>
 #include <QtWidgets/QMenu>
 #include <QApplication>
