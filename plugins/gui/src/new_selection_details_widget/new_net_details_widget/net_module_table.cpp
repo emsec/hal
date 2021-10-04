@@ -90,6 +90,7 @@ namespace hal
 
     void NetModuleTable::fitSizeToContent()
     {
+        horizontalHeader()->setStretchLastSection(false);
         resizeRowsToContents();
         resizeColumnsToContents();
 
@@ -115,6 +116,9 @@ namespace hal
         }
         setFixedHeight(h);
         setMinimumWidth(w);
+        horizontalHeader()->setStretchLastSection(true);
+        update();
+        updateGeometry();
     }
 
 }
