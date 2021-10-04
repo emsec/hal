@@ -1,17 +1,98 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include "netlist_simulator_controller/simulation_input.h"
+#include "hal_core/netlist/boolean_function.h"
+#include "hal_core/defines.h"
 
 namespace hal {
 
     class SimulationEngine {
         std::string mName;
     public:
-        SimulationEngine(const std::string& nam) : mName(nam) {;}
+        SimulationEngine(const std::string& nam);
+
+        /**
+         * Must be implemented by derived class
+         *
+         * Will be called by controller to pass all relevant information to setup the simulation
+         * @param[in] simInput the input
+         */
         virtual void setSimulationInput(SimulationInput* simInput) = 0;
-        virtual void run() = 0;
+
+        /**
+         * Must be implemented by derived class
+         *
+         * Returns VCD file name of results if any.
+         * @return file name or empty string if no VCD file has been generated (yet).
+         */
+        virtual std::string resultFilename() const = 0;
+
+        /**
+         * Must be implemented by derived class
+         *
+         * Will be called by controller to start simulation.
+         *
+         * Derived classes SimulationEngineEventDriven and SimulationEngineScripted will
+         * implement their own run handlers to start either a separate process or a thread
+         *
+         * @return true if successful, false on error
+         */
+        virtual bool run() = 0;
         std::string name() const { return mName; }
+    };
+
+    class SimulationEngineEventDriven : public SimulationEngine
+    {
+        bool run() override;
+        void setSimulationInput(SimulationInput *simInput) override { mSimulationInput = simInput; }
+    protected:
+        SimulationInput* mSimulationInput;
+    public:
+        SimulationEngineEventDriven(const std::string& nam) : SimulationEngine(nam), mSimulationInput(nullptr) {;}
+
+        /**
+         * Must be implemented by derived class
+         *
+         * Passes an event to engine to trigger simulation
+         * @param[in] netInputs Input values (0,1,X,Z) for net id
+         * @param[in] simulationDuration number of cycles to simulate
+         * @return
+         */
+        virtual bool inputEvent(const std::unordered_map<u32,BooleanFunction::Value>& netInputs, u64 simulationDuration) = 0;
+
+        /**
+         * Can be implemented by derived class
+         *
+         * Signals the engine that all input events have been processed
+         */
+        virtual void done() {;}
+    };
+
+    class SimulationEngineScripted : public SimulationEngine
+    {
+        virtual bool run() override;
+    public:
+        SimulationEngineScripted(const std::string& nam) : SimulationEngine(nam) {;}
+
+        /**
+         * Must be implemented by derived class
+         *
+         * Returns the information how many
+         * command lines are to be executed
+         * @return number of command lines
+         */
+        virtual int numberCommandLines() const = 0;
+
+        /**
+         * Must be implemented by derived class
+         *
+         * Returns command and argument to be executed
+         * @param[in] lineNumber the line index of the script starting from 0
+         * @return first element is command to be executed, subsequent elements are arguments
+         */
+        virtual std::vector<std::string> commandLine(int lineIndex) const = 0;
     };
 
     class SimulationEngines : public std::vector<SimulationEngine*>

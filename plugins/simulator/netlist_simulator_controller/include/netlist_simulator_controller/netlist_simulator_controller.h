@@ -27,7 +27,6 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
-#include "netlist_simulator/netlist_simulator.h"
 
 #include <functional>
 #include <map>
@@ -39,6 +38,7 @@
 #include <memory>
 
 #include "netlist_simulator_controller/wave_data.h"
+#include "netlist_simulator_controller/simulation_input.h"
 
 namespace hal
 {
@@ -84,6 +84,6 @@ namespace hal
         WaveDataList mWaveDataList;
         QMap<u32,const WaveData*> mResultMap;
 
-
+        SimulationInput* mSimulationInput;
     };
 }    // namespace hal

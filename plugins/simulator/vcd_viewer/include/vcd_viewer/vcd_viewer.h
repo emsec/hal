@@ -30,6 +30,7 @@
 #include "gui/content_widget/content_widget.h"
 #include "gui/content_manager/content_manager.h"
 #include "netlist_simulator/netlist_simulator.h"
+#include "netlist_simulator_controller/simulation_input.h"
 
 #include <functional>
 #include <map>
@@ -49,6 +50,7 @@ namespace hal
     class WaveWidget;
     class WaveData;
     class Toolbar;
+    class SimulationInput;
 
     class NETLIST_API VcdViewerFactory : public ContentFactory
     {
@@ -107,5 +109,7 @@ namespace hal
 
         WaveWidget* mWaveWidget;
         QStatusBar* mStatusBar;
+
+        SimulationInput* mSimulationInput;
     };
 }    // namespace hal

@@ -20,6 +20,6 @@ if(PL_VCD_VIEWER OR BUILD_ALL_PLUGINS)
                    #PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/graph_algorithm.rst
                    HEADER ${VCD_VIEWER_INC}
                    SOURCES ${VCD_VIEWER_SRC} ${VCD_VIEWER_PYTHON_SRC}  ${MOC_HDR}
-                   LINK_LIBRARIES PUBLIC gui netlist_simulator Qt5::Core Qt5::Gui Qt5::Widgets)
+                   LINK_LIBRARIES PUBLIC gui netlist_simulator netlist_simulator_controller Qt5::Core Qt5::Gui Qt5::Widgets)
 
 endif()

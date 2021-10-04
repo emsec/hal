@@ -138,7 +138,7 @@
         "data_identifier": "INIT",
         "next_state": "D & !R",
         "clocked_on": "C",
-        "preset_on": "R"
+        "clear_on": "R"
       },
       "pins": [
         {
@@ -209,7 +209,7 @@
         "data_identifier": "INIT",
         "next_state": "D | S",
         "clocked_on": "C",
-        "clear_on": "S"
+        "preset_on": "S"
       },
       "pins": [
         {
@@ -285,7 +285,7 @@
         "data_identifier": "INIT",
         "next_state": "D & !R",
         "clocked_on": "E & C",
-        "preset_on": "R"
+        "clear_on": "R"
       },
       "pins": [
         {
@@ -366,7 +366,7 @@
         "data_identifier": "INIT",
         "next_state": "D | S",
         "clocked_on": "E & C",
-        "clear_on": "S"
+        "preset_on": "S"
       },
       "pins": [
         {
@@ -507,7 +507,7 @@
         "data_identifier": "INIT",
         "next_state": "D & !R",
         "clocked_on": "!C",
-        "preset_on": "R"
+        "clear_on": "R"
       },
       "pins": [
         {
@@ -578,7 +578,7 @@
         "data_identifier": "INIT",
         "next_state": "D | S",
         "clocked_on": "!C",
-        "clear_on": "S"
+        "preset_on": "S"
       },
       "pins": [
         {
@@ -649,7 +649,7 @@
         "data_identifier": "INIT",
         "next_state": "D & !R",
         "clocked_on": "E & !C",
-        "preset_on": "R"
+        "clear_on": "R"
       },
       "pins": [
         {
@@ -730,7 +730,7 @@
         "data_identifier": "INIT",
         "next_state": "D | S",
         "clocked_on": "E & !C",
-        "clear_on": "S"
+        "preset_on": "S"
       },
       "pins": [
         {

@@ -1,4 +1,5 @@
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_input.h"
 
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/vcd_serializer.h"
@@ -16,14 +17,15 @@
 #include <QDebug>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
-#include "netlist_simulator/plugin_netlist_simulator.h"
+#include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 
 namespace hal
 {
 
 
     NetlistSimulatorController::NetlistSimulatorController(QObject *parent)
-        : QObject(parent), mState(NoGatesSelected), mClkNet(nullptr)
+        : QObject(parent), mState(NoGatesSelected), mClkNet(nullptr),
+          mSimulationInput(new SimulationInput)
     {;}
 
     void NetlistSimulatorController::setState(SimulationState stat)
@@ -116,7 +118,7 @@ namespace hal
             return;
         }
         QMultiMap<int,QPair<const Net*, BooleanFunction::Value>> inputMap;
-        for (const Net* n : mSimulator->get_input_nets())
+        for (const Net* n : mSimulationInput->get_input_nets())
         {
             if (n==mClkNet) continue;
             const WaveData* wd = mWaveDataList.waveDataByNetId(n->get_id());
@@ -134,6 +136,8 @@ namespace hal
                 inputMap.insertMulti(it.key(),QPair<const Net*,BooleanFunction::Value>(n,sv));
             }
         }
+
+        /* TODO trigger simulation
         int t=0;
         for (auto it = inputMap.begin(); it != inputMap.end(); ++it)
         {
@@ -145,6 +149,7 @@ namespace hal
             mSimulator->set_input(it.value().first,it.value().second);
         }
 
+        */
         /*
        for (Net* n : gNetlist->get_nets())
         {
@@ -182,7 +187,9 @@ namespace hal
     void NetlistSimulatorController::setClock(const Net *n, int period, int start)
     {
         mClkNet = n;
-        mSimulator->add_clock_period(mClkNet,period,start==0);
+
+        // TODO: clock set unify
+        // mSimulator->add_clock_period(mClkNet,period,start==0);
         WaveData* wd = WaveData::clockFactory(mClkNet, start, period, 2000);
         mWaveDataList.addOrReplace(wd);
     }

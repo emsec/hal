@@ -8,4 +8,11 @@ namespace hal {
         if (!inst) inst = new SimulationEngines;
         return inst;
     }
+
+    SimulationEngine::SimulationEngine(const std::string& nam) : mName(nam)
+    {
+        SimulationEngines::instance()->push_back(this);
+    }
+
+
 }

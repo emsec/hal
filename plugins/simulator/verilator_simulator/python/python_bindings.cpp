@@ -31,7 +31,7 @@ namespace hal
             .def("get_version", &VerilatorSimulatorPlugin::get_version);
 
         auto py_verilator_simulator = m.def_submodule("VerilatorSimulator");
-        py_verilator_simulator.def("convert_gate_library_to_verilog", &verilator_simulator::convert_gate_library_to_verilog);
+        py_verilator_simulator.def("convert_gate_library_to_verilog", &verilator_simulator::converter::convert_gate_library_to_verilog);
         // py_verilator_simulator.def("verify_counter", &verilator_simulator::verify_counter);
 
 #ifndef PYBIND11_MODULE

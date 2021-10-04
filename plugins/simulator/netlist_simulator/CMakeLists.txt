@@ -10,7 +10,8 @@ if(PL_NETLIST_SIMULATOR OR PL_SIMULATOR OR BUILD_ALL_PLUGINS)
                    SHARED
                    HEADER ${NETLIST_SIMULATOR_INC}
                    SOURCES ${NETLIST_SIMULATOR_SRC} ${NETLIST_SIMULATOR_PYTHON_SRC}
-                   PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/netlist_simulator.rst)
+                   PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/netlist_simulator.rst
+                   LINK_LIBRARIES PUBLIC netlist_simulator_controller)
 
     add_subdirectory(test)
 

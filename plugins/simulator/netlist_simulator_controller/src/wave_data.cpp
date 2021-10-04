@@ -1,9 +1,10 @@
 #include "netlist_simulator_controller/wave_data.h"
-#include "netlist_simulator/netlist_simulator.h"
-#include "netlist_simulator/event.h"
+//#include "netlist_simulator/event.h"
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/net.h"
 #include <math.h>
 #include <vector>
+#include <QString>
 
 
 namespace hal {
@@ -31,6 +32,8 @@ namespace hal {
         return retval;
     }
 
+    /* TODO transfer results from netlist_simulator
+
     WaveData* WaveData::simulationResultFactory(Net *n, const NetlistSimulator* sim)
     {
         const std::vector<Event>& evts = sim->get_simulation_events(n);
@@ -54,6 +57,8 @@ namespace hal {
             retval->insert(0,-1);
         return retval;
     }
+
+    */
 
     void WaveData::setStartvalue(int val)
     {
