@@ -1,5 +1,5 @@
 #include "netlist_simulator_controller/wave_data.h"
-//#include "netlist_simulator/event.h"
+#include "netlist_simulator_controller/wave_event.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/net.h"
 #include <math.h>
@@ -36,7 +36,7 @@ namespace hal {
 
     WaveData* WaveData::simulationResultFactory(Net *n, const NetlistSimulator* sim)
     {
-        const std::vector<Event>& evts = sim->get_simulation_events(n);
+        const std::vector<WaveEvent>& evts = sim->get_simulation_events(n);
         if (evts.empty()) return nullptr;
         WaveData* retval = new WaveData(n);
         for (const Event& evt : evts)
@@ -148,4 +148,23 @@ namespace hal {
         return at(inx);
     }
 
+    void WaveDataList::restoreIndex()
+    {
+        mIds.clear();
+        int inx = 0;
+        for (const WaveData* wd : *this)
+        {
+            mIds[wd->id()] = inx++;
+        }
+    }
+
+    void WaveDataList::remove(u32 id)
+    {
+        auto it = mIds.find(id);
+        if (it == mIds.end()) return;
+        int inx = it.value();
+        delete at(inx);
+        removeAt(inx);
+        restoreIndex();
+    }
 }

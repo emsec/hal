@@ -1,6 +1,6 @@
 #include "vcd_viewer/wave_scene.h"
 #include "vcd_viewer/wave_item.h"
-#include "vcd_viewer/wave_data.h"
+#include "netlist_simulator_controller/wave_data.h"
 #include "vcd_viewer/wave_cursor.h"
 #include "vcd_viewer/wave_timescale.h"
 #include "vcd_viewer/vcd_serializer.h"

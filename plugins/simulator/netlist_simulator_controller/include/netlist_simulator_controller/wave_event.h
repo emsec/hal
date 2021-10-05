@@ -28,7 +28,7 @@
 
 namespace hal
 {
-    struct Event
+    struct WaveEvent
     {
         /**
          * The net affected by the event.
@@ -56,7 +56,7 @@ namespace hal
          * @param[in] other - Event to compare to.
          * @returns True when both events are equal, false otherwise.
          */
-        bool operator==(const Event& other) const
+        bool operator==(const WaveEvent& other) const
         {
             return affected_net == other.affected_net && new_value == other.new_value && time == other.time;
         }
@@ -67,7 +67,7 @@ namespace hal
          * @param[in] other - Event to compare to.
          * @returns True when this event happened before the other, false otherwise.
          */
-        bool operator<(const Event& other) const
+        bool operator<(const WaveEvent& other) const
         {
             if (time != other.time)
             {

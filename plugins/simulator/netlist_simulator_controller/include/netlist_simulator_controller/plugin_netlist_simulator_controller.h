@@ -32,12 +32,26 @@ namespace hal
 
     class PLUGIN_API NetlistSimulatorControllerPlugin : public BasePluginInterface
     {
-        NetlistSimulatorController* mNetlistSimulatorController;
     public:
+        /**
+         * Get the name of the plugin.
+         *
+         * @returns The name of the plugin.
+         */
         std::string get_name() const override;
+
+        /**
+         * Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
         std::string get_version() const override;
 
-        void on_load() override;
-        void on_unload() override;
+        /**
+         * Create a netlist simulator instance.
+         *
+         * @returns The simulator instance.
+         */
+        std::unique_ptr<NetlistSimulatorController> create_simulator_controller() const;
     };
 }    // namespace hal

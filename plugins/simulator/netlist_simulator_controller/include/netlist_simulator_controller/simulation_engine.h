@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include "netlist_simulator_controller/simulation_input.h"
+#include "netlist_simulator_controller/wave_event.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/defines.h"
 
@@ -12,6 +13,7 @@ namespace hal {
         std::string mName;
     public:
         SimulationEngine(const std::string& nam);
+        virtual ~SimulationEngine() {;}
 
         /**
          * Must be implemented by derived class
@@ -70,6 +72,14 @@ namespace hal {
          * @return true if event was handled successfully, false otherwise
          */
         virtual bool inputEvent(const SimulationInputNetEvent& netEv) = 0;
+
+        /**
+         * Get vector of simulated events for net
+         *
+         * @param[in] n - The net for which events where simulated
+         * @return Vector of events
+         */
+        virtual std::vector<WaveEvent> get_simulation_events(Net *n) const;
     };
 
     class SimulationEngineScripted : public SimulationEngine
@@ -103,5 +113,9 @@ namespace hal {
         static SimulationEngines* inst;
     public:
         static SimulationEngines* instance();
+
+        std::vector<std::string> names() const;
+        SimulationEngine* engineByName(const std::string nam) const;
+        void deleteEngine(const std::string nam);
     };
 }

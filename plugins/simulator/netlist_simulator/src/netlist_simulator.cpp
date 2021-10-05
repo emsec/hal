@@ -41,7 +41,7 @@ namespace hal
             }
         }
 
-        Event e;
+        WaveEvent e;
         e.affected_net = net;
         e.time         = m_current_time;
         e.new_value    = value;
@@ -93,7 +93,7 @@ namespace hal
                 {
                     if (pin_types.at(ep->get_pin()) == PinType::state)
                     {
-                        Event e;
+                        WaveEvent e;
                         e.affected_net = ep->get_net();
                         e.new_value    = value;
                         e.time         = m_current_time;
@@ -101,7 +101,7 @@ namespace hal
                     }
                     else if (pin_types.at(ep->get_pin()) == PinType::neg_state)
                     {
-                        Event e;
+                        WaveEvent e;
                         e.affected_net = ep->get_net();
                         e.new_value    = inv_value;
                         e.time         = m_current_time;
@@ -158,7 +158,7 @@ namespace hal
                     {
                         if (pin_types.at(ep->get_pin()) == PinType::state)
                         {
-                            Event e;
+                            WaveEvent e;
                             e.affected_net = ep->get_net();
                             e.new_value    = value;
                             e.time         = m_current_time;
@@ -166,7 +166,7 @@ namespace hal
                         }
                         else if (pin_types.at(ep->get_pin()) == PinType::neg_state)
                         {
-                            Event e;
+                            WaveEvent e;
                             e.affected_net = ep->get_net();
                             e.new_value    = inv_value;
                             e.time         = m_current_time;
@@ -221,12 +221,12 @@ namespace hal
         return m_timeout_iterations;
     }
 
-    std::vector<Event> NetlistSimulator::get_simulation_events(Net* n) const
+    std::vector<WaveEvent> NetlistSimulator::get_simulation_events(Net* n) const
     {
-        std::unordered_map<const Net*, std::vector<Event>> sim_events = m_simulation.get_events();
+        std::unordered_map<const Net*, std::vector<WaveEvent>> sim_events = m_simulation.get_events();
         auto it = sim_events.find(n);
         if (it == sim_events.end())
-            return std::vector<Event>();
+            return std::vector<WaveEvent>();
         return it->second;
     }
 
@@ -361,7 +361,7 @@ namespace hal
         // set initial values
         for (const auto& [net, value] : init_events)
         {
-            Event e;
+            WaveEvent e;
             e.affected_net = net;
             e.new_value    = value;
             e.time         = m_current_time;
@@ -390,7 +390,7 @@ namespace hal
             // insert the required amount of clock signal switch events
             while (time < picoseconds)
             {
-                Event e;
+                WaveEvent e;
                 e.affected_net = c.clock_net;
                 e.new_value    = v;
                 e.time         = base_time + time;
@@ -521,7 +521,7 @@ namespace hal
             m_event_queue.reserve(m_event_queue.size() + new_events.size());
             for (const auto& event_it : new_events)
             {
-                Event e;
+                WaveEvent e;
                 e.affected_net = event_it.first.first;
                 e.time         = event_it.first.second;
                 e.new_value    = event_it.second;
@@ -591,7 +591,7 @@ namespace hal
         //declare variables
         vcd << "$scope module TOP $end" << std::endl;
 
-        std::unordered_map<const Net*, std::vector<Event>> events = m_simulation.get_events();
+        std::unordered_map<const Net*, std::vector<WaveEvent>> events = m_simulation.get_events();
         std::vector<const Net*> simulated_nets;
 
         for (auto net_changes : events)
@@ -615,11 +615,11 @@ namespace hal
 
         std::map<u32, std::map<const Net*, BooleanFunction::Value>> time_to_changes_map;
 
-        std::unordered_map<const Net*, std::vector<Event>> event_tracker = m_simulation.get_events();
+        std::unordered_map<const Net*, std::vector<WaveEvent>> event_tracker = m_simulation.get_events();
 
         for (const auto& simulated_net : simulated_nets)
         {
-            std::vector<Event> net_events        = event_tracker.at(simulated_net);
+            std::vector<WaveEvent> net_events        = event_tracker.at(simulated_net);
             BooleanFunction::Value initial_value = BooleanFunction::Value::X;
             u32 initial_time                     = 0;
 

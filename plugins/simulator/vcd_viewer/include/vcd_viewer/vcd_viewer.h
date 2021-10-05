@@ -29,8 +29,9 @@
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/content_manager/content_manager.h"
-#include "netlist_simulator/netlist_simulator.h"
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_input.h"
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
 
 #include <functional>
 #include <map>
@@ -95,7 +96,7 @@ namespace hal
         void setState(SimulationState stat);
 
         SimulationState mState;
-        std::shared_ptr<NetlistSimulator> mSimulator;
+        std::shared_ptr<NetlistSimulatorController> mController;
         std::vector<const Net*> mInputNets;
         const Net* mClkNet;
         std::vector<Gate*> mSimulateGates;
@@ -110,6 +111,5 @@ namespace hal
         WaveWidget* mWaveWidget;
         QStatusBar* mStatusBar;
 
-        SimulationInput* mSimulationInput;
     };
 }    // namespace hal
