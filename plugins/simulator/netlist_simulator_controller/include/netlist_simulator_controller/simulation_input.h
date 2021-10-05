@@ -10,7 +10,7 @@ namespace hal {
     class Gate;
     class Net;
 
-    class SimulationInputNetEvent : public std::unordered_map<u32,BooleanFunction::Value>
+    class SimulationInputNetEvent : public std::unordered_map<const Net*,BooleanFunction::Value>
     {
         u64 mSimulationDuration;
     public:
@@ -63,32 +63,25 @@ namespace hal {
         const std::vector<Clock>& get_clocks() const { return m_clocks; }
 
         /**
+         * Tests whether net has been selected as clock
+         * @param[in] n pointer to net
+         * @return true if net has been selected as clock, false otherwise
+         */
+        bool is_clock(const Net* n) const;
+
+        /**
+         * Adds a clock
+         * @param[in] clk reference to clock instance
+         */
+        void add_clock(const Clock& clk);
+
+        /**
          * Add gates to the simulation set that contains all gates that are considered during simulation.
          * This function can only be called before the simulation has been initialized.
          *
          * @param[in] gates - The gates to add.
          */
         void add_gates(const std::vector<Gate*>& gates);
-
-        /**
-         * Specify a net that carries the clock signal and set the clock frequency in hertz.
-         * This function can only be called before the simulation has been initialized.
-         *
-         * @param[in] clock_net - The net that carries the clock signal.
-         * @param[in] frequency - The clock frequency in hertz.
-         * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
-         */
-        void add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero = true);
-
-        /**
-         * Specify a net that carries the clock signal and set the clock period in picoseconds.
-         * This function can only be called before the simulation has been initialized.
-         *
-         * @param[in] clock_net - The net that carries the clock signal.
-         * @param[in] period - The clock period from rising edge to rising edge in picoseconds.
-         * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
-         */
-        void add_clock_period(const Net* clock_net, u64 period, bool start_at_zero = true);
 
         void clear();
 

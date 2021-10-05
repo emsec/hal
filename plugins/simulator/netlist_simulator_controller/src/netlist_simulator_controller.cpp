@@ -1,5 +1,6 @@
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_input.h"
+#include "netlist_simulator_controller/simulation_engine.h"
 
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/vcd_serializer.h"
@@ -24,7 +25,7 @@ namespace hal
 
 
     NetlistSimulatorController::NetlistSimulatorController(QObject *parent)
-        : QObject(parent), mState(NoGatesSelected), mClkNet(nullptr),
+        : QObject(parent), mState(NoGatesSelected), mSimulationEngine(nullptr),
           mSimulationInput(new SimulationInput)
     {;}
 
@@ -39,6 +40,17 @@ namespace hal
         case SimulationRun:    log_info("simulator_contr", "Running simulation, please wait...");     break;
         case ShowResults:      log_info("simulator_contr", "Select wires in graph to show results");  break;
         }
+    }
+
+    bool NetlistSimulatorController::setSimulationEngine(const QString& name)
+    {
+        mSimulationEngine = SimulationEngines::instance()->engineByName(name.toStdString());
+        return (mSimulationEngine != nullptr);
+    }
+
+    SimulationEngine* NetlistSimulatorController::simulationEngine() const
+    {
+        return mSimulationEngine;
     }
 
     void NetlistSimulatorController::initSimulator()
@@ -106,21 +118,24 @@ namespace hal
 
     void NetlistSimulatorController::handleRunSimulation()
     {
-        mResultMap.clear();
-        if (!mClkNet)
+        if (!mSimulationEngine)
         {
-            qDebug() << "no clock found";
+            log_warning("sim_controller", "no simulation engine selected");
             return;
         }
+
+        mResultMap.clear();
+
         if (mState != ParameterSetup)
         {
-            qDebug() << "wrong state" << mState;
+            log_warning("sim_controller", "wrong state {}.", (u32) mState);
             return;
         }
+
         QMultiMap<int,QPair<const Net*, BooleanFunction::Value>> inputMap;
         for (const Net* n : mSimulationInput->get_input_nets())
         {
-            if (n==mClkNet) continue;
+            if (mSimulationInput->is_clock(n)) continue;
             const WaveData* wd = mWaveDataList.waveDataByNetId(n->get_id());
             for (auto it=wd->constBegin(); it != wd->constEnd(); ++it)
             {
@@ -137,19 +152,25 @@ namespace hal
             }
         }
 
-        /* TODO trigger simulation
         int t=0;
+        SimulationInputNetEvent netEv;
         for (auto it = inputMap.begin(); it != inputMap.end(); ++it)
         {
             if (it.key() != t)
             {
-                mSimulator->simulate(it.key() - t);
+                netEv.set_simulation_duration(it.key() - t);
+                mSimulationInput->add_simulation_net_event(netEv);
+                netEv.clear();
                 t = it.key();
             }
-            mSimulator->set_input(it.value().first,it.value().second);
+            netEv[it.value().first] = it.value().second;
         }
 
-        */
+        mSimulationEngine->setSimulationInput(mSimulationInput);
+
+        mSimulationEngine->run();
+
+        mSimulationEngine->done();
         /*
        for (Net* n : gNetlist->get_nets())
         {
@@ -167,23 +188,81 @@ namespace hal
         setState(ShowResults);
     }
 
-    void NetlistSimulatorController::handleClockSet()
+    void NetlistSimulatorController::add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero)
     {
-        /*
-        int period = csd.period();
-        if (period <= 0) return;
-
-        int start = csd.startValue();
-        mClkNet = mInputNets.at(csd.netIndex());
-
-        mDuration = csd.duration();
-        mSimulator->add_clock_period(mClkNet,period,start==0);
-        WaveData* wd = WaveData::clockFactory(mClkNet, start, period, mDuration);
-        mWaveDataList.addOrReplace(wd);
-        setState(SimulationInputGenerate);
-        */
+        u64 period = 1'000'000'000'000ul / frequency;
+        add_clock_period(clock_net, period, start_at_zero);
     }
 
+    void NetlistSimulatorController::add_clock_period(const Net* clock_net, u64 period, bool start_at_zero)
+    {
+        SimulationInput::Clock clk;
+        clk.clock_net     = clock_net;
+        clk.switch_time   = period / 2;
+        clk.start_at_zero = start_at_zero;
+        mSimulationInput->add_clock(clk);
+        WaveData* wd = WaveData::clockFactory(clock_net, start_at_zero ? 0 : 1, period, 2000);
+        mWaveDataList.addOrReplace(wd);
+    }
+
+    void NetlistSimulatorController::add_gates(const std::vector<Gate *> &gates)
+    {
+        mSimulationInput->add_gates(gates);
+
+        QSet<u32> previousInputSet = mWaveDataList.toSet();
+        QSet<u32> currentInputSet;
+        for (const Net* n : mSimulationInput->get_input_nets())
+        {
+            u32 nid = n->get_id();
+            if (!previousInputSet.contains(nid))
+            {
+                WaveData* wd = new WaveData(nid, QString::fromStdString(n->get_name()));
+                mWaveDataList.addOrReplace(wd);
+            }
+            currentInputSet.insert(nid);
+        }
+        previousInputSet -= currentInputSet;
+        for (u32 id : previousInputSet)
+        {
+            mWaveDataList.remove(id);
+        }
+    }
+
+    const std::unordered_set<const Gate*>& NetlistSimulatorController::get_gates() const
+    {
+        return mSimulationInput->get_gates();
+    }
+
+    const std::vector<const Net*>& NetlistSimulatorController::get_input_nets() const
+    {
+        return mSimulationInput->get_input_nets();
+    }
+
+    const std::vector<const Net*>& NetlistSimulatorController::get_output_nets() const
+    {
+        return mSimulationInput->get_output_nets();
+    }
+
+    void NetlistSimulatorController::set_input(const Net* net, BooleanFunction::Value value)
+    {
+
+    }
+
+    void NetlistSimulatorController::initialize()
+    {
+
+    }
+
+    void NetlistSimulatorController::reset()
+    {
+
+    }
+
+    void NetlistSimulatorController::simulate(u64 picoseconds)
+    {
+
+    }
+    /*
     void NetlistSimulatorController::setClock(const Net *n, int period, int start)
     {
         mClkNet = n;
@@ -193,6 +272,7 @@ namespace hal
         WaveData* wd = WaveData::clockFactory(mClkNet, start, period, 2000);
         mWaveDataList.addOrReplace(wd);
     }
+*/
 
     void NetlistSimulatorController::handleSelectGates()
     {

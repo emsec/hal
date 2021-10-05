@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "netlist_simulator/event.h"
+#include "netlist_simulator_controller/wave_event.h"
 
 #include <unordered_map>
 #include <vector>
@@ -49,18 +49,18 @@ namespace hal
          *
          * @param[in] event - The event to add.
          */
-        void add_event(const Event& event);
+        void add_event(const WaveEvent& event);
 
         /**
          * Get all events of the simulation.
          *
          * @returns A map from net to associated events for that net sorted by time.
          */
-        std::unordered_map<const Net*, std::vector<Event>> get_events() const;
+        std::unordered_map<const Net *, std::vector<WaveEvent> > get_events() const;
 
     private:
         friend class NetlistSimulator;
-        std::unordered_map<const Net*, std::vector<Event>> m_events;
+        std::unordered_map<const Net*, std::vector<WaveEvent>> m_events;
     };
 
 }    // namespace hal

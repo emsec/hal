@@ -90,7 +90,7 @@ namespace hal
         }
     }
 
-    bool NetlistSimulator::SimulationGateFF::simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
+    bool NetlistSimulator::SimulationGateFF::simulate(const Simulation& simulation, const WaveEvent &event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)
     {
         // compute delay, currently just a placeholder
         u64 delay = 0;

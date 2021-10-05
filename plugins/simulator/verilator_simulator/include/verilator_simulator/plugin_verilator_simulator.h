@@ -32,6 +32,8 @@ namespace hal {
 class Netlist;
 
 class PLUGIN_API VerilatorSimulatorPlugin : public BasePluginInterface {
+    static std::string s_engine_name;
+
 public:
     /**
          * Get the name of the plugin.
@@ -46,5 +48,16 @@ public:
          * @returns The version of the plugin.
          */
     std::string get_version() const override;
+
+    /**
+     * Creates instance and registers with NetlistSimulatorController
+     */
+    void on_load() override;
+
+    /**
+     * Unregisters and delete instance
+     */
+    void on_unload() override;
+
 };
 } // namespace hal

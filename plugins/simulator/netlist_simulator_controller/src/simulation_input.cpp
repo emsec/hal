@@ -22,19 +22,16 @@ namespace hal {
         return mSimulationSet;
     }
 
-    void SimulationInput::add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero)
+    bool SimulationInput::is_clock(const Net* n) const
     {
-        u64 period = 1'000'000'000'000ul / frequency;
-        add_clock_period(clock_net, period, start_at_zero);
+        for (const Clock& c: m_clocks)
+            if (c.clock_net == n) return true;
+        return false;
     }
 
-    void SimulationInput::add_clock_period(const Net* clock_net, u64 period, bool start_at_zero)
+    void SimulationInput::add_clock(const Clock& clk)
     {
-        Clock c;
-        c.clock_net     = clock_net;
-        c.switch_time   = period / 2;
-        c.start_at_zero = start_at_zero;
-        m_clocks.push_back(c);
+        m_clocks.push_back(clk);
     }
 
     void SimulationInput::clear()
@@ -43,6 +40,16 @@ namespace hal {
         m_clocks.clear();
         m_input_nets.clear();
         m_output_nets.clear();
+    }
+
+    const std::vector<const Net*>& SimulationInput::get_input_nets() const
+    {
+        return m_input_nets;
+    }
+
+    const std::vector<const Net*>& SimulationInput::get_output_nets() const
+    {
+        return m_output_nets;
     }
 
     void SimulationInput::compute_input_nets()

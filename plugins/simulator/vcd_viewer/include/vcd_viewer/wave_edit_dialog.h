@@ -4,7 +4,7 @@
 #include <QAbstractTableModel>
 #include <QTableView>
 #include <QStyledItemDelegate>
-#include "wave_data.h"
+#include "netlist_simulator_controller/wave_data.h"
 
 namespace hal {
 

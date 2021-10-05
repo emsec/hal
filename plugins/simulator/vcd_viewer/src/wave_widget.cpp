@@ -2,7 +2,7 @@
 #include "vcd_viewer/wave_view.h"
 #include "vcd_viewer/wave_scene.h"
 #include "vcd_viewer/wave_label.h"
-#include "vcd_viewer/wave_data.h"
+#include "netlist_simulator_controller/wave_data.h"
 #include "vcd_viewer/wave_edit_dialog.h"
 #include "math.h"
 

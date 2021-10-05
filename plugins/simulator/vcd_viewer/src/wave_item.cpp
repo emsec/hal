@@ -1,7 +1,7 @@
 #include <QPainter>
 
 #include "vcd_viewer/wave_item.h"
-#include "vcd_viewer/wave_data.h"
+#include "netlist_simulator_controller/wave_data.h"
 #include <QGraphicsScene>
 #include <QDebug>
 #include <math.h>

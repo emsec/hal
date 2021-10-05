@@ -164,7 +164,7 @@ namespace hal
          * @param[in] n - The net for which events where simulated
          * @return Vector of events
          */
-        std::vector<Event> get_simulation_events(Net *n) const;
+        std::vector<WaveEvent> get_simulation_events(Net *n) const override;
 
         std::string resultFilename() const override { return std::string(); } // TODO : name of vcd file if any
 
@@ -183,7 +183,7 @@ namespace hal
             SimulationGate(const Gate* gate);
             virtual ~SimulationGate() = default;
 
-            virtual bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) = 0;
+            virtual bool simulate(const Simulation& simulation, const WaveEvent& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) = 0;
         };
 
         struct SimulationGateCombinational : public SimulationGate
@@ -194,7 +194,7 @@ namespace hal
 
             SimulationGateCombinational(const Gate* gate);
 
-            bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
+            bool simulate(const Simulation& simulation, const WaveEvent& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
         };
 
         struct SimulationGateSequential : public SimulationGate
@@ -202,7 +202,7 @@ namespace hal
             SimulationGateSequential(const Gate* gate);
 
             virtual void initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value)                = 0;
-            virtual bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) = 0;
+            virtual bool simulate(const Simulation& simulation, const WaveEvent& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) = 0;
             virtual void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)                              = 0;
         };
 
@@ -223,7 +223,7 @@ namespace hal
             SimulationGateFF(const Gate* gate);
 
             void initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value) override;
-            bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
+            bool simulate(const Simulation& simulation, const WaveEvent& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
             void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
         };
 
@@ -248,7 +248,7 @@ namespace hal
             SimulationGateRAM(const Gate* gate);
 
             void initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value) override;
-            bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
+            bool simulate(const Simulation& simulation, const WaveEvent& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
             void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
         };
 
@@ -256,7 +256,7 @@ namespace hal
         std::vector<std::tuple<bool, BooleanFunction::Value, const std::function<bool(const Gate*)>>> m_init_seq_gates;
 
         u64 m_current_time = 0;
-        std::vector<Event> m_event_queue;
+        std::vector<WaveEvent> m_event_queue;
         Simulation m_simulation;
         u64 m_timeout_iterations = 10000000ul;
         u64 m_id_counter         = 0;
