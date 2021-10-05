@@ -105,7 +105,7 @@ namespace hal {
         {
             switch (index.column())
             {
-            case 0: return it.key();
+            case 0: return QVariant::fromValue(it.key());
             case 1: return mWaveData.textValue(it);
             case 2: return QString();
             default: return QVariant();

@@ -26,6 +26,7 @@ namespace hal {
             const Net* clock_net;
             u64 switch_time;
             bool start_at_zero;
+            u64 period() const { return switch_time * 2; }
         };
 
     private:

@@ -26,6 +26,7 @@ namespace hal
 
     NetlistSimulatorController::NetlistSimulatorController(QObject *parent)
         : QObject(parent), mState(NoGatesSelected), mSimulationEngine(nullptr),
+          mInputTime(0),
           mSimulationInput(new SimulationInput)
     {;}
 
@@ -42,15 +43,20 @@ namespace hal
         }
     }
 
-    bool NetlistSimulatorController::setSimulationEngine(const QString& name)
+    bool NetlistSimulatorController::set_simulation_engine(const QString& name)
     {
         mSimulationEngine = SimulationEngines::instance()->engineByName(name.toStdString());
         return (mSimulationEngine != nullptr);
     }
 
-    SimulationEngine* NetlistSimulatorController::simulationEngine() const
+    SimulationEngine* NetlistSimulatorController::get_simulation_engine() const
     {
         return mSimulationEngine;
+    }
+
+    std::vector<std::string> NetlistSimulatorController::get_engine_names() const
+    {
+        return SimulationEngines::instance()->names();
     }
 
     void NetlistSimulatorController::initSimulator()
@@ -166,7 +172,7 @@ namespace hal
             netEv[it.value().first] = it.value().second;
         }
 
-        mSimulationEngine->setSimulationInput(mSimulationInput);
+        if (!mSimulationEngine->setSimulationInput(mSimulationInput)) return;
 
         mSimulationEngine->run();
 
@@ -245,7 +251,14 @@ namespace hal
 
     void NetlistSimulatorController::set_input(const Net* net, BooleanFunction::Value value)
     {
-
+        Q_ASSERT(net);
+        WaveData* wd = mWaveDataList.waveDataByNetId(net->get_id());
+        if (!wd)
+        {
+            wd = new WaveData(net);
+            mWaveDataList.add(wd);
+        }
+        wd->insertBooleanValue(mInputTime,value);
     }
 
     void NetlistSimulatorController::initialize()
@@ -255,12 +268,12 @@ namespace hal
 
     void NetlistSimulatorController::reset()
     {
-
+        mInputTime = 0;
     }
 
     void NetlistSimulatorController::simulate(u64 picoseconds)
     {
-
+        mInputTime += picoseconds;
     }
     /*
     void NetlistSimulatorController::setClock(const Net *n, int period, int start)

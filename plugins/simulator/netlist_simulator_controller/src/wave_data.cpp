@@ -1,6 +1,5 @@
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/wave_event.h"
-#include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/net.h"
 #include <math.h>
 #include <vector>
@@ -9,8 +8,8 @@
 
 namespace hal {
 
-    WaveData::WaveData(u32 id_, const QString& nam, const QMap<int, int> &other)
-        : QMap<int,int>(other), mId(id_), mName(nam)
+    WaveData::WaveData(u32 id_, const QString& nam, const QMap<u64,int> &other)
+        : QMap<u64,int>(other), mId(id_), mName(nam)
     {;}
 
     WaveData::WaveData(const Net* n)
@@ -32,6 +31,19 @@ namespace hal {
         return retval;
     }
 
+    void WaveData::insertBooleanValue(u64 t, BooleanFunction::Value bval)
+    {
+        int val = -1;
+        switch (bval)
+        {
+        case BooleanFunction::Value::Z:    val = -2; break;
+        case BooleanFunction::Value::X:    val = -1; break;
+        case BooleanFunction::Value::ZERO: val =  0; break;
+        case BooleanFunction::Value::ONE:  val =  1; break;
+        }
+        insert(t,val);
+    }
+
     /* TODO transfer results from netlist_simulator
 
     WaveData* WaveData::simulationResultFactory(Net *n, const NetlistSimulator* sim)
@@ -41,15 +53,7 @@ namespace hal {
         WaveData* retval = new WaveData(n);
         for (const Event& evt : evts)
         {
-            int val = -1;
-            switch (evt.new_value)
-            {
-            case BooleanFunction::Value::Z:    val = -2; break;
-            case BooleanFunction::Value::X:    val = -1; break;
-            case BooleanFunction::Value::ZERO: val =  0; break;
-            case BooleanFunction::Value::ONE:  val =  1; break;
-            }
-            retval->insert(evt.time,val);
+        insertBooleanValue(evt.time,evt.new_value)
         }
         // no start value defined?
         auto it = retval->lowerBound(0);
@@ -69,7 +73,7 @@ namespace hal {
         }
     }
 
-    bool WaveData::insertToggleTime(int t)
+    bool WaveData::insertToggleTime(u64 t)
     {
         if (isEmpty()) return false; // no start value
         auto it = upperBound(t);
@@ -95,7 +99,7 @@ namespace hal {
         return it.value();
     }
 
-    QString WaveData::textValue(const QMap<int,int>::const_iterator& it) const
+    QString WaveData::textValue(const QMap<u64,int>::const_iterator& it) const
     {
         if (it == constEnd()) return QString();
         switch (it.value()) {

@@ -60,8 +60,8 @@ namespace hal
         NetlistSimulatorController(QObject* parent = nullptr);
         ~NetlistSimulatorController() = default;
 
-        bool setSimulationEngine(const QString& name);
-        SimulationEngine* simulationEngine() const;
+        bool set_simulation_engine(const QString& name);
+        SimulationEngine* get_simulation_engine() const;
 
 
         /**
@@ -136,6 +136,12 @@ namespace hal
          */
         const std::vector<const Net*>& get_output_nets() const;
 
+        /**
+         * Shortcut to SimulationEngines::instance()->names()
+         * @return names of registered simulation engines
+         */
+        std::vector<std::string> get_engine_names() const;
+
         SimulationInput* input() const { return mSimulationInput; }
     private Q_SLOTS:
         void handleSimulSettings();
@@ -154,7 +160,7 @@ namespace hal
         SimulationState mState;
         SimulationEngine* mSimulationEngine;
 
-        std::vector<Gate*> mSimulateGates;
+        u64 mInputTime;
 
         WaveDataList mWaveDataList;
         QMap<u32,const WaveData*> mResultMap;

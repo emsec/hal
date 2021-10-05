@@ -116,7 +116,7 @@ namespace verilator_simulator {
 
     const int VerilatorEngine::s_command_lines = 3;
 
-    void VerilatorEngine::setSimulationInput(SimulationInput* simInput)
+    bool VerilatorEngine::setSimulationInput(SimulationInput* simInput)
     {
         const std::vector<const Gate*> simulation_gates(simInput->get_gates().begin(), simInput->get_gates().end());
         m_partial_netlist = netlist_utils::get_partial_netlist(simulation_gates.at(0)->get_netlist(), simulation_gates);
@@ -151,6 +151,8 @@ namespace verilator_simulator {
         if (!converter::convert_gate_library_to_verilog(m_partial_netlist.get(), simulator_dir)) {
             log_error("verilator_simulator", "could not create gate definitions in verilog");
         };
+
+        return true; // everything ok
     }
 
     int VerilatorEngine::numberCommandLines() const

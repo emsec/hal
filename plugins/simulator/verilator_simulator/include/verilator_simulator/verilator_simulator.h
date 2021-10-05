@@ -49,7 +49,7 @@ namespace verilator_simulator {
         }
         std::unique_ptr<Netlist> m_partial_netlist;
 
-        void setSimulationInput(SimulationInput* simInput) override;
+        bool setSimulationInput(SimulationInput* simInput) override;
         std::string resultFilename() const override { return m_result_filename; }
         int numberCommandLines() const override;
         std::vector<std::string> commandLine(int lineIndex) const override;

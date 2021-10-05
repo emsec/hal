@@ -1,4 +1,6 @@
 #include "netlist_simulator_controller/simulation_engine.h"
+#include "netlist_simulator_controller/simulation_thread.h"
+#include "netlist_simulator_controller/simulation_process.h"
 #include <QProcess>
 #include <QThread>
 
@@ -54,15 +56,23 @@ namespace hal {
         return std::vector<WaveEvent>();
     }
 
+    bool SimulationEngineEventDriven::setSimulationInput(SimulationInput *simInput)
+    {
+        mSimulationInput = simInput;
+        return true;
+    }
+
     bool SimulationEngineEventDriven::run()
     {
-        // TODO
+        SimulationThread* thread = new SimulationThread(mSimulationInput,this);
+        thread->start();
         return true;
     }
 
     bool SimulationEngineScripted::run()
     {
-        // TODO
+        SimulationProcess* proc = new SimulationProcess(this);
+        proc->start();
         return true;
     }
 }

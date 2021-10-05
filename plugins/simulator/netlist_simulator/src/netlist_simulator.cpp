@@ -232,7 +232,11 @@ namespace hal
 
     bool NetlistSimulator::inputEvent(const SimulationInputNetEvent& netEv)
     {
-        // TODO
+        for (auto it = netEv.begin(); it != netEv.end(); ++it)
+        {
+            set_input(it->first, it->second);
+        }
+        simulate(netEv.get_simulation_duration());
         return true;
     }
 

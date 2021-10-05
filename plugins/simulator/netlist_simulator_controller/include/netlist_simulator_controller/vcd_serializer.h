@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QList>
 #include <QMap>
+#include "hal_core/defines.h"
 
 namespace hal {
 
@@ -12,7 +13,7 @@ namespace hal {
     {
         int mIndex;
         const WaveData* mData;
-        QMap<int,int>::const_iterator mIterator;
+        QMap<u64,int>::const_iterator mIterator;
     public:
         VcdSerializerElement(int inx, const WaveData* wd);
         void hasNextElement() const;

@@ -119,6 +119,19 @@ namespace hal
                 :param hal_py.BooleanFunction.Value value: The value to set.
             )")
 
+            .def_property_readonly("get_engine_names", &NetlistSimulatorController::get_engine_names, R"(
+                A list of registered simulation engines.
+
+                :type: list[str]
+             )")
+
+            .def("get_engine_names", &NetlistSimulatorController::get_engine_names, R"(
+                Get a list of registered simulation engines.
+
+                :returns: A list of registered sim.
+                :rtype: list[str]
+             )")
+
                 /*
             .def("initialize_sequential_gates", py::overload_cast<const std::function<bool(const Gate*)>&>(&NetlistSimulator::initialize_sequential_gates), py::arg("filter") = nullptr, R"(
                 Configure the sequential gates matching the (optional) user-defined filter condition with initialization data specified within the netlist.

@@ -20,8 +20,9 @@ namespace hal {
          *
          * Will be called by controller to pass all relevant information to setup the simulation
          * @param[in] simInput the input
+         * @return true if engine could be prepared successfully with given input, false on error
          */
-        virtual void setSimulationInput(SimulationInput* simInput) = 0;
+        virtual bool setSimulationInput(SimulationInput* simInput) = 0;
 
         /**
          * Must be implemented by derived class
@@ -58,7 +59,7 @@ namespace hal {
     class SimulationEngineEventDriven : public SimulationEngine
     {
         bool run() override;
-        void setSimulationInput(SimulationInput *simInput) override { mSimulationInput = simInput; }
+        bool setSimulationInput(SimulationInput *simInput) override;
     protected:
         SimulationInput* mSimulationInput;
     public:
