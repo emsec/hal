@@ -28,42 +28,19 @@
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/net.h"
 #include "netlist_simulator/simulation.h"
+#include "netlist_simulator_controller/simulation_engine.h"
 
 #include <map>
 #include <unordered_set>
 
 namespace hal
 {
-    class NetlistSimulator
+    class SimulationInput;
+
+    class NetlistSimulator : public SimulationEngineEventDriven
     {
     public:
-        /**
-         * Add gates to the simulation set that contains all gates that are considered during simulation.
-         * This function can only be called before the simulation has been initialized.
-         *
-         * @param[in] gates - The gates to add.
-         */
-        void add_gates(const std::vector<Gate*>& gates);
 
-        /**
-         * Specify a net that carries the clock signal and set the clock frequency in hertz.
-         * This function can only be called before the simulation has been initialized.
-         *
-         * @param[in] clock_net - The net that carries the clock signal.
-         * @param[in] frequency - The clock frequency in hertz.
-         * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
-         */
-        void add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero = true);
-
-        /**
-         * Specify a net that carries the clock signal and set the clock period in picoseconds.
-         * This function can only be called before the simulation has been initialized.
-         *
-         * @param[in] clock_net - The net that carries the clock signal.
-         * @param[in] period - The clock period from rising edge to rising edge in picoseconds.
-         * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
-         */
-        void add_clock_period(const Net* clock_net, u64 period, bool start_at_zero = true);
 
         /**
          * Get all gates that are in the simulation set.
@@ -71,20 +48,6 @@ namespace hal
          * @returns The simulation set.
          */
         const std::unordered_set<Gate*>& get_gates() const;
-
-        /**
-         * Get all nets that are considered inputs, i.e., not driven by a gate in the simulation set or global inputs.
-         *
-         * @returns The input nets.
-         */
-        const std::vector<const Net*>& get_input_nets() const;
-
-        /**
-         * Get all output nets of gates in the simulation set that have a destination outside of the set or that are global outputs.
-         *
-         * @returns The output nets.
-         */
-        const std::vector<const Net*>& get_output_nets() const;
 
         /**
          * Set the signal for a specific wire to control input signals between simulation cycles.
@@ -145,6 +108,8 @@ namespace hal
          */
         void simulate(u64 picoseconds);
 
+        SimulationInput* get_simulation_input() const { return mSimulationInput; }
+
         /**
          * Reset the simulator state, i.e., treat all signals as unknown.
          * Does not remove gates/nets from the simulation set.
@@ -200,6 +165,10 @@ namespace hal
          * @return Vector of events
          */
         std::vector<Event> get_simulation_events(Net *n) const;
+
+        std::string resultFilename() const override { return std::string(); } // TODO : name of vcd file if any
+
+        bool inputEvent(const SimulationInputNetEvent& netEv) override;
 
     private:
         friend class NetlistSimulatorPlugin;
@@ -282,19 +251,6 @@ namespace hal
             bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
             void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
         };
-
-        struct Clock
-        {
-            const Net* clock_net;
-            u64 switch_time;
-            bool start_at_zero;
-        };
-
-        std::unordered_set<Gate*> m_simulation_set;
-        std::vector<Clock> m_clocks;
-
-        std::vector<const Net*> m_input_nets;
-        std::vector<const Net*> m_output_nets;
 
         bool m_is_initialized = false;
         std::vector<std::tuple<bool, BooleanFunction::Value, const std::function<bool(const Gate*)>>> m_init_seq_gates;

@@ -64,8 +64,8 @@ namespace hal
                  :returns: The simulator instance.
                  :rtype: netlist_simulator.NetlistSimulator
             )");
-
         py::class_<NetlistSimulator>(m, "NetlistSimulator")
+                /*
             .def("add_gates", &NetlistSimulator::add_gates, py::arg("gates"), R"(
                 Add gates to the simulation set.
                 Only elements in the simulation set are considered during simulation.
@@ -109,7 +109,7 @@ namespace hal
                 :returns: The output nets.
                 :rtype: list[hal_py.Net]
             )")
-
+*/
             .def("set_input", &NetlistSimulator::set_input, py::arg("net"), py::arg("value"), R"(
                 Set the signal for a specific wire to control input signals between simulation cycles.
             

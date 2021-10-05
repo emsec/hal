@@ -5,6 +5,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 #include "netlist_simulator/simulation_utils.h"
+#include "netlist_simulator_controller/simulation_input.h"
 
 #include <algorithm>
 #include <chrono>
@@ -19,70 +20,9 @@ namespace hal
 #define measure_block_time(X)
 
     NetlistSimulator::NetlistSimulator()
+        : SimulationEngineEventDriven("hal_simulator")
     {
         reset();
-    }
-
-    void NetlistSimulator::add_gates(const std::vector<Gate*>& gates)
-    {
-        if (!m_is_initialized)
-        {
-            m_simulation_set.insert(gates.begin(), gates.end());
-
-            compute_input_nets();
-            compute_output_nets();
-        }
-        else
-        {
-            log_error("netlist_simulator", "cannot add gates after the simulation was started.");
-            return;
-        }
-    }
-
-    void NetlistSimulator::add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero)
-    {
-        if (!m_is_initialized)
-        {
-            u64 period = 1'000'000'000'000ul / frequency;
-            add_clock_period(clock_net, period, start_at_zero);
-        }
-        else
-        {
-            log_error("netlist_simulator", "cannot add a clock frequency after the simulation was started.");
-            return;
-        }
-    }
-
-    void NetlistSimulator::add_clock_period(const Net* clock_net, u64 period, bool start_at_zero)
-    {
-        if (!m_is_initialized)
-        {
-            Clock c;
-            c.clock_net     = clock_net;
-            c.switch_time   = period / 2;
-            c.start_at_zero = start_at_zero;
-            m_clocks.push_back(c);
-        }
-        else
-        {
-            log_error("netlist_simulator", "cannot add a clock period after the simulation was started.");
-            return;
-        }
-    }
-
-    const std::unordered_set<Gate*>& NetlistSimulator::get_gates() const
-    {
-        return m_simulation_set;
-    }
-
-    const std::vector<const Net*>& NetlistSimulator::get_input_nets() const
-    {
-        return m_input_nets;
-    }
-
-    const std::vector<const Net*>& NetlistSimulator::get_output_nets() const
-    {
-        return m_output_nets;
     }
 
     void NetlistSimulator::set_input(const Net* net, BooleanFunction::Value value)
@@ -139,7 +79,7 @@ namespace hal
         // has to work even if the simulation was not started, i.e., initialize was not called yet
         // so we cannot use the SimulationGateFF type
 
-        for (Gate* gate : m_simulation_set)
+        for (const Gate* gate : mSimulationInput->get_gates())
         {
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
@@ -177,7 +117,7 @@ namespace hal
         // has to work even if the simulation was not started, i.e., initialize was not called yet
         // so we cannot use the SimulationGateFF type
 
-        for (Gate* gate : m_simulation_set)
+        for (const Gate* gate : mSimulationInput->get_gates())
         {
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
@@ -252,8 +192,7 @@ namespace hal
 
     void NetlistSimulator::reset()
     {
-        m_clocks.clear();
-        m_simulation_set.clear();
+        mSimulationInput->clear();
         m_current_time = 0;
         m_id_counter   = 0;
         m_simulation   = Simulation();
@@ -271,59 +210,6 @@ namespace hal
         return m_simulation;
     }
 
-    void NetlistSimulator::compute_input_nets()
-    {
-        m_input_nets.clear();
-        for (auto gate : m_simulation_set)
-        {
-            for (auto net : gate->get_fan_in_nets())
-            {
-                // "input net" is either a global input...
-                if (net->is_global_input_net())
-                {
-                    m_input_nets.push_back(net);
-                }
-                else    // ... or has a source outside of the simulation set
-                {
-                    for (auto src : net->get_sources())
-                    {
-                        if (m_simulation_set.find(src->get_gate()) == m_simulation_set.end())
-                        {
-                            m_input_nets.push_back(net);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    void NetlistSimulator::compute_output_nets()
-    {
-        m_output_nets.clear();
-        for (auto gate : m_simulation_set)
-        {
-            for (auto net : gate->get_fan_out_nets())
-            {
-                // "output net" is either a global output...
-                if (net->is_global_output_net())
-                {
-                    m_output_nets.push_back(net);
-                }
-                else    // ... or has a destination outside of the simulation set
-                {
-                    for (auto dst : net->get_destinations())
-                    {
-                        if (m_simulation_set.find(dst->get_gate()) == m_simulation_set.end())
-                        {
-                            m_output_nets.push_back(net);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     void NetlistSimulator::set_iteration_timeout(u64 iterations)
     {
@@ -344,6 +230,12 @@ namespace hal
         return it->second;
     }
 
+    bool NetlistSimulator::inputEvent(const SimulationInputNetEvent& netEv)
+    {
+        // TODO
+        return true;
+    }
+
 
     /*
      * This function precomputes all the stuff that shall be cached for simulation.
@@ -355,12 +247,12 @@ namespace hal
         m_sim_gates.clear();
         m_sim_gates_raw.clear();
 
-        std::unordered_map<Gate*, SimulationGate*> sim_gates_map;
+        std::unordered_map<const Gate*, SimulationGate*> sim_gates_map;
         std::unordered_set<const Net*> all_nets;
         std::map<const Net*, BooleanFunction::Value> init_events;
 
         // precompute everything that is gate-related
-        for (auto gate : m_simulation_set)
+        for (const Gate* gate : mSimulationInput->get_gates())
         {
             SimulationGate* sim_gate_base = nullptr;
 
@@ -416,7 +308,8 @@ namespace hal
             all_nets.insert(out_nets.begin(), out_nets.end());
         }
 
-        all_nets.insert(m_input_nets.begin(), m_input_nets.end());
+        const std::vector<const Net*>& inets = mSimulationInput->get_input_nets();
+        all_nets.insert(inets.begin(), inets.end());
 
         // find all successors of nets and transform them to their respective simulation gate instance
         for (auto net : all_nets)
@@ -437,7 +330,7 @@ namespace hal
             {
                 auto gate  = it.first;
                 auto& pins = it.second;
-                if (m_simulation_set.find(gate) == m_simulation_set.end())
+                if (!mSimulationInput->contains_gate(gate))
                 {
                     continue;
                 }
@@ -447,7 +340,7 @@ namespace hal
         }
 
         // create one-time events for global gnd and vcc gates
-        for (auto g : m_simulation_set)
+        for (auto g : mSimulationInput->get_gates())
         {
             if (g->is_gnd_gate())
             {
@@ -481,7 +374,7 @@ namespace hal
 
     void NetlistSimulator::prepare_clock_events(u64 picoseconds)
     {
-        for (auto& c : m_clocks)
+        for (const SimulationInput::Clock& c : mSimulationInput->get_clocks())
         {
             u64 base_time = m_current_time - (m_current_time % c.switch_time);
             u64 time      = 0;
@@ -669,7 +562,7 @@ namespace hal
 
     bool NetlistSimulator::generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets) const
     {
-        if (m_simulation_set.empty())
+        if (mSimulationInput->get_gates().empty())
         {
             log_error("netlist_simulator", "no gates have been added to the simulator.");
             return false;

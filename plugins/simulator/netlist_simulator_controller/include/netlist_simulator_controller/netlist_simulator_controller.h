@@ -27,72 +27,52 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
-#include "gui/content_widget/content_widget.h"
-#include "gui/content_manager/content_manager.h"
-#include "netlist_simulator/netlist_simulator.h"
-#include "netlist_simulator_controller/simulation_input.h"
 
 #include <functional>
 #include <map>
 #include <sstream>
 #include <QString>
 #include <QMap>
-#include <QCheckBox>
+#include <QObject>
 #include <vector>
 #include <memory>
 
-class QStatusBar;
+#include "netlist_simulator_controller/wave_data.h"
+#include "netlist_simulator_controller/simulation_input.h"
 
 namespace hal
 {
     /* forward declaration */
     class Netlist;
-    class WaveWidget;
-    class WaveData;
-    class Toolbar;
-    class SimulationInput;
-
-    class NETLIST_API VcdViewerFactory : public ContentFactory
-    {
-    public:
-        VcdViewerFactory() : ContentFactory("VcdViewerFactory") {;}
-        ContentWidget* contentFactory() const;
-    };
 
     /**
      * @ingroup netlist_writer
      */
-    class NETLIST_API VcdViewer : public ContentWidget
+    class NETLIST_API NetlistSimulatorController : public QObject
     {
         Q_OBJECT
 
     public:
 
-        enum SimulationState { SimulationSelectGates, SimulationClockSet, SimulationInputGenerate, SimulationShowResults };
+        enum SimulationState { NoGatesSelected, ParameterSetup, SimulationRun, ShowResults };
 
-        VcdViewer(QWidget* parent = nullptr);
-        ~VcdViewer() = default;
-
-        /**
-         * Setups the toolbar with the actions that are supported by the vcd-viewer.
-         *
-         * @param toolbar - The toolbar to set up
-         */
-        virtual void setupToolbar(Toolbar* toolbar) override;
+        NetlistSimulatorController(QObject* parent = nullptr);
+        ~NetlistSimulatorController() = default;
 
     private Q_SLOTS:
         void handleSimulSettings();
-        void handleOpenInputFile();
+        void handleOpenInputFile(const QString& filename);
         void handleRunSimulation();
         void handleSelectGates();
         void handleClockSet();
-
-        void handleSelectionChanged(void* sender);
 
     private:
         void initSimulator();
         void setClock(const Net*n, int period, int start=0);
         void setState(SimulationState stat);
+
+        bool isClockSet() const;
+        bool isInputSet() const;
 
         SimulationState mState;
         std::shared_ptr<NetlistSimulator> mSimulator;
@@ -101,14 +81,8 @@ namespace hal
         std::vector<Gate*> mSimulateGates;
         int mDuration;
 
+        WaveDataList mWaveDataList;
         QMap<u32,const WaveData*> mResultMap;
-
-        QAction* mSimulSettingsAction;
-        QAction* mOpenInputfileAction;
-        QAction* mRunSimulationAction;
-
-        WaveWidget* mWaveWidget;
-        QStatusBar* mStatusBar;
 
         SimulationInput* mSimulationInput;
     };

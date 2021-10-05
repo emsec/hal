@@ -29,6 +29,7 @@
 #include <QVBoxLayout>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "netlist_simulator/plugin_netlist_simulator.h"
+#include "netlist_simulator_controller/simulation_input.h"
 
 namespace hal
 {
@@ -104,11 +105,11 @@ namespace hal
             return;
         }
         qDebug() << "net has gates " << gNetlist->get_gates().size();
-        mSimulator->add_gates(mSimulateGates);
+        mSimulationInput->add_gates(mSimulateGates);
 
 
         mClkNet = nullptr;
-        mInputNets = mSimulator->get_input_nets();
+        mInputNets = mSimulationInput->get_input_nets();
         for (const Net* n : mInputNets)
         {
             WaveData* wd = new WaveData(n);
@@ -172,7 +173,7 @@ namespace hal
             return;
         }
         QMultiMap<int,QPair<const Net*, BooleanFunction::Value>> inputMap;
-        for (const Net* n : mSimulator->get_input_nets())
+        for (const Net* n : mSimulationInput->get_input_nets())
         {
             if (n==mClkNet) continue;
             const WaveData* wd = mWaveWidget->waveDataByNetId(n->get_id());
@@ -230,7 +231,7 @@ namespace hal
         mClkNet = mInputNets.at(csd.netIndex());
 
         mDuration = csd.duration();
-        mSimulator->add_clock_period(mClkNet,period,start==0);
+        mSimulationInput->add_clock_period(mClkNet,period,start==0);
         WaveData* wd = WaveData::clockFactory(mClkNet, start, period, mDuration);
         mWaveWidget->addOrReplaceWave(wd);
         setState(SimulationInputGenerate);
@@ -239,7 +240,7 @@ namespace hal
     void VcdViewer::setClock(const Net *n, int period, int start)
     {
         mClkNet = n;
-        mSimulator->add_clock_period(mClkNet,period,start==0);
+        mSimulationInput->add_clock_period(mClkNet,period,start==0);
         WaveData* wd = WaveData::clockFactory(mClkNet, start, period, 2000);
         mWaveWidget->addOrReplaceWave(wd);
         setState(SimulationInputGenerate);

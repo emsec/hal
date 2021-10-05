@@ -1,0 +1,10 @@
+*
+!netlist_simulator*
+!netlist_simulator/**/*
+!netlist_simulator_controller*
+!netlist_simulator_controller/**/*
+!vcd_viewer*
+!vcd_viewer/**/*
+!verilator_simulator*
+!verilator_simulator/**/*
+!.gitignore

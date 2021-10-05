@@ -24,49 +24,20 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
-#include "netlist_simulator/netlist_simulator.h"
-#include <unordered_map>
-#include <memory>
 
 namespace hal
 {
-    class PLUGIN_API NetlistSimulatorPlugin : public BasePluginInterface
-    {
-        std::unordered_map<std::string, std::shared_ptr<NetlistSimulator> > m_shared_simulator_map;
-    public:
-        /**
-         * Get the name of the plugin.
-         *
-         * @returns The name of the plugin.
-         */
-        std::string get_name() const override;
+    class NetlistSimulatorController;
+    class NetlistSimulator;
 
-        /**
-         * Get the version of the plugin.
-         *
-         * @returns The version of the plugin.
-         */
+    class PLUGIN_API NetlistSimulatorControllerPlugin : public BasePluginInterface
+    {
+        NetlistSimulatorController* mNetlistSimulatorController;
+    public:
+        std::string get_name() const override;
         std::string get_version() const override;
 
-        /**
-         * Get dependencies of plugin
-         * @return Set of plugin names which must be loaded first, contains {netlist_simulator_controller}
-         */
-        std::set<std::string> get_dependencies() const override;
-
-        /**
-         * Create a netlist simulator instance.
-         * 
-         * @returns The simulator instance.
-         */
-        std::unique_ptr<NetlistSimulator> create_simulator() const;
-
-        /**
-         * Get simulator that is shared with external module
-         *
-         * @param user Name of external module
-         * @return Shared pointer to simulator instance
-         */
-        std::shared_ptr<NetlistSimulator> get_shared_simulator(const std::string& module_name);
+        void on_load() override;
+        void on_unload() override;
     };
 }    // namespace hal
