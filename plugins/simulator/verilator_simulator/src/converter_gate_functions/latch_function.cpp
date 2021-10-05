@@ -8,6 +8,8 @@
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/netlist/netlist.h"
+
 
 #include <filesystem>
 #include <sstream>

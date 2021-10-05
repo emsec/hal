@@ -1,3 +1,5 @@
+#include "verilator_simulator/verilator_simulator.h"
+
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
@@ -8,9 +10,9 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
-#include "verilator_simulator/verilator_simulator.h"
 
 #include <filesystem>
+#include <fstream>
 #include <set>
 #include <sstream>
 #include <vector>
@@ -20,7 +22,7 @@ namespace hal {
 namespace verilator_simulator {
     namespace converter {
 
-        bool convert_gate_library_to_verilog(const Netlist* nl)
+        bool convert_gate_library_to_verilog(const Netlist* nl, std::filesystem::path path)
         {
             log_info("verilator_simulator", "converting {} to verilog for simulation", nl->get_gate_library()->get_name());
 
@@ -52,6 +54,10 @@ namespace verilator_simulator {
                 gate_description << get_epilogue_for_gate_type(gate_type) << std::endl;
 
                 log_info("verilator_simulator", "verilog file: \n{}", gate_description.str());
+                // write file
+                std::ofstream gate_file(path / "gate_definitions" / gate_type->get_name());
+                gate_file << gate_description.str();
+                gate_file.close();
             }
 
             return true;

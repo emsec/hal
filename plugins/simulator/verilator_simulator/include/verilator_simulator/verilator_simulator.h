@@ -5,6 +5,7 @@
 
 #include <set>
 #include <vector>
+#include <filesystem>
 
 namespace hal {
 class Netlist;
@@ -14,7 +15,7 @@ class Net;
 
 namespace verilator_simulator {
     namespace converter {
-        bool convert_gate_library_to_verilog(const Netlist* nl);
+        bool convert_gate_library_to_verilog(const Netlist* nl, std::filesystem::path path);
 
         std::set<GateType*> get_gate_gate_types_from_netlist(const Netlist* nl);
 
@@ -34,14 +35,20 @@ namespace verilator_simulator {
         std::vector<std::string> get_vector_for_const_char(const char** txt);
     }
 
-    class VerilatorEngine : public SimulationEngineScripted
-    {
+    class VerilatorEngine : public SimulationEngineScripted {
         // path to VCD file with results when simulation done
         std::string m_result_filename;
 
         static const int s_command_lines;
+
     public:
-        VerilatorEngine() : SimulationEngineScripted("verilator_simulator") {;}
+        VerilatorEngine()
+            : SimulationEngineScripted("verilator_simulator")
+        {
+            ;
+        }
+        std::unique_ptr<Netlist> m_partial_netlist;
+
         void setSimulationInput(SimulationInput* simInput) override;
         std::string resultFilename() const override { return m_result_filename; }
         int numberCommandLines() const override;

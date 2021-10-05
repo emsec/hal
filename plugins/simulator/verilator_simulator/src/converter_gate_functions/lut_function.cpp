@@ -6,6 +6,7 @@
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
+#include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 
 #include <filesystem>

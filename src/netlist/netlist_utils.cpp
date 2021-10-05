@@ -295,7 +295,7 @@ namespace netlist_utils {
         return c_netlist;
     }
 
-    std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<Gate*>& subgraph_gates)
+    std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates)
     {
         std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->get_gate_library());
 

@@ -1,5 +1,6 @@
-#include "netlist_simulator_controller/simulation_engine.h"
 #include "verilator_simulator/plugin_verilator_simulator.h"
+#include "hal_core/netlist/netlist.h"
+#include "netlist_simulator_controller/simulation_engine.h"
 #include "verilator_simulator/verilator_simulator.h"
 
 namespace hal {
