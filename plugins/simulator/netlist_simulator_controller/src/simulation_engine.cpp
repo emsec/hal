@@ -56,6 +56,13 @@ namespace hal {
 
     bool SimulationEngineEventDriven::run()
     {
+        // TODO
+        return true;
+    }
+
+    bool SimulationEngineScripted::run()
+    {
+        // TODO
         return true;
     }
 }
