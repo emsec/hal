@@ -142,7 +142,14 @@ namespace hal
          */
         std::vector<std::string> get_engine_names() const;
 
-        SimulationInput* input() const { return mSimulationInput; }
+//        SimulationInput* input() const { return mSimulationInput; }
+
+        /**
+         * run simulation and parse results
+         * @return true on success, false otherwise
+         */
+        bool run_simulation();
+
     private Q_SLOTS:
         void handleSimulSettings();
         void handleOpenInputFile(const QString& filename);
@@ -159,8 +166,6 @@ namespace hal
 
         SimulationState mState;
         SimulationEngine* mSimulationEngine;
-
-        u64 mInputTime;
 
         WaveDataList mWaveDataList;
         QMap<u32,const WaveData*> mResultMap;

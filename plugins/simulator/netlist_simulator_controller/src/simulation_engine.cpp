@@ -44,11 +44,17 @@ namespace hal {
         }
     }
 
-    SimulationEngine::SimulationEngine(const std::string& nam) : mName(nam)
+    SimulationEngine::SimulationEngine(const std::string& nam)
+        : mName(nam), mRequireClockEvents(false), mCanShareMemory(false)
     {
         SimulationEngines::instance()->push_back(this);
     }
 
+    SimulationEngineEventDriven::SimulationEngineEventDriven(const std::string& nam)
+        : SimulationEngine(nam), mSimulationInput(nullptr)
+    {
+        mCanShareMemory = true;
+    }
 
     std::vector<WaveEvent> SimulationEngineEventDriven::get_simulation_events(Net *n) const
     {

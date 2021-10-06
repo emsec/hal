@@ -21,9 +21,7 @@ namespace hal
 
     NetlistSimulator::NetlistSimulator()
         : SimulationEngineEventDriven("hal_simulator")
-    {
-        reset();
-    }
+    {;}
 
     void NetlistSimulator::set_input(const Net* net, BooleanFunction::Value value)
     {

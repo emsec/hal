@@ -42,18 +42,13 @@ namespace verilator_simulator {
         static const int s_command_lines;
 
     public:
-        VerilatorEngine()
-            : SimulationEngineScripted("verilator_simulator")
-        {
-            ;
-        }
+        VerilatorEngine();
         std::unique_ptr<Netlist> m_partial_netlist;
 
         bool setSimulationInput(SimulationInput* simInput) override;
-        std::string resultFilename() const override { return m_result_filename; }
         int numberCommandLines() const override;
         std::vector<std::string> commandLine(int lineIndex) const override;
-        void done() override;
+        bool finalize() override;
     };
 
 } // namespace verilator_simulator

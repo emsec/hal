@@ -8,28 +8,48 @@
 
 namespace hal {
 
-    WaveData::WaveData(u32 id_, const QString& nam, const QMap<u64,int> &other)
-        : QMap<u64,int>(other), mId(id_), mName(nam)
+    WaveDataClock::WaveDataClock(const Net* n, const SimulationInput::Clock& clk, u64 tmax)
+        : WaveData(n, WaveData::ClockNet), mClock(clk), mMaxTime(tmax)
+    {
+        dataFactory();
+    }
+
+    WaveDataClock::WaveDataClock(const Net* n, int start, u64 period, u64 tmax)
+        : WaveData(n, WaveData::ClockNet), mMaxTime(tmax)
+    {
+        mClock.clock_net = n;
+        mClock.switch_time = period / 2;
+        mClock.start_at_zero = (start==0);
+    }
+
+    void WaveDataClock::setMaxTime(u64 tmax)
+    {
+        mMaxTime = tmax;
+        clear();
+        dataFactory();
+    }
+
+    void WaveDataClock::dataFactory()
+    {
+        int val = mClock.start_at_zero ? 0 : 1;
+        for (u64 t=0; t<=mMaxTime; t+=mClock.switch_time)
+        {
+            insert(t,val);
+            val = val ? 0 : 1;
+        }
+    }
+
+    WaveData::WaveData(u32 id_, const QString& nam, NetType tp, const QMap<u64,int> &other)
+        : QMap<u64,int>(other), mId(id_), mName(nam), mNetType(tp)
     {;}
 
-    WaveData::WaveData(const Net* n)
+    WaveData::WaveData(const Net* n, NetType tp)
         : mId(n->get_id()),
           mName(QString("%1[%2]")
                 .arg(QString::fromStdString(n->get_name()))
-                .arg(n->get_id()))
+                .arg(n->get_id())),
+          mNetType(tp)
     {;}
-
-    WaveData* WaveData::clockFactory(const Net *n, int start, int period, int duration)
-    {
-        WaveData* retval = new WaveData(n);
-        int val = start;
-        for (int t=0; t<=duration; t+=period/2)
-        {
-            retval->insert(t,val);
-            val = val ? 0 : 1;
-        }
-        return retval;
-    }
 
     void WaveData::insertBooleanValue(u64 t, BooleanFunction::Value bval)
     {
@@ -120,8 +140,41 @@ namespace hal {
 
     WaveDataList::~WaveDataList()
     {
+        clearAll();
+    }
+
+    void WaveDataList::incrementMaxTime(u64 deltaT)
+    {
+        mMaxTime += deltaT;
+    }
+
+    void WaveDataList::clearAll()
+    {
         for (auto it=begin(); it!=end(); ++it)
             delete *it;
+        clear();
+        mIds.clear();
+        mMaxTime = 0;
+    }
+
+    void WaveDataList::updateClocks()
+    {
+        for (auto it=begin(); it!=end(); ++it)
+            if ((*it)->netType() == WaveData::ClockNet)
+            {
+                WaveDataClock* wdc = static_cast<WaveDataClock*>(*it);
+                wdc->setMaxTime(mMaxTime);
+            }
+    }
+
+    void WaveDataList::updateMaxTime()
+    {
+        for (auto it = constBegin(); it!= constEnd(); ++it)
+        {
+            u64 maxT = (*it)->lastKey();
+            if (maxT > mMaxTime)
+                mMaxTime = maxT;
+        }
     }
 
     void WaveDataList::add(WaveData* wd)
@@ -129,6 +182,7 @@ namespace hal {
         int n = size();
         mIds[wd->id()] = n;
         append(wd);
+        updateMaxTime();
     }
 
     void WaveDataList::addOrReplace(WaveData* wd)
@@ -140,6 +194,7 @@ namespace hal {
             // replace existing
             delete at(inx);
             operator[](inx) = wd;
+            updateMaxTime();
         }
         else
             add(wd);

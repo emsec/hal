@@ -117,7 +117,7 @@ namespace hal
         // TODO : WaveData from WaveDataList
 
         mClkNet = nullptr;
-        mInputNets = mController->input()->get_input_nets();
+        mInputNets = mController->get_input_nets();
         for (const Net* n : mInputNets)
         {
             WaveData* wd = new WaveData(n);
@@ -182,7 +182,7 @@ namespace hal
             return;
         }
         QMultiMap<int,QPair<const Net*, BooleanFunction::Value>> inputMap;
-        for (const Net* n : mController->input()->get_input_nets())
+        for (const Net* n : mController->get_input_nets())
         {
             if (n==mClkNet) continue;
             const WaveData* wd = mWaveWidget->waveDataByNetId(n->get_id());
@@ -245,7 +245,7 @@ namespace hal
 
         mDuration = csd.duration();
         mController->add_clock_period(mClkNet,period,start==0);
-        WaveData* wd = WaveData::clockFactory(mClkNet, start, period, mDuration);
+        WaveData* wd = new WaveDataClock(mClkNet, start, period, mDuration);
         mWaveWidget->addOrReplaceWave(wd);
         setState(SimulationInputGenerate);
     }
@@ -254,7 +254,7 @@ namespace hal
     {
         mClkNet = n;
         mController->add_clock_period(mClkNet,period,start==0);
-        WaveData* wd = WaveData::clockFactory(mClkNet, start, period, 2000);
+        WaveData* wd = new WaveDataClock(mClkNet, start, period, 2000);
         mWaveWidget->addOrReplaceWave(wd);
         setState(SimulationInputGenerate);
     }

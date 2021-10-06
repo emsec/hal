@@ -12,13 +12,13 @@ namespace py = pybind11;
 namespace hal
 {
 #ifdef PYBIND11_MODULE
-    PYBIND11_MODULE(netlist_simulator, m)
+    PYBIND11_MODULE(netlist_simulator_controller, m)
     {
         m.doc() = "hal NetlistSimulatorControllerPlugin python bindings";
 #else
-    PYBIND11_PLUGIN(netlist_simulator)
+    PYBIND11_PLUGIN(netlist_simulator_controller)
     {
-        py::module m("netlist_simulator", "hal NetlistSimulatorControllerPlugin python bindings");
+        py::module m("netlist_simulator_controller", "hal NetlistSimulatorControllerPlugin python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<NetlistSimulatorControllerPlugin, RawPtrWrapper<NetlistSimulatorControllerPlugin>, BasePluginInterface>(m, "NetlistSimulatorControllerPlugin")
@@ -46,26 +46,15 @@ namespace hal
 
                 :returns: The version of the plugin.
                 :rtype: str
-            )");
-
-                /* TODO : create controller instance
-            .def("create_simulator", &NetlistSimulatorControllerPlugin::create_simulator, R"(
-                Create a netlist simulator instance.
-
-                :returns: The simulator instance.
-                :rtype: netlist_simulator.NetlistSimulatorController
             )")
 
-            .def("get_shared_simulator",
-                 &NetlistSimulatorControllerPlugin::get_shared_simulator,
-                 py::arg("owner"), R"(
-                 Get netlist simulator instance owned by external module.
+            .def("create_simulator_controller", &NetlistSimulatorControllerPlugin::create_simulator_controller, R"(
+                Create a netlist simulation controller instance.
 
-                 :param str owner: The owner of netlist simulator.
-                 :returns: The simulator instance.
-                 :rtype: netlist_simulator.NetlistSimulatorController
+                :returns: The simulator controller instance.
+                :rtype: netlist_simulator_controller.NetlistSimulatorController
             )");
-        */
+
         py::class_<NetlistSimulatorController>(m, "NetlistSimulatorController")
 
             .def("add_gates", &NetlistSimulatorController::add_gates, py::arg("gates"), R"(
@@ -119,12 +108,6 @@ namespace hal
                 :param hal_py.BooleanFunction.Value value: The value to set.
             )")
 
-            .def_property_readonly("get_engine_names", &NetlistSimulatorController::get_engine_names, R"(
-                A list of registered simulation engines.
-
-                :type: list[str]
-             )")
-
             .def("get_engine_names", &NetlistSimulatorController::get_engine_names, R"(
                 Get a list of registered simulation engines.
 
@@ -132,6 +115,20 @@ namespace hal
                 :rtype: list[str]
              )")
 
+             .def("set_simulation_engine", &NetlistSimulatorController::set_simulation_engine, py::arg("name"), R"(
+                  Select and set the engine for simulation. The list of available engines is provided by function get_engine_names().
+
+                  :param str name: The name of the engine to be selected.
+                  :returns: True if engine could be selected, False otherwise
+                  :rtype: bool
+              )")
+
+             .def("run_simulation", &NetlistSimulatorController::run_simulation, R"("
+                  Run the simulation
+
+                  :returns: True if all simulation steps could be processed successfully, False otherwise
+                  :rtype: bool
+             )")
                 /*
             .def("initialize_sequential_gates", py::overload_cast<const std::function<bool(const Gate*)>&>(&NetlistSimulator::initialize_sequential_gates), py::arg("filter") = nullptr, R"(
                 Configure the sequential gates matching the (optional) user-defined filter condition with initialization data specified within the netlist.
@@ -185,14 +182,14 @@ namespace hal
                 Set the simulator state, i.e., net signals, to a given state.
                 Does not influence gates/nets added to the simulation set.
         
-                :param netlist_simulator.Simulation state: The state to apply.
+                :param netlist_simulator_controller.Simulation state: The state to apply.
             )")
 
             .def("get_simulation_state", &NetlistSimulator::get_simulation_state, R"(
                 Get the current simulation state.
         
                 :returns: The current simulation state.
-                :rtype: libnetlist_simulator.Simulation
+                :rtype: libnetlist_simulator_controller.Simulation
             )")
 
             .def("set_iteration_timeout", &NetlistSimulator::set_iteration_timeout, py::arg("iterations"), R"(

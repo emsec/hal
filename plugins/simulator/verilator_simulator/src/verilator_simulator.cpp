@@ -185,8 +185,15 @@ namespace verilator_simulator {
         return std::vector<std::string>();
     }
 
-    void VerilatorEngine::done()
+    VerilatorEngine::VerilatorEngine()
+        : SimulationEngineScripted("verilator_simulator")
     {
+        mRequireClockEvents = true;
+    }
+
+    bool VerilatorEngine::finalize()
+    {
+        return true;
         // could set m_result_filename (VCD results) here
     }
 

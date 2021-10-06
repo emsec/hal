@@ -166,8 +166,6 @@ namespace hal
          */
         std::vector<WaveEvent> get_simulation_events(Net *n) const override;
 
-        std::string resultFilename() const override { return std::string(); } // TODO : name of vcd file if any
-
         bool inputEvent(const SimulationInputNetEvent& netEv) override;
 
     private:

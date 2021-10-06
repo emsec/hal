@@ -11,9 +11,26 @@ namespace hal {
 
     class SimulationEngine {
         std::string mName;
+    protected:
+        bool mRequireClockEvents;
+        bool mCanShareMemory;
+        std::string mResultFilename;
     public:
         SimulationEngine(const std::string& nam);
         virtual ~SimulationEngine() {;}
+
+        /**
+         * Request clock change as regular net input event
+         * @return true if clock events are required by engine, false otherwise
+         */
+        bool clock_events_required() const {return mRequireClockEvents; }
+
+        /**
+         * Tells the caller whether engine can share simulation results directly from memory.
+         * If not the caller will most likely ask to have a VCD result file created.
+         * @return true if results can be read from memory
+         */
+        bool can_share_memory() const { return mCanShareMemory; }
 
         /**
          * Must be implemented by derived class
@@ -25,12 +42,10 @@ namespace hal {
         virtual bool setSimulationInput(SimulationInput* simInput) = 0;
 
         /**
-         * Must be implemented by derived class
-         *
-         * Returns VCD file name of results if any.
-         * @return file name or empty string if no VCD file has been generated (yet).
+         * Set the name of VCD result file. If set engine is requested to produce such a file upon finalize
+         * @param[in] the name of the file to be created.
          */
-        virtual std::string resultFilename() const = 0;
+        virtual void setResultFilename(const std::string filename) {mResultFilename = filename; };
 
         /**
          * Must be implemented by derived class
@@ -47,11 +62,14 @@ namespace hal {
         /**
          * Can be implemented by derived class
          *
-         * Signals the engine that simulation is done
+         * Signals the engine that it is time for final steps (.e.g. writing VCD file)
+         * after simulation is done - that is:
          * SimulationEngineEventDriven:   all input events have been processed
          * SimulationEngineScripted:      all comands executed successfully
+         *
+         * @return true if successful, false on error
          */
-        virtual void done() {;}
+        virtual bool finalize() { return true; }
 
         std::string name() const { return mName; }
     };
@@ -63,7 +81,7 @@ namespace hal {
     protected:
         SimulationInput* mSimulationInput;
     public:
-        SimulationEngineEventDriven(const std::string& nam) : SimulationEngine(nam), mSimulationInput(nullptr) {;}
+        SimulationEngineEventDriven(const std::string& nam);
 
         /**
          * Must be implemented by derived class
