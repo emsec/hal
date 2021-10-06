@@ -48,6 +48,7 @@ namespace verilator_simulator {
             ;
         }
         std::unique_ptr<Netlist> m_partial_netlist;
+        std::filesystem::path m_simulator_dir;
 
         bool setSimulationInput(SimulationInput* simInput) override;
         std::string resultFilename() const override { return m_result_filename; }
