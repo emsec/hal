@@ -31,8 +31,8 @@ namespace verilator_simulator {
             }
             return retval;
         }
-
     }
+
     // std::string get_makefile(const Netlist* netlist)
     // {
     //     std::string makefile_template = get_makefile_template();
@@ -114,6 +114,10 @@ namespace verilator_simulator {
         m_partial_netlist = netlist_utils::get_partial_netlist(simulation_gates.at(0)->get_netlist(), simulation_gates);
 
         m_simulator_dir = "/tmp/hal/simulator/";
+
+        std::filesystem::path provided_models = "/Users/eve/hal/plugins/real_world_reversing/simulation_models/";
+
+        // todo: delete folder if not empty
         std::filesystem::create_directory(m_simulator_dir);
 
         std::vector<SimulationInput::Clock> clocks = simInput->get_clocks();
@@ -169,7 +173,7 @@ namespace verilator_simulator {
         testbench_cpp_file << testbench_cpp;
         testbench_cpp_file.close();
 
-        if (!converter::convert_gate_library_to_verilog(m_partial_netlist.get(), m_simulator_dir)) {
+        if (!converter::convert_gate_library_to_verilog(m_partial_netlist.get(), m_simulator_dir, provided_models)) {
             log_error("verilator_simulator", "could not create gate definitions in verilog");
             return false;
         };

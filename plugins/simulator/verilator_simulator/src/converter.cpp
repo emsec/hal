@@ -22,19 +22,23 @@ namespace hal {
 namespace verilator_simulator {
     namespace converter {
 
-        bool convert_gate_library_to_verilog(const Netlist* nl, std::filesystem::path path)
+        bool convert_gate_library_to_verilog(const Netlist* nl, const std::filesystem::path verilator_sim_path, const std::filesystem::path model_path)
         {
             log_info("verilator_simulator", "converting {} to verilog for simulation", nl->get_gate_library()->get_name());
 
-            auto gl = nl->get_gate_library();
-
             std::set<GateType*> gate_types = get_gate_gate_types_from_netlist(nl);
 
-            std::filesystem::path tmp_folder = "/tmp/hal/gate_types/";
+            std::filesystem::path gate_definitions_path = verilator_sim_path / "gate_definitions";
+            std::set<std::string> provided_models = get_provided_models(model_path, gate_definitions_path);
 
             for (const auto& gate_type : gate_types) {
-
                 log_info("verilator_simulator", "creating verilog simulation model for {}", gate_type->get_name());
+
+                if (provided_models.find(gate_type->get_name()) != provided_models.end()) {
+                    log_info("verilator_simulator", "using provided model for gate: {}", gate_type->get_name());
+                    // todo
+                    continue;
+                }
 
                 std::stringstream gate_description;
 
@@ -45,7 +49,7 @@ namespace verilator_simulator {
                 std::string gate_function = get_function_for_gate(gate_type);
 
                 if (gate_function.empty()) {
-                    log_info("verilator_simulator", "unimplemented reached: gate type: '{}', cannot create simulation model...", gate_type->get_name());
+                    log_error("verilator_simulator", "unimplemented reached: gate type: '{}', cannot create simulation model...", gate_type->get_name());
                     return false;
                 }
                 gate_description << gate_function << std::endl;
@@ -55,12 +59,26 @@ namespace verilator_simulator {
 
                 log_info("verilator_simulator", "verilog file: \n{}", gate_description.str());
                 // write file
-                std::ofstream gate_file(path / "gate_definitions" / gate_type->get_name());
+                std::ofstream gate_file(gate_definitions_path / gate_type->get_name());
                 gate_file << gate_description.str();
                 gate_file.close();
             }
 
             return true;
+        }
+
+        std::set<std::string> get_provided_models(const std::filesystem::path model_path, const std::filesystem::path gate_definition_path)
+        {
+            std::set<std::string> supported_gate_types;
+            for (const auto& entry : std::filesystem::directory_iterator(model_path)) {
+                std::string file = entry.path();
+                utils::replace(file, std::string(".v"), std::string(""));
+                supported_gate_types.insert(file);
+
+                // copy gate lib to verilator folder
+                std::filesystem::copy(model_path / entry, gate_definition_path);
+            }
+            return supported_gate_types;
         }
 
         std::set<GateType*> get_gate_gate_types_from_netlist(const Netlist* nl)
