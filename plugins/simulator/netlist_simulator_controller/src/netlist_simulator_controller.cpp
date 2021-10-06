@@ -40,9 +40,9 @@ namespace hal
         }
     }
 
-    bool NetlistSimulatorController::set_simulation_engine(const QString& name)
+    bool NetlistSimulatorController::set_simulation_engine(const std::string& name)
     {
-        mSimulationEngine = SimulationEngines::instance()->engineByName(name.toStdString());
+        mSimulationEngine = SimulationEngines::instance()->engineByName(name);
         return (mSimulationEngine != nullptr);
     }
 

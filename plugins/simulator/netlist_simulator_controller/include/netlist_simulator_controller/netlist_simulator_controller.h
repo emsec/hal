@@ -60,7 +60,7 @@ namespace hal
         NetlistSimulatorController(QObject* parent = nullptr);
         ~NetlistSimulatorController() = default;
 
-        bool set_simulation_engine(const QString& name);
+        bool set_simulation_engine(const std::string& name);
         SimulationEngine* get_simulation_engine() const;
 
 
