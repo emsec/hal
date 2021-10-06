@@ -130,6 +130,7 @@ namespace hal
 
         QPlainTextEdit* mPlainTextEdit;
         ChannelSelector* selector;
+        QLabel* mChannelLabel;
         QPushButton* mMuteButton;
         QPushButton* mVerboseButton;
         QPushButton* mDebugButton;

@@ -49,6 +49,10 @@ namespace hal
     void LoggerWidget::setupToolbar(Toolbar* Toolbar)
     {
 
+        mChannelLabel = new QLabel(this);
+        mChannelLabel->setText("all");
+        Toolbar->addWidget(mChannelLabel);
+
         //selector will be deleted within the toolbars destructor
         selector = new ChannelSelector(this);
         selector->setEditable(true);
@@ -147,6 +151,7 @@ namespace hal
         if ((sender() == selector) || p == 0) {
             mCurrentChannelIndex = p;
         }
+
         // set ALL Channel
         if (p == -1) {
             mCurrentChannelIndex = model->rowCount() - 1;
@@ -155,6 +160,7 @@ namespace hal
 
         ChannelItem* item   = static_cast<ChannelItem*>((model->index(mCurrentChannelIndex, 0, QModelIndex())).internalPointer());
         mCurrentChannel = item->name().toStdString();
+        mChannelLabel->setText(QString::fromStdString(mCurrentChannel));
         selector->setCurrentText(QString::fromStdString(mCurrentChannel));
 
         mPlainTextEdit->clear();
@@ -237,7 +243,6 @@ namespace hal
         if (txt.isEmpty()) return;
         std::string channel_name = txt.toStdString();
         ChannelModel* model = ChannelModel::instance();
-        std::cout << channel_name << std::endl;
         model->handleLogmanagerCallback(spdlog::level::level_enum::debug , channel_name, channel_name + " has manually been added to channellist");
     }
 
