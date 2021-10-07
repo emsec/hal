@@ -5,6 +5,6 @@
 !netlist_simulator_controller/**/*
 !vcd_viewer*
 !vcd_viewer/**/*
-!verilator_simulator*
-!verilator_simulator/**/*
+!verilator*
+!verilator/**/*
 !.gitignore

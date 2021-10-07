@@ -1,8 +1,8 @@
-#include "verilator_simulator/verilator_simulator.h"
+#include "verilator/verilator.h"
 #include <sstream>
 
 namespace hal {
-namespace verilator_simulator {
+namespace verilator {
 
     // const std::string get_makefile_template()
     // {

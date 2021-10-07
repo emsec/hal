@@ -260,27 +260,30 @@ namespace hal
                 :rtype: bool
             )");
 
-        py::class_<SimulationEngine>(m, "SimulationEngine")
-            .def("name", &SimulationEngine::name, R"(
+        py::class_<SimulationEngine, RawPtrWrapper<SimulationEngine>> py_simulation_engine(m, "SimulationEngine", R"(
+             The engine which does the active part of the simulation as seperate process or thread.
+        )");
+
+        py_simulation_engine.def("name", &SimulationEngine::name, R"(
                 Get the name of the engine.
 
                 :returns: The name of the engine.
                 :rtype: str
-            )")
+        )");
 
-            .def_property_readonly("state", &SimulationEngine::state, R"(
+        py_simulation_engine.def_property_readonly("state", &SimulationEngine::state, R"(
                 Get the state of the engine.
 
                 :returns: The state of the engine (Preparing=0, Running=1, Done=2)
                 :type: int
-            )")
+        )");
 
-            .def("directory", &SimulationEngine::directory, R"(
+        py_simulation_engine.def("directory", &SimulationEngine::directory, R"(
                 Get the working directory of the engine.
 
                 :returns: The working directory of the engine.
                 :rtype: str
-            )");
+        )");
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

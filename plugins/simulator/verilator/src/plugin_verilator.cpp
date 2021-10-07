@@ -1,7 +1,7 @@
-#include "verilator_simulator/plugin_verilator_simulator.h"
+#include "verilator/plugin_verilator.h"
 #include "hal_core/netlist/netlist.h"
 #include "netlist_simulator_controller/simulation_engine.h"
-#include "verilator_simulator/verilator_simulator.h"
+#include "verilator/verilator.h"
 
 namespace hal {
 
@@ -14,7 +14,7 @@ extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
 
 std::string VerilatorSimulatorPlugin::get_name() const
 {
-    return std::string("verilator_simulator");
+    return std::string("verilator");
 }
 
 std::string VerilatorSimulatorPlugin::get_version() const
@@ -25,7 +25,7 @@ std::string VerilatorSimulatorPlugin::get_version() const
 void VerilatorSimulatorPlugin::on_load()
 {
     // constructor will register with controller
-    s_engine_name = (new verilator_simulator::VerilatorEngineFactory)->name();
+    s_engine_name = (new verilator::VerilatorEngineFactory)->name();
 }
 
 void VerilatorSimulatorPlugin::on_unload()

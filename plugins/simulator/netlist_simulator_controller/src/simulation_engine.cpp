@@ -4,11 +4,17 @@
 #include <QProcess>
 #include <QThread>
 #include <QTemporaryDir>
+#include <QDir>
 
 namespace hal {
     SimulationEngine::SimulationEngine(const std::string& nam)
-        : mName(nam), mRequireClockEvents(false), mCanShareMemory(false), mState(Preparing), mTempDir(new QTemporaryDir)
-    {;}
+        : mName(nam), mRequireClockEvents(false), mCanShareMemory(false), mState(Preparing)
+    {
+        QString templatePath = QDir::tempPath();
+        if (!templatePath.isEmpty()) templatePath += '/';
+        templatePath += "hal_simulation_" + QString::fromStdString(mName) + "_XXXXXX";
+        mTempDir = new QTemporaryDir(templatePath);
+    }
 
     SimulationEngine::~SimulationEngine()
     {

@@ -1,4 +1,4 @@
-#include "verilator_simulator/verilator_simulator.h"
+#include "verilator/verilator.h"
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
@@ -19,27 +19,34 @@
 
 namespace hal {
 
-namespace verilator_simulator {
+namespace verilator {
     namespace converter {
 
         bool convert_gate_library_to_verilog(const Netlist* nl, const std::filesystem::path verilator_sim_path, const std::filesystem::path model_path)
         {
-            log_info("verilator_simulator", "converting {} to verilog for simulation", nl->get_gate_library()->get_name());
+            log_info("verilator", "converting {} to verilog for simulation", nl->get_gate_library()->get_name());
 
             std::set<GateType*> gate_types = get_gate_gate_types_from_netlist(nl);
 
-            std::filesystem::path gate_definitions_path = verilator_sim_path / "gate_definitions";
-            std::set<std::string> provided_models = get_provided_models(model_path, gate_definitions_path);
+            // get preset simulation gate models if path given
+            std::filesystem::path gate_definitions_path = verilator_sim_path / "gate_definitions/";
+            std::filesystem::create_directory(gate_definitions_path);
+            std::set<std::string> provided_models;
+            if (!model_path.empty()) {
+                provided_models = get_provided_models(model_path, gate_definitions_path);
+            }
 
+            // create all remaining gate type simulation models
             for (const auto& gate_type : gate_types) {
-                log_info("verilator_simulator", "creating verilog simulation model for {}", gate_type->get_name());
 
+                // check if model has been given
                 if (provided_models.find(gate_type->get_name()) != provided_models.end()) {
-                    log_info("verilator_simulator", "using provided model for gate: {}", gate_type->get_name());
+                    log_info("verilator", "using provided model for gate: {}", gate_type->get_name());
                     // todo
                     continue;
                 }
 
+                log_info("verilator", "creating verilog simulation model for {}", gate_type->get_name());
                 std::stringstream gate_description;
 
                 // insert prologue
@@ -47,9 +54,8 @@ namespace verilator_simulator {
 
                 // get function of gate
                 std::string gate_function = get_function_for_gate(gate_type);
-
                 if (gate_function.empty()) {
-                    log_error("verilator_simulator", "unimplemented reached: gate type: '{}', cannot create simulation model...", gate_type->get_name());
+                    log_error("verilator", "unimplemented reached: gate type: '{}', cannot create simulation model...", gate_type->get_name());
                     return false;
                 }
                 gate_description << gate_function << std::endl;
@@ -57,9 +63,8 @@ namespace verilator_simulator {
                 // insert epilogue
                 gate_description << get_epilogue_for_gate_type(gate_type) << std::endl;
 
-                log_info("verilator_simulator", "verilog file: \n{}", gate_description.str());
                 // write file
-                std::ofstream gate_file(gate_definitions_path / gate_type->get_name());
+                std::ofstream gate_file(gate_definitions_path / (gate_type->get_name() + ".v"));
                 gate_file << gate_description.str();
                 gate_file.close();
             }
@@ -71,13 +76,30 @@ namespace verilator_simulator {
         {
             std::set<std::string> supported_gate_types;
             for (const auto& entry : std::filesystem::directory_iterator(model_path)) {
-                std::string file = entry.path();
-                utils::replace(file, std::string(".v"), std::string(""));
+                std::string file = entry.path().filename();
+
+                if (entry.path().extension() != ".v") {
+                    log_info("verilator", "not reading {} from simulation path, since it is not verilog (no .v extension)", file);
+                    continue;
+                }
+                
+                file = utils::replace(file, std::string(".v"), std::string(""));
                 supported_gate_types.insert(file);
 
                 // copy gate lib to verilator folder
                 std::filesystem::copy(model_path / entry, gate_definition_path);
             }
+
+            if (!supported_gate_types.empty()) {
+
+                log_info("verilator", "using provided gate simulation models for: ");
+                for (const auto& gate : supported_gate_types) {
+                    log_info("verilator", "\t{}", gate);
+                }
+            } else {
+                log_info("verilator", "no gate types were provided");
+            }
+
             return supported_gate_types;
         }
 
@@ -166,19 +188,19 @@ namespace verilator_simulator {
             // insert gate specific function
             if (gt->has_property(hal::GateTypeProperty::lut)) {
 
-                gate_description << verilator_simulator::converter::get_function_for_lut(gt) << std::endl;
+                gate_description << verilator::converter::get_function_for_lut(gt) << std::endl;
 
             } else if (gt->has_property(hal::GateTypeProperty::combinational)) {
 
-                gate_description << verilator_simulator::converter::get_function_for_combinational_gate(gt) << std::endl;
+                gate_description << verilator::converter::get_function_for_combinational_gate(gt) << std::endl;
 
             } else if (gt->has_property(hal::GateTypeProperty::ff)) {
 
-                gate_description << verilator_simulator::converter::get_function_for_ff(gt) << std::endl;
+                gate_description << verilator::converter::get_function_for_ff(gt) << std::endl;
 
             } else if (gt->has_property(hal::GateTypeProperty::latch)) {
 
-                gate_description << verilator_simulator::converter::get_function_for_latch(gt) << std::endl;
+                gate_description << verilator::converter::get_function_for_latch(gt) << std::endl;
             }
             return gate_description.str();
         }
@@ -193,5 +215,5 @@ namespace verilator_simulator {
         }
     }
 
-} // namespace verilator_simulator
+} // namespace verilator
 }

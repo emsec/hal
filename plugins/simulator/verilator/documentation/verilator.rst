@@ -1,5 +1,5 @@
 Verilator Simulator
 ==========================
 
-.. autoclass:: verilator_simulator.VerilatorSimulatorPlugin
+.. autoclass:: verilator.VerilatorSimulatorPlugin
    :members:

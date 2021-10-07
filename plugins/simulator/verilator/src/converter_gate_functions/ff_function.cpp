@@ -1,4 +1,4 @@
-#include "verilator_simulator/verilator_simulator.h"
+#include "verilator/verilator.h"
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
@@ -15,7 +15,7 @@
 #include <vector>
 
 namespace hal {
-namespace verilator_simulator {
+namespace verilator {
     namespace converter {
         std::string get_function_for_ff(const GateType* gt)
         {
@@ -43,7 +43,7 @@ namespace verilator_simulator {
 
                 std::unordered_set<std::string> clock_pins = gt->get_pins_of_type(hal::PinType::clock);
                 if (clock_pins.size() != 1) {
-                    log_error("verilator_simulator", "unsupported reached: currently only supporting FFs with one clock! aborting...");
+                    log_error("verilator", "unsupported reached: currently only supporting FFs with one clock! aborting...");
                     return std::string();
                 }
                 auto clock_function = ff_component->get_clock_function();
@@ -54,7 +54,7 @@ namespace verilator_simulator {
                 bool set_async = false;
 
                 if (clock_function.is_empty()) {
-                    log_error("verilator_simulator", "gate: {} has no clock function in gate_library. you need to set one! aborting...", gt->get_name());
+                    log_error("verilator", "gate: {} has no clock function in gate_library. you need to set one! aborting...", gt->get_name());
                     return std::string();
                 }
 
@@ -112,7 +112,7 @@ namespace verilator_simulator {
                         break;
 
                     default:
-                        log_error("verilator_simulator", "unimplemented reached: found weird AsyncSetResetBehaviour for gate: {}", gt->get_name());
+                        log_error("verilator", "unimplemented reached: found weird AsyncSetResetBehaviour for gate: {}", gt->get_name());
                         return std::string();
                         break;
                     }
@@ -135,7 +135,7 @@ namespace verilator_simulator {
                         break;
 
                     default:
-                        log_error("verilator_simulator", "unimplemented reached: found weird AsyncSetResetBehaviour for gate: {}", gt->get_name());
+                        log_error("verilator", "unimplemented reached: found weird AsyncSetResetBehaviour for gate: {}", gt->get_name());
                         return std::string();
                         break;
                     }
@@ -174,14 +174,14 @@ namespace verilator_simulator {
                     } else if (gt->get_pin_type(output_pin) == hal::PinType::neg_state) {
                         function << "QN_reg";
                     } else {
-                        log_error("verilator_simulator", "unsupported reached: FF has weird outpin '{}' for gate '{}', aborting...", output_pin, gt->get_name());
+                        log_error("verilator", "unsupported reached: FF has weird outpin '{}' for gate '{}', aborting...", output_pin, gt->get_name());
                         return std::string();
                     }
                     function << ";" << std::endl;
                 }
 
             } else {
-                log_error("verilator_simulator", "cannot get FFComponent, aborting...");
+                log_error("verilator", "cannot get FFComponent, aborting...");
                 return function.str();
             }
 

@@ -1,4 +1,4 @@
-#include "verilator_simulator/verilator_simulator.h"
+#include "verilator/verilator.h"
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
@@ -14,7 +14,7 @@
 #include <vector>
 
 namespace hal {
-namespace verilator_simulator {
+namespace verilator {
     namespace converter {
         std::string get_function_for_lut(const GateType* gt)
         {
@@ -30,12 +30,12 @@ namespace verilator_simulator {
                     std::reverse(input_pins.begin(), input_pins.end()); // needs to be reverted due to access in INIT string
                 }
             } else {
-                log_error("verilator_simulator", "cannot get LUTComponent, aborting...");
+                log_error("verilator", "cannot get LUTComponent, aborting...");
                 return function.str();
             }
 
             if (output_pins.size() > 1) {
-                log_error("verilator_simulator", "unsupported reached: currently only supporting LUTs with one output, split them into two and set the INIT string correctly :) ! aborting...");
+                log_error("verilator", "unsupported reached: currently only supporting LUTs with one output, split them into two and set the INIT string correctly :) ! aborting...");
                 return function.str();
             }
 

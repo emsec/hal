@@ -1,5 +1,5 @@
 
-#include "verilator_simulator/verilator_simulator.h"
+#include "verilator/verilator.h"
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace hal {
-namespace verilator_simulator {
+namespace verilator {
     namespace converter {
         std::string get_function_for_combinational_gate(const GateType* gt)
         {

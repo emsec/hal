@@ -13,7 +13,7 @@ class Gate;
 class GateType;
 class Net;
 
-namespace verilator_simulator {
+namespace verilator {
     namespace converter {
 
         /**
@@ -140,6 +140,6 @@ namespace verilator_simulator {
         VerilatorEngineFactory() : SimulationEngineFactory("verilator_simulator") {;}
         SimulationEngine* createEngine() const override;
     };
-} // namespace verilator_simulator
+} // namespace verilator
 
 } // namespace hal

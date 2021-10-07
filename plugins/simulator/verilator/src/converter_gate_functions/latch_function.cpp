@@ -1,4 +1,4 @@
-#include "verilator_simulator/verilator_simulator.h"
+#include "verilator/verilator.h"
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
@@ -16,7 +16,7 @@
 #include <vector>
 
 namespace hal {
-namespace verilator_simulator {
+namespace verilator {
     namespace converter {
         std::string get_function_for_latch(const GateType* gt)
         {
@@ -90,7 +90,7 @@ namespace verilator_simulator {
                 } else if (set_async) {
                     function << "always @(new_async_set";
                 } else {
-                    log_error("verilator_simulator", "gate '{}' has no signals in process, please check gate lib, aborting...", gt->get_name());
+                    log_error("verilator", "gate '{}' has no signals in process, please check gate lib, aborting...", gt->get_name());
                     return std::string();
                 }
 
@@ -122,7 +122,7 @@ namespace verilator_simulator {
                         break;
 
                     default:
-                        log_error("verilator_simulator", "unimplemented reached: found weird AsyncSetResetBehaviour for gate: {}", gt->get_name());
+                        log_error("verilator", "unimplemented reached: found weird AsyncSetResetBehaviour for gate: {}", gt->get_name());
                         return std::string();
                         break;
                     }
@@ -145,7 +145,7 @@ namespace verilator_simulator {
                         break;
 
                     default:
-                        log_error("verilator_simulator", "unimplemented reached: found weird AsyncSetResetBehaviour for gate: {}", gt->get_name());
+                        log_error("verilator", "unimplemented reached: found weird AsyncSetResetBehaviour for gate: {}", gt->get_name());
                         return std::string();
                         break;
                     }
@@ -207,14 +207,14 @@ namespace verilator_simulator {
                     } else if (gt->get_pin_type(output_pin) == hal::PinType::neg_state) {
                         function << "QN_reg";
                     } else {
-                        log_error("verilator_simulator", "unsupported reached: Latch has weird outpin '{}' for gate '{}', aborting...", output_pin, gt->get_name());
+                        log_error("verilator", "unsupported reached: Latch has weird outpin '{}' for gate '{}', aborting...", output_pin, gt->get_name());
                         return std::string();
                     }
                     function << ";" << std::endl;
                 }
 
             } else {
-                log_error("verilator_simulator", "cannot get FFComponent, aborting...");
+                log_error("verilator", "cannot get FFComponent, aborting...");
                 return function.str();
             }
 
