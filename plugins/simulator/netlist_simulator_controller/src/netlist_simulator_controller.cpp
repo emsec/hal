@@ -25,7 +25,9 @@ namespace hal
     NetlistSimulatorController::NetlistSimulatorController(QObject *parent)
         : QObject(parent), mState(NoGatesSelected), mSimulationEngine(nullptr),
           mSimulationInput(new SimulationInput)
-    {;}
+    {
+        LogManager::get_instance().add_channel("sim_controller", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    }
 
     void NetlistSimulatorController::setState(SimulationState stat)
     {
@@ -40,10 +42,14 @@ namespace hal
         }
     }
 
-    bool NetlistSimulatorController::set_simulation_engine(const std::string& name)
+    SimulationEngine* NetlistSimulatorController::create_simulation_engine(const std::string& name)
     {
-        mSimulationEngine = SimulationEngines::instance()->engineByName(name);
-        return (mSimulationEngine != nullptr);
+        SimulationEngineFactory* fac = SimulationEngineFactories::instance()->factoryByName(name);
+        if (!fac) return nullptr;
+        if (mSimulationEngine) delete mSimulationEngine;
+        mSimulationEngine = fac->createEngine();
+        log_info("sim_controller", "engine '{}' created with working directory {}.", mSimulationEngine->name(), mSimulationEngine->directory());
+        return mSimulationEngine;
     }
 
     SimulationEngine* NetlistSimulatorController::get_simulation_engine() const
@@ -53,7 +59,7 @@ namespace hal
 
     std::vector<std::string> NetlistSimulatorController::get_engine_names() const
     {
-        return SimulationEngines::instance()->names();
+        return SimulationEngineFactories::instance()->factoryNames();
     }
 
     void NetlistSimulatorController::initSimulator()

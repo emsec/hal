@@ -39,6 +39,7 @@ namespace hal
 
     class NetlistSimulator : public SimulationEngineEventDriven
     {
+        friend class NetlistSimulatorFactory;
     public:
 
 
@@ -263,12 +264,19 @@ namespace hal
         std::vector<std::unique_ptr<SimulationGate>> m_sim_gates;
         std::vector<SimulationGate*> m_sim_gates_raw;
 
-        NetlistSimulator();
+        NetlistSimulator(const std::string& nam);
         void compute_input_nets();
         void compute_output_nets();
         void prepare_clock_events(u64 nanoseconds);
         void process_events(u64 timeout);
 
         BooleanFunction::Value process_clear_preset_behavior(AsyncSetResetBehavior behavior, BooleanFunction::Value previous_output);
+    };
+
+    class NetlistSimulatorFactory : public SimulationEngineFactory
+    {
+    public:
+        NetlistSimulatorFactory() : SimulationEngineFactory("hal_simulator") {;}
+        SimulationEngine* createEngine() const override;
     };
 }    // namespace hal

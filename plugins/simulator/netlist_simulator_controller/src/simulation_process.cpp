@@ -45,6 +45,7 @@ namespace hal {
         if (prog.isEmpty()) return false;
 
         mProcess = new QProcess(this);
+        mProcess->setWorkingDirectory(QString::fromStdString(mEngine->directory()));
         connect(mProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &SimulationProcess::handleProcessFinished);
         mProcess->start(prog, args);
 

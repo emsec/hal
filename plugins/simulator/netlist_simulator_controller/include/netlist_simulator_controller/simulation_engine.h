@@ -7,17 +7,42 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/defines.h"
 
+class QTemporaryDir;
+
 namespace hal {
 
     class SimulationEngine {
         std::string mName;
+
+    public:
+        enum State { Preparing, Running, Done };
     protected:
         bool mRequireClockEvents;
         bool mCanShareMemory;
         std::string mResultFilename;
+        State mState;
+        QTemporaryDir* mTempDir;
     public:
         SimulationEngine(const std::string& nam);
-        virtual ~SimulationEngine() {;}
+        virtual ~SimulationEngine();
+
+        /**
+         * Getter for enging name
+         * @return name as std::string
+         */
+        std::string name() const { return mName; }
+
+        /**
+         * State of the engine
+         * @return possible state values are Preparing, Running, Done
+         */
+        State state() const { return mState; }
+
+        /**
+         * The working directory. Directory is temporary and will be removed when engine gets deleted
+         * @return directory path
+         */
+        std::string directory() const;
 
         /**
          * Request clock change as regular net input event
@@ -70,8 +95,6 @@ namespace hal {
          * @return true if successful, false on error
          */
         virtual bool finalize() { return true; }
-
-        std::string name() const { return mName; }
     };
 
     class SimulationEngineEventDriven : public SimulationEngine
@@ -126,15 +149,26 @@ namespace hal {
         virtual std::vector<std::string> commandLine(int lineIndex) const = 0;
     };
 
-    class SimulationEngines : public std::vector<SimulationEngine*>
+    class SimulationEngineFactory
     {
-        SimulationEngines() {;}
-        static SimulationEngines* inst;
+    protected:
+        std::string mName;
     public:
-        static SimulationEngines* instance();
+        SimulationEngineFactory(const std::string& nam);
+        virtual ~SimulationEngineFactory() {;}
+        virtual SimulationEngine* createEngine() const = 0;
+        std::string name() const { return mName; }
+    };
 
-        std::vector<std::string> names() const;
-        SimulationEngine* engineByName(const std::string nam) const;
-        void deleteEngine(const std::string nam);
+    class SimulationEngineFactories : public std::vector<SimulationEngineFactory*>
+    {
+        SimulationEngineFactories() {;}
+        static SimulationEngineFactories* inst;
+    public:
+        static SimulationEngineFactories* instance();
+
+        std::vector<std::string> factoryNames() const;
+        SimulationEngineFactory* factoryByName(const std::string nam) const;
+        void deleteFactory(const std::string nam);
     };
 }

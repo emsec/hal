@@ -19,8 +19,8 @@ namespace hal
 {
 #define measure_block_time(X)
 
-    NetlistSimulator::NetlistSimulator()
-        : SimulationEngineEventDriven("hal_simulator")
+    NetlistSimulator::NetlistSimulator(const std::string &nam)
+        : SimulationEngineEventDriven(nam)
     {;}
 
     void NetlistSimulator::set_input(const Net* net, BooleanFunction::Value value)
@@ -689,4 +689,10 @@ namespace hal
 
         return true;
     }
+
+    SimulationEngine* NetlistSimulatorFactory::createEngine() const
+    {
+        return new NetlistSimulator(mName);
+    }
+
 }    // namespace hal

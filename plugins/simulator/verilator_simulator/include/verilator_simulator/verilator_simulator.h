@@ -125,7 +125,7 @@ namespace verilator_simulator {
         static const int s_command_lines;
 
     public:
-        VerilatorEngine();
+        VerilatorEngine(const std::string& nam);
         std::unique_ptr<Netlist> m_partial_netlist;
         std::filesystem::path m_simulator_dir;
 
@@ -135,6 +135,11 @@ namespace verilator_simulator {
         bool finalize() override;
     };
 
+    class VerilatorEngineFactory : public SimulationEngineFactory {
+    public:
+        VerilatorEngineFactory() : SimulationEngineFactory("verilator_simulator") {;}
+        SimulationEngine* createEngine() const override;
+    };
 } // namespace verilator_simulator
 
 } // namespace hal
