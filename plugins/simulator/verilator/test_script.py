@@ -23,7 +23,7 @@ pl_sim_ctrl = hal_py.plugin_manager.get_plugin_instance("netlist_simulator_contr
 sim = pl_sim_ctrl.create_simulator_controller()
 
 sim.add_gates(netlist.get_gates())
-sim.set_simulation_engine("verilator")
+sim.create_simulation_engine("verilator")
 
 #sim.load_initial_values()
 

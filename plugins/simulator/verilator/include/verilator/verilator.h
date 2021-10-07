@@ -137,7 +137,7 @@ namespace verilator {
 
     class VerilatorEngineFactory : public SimulationEngineFactory {
     public:
-        VerilatorEngineFactory() : SimulationEngineFactory("verilator_simulator") {;}
+        VerilatorEngineFactory() : SimulationEngineFactory("verilator") {;}
         SimulationEngine* createEngine() const override;
     };
 } // namespace verilator

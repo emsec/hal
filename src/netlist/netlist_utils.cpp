@@ -356,16 +356,19 @@ namespace netlist_utils {
             if (c_net->get_num_of_sources() == 0) {
                 u32 id = c_net->get_id();
 
-                if (nl->get_net_by_id(id)->get_num_of_sources() != 0) {
+                if (nl->get_net_by_id(id)->get_num_of_sources() != 0 || 
+                    nl->get_net_by_id(id)->is_global_input_net()) {
                     c_netlist->mark_global_input_net(c_net);
                 }
+
             }
 
             // mark nets that had a destination previously but now dont as global outputs
             if (c_net->get_num_of_destinations() == 0) {
                 u32 id = c_net->get_id();
 
-                if (nl->get_net_by_id(id)->get_num_of_destinations() != 0) {
+                if (nl->get_net_by_id(id)->get_num_of_destinations() != 0 || 
+                    nl->get_net_by_id(id)->is_global_output_net()) {
                     c_netlist->mark_global_output_net(c_net);
                 }
             }

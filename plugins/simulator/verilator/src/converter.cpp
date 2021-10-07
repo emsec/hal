@@ -158,19 +158,23 @@ namespace verilator {
             if (!parameters.empty()) {
                 prologue << "#(" << std::endl;
 
+                std::string parameter_str; 
                 for (const auto& parameter : parameters) {
-                    prologue << "\t" << parameter << std::endl;
+                    parameter_str += "\t" + parameter + "\n";
                 }
+                parameter_str.erase(parameter_str.find_last_of(";"));
+                prologue << parameter_str;
+
                 prologue << ")" << std::endl;
             }
 
             prologue << "(" << std::endl;
 
             for (const auto& input_pin : input_pins) {
-                prologue << "\tinput wire " << input_pin << "," << std::endl;
+                prologue << "\tinput " << input_pin << "," << std::endl;
             }
             for (const auto& output_pin : output_pins) {
-                prologue << "\toutput wire " << output_pin << "," << std::endl;
+                prologue << "\toutput " << output_pin << "," << std::endl;
             }
 
             prologue.seekp(-2, prologue.cur); // remove the additional colon and space
