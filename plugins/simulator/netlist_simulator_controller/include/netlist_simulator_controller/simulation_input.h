@@ -33,7 +33,7 @@ namespace hal {
         std::unordered_set<const Gate*> mSimulationSet;
         std::vector<Clock> m_clocks;
 
-        std::vector<const Net*> m_input_nets;
+        std::unordered_set<const Net*> m_input_nets;
         std::vector<const Net*> m_output_nets;
 
         std::vector<SimulationInputNetEvent> mSimulationInputNetEvents;
@@ -77,6 +77,13 @@ namespace hal {
         bool is_clock(const Net* n) const;
 
         /**
+         * Tests whether net is an input net
+         * @param[in] n pointer to net
+         * @return true if net is input net, false otherwise
+         */
+        bool is_input_net(const Net* n) const;
+
+        /**
          * Adds a clock
          * @param[in] clk reference to clock instance
          */
@@ -97,7 +104,7 @@ namespace hal {
          *
          * @returns The input nets.
          */
-        const std::vector<const Net*>& get_input_nets() const;
+        const std::unordered_set<const Net*>& get_input_nets() const;
 
         /**
          * Get all output nets of gates in the simulation set that have a destination outside of the set or that are global outputs.
@@ -119,5 +126,7 @@ namespace hal {
          * @return reference to vector of simulation input net events
          */
         const std::vector<SimulationInputNetEvent>& get_simulation_net_events() const { return mSimulationInputNetEvents; }
+
+        void dump() const;
     };
 }

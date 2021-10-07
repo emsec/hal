@@ -65,5 +65,7 @@ namespace hal {
         void clearAll();
         void updateClocks();
         u64 maxTime() const { return mMaxTime; }
+        void setValueForEmpty(int val);
+        void dump() const;
     };
 }

@@ -5,7 +5,7 @@
 
 namespace hal {
 
-    ClockSetDialog::ClockSetDialog(const std::vector<const Net*> &inputs, QWidget *parent)
+    ClockSetDialog::ClockSetDialog(const QList<const Net*>& inputs, QWidget *parent)
         : QDialog(parent)
     {
         QGridLayout* layout = new QGridLayout(this);

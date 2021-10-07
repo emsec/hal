@@ -4,6 +4,7 @@
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QSpinBox>
+#include <QList>
 #include <vector>
 
 namespace hal {
@@ -14,7 +15,7 @@ namespace hal {
     {
         Q_OBJECT
     public:
-        explicit ClockSetDialog(const std::vector<const Net*>& inputs, QWidget *parent = nullptr);
+        explicit ClockSetDialog(const QList<const Net*>& inputs, QWidget *parent = nullptr);
 
         int netIndex() const { return mComboNet->currentIndex(); }
         int period() const { return mSpinPeriod->value(); }

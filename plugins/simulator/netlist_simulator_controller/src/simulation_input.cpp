@@ -1,6 +1,7 @@
 #include "netlist_simulator_controller/simulation_input.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
+#include <stdio.h>
 
 namespace hal {
 
@@ -47,7 +48,7 @@ namespace hal {
         return !mSimulationSet.empty() && !m_clocks.empty() && !m_input_nets.empty();
     }
 
-    const std::vector<const Net*>& SimulationInput::get_input_nets() const
+    const std::unordered_set<const Net *>& SimulationInput::get_input_nets() const
     {
         return m_input_nets;
     }
@@ -55,6 +56,44 @@ namespace hal {
     const std::vector<const Net*>& SimulationInput::get_output_nets() const
     {
         return m_output_nets;
+    }
+
+    bool SimulationInput::is_input_net(const Net* n) const
+    {
+        return (m_input_nets.find(n) != m_input_nets.end());
+    }
+
+    void SimulationInput::dump() const
+    {
+        fprintf(stderr, "Gates:______________________________________\n");
+        for (const Gate* g: mSimulationSet)
+        {
+            fprintf(stderr, "  %4d <%s>\n", g->get_id(), g->get_name().c_str());
+        }
+        fprintf(stderr, "Clocks:_____________________________________\n");
+        for (const Clock& clk: m_clocks)
+        {
+            fprintf(stderr, "  %4d <%s> \t period: %u \n", clk.clock_net->get_id(), clk.clock_net->get_name().c_str(), (unsigned int) clk.period());
+        }
+        fprintf(stderr, "Input nets:_________________________________\n");
+        for (const Net* n: m_input_nets)
+        {
+            fprintf(stderr, "  %4d <%s>\n", n->get_id(), n->get_name().c_str());
+        }
+        fprintf(stderr, "Output nets:________________________________\n");
+        for (const Net* n: m_output_nets)
+        {
+            fprintf(stderr, "  %4d <%s>\n", n->get_id(), n->get_name().c_str());
+        }
+        fprintf(stderr, "Events:_____________________________________\n");
+        for (const SimulationInputNetEvent& ev : mSimulationInputNetEvents)
+        {
+            fprintf(stderr, "  %8u:", (unsigned int) ev.get_simulation_duration());
+            for (auto it = ev.begin(); it != ev.end(); ++it)
+                fprintf(stderr, " <%u,%d>", it->first->get_id(), it->second);
+            fprintf(stderr, "\n");
+        }
+        fflush(stderr);
     }
 
     void SimulationInput::compute_input_nets()
@@ -67,7 +106,7 @@ namespace hal {
                 // "input net" is either a global input...
                 if (net->is_global_input_net())
                 {
-                    m_input_nets.push_back(net);
+                    m_input_nets.insert(net);
                 }
                 else    // ... or has a source outside of the simulation set
                 {
@@ -75,7 +114,7 @@ namespace hal {
                     {
                         if (!contains_gate(src->get_gate()))
                         {
-                            m_input_nets.push_back(net);
+                            m_input_nets.insert(net);
                             break;
                         }
                     }

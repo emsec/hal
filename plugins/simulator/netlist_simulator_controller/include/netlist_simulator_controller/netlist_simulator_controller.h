@@ -140,7 +140,7 @@ namespace hal
         /**
          * Shortcut to SimulationInput::get_input_nets
          */
-        const std::vector<const Net*>& get_input_nets() const;
+        const std::unordered_set<const Net *>& get_input_nets() const;
 
         /**
          * Shortcut to SimulationInput::get_output_nets

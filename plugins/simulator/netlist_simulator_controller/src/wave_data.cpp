@@ -4,7 +4,7 @@
 #include <math.h>
 #include <vector>
 #include <QString>
-
+#include <stdio.h>
 
 namespace hal {
 
@@ -157,6 +157,20 @@ namespace hal {
         mMaxTime = 0;
     }
 
+    void WaveDataList::dump() const
+    {
+        fprintf(stderr, "WaveDataList:_________%8u______________\n", (unsigned int) mMaxTime);
+        for (auto it = constBegin(); it!= constEnd(); ++it)
+        {
+            fprintf(stderr, "  %4d <%s>:", (*it)->id(), (*it)->name().toStdString().c_str());
+            for (auto jt = (*it)->begin(); jt != (*it)->end(); ++jt)
+                fprintf(stderr, " <%u,%d>", (unsigned int) jt.key(), jt.value());
+            fprintf(stderr, "\n");
+        }
+        fflush(stderr);
+
+    }
+
     void WaveDataList::updateClocks()
     {
         for (auto it=begin(); it!=end(); ++it)
@@ -227,4 +241,12 @@ namespace hal {
         removeAt(inx);
         restoreIndex();
     }
+
+    void WaveDataList::setValueForEmpty(int val)
+    {
+        for (auto it = constBegin(); it!= constEnd(); ++it)
+            if ((*it)->isEmpty())
+                (*it)->insert(0,val);
+    }
+
 }

@@ -310,7 +310,7 @@ namespace hal
             all_nets.insert(out_nets.begin(), out_nets.end());
         }
 
-        const std::vector<const Net*>& inets = mSimulationInput->get_input_nets();
+        const std::unordered_set<const Net*>& inets = mSimulationInput->get_input_nets();
         all_nets.insert(inets.begin(), inets.end());
 
         // find all successors of nets and transform them to their respective simulation gate instance

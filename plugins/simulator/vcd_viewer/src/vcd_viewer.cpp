@@ -117,7 +117,10 @@ namespace hal
         // TODO : WaveData from WaveDataList
 
         mClkNet = nullptr;
-        mInputNets = mController->get_input_nets();
+
+        for (const Net* inet : mController->get_input_nets())
+            mInputNets.append(inet);
+
         for (const Net* n : mInputNets)
         {
             WaveData* wd = new WaveData(n);

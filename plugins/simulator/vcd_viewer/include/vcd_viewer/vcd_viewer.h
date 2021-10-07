@@ -41,6 +41,7 @@
 #include <QCheckBox>
 #include <vector>
 #include <memory>
+#include <unordered_set>
 
 class QStatusBar;
 
@@ -97,7 +98,7 @@ namespace hal
 
         SimulationState mState;
         std::shared_ptr<NetlistSimulatorController> mController;
-        std::vector<const Net*> mInputNets;
+        QList<const Net*> mInputNets;
         const Net* mClkNet;
         std::vector<Gate*> mSimulateGates;
         int mDuration;

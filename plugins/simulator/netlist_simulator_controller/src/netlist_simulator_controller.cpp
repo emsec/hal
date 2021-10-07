@@ -146,6 +146,8 @@ namespace hal
             return false;
         }
 
+        mWaveDataList.setValueForEmpty(0);
+
         QMultiMap<u64,QPair<const Net*, BooleanFunction::Value>> inputMap;
         for (const Net* n : mSimulationInput->get_input_nets())
         {
@@ -192,7 +194,6 @@ namespace hal
                 inputMap.insertMulti(it.key(),QPair<const Net*,BooleanFunction::Value>(n,sv));
             }
         }
-
         u64 t=0;
         SimulationInputNetEvent netEv;
         for (auto it = inputMap.begin(); it != inputMap.end(); ++it)
@@ -294,7 +295,7 @@ namespace hal
         return mSimulationInput->get_gates();
     }
 
-    const std::vector<const Net*>& NetlistSimulatorController::get_input_nets() const
+    const std::unordered_set<const Net*>& NetlistSimulatorController::get_input_nets() const
     {
         return mSimulationInput->get_input_nets();
     }
@@ -307,6 +308,11 @@ namespace hal
     void NetlistSimulatorController::set_input(const Net* net, BooleanFunction::Value value)
     {
         Q_ASSERT(net);
+        if (!mSimulationInput->is_input_net(net))
+        {
+            log_warning("sim_controller", "net[{}] '{}' is not an input net, value not assigned.", net->get_id(), net->get_name());
+            return;
+        }
         WaveData* wd = mWaveDataList.waveDataByNetId(net->get_id());
         if (!wd)
         {
@@ -319,7 +325,6 @@ namespace hal
 
     void NetlistSimulatorController::initialize()
     {
-
     }
 
     void NetlistSimulatorController::reset()
