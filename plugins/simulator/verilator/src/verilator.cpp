@@ -1,4 +1,7 @@
 
+#include "verilator/verilator.h"
+#include "verilator/templates.h"
+
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
@@ -7,10 +10,10 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
-#include "verilog_writer/verilog_writer.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 
 #include "netlist_simulator_controller/simulation_input.h"
-#include "verilator/templates.h"
 
 #include <algorithm>
 #include <filesystem>
@@ -102,6 +105,8 @@ namespace verilator {
             log_error("verilator", "could not create gate definitions in verilog");
             return false;
         };
+
+        netlist_writer_manager::write(m_partial_netlist.get(), netlist_verilog);
         //VerilogWriter::write(m_partial_netlist, netlist_verilog);
 
         return true; // everything ok
