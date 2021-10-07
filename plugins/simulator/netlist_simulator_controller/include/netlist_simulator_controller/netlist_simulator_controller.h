@@ -34,6 +34,7 @@
 #include <QString>
 #include <QMap>
 #include <QObject>
+#include <QTemporaryDir>
 #include <vector>
 #include <memory>
 

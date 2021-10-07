@@ -171,6 +171,7 @@ namespace hal {
     {
         for (auto it = constBegin(); it!= constEnd(); ++it)
         {
+            if ((*it)->isEmpty()) continue;
             u64 maxT = (*it)->lastKey();
             if (maxT > mMaxTime)
                 mMaxTime = maxT;

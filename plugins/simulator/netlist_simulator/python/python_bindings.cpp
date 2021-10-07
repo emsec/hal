@@ -212,47 +212,6 @@ namespace hal
                 :returns: A map from net to associated events for that net sorted by time.
             )");
 
-        py::class_<WaveEvent>(m, "WaveEvent")
-            .def(py::init<>(), R"(Construct a new event.)")
-
-            .def_readwrite("affected_net", &WaveEvent::affected_net, R"(
-                The net affected by the event.
-
-                :type: hal_py.Net
-            )")
-
-            .def_readwrite("new_value", &WaveEvent::new_value, R"(
-                The new value caused by the event.
-
-                :type: hal_py.BooleanFunction.Value
-            )")
-
-            .def_readwrite("time", &WaveEvent::time, R"(
-                The time of the event.
-
-                :type: int
-            )")
-
-            .def_readwrite("id", &WaveEvent::id, R"(
-                The unique ID of the event.
-
-                :type: int
-            )")
-
-            .def(py::self == py::self, R"(
-                Tests whether two events are equal.
-
-                :returns: True when both events are equal, false otherwise.
-                :rtype: bool
-            )")
-
-            .def(py::self < py::self, R"(
-                Tests whether one event happened before the other.
-         
-                :returns: True when this event happened before the other, false otherwise.
-                :rtype: bool
-            )");
-
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE

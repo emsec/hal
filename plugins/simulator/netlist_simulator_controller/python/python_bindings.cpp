@@ -258,7 +258,6 @@ namespace hal
                 :returns: True when this event happened before the other, false otherwise.
                 :rtype: bool
             )");
-
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE

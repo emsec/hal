@@ -42,6 +42,11 @@ namespace hal {
         m_output_nets.clear();
     }
 
+    bool SimulationInput::is_ready() const
+    {
+        return !mSimulationSet.empty() && !m_clocks.empty() && !m_input_nets.empty();
+    }
+
     const std::vector<const Net*>& SimulationInput::get_input_nets() const
     {
         return m_input_nets;

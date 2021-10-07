@@ -256,6 +256,7 @@ namespace hal
         mSimulationInput->add_clock(clk);
         WaveData* wd = new WaveDataClock(clock_net, clk, 2000);
         mWaveDataList.addOrReplace(wd);
+        if (mState == NoGatesSelected && mSimulationInput->is_ready()) mState = ParameterSetup;
     }
 
     void NetlistSimulatorController::add_gates(const std::vector<Gate *> &gates)
@@ -269,7 +270,7 @@ namespace hal
             u32 nid = n->get_id();
             if (!previousInputSet.contains(nid))
             {
-                WaveData* wd = new WaveData(nid, QString::fromStdString(n->get_name()));
+                WaveData* wd = new WaveData(n, WaveData::InputNet);
                 mWaveDataList.addOrReplace(wd);
             }
             currentInputSet.insert(nid);
@@ -279,6 +280,7 @@ namespace hal
         {
             mWaveDataList.remove(id);
         }
+        if (mState == NoGatesSelected && mSimulationInput->is_ready()) mState = ParameterSetup;
     }
 
     const std::unordered_set<const Gate*>& NetlistSimulatorController::get_gates() const

@@ -45,7 +45,13 @@ namespace hal {
         SimulationInput() {;}
 
         /**
-         * Checks wether a gate is part of the simulation set
+         * Checks whether essential data for simulation has been provided (gates, clock, input_nets)
+         * @return true if essential data is present, false otherwise
+         */
+        bool is_ready() const;
+
+        /**
+         * Checks whether a gate is part of the simulation set
          * @param[in] g the gate
          * @return true if part, false otherwise
          */
