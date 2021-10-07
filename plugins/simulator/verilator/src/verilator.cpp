@@ -142,8 +142,8 @@ namespace verilator {
         return std::vector<std::string>();
     }
 
-    VerilatorEngine::VerilatorEngine()
-        : SimulationEngineScripted("verilator")
+    VerilatorEngine::VerilatorEngine(const std::string& nam)
+        : SimulationEngineScripted(nam)
     {
         mRequireClockEvents = true;
     }
@@ -152,6 +152,11 @@ namespace verilator {
     {
         m_result_filename = std::string(m_simulator_dir / "waveform.vcd");
         return true;
+    }
+
+    SimulationEngine* VerilatorEngineFactory::createEngine() const
+    {
+        return new VerilatorEngine(mName);
     }
 
 } // namespace verilator

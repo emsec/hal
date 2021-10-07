@@ -30,11 +30,11 @@ namespace hal
     void NetlistSimulatorPlugin::on_load()
     {
         // constructor will register with controller
-        s_engine_name = (new NetlistSimulator)->name();
+        s_engine_name = (new NetlistSimulatorFactory)->name();
     }
 
     void NetlistSimulatorPlugin::on_unload()
     {
-        SimulationEngines::instance()->deleteEngine(s_engine_name);
+        SimulationEngineFactories::instance()->deleteFactory(s_engine_name);
     }
 }

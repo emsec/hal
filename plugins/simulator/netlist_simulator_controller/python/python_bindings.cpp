@@ -2,6 +2,7 @@
 
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_engine.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
@@ -115,12 +116,12 @@ namespace hal
                 :rtype: list[str]
              )")
 
-             .def("set_simulation_engine", &NetlistSimulatorController::set_simulation_engine, py::arg("name"), R"(
+             .def("create_simulation_engine", &NetlistSimulatorController::create_simulation_engine, py::arg("name"), R"(
                   Select and set the engine for simulation. The list of available engines is provided by function get_engine_names().
 
                   :param str name: The name of the engine to be selected.
-                  :returns: True if engine could be selected, False otherwise
-                  :rtype: bool
+                  :returns: The engine created by factory method
+                  :rtype: netlist_simulator_controller.SimulationEngine or None
               )")
 
              .def("run_simulation", &NetlistSimulatorController::run_simulation, R"("
@@ -258,6 +259,32 @@ namespace hal
                 :returns: True when this event happened before the other, false otherwise.
                 :rtype: bool
             )");
+
+        py::class_<SimulationEngine, RawPtrWrapper<SimulationEngine>> py_simulation_engine(m, "SimulationEngine", R"(
+             The engine which does the active part of the simulation as seperate process or thread.
+        )");
+
+        py_simulation_engine.def("name", &SimulationEngine::name, R"(
+                Get the name of the engine.
+
+                :returns: The name of the engine.
+                :rtype: str
+        )");
+
+        py_simulation_engine.def_property_readonly("state", &SimulationEngine::state, R"(
+                Get the state of the engine.
+
+                :returns: The state of the engine (Preparing=0, Running=1, Done=2)
+                :type: int
+        )");
+
+        py_simulation_engine.def("directory", &SimulationEngine::directory, R"(
+                Get the working directory of the engine.
+
+                :returns: The working directory of the engine.
+                :rtype: str
+        )");
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE

@@ -3,51 +3,27 @@
 #include "netlist_simulator_controller/simulation_process.h"
 #include <QProcess>
 #include <QThread>
+#include <QTemporaryDir>
+#include <QDir>
 
 namespace hal {
-    SimulationEngines* SimulationEngines::inst = nullptr;
-
-    SimulationEngines* SimulationEngines::instance()
-    {
-        if (!inst) inst = new SimulationEngines;
-        return inst;
-    }
-
-    std::vector<std::string> SimulationEngines::names() const
-    {
-        std::vector<std::string> retval;
-        for (auto it=begin(); it!=end(); ++it)
-            retval.push_back((*it)->name());
-        return retval;
-    }
-
-    SimulationEngine* SimulationEngines::engineByName(const std::string nam) const
-    {
-        for (auto it=begin(); it!=end(); ++it)
-            if ((*it)->name() == nam) return (*it);
-
-        return nullptr;
-    }
-
-    void SimulationEngines::deleteEngine(const std::string nam)
-    {
-        auto it = begin();
-        while (it != end())
-        {
-            if ((*it)->name() == nam)
-            {
-                delete (*it);
-                it = erase(it);
-            }
-            else
-                ++it;
-        }
-    }
-
     SimulationEngine::SimulationEngine(const std::string& nam)
-        : mName(nam), mRequireClockEvents(false), mCanShareMemory(false)
+        : mName(nam), mRequireClockEvents(false), mCanShareMemory(false), mState(Preparing)
     {
-        SimulationEngines::instance()->push_back(this);
+        QString templatePath = QDir::tempPath();
+        if (!templatePath.isEmpty()) templatePath += '/';
+        templatePath += "hal_simulation_" + QString::fromStdString(mName) + "_XXXXXX";
+        mTempDir = new QTemporaryDir(templatePath);
+    }
+
+    SimulationEngine::~SimulationEngine()
+    {
+        delete mTempDir;
+    }
+
+    std::string SimulationEngine::directory() const
+    {
+        return mTempDir->path().toStdString();
     }
 
     SimulationEngineEventDriven::SimulationEngineEventDriven(const std::string& nam)
@@ -71,6 +47,7 @@ namespace hal {
     bool SimulationEngineEventDriven::run()
     {
         SimulationThread* thread = new SimulationThread(mSimulationInput,this);
+        mState = Running;
         thread->start();
         return true;
     }
@@ -78,7 +55,57 @@ namespace hal {
     bool SimulationEngineScripted::run()
     {
         SimulationProcess* proc = new SimulationProcess(this);
+        mState = Running;
         proc->start();
         return true;
     }
+
+
+    //======================= FACTORY ================================
+    SimulationEngineFactory::SimulationEngineFactory(const std::string& nam)
+        : mName(nam)
+    {
+        SimulationEngineFactories::instance()->push_back(this);
+    }
+
+    SimulationEngineFactories* SimulationEngineFactories::inst = nullptr;
+
+    SimulationEngineFactories* SimulationEngineFactories::instance()
+    {
+        if (!inst) inst = new SimulationEngineFactories;
+        return inst;
+    }
+
+    std::vector<std::string> SimulationEngineFactories::factoryNames() const
+    {
+        std::vector<std::string> retval;
+        for (auto it=begin(); it!=end(); ++it)
+            retval.push_back((*it)->name());
+        return retval;
+    }
+
+    SimulationEngineFactory* SimulationEngineFactories::factoryByName(const std::string nam) const
+    {
+        for (auto it=begin(); it!=end(); ++it)
+            if ((*it)->name() == nam) return (*it);
+
+        return nullptr;
+    }
+
+    void SimulationEngineFactories::deleteFactory(const std::string nam)
+    {
+        auto it = begin();
+        while (it != end())
+        {
+            if ((*it)->name() == nam)
+            {
+                delete (*it);
+                it = erase(it);
+            }
+            else
+                ++it;
+        }
+    }
+
+
 }

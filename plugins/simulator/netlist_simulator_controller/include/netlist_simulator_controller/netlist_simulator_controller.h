@@ -61,9 +61,19 @@ namespace hal
         NetlistSimulatorController(QObject* parent = nullptr);
         ~NetlistSimulatorController() = default;
 
-        bool set_simulation_engine(const std::string& name);
-        SimulationEngine* get_simulation_engine() const;
+        /**
+         * Call to one of the registered engine factories to create a new engine.
+         * Controller will take ownership for new engine.
+         * @param[in] name name of engine factory (thus name of the engine)
+         * @return Pointer to engine if successfully created, nullptr otherwise
+         */
+        SimulationEngine* create_simulation_engine(const std::string& name);
 
+        /**
+         * Getter for simulation engine (if any)
+         * @return Pointer to engine or nullptr
+         */
+        SimulationEngine* get_simulation_engine() const;
 
         /**
          * Specify a net that carries the clock signal and set the clock frequency in hertz.

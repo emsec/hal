@@ -25,12 +25,12 @@ std::string VerilatorSimulatorPlugin::get_version() const
 void VerilatorSimulatorPlugin::on_load()
 {
     // constructor will register with controller
-    s_engine_name = (new verilator::VerilatorEngine)->name();
+    s_engine_name = (new verilator::VerilatorEngineFactory)->name();
 }
 
 void VerilatorSimulatorPlugin::on_unload()
 {
-    SimulationEngines::instance()->deleteEngine(s_engine_name);
+    SimulationEngineFactories::instance()->deleteFactory(s_engine_name);
 }
 
 }
