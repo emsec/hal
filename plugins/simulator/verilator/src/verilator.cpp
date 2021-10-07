@@ -10,8 +10,8 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include "netlist_simulator_controller/simulation_input.h"
 
@@ -93,9 +93,6 @@ namespace verilator {
 
         testbench_cpp = utils::replace(testbench_cpp, std::string("<insert_trace_here>"), simulation_data.str());
         testbench_cpp = utils::replace(testbench_cpp, std::string("<top_system>"), m_partial_netlist->get_design_name());
-
-        log_info("verilator", "{}", testbench_cpp);
-        log_info("verilator", "{}", simulation_data.str());
 
         std::ofstream testbench_cpp_file(m_simulator_dir / "testbench.cpp");
         testbench_cpp_file << testbench_cpp;

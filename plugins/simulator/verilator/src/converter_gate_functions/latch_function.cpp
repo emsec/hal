@@ -34,7 +34,7 @@ namespace verilator {
 
                     function << "initial begin" << std::endl;
                     function << "\tQ_reg = INIT;" << std::endl;
-                    function << "\tQN_reg = not(INIT);" << std::endl;
+                    function << "\tQN_reg = !(INIT);" << std::endl;
                     function << "end" << std::endl;
                 }
                 function << std::endl;
@@ -112,7 +112,7 @@ namespace verilator {
                         function << "\t\tQ_reg <= 1'b1;" << std::endl;
                         break;
                     case AsyncSetResetBehavior::T:
-                        function << "\t\tQ_reg <= not(Q_reg);" << std::endl;
+                        function << "\t\tQ_reg <= !(Q_reg);" << std::endl;
                         break;
                     case AsyncSetResetBehavior::N:
                         function << "\t\tQ_reg <= Q_reg;" << std::endl;
@@ -135,7 +135,7 @@ namespace verilator {
                         function << "\t\tQN_reg <= 1'b1;" << std::endl;
                         break;
                     case AsyncSetResetBehavior::T:
-                        function << "\t\tQN_reg <= not(QN_reg);" << std::endl;
+                        function << "\t\tQN_reg <= !(QN_reg);" << std::endl;
                         break;
                     case AsyncSetResetBehavior::N:
                         function << "\t\tQN_reg <= QN_reg;" << std::endl;
@@ -172,7 +172,7 @@ namespace verilator {
                 if (enable) {
                     function << (if_used ? "\telse if (" : "\tif (") << enable_function.to_string() << ") begin" << std::endl;
                     function << (if_used ? "\t" : "") << "\tQ_reg <= " << data_function << ";" << std::endl;
-                    function << (if_used ? "\t" : "") << "\tQN_reg <= not(" << data_function << ");" << std::endl;
+                    function << (if_used ? "\t" : "") << "\tQN_reg <= !(" << data_function << ");" << std::endl;
                     function << "\tend" << std::endl;
 
                     // unncessary but for completeness
@@ -192,7 +192,7 @@ namespace verilator {
                     } else {
                         function << (if_used ? "\telse begin\n" : "");
                         function << (if_used ? "\t" : "") << "\tQ_reg <= " << data_function << ";" << std::endl;
-                        function << (if_used ? "\t" : "") << "\tQN_reg <= not(" << data_function << ");" << std::endl;
+                        function << (if_used ? "\t" : "") << "\tQN_reg <= !(" << data_function << ");" << std::endl;
                         function << "\tend" << std::endl;
                     }
                 }
