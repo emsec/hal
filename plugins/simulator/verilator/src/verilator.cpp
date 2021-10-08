@@ -44,7 +44,8 @@ namespace verilator {
         const std::vector<const Gate*> simulation_gates(simInput->get_gates().begin(), simInput->get_gates().end());
         m_partial_netlist = netlist_utils::get_partial_netlist(simulation_gates.at(0)->get_netlist(), simulation_gates);
 
-        m_simulator_dir = "/tmp/hal/simulator/";
+        m_simulator_dir = directory();
+        m_design_name = m_partial_netlist->get_design_name();
 
         std::filesystem::path provided_models = "/Users/eve/hal/plugins/real_world_reversing/simulation_models/";
         std::filesystem::path netlist_verilog = m_simulator_dir / std::string(m_partial_netlist->get_design_name() + ".v");
@@ -66,7 +67,6 @@ namespace verilator {
         for (const auto& sim_event : simInput->get_simulation_net_events()) {
             u32 duration = sim_event.get_simulation_duration();
             for (const auto& [net, boolean_value] : sim_event) {
-                log_info("verilator", "net: {}", net->get_name());
                 simulation_data << "\tdut->" << net->get_name() << " = ";
 
                 switch (boolean_value) {
@@ -86,10 +86,11 @@ namespace verilator {
                 simulation_data << ";" << std::endl;
             }
             simulation_data << "\tdut->eval();" << std::endl;
-            simulation_data << "\tm_trace->dump(" << duration << ");" << std::endl;
-            simulation_data << "\tsim_time += " << duration << ");" << std::endl;
+            simulation_data << "\tm_trace->dump(sim_time);" << std::endl;
+            simulation_data << "\tsim_time += " << duration << ";" << std::endl;
             simulation_data << std::endl;
         }
+        simulation_data << "\tm_trace->dump(sim_time);" << std::endl;
 
         testbench_cpp = utils::replace(testbench_cpp, std::string("<insert_trace_here>"), simulation_data.str());
         testbench_cpp = utils::replace(testbench_cpp, std::string("<top_system>"), m_partial_netlist->get_design_name());
@@ -104,7 +105,6 @@ namespace verilator {
         };
 
         netlist_writer_manager::write(m_partial_netlist.get(), netlist_verilog);
-        //VerilogWriter::write(m_partial_netlist, netlist_verilog);
 
         return true; // everything ok
     }
@@ -120,16 +120,16 @@ namespace verilator {
         switch (lineIndex) {
         case 0: {
             const char* cl[] = { "verilator", "-I.", "-Wall", "-Wno-fatal", "--MMD", "-trace", "-y", "gate_definitions/",
-                "--Mdir", "obj_dir", "--exe", "-cc", "-DSIM_VERILATOR", "--trace-depth", "1",
-                "generic_tb.cpp", "counter.v", nullptr };
+                "--Mdir", "obj_dir", "--exe", "-cc", "-DSIM_VERILATOR", "--trace-depth", "2",
+                "testbench.cpp", std::string(m_design_name + ".v").c_str(), nullptr };
             return converter::get_vector_for_const_char(cl);
         } break;
         case 1: {
-            const char* cl[] = { "make", "--no-print-directory", "-C", "obj_dir/", "-f", "Vcounter.mk", nullptr };
+            const char* cl[] = { "make", "--no-print-directory", "-C", "obj_dir/", "-f", std::string("V" + m_design_name + ".mk").c_str(), nullptr };
             return converter::get_vector_for_const_char(cl);
         } break;
         case 2: {
-            const char* cl[] = { "make", "run", nullptr };
+            const char* cl[] = { "obj_dir/", "run", nullptr };
             return converter::get_vector_for_const_char(cl);
         } break;
         default:

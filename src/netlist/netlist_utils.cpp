@@ -393,7 +393,7 @@ namespace netlist_utils {
             Net* old_net = nl->get_net_by_id(new_net->get_id());
             if (old_output_names.find(old_net) != old_output_names.end()) {
                 const std::string old_name = old_output_names.at(old_net);
-                c_netlist->get_top_module()->set_input_port_name(new_net, old_name);
+                c_netlist->get_top_module()->set_output_port_name(new_net, old_name);
             }
         }
 

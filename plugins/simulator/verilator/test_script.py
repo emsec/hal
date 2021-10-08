@@ -27,38 +27,39 @@ sim.create_simulation_engine("verilator")
 
 #sim.load_initial_values()
 
-Clock_enable_B = netlist.get_net_by_id(4)
-clock = netlist.get_net_by_id(3)
-reset = netlist.get_net_by_id(9)
-output_0 = netlist.get_net_by_id(5)
-output_1 = netlist.get_net_by_id(6)
-output_2 = netlist.get_net_by_id(7)
-output_3 = netlist.get_net_by_id(8)
+Clock_enable_B = netlist.get_net_by_id(8)
+clock = netlist.get_net_by_id(5)
+reset = netlist.get_net_by_id(6)
+output_0 = netlist.get_net_by_id(9)
+output_1 = netlist.get_net_by_id(3)
+output_2 = netlist.get_net_by_id(4)
+output_3 = netlist.get_net_by_id(7)
 
-sim.add_clock_period(clock, 10000)
+clock_period = 10000
+
+sim.add_clock_period(clock, clock_period)
+
+sim.set_input(reset, hal_py.BooleanFunction.Value.ONE)
+sim.simulate(1 * clock_period)
+
+sim.set_input(reset, hal_py.BooleanFunction.Value.ZERO)
+sim.simulate(1 * clock_period)
 
 sim.set_input(Clock_enable_B, hal_py.BooleanFunction.Value.ONE)
-sim.set_input(reset, hal_py.BooleanFunction.Value.ZERO)
-sim.simulate(40 * 1000)
+sim.simulate(5 * clock_period)
 
 sim.set_input(Clock_enable_B, hal_py.BooleanFunction.Value.ZERO)
-sim.simulate(110 * 1000)
+sim.simulate(2 * clock_period)
 
 sim.set_input(reset, hal_py.BooleanFunction.Value.ONE)
-sim.simulate(20 * 1000)
+sim.simulate(2 * clock_period)
 
 sim.set_input(reset, hal_py.BooleanFunction.Value.ZERO)
-sim.simulate(70 * 1000)
+sim.simulate(1 * clock_period)
 
 sim.set_input(Clock_enable_B, hal_py.BooleanFunction.Value.ONE)
-sim.simulate(23 * 1000)
+sim.simulate(20 * clock_period)
 
-sim.set_input(reset, hal_py.BooleanFunction.Value.ONE)
-sim.simulate(20 * 1000)
-
-sim.simulate(20 * 1000)
-
-sim.simulate(5 * 1000)
 
 sim.run_simulation()
 
