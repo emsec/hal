@@ -32,7 +32,8 @@ namespace hal
 {
     class PLUGIN_API NetlistSimulatorPlugin : public BasePluginInterface
     {
-        std::unordered_map<std::string, std::shared_ptr<NetlistSimulator> > m_shared_simulator_map;
+        static std::string s_engine_name;
+
     public:
         /**
          * Get the name of the plugin.
@@ -49,18 +50,19 @@ namespace hal
         std::string get_version() const override;
 
         /**
-         * Create a netlist simulator instance.
-         * 
-         * @returns The simulator instance.
+         * Get dependencies of plugin
+         * @return Set of plugin names which must be loaded first, contains {netlist_simulator_controller}
          */
-        std::unique_ptr<NetlistSimulator> create_simulator() const;
+        std::set<std::string> get_dependencies() const override;
 
         /**
-         * Get simulator that is shared with external module
-         *
-         * @param user Name of external module
-         * @return Shared pointer to simulator instance
+         * Creates instance and registers with NetlistSimulatorController
          */
-        std::shared_ptr<NetlistSimulator> get_shared_simulator(const std::string& module_name);
+        void on_load() override;
+
+        /**
+         * Unregisters and delete instance
+         */
+        void on_unload() override;
     };
 }    // namespace hal

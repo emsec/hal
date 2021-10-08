@@ -1,5 +1,5 @@
 #include "vcd_viewer/vcd_serializer.h"
-#include "vcd_viewer/wave_data.h"
+#include "netlist_simulator_controller/wave_data.h"
 #include <QFile>
 #include <QRegularExpression>
 #include <QDebug>

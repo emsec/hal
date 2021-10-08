@@ -722,13 +722,13 @@ namespace hal
     
         GateLibrary gl("no_path", "example_gl");
 
-        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::latch}, GateTypeComponent::create_latch_component(BooleanFunction::from_string("D"), BooleanFunction::from_string("E")));
+        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::latch}, GateTypeComponent::create_latch_component());
         ASSERT_NE(gt, nullptr);
         LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* component){ return component->get_type() ==  GateTypeComponent::ComponentType::latch; });
         ASSERT_NE(latch_component, nullptr);
 
-        EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::from_string("E"));
-        EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::from_string("D"));
+        EXPECT_TRUE(latch_component->get_enable_function().is_empty());
+        EXPECT_TRUE(latch_component->get_data_in_function().is_empty());
         EXPECT_TRUE(latch_component->get_async_reset_function().is_empty());
         EXPECT_TRUE(latch_component->get_async_set_function().is_empty());
         EXPECT_EQ(latch_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::undef, AsyncSetResetBehavior::undef));

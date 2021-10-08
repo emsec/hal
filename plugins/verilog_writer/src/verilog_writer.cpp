@@ -63,6 +63,7 @@ namespace hal
             log_error("verilog_writer", "unable to open '{}'.", file_path.string());
             return false;
         }
+        file << "`timescale 1 ps/1 ps" << std::endl;
         file << res_stream.str();
         file.close();
 
@@ -91,7 +92,15 @@ namespace hal
             }
         }
         module_type_aliases[module] = get_unique_alias(module_type_occurrences, module_type);
-        res_stream << "module " << escape(module_type_aliases.at(module));
+
+        if (module_type_aliases.at(module) == "top_module")
+        {
+            res_stream << "module " << escape(module->get_netlist()->get_design_name());
+        }
+        else
+        {
+            res_stream << "module " << escape(module_type_aliases.at(module));
+        }
 
         std::unordered_map<const DataContainer*, std::string> aliases;
         std::unordered_map<std::string, u32> identifier_occurrences;

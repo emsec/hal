@@ -26,6 +26,7 @@ namespace hal
     std::set<std::string> VcdViewerPlugin::get_dependencies() const
     {
         std::set<std::string> retval;
+        retval.insert("netlist_simulator_controller");
         retval.insert("netlist_simulator");
         retval.insert("hal_gui");
         return retval;

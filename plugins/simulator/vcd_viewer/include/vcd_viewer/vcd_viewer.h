@@ -29,7 +29,9 @@
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/content_manager/content_manager.h"
-#include "netlist_simulator/netlist_simulator.h"
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_input.h"
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
 
 #include <functional>
 #include <map>
@@ -39,6 +41,7 @@
 #include <QCheckBox>
 #include <vector>
 #include <memory>
+#include <unordered_set>
 
 class QStatusBar;
 
@@ -49,6 +52,7 @@ namespace hal
     class WaveWidget;
     class WaveData;
     class Toolbar;
+    class SimulationInput;
 
     class NETLIST_API VcdViewerFactory : public ContentFactory
     {
@@ -93,8 +97,8 @@ namespace hal
         void setState(SimulationState stat);
 
         SimulationState mState;
-        std::shared_ptr<NetlistSimulator> mSimulator;
-        std::vector<const Net*> mInputNets;
+        std::shared_ptr<NetlistSimulatorController> mController;
+        QList<const Net*> mInputNets;
         const Net* mClkNet;
         std::vector<Gate*> mSimulateGates;
         int mDuration;
@@ -107,5 +111,6 @@ namespace hal
 
         WaveWidget* mWaveWidget;
         QStatusBar* mStatusBar;
+
     };
 }    // namespace hal

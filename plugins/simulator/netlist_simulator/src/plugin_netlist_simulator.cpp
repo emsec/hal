@@ -1,7 +1,9 @@
 #include "netlist_simulator/plugin_netlist_simulator.h"
+#include "netlist_simulator_controller/simulation_engine.h"
 
 namespace hal
 {
+    std::string NetlistSimulatorPlugin::s_engine_name;
 
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
@@ -18,22 +20,21 @@ namespace hal
         return std::string("0.1");
     }
 
-    std::unique_ptr<NetlistSimulator> NetlistSimulatorPlugin::create_simulator() const
+    std::set<std::string> NetlistSimulatorPlugin::get_dependencies() const
     {
-        return std::unique_ptr<NetlistSimulator>(new NetlistSimulator());
+        std::set<std::string> retval;
+        retval.insert("netlist_simulator_controller");
+        return retval;
     }
 
-    std::shared_ptr<NetlistSimulator> NetlistSimulatorPlugin::get_shared_simulator(const std::string& module_name)
+    void NetlistSimulatorPlugin::on_load()
     {
-        auto it = m_shared_simulator_map.find(module_name);
-        if (it == m_shared_simulator_map.end())
-        {
-            std::shared_ptr<NetlistSimulator> retval = create_simulator();
-            m_shared_simulator_map[module_name] = retval;
-            return retval;
-        }
-        return it->second;
+        // constructor will register with controller
+        s_engine_name = (new NetlistSimulatorFactory)->name();
     }
 
-
+    void NetlistSimulatorPlugin::on_unload()
+    {
+        SimulationEngineFactories::instance()->deleteFactory(s_engine_name);
+    }
 }

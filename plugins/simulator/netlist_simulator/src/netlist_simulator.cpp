@@ -5,6 +5,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 #include "netlist_simulator/simulation_utils.h"
+#include "netlist_simulator_controller/simulation_input.h"
 
 #include <algorithm>
 #include <chrono>
@@ -18,72 +19,9 @@ namespace hal
 {
 #define measure_block_time(X)
 
-    NetlistSimulator::NetlistSimulator()
-    {
-        reset();
-    }
-
-    void NetlistSimulator::add_gates(const std::vector<Gate*>& gates)
-    {
-        if (!m_is_initialized)
-        {
-            m_simulation_set.insert(gates.begin(), gates.end());
-
-            compute_input_nets();
-            compute_output_nets();
-        }
-        else
-        {
-            log_error("netlist_simulator", "cannot add gates after the simulation was started.");
-            return;
-        }
-    }
-
-    void NetlistSimulator::add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero)
-    {
-        if (!m_is_initialized)
-        {
-            u64 period = 1'000'000'000'000ul / frequency;
-            add_clock_period(clock_net, period, start_at_zero);
-        }
-        else
-        {
-            log_error("netlist_simulator", "cannot add a clock frequency after the simulation was started.");
-            return;
-        }
-    }
-
-    void NetlistSimulator::add_clock_period(const Net* clock_net, u64 period, bool start_at_zero)
-    {
-        if (!m_is_initialized)
-        {
-            Clock c;
-            c.clock_net     = clock_net;
-            c.switch_time   = period / 2;
-            c.start_at_zero = start_at_zero;
-            m_clocks.push_back(c);
-        }
-        else
-        {
-            log_error("netlist_simulator", "cannot add a clock period after the simulation was started.");
-            return;
-        }
-    }
-
-    const std::unordered_set<Gate*>& NetlistSimulator::get_gates() const
-    {
-        return m_simulation_set;
-    }
-
-    const std::vector<const Net*>& NetlistSimulator::get_input_nets() const
-    {
-        return m_input_nets;
-    }
-
-    const std::vector<const Net*>& NetlistSimulator::get_output_nets() const
-    {
-        return m_output_nets;
-    }
+    NetlistSimulator::NetlistSimulator(const std::string &nam)
+        : SimulationEngineEventDriven(nam)
+    {;}
 
     void NetlistSimulator::set_input(const Net* net, BooleanFunction::Value value)
     {
@@ -101,7 +39,7 @@ namespace hal
             }
         }
 
-        Event e;
+        WaveEvent e;
         e.affected_net = net;
         e.time         = m_current_time;
         e.new_value    = value;
@@ -139,7 +77,7 @@ namespace hal
         // has to work even if the simulation was not started, i.e., initialize was not called yet
         // so we cannot use the SimulationGateFF type
 
-        for (Gate* gate : m_simulation_set)
+        for (const Gate* gate : mSimulationInput->get_gates())
         {
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
@@ -153,7 +91,7 @@ namespace hal
                 {
                     if (pin_types.at(ep->get_pin()) == PinType::state)
                     {
-                        Event e;
+                        WaveEvent e;
                         e.affected_net = ep->get_net();
                         e.new_value    = value;
                         e.time         = m_current_time;
@@ -161,7 +99,7 @@ namespace hal
                     }
                     else if (pin_types.at(ep->get_pin()) == PinType::neg_state)
                     {
-                        Event e;
+                        WaveEvent e;
                         e.affected_net = ep->get_net();
                         e.new_value    = inv_value;
                         e.time         = m_current_time;
@@ -177,7 +115,7 @@ namespace hal
         // has to work even if the simulation was not started, i.e., initialize was not called yet
         // so we cannot use the SimulationGateFF type
 
-        for (Gate* gate : m_simulation_set)
+        for (const Gate* gate : mSimulationInput->get_gates())
         {
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
@@ -218,7 +156,7 @@ namespace hal
                     {
                         if (pin_types.at(ep->get_pin()) == PinType::state)
                         {
-                            Event e;
+                            WaveEvent e;
                             e.affected_net = ep->get_net();
                             e.new_value    = value;
                             e.time         = m_current_time;
@@ -226,7 +164,7 @@ namespace hal
                         }
                         else if (pin_types.at(ep->get_pin()) == PinType::neg_state)
                         {
-                            Event e;
+                            WaveEvent e;
                             e.affected_net = ep->get_net();
                             e.new_value    = inv_value;
                             e.time         = m_current_time;
@@ -252,8 +190,7 @@ namespace hal
 
     void NetlistSimulator::reset()
     {
-        m_clocks.clear();
-        m_simulation_set.clear();
+        mSimulationInput->clear();
         m_current_time = 0;
         m_id_counter   = 0;
         m_simulation   = Simulation();
@@ -271,59 +208,6 @@ namespace hal
         return m_simulation;
     }
 
-    void NetlistSimulator::compute_input_nets()
-    {
-        m_input_nets.clear();
-        for (auto gate : m_simulation_set)
-        {
-            for (auto net : gate->get_fan_in_nets())
-            {
-                // "input net" is either a global input...
-                if (net->is_global_input_net())
-                {
-                    m_input_nets.push_back(net);
-                }
-                else    // ... or has a source outside of the simulation set
-                {
-                    for (auto src : net->get_sources())
-                    {
-                        if (m_simulation_set.find(src->get_gate()) == m_simulation_set.end())
-                        {
-                            m_input_nets.push_back(net);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    void NetlistSimulator::compute_output_nets()
-    {
-        m_output_nets.clear();
-        for (auto gate : m_simulation_set)
-        {
-            for (auto net : gate->get_fan_out_nets())
-            {
-                // "output net" is either a global output...
-                if (net->is_global_output_net())
-                {
-                    m_output_nets.push_back(net);
-                }
-                else    // ... or has a destination outside of the simulation set
-                {
-                    for (auto dst : net->get_destinations())
-                    {
-                        if (m_simulation_set.find(dst->get_gate()) == m_simulation_set.end())
-                        {
-                            m_output_nets.push_back(net);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     void NetlistSimulator::set_iteration_timeout(u64 iterations)
     {
@@ -335,13 +219,23 @@ namespace hal
         return m_timeout_iterations;
     }
 
-    std::vector<Event> NetlistSimulator::get_simulation_events(Net* n) const
+    std::vector<WaveEvent> NetlistSimulator::get_simulation_events(Net* n) const
     {
-        std::unordered_map<const Net*, std::vector<Event>> sim_events = m_simulation.get_events();
+        std::unordered_map<const Net*, std::vector<WaveEvent>> sim_events = m_simulation.get_events();
         auto it = sim_events.find(n);
         if (it == sim_events.end())
-            return std::vector<Event>();
+            return std::vector<WaveEvent>();
         return it->second;
+    }
+
+    bool NetlistSimulator::inputEvent(const SimulationInputNetEvent& netEv)
+    {
+        for (auto it = netEv.begin(); it != netEv.end(); ++it)
+        {
+            set_input(it->first, it->second);
+        }
+        simulate(netEv.get_simulation_duration());
+        return true;
     }
 
 
@@ -355,12 +249,12 @@ namespace hal
         m_sim_gates.clear();
         m_sim_gates_raw.clear();
 
-        std::unordered_map<Gate*, SimulationGate*> sim_gates_map;
+        std::unordered_map<const Gate*, SimulationGate*> sim_gates_map;
         std::unordered_set<const Net*> all_nets;
         std::map<const Net*, BooleanFunction::Value> init_events;
 
         // precompute everything that is gate-related
-        for (auto gate : m_simulation_set)
+        for (const Gate* gate : mSimulationInput->get_gates())
         {
             SimulationGate* sim_gate_base = nullptr;
 
@@ -416,7 +310,8 @@ namespace hal
             all_nets.insert(out_nets.begin(), out_nets.end());
         }
 
-        all_nets.insert(m_input_nets.begin(), m_input_nets.end());
+        const std::unordered_set<const Net*>& inets = mSimulationInput->get_input_nets();
+        all_nets.insert(inets.begin(), inets.end());
 
         // find all successors of nets and transform them to their respective simulation gate instance
         for (auto net : all_nets)
@@ -437,7 +332,7 @@ namespace hal
             {
                 auto gate  = it.first;
                 auto& pins = it.second;
-                if (m_simulation_set.find(gate) == m_simulation_set.end())
+                if (!mSimulationInput->contains_gate(gate))
                 {
                     continue;
                 }
@@ -447,7 +342,7 @@ namespace hal
         }
 
         // create one-time events for global gnd and vcc gates
-        for (auto g : m_simulation_set)
+        for (auto g : mSimulationInput->get_gates())
         {
             if (g->is_gnd_gate())
             {
@@ -468,7 +363,7 @@ namespace hal
         // set initial values
         for (const auto& [net, value] : init_events)
         {
-            Event e;
+            WaveEvent e;
             e.affected_net = net;
             e.new_value    = value;
             e.time         = m_current_time;
@@ -481,7 +376,7 @@ namespace hal
 
     void NetlistSimulator::prepare_clock_events(u64 picoseconds)
     {
-        for (auto& c : m_clocks)
+        for (const SimulationInput::Clock& c : mSimulationInput->get_clocks())
         {
             u64 base_time = m_current_time - (m_current_time % c.switch_time);
             u64 time      = 0;
@@ -497,7 +392,7 @@ namespace hal
             // insert the required amount of clock signal switch events
             while (time < picoseconds)
             {
-                Event e;
+                WaveEvent e;
                 e.affected_net = c.clock_net;
                 e.new_value    = v;
                 e.time         = base_time + time;
@@ -628,7 +523,7 @@ namespace hal
             m_event_queue.reserve(m_event_queue.size() + new_events.size());
             for (const auto& event_it : new_events)
             {
-                Event e;
+                WaveEvent e;
                 e.affected_net = event_it.first.first;
                 e.time         = event_it.first.second;
                 e.new_value    = event_it.second;
@@ -669,7 +564,7 @@ namespace hal
 
     bool NetlistSimulator::generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets) const
     {
-        if (m_simulation_set.empty())
+        if (mSimulationInput->get_gates().empty())
         {
             log_error("netlist_simulator", "no gates have been added to the simulator.");
             return false;
@@ -698,7 +593,7 @@ namespace hal
         //declare variables
         vcd << "$scope module TOP $end" << std::endl;
 
-        std::unordered_map<const Net*, std::vector<Event>> events = m_simulation.get_events();
+        std::unordered_map<const Net*, std::vector<WaveEvent>> events = m_simulation.get_events();
         std::vector<const Net*> simulated_nets;
 
         for (auto net_changes : events)
@@ -722,11 +617,11 @@ namespace hal
 
         std::map<u32, std::map<const Net*, BooleanFunction::Value>> time_to_changes_map;
 
-        std::unordered_map<const Net*, std::vector<Event>> event_tracker = m_simulation.get_events();
+        std::unordered_map<const Net*, std::vector<WaveEvent>> event_tracker = m_simulation.get_events();
 
         for (const auto& simulated_net : simulated_nets)
         {
-            std::vector<Event> net_events        = event_tracker.at(simulated_net);
+            std::vector<WaveEvent> net_events        = event_tracker.at(simulated_net);
             BooleanFunction::Value initial_value = BooleanFunction::Value::X;
             u32 initial_time                     = 0;
 
@@ -794,4 +689,10 @@ namespace hal
 
         return true;
     }
+
+    SimulationEngine* NetlistSimulatorFactory::createEngine() const
+    {
+        return new NetlistSimulator(mName);
+    }
+
 }    // namespace hal

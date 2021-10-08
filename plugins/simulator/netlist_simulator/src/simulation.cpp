@@ -11,7 +11,7 @@ namespace hal
 
         if (auto it = m_events.find(net); it != m_events.end())
         {
-            for (const Event& e : it->second)
+            for (const WaveEvent& e : it->second)
             {
                 if (e.time > time)
                 {
@@ -23,12 +23,12 @@ namespace hal
         return result;
     }
 
-    void Simulation::add_event(const Event& event)
+    void Simulation::add_event(const WaveEvent &event)
     {
         m_events[event.affected_net].push_back(event);
     }
 
-    std::unordered_map<const Net*, std::vector<Event>> Simulation::get_events() const
+    std::unordered_map<const Net*, std::vector<WaveEvent>> Simulation::get_events() const
     {
         return m_events;
     }

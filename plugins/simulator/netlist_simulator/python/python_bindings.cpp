@@ -46,26 +46,11 @@ namespace hal
 
                 :returns: The version of the plugin.
                 :rtype: str
-            )")
-
-            .def("create_simulator", &NetlistSimulatorPlugin::create_simulator, R"(
-                Create a netlist simulator instance.
-
-                :returns: The simulator instance.
-                :rtype: netlist_simulator.NetlistSimulator
-            )")
-
-            .def("get_shared_simulator",
-                 &NetlistSimulatorPlugin::get_shared_simulator,
-                 py::arg("owner"), R"(
-                 Get netlist simulator instance owned by external module.
-
-                 :param str owner: The owner of netlist simulator.
-                 :returns: The simulator instance.
-                 :rtype: netlist_simulator.NetlistSimulator
             )");
 
+
         py::class_<NetlistSimulator>(m, "NetlistSimulator")
+                /*
             .def("add_gates", &NetlistSimulator::add_gates, py::arg("gates"), R"(
                 Add gates to the simulation set.
                 Only elements in the simulation set are considered during simulation.
@@ -109,7 +94,7 @@ namespace hal
                 :returns: The output nets.
                 :rtype: list[hal_py.Net]
             )")
-
+*/
             .def("set_input", &NetlistSimulator::set_input, py::arg("net"), py::arg("value"), R"(
                 Set the signal for a specific wire to control input signals between simulation cycles.
             
@@ -225,47 +210,6 @@ namespace hal
                 Get all events of the simulation.
 
                 :returns: A map from net to associated events for that net sorted by time.
-            )");
-
-        py::class_<Event>(m, "Event")
-            .def(py::init<>(), R"(Construct a new event.)")
-
-            .def_readwrite("affected_net", &Event::affected_net, R"(
-                The net affected by the event.
-
-                :type: hal_py.Net
-            )")
-
-            .def_readwrite("new_value", &Event::new_value, R"(
-                The new value caused by the event.
-
-                :type: hal_py.BooleanFunction.Value
-            )")
-
-            .def_readwrite("time", &Event::time, R"(
-                The time of the event.
-
-                :type: int
-            )")
-
-            .def_readwrite("id", &Event::id, R"(
-                The unique ID of the event.
-
-                :type: int
-            )")
-
-            .def(py::self == py::self, R"(
-                Tests whether two events are equal.
-
-                :returns: True when both events are equal, false otherwise.
-                :rtype: bool
-            )")
-
-            .def(py::self < py::self, R"(
-                Tests whether one event happened before the other.
-         
-                :returns: True when this event happened before the other, false otherwise.
-                :rtype: bool
             )");
 
 #ifndef PYBIND11_MODULE

@@ -109,7 +109,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_latch", {GateTypeProperty::latch}, GateTypeComponent::create_latch_component(BooleanFunction::from_string("D"), BooleanFunction::from_string("EN")));
+                GateType* gt = gl->create_gate_type("gt_latch", {GateTypeProperty::latch}, GateTypeComponent::create_latch_component());
                 LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::latch; });
                 assert(latch_component != nullptr);
 
@@ -123,6 +123,8 @@ namespace hal
                 gt->assign_pin_type("Q", PinType::state);
                 gt->assign_pin_type("QN", PinType::neg_state);
 
+                latch_component->set_data_in_function(BooleanFunction::from_string("D"));
+                latch_component->set_enable_function(BooleanFunction::from_string("EN"));
                 latch_component->set_async_reset_function(BooleanFunction::from_string("R"));
                 latch_component->set_async_set_function(BooleanFunction::from_string("S"));
                 latch_component->set_async_set_reset_behavior(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H);

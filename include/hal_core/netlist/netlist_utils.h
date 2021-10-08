@@ -73,6 +73,16 @@ namespace hal
          */
         CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
 
+
+        /**
+         * Get a deep copy of an entire partial netlist including all of its gates, nets, excluding modules and groupings.
+         *
+         * @param[in] nl - The netlist consisting of the subgraph.
+         * @param[in] subgraph_gates - The gates the subgraph is supposed to consist of.
+         * @returns The deep copy of the netlist.
+         */
+        CORE_API std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates);
+
         /**
          * TODO test
          * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors

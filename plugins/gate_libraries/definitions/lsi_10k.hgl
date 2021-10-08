@@ -2578,8 +2578,6 @@
             "name": "FD1",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "D",
                 "clocked_on": "CP"
             },
@@ -2610,8 +2608,6 @@
             "name": "FD1P",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "D",
                 "clocked_on": "CP"
             },
@@ -2642,8 +2638,6 @@
             "name": "FD1S",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP"
             },
@@ -2684,8 +2678,6 @@
             "name": "FD1SP",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP"
             },
@@ -2726,8 +2718,6 @@
             "name": "FD2",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
@@ -2764,8 +2754,6 @@
             "name": "FD2P",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
@@ -2802,8 +2790,6 @@
             "name": "FD2S",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
@@ -2850,8 +2836,6 @@
             "name": "FD2SP",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
@@ -2898,8 +2882,6 @@
             "name": "FD3",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
@@ -2944,8 +2926,6 @@
             "name": "FD3P",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
@@ -2990,8 +2970,6 @@
             "name": "FD3S",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
@@ -3046,8 +3024,6 @@
             "name": "FD3SP",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
@@ -3102,8 +3078,6 @@
             "name": "FD4",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
@@ -3140,8 +3114,6 @@
             "name": "FD4P",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
@@ -3178,8 +3150,6 @@
             "name": "FD4S",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
@@ -3226,8 +3196,6 @@
             "name": "FD4SP",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
@@ -3274,9 +3242,7 @@
             "name": "FJK1",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_4) | (J & !K) | (J & K & !I__v_4)",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -3311,9 +3277,7 @@
             "name": "FJK1P",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_4) | (J & !K) | (J & K & !I__v_4)",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -3348,9 +3312,7 @@
             "name": "FJK1S",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_6) | (J & !K & !TE) | (J & K & !TE & !I__v_6) | (TI & TE)",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -3395,9 +3357,7 @@
             "name": "FJK1SP",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_6) | (J & !K & !TE) | (J & K & !TE & !I__v_6) | (TI & TE)",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -3442,9 +3402,7 @@
             "name": "FJK2",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_5) | (J & !K) | (J & K & !I__v_5)",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -3485,9 +3443,7 @@
             "name": "FJK2P",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_5) | (J & !K) | (J & K & !I__v_5)",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -3528,9 +3484,7 @@
             "name": "FJK2S",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_7) | (J & !K & !TE) | (J & K & !TE & !I__v_7) | (TI & TE)",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -3581,9 +3535,7 @@
             "name": "FJK2SP",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_7) | (J & !K & !TE) | (J & K & !TE & !I__v_7) | (TI & TE)",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -3634,9 +3586,7 @@
             "name": "FJK3",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_6) | (J & !K) | (J & K & !I__v_6)",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
                 "preset_on": "!SD",
@@ -3685,9 +3635,7 @@
             "name": "FJK3P",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_6) | (J & !K) | (J & K & !I__v_6)",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
                 "preset_on": "!SD",
@@ -3736,9 +3684,7 @@
             "name": "FJK3S",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_8) | (J & !K & !TE) | (J & K & !TE & !I__v_8) | (TI & TE)",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
                 "preset_on": "!SD",
@@ -3797,9 +3743,7 @@
             "name": "FJK3SP",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_8) | (J & !K & !TE) | (J & K & !TE & !I__v_8) | (TI & TE)",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
                 "preset_on": "!SD",
@@ -4410,8 +4354,6 @@
             "name": "FDS2",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "D & CR",
                 "clocked_on": "CP"
             },
@@ -4446,9 +4388,7 @@
             "name": "FDS2L",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "CR & ((D & LD) | (I__v_5 & !LD))",
+                "next_state": "CR & ((D & LD) | (IQ & !LD))",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -4486,9 +4426,7 @@
             "name": "FDS2LP",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "CR & ((D & LD) | (I__v_5 & !LD))",
+                "next_state": "CR & ((D & LD) | (IQ & !LD))",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -4526,8 +4464,6 @@
             "name": "FDS2P",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "CR & D",
                 "clocked_on": "CP"
             },
@@ -4562,9 +4498,7 @@
             "name": "FT2",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "!I__v_3",
+                "next_state": "!IQ",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -4595,9 +4529,7 @@
             "name": "FT2P",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "!I__v_3",
+                "next_state": "!IQ",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -4628,9 +4560,7 @@
             "name": "FT4",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "!I__v_3",
+                "next_state": "!IQ",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
             },
@@ -4661,9 +4591,7 @@
             "name": "FT4P",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "!I__v_3",
+                "next_state": "!IQ",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
             },
@@ -4956,8 +4884,6 @@
             "name": "FD2TS",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
@@ -5000,8 +4926,6 @@
             "name": "FD2TSP",
             "types": ["ff"],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD"

@@ -862,9 +862,26 @@ namespace hal
                 return false;
             }
 
-            parent_component = GateTypeComponent::create_latch_component(BooleanFunction::from_string(cell.latch->data_in, input_pins), BooleanFunction::from_string(cell.latch->enable, input_pins));
-
+            parent_component                = GateTypeComponent::create_latch_component();
             LatchComponent* latch_component = parent_component->convert_to<LatchComponent>();
+            assert(latch_component != nullptr);
+
+            if (!cell.latch->data_in.empty() && !cell.latch->enable.empty())
+            {
+                latch_component->set_data_in_function(BooleanFunction::from_string(cell.latch->data_in, input_pins));
+                latch_component->set_enable_function(BooleanFunction::from_string(cell.latch->enable, input_pins));
+            }
+            else if (cell.latch->data_in.empty())
+            {
+                log_error("liberty_parser", "missing 'data_in' specification for latch gate type '{}'.", cell.name);
+                return false;
+            }
+            else if (cell.latch->enable.empty())
+            {
+                log_error("liberty_parser", "missing 'enable' specification for latch gate type '{}'.", cell.name);
+                return false;
+            }
+
             if (!cell.latch->clear.empty())
             {
                 latch_component->set_async_reset_function(BooleanFunction::from_string(cell.latch->clear, input_pins));

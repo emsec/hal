@@ -1,7 +1,9 @@
 #include "vcd_viewer/vcd_viewer.h"
 
 #include "vcd_viewer/wave_widget.h"
-#include "vcd_viewer/wave_data.h"
+#include "netlist_simulator_controller/wave_data.h"
+#include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+
 #include "vcd_viewer/vcd_serializer.h"
 #include "vcd_viewer/gate_selection_dialog.h"
 #include "vcd_viewer/plugin_vcd_viewer.h"
@@ -29,6 +31,7 @@
 #include <QVBoxLayout>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "netlist_simulator/plugin_netlist_simulator.h"
+#include "netlist_simulator_controller/simulation_input.h"
 
 namespace hal
 {
@@ -83,39 +86,49 @@ namespace hal
 
     void VcdViewer::initSimulator()
     {
-        NetlistSimulatorPlugin* simPlug = static_cast<NetlistSimulatorPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator"));
-        if (!simPlug)
+        NetlistSimulatorControllerPlugin* simControlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
+        if (!simControlPlug)
         {
-            qDebug() << "Plugin 'netlist_simulator' not found";
+            qDebug() << "Plugin 'netlist_simulator_controller' not found";
             return;
         }
-        qDebug() << "access to plugin" << simPlug->get_name().c_str() << simPlug->get_version().c_str();
-        mSimulator = simPlug->get_shared_simulator("vcd_viewer");
+        qDebug() << "access to plugin" << simControlPlug->get_name().c_str() << simControlPlug->get_version().c_str();
+
+        mController = simControlPlug->create_simulator_controller();
+
+        /*
+        mSimulator = simP->get_shared_simulator("vcd_viewer");
         if (!mSimulator)
         {
             qDebug() << "Cannot create new simulator";
             return;
         }
-        mSimulator->reset();
-        qDebug() << "sim has gates " << mSimulator->get_gates().size();
+        */
+        mController->reset();
+        qDebug() << "sim has gates " << mController->get_gates().size();
         if (!gNetlist)
         {
             qDebug() << "No netlist loaded";
             return;
         }
         qDebug() << "net has gates " << gNetlist->get_gates().size();
-        mSimulator->add_gates(mSimulateGates);
+        mController->add_gates(mSimulateGates);
 
+        // TODO : WaveData from WaveDataList
 
         mClkNet = nullptr;
-        mInputNets = mSimulator->get_input_nets();
+
+        for (const Net* inet : mController->get_input_nets())
+            mInputNets.append(inet);
+
         for (const Net* n : mInputNets)
         {
             WaveData* wd = new WaveData(n);
             wd->insert(0,0);
             mWaveWidget->addOrReplaceWave(wd);
         }
-        mSimulator->set_iteration_timeout(1000);
+
+        // mController->set_iteration_timeout(1000);
         setState(SimulationClockSet);
     }
 
@@ -172,7 +185,7 @@ namespace hal
             return;
         }
         QMultiMap<int,QPair<const Net*, BooleanFunction::Value>> inputMap;
-        for (const Net* n : mSimulator->get_input_nets())
+        for (const Net* n : mController->get_input_nets())
         {
             if (n==mClkNet) continue;
             const WaveData* wd = mWaveWidget->waveDataByNetId(n->get_id());
@@ -190,6 +203,8 @@ namespace hal
                 inputMap.insertMulti(it.key(),QPair<const Net*,BooleanFunction::Value>(n,sv));
             }
         }
+        /*
+         * TODO start simulation
         int t=0;
         for (auto it = inputMap.begin(); it != inputMap.end(); ++it)
         {
@@ -203,11 +218,13 @@ namespace hal
 
         for (Net* n : gNetlist->get_nets())
         {
+             TODO get data from engine
             WaveData* wd = WaveData::simulationResultFactory(n, mSimulator.get());
             if (wd) mResultMap.insert(wd->id(),wd);
+
         }
 
-        /*
+
         mSimulator->generate_vcd("result.vcd",0,t);
 
         VcdSerializer reader(this);
@@ -230,8 +247,8 @@ namespace hal
         mClkNet = mInputNets.at(csd.netIndex());
 
         mDuration = csd.duration();
-        mSimulator->add_clock_period(mClkNet,period,start==0);
-        WaveData* wd = WaveData::clockFactory(mClkNet, start, period, mDuration);
+        mController->add_clock_period(mClkNet,period,start==0);
+        WaveData* wd = new WaveDataClock(mClkNet, start, period, mDuration);
         mWaveWidget->addOrReplaceWave(wd);
         setState(SimulationInputGenerate);
     }
@@ -239,8 +256,8 @@ namespace hal
     void VcdViewer::setClock(const Net *n, int period, int start)
     {
         mClkNet = n;
-        mSimulator->add_clock_period(mClkNet,period,start==0);
-        WaveData* wd = WaveData::clockFactory(mClkNet, start, period, 2000);
+        mController->add_clock_period(mClkNet,period,start==0);
+        WaveData* wd = new WaveDataClock(mClkNet, start, period, 2000);
         mWaveWidget->addOrReplaceWave(wd);
         setState(SimulationInputGenerate);
     }
