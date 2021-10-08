@@ -35,10 +35,11 @@ namespace hal
         mState = stat;
         switch (mState)
         {
-        case NoGatesSelected:  log_info("simulator_contr", "Select gates for simulation");            break;
-        case ParameterSetup:   log_info("simulator_contr", "Expecting parameter and input");          break;
-        case SimulationRun:    log_info("simulator_contr", "Running simulation, please wait...");     break;
-        case ShowResults:      log_info("simulator_contr", "Select wires in graph to show results");  break;
+        case NoGatesSelected:  log_info("simulator_contr", "Select gates for simulation");              break;
+        case ParameterSetup:   log_info("simulator_contr", "Expecting parameter and input");            break;
+        case SimulationRun:    log_info("simulator_contr", "Running simulation, please wait...");       break;
+        case ShowResults:      log_info("simulator_contr", "Simulation engine completed successfully"); break;
+        case EngineFailed:     log_info("simulator_contr", "Simulation engine process error");          break;
         }
     }
 
@@ -148,6 +149,9 @@ namespace hal
 
         mWaveDataList.setValueForEmpty(0);
 
+        if (!mResultVcdFilename.empty())
+            mSimulationEngine->setResultFilename(mResultVcdFilename);
+
         QMultiMap<u64,QPair<const Net*, BooleanFunction::Value>> inputMap;
         for (const Net* n : mSimulationInput->get_input_nets())
         {
@@ -208,25 +212,42 @@ namespace hal
             netEv[it.value().first] = it.value().second;
         }
 
-        std::string resultFilename = "dummy.vcd";
-        mSimulationEngine->setResultFilename(resultFilename);
-
         if (!mSimulationEngine->setSimulationInput(mSimulationInput))
         {
             log_warning("sim_controller", "simulation engine error during setup.");
+            setState(EngineFailed);
             return false;
         }
 
-        if (!mSimulationEngine->run())
+        if (!mSimulationEngine->run(this))
+        {
+            log_warning("sim_controller", "simulation engine error during startup.");
+            setState(EngineFailed);
+            return false;
+        }
+        setState(SimulationRun);
+        return true;
+    }
+
+    void NetlistSimulatorController::request_generate_vcd(const std::string &filename)
+    {
+        mResultVcdFilename = filename;
+    }
+
+    void NetlistSimulatorController::handleRunFinished(bool success)
+    {
+        if (!success)
         {
             log_warning("sim_controller", "simulation engine error during run.");
-            return false;
+            setState(EngineFailed);
+            return;
         }
 
         if (!mSimulationEngine->finalize())
         {
             log_warning("sim_controller", "simulation engine error during finalize.");
-            return false;
+            setState(EngineFailed);
+            return;
         }
 
         /*
@@ -239,13 +260,15 @@ namespace hal
         mSimulator->generate_vcd("result.vcd",0,t);
 
 */
-
-        VcdSerializer reader(this);
-        for (WaveData* wd : reader.deserialize(QString::fromStdString(resultFilename)))
-            mWaveDataList.addOrReplace(wd);
+        if (!mResultVcdFilename.empty())
+        {
+            std::string resultPath = mSimulationEngine->directory() + "/" + mResultVcdFilename;
+            VcdSerializer reader(this);
+            for (WaveData* wd : reader.deserialize(QString::fromStdString(resultPath)))
+                mWaveDataList.addOrReplace(wd);
+        }
         qDebug() << "number waves" << mWaveDataList.size();
         setState(ShowResults);
-        return true;
     }
 
     void NetlistSimulatorController::add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero)

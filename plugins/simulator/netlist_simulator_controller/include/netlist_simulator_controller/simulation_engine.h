@@ -10,6 +10,7 @@
 class QTemporaryDir;
 
 namespace hal {
+    class NetlistSimulatorController;
 
     class SimulationEngine {
         std::string mName;
@@ -82,7 +83,7 @@ namespace hal {
          *
          * @return true if successful, false on error
          */
-        virtual bool run() = 0;
+        virtual bool run(NetlistSimulatorController* controller) = 0;
 
         /**
          * Can be implemented by derived class
@@ -94,12 +95,12 @@ namespace hal {
          *
          * @return true if successful, false on error
          */
-        virtual bool finalize() { return true; }
+        virtual bool finalize();
     };
 
     class SimulationEngineEventDriven : public SimulationEngine
     {
-        bool run() override;
+        bool run(NetlistSimulatorController* controller) override;
         bool setSimulationInput(SimulationInput *simInput) override;
     protected:
         SimulationInput* mSimulationInput;
@@ -126,7 +127,7 @@ namespace hal {
 
     class SimulationEngineScripted : public SimulationEngine
     {
-        virtual bool run() override;
+        virtual bool run(NetlistSimulatorController* controller) override;
     public:
         SimulationEngineScripted(const std::string& nam) : SimulationEngine(nam) {;}
 

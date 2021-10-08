@@ -1,4 +1,5 @@
 #include "netlist_simulator_controller/simulation_process.h"
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include <QProcess>
 #include <QThread>
 #include <vector>
@@ -6,8 +7,11 @@
 
 namespace hal {
 
-    SimulationProcess::SimulationProcess(SimulationEngineScripted *engine)
-        : mEngine(engine), mLineIndex(0), mNumberLines(0) {;}
+    SimulationProcess::SimulationProcess(NetlistSimulatorController *controller, SimulationEngineScripted *engine)
+        : mEngine(engine), mLineIndex(0), mNumberLines(0)
+    {
+        connect(this, &SimulationProcess::processFinished, controller, &NetlistSimulatorController::handleRunFinished);
+    }
 
 
     void SimulationProcess::start()
@@ -16,12 +20,19 @@ namespace hal {
         launchProcess();
     }
 
-    void SimulationProcess::handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+    void SimulationProcess::handleStepFinished(int exitCode, QProcess::ExitStatus exitStatus)
     {
-        Q_UNUSED(exitCode);
-        if (exitStatus != QProcess::NormalExit) return;
+        if (exitStatus != QProcess::NormalExit || exitCode != 0)
+        {
+            Q_EMIT processFinished(false);
+            return;
+        }
         ++mLineIndex;
-        if (mLineIndex >= mNumberLines) return;
+        if (mLineIndex >= mNumberLines)
+        {
+            Q_EMIT processFinished(true);
+            return;
+        }
         launchProcess();
     }
 
@@ -46,7 +57,7 @@ namespace hal {
 
         mProcess = new QProcess(this);
         mProcess->setWorkingDirectory(QString::fromStdString(mEngine->directory()));
-        connect(mProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &SimulationProcess::handleProcessFinished);
+        connect(mProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &SimulationProcess::handleStepFinished);
         mProcess->start(prog, args);
 
         return true;

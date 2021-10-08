@@ -1,6 +1,7 @@
 #include "netlist_simulator_controller/simulation_engine.h"
 #include "netlist_simulator_controller/simulation_thread.h"
 #include "netlist_simulator_controller/simulation_process.h"
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include <QProcess>
 #include <QThread>
 #include <QTemporaryDir>
@@ -26,6 +27,12 @@ namespace hal {
         return mTempDir->path().toStdString();
     }
 
+    bool SimulationEngine::finalize()
+    {
+        mState = Done;
+        return true;
+    }
+
     SimulationEngineEventDriven::SimulationEngineEventDriven(const std::string& nam)
         : SimulationEngine(nam), mSimulationInput(nullptr)
     {
@@ -44,17 +51,17 @@ namespace hal {
         return true;
     }
 
-    bool SimulationEngineEventDriven::run()
+    bool SimulationEngineEventDriven::run(NetlistSimulatorController* controller)
     {
-        SimulationThread* thread = new SimulationThread(mSimulationInput,this);
+        SimulationThread* thread = new SimulationThread(controller,mSimulationInput,this);
         mState = Running;
         thread->start();
         return true;
     }
 
-    bool SimulationEngineScripted::run()
+    bool SimulationEngineScripted::run(NetlistSimulatorController *controller)
     {
-        SimulationProcess* proc = new SimulationProcess(this);
+        SimulationProcess* proc = new SimulationProcess(controller,this);
         mState = Running;
         proc->start();
         return true;
