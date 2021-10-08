@@ -351,6 +351,9 @@ namespace netlist_utils {
             }
         }
 
+        const std::map<hal::Net *, std::string> old_input_names = nl->get_top_module()->get_input_port_names();
+        const std::map<hal::Net *, std::string> old_output_names = nl->get_top_module()->get_output_port_names();
+
         for (Net* c_net : c_netlist->get_nets()) {
             // mark nets that had a sourc previously but now dont as global inputs
             if (c_net->get_num_of_sources() == 0) {
@@ -359,8 +362,19 @@ namespace netlist_utils {
                 if (nl->get_net_by_id(id)->get_num_of_sources() != 0 || 
                     nl->get_net_by_id(id)->is_global_input_net()) {
                     c_netlist->mark_global_input_net(c_net);
-                }
 
+                    Net* old_net = nl->get_net_by_id(c_net->get_id());
+                    // if net had a name annotated at the top module port take that one, otherwise use regular net name
+                    if (old_input_names.find(old_net) != old_input_names.end()) {
+                        const std::string old_name = old_input_names.at(old_net);
+                        c_netlist->get_top_module()->set_input_port_name(c_net, old_name);
+                    }
+                    else
+                    {
+                        const std::string old_name = c_net->get_name();
+                        c_netlist->get_top_module()->set_input_port_name(c_net, old_name);
+                    }
+                }
             }
 
             // mark nets that had a destination previously but now dont as global outputs
@@ -370,30 +384,18 @@ namespace netlist_utils {
                 if (nl->get_net_by_id(id)->get_num_of_destinations() != 0 || 
                     nl->get_net_by_id(id)->is_global_output_net()) {
                     c_netlist->mark_global_output_net(c_net);
+
+                    Net* old_net = nl->get_net_by_id(c_net->get_id());
+                    if (old_output_names.find(old_net) != old_output_names.end()) {
+                        const std::string old_name = old_output_names.at(old_net);
+                        c_netlist->get_top_module()->set_output_port_name(c_net, old_name);
+                    }
+                    else
+                    {
+                        const std::string old_name = c_net->get_name();
+                        c_netlist->get_top_module()->set_output_port_name(c_net, old_name);
+                    }
                 }
-            }
-        }
-
-        // copy module portnames, but only for the top module
-        const std::map<hal::Net *, std::string> old_input_names = nl->get_top_module()->get_input_port_names();
-        const std::map<hal::Net *, std::string> new_input_names = c_netlist->get_top_module()->get_input_port_names();
-
-        const std::map<hal::Net *, std::string> old_output_names = nl->get_top_module()->get_output_port_names();
-        const std::map<hal::Net *, std::string> new_output_names = c_netlist->get_top_module()->get_output_port_names();
-
-        for (const auto& [new_net, _name] : new_input_names) {
-            Net* old_net = nl->get_net_by_id(new_net->get_id());
-            if (old_input_names.find(old_net) != old_input_names.end()) {
-                const std::string old_name = old_input_names.at(old_net);
-                c_netlist->get_top_module()->set_input_port_name(new_net, old_name);
-            }
-        }
-
-        for (const auto& [new_net, _name] : new_output_names) {
-            Net* old_net = nl->get_net_by_id(new_net->get_id());
-            if (old_output_names.find(old_net) != old_output_names.end()) {
-                const std::string old_name = old_output_names.at(old_net);
-                c_netlist->get_top_module()->set_output_port_name(new_net, old_name);
             }
         }
 
