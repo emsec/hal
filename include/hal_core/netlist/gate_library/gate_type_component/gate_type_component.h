@@ -45,10 +45,10 @@ namespace hal
             lut,     /**< LUT component type. */
             ff,      /**< Flip-flop component type. */
             latch,   /**< Latch component type. */
-            state,   /**< State component type. */
             ram,     /**< RAM component type. */
             mac,     /**< MAC component type. */
             init,    /**< Initialization component type. */
+            state,   /**< State component type. */
             ram_port /**< RAM port component type. */
         };
 
@@ -79,17 +79,6 @@ namespace hal
         static std::unique_ptr<GateTypeComponent> create_latch_component();
 
         /**
-         * TODO pybind
-         * Create a new StateComponent with given child component and the internal state identifiers.
-         * 
-         * @param[in] component - Another component to be added as a child component.
-         * @param[in] state_identifier - The identifier of the internal state.
-         * @param[in] neg_state_identifier - The identifier of the negated internal state.
-         * @returns The StateComponent.
-         */
-        static std::unique_ptr<GateTypeComponent> create_state_component(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier);
-
-        /**
          * Create a new RAMComponent with given child component.
          * 
          * @param[in] component - Another component to be added as a child component.
@@ -113,6 +102,16 @@ namespace hal
          * @returns The InitComponent.
          */
         static std::unique_ptr<GateTypeComponent> create_init_component(const std::string& init_category, const std::vector<std::string>& init_identifiers);
+
+        /**
+         * Create a new StateComponent with given child component and the internal state identifiers.
+         * 
+         * @param[in] component - Another component to be added as a child component.
+         * @param[in] state_identifier - The identifier of the internal state.
+         * @param[in] neg_state_identifier - The identifier of the negated internal state.
+         * @returns The StateComponent.
+         */
+        static std::unique_ptr<GateTypeComponent> create_state_component(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier);
 
         /**
          * Create a new RAMPortComponent with given child component, the write/read data/address pin groups, and the write/read clock/enable functions.

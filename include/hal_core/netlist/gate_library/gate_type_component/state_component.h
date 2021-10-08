@@ -27,7 +27,7 @@
 
 namespace hal
 {
-    // TODO pybinds and tests
+    // TODO tests
     class StateComponent : public GateTypeComponent
     {
     public:
@@ -67,12 +67,12 @@ namespace hal
         /**
          * Get the identifier of the internal state.
          * 
-         * @returns The internal state.
+         * @returns The identifier of the internal state.
          */
         const std::string& get_state_identifier() const;
 
         /**
-         * Get the identifiers of the internal state.
+         * Get the identifier of the internal state.
          * 
          * @param[in] state_identifier - The identifier of the internal state.
          */
@@ -81,7 +81,7 @@ namespace hal
         /**
          * Get the identifier of the negated internal state.
          * 
-         * @returns The negated internal state.
+         * @returns The identifier of the negated internal state.
          */
         const std::string& get_neg_state_identifier() const;
 

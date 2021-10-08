@@ -12,7 +12,7 @@
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<GateTypeComponent::ComponentType>::data = {"lut", "ff", "latch", "ram", "mac", "init", "ram_port"};
+    std::vector<std::string> EnumStrings<GateTypeComponent::ComponentType>::data = {"lut", "ff", "latch", "ram", "mac", "init", "state", "ram_port"};
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_lut_component(std::unique_ptr<GateTypeComponent> component, bool init_ascending)
     {
@@ -34,12 +34,6 @@ namespace hal
         return std::make_unique<LatchComponent>();
     }
 
-    std::unique_ptr<GateTypeComponent>
-        GateTypeComponent::create_state_component(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier)
-    {
-        return std::make_unique<StateComponent>(std::move(component), state_identifier, neg_state_identifier);
-    }
-
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_component(std::unique_ptr<GateTypeComponent> component, const u32 bit_size)
     {
         if (component == nullptr)
@@ -59,6 +53,12 @@ namespace hal
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_init_component(const std::string& init_category, const std::vector<std::string>& init_identifiers)
     {
         return std::make_unique<InitComponent>(init_category, init_identifiers);
+    }
+
+    std::unique_ptr<GateTypeComponent>
+        GateTypeComponent::create_state_component(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier)
+    {
+        return std::make_unique<StateComponent>(std::move(component), state_identifier, neg_state_identifier);
     }
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ram_port_component(std::unique_ptr<GateTypeComponent> component,
