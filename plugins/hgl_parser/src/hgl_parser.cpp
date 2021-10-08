@@ -117,14 +117,7 @@ namespace hal
         }
 
         std::unique_ptr<GateTypeComponent> parent_component = nullptr;
-        std::vector<std::string> bf_vars;
-        for (const std::string& pin : pin_ctx.pins)
-        {
-            if (PinDirection direction = pin_ctx.pin_to_direction.at(pin); direction == PinDirection::input || direction == PinDirection::inout)
-            {
-                bf_vars.push_back(pin);
-            }
-        }
+        std::vector<std::string> bf_vars                    = pin_ctx.pins;    // we MUST allow for output pins here
 
         if (gate_type.HasMember("lut_config") && gate_type["lut_config"].IsObject())
         {
@@ -358,6 +351,7 @@ namespace hal
         std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(std::move(init_component), state_identifier, neg_state_identifier);
         bf_vars.push_back(state_identifier);
         bf_vars.push_back(neg_state_identifier);
+        assert(state_component != nullptr);
 
         std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_ff_component(
             std::move(state_component), BooleanFunction::from_string(ff_config["next_state"].GetString(), bf_vars), BooleanFunction::from_string(ff_config["clocked_on"].GetString(), bf_vars));

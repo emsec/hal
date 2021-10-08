@@ -8,7 +8,7 @@ namespace hal
     NetlistSimulator::SimulationGateFF::SimulationGateFF(const Gate* gate) : SimulationGateSequential(gate)
     {
         const GateType* gate_type       = gate->get_type();
-        const FFComponent* ff_component = gate_type->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
+        const FFComponent* ff_component = gate_type->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); });
         assert(ff_component != nullptr);
         m_clock_func      = ff_component->get_clock_function();
         m_next_state_func = ff_component->get_next_state_function();

@@ -771,9 +771,10 @@ namespace hal
         std::vector<std::string> bf_vars;
         for (const auto& pin : cell.pins)
         {
+            bf_vars.insert(bf_vars.end(), pin.pin_names.begin(), pin.pin_names.end());
+
             if (pin.direction == PinDirection::input || pin.direction == PinDirection::inout)
             {
-                bf_vars.insert(bf_vars.end(), pin.pin_names.begin(), pin.pin_names.end());
                 if (!pin.power && !pin.ground)
                 {
                     has_inputs = true;
@@ -812,8 +813,8 @@ namespace hal
             bf_vars.push_back(cell.ff->state1);
             bf_vars.push_back(cell.ff->state2);
 
-            parent_component =
-                GateTypeComponent::create_ff_component(std::move(state_component), BooleanFunction::from_string(cell.ff->next_state, bf_vars), BooleanFunction::from_string(cell.ff->clocked_on, bf_vars));
+            parent_component = GateTypeComponent::create_ff_component(
+                std::move(state_component), BooleanFunction::from_string(cell.ff->next_state, bf_vars), BooleanFunction::from_string(cell.ff->clocked_on, bf_vars));
 
             FFComponent* ff_component = parent_component->convert_to<FFComponent>();
             if (!cell.ff->clear.empty())
