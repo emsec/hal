@@ -74,9 +74,10 @@ namespace hal
         /**
          * Create a new LatchComponent with given child component and the Boolean functions describing the data input and the enable signal.
          * 
+         * @param[in] component - Another component to be added as a child component.
          * @returns The LatchComponent.
          */
-        static std::unique_ptr<GateTypeComponent> create_latch_component();
+        static std::unique_ptr<GateTypeComponent> create_latch_component(std::unique_ptr<GateTypeComponent> component);
 
         /**
          * Create a new RAMComponent with given child component.
