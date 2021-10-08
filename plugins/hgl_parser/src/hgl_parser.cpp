@@ -390,22 +390,25 @@ namespace hal
 
     std::unique_ptr<GateTypeComponent> HGLParser::parse_latch_config(const rapidjson::Value& latch_config, const std::string& gt_name, const std::vector<std::string>& input_pins)
     {
-        if (!latch_config.HasMember("data_in") || !latch_config["data_in"].IsString())
-        {
-            log_error("hgl_parser", "invalid or missing 'data_in' specification for latch gate type '{}'.", gt_name);
-            return nullptr;
-        }
+        std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_latch_component();
+        LatchComponent* latch_component              = component->convert_to<LatchComponent>();
+        assert(latch_component != nullptr);
 
-        if (!latch_config.HasMember("enable_on") || !latch_config["enable_on"].IsString())
+        if (latch_config.HasMember("data_in") && latch_config["data_in"].IsString() && latch_config.HasMember("enable_on") && latch_config["enable_on"].IsString())
+        {
+            latch_component->set_data_in_function(BooleanFunction::from_string(latch_config["data_in"].GetString(), input_pins));
+            latch_component->set_enable_function(BooleanFunction::from_string(latch_config["enable_on"].GetString(), input_pins));
+        }
+        else if (latch_config.HasMember("data_in") && latch_config["data_in"].IsString())
         {
             log_error("hgl_parser", "invalid or missing 'enable_on' specification for latch gate type '{}'.", gt_name);
             return nullptr;
         }
-
-        std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_latch_component(BooleanFunction::from_string(latch_config["data_in"].GetString(), input_pins),
-                                                                                                 BooleanFunction::from_string(latch_config["enable_on"].GetString(), input_pins));
-        LatchComponent* latch_component              = component->convert_to<LatchComponent>();
-        assert(latch_component != nullptr);
+        else if (latch_config.HasMember("enable_on") && latch_config["enable_on"].IsString())
+        {
+            log_error("hgl_parser", "invalid or missing 'data_in' specification for latch gate type '{}'.", gt_name);
+            return nullptr;
+        }
 
         if (latch_config.HasMember("clear_on") && latch_config["clear_on"].IsString())
         {

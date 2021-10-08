@@ -38,7 +38,9 @@ namespace hal
     class GraphContext;
     class GraphGraphicsView;
     class SpinnerWidget;
+    class SettingsItemSpinbox;
     class GraphNavigationWidget;
+    class ProgressBar;
 
     /**
      * @ingroup graph
@@ -84,20 +86,9 @@ namespace hal
         void handleContextAboutToBeDeleted() override;
 
         /**
-         * Currently unused. <br>
-         * Update the loading(?) progress of the layouter that layouts the context this graph widget manages.
-         *
-         * @param percent - The progress in percent (in range 0-100(?))
+         * Subscriber should store the scene mapping to viewport so it can be restored upon handleSceneAvailable
          */
-        void handleStatusUpdate(const int percent) override;
-
-        /**
-         * Currently unused. <br>
-         * Update the status message of the layouters progress that layouts the context this graph widget manages.
-         *
-         * @param message - The new status message
-         */
-        void handleStatusUpdate(const QString& message) override;
+        void storeViewport() override;
 
         /**
          * Get the GraphGraphicsView this object manages.
@@ -110,6 +101,12 @@ namespace hal
          * Used to move and scale the camera of the view so that the whole selection can be seen.
          */
         void ensureSelectionVisible();
+
+        /**
+         * Show progress in overlay
+         * @param percent percent done
+         */
+        void showProgress(int percent, const QString& text=QString()) override;
 
         void focusGate(u32 gateId);
         void focusNet(u32 netId);
@@ -150,11 +147,28 @@ namespace hal
 
         WidgetOverlay* mOverlay;
         GraphNavigationWidget* mNavigationWidgetV3;
+        ProgressBar* mProgressBar;
+
         SpinnerWidget* mSpinnerWidget;
 
         u32 mCurrentExpansion;
 
         QRectF mRectAfterFocus;
         QRectF mLastTargetRect;
+
+        class StoreViewport
+        {
+        public:
+            bool mValid;
+            QRectF mRect;
+            QVector<QPoint> mGrid;
+            StoreViewport() : mValid(false) {;}
+        };
+
+        QRectF restoreViewport(bool reset = true);
+
+        StoreViewport mStoreViewport;
+
+        static SettingsItemSpinbox* sSettingAnimationDuration;
     };
 }
