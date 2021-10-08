@@ -6,13 +6,19 @@
 
 namespace hal {
 
+    class NetlistSimulatorController;
+
     class SimulationThread : public QThread {
         Q_OBJECT
 
         const SimulationInput* mSimulationInput;
         SimulationEngineEventDriven* mEngine;
+
+    Q_SIGNALS:
+        void threadFinished(bool success);
+
     public:
-        SimulationThread(const SimulationInput* simInput, SimulationEngineEventDriven* engine);
+        SimulationThread(NetlistSimulatorController* controller, const SimulationInput* simInput, SimulationEngineEventDriven* engine);
 
         void run() override;
     };

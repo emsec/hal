@@ -178,6 +178,10 @@ namespace hal
                 Does not remove gates/nets from the simulation set.
             )")
 
+            .def("request_generate_vcd", &NetlistSimulatorController::request_generate_vcd, py::arg("filename"), R"(
+                Request to engine to generate VCD reult file upon successful completion.
+
+                :param str filename: filename for requested VCD result file in engine working directory.")");
                 /*
             .def("set_simulation_state", &NetlistSimulator::set_simulation_state, py::arg("state"), R"(
                 Set the simulator state, i.e., net signals, to a given state.

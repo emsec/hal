@@ -148,6 +148,7 @@ namespace verilator {
     bool VerilatorEngine::finalize()
     {
         m_result_filename = std::string(m_simulator_dir / "waveform.vcd");
+        mState = Done;
         return true;
     }
 

@@ -6,6 +6,8 @@
 
 namespace hal {
 
+    class NetlistSimulatorController;
+
     class SimulationProcess : public QObject {
         Q_OBJECT
 
@@ -16,11 +18,15 @@ namespace hal {
         QProcess* mProcess;
 
         bool launchProcess();
+
+    Q_SIGNALS:
+        void processFinished(bool success);
+
     private Q_SLOTS:
-        void handleProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+        void handleStepFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
     public:
-        SimulationProcess(SimulationEngineScripted* engine);
+        SimulationProcess(NetlistSimulatorController* controller, SimulationEngineScripted* engine);
 
         void start();
     };

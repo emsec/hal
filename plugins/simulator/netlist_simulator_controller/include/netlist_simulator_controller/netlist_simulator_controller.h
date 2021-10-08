@@ -56,7 +56,7 @@ namespace hal
 
     public:
 
-        enum SimulationState { NoGatesSelected, ParameterSetup, SimulationRun, ShowResults };
+        enum SimulationState { NoGatesSelected, ParameterSetup, SimulationRun, ShowResults, EngineFailed };
 
         NetlistSimulatorController(QObject* parent = nullptr);
         ~NetlistSimulatorController() = default;
@@ -161,11 +161,17 @@ namespace hal
          */
         bool run_simulation();
 
-    private Q_SLOTS:
+        /**
+         * Request to engine to generate a VCD file for simulated netlist.
+         */
+        void request_generate_vcd(const std::string& filename);
+
+    public Q_SLOTS:
         void handleSimulSettings();
         void handleOpenInputFile(const QString& filename);
         void handleRunSimulation();
         void handleSelectGates();
+        void handleRunFinished(bool success);
 
     private:
         void initSimulator();
@@ -182,5 +188,6 @@ namespace hal
         QMap<u32,const WaveData*> mResultMap;
 
         SimulationInput* mSimulationInput;
+        std::string mResultVcdFilename;
     };
 }    // namespace hal
