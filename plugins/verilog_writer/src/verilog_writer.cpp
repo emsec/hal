@@ -444,18 +444,18 @@ namespace hal
         else if (type == "bit_vector")
         {
             u32 len = value.size() * 4;
-            if (value.at(0) == '0' || value.at(0) == '1')
-            {
-                len -= 3;
-            }
-            else if (value.at(0) == '2' || value.at(0) == '3')
-            {
-                len -= 2;
-            }
-            else if (value.at(0) >= '4' && value.at(0) <= '7')
-            {
-                len -= 1;
-            }
+            // if (value.at(0) == '0' || value.at(0) == '1')
+            // {
+            //     len -= 3;
+            // }
+            // else if (value.at(0) == '2' || value.at(0) == '3')
+            // {
+            //     len -= 2;
+            // }
+            // else if (value.at(0) >= '4' && value.at(0) <= '7')
+            // {
+            //     len -= 1;
+            // }
             res_stream << len << "'h" << value;
         }
         else
