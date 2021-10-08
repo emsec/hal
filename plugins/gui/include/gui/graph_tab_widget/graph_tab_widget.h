@@ -1,4 +1,4 @@
-﻿//  MIT License
+//  MIT License
 //
 //  Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 //  Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.

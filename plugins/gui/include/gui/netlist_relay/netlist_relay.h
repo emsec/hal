@@ -515,6 +515,14 @@ namespace hal
         void groupingNameChanged(Grouping* grp) const;
 
         /**
+         * Q_SIGNAL to notify that a grouping has been recolored. <br>
+         * Relays the following hal-core event: <i>GroupingEvent::event::color_changed</i>
+         *
+         * @param grp - The renamed grouping
+         */
+        void groupingColorChanged(Grouping* grp) const;
+
+        /**
          * Q_SIGNAL to notify that a gate has been assigned to a grouping. <br>
          * Relays the following hal-core event: <i>GroupingEvent::event::gate_assigned</i>
          *

@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/net.h"
 #include "netlist_simulator/simulation.h"
@@ -37,8 +38,8 @@ namespace hal
     {
     public:
         /**
-         * Add gates to the simulation set.
-         * Only elements in the simulation set are considered during simulation.
+         * Add gates to the simulation set that contains all gates that are considered during simulation.
+         * This function can only be called before the simulation has been initialized.
          *
          * @param[in] gates - The gates to add.
          */
@@ -46,42 +47,44 @@ namespace hal
 
         /**
          * Specify a net that carries the clock signal and set the clock frequency in hertz.
+         * This function can only be called before the simulation has been initialized.
          *
          * @param[in] clock_net - The net that carries the clock signal.
          * @param[in] frequency - The clock frequency in hertz.
          * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
          */
-        void add_clock_frequency(Net* clock_net, u64 frequency, bool start_at_zero = true);
+        void add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero = true);
 
         /**
          * Specify a net that carries the clock signal and set the clock period in picoseconds.
+         * This function can only be called before the simulation has been initialized.
          *
          * @param[in] clock_net - The net that carries the clock signal.
          * @param[in] period - The clock period from rising edge to rising edge in picoseconds.
          * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
          */
-        void add_clock_period(Net* clock_net, u64 period, bool start_at_zero = true);
+        void add_clock_period(const Net* clock_net, u64 period, bool start_at_zero = true);
 
         /**
          * Get all gates that are in the simulation set.
          *
          * @returns The simulation set.
          */
-        std::unordered_set<Gate*> get_gates() const;
+        const std::unordered_set<Gate*>& get_gates() const;
 
         /**
          * Get all nets that are considered inputs, i.e., not driven by a gate in the simulation set or global inputs.
          *
          * @returns The input nets.
          */
-        std::vector<Net*> get_input_nets() const;
+        const std::vector<const Net*>& get_input_nets() const;
 
         /**
          * Get all output nets of gates in the simulation set that have a destination outside of the set or that are global outputs.
          *
          * @returns The output nets.
          */
-        std::vector<Net*> get_output_nets() const;
+        const std::vector<const Net*>& get_output_nets() const;
 
         /**
          * Set the signal for a specific wire to control input signals between simulation cycles.
@@ -89,23 +92,53 @@ namespace hal
          * @param[in] net - The net to set a signal value for.
          * @param[in] value - The value to set.
          */
-        void set_input(Net* net, SignalValue value);
+        void set_input(const Net* net, BooleanFunction::Value value);
 
         /**
+         * Configure the sequential gates matching the (optional) user-defined filter condition with initialization data specified within the netlist.
+         * Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
+         * This function can only be called before the simulation has started.
+         * 
+         * @param[in] filter - The optional filter to be applied before initialization.
+         */
+        void initialize_sequential_gates(const std::function<bool(const Gate*)>& filter = nullptr);
+
+        /**
+         * Configure the sequential gates matching the (optional) user-defined filter condition with the specified value.
+         * Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
+         * This function can only be called before the simulation has started.
+         * 
+         * @param[in] value - The value to initialize the selected gates with.
+         * @param[in] filter - The optional filter to be applied before initialization.
+         */
+        void initialize_sequential_gates(BooleanFunction::Value value, const std::function<bool(const Gate*)>& filter = nullptr);
+
+        /**
+         * \deprecated
+         * DEPRECATED <br>
          * Load the specified initial value into the current state of all sequential elements.
          * 
          * @param[in] value - The initial value to load.
          */
-        void load_initial_values(SignalValue value);
+        [[deprecated("Will be removed in a future version. Use initialize_sequential_gates() instead.")]] void load_initial_values(BooleanFunction::Value value);
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Load the initial value specified within the netlist file into the current state of all sequential elements.
          * This is especially relevant for FPGA netlists, since these may provide initial values to load on startup.
          */
-        void load_initial_values_from_netlist();
+        [[deprecated("Will be removed in a future version. Use initialize_sequential_gates() instead.")]] void load_initial_values_from_netlist();
+
+        /**
+         * Initialize the simulation.
+         * No additional gates or clocks can be added after this point.
+         */
+        void initialize();
 
         /**
          * Simulate for a specific period, advancing the internal state.
+         * Automatically initializes the simulation if 'initialize' has not yet been called.
          * Use 'set_input' to control specific signals.
          *
          * @param[in] picoseconds - The duration to simulate.
@@ -131,7 +164,7 @@ namespace hal
          *
          * @returns The current simulation state.
          */
-        Simulation get_simulation_state() const;
+        const Simulation& get_simulation_state() const;
 
         /**
          * Set the iteration timeout, i.e., the maximum number of events processed for a single point in time.
@@ -158,15 +191,93 @@ namespace hal
          * @param[in] nets - Nets to include in the VCD file.
          * @returns True if the file gerneration was successful, false otherwise.
          */
-        bool generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<Net*> nets = {}) const;
+        bool generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets = {}) const;
 
     private:
         friend class NetlistSimulatorPlugin;
-        NetlistSimulator();
+
+        struct SimulationGate
+        {
+            const Gate* m_gate;
+            std::vector<std::string> m_input_pins;
+            std::vector<const Net*> m_input_nets;
+            std::unordered_map<std::string, BooleanFunction::Value> m_input_values;
+
+            SimulationGate(const Gate* gate);
+            virtual ~SimulationGate() = default;
+
+            virtual bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) = 0;
+        };
+
+        struct SimulationGateCombinational : public SimulationGate
+        {
+            std::vector<std::string> m_output_pins;
+            std::vector<const Net*> m_output_nets;
+            std::unordered_map<const Net*, BooleanFunction> m_functions;
+
+            SimulationGateCombinational(const Gate* gate);
+
+            bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
+        };
+
+        struct SimulationGateSequential : public SimulationGate
+        {
+            SimulationGateSequential(const Gate* gate);
+
+            virtual void initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value)                = 0;
+            virtual bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) = 0;
+            virtual void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)                              = 0;
+        };
+
+        struct SimulationGateFF : public SimulationGateSequential
+        {
+            BooleanFunction m_clock_func;
+            BooleanFunction m_clear_func;
+            BooleanFunction m_preset_func;
+            BooleanFunction m_next_state_func;
+            std::vector<const Net*> m_state_output_nets;
+            std::vector<const Net*> m_state_inverted_output_nets;
+            std::vector<const Net*> m_clock_nets;
+            AsyncSetResetBehavior m_sr_behavior_out;
+            AsyncSetResetBehavior m_sr_behavior_out_inverted;
+            BooleanFunction::Value m_output;
+            BooleanFunction::Value m_inv_output;
+
+            SimulationGateFF(const Gate* gate);
+
+            void initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value) override;
+            bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
+            void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
+        };
+
+        struct SimulationGateRAM : public SimulationGateSequential
+        {
+            struct Port
+            {
+                const Net* clock_net;
+                BooleanFunction clock_func;
+                BooleanFunction enable_func;
+                bool is_write;
+
+                std::vector<std::string> address_pins;
+                std::vector<std::string> data_pins;
+            };
+
+            std::vector<Port> m_ports;
+            std::vector<u64> m_data;
+            u32 m_bit_size;
+            std::vector<size_t> m_clocked_port_indices;
+
+            SimulationGateRAM(const Gate* gate);
+
+            void initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value) override;
+            bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
+            void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
+        };
 
         struct Clock
         {
-            Net* clock_net;
+            const Net* clock_net;
             u64 switch_time;
             bool start_at_zero;
         };
@@ -174,10 +285,11 @@ namespace hal
         std::unordered_set<Gate*> m_simulation_set;
         std::vector<Clock> m_clocks;
 
-        std::vector<Net*> m_input_nets;
-        std::vector<Net*> m_output_nets;
+        std::vector<const Net*> m_input_nets;
+        std::vector<const Net*> m_output_nets;
 
-        bool m_needs_initialization = true;
+        bool m_is_initialized = false;
+        std::vector<std::tuple<bool, BooleanFunction::Value, const std::function<bool(const Gate*)>>> m_init_seq_gates;
 
         u64 m_current_time = 0;
         std::vector<Event> m_event_queue;
@@ -185,50 +297,16 @@ namespace hal
         u64 m_timeout_iterations = 10000000ul;
         u64 m_id_counter         = 0;
 
-        struct SimulationGate
-        {
-            Gate* gate;
-            std::vector<std::string> input_pins;
-            std::vector<Net*> input_nets;
-            std::unordered_map<std::string, BooleanFunction::Value> input_values;
-            bool is_flip_flop;
-
-            virtual ~SimulationGate() = default;
-        };
-
-        struct SimulationGateCombinational : public SimulationGate
-        {
-            std::vector<std::string> output_pins;
-            std::vector<Net*> output_nets;
-            std::unordered_map<Net*, BooleanFunction> functions;
-        };
-
-        struct SimulationGateFF : public SimulationGate
-        {
-            BooleanFunction clock_func;
-            BooleanFunction clear_func;
-            BooleanFunction preset_func;
-            BooleanFunction next_state_func;
-            std::vector<Net*> state_output_nets;
-            std::vector<Net*> state_inverted_output_nets;
-            std::vector<Net*> clock_nets;
-            GateType::ClearPresetBehavior sr_behavior_out;
-            GateType::ClearPresetBehavior sr_behavior_out_inverted;
-            SignalValue output;
-            SignalValue inv_output;
-        };
-
-        std::unordered_map<Net*, std::vector<std::pair<SimulationGate*, std::vector<std::string>>>> m_successors;
+        std::unordered_map<const Net*, std::vector<std::pair<SimulationGate*, std::vector<std::string>>>> m_successors;
         std::vector<std::unique_ptr<SimulationGate>> m_sim_gates;
+        std::vector<SimulationGate*> m_sim_gates_raw;
 
-        bool simulate_gate(SimulationGate* gate, Event& event, std::map<std::pair<Net*, u64>, SignalValue>& new_events);
-        void simulate_ff(SimulationGateFF* gate, std::map<std::pair<Net*, u64>, SignalValue>& new_events);
+        NetlistSimulator();
         void compute_input_nets();
         void compute_output_nets();
-        void initialize();
         void prepare_clock_events(u64 nanoseconds);
         void process_events(u64 timeout);
 
-        SignalValue process_clear_preset_behavior(GateType::ClearPresetBehavior behavior, SignalValue previous_output);
+        BooleanFunction::Value process_clear_preset_behavior(AsyncSetResetBehavior behavior, BooleanFunction::Value previous_output);
     };
 }    // namespace hal

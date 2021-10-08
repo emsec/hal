@@ -7,15 +7,6 @@ namespace hal
     template<>
     std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry"};
 
-    template<>
-    std::vector<std::string> EnumStrings<GateType::ClearPresetBehavior>::data = {"L", "H", "N", "T", "X", "undef"};
-
-    template<>
-    std::vector<std::string> EnumStrings<PinDirection>::data = {"none", "input", "output", "inout", "internal"};
-
-    template<>
-    std::vector<std::string> EnumStrings<PinType>::data = {"none", "power", "ground", "lut", "state", "neg_state", "clock", "enable", "set", "reset", "data", "address", "io_pad", "select"};
-
     const std::unordered_map<PinDirection, std::unordered_set<PinType>> GateType::m_direction_to_types = {
         {PinDirection::none, {}},
         {PinDirection::input,
@@ -24,12 +15,49 @@ namespace hal
         {PinDirection::inout, {PinType::none, PinType::io_pad}},
         {PinDirection::internal, {PinType::none}}};
 
-    GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties)
+    GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
+        : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(component))
     {
-        m_gate_library = gate_library;
-        m_id           = id;
-        m_name         = name;
-        m_properties   = properties;
+    }
+
+    std::vector<GateTypeComponent*> GateType::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
+    {
+        if (m_component != nullptr)
+        {
+            std::vector<GateTypeComponent*> res = m_component->get_components(filter);
+            if (filter)
+            {
+                if (filter(m_component.get()))
+                {
+                    res.push_back(m_component.get());
+                }
+            }
+            else
+            {
+                res.push_back(m_component.get());
+            }
+
+            return res;
+        }
+
+        return {};
+    }
+
+    GateTypeComponent* GateType::get_component(const std::function<bool(const GateTypeComponent*)>& filter) const
+    {
+        std::vector<GateTypeComponent*> components = this->get_components(filter);
+
+        if (components.size() == 1)
+        {
+            return *components.begin();
+        }
+
+        return nullptr;
+    }
+
+    bool GateType::has_component_of_type(const GateTypeComponent::ComponentType type) const
+    {
+        return !this->get_components([type](const GateTypeComponent* component) { return component->get_type() == type; }).empty();
     }
 
     u32 GateType::get_id() const
@@ -40,6 +68,11 @@ namespace hal
     const std::string& GateType::get_name() const
     {
         return m_name;
+    }
+
+    void GateType::assign_property(const GateTypeProperty property)
+    {
+        m_properties.insert(property);
     }
 
     std::set<GateTypeProperty> GateType::get_properties() const
@@ -311,7 +344,7 @@ namespace hal
         return "";
     }
 
-    void GateType::add_boolean_function(std::string pin_name, BooleanFunction bf)
+    void GateType::add_boolean_function(const std::string& pin_name, const BooleanFunction& bf)
     {
         m_functions.emplace(pin_name, bf);
     }
@@ -321,48 +354,18 @@ namespace hal
         m_functions.insert(functions.begin(), functions.end());
     }
 
+    const BooleanFunction GateType::get_boolean_function(const std::string& function_name) const
+    {
+        if (const auto it = m_functions.find(function_name); it != m_functions.end())
+        {
+            return std::get<1>(*it);
+        }
+
+        return BooleanFunction();
+    }
+
     const std::unordered_map<std::string, BooleanFunction>& GateType::get_boolean_functions() const
     {
         return m_functions;
-    }
-
-    void GateType::set_clear_preset_behavior(ClearPresetBehavior cp1, ClearPresetBehavior cp2)
-    {
-        m_clear_preset_behavior = {cp1, cp2};
-    }
-
-    const std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior>& GateType::get_clear_preset_behavior() const
-    {
-        return m_clear_preset_behavior;
-    }
-
-    void GateType::set_config_data_category(const std::string& category)
-    {
-        m_config_data_category = category;
-    }
-
-    const std::string& GateType::get_config_data_category() const
-    {
-        return m_config_data_category;
-    }
-
-    void GateType::set_config_data_identifier(const std::string& identifier)
-    {
-        m_config_data_identifier = identifier;
-    }
-
-    const std::string& GateType::get_config_data_identifier() const
-    {
-        return m_config_data_identifier;
-    }
-
-    void GateType::set_lut_init_ascending(bool ascending)
-    {
-        m_ascending = ascending;
-    }
-
-    bool GateType::is_lut_init_ascending() const
-    {
-        return m_ascending;
     }
 }    // namespace hal

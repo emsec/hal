@@ -55,7 +55,8 @@ namespace hal
         u32 edge_counter = 0;
         for (auto net : nl->get_nets())
         {
-            if (net->get_source()->get_gate() == nullptr)
+            assert(net->get_sources().size() == 1);
+            if (net->get_sources().front()->get_gate() == nullptr)
                 continue;
 
             for (const auto& successor : net->get_destinations())
@@ -71,10 +72,11 @@ namespace hal
         u32 edge_vertice_counter = 0;
         for (auto net : nl->get_nets())
         {
-            auto predecessor = net->get_source()->get_gate();
+            assert(net->get_sources().size() == 1);
+            Gate* predecessor = net->get_sources().front()->get_gate();
             if (predecessor == nullptr)
                 continue;
-            auto predecessor_id = nl_igraph_id_match[predecessor->get_id()];
+            u32 predecessor_id = nl_igraph_id_match[predecessor->get_id()];
 
             for (const auto& successor : net->get_destinations())
             {

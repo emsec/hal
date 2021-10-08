@@ -39,7 +39,8 @@ namespace hal
     const static qreal sMinimumVChannelWidth  = 20;
     const static qreal sMinimumHChannelHeight = 20;
 
-    GraphLayouter::GraphLayouter(const GraphContext* const context, QObject* parent) : QObject(parent), mScene(new GraphicsScene(this)), mContext(context), mDone(false), mOptimizeNetLayout(true)
+    GraphLayouter::GraphLayouter(const GraphContext* const context, QObject* parent)
+        : QObject(parent), mScene(new GraphicsScene(this)), mContext(context), mDone(false), mRollbackStatus(0), mOptimizeNetLayout(true)
     {
         SelectionDetailsWidget* details = gContentManager->getSelectionDetailsWidget();
         if (details) connect(details, &SelectionDetailsWidget::triggerHighlight, mScene, &GraphicsScene::handleHighlight);
@@ -171,15 +172,40 @@ namespace hal
         return mMaxNodeHeight + sMinimumHChannelHeight;
     }
 
+    qreal GraphLayouter::gridXposition(int ix) const
+    {
+        Q_ASSERT(!mXValues.isEmpty());
+        int inx = ix - mMinXIndex;
+        if (inx < 0) return mXValues[0] - inx * defaultGridWidth();
+        if (inx < mXValues.size()) return mXValues[inx];
+        return mXValues.last() + (inx - mXValues.size() - 1) * defaultGridWidth();
+    }
+
+    qreal GraphLayouter::gridYposition(int iy) const
+    {
+        Q_ASSERT(!mYValues.isEmpty());
+        int inx = iy - mMinYIndex;
+        if (inx < 0) return mYValues[0] - inx * defaultGridHeight();
+        if (inx < mYValues.size()) return mYValues[inx];
+        return mYValues.last() + (inx - mYValues.size() - 1) * defaultGridHeight();
+    }
+
     void GraphLayouter::alternateLayout()
     {
+        mContext->layoutProgress(0);
         getWireHash();
 
+        mContext->layoutProgress(1);
         findMaxBoxDimensions();
+        mContext->layoutProgress(2);
         alternateMaxChannelLanes();
+        mContext->layoutProgress(3);
         calculateJunctionMinDistance();
+        mContext->layoutProgress(4);
         alternateGateOffsets();
+        mContext->layoutProgress(5);
         alternatePlaceGates();
+        mContext->layoutProgress(6);
         mDone = true;
         alternateDrawNets();
         updateSceneRect();
@@ -190,6 +216,7 @@ namespace hal
     #ifdef GUI_DEBUG_GRID
         mScene->debugSetLayouterGrid(xValues(), yValues(), defaultGridHeight(), defaultGridWidth());
     #endif
+        mRollbackStatus = 0;
     }
 
     void GraphLayouter::layout()
@@ -223,8 +250,33 @@ namespace hal
     #ifdef GUI_DEBUG_GRID
         mScene->debugSetLayouterGrid(xValues(), yValues(), defaultGridHeight(), defaultGridWidth());
     #endif
+        mRollbackStatus = 0;
         qDebug() << "elapsed time (classic) layout [ms]" << timer.elapsed();
     }
+
+    void GraphLayouter::prepareRollback()
+    {
+        mNodeToPositionRollback = mNodeToPositionMap;
+        mRollbackStatus = 1;
+    }
+
+    bool GraphLayouter::canRollback() const
+    {
+        return mRollbackStatus > 0 && !mNodeToPositionRollback.isEmpty();
+    }
+
+    bool GraphLayouter::rollback()
+    {
+        if (!canRollback())  return false;
+        mRollbackStatus = -1;
+        mNodeToPositionMap = mNodeToPositionRollback;
+        mNodeToPositionRollback.clear();
+        mPositionToNodeMap.clear();
+        for (auto it = mNodeToPositionMap.begin(); it !=mNodeToPositionMap.end(); it++)
+            mPositionToNodeMap.insert(it.value(),it.key());
+        return true;
+    }
+
 
     void GraphLayouter::clearLayoutData()
     {
@@ -270,11 +322,11 @@ namespace hal
         mMaxLeftIoPaddingForChannelX.clear();
         mMaxRightIoPaddingForChannelX.clear();
 
-        mMinXIndex = 0;
-        mMinYIndex = 0;
+        mMinXIndex = INT_MAX;
+        mMinYIndex = INT_MAX;
 
-        mMaxXIndex = 0;
-        mMaxYIndex = 0;
+        mMaxXIndex = INT_MIN;
+        mMaxYIndex = INT_MIN;
 
         mXValues.clear();
         mYValues.clear();
@@ -1054,7 +1106,7 @@ namespace hal
             itxLast = itNext;
         }
 
-        int iy0 = mNodeBoundingBox.y();
+        int iy0 = mNodeBoundingBox.y()*2;
         float y0 = mCoordY[iy0].preLanes() * sLaneSpacing + sVRoadPadding;
         mCoordY[iy0].setOffset(y0);
         mYValues.append(mCoordY.value(iy0).lanePosition(0));
@@ -1174,8 +1226,21 @@ namespace hal
                 laneMap[id].insert(it.key(),ilane++);
         }
 
+        int netCount = mContext->nets().size();
+        int percentCount = netCount / 93;
+        int doneCount = 0;
+
         for (const u32 id : mContext->nets())
         {
+            ++doneCount;
+            if (percentCount)
+            {
+                if (doneCount % percentCount == 0)
+                    mContext->layoutProgress(6 + doneCount / percentCount);
+            }
+            else
+                mContext->layoutProgress(6 + (int) floor(93. * doneCount / netCount));
+
             Net* n = gNetlist->get_net_by_id(id);
             if (!n) continue;
 

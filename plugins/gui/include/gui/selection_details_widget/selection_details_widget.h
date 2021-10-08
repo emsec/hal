@@ -313,18 +313,6 @@ namespace hal
         void toggleSearchbar();
 
         /**
-         * Creates a new grouping by calling addDefault() from the GroupingManagerWidget's model and adds
-         * the current selection to the grouping.
-         */
-        void selectionToNewGrouping();
-
-        /**
-         * Gets an existing grouping based on the before selected QAction in the ContextMenu created by
-         * selectionToGrouping() and adds the current selection to the grouping.
-         */
-        void selectionToExistingGrouping();
-
-        /**
          * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
          * type of the clicked item.
          *

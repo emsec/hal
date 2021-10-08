@@ -16,8 +16,10 @@
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
+#include "gui/grouping_dialog/grouping_dialog.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
+#include "gui/gui_utils/common_successor_predecessor.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/user_action/action_add_items_to_object.h"
@@ -188,6 +190,10 @@ namespace hal
                 compound->addAction(actMoveNode);
             }
         }
+
+        GraphContext* context = mGraphWidget->getContext();
+        context->setSpecialUpdate(true);
+
         compound->exec();
         gSelectionRelay->clear();
         gSelectionRelay->addModule(compound->object().id());
@@ -511,6 +517,8 @@ namespace hal
                     assert(!nodeFrom.isNull());    // assert that value was found
                     assert(!nodeTo.isNull());
                     layouter->swapNodePositions(nodeFrom, nodeTo);
+                    // re-layout the nets
+                    context->scheduleSceneUpdate();
                 }
                 else
                 {
@@ -518,8 +526,6 @@ namespace hal
                     act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
                     act->exec();
                 }
-                // re-layout the nets
-                context->scheduleSceneUpdate();
                 context->setDirty(true);
             }
         }
@@ -587,8 +593,10 @@ namespace hal
         QGraphicsItem* item = itemAt(pos);
         bool isGate         = false;
         bool isModule       = false;
-        bool isMultiSelect  = false;
         bool isNet          = false;
+
+        bool isMultiGates = gSelectionRelay->selectedGates().size() > 1 &&
+                gSelectionRelay->selectedModules().isEmpty();
 
         if (item)
         {
@@ -663,6 +671,8 @@ namespace hal
 
                 QMenu* preSucMenu = context_menu.addMenu("  Successor/Predecessor …");
                 recursionLevelMenu(preSucMenu->addMenu("Add successors to view …"),           true, &GraphGraphicsView::handleAddSuccessorToView);
+                if (isMultiGates)
+                    recursionLevelMenu(preSucMenu->addMenu("Add common successors to view …"),true, &GraphGraphicsView::handleAddCommonSuccessorToView);
                 if (isGate)
                 {
                     action = preSucMenu->addAction("Add path to successor to view …");
@@ -680,6 +690,8 @@ namespace hal
 
                 preSucMenu->addSeparator();
                 recursionLevelMenu(preSucMenu->addMenu("Add predecessors to view …"),           false, &GraphGraphicsView::handleAddPredecessorToView);
+                if (isMultiGates)
+                    recursionLevelMenu(preSucMenu->addMenu("Add common predecessors to view …"),false, &GraphGraphicsView::handleAddCommonPredecessorToView);
                 if (isGate)
                 {
                     action = preSucMenu->addAction("Add path to predecessor to view …");
@@ -696,14 +708,11 @@ namespace hal
                 }
             }
 
-            if (gSelectionRelay->numberSelectedNodes() > 1)
+            if (gSelectionRelay->numberSelectedItems() > 1)
             {
                 context_menu.addSeparator();
                 context_menu.addAction("Entire selection:")->setEnabled(false);
             }
-
-            if (gSelectionRelay->numberSelectedItems() > 1)
-                isMultiSelect = true;
 
             if (isGate || isModule)
             {
@@ -718,7 +727,7 @@ namespace hal
 
                 action = context_menu.addAction("  Remove from view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
-                Gate* g   = isGate ? gNetlist->get_gate_by_id(mItem->id()) : nullptr;
+                // Gate* g   = isGate ? gNetlist->get_gate_by_id(mItem->id()) : nullptr;
                 Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
 
                 // only allow move actions on anything that is not the top module
@@ -735,44 +744,13 @@ namespace hal
                         connect(action, &QAction::triggered, this, &GraphGraphicsView::handleModuleDialog);
                     }
                 }
-
-                Grouping* assignedGrouping = nullptr;
-                if (isGate)
-                {
-                    if (g)
-                        assignedGrouping = g->get_grouping();
-                }
-                if (isModule)
-                {
-                    if (m)
-                        assignedGrouping = m->get_grouping();
-                }
-                QMenu* groupingSubmenu;
-                if (isMultiSelect)
-                    groupingSubmenu = context_menu.addMenu("  Assign all to grouping …");
-                else if (assignedGrouping)
-                    groupingSubmenu = context_menu.addMenu("  Change grouping assignment …");
-                else
-                    groupingSubmenu = context_menu.addMenu("  Assign to grouping …");
-
-                QString assignedGroupingName;
-                if (assignedGrouping && !isMultiSelect)
-                {
-                    action = groupingSubmenu->addAction("Delete current assignment");
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
-                    assignedGroupingName = QString::fromStdString(assignedGrouping->get_name());
-                }
-                action = groupingSubmenu->addAction("New grouping …");
-                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssignNew);
-                for (Grouping* grouping : gNetlist->get_groupings())
-                {
-                    QString groupingName = QString::fromStdString(grouping->get_name());
-                    if (groupingName == assignedGroupingName && !isMultiSelect)
-                        continue;
-                    action = groupingSubmenu->addAction(sAssignToGrouping + groupingName);
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssingExisting);
-                }
             }
+
+            action = context_menu.addAction("  Assign to grouping …");
+            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingDialog);
+
+            action = context_menu.addAction("  Remove grouping assignment …");
+            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
 
             if (gSelectionRelay->numberSelectedNodes() > 1)
             {
@@ -895,6 +873,22 @@ namespace hal
         addSuccessorToView(level, false);
     }
 
+    void GraphGraphicsView::handleAddCommonSuccessorToView()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        addCommonSuccessorToView(level, true);
+    }
+
+    void GraphGraphicsView::handleAddCommonPredecessorToView()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+        int level = send->data().toInt();
+        addCommonSuccessorToView(level, false);
+    }
+
     void GraphGraphicsView::addSuccessorToView(int maxLevel, bool succ)
     {
 
@@ -972,6 +966,22 @@ namespace hal
         act->exec();
     }
 
+
+    void GraphGraphicsView::addCommonSuccessorToView(int maxLevel, bool succ)
+    {
+        CommonSuccessorPredecessor csp(gSelectionRelay->selectedGatesList(),succ,maxLevel);
+        const NodeBoxes& boxes = mGraphWidget->getContext()->getLayouter()->boxes();
+
+        QSet<u32> gatsNew;
+        for (const Gate* g : csp.result())
+        {
+            if (boxes.boxForGate(g)) continue;
+            gatsNew.insert(g->get_id());
+        }
+        ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gatsNew);
+        act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+        act->exec();
+    }
 
     void GraphGraphicsView::handleHighlightSuccessor()
     {
@@ -1397,6 +1407,19 @@ namespace hal
         UserActionCompound* compound = new UserActionCompound;
         for (UserAction* act : actList) compound->addAction(act);
         compound->exec();
+    }
+
+    void GraphGraphicsView::handleGroupingDialog()
+    {
+        GroupingDialog gd(this);
+        if (gd.exec() != QDialog::Accepted) return;
+        if (gd.isNewGrouping())
+        {
+            gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction();
+            return;
+        }
+        QString groupName = QString::fromStdString(gNetlist->get_grouping_by_id(gd.groupId())->get_name());
+        gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction(groupName);
     }
 
     void GraphGraphicsView::handleGroupingAssignNew()

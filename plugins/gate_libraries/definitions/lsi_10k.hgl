@@ -2576,10 +2576,13 @@
         },
         {
             "name": "FD1",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CP"
             },
@@ -2597,21 +2600,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD1P",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CP"
             },
@@ -2629,21 +2637,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD1S",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP"
             },
@@ -2671,21 +2684,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD1SP",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP"
             },
@@ -2713,21 +2731,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
@@ -2751,21 +2774,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD2P",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
@@ -2789,21 +2817,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD2S",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
@@ -2837,21 +2870,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD2SP",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
@@ -2885,21 +2923,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD3",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
@@ -2931,21 +2974,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD3P",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
@@ -2977,21 +3025,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD3S",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
@@ -3033,21 +3086,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD3SP",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
@@ -3089,21 +3147,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD4",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
@@ -3127,21 +3190,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD4P",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
@@ -3165,21 +3233,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD4S",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
@@ -3213,21 +3286,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FD4SP",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "(D & !TE) | (TI & TE)",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
@@ -3261,22 +3339,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK1",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_4) | (J & !K) | (J & K & !I__v_4)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -3298,22 +3381,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK1P",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_4) | (J & !K) | (J & K & !I__v_4)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -3335,22 +3423,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK1S",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_6) | (J & !K & !TE) | (J & K & !TE & !I__v_6) | (TI & TE)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -3382,22 +3475,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK1SP",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_6) | (J & !K & !TE) | (J & K & !TE & !I__v_6) | (TI & TE)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -3429,22 +3527,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_5) | (J & !K) | (J & K & !I__v_5)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -3472,22 +3575,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK2P",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_5) | (J & !K) | (J & K & !I__v_5)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -3515,22 +3623,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK2S",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_7) | (J & !K & !TE) | (J & K & !TE & !I__v_7) | (TI & TE)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -3568,22 +3681,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK2SP",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_7) | (J & !K & !TE) | (J & K & !TE & !I__v_7) | (TI & TE)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -3621,22 +3739,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK3",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_6) | (J & !K) | (J & K & !I__v_6)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
                 "preset_on": "!SD",
@@ -3672,22 +3795,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK3P",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & I__v_6) | (J & !K) | (J & K & !I__v_6)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & IQ) | (J & !K) | (J & K & !IQ)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
                 "preset_on": "!SD",
@@ -3723,22 +3851,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK3S",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_8) | (J & !K & !TE) | (J & K & !TE & !I__v_8) | (TI & TE)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
                 "preset_on": "!SD",
@@ -3784,22 +3917,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FJK3SP",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "(!J & !K & !TE & I__v_8) | (J & !K & !TE) | (J & K & !TE & !I__v_8) | (TI & TE)",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(!J & !K & !TE & IQ) | (J & !K & !TE) | (J & K & !TE & !IQ) | (TI & TE)",
                 "clocked_on": "CP",
                 "clear_on": "!CD",
                 "preset_on": "!SD",
@@ -3845,19 +3983,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "LD1",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "G"
             },
@@ -3873,19 +4018,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "LD1P",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "G"
             },
@@ -3901,19 +4053,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "LD2",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "!GN"
             },
@@ -3929,19 +4088,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "LD2P",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "!GN"
             },
@@ -3957,19 +4123,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "LD3",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "G",
                 "clear_on": "!CD"
@@ -3990,19 +4163,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "LD3P",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "G",
                 "clear_on": "!CD"
@@ -4023,19 +4203,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "LD4",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "!GN",
                 "clear_on": "!CD"
@@ -4056,19 +4243,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "LD4P",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "!GN",
                 "clear_on": "!CD"
@@ -4089,11 +4283,13 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
@@ -4408,10 +4604,13 @@
         },
         {
             "name": "FDS2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D & CR",
                 "clocked_on": "CP"
             },
@@ -4433,22 +4632,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FDS2L",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "CR & ((D & LD) | (I__v_5 & !LD))",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "CR & ((D & LD) | (IQ & !LD))",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -4473,22 +4677,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FDS2LP",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "CR & ((D & LD) | (I__v_5 & !LD))",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "CR & ((D & LD) | (IQ & !LD))",
                 "clocked_on": "CP"
             },
             "pins": [
@@ -4513,21 +4722,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FDS2P",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "CR & D",
                 "clocked_on": "CP"
             },
@@ -4549,22 +4763,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FT2",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "!I__v_3",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "!IQ",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -4582,22 +4801,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FT2P",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "!I__v_3",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "!IQ",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
             },
@@ -4615,22 +4839,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FT4",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "!I__v_3",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "!IQ",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
             },
@@ -4648,22 +4877,27 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "FT4P",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
-                "next_state": "!I__v_3",
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "!IQ",
                 "clocked_on": "CP",
                 "preset_on": "!SD"
             },
@@ -4681,11 +4915,13 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
@@ -4712,8 +4948,7 @@
         },
         {
             "name": "LS1",
-            "types": ["sequential", "latch"],
-            "latch_config": {},
+            "types": ["sequential"],
             "pins": [
                 {
                     "name": "D1",
@@ -4743,8 +4978,7 @@
         },
         {
             "name": "LS1P",
-            "types": ["sequential", "latch"],
-            "latch_config": {},
+            "types": ["sequential"],
             "pins": [
                 {
                     "name": "D1",
@@ -4774,8 +5008,13 @@
         },
         {
             "name": "LSR0",
-            "types": ["latch"],
+            "types": [
+                "sequential", 
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "clear_on": "!R",
                 "preset_on": "!S",
                 "state_clear_preset": "L",
@@ -4793,19 +5032,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "LSR0P",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "clear_on": "!R",
                 "preset_on": "!S",
                 "state_clear_preset": "L",
@@ -4823,19 +5069,26 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
         },
         {
             "name": "LSR2",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "clear_on": "!RD | (S & !R & !G)",
                 "preset_on": "!SD | (R & !S & !G)",
                 "state_clear_preset": "H",
@@ -4865,11 +5118,13 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]
@@ -4956,10 +5211,13 @@
         },
         {
             "name": "FD2TS",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
@@ -4988,22 +5246,27 @@
                 {
                     "name": "Z",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state",
                     "z_function": "!RD"
                 },
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]
         },
         {
             "name": "FD2TSP",
-            "types": ["ff"],
+            "types": [
+                "sequential",
+                "ff"
+            ],
             "ff_config": {
-                "data_category": "",
-                "data_identifier": "",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CP",
                 "clear_on": "!CD"
@@ -5032,6 +5295,7 @@
                 {
                     "name": "Z",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state",
                     "z_function": "!RD"
                 }
@@ -5039,8 +5303,15 @@
         },
         {
             "name": "RAM1",
-            "types": ["latch"],
+            "types": [
+                "sequential",
+                "latch"
+            ],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "WR & !WRN"
             },
@@ -5064,12 +5335,14 @@
                 {
                     "name": "ZN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state",
                     "z_function": "!RD"
                 },
                 {
                     "name": "QN",
                     "direction": "output",
+                    "function": "IQN",
                     "type": "neg_state"
                 }
             ]

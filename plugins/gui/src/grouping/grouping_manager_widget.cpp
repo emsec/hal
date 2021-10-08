@@ -73,7 +73,7 @@ namespace hal
         //mRenameAction->setEnabled(false);
         //mDeleteAction->setEnabled(false);
 
-        mGroupingTableModel = new GroupingTableModel;
+        mGroupingTableModel = new GroupingTableModel(false, this);
 
         mProxyModel->setSourceModel(mGroupingTableModel);
         mProxyModel->setSortRole(Qt::UserRole);
@@ -117,6 +117,7 @@ namespace hal
         connect(mGroupingTableModel, &GroupingTableModel::lastEntryDeleted, this, &GroupingManagerWidget::handleLastEntryDeleted);
         connect(mGroupingTableModel, &GroupingTableModel::newEntryAdded, this, &GroupingManagerWidget::handleNewEntryAdded);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GroupingManagerWidget::handleGraphSelectionChanged);
+        connect(mGroupingTableView, &QTableView::doubleClicked, this, &GroupingManagerWidget::handleDoubleClicked);
         handleCurrentChanged();
         handleGraphSelectionChanged(this);
     }
@@ -191,6 +192,12 @@ namespace hal
         toolboxMenu->addAction(toolSucStep);
         connect(toolSucStep,&QAction::triggered,this,&GroupingManagerWidget::handleToolboxSuccessorDistance);
         toolboxMenu->exec(mapToGlobal(pos()+QPoint(100,-25)));
+    }
+
+    void GroupingManagerWidget::handleDoubleClicked(const QModelIndex & index)
+    {
+        if (index.column() == 0) handleRenameGroupingClicked();
+        if (index.column() == 2) handleColorSelectClicked();
     }
 
     GroupingManagerWidget::ToolboxNode::ToolboxNode(Endpoint* ep, const ToolboxModuleHash *tmh)

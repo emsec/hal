@@ -5,6 +5,7 @@
 #include "gui/selection_details_widget/net_details_widget.h"
 #include "gui/selection_details_widget/module_details_widget.h"
 #include "gui/module_dialog/module_dialog.h"
+#include "gui/grouping_dialog/grouping_dialog.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/user_action/action_add_items_to_object.h"
@@ -235,39 +236,15 @@ namespace hal
 
     void SelectionDetailsWidget::selectionToGrouping()
     {
-        QStringList groupingNames =
-                gContentManager->getGroupingManagerWidget()->getModel()->groupingNames();
-        if (groupingNames.isEmpty())
-            selectionToNewGrouping();
-        else
+        GroupingDialog gd(this);
+        if (gd.exec() != QDialog::Accepted) return;
+        if (gd.isNewGrouping())
         {
-            QMenu* contextMenu = new QMenu(this);
-
-            QAction* newGrouping = contextMenu->addAction("Create new grouping from selected items");
-            connect(newGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToNewGrouping);
-
-            contextMenu->addSeparator();
-
-            for (const QString& gn : groupingNames)
-            {
-                QAction* toGrouping = contextMenu->addAction(sAddToGrouping+gn);
-                connect(toGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToExistingGrouping);
-            }
-            contextMenu->exec(mapToGlobal(geometry().topLeft()+QPoint(100,0)));
+            selectionToGroupingAction();
+            return;
         }
-    }
-
-    void SelectionDetailsWidget::selectionToNewGrouping()
-    {
-        selectionToGroupingAction();
-    }
-
-    void SelectionDetailsWidget::selectionToExistingGrouping()
-    {
-        const QAction* action = static_cast<const QAction*>(QObject::sender());
-        QString grpName = action->text();
-        if (grpName.startsWith(sAddToGrouping)) grpName.remove(0,sAddToGrouping.size());
-        selectionToGroupingAction(grpName);
+        QString groupName = QString::fromStdString(gNetlist->get_grouping_by_id(gd.groupId())->get_name());
+        selectionToGroupingAction(groupName);
     }
 
     UserAction* SelectionDetailsWidget::groupingUnassignActionFactory(const UserActionObject& obj) const

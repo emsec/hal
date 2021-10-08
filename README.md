@@ -83,15 +83,6 @@ If you want to build HAL on Ubuntu 20.04, run the following commands:
 5. `make` to compile HAL
 6. `make install` (optionally) to install HAL
 
-## macOS
-
-**Warning:** Building on macOS is experimental and may not always work.
-
-Please make sure to use a compiler that supports OpenMP. You can install one using, e.g., Homebrew via: `brew install llvm`.
-
-To let cmake know of the custom compiler use following command.
-
-`cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
 
 ## CMake Options
 Using the CMake build system, your HAL build can be configured quite easily (by adding `-D<OPTION>=1` to the cmake command).

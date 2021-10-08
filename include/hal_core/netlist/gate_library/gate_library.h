@@ -65,13 +65,15 @@ namespace hal
         std::filesystem::path get_path() const;
 
         /**
+         * TODO pybind
          * Create a new gate type, add it to the gate library, and return it.
          * 
          * @param[in] name - The name of the gate type.
          * @param[in] properties - The properties of the gate type.
+         * @param[in] component - A component adding additional functionality to the gate type.
          * @returns The new gate type instance on success, a nullptr otherwise.
          */
-        GateType* create_gate_type(const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational});
+        GateType* create_gate_type(const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational}, std::unique_ptr<GateTypeComponent> component = nullptr);
 
         /**
          * Check whether the given gate type is contained in this library.
@@ -98,11 +100,14 @@ namespace hal
         GateType* get_gate_type_by_name(const std::string& name) const;
 
         /**
+         * TODO pybind
          * Get all gate types of the library.
+         * In case a filter is applied, only the gate types matching the filter condition are returned.
          *
+         * @param[in] filter - The user-defined filter function.
          * @returns A map from gate type names to gate types.
          */
-        std::unordered_map<std::string, GateType*> get_gate_types() const;
+        std::unordered_map<std::string, GateType*> get_gate_types(const std::function<bool(const GateType*)>& filter = nullptr) const;
 
         /**
          * Mark a gate type as a VCC gate type.

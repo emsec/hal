@@ -17,7 +17,7 @@ namespace hal
         m_parent           = parent;
         m_name             = name;
 
-        m_event_handler    = event_handler;
+        m_event_handler = event_handler;
     }
 
     bool Module::operator==(const Module& other) const
@@ -138,9 +138,10 @@ namespace hal
 
     int Module::get_submodule_depth() const
     {
-        int retval = 0;
-        const Module*p = this;
-        while ((p=p->get_parent_module())) ++retval;
+        int retval      = 0;
+        const Module* p = this;
+        while ((p = p->get_parent_module()))
+            ++retval;
         return retval;
     }
 
@@ -515,82 +516,119 @@ namespace hal
         return m_internal_nets;
     }
 
-    void Module::set_input_port_name(Net* input_net, const std::string& port_name)
+    bool Module::set_input_port_name(Net* input_net, const std::string& port_name)
     {
         if (input_net == nullptr)
         {
             log_error("module", "nullptr given as input net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return;
+            return false;
+        }
+
+        if (port_name.empty())
+        {
+            log_error("module",
+                      "trying to assign empty input port name for net '{}' with ID {} to module '{}' with ID {} in netlist with ID {}.",
+                      input_net->get_name(),
+                      input_net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return false;
         }
 
         if (m_input_port_names.find(port_name) != m_input_port_names.end())
         {
-            log_error("module",
+            log_debug("module",
                       "input port name '{}' already exists within module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
                       port_name,
                       m_name,
                       m_id,
                       m_internal_manager->m_netlist->get_id());
-            return;
+            return false;
         }
 
         const std::vector<Net*>& input_nets = get_input_nets();
         if (auto it = std::find(input_nets.begin(), input_nets.end(), input_net); it == input_nets.end())
         {
-            log_error("module",
+            log_debug("module",
                       "net '{}' with ID {} is not an input net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
                       input_net->get_name(),
                       input_net->get_id(),
                       m_name,
                       m_id,
                       m_internal_manager->m_netlist->get_id());
-            return;
+            return false;
         }
 
         m_named_input_nets.insert(input_net);
         m_input_port_names.insert(port_name);
+
+        if (auto prev_name = m_input_net_to_port_name.find(input_net); prev_name != m_input_net_to_port_name.end())
+        {
+            m_input_port_names.erase(prev_name->second);
+        }
         m_input_net_to_port_name[input_net] = port_name;
 
         m_event_handler->notify(ModuleEvent::event::input_port_name_changed, this, input_net->get_id());
+
+        return true;
     }
 
-    void Module::set_output_port_name(Net* output_net, const std::string& port_name)
+    bool Module::set_output_port_name(Net* output_net, const std::string& port_name)
     {
         if (output_net == nullptr)
         {
             log_error("module", "nullptr given as output net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return;
+            return false;
+        }
+
+        if (port_name.empty())
+        {
+            log_error("module",
+                      "trying to assign empty output port name for net '{}' with ID {} to module '{}' with ID {} in netlist with ID {}.",
+                      output_net->get_name(),
+                      output_net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return false;
         }
 
         if (m_output_port_names.find(port_name) != m_output_port_names.end())
         {
-            log_error("module",
+            log_debug("module",
                       "output port name '{}' already exists within module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
                       port_name,
                       m_name,
                       m_id,
                       m_internal_manager->m_netlist->get_id());
-            return;
+            return false;
         }
 
         const std::vector<Net*>& output_nets = get_output_nets();
         if (auto it = std::find(output_nets.begin(), output_nets.end(), output_net); it == output_nets.end())
         {
-            log_error("module",
+            log_debug("module",
                       "net '{}' with ID {} is not an output net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
                       output_net->get_name(),
                       output_net->get_id(),
                       m_name,
                       m_id,
                       m_internal_manager->m_netlist->get_id());
-            return;
+            return false;
         }
 
         m_named_output_nets.insert(output_net);
         m_output_port_names.insert(port_name);
+        if (auto prev_name = m_output_net_to_port_name.find(output_net); prev_name != m_output_net_to_port_name.end())
+        {
+            m_output_port_names.erase(prev_name->second);
+        }
         m_output_net_to_port_name[output_net] = port_name;
 
         m_event_handler->notify(ModuleEvent::event::output_port_name_changed, this, output_net->get_id());
+
+        return true;
     }
 
     std::string Module::get_input_port_name(Net* net) const
@@ -604,7 +642,7 @@ namespace hal
         const std::vector<Net*>& input_nets = get_input_nets();
         if (auto it = std::find(input_nets.begin(), input_nets.end(), net); it == input_nets.end())
         {
-            log_error("module",
+            log_debug("module",
                       "net '{}' with ID {} is not an input net of module '{}' with ID {} in netlist with ID {}.",
                       net->get_name(),
                       net->get_id(),
@@ -645,7 +683,7 @@ namespace hal
         const std::vector<Net*>& output_nets = get_output_nets();
         if (auto it = std::find(output_nets.begin(), output_nets.end(), net); it == output_nets.end())
         {
-            log_error("module",
+            log_debug("module",
                       "net '{}' with ID {} is not an output net of module '{}' with ID {} in netlist with ID {}.",
                       net->get_name(),
                       net->get_id(),
@@ -685,7 +723,7 @@ namespace hal
             }
         }
 
-        log_error("module", "port '{}' is not an input port of module '{}' with ID {} in netlist with ID {}.", port_name, this->get_name(), this->get_id(), m_internal_manager->m_netlist->get_id());
+        log_debug("module", "port '{}' is not an input port of module '{}' with ID {} in netlist with ID {}.", port_name, this->get_name(), this->get_id(), m_internal_manager->m_netlist->get_id());
         return nullptr;
     }
 
@@ -699,7 +737,7 @@ namespace hal
             }
         }
 
-        log_error("module", "port '{}' is not an output port of module '{}' with ID {} in netlist with ID {}.", port_name, this->get_name(), this->get_id(), m_internal_manager->m_netlist->get_id());
+        log_debug("module", "port '{}' is not an output port of module '{}' with ID {} in netlist with ID {}.", port_name, this->get_name(), this->get_id(), m_internal_manager->m_netlist->get_id());
         return nullptr;
     }
 
