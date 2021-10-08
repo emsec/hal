@@ -374,6 +374,29 @@ namespace netlist_utils {
             }
         }
 
+        // copy module portnames, but only for the top module
+        const std::map<hal::Net *, std::string> old_input_names = nl->get_top_module()->get_input_port_names();
+        const std::map<hal::Net *, std::string> new_input_names = c_netlist->get_top_module()->get_input_port_names();
+
+        const std::map<hal::Net *, std::string> old_output_names = nl->get_top_module()->get_output_port_names();
+        const std::map<hal::Net *, std::string> new_output_names = c_netlist->get_top_module()->get_output_port_names();
+
+        for (const auto& [new_net, _name] : new_input_names) {
+            Net* old_net = nl->get_net_by_id(new_net->get_id());
+            if (old_input_names.find(old_net) != old_input_names.end()) {
+                const std::string old_name = old_input_names.at(old_net);
+                c_netlist->get_top_module()->set_input_port_name(new_net, old_name);
+            }
+        }
+
+        for (const auto& [new_net, _name] : new_output_names) {
+            Net* old_net = nl->get_net_by_id(new_net->get_id());
+            if (old_output_names.find(old_net) != old_output_names.end()) {
+                const std::string old_name = old_output_names.at(old_net);
+                c_netlist->get_top_module()->set_output_port_name(new_net, old_name);
+            }
+        }
+
         // copy some meta data
         c_netlist->set_design_name(nl->get_design_name());
         c_netlist->set_device_name(nl->get_device_name());

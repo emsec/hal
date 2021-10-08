@@ -129,6 +129,8 @@ namespace verilator {
         std::unique_ptr<Netlist> m_partial_netlist;
         std::filesystem::path m_simulator_dir;
 
+        std::string m_design_name;
+
         bool setSimulationInput(SimulationInput* simInput) override;
         int numberCommandLines() const override;
         std::vector<std::string> commandLine(int lineIndex) const override;
