@@ -55,7 +55,7 @@ namespace hal {
      * BooleanFunctionTableEntry - CPBehaviorEntry
      * ========================================================*/
 
-    CPBehaviorEntry::CPBehaviorEntry(u32 gateId, std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehavior)
+    CPBehaviorEntry::CPBehaviorEntry(u32 gateId, std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> cPBehavior)
     : BooleanFunctionTableEntry(gateId)
     {
         mLeft = "set_clear_behavior";
@@ -63,7 +63,7 @@ namespace hal {
         mCPBehavior =cPBehavior;
     }
 
-    std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> CPBehaviorEntry::getCPBehavior() const
+    std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> CPBehaviorEntry::getCPBehavior() const
     {
         return mCPBehavior;
     }
@@ -73,15 +73,15 @@ namespace hal {
         return true;
     }
 
-    QString CPBehaviorEntry::cPBehaviourToString (std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviour)
+    QString CPBehaviorEntry::cPBehaviourToString (std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> cPBehaviour)
     {
-        static QMap<GateType::ClearPresetBehavior, QString> cPBehaviourToString {
-            {GateType::ClearPresetBehavior::L, "L"},
-            {GateType::ClearPresetBehavior::H, "H"},
-            {GateType::ClearPresetBehavior::N, "N"},
-            {GateType::ClearPresetBehavior::T, "T"},
-            {GateType::ClearPresetBehavior::X, "X"},
-            {GateType::ClearPresetBehavior::undef, "Undefined"},
+        static QMap<hal::AsyncSetResetBehavior, QString> cPBehaviourToString {
+            {hal::AsyncSetResetBehavior::L, "L"},
+            {hal::AsyncSetResetBehavior::H, "H"},
+            {hal::AsyncSetResetBehavior::N, "N"},
+            {hal::AsyncSetResetBehavior::T, "T"},
+            {hal::AsyncSetResetBehavior::X, "X"},
+            {hal::AsyncSetResetBehavior::undef, "Undefined"},
         };
         return QString(cPBehaviourToString[cPBehaviour.first] + ", " + cPBehaviourToString[cPBehaviour.second]);
     }

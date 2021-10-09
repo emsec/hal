@@ -29,6 +29,7 @@
 #include <QSharedPointer>
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
 
 #include "hal_core/defines.h"
 #include "hal_core/utilities/log.h"
@@ -133,20 +134,25 @@ namespace hal {
          * @param gateId - The id of the gate the clear-preset behavior belongs to
          * @param cPBehavior - The clear set behavior
          */
-        CPBehaviorEntry(u32 gateId, std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehavior);
+        //CPBehaviorEntry(u32 gateId, std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehavior);
+        CPBehaviorEntry(u32 gateId, std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> cPBehavior);
 
         /**
          * Get the clear-preset behavior.
          *
          * @returns the clear-preset behavior
          */
-        std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> getCPBehavior() const;
+        //std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> getCPBehavior() const;
+        std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> getCPBehavior() const;
 
         virtual bool isCPBehavior() const;
 
     private:
-        QString cPBehaviourToString (std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviour);
-        std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> mCPBehavior;
+        //QString cPBehaviourToString (std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviour);
+        //std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> mCPBehavior;
+
+        QString cPBehaviourToString (std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> cPBehaviour);
+        std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> mCPBehavior;
     };
 
     /**

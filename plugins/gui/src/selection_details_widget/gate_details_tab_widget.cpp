@@ -7,6 +7,9 @@
 
 
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 
 namespace hal
 {
@@ -263,7 +266,15 @@ namespace hal
         for(i = otherFunctions.begin(); i != otherFunctions.end(); i++)
             otherFunctionList.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), i.key(), i.value())));
 
-        setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new CPBehaviorEntry(gate->get_id(), gate->get_type()->get_clear_preset_behavior())));
+        GateType* gt = gate->get_type();
+        if(FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); }); ff_component != nullptr)
+        {
+            setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new CPBehaviorEntry(gate->get_id(), ff_component->get_async_set_reset_behavior())));
+        }
+        else if(LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* c) { return LatchComponent::is_class_of(c); }); latch_component != nullptr)
+        {
+            setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new CPBehaviorEntry(gate->get_id(), latch_component->get_async_set_reset_behavior())));
+        }
 
 
         // Fill the category (LUT/FF/LATCH) widgets

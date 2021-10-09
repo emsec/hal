@@ -98,8 +98,7 @@ namespace hal {
         // Temporary until items can be in multiple groupings
         Grouping* grp = gate->get_grouping();
         if(grp != nullptr){
-            QColor c = gContentManager->getGroupingManagerWidget()->getModel()->colorForGrouping(grp);
-            newGroupingList.append(GroupingTableEntry(grp, c));
+            newGroupingList.append(GroupingTableEntry(grp));
         }
         layoutAboutToBeChanged();
         mGroupings = newGroupingList;
@@ -116,8 +115,7 @@ namespace hal {
         // Temporary until items can be in multiple groupings
         Grouping* grp = module->get_grouping();
         if(grp != nullptr){
-            QColor c = gContentManager->getGroupingManagerWidget()->getModel()->colorForGrouping(grp);
-            newGroupingList.append(GroupingTableEntry(grp, c));
+            newGroupingList.append(GroupingTableEntry(grp));
         }
         layoutAboutToBeChanged();
         mGroupings = newGroupingList;
@@ -134,8 +132,7 @@ namespace hal {
         // Temporary until items can be in multiple groupings
         Grouping* grp = net->get_grouping();
         if(grp != nullptr){
-            QColor c = gContentManager->getGroupingManagerWidget()->getModel()->colorForGrouping(grp);
-            newGroupingList.append(GroupingTableEntry(grp, c));
+            newGroupingList.append(GroupingTableEntry(grp));
         }
         layoutAboutToBeChanged();
         mGroupings = newGroupingList;
@@ -152,8 +149,7 @@ namespace hal {
         {
             if(grp == nullptr)
                 continue;
-            QColor c = gContentManager->getGroupingManagerWidget()->getModel()->colorForGrouping(grp);
-            newGroupingList.append(GroupingTableEntry(grp, c));
+            newGroupingList.append(GroupingTableEntry(grp));
             layoutAboutToBeChanged();
             mGroupings = newGroupingList;
             layoutChanged();
