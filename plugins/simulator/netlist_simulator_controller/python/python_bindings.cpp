@@ -275,10 +275,10 @@ namespace hal
                 :rtype: str
         )");
 
-        py_simulation_engine.def_property_readonly("state", &SimulationEngine::state, R"(
+        py_simulation_engine.def("get_state", &SimulationEngine::get_state, R"(
                 Get the state of the engine.
 
-                :returns: The state of the engine (Preparing=0, Running=1, Done=2)
+                :returns: The state of the engine (Preparing=2, Running=1, Done=0, Failed=-1)
                 :type: int
         )");
 

@@ -14,6 +14,7 @@ namespace hal {
         const SimulationInput* mSimulationInput;
         SimulationEngineEventDriven* mEngine;
 
+        void terminateThread(bool success, const char* failedStep = nullptr);
     Q_SIGNALS:
         void threadFinished(bool success);
 

@@ -33,6 +33,11 @@ namespace hal {
         return true;
     }
 
+    void SimulationEngine::failed()
+    {
+        mState = Failed;
+    }
+
     SimulationEngineEventDriven::SimulationEngineEventDriven(const std::string& nam)
         : SimulationEngine(nam), mSimulationInput(nullptr)
     {

@@ -1,6 +1,7 @@
 #include "netlist_simulator_controller/simulation_input.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/utilities/log.h"
 #include <stdio.h>
 
 namespace hal {
@@ -63,37 +64,48 @@ namespace hal {
         return (m_input_nets.find(n) != m_input_nets.end());
     }
 
-    void SimulationInput::dump() const
+    void SimulationInput::dump(std::string filename) const
     {
-        fprintf(stderr, "Gates:______________________________________\n");
+        FILE* of = stderr;
+        if (!filename.empty())
+            if (!(of = fopen(filename.c_str(),"w")))
+            {
+                log_warning("sim_controller", "cannot open simulation input dump file '{}'", filename);
+                return;
+            }
+
+        fprintf(of, "Gates:______________________________________\n");
         for (const Gate* g: mSimulationSet)
         {
-            fprintf(stderr, "  %4d <%s>\n", g->get_id(), g->get_name().c_str());
+            fprintf(of, "  %4d <%s>\n", g->get_id(), g->get_name().c_str());
         }
-        fprintf(stderr, "Clocks:_____________________________________\n");
+        fprintf(of, "Clocks:_____________________________________\n");
         for (const Clock& clk: m_clocks)
         {
-            fprintf(stderr, "  %4d <%s> \t period: %u \n", clk.clock_net->get_id(), clk.clock_net->get_name().c_str(), (unsigned int) clk.period());
+            fprintf(of, "  %4d <%s> \t period: %u \n", clk.clock_net->get_id(), clk.clock_net->get_name().c_str(), (unsigned int) clk.period());
         }
-        fprintf(stderr, "Input nets:_________________________________\n");
+        fprintf(of, "Input nets:_________________________________\n");
         for (const Net* n: m_input_nets)
         {
-            fprintf(stderr, "  %4d <%s>\n", n->get_id(), n->get_name().c_str());
+            fprintf(of, "  %4d <%s>\n", n->get_id(), n->get_name().c_str());
         }
-        fprintf(stderr, "Output nets:________________________________\n");
+        fprintf(of, "Output nets:________________________________\n");
         for (const Net* n: m_output_nets)
         {
-            fprintf(stderr, "  %4d <%s>\n", n->get_id(), n->get_name().c_str());
+            fprintf(of, "  %4d <%s>\n", n->get_id(), n->get_name().c_str());
         }
-        fprintf(stderr, "Events:_____________________________________\n");
+        fprintf(of, "Events:_____________________________________\n");
         for (const SimulationInputNetEvent& ev : mSimulationInputNetEvents)
         {
-            fprintf(stderr, "  %8u:", (unsigned int) ev.get_simulation_duration());
+            fprintf(of, "  %8u:", (unsigned int) ev.get_simulation_duration());
             for (auto it = ev.begin(); it != ev.end(); ++it)
-                fprintf(stderr, " <%u,%d>", it->first->get_id(), it->second);
-            fprintf(stderr, "\n");
+                fprintf(of, " <%u,%d>", it->first->get_id(), it->second);
+            fprintf(of, "\n");
         }
-        fflush(stderr);
+        if (filename.empty())
+            fflush(of);
+        else
+            fclose(of);
     }
 
     void SimulationInput::compute_input_nets()

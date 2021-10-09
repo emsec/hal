@@ -3,12 +3,13 @@
 #include "netlist_simulator_controller/simulation_input.h"
 #include "netlist_simulator_controller/simulation_engine.h"
 #include <QProcess>
+#include <QThread>
 
 namespace hal {
 
     class NetlistSimulatorController;
 
-    class SimulationProcess : public QObject {
+    class SimulationProcess : public QThread {
         Q_OBJECT
 
         SimulationEngineScripted* mEngine;
@@ -17,17 +18,14 @@ namespace hal {
         int mNumberLines;
         QProcess* mProcess;
 
-        bool launchProcess();
+        void abortOnError();
 
     Q_SIGNALS:
         void processFinished(bool success);
 
-    private Q_SLOTS:
-        void handleStepFinished(int exitCode, QProcess::ExitStatus exitStatus);
-
     public:
         SimulationProcess(NetlistSimulatorController* controller, SimulationEngineScripted* engine);
 
-        void start();
+        void run();
     };
 }

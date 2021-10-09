@@ -127,6 +127,10 @@ namespace hal {
          */
         const std::vector<SimulationInputNetEvent>& get_simulation_net_events() const { return mSimulationInputNetEvents; }
 
-        void dump() const;
+        /**
+         * Dump content of simulation input instance to file or stderr if no filename given
+         * @param filename name of file to be created
+         */
+        void dump(std::string filename = std::string()) const;
     };
 }

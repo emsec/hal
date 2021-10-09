@@ -1,6 +1,7 @@
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_input.h"
 #include "netlist_simulator_controller/simulation_engine.h"
+#include "netlist_simulator_controller/dummy_engine.h"
 
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/vcd_serializer.h"
@@ -35,11 +36,12 @@ namespace hal
         mState = stat;
         switch (mState)
         {
-        case NoGatesSelected:  log_info("simulator_contr", "Select gates for simulation");              break;
-        case ParameterSetup:   log_info("simulator_contr", "Expecting parameter and input");            break;
-        case SimulationRun:    log_info("simulator_contr", "Running simulation, please wait...");       break;
-        case ShowResults:      log_info("simulator_contr", "Simulation engine completed successfully"); break;
-        case EngineFailed:     log_info("simulator_contr", "Simulation engine process error");          break;
+        case NoGatesSelected:  log_info("sim_controller", "Select gates for simulation");              break;
+        case ParameterSetup:   log_info("sim_controller", "Expecting parameter and input");            break;
+        case SimulationRun:    log_info("sim_controller", "Running simulation, please wait...");       break;
+        case ShowResults:      log_info("sim_controller", "Simulation engine completed successfully"); break;
+        case EngineFailed:     log_info("sim_controller", "Simulation engine process error");
+            if (mSimulationEngine) mSimulationEngine->failed(); break;
         }
     }
 
@@ -239,13 +241,6 @@ namespace hal
         if (!success)
         {
             log_warning("sim_controller", "simulation engine error during run.");
-            setState(EngineFailed);
-            return;
-        }
-
-        if (!mSimulationEngine->finalize())
-        {
-            log_warning("sim_controller", "simulation engine error during finalize.");
             setState(EngineFailed);
             return;
         }

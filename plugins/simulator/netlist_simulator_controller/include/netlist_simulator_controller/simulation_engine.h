@@ -16,7 +16,7 @@ namespace hal {
         std::string mName;
 
     public:
-        enum State { Preparing, Running, Done };
+        enum State { Failed = -1, Done = 0, Running = 1, Preparing = 2};
     protected:
         bool mRequireClockEvents;
         bool mCanShareMemory;
@@ -35,9 +35,15 @@ namespace hal {
 
         /**
          * State of the engine
-         * @return possible state values are Preparing, Running, Done
+         * @return possible state values are Preparing, Running, Done, Failed
          */
         State state() const { return mState; }
+
+        /**
+         * State of the engine as integer
+         * @return possible state values are Preparing = 2, Running = 1, Done = 0, Failed = -1
+         */
+        int get_state() const { return mState; }
 
         /**
          * The working directory. Directory is temporary and will be removed when engine gets deleted
@@ -86,7 +92,7 @@ namespace hal {
         virtual bool run(NetlistSimulatorController* controller) = 0;
 
         /**
-         * Can be implemented by derived class
+         * Can be overwritten by derived class
          *
          * Signals the engine that it is time for final steps (.e.g. writing VCD file)
          * after simulation is done - that is:
@@ -96,6 +102,14 @@ namespace hal {
          * @return true if successful, false on error
          */
         virtual bool finalize();
+
+        /**
+         * Can be overwritten by derived class
+         *
+         * Signals the engine that an essential step failed and execution is going to be
+         * aborted. Engine might want to do some final clean up.
+         */
+        virtual void failed();
     };
 
     class SimulationEngineEventDriven : public SimulationEngine
