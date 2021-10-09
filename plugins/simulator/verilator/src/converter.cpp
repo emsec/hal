@@ -82,7 +82,7 @@ namespace verilator {
                     log_info("verilator", "not reading {} from simulation path, since it is not verilog (no .v extension)", file);
                     continue;
                 }
-                
+
                 file = utils::replace(file, std::string(".v"), std::string(""));
                 supported_gate_types.insert(file);
 
@@ -124,7 +124,7 @@ namespace verilator {
 
                 std::stringstream parameter;
                 parameter << "parameter [" << init_len - 1 << ":0]"
-                          << " INIT = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ";";
+                          << " INIT = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
 
                 parameters.push_back(parameter.str());
 
@@ -133,7 +133,7 @@ namespace verilator {
 
                     std::stringstream parameter;
                     parameter << "parameter [0:0]"
-                              << " INIT = 1'b0;";
+                              << " INIT = 1'b0,";
                     parameters.push_back(parameter.str());
                 }
             }
@@ -155,19 +155,20 @@ namespace verilator {
             // some gates have parameters, which we need to insert
 
             std::vector<std::string> parameters = get_parameters_for_gate(gt);
+
+            // add parameters to all gates
             if (!parameters.empty()) {
                 prologue << "#(" << std::endl;
-
-                std::string parameter_str; 
+                std::string parameter_str;
                 for (const auto& parameter : parameters) {
                     parameter_str += "\t" + parameter + "\n";
                 }
-                parameter_str.erase(parameter_str.find_last_of(";"));
-                prologue << parameter_str;
-
+                parameter_str.erase(parameter_str.find_last_of(","));
+                prologue << parameter_str << std::endl;
                 prologue << ")" << std::endl;
             }
 
+            // in and outputs of module
             prologue << "(" << std::endl;
 
             for (const auto& input_pin : input_pins) {

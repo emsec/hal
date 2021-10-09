@@ -4,6 +4,7 @@
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_utils.h"
@@ -37,12 +38,32 @@ namespace verilator {
         }
     }
 
+    void remove_unwanted_parameters_from_netlist(Netlist* nl)
+    {
+        for (const auto& gate : nl->get_gates()) {
+            gate->delete_data("generic", "X_COORDINATE");
+            gate->delete_data("generic", "Y_COORDINATE");
+
+            if (!gate->get_type()->has_property(hal::GateTypeProperty::lut) && gate->get_type()->has_property(hal::GateTypeProperty::combinational)) {
+                gate->delete_data("generic", "INIT");
+            }
+        }
+    }
+
+    std::string escape_net_name(std::string net_name){
+        std::string new_net_name;
+        new_net_name = utils::replace(net_name, std::string("'"), std::string("__027"));
+        return new_net_name;
+    }
+
     const int VerilatorEngine::s_command_lines = 3;
 
     bool VerilatorEngine::setSimulationInput(SimulationInput* simInput)
     {
         const std::vector<const Gate*> simulation_gates(simInput->get_gates().begin(), simInput->get_gates().end());
         m_partial_netlist = netlist_utils::get_partial_netlist(simulation_gates.at(0)->get_netlist(), simulation_gates);
+
+        remove_unwanted_parameters_from_netlist(m_partial_netlist.get());
 
         m_simulator_dir = directory();
         m_design_name = m_partial_netlist->get_design_name();
@@ -67,7 +88,7 @@ namespace verilator {
         for (const auto& sim_event : simInput->get_simulation_net_events()) {
             u32 duration = sim_event.get_simulation_duration();
             for (const auto& [net, boolean_value] : sim_event) {
-                simulation_data << "\tdut->" << net->get_name() << " = ";
+                simulation_data << "\tdut->" << escape_net_name(net->get_name()) << " = ";
 
                 switch (boolean_value) {
                 case BooleanFunction::Value::ONE:

@@ -62,6 +62,7 @@ sim.simulate(20 * clock_period)
 
 
 sim.run_simulation()
+sleep(30)
 
 
 
