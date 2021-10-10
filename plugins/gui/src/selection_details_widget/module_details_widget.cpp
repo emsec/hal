@@ -3,15 +3,15 @@
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/input_dialog/input_dialog.h"
+#include "gui/selection_details_widget/data_fields_table.h"
+#include "gui/selection_details_widget/details_general_model.h"
+#include "gui/selection_details_widget/details_section_widget.h"
+#include "gui/selection_details_widget/details_table_utilities.h"
+#include "gui/selection_details_widget/disputed_big_icon.h"
+#include "gui/user_action/action_rename_object.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
-#include "gui/selection_details_widget/data_fields_table.h"
-#include "gui/selection_details_widget/details_section_widget.h"
-#include "gui/selection_details_widget/disputed_big_icon.h"
-#include "gui/selection_details_widget/details_general_model.h"
-#include "gui/selection_details_widget/details_table_utilities.h"
-#include "gui/user_action/action_rename_object.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -30,7 +30,7 @@ namespace hal
 {
     ModuleDetailsWidget::ModuleDetailsWidget(QWidget* parent) : DetailsWidget(DetailsWidget::ModuleDetails, parent)
     {
-        mScrollArea       = new QScrollArea();
+        mScrollArea      = new QScrollArea();
         mTopLvlContainer = new QWidget();
         mTopLvlLayout    = new QVBoxLayout(mTopLvlContainer);
         mTopLvlContainer->setLayout(mTopLvlLayout);
@@ -50,13 +50,13 @@ namespace hal
         mGeneralInfoButton = new QPushButton("Module Information", this);
         mGeneralInfoButton->setEnabled(false);
 
-        mGeneralView         = new QTableView(this);
-        mGeneralModel        = new DetailsGeneralModel(mGeneralView);
+        mGeneralView  = new QTableView(this);
+        mGeneralModel = new DetailsGeneralModel(mGeneralView);
         mGeneralModel->setDummyContent<Module>();
         mGeneralView->setModel(mGeneralModel);
         mInputPortsTable  = new QTableWidget(0, 3);
         mOutputPortsTable = new QTableWidget(0, 3);
-        mDataFieldsTable    = new DataFieldsTable(this);
+        mDataFieldsTable  = new DataFieldsTable(this);
 
         mInputPortsSection  = new DetailsSectionWidget("Input Ports (%1)", mInputPortsTable, this);
         mOutputPortsSection = new DetailsSectionWidget("Output Ports (%1)", mOutputPortsTable, this);
@@ -105,8 +105,7 @@ namespace hal
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleDetailsWidget::handleSubmoduleRemoved);
         connect(gNetlistRelay, &NetlistRelay::moduleGateAssigned, this, &ModuleDetailsWidget::handleModuleGateAssigned);
         connect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &ModuleDetailsWidget::handleModuleGateRemoved);
-        connect(gNetlistRelay, &NetlistRelay::moduleInputPortNameChanged, this, &ModuleDetailsWidget::handleModuleInputPortNameChanged);
-        connect(gNetlistRelay, &NetlistRelay::moduleOutputPortNameChanged, this, &ModuleDetailsWidget::handleModuleOutputPortNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::modulePortChanged, this, &ModuleDetailsWidget::handleModulePortChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleTypeChanged, this, &ModuleDetailsWidget::handleModuleTypeChanged);
 
         connect(gNetlistRelay, &NetlistRelay::netNameChanged, this, &ModuleDetailsWidget::handleNetNameChanged);
@@ -137,12 +136,13 @@ namespace hal
             return;
 
         auto m = gNetlist->get_module_by_id(module_id);
-        if (!m) return;
+        if (!m)
+            return;
 
         mGeneralModel->setContent<Module>(m);
 
         mGeneralView->resizeColumnsToContents();
-        mGeneralView->setFixedSize(DetailsTableUtilities::tableViewSize(mGeneralView,mGeneralModel->rowCount(),mGeneralModel->columnCount()));
+        mGeneralView->setFixedSize(DetailsTableUtilities::tableViewSize(mGeneralView, mGeneralModel->rowCount(), mGeneralModel->columnCount()));
         mGeneralView->update();
 
         //update table with input ports
@@ -412,15 +412,7 @@ namespace hal
             update(mCurrentId);
     }
 
-    void ModuleDetailsWidget::handleModuleInputPortNameChanged(Module* module, u32 associated_data)
-    {
-        Q_UNUSED(associated_data);
-
-        if (mCurrentId == module->get_id())
-            update(mCurrentId);
-    }
-
-    void ModuleDetailsWidget::handleModuleOutputPortNameChanged(Module* module, u32 associated_data)
+    void ModuleDetailsWidget::handleModulePortChanged(Module* module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -537,7 +529,7 @@ namespace hal
                     if (!corresponding_net)
                         return;
                     ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
-                    act->setObject(UserActionObject(mCurrentId,UserActionObjectType::Port));
+                    act->setObject(UserActionObject(mCurrentId, UserActionObjectType::Port));
                     act->setInputNetId(corresponding_net->get_id());
                     act->exec();
                     update(mCurrentId);
@@ -581,7 +573,7 @@ namespace hal
                     if (!corresponding_net)
                         return;
                     ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
-                    act->setObject(UserActionObject(mCurrentId,UserActionObjectType::Port));
+                    act->setObject(UserActionObject(mCurrentId, UserActionObjectType::Port));
                     act->setOutputNetId(corresponding_net->get_id());
                     act->exec();
                     update(mCurrentId);
@@ -617,10 +609,9 @@ namespace hal
             gSelectionRelay->clear();
             gSelectionRelay->addGate(ep->get_gate()->get_id());
 
-            auto pins                          = ep->get_gate()->get_type()->get_input_pins();
-            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
-            gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,ep->get_gate()->get_id(),
-                                      SelectionRelay::Subfocus::Left,index);
+            auto pins  = ep->get_gate()->get_type()->get_input_pins();
+            auto index = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, ep->get_gate()->get_id(), SelectionRelay::Subfocus::Left, index);
 
             update(ep->get_gate()->get_id());
             gSelectionRelay->relaySelectionChanged(this);
@@ -663,10 +654,9 @@ namespace hal
             gSelectionRelay->clear();
             gSelectionRelay->addGate(ep->get_gate()->get_id());
 
-            auto pins                          = ep->get_gate()->get_type()->get_output_pins();
-            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
-            gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,ep->get_gate()->get_id(),
-                                      SelectionRelay::Subfocus::Right,index);
+            auto pins  = ep->get_gate()->get_type()->get_output_pins();
+            auto index = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, ep->get_gate()->get_id(), SelectionRelay::Subfocus::Right, index);
 
             update(ep->get_gate()->get_id());
             gSelectionRelay->relaySelectionChanged(this);
@@ -716,8 +706,7 @@ namespace hal
             {
                 if (g->get_fan_in_net(pin) == n)
                 {
-                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,g->get_id(),
-                                              SelectionRelay::Subfocus::Left,index_cnt);
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, g->get_id(), SelectionRelay::Subfocus::Left, index_cnt);
                     break;
                 }
                 index_cnt++;

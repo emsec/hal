@@ -179,22 +179,13 @@ namespace hal
         void handleModuleGateRemoved(Module* m, const u32 removed_gate);
 
         /**
-         * Handler to be called after an input port of a module has been renamed. <br>
+         * Handler to be called after a port of a module has been changed. <br>
          * Used to apply the changes in the affected contexts.
          *
-         * @param m - The module with the renamed input port
-         * @param net - The net that is connected to the renamed input port
+         * @param m - The module with the changed port
+         * @param net - The net that is connected to the changed port
          */
-        void handleModuleInputPortNameChanged(Module* m, const u32 net);
-
-        /**
-         * Handler to be called after an output port of a module has been renamed. <br>
-         * Used to apply the changes in the affected contexts.
-         *
-         * @param m - The module with the renamed output port
-         * @param net - The net that is connected to the renamed output port
-         */
-        void handleModuleOutputPortNameChanged(Module* m, const u32 net);
+        void handleModulePortChanged(Module* m, const u32 net);
 
         /**
          * Handler to be called after a gate has been removed. <br>
@@ -345,7 +336,10 @@ namespace hal
         void handleSaveTriggered();
         void restoreFromFile();
 
-        QString nextDefaultName() const { return QString("view %1").arg(mMaxContextId+1);}
+        QString nextDefaultName() const
+        {
+            return QString("view %1").arg(mMaxContextId + 1);
+        }
     Q_SIGNALS:
         /**
          * Q_SIGNAL that notifies about the creation of a new context by the context manager.
@@ -370,7 +364,7 @@ namespace hal
         void deletingContext(GraphContext* context);
 
     private:
-//        QVector<GraphContext*> mGraphContexts;
+        //        QVector<GraphContext*> mGraphContexts;
 
         ContextTableModel* mContextTableModel;
         u32 mMaxContextId;
@@ -380,4 +374,4 @@ namespace hal
         SettingsItemCheckbox* mSettingParseLayout;
         SettingsItemCheckbox* mSettingLayoutBoxes;
     };
-}
+}    // namespace hal

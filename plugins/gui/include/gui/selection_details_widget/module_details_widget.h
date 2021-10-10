@@ -22,11 +22,11 @@
 //  SOFTWARE.
 #pragma once
 
-#include "hal_core/defines.h"
 #include "gui/gui_def.h"
-#include "hal_core/netlist/endpoint.h"
 #include "gui/netlist_relay/netlist_relay.h"
 #include "gui/selection_details_widget/details_widget.h"
+#include "hal_core/defines.h"
+#include "hal_core/netlist/endpoint.h"
 
 #include <QWidget>
 
@@ -59,7 +59,6 @@ namespace hal
     {
         Q_OBJECT
     public:
-
         /**
          * The constructor. Everything is set up here.
          *
@@ -198,21 +197,12 @@ namespace hal
 
         /**
          * Checks if the given module is the currently displayed module. If yes, the data is updated.
-         * Should be connected to a module-input-port-name-changed signal.
+         * Should be connected to a module-port-changed signal.
          *
-         * @param module - The module that had a input-port-name-change.
+         * @param module - The module that had a port-change.
          * @param associated_data - The respective net.
          */
-        void handleModuleInputPortNameChanged(Module* module, u32 associated_data);
-
-        /**
-         * Checks if the given module is the currently displayed module. If yes, the data is updated.
-         * Should be connected to a module-output-name-change signal.
-         *
-         * @param module - The module that had a output-port-name-change.
-         * @param associated_data - The respective net.
-         */
-        void handleModuleOutputPortNameChanged(Module* module, u32 associated_data);
+        void handleModulePortChanged(Module* module, u32 associated_data);
 
         /**
          * Checks if the given module is currently displayed. If yes, the data is updated.

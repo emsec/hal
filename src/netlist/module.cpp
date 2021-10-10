@@ -569,7 +569,7 @@ namespace hal
         }
         m_input_net_to_port_name[input_net] = port_name;
 
-        m_event_handler->notify(ModuleEvent::event::input_port_name_changed, this, input_net->get_id());
+        m_event_handler->notify(ModuleEvent::event::port_changed, this, input_net->get_id());
 
         return true;
     }
@@ -626,7 +626,7 @@ namespace hal
         }
         m_output_net_to_port_name[output_net] = port_name;
 
-        m_event_handler->notify(ModuleEvent::event::output_port_name_changed, this, output_net->get_id());
+        m_event_handler->notify(ModuleEvent::event::port_changed, this, output_net->get_id());
 
         return true;
     }
