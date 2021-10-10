@@ -14,6 +14,7 @@ var classhal_1_1_main_window =
     [ "handleActionAbout", "classhal_1_1_main_window.html#a218cf9b1c90b6a2cbf12932e48254139", null ],
     [ "handleActionCloseFile", "classhal_1_1_main_window.html#a33e100a72ed2b63e1251546db93b48ca", null ],
     [ "handleActionExport", "classhal_1_1_main_window.html#ae68cd5c12714f48219ab9f31156bf751", null ],
+    [ "handleActionGatelibraryManager", "classhal_1_1_main_window.html#a258818c82a1734f56135ec7e7f230f97", null ],
     [ "handleActionNew", "classhal_1_1_main_window.html#a62352d9e02b54e67a9393a501caf5904", null ],
     [ "handleActionOpen", "classhal_1_1_main_window.html#ab168645f8f8b6eaec979106c7d5b58d3", null ],
     [ "handleActionPlayMacro", "classhal_1_1_main_window.html#a90c41d58ef3e4aefcc5b88a40288bc07", null ],

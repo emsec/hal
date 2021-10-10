@@ -16,6 +16,7 @@ var dir_6b8756a038d2bd8b7f4f32095327c07b =
     [ "file_modified_bar", "dir_33f5e9141ebe4d7128195f86684506f2.html", "dir_33f5e9141ebe4d7128195f86684506f2" ],
     [ "file_status_manager", "dir_cef7e09ba7876bb1bae062bda3c1c6c4.html", "dir_cef7e09ba7876bb1bae062bda3c1c6c4" ],
     [ "frames", "dir_44deab7264ed221a2197772856b729a7.html", "dir_44deab7264ed221a2197772856b729a7" ],
+    [ "gatelibrary_management", "dir_4252469b3ac735c304362e15e3ea1050.html", "dir_4252469b3ac735c304362e15e3ea1050" ],
     [ "graph_tab_widget", "dir_852c853809d325c7ff34f936f779c3ef.html", "dir_852c853809d325c7ff34f936f779c3ef" ],
     [ "graph_widget", "dir_e6f210bccc64e8ff5ef57a64ae71bbf6.html", "dir_e6f210bccc64e8ff5ef57a64ae71bbf6" ],
     [ "graphics_effects", "dir_47a583ce1cbc1c7cb0dd54b34c740ef0.html", "dir_47a583ce1cbc1c7cb0dd54b34c740ef0" ],

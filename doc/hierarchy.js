@@ -236,6 +236,7 @@ var hierarchy =
         [ "QAbstractProxyModel", "https://doc.qt.io/qt-5/qabstractproxymodel.html", [
           [ "QSortFilterProxyModel", "https://doc.qt.io/qt-5/qsortfilterproxymodel.html", [
             [ "hal::ContextTableProxyModel", "classhal_1_1_context_table_proxy_model.html", null ],
+            [ "hal::GatelibraryProxyModel", "classhal_1_1_gatelibrary_proxy_model.html", null ],
             [ "hal::GateSelectProxy", "classhal_1_1_gate_select_proxy.html", null ],
             [ "hal::GroupingProxyModel", "classhal_1_1_grouping_proxy_model.html", null ],
             [ "hal::ModuleProxyModel", "classhal_1_1_module_proxy_model.html", null ],
@@ -247,6 +248,7 @@ var hierarchy =
           [ "hal::ChannelModel", "classhal_1_1_channel_model.html", null ],
           [ "hal::ContextTableModel", "classhal_1_1_context_table_model.html", null ],
           [ "hal::DetailsGeneralModel", "classhal_1_1_details_general_model.html", null ],
+          [ "hal::GatelibraryTableModel", "classhal_1_1_gatelibrary_table_model.html", null ],
           [ "hal::GateSelectModel", "classhal_1_1_gate_select_model.html", null ],
           [ "hal::GroupingTableModel", "classhal_1_1_grouping_table_model.html", null ],
           [ "hal::ModuleSelectModel", "classhal_1_1_module_select_model.html", null ]
@@ -318,6 +320,7 @@ var hierarchy =
         [ "QDialog", "https://doc.qt.io/qt-5/qdialog.html", [
           [ "hal::AboutDialog", "classhal_1_1_about_dialog.html", null ],
           [ "hal::GateDialog", "classhal_1_1_gate_dialog.html", null ],
+          [ "hal::GatelibraryManagementDialog", "classhal_1_1_gatelibrary_management_dialog.html", null ],
           [ "hal::GroupingDialog", "classhal_1_1_grouping_dialog.html", null ],
           [ "hal::InputDialog", "classhal_1_1_input_dialog.html", null ],
           [ "hal::ModuleDialog", "classhal_1_1_module_dialog.html", null ],
@@ -352,6 +355,7 @@ var hierarchy =
           [ "QAbstractScrollArea", "https://doc.qt.io/qt-5/qabstractscrollarea.html", [
             [ "QAbstractItemView", "https://doc.qt.io/qt-5/qabstractitemview.html", [
               [ "QTableView", "https://doc.qt.io/qt-5/qtableview.html", [
+                [ "hal::GatelibraryTableView", "classhal_1_1_gatelibrary_table_view.html", null ],
                 [ "hal::GateSelectView", "classhal_1_1_gate_select_view.html", null ],
                 [ "hal::GroupingTableView", "classhal_1_1_grouping_table_view.html", null ],
                 [ "hal::ModuleSelectView", "classhal_1_1_module_select_view.html", null ],
@@ -478,8 +482,8 @@ var hierarchy =
       [ "hal::StackedValidator", "classhal_1_1_stacked_validator.html", null ],
       [ "hal::UniqueStringValidator", "classhal_1_1_unique_string_validator.html", null ]
     ] ],
-    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
+    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];
