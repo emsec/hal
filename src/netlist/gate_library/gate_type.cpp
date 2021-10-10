@@ -7,14 +7,6 @@ namespace hal
     template<>
     std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry"};
 
-    const std::unordered_map<PinDirection, std::unordered_set<PinType>> GateType::m_direction_to_types = {
-        {PinDirection::none, {}},
-        {PinDirection::input,
-         {PinType::none, PinType::power, PinType::ground, PinType::clock, PinType::enable, PinType::set, PinType::reset, PinType::data, PinType::address, PinType::io_pad, PinType::select}},
-        {PinDirection::output, {PinType::none, PinType::clock, PinType::lut, PinType::state, PinType::neg_state, PinType::data, PinType::address, PinType::io_pad}},
-        {PinDirection::inout, {PinType::none, PinType::io_pad}},
-        {PinDirection::internal, {PinType::none}}};
-
     GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
         : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(component))
     {
@@ -228,17 +220,13 @@ namespace hal
     {
         if (m_pins_set.find(pin) != m_pins_set.end())
         {
-            std::unordered_set<PinType> types = m_direction_to_types.at(m_pin_to_direction.at(pin));
-            if (types.find(pin_type) != types.end())
+            if (const auto it = m_pin_to_type.find(pin); it != m_pin_to_type.end())
             {
-                if (const auto it = m_pin_to_type.find(pin); it != m_pin_to_type.end())
-                {
-                    m_type_to_pins.at(it->second).erase(pin);
-                }
-                m_pin_to_type[pin] = pin_type;
-                m_type_to_pins[pin_type].insert(pin);
-                return true;
+                m_type_to_pins.at(it->second).erase(pin);
             }
+            m_pin_to_type[pin] = pin_type;
+            m_type_to_pins[pin_type].insert(pin);
+            return true;
         }
 
         log_error("gate_library", "could not assign type '{}' to pin '{}' of gate type '{}'.", enum_to_string<PinType>(pin_type), pin, m_name);
@@ -310,7 +298,7 @@ namespace hal
         return "";
     }
 
-    std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> GateType::get_pin_groups() const
+    const std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>>& GateType::get_pin_groups() const
     {
         return m_pin_groups;
     }

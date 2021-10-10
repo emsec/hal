@@ -231,22 +231,22 @@ namespace hal
             :rtype: list[str]
         )");
 
-        py_gate_type.def("add_pin", &GateType::add_pin, py::arg("pin"), py::arg("direction"), py::arg("pin_type"), R"(
+        py_gate_type.def("add_pin", &GateType::add_pin, py::arg("pin"), py::arg("direction"), py::arg("type"), R"(
             Add a pin of the specified direction and type to the gate type.
         
             :param str pin: The pin.
             :param hal_py.PinDirection direction: The pin direction to be assigned.
-            :param hal_py.PinType pin_type: The pin type to be assigned.
+            :param hal_py.PinType type: The pin type to be assigned.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
 
-        py_gate_type.def("add_pins", &GateType::add_pin, py::arg("pins"), py::arg("direction"), py::arg("pin_type"), R"(
+        py_gate_type.def("add_pins", &GateType::add_pin, py::arg("pins"), py::arg("direction"), py::arg("type"), R"(
             Add a list of pin of the specified direction and type to the gate type.
         
             :param list[str] pins: The pins.
             :param hal_py.PinDirection direction: The pin direction to be assigned.
-            :param hal_py.PinType pin_type: The pin type to be assigned.
+            :param hal_py.PinType type: The pin type to be assigned.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
@@ -293,11 +293,11 @@ namespace hal
             :rtype: set[str]
         )");
 
-        py_gate_type.def("assign_pin_type", &GateType::assign_pin_type, py::arg("pin"), py::arg("pin_type"), R"(
+        py_gate_type.def("assign_pin_type", &GateType::assign_pin_type, py::arg("pin"), py::arg("type"), R"(
             Assign a pin type to the given pin. The pin must have been added to the gate type beforehand.
     
             :param str pin: The pin.
-            :param hal_py.PinType pin_type: The pin type to be assigned.
+            :param hal_py.PinType type: The pin type to be assigned.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
@@ -323,10 +323,10 @@ namespace hal
             :type: dict[str,hal_py.PinType]
         )");
 
-        py_gate_type.def("get_pins_of_type", &GateType::get_pins_of_type, py::arg("pin_type"), R"(
+        py_gate_type.def("get_pins_of_type", &GateType::get_pins_of_type, py::arg("type"), R"(
             Get all pins of the specified pin type.
         
-            :param hal_py.PinType pin_type: The pin type.
+            :param hal_py.PinType type: The pin type.
             :returns: A set of pins.
             :rtype: set[str]
         )");
