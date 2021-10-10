@@ -58,7 +58,7 @@ namespace hal
             }
 
             //one for the team (must be added for some additional size so the invisible scrossbars!
-            h += (indexRowHeight/2)-2;
+            h += (indexRowHeight/2)-6;
         }
 
         setFixedHeight(h);

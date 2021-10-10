@@ -18,6 +18,10 @@ namespace hal
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        setSelectionMode(QAbstractItemView::NoSelection);
+        setFocusPolicy(Qt::NoFocus);
         horizontalHeader()->setStretchLastSection(true);
         verticalHeader()->hide();
         setModel(mEndpointModel);
@@ -80,12 +84,34 @@ namespace hal
 
     void NetEndpointTable::fitSizeToContent()
     {
+        horizontalHeader()->setStretchLastSection(false);
         resizeRowsToContents();
-        int h = horizontalHeader()->height() + 4;
-        for (int i = 0; i < mEndpointModel->rowCount(); i++)
-            h += rowHeight(i);
+        resizeColumnsToContents();
 
-        setMaximumHeight(h);
-        setMinimumHeight(h);
+        int rows = mEndpointModel->rowCount();
+        int columns = mEndpointModel->columnCount();
+
+        int w = 0;
+        int h = 0;
+
+        //necessary to test if the table is empty, otherwise (due to the resizeColumnsToContents function)
+        //is the table's width far too big, so just set 0 as the size
+        if(rows != 0)
+        {
+            w = verticalHeader()->width() + 4;    // +4 seems to be needed
+            for (int i = 0; i < columns; i++)
+                w += columnWidth(i);    // seems to include gridline
+
+            h = horizontalHeader()->height() + 4;
+            for (int i = 0; i < rows; i++)
+                h += rowHeight(i);
+
+            w = w + 5; //no contemporary source exists why 5 is the magic number here (my guess would be it's the width of the hidden scrollbar)
+        }
+        setFixedHeight(h);
+        setMinimumWidth(w);
+        horizontalHeader()->setStretchLastSection(true);
+        update();
+        updateGeometry();
     }
 }

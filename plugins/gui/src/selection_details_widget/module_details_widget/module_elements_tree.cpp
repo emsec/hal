@@ -15,6 +15,8 @@ namespace hal
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        setSelectionMode(QAbstractItemView::NoSelection);
+        setFocusPolicy(Qt::NoFocus);
         header()->setStretchLastSection(true);
         setModel(mNetlistElementsModel);
 

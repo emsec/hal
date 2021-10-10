@@ -20,6 +20,8 @@ namespace hal
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        setSelectionMode(QAbstractItemView::NoSelection);
+        setFocusPolicy(Qt::NoFocus);
         horizontalHeader()->setStretchLastSection(true);
         verticalHeader()->hide();
         setModel(mModuleTableModel);

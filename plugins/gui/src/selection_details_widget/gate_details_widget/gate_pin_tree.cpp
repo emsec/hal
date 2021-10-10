@@ -16,6 +16,8 @@ namespace hal
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        setSelectionMode(QAbstractItemView::NoSelection);
+        setFocusPolicy(Qt::NoFocus);
         header()->setStretchLastSection(true);
         setModel(mPinModel);
 
@@ -94,8 +96,9 @@ namespace hal
         }
         if(netIds.size() != 0)
         {
+            QString desc = (netIds.size() == 1) ? "Add net to current selection" : "Add net(s) to current selection";
             menu.addSection("Misc");
-            menu.addAction("Add net(s) to current selection",
+            menu.addAction(desc,
                 [this, netIds](){
                 for(const int id : netIds)
                     gSelectionRelay->addNet(id);
