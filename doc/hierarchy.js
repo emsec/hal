@@ -71,7 +71,8 @@ var hierarchy =
       [ "hal::LUTComponent", "classhal_1_1_l_u_t_component.html", null ],
       [ "hal::MACComponent", "classhal_1_1_m_a_c_component.html", null ],
       [ "hal::RAMComponent", "classhal_1_1_r_a_m_component.html", null ],
-      [ "hal::RAMPortComponent", "classhal_1_1_r_a_m_port_component.html", null ]
+      [ "hal::RAMPortComponent", "classhal_1_1_r_a_m_port_component.html", null ],
+      [ "hal::StateComponent", "classhal_1_1_state_component.html", null ]
     ] ],
     [ "hal::GraphContextSubscriber", "classhal_1_1_graph_context_subscriber.html", [
       [ "hal::GraphWidget", "classhal_1_1_graph_widget.html", null ]
@@ -482,8 +483,8 @@ var hierarchy =
       [ "hal::StackedValidator", "classhal_1_1_stacked_validator.html", null ],
       [ "hal::UniqueStringValidator", "classhal_1_1_unique_string_validator.html", null ]
     ] ],
-    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
+    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

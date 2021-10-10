@@ -23,5 +23,8 @@ var dir_527facc1459bfa3f362f8599485e2a7b =
     ] ],
     [ "ram_port_component.h", "ram__port__component_8h.html", [
       [ "RAMPortComponent", "classhal_1_1_r_a_m_port_component.html", "classhal_1_1_r_a_m_port_component" ]
+    ] ],
+    [ "state_component.h", "state__component_8h.html", [
+      [ "StateComponent", "classhal_1_1_state_component.html", "classhal_1_1_state_component" ]
     ] ]
 ];

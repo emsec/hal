@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"classhal_1_1_python_editor.html#a1107aac9ab92317701cb30acac397e3c":[11,0,1,0,6,29],
 "classhal_1_1_python_editor.html#a114ad66111194a4eed8d8b4811ee522b":[11,0,1,0,6,74],
 "classhal_1_1_python_editor.html#a1aabdac63b7bf8155ca4d1e62fb19196":[11,0,1,0,6,20],
 "classhal_1_1_python_editor.html#a1b285dd29a7cc8a5def70105ee2f7ce5":[11,0,1,0,6,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX11 =
 "classhal_1_1_selection_details_widget.html#a2281393d42e2c16e7ea25bf34da0832b":[11,0,7,3,11,20],
 "classhal_1_1_selection_details_widget.html#a2cee888960cc35395fd461c910ea2554":[11,0,7,3,11,17],
 "classhal_1_1_selection_details_widget.html#a2e56df6fcde04ef6ad58f755bac46a39":[11,0,7,3,11,1],
-"classhal_1_1_selection_details_widget.html#a36b921a6229c6367ac9180f4894cbe33":[11,0,7,3,11,5],
-"classhal_1_1_selection_details_widget.html#a43a06ae08fbc046cdeda0651e7bec713":[11,0,7,3,11,8]
+"classhal_1_1_selection_details_widget.html#a36b921a6229c6367ac9180f4894cbe33":[11,0,7,3,11,5]
 };

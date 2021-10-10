@@ -7,6 +7,7 @@ var classhal_1_1_gate_type_component =
       [ "ram", "classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a4641999a7679fcaef2df0e26d11e3c72", null ],
       [ "mac", "classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a140c1f12feeb2c52dfbeb2da6066a73a", null ],
       [ "init", "classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017ae37f0136aa3ffaf149b351f6a4c948e9", null ],
+      [ "state", "classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a9ed39e2ea931586b6a985a6942ef573e", null ],
       [ "ram_port", "classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a8ece2e6e53ae7532e49f462073d92601", null ]
     ] ],
     [ "convert_to", "classhal_1_1_gate_type_component.html#a6b439c29e3e8fa2d23827a8f579f7ca3", null ],

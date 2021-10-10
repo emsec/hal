@@ -268,6 +268,7 @@ var namespacehal =
     [ "StandardGraphicsModule", "classhal_1_1_standard_graphics_module.html", "classhal_1_1_standard_graphics_module" ],
     [ "StandardGraphicsNet", "classhal_1_1_standard_graphics_net.html", "classhal_1_1_standard_graphics_net" ],
     [ "StandardGraphLayouter", "classhal_1_1_standard_graph_layouter.html", "classhal_1_1_standard_graph_layouter" ],
+    [ "StateComponent", "classhal_1_1_state_component.html", "classhal_1_1_state_component" ],
     [ "SvgIconEngine", "classhal_1_1_svg_icon_engine.html", "classhal_1_1_svg_icon_engine" ],
     [ "TabWidget", "classhal_1_1_tab_widget.html", "classhal_1_1_tab_widget" ],
     [ "Token", "structhal_1_1_token.html", "structhal_1_1_token" ],
