@@ -830,30 +830,25 @@ namespace hal
 
             for (auto& pin : cell.pins)
             {
-                if (pin.function == cell.ff->state1)
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        pin_types[pin_name] = PinType::clock;
+                    }
+                }
+                else if (pin.function == cell.ff->state1)
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
                         pin_types[pin_name] = PinType::state;
                     }
-
-                    pin.function = "";
                 }
                 else if (pin.function == cell.ff->state2)
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
                         pin_types[pin_name] = PinType::neg_state;
-                    }
-
-                    pin.function = "";
-                }
-
-                if (pin.clock == true)
-                {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::clock;
                     }
                 }
             }
@@ -902,30 +897,25 @@ namespace hal
 
             for (auto& pin : cell.pins)
             {
-                if (pin.function == cell.latch->state1)
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        pin_types[pin_name] = PinType::clock;
+                    }
+                }
+                else if (pin.function == cell.latch->state1)
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
                         pin_types[pin_name] = PinType::state;
                     }
-
-                    pin.function = "";
                 }
                 else if (pin.function == cell.latch->state2)
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
                         pin_types[pin_name] = PinType::neg_state;
-                    }
-
-                    pin.function = "";
-                }
-
-                if (pin.clock == true)
-                {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::clock;
                     }
                 }
             }
