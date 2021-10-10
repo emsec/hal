@@ -3,6 +3,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 
 #include "netlist_test_utils.h"
 
@@ -231,15 +232,19 @@ namespace hal
                     EXPECT_TRUE(gt->get_boolean_functions().empty());
 
                     // Components
-                    ASSERT_EQ(gt->get_components().size(), 1);
-                    const FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
+                    ASSERT_EQ(gt->get_components().size(), 2);
+                    const FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c){ return FFComponent::is_class_of(c); });
                     ASSERT_NE(ff_component, nullptr);
+                    const StateComponent* state_component = gt->get_component_as<StateComponent>([](const GateTypeComponent* c){ return StateComponent::is_class_of(c); });
+                    ASSERT_NE(state_component, nullptr);
 
                     EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::pair(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H));
                     EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("D"));
                     EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK & EN"));
                     EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("R"));
                     EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("S"));
+                    EXPECT_EQ(state_component->get_state_identifier(), "IQ");
+                    EXPECT_EQ(state_component->get_neg_state_identifier(), "IQN");
                 }
 
                 // FF gate type with initialization
@@ -272,10 +277,12 @@ namespace hal
                     EXPECT_TRUE(gt->get_boolean_functions().empty());
 
                     // Components
-                    ASSERT_EQ(gt->get_components().size(), 2);
-                    const FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
-                    const InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
+                    ASSERT_EQ(gt->get_components().size(), 3);
+                    const FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c){ return FFComponent::is_class_of(c); });
                     ASSERT_NE(ff_component, nullptr);
+                    const StateComponent* state_component = gt->get_component_as<StateComponent>([](const GateTypeComponent* c){ return StateComponent::is_class_of(c); });
+                    ASSERT_NE(state_component, nullptr);
+                    const InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c){ return InitComponent::is_class_of(c); });
                     ASSERT_NE(init_component, nullptr);
 
                     EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::pair(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H));
@@ -283,6 +290,8 @@ namespace hal
                     EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK & EN"));
                     EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("R"));
                     EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("S"));
+                    EXPECT_EQ(state_component->get_state_identifier(), "IQ");
+                    EXPECT_EQ(state_component->get_neg_state_identifier(), "IQN");
                     EXPECT_EQ(init_component->get_init_category(), "generic");
                     EXPECT_EQ(init_component->get_init_identifiers(), std::vector<std::string>({"INIT"}));
                 }
@@ -316,15 +325,19 @@ namespace hal
                     EXPECT_TRUE(gt->get_boolean_functions().empty());
 
                     // Components
-                    ASSERT_EQ(gt->get_components().size(), 1);
-                    const LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::latch; });
+                    ASSERT_EQ(gt->get_components().size(), 2);
+                    const LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* c){ return LatchComponent::is_class_of(c); });
                     ASSERT_NE(latch_component, nullptr);
+                    const StateComponent* state_component = gt->get_component_as<StateComponent>([](const GateTypeComponent* c){ return StateComponent::is_class_of(c); });
+                    ASSERT_NE(state_component, nullptr);
 
                     EXPECT_EQ(latch_component->get_async_set_reset_behavior(), std::pair(AsyncSetResetBehavior::N, AsyncSetResetBehavior::T));
                     EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::from_string("D"));
                     EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::from_string("EN"));
                     EXPECT_EQ(latch_component->get_async_reset_function(), BooleanFunction::from_string("R"));
                     EXPECT_EQ(latch_component->get_async_set_function(), BooleanFunction::from_string("S"));
+                    EXPECT_EQ(state_component->get_state_identifier(), "IQ");
+                    EXPECT_EQ(state_component->get_neg_state_identifier(), "IQN");
                 }
 
                 // RAM gate type
