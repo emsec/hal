@@ -23,14 +23,10 @@ namespace verilator {
             u32 init_len = 1 << lut_size;
             std::vector<std::string> input_pins = gt->get_input_pins();
             std::vector<std::string> output_pins = gt->get_output_pins();
-            bool lut_init_reverted = false;
 
             // check if LUTComponent exists, if not abort
             if (LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lut_component != nullptr) {
-                if (!lut_component->is_init_ascending()) {
-                    //function << "parameter reverted_inite = INIT[]";
-                    std::reverse(input_pins.begin(), input_pins.end()); // needs to be reverted due to access in INIT string
-                }
+                log_debug("verilator", "valid LUT, got LUT component");
             } else {
                 log_error("verilator", "cannot get LUTComponent, aborting...");
                 return function.str();
@@ -41,6 +37,9 @@ namespace verilator {
                 return function.str();
             }
 
+
+
+            std::reverse(input_pins.begin(), input_pins.end()); // needs to be reverted due to access in INIT string
             function << "wire [" << lut_size - 1 << ":0] lut_lookup = {";
             for (const auto& input_pin : input_pins) {
                 function << input_pin << ", ";
