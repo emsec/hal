@@ -150,7 +150,7 @@ namespace verilator {
             return converter::get_vector_for_const_char(cl);
         } break;
         case 2: {
-            const char* cl[] = { "obj_dir/", "run", nullptr };
+            const char* cl[] = { "obj_dir/", std::string("V" + m_design_name).c_str(), nullptr };
             return converter::get_vector_for_const_char(cl);
         } break;
         default:
