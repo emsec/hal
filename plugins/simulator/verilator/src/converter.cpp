@@ -7,6 +7,7 @@
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
@@ -121,10 +122,26 @@ namespace verilator {
             if (gt->has_property(hal::GateTypeProperty::lut)) {
                 u32 lut_size = gt->get_input_pins().size();
                 u32 init_len = 1 << lut_size;
+                bool lut_init_descending = false;
+
+                if (LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lut_component != nullptr) {
+                    if (!lut_component->is_init_ascending()) {
+                        lut_init_descending = true;
+                    }
+                } else {
+                    log_error("verilator", "cannot get LUTComponent, aborting...");
+                    return std::vector<std::string>();
+                }
 
                 std::stringstream parameter;
-                parameter << "parameter [" << init_len - 1 << ":0]"
-                          << " INIT = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
+
+                if (lut_init_descending) {
+                    parameter << "parameter [" << init_len - 1 << ":0]"
+                              << " INIT = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
+                } else {
+                    parameter << "parameter [0:" << init_len - 1 << "]"
+                              << " INIT = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
+                }
 
                 parameters.push_back(parameter.str());
 
