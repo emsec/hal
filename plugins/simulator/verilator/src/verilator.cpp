@@ -155,17 +155,20 @@ namespace verilator {
             const char* cl[] = { "verilator", "-I.", "-Wall", "-Wno-fatal", "--MMD", "-trace", "-y", "gate_definitions/",
                 "--Mdir", "obj_dir", "--exe", "-cc", "-DSIM_VERILATOR", "--trace-depth", "2",
                 "testbench.cpp", nullptr};
-            std::vector retval = converter::get_vector_for_const_char(cl);
-            retval.push_back(std::string(m_design_name + ".v"));
+            std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
+            retval.push_back(m_design_name + ".v");
             return retval;
         } break;
         case 1: {
-            const char* cl[] = { "make", "--no-print-directory", "-C", "obj_dir/", "-f", std::string("V" + m_design_name + ".mk").c_str(), nullptr };
-            return converter::get_vector_for_const_char(cl);
+            const char* cl[] = { "make", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr };
+            std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
+            retval.push_back("V" + m_design_name + ".mk");
+            return retval;
         } break;
         case 2: {
-            const char* cl[] = { "obj_dir/", std::string("V" + m_design_name).c_str(), nullptr };
-            return converter::get_vector_for_const_char(cl);
+            std::vector<std::string> retval;
+            retval.push_back("obj_dir/V" + m_design_name);
+            return retval;
         } break;
         default:
             break;

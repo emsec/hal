@@ -4,6 +4,7 @@
 #include <QThread>
 #include <vector>
 #include <QStringList>
+#include <QTextStream>
 
 namespace hal {
 
@@ -41,6 +42,16 @@ namespace hal {
             if (prog.isEmpty())
                 return abortOnError();
 
+
+            QTextStream xout(stdout, QIODevice::WriteOnly);
+            int count = 0;
+            for (const std::string& s : mEngine->commandLine(mLineIndex))
+            {
+
+                xout << QString("engine command line[%1] <%2>").arg(count++).arg(s.c_str()) << "\n";
+                xout.flush();
+            }
+
             mProcess = new QProcess;
             mProcess->setWorkingDirectory(QString::fromStdString(mEngine->directory()));
             mProcess->start(prog, args);
@@ -48,7 +59,16 @@ namespace hal {
             if (!mProcess->waitForStarted())
                 return abortOnError();
 
-            if (!mProcess->waitForFinished(-1))
+            bool success = mProcess->waitForFinished(-1);
+
+            xout << "process stdout......\n";
+            xout << mProcess->readAllStandardOutput();
+            xout << "\n--------------------\n";
+            xout << "process stderr......\n";
+            xout << mProcess->readAllStandardError();
+            xout << "\n--------------------\n";
+
+            if (!success)
                 return abortOnError();
 
             if (mProcess->exitStatus() != QProcess::NormalExit || mProcess->exitCode() != 0)
