@@ -29,10 +29,9 @@ namespace verilator {
         std::vector<std::string> get_vector_for_const_char(const char** txt)
         {
             std::vector<std::string> retval;
-            const char* s = *txt;
-            while (s) {
-                retval.push_back(std::string(s));
-                s++;
+            for (int i=0; txt[i]; i++)
+            {
+                retval.push_back(std::string(txt[i]));
             }
             return retval;
         }
@@ -67,9 +66,22 @@ namespace verilator {
 
         m_simulator_dir = directory();
         m_design_name = m_partial_netlist->get_design_name();
+        if (m_design_name.empty())
+        {
+            m_design_name = "dummy";
+            log_warning("verilator", "No design name for partial metlist, set to '{}'.", m_design_name);
+        }
+        else
+            std::cerr << "m_design_name = <" << m_design_name << ">" << std::endl;
 
-        std::filesystem::path provided_models = "/Users/eve/hal/plugins/real_world_reversing/simulation_models/";
         std::filesystem::path netlist_verilog = m_simulator_dir / std::string(m_partial_netlist->get_design_name() + ".v");
+
+        std::filesystem::path provided_models;
+        auto it = mProperties.find(std::string("provided_models"));
+        if (it == mProperties.end())
+            log_warning("verilator", "Mandatory property 'provided_models' not set (use set_engine_property method to assign).");
+        else
+            provided_models = it->second;
 
         // todo: delete folder if not empty
         if (std::filesystem::exists(m_simulator_dir)) {
@@ -142,8 +154,10 @@ namespace verilator {
         case 0: {
             const char* cl[] = { "verilator", "-I.", "-Wall", "-Wno-fatal", "--MMD", "-trace", "-y", "gate_definitions/",
                 "--Mdir", "obj_dir", "--exe", "-cc", "-DSIM_VERILATOR", "--trace-depth", "2",
-                "testbench.cpp", std::string(m_design_name + ".v").c_str(), nullptr };
-            return converter::get_vector_for_const_char(cl);
+                "testbench.cpp", nullptr};
+            std::vector retval = converter::get_vector_for_const_char(cl);
+            retval.push_back(std::string(m_design_name + ".v"));
+            return retval;
         } break;
         case 1: {
             const char* cl[] = { "make", "--no-print-directory", "-C", "obj_dir/", "-f", std::string("V" + m_design_name + ".mk").c_str(), nullptr };

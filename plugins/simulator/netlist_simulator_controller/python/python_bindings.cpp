@@ -289,6 +289,12 @@ namespace hal
                 :rtype: str
         )");
 
+        py_simulation_engine.def("set_engine_property", &SimulationEngine::set_engine_property, py::arg("key"), py::arg("value"), R"(
+                Set property value for engines internal use.
+                :param str key: The property name.
+                :param str value: The property value.
+        )");
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE

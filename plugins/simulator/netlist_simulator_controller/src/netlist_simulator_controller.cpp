@@ -221,6 +221,20 @@ namespace hal
             return false;
         }
 
+        SimulationEngineScripted* sev = dynamic_cast<SimulationEngineScripted*>(mSimulationEngine);
+        if (sev)
+        {
+            int nlines = sev->numberCommandLines();
+            for (int iline=0; iline<nlines; iline++)
+            {
+                int count = 0;
+                for (const std::string& s : sev->commandLine(0))
+                {
+                    qDebug() << QString("engine command line[%1,%2] <%3>").arg(iline).arg(count++).arg(s.c_str());
+                }
+            }
+        }
+
         if (!mSimulationEngine->run(this))
         {
             log_warning("sim_controller", "simulation engine error during startup.");

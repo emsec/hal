@@ -38,6 +38,11 @@ namespace hal {
         mState = Failed;
     }
 
+    void SimulationEngine::set_engine_property(const std::string& key, const std::string& value)
+    {
+        mProperties[key] = value;
+    }
+
     SimulationEngineEventDriven::SimulationEngineEventDriven(const std::string& nam)
         : SimulationEngine(nam), mSimulationInput(nullptr)
     {

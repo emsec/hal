@@ -22,6 +22,7 @@ namespace hal {
         bool mCanShareMemory;
         std::string mResultFilename;
         State mState;
+        std::unordered_map<std::string,std::string> mProperties;
         QTemporaryDir* mTempDir;
     public:
         SimulationEngine(const std::string& nam);
@@ -110,6 +111,14 @@ namespace hal {
          * aborted. Engine might want to do some final clean up.
          */
         virtual void failed();
+
+        /**
+         * Set property which can be evaluated by engine
+         *
+         * @param key property name
+         * @param value property value
+         */
+        virtual void set_engine_property(const std::string& key, const std::string& value);
     };
 
     class SimulationEngineEventDriven : public SimulationEngine
