@@ -4,7 +4,7 @@
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 
-#include "vcd_viewer/vcd_serializer.h"
+#include "netlist_simulator_controller/vcd_serializer.h"
 #include "vcd_viewer/gate_selection_dialog.h"
 #include "vcd_viewer/plugin_vcd_viewer.h"
 #include "vcd_viewer/clock_set_dialog.h"

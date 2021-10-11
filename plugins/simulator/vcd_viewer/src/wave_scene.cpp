@@ -3,7 +3,7 @@
 #include "netlist_simulator_controller/wave_data.h"
 #include "vcd_viewer/wave_cursor.h"
 #include "vcd_viewer/wave_timescale.h"
-#include "vcd_viewer/vcd_serializer.h"
+#include "netlist_simulator_controller/vcd_serializer.h"
 #include <QDebug>
 
 namespace hal {
