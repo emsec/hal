@@ -17,6 +17,7 @@
 #include <QFile>
 #include <QDate>
 #include <QDebug>
+#include <QTextStream>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
@@ -222,15 +223,18 @@ namespace hal
         }
 
         SimulationEngineScripted* sev = dynamic_cast<SimulationEngineScripted*>(mSimulationEngine);
+        QTextStream xout(stdout, QIODevice::WriteOnly);
         if (sev)
         {
             int nlines = sev->numberCommandLines();
             for (int iline=0; iline<nlines; iline++)
             {
                 int count = 0;
-                for (const std::string& s : sev->commandLine(0))
+                for (const std::string& s : sev->commandLine(iline))
                 {
-                    qDebug() << QString("engine command line[%1,%2] <%3>").arg(iline).arg(count++).arg(s.c_str());
+                
+                    xout << QString("engine command line[%1,%2] <%3>").arg(iline).arg(count++).arg(s.c_str()) << "\n";
+                    xout.flush();
                 }
             }
         }
