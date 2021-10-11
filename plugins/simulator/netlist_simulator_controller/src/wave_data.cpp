@@ -111,20 +111,32 @@ namespace hal {
         return true;
     }
 
-    int WaveData::tValue(float t) const
+    QMap<u64,int>::const_iterator WaveData::timeIterator(float t) const
     {
-        if (t<0) return 0;
-        auto it = upperBound((int)floor(t));
-        if (it != constBegin()) --it;
+        if (t<0) return constEnd();
+        QMap<u64,int>::const_iterator retval = upperBound((u64)floor(t));
+        if (retval != constBegin()) --retval;
+        return retval;
+    }
+
+    int WaveData::intValue(float t) const
+    {
+        QMap<u64,int>::const_iterator it = timeIterator(t);
         return it.value();
     }
 
-    QString WaveData::textValue(const QMap<u64,int>::const_iterator& it) const
+    char WaveData::charValue(float t) const
     {
-        if (it == constEnd()) return QString();
+        QMap<u64,int>::const_iterator it = timeIterator(t);
+        return charValue(it);
+    }
+
+    char WaveData::charValue(const QMap<u64,int>::const_iterator& it) const
+    {
+        if (it == constEnd()) return '\0';
         switch (it.value()) {
-        case -2 : return "z";
-        case -1 : return "x";
+        case -2 : return 'z';
+        case -1 : return 'x';
         case 0:
         case 1:
         case 2:
@@ -133,9 +145,9 @@ namespace hal {
         case 5:
         case 6:
         case 7:
-            return QString() + (char) ('0' + it.value());
+            return (char) ('0' + it.value());
         }
-        return QString();
+        return '\0';
     }
 
     WaveDataList::~WaveDataList()

@@ -21,6 +21,8 @@ namespace hal {
         u32 mId;
         QString mName;
         NetType mNetType;
+
+        QMap<u64,int>::const_iterator timeIterator(float t) const;
     public:
         WaveData(u32 id_, const QString& nam, NetType tp = RegularNet,
                  const QMap<u64,int>& other = QMap<u64,int>() );
@@ -28,11 +30,12 @@ namespace hal {
         u32     id()      const { return mId; }
         QString name()    const { return mName; }
         NetType netType() const { return mNetType; }
-        int tValue(float t) const;
+        int intValue(float t) const;
         void setStartvalue(int val);
         void insertBooleanValue(u64 t, BooleanFunction::Value bval);
         bool insertToggleTime(u64 t);
-        QString textValue(const QMap<u64,int>::const_iterator& it) const;
+        char charValue(float t) const;
+        char charValue(const QMap<u64,int>::const_iterator& it) const;
 //        static WaveData* simulationResultFactory(Net* n, const NetlistSimulator* sim);
     };
 

@@ -169,7 +169,7 @@ namespace hal {
             const WaveData* wd = mWaveScene->waveData(i);
             Net* n = gNetlist->get_net_by_id(wd->id());
             if (!n) continue;
-            int tval = wd->tValue(xpos);
+            int tval = wd->intValue(xpos);
             if (tval < -1 || tval > 1) continue;
             netState[tval+1].insert(n);
         }
@@ -197,7 +197,7 @@ namespace hal {
         if (wl->state()>=2) return;
         QPoint pos = mWaveView->mapFromScene(QPointF(xpos,mWaveScene->yPosition(dataIndex)-1));
         pos.setX(3);
-        wl->setValue(mWaveScene->waveData(dataIndex)->tValue(xpos));
+        wl->setValue(mWaveScene->waveData(dataIndex)->intValue(xpos));
         wl->move(pos);
     }
 
