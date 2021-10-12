@@ -218,37 +218,58 @@ namespace hal
          * ################################################################
          */
 
+        struct Port
+        {
+            Port(const std::string& name, Net* net) : m_name(name), m_net(net)
+            {
+            }
+
+            std::string m_name;
+            Net* m_net;
+            PinDirection m_direction;
+            PinType m_type = PinType::none;
+            std::pair<std::string, u32> m_group;
+        };
+
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Set the name of the port corresponding to the specified input net.
          *
          * @param[in] input_net - The input net.
          * @param[in] port_name - The input port name.
          * @returns True on success, false otherwise.
          */
-        bool set_input_port_name(Net* input_net, const std::string& port_name);
+        [[deprecated("Will be removed in a future version. Use add_port() instead.")]] bool set_input_port_name(Net* input_net, const std::string& port_name);
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the name of the port corresponding to the specified input net.
          *
          * @param[in] input_net - The input net.
          * @returns The input port name.
          */
-        std::string get_input_port_name(Net* input_net) const;
+        [[deprecated("Will be removed in a future version. Use get_port_by_net() instead.")]] std::string get_input_port_name(Net* input_net) const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the input net of the port corresponding to the specified port name.
          *
          * @param[in] port_name - The input port name.
          * @returns The input net or a nullptr.
          */
-        Net* get_input_port_net(const std::string& port_name) const;
+        [[deprecated("Will be removed in a future version. Use get_port_by_name() instead.")]] Net* get_input_port_net(const std::string& port_name) const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the mapping of all input nets to their corresponding port names.
          *
          * @returns The map from input net to port name.
          */
-        const std::map<Net*, std::string>& get_input_port_names() const;
+        [[deprecated("Will be removed in a future version. Use get_ports() instead.")]] std::map<Net*, std::string> get_input_port_names() const;
 
         /**
          * Set the next free input port ID to the given value.
@@ -265,36 +286,44 @@ namespace hal
         u32 get_next_input_port_id() const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Set the name of the port corresponding to the specified output net.
          *
          * @param[in] output_net - The output net.
          * @param[in] port_name - The output port name.
          * @returns True on success, false otherwise.
          */
-        bool set_output_port_name(Net* output_net, const std::string& port_name);
+        [[deprecated("Will be removed in a future version. Use add_port() instead.")]] bool set_output_port_name(Net* output_net, const std::string& port_name);
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the name of the port corresponding to the specified output net.
          *
          * @param[in] output_net - The output net.
          * @returns The output port name.
          */
-        std::string get_output_port_name(Net* output_net) const;
+        [[deprecated("Will be removed in a future version. Use get_port_by_net() instead.")]] std::string get_output_port_name(Net* output_net) const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the output net of the port corresponding to the specified port name.
          *
          * @param[in] port_name - The output port name.
          * @returns The output net or a nullptr.
          */
-        Net* get_output_port_net(const std::string& port_name) const;
+        [[deprecated("Will be removed in a future version. Use get_port_by_name() instead.")]] Net* get_output_port_net(const std::string& port_name) const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the mapping of all output nets to their corresponding port names.
          *
          * @returns The map from output net to port name.
          */
-        const std::map<Net*, std::string>& get_output_port_names() const;
+        [[deprecated("Will be removed in a future version. Use get_ports() instead.")]] std::map<Net*, std::string> get_output_port_names() const;
 
         /**
          * Set the next free output port ID to the given value.
@@ -317,35 +346,18 @@ namespace hal
 
         bool add_ports(const std::vector<std::pair<Net*, std::string>>& ports, PinType type = PinType::none);
 
-        const std::vector<std::pair<Net*, std::string>>& get_ports() const;
+        const std::vector<Port*>& get_ports() const;
+        std::vector<Port*> get_ports(const std::function<bool(Port*)>& filter) const;
 
-        std::string get_port_name(Net* port_net) const;
+        Port* get_port_by_net(Net* port_net) const;
 
-        Net* get_port_net(const std::string& port_name) const;
+        Port* get_port_by_name(const std::string& port_name) const;
 
-        PinDirection get_port_direction(const std::string& port_name) const;
+        bool assign_port_group(const std::string& group, const std::vector<std::pair<u32, Port*>>& port_indices);
 
-        const std::unordered_map<std::string, PinDirection>& get_port_directions() const;
+        const std::unordered_map<std::string, std::vector<Port*>>& get_port_groups() const;
 
-        std::unordered_set<std::string> get_ports_of_direction(PinDirection direction) const;
-
-        bool assign_port_type(const std::string& port_name, PinType type);
-
-        PinType get_port_type(const std::string& port_name) const;
-
-        const std::unordered_map<std::string, PinType>& get_port_types() const;
-
-        std::unordered_set<std::string> get_ports_of_type(PinType type) const;
-
-        bool assign_port_group(const std::string& group, const std::vector<std::pair<u32, std::string>>& ports);
-
-        std::string get_port_group(const std::string& port_name) const;
-
-        const std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>>& get_port_groups() const;
-
-        std::vector<std::pair<u32, std::string>> get_ports_of_group(const std::string& group) const;
-
-        std::string get_port_of_group_at_index(const std::string& group, const u32 index) const;
+        std::vector<Port*> get_ports_of_group(const std::string& group) const;
 
         // TODO end new functions
 
@@ -411,10 +423,12 @@ namespace hal
         Module(const Module&) = delete;               //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
 
+        // TODO new functions below
+        void create_port(const std::string& port_name, Net* port_net, PinDirection direction, PinType type = PinType::none) const;
+        bool remove_port(Port* port) const;
         PinDirection determine_port_direction(Net* net) const;
-        bool change_port_name(std::pair<Net*, std::string>* port_ptr, const std::string& new_name, PinDirection new_direction) const;
-        std::pair<Net*, std::string> create_port(Net* port_net, const std::string& port_name, PinDirection direction, PinType type) const;
         void update_ports() const;
+        // TODO new functions above
 
         std::string m_name;
         std::string m_type;
@@ -429,46 +443,29 @@ namespace hal
         std::unordered_map<u32, Module*> m_submodules_map;
         std::vector<Module*> m_submodules;
 
-        /* TODO remove old port names */
-
-        mutable std::set<Net*> m_named_input_nets;                        // ordering necessary, cannot be replaced with unordered_set
-        mutable std::set<Net*> m_named_output_nets;                       // ordering necessary, cannot be replaced with unordered_set
-        mutable std::map<Net*, std::string> m_input_net_to_port_name;     // ordering necessary, cannot be replaced with unordered_map
-        mutable std::map<Net*, std::string> m_output_net_to_port_name;    // ordering necessary, cannot be replaced with unordered_map
-        mutable std::unordered_set<std::string> m_input_port_names;
-        mutable std::unordered_set<std::string> m_output_port_names;
-
         // ports
-        mutable u32 m_next_input_port_id  = 0;
-        mutable u32 m_next_output_port_id = 0;
-        mutable std::vector<std::pair<Net*, std::string>> m_ports;
-        mutable std::unordered_map<Net*, std::pair<Net*, std::string>*> m_net_to_port;
-        mutable std::unordered_map<std::string, std::pair<Net*, std::string>*> m_name_to_port;
-
-        // port directions
-        mutable std::unordered_map<std::string, PinDirection> m_port_name_to_direction;
-        mutable std::unordered_map<PinDirection, std::unordered_set<std::string>> m_port_direction_to_names;
-
-        // port types
-        mutable std::unordered_map<std::string, PinType> m_port_name_to_type;
-        mutable std::unordered_map<PinType, std::unordered_set<std::string>> m_port_type_to_names;
-
-        // port groups
-        mutable std::unordered_map<std::string, std::string> m_port_name_to_group;
-        mutable std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> m_port_groups;
-        mutable std::unordered_map<std::string, std::unordered_map<u32, std::string>> m_port_group_indices;
+        mutable bool m_ports_dirty;
+        mutable u32 m_next_input_index  = 0;
+        mutable u32 m_next_inout_index  = 0;
+        mutable u32 m_next_output_index = 0;
+        mutable std::vector<std::unique_ptr<Port>> m_ports;
+        mutable std::set<Net*> m_port_nets;
+        mutable std::vector<Port*> m_ports_raw;
+        mutable std::unordered_map<Net*, Port*> m_net_to_port;
+        mutable std::unordered_map<std::string, Port*> m_name_to_port;
+        mutable std::unordered_map<std::string, std::vector<Port*>> m_port_groups;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;
         std::vector<Gate*> m_gates;
 
-        mutable bool m_nets_dirty;
+        mutable bool m_nets_dirty = true;
         mutable std::vector<Net*> m_nets;
-        mutable bool m_input_nets_dirty;
+        mutable bool m_input_nets_dirty = true;
         mutable std::vector<Net*> m_input_nets;
-        mutable bool m_output_nets_dirty;
+        mutable bool m_output_nets_dirty = true;
         mutable std::vector<Net*> m_output_nets;
-        mutable bool m_internal_nets_dirty;
+        mutable bool m_internal_nets_dirty = true;
         mutable std::vector<Net*> m_internal_nets;
 
         EventHandler* m_event_handler;
