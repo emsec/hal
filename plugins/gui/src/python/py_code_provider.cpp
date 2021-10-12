@@ -1,5 +1,13 @@
 #include "gui/python/py_code_provider.h"
 
+//------
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "gui/gui_globals.h"
+
 namespace hal
 {
     const QString PyCodeProvider::gateCodePrefix = "netlist.get_gate_by_id(%1)";
@@ -48,9 +56,22 @@ namespace hal
         return buildPyCode(gateCodePrefix, suffix, gateId);
     }
 
-    QString PyCodeProvider::pyCodeGateClearPresetBehavior(u32 gateId)
-    {
-        return pyCodeGateType(gateId) + ".get_clear_preset_behavior()";
+    QString PyCodeProvider::pyCodeGateAsyncSetResetBehavior(u32 gateId)
+    {   
+        //logic (ff/latch check) can also be done beforehand to remove any logic from
+        //this class, but could "blow up" the code if many other places need to call this function
+
+        GateType* gt = gNetlist->get_gate_by_id(gateId)->get_type();
+        QString pyString = pyCodeGateType(gateId) + ".get_component(filter = lambda f: hal_py.%1.is_class_of(f)).get_async_set_reset_behavior()";
+
+        if(FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); }); ff_component != nullptr)
+            pyString = pyString.arg("FFComponent");
+        else if(LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* c) { return LatchComponent::is_class_of(c); }); latch_component != nullptr)
+            pyString = pyString.arg("LatchComponent");
+        else
+            pyString = "";
+
+        return pyString;
     }
 
     QString PyCodeProvider::pyCodeGateDataMap(u32 gateId)

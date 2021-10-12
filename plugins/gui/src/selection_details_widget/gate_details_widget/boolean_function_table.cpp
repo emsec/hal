@@ -80,7 +80,7 @@ namespace hal {
         else
         {
             menuText = "Extract clear-preset behavior as python code (copy to clipboard)";
-            pythonCode = PyCodeProvider::pyCodeGateClearPresetBehavior(entry->getGateId());
+            pythonCode = PyCodeProvider::pyCodeGateAsyncSetResetBehavior(entry->getGateId());
         }
         menu.addAction(QIcon(":/icons/python"), menuText,
            [pythonCode]()
