@@ -829,4 +829,367 @@ namespace hal
     {
         return m_next_output_port_id;
     }
+
+    PinDirection Module::determine_port_direction(Net* net) const
+    {
+        PinDirection direction = PinDirection::none;
+
+        const std::vector<Net*>& input_nets  = get_input_nets();
+        const std::vector<Net*>& output_nets = get_output_nets();
+
+        if (std::find(input_nets.begin(), input_nets.end(), net) != input_nets.end())
+        {
+            direction = PinDirection::input;
+        }
+        if (std::find(output_nets.begin(), output_nets.end(), net) != output_nets.end())
+        {
+            if (direction == PinDirection::input)
+            {
+                direction = PinDirection::inout;
+            }
+            else
+            {
+                direction = PinDirection::output;
+            }
+        }
+
+        return direction;
+    }
+
+    bool Module::change_port_name(std::pair<Net*, std::string>* port_ptr, const std::string& new_name, PinDirection new_direction) const
+    {
+        Net* port_net           = port_ptr->first;
+        std::string old_name    = port_ptr->second;
+        *port_ptr               = std::make_pair(port_net, new_name);
+        m_net_to_port[port_net] = port_ptr;
+        m_name_to_port.erase(old_name);
+        m_name_to_port[new_name] = port_ptr;
+
+        PinDirection old_direction         = m_port_name_to_direction.at(old_name);
+        m_port_name_to_direction[new_name] = new_direction;
+        m_port_name_to_direction.erase(old_name);
+        m_port_direction_to_names.at(old_direction).erase(old_name);
+        m_port_direction_to_names[new_direction].insert(new_name);
+
+        PinType type                  = m_port_name_to_type.at(old_name);
+        m_port_name_to_type[new_name] = type;
+        m_port_name_to_type.erase(old_name);
+        m_port_type_to_names.at(type).erase(old_name);
+        m_port_type_to_names[type].insert(new_name);
+
+        std::string group              = m_port_name_to_group.at(old_name);
+        m_port_name_to_group[new_name] = group;
+        m_port_name_to_group.erase(old_name);
+        m_port_groups;    // TODO here
+        m_port_group_indices;
+    }
+
+    std::pair<Net*, std::string> Module::create_port(Net* port_net, const std::string& port_name, PinDirection direction, PinType type) const
+    {
+        m_ports.push_back(std::make_pair(port_net, port_name));
+        std::pair<Net*, std::string>* port_ptr = &(m_ports.back());
+        m_net_to_port[port_net]                = port_ptr;
+        m_name_to_port[port_name]              = port_ptr;
+
+        m_port_name_to_direction[port_name] = direction;
+        m_port_direction_to_names[direction].insert(port_name);
+
+        m_port_name_to_type[port_name] = type;
+        m_port_type_to_names[type].insert(port_name);
+    }
+
+    void Module::update_ports() const
+    {
+        // TODO
+    }
+
+    bool Module::add_port(Net* port_net, const std::string& port_name, PinType type)
+    {
+        if (port_net == nullptr)
+        {
+            log_error("module", "nullptr given as net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
+            return false;
+        }
+
+        if (port_name.empty())
+        {
+            log_error("module",
+                      "trying to assign empty port name for net '{}' with ID {} to module '{}' with ID {} in netlist with ID {}.",
+                      port_net->get_name(),
+                      port_net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return false;
+        }
+
+        if (m_name_to_port.find(port_name) != m_name_to_port.end())
+        {
+            log_debug("module",
+                      "port name '{}' already exists within module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
+                      port_name,
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return false;
+        }
+
+        PinDirection direction = determine_port_direction(port_net);
+        if (direction == PinDirection::none)
+        {
+            log_debug("module",
+                      "net '{}' with ID {} is not a port net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
+                      port_net->get_name(),
+                      port_net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return false;
+        }
+
+        std::pair<Net*, std::string> port = std::make_pair(port_net, port_name);
+        std::pair<Net*, std::string>* port_ptr;
+
+        if (auto it = m_net_to_port.find(port_net); it != m_net_to_port.end())
+        {
+            // change existing port
+            change_port_name(it->second, port_name, direction);
+        }
+        else
+        {
+            create_port(port_net, port_name, direction, type);
+        }
+
+        m_event_handler->notify(ModuleEvent::event::port_changed, this, port_net->get_id());
+
+        return true;
+    }
+
+    bool Module::add_ports(const std::vector<std::pair<Net*, std::string>>& ports, PinType type)
+    {
+        bool success = true;
+
+        for (const auto& [port_net, port_name] : ports)
+        {
+            success &= add_port(port_net, port_name, type);
+        }
+
+        return success;
+    }
+
+    const std::vector<std::pair<Net*, std::string>>& Module::get_ports() const
+    {
+        update_ports();
+
+        return m_ports;
+    }
+
+    std::string Module::get_port_name(Net* port_net) const
+    {
+        update_ports();
+
+        if (const auto it = m_net_to_port.find(port_net); it != m_net_to_port.end())
+        {
+            return it->second->second;
+        }
+
+        log_debug("module",
+                  "net '{}' with ID {} is not connected to a port of module '{}' with ID {} in netlist with ID {}.",
+                  port_net->get_name(),
+                  port_net->get_id(),
+                  m_name,
+                  m_id,
+                  m_internal_manager->m_netlist->get_id());
+        return "";
+    }
+
+    Net* Module::get_port_net(const std::string& port_name) const
+    {
+        update_ports();
+
+        if (auto it = m_name_to_port.find(port_name); it != m_name_to_port.end())
+        {
+            return it->second->first;
+        }
+
+        log_debug("module", "'{}' is not a port of module '{}' with ID {} in netlist with ID {}.", port_name, m_name, m_id, m_internal_manager->m_netlist->get_id());
+        return nullptr;
+    }
+
+    PinDirection Module::get_port_direction(const std::string& port_name) const
+    {
+        update_ports();
+
+        if (const auto it = m_port_name_to_direction.find(port_name); it != m_port_name_to_direction.end())
+        {
+            return it->second;
+        }
+
+        return PinDirection::none;
+    }
+
+    const std::unordered_map<std::string, PinDirection>& Module::get_port_directions() const
+    {
+        update_ports();
+
+        return m_port_name_to_direction;
+    }
+
+    std::unordered_set<std::string> Module::get_ports_of_direction(PinDirection direction) const
+    {
+        update_ports();
+
+        if (const auto it = m_port_direction_to_names.find(direction); it != m_port_direction_to_names.end())
+        {
+            return it->second;
+        }
+
+        return {};
+    }
+
+    bool Module::assign_port_type(const std::string& port_name, PinType type)
+    {
+        update_ports();
+
+        if (m_name_to_port.find(port_name) != m_name_to_port.end())
+        {
+            if (const auto it = m_port_name_to_type.find(port_name); it != m_port_name_to_type.end())
+            {
+                m_port_type_to_names.at(it->second).erase(port_name);
+            }
+            m_port_name_to_type[port_name] = type;
+            m_port_type_to_names[type].insert(port_name);
+            return true;
+        }
+
+        log_error("module",
+                  "could not assign type '{}' to port '{}' of module '{}' with ID {} in netlist with ID {}.",
+                  enum_to_string<PinType>(type),
+                  port_name,
+                  m_name,
+                  m_id,
+                  m_internal_manager->m_netlist->get_id());
+        return false;
+    }
+
+    PinType Module::get_port_type(const std::string& port_name) const
+    {
+        update_ports();
+
+        if (const auto it = m_port_name_to_type.find(port_name); it != m_port_name_to_type.end())
+        {
+            return it->second;
+        }
+
+        return PinType::none;
+    }
+
+    const std::unordered_map<std::string, PinType>& Module::get_port_types() const
+    {
+        update_ports();
+
+        return m_port_name_to_type;
+    }
+
+    std::unordered_set<std::string> Module::get_ports_of_type(PinType type) const
+    {
+        update_ports();
+
+        if (const auto it = m_port_type_to_names.find(type); it != m_port_type_to_names.end())
+        {
+            return it->second;
+        }
+
+        return {};
+    }
+
+    bool Module::assign_port_group(const std::string& group, const std::vector<std::pair<u32, std::string>>& ports)
+    {
+        update_ports();
+
+        if (m_port_groups.find(group) != m_port_groups.end())
+        {
+            log_error("module",
+                      "port group '{}' could not be added to module '{}' with ID {} in netlist with ID {} since a port group with the same name does already exists.",
+                      group,
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return false;
+        }
+
+        for (const auto& port : ports)
+        {
+            if (m_name_to_port.find(port.second) == m_name_to_port.end())
+            {
+                log_error(
+                    "module", "could not assign port '{}' to group '{}' of module '{}' with ID {} in netlist with ID {}.", port.second, group, m_name, m_id, m_internal_manager->m_netlist->get_id());
+                return false;
+            }
+        }
+
+        m_port_groups[group] = ports;
+
+        std::unordered_map<u32, std::string> index_to_port_name;
+        for (const auto& [index, port_name] : ports)
+        {
+            index_to_port_name[index]       = port_name;
+            m_port_name_to_group[port_name] = group;
+        }
+
+        m_port_group_indices[group] = index_to_port_name;
+        return true;
+    }
+
+    std::string Module::get_port_group(const std::string& port_name) const
+    {
+        update_ports();
+
+        if (const auto it = m_port_name_to_group.find(port_name); it != m_port_name_to_group.end())
+        {
+            return it->second;
+        }
+
+        return "";
+    }
+
+    const std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>>& Module::get_port_groups() const
+    {
+        update_ports();
+
+        return m_port_groups;
+    }
+
+    std::vector<std::pair<u32, std::string>> Module::get_ports_of_group(const std::string& group) const
+    {
+        update_ports();
+
+        if (const auto it = m_port_groups.find(group); it != m_port_groups.end())
+        {
+            return it->second;
+        }
+
+        log_error("module", "port group with name '{}' does not exist.", group);
+        return {};
+    }
+
+    std::string Module::get_port_of_group_at_index(const std::string& group, const u32 index) const
+    {
+        update_ports();
+
+        if (const auto group_it = m_port_group_indices.find(group); group_it != m_port_group_indices.end())
+        {
+            const std::unordered_map<u32, std::string>& index_to_port = group_it->second;
+            if (const auto index_it = index_to_port.find(index); index_it != index_to_port.end())
+            {
+                return index_it->second;
+            }
+
+            log_error("module", "port group with name '{}' does not have a port with index {}.", group, index);
+            return "";
+        }
+
+        log_error("module", "port group with name '{}' does not exist.", group);
+        return "";
+    }
 }    // namespace hal

@@ -26,15 +26,19 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/data_container.h"
 #include "hal_core/netlist/event_system/event_handler.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/utilities/enums.h"
 
 #include <functional>
 #include <map>
 #include <memory>
-#include <set>
 #include <string>
 #include <tuple>
 #include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace hal
 {
@@ -202,6 +206,19 @@ namespace hal
         const std::vector<Net*>& get_internal_nets() const;
 
         /**
+         * Mark all internal caches as dirty. Caches are primarily used for the nets connected to the gates of a module.
+         * 
+         * @param[in] is_dirty - True to mark caches as dirty, false otherwise.
+         */
+        void set_cache_dirty(bool is_dirty = true);
+
+        /*
+         * ################################################################
+         *      port functions
+         * ################################################################
+         */
+
+        /**
          * Set the name of the port corresponding to the specified input net.
          *
          * @param[in] input_net - The input net.
@@ -293,12 +310,44 @@ namespace hal
          */
         u32 get_next_output_port_id() const;
 
-        /**
-         * Mark all internal caches as dirty. Caches are primarily used for the nets connected to the gates of a module.
-         * 
-         * @param[in] is_dirty - True to mark caches as dirty, false otherwise.
-         */
-        void set_cache_dirty(bool is_dirty = true);
+        // TODO old above
+        // TODO add Pybind + docs below
+
+        bool add_port(Net* port_net, const std::string& port_name, PinType type = PinType::none);
+
+        bool add_ports(const std::vector<std::pair<Net*, std::string>>& ports, PinType type = PinType::none);
+
+        const std::vector<std::pair<Net*, std::string>>& get_ports() const;
+
+        std::string get_port_name(Net* port_net) const;
+
+        Net* get_port_net(const std::string& port_name) const;
+
+        PinDirection get_port_direction(const std::string& port_name) const;
+
+        const std::unordered_map<std::string, PinDirection>& get_port_directions() const;
+
+        std::unordered_set<std::string> get_ports_of_direction(PinDirection direction) const;
+
+        bool assign_port_type(const std::string& port_name, PinType type);
+
+        PinType get_port_type(const std::string& port_name) const;
+
+        const std::unordered_map<std::string, PinType>& get_port_types() const;
+
+        std::unordered_set<std::string> get_ports_of_type(PinType type) const;
+
+        bool assign_port_group(const std::string& group, const std::vector<std::pair<u32, std::string>>& ports);
+
+        std::string get_port_group(const std::string& port_name) const;
+
+        const std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>>& get_port_groups() const;
+
+        std::vector<std::pair<u32, std::string>> get_ports_of_group(const std::string& group) const;
+
+        std::string get_port_of_group_at_index(const std::string& group, const u32 index) const;
+
+        // TODO end new functions
 
         /*
          * ################################################################
@@ -362,6 +411,11 @@ namespace hal
         Module(const Module&) = delete;               //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
 
+        PinDirection determine_port_direction(Net* net) const;
+        bool change_port_name(std::pair<Net*, std::string>* port_ptr, const std::string& new_name, PinDirection new_direction) const;
+        std::pair<Net*, std::string> create_port(Net* port_net, const std::string& port_name, PinDirection direction, PinType type) const;
+        void update_ports() const;
+
         std::string m_name;
         std::string m_type;
 
@@ -375,15 +429,34 @@ namespace hal
         std::unordered_map<u32, Module*> m_submodules_map;
         std::vector<Module*> m_submodules;
 
-        /* port names */
-        mutable u32 m_next_input_port_id  = 0;
-        mutable u32 m_next_output_port_id = 0;
+        /* TODO remove old port names */
+
         mutable std::set<Net*> m_named_input_nets;                        // ordering necessary, cannot be replaced with unordered_set
         mutable std::set<Net*> m_named_output_nets;                       // ordering necessary, cannot be replaced with unordered_set
         mutable std::map<Net*, std::string> m_input_net_to_port_name;     // ordering necessary, cannot be replaced with unordered_map
         mutable std::map<Net*, std::string> m_output_net_to_port_name;    // ordering necessary, cannot be replaced with unordered_map
         mutable std::unordered_set<std::string> m_input_port_names;
         mutable std::unordered_set<std::string> m_output_port_names;
+
+        // ports
+        mutable u32 m_next_input_port_id  = 0;
+        mutable u32 m_next_output_port_id = 0;
+        mutable std::vector<std::pair<Net*, std::string>> m_ports;
+        mutable std::unordered_map<Net*, std::pair<Net*, std::string>*> m_net_to_port;
+        mutable std::unordered_map<std::string, std::pair<Net*, std::string>*> m_name_to_port;
+
+        // port directions
+        mutable std::unordered_map<std::string, PinDirection> m_port_name_to_direction;
+        mutable std::unordered_map<PinDirection, std::unordered_set<std::string>> m_port_direction_to_names;
+
+        // port types
+        mutable std::unordered_map<std::string, PinType> m_port_name_to_type;
+        mutable std::unordered_map<PinType, std::unordered_set<std::string>> m_port_type_to_names;
+
+        // port groups
+        mutable std::unordered_map<std::string, std::string> m_port_name_to_group;
+        mutable std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> m_port_groups;
+        mutable std::unordered_map<std::string, std::unordered_map<u32, std::string>> m_port_group_indices;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;
