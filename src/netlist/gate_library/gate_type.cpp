@@ -198,7 +198,7 @@ namespace hal
             return it->second;
         }
 
-        return PinDirection::internal;
+        return PinDirection::none;
     }
 
     const std::unordered_map<std::string, PinDirection>& GateType::get_pin_directions() const
@@ -262,7 +262,7 @@ namespace hal
     {
         if (m_pin_groups.find(group) != m_pin_groups.end())
         {
-            log_error("gate_library", "pin group '{}' could not be added to gate type '{}' since a pin group with the same name does already exist.", group, m_name);
+            log_error("gate_library", "pin group '{}' could not be added to gate type '{}' since a pin group with the same name does already exists.", group, m_name);
             return false;
         }
 
