@@ -5,6 +5,7 @@
 #include "gui/docking_system/dock_bar.h"
 #include "gui/export/export_registered_format.h"
 #include "gui/file_manager/file_manager.h"
+#include "gui/gatelibrary_management/gatelibrary_management_dialog.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/logger/logger_widget.h"
@@ -115,11 +116,12 @@ namespace hal
 
         setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
-        mActionNew          = new Action(this);
-        mActionOpen         = new Action(this);
-        mActionSave         = new Action(this);
-        mActionSaveAs       = new Action(this);
-        mActionAbout        = new Action(this);
+        mActionNew                = new Action(this);
+        mActionOpen               = new Action(this);
+        mActionSave               = new Action(this);
+        mActionSaveAs             = new Action(this);
+        mActionGateLibraryManager = new Action(this);
+        mActionAbout              = new Action(this);
 
         mActionStartRecording = new Action(this);
         mActionStopRecording  = new Action(this);
@@ -158,6 +160,7 @@ namespace hal
         mActionOpen->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
         mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
+        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
 
@@ -175,6 +178,7 @@ namespace hal
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
         mMenuFile->addAction(mActionSaveAs);
+        mMenuFile->addAction(mActionGateLibraryManager);
 
         QMenu* menuExport = nullptr;
         for (auto it : netlist_writer_manager::get_writer_extensions())
@@ -238,6 +242,7 @@ namespace hal
         mActionOpen->setText("Open");
         mActionSave->setText("Save");
         mActionSaveAs->setText("Save As");
+        mActionGateLibraryManager->setText("Gate Library Manager");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
@@ -279,21 +284,17 @@ namespace hal
         connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
         connect(mActionOpen, &Action::triggered, this, &MainWindow::handleActionOpen);
         connect(mActionAbout, &Action::triggered, this, &MainWindow::handleActionAbout);
-        //        connect(mActionSchedule, &Action::triggered, this, &MainWindow::toggleSchedule);
         connect(mActionSettings, &Action::triggered, this, &MainWindow::toggleSettings);
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
-        //debug
+        connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
 
         connect(mActionStartRecording, &Action::triggered, this, &MainWindow::handleActionStartRecording);
         connect(mActionStopRecording, &Action::triggered, this, &MainWindow::handleActionStopRecording);
         connect(mActionPlayMacro, &Action::triggered, this, &MainWindow::handleActionPlayMacro);
-        connect(mActionUndo,
-                &Action::triggered,
-                this,
-                &MainWindow::handleActionUndo);    //        connect(mActionRunSchedule, &Action::triggered, PluginScheduleManager::get_instance(), &PluginScheduleManager::runSchedule);
+        connect(mActionUndo, &Action::triggered, this, &MainWindow::handleActionUndo);
 
         //connect(this, &MainWindow::saveTriggered, gContentManager, &ContentManager::handleSaveTriggered);
         connect(this, &MainWindow::saveTriggered, gGraphContextManager, &GraphContextManager::handleSaveTriggered);
@@ -609,6 +610,8 @@ namespace hal
             mWelcomeScreen->close();
         }
         gPythonContext->updateNetlist();
+
+        mActionGateLibraryManager->setVisible(false);
     }
 
     void MainWindow::handleActionExport()
@@ -621,6 +624,12 @@ namespace hal
         if (erf.queryFilename())
             erf.exportNetlist();
 
+    }
+
+    void MainWindow::handleActionGatelibraryManager()
+    {
+        GatelibraryManagementDialog dialog;
+        dialog.exec();
     }
 
     void MainWindow::handleSaveAsTriggered()
@@ -798,6 +807,8 @@ namespace hal
         mStackedWidget->setCurrentWidget(mWelcomeScreen);
 
         gNetlistRelay->reset();
+
+        mActionGateLibraryManager->setVisible(true);
 
         return true;
     }

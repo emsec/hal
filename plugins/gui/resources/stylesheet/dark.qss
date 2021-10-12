@@ -1296,3 +1296,30 @@ hal--DetailsFrameWidget QPushButton:hover
 {
     background-color : rgba(128, 128, 128, 0.2);
 }
+
+hal--GatelibraryManagementDialog
+{
+    qproperty-loadIconPath  : ":/icons/plus";
+    qproperty-loadIconStyle : "all->#00ff00";
+
+    qproperty-reloadIconPath  : ":/icons/spinner";
+    qproperty-reloadIconStyle : "all->#ffffff";
+
+    qproperty-removeIconPath  : ":/icons/minus";
+    qproperty-removeIconStyle : "all->#ff0000";
+}
+
+hal--GatelibraryManagementDialog hal--Searchbar
+{
+    border    : 1px solid rgb(73, 74, 76);
+}
+
+hal--GatelibraryManagementDialog QTableView
+{
+    background: rgb(30, 30, 30);
+}
+
+hal--GatelibraryManagementDialog QHeaderView::section
+{
+background: rgb(35, 35, 35);
+}
