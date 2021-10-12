@@ -625,22 +625,32 @@ namespace hal
 
     void Module::set_next_input_port_id(u32 id)
     {
-        m_next_input_port_id = id;
+        m_next_input_index = id;
     }
 
-    u32 Module::get_next_input_port_id() const
+    void Module::set_next_inout_port_id(u32 id)
     {
-        return m_next_input_port_id;
+        m_next_inout_index = id;
     }
 
     void Module::set_next_output_port_id(u32 id)
     {
-        m_next_output_port_id = id;
+        m_next_output_index = id;
+    }
+
+    u32 Module::get_next_input_port_id() const
+    {
+        return m_next_input_index;
+    }
+
+    u32 Module::get_next_inout_port_id() const
+    {
+        return m_next_inout_index;
     }
 
     u32 Module::get_next_output_port_id() const
     {
-        return m_next_output_port_id;
+        return m_next_input_index;
     }
 
     void Module::create_port(const std::string& port_name, Net* port_net, PinDirection direction, PinType type) const
@@ -648,15 +658,25 @@ namespace hal
         std::unique_ptr<Port> port_owner = std::make_unique<Port>(port_name, port_net);
         Port* port                       = port_owner.get();
         m_ports.push_back(std::move(port_owner));
+        m_ports_raw.push_back(port);
         m_name_to_port[port_name] = port;
         m_net_to_port[port_net]   = port;
         port->m_direction         = direction;
         m_port_nets.insert(port_net);
     }
 
-    bool Module::remove_port(const std::string& port_name) const
+    void Module::remove_port(Port* port) const
     {
-        // TODO
+        m_port_nets.erase(port->m_net);
+        m_ports_raw.erase(std::find(m_ports_raw.begin(), m_ports_raw.end(), port));
+        m_name_to_port.erase(port->m_name);
+        m_net_to_port.erase(port->m_net);
+        if (!port->m_group.first.empty())
+        {
+            std::vector<Port*>& group_ports = m_port_groups.at(port->m_group.first);
+            group_ports.erase(std::find(group_ports.begin(), group_ports.end(), port));
+        }
+        m_ports.erase(std::find_if(m_ports.begin(), m_ports.end(), [port](const std::unique_ptr<Port>& p) { return p.get() == port; }));
     }
 
     PinDirection Module::determine_port_direction(Net* net) const
@@ -702,7 +722,7 @@ namespace hal
             std::set_difference(m_port_nets.begin(), m_port_nets.end(), current_port_nets.begin(), current_port_nets.end(), std::back_inserter(diff_nets));
             for (Net* port_net : diff_nets)
             {
-                remove_port(get_port_by_net(port_net));
+                remove_port(m_net_to_port.at(port_net));
             }
 
             diff_nets.clear();

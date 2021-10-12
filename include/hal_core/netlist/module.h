@@ -272,20 +272,6 @@ namespace hal
         [[deprecated("Will be removed in a future version. Use get_ports() instead.")]] std::map<Net*, std::string> get_input_port_names() const;
 
         /**
-         * Set the next free input port ID to the given value.
-         * 
-         * @param[in] id - The next input port ID. 
-         */
-        void set_next_input_port_id(u32 id);
-
-        /**
-         * Get the next free input port ID.
-         * 
-         * @returns The next input port ID.
-         */
-        u32 get_next_input_port_id() const;
-
-        /**
          * \deprecated
          * DEPRECATED <br>
          * Set the name of the port corresponding to the specified output net.
@@ -326,18 +312,58 @@ namespace hal
         [[deprecated("Will be removed in a future version. Use get_ports() instead.")]] std::map<Net*, std::string> get_output_port_names() const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
+         * Set the next free input port ID to the given value.
+         * 
+         * @param[in] id - The next input port ID. 
+         */
+        [[deprecated("Will be removed in a future version.")]] void set_next_input_port_id(u32 id);
+
+        /**
+         * \deprecated
+         * DEPRECATED <br>
+         * Set the next free inout port ID to the given value.
+         * 
+         * @param[in] id - The next inout port ID. 
+         */
+        [[deprecated("Will be removed in a future version.")]] void set_next_inout_port_id(u32 id);
+
+        /**
+         * \deprecated
+         * DEPRECATED <br>
          * Set the next free output port ID to the given value.
          * 
          * @param[in] id - The next output port ID. 
          */
-        void set_next_output_port_id(u32 id);
+        [[deprecated("Will be removed in a future version.")]] void set_next_output_port_id(u32 id);
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
+         * Get the next free input port ID.
+         * 
+         * @returns The next input port ID.
+         */
+        [[deprecated("Will be removed in a future version.")]] u32 get_next_input_port_id() const;
+
+        /**
+         * \deprecated
+         * DEPRECATED <br>
+         * Get the next free inout port ID.
+         * 
+         * @returns The next inout port ID.
+         */
+        [[deprecated("Will be removed in a future version.")]] u32 get_next_inout_port_id() const;
+
+        /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the next free output port ID.
          * 
          * @returns The next output port ID.
          */
-        u32 get_next_output_port_id() const;
+        [[deprecated("Will be removed in a future version.")]] u32 get_next_output_port_id() const;
 
         // TODO old above
         // TODO add Pybind + docs below
@@ -425,7 +451,7 @@ namespace hal
 
         // TODO new functions below
         void create_port(const std::string& port_name, Net* port_net, PinDirection direction, PinType type = PinType::none) const;
-        bool remove_port(Port* port) const;
+        void remove_port(Port* port) const;
         PinDirection determine_port_direction(Net* net) const;
         void update_ports() const;
         // TODO new functions above

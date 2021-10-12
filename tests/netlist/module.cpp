@@ -937,8 +937,7 @@ namespace hal {
                 ModuleEvent::event::name_changed, ModuleEvent::event::type_changed,
                 ModuleEvent::event::parent_changed, ModuleEvent::event::submodule_added,
                 ModuleEvent::event::submodule_removed, ModuleEvent::event::gate_assigned,
-                ModuleEvent::event::gate_removed, ModuleEvent::event::input_port_name_changed,
-                ModuleEvent::event::output_port_name_changed};
+                ModuleEvent::event::gate_removed, ModuleEvent::event::port_changed};
 
             // A list of the functions that will trigger its associated event exactly once
             std::vector<std::function<void(void)>> trigger_event = { trigger_name_changed, trigger_type_changed,
@@ -954,8 +953,8 @@ namespace hal {
                 std::make_tuple(ModuleEvent::event::submodule_removed, test_mod, other_mod_sub->get_id()),
                 std::make_tuple(ModuleEvent::event::gate_assigned, test_mod, test_gate->get_id()),
                 std::make_tuple(ModuleEvent::event::gate_removed, test_mod, test_gate->get_id()),
-                std::make_tuple(ModuleEvent::event::input_port_name_changed, test_mod, test_gate->get_fan_in_net("I0")->get_id()),
-                std::make_tuple(ModuleEvent::event::output_port_name_changed, test_mod, test_gate->get_fan_out_net("O")->get_id())
+                std::make_tuple(ModuleEvent::event::port_changed, test_mod, test_gate->get_fan_in_net("I0")->get_id()),
+                std::make_tuple(ModuleEvent::event::port_changed, test_mod, test_gate->get_fan_out_net("O")->get_id())
             };
 
             // Check all events in a for-loop
