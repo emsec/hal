@@ -62,7 +62,7 @@ namespace hal
          * Check whether two modules are equal.
          * Does not check for parent module.
          *
-         * @param[in] other - The module to compare again.
+         * @param[in] other - The module to compare against.
          * @returns True if both modules are equal, false otherwise.
          */
         bool operator==(const Module& other) const;
@@ -71,7 +71,7 @@ namespace hal
          * Check whether two modules are unequal.
          * Does not check for parent module.
          *
-         * @param[in] other - The module to compare again.
+         * @param[in] other - The module to compare against.
          * @returns True if both modules are unequal, false otherwise.
          */
         bool operator!=(const Module& other) const;
@@ -218,17 +218,94 @@ namespace hal
          * ################################################################
          */
 
-        struct Port
+        /**
+         * The port of a module is a named entry or exit point where a net crosses the module boundary.
+         * A port always has a direction and may additionally feature a type and be part of a port group.
+         * 
+         * @ingroup module
+         */
+        class Port
         {
-            Port(const std::string& name, Net* net) : m_name(name), m_net(net)
-            {
-            }
+        public:
+            /**
+             * Check whether two ports are equal.
+             * 
+             * @param[in] other - The port to compare against.
+             * @returns True if both ports are equal, false otherwise.
+             */
+            bool operator==(const Port& other) const;
+
+            /**
+             * Check whether two ports are unequal.
+             * 
+             * @param[in] other - The port to compare against.
+             * @returns True if both ports are unequal, false otherwise.
+             */
+            bool operator!=(const Port& other) const;
+
+            /**
+             * Get the name of the port.
+             * 
+             * @returns The name of the port.
+             */
+            const std::string& get_name() const;
+
+            /**
+             * Get the net passing through the port.
+             * 
+             * @returns The net passing through the port.
+             */
+            Net* get_net() const;
+
+            /**
+             * Get the direction of the port.
+             * 
+             * @returns The direction of the port.
+             */
+            PinDirection get_direction() const;
+
+            /**
+             * Set the type of the port.
+             * 
+             * @param[in] type - The type to be assigned to the port.
+             */
+            void set_type(PinType type);
+
+            /**
+             * Get the type of the port.
+             * 
+             * @returns The type of the port.
+             */
+            PinType get_type() const;
+
+            /**
+             * Get the name of the group that the port is part of.
+             * Returns an empty string if the port is not part of a group.
+             * 
+             * @returns The name of the port group.
+             */
+            const std::string& get_group_name() const;
+
+            /**
+             * Get the index of the port within its port group.
+             * Returns 0 if the port is not part of a group. 
+             * Make sure to check the group name to determine whether the port is actually part of a group.
+             * 
+             * @returns The index of the port within the port group.
+             */
+            u32 get_group_index() const;
+
+        private:
+            friend Module;
 
             std::string m_name;
             Net* m_net;
             PinDirection m_direction;
-            PinType m_type = PinType::none;
-            std::pair<std::string, u32> m_group;
+            PinType m_type           = PinType::none;
+            std::string m_group_name = "";
+            u32 m_group_index        = 0;
+
+            Port(const std::string& name, Net* net);
         };
 
         /**
@@ -365,27 +442,82 @@ namespace hal
          */
         [[deprecated("Will be removed in a future version.")]] u32 get_next_output_port_id() const;
 
-        // TODO old above
-        // TODO add Pybind + docs below
-
+        // TODO add Pybind + below
+        /**
+         * Add a new port to the module.
+         * 
+         * @param[in] port_net - The net passing through the port.
+         * @param[in] port_name - The name of the port.
+         * @param[in] type - The type of the port.
+         * @returns True on success, false otherwise.
+         */
         bool add_port(Net* port_net, const std::string& port_name, PinType type = PinType::none);
 
+        /**
+         * Add multiple new ports to the module.
+         * 
+         * @param[in] ports - Pairs of nets passing through the respective ports and port names.
+         * @param[in] type - The type of the ports.
+         * @returns True on success, false otherwise.
+         */
         bool add_ports(const std::vector<std::pair<Net*, std::string>>& ports, PinType type = PinType::none);
 
+        /**
+         * Get all ports of the module.
+         * 
+         * @returns A vector of ports.
+         */
         const std::vector<Port*>& get_ports() const;
+
+        /**
+         * Get all ports of the module.
+         * The filter is evaluated on every port such that the result only contains ports matching the specified condition.
+         * 
+         * @param[in] filter - Filter function to be evaluated on each port.
+         * @returns A vector of ports.
+         */
         std::vector<Port*> get_ports(const std::function<bool(Port*)>& filter) const;
 
+        /**
+         * Get a port by the net that is passing through it.
+         * 
+         * @param[in] port_net - The net that passes through the port.
+         * @returns The port on success, a nullptr otherwise.
+         */
         Port* get_port_by_net(Net* port_net) const;
 
+        /**
+         * Get a port by its name.
+         * 
+         * @param[in] port_name - The name of the port.
+         * @returns The port on success, a nullptr otherwise.
+         */
         Port* get_port_by_name(const std::string& port_name) const;
 
-        bool assign_port_group(const std::string& group, const std::vector<std::pair<u32, Port*>>& port_indices);
+        /**
+         * Create a new port group and assign existing ports to it.
+         * 
+         * @param[in] group_name - The name of the port group to be created.
+         * @param[in] port_indices - A vector of pairs comprising a port indices as well as the ports themselves.
+         * @returns True on success, false otherweise.
+         */
+        bool assign_port_group(const std::string& group_name, const std::vector<std::pair<u32, Port*>>& port_indices);
 
+        /**
+         * Get all port groups of the module.
+         * 
+         * @returns A map from port group name to a vector of ports.
+         */
         const std::unordered_map<std::string, std::vector<Port*>>& get_port_groups() const;
 
-        std::vector<Port*> get_ports_of_group(const std::string& group) const;
-
-        // TODO end new functions
+        /**
+         * Get all ports belonging to a given port group in order.
+         * 
+         * @param[in] group_name - The name of the port group.
+         * @returns A vector of ports belonging to the specified port group.
+         */
+        std::vector<Port*> get_ports_of_group(const std::string& group_name) const;
+        // TODO stop
 
         /*
          * ################################################################
@@ -449,12 +581,35 @@ namespace hal
         Module(const Module&) = delete;               //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
 
-        // TODO new functions below
+        /**
+         * Create a new port and assign it to the current module instance. Does not perform sanity checks.
+         * 
+         * @param[in] port_name - Name of the port.
+         * @param[in] port_net - Net passing through the port.
+         * @param[in] direction - Direction of the port.
+         * @param[in] type - Type of the port.
+         */
         void create_port(const std::string& port_name, Net* port_net, PinDirection direction, PinType type = PinType::none) const;
+
+        /**
+         * Remove a port from the current module instance. Does not perform sanity checks.
+         * 
+         * @param[in] port - The port to be removed.
+         */
         void remove_port(Port* port) const;
+
+        /**
+         * Determine the direction of a port using the net passing through the port.
+         * 
+         * @param[in] net - The net passing through the port.
+         * @returns The direction of the port or PinDirection::none if the net is not an input or output of the module.
+         */
         PinDirection determine_port_direction(Net* net) const;
+
+        /**
+         * Update the ports of the module by analyzing its input and output nets.
+         */
         void update_ports() const;
-        // TODO new functions above
 
         std::string m_name;
         std::string m_type;

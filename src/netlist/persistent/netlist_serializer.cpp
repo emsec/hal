@@ -61,6 +61,7 @@ namespace hal
                 }
                 return val;
             }
+
             void deserialize_data(DataContainer* c, const rapidjson::Value& val)
             {
                 for (const auto& entry : val.GetArray())
@@ -77,10 +78,12 @@ namespace hal
                 val.AddMember("pin_type", ep->get_pin(), allocator);
                 return val;
             }
+
             bool deserialize_destination(Netlist* nl, Net* net, const rapidjson::Value& val)
             {
                 return net->add_destination(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString());
             }
+
             bool deserialize_source(Netlist* nl, Net* net, const rapidjson::Value& val)
             {
                 return net->add_source(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString());
@@ -112,6 +115,7 @@ namespace hal
                 }
                 return val;
             }
+
             bool deserialize_gate(Netlist* nl, const rapidjson::Value& val, const std::unordered_map<std::string, hal::GateType*>& gate_types)
             {
                 auto gt_name = val["type"].GetString();
@@ -187,6 +191,7 @@ namespace hal
                 }
                 return val;
             }
+
             bool deserialize_net(Netlist* nl, const rapidjson::Value& val)
             {
                 auto n = nl->create_net(val["id"].GetUint(), val["name"].GetString());
@@ -225,37 +230,6 @@ namespace hal
                 return true;
             }
 
-            // serialize module port
-            rapidjson::Value serialize(const std::pair<Net*, std::string>& port, rapidjson::Document::AllocatorType& allocator)
-            {
-                rapidjson::Value val(rapidjson::kObjectType);
-                val.AddMember("net_id", port.first->get_id(), allocator);
-                val.AddMember("port_name", port.second, allocator);
-                return val;
-            }
-            bool deserialize_module_ports(Netlist* nl, const rapidjson::Value& val)
-            {
-                Module* sm = nl->get_module_by_id(val["id"].GetUint());
-
-                if (val.HasMember("input_ports"))
-                {
-                    for (const auto& port_node : val["input_ports"].GetArray())
-                    {
-                        sm->set_input_port_name(nl->get_net_by_id(port_node["net_id"].GetUint()), port_node["port_name"].GetString());
-                    }
-                }
-
-                if (val.HasMember("output_ports"))
-                {
-                    for (const auto& port_node : val["output_ports"].GetArray())
-                    {
-                        sm->set_output_port_name(nl->get_net_by_id(port_node["net_id"].GetUint()), port_node["port_name"].GetString());
-                    }
-                }
-
-                return true;
-            }
-
             // serialize module
             rapidjson::Value serialize(Module* m, rapidjson::Document::AllocatorType& allocator)
             {
@@ -285,26 +259,38 @@ namespace hal
                     }
                 }
                 {
-                    rapidjson::Value input_ports(rapidjson::kArrayType);
-                    for (const auto& port : m->get_input_port_names())
+                    rapidjson::Value ports(rapidjson::kArrayType);
+                    for (Module::Port* port : m->get_ports())
                     {
-                        input_ports.PushBack(serialize(port, allocator), allocator);
+                        rapidjson::Value module_port(rapidjson::kObjectType);
+                        module_port.AddMember("port_net_id", port->get_net()->get_id(), allocator);
+                        module_port.AddMember("port_name", port->get_name(), allocator);
+                        module_port.AddMember("port_type", enum_to_string(port->get_type()), allocator);
+                        ports.PushBack(module_port, allocator);
                     }
-                    if (!input_ports.Empty())
+                    if (!ports.Empty())
                     {
-                        val.AddMember("input_ports", input_ports, allocator);
+                        val.AddMember("ports", ports, allocator);
                     }
                 }
                 {
-                    rapidjson::Value output_ports(rapidjson::kArrayType);
-                    for (const auto& port : m->get_output_port_names())
+                    rapidjson::Value port_groups(rapidjson::kArrayType);
+                    for (const auto& [group_name, ports] : m->get_port_groups())
                     {
-                        output_ports.PushBack(serialize(port, allocator), allocator);
+                        rapidjson::Value port_indices(rapidjson::kArrayType);
+                        for (const Module::Port* port : ports)
+                        {
+                            rapidjson::Value port_index(rapidjson::kObjectType);
+                            std::string index_str = std::to_string(port->get_group_index());
+                            port_index.AddMember(JSON_STR_HELPER(index_str), JSON_STR_HELPER(port->get_name()), allocator);
+                            port_indices.PushBack(port_index, allocator);
+                        }
+                        rapidjson::Value port_group(rapidjson::kObjectType);
+                        port_group.AddMember("group_name", group_name, allocator);
+                        port_group.AddMember("ports", port_indices, allocator);
+                        port_groups.PushBack(port_group, allocator);
                     }
-                    if (!output_ports.Empty())
-                    {
-                        val.AddMember("output_ports", output_ports, allocator);
-                    }
+                    val.AddMember("port_groups", port_groups, allocator);
                 }
 
                 auto data_val = serialize(m->get_data_map(), allocator);
@@ -314,6 +300,7 @@ namespace hal
                 }
                 return val;
             }
+
             bool deserialize_module(Netlist* nl, const rapidjson::Value& val)
             {
                 auto parent_id = val["parent"].GetUint();
@@ -336,7 +323,7 @@ namespace hal
                 {
                     for (auto& gate_node : val["gates"].GetArray())
                     {
-                        if(!sm->is_top_module()) 
+                        if (!sm->is_top_module())
                         {
                             sm->assign_gate(nl->get_gate_by_id(gate_node.GetUint()));
                         }
@@ -347,6 +334,52 @@ namespace hal
                 {
                     deserialize_data(sm, val["data"]);
                 }
+
+                if (val.HasMember("ports"))
+                {
+                    for (const auto& port_node : val["ports"].GetArray())
+                    {
+                        sm->add_port(nl->get_net_by_id(port_node["port_net_id"].GetUint()), port_node["port_name"].GetString(), enum_from_string<PinType>(port_node["port_type"].GetString()));
+                    }
+                }
+
+                if (val.HasMember("port_groups"))
+                {
+                    for (const auto& port_group_node : val["port_groups"].GetArray())
+                    {
+                        std::string group_name = port_group_node["group_name"].GetString();
+                        std::vector<std::pair<u32, Module::Port*>> port_indices;
+                        for (const auto& port_node : port_group_node["ports"].GetArray())
+                        {
+                            const auto port_val   = port_node.GetObject().MemberBegin();
+                            u32 port_index        = std::stoul(port_val->name.GetString());
+                            std::string port_name = port_val->value.GetString();
+
+                            port_indices.push_back(std::make_pair(port_index, sm->get_port_by_name(port_name)));
+                        }
+
+                        sm->assign_port_group(group_name, port_indices);
+                    }
+                }
+
+                // legacy code below
+                if (val.HasMember("input_ports"))
+                {
+                    for (const auto& port_node : val["input_ports"].GetArray())
+                    {
+                        sm->add_port(nl->get_net_by_id(port_node["net_id"].GetUint()), port_node["port_name"].GetString());
+                    }
+                }
+
+                if (val.HasMember("output_ports"))
+                {
+                    for (const auto& port_node : val["output_ports"].GetArray())
+                    {
+                        sm->add_port(nl->get_net_by_id(port_node["net_id"].GetUint()), port_node["port_name"].GetString());
+                    }
+                }
+                // legacy code above
+
                 return true;
             }
 
@@ -398,6 +431,7 @@ namespace hal
 
                 return val;
             }
+
             bool deserialize_grouping(Netlist* nl, const rapidjson::Value& val)
             {
                 Grouping* grouping = nl->create_grouping(val["id"].GetUint(), val["name"].GetString());
@@ -602,13 +636,6 @@ namespace hal
                 for (auto& module_node : root["modules"].GetArray())
                 {
                     if (!deserialize_module(nl.get(), module_node))
-                    {
-                        return nullptr;
-                    }
-                }
-                for (auto& module_node : root["modules"].GetArray())
-                {
-                    if (!deserialize_module_ports(nl.get(), module_node))
                     {
                         return nullptr;
                     }

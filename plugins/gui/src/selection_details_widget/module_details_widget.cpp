@@ -155,7 +155,7 @@ namespace hal
         int index = 0;
         for (auto net : m->get_input_nets())
         {
-            QTableWidgetItem* port_name  = new QTableWidgetItem(QString::fromStdString(m->get_input_port_name(net)));
+            QTableWidgetItem* port_name  = new QTableWidgetItem(QString::fromStdString(m->get_port_by_net(net)->get_name()));
             QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x2b05));
             QTableWidgetItem* net_item   = new QTableWidgetItem(QString::fromStdString(net->get_name()));
 
@@ -185,7 +185,7 @@ namespace hal
         index = 0;
         for (auto net : m->get_output_nets())
         {
-            QTableWidgetItem* port_name  = new QTableWidgetItem(QString::fromStdString(m->get_output_port_name(net)));
+            QTableWidgetItem* port_name  = new QTableWidgetItem(QString::fromStdString(m->get_port_by_net(net)->get_name()));
             QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x27a1));
             QTableWidgetItem* net_item   = new QTableWidgetItem(QString::fromStdString(net->get_name()));
 

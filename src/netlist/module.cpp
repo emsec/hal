@@ -28,12 +28,6 @@ namespace hal
             return false;
         }
 
-        if (other.get_input_port_names().size() != get_input_port_names().size() || other.get_output_port_names().size() != get_output_port_names().size())
-        {
-            log_info("module", "the modules with IDs {} and {} are not equal due to unequal number of port names.", m_id, other.get_id());
-            return false;
-        }
-
         // does not check parent module to avoid infinite loop
 
         for (Module* other_module : other.get_submodules())
@@ -54,20 +48,11 @@ namespace hal
             }
         }
 
-        for (const auto& [net, port_name] : get_input_port_names())
+        for (const Port* port : get_ports())
         {
-            if (const Net* other_net = other.get_input_port_net(port_name); other_net == nullptr || *other_net != *net)
+            if (const Port* other_port = other.get_port_by_name(port->get_name()); other_port == nullptr || *other_port != *port)
             {
-                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal input ports.", m_id, other.get_id());
-                return false;
-            }
-        }
-
-        for (const auto& [net, port_name] : get_output_port_names())
-        {
-            if (const Net* other_net = other.get_output_port_net(port_name); other_net == nullptr || *other_net != *net)
-            {
-                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal output ports.", m_id, other.get_id());
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal port.", m_id, other.get_id());
                 return false;
             }
         }
@@ -517,6 +502,62 @@ namespace hal
         return m_internal_nets;
     }
 
+    /*
+     * ################################################################
+     *      port functions
+     * ################################################################
+     */
+
+    Module::Port::Port(const std::string& name, Net* net) : m_name(name), m_net(net)
+    {
+    }
+
+    bool Module::Port::operator==(const Port& other) const
+    {
+        return (m_name == other.get_name()) && (*m_net == *other.get_net()) && (m_direction == other.get_direction()) && (m_type == other.get_type()) && (m_group_name == other.get_group_name())
+               && (m_group_index == other.get_group_index());
+    }
+
+    bool Module::Port::operator!=(const Port& other) const
+    {
+        return !operator==(other);
+    }
+
+    const std::string& Module::Port::get_name() const
+    {
+        return m_name;
+    }
+
+    Net* Module::Port::get_net() const
+    {
+        return m_net;
+    }
+
+    PinDirection Module::Port::get_direction() const
+    {
+        return m_direction;
+    }
+
+    void Module::Port::set_type(PinType type)
+    {
+        m_type = type;
+    }
+
+    PinType Module::Port::get_type() const
+    {
+        return m_type;
+    }
+
+    const std::string& Module::Port::get_group_name() const
+    {
+        return m_group_name;
+    }
+
+    u32 Module::Port::get_group_index() const
+    {
+        return m_group_index;
+    }
+
     bool Module::set_input_port_name(Net* input_net, const std::string& port_name)
     {
         return add_port(input_net, port_name);
@@ -536,7 +577,7 @@ namespace hal
         }
 
         Port* port = get_port_by_net(net);
-        if (port == nullptr || (port->m_direction != PinDirection::input && port->m_direction != PinDirection::inout))
+        if (port == nullptr || (port->get_direction() != PinDirection::input && port->get_direction() != PinDirection::inout))
         {
             log_debug("module",
                       "net '{}' with ID {} is not an input net of module '{}' with ID {} in netlist with ID {}.",
@@ -548,7 +589,7 @@ namespace hal
             return "";
         }
 
-        return port->m_name;
+        return port->get_name();
     }
 
     std::string Module::get_output_port_name(Net* net) const
@@ -560,7 +601,7 @@ namespace hal
         }
 
         Port* port = get_port_by_net(net);
-        if (port == nullptr || (port->m_direction != PinDirection::output && port->m_direction != PinDirection::inout))
+        if (port == nullptr || (port->get_direction() != PinDirection::output && port->get_direction() != PinDirection::inout))
         {
             log_debug("module",
                       "net '{}' with ID {} is not an output net of module '{}' with ID {} in netlist with ID {}.",
@@ -572,41 +613,41 @@ namespace hal
             return "";
         }
 
-        return port->m_name;
+        return port->get_name();
     }
 
     Net* Module::get_input_port_net(const std::string& port_name) const
     {
         Port* port = get_port_by_name(port_name);
-        if (port == nullptr || (port->m_direction != PinDirection::input && port->m_direction != PinDirection::inout))
+        if (port == nullptr || (port->get_direction() != PinDirection::input && port->get_direction() != PinDirection::inout))
         {
             log_debug(
                 "module", "port '{}' is not an input port of module '{}' with ID {} in netlist with ID {}.", port_name, this->get_name(), this->get_id(), m_internal_manager->m_netlist->get_id());
             return nullptr;
         }
 
-        return port->m_net;
+        return port->get_net();
     }
 
     Net* Module::get_output_port_net(const std::string& port_name) const
     {
         Port* port = get_port_by_name(port_name);
-        if (port == nullptr || (port->m_direction != PinDirection::output && port->m_direction != PinDirection::inout))
+        if (port == nullptr || (port->get_direction() != PinDirection::output && port->get_direction() != PinDirection::inout))
         {
             log_debug(
                 "module", "port '{}' is not an input port of module '{}' with ID {} in netlist with ID {}.", port_name, this->get_name(), this->get_id(), m_internal_manager->m_netlist->get_id());
             return nullptr;
         }
 
-        return port->m_net;
+        return port->get_net();
     }
 
     std::map<Net*, std::string> Module::get_input_port_names() const
     {
         std::map<Net*, std::string> ports;
-        for (Port* port : get_ports([](Port* p) { return p->m_direction == PinDirection::input || p->m_direction == PinDirection::inout; }))
+        for (Port* port : get_ports([](Port* p) { return p->get_direction() == PinDirection::input || p->get_direction() == PinDirection::inout; }))
         {
-            ports[port->m_net] = port->m_name;
+            ports[port->get_net()] = port->get_name();
         }
 
         return ports;
@@ -615,9 +656,9 @@ namespace hal
     std::map<Net*, std::string> Module::get_output_port_names() const
     {
         std::map<Net*, std::string> ports;
-        for (Port* port : get_ports([](Port* p) { return p->m_direction == PinDirection::output || p->m_direction == PinDirection::inout; }))
+        for (Port* port : get_ports([](Port* p) { return p->get_direction() == PinDirection::output || p->get_direction() == PinDirection::inout; }))
         {
-            ports[port->m_net] = port->m_name;
+            ports[port->get_net()] = port->get_name();
         }
 
         return ports;
@@ -655,25 +696,26 @@ namespace hal
 
     void Module::create_port(const std::string& port_name, Net* port_net, PinDirection direction, PinType type) const
     {
-        std::unique_ptr<Port> port_owner = std::make_unique<Port>(port_name, port_net);
+        std::unique_ptr<Port> port_owner = std::make_unique<Port>(Port(port_name, port_net));
         Port* port                       = port_owner.get();
         m_ports.push_back(std::move(port_owner));
         m_ports_raw.push_back(port);
         m_name_to_port[port_name] = port;
         m_net_to_port[port_net]   = port;
         port->m_direction         = direction;
+        port->m_type              = type;
         m_port_nets.insert(port_net);
     }
 
     void Module::remove_port(Port* port) const
     {
-        m_port_nets.erase(port->m_net);
+        m_port_nets.erase(port->get_net());
         m_ports_raw.erase(std::find(m_ports_raw.begin(), m_ports_raw.end(), port));
-        m_name_to_port.erase(port->m_name);
-        m_net_to_port.erase(port->m_net);
-        if (!port->m_group.first.empty())
+        m_name_to_port.erase(port->get_name());
+        m_net_to_port.erase(port->get_net());
+        if (const std::string& group_name = port->get_group_name(); !group_name.empty())
         {
-            std::vector<Port*>& group_ports = m_port_groups.at(port->m_group.first);
+            std::vector<Port*>& group_ports = m_port_groups.at(group_name);
             group_ports.erase(std::find(group_ports.begin(), group_ports.end(), port));
         }
         m_ports.erase(std::find_if(m_ports.begin(), m_ports.end(), [port](const std::unique_ptr<Port>& p) { return p.get() == port; }));
@@ -727,6 +769,11 @@ namespace hal
 
             diff_nets.clear();
 
+            for (Port* port : m_ports_raw)
+            {
+                port->m_direction = determine_port_direction(port->get_net());
+            }
+
             // find nets that are port nets but have not yet been assigned a port name
             std::set_difference(current_port_nets.begin(), current_port_nets.end(), m_port_nets.begin(), m_port_nets.end(), std::back_inserter(diff_nets));
             for (Net* port_net : diff_nets)
@@ -770,19 +817,14 @@ namespace hal
     {
         if (port_net == nullptr)
         {
-            log_error("module", "nullptr given as net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
+            log_error("module", "nullptr given as port net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return false;
         }
 
         if (port_name.empty())
         {
-            log_error("module",
-                      "trying to assign empty port name for net '{}' with ID {} to module '{}' with ID {} in netlist with ID {}.",
-                      port_net->get_name(),
-                      port_net->get_id(),
-                      m_name,
-                      m_id,
-                      m_internal_manager->m_netlist->get_id());
+            log_error(
+                "module", "empty port name given for module '{}' with ID {} in netlist with ID {}.", port_net->get_name(), port_net->get_id(), m_name, m_id, m_internal_manager->m_netlist->get_id());
             return false;
         }
 
@@ -810,13 +852,10 @@ namespace hal
             return false;
         }
 
-        std::pair<Net*, std::string> port = std::make_pair(port_net, port_name);
-        std::pair<Net*, std::string>* port_ptr;
-
         if (auto it = m_net_to_port.find(port_net); it != m_net_to_port.end())
         {
             Port* port                = it->second;
-            std::string old_name      = port->m_name;
+            std::string old_name      = port->get_name();
             port->m_name              = port_name;
             m_name_to_port[port_name] = port;
             m_name_to_port.erase(old_name);
@@ -873,6 +912,12 @@ namespace hal
 
     Module::Port* Module::get_port_by_net(Net* port_net) const
     {
+        if (port_net == nullptr)
+        {
+            log_warning("module", "nullptr given as port net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
+            return nullptr;
+        }
+
         update_ports();
 
         if (const auto it = m_net_to_port.find(port_net); it != m_net_to_port.end())
@@ -892,6 +937,12 @@ namespace hal
 
     Module::Port* Module::get_port_by_name(const std::string& port_name) const
     {
+        if (port_name.empty())
+        {
+            log_warning("module", "empty port name given for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
+            return nullptr;
+        }
+
         update_ports();
 
         if (auto it = m_name_to_port.find(port_name); it != m_name_to_port.end())
@@ -920,11 +971,11 @@ namespace hal
 
         for (const auto& port : port_indices)
         {
-            if (m_name_to_port.find(port.second->m_name) == m_name_to_port.end())
+            if (m_name_to_port.find(port.second->get_name()) == m_name_to_port.end())
             {
                 log_error("module",
                           "could not assign port '{}' to group '{}' of module '{}' with ID {} in netlist with ID {}.",
-                          port.second->m_name,
+                          port.second->get_name(),
                           group,
                           m_name,
                           m_id,
@@ -936,7 +987,8 @@ namespace hal
         std::vector<Port*> ports;
         for (const auto [index, port] : port_indices)
         {
-            port->m_group = std::make_pair(group, index);
+            port->m_group_name  = group;
+            port->m_group_index = index;
             ports.push_back(port);
         }
         m_port_groups[group] = ports;

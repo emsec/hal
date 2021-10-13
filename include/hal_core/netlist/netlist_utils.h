@@ -66,6 +66,7 @@ namespace hal
         CORE_API BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates);
 
         /**
+         * TODO move into netlist class
          * Get a deep copy of an entire netlist including all of its gates, nets, modules, and groupings.
          *
          * @param[in] nl - The netlist to copy.
@@ -73,8 +74,8 @@ namespace hal
          */
         CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
 
-
         /**
+         * TODO move into netlist class
          * Get a deep copy of an entire partial netlist including all of its gates, nets, excluding modules and groupings.
          *
          * @param[in] nl - The netlist consisting of the subgraph.
