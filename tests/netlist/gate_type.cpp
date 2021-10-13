@@ -588,7 +588,7 @@ namespace hal
             GateType* gt = gl.create_gate_type("dummy1", {GateTypeProperty::combinational});
             ASSERT_NE(gt, nullptr);
 
-            BooleanFunction bf1 = BooleanFunction::ONE;
+            BooleanFunction bf1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
             gt->add_boolean_function("bf1", bf1);
 
             std::unordered_map<std::string, BooleanFunction> ret_map = gt->get_boolean_functions();
@@ -603,8 +603,8 @@ namespace hal
             ASSERT_NE(gt, nullptr);
         
             std::unordered_map<std::string, BooleanFunction> func_map = {
-                {"bf1", BooleanFunction::ONE},
-                {"bf2", BooleanFunction::ONE}};
+                {"bf1",  BooleanFunction::Const(BooleanFunction::Value::ONE)},
+                {"bf2",  BooleanFunction::Const(BooleanFunction::Value::ONE)}};
             gt->add_boolean_functions(func_map);
 
             std::unordered_map<std::string, BooleanFunction> ret_map = gt->get_boolean_functions();

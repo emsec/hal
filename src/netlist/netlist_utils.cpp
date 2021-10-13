@@ -650,9 +650,9 @@ namespace netlist_utils {
                     }
 
                     if (sources.front()->get_gate()->is_gnd_gate()) {
-                        func = func.substitute(ep->get_pin(), BooleanFunction::Value::ZERO);
+                        func = func.substitute(ep->get_pin(), BooleanFunction::Const(BooleanFunction::Value::ZERO));
                     } else if (sources.front()->get_gate()->is_vcc_gate()) {
-                        func = func.substitute(ep->get_pin(), BooleanFunction::Value::ONE);
+                        func = func.substitute(ep->get_pin(), BooleanFunction::Const(BooleanFunction::Value::ONE));
                     }
                 }
 

@@ -16,19 +16,6 @@ namespace hal
             Construct an empty Boolean function and thus evaluates to ``X`` (undefined).
         )");
 
-        py_boolean_function.def(py::init<const std::string&>(), py::arg("variable_name"), R"(
-            Construct a Boolean function comprising a single variable.
-            The name of the variable must not be empty.
-
-            :param str variable_name: The name of the variable.
-        )");
-
-        py_boolean_function.def(py::init<BooleanFunction::Value>(), py::arg("constant"), R"(
-            Construct a Boolean function from a single constant value.
-
-            :param hal_py.BooleanFunction.Value constant: The constant value.
-        )");
-
         py_boolean_function.def(
             "substitute", py::overload_cast<const std::string&, const std::string&>(&BooleanFunction::substitute, py::const_), py::arg("old_variable_name"), py::arg("new_variable_name"), R"(
             Substitute a variable with another one and thus renames the variable.

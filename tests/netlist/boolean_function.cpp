@@ -8,14 +8,8 @@
 #include <type_traits>
 
 namespace hal {
-
     class BooleanFunctionTest : public ::testing::Test {
     protected:
-
-        const BooleanFunction::Value X = BooleanFunction::X;
-        const BooleanFunction::Value ZERO = BooleanFunction::ZERO;
-        const BooleanFunction::Value ONE = BooleanFunction::ONE;
-
         virtual void SetUp() {
             test_utils::init_log_channels();
         }
@@ -43,9 +37,9 @@ namespace hal {
                 }
                 std::cout << "|";
                 switch (t_table[i]) {
-                    case BooleanFunction::ONE:std::cout << "1";
+                    case BooleanFunction::Value::ONE: std::cout << "1";
                         break;
-                    case BooleanFunction::ZERO:std::cout << "0";
+                    case BooleanFunction::Value::ZERO: std::cout << "0";
                         break;
                     default:std::cout << "X";
                         break;
@@ -125,31 +119,32 @@ namespace hal {
     TEST_F(BooleanFunctionTest, check_main_example) {
         TEST_START
             {
-                // Constuctor with variables
-                BooleanFunction a("A");
-                BooleanFunction b("B");
-                BooleanFunction c("C");
-                // Constructor with constant
-                BooleanFunction _1(ONE);
+                const auto   a = BooleanFunction::Var("A"),
+                             b = BooleanFunction::Var("B"),
+                             c = BooleanFunction::Var("C"),
+                            _0 = BooleanFunction::Const(BooleanFunction::Value::ZERO),
+                            _1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
 
                 // Combining them
                 BooleanFunction r = ((a & b) | c) ^_1;
 
-                EXPECT_EQ(r(create_input_map("ABC", "000")), ONE);
-                EXPECT_EQ(r(create_input_map("ABC", "001")), ZERO);
-                EXPECT_EQ(r(create_input_map("ABC", "010")), ONE);
-                EXPECT_EQ(r(create_input_map("ABC", "011")), ZERO);
+                EXPECT_EQ(r(create_input_map("ABC", "000")), BooleanFunction::Value::ONE);
+                EXPECT_EQ(r(create_input_map("ABC", "001")), BooleanFunction::Value::ZERO);
+                EXPECT_EQ(r(create_input_map("ABC", "010")), BooleanFunction::Value::ONE);
+                EXPECT_EQ(r(create_input_map("ABC", "011")), BooleanFunction::Value::ZERO);
 
-                EXPECT_EQ(r(create_input_map("ABC", "100")), ONE);
-                EXPECT_EQ(r(create_input_map("ABC", "101")), ZERO);
-                EXPECT_EQ(r(create_input_map("ABC", "110")), ZERO);
-                EXPECT_EQ(r(create_input_map("ABC", "111")), ZERO);
+                EXPECT_EQ(r(create_input_map("ABC", "100")), BooleanFunction::Value::ONE);
+                EXPECT_EQ(r(create_input_map("ABC", "101")), BooleanFunction::Value::ZERO);
+                EXPECT_EQ(r(create_input_map("ABC", "110")), BooleanFunction::Value::ZERO);
+                EXPECT_EQ(r(create_input_map("ABC", "111")), BooleanFunction::Value::ZERO);
 
                 std::vector<BooleanFunction::Value>
                     truth_table = r.get_truth_table(std::vector<std::string>({"C", "B", "A"}));
 
-                EXPECT_EQ(truth_table,
-                          std::vector<BooleanFunction::Value>({ONE, ZERO, ONE, ZERO, ONE, ZERO, ZERO, ZERO}));
+                EXPECT_EQ(truth_table, std::vector<BooleanFunction::Value>({
+                    BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE,   BooleanFunction::Value::ZERO, 
+                    BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO,  BooleanFunction::Value::ZERO
+                }));
             }
 
         TEST_END
@@ -162,11 +157,11 @@ namespace hal {
      */
     TEST_F(BooleanFunctionTest, check_to_string) {
         TEST_START
-            BooleanFunction a("A");
-            BooleanFunction b("B");
-            BooleanFunction c("C");
-            BooleanFunction _0(ZERO);
-            BooleanFunction _1(ONE);
+            const auto  a = BooleanFunction::Var("A"),
+                        b = BooleanFunction::Var("B"),
+                        c = BooleanFunction::Var("C"),
+                       _0 = BooleanFunction::Const(BooleanFunction::Value::ZERO),
+                       _1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
 
             // Check some bf strings
             std::vector<std::pair<BooleanFunction, std::string>> test_cases =
@@ -206,11 +201,11 @@ namespace hal {
      */
     TEST_F(BooleanFunctionTest, check_is_constant) {
         TEST_START
-            BooleanFunction a("A");
-            BooleanFunction b("B");
-            BooleanFunction c("C");
-            BooleanFunction _0(ZERO);
-            BooleanFunction _1(ONE);
+           const auto  a = BooleanFunction::Var("A"),
+                       b = BooleanFunction::Var("B"),
+                       c = BooleanFunction::Var("C"),
+                      _0 = BooleanFunction::Const(BooleanFunction::Value::ZERO),
+                      _1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
             {
                 // Some samples that are constant zero
                 EXPECT_TRUE((_0).is_constant_zero());
@@ -256,7 +251,7 @@ namespace hal {
         TEST_START
             {
                 // The boolean function is not empty
-                BooleanFunction not_empty("A");
+                auto not_empty = BooleanFunction::Var("A");
                 EXPECT_FALSE(not_empty.is_empty());
             }
             {
@@ -276,11 +271,11 @@ namespace hal {
         TEST_START
             {
                 // Get variables
-                BooleanFunction a("A");
-                BooleanFunction b("B");
-                BooleanFunction c("C");
-                BooleanFunction a_2("A");
-                EXPECT_EQ((a | b | c | a_2).get_variables(), std::vector<std::string>({"A", "B", "C"}));
+                const auto  a = BooleanFunction::Var("A"),
+                            b = BooleanFunction::Var("B"),
+                            c = BooleanFunction::Var("C"),
+                           a2 = BooleanFunction::Var("A");
+                EXPECT_EQ((a | b | c | a2).get_variables(), std::vector<std::string>({"A", "B", "C"}));
             }
         TEST_END
     }
@@ -292,49 +287,36 @@ namespace hal {
      */
     TEST_F(BooleanFunctionTest, check_compare_operator) {
         TEST_START
+            const auto  a = BooleanFunction::Var("A"),
+                        b = BooleanFunction::Var("B"),
+                       _1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
+
             // Tests for ==
             {
                 // Compare the same object
-                BooleanFunction a("A");
                 EXPECT_TRUE((a == a));
             }
             {
                 // The boolean functions are equivalent in syntax
-                BooleanFunction a("A");
-                BooleanFunction b("B");
                 EXPECT_TRUE(((a | b) == (a | b)));
             }
             {
-                // The boolean functions are equivalent in semantic (but not in syntax)
-                BooleanFunction a("A");
-                BooleanFunction b("B");
-                // EXPECT_TRUE(((a|b|b) == (a|b)));
-            }
-            {
                 // Compare two empty expressions
-                BooleanFunction a = BooleanFunction();
-                EXPECT_TRUE(a == BooleanFunction());
+                EXPECT_TRUE(BooleanFunction() == BooleanFunction());
             }
             // Tests for !=
             {
                 // The boolean function are equivalent in semantic, but do not share the same variable
-                BooleanFunction a("A");
-                BooleanFunction b("B");
                 EXPECT_TRUE((a != b));
             }
             {
                 // Compare boolean functions of different types (constant, variable, expression)
-                BooleanFunction a("A");
-                BooleanFunction b("B");
-                BooleanFunction _1(ONE);
                 EXPECT_TRUE((a != (a | (b & _1)))); // variable - expression
                 EXPECT_TRUE((a != _1)); // variable - constant
                 EXPECT_TRUE(((a | (b & _1)) != _1)); // expression - constant
             }
             {
                 // Compare semantically different expressions
-                BooleanFunction a("A");
-                BooleanFunction b("B");
                 EXPECT_TRUE(((a & b) != (a | b)));
                 EXPECT_TRUE(((a ^ b) != (a & b)));
                 EXPECT_TRUE(((a ^ b) != ((~a) & b)));
@@ -350,11 +332,11 @@ namespace hal {
     TEST_F(BooleanFunctionTest, check_optimize_correctness)
     {
         TEST_START
-            BooleanFunction a("A");
-            BooleanFunction b("B");
-            BooleanFunction c("C");
-            BooleanFunction _0(ZERO);
-            BooleanFunction _1(ONE);
+           const auto  a = BooleanFunction::Var("A"),
+                       b = BooleanFunction::Var("B"),
+                       c = BooleanFunction::Var("C"),
+                      _0 = BooleanFunction::Const(BooleanFunction::Value::ZERO),
+                      _1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
             {
                 // Optimize some boolean functions and compare their truth_table
                 BooleanFunction bf = (~(a ^ b & c) | (b | c & _1)) ^((a & b) | (a | b | c));
@@ -390,11 +372,11 @@ namespace hal {
     TEST_F(BooleanFunctionTest, check_optimize_minimality)
     {
         TEST_START
-            BooleanFunction a("A");
-            BooleanFunction b("B");
-            BooleanFunction c("C");
-            BooleanFunction _0(ZERO);
-            BooleanFunction _1(ONE);
+            const auto  a = BooleanFunction::Var("A"),
+                       b = BooleanFunction::Var("B"),
+                       c = BooleanFunction::Var("C"),
+                      _0 = BooleanFunction::Const(BooleanFunction::Value::ZERO),
+                      _1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
             {
                 // Optimize MUX function
                 BooleanFunction bf = (a & c) | (b & ~c) | (a & b);
@@ -522,7 +504,11 @@ namespace hal {
      */
     TEST_F(BooleanFunctionTest, check_substitute) {
         TEST_START
-            BooleanFunction a("A"), b("B"), c("C"), d("D");
+            const auto  a = BooleanFunction::Var("A"),
+                        b = BooleanFunction::Var("B"),
+                        c = BooleanFunction::Var("C"),
+                        d = BooleanFunction::Var("D");
+
             {
                 // Substitute a variable with another one
                 BooleanFunction bf = a & b & c;
@@ -563,7 +549,12 @@ namespace hal {
      */
     TEST_F(BooleanFunctionTest, check_get_dnf_clauses) {
         TEST_START
-            BooleanFunction a("A"), b("B"), c("C"), d("D"), _0(ZERO), _1(ONE);
+            const auto  a = BooleanFunction::Var("A"),
+                        b = BooleanFunction::Var("B"),
+                        c = BooleanFunction::Var("C"),
+                        d = BooleanFunction::Var("D"),
+                      _0 = BooleanFunction::Const(BooleanFunction::Value::ZERO),
+                      _1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
             {
                 // Get the dnf clauses of a boolean function that is already in dnf
                 BooleanFunction bf = (a & b & ~c) | (a & ~b) | d;
@@ -650,32 +641,35 @@ namespace hal {
     }
 
     TEST_F(BooleanFunctionTest, SatisfiableConstraint) {
-        auto [a, b] = std::make_tuple(BooleanFunction("A"), BooleanFunction("B"));
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                   _0 = BooleanFunction::Const(BooleanFunction::Value::ZERO),
+                   _1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
 
         auto formulas = std::vector<std::vector<SMT::Constraint>>({
             {
-                SMT::Constraint(a & b, BooleanFunction::ONE)
+                SMT::Constraint(a & b,_1)
             },
             {
-                SMT::Constraint(a | b, BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ONE),
-                SMT::Constraint(b, BooleanFunction::ZERO),
+                SMT::Constraint(a | b, _1),
+                SMT::Constraint(a, _1),
+                SMT::Constraint(b, _0),
             },
             {
-                SMT::Constraint(a & b, BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ONE),
-                SMT::Constraint(b, BooleanFunction::ONE),
+                SMT::Constraint(a & b, _1),
+                SMT::Constraint(a, _1),
+                SMT::Constraint(b, _1),
             },
             {
-                SMT::Constraint((a & ~b) | (~a & b), BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ONE),
+                SMT::Constraint((a & ~b) | (~a & b), _1),
+                SMT::Constraint(a, _1),
             }
         });
 
         for (auto&& constraints : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
 
-            for (auto&& solver_type : {SMT::SolverType::Z3, SMT::SolverType::Boolector}) {
+            for (auto&& solver_type : {SMT::SolverType::Z3}) {
                 if (!SMT::Solver::has_local_solver_for(solver_type)) {
                     continue;
                 }
@@ -696,40 +690,42 @@ namespace hal {
     }
 
     TEST_F(BooleanFunctionTest, UnSatisfiableConstraint) {
-        auto [a, b] = std::make_tuple(BooleanFunction("A"), BooleanFunction("B"));
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                   _0 = BooleanFunction::Const(BooleanFunction::Value::ZERO),
+                   _1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
 
         auto formulas = std::vector<std::vector<SMT::Constraint>>({
             {
                 SMT::Constraint(a, b),
-                SMT::Constraint(a, BooleanFunction::ONE),
-                SMT::Constraint(b, BooleanFunction::ZERO),
+                SMT::Constraint(a, _1),
+                SMT::Constraint(b, _0),
             },
             {
-                SMT::Constraint(a | b, BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ZERO),
-                SMT::Constraint(b, BooleanFunction::ZERO),
+                SMT::Constraint(a | b, _1),
+                SMT::Constraint(a, _0),
+                SMT::Constraint(b, _0),
             },
             {
-                SMT::Constraint(a & b, BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ZERO),
-                SMT::Constraint(b, BooleanFunction::ONE),
+                SMT::Constraint(a & b, _1),
+                SMT::Constraint(a, _0),
+                SMT::Constraint(b, _1),
             },
             {
-                SMT::Constraint(a & b, BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ONE),
-                SMT::Constraint(b, BooleanFunction::ZERO),
+                SMT::Constraint(a & b, _1),
+                SMT::Constraint(a, _1),
+                SMT::Constraint(b, _0),
             },
             {
-                SMT::Constraint((a & ~b) | (~a & b), BooleanFunction::ONE),
-                SMT::Constraint(a, BooleanFunction::ONE),
-                SMT::Constraint(b, BooleanFunction::ONE),
+                SMT::Constraint((a & ~b) | (~a & b), _1),
+                SMT::Constraint(a, _1),
+                SMT::Constraint(b, _1),
             }
         });
 
         for (auto&& constraints : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
-
-            for (auto&& solver_type : {SMT::SolverType::Z3, SMT::SolverType::Boolector}) {
+            for (auto&& solver_type : {SMT::SolverType::Z3}) {
                 if (!SMT::Solver::has_local_solver_for(solver_type)) {
                     continue;
                 }
@@ -750,33 +746,36 @@ namespace hal {
     }
 
     TEST_F(BooleanFunctionTest, Model) {
-        auto [a, b] = std::make_tuple(BooleanFunction("A"), BooleanFunction("B"));
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                   _0 = BooleanFunction::Const(BooleanFunction::Value::ZERO),
+                   _1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
 
         auto formulas = std::vector<std::tuple<std::vector<SMT::Constraint>, SMT::Model>>({
             {
                 {
-                    SMT::Constraint(a & b, BooleanFunction::ONE)
+                    SMT::Constraint(a & b, _1)
                 },
                 SMT::Model({{"A", {1, 1}}, {"B", {1, 1}}})
             },
             {
                 {
-                    SMT::Constraint(a | b, BooleanFunction::ONE),
-                    SMT::Constraint(b, BooleanFunction::ZERO),
+                    SMT::Constraint(a | b, _1),
+                    SMT::Constraint(b, _0),
                 },
                 SMT::Model({{"A", {1, 1}}, {"B", {0, 1}}})
             },
             {
                 {
-                    SMT::Constraint(a & b, BooleanFunction::ONE),
-                    SMT::Constraint(a, BooleanFunction::ONE),
+                    SMT::Constraint(a & b, _1),
+                    SMT::Constraint(a, _1),
                 },
                 SMT::Model({{"A", {1, 1}}, {"B", {1, 1}}})
             },
             {
                 {
-                    SMT::Constraint((~a & b) | (a & ~b), BooleanFunction::ONE),
-                    SMT::Constraint(a, BooleanFunction::ONE),
+                    SMT::Constraint((~a & b) | (a & ~b), _1),
+                    SMT::Constraint(a, _1),
                 },
                 SMT::Model({{"A", {1, 1}}, {"B", {0, 1}}})
             }
@@ -785,7 +784,7 @@ namespace hal {
         for (auto&& [constraints, model] : formulas) {
             const auto solver = SMT::Solver(std::move(constraints));
 
-            for (auto&& solver_type : {SMT::SolverType::Z3, SMT::SolverType::Boolector}) {
+            for (auto&& solver_type : {SMT::SolverType::Z3}) {
                 if (!SMT::Solver::has_local_solver_for(solver_type)) {
                     continue;
                 }

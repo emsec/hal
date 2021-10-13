@@ -72,19 +72,6 @@ namespace hal
             X         /**< Represents an undefined value. */
         };
 
-        enum class content_type
-        {
-            VARIABLE,
-            CONSTANT,
-            TERMS
-        };
-        
-        enum class operation
-        {
-            AND,
-            OR,
-            XOR
-        };
 
         /**
          * Get the value as a string.
@@ -108,20 +95,13 @@ namespace hal
          */
         BooleanFunction();
 
-        /**
-         * Construct a Boolean function comprising a single variable.
-         * The name of the variable must not be empty.
-         *
-         * @param[in] variable_name - The name of the variable.
-         */
-        BooleanFunction(const std::string& variable_name);
+        /// Creates a 'Variable' Boolean function.
+        static BooleanFunction Var(const std::string& name, u16 size = 1);
 
-        /**
-         * Construct a Boolean function from a single constant value.
-         *
-         * @param[in] constant - The constant value.
-         */
-        BooleanFunction(Value constant);
+        /// Creates a 'Constant' Boolean function.
+        static BooleanFunction Const(const BooleanFunction::Value& value);
+        /// Creates a 'Constant' Boolean function.
+        static BooleanFunction Const(const std::vector<BooleanFunction::Value>& value);
 
         /**
          * Substitute a variable with another one and thus renames the variable.
@@ -159,19 +139,7 @@ namespace hal
          */
         Value operator()(const std::unordered_map<std::string, Value>& inputs = {}) const;
 
-        /**
-         * Returns content type of Boolean function.
-         *
-         * @returns Content type.
-         */
-        content_type get_type() const;
 
-        /**
-         * Returns operation identifier of Boolean function.
-         *
-         * @returns Operation.
-         */
-        operation get_operation() const;
 
         /** 
          * Checks whether Boolean function is negated.
@@ -403,6 +371,29 @@ namespace hal
         std::vector<std::unique_ptr<Node>> get_reverse_polish_notation() const;
 
     protected:
+        BooleanFunction(const std::string& variable_name);
+
+        enum class content_type
+        {
+            VARIABLE,
+            CONSTANT,
+            TERMS
+        };
+        
+        enum class operation
+        {
+            AND,
+            OR,
+            XOR
+        };
+
+
+        BooleanFunction(Value constant);
+
+        content_type get_type() const;
+
+        operation get_operation() const;
+
         static std::string to_string(const operation& op);
         friend std::ostream& operator<<(std::ostream& os, const operation& op);
 
@@ -607,7 +598,7 @@ namespace hal
         ////////////////////////////////////////////////////////////////////////
 
         /// stores constant value
-        const BooleanFunction::Value constant{};
+        const std::vector<BooleanFunction::Value> constant{};
         /// stores index value
         const u16 index{};
         /// stores variable name 
@@ -621,10 +612,9 @@ namespace hal
          * Creates a constant 'OperandNode'.
          *
          * @param[in] constant - Constant value.
-         * @param[in] size - Node bit-size.
          * @returns An initialized base-class node.
          */
-        static std::unique_ptr<BooleanFunction::Node> make(BooleanFunction::Value _constant, u16 _size);
+        static std::unique_ptr<BooleanFunction::Node> make(const std::vector<BooleanFunction::Value>& _constant);
 
         /**
          * Creates an index 'OperandNode'.
@@ -660,6 +650,6 @@ namespace hal
 
     private:
         /// Constructor to initialize an 'OperandNode'.
-        OperandNode(u16 _type, u16 _size, BooleanFunction::Value _constant, u16 _index, const std::string& _variable);
+        OperandNode(u16 _type, u16 _size, std::vector<BooleanFunction::Value> _constant, u16 _index, const std::string& _variable);
     };
 }    // namespace hal

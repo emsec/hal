@@ -64,14 +64,14 @@ namespace hal
             auto gt_gnd = gl->create_gate_type("gt_gnd");
             ASSERT_TRUE(gt_gnd != nullptr);
             gt_gnd->add_output_pins(std::vector<std::string>({"O"}));
-            gt_gnd->add_boolean_function("O", BooleanFunction(BooleanFunction::ZERO));
+            gt_gnd->add_boolean_function("O", BooleanFunction::Const(BooleanFunction::Value::ZERO));
             gl->mark_gnd_gate_type(gt_gnd);
 
             // VCC gate type
             auto gt_vcc = gl->create_gate_type("gt_vcc");
             ASSERT_TRUE(gt_vcc != nullptr);
             gt_vcc->add_output_pins(std::vector<std::string>({"O"}));
-            gt_vcc->add_boolean_function("O", BooleanFunction(BooleanFunction::ONE));
+            gt_vcc->add_boolean_function("O",  BooleanFunction::Const(BooleanFunction::Value::ONE));
             gl->mark_vcc_gate_type(gt_vcc);
 
             // FF gate type

@@ -1,4 +1,6 @@
-#include  "hal_core/netlist/boolean_function/translator.h"
+#include "hal_core/netlist/boolean_function/translator.h"
+
+#include "hal_core/utilities/utils.h"
 
 namespace hal 
 {
@@ -23,10 +25,16 @@ namespace Translator
 
  		switch (node->type) 
  		{
- 			case BooleanFunction::NodeType::Constant: 
- 				return {true, "(_ bv" + enum_to_string(node->get_as<BooleanFunction::OperandNode>()->constant) + " " + std::to_string(node->size) + ")"};
+ 			case BooleanFunction::NodeType::Constant:
+			{
+				if (auto [ok, str] = utils::translate_to<u64>(node->to_string()); ok) 
+				{
+					return {true, "(_ bv" + std::to_string(str) + " " + std::to_string(node->size) + ")"};
+				}
+				return {false, ""};
+			}
  			case BooleanFunction::NodeType::Index:
- 				return {true, std::to_string(node->get_as<BooleanFunction::OperandNode>()->index)};
+				return {true, std::to_string(node->get_as<BooleanFunction::OperandNode>()->index)};
  			case BooleanFunction::NodeType::Variable: 
  				return {true, node->get_as<BooleanFunction::OperandNode>()->variable};
 

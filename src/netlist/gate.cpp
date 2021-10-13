@@ -259,7 +259,7 @@ namespace hal
         auto is_ascending               = lut_component->is_init_ascending();
         std::vector<std::string> inputs = m_type->get_input_pins();
 
-        BooleanFunction result = BooleanFunction::ZERO;
+        auto result = BooleanFunction::Const(BooleanFunction::Value::ZERO);
 
         if (config_str.empty())
         {
@@ -338,11 +338,11 @@ namespace hal
                 {
                     if ((input_values & 1) == 1)
                     {
-                        clause &= BooleanFunction(input);
+                        clause &= BooleanFunction::Var(input);
                     }
                     else
                     {
-                        clause &= ~BooleanFunction(input);
+                        clause &= ~BooleanFunction::Var(input);
                     }
                     input_values >>= 1;
                 }

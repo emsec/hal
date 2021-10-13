@@ -81,6 +81,19 @@ namespace hal
         m_constant = constant;
     }
 
+    BooleanFunction BooleanFunction::Var(const std::string& name, u16 /* size */) {
+        return BooleanFunction(name);
+    }
+
+    BooleanFunction BooleanFunction::Const(const BooleanFunction::Value& value) {
+        return BooleanFunction(value);
+    }
+
+    BooleanFunction BooleanFunction::Const(const std::vector<BooleanFunction::Value>& values) {
+        // TODO: change this once the underlying model is replaced with multi-bit handling
+        return BooleanFunction(values[0]);
+    }
+
     BooleanFunction::content_type BooleanFunction::get_type() const {
         return m_content;
     }
@@ -1488,7 +1501,7 @@ namespace hal
             case BooleanFunction::content_type::CONSTANT:
             {
                 std::vector<std::unique_ptr<BooleanFunction::Node>> nodes = {};
-                nodes.emplace_back(BooleanFunction::OperandNode::make(m_constant, 1));
+                nodes.emplace_back(BooleanFunction::OperandNode::make({m_constant}));
                 if (this->m_invert) 
                 {
                     nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Not, 1));
@@ -1666,19 +1679,19 @@ namespace hal
     BooleanFunction::OperationNode::OperationNode(u16 _type, u16 _size) :
         BooleanFunction::Node(_type, _size) {}
 
-    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(BooleanFunction::Value _constant, u16 _size)
+    std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(const std::vector<BooleanFunction::Value>& _constant)
     {
-        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Constant, _size, _constant, 0, ""));
+        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Constant, _constant.size(), _constant, 0, ""));
     }
  
     std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(u16 _index, u16 _size) 
     {
-        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Index, _size, BooleanFunction::Value::X, _index, ""));
+        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Index, _size, {}, _index, ""));
     }
 
     std::unique_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(const std::string& _name, u16 _size) 
     {
-        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Variable, _size, BooleanFunction::Value::X, 0, _name));
+        return std::unique_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Variable, _size, {}, 0, _name));
     }
 
     bool BooleanFunction::OperandNode::operator==(const BooleanFunction::OperandNode& other) const 
@@ -1705,7 +1718,13 @@ namespace hal
     {
         static const std::map<u16, std::function<std::string(const OperandNode*)>> operand2name = 
         {
-            {BooleanFunction::NodeType::Constant, [] (const OperandNode* node) { return enum_to_string(node->constant); }},
+            {BooleanFunction::NodeType::Constant, [] (const OperandNode* node) { 
+                std::string str;
+                for (const auto& value : node->constant) {
+                    str = enum_to_string(value) + str;
+                }
+                return "0b" + str;
+            }},
             {BooleanFunction::NodeType::Index, [] (const OperandNode* node) { return std::to_string(node->index); }},
             {BooleanFunction::NodeType::Variable, [] (const OperandNode* node) { return node->variable; }},
         };
@@ -1713,7 +1732,7 @@ namespace hal
         return operand2name.at(this->type)(this);
     }
 
-    BooleanFunction::OperandNode::OperandNode(u16 _type, u16 _size, BooleanFunction::Value _constant, u16 _index, const std::string& _variable) :
+    BooleanFunction::OperandNode::OperandNode(u16 _type, u16 _size, std::vector<BooleanFunction::Value> _constant, u16 _index, const std::string& _variable) :
         BooleanFunction::Node(_type, _size), constant(_constant), index(_index), variable(_variable) {}
 
 }    // namespace hal
