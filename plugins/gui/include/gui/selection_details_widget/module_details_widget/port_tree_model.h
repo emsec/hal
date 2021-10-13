@@ -25,11 +25,13 @@
 
 //#include "gui/new_selection_details_widget/models/base_tree_model.h"
 #include "gui/basic_tree_model/base_tree_model.h"
+#include <QMap>
 
 namespace hal
 {
     class Module;
     class Net;
+
 
     /**
      * @brief A model to represent the ports of a module.
@@ -38,6 +40,9 @@ namespace hal
     {
         Q_OBJECT
     public:
+
+        //metatype declaration at the end of file
+        enum class itemType{grouping = 0, port = 1};
 
         /**
          * The constructor.
@@ -93,6 +98,9 @@ namespace hal
         static const int sTypeColumn = 2;
         static const int sNetColumn = 3;
 
+        //additional data keys
+        const QString keyType = "type";
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted when the number of the model's port changed.
@@ -102,7 +110,10 @@ namespace hal
          */
         void numberOfPortsChanged(const int newNumber);
 
-    private:
+    private:        
         int mModuleId;
+        QMap<std::string, TreeItem*> mPortGroupingToTreeItem;
     };
 }
+
+Q_DECLARE_METATYPE(hal::PortTreeModel::itemType)

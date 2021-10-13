@@ -65,7 +65,7 @@ namespace hal
 
         //hacky to check if its an input or output port, change this when port-groupings
         //and real extensions for module type/direction is implemented (similar to the gate pin model)
-        bool isInputPort = clickedItem->getData(PortTreeModel::sDirectionColumn).toString() == "input(placeholder)";
+        bool isInputPort = clickedItem->getData(PortTreeModel::sDirectionColumn).toString() == "input";
         QString renameText = isInputPort ? "Change input port name" : "Change output port name";
 
         QMenu menu;
