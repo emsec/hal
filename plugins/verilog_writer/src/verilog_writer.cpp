@@ -100,7 +100,7 @@ namespace hal
         std::stringstream tmp_stream;
 
         res_stream << "(";
-        for (const auto& [net, port] : module->get_input_port_names())
+        for (Module::Port* port : module->get_ports())
         {
             if (first_port)
             {
@@ -111,29 +111,12 @@ namespace hal
                 res_stream << ",";
             }
 
-            aliases[net] = escape(get_unique_alias(identifier_occurrences, port));
+            Net* port_net                = port->get_net();
+            const std::string& port_name = port->get_name();
+            aliases[port_net]            = escape(get_unique_alias(identifier_occurrences, port_name));
 
-            res_stream << aliases.at(net);
-
-            tmp_stream << "    input " << aliases.at(net) << ";" << std::endl;
-        }
-
-        for (const auto& [net, port] : module->get_output_port_names())
-        {
-            if (first_port)
-            {
-                first_port = false;
-            }
-            else
-            {
-                res_stream << ",";
-            }
-
-            aliases[net] = escape(get_unique_alias(identifier_occurrences, port));
-
-            res_stream << aliases.at(net);
-
-            tmp_stream << "    output " << aliases.at(net) << ";" << std::endl;
+            res_stream << aliases.at(port_net);
+            tmp_stream << "    " << enum_to_string(port->get_direction()) << " " << aliases.at(port_net) << ";" << std::endl;
         }
 
         res_stream << ");" << std::endl;
@@ -295,14 +278,9 @@ namespace hal
         // extract port assignments
         std::vector<std::pair<std::string, std::vector<const Net*>>> port_assignments;
 
-        for (const auto& [net, port] : module->get_input_port_names())
+        for (Module::Port* port : module->get_ports())
         {
-            port_assignments.push_back(std::make_pair(port, std::vector<const Net*>({net})));
-        }
-
-        for (const auto& [net, port] : module->get_output_port_names())
-        {
-            port_assignments.push_back(std::make_pair(port, std::vector<const Net*>({net})));
+            port_assignments.push_back(std::make_pair(port->get_name(), std::vector<const Net*>({port->get_net()})));
         }
 
         if (!write_pin_assignments(res_stream, port_assignments, aliases))

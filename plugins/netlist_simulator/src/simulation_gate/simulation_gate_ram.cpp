@@ -148,7 +148,7 @@ namespace hal
 
             for (const std::string& identifier : init_component->get_init_identifiers())
             {
-                const std::string& data = std::get<1>(m_gate->get_data(category, identifier));
+                std::string data = std::get<1>(m_gate->get_data(category, identifier));
 
                 u32 data_len = data.size();
                 assert(data_len % 16 == 0);
@@ -180,11 +180,10 @@ namespace hal
                     break;
                 case BooleanFunction::Value::X:
                 case BooleanFunction::Value::Z:
-                    break;
-                    // TODO handle
+                    return;
             }
-            // TODO write this shit
-            // INIT with fixed value
+            UNUSED(init_val);
+            // TODO INIT with fixed value
         }
     }
 

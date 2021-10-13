@@ -344,22 +344,13 @@ namespace hal
         void moduleGateRemoved(Module* m, const u32 removed_gate) const;
 
         /**
-         * Q_SIGNAL to notify that an input port name of a module has been changed. <br>
-         * Relays the following hal-core event: <i>ModuleEvent::event::input_port_name_changed</i>
+         * Q_SIGNAL to notify that a port of a module has been changed. <br>
+         * Relays the following hal-core event: <i>ModuleEvent::event::port_changed</i>
          *
-         * @param m - The module with the renamed input port
+         * @param m - The module with the changed port
          * @param respective_net - The id of the net of the renamed input port
          */
-        void moduleInputPortNameChanged(Module* m, const u32 respective_net) const;
-
-        /**
-         * Q_SIGNAL to notify that an output port name of a module has been changed. <br>
-         * Relays the following hal-core event: <i>ModuleEvent::event::output_port_name_changed</i>
-         *
-         * @param m - The module with the renamed output port
-         * @param respective_net - The id of the net of the renamed output port
-         */
-        void moduleOutputPortNameChanged(Module* m, const u32 respective_net) const;
+        void modulePortChanged(Module* m, const u32 respective_net) const;
 
         /**
          * Q_SIGNAL to notify that the type of a module has been changed. <br>
@@ -612,4 +603,4 @@ namespace hal
         QMap<u32, QColor> mModuleColors;
         ModuleModel* mModuleModel;
     };
-}
+}    // namespace hal

@@ -13,7 +13,7 @@ namespace hal
             Check whether two modules are equal.
             Does not check for parent module.
 
-            :returns: True if both modules are equal, false otherwise.
+            :returns: True if both modules are equal, False otherwise.
             :rtype: bool
         )");
 
@@ -21,7 +21,7 @@ namespace hal
             Check whether two modules are unequal.
             Does not check for parent module.
 
-            :returns: True if both modules are unequal, false otherwise.
+            :returns: True if both modules are unequal, False otherwise.
             :rtype: bool
         )");
 
@@ -216,6 +216,67 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
+        py_module.def("set_cache_dirty", &Module::set_cache_dirty, py::arg("is_dirty") = true, R"(
+            Mark all internal caches as dirty. Caches are primarily used for the nets connected to the gates of a module.
+
+            :param bool is_dirty: True to mark caches as dirty, False otherwise.
+        )");
+
+        py_module.def("assign_gate", &Module::assign_gate, py::arg("gate"), R"(
+            Assign a gate to the module.
+            The gate is removed from its previous module in the process.
+
+            :param hal_py.Gate gate: The gate to assign.
+            :returns: True on success, false otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("remove_gate", &Module::remove_gate, py::arg("gate"), R"(
+            Remove a gate from the module.
+            Automatically moves the gate to the top module of the netlist.
+
+            :param hal_py.Gate gate: The gate to remove.
+            :returns: True on success, false otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("contains_gate", &Module::contains_gate, py::arg("gate"), py::arg("recusive") = false, R"(
+            Check whether a gate is in the module.
+            If recursive is set to true, all submodules are searched as well.
+
+            :param hal_py.Gate gate: The gate to check for.
+            :param bool recursive: True to also search in submodules.
+            :returns: True if the gate is in the module, false otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("get_gate_by_id", &Module::get_gate_by_id, py::arg("id"), py::arg("recursive") = false, R"(
+            Get a gate specified by the given ID.
+            If recursive is true, all submodules are searched as well.
+
+            :param int id: The unique ID of the gate.
+            :param bool recursive: True to also search in submodules.
+            :returns: The gate if found, None otherwise.
+            :rtype: hal_py.Gate or None
+        )");
+
+        py_module.def_property_readonly(
+            "gates", [](Module* mod) { return mod->get_gates(); }, R"(
+            The list of all gates contained within the module.
+
+            :type: list[hal_py.Gate]
+        )");
+
+        py_module.def("get_gates", &Module::get_gates, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
+            Get all modules contained within the module.
+            A filter can be applied to the result to only get gates matching the specified condition.
+            If recursive is true, all submodules are searched as well.
+
+            :param lambda filter: Filter to be applied to the gates.
+            :param bool recursive: True to also search in submodules.
+            :returns: The list of all gates.
+            :rtype: list[hal_py.Gate]
+        )");
         py_module.def("set_input_port_name", &Module::set_input_port_name, py::arg("input_net"), py::arg("port_name"), R"(
             Set the name of the port corresponding to the specified input net.
 
@@ -292,100 +353,194 @@ namespace hal
             :rtype: dict[hal_py.Net,str]
         )");
 
-        py_module.def_property("next_input_port_id", &Module::get_next_input_port_id, &Module::set_next_input_port_id, R"(
-            The next free input port ID.
+        py::class_<Module::Port> py_module_port(py_module, "Port", R"(
+            The port of a module is a named entry or exit point where a net crosses the module boundary.
+            A port always has a direction and may additionally feature a type and be part of a port group.
         )");
 
-        py_module.def("get_next_input_port_id", &Module::get_next_input_port_id, R"(
-            Get the next free input port ID.
+        py_module_port.def(py::self == py::self, R"(
+            Check whether two ports are equal.
 
-            :returns: The next input port ID.
+            :returns: True if both ports are equal, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module_port.def(py::self != py::self, R"(
+            Check whether two ports are unequal.
+
+            :returns: True if both ports are unequal, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module_port.def_property_readonly("name", &Module::Port::get_name, R"(
+            The name of the port.
+            
+            :type: str
+        )");
+
+        py_module_port.def("get_name", &Module::Port::get_name, R"(
+            Get the name of the port.
+
+            :returns: The name of the port.
+            :rtype: str
+        )");
+
+        py_module_port.def_property_readonly("net", &Module::Port::get_net, R"(
+            The net passing through the port.
+            
+            :type: hal_py.Net
+        )");
+
+        py_module_port.def("get_net", &Module::Port::get_net, R"(
+            Get the net passing through the port.
+
+            :returns: The net passing through the port.
+            :rtype: hal_py.Net
+        )");
+
+        py_module_port.def_property_readonly("direction", &Module::Port::get_direction, R"(
+            The direction of the port.
+            
+            :type: hal_py.PinDirection
+        )");
+
+        py_module_port.def("get_direction", &Module::Port::get_direction, R"(
+            Get the direction of the port.
+
+            :returns: The direction of the port.
+            :rtype: hal_py.PinDirection
+        )");
+
+        py_module_port.def_property("type", &Module::Port::get_type, &Module::Port::set_type, R"(
+            The type of the port.
+            
+            :type: hal_py.PinType
+        )");
+
+        py_module_port.def("set_type", &Module::Port::set_type, py::arg("type"), R"(
+            Set the type of the port.
+
+            :param hal_py.PinType type: The type to be assigned to the port.
+        )");
+
+        py_module_port.def("get_type", &Module::Port::get_type, R"(
+            Get the type of the port.
+
+            :returns: The type of the port.
+            :rtype: hal_py.PinType
+        )");
+
+        py_module_port.def_property_readonly("group_name", &Module::Port::get_group_name, R"(
+            The name of the group that the port is part of.
+            Holds an empty string if the port is not part of a group.
+            
+            :type: str
+        )");
+
+        py_module_port.def("get_group_name", &Module::Port::get_group_name, R"(
+            Get the name of the group that the port is part of.
+            Returns an empty string if the port is not part of a group.
+
+            :returns: The name of the port group.
+            :rtype: str
+        )");
+
+        py_module_port.def_property_readonly("group_index", &Module::Port::get_group_index, R"(
+            The index of the port within its port group.
+            Holds 0 if the port is not part of a group. 
+            Make sure to check the group name to determine whether the port is actually part of a group.
+            
+            :type: int
+        )");
+
+        py_module_port.def("get_group_index", &Module::Port::get_group_index, R"(
+            Get the index of the port within its port group.
+            Returns 0 if the port is not part of a group. 
+            Make sure to check the group name to determine whether the port is actually part of a group.
+
+            :returns: The index of the port within the port group.
             :rtype: int
         )");
 
-        py_module.def("set_next_input_port_id", &Module::set_next_input_port_id, py::arg("id"), R"(
-            Set the next free input port ID to the given value.
-
-            :param int id: The next input port ID.
-        )");
-
-        py_module.def_property("next_output_port_id", &Module::get_next_output_port_id, &Module::set_next_output_port_id, R"(
-            The next free output port ID.
-        )");
-
-        py_module.def("get_next_output_port_id", &Module::get_next_output_port_id, R"(
-            Get the next free output port ID.
-
-            :returns: The next output port ID.
-            :rtype: int
-        )");
-
-        py_module.def("set_next_output_port_id", &Module::set_next_output_port_id, py::arg("id"), R"(
-            Set the next free output port ID to the given value.
-
-            :param int id: The next output port ID.
-        )");
-
-        py_module.def("set_cache_dirty", &Module::set_cache_dirty, py::arg("is_dirty") = true, R"(
-            Mark all internal caches as dirty. Caches are primarily used for the nets connected to the gates of a module.
-
-            :param bool is_dirty: True to mark caches as dirty, False otherwise.
-        )");
-
-        py_module.def("assign_gate", &Module::assign_gate, py::arg("gate"), R"(
-            Assign a gate to the module.
-            The gate is removed from its previous module in the process.
-
-            :param hal_py.Gate gate: The gate to assign.
-            :returns: True on success, false otherwise.
+        py_module.def("add_port", &Module::add_port, py::arg("port_net"), py::arg("port_name"), py::arg("type") = PinType::none, R"(
+            Add a new port to the module.
+        
+            :param hal_py.Net port_net: The net passing through the port.
+            :param str port_name: The name of the port.
+            :param hal_py.PinType type: The type of the port.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
-        py_module.def("remove_gate", &Module::remove_gate, py::arg("gate"), R"(
-            Remove a gate from the module.
-            Automatically moves the gate to the top module of the netlist.
-
-            :param hal_py.Gate gate: The gate to remove.
-            :returns: True on success, false otherwise.
+        py_module.def("add_ports", &Module::add_ports, py::arg("ports"), py::arg("type") = PinType::none, R"(
+            Add multiple new ports to the module.
+         
+            :param list[tuple(hal_py.Net,str)] ports: Pairs of nets passing through the respective ports and port names.
+            :param hal_py.PinType type: The type of the ports.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
-        py_module.def("contains_gate", &Module::contains_gate, py::arg("gate"), py::arg("recusive") = false, R"(
-            Check whether a gate is in the module.
-            If recursive is set to true, all submodules are searched as well.
+        py_module.def_property_readonly("ports", static_cast<const std::vector<Module::Port*>& (Module::*)() const>(&Module::get_ports), R"(
+            All ports of the module.
 
-            :param hal_py.Gate gate: The gate to check for.
-            :param bool recursive: True to also search in submodules.
-            :returns: True if the gate is in the module, false otherwise.
+            :type: list[hal_py.Module.Port]
+        )");
+
+        py_module.def("get_ports", static_cast<const std::vector<Module::Port*>& (Module::*)() const>(&Module::get_ports), R"(
+            Get all ports of the module.
+
+            :returns: A list of ports.
+            :rtype: list[hal_py.Module.Port]
+        )");
+
+        py_module.def("get_ports", static_cast<std::vector<Module::Port*> (Module::*)(const std::function<bool(Module::Port*)>&) const>(&Module::get_ports), py::arg("filter"), R"(
+            Get all ports of the module.
+            The filter is evaluated on every port such that the result only contains ports matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each port.
+            :returns: A list of ports.
+            :rtype: list[hal_py.Module.Port]
+        )");
+
+        py_module.def("get_port_by_net", &Module::get_port_by_net, py::arg("port_net"), R"(
+            Get a port by the net that is passing through it.
+        
+            :param hal_py.Net port_net: The net that passes through the port.
+            :returns: The port on success, None otherwise.
+            :rtype: hal_py.Module.Port or None
+        )");
+
+        py_module.def("get_port_by_name", &Module::get_port_by_name, py::arg("port_name"), R"(
+            Get a port by its name.
+        
+            :param str port_name: The name of the port.
+            :returns: The port on success, None otherwise.
+            :rtype: hal_py.Module.Port or None
+        )");
+
+        py_module.def("assign_port_group", &Module::assign_port_group, py::arg("group_name"), py::arg("group_indices"), R"(
+            Create a new port group and assign existing ports to it.
+        
+            :param str group_name: The name of the port group to be created.
+            :param list[tuple(int,hal_py.Module.Port)] port_indices: A list of pairs comprising a port indices as well as the ports themselves.
+            :returns: True on success, False otherweise.
             :rtype: bool
         )");
 
-        py_module.def("get_gate_by_id", &Module::get_gate_by_id, py::arg("id"), py::arg("recursive") = false, R"(
-            Get a gate specified by the given ID.
-            If recursive is true, all submodules are searched as well.
-
-            :param int id: The unique ID of the gate.
-            :param bool recursive: True to also search in submodules.
-            :returns: The gate if found, None otherwise.
-            :rtype: hal_py.Gate or None
+        py_module.def("get_port_groups", &Module::get_port_groups, R"(
+            Get all port groups of the module.
+        
+            :returns: A dict from port group name to a list of ports.
+            :rtype: dict[str,list[hal_py.Module.Port]]
         )");
 
-        py_module.def_property_readonly(
-            "gates", [](Module* mod) { return mod->get_gates(); }, R"(
-            The list of all gates contained within the module.
-
-            :type: list[hal_py.Gate]
-        )");
-
-        py_module.def("get_gates", &Module::get_gates, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
-            Get all modules contained within the module.
-            A filter can be applied to the result to only get gates matching the specified condition.
-            If recursive is true, all submodules are searched as well.
-
-            :param lambda filter: Filter to be applied to the gates.
-            :param bool recursive: True to also search in submodules.
-            :returns: The list of all gates.
-            :rtype: list[hal_py.Gate]
+        py_module.def("get_ports_of_group", &Module::get_ports_of_group, py::arg("group_name"), R"(
+            Get all ports belonging to a given port group in order.
+        
+            :param str group_name: The name of the port group.
+            :returns: A list of ports belonging to the specified port group.
+            :rtype: list[hal_py.Module.Port]
         )");
     }
 }    // namespace hal

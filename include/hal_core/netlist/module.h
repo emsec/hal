@@ -26,15 +26,19 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/data_container.h"
 #include "hal_core/netlist/event_system/event_handler.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/utilities/enums.h"
 
 #include <functional>
 #include <map>
 #include <memory>
-#include <set>
 #include <string>
 #include <tuple>
 #include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace hal
 {
@@ -58,7 +62,7 @@ namespace hal
          * Check whether two modules are equal.
          * Does not check for parent module.
          *
-         * @param[in] other - The module to compare again.
+         * @param[in] other - The module to compare against.
          * @returns True if both modules are equal, false otherwise.
          */
         bool operator==(const Module& other) const;
@@ -67,7 +71,7 @@ namespace hal
          * Check whether two modules are unequal.
          * Does not check for parent module.
          *
-         * @param[in] other - The module to compare again.
+         * @param[in] other - The module to compare against.
          * @returns True if both modules are unequal, false otherwise.
          */
         bool operator!=(const Module& other) const;
@@ -202,103 +206,318 @@ namespace hal
         const std::vector<Net*>& get_internal_nets() const;
 
         /**
+         * Mark all internal caches as dirty. Caches are primarily used for the nets connected to the gates of a module.
+         * 
+         * @param[in] is_dirty - True to mark caches as dirty, false otherwise.
+         */
+        void set_cache_dirty(bool is_dirty = true);
+
+        /*
+         * ################################################################
+         *      port functions
+         * ################################################################
+         */
+
+        /**
+         * The port of a module is a named entry or exit point where a net crosses the module boundary.
+         * A port always has a direction and may additionally feature a type and be part of a port group.
+         * 
+         * @ingroup module
+         */
+        class Port
+        {
+        public:
+            /**
+             * Check whether two ports are equal.
+             * 
+             * @param[in] other - The port to compare against.
+             * @returns True if both ports are equal, false otherwise.
+             */
+            bool operator==(const Port& other) const;
+
+            /**
+             * Check whether two ports are unequal.
+             * 
+             * @param[in] other - The port to compare against.
+             * @returns True if both ports are unequal, false otherwise.
+             */
+            bool operator!=(const Port& other) const;
+
+            /**
+             * Get the name of the port.
+             * 
+             * @returns The name of the port.
+             */
+            const std::string& get_name() const;
+
+            /**
+             * Get the net passing through the port.
+             * 
+             * @returns The net passing through the port.
+             */
+            Net* get_net() const;
+
+            /**
+             * Get the direction of the port.
+             * 
+             * @returns The direction of the port.
+             */
+            PinDirection get_direction() const;
+
+            /**
+             * Set the type of the port.
+             * 
+             * @param[in] type - The type to be assigned to the port.
+             */
+            void set_type(PinType type);
+
+            /**
+             * Get the type of the port.
+             * 
+             * @returns The type of the port.
+             */
+            PinType get_type() const;
+
+            /**
+             * Get the name of the group that the port is part of.
+             * Returns an empty string if the port is not part of a group.
+             * 
+             * @returns The name of the port group.
+             */
+            const std::string& get_group_name() const;
+
+            /**
+             * Get the index of the port within its port group.
+             * Returns 0 if the port is not part of a group. 
+             * Make sure to check the group name to determine whether the port is actually part of a group.
+             * 
+             * @returns The index of the port within the port group.
+             */
+            u32 get_group_index() const;
+
+        private:
+            friend Module;
+
+            std::string m_name;
+            Net* m_net;
+            PinDirection m_direction;
+            PinType m_type           = PinType::none;
+            std::string m_group_name = "";
+            u32 m_group_index        = 0;
+
+            Port(const std::string& name, Net* net);
+        };
+
+        /**
+         * \deprecated
+         * DEPRECATED <br>
          * Set the name of the port corresponding to the specified input net.
          *
          * @param[in] input_net - The input net.
          * @param[in] port_name - The input port name.
          * @returns True on success, false otherwise.
          */
-        bool set_input_port_name(Net* input_net, const std::string& port_name);
+        [[deprecated("Will be removed in a future version. Use add_port() instead.")]] bool set_input_port_name(Net* input_net, const std::string& port_name);
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the name of the port corresponding to the specified input net.
          *
          * @param[in] input_net - The input net.
          * @returns The input port name.
          */
-        std::string get_input_port_name(Net* input_net) const;
+        [[deprecated("Will be removed in a future version. Use get_port_by_net() instead.")]] std::string get_input_port_name(Net* input_net) const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the input net of the port corresponding to the specified port name.
          *
          * @param[in] port_name - The input port name.
          * @returns The input net or a nullptr.
          */
-        Net* get_input_port_net(const std::string& port_name) const;
+        [[deprecated("Will be removed in a future version. Use get_port_by_name() instead.")]] Net* get_input_port_net(const std::string& port_name) const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the mapping of all input nets to their corresponding port names.
          *
          * @returns The map from input net to port name.
          */
-        const std::map<Net*, std::string>& get_input_port_names() const;
+        [[deprecated("Will be removed in a future version. Use get_ports() instead.")]] std::map<Net*, std::string> get_input_port_names() const;
 
         /**
-         * Set the next free input port ID to the given value.
-         * 
-         * @param[in] id - The next input port ID. 
-         */
-        void set_next_input_port_id(u32 id);
-
-        /**
-         * Get the next free input port ID.
-         * 
-         * @returns The next input port ID.
-         */
-        u32 get_next_input_port_id() const;
-
-        /**
+         * \deprecated
+         * DEPRECATED <br>
          * Set the name of the port corresponding to the specified output net.
          *
          * @param[in] output_net - The output net.
          * @param[in] port_name - The output port name.
          * @returns True on success, false otherwise.
          */
-        bool set_output_port_name(Net* output_net, const std::string& port_name);
+        [[deprecated("Will be removed in a future version. Use add_port() instead.")]] bool set_output_port_name(Net* output_net, const std::string& port_name);
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the name of the port corresponding to the specified output net.
          *
          * @param[in] output_net - The output net.
          * @returns The output port name.
          */
-        std::string get_output_port_name(Net* output_net) const;
+        [[deprecated("Will be removed in a future version. Use get_port_by_net() instead.")]] std::string get_output_port_name(Net* output_net) const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the output net of the port corresponding to the specified port name.
          *
          * @param[in] port_name - The output port name.
          * @returns The output net or a nullptr.
          */
-        Net* get_output_port_net(const std::string& port_name) const;
+        [[deprecated("Will be removed in a future version. Use get_port_by_name() instead.")]] Net* get_output_port_net(const std::string& port_name) const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the mapping of all output nets to their corresponding port names.
          *
          * @returns The map from output net to port name.
          */
-        const std::map<Net*, std::string>& get_output_port_names() const;
+        [[deprecated("Will be removed in a future version. Use get_ports() instead.")]] std::map<Net*, std::string> get_output_port_names() const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
+         * Set the next free input port ID to the given value.
+         * 
+         * @param[in] id - The next input port ID. 
+         */
+        [[deprecated("Will be removed in a future version.")]] void set_next_input_port_id(u32 id);
+
+        /**
+         * \deprecated
+         * DEPRECATED <br>
+         * Set the next free inout port ID to the given value.
+         * 
+         * @param[in] id - The next inout port ID. 
+         */
+        [[deprecated("Will be removed in a future version.")]] void set_next_inout_port_id(u32 id);
+
+        /**
+         * \deprecated
+         * DEPRECATED <br>
          * Set the next free output port ID to the given value.
          * 
          * @param[in] id - The next output port ID. 
          */
-        void set_next_output_port_id(u32 id);
+        [[deprecated("Will be removed in a future version.")]] void set_next_output_port_id(u32 id);
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
+         * Get the next free input port ID.
+         * 
+         * @returns The next input port ID.
+         */
+        [[deprecated("Will be removed in a future version.")]] u32 get_next_input_port_id() const;
+
+        /**
+         * \deprecated
+         * DEPRECATED <br>
+         * Get the next free inout port ID.
+         * 
+         * @returns The next inout port ID.
+         */
+        [[deprecated("Will be removed in a future version.")]] u32 get_next_inout_port_id() const;
+
+        /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get the next free output port ID.
          * 
          * @returns The next output port ID.
          */
-        u32 get_next_output_port_id() const;
+        [[deprecated("Will be removed in a future version.")]] u32 get_next_output_port_id() const;
+
+        // TODO add Pybind + below
+        /**
+         * Add a new port to the module.
+         * 
+         * @param[in] port_net - The net passing through the port.
+         * @param[in] port_name - The name of the port.
+         * @param[in] type - The type of the port.
+         * @returns True on success, false otherwise.
+         */
+        bool add_port(Net* port_net, const std::string& port_name, PinType type = PinType::none);
 
         /**
-         * Mark all internal caches as dirty. Caches are primarily used for the nets connected to the gates of a module.
+         * Add multiple new ports to the module.
          * 
-         * @param[in] is_dirty - True to mark caches as dirty, false otherwise.
+         * @param[in] ports - Pairs of nets passing through the respective ports and port names.
+         * @param[in] type - The type of the ports.
+         * @returns True on success, false otherwise.
          */
-        void set_cache_dirty(bool is_dirty = true);
+        bool add_ports(const std::vector<std::pair<Net*, std::string>>& ports, PinType type = PinType::none);
+
+        /**
+         * Get all ports of the module.
+         * 
+         * @returns A vector of ports.
+         */
+        const std::vector<Port*>& get_ports() const;
+
+        /**
+         * Get all ports of the module.
+         * The filter is evaluated on every port such that the result only contains ports matching the specified condition.
+         * 
+         * @param[in] filter - Filter function to be evaluated on each port.
+         * @returns A vector of ports.
+         */
+        std::vector<Port*> get_ports(const std::function<bool(Port*)>& filter) const;
+
+        /**
+         * Get a port by the net that is passing through it.
+         * 
+         * @param[in] port_net - The net that passes through the port.
+         * @returns The port on success, a nullptr otherwise.
+         */
+        Port* get_port_by_net(Net* port_net) const;
+
+        /**
+         * Get a port by its name.
+         * 
+         * @param[in] port_name - The name of the port.
+         * @returns The port on success, a nullptr otherwise.
+         */
+        Port* get_port_by_name(const std::string& port_name) const;
+
+        /**
+         * Create a new port group and assign existing ports to it.
+         * 
+         * @param[in] group_name - The name of the port group to be created.
+         * @param[in] port_indices - A vector of pairs comprising a port indices as well as the ports themselves.
+         * @returns True on success, false otherweise.
+         */
+        bool assign_port_group(const std::string& group_name, const std::vector<std::pair<u32, Port*>>& port_indices);
+
+        /**
+         * Get all port groups of the module.
+         * 
+         * @returns A map from port group name to a vector of ports.
+         */
+        const std::unordered_map<std::string, std::vector<Port*>>& get_port_groups() const;
+
+        /**
+         * Get all ports belonging to a given port group in order.
+         * 
+         * @param[in] group_name - The name of the port group.
+         * @returns A vector of ports belonging to the specified port group.
+         */
+        std::vector<Port*> get_ports_of_group(const std::string& group_name) const;
+        // TODO stop
 
         /*
          * ################################################################
@@ -362,6 +581,36 @@ namespace hal
         Module(const Module&) = delete;               //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
 
+        /**
+         * Create a new port and assign it to the current module instance. Does not perform sanity checks.
+         * 
+         * @param[in] port_name - Name of the port.
+         * @param[in] port_net - Net passing through the port.
+         * @param[in] direction - Direction of the port.
+         * @param[in] type - Type of the port.
+         */
+        void create_port(const std::string& port_name, Net* port_net, PinDirection direction, PinType type = PinType::none) const;
+
+        /**
+         * Remove a port from the current module instance. Does not perform sanity checks.
+         * 
+         * @param[in] port - The port to be removed.
+         */
+        void remove_port(Port* port) const;
+
+        /**
+         * Determine the direction of a port using the net passing through the port.
+         * 
+         * @param[in] net - The net passing through the port.
+         * @returns The direction of the port or PinDirection::none if the net is not an input or output of the module.
+         */
+        PinDirection determine_port_direction(Net* net) const;
+
+        /**
+         * Update the ports of the module by analyzing its input and output nets.
+         */
+        void update_ports() const;
+
         std::string m_name;
         std::string m_type;
 
@@ -375,27 +624,29 @@ namespace hal
         std::unordered_map<u32, Module*> m_submodules_map;
         std::vector<Module*> m_submodules;
 
-        /* port names */
-        mutable u32 m_next_input_port_id  = 0;
-        mutable u32 m_next_output_port_id = 0;
-        mutable std::set<Net*> m_named_input_nets;                        // ordering necessary, cannot be replaced with unordered_set
-        mutable std::set<Net*> m_named_output_nets;                       // ordering necessary, cannot be replaced with unordered_set
-        mutable std::map<Net*, std::string> m_input_net_to_port_name;     // ordering necessary, cannot be replaced with unordered_map
-        mutable std::map<Net*, std::string> m_output_net_to_port_name;    // ordering necessary, cannot be replaced with unordered_map
-        mutable std::unordered_set<std::string> m_input_port_names;
-        mutable std::unordered_set<std::string> m_output_port_names;
+        // ports
+        mutable bool m_ports_dirty;
+        mutable u32 m_next_input_index  = 0;
+        mutable u32 m_next_inout_index  = 0;
+        mutable u32 m_next_output_index = 0;
+        mutable std::vector<std::unique_ptr<Port>> m_ports;
+        mutable std::set<Net*> m_port_nets;
+        mutable std::vector<Port*> m_ports_raw;
+        mutable std::unordered_map<Net*, Port*> m_net_to_port;
+        mutable std::unordered_map<std::string, Port*> m_name_to_port;
+        mutable std::unordered_map<std::string, std::vector<Port*>> m_port_groups;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;
         std::vector<Gate*> m_gates;
 
-        mutable bool m_nets_dirty;
+        mutable bool m_nets_dirty = true;
         mutable std::vector<Net*> m_nets;
-        mutable bool m_input_nets_dirty;
+        mutable bool m_input_nets_dirty = true;
         mutable std::vector<Net*> m_input_nets;
-        mutable bool m_output_nets_dirty;
+        mutable bool m_output_nets_dirty = true;
         mutable std::vector<Net*> m_output_nets;
-        mutable bool m_internal_nets_dirty;
+        mutable bool m_internal_nets_dirty = true;
         mutable std::vector<Net*> m_internal_nets;
 
         EventHandler* m_event_handler;
