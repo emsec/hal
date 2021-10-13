@@ -83,6 +83,15 @@ If you want to build HAL on Ubuntu 20.04, run the following commands:
 5. `make` to compile HAL
 6. `make install` (optionally) to install HAL
 
+## A few notes on Windows WSL
+You can try using HAL directly on Windows with the help of the most recent Ubuntu 20.04 subsystem. Install Ubuntu 20.04 with Windows subsystem and follow the installation instructions above.
+
+To get the HAL GUI appearing you need an XServer. Install `VcXsrv`(https://sourceforge.net/projects/vcxsrv/) and start `Xlaunch` on your Windows machine. Now go to Ubuntu 20.04 and start HAL with GUI support. In the following command we assume that the DISPLAY is at localhost:0, this needs to be adjusted on your machine. 
+
+`export LIBGL_ALWAYS_INDIRECT=1; export DISPLAY=:0; hal -g`
+
+If you encounter an error try restarting the XServer and select `One Large Window`.
+
 
 ## CMake Options
 Using the CMake build system, your HAL build can be configured quite easily (by adding `-D<OPTION>=1` to the cmake command).
