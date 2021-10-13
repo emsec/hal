@@ -32,6 +32,7 @@ namespace hal
 
     class PLUGIN_API NetlistSimulatorControllerPlugin : public BasePluginInterface
     {
+        static u32 mMaxControllerId;
     public:
         /**
          * Get the name of the plugin.
@@ -52,6 +53,6 @@ namespace hal
          *
          * @returns The simulator instance.
          */
-        std::unique_ptr<NetlistSimulatorController> create_simulator_controller() const;
+        std::unique_ptr<NetlistSimulatorController> create_simulator_controller(const std::string& nam=std::string()) const;
     };
 }    // namespace hal

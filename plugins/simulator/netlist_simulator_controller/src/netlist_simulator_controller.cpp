@@ -23,11 +23,18 @@
 
 namespace hal
 {
-    NetlistSimulatorController::NetlistSimulatorController(QObject *parent)
-        : QObject(parent), mState(NoGatesSelected), mSimulationEngine(nullptr),
+    NetlistSimulatorController::NetlistSimulatorController(u32 id, const std::string nam, QObject *parent)
+        : QObject(parent), mId(id), mName(QString::fromStdString(nam)), mState(NoGatesSelected), mSimulationEngine(nullptr),
           mSimulationInput(new SimulationInput)
     {
-        LogManager::get_instance().add_channel("sim_controller", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+        if (mName.isEmpty()) mName = QString("sim_controller%1").arg(mId);
+        LogManager::get_instance().add_channel(mName.toStdString(), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+        NetlistSimulatorControllerMap::instance()->addController(this);
+    }
+
+    NetlistSimulatorController::~NetlistSimulatorController()
+    {
+        NetlistSimulatorControllerMap::instance()->removeController(mId);
     }
 
     void NetlistSimulatorController::setState(SimulationState stat)
@@ -36,12 +43,14 @@ namespace hal
         mState = stat;
         switch (mState)
         {
-        case NoGatesSelected:  log_info("sim_controller", "Select gates for simulation");              break;
-        case ParameterSetup:   log_info("sim_controller", "Expecting parameter and input");            break;
-        case SimulationRun:    log_info("sim_controller", "Running simulation, please wait...");       break;
-        case ShowResults:      log_info("sim_controller", "Simulation engine completed successfully"); break;
-        case EngineFailed:     log_info("sim_controller", "Simulation engine process error");
-            if (mSimulationEngine) mSimulationEngine->failed(); break;
+        case NoGatesSelected:  log_info(get_name(), "Select gates for simulation");              break;
+        case ParameterSetup:   log_info(get_name(), "Expecting parameter and input");            break;
+        case SimulationRun:    log_info(get_name(), "Running simulation, please wait...");       break;
+        case ShowResults:      log_info(get_name(), "Simulation engine completed successfully"); break;
+        case EngineFailed:
+            log_info(get_name(), "Simulation engine process error");
+            if (mSimulationEngine) mSimulationEngine->failed();
+            break;
         }
     }
 
@@ -51,7 +60,7 @@ namespace hal
         if (!fac) return nullptr;
         if (mSimulationEngine) delete mSimulationEngine;
         mSimulationEngine = fac->createEngine();
-        log_info("sim_controller", "engine '{}' created with working directory {}.", mSimulationEngine->name(), mSimulationEngine->directory());
+        log_info(get_name(), "engine '{}' created with working directory {}.", mSimulationEngine->name(), mSimulationEngine->directory());
         return mSimulationEngine;
     }
 
@@ -113,10 +122,6 @@ namespace hal
          act = new QAction("Select clock net", settingMenu);
          connect(act, &QAction::triggered, this, &NetlistSimulatorController::handleClockSet);
          act->setEnabled(mState==SimulationClockSet);
-         act = new QAction("Visualize net state by color", settingMenu);
-         act->setCheckable(true);
-         act->setChecked(mWaveWidget->isVisulizeNetState());
-         connect (act, &QAction::triggered, mWaveWidget, &WaveWidget::setVisualizeNetState);
 */
     }
 
@@ -137,7 +142,7 @@ namespace hal
     {
         if (!mSimulationEngine)
         {
-            log_warning("sim_controller", "no simulation engine selected");
+            log_warning(get_name(), "no simulation engine selected");
             return false;
         }
 
@@ -145,7 +150,7 @@ namespace hal
 
         if (mState != ParameterSetup)
         {
-            log_warning("sim_controller", "wrong state {}.", (u32) mState);
+            log_warning(get_name(), "wrong state {}.", (u32) mState);
             return false;
         }
 
@@ -180,7 +185,7 @@ namespace hal
                 wd = mWaveDataList.waveDataByNetId(n->get_id());
                 if (!wd)
                 {
-                    log_warning("sim_controller", "no input data for net[{}] '{}'.", n->get_id(), n->get_name());
+                    log_warning(get_name(), "no input data for net[{}] '{}'.", n->get_id(), n->get_name());
                     inputMap.insertMulti(0,QPair<const Net*,BooleanFunction::Value>(n,BooleanFunction::Value::X));
                     continue;
                 }
@@ -216,14 +221,14 @@ namespace hal
 
         if (!mSimulationEngine->setSimulationInput(mSimulationInput))
         {
-            log_warning("sim_controller", "simulation engine error during setup.");
+            log_warning(get_name(), "simulation engine error during setup.");
             setState(EngineFailed);
             return false;
         }
 
         if (!mSimulationEngine->run(this))
         {
-            log_warning("sim_controller", "simulation engine error during startup.");
+            log_warning(get_name(), "simulation engine error during startup.");
             setState(EngineFailed);
             return false;
         }
@@ -236,11 +241,18 @@ namespace hal
         mResultVcdFilename = filename;
     }
 
+    void NetlistSimulatorController::parse_vcd(const std::string& filename)
+    {
+        VcdSerializer reader;
+        for (WaveData* wd : reader.deserialize(QString::fromStdString(filename)))
+            mWaveDataList.addOrReplace(wd);
+    }
+
     void NetlistSimulatorController::handleRunFinished(bool success)
     {
         if (!success)
         {
-            log_warning("sim_controller", "simulation engine error during run.");
+            log_warning(get_name(), "simulation engine error during run.");
             setState(EngineFailed);
             return;
         }
@@ -328,7 +340,7 @@ namespace hal
         Q_ASSERT(net);
         if (!mSimulationInput->is_input_net(net))
         {
-            log_warning("sim_controller", "net[{}] '{}' is not an input net, value not assigned.", net->get_id(), net->get_name());
+            log_warning(get_name(), "net[{}] '{}' is not an input net, value not assigned.", net->get_id(), net->get_name());
             return;
         }
         WaveData* wd = mWaveDataList.waveDataByNetId(net->get_id());
@@ -373,6 +385,29 @@ namespace hal
         mSimulateGates = gsd.selectedGates();
         initSimulator();
         */
+    }
+
+    NetlistSimulatorControllerMap* NetlistSimulatorControllerMap::sInst = nullptr;
+
+    NetlistSimulatorControllerMap* NetlistSimulatorControllerMap::instance()
+    {
+        if (!sInst) sInst = new NetlistSimulatorControllerMap;
+        return sInst;
+    }
+
+    void NetlistSimulatorControllerMap::addController(NetlistSimulatorController* ctrl)
+    {
+        u32 id = ctrl->get_id();
+        mMap.insert(id,ctrl);
+        Q_EMIT controllerAdded(id);
+    }
+
+    void NetlistSimulatorControllerMap::removeController(u32 id)
+    {
+        auto it = mMap.find(id);
+        if (it == mMap.end()) return;
+        mMap.erase(it);
+        Q_EMIT controllerRemoved(id);
     }
 
     /* show results

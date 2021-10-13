@@ -49,10 +49,11 @@ namespace hal
                 :rtype: str
             )")
 
-            .def("create_simulator_controller", &NetlistSimulatorControllerPlugin::create_simulator_controller, R"(
+            .def("create_simulator_controller", &NetlistSimulatorControllerPlugin::create_simulator_controller, py::arg("name") = std::string(), R"(
                 Create a netlist simulation controller instance.
 
                 :returns: The simulator controller instance.
+                :param str name: Optional name for new controller.
                 :rtype: netlist_simulator_controller.NetlistSimulatorController
             )");
 
@@ -114,6 +115,20 @@ namespace hal
 
                 :returns: A list of registered sim.
                 :rtype: list[str]
+             )")
+
+             .def("get_name", &NetlistSimulatorController::get_name, R"(
+                Get controller name.
+
+                :returns: The name of the controller.
+                :rtype: str
+             )")
+
+             .def("get_id", &NetlistSimulatorController::get_id, R"()
+                Get unique controller id.
+
+                :returns: The unique id of the controller.
+                :rtype: int
              )")
 
              .def("create_simulation_engine", &NetlistSimulatorController::create_simulation_engine, py::arg("name"), R"(
@@ -178,10 +193,18 @@ namespace hal
                 Does not remove gates/nets from the simulation set.
             )")
 
+            .def("parse_vcd", &NetlistSimulatorController::parse_vcd, R"(
+                Parse VCD data (e.g. simulation input).
+
+                :param str filename: filename of VCD file to be parsed.
+            )")
+
             .def("request_generate_vcd", &NetlistSimulatorController::request_generate_vcd, py::arg("filename"), R"(
                 Request to engine to generate VCD reult file upon successful completion.
 
-                :param str filename: filename for requested VCD result file in engine working directory.")");
+                :param str filename: filename for requested VCD result file in engine working directory."
+            )");
+
                 /*
             .def("set_simulation_state", &NetlistSimulator::set_simulation_state, py::arg("state"), R"(
                 Set the simulator state, i.e., net signals, to a given state.

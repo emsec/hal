@@ -70,7 +70,7 @@ namespace hal {
         if (!filename.empty())
             if (!(of = fopen(filename.c_str(),"w")))
             {
-                log_warning("sim_controller", "cannot open simulation input dump file '{}'", filename);
+                log_warning("SimulationInput", "cannot open simulation input dump file '{}'", filename);
                 return;
             }
 

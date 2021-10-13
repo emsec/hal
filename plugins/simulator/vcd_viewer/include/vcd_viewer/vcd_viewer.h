@@ -39,6 +39,7 @@
 #include <QString>
 #include <QMap>
 #include <QCheckBox>
+#include <QTabWidget>
 #include <vector>
 #include <memory>
 #include <unordered_set>
@@ -89,7 +90,13 @@ namespace hal
         void handleSelectGates();
         void handleClockSet();
 
+
         void handleSelectionChanged(void* sender);
+        void setVisualizeNetState(bool state);
+
+    public Q_SLOTS:
+        void handleControllerAdded(u32 controllerId);
+        void handleControllerRemoved(u32 controllerId);
 
     private:
         void initSimulator();
@@ -102,6 +109,7 @@ namespace hal
         const Net* mClkNet;
         std::vector<Gate*> mSimulateGates;
         int mDuration;
+        bool mVisualizeNetState;
 
         QMap<u32,const WaveData*> mResultMap;
 
@@ -109,7 +117,7 @@ namespace hal
         QAction* mOpenInputfileAction;
         QAction* mRunSimulationAction;
 
-        WaveWidget* mWaveWidget;
+        QTabWidget* mTabWidget;
         QStatusBar* mStatusBar;
 
     };

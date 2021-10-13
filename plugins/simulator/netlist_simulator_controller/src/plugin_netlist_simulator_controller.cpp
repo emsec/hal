@@ -6,6 +6,8 @@
 
 namespace hal
 {
+    u32 NetlistSimulatorControllerPlugin::mMaxControllerId = 0;
+
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<NetlistSimulatorControllerPlugin>();
@@ -21,9 +23,9 @@ namespace hal
         return std::string("0.7");
     }
 
-    std::unique_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::create_simulator_controller() const
+    std::unique_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::create_simulator_controller(const std::string &nam) const
     {
-        return std::unique_ptr<NetlistSimulatorController>(new NetlistSimulatorController());
+        return std::unique_ptr<NetlistSimulatorController>(new NetlistSimulatorController(++mMaxControllerId, nam));
     }
 
 

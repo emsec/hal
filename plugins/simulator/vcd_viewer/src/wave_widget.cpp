@@ -12,6 +12,7 @@
 #include <QResizeEvent>
 #include <QDebug>
 
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include "hal_core/netlist/grouping.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/grouping/grouping_manager_widget.h"
@@ -22,8 +23,8 @@
 
 namespace hal {
 
-    WaveWidget::WaveWidget(QWidget *parent)
-        : QSplitter(parent), mVisualizeNetState(false)
+    WaveWidget::WaveWidget(NetlistSimulatorController *ctrl, QWidget *parent)
+        : QSplitter(parent), mController(ctrl), mVisualizeNetState(false)
     {
         mFrame = new QFrame(this);
         mFrame->setLineWidth(3);
@@ -40,6 +41,12 @@ namespace hal {
         connect(mWaveScene,&WaveScene::cursorMoved,this,&WaveWidget::handleCursorMoved);
         connect(mWaveView,&WaveView::relativeYScroll,this,&WaveWidget::handleYScroll);
         connect(gContentManager->getSelectionDetailsWidget(),&SelectionDetailsWidget::triggerHighlight,this,&WaveWidget::handleSelectionHighlight);
+    }
+
+    u32 WaveWidget::controllerId() const
+    {
+        if (!mController) return 0;
+        return mController->get_id();
     }
 
     void WaveWidget::updateIndices()
@@ -68,12 +75,13 @@ namespace hal {
         }
     }
 
-    void WaveWidget::setVisualizeNetState(bool state)
+    void WaveWidget::setVisualizeNetState(bool state, bool activeTab)
     {
         GroupingTableModel* gtm = gContentManager->getGroupingManagerWidget()->getModel();
         static const char* grpNames[3] = {"x state", "0 state", "1 state"};
-        if (state == mVisualizeNetState) return;
-        if ((mVisualizeNetState = state))
+        mVisualizeNetState = state;
+        if (!activeTab) return;
+        if (mVisualizeNetState)
         {
             for (int i=0; i<3; i++)
             {

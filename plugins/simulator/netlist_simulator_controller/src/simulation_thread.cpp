@@ -8,7 +8,7 @@
 namespace hal {
 
     SimulationThread::SimulationThread(NetlistSimulatorController* controller, const SimulationInput* simInput, SimulationEngineEventDriven *engine)
-        : QThread(controller), mSimulationInput(simInput), mEngine(engine)
+        : QThread(controller), mSimulationInput(simInput), mEngine(engine), mLogChannel(controller->get_name())
     {
         connect(this, &SimulationThread::threadFinished, controller, &NetlistSimulatorController::handleRunFinished);
     }
@@ -19,7 +19,7 @@ namespace hal {
         {
             mEngine->failed();
             if (failedStep)
-               log_warning("sim_controller", "simulation engine error during {}.", failedStep);
+               log_warning(mLogChannel, "simulation engine error during {}.", failedStep);
         }
         Q_EMIT threadFinished(success);
     }

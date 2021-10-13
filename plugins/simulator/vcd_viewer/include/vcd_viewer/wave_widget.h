@@ -16,19 +16,20 @@ namespace hal {
     class WaveView;
     class WaveScene;
     class SelectionTreeItem;
+    class NetlistSimulatorController;
 
     class WaveWidget : public QSplitter
     {
         Q_OBJECT
 
     public:
-        WaveWidget(QWidget* parent=nullptr);
+        WaveWidget(NetlistSimulatorController* ctrl, QWidget* parent=nullptr);
         void addOrReplaceWave(WaveData* wd);
         const WaveData* waveDataByNetId(u32 id) const;
         bool isVisulizeNetState() const { return mVisualizeNetState; }
-
-    public Q_SLOTS:
-        void setVisualizeNetState(bool state);
+        u32 controllerId() const;
+        NetlistSimulatorController* controller() const { return mController; }
+        void setVisualizeNetState(bool state, bool activeTab);
 
     private Q_SLOTS:
         void handleCursorMoved(float xpos);
@@ -44,6 +45,7 @@ namespace hal {
         void resizeEvent(QResizeEvent *event) override;
 
     private:
+        NetlistSimulatorController* mController;
         QMap<u32,int> mWaveIndices;
         QVector<WaveLabel*> mValues;
 

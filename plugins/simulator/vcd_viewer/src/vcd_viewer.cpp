@@ -31,6 +31,7 @@
 #include <QVBoxLayout>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "netlist_simulator/plugin_netlist_simulator.h"
+#include "netlist_simulator/netlist_simulator.h"
 #include "netlist_simulator_controller/simulation_input.h"
 
 namespace hal
@@ -42,7 +43,8 @@ namespace hal
     }
 
     VcdViewer::VcdViewer(QWidget *parent)
-        : ContentWidget("VcdViewer",parent), mState(SimulationSelectGates), mClkNet(nullptr)
+        : ContentWidget("VcdViewer",parent), mState(SimulationSelectGates), mClkNet(nullptr),
+          mVisualizeNetState(false)
     {
         mSimulSettingsAction = new QAction(this);
         mOpenInputfileAction = new QAction(this);
@@ -61,14 +63,21 @@ namespace hal
         connect(mOpenInputfileAction, &QAction::triggered, this, &VcdViewer::handleOpenInputFile);
         connect(mRunSimulationAction, &QAction::triggered, this, &VcdViewer::handleRunSimulation);
 
-        mWaveWidget = new WaveWidget(this);
-        mWaveWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        mContentLayout->addWidget(mWaveWidget);
+        mTabWidget = new QTabWidget(this);
+        mTabWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        mContentLayout->addWidget(mTabWidget);
+//        mWaveWidget = new WaveWidget(this);
+//        mWaveWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+//        mContentLayout->addWidget(mWaveWidget);
         mStatusBar = new QStatusBar(this);
         mStatusBar->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
         mContentLayout->addWidget(mStatusBar);
         if (gSelectionRelay)
             connect(gSelectionRelay,&SelectionRelay::selectionChanged,this,&VcdViewer::handleSelectionChanged);
+
+        NetlistSimulatorControllerMap* nscm = NetlistSimulatorControllerMap::instance();
+        connect(nscm, &NetlistSimulatorControllerMap::controllerAdded, this, &VcdViewer::handleControllerAdded);
+        connect(nscm, &NetlistSimulatorControllerMap::controllerRemoved, this, &VcdViewer::handleControllerRemoved);
         setState(SimulationSelectGates);
     }
 
@@ -125,7 +134,7 @@ namespace hal
         {
             WaveData* wd = new WaveData(n);
             wd->insert(0,0);
-            mWaveWidget->addOrReplaceWave(wd);
+// TODO            mWaveWidget->addOrReplaceWave(wd);
         }
 
         // mController->set_iteration_timeout(1000);
@@ -154,21 +163,54 @@ namespace hal
          settingMenu->addSeparator();
          act = new QAction("Visualize net state by color", settingMenu);
          act->setCheckable(true);
-         act->setChecked(mWaveWidget->isVisulizeNetState());
-         connect (act, &QAction::triggered, mWaveWidget, &WaveWidget::setVisualizeNetState);
+         act->setChecked(mVisualizeNetState);
+         connect (act, &QAction::triggered, this, &VcdViewer::setVisualizeNetState);
          settingMenu->addAction(act);
 
          settingMenu->exec(mapToGlobal(QPoint(10,3)));
     }
 
+    void VcdViewer::setVisualizeNetState(bool state)
+    {
+        if (state == mVisualizeNetState) return;
+        mVisualizeNetState = state;
+        for (int inx=0; inx < mTabWidget->count(); inx++)
+        {
+            WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
+            ww->setVisualizeNetState(mVisualizeNetState, inx==mTabWidget->currentIndex());
+        }
+    }
+
+    void VcdViewer::handleControllerAdded(u32 controllerId)
+    {
+        NetlistSimulatorController* nsc = NetlistSimulatorControllerMap::instance()->controller(controllerId);
+        if (!nsc) return;
+        WaveWidget* ww = new WaveWidget(nsc, mTabWidget);
+        mTabWidget->addTab(ww,nsc->name());
+    }
+
+    void VcdViewer::handleControllerRemoved(u32 controllerId)
+    {
+        for (int inx=0; inx<mTabWidget->count(); inx++)
+        {
+            WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
+            if (ww->controllerId() == controllerId)
+            {
+                mTabWidget->removeTab(inx);
+                ww->deleteLater();
+            }
+        }
+    }
+
     void VcdViewer::handleOpenInputFile()
     {
+        if (!mTabWidget->count()) return;
+        WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->currentWidget());
+        if (!ww) return;
         QString filename =
                 QFileDialog::getOpenFileName(this, "Load input wave file", ".", ("VCD Files (*.vcd)") );
         if (filename.isEmpty()) return;
-        VcdSerializer reader;
-        for (WaveData* wd : reader.deserialize(filename))
-            mWaveWidget->addOrReplaceWave(wd);
+        ww->controller()->parse_vcd(filename.toStdString());
     }
 
     void VcdViewer::handleRunSimulation()
@@ -185,6 +227,8 @@ namespace hal
             return;
         }
         QMultiMap<int,QPair<const Net*, BooleanFunction::Value>> inputMap;
+// TODO
+        /*
         for (const Net* n : mController->get_input_nets())
         {
             if (n==mClkNet) continue;
@@ -203,7 +247,7 @@ namespace hal
                 inputMap.insertMulti(it.key(),QPair<const Net*,BooleanFunction::Value>(n,sv));
             }
         }
-        /*
+
          * TODO start simulation
         int t=0;
         for (auto it = inputMap.begin(); it != inputMap.end(); ++it)
@@ -249,7 +293,7 @@ namespace hal
         mDuration = csd.duration();
         mController->add_clock_period(mClkNet,period,start==0);
         WaveData* wd = new WaveDataClock(mClkNet, start, period, mDuration);
-        mWaveWidget->addOrReplaceWave(wd);
+// TODO        mWaveWidget->addOrReplaceWave(wd);
         setState(SimulationInputGenerate);
     }
 
@@ -258,7 +302,7 @@ namespace hal
         mClkNet = n;
         mController->add_clock_period(mClkNet,period,start==0);
         WaveData* wd = new WaveDataClock(mClkNet, start, period, 2000);
-        mWaveWidget->addOrReplaceWave(wd);
+// TODO        mWaveWidget->addOrReplaceWave(wd);
         setState(SimulationInputGenerate);
     }
 
@@ -281,7 +325,7 @@ namespace hal
             const WaveData* wd = mResultMap.value(n->get_id());
             if (!wd) continue;
             WaveData* wdCopy = new WaveData(*wd);
-            mWaveWidget->addOrReplaceWave(wdCopy);
+// TODO             mWaveWidget->addOrReplaceWave(wdCopy);
         }
     }
 }    // namespace hal
