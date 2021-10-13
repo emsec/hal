@@ -30,23 +30,20 @@ var NAVTREE =
       [ "Documentation", "index.html#autotoc_md13", null ],
       [ "Slack, Contact and Support", "index.html#autotoc_md14", null ]
     ] ],
-    [ "Install Instructions", "index.html#autotoc_md15", [
-      [ "Ubuntu 20.04", "index.html#autotoc_md16", null ]
+    [ "Build Instructions", "index.html#autotoc_md15", [
+      [ "Ubuntu 18.04", "index.html#autotoc_md16", null ],
+      [ "Ubuntu 20.04", "index.html#autotoc_md17", null ],
+      [ "A few notes on Windows WSL", "index.html#autotoc_md18", null ],
+      [ "CMake Options", "index.html#autotoc_md19", null ]
     ] ],
-    [ "Build Instructions", "index.html#autotoc_md17", [
-      [ "Ubuntu 18.04", "index.html#autotoc_md18", null ],
-      [ "Ubuntu 20.04", "index.html#autotoc_md19", null ],
-      [ "A few notes on Windows WSL", "index.html#autotoc_md20", null ],
-      [ "CMake Options", "index.html#autotoc_md21", null ]
+    [ "Quickstart Guide", "index.html#autotoc_md20", null ],
+    [ "Contributing", "index.html#autotoc_md21", [
+      [ "Run static checks and clang format locally", "index.html#autotoc_md22", null ],
+      [ "Generate Changelog", "index.html#autotoc_md23", null ]
     ] ],
-    [ "Quickstart Guide", "index.html#autotoc_md22", null ],
-    [ "Contributing", "index.html#autotoc_md23", [
-      [ "Run static checks and clang format locally", "index.html#autotoc_md24", null ],
-      [ "Generate Changelog", "index.html#autotoc_md25", null ]
-    ] ],
-    [ "Academic Context", "index.html#autotoc_md26", null ],
-    [ "Licensing", "index.html#autotoc_md27", null ],
-    [ "Disclaimer", "index.html#autotoc_md28", null ],
+    [ "Academic Context", "index.html#autotoc_md24", null ],
+    [ "Licensing", "index.html#autotoc_md25", null ],
+    [ "Disclaimer", "index.html#autotoc_md26", null ],
     [ "LICENSE", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html", [
       [ "SIL Open Font License v1.1", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md4", [
         [ "Preamble", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md5", null ],
@@ -117,11 +114,11 @@ var NAVTREEINDEX =
 "enums_8h.html#afe11c53f9f94ae23527944574e1f5df3",
 "graph__context_8h_source.html",
 "index.html#autotoc_md10",
-"net__layout__point_8h.html",
-"plugin__manager_8h.html#af13862a2a5565fb995d7cc93c0bfd980",
-"separated__graphics__net_8h.html",
-"structhal_1_1_s_m_t_1_1_model.html#a67d2af2431b357a27f78b421b3bd0797",
-"utils_8h.html#a7de316388e4d4baf69a170c67a6efd57"
+"net__layout__point_8h.html#a7feb466e42a0d4e1c5601fe9a6169154",
+"plugin__relay_8cpp.html",
+"settings__display_8cpp.html",
+"structhal_1_1_s_m_t_1_1_model.html#ab315e7ca78ff1ce335a52e77fe6f95eb",
+"utils_8h.html#a94d00e2a6c7e4945e1301d5e96377459"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
