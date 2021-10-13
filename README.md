@@ -12,10 +12,9 @@ HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation fr
 
 # Navigation
 1. [Introduction](#introduction)
-2. [Install Instructions](#install-instructions)
-3. [Build Instructions](#build-instructions)
-4. [Quickstart Guide](#quickstart)
-5. [Academic Context](#academic-context)
+2. [Build Instructions](#build-instructions)
+3. [Quickstart Guide](#quickstart)
+4. [Academic Context](#academic-context)
 
 ## What the hell is HAL?
 Virtually all available research on netlist analysis operates on a graph-based representation of the netlist under inspection.
