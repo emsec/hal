@@ -3,6 +3,7 @@
 #include "hal_core/netlist/module.h"
 
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
+#include "gui/graph_widget/layout_locker.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_def.h"
@@ -462,7 +463,7 @@ namespace hal
 
         if (mSceneUpdateRequired)
         {
-            startSceneUpdate();
+            requireSceneUpdate();
         }
         else
         {
@@ -495,7 +496,7 @@ namespace hal
             applyChanges();
 
         if (mSceneUpdateRequired)
-            startSceneUpdate();
+            requireSceneUpdate();
     }
 
     void GraphContext::applyChanges()
@@ -567,6 +568,12 @@ namespace hal
 
         mUnappliedChanges     = false;
         mSceneUpdateRequired = true;
+    }
+
+    void GraphContext::requireSceneUpdate()
+    {
+        if (LayoutLockerManager::instance()->canUpdate(this))
+            startSceneUpdate();
     }
 
     void GraphContext::startSceneUpdate()

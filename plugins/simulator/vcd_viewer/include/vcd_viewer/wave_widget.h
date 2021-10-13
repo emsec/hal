@@ -8,6 +8,7 @@
 #include <QSplitter>
 #include <QFrame>
 #include <hal_core/defines.h>
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
 
 namespace hal {
 
@@ -16,7 +17,8 @@ namespace hal {
     class WaveView;
     class WaveScene;
     class SelectionTreeItem;
-    class NetlistSimulatorController;
+
+//    enum SimulationState { SimulationSelectGates, SimulationClockSet, SimulationInputGenerate, SimulationShowResults };
 
     class WaveWidget : public QSplitter
     {
@@ -24,12 +26,15 @@ namespace hal {
 
     public:
         WaveWidget(NetlistSimulatorController* ctrl, QWidget* parent=nullptr);
+        ~WaveWidget();
         void addOrReplaceWave(WaveData* wd);
         const WaveData* waveDataByNetId(u32 id) const;
         bool isVisulizeNetState() const { return mVisualizeNetState; }
         u32 controllerId() const;
         NetlistSimulatorController* controller() const { return mController; }
         void setVisualizeNetState(bool state, bool activeTab);
+        void takeOwnership(std::unique_ptr<NetlistSimulatorController>& ctrl);
+        bool triggerClose();
 
     private Q_SLOTS:
         void handleCursorMoved(float xpos);
@@ -46,6 +51,7 @@ namespace hal {
 
     private:
         NetlistSimulatorController* mController;
+        std::unique_ptr<NetlistSimulatorController> mControllerOwner;
         QMap<u32,int> mWaveIndices;
         QVector<WaveLabel*> mValues;
 

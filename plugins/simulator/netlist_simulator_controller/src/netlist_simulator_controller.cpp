@@ -366,17 +366,6 @@ namespace hal
     {
        mWaveDataList.incrementMaxTime(picoseconds);
     }
-    /*
-    void NetlistSimulatorController::setClock(const Net *n, int period, int start)
-    {
-        mClkNet = n;
-
-        // TODO: clock set unify
-        // mSimulator->add_clock_period(mClkNet,period,start==0);
-        WaveData* wd = WaveData::clockFactory(mClkNet, start, period, 2000);
-        mWaveDataList.addOrReplace(wd);
-    }
-*/
 
     void NetlistSimulatorController::handleSelectGates()
     {

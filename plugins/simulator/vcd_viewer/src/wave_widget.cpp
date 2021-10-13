@@ -24,7 +24,7 @@
 namespace hal {
 
     WaveWidget::WaveWidget(NetlistSimulatorController *ctrl, QWidget *parent)
-        : QSplitter(parent), mController(ctrl), mVisualizeNetState(false)
+        : QSplitter(parent), mController(ctrl), mControllerOwner(nullptr), mVisualizeNetState(false)
     {
         mFrame = new QFrame(this);
         mFrame->setLineWidth(3);
@@ -43,10 +43,28 @@ namespace hal {
         connect(gContentManager->getSelectionDetailsWidget(),&SelectionDetailsWidget::triggerHighlight,this,&WaveWidget::handleSelectionHighlight);
     }
 
+    WaveWidget::~WaveWidget()
+    {
+        disconnect(mWaveScene,&WaveScene::cursorMoved,this,&WaveWidget::handleCursorMoved);
+        disconnect(mWaveView,&WaveView::relativeYScroll,this,&WaveWidget::handleYScroll);
+    }
+
     u32 WaveWidget::controllerId() const
     {
         if (!mController) return 0;
         return mController->get_id();
+    }
+
+    void WaveWidget::takeOwnership(std::unique_ptr<NetlistSimulatorController>& ctrl)
+    {
+        mControllerOwner = std::move(ctrl);
+    }
+
+    bool WaveWidget::triggerClose()
+    {
+        if (!mControllerOwner) return false;
+        deleteLater();
+        return true;
     }
 
     void WaveWidget::updateIndices()

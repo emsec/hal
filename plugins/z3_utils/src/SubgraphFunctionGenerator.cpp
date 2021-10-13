@@ -52,7 +52,7 @@ namespace hal
                 const auto& input_net = gate->get_fan_in_net(input_pin);
                 if (!input_net)
                 {
-                    log_info("z3_utils", "Pin ({}) has no input net. Gate id: ({})", input_pin, gate->get_id());
+                    log_debug("z3_utils", "Pin ({}) has no input net. Gate id: ({})", input_pin, gate->get_id());
                     continue;
                 }
                 bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));

@@ -71,8 +71,6 @@ namespace hal
 
     public:
 
-        enum SimulationState { SimulationSelectGates, SimulationClockSet, SimulationInputGenerate, SimulationShowResults };
-
         VcdViewer(QWidget* parent = nullptr);
         ~VcdViewer() = default;
 
@@ -84,6 +82,7 @@ namespace hal
         virtual void setupToolbar(Toolbar* toolbar) override;
 
     private Q_SLOTS:
+        void handleCreateControl();
         void handleSimulSettings();
         void handleOpenInputFile();
         void handleRunSimulation();
@@ -93,26 +92,24 @@ namespace hal
 
         void handleSelectionChanged(void* sender);
         void setVisualizeNetState(bool state);
+        void handleTabClosed(int inx);
 
     public Q_SLOTS:
         void handleControllerAdded(u32 controllerId);
         void handleControllerRemoved(u32 controllerId);
+        void displayStatusMessage(const QString& msg = QString());
 
     private:
         void initSimulator();
-        void setClock(const Net*n, int period, int start=0);
-        void setState(SimulationState stat);
 
-        SimulationState mState;
         std::shared_ptr<NetlistSimulatorController> mController;
         QList<const Net*> mInputNets;
-        const Net* mClkNet;
         std::vector<Gate*> mSimulateGates;
-        int mDuration;
         bool mVisualizeNetState;
 
         QMap<u32,const WaveData*> mResultMap;
 
+        QAction* mCreateControlAction;
         QAction* mSimulSettingsAction;
         QAction* mOpenInputfileAction;
         QAction* mRunSimulationAction;

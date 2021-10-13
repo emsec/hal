@@ -3,6 +3,7 @@
 #include "vcd_viewer/wave_widget.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_engine.h"
 
 #include "netlist_simulator_controller/vcd_serializer.h"
 #include "vcd_viewer/gate_selection_dialog.h"
@@ -43,28 +44,33 @@ namespace hal
     }
 
     VcdViewer::VcdViewer(QWidget *parent)
-        : ContentWidget("VcdViewer",parent), mState(SimulationSelectGates), mClkNet(nullptr),
+        : ContentWidget("VcdViewer",parent),
           mVisualizeNetState(false)
     {
+        mCreateControlAction = new QAction(this);
         mSimulSettingsAction = new QAction(this);
         mOpenInputfileAction = new QAction(this);
         mRunSimulationAction = new QAction(this);
 
-
+        mCreateControlAction->setIcon(gui_utility::getStyledSvgIcon("all->#808080",":/icons/plus"));
         mSimulSettingsAction->setIcon(gui_utility::getStyledSvgIcon("all->#808080",":/icons/preferences"));
         mOpenInputfileAction->setIcon(gui_utility::getStyledSvgIcon("all->#FFFFFF",":/icons/folder"));
         mRunSimulationAction->setIcon(gui_utility::getStyledSvgIcon("all->#20FF80",":/icons/run"));
 
+        mCreateControlAction->setToolTip("Create simulation controller");
         mSimulSettingsAction->setToolTip("Simulation settings");
         mOpenInputfileAction->setToolTip("Open input file");
         mRunSimulationAction->setToolTip("Run Simulation");
 
+        connect(mCreateControlAction, &QAction::triggered, this, &VcdViewer::handleCreateControl);
         connect(mSimulSettingsAction, &QAction::triggered, this, &VcdViewer::handleSimulSettings);
         connect(mOpenInputfileAction, &QAction::triggered, this, &VcdViewer::handleOpenInputFile);
         connect(mRunSimulationAction, &QAction::triggered, this, &VcdViewer::handleRunSimulation);
 
         mTabWidget = new QTabWidget(this);
+        mTabWidget->setTabsClosable(true);
         mTabWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        connect(mTabWidget,&QTabWidget::tabCloseRequested,this,&VcdViewer::handleTabClosed);
         mContentLayout->addWidget(mTabWidget);
 //        mWaveWidget = new WaveWidget(this);
 //        mWaveWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -78,19 +84,23 @@ namespace hal
         NetlistSimulatorControllerMap* nscm = NetlistSimulatorControllerMap::instance();
         connect(nscm, &NetlistSimulatorControllerMap::controllerAdded, this, &VcdViewer::handleControllerAdded);
         connect(nscm, &NetlistSimulatorControllerMap::controllerRemoved, this, &VcdViewer::handleControllerRemoved);
-        setState(SimulationSelectGates);
+        displayStatusMessage();
     }
 
-    void VcdViewer::setState(SimulationState stat)
+    void VcdViewer::displayStatusMessage(const QString& msg)
     {
-        mState = stat;
-        switch (mState)
+        if (msg.isEmpty())
         {
-        case SimulationSelectGates:   mStatusBar->showMessage("Select gates for simulation");                   break;
-        case SimulationClockSet:      mStatusBar->showMessage("Select and set clock");                          break;
-        case SimulationInputGenerate: mStatusBar->showMessage("Generate input and start simulation when done"); break;
-        case SimulationShowResults:   mStatusBar->showMessage("Select wires in graph to show results");         break;
+            if (mTabWidget->count())
+            {
+                WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->currentWidget());
+                mStatusBar->showMessage("Setup simulation controller " + ww->controller()->name());
+            }
+            else
+                mStatusBar->showMessage("Create new simulation controller");
         }
+        else
+            mStatusBar->showMessage(msg);
     }
 
     void VcdViewer::initSimulator()
@@ -125,8 +135,6 @@ namespace hal
 
         // TODO : WaveData from WaveDataList
 
-        mClkNet = nullptr;
-
         for (const Net* inet : mController->get_input_nets())
             mInputNets.append(inet);
 
@@ -138,15 +146,45 @@ namespace hal
         }
 
         // mController->set_iteration_timeout(1000);
-        setState(SimulationClockSet);
+ //       setState(SimulationClockSet);
     }
 
     void VcdViewer::setupToolbar(Toolbar* toolbar)
     {
+        toolbar->addAction(mCreateControlAction);
         toolbar->addAction(mSimulSettingsAction);
         toolbar->addAction(mOpenInputfileAction);
         toolbar->addAction(mRunSimulationAction);
 
+    }
+
+    void VcdViewer::handleTabClosed(int inx)
+    {
+        WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
+        if (!ww->triggerClose())
+            log_warning(ww->controller()->get_name(), "Cannot close tab for externally owned controller.");
+    }
+
+    void VcdViewer::handleCreateControl()
+    {
+        NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
+        if (!ctrlPlug)
+        {
+            log_warning("vcd_viewer", "Plugin 'netlist_simulator_controller' not found");
+            return;
+        }
+        std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->create_simulator_controller();
+        u32 ctrlId = ctrlRef.get()->get_id();
+        for (int inx=0; inx<mTabWidget->count(); inx++)
+        {
+            WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
+            qDebug() << "search controller" << ctrlId << ww->controllerId();
+            if (ctrlId == ww->controllerId())
+            {
+                ww->takeOwnership(ctrlRef);
+                break;
+            }
+        }
     }
 
     void VcdViewer::handleSimulSettings()
@@ -158,8 +196,19 @@ namespace hal
          settingMenu->addAction(act);
          act = new QAction("Select clock net", settingMenu);
          connect(act, &QAction::triggered, this, &VcdViewer::handleClockSet);
-         act->setEnabled(mState==SimulationClockSet);
+  // TODO       act->setEnabled(mState==SimulationClockSet);
          settingMenu->addAction(act);
+         settingMenu->addSeparator();
+         QMenu* engineMenu = settingMenu->addMenu("Select engine ...");
+         QActionGroup* engineGroup = new QActionGroup(this);
+         engineGroup->setExclusive(true);
+         for (SimulationEngineFactory* sef : *SimulationEngineFactories::instance())
+         {
+             act = new QAction(QString::fromStdString(sef->name()), engineMenu);
+             act->setCheckable(true);
+             engineMenu->addAction(act);
+             engineGroup->addAction(act);
+         }
          settingMenu->addSeparator();
          act = new QAction("Visualize net state by color", settingMenu);
          act->setCheckable(true);
@@ -187,6 +236,7 @@ namespace hal
         if (!nsc) return;
         WaveWidget* ww = new WaveWidget(nsc, mTabWidget);
         mTabWidget->addTab(ww,nsc->name());
+        displayStatusMessage();
     }
 
     void VcdViewer::handleControllerRemoved(u32 controllerId)
@@ -200,6 +250,7 @@ namespace hal
                 ww->deleteLater();
             }
         }
+        displayStatusMessage();
     }
 
     void VcdViewer::handleOpenInputFile()
@@ -216,19 +267,14 @@ namespace hal
     void VcdViewer::handleRunSimulation()
     {
         mResultMap.clear();
-        if (!mClkNet)
-        {
-            qDebug() << "no clock found";
-            return;
-        }
+        // TODO
+        /*
         if (mState != SimulationInputGenerate)
         {
             qDebug() << "wrong state" << mState;
             return;
         }
         QMultiMap<int,QPair<const Net*, BooleanFunction::Value>> inputMap;
-// TODO
-        /*
         for (const Net* n : mController->get_input_nets())
         {
             if (n==mClkNet) continue;
@@ -276,7 +322,7 @@ namespace hal
             mResults.insert(wd->name(),wd);
             */
         qDebug() << "results" << mResultMap.size();
-        setState(SimulationShowResults);
+     //   setState(SimulationShowResults);
     }
 
     void VcdViewer::handleClockSet()
@@ -287,24 +333,13 @@ namespace hal
         int period = csd.period();
         if (period <= 0) return;
 
-        int start = csd.startValue();
-        mClkNet = mInputNets.at(csd.netIndex());
+        const Net* clk = mInputNets.at(csd.netIndex());
 
-        mDuration = csd.duration();
-        mController->add_clock_period(mClkNet,period,start==0);
-        WaveData* wd = new WaveDataClock(mClkNet, start, period, mDuration);
-// TODO        mWaveWidget->addOrReplaceWave(wd);
-        setState(SimulationInputGenerate);
-    }
+        WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->currentWidget());
+        ww->controller()->add_clock_period(clk,csd.duration(),csd.startValue()==0);
 
-    void VcdViewer::setClock(const Net *n, int period, int start)
-    {
-        mClkNet = n;
-        mController->add_clock_period(mClkNet,period,start==0);
-        WaveData* wd = new WaveDataClock(mClkNet, start, period, 2000);
-// TODO        mWaveWidget->addOrReplaceWave(wd);
-        setState(SimulationInputGenerate);
-    }
+        // TODO : ww->update() ?
+   }
 
     void VcdViewer::handleSelectGates()
     {

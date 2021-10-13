@@ -37,7 +37,7 @@ namespace hal
          * 
          * @param[in] component - Another component to be added as a child component.
          */
-        LatchComponent();
+        LatchComponent(std::unique_ptr<GateTypeComponent> component);
 
         /**
          * Get the type of the gate type component.
@@ -138,6 +138,8 @@ namespace hal
 
     private:
         static constexpr ComponentType m_type = ComponentType::latch;
+        std::unique_ptr<GateTypeComponent> m_component = nullptr;
+
 
         BooleanFunction m_data_in_bf                                                       = BooleanFunction();
         BooleanFunction m_enable_bf                                                        = BooleanFunction();

@@ -36,6 +36,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D",
         "clocked_on": "C"
       },
@@ -53,6 +55,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -66,6 +69,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D",
         "clocked_on": "E & C"
       },
@@ -88,6 +93,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -101,6 +107,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D & !R",
         "clocked_on": "C"
       },
@@ -123,6 +131,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -136,6 +145,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D & !R",
         "clocked_on": "C",
         "clear_on": "R"
@@ -159,6 +170,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -172,6 +184,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D | S",
         "clocked_on": "C"
       },
@@ -194,6 +208,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -207,6 +222,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D | S",
         "clocked_on": "C",
         "preset_on": "S"
@@ -230,6 +247,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -243,6 +261,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D & !R",
         "clocked_on": "E & C"
       },
@@ -270,6 +290,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -283,6 +304,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D & !R",
         "clocked_on": "E & C",
         "clear_on": "R"
@@ -311,6 +334,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -324,6 +348,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D | S",
         "clocked_on": "E & C"
       },
@@ -351,6 +377,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -364,6 +391,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D | S",
         "clocked_on": "E & C",
         "preset_on": "S"
@@ -392,6 +421,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -405,6 +435,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D",
         "clocked_on": "!C"
       },
@@ -422,6 +454,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -435,6 +468,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D",
         "clocked_on": "E & !C"
       },
@@ -457,6 +492,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -470,6 +506,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D & !R",
         "clocked_on": "!C"
       },
@@ -492,6 +530,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -505,6 +544,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D & !R",
         "clocked_on": "!C",
         "clear_on": "R"
@@ -528,6 +569,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -541,6 +583,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D | S",
         "clocked_on": "!C"
       },
@@ -563,6 +607,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -576,6 +621,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D | S",
         "clocked_on": "!C",
         "preset_on": "S"
@@ -599,6 +646,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -612,6 +660,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D & !R",
         "clocked_on": "E & !C"
       },
@@ -634,6 +684,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -647,6 +698,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D & !R",
         "clocked_on": "E & !C",
         "clear_on": "R"
@@ -675,6 +728,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -688,6 +742,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D | S",
         "clocked_on": "E & !C"
       },
@@ -715,6 +771,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]
@@ -728,6 +785,8 @@
       "ff_config": {
         "data_category": "generic",
         "data_identifier": "INIT",
+        "state": "IQ",
+        "neg_state": "IQN",
         "next_state": "D | S",
         "clocked_on": "E & !C",
         "preset_on": "S"
@@ -756,6 +815,7 @@
         {
           "name": "Q",
           "direction": "output",
+          "function": "IQ",
           "type": "state"
         }
       ]

@@ -200,7 +200,6 @@ namespace hal
 
     private:
         void initSimulator();
-//        void setClock(const Net*n, int period, int start=0);
         void setState(SimulationState stat);
 
         bool isClockSet() const;

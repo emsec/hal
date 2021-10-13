@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    LatchComponent::LatchComponent()
+    LatchComponent::LatchComponent(std::unique_ptr<GateTypeComponent> component) : m_component(std::move(component))
     {
     }
 
@@ -18,7 +18,24 @@ namespace hal
 
     std::vector<GateTypeComponent*> LatchComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
-        UNUSED(filter);
+        if (m_component != nullptr)
+        {
+            std::vector<GateTypeComponent*> res = m_component->get_components(filter);
+            if (filter)
+            {
+                if (filter(m_component.get()))
+                {
+                    res.push_back(m_component.get());
+                }
+            }
+            else
+            {
+                res.push_back(m_component.get());
+            }
+
+            return res;
+        }
+
         return {};
     }
 

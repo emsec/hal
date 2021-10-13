@@ -149,6 +149,11 @@ namespace hal
             return gate_library_writer_manager::write(gate_lib, file_path);
         }
 
+        void remove(std::filesystem::path file_path)
+        {
+            m_gate_libraries.erase(file_path);
+        }
+
         GateLibrary* get_gate_library(const std::string& file_path)
         {
             std::filesystem::path absolute_path;
