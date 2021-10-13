@@ -45,7 +45,8 @@ var group__graph_contexts =
       [ "unfoldModule", "classhal_1_1_graph_context.html#af5994fa27903de66f5af0453368f3cf3", null ],
       [ "unsubscribe", "classhal_1_1_graph_context.html#acc8900f76c89c0b80315f28c22d4cf38", null ],
       [ "writeToFile", "classhal_1_1_graph_context.html#a246b2047c7dd7a7239779a383e2bb3f9", null ],
-      [ "GraphContextManager", "classhal_1_1_graph_context.html#a86a0cb713ffa26636ccf96114f7566ec", null ]
+      [ "GraphContextManager", "classhal_1_1_graph_context.html#a86a0cb713ffa26636ccf96114f7566ec", null ],
+      [ "LayoutLockerManager", "classhal_1_1_graph_context.html#a86285ea7584f0c31dd775ee66c145412", null ]
     ] ],
     [ "GraphContextSubscriber", "classhal_1_1_graph_context_subscriber.html", [
       [ "~GraphContextSubscriber", "classhal_1_1_graph_context_subscriber.html#a61a66286e7cf9df3a8a040120029166e", null ],

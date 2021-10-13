@@ -141,6 +141,8 @@ var namespacehal =
     [ "LabeledFrame", "classhal_1_1_labeled_frame.html", "classhal_1_1_labeled_frame" ],
     [ "LabeledSeparatedNet", "classhal_1_1_labeled_separated_net.html", "classhal_1_1_labeled_separated_net" ],
     [ "LatchComponent", "classhal_1_1_latch_component.html", "classhal_1_1_latch_component" ],
+    [ "LayoutLocker", "classhal_1_1_layout_locker.html", "classhal_1_1_layout_locker" ],
+    [ "LayoutLockerManager", "classhal_1_1_layout_locker_manager.html", "classhal_1_1_layout_locker_manager" ],
     [ "LineNumberArea", "classhal_1_1_line_number_area.html", "classhal_1_1_line_number_area" ],
     [ "log_gui_sink", "classhal_1_1log__gui__sink.html", "classhal_1_1log__gui__sink" ],
     [ "LoggerMarshall", "classhal_1_1_logger_marshall.html", "classhal_1_1_logger_marshall" ],

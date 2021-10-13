@@ -201,7 +201,15 @@ var menudata={children:[
 {text:"u",url:"functions_prop.html#index_u"},
 {text:"v",url:"functions_prop.html#index_v"},
 {text:"w",url:"functions_prop.html#index_w"}]},
-{text:"Related Functions",url:"functions_rela.html"}]}]},
+{text:"Related Functions",url:"functions_rela.html",children:[
+{text:"d",url:"functions_rela.html#index_d"},
+{text:"g",url:"functions_rela.html#index_g"},
+{text:"l",url:"functions_rela.html#index_l"},
+{text:"m",url:"functions_rela.html#index_m"},
+{text:"n",url:"functions_rela.html#index_n"},
+{text:"o",url:"functions_rela.html#index_o"},
+{text:"s",url:"functions_rela.html#index_s"},
+{text:"w",url:"functions_rela.html#index_w"}]}]}]},
 {text:"Files",url:"files.html",children:[
 {text:"File List",url:"files.html"},
 {text:"File Members",url:"globals.html",children:[
