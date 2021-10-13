@@ -56,15 +56,6 @@ A comprehensive documentation of HAL's features from a user perspective is avail
 ## Slack, Contact and Support
 For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@csp.mpg.de](mailto:hal@csp.mpg.de). To receive an invite to our dedicated hal-support Slack workspace, please write us an e-mail as well.
 
-
-<a name="install-instructions"></a>
-# Install Instructions 
-
-## Ubuntu 20.04
-
-HAL releases are available via it's own ppa, which can be found here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal). If you wish to always work with the most recent version of HAL, we recommend building HAL yourself.
-
-
 <a name="build-instructions"></a>
 # Build Instructions 
 
