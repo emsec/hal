@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type &mdash; hal_py v3.2.6-564-g842046576 documentation</title>
+  <title>Gate Type &mdash; hal_py v3.2.6-566-g1d8db9619 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Gate Library" href="gate_library.html" />
-    <link rel="prev" title="HAL Path" href="path.html" /> 
+    <link rel="next" title="Gate Type Component" href="gate_type_component.html" />
+    <link rel="prev" title="Gate Library Manager" href="gate_library_manager.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.6-564-g842046576
+                v3.2.6-566-g1d8db9619
               </div>
             
           
@@ -86,25 +86,29 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="core_utils.html">Core Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Gate Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_utils.html">Core Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="endpoint.html">Endpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate.html">Gate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library_manager.html">Gate Library Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gate.html">Gate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
-<li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Gate Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_type_component.html">Gate Type Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_type_property.html">Gate Type Property</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="endpoint.html">Endpoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
@@ -284,8 +288,8 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The pin.</li>
-<li><strong>direction</strong> (<em>hal_py.PinDirection</em>) – The pin direction to be assigned.</li>
-<li><strong>pin_type</strong> (<em>hal_py.PinType</em>) – The pin type to be assigned.</li>
+<li><strong>direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The pin direction to be assigned.</li>
+<li><strong>pin_type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type to be assigned.</li>
 </ul>
 </td>
 </tr>
@@ -309,8 +313,8 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – The pins.</li>
-<li><strong>direction</strong> (<em>hal_py.PinDirection</em>) – The pin direction to be assigned.</li>
-<li><strong>pin_type</strong> (<em>hal_py.PinType</em>) – The pin type to be assigned.</li>
+<li><strong>direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The pin direction to be assigned.</li>
+<li><strong>pin_type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type to be assigned.</li>
 </ul>
 </td>
 </tr>
@@ -352,7 +356,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The pin.</li>
-<li><strong>pin_type</strong> (<em>hal_py.PinType</em>) – The pin type to be assigned.</li>
+<li><strong>pin_type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type to be assigned.</li>
 </ul>
 </td>
 </tr>
@@ -374,7 +378,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>property</strong> (<em>hal_py.GateTypeProperty</em>) – The property to assign.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>property</strong> (<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty"><em>hal_py.GateTypeProperty</em></a>) – The property to assign.</td>
 </tr>
 </tbody>
 </table>
@@ -402,7 +406,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[hal_py.GateTypeComponent]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -470,7 +474,7 @@ Returns None if (i) the gate type does not contain any components, (ii) multiple
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The component or None.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.GateTypeComponent or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)">None</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)">None</a></td>
 </tr>
 </tbody>
 </table>
@@ -489,7 +493,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The components.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[hal_py.GateTypeComponent]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -587,7 +591,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin direction.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.PinDirection</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection">hal_py.PinDirection</a></td>
 </tr>
 </tbody>
 </table>
@@ -603,7 +607,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin to pin direction.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>[std,hal_py.PinDirection]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>[std,<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection">hal_py.PinDirection</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -679,7 +683,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin type.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.PinType</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType">hal_py.PinType</a></td>
 </tr>
 </tbody>
 </table>
@@ -695,7 +699,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin to pin type.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>,hal_py.PinType]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>,<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType">hal_py.PinType</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -725,7 +729,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction</strong> (<em>hal_py.PinDirection</em>) – The pin direction.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The pin direction.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A set of pins.</td>
 </tr>
@@ -761,7 +765,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_type</strong> (<em>hal_py.PinType</em>) – The pin type.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A set of pins.</td>
 </tr>
@@ -781,7 +785,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The properties of the gate type.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.10)">set</a>[hal_py.GateTypeProperty]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.10)">set</a>[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -795,7 +799,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<em>hal_py.GateTypeComponent.ComponentType</em>) – The component type to check for.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent.ComponentType" title="hal_py.GateTypeComponent.ComponentType"><em>hal_py.GateTypeComponent.ComponentType</em></a>) – The component type to check for.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the gate type contains a component of the speciifed type, False otherwise.</td>
 </tr>
@@ -813,7 +817,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<em>hal_py.GateTypeProperty</em>) – The property to check for.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty"><em>hal_py.GateTypeProperty</em></a>) – The property to check for.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the gate type has the specified property, false otherwise.</td>
 </tr>
@@ -886,7 +890,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>,hal_py.PinDirection]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>,<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection">hal_py.PinDirection</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -914,7 +918,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>,hal_py.PinType]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>,<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType">hal_py.PinType</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -942,7 +946,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.10)">set</a>[hal_py.GateTypeProperty]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.10)">set</a>[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -960,10 +964,10 @@ Returns an empty list if (i) the gate type does not contain any components or (i
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="gate_library.html" class="btn btn-neutral float-right" title="Gate Library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="gate_type_component.html" class="btn btn-neutral float-right" title="Gate Type Component" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="path.html" class="btn btn-neutral float-left" title="HAL Path" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="gate_library_manager.html" class="btn btn-neutral float-left" title="Gate Library Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

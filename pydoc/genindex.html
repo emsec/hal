@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v3.2.6-564-g842046576 documentation</title>
+  <title>Index &mdash; hal_py v3.2.6-566-g1d8db9619 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v3.2.6-564-g842046576
+                v3.2.6-566-g1d8db9619
               </div>
             
           
@@ -262,13 +262,15 @@
 </li>
       <li><a href="gate_type.html#hal_py.GateType.add_output_pins">add_output_pins() (hal_py.GateType method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type.html#hal_py.GateType.add_pin">add_pin() (hal_py.GateType method)</a>
 </li>
       <li><a href="gate_type.html#hal_py.GateType.add_pins">add_pins() (hal_py.GateType method)</a>
 </li>
       <li><a href="net.html#hal_py.Net.add_source">add_source() (hal_py.Net method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gate_type_component.html#hal_py.RAMPortComponent.address_group">address_group (hal_py.RAMPortComponent attribute)</a>
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.Event.affected_net">affected_net (netlist_simulator.Event attribute)</a>
 </li>
@@ -294,6 +296,18 @@
 </li>
       <li><a href="gate_type.html#hal_py.GateType.assign_property">assign_property() (hal_py.GateType method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.async_reset_function">async_reset_function (hal_py.FFComponent attribute)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.LatchComponent.async_reset_function">(hal_py.LatchComponent attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.async_set_function">async_set_function (hal_py.FFComponent attribute)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.LatchComponent.async_set_function">(hal_py.LatchComponent attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -301,6 +315,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface">BasePluginInterface (class in hal_py)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.RAMComponent.bit_size">bit_size (hal_py.RAMComponent attribute)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.boolean_functions">boolean_functions (hal_py.Gate attribute)</a>
 
@@ -324,8 +340,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.Netlist.clear_caches">clear_caches() (hal_py.Netlist method)</a>
 </li>
-      <li><a href="gate_type.html#hal_py.GateType.components">components (hal_py.GateType attribute)</a>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.clock_function">clock_function (hal_py.FFComponent attribute)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.RAMPortComponent.clock_function">(hal_py.RAMPortComponent attribute)</a>
 </li>
+      </ul></li>
+      <li><a href="gate_type.html#hal_py.GateType.components">components (hal_py.GateType attribute)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.GateTypeComponent.components">(hal_py.GateTypeComponent attribute)</a>
+</li>
+      </ul></li>
       <li><a href="grouping.html#hal_py.Grouping.contains_gate">contains_gate() (hal_py.Grouping method)</a>
 
       <ul>
@@ -382,6 +408,10 @@
         <li><a href="net.html#hal_py.Net.data">(hal_py.Net attribute)</a>
 </li>
       </ul></li>
+      <li><a href="gate_type_component.html#hal_py.RAMPortComponent.data_group">data_group (hal_py.RAMPortComponent attribute)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LatchComponent.data_in_function">data_in_function (hal_py.LatchComponent attribute)</a>
+</li>
       <li><a href="data_container.html#hal_py.DataContainer">DataContainer (class in hal_py)</a>
 </li>
       <li><a href="dataflow.html#dataflow.DataflowPlugin">DataflowPlugin (class in dataflow)</a>
@@ -396,10 +426,10 @@
         <li><a href="net.html#hal_py.Net.delete_data">(hal_py.Net method)</a>
 </li>
       </ul></li>
-      <li><a href="netlist.html#hal_py.Netlist.delete_gate">delete_gate() (hal_py.Netlist method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="netlist.html#hal_py.Netlist.delete_gate">delete_gate() (hal_py.Netlist method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.delete_grouping">delete_grouping() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.delete_module">delete_module() (hal_py.Netlist method)</a>
@@ -428,12 +458,18 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="endpoint.html#hal_py.Endpoint">Endpoint (class in hal_py)</a>
+      <li><a href="gate_type_component.html#hal_py.LatchComponent.enable_function">enable_function (hal_py.LatchComponent attribute)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.RAMPortComponent.enable_function">(hal_py.RAMPortComponent attribute)</a>
 </li>
-      <li><a href="boolean_function.html#hal_py.BooleanFunction.evaluate">evaluate() (hal_py.BooleanFunction method)</a>
+      </ul></li>
+      <li><a href="endpoint.html#hal_py.Endpoint">Endpoint (class in hal_py)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="boolean_function.html#hal_py.BooleanFunction.evaluate">evaluate() (hal_py.BooleanFunction method)</a>
+</li>
       <li><a href="netlist_simulator.html#netlist_simulator.Event">Event (class in netlist_simulator)</a>
 </li>
       <li><a href="gui_plugin_interface.html#hal_py.GUIPluginInterface.exec">exec() (hal_py.GUIPluginInterface method)</a>
@@ -448,9 +484,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate.html#hal_py.Gate.fan_in_nets">fan_in_nets (hal_py.Gate attribute)</a>
 </li>
+      <li><a href="gate.html#hal_py.Gate.fan_out_nets">fan_out_nets (hal_py.Gate attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="gate.html#hal_py.Gate.fan_out_nets">fan_out_nets (hal_py.Gate attribute)</a>
+      <li><a href="gate_type_component.html#hal_py.FFComponent">FFComponent (class in hal_py)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.from_string">from_string() (hal_py.BooleanFunction static method)</a>
 </li>
@@ -476,8 +514,6 @@
 </li>
       <li><a href="gate_library.html#hal_py.GateLibrary">GateLibrary (class in hal_py)</a>
 </li>
-      <li><a href="gate_library_manager.html#hal_py.GateLibraryManager">GateLibraryManager (in module hal_py)</a>
-</li>
       <li><a href="grouping.html#hal_py.Grouping.gates">gates (hal_py.Grouping attribute)</a>
 
       <ul>
@@ -488,11 +524,39 @@
       </ul></li>
       <li><a href="gate_type.html#hal_py.GateType">GateType (class in hal_py)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.GateTypeComponent">GateTypeComponent (class in hal_py)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.GateTypeComponent.ComponentType">GateTypeComponent.ComponentType (class in hal_py)</a>
+</li>
+      <li><a href="gate_type_property.html#hal_py.GateTypeProperty">GateTypeProperty (class in hal_py)</a>
+</li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.generate_vcd">generate_vcd() (netlist_simulator.NetlistSimulator method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.RAMPortComponent.get_address_group">get_address_group() (hal_py.RAMPortComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.get_async_reset_function">get_async_reset_function() (hal_py.FFComponent method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.LatchComponent.get_async_reset_function">(hal_py.LatchComponent method)</a>
+</li>
+      </ul></li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.get_async_set_function">get_async_set_function() (hal_py.FFComponent method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.LatchComponent.get_async_set_function">(hal_py.LatchComponent method)</a>
+</li>
+      </ul></li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.get_async_set_reset_behavior">get_async_set_reset_behavior() (hal_py.FFComponent method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.LatchComponent.get_async_set_reset_behavior">(hal_py.LatchComponent method)</a>
+</li>
+      </ul></li>
       <li><a href="core_utils.html#hal_py.CoreUtils.get_base_directory">get_base_directory() (in module hal_py.CoreUtils)</a>
 </li>
       <li><a href="core_utils.html#hal_py.CoreUtils.get_binary_directory">get_binary_directory() (in module hal_py.CoreUtils)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.RAMComponent.get_bit_size">get_bit_size() (hal_py.RAMComponent method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_boolean_function">get_boolean_function() (hal_py.Gate method)</a>
 
@@ -508,6 +572,12 @@
       </ul></li>
       <li><a href="boolean_influence.html#boolean_influence.BooleanInfluencePlugin.get_boolean_influences_of_gate">get_boolean_influences_of_gate() (boolean_influence.BooleanInfluencePlugin method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.get_clock_function">get_clock_function() (hal_py.FFComponent method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.RAMPortComponent.get_clock_function">(hal_py.RAMPortComponent method)</a>
+</li>
+      </ul></li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_common_inputs">get_common_inputs() (in module hal_py.NetlistUtils)</a>
 </li>
       <li><a href="graph_algorithm.html#graph_algorithm.GraphAlgorithmPlugin.get_communities">get_communities() (graph_algorithm.GraphAlgorithmPlugin method)</a>
@@ -519,9 +589,17 @@
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_complex_gate_chain">get_complex_gate_chain() (in module hal_py.NetlistUtils)</a>
 </li>
       <li><a href="gate_type.html#hal_py.GateType.get_component">get_component() (hal_py.GateType method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.GateTypeComponent.get_component">(hal_py.GateTypeComponent method)</a>
 </li>
+      </ul></li>
       <li><a href="gate_type.html#hal_py.GateType.get_components">get_components() (hal_py.GateType method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.GateTypeComponent.get_components">(hal_py.GateTypeComponent method)</a>
 </li>
+      </ul></li>
       <li><a href="data_container.html#hal_py.DataContainer.get_data">get_data() (hal_py.DataContainer method)</a>
 
       <ul>
@@ -532,6 +610,10 @@
         <li><a href="net.html#hal_py.Net.get_data">(hal_py.Net method)</a>
 </li>
       </ul></li>
+      <li><a href="gate_type_component.html#hal_py.RAMPortComponent.get_data_group">get_data_group() (hal_py.RAMPortComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LatchComponent.get_data_in_function">get_data_in_function() (hal_py.LatchComponent method)</a>
+</li>
       <li><a href="data_container.html#hal_py.DataContainer.get_data_map">get_data_map() (hal_py.DataContainer method)</a>
 
       <ul>
@@ -552,6 +634,12 @@
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.get_dnf_clauses">get_dnf_clauses() (hal_py.BooleanFunction method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.LatchComponent.get_enable_function">get_enable_function() (hal_py.LatchComponent method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.RAMPortComponent.get_enable_function">(hal_py.RAMPortComponent method)</a>
+</li>
+      </ul></li>
       <li><a href="netlist_simulator.html#netlist_simulator.Simulation.get_events">get_events() (netlist_simulator.Simulation method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_fan_in_endpoint">get_fan_in_endpoint() (hal_py.Gate method)</a>
@@ -590,12 +678,18 @@
 </li>
       <li><a href="grouping.html#hal_py.Grouping.get_gate_ids">get_gate_ids() (hal_py.Grouping method)</a>
 </li>
+      <li><a href="gate_library_manager.html#hal_py.GateLibraryManager.get_gate_libraries">get_gate_libraries() (in module hal_py.GateLibraryManager)</a>
+</li>
       <li><a href="gate_type.html#hal_py.GateType.get_gate_library">get_gate_library() (hal_py.GateType method)</a>
 
       <ul>
         <li><a href="netlist.html#hal_py.Netlist.get_gate_library">(hal_py.Netlist method)</a>
 </li>
+        <li><a href="gate_library_manager.html#hal_py.GateLibraryManager.get_gate_library">(in module hal_py.GateLibraryManager)</a>
+</li>
       </ul></li>
+      <li><a href="gate_library_manager.html#hal_py.GateLibraryManager.get_gate_library_by_name">get_gate_library_by_name() (in module hal_py.GateLibraryManager)</a>
+</li>
       <li><a href="core_utils.html#hal_py.CoreUtils.get_gate_library_directories">get_gate_library_directories() (in module hal_py.CoreUtils)</a>
 </li>
       <li><a href="gate_library.html#hal_py.GateLibrary.get_gate_type_by_name">get_gate_type_by_name() (hal_py.GateLibrary method)</a>
@@ -650,6 +744,10 @@
       </ul></li>
       <li><a href="gate_library.html#hal_py.GateLibrary.get_includes">get_includes() (hal_py.GateLibrary method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.InitComponent.get_init_category">get_init_category() (hal_py.InitComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.InitComponent.get_init_identifier">get_init_identifier() (hal_py.InitComponent method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.get_input_filename">get_input_filename() (hal_py.Netlist method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.get_input_nets">get_input_nets() (hal_py.Module method)</a>
@@ -682,6 +780,8 @@
 </li>
       <li><a href="gate.html#hal_py.Gate.get_module">get_module() (hal_py.Gate method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.Netlist.get_module_by_id">get_module_by_id() (hal_py.Netlist method)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.get_module_ids">get_module_ids() (hal_py.Grouping method)</a>
@@ -716,8 +816,8 @@
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.get_name">(netlist_simulator.NetlistSimulatorPlugin method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gate_type_component.html#hal_py.StateComponent.get_neg_state_identifier">get_neg_state_identifier() (hal_py.StateComponent method)</a>
+</li>
       <li><a href="endpoint.html#hal_py.Endpoint.get_net">get_net() (hal_py.Endpoint method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_net_by_id">get_net_by_id() (hal_py.Netlist method)</a>
@@ -761,6 +861,8 @@
       <li><a href="module.html#hal_py.Module.get_next_output_port_id">get_next_output_port_id() (hal_py.Module method)</a>
 </li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_next_sequential_gates">get_next_sequential_gates() (in module hal_py.NetlistUtils)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.get_next_state_function">get_next_state_function() (hal_py.FFComponent method)</a>
 </li>
       <li><a href="net.html#hal_py.Net.get_num_of_destinations">get_num_of_destinations() (hal_py.Net method)</a>
 </li>
@@ -840,6 +942,8 @@
 </li>
       <li><a href="net.html#hal_py.Net.get_sources">get_sources() (hal_py.Net method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.StateComponent.get_state_identifier">get_state_identifier() (hal_py.StateComponent method)</a>
+</li>
       <li><a href="graph_algorithm.html#graph_algorithm.GraphAlgorithmPlugin.get_strongly_connected_components">get_strongly_connected_components() (graph_algorithm.GraphAlgorithmPlugin method)</a>
 </li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_subgraph_function">get_subgraph_function() (in module hal_py.NetlistUtils)</a>
@@ -857,6 +961,8 @@
       <li><a href="gate.html#hal_py.Gate.get_type">get_type() (hal_py.Gate method)</a>
 
       <ul>
+        <li><a href="gate_type_component.html#hal_py.GateTypeComponent.get_type">(hal_py.GateTypeComponent method)</a>
+</li>
         <li><a href="module.html#hal_py.Module.get_type">(hal_py.Module method)</a>
 </li>
       </ul></li>
@@ -944,6 +1050,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="core_utils.html#module-hal_py.CoreUtils">hal_py.CoreUtils (module)</a>
 </li>
+      <li><a href="gate_library_manager.html#module-hal_py.GateLibraryManager">hal_py.GateLibraryManager (module)</a>
+</li>
       <li><a href="netlist_factory.html#module-hal_py.NetlistFactory">hal_py.NetlistFactory (module)</a>
 </li>
       <li><a href="netlist_utils.html#module-hal_py.NetlistUtils">hal_py.NetlistUtils (module)</a>
@@ -986,6 +1094,14 @@
       </ul></li>
       <li><a href="gate_library.html#hal_py.GateLibrary.includes">includes (hal_py.GateLibrary attribute)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.init_ascending">init_ascending (hal_py.LUTComponent attribute)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.InitComponent.init_category">init_category (hal_py.InitComponent attribute)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.InitComponent.init_identifiers">init_identifiers (hal_py.InitComponent attribute)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.InitComponent">InitComponent (class in hal_py)</a>
+</li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.initialize">initialize() (netlist_simulator.NetlistSimulator method)</a>
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.initialize_sequential_gates">initialize_sequential_gates() (netlist_simulator.NetlistSimulator method)</a>
@@ -1008,14 +1124,30 @@
 </li>
       <li><a href="net.html#hal_py.Net.is_a_source">is_a_source() (hal_py.Net method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.is_class_of">is_class_of() (hal_py.FFComponent static method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.InitComponent.is_class_of">(hal_py.InitComponent static method)</a>
+</li>
+        <li><a href="gate_type_component.html#hal_py.LUTComponent.is_class_of">(hal_py.LUTComponent static method)</a>
+</li>
+        <li><a href="gate_type_component.html#hal_py.LatchComponent.is_class_of">(hal_py.LatchComponent static method)</a>
+</li>
+        <li><a href="gate_type_component.html#hal_py.RAMComponent.is_class_of">(hal_py.RAMComponent static method)</a>
+</li>
+        <li><a href="gate_type_component.html#hal_py.RAMPortComponent.is_class_of">(hal_py.RAMPortComponent static method)</a>
+</li>
+        <li><a href="gate_type_component.html#hal_py.StateComponent.is_class_of">(hal_py.StateComponent static method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.is_constant_one">is_constant_one() (hal_py.BooleanFunction method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.is_constant_zero">is_constant_zero() (hal_py.BooleanFunction method)</a>
 </li>
       <li><a href="endpoint.html#hal_py.Endpoint.is_destination">is_destination (hal_py.Endpoint attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="endpoint.html#hal_py.Endpoint.is_destination_pin">is_destination_pin() (hal_py.Endpoint method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.is_dnf">is_dnf() (hal_py.BooleanFunction method)</a>
@@ -1046,6 +1178,8 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.is_grouping_in_netlist">is_grouping_in_netlist() (hal_py.Netlist method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.is_init_ascending">is_init_ascending() (hal_py.LUTComponent method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.is_module_in_netlist">is_module_in_netlist() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.is_net_in_netlist">is_net_in_netlist() (hal_py.Netlist method)</a>
@@ -1066,22 +1200,32 @@
       </ul></li>
       <li><a href="net.html#hal_py.Net.is_vcc_net">is_vcc_net() (hal_py.Net method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.RAMPortComponent.is_write_port">is_write_port() (hal_py.RAMPortComponent method)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="plugin_manager.html#hal_py.plugin_manager.load">load() (in module hal_py.plugin_manager)</a>
+      <li><a href="gate_type_component.html#hal_py.LatchComponent">LatchComponent (class in hal_py)</a>
+</li>
+      <li><a href="gate_library_manager.html#hal_py.GateLibraryManager.load">load() (in module hal_py.GateLibraryManager)</a>
+
+      <ul>
+        <li><a href="plugin_manager.html#hal_py.plugin_manager.load">(in module hal_py.plugin_manager)</a>
+</li>
+      </ul></li>
+      <li><a href="gate_library_manager.html#hal_py.GateLibraryManager.load_all">load_all() (in module hal_py.GateLibraryManager)</a>
 </li>
       <li><a href="plugin_manager.html#hal_py.plugin_manager.load_all_plugins">load_all_plugins() (in module hal_py.plugin_manager)</a>
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.load_initial_values">load_initial_values() (netlist_simulator.NetlistSimulator method)</a>
 </li>
-      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.load_initial_values_from_netlist">load_initial_values_from_netlist() (netlist_simulator.NetlistSimulator method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.load_initial_values_from_netlist">load_initial_values_from_netlist() (netlist_simulator.NetlistSimulator method)</a>
+</li>
       <li><a href="netlist_factory.html#hal_py.NetlistFactory.load_netlist">load_netlist() (in module hal_py.NetlistFactory)</a>
 </li>
       <li><a href="netlist_factory.html#hal_py.NetlistFactory.load_netlists">load_netlists() (in module hal_py.NetlistFactory)</a>
@@ -1091,6 +1235,8 @@
       <li><a href="gate.html#hal_py.Gate.location_x">location_x (hal_py.Gate attribute)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.location_y">location_y (hal_py.Gate attribute)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent">LUTComponent (class in hal_py)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1161,23 +1307,33 @@
 </li>
         <li><a href="gate_type.html#hal_py.GateType.name">(hal_py.GateType attribute)</a>
 </li>
+        <li><a href="gate_type_component.html#hal_py.GateTypeComponent.ComponentType.name">(hal_py.GateTypeComponent.ComponentType attribute)</a>
+</li>
+        <li><a href="gate_type_property.html#hal_py.GateTypeProperty.name">(hal_py.GateTypeProperty attribute)</a>
+</li>
         <li><a href="grouping.html#hal_py.Grouping.name">(hal_py.Grouping attribute)</a>
 </li>
         <li><a href="module.html#hal_py.Module.name">(hal_py.Module attribute)</a>
 </li>
         <li><a href="net.html#hal_py.Net.name">(hal_py.Net attribute)</a>
 </li>
+        <li><a href="pin_direction.html#hal_py.PinDirection.name">(hal_py.PinDirection attribute)</a>
+</li>
+        <li><a href="pin_type.html#hal_py.PinType.name">(hal_py.PinType attribute)</a>
+</li>
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.name">(netlist_simulator.NetlistSimulatorPlugin attribute)</a>
 </li>
       </ul></li>
+      <li><a href="gate_type_component.html#hal_py.StateComponent.neg_state_identifier">neg_state_identifier (hal_py.StateComponent attribute)</a>
+</li>
       <li><a href="net.html#hal_py.Net">Net (class in hal_py)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="endpoint.html#hal_py.Endpoint.net">net (hal_py.Endpoint attribute)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.net_ids">net_ids (hal_py.Grouping attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.Netlist">Netlist (class in hal_py)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.netlist">netlist (hal_py.Gate attribute)</a>
@@ -1207,6 +1363,8 @@
       <li><a href="module.html#hal_py.Module.next_input_port_id">next_input_port_id (hal_py.Module attribute)</a>
 </li>
       <li><a href="module.html#hal_py.Module.next_output_port_id">next_output_port_id (hal_py.Module attribute)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.next_state_function">next_state_function (hal_py.FFComponent attribute)</a>
 </li>
       <li><a href="net.html#hal_py.Net.num_of_destinations">num_of_destinations (hal_py.Net attribute)</a>
 </li>
@@ -1248,13 +1406,17 @@
 </li>
       <li><a href="gate_type.html#hal_py.GateType.pin_directions">pin_directions (hal_py.GateType attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type.html#hal_py.GateType.pin_groups">pin_groups (hal_py.GateType attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type.html#hal_py.GateType.pin_types">pin_types (hal_py.GateType attribute)</a>
 </li>
+      <li><a href="pin_direction.html#hal_py.PinDirection">PinDirection (class in hal_py)</a>
+</li>
       <li><a href="gate_type.html#hal_py.GateType.pins">pins (hal_py.GateType attribute)</a>
+</li>
+      <li><a href="pin_type.html#hal_py.PinType">PinType (class in hal_py)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.predecessors">predecessors (hal_py.Gate attribute)</a>
 </li>
@@ -1266,6 +1428,10 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gate_type_component.html#hal_py.RAMComponent">RAMComponent (class in hal_py)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.RAMPortComponent">RAMPortComponent (class in hal_py)</a>
+</li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.remove_buffers">remove_buffers() (in module hal_py.NetlistUtils)</a>
 </li>
       <li><a href="net.html#hal_py.Net.remove_destination">remove_destination() (hal_py.Net method)</a>
@@ -1280,10 +1446,10 @@
 </li>
       <li><a href="grouping.html#hal_py.Grouping.remove_module">remove_module() (hal_py.Grouping method)</a>
 </li>
-      <li><a href="grouping.html#hal_py.Grouping.remove_module_by_id">remove_module_by_id() (hal_py.Grouping method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grouping.html#hal_py.Grouping.remove_module_by_id">remove_module_by_id() (hal_py.Grouping method)</a>
+</li>
       <li><a href="grouping.html#hal_py.Grouping.remove_net">remove_net() (hal_py.Grouping method)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.remove_net_by_id">remove_net_by_id() (hal_py.Grouping method)</a>
@@ -1304,6 +1470,8 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gate_library_manager.html#hal_py.GateLibraryManager.save">save() (in module hal_py.GateLibraryManager)</a>
+</li>
       <li><a href="gui.html#hal_gui.GuiApi.select">select() (hal_gui.GuiApi method)</a>
 </li>
       <li><a href="gui.html#hal_gui.GuiApi.selectGate">selectGate() (hal_gui.GuiApi method)</a>
@@ -1312,8 +1480,36 @@
 </li>
       <li><a href="gui.html#hal_gui.GuiApi.selectNet">selectNet() (hal_gui.GuiApi method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.RAMPortComponent.set_address_group">set_address_group() (hal_py.RAMPortComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.set_async_reset_function">set_async_reset_function() (hal_py.FFComponent method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.LatchComponent.set_async_reset_function">(hal_py.LatchComponent method)</a>
+</li>
+      </ul></li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.set_async_set_function">set_async_set_function() (hal_py.FFComponent method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.LatchComponent.set_async_set_function">(hal_py.LatchComponent method)</a>
+</li>
+      </ul></li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.set_async_set_reset_behavior">set_async_set_reset_behavior() (hal_py.FFComponent method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.LatchComponent.set_async_set_reset_behavior">(hal_py.LatchComponent method)</a>
+</li>
+      </ul></li>
+      <li><a href="gate_type_component.html#hal_py.RAMComponent.set_bit_size">set_bit_size() (hal_py.RAMComponent method)</a>
+</li>
       <li><a href="module.html#hal_py.Module.set_cache_dirty">set_cache_dirty() (hal_py.Module method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.set_clock_function">set_clock_function() (hal_py.FFComponent method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.RAMPortComponent.set_clock_function">(hal_py.RAMPortComponent method)</a>
+</li>
+      </ul></li>
       <li><a href="data_container.html#hal_py.DataContainer.set_data">set_data() (hal_py.DataContainer method)</a>
 
       <ul>
@@ -1324,10 +1520,20 @@
         <li><a href="net.html#hal_py.Net.set_data">(hal_py.Net method)</a>
 </li>
       </ul></li>
+      <li><a href="gate_type_component.html#hal_py.RAMPortComponent.set_data_group">set_data_group() (hal_py.RAMPortComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LatchComponent.set_data_in_function">set_data_in_function() (hal_py.LatchComponent method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.set_design_name">set_design_name() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.set_device_name">set_device_name() (hal_py.Netlist method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.LatchComponent.set_enable_function">set_enable_function() (hal_py.LatchComponent method)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.RAMPortComponent.set_enable_function">(hal_py.RAMPortComponent method)</a>
+</li>
+      </ul></li>
       <li><a href="netlist.html#hal_py.Netlist.set_free_gate_ids">set_free_gate_ids() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.set_free_grouping_ids">set_free_grouping_ids() (hal_py.Netlist method)</a>
@@ -1338,8 +1544,16 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.set_id">set_id() (hal_py.Netlist method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.set_init_ascending">set_init_ascending() (hal_py.LUTComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.InitComponent.set_init_category">set_init_category() (hal_py.InitComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.InitComponent.set_init_identifier">set_init_identifier() (hal_py.InitComponent method)</a>
+</li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.set_input">set_input() (netlist_simulator.NetlistSimulator method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.Netlist.set_input_filename">set_input_filename() (hal_py.Netlist method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.set_input_port_name">set_input_port_name() (hal_py.Module method)</a>
@@ -1352,8 +1566,6 @@
 </li>
       <li><a href="gate.html#hal_py.Gate.set_location_y">set_location_y() (hal_py.Gate method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate.html#hal_py.Gate.set_name">set_name() (hal_py.Gate method)</a>
 
       <ul>
@@ -1364,6 +1576,8 @@
         <li><a href="net.html#hal_py.Net.set_name">(hal_py.Net method)</a>
 </li>
       </ul></li>
+      <li><a href="gate_type_component.html#hal_py.StateComponent.set_neg_state_identifier">set_neg_state_identifier() (hal_py.StateComponent method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.set_next_gate_id">set_next_gate_id() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.set_next_grouping_id">set_next_grouping_id() (hal_py.Netlist method)</a>
@@ -1376,11 +1590,15 @@
 </li>
       <li><a href="module.html#hal_py.Module.set_next_output_port_id">set_next_output_port_id() (hal_py.Module method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent.set_next_state_function">set_next_state_function() (hal_py.FFComponent method)</a>
+</li>
       <li><a href="module.html#hal_py.Module.set_output_port_name">set_output_port_name() (hal_py.Module method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.set_parent_module">set_parent_module() (hal_py.Module method)</a>
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.set_simulation_state">set_simulation_state() (netlist_simulator.NetlistSimulator method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.StateComponent.set_state_identifier">set_state_identifier() (hal_py.StateComponent method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.set_type">set_type() (hal_py.Module method)</a>
 </li>
@@ -1392,11 +1610,17 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.set_used_net_ids">set_used_net_ids() (hal_py.Netlist method)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.RAMPortComponent.set_write_port">set_write_port() (hal_py.RAMPortComponent method)</a>
+</li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.simulate">simulate() (netlist_simulator.NetlistSimulator method)</a>
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.Simulation">Simulation (class in netlist_simulator)</a>
 </li>
       <li><a href="net.html#hal_py.Net.sources">sources (hal_py.Net attribute)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.StateComponent.state_identifier">state_identifier (hal_py.StateComponent attribute)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.StateComponent">StateComponent (class in hal_py)</a>
 </li>
       <li><a href="module.html#hal_py.Module.submodules">submodules (hal_py.Module attribute)</a>
 </li>
@@ -1425,6 +1649,8 @@
       <li><a href="gate.html#hal_py.Gate.type">type (hal_py.Gate attribute)</a>
 
       <ul>
+        <li><a href="gate_type_component.html#hal_py.GateTypeComponent.type">(hal_py.GateTypeComponent attribute)</a>
+</li>
         <li><a href="module.html#hal_py.Module.type">(hal_py.Module attribute)</a>
 </li>
       </ul></li>
@@ -1499,6 +1725,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist_writer_manager.html#hal_py.NetlistWriterManager.write">write() (in module hal_py.NetlistWriterManager)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gate_type_component.html#hal_py.RAMPortComponent.write_port">write_port (hal_py.RAMPortComponent attribute)</a>
 </li>
   </ul></td>
 </tr></table>
