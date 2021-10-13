@@ -161,6 +161,12 @@ Ubuntu 20.04</h2>
 <li><code>make install</code> (optionally) to install HAL</li>
 </ol>
 <h2><a class="anchor" id="autotoc_md20"></a>
+A few notes on Windows WSL</h2>
+<p>You can try using HAL directly on Windows with the help of the most recent Ubuntu 20.04 subsystem. Install Ubuntu 20.04 with Windows subsystem and follow the installation instructions above.</p>
+<p>To get the HAL GUI appearing you need an XServer. Install <code>VcXsrv</code>(<a href="https://sourceforge.net/projects/vcxsrv/">https://sourceforge.net/projects/vcxsrv/</a>) and start <code>Xlaunch</code> on your Windows machine. Now go to Ubuntu 20.04 and start HAL with GUI support. In the following command we assume that the DISPLAY is at localhost:0, this needs to be adjusted on your machine.</p>
+<p><code>export LIBGL_ALWAYS_INDIRECT=1; export DISPLAY=:0; hal -g</code></p>
+<p>If you encounter an error try restarting the XServer and select <code>One Large Window</code>.</p>
+<h2><a class="anchor" id="autotoc_md21"></a>
 CMake Options</h2>
 <p>Using the CMake build system, your HAL build can be configured quite easily (by adding <code>-D&lt;OPTION&gt;=1</code> to the cmake command). Here is a selection of the most important options:</p><ul>
 <li><code>BUILD_TESTS</code>: builds all available tests which can be executed by running <code>ctest</code> in the build directory. This also builds all tests of plugins that are built.</li>
@@ -171,7 +177,7 @@ CMake Options</h2>
 </ul>
 <p>If you do not specify <code>CMAKE_BUILD_TYPE</code>, it defaults to <code>Release</code>.</p>
 <p><a class="anchor" id="quickstart"></a> </p>
-<h1><a class="anchor" id="autotoc_md21"></a>
+<h1><a class="anchor" id="autotoc_md22"></a>
 Quickstart Guide</h1>
 <p>Install HAL or build HAL and start the GUI via <code>hal -g</code>. You can list all available options via <code>hal [--help|-h]</code>. We included some example netlists in <code>examples</code> together with the implementation of the respective example gate library in <code>plugins/example_gate_library</code>. For instructions to create your own gate library and other useful tutorials, take a look at the <a href="https://github.com/emsec/hal/wiki">wiki</a>.</p>
 <p>Load a library from the <code>examples</code> directory and start exploring the graphical representation. Use the integrated Python shell or the Python script window to interact. Both feature (limited) autocomplete functionality.</p>
@@ -206,19 +212,19 @@ Quickstart Guide</h1>
 <div class="line">OUTPUT_BUF_1_inst_i_1_inst (id 20, type LUT2)</div>
 <div class="line">  2-to-1 LUT</div>
 <div class="line">  O: (I0 &amp; !I1) | (!I0 &amp; I1)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md22"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md23"></a>
 Contributing</h1>
 <p>You are welcome to contribute to the development of HAL. Feel free to submit a new pull request via github. Please consider running the static checks + <code>clang format</code> before that. You can also install these checks as git hooks before any commit.</p>
-<h2><a class="anchor" id="autotoc_md23"></a>
+<h2><a class="anchor" id="autotoc_md24"></a>
 Run static checks and clang format locally</h2>
 <p>To install clang-format hook install <a href="https://github.com/icefox/git-hooks">git-hooks</a> and run:</p>
 <p><code>git hooks --install</code></p>
 <p>Start Docker build via: <code>docker-compose run --rm hal-build</code></p>
-<h2><a class="anchor" id="autotoc_md24"></a>
+<h2><a class="anchor" id="autotoc_md25"></a>
 Generate Changelog</h2>
 <p><code>git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges</code></p>
 <p><a class="anchor" id="academic-context"></a> </p>
-<h1><a class="anchor" id="autotoc_md25"></a>
+<h1><a class="anchor" id="autotoc_md26"></a>
 Academic Context</h1>
 <p>If you use HAL in an academic context, please cite the framework using the reference below: </p><div class="fragment"><div class="line">@misc{hal,</div>
 <div class="line">    author = {{Embedded Security Group}},</div>
@@ -236,10 +242,10 @@ Academic Context</h1>
 <div class="line">    howpublished = {\url{https://github.com/emsec/hal}}</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>To get an overview on the challenges we set out to solve with HAL, feel free to watch our <a href="https://media.ccc.de/v/36c3-10879-hal_-_the_open-source_hardware_analyzer">talk</a> at 36C3.</p>
-<h1><a class="anchor" id="autotoc_md26"></a>
+<h1><a class="anchor" id="autotoc_md27"></a>
 Licensing</h1>
 <p>HAL is licensed under MIT License to encourage collaboration with other research groups and contributions from the industry. Please refer to the license file for further information.</p>
-<h1><a class="anchor" id="autotoc_md27"></a>
+<h1><a class="anchor" id="autotoc_md28"></a>
 Disclaimer</h1>
 <p>HAL is at most alpha-quality software. Use at your own risk. We do not encourage any malicious use of our toolkit. </p>
 </div></div><!-- PageDoc -->
@@ -248,7 +254,7 @@ Disclaimer</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Oct 13 2021 10:29:05 for HAL by
+    <li class="footer">Generated on Wed Oct 13 2021 12:55:02 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

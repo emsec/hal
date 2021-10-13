@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"plugin__manager_8h.html#af13862a2a5565fb995d7cc93c0bfd980":[14,0,0,0,2,4,8],
 "plugin__manager_8h_source.html":[14,0,0,0,2,4],
 "plugin__relay_8cpp.html":[14,0,1,0,2,33,0],
 "plugin__relay_8cpp_source.html":[14,0,1,0,2,33,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "selection__tree__view_8h.html":[14,0,1,0,0,0,38,0,3],
 "selection__tree__view_8h_source.html":[14,0,1,0,0,0,38,0,3],
 "separated__graphics__net_8cpp.html":[14,0,1,0,2,17,1,0,4],
-"separated__graphics__net_8cpp_source.html":[14,0,1,0,2,17,1,0,4],
-"separated__graphics__net_8h.html":[14,0,1,0,0,0,18,1,0,4]
+"separated__graphics__net_8cpp_source.html":[14,0,1,0,2,17,1,0,4]
 };
