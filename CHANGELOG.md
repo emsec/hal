@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * different grouping colors can be assigned depending on the distance from the origin
   * common predecessors or successors can be found and added to view
 * improved layouter
+  * omit repeated layouting during an ongoing activity
   * show progress bar during layouting
   * allow user to abort layouting
   * preserve graph view location of gate when moving it to new module
