@@ -1,4 +1,4 @@
-if(BUILD_TESTS)
+if(CHANGE_THIS_WHEN_SIMULATOR_IS_DONE)
     if(HAL_PLUGINS_MASTER_PROJECT)
         project(tests)
 

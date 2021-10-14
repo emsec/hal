@@ -363,7 +363,7 @@ namespace hal
                     }
                     if (current_state[current_net] != BooleanFunction::Value::ZERO)
                     {
-                        Event e;
+                        WaveEvent e;
                         e.affected_net = current_net;
                         e.time         = time;
                         e.new_value    = BooleanFunction::Value::ZERO;
@@ -380,7 +380,7 @@ namespace hal
                     }
                     if (current_state[current_net] != BooleanFunction::Value::ONE)
                     {
-                        Event e;
+                        WaveEvent e;
                         e.affected_net = current_net;
                         e.time         = time;
                         e.new_value    = BooleanFunction::Value::ONE;
@@ -397,7 +397,7 @@ namespace hal
                     }
                     if (current_state[current_net] != BooleanFunction::Value::X)
                     {
-                        Event e;
+                        WaveEvent e;
                         e.affected_net = current_net;
                         e.time         = time;
                         e.new_value    = BooleanFunction::Value::X;
