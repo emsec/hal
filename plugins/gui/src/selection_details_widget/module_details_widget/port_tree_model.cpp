@@ -48,6 +48,7 @@ namespace hal
             QString netName = port->get_net() ? QString::fromStdString(port->get_net()->get_name()) : "";
 
             TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << portDirection << portType << netName);
+            portItem->setAdditionalData(keyType, QVariant::fromValue(itemType::port));
 
             if(!port->get_group_name().empty())
             {
@@ -90,6 +91,8 @@ namespace hal
         if(mModuleId == -1) //no current module = no represented net
             return nullptr;
 
+        if(getTypeOfItem(item) == itemType::grouping) return nullptr;
+
         Module* m = gNetlist->get_module_by_id(mModuleId);
         if(!m) return nullptr;
 
@@ -99,6 +102,11 @@ namespace hal
     int PortTreeModel::getRepresentedModuleId()
     {
         return mModuleId;
+    }
+
+    PortTreeModel::itemType PortTreeModel::getTypeOfItem(TreeItem *item)
+    {
+        return item->getAdditionalData(keyType).value<itemType>();
     }
 
     void PortTreeModel::handleModuleInputOutputPortNameChanged(Module *m, int associated_data)

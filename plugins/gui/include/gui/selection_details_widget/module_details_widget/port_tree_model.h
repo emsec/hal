@@ -86,6 +86,14 @@ namespace hal
          */
         int getRepresentedModuleId();
 
+        /**
+         * Get the type (enum) of a given item.
+         *
+         * @param item - The item for which the type is requested.
+         * @return The item's type.
+         */
+        itemType getTypeOfItem(TreeItem* item);
+
         /** @name Event Handler Functions
          */
         ///@{

@@ -191,6 +191,30 @@ namespace hal
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
+    QString PyCodeProvider::pyCodeModulePortsOfGroup(u32 moduleId, QString groupName)
+    {
+        const QString suffix = QString("get_ports_of_group(%1").arg(groupName);
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModulePortByName(u32 moduleId, QString portName)
+    {
+        const QString suffix = QString("get_port_by_name(\"%1\")").arg(portName);
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModulePortDirection(u32 moduleId, QString portName)
+    {
+        return pyCodeModulePortByName(moduleId, portName) + ".get_direction()";
+    }
+
+    QString PyCodeProvider::pyCodeModulePortType(u32 moduleId, QString portName)
+    {
+        return pyCodeModulePortByName(moduleId, portName) + ".get_type()";
+    }
+
     QString PyCodeProvider::pyCodeGrouping(u32 groupingId)
     {
         return groupingCodePrefix.arg(groupingId);

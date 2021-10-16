@@ -2,11 +2,15 @@
 #include "gui/selection_details_widget/module_details_widget/port_tree_model.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/input_dialog/input_dialog.h"
+#include "gui/python/py_code_provider.h"
+#include "hal_core/utilities/enums.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include <QHeaderView>
 #include <QQueue>
 #include <QMenu>
 #include "gui/gui_globals.h"
-#include <QDebug>
+#include <QApplication>
+#include <QClipboard>
 
 namespace hal
 {
@@ -61,16 +65,49 @@ namespace hal
             return;
 
         TreeItem* clickedItem = mPortModel->getItemFromIndex(clickedIndex);
+        PortTreeModel::itemType type = mPortModel->getTypeOfItem(clickedItem);
         Net* n = mPortModel->getNetFromItem(clickedItem);
-
-        //hacky to check if its an input or output port, change this when port-groupings
-        //and real extensions for module type/direction is implemented (similar to the gate pin model)
-        bool isInputPort = clickedItem->getData(PortTreeModel::sDirectionColumn).toString() == "input";
-        QString renameText = isInputPort ? "Change input port name" : "Change output port name";
-
+        QString name = clickedItem->getData(PortTreeModel::sNameColumn).toString();
+        u32 modId = mPortModel->getRepresentedModuleId();
         QMenu menu;
+
+        //For now, if the item is a grouping item, only list of ports and namechange options
+        if(type == PortTreeModel::itemType::grouping)
+        {
+            menu.addAction(QIcon(":/icons/python"), "Extract ports as python list",
+                [modId, name]()
+                {
+                    QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePortsOfGroup(modId, name));
+                });
+
+            menu.move(mapToGlobal(pos));
+            menu.exec();
+            return;
+        }
+
+        //PLAINTEXT: NAME, DIRECTION, TYPE (for now, only port)
+        menu.addAction("Extract name as plain text",
+            [clickedItem](){
+            QApplication::clipboard()->setText(clickedItem->getData(PortTreeModel::sNameColumn).toString());
+        });
+
+        menu.addAction("Extract direction as plain text",
+            [clickedItem](){
+            QApplication::clipboard()->setText(clickedItem->getData(PortTreeModel::sDirectionColumn).toString());
+        });
+
+        menu.addAction("Extract type as plain text",
+            [clickedItem](){
+            QApplication::clipboard()->setText(clickedItem->getData(PortTreeModel::sTypeColumn).toString());
+        });
+
+        //Misc section: port renaming, selection change
         if(n)
         {
+            bool isInputPort = clickedItem->getData(PortTreeModel::sDirectionColumn).toString().toStdString() == enum_to_string(PinDirection::input);
+            QString renameText = isInputPort ? "Change input port name" : "Change output port name";
+
+            menu.addSection("Misc");
             menu.addAction(renameText, [this, isInputPort, n, clickedItem](){
                 InputDialog ipd("Change port name", "New port name", clickedItem->getData(PortTreeModel::sNameColumn).toString());
                 if(ipd.exec() == QDialog::Accepted)
@@ -82,7 +119,31 @@ namespace hal
                     setModule(mModuleID);
                 }
             });
+
+            menu.addAction("Add net to current selection",
+                 [this, n]()
+                 {
+                    gSelectionRelay->addNet(n->get_id());
+                    gSelectionRelay->relaySelectionChanged(this);
+                 });
         }
+
+        //PYTHON: port, direction, type
+        menu.addSection("Python");
+        menu.addAction(QIcon(":/icons/python"), "Extract port as python code",
+            [modId, name](){
+            QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePortByName(modId, name));
+        });
+
+        menu.addAction(QIcon(":/icons/python"), "Extract direction as python code",
+            [modId, name](){
+            QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePortDirection(modId, name));
+        });
+
+        menu.addAction(QIcon(":/icons/python"), "Extract type as python code",
+            [modId, name](){
+            QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePortType(modId, name));
+        });
 
         menu.move(mapToGlobal(pos));
         menu.exec();
