@@ -193,7 +193,7 @@ namespace hal
 
     QString PyCodeProvider::pyCodeModulePortsOfGroup(u32 moduleId, QString groupName)
     {
-        const QString suffix = QString("get_ports_of_group(%1").arg(groupName);
+        const QString suffix = QString("get_ports_of_group(\"%1\")").arg(groupName);
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
