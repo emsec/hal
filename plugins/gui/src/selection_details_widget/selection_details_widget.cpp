@@ -1,9 +1,6 @@
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
-#include "gui/selection_details_widget/gate_details_widget.h"
-#include "gui/selection_details_widget/net_details_widget.h"
-#include "gui/selection_details_widget/module_details_widget.h"
 #include "gui/module_dialog/module_dialog.h"
 #include "gui/grouping_dialog/grouping_dialog.h"
 #include "gui/grouping/grouping_manager_widget.h"
@@ -97,20 +94,11 @@ namespace hal
 
         mStackedWidget = new QStackedWidget(mSelectionDetails);
 
-        mGateDetails = new GateDetailsWidget(mSelectionDetails);
-        mStackedWidget->addWidget(mGateDetails);
-
         mGateDetailsTabs = new GateDetailsTabWidget(mSelectionDetails);
         mStackedWidget->addWidget(mGateDetailsTabs);
 
-        mNetDetails = new NetDetailsWidget(mSelectionDetails);
-        mStackedWidget->addWidget(mNetDetails);
-
         mNetDetailsTabs = new NetDetailsTabWidget(mSelectionDetails);
         mStackedWidget->addWidget(mNetDetailsTabs);
-
-        mModuleDetails = new ModuleDetailsWidget(this);
-        mStackedWidget->addWidget(mModuleDetails);
 
         mModuleDetailsTabs = new ModuleDetailsTabWidget();
         mStackedWidget->addWidget(mModuleDetailsTabs);
@@ -151,14 +139,6 @@ namespace hal
         enableSearchbar(false);  // enable upon first non-zero selection
         mSelectionToGrouping->setDisabled(true);
         mSelectionToModule->setDisabled(true);
-
-        mGateDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
-        mModuleDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
-        mNetDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
-
-        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mGateDetails, &GateDetailsWidget::hideSectionsWhenEmpty);
-        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mModuleDetails, &ModuleDetailsWidget::hideSectionsWhenEmpty);
-        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mNetDetails, &NetDetailsWidget::hideSectionsWhenEmpty);
 
         gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
         connect(mSelectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);
@@ -420,30 +400,21 @@ namespace hal
 
         switch (tp) {
         case SelectionTreeItem::NullItem:
-            mModuleDetails->update(0);
+            //mModuleDetails->update(0);
             mStackedWidget->setCurrentWidget(mNoSelectionLabel);
 //            set_name("Selection Details");
             break;
         case SelectionTreeItem::ModuleItem:
-            //mModuleDetails->update(sti->id());
-            //mStackedWidget->setCurrentWidget(mModuleDetails);
             mModuleDetailsTabs->setModule(gNetlist->get_module_by_id(sti->id()));
             mStackedWidget->setCurrentWidget(mModuleDetailsTabs);
 //            if (mNumberSelectedItems==1) set_name("Module Details");
             break;
         case SelectionTreeItem::GateItem:
-            //qDebug() << "Gate Selected";
-            mModuleDetails->update(0);
-            //mGateDetails->update(sti->id());
-            //mStackedWidget->setCurrentWidget(mGateDetails);
             mGateDetailsTabs->setGate(gNetlist->get_gate_by_id(sti->id()));
             mStackedWidget->setCurrentWidget(mGateDetailsTabs);
 //            if (mNumberSelectedItems==1) set_name("Gate Details");
             break;
         case SelectionTreeItem::NetItem:
-            mModuleDetails->update(0);
-            //mNetDetails->update(sti->id());
-            //mStackedWidget->setCurrentWidget(mNetDetails);
             mNetDetailsTabs->setNet(gNetlist->get_net_by_id(sti->id()));
             mStackedWidget->setCurrentWidget(mNetDetailsTabs);
 //            if (mNumberSelectedItems==1) set_name("Net Details");
