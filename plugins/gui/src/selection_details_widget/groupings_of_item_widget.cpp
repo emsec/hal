@@ -104,7 +104,7 @@ namespace hal {
 
         toClipboardText = QString::number(e.id());
         menu.addAction(
-            "Copy grouping id to clipboard",
+            "Copy grouping ID to clipboard",
             [toClipboardText]()
             {
                 QApplication::clipboard()->setText( toClipboardText );
@@ -176,7 +176,7 @@ namespace hal {
         pythonCode = PyCodeProvider::pyCodeGroupingId(e.id());
         menu.addAction(
             QIcon(":/icons/python"),
-            "Extract grouping id as python code (copy to clipboard)",
+            "Extract grouping ID as python code (copy to clipboard)",
             [pythonCode]()
             {
                 QApplication::clipboard()->setText( pythonCode );

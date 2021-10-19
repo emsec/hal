@@ -13,7 +13,7 @@
 namespace hal
 {
     const QString ModuleInfoTable::nameRowKey = "Name";
-    const QString ModuleInfoTable::idRowKey = "Id";
+    const QString ModuleInfoTable::idRowKey = "ID";
     const QString ModuleInfoTable::typeRowKey = "Module Type";
     const QString ModuleInfoTable::moduleRowKey = "Parent module";
     const QString ModuleInfoTable::noOfGatesRowKey = "No. of Gates";
@@ -30,7 +30,7 @@ namespace hal
         mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract module name as phyton code", std::bind(&ModuleInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
-        mIdEntryContextMenu->addAction("Extract module id as plain text", std::bind(&ModuleInfoTable::copyId, this));
+        mIdEntryContextMenu->addAction("Extract module ID as plain text", std::bind(&ModuleInfoTable::copyId, this));
 
         mTypeEntryContextMenu = new QMenu();
         mTypeEntryContextMenu->addAction("Extract module type as plain text", std::bind(&ModuleInfoTable::copyType, this));
@@ -45,10 +45,10 @@ namespace hal
         mModuleEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract parent module name python code", std::bind(&ModuleInfoTable::pyCopyModule, this));
 
         mNumOfGatesContextMenu = new QMenu();
-        mNumOfGatesContextMenu->addAction("Extract number of gates ass plain text", std::bind(&ModuleInfoTable::copyNumberOfGates, this));
+        mNumOfGatesContextMenu->addAction("Extract number of gates as plain text", std::bind(&ModuleInfoTable::copyNumberOfGates, this));
 
         mNumOfSubmodulesContextMenu = new QMenu();
-        mNumOfSubmodulesContextMenu->addAction("Extract number of submodule ass plain text", std::bind(&ModuleInfoTable::copyNumberOfSubmodules, this));
+        mNumOfSubmodulesContextMenu->addAction("Extract number of submodule as plain text", std::bind(&ModuleInfoTable::copyNumberOfSubmodules, this));
 
         mNumOfNetsContextMenu = new QMenu();
         mNumOfNetsContextMenu->addAction("Extract number of nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfNets, this));
@@ -114,7 +114,7 @@ namespace hal
         Module* module = mModule->get_parent_module();
 
         if(module)
-            parentModule = QString::fromStdString(module->get_name()) + "[Id:" + QString::number(module->get_id()) + "]";
+            parentModule = QString::fromStdString(module->get_name()) + "[ID:" + QString::number(module->get_id()) + "]";
 
         return parentModule;
     }

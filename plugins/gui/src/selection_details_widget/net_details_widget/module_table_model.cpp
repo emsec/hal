@@ -49,10 +49,6 @@ namespace hal
                 case 3: return mEntries[index.row()].used_port;
                 }
             }
-            else if (role == Qt::TextAlignmentRole)
-            {
-                return Qt::AlignCenter;
-            }
         }
 
         return QVariant();

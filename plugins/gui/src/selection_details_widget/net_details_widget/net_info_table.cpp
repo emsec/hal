@@ -12,7 +12,7 @@
 namespace hal
 {
     const QString NetInfoTable::nameRowKey = "Name";
-    const QString NetInfoTable::idRowKey = "Id";
+    const QString NetInfoTable::idRowKey = "ID";
     const QString NetInfoTable::typeRowKey = "Type";
     const QString NetInfoTable::noOfSrcRowKey = "No. of Sources";
     const QString NetInfoTable::noOfDstRowKey = "No. of Destinations";
@@ -27,7 +27,7 @@ namespace hal
         mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract net name as phyton code", std::bind(&NetInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
-        mIdEntryContextMenu->addAction("Extract net id as plain text", std::bind(&NetInfoTable::copyId, this));
+        mIdEntryContextMenu->addAction("Extract net ID as plain text", std::bind(&NetInfoTable::copyId, this));
 
         mTypeEntryContextMenu = new QMenu();
         mTypeEntryContextMenu->addAction("Extract net type as plain text", std::bind(&NetInfoTable::copyType, this));

@@ -112,7 +112,7 @@ namespace hal
            }
         );
 
-        menu.addAction("Extract id as plain text",
+        menu.addAction("Extract ID as plain text",
            [id]()
            {
                QApplication::clipboard()->setText(QString::number(id));

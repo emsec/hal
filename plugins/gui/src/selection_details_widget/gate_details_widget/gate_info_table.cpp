@@ -12,7 +12,7 @@
 namespace hal
 {
     const QString GateInfoTable::nameRowKey = "Name";
-    const QString GateInfoTable::idRowKey = "Id";
+    const QString GateInfoTable::idRowKey = "ID";
     const QString GateInfoTable::typeRowKey = "Type";
     const QString GateInfoTable::gateTypePropertiesRowKey = "Gate type properties";
     const QString GateInfoTable::locationRowKey = "Location";
@@ -28,7 +28,7 @@ namespace hal
         mNameEntryContextMenu->addAction(QIcon(":/icons/python"), "Extract gate name as python code", std::bind(&GateInfoTable::pyCopyName, this));
 
         mIdEntryContextMenu = new QMenu();
-        mIdEntryContextMenu->addAction("Extract gate id as plain text", std::bind(&GateInfoTable::copyId, this));
+        mIdEntryContextMenu->addAction("Extract gate ID as plain text", std::bind(&GateInfoTable::copyId, this));
 
         mTypeEntryContextMenu = new QMenu();
         mTypeEntryContextMenu->addAction("Extract gate type as plain text", std::bind(&GateInfoTable::copyType, this));
@@ -134,7 +134,7 @@ namespace hal
     {
         Module* module = mGate->get_module();
 
-        return QString::fromStdString(module->get_name()) + "[Id:" + QString::number(module->get_id()) + "]";
+        return QString::fromStdString(module->get_name()) + "[ID:" + QString::number(module->get_id()) + "]";
     }
 
     void GateInfoTable::changeName()
