@@ -67,19 +67,31 @@ namespace hal
                 mRootItem->appendChild(portItem);
 
         }
-        //sort ports within all groupingitems (easy way)
+        //sort ports within all groupingitems (easy way) and "compute" the remaining columns
         for(auto it = mPortGroupingToTreeItem.begin(); it != mPortGroupingToTreeItem.end(); it++)
         {
             QMap<u32, TreeItem*> tmpSortedPortItems;
             TreeItem* groupingsItem = it.value();
+
+            QString initDirection = (groupingsItem->getChildCount() >  0) ? groupingsItem->getChild(0)->getData(sDirectionColumn).toString() : "-";
+            QString initType = (groupingsItem->getChildCount() >  0) ? groupingsItem->getChild(0)->getData(sTypeColumn).toString() : "-";
+
             while(groupingsItem->getChildCount() > 0)
             {
                 TreeItem* currPortItem = groupingsItem->removeChildAtPos(0);
                 tmpSortedPortItems.insert(portItemToIndex.value(currPortItem), currPortItem);
+
+                if(initDirection != currPortItem->getData(sDirectionColumn).toString())
+                    initDirection = "-";
+                if(initType != currPortItem->getData(sTypeColumn).toString())
+                    initType = "-";
             }
 
             for(auto portItem : tmpSortedPortItems)
                 groupingsItem->appendChild(portItem);
+
+            groupingsItem->setDataAtIndex(sDirectionColumn, initDirection);
+            groupingsItem->setDataAtIndex(sTypeColumn, initType);
         }
         endResetModel();
 
