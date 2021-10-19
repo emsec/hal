@@ -287,6 +287,12 @@ namespace hal
             setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "async_reset", latch_component->get_async_reset_function())));
         }
 
+        if(StateComponent* state_component = gt->get_component_as<StateComponent>([](const GateTypeComponent* c) { return StateComponent::is_class_of(c); }); state_component != nullptr)
+        {
+            setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "internal_state", state_component->get_state_identifier())));
+            setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "internal_neg_state", state_component->get_neg_state_identifier())));
+        }
+
 
         // Fill the category (LUT/FF/LATCH) widgets
         switch(gateTypeCategory)

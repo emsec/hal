@@ -14,6 +14,7 @@ namespace hal {
     BooleanFunctionTableEntry::BooleanFunctionTableEntry(u32 gateId)
     {
         mGateId = gateId;
+        mType = EntryType::BooleanFunction;
     }
 
     QString BooleanFunctionTableEntry::getEntryIdentifier() const
@@ -30,6 +31,11 @@ namespace hal {
         return mGateId;
     }
 
+    BooleanFunctionTableEntry::EntryType BooleanFunctionTableEntry::getEntryType() const
+    {
+        return mType;
+    }
+
     /* ========================================================
      * BooleanFunctionTableEntry - BooleanFunctionEntry
      * ========================================================*/
@@ -39,6 +45,7 @@ namespace hal {
     {
         mLeft = functionName;
         mRight = QString::fromStdString(bf.to_string());
+        mType = EntryType::BooleanFunction;
     }
 
     BooleanFunction BooleanFunctionEntry::getBooleanFunction() const
@@ -61,6 +68,7 @@ namespace hal {
         mLeft = "set_reset_behavior";
         mRight = cPBehaviourToString(cPBehavior);
         mCPBehavior =cPBehavior;
+        mType = EntryType::CPBehavior;
     }
 
     std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> CPBehaviorEntry::getCPBehavior() const
@@ -84,6 +92,13 @@ namespace hal {
             {hal::AsyncSetResetBehavior::undef, "Undefined"},
         };
         return QString(cPBehaviourToString[cPBehaviour.first] + ", " + cPBehaviourToString[cPBehaviour.second]);
+    }
+
+    StateComponentEntry::StateComponentEntry(u32 gateId, QString name, QString stateVal) : BooleanFunctionTableEntry(gateId)
+    {
+        mLeft = name;
+        mRight = stateVal;
+        mType = EntryType::State;
     }
 
     /* ========================================================

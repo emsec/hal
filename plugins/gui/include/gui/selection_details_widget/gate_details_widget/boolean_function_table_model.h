@@ -48,6 +48,8 @@ namespace hal {
     class BooleanFunctionTableEntry
     {
     public:
+
+        enum class EntryType{BooleanFunction, CPBehavior, State};
         /**
          * Constructor.
          *
@@ -84,10 +86,18 @@ namespace hal {
          */
         u32 getGateId() const;
 
+        /**
+         * Returns the entry's type.
+         *
+         * @return The entry's type.
+         */
+        EntryType getEntryType() const;
+
     protected:
         QString mLeft;
         QString mRight;
         u32 mGateId;
+        EntryType mType;
     };
 
     /**
@@ -153,6 +163,25 @@ namespace hal {
 
         QString cPBehaviourToString (std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> cPBehaviour);
         std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> mCPBehavior;
+    };
+
+    /**
+     * @ingroup utility_widgets-selection_details
+     *
+     * @brief Utility class that represents a state of the StateComponent
+     */
+    class StateComponentEntry : public BooleanFunctionTableEntry
+    {
+        //perhaps own enum declaring if this entry stores the pos/neg state?
+    public:
+        /**
+         * The constructor.
+         *
+         * @param gateId - The id of the gate the state belongs to.
+         * @param name - The name of the state (pos. / neg.).
+         * @param stateVal - The value of the state.
+         */
+        StateComponentEntry(u32 gateId, QString name, QString stateVal);
     };
 
     /**
