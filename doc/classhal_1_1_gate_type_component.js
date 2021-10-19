@@ -10,6 +10,7 @@ var classhal_1_1_gate_type_component =
       [ "state", "classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a9ed39e2ea931586b6a985a6942ef573e", null ],
       [ "ram_port", "classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a8ece2e6e53ae7532e49f462073d92601", null ]
     ] ],
+    [ "~GateTypeComponent", "classhal_1_1_gate_type_component.html#a098460c3623e30819691d15ddcea36d1", null ],
     [ "convert_to", "classhal_1_1_gate_type_component.html#a6b439c29e3e8fa2d23827a8f579f7ca3", null ],
     [ "convert_to", "classhal_1_1_gate_type_component.html#a288e45d048e44e5be7b3130885462a8e", null ],
     [ "get_component", "classhal_1_1_gate_type_component.html#acb0075c46f66aa6004b6cd529cb4c411", null ],

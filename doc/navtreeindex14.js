@@ -1,5 +1,6 @@
 var NAVTREEINDEX14 =
 {
+"classhal_1_1_user_action.html#ad4976d95d07011dd9be187ddbcf75fde":[10,0,5,24,9],
 "classhal_1_1_user_action.html#ad7a49a6a643395eb9b8ab136c6ac36a9":[10,0,5,24,17],
 "classhal_1_1_user_action.html#ad867eaa35212e5066de06e57fdb62b21":[10,0,5,24,15],
 "classhal_1_1_user_action.html#adf664b569ddea94bbc560a882d67b315":[10,0,5,24,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX14 =
 "context__table__proxy__model_8cpp.html":[13,0,1,0,2,7,0,1],
 "context__table__proxy__model_8cpp_source.html":[13,0,1,0,2,7,0,1],
 "context__table__proxy__model_8h.html":[13,0,1,0,0,0,8,0,1],
-"context__table__proxy__model_8h_source.html":[13,0,1,0,0,0,8,0,1],
-"coordinate__from__data_8cpp.html":[13,0,1,0,2,17,2,0]
+"context__table__proxy__model_8h_source.html":[13,0,1,0,0,0,8,0,1]
 };

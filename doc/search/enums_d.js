@@ -1,13 +1,13 @@
 var searchData=
 [
-  ['namedcolorspace_35013',['NamedColorSpace',['https://doc.qt.io/qt-5/qcolorspace.html#NamedColorSpace-enum',1,'QColorSpace']]],
-  ['nameformat_35014',['NameFormat',['https://doc.qt.io/qt-5/qcolor.html#NameFormat-enum',1,'QColor']]],
-  ['nametype_35015',['NameType',['https://doc.qt.io/qt-5/qtimezone.html#NameType-enum',1,'QTimeZone']]],
-  ['nativegesturetype_35016',['NativeGestureType',['https://doc.qt.io/qt-5/qt.html#NativeGestureType-enum',1,'Qt']]],
-  ['navigationmode_35017',['NavigationMode',['https://doc.qt.io/qt-5/qt.html#NavigationMode-enum',1,'Qt']]],
-  ['nodetype_35018',['NodeType',['../classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34',1,'hal::Node']]],
-  ['normalizationform_35019',['NormalizationForm',['https://doc.qt.io/qt-5/qstring.html#NormalizationForm-enum',1,'QString']]],
-  ['notation_35020',['Notation',['https://doc.qt.io/qt-5/qdoublevalidator.html#Notation-enum',1,'QDoubleValidator']]],
-  ['numberflag_35021',['NumberFlag',['https://doc.qt.io/qt-5/qtextstream.html#NumberFlag-enum',1,'QTextStream']]],
-  ['numberoption_35022',['NumberOption',['https://doc.qt.io/qt-5/qlocale.html#NumberOption-enum',1,'QLocale']]]
+  ['namedcolorspace_35015',['NamedColorSpace',['https://doc.qt.io/qt-5/qcolorspace.html#NamedColorSpace-enum',1,'QColorSpace']]],
+  ['nameformat_35016',['NameFormat',['https://doc.qt.io/qt-5/qcolor.html#NameFormat-enum',1,'QColor']]],
+  ['nametype_35017',['NameType',['https://doc.qt.io/qt-5/qtimezone.html#NameType-enum',1,'QTimeZone']]],
+  ['nativegesturetype_35018',['NativeGestureType',['https://doc.qt.io/qt-5/qt.html#NativeGestureType-enum',1,'Qt']]],
+  ['navigationmode_35019',['NavigationMode',['https://doc.qt.io/qt-5/qt.html#NavigationMode-enum',1,'Qt']]],
+  ['nodetype_35020',['NodeType',['../classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34',1,'hal::Node']]],
+  ['normalizationform_35021',['NormalizationForm',['https://doc.qt.io/qt-5/qstring.html#NormalizationForm-enum',1,'QString']]],
+  ['notation_35022',['Notation',['https://doc.qt.io/qt-5/qdoublevalidator.html#Notation-enum',1,'QDoubleValidator']]],
+  ['numberflag_35023',['NumberFlag',['https://doc.qt.io/qt-5/qtextstream.html#NumberFlag-enum',1,'QTextStream']]],
+  ['numberoption_35024',['NumberOption',['https://doc.qt.io/qt-5/qlocale.html#NumberOption-enum',1,'QLocale']]]
 ];
