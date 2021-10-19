@@ -96,7 +96,7 @@ Collaboration diagram for hal::GateLibrary:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_gate_library__coll__graph.png" border="0" usemap="#hal_1_1_gate_library_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_gate_library_coll__map" id="hal_1_1_gate_library_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,165,156"/>
+<area shape="rect" title=" " alt="" coords="5,5,193,171"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -110,6 +110,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aef64b8371779e27c778227552deb3a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a203b238f213e1980b82f796763ea2ac7"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library.html#a203b238f213e1980b82f796763ea2ac7">get_path</a> () const</td></tr>
 <tr class="separator:a203b238f213e1980b82f796763ea2ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bfa20c066532a2e405200b30f719348"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library.html#a7bfa20c066532a2e405200b30f719348">set_gate_location_data_category</a> (const std::string &amp;category)</td></tr>
+<tr class="separator:a7bfa20c066532a2e405200b30f719348"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af63f080c714ecfd2e5d569200a92b397"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library.html#af63f080c714ecfd2e5d569200a92b397">get_gate_location_data_category</a> () const</td></tr>
+<tr class="separator:af63f080c714ecfd2e5d569200a92b397"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97adde8cf19b82707a3b99dd1d7c2ef1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library.html#a97adde8cf19b82707a3b99dd1d7c2ef1">set_gate_location_data_identifiers</a> (const std::string &amp;x_coordinate, const std::string &amp;y_coordinate)</td></tr>
+<tr class="separator:a97adde8cf19b82707a3b99dd1d7c2ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31ea99ad04afe238972f0890fba6771b"><td class="memItemLeft" align="right" valign="top">const std::pair&lt; std::string, std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library.html#a31ea99ad04afe238972f0890fba6771b">get_gate_location_data_identifiers</a> () const</td></tr>
+<tr class="separator:a31ea99ad04afe238972f0890fba6771b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa02f23d1517dad7a2d24b2c089cea84a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_gate_type.html">GateType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library.html#aa02f23d1517dad7a2d24b2c089cea84a">create_gate_type</a> (const std::string &amp;name, std::set&lt; <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721ca">GateTypeProperty</a> &gt; properties={<a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa294da9f271b64311147582da631ee638">GateTypeProperty::combinational</a>}, std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component=nullptr)</td></tr>
 <tr class="separator:aa02f23d1517dad7a2d24b2c089cea84a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87ff461bac5e8b03736eb909fe9eee5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library.html#a87ff461bac5e8b03736eb909fe9eee5a">contains_gate_type</a> (<a class="el" href="classhal_1_1_gate_type.html">GateType</a> *gate_type) const</td></tr>
@@ -225,7 +233,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00154">154</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00174">174</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library_8cpp_source.html#l00005">hal::gate_library_init()</a>.</p>
 
@@ -255,7 +263,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the gate type is part of this library, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00039">39</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00059">59</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00068">hal::GateType::get_name()</a>.</p>
 
@@ -287,7 +295,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the gate type is part of this library, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00054">54</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00074">74</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library_8cpp_source.html#l00005">hal::gate_library_init()</a>.</p>
 
@@ -335,9 +343,55 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The new gate type instance on success, a nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00023">23</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00043">43</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00075">log_error</a>.</p>
+
+</div>
+</div>
+<a id="af63f080c714ecfd2e5d569200a92b397"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af63f080c714ecfd2e5d569200a92b397">&#9670;&nbsp;</a></span>get_gate_location_data_category()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string &amp; hal::GateLibrary::get_gate_location_data_category </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the data category of the gate location information.</p>
+<dl class="section return"><dt>Returns</dt><dd>The data category. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00028">28</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library_8cpp_source.html#l00005">hal::gate_library_init()</a>, and <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00823">hal::Netlist::load_gate_locations_from_data()</a>.</p>
+
+</div>
+</div>
+<a id="a31ea99ad04afe238972f0890fba6771b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31ea99ad04afe238972f0890fba6771b">&#9670;&nbsp;</a></span>get_gate_location_data_identifiers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::pair&lt; std::string, std::string &gt; &amp; hal::GateLibrary::get_gate_location_data_identifiers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the data identifiers of the gate location information for both the x- and y-coordinates.</p>
+<dl class="section return"><dt>Returns</dt><dd>A pair of data identifiers. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00038">38</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00823">hal::Netlist::load_gate_locations_from_data()</a>.</p>
 
 </div>
 </div>
@@ -365,7 +419,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The gate type on success, a nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00064">64</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00084">84</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00075">log_error</a>.</p>
 
@@ -388,7 +442,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO pybind Get all gate types of the library. In case a filter is applied, only the gate types matching the filter condition are returned.</p>
+<p>Get all gate types of the library. In case a filter is applied, only the gate types matching the filter condition are returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- The user-defined filter function. </td></tr>
@@ -397,7 +451,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A map from gate type names to gate types. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00075">75</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00095">95</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library_8cpp_source.html#l00005">hal::gate_library_init()</a>, and <a class="el" href="gatelibrary__table__model_8cpp_source.html#l00124">hal::GatelibraryTableModel::loadFile()</a>.</p>
 
@@ -420,7 +474,7 @@ Public Member Functions</h2></td></tr>
 <p>Get all GND gate types of the library.</p>
 <dl class="section return"><dt>Returns</dt><dd>A map from GND gate type names to gate type objects. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00144">144</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00164">164</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library_8cpp_source.html#l00005">hal::gate_library_init()</a>.</p>
 
@@ -443,7 +497,7 @@ Public Member Functions</h2></td></tr>
 <p>Get a vector of includes required for parsing a corresponding netlist, e.g., VHDL libraries.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of includes. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00149">149</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00169">169</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library_8cpp_source.html#l00005">hal::gate_library_init()</a>.</p>
 
@@ -512,7 +566,7 @@ Public Member Functions</h2></td></tr>
 <p>Get all VCC gate types of the library.</p>
 <dl class="section return"><dt>Returns</dt><dd>A map from VCC gate type names to gate type objects. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00116">116</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00136">136</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library_8cpp_source.html#l00005">hal::gate_library_init()</a>.</p>
 
@@ -542,7 +596,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00121">121</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00141">141</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00367">hal::GateType::get_boolean_functions()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00123">hal::GateType::get_input_pins()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00068">hal::GateType::get_name()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00149">hal::GateType::get_output_pins()</a>.</p>
 
@@ -574,9 +628,78 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00093">93</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00113">113</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00367">hal::GateType::get_boolean_functions()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00123">hal::GateType::get_input_pins()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00068">hal::GateType::get_name()</a>, and <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00149">hal::GateType::get_output_pins()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library_8cpp_source.html#l00005">hal::gate_library_init()</a>.</p>
+
+</div>
+</div>
+<a id="a7bfa20c066532a2e405200b30f719348"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bfa20c066532a2e405200b30f719348">&#9670;&nbsp;</a></span>set_gate_location_data_category()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GateLibrary::set_gate_location_data_category </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>category</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the data category of the gate location information.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">category</td><td>- The data category. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00023">23</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library_8cpp_source.html#l00005">hal::gate_library_init()</a>.</p>
+
+</div>
+</div>
+<a id="a97adde8cf19b82707a3b99dd1d7c2ef1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97adde8cf19b82707a3b99dd1d7c2ef1">&#9670;&nbsp;</a></span>set_gate_location_data_identifiers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GateLibrary::set_gate_location_data_identifiers </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>x_coordinate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>y_coordinate</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the data identifiers of the gate location information for both the x- and y-coordinates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_coordinate</td><td>- The data identifier for the x-coordinate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y_coordinate</td><td>- The data identifier for the y-coordinate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00033">33</a> of file <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html">gate_library.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__library_8cpp_source.html#l00005">hal::gate_library_init()</a>.</p>
 
@@ -592,7 +715,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a></li>
-    <li class="footer">Generated on Tue Oct 19 2021 14:31:03 for HAL by
+    <li class="footer">Generated on Tue Oct 19 2021 18:04:14 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

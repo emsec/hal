@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist &mdash; hal_py v3.3.0-13-g055e8415a documentation</title>
+  <title>Netlist &mdash; hal_py v3.3.0-14-gccab70460 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.3.0-13-g055e8415a
+                v3.3.0-14-gccab70460
               </div>
             
           
@@ -1391,6 +1391,31 @@ If not explicitly set, the ID defaults to 0.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the gate is a global VCC gate, false otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.load_gate_locations_from_data">
+<code class="descname">load_gate_locations_from_data</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em>, <em>data_category: str = ''</em>, <em>data_identifiers: Tuple[str</em>, <em>str] = (''</em>, <em>'')</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Netlist.load_gate_locations_from_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the locations of the gates in the netlist from their associated data using the specified category and identifier.
+If no parameter is given, the data is querried using the default category and identifier stored with the gate library.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The data category.</li>
+<li><strong>data_identifiers</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – The data identifiers for the x- and y-coordinates.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</td>
 </tr>
 </tbody>
 </table>

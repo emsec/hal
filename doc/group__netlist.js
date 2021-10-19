@@ -311,6 +311,7 @@ var group__netlist =
       [ "is_module_in_netlist", "classhal_1_1_netlist.html#ac322b3605d50992b76b8afa8dfd6fb11", null ],
       [ "is_net_in_netlist", "classhal_1_1_netlist.html#a8514bcb8c9bcdd25c2cabd2f3aaa6307", null ],
       [ "is_vcc_gate", "classhal_1_1_netlist.html#aadea5f117fc8b9ed0e521de4cb788060", null ],
+      [ "load_gate_locations_from_data", "classhal_1_1_netlist.html#a2f4fbe600e19dc28c5bddf40b38ac0cf", null ],
       [ "mark_global_input_net", "classhal_1_1_netlist.html#a9b2353349272a95760d03c118900f4cc", null ],
       [ "mark_global_output_net", "classhal_1_1_netlist.html#ab5341a316daab6aafceac102a744c8ee", null ],
       [ "mark_gnd_gate", "classhal_1_1_netlist.html#a1600d7ec1cf6455657786174bc958589", null ],
