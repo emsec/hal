@@ -21,7 +21,7 @@ namespace hal
     ActionOpenNetlistFile::ActionOpenNetlistFile(const QString &filename_)
         : mFilename(filename_)
     {
-        mWaitForReady = true;
+        // mWaitForReady = true;
     }
 
     bool ActionOpenNetlistFile::exec()
