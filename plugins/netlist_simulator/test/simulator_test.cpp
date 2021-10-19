@@ -350,416 +350,416 @@ protected:
     }
 }; // namespace hal
 
-// TEST_F(SimulatorTest, half_adder)
-// {
-//     // return;
-//     TEST_START
-//     auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
-//     auto sim    = plugin->create_simulator();
-
-//     std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/halfaddernetlist_flattened_by_hal.v";
-//     if (!utils::file_exists(path_netlist))
-//     {
-//         FAIL() << "netlis for counter-test not found: " << path_netlist;
-//     }
-
-//     //create netlist from path
-//     auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
-//     if (lib == nullptr)
-//     {
-//         FAIL() << "XILINX_UNISIM gate library not found";
-//     }
-
-//     std::unique_ptr<Netlist> nl;
-//     {
-//         NO_COUT_BLOCK;
-//         nl = netlist_parser_manager::parse(path_netlist, lib);
-//         if (nl == nullptr)
-//         {
-//             FAIL() << "netlist couldn't be parsed";
-//         }
-//     }
-
-//     //path to vcd
-//     std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/dump.vcd";
-//     if (!utils::file_exists(path_vcd))
-//     {
-//         FAIL() << "dump for half_adder-test not found: " << path_vcd;
-//     }
-//     //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
-//     Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
-
-//     //prepare simulation
-//     sim->add_gates(nl->get_gates());
-//     sim->initialize_sequential_gates();
-//     Net* A = *(nl->get_nets([](auto net) { return net->get_name() == "A"; }).begin());
-//     Net* B = *(nl->get_nets([](auto net) { return net->get_name() == "B"; }).begin());
-
-//     //start simulation
-//     {
-//         measure_block_time("simulation");
-//         //Testbench
-//         sim->set_input(A, BooleanFunction::Value::ZERO);    //A=0
-//         sim->set_input(B, BooleanFunction::Value::ZERO);    //B=0
-//         sim->simulate(10 * 1000);
-
-//         sim->set_input(A, BooleanFunction::Value::ZERO);    //A=0
-//         sim->set_input(B, BooleanFunction::Value::ONE);     //B=1
-//         sim->simulate(10 * 1000);
-
-//         sim->set_input(A, BooleanFunction::Value::ONE);     //A=1
-//         sim->set_input(B, BooleanFunction::Value::ZERO);    //B=0
-//         sim->simulate(10 * 1000);
-
-//         sim->set_input(A, BooleanFunction::Value::ONE);    //A=1
-//         sim->set_input(B, BooleanFunction::Value::ONE);    //B=1
-//         sim->simulate(10 * 1000);
-//     }
-
-//     //Test if maps are equal
-//     EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
-//     TEST_END
-// }
-
-// TEST_F(SimulatorTest, counter)
-// {
-//     // return;
-//     TEST_START
-
-//     auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
-//     auto sim    = plugin->create_simulator();
-
-//     //path to netlist
-//     std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/counternetlist_flattened_by_hal.vhd";
-//     if (!utils::file_exists(path_netlist))
-//         FAIL() << "netlist for counter-test not found: " << path_netlist;
-
-//     //create netlist from path
-//     auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
-//     if (lib == nullptr)
-//     {
-//         FAIL() << "XILINX_UNISIM gate library not found";
-//     }
-
-//     std::unique_ptr<Netlist> nl;
-//     {
-//         NO_COUT_BLOCK;
-//         nl = netlist_parser_manager::parse(path_netlist, lib);
-//         if (nl == nullptr)
-//         {
-//             FAIL() << "netlist couldn't be parsed";
-//         }
-//     }
-
-//     //path to vcd
-//     std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/dump.vcd";
-//     if (!utils::file_exists(path_vcd))
-//         FAIL() << "dump for counter-test not found: " << path_vcd;
-
-//     //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
-//     Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
-
-//     //prepare simulation
-//     sim->add_gates(nl->get_gates());
-//     sim->initialize_sequential_gates();
-
-//     // retrieve nets
-//     Net* reset          = *(nl->get_nets([](const Net* net) { return net->get_name() == "Reset"; }).begin());
-//     Net* clock          = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock"; }).begin());
-//     Net* Clock_enable_B = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock_enable_B"; }).begin());
-//     Net* output_0       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_0"; }).begin());
-//     Net* output_1       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_1"; }).begin());
-//     Net* output_2       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_2"; }).begin());
-//     Net* output_3       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_3"; }).begin());
-
-//     sim->add_clock_period(clock, 10000);
-
-//     //start simulation
-//     {
-//         measure_block_time("simulation");
-//         //testbench
-//         sim->set_input(Clock_enable_B, BooleanFunction::Value::ONE);    //#Clock_enable_B <= '1';
-//         sim->set_input(reset, BooleanFunction::Value::ZERO);            //#Reset <= '0';
-//         sim->simulate(40 * 1000);                            //#WAIT FOR 40 NS; -> simulate 4 clock cycle  - cycle 0, 1, 2, 3
-
-//         sim->set_input(Clock_enable_B, BooleanFunction::Value::ZERO);    //#Clock_enable_B <= '0';
-//         sim->simulate(110 * 1000);                            //#WAIT FOR 110 NS; -> simulate 11 clock cycle  - cycle 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
-
-//         sim->set_input(reset, BooleanFunction::Value::ONE);    //#Reset <= '1';
-//         sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 15, 16
-
-//         sim->set_input(reset, BooleanFunction::Value::ZERO);    //#Reset <= '0';
-//         sim->simulate(70 * 1000);                    //#WAIT FOR 70 NS; -> simulate 7 clock cycle  - cycle 17, 18, 19, 20, 21, 22, 23
-
-//         sim->set_input(Clock_enable_B, BooleanFunction::Value::ONE);    //#Clock_enable_B <= '1';
-//         sim->simulate(23 * 1000);                            //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 24, 25
-
-//         sim->set_input(reset, BooleanFunction::Value::ONE);    //#Reset <= '1';
-//         sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 26, 27
-//                                                     //#3 additional traces á 10 NS to get 300 NS simulation time
-//         sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 28, 29
-//                                                     //#for last "cycle" set clock to 0, in the final state clock stays ZERO and does not switch to 1 anymore
-//         sim->simulate(5 * 1000);                    //#WAIT FOR 10 NS; -> simulate 1 clock cycle  - cycle 30
-//     }
-//     //Test if maps are equal
-//     EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
-//     TEST_END
-// }
-
-// TEST_F(SimulatorTest, toycipher)
-// {
-//     // return;
-//     TEST_START
-
-//     auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
-//     auto sim    = plugin->create_simulator();
-
-//     //path to netlist
-//     std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/cipher_flat.vhd";
-//     if (!utils::file_exists(path_netlist))
-//         FAIL() << "netlist for toycipher-test not found: " << path_netlist;
-
-//     //create netlist from path
-//     auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
-//     if (lib == nullptr)
-//     {
-//         FAIL() << "XILINX_UNISIM gate library not found";
-//     }
+TEST_F(SimulatorTest, half_adder)
+{
+    // return;
+    TEST_START
+    auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
+    auto sim    = plugin->create_simulator();
+
+    std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/halfaddernetlist_flattened_by_hal.v";
+    if (!utils::file_exists(path_netlist))
+    {
+        FAIL() << "netlis for counter-test not found: " << path_netlist;
+    }
+
+    //create netlist from path
+    auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+    if (lib == nullptr)
+    {
+        FAIL() << "XILINX_UNISIM gate library not found";
+    }
+
+    std::unique_ptr<Netlist> nl;
+    {
+        NO_COUT_BLOCK;
+        nl = netlist_parser_manager::parse(path_netlist, lib);
+        if (nl == nullptr)
+        {
+            FAIL() << "netlist couldn't be parsed";
+        }
+    }
+
+    //path to vcd
+    std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/dump.vcd";
+    if (!utils::file_exists(path_vcd))
+    {
+        FAIL() << "dump for half_adder-test not found: " << path_vcd;
+    }
+    //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
+    Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
+
+    //prepare simulation
+    sim->add_gates(nl->get_gates());
+    sim->initialize_sequential_gates();
+    Net* A = *(nl->get_nets([](auto net) { return net->get_name() == "A"; }).begin());
+    Net* B = *(nl->get_nets([](auto net) { return net->get_name() == "B"; }).begin());
+
+    //start simulation
+    {
+        measure_block_time("simulation");
+        //Testbench
+        sim->set_input(A, BooleanFunction::Value::ZERO);    //A=0
+        sim->set_input(B, BooleanFunction::Value::ZERO);    //B=0
+        sim->simulate(10 * 1000);
+
+        sim->set_input(A, BooleanFunction::Value::ZERO);    //A=0
+        sim->set_input(B, BooleanFunction::Value::ONE);     //B=1
+        sim->simulate(10 * 1000);
+
+        sim->set_input(A, BooleanFunction::Value::ONE);     //A=1
+        sim->set_input(B, BooleanFunction::Value::ZERO);    //B=0
+        sim->simulate(10 * 1000);
+
+        sim->set_input(A, BooleanFunction::Value::ONE);    //A=1
+        sim->set_input(B, BooleanFunction::Value::ONE);    //B=1
+        sim->simulate(10 * 1000);
+    }
+
+    //Test if maps are equal
+    EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
+    TEST_END
+}
+
+TEST_F(SimulatorTest, counter)
+{
+    // return;
+    TEST_START
+
+    auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
+    auto sim    = plugin->create_simulator();
+
+    //path to netlist
+    std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/counternetlist_flattened_by_hal.vhd";
+    if (!utils::file_exists(path_netlist))
+        FAIL() << "netlist for counter-test not found: " << path_netlist;
+
+    //create netlist from path
+    auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+    if (lib == nullptr)
+    {
+        FAIL() << "XILINX_UNISIM gate library not found";
+    }
+
+    std::unique_ptr<Netlist> nl;
+    {
+        NO_COUT_BLOCK;
+        nl = netlist_parser_manager::parse(path_netlist, lib);
+        if (nl == nullptr)
+        {
+            FAIL() << "netlist couldn't be parsed";
+        }
+    }
+
+    //path to vcd
+    std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/dump.vcd";
+    if (!utils::file_exists(path_vcd))
+        FAIL() << "dump for counter-test not found: " << path_vcd;
+
+    //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
+    Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
+
+    //prepare simulation
+    sim->add_gates(nl->get_gates());
+    sim->initialize_sequential_gates();
+
+    // retrieve nets
+    Net* reset          = *(nl->get_nets([](const Net* net) { return net->get_name() == "Reset"; }).begin());
+    Net* clock          = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock"; }).begin());
+    Net* Clock_enable_B = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock_enable_B"; }).begin());
+    Net* output_0       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_0"; }).begin());
+    Net* output_1       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_1"; }).begin());
+    Net* output_2       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_2"; }).begin());
+    Net* output_3       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_3"; }).begin());
+
+    sim->add_clock_period(clock, 10000);
+
+    //start simulation
+    {
+        measure_block_time("simulation");
+        //testbench
+        sim->set_input(Clock_enable_B, BooleanFunction::Value::ONE);    //#Clock_enable_B <= '1';
+        sim->set_input(reset, BooleanFunction::Value::ZERO);            //#Reset <= '0';
+        sim->simulate(40 * 1000);                            //#WAIT FOR 40 NS; -> simulate 4 clock cycle  - cycle 0, 1, 2, 3
+
+        sim->set_input(Clock_enable_B, BooleanFunction::Value::ZERO);    //#Clock_enable_B <= '0';
+        sim->simulate(110 * 1000);                            //#WAIT FOR 110 NS; -> simulate 11 clock cycle  - cycle 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+
+        sim->set_input(reset, BooleanFunction::Value::ONE);    //#Reset <= '1';
+        sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 15, 16
+
+        sim->set_input(reset, BooleanFunction::Value::ZERO);    //#Reset <= '0';
+        sim->simulate(70 * 1000);                    //#WAIT FOR 70 NS; -> simulate 7 clock cycle  - cycle 17, 18, 19, 20, 21, 22, 23
+
+        sim->set_input(Clock_enable_B, BooleanFunction::Value::ONE);    //#Clock_enable_B <= '1';
+        sim->simulate(23 * 1000);                            //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 24, 25
+
+        sim->set_input(reset, BooleanFunction::Value::ONE);    //#Reset <= '1';
+        sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 26, 27
+                                                    //#3 additional traces á 10 NS to get 300 NS simulation time
+        sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 28, 29
+                                                    //#for last "cycle" set clock to 0, in the final state clock stays ZERO and does not switch to 1 anymore
+        sim->simulate(5 * 1000);                    //#WAIT FOR 10 NS; -> simulate 1 clock cycle  - cycle 30
+    }
+    //Test if maps are equal
+    EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
+    TEST_END
+}
+
+TEST_F(SimulatorTest, toycipher)
+{
+    // return;
+    TEST_START
+
+    auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
+    auto sim    = plugin->create_simulator();
+
+    //path to netlist
+    std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/cipher_flat.vhd";
+    if (!utils::file_exists(path_netlist))
+        FAIL() << "netlist for toycipher-test not found: " << path_netlist;
+
+    //create netlist from path
+    auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+    if (lib == nullptr)
+    {
+        FAIL() << "XILINX_UNISIM gate library not found";
+    }
 
-//     std::unique_ptr<Netlist> nl;
-//     {
-//         NO_COUT_BLOCK;
-//         nl = netlist_parser_manager::parse(path_netlist, lib);
-//         if (nl == nullptr)
-//         {
-//             FAIL() << "netlist couldn't be parsed";
-//         }
-//     }
-
-//     //path to vcd
-//     std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/dump.vcd";
-//     if (!utils::file_exists(path_vcd))
-//         FAIL() << "dump for toycipher-test not found: " << path_vcd;
-
-//     //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
-//     Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
-
-//     //prepare simulation
-//     sim->add_gates(nl->get_gates());
-//     sim->initialize_sequential_gates();
-
-//     // retrieve nets
-//     auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
+    std::unique_ptr<Netlist> nl;
+    {
+        NO_COUT_BLOCK;
+        nl = netlist_parser_manager::parse(path_netlist, lib);
+        if (nl == nullptr)
+        {
+            FAIL() << "netlist couldn't be parsed";
+        }
+    }
+
+    //path to vcd
+    std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/dump.vcd";
+    if (!utils::file_exists(path_vcd))
+        FAIL() << "dump for toycipher-test not found: " << path_vcd;
+
+    //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
+    Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
+
+    //prepare simulation
+    sim->add_gates(nl->get_gates());
+    sim->initialize_sequential_gates();
+
+    // retrieve nets
+    auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
 
-//     sim->add_clock_period(clk, 10000);
+    sim->add_clock_period(clk, 10000);
 
-//     std::set<const Net*> key_set, plaintext_set;
-//     auto start = *(nl->get_nets([](auto net) { return net->get_name() == "START"; }).begin());
-
-//     for (int i = 0; i < 16; i++)
-//     {
-//         std::string name = "KEY_" + std::to_string(i);
-//         key_set.insert(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
-//     }
-
-//     for (int i = 0; i < 16; i++)
-//     {
-//         std::string name = "PLAINTEXT_" + std::to_string(i);
-//         plaintext_set.insert(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
-//     }
-
-//     int input_nets_amount = key_set.size() + plaintext_set.size();
-
-//     if (clk != nullptr)
-//         input_nets_amount++;
-
-//     if (start != nullptr)
-//         input_nets_amount++;
-
-//     if (input_nets_amount != sim->get_input_nets().size())
-//         FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
-
-//     //start simulation
-//     {
-//         measure_block_time("simulation");
-//         //testbench
-
-//         for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
-//             sim->set_input(net, BooleanFunction::Value::ZERO);
-
-//         for (auto net : key_set)    //KEY <= (OTHERS => '0');
-//             sim->set_input(net, BooleanFunction::Value::ZERO);
-
-//         sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-//         sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
-
-//         sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
-//         sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
-
-//         sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-//         sim->simulate(100 * 1000);                   //WAIT FOR 100 NS;
-
-//         for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '1');
-//             sim->set_input(net, BooleanFunction::Value::ONE);
-
-//         for (auto net : key_set)    //KEY <= (OTHERS => '1');
-//             sim->set_input(net, BooleanFunction::Value::ONE);
-
-//         sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-//         sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
-
-//         sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
-//         sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
-
-//         sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-//         sim->simulate(100 * 1000);                   //WAIT FOR 100 NS;
-
-//         for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
-//             sim->set_input(net, BooleanFunction::Value::ZERO);
-
-//         for (auto net : key_set)    //KEY <= (OTHERS => '0');
-//             sim->set_input(net, BooleanFunction::Value::ZERO);
-
-//         sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-
-//         sim->simulate(10 * 1000);
-//         sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
-
-//         sim->simulate(10 * 1000);
-//         sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-
-//         sim->simulate(30 * 1000);
-//     }
-
-//     //Test if maps are equal
-//     EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
-//     TEST_END
-// }
-
-// TEST_F(SimulatorTest, sha256)
-// {
-//     // return;
-//     TEST_START
-
-//     auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
-//     auto sim    = plugin->create_simulator();
-
-//     //path to netlist
-//     std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.vhd";
-//     if (!utils::file_exists(path_netlist))
-//         FAIL() << "netlist for sha256 not found: " << path_netlist;
-
-//     std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.hal";
-
-//     //create netlist from path
-//     auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
-//     if (lib == nullptr)
-//     {
-//         FAIL() << "XILINX_UNISIM gate library not found";
-//     }
-
-//     std::unique_ptr<Netlist> nl;
-//     {
-//         std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
-//         if (utils::file_exists(path_netlist_hal))
-//         {
-//             std::cout << ".hal file found for test netlist, loading this one." << std::endl;
-//             NO_COUT_BLOCK;
-//             nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
-//         }
-//         else
-//         {
-//             NO_COUT_BLOCK;
-//             nl = netlist_parser_manager::parse(path_netlist, lib);
-//             netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
-//         }
-//         if (nl == nullptr)
-//         {
-//             FAIL() << "netlist couldn't be parsed";
-//         }
-//     }
-
-//     //path to vcd
-//     std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/dump.vcd";
-//     if (!utils::file_exists(path_vcd))
-//         FAIL() << "dump for sha256 not found: " << path_vcd;
-
-//     //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
-//     Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
-
-//     //prepare simulation
-//     sim->add_gates(nl->get_gates());
-//     sim->initialize_sequential_gates();
-
-//     // retrieve nets
-//     auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
-
-//     sim->add_clock_period(clk, 10000);
-
-//     auto start = *(nl->get_nets([](auto net) { return net->get_name() == "data_ready"; }).begin());
-
-//     auto rst = *(nl->get_nets([](auto net) { return net->get_name() == "rst"; }).begin());
-
-//     std::vector<const Net*> input_bits;
-//     for (int i = 0; i < 512; i++)
-//     {
-//         std::string name = "msg_block_in_" + std::to_string(i);
-//         input_bits.push_back(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
-//     }
-
-//     int input_nets_amount = input_bits.size();
-
-//     if (clk != nullptr)
-//         input_nets_amount++;
-
-//     if (rst != nullptr)
-//         input_nets_amount++;
-
-//     if (start != nullptr)
-//         input_nets_amount++;
-
-//     if (input_nets_amount != sim->get_input_nets().size())
-//         FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
-
-//     //start simulation
-//     std::cout << "starting simulation" << std::endl;
-//     //testbench
-
-//     {
-//         measure_block_time("simulation");
-
-//         // msg <= x"61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
-//         std::string hex_input = "61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
-//         for (u32 i = 0; i < hex_input.size(); i += 2)
-//         {
-//             u8 byte = std::stoul(hex_input.substr(i, 2), nullptr, 16);
-//             for (u32 j = 0; j < 8; ++j)
-//             {
-//                 sim->set_input(input_bits[i * 4 + j], (BooleanFunction::Value)((byte >> (7 - j)) & 1));
-//             }
-//         }
-
-//         sim->set_input(rst, BooleanFunction::Value::ONE);       //RST <= '1';
-//         sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-//         sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
-
-//         sim->set_input(rst, BooleanFunction::Value::ZERO);    //RST <= '0';
-//         sim->simulate(10 * 1000);                  //WAIT FOR 10 NS;
-
-//         sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
-//         sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
-
-//         sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-//         sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
-
-//         sim->simulate(2000 * 1000);
-//     }
-
-//     // Test if maps are equal
-
-//     EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
-//     TEST_END
-// }
+    std::set<const Net*> key_set, plaintext_set;
+    auto start = *(nl->get_nets([](auto net) { return net->get_name() == "START"; }).begin());
+
+    for (int i = 0; i < 16; i++)
+    {
+        std::string name = "KEY_" + std::to_string(i);
+        key_set.insert(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
+    }
+
+    for (int i = 0; i < 16; i++)
+    {
+        std::string name = "PLAINTEXT_" + std::to_string(i);
+        plaintext_set.insert(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
+    }
+
+    int input_nets_amount = key_set.size() + plaintext_set.size();
+
+    if (clk != nullptr)
+        input_nets_amount++;
+
+    if (start != nullptr)
+        input_nets_amount++;
+
+    if (input_nets_amount != sim->get_input_nets().size())
+        FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
+
+    //start simulation
+    {
+        measure_block_time("simulation");
+        //testbench
+
+        for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
+            sim->set_input(net, BooleanFunction::Value::ZERO);
+
+        for (auto net : key_set)    //KEY <= (OTHERS => '0');
+            sim->set_input(net, BooleanFunction::Value::ZERO);
+
+        sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+        sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
+
+        sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
+        sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
+
+        sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+        sim->simulate(100 * 1000);                   //WAIT FOR 100 NS;
+
+        for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '1');
+            sim->set_input(net, BooleanFunction::Value::ONE);
+
+        for (auto net : key_set)    //KEY <= (OTHERS => '1');
+            sim->set_input(net, BooleanFunction::Value::ONE);
+
+        sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+        sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
+
+        sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
+        sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
+
+        sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+        sim->simulate(100 * 1000);                   //WAIT FOR 100 NS;
+
+        for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
+            sim->set_input(net, BooleanFunction::Value::ZERO);
+
+        for (auto net : key_set)    //KEY <= (OTHERS => '0');
+            sim->set_input(net, BooleanFunction::Value::ZERO);
+
+        sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+
+        sim->simulate(10 * 1000);
+        sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
+
+        sim->simulate(10 * 1000);
+        sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+
+        sim->simulate(30 * 1000);
+    }
+
+    //Test if maps are equal
+    EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
+    TEST_END
+}
+
+TEST_F(SimulatorTest, sha256)
+{
+    // return;
+    TEST_START
+
+    auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
+    auto sim    = plugin->create_simulator();
+
+    //path to netlist
+    std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.vhd";
+    if (!utils::file_exists(path_netlist))
+        FAIL() << "netlist for sha256 not found: " << path_netlist;
+
+    std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.hal";
+
+    //create netlist from path
+    auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+    if (lib == nullptr)
+    {
+        FAIL() << "XILINX_UNISIM gate library not found";
+    }
+
+    std::unique_ptr<Netlist> nl;
+    {
+        std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
+        if (utils::file_exists(path_netlist_hal))
+        {
+            std::cout << ".hal file found for test netlist, loading this one." << std::endl;
+            NO_COUT_BLOCK;
+            nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
+        }
+        else
+        {
+            NO_COUT_BLOCK;
+            nl = netlist_parser_manager::parse(path_netlist, lib);
+            netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
+        }
+        if (nl == nullptr)
+        {
+            FAIL() << "netlist couldn't be parsed";
+        }
+    }
+
+    //path to vcd
+    std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/dump.vcd";
+    if (!utils::file_exists(path_vcd))
+        FAIL() << "dump for sha256 not found: " << path_vcd;
+
+    //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
+    Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
+
+    //prepare simulation
+    sim->add_gates(nl->get_gates());
+    sim->initialize_sequential_gates();
+
+    // retrieve nets
+    auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
+
+    sim->add_clock_period(clk, 10000);
+
+    auto start = *(nl->get_nets([](auto net) { return net->get_name() == "data_ready"; }).begin());
+
+    auto rst = *(nl->get_nets([](auto net) { return net->get_name() == "rst"; }).begin());
+
+    std::vector<const Net*> input_bits;
+    for (int i = 0; i < 512; i++)
+    {
+        std::string name = "msg_block_in_" + std::to_string(i);
+        input_bits.push_back(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
+    }
+
+    int input_nets_amount = input_bits.size();
+
+    if (clk != nullptr)
+        input_nets_amount++;
+
+    if (rst != nullptr)
+        input_nets_amount++;
+
+    if (start != nullptr)
+        input_nets_amount++;
+
+    if (input_nets_amount != sim->get_input_nets().size())
+        FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
+
+    //start simulation
+    std::cout << "starting simulation" << std::endl;
+    //testbench
+
+    {
+        measure_block_time("simulation");
+
+        // msg <= x"61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
+        std::string hex_input = "61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
+        for (u32 i = 0; i < hex_input.size(); i += 2)
+        {
+            u8 byte = std::stoul(hex_input.substr(i, 2), nullptr, 16);
+            for (u32 j = 0; j < 8; ++j)
+            {
+                sim->set_input(input_bits[i * 4 + j], (BooleanFunction::Value)((byte >> (7 - j)) & 1));
+            }
+        }
+
+        sim->set_input(rst, BooleanFunction::Value::ONE);       //RST <= '1';
+        sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+        sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
+
+        sim->set_input(rst, BooleanFunction::Value::ZERO);    //RST <= '0';
+        sim->simulate(10 * 1000);                  //WAIT FOR 10 NS;
+
+        sim->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
+        sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
+
+        sim->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+        sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
+
+        sim->simulate(2000 * 1000);
+    }
+
+    // Test if maps are equal
+
+    EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
+    TEST_END
+}
 
 TEST_F(SimulatorTest, bram_lattice)
 {
@@ -1169,358 +1169,4 @@ TEST_F(SimulatorTest, bram_lattice)
     EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
     TEST_END
 }
-
-// TEST_F(SimulatorTest, dsp_lattice)
-// {
-//     // return;
-//     TEST_START
-
-//     auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("netlist_simulator");
-//     auto sim    = plugin->create_simulator();
-
-//     //path to netlist
-//     std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/dsp/dsp_netlist.v";
-//     if (!utils::file_exists(path_netlist))
-//         FAIL() << "netlist for dsp not found: " << path_netlist;
-
-//     std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/dsp/dsp_netlist.hal";
-
-//     auto lib = gate_library_manager::get_gate_library_by_name("ICE40ULTRA");
-//     if (lib == nullptr)
-//     {
-//         FAIL() << "ice40ultra gate library not found";
-//     }
-
-//     std::unique_ptr<Netlist> nl;
-//     {
-//         std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
-//         if (utils::file_exists(path_netlist_hal))
-//         {
-//             std::cout << ".hal file found for test netlist, loading this one." << std::endl;
-//             nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
-//         }
-//         else
-//         {
-//             NO_COUT_BLOCK;
-//             nl = netlist_parser_manager::parse(path_netlist, lib);
-//             netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
-//         }
-//         if (nl == nullptr)
-//         {
-//             FAIL() << "netlist couldn't be parsed";
-//         }
-//     }
-
-//     //path to vcd
-//     std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/dsp/trace.vcd";
-//     if (!utils::file_exists(path_vcd))
-//         FAIL() << "dump for bram not found: " << path_vcd;
-
-//     //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
-//     Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
-
-//     std::cout << "read simulation file" << std::endl;
-
-//     //prepare simulation
-//     sim->add_gates(nl->get_gates());
-//     sim->initialize_sequential_gates();
-
-//     auto CLK = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
-
-//     sim->add_clock_period(CLK, 10000);
-
-//     std::vector<Net*> A;
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_0"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_1"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_2"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_3"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_4"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_5"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_6"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_7"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_8"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_9"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_10"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_11"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_12"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_13"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_14"; }).begin()));
-//     A.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "A_15"; }).begin()));
-
-//     std::vector<Net*> B;
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_0"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_1"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_2"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_3"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_4"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_5"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_6"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_7"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_8"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_9"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_10"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_11"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_12"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_13"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_14"; }).begin()));
-//     B.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "B_15"; }).begin()));
-
-//     std::vector<Net*> C;
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_0"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_1"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_2"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_3"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_4"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_5"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_6"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_7"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_8"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_9"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_10"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_11"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_12"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_13"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_14"; }).begin()));
-//     C.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "C_15"; }).begin()));
-
-//     std::vector<Net*> D;
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_0"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_1"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_2"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_3"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_4"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_5"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_6"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_7"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_8"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_9"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_10"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_11"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_12"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_13"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_14"; }).begin()));
-//     D.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "D_15"; }).begin()));
-
-//     auto IRSTTOP   = *(nl->get_nets([](auto net) { return net->get_name() == "IRSTTOP"; }).begin());
-//     auto IRSTBOT   = *(nl->get_nets([](auto net) { return net->get_name() == "IRSTBOT"; }).begin());
-//     auto ORSTTOP   = *(nl->get_nets([](auto net) { return net->get_name() == "ORSTTOP"; }).begin());
-//     auto ORSTBOT   = *(nl->get_nets([](auto net) { return net->get_name() == "ORSTBOT"; }).begin());
-//     auto AHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "AHOLD"; }).begin());
-//     auto BHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "BHOLD"; }).begin());
-//     auto CHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "CHOLD"; }).begin());
-//     auto DHOLD     = *(nl->get_nets([](auto net) { return net->get_name() == "DHOLD"; }).begin());
-//     auto OHOLDTOP  = *(nl->get_nets([](auto net) { return net->get_name() == "OHOLDTOP"; }).begin());
-//     auto OHOLDBOT  = *(nl->get_nets([](auto net) { return net->get_name() == "OHOLDBOT"; }).begin());
-//     auto OLOADTOP  = *(nl->get_nets([](auto net) { return net->get_name() == "OLOADTOP"; }).begin());
-//     auto OLOADBOT  = *(nl->get_nets([](auto net) { return net->get_name() == "OLOADBOT"; }).begin());
-//     auto ADDSUBTOP = *(nl->get_nets([](auto net) { return net->get_name() == "ADDSUBTOP"; }).begin());
-//     auto ADDSUBBOT = *(nl->get_nets([](auto net) { return net->get_name() == "ADDSUBBOT"; }).begin());
-//     auto CI        = *(nl->get_nets([](auto net) { return net->get_name() == "CI"; }).begin());
-//     auto CE        = *(nl->get_nets([](auto net) { return net->get_name() == "CE"; }).begin());
-
-//     u32 input_nets_amount = 0;
-
-//     if (CLK != nullptr)
-//         input_nets_amount++;
-
-//     for (const auto& A_net : A)
-//     {
-//         if (A_net != nullptr)
-//             input_nets_amount++;
-//     }
-//     for (const auto& B_net : B)
-//     {
-//         if (B_net != nullptr)
-//             input_nets_amount++;
-//     }
-//     for (const auto& C_net : C)
-//     {
-//         if (C_net != nullptr)
-//             input_nets_amount++;
-//     }
-//     for (const auto& D_net : D)
-//     {
-//         if (D_net != nullptr)
-//             input_nets_amount++;
-//     }
-
-//     if (IRSTTOP != nullptr)
-//         input_nets_amount++;
-
-//     if (IRSTBOT != nullptr)
-//         input_nets_amount++;
-
-//     if (ORSTTOP != nullptr)
-//         input_nets_amount++;
-
-//     if (ORSTBOT != nullptr)
-//         input_nets_amount++;
-
-//     if (AHOLD != nullptr)
-//         input_nets_amount++;
-
-//     if (BHOLD != nullptr)
-//         input_nets_amount++;
-
-//     if (CHOLD != nullptr)
-//         input_nets_amount++;
-
-//     if (DHOLD != nullptr)
-//         input_nets_amount++;
-
-//     if (OHOLDTOP != nullptr)
-//         input_nets_amount++;
-
-//     if (OHOLDBOT != nullptr)
-//         input_nets_amount++;
-
-//     if (OLOADTOP != nullptr)
-//         input_nets_amount++;
-
-//     if (OLOADBOT != nullptr)
-//         input_nets_amount++;
-
-//     if (ADDSUBTOP != nullptr)
-//         input_nets_amount++;
-
-//     if (ADDSUBBOT != nullptr)
-//         input_nets_amount++;
-
-//     if (CI != nullptr)
-//         input_nets_amount++;
-
-//     if (CE != nullptr)
-//         input_nets_amount++;
-
-//     if (input_nets_amount != sim->get_input_nets().size())
-//     {
-//         for (const auto& net : sim->get_input_nets())
-//         {
-//             std::cout << net->get_name() << std::endl;
-//         }
-//         FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
-//     }
-
-//     //start simulation
-//     std::cout << "starting simulation" << std::endl;
-//     //testbench
-
-//     {
-//         measure_block_time("simulation");
-//         for (const auto& input_net : sim->get_input_nets())
-//         {
-//             sim->set_input(input_net, BooleanFunction::Value::ZERO);
-//         }
-
-//         set_16_bit_net_vector(sim.get(), A, 6666);     // set_a(6666);
-//         set_16_bit_net_vector(sim.get(), B, 1234);     // set_b(1234);
-//         set_16_bit_net_vector(sim.get(), C, 4371);     // set_c(4371);
-//         set_16_bit_net_vector(sim.get(), D, 43714);    // set_d(43714);
-
-//         // tb->m_core->AHOLD     = 0x0;
-//         // tb->m_core->BHOLD     = 0x0;
-//         // tb->m_core->CHOLD     = 0x0;
-//         // tb->m_core->DHOLD     = 0x0;
-//         // tb->m_core->OHOLDTOP  = 0x0;
-//         // tb->m_core->OHOLDBOT  = 0x0;
-//         // tb->m_core->OLOADTOP  = 0x0;
-//         // tb->m_core->OLOADBOT  = 0x0;
-//         // tb->m_core->ADDSUBTOP = 0x0;
-//         // tb->m_core->ADDSUBBOT = 0x0;
-//         // tb->m_core->CI        = 0x0;
-//         // tb->m_core->CE        = 0x0;
-//         // --> already done before :)
-
-//         // tb->opentrace("trace.vcd");
-
-//         sim->simulate(1 * 1000);    // WAIT FOR 10 NS;
-
-//         sim->set_input(CE, BooleanFunction::Value::ZERO);    // tb->m_core->CE = 0x0;
-
-//         sim->set_input(IRSTTOP, BooleanFunction::Value::ONE);    // tb->m_core->IRSTTOP = 0x1;
-//         sim->set_input(IRSTBOT, BooleanFunction::Value::ONE);    // tb->m_core->IRSTBOT = 0x1;
-//         sim->set_input(ORSTTOP, BooleanFunction::Value::ONE);    // tb->m_core->ORSTTOP = 0x1;
-//         sim->set_input(ORSTBOT, BooleanFunction::Value::ONE);    // tb->m_core->ORSTBOT = 0x1;
-
-//         sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
-
-//         sim->set_input(CE, BooleanFunction::Value::ONE);    // tb->m_core->CE = 0x1;
-
-//         sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
-
-//         sim->set_input(IRSTTOP, BooleanFunction::Value::ZERO);    // tb->m_core->IRSTTOP = 0x0;
-//         sim->set_input(IRSTBOT, BooleanFunction::Value::ZERO);    // tb->m_core->IRSTBOT = 0x0;
-//         sim->set_input(ORSTTOP, BooleanFunction::Value::ZERO);    // tb->m_core->ORSTTOP = 0x0;
-//         sim->set_input(ORSTBOT, BooleanFunction::Value::ZERO);    // tb->m_core->ORSTBOT = 0x0;
-
-//         sim->simulate(10 * 1000);    // tb->wait_for_n_clocks(10);
-
-//         sim->set_input(AHOLD, BooleanFunction::Value::ONE);    // tb->m_core->AHOLD = 0x1;
-//         sim->simulate(5 * 1000);                    // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(OHOLDTOP, BooleanFunction::Value::ONE);    // tb->m_core->OHOLDTOP = 0x1;
-//         sim->set_input(OHOLDBOT, BooleanFunction::Value::ONE);    // tb->m_core->OHOLDBOT = 0x1;
-//         sim->simulate(5 * 1000);                       // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(AHOLD, BooleanFunction::Value::ZERO);       // tb->m_core->AHOLD    = 0x0;
-//         sim->set_input(OHOLDTOP, BooleanFunction::Value::ZERO);    // tb->m_core->OHOLDTOP = 0x0;
-//         sim->set_input(OHOLDBOT, BooleanFunction::Value::ZERO);    // tb->m_core->OHOLDBOT = 0x0;
-//         sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(OLOADTOP, BooleanFunction::Value::ONE);     // tb->m_core->OLOADTOP  = 0x1;
-//         sim->set_input(ADDSUBTOP, BooleanFunction::Value::ONE);    // tb->m_core->ADDSUBTOP = 0x1;
-//         sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(OLOADTOP, BooleanFunction::Value::ZERO);     // tb->m_core->OLOADTOP  = 0x0;
-//         sim->set_input(ADDSUBTOP, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
-//         sim->set_input(ADDSUBBOT, BooleanFunction::Value::ONE);     // tb->m_core->ADDSUBBOT = 0x1;
-//         sim->simulate(5 * 1000);                         // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(ORSTTOP, BooleanFunction::Value::ONE);    // tb->m_core->ORSTTOP = 0x1;
-//         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(ADDSUBBOT, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
-//         sim->set_input(ORSTTOP, BooleanFunction::Value::ZERO);      // tb->m_core->ORSTTOP   = 0x0;
-//         sim->simulate(5 * 1000);                         // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(IRSTTOP, BooleanFunction::Value::ONE);    // tb->m_core->IRSTTOP = 0x1;
-//         sim->set_input(CHOLD, BooleanFunction::Value::ONE);      // tb->m_core->CHOLD   = 0x1;
-//         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(IRSTTOP, BooleanFunction::Value::ZERO);    // tb->m_core->IRSTTOP = 0x0;
-//         sim->set_input(CHOLD, BooleanFunction::Value::ZERO);      // tb->m_core->CHOLD   = 0x0;
-
-//         set_16_bit_net_vector(sim.get(), A, 1632);      // set_a(1632);
-//         set_16_bit_net_vector(sim.get(), B, 764254);    // set_b(764254); // TODO @nils this is shit
-//         set_16_bit_net_vector(sim.get(), C, 12523);     // set_c(12523);
-//         set_16_bit_net_vector(sim.get(), D, 263);       // set_d(263);
-//         sim->simulate(5 * 1000);                        // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(OLOADTOP, BooleanFunction::Value::ONE);    // tb->m_core->OLOADTOP = 0x1;
-//         sim->set_input(OLOADBOT, BooleanFunction::Value::ONE);    // tb->m_core->OLOADBOT = 0x1;
-//         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(OLOADTOP, BooleanFunction::Value::ZERO);    // tb->m_core->OLOADTOP = 0x0;
-//         sim->set_input(OLOADBOT, BooleanFunction::Value::ZERO);    // tb->m_core->OLOADBOT = 0x0;
-//         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(ADDSUBTOP, BooleanFunction::Value::ONE);    // tb->m_core->ADDSUBTOP = 0x1;
-//         sim->set_input(ADDSUBBOT, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
-//         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(ADDSUBTOP, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
-//         sim->set_input(ADDSUBBOT, BooleanFunction::Value::ONE);    // tb->m_core->ADDSUBBOT = 0x1;
-//         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-//         sim->set_input(ADDSUBTOP, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBTOP = 0x0;
-//         sim->set_input(ADDSUBBOT, BooleanFunction::Value::ZERO);    // tb->m_core->ADDSUBBOT = 0x0;
-//         sim->simulate(5 * 1000);                      // tb->wait_for_n_clocks(5);
-
-//         sim->simulate(5 * 1000);    // tb->wait_for_n_clocks(5);
-//     }
-
-//     // Test if maps are equal
-//     EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
-//     TEST_END
-// }
 } // namespace hal

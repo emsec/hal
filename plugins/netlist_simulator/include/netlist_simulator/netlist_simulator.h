@@ -276,64 +276,6 @@ namespace hal
             void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
         };
 
-        struct SimulationGateLatticeMAC : public SimulationGateSequential
-        {
-            enum Configuration
-            {
-                C0  = 0x00000001,
-                C1  = 0x00000002,
-                C2  = 0x00000004,
-                C3  = 0x00000008,
-                C4  = 0x00000010,
-                C5  = 0x00000020,
-                C6  = 0x00000040,
-                C7  = 0x00000080,
-                C8  = 0x00000100,
-                C9  = 0x00000200,
-                C10 = 0x00000400,
-                C11 = 0x00000800,
-                C12 = 0x00001000,
-                C13 = 0x00002000,
-                C14 = 0x00004000,
-                C15 = 0x00008000,
-                C16 = 0x00010000,
-                C17 = 0x00020000,
-                C18 = 0x00040000,
-                C19 = 0x00080000,
-                C20 = 0x00100000,
-                C21 = 0x00200000,
-                C22 = 0x00400000,
-                C23 = 0x00800000,
-                C24 = 0x01000000
-            };
-
-            const Net* m_clock_net;
-            BooleanFunction m_clock_func;
-            u32 m_configuration = 0;
-            std::vector<std::vector<const Net*>> m_data_in_nets;
-            std::vector<std::vector<std::string>> m_data_in_pins;
-            std::vector<const Net*> m_data_out_nets;
-            std::vector<const Net*> m_hold_nets;
-
-            u16 m_in_reg_a      = 0;
-            u16 m_in_reg_b      = 0;
-            u16 m_in_reg_c      = 0;
-            u16 m_in_reg_d      = 0;
-            u16 m_mul_int_reg_1 = 0;    // top
-            u16 m_mul_int_reg_2 = 0;
-            u16 m_mul_int_reg_3 = 0;
-            u16 m_mul_int_reg_4 = 0;    // bottom
-            u32 m_mul_out_reg   = 0;
-            u16 m_acc_out_reg1  = 0;    // top
-            u16 m_acc_out_reg2  = 0;    // bottom
-
-            SimulationGateLatticeMAC(const Gate* gate);
-
-            void initialize(std::map<const Net*, BooleanFunction::Value>& new_events, bool from_netlist, BooleanFunction::Value value) override;
-            bool simulate(const Simulation& simulation, const Event& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
-            void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
-        };
-
         struct Clock
         {
             const Net* clock_net;

@@ -387,21 +387,6 @@ namespace hal
                     }
                 }
             }
-            else if (gate->get_type()->get_gate_library()->get_name() == "ICE40ULTRA" && gate->get_type()->has_property(GateTypeProperty::dsp))
-            {
-                std::unique_ptr<SimulationGateLatticeMAC> sim_gate_owner = std::make_unique<SimulationGateLatticeMAC>(gate);
-                SimulationGateLatticeMAC* sim_gate                       = sim_gate_owner.get();
-                sim_gate_base                                            = sim_gate;
-                m_sim_gates.push_back(std::move(sim_gate_owner));
-
-                for (const auto& [from_netlist, value, filter] : m_init_seq_gates)
-                {
-                    if (!filter || filter(gate))
-                    {
-                        sim_gate->initialize(init_events, from_netlist, value);
-                    }
-                }
-            }
             else if (gate->get_type()->has_property(GateTypeProperty::combinational))
             {
                 std::unique_ptr<SimulationGateCombinational> sim_gate_owner = std::make_unique<SimulationGateCombinational>(gate);
