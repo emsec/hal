@@ -95,10 +95,8 @@ namespace hal
 
         connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalInput, this, &ModuleDetailsWidget::handleNetlistMarkedGlobalInput);
         connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalOutput, this, &ModuleDetailsWidget::handleNetlistMarkedGlobalOutput);
-        connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalInout, this, &ModuleDetailsWidget::handleNetlistMarkedGlobalInout);
         connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalInput, this, &ModuleDetailsWidget::handleNetlistUnmarkedGlobalInput);
         connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalOutput, this, &ModuleDetailsWidget::handleNetlistUnmarkedGlobalOutput);
-        connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalInout, this, &ModuleDetailsWidget::handleNetlistUnmarkedGlobalInout);
 
         connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &ModuleDetailsWidget::handleModuleNameChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleAdded, this, &ModuleDetailsWidget::handleSubmoduleAdded);

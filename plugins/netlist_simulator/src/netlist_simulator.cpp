@@ -270,56 +270,62 @@ namespace hal
 
     void NetlistSimulator::compute_input_nets()
     {
-        m_input_nets.clear();
-        for (auto gate : m_simulation_set)
+        std::set<const Net*> input_nets_set;
+        for (const Gate* gate : m_simulation_set)
         {
-            for (auto net : gate->get_fan_in_nets())
+            for (const Net* net : gate->get_fan_in_nets())
             {
                 // "input net" is either a global input...
                 if (net->is_global_input_net())
                 {
-                    m_input_nets.push_back(net);
+                    input_nets_set.insert(net);
                 }
                 else    // ... or has a source outside of the simulation set
                 {
-                    for (auto src : net->get_sources())
+                    for (const Endpoint* src : net->get_sources())
                     {
                         if (m_simulation_set.find(src->get_gate()) == m_simulation_set.end())
                         {
-                            m_input_nets.push_back(net);
+                            input_nets_set.insert(net);
                             break;
                         }
                     }
                 }
             }
         }
+
+        m_input_nets.clear();
+        m_input_nets.insert(m_input_nets.end(), input_nets_set.begin(), input_nets_set.end());
     }
 
     void NetlistSimulator::compute_output_nets()
     {
-        m_output_nets.clear();
+        std::set<const Net*> output_nets_set;
         for (auto gate : m_simulation_set)
         {
-            for (auto net : gate->get_fan_out_nets())
+            for (const Net* net : gate->get_fan_out_nets())
             {
                 // "output net" is either a global output...
                 if (net->is_global_output_net())
                 {
-                    m_output_nets.push_back(net);
+                    output_nets_set.insert(net);
                 }
                 else    // ... or has a destination outside of the simulation set
                 {
-                    for (auto dst : net->get_destinations())
+                    for (const Endpoint* dst : net->get_destinations())
                     {
                         if (m_simulation_set.find(dst->get_gate()) == m_simulation_set.end())
                         {
-                            m_output_nets.push_back(net);
+                            output_nets_set.insert(net);
                             break;
                         }
                     }
                 }
             }
         }
+
+        m_output_nets.clear();
+        m_output_nets.insert(m_output_nets.end(), output_nets_set.begin(), output_nets_set.end());
     }
 
     void NetlistSimulator::set_iteration_timeout(u64 iterations)

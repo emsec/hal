@@ -19,10 +19,8 @@ namespace hal
                                                                        "unmarked_global_gnd",
                                                                        "marked_global_input",
                                                                        "marked_global_output",
-                                                                       "marked_global_inout",
                                                                        "unmarked_global_input",
-                                                                       "unmarked_global_output",
-                                                                       "unmarked_global_inout"};
+                                                                       "unmarked_global_output"};
 
     template<>
     std::vector<std::string> EnumStrings<GateEvent::event>::data = {"created", "removed", "name_changed", "location_changed", "boolean_function_changed"};
