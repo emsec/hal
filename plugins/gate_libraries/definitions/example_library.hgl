@@ -777,6 +777,8 @@
                 "ff"
             ],
             "ff_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CE & C"
             },
@@ -799,6 +801,7 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]
@@ -810,6 +813,8 @@
                 "ff"
             ],
             "ff_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CE & C",
                 "preset_on": "S"
@@ -838,6 +843,7 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]
@@ -849,6 +855,8 @@
                 "ff"
             ],
             "ff_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CE & C",
                 "clear_on": "R"
@@ -877,6 +885,7 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]
@@ -888,6 +897,8 @@
                 "ff"
             ],
             "ff_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CE & C",
                 "clear_on": "R",
@@ -924,6 +935,7 @@
                 {
                     "name": "Q",
                     "direction": "output",
+                    "function": "IQ",
                     "type": "state"
                 }
             ]

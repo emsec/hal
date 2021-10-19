@@ -313,6 +313,9 @@ namespace hal
         case GroupingEvent::event::name_changed:
             Q_EMIT groupingNameChanged(grp);
             break;
+        case GroupingEvent::event::color_changed:
+            Q_EMIT groupingColorChanged(grp);
+            break;
         case GroupingEvent::event::gate_assigned:
             Q_EMIT groupingGateAssigned(grp,associated_data);
             break;
@@ -355,6 +358,8 @@ namespace hal
             {
                 mModuleModel->setRandomColor(mod->get_id());
             }
+
+            gGraphContextManager->handleModuleCreated(mod);
 
             Q_EMIT moduleCreated(mod);
             break;
@@ -484,6 +489,8 @@ namespace hal
             //< no associated_data
 
            gSelectionRelay->handleGateRemoved(gat->get_id());
+
+           gGraphContextManager->handleGateRemoved(gat);
 
             Q_EMIT gateRemoved(gat);
             break;

@@ -45,7 +45,7 @@ namespace hal
 
         for (auto out_net : m_output_nets)
         {
-            BooleanFunction::Value result = m_functions[out_net](m_input_values);
+            BooleanFunction::Value result = m_functions[out_net].evaluate(m_input_values);
 
             new_events[std::make_pair(out_net, event.time + delay)] = result;
         }

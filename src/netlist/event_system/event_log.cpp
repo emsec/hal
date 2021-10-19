@@ -167,7 +167,11 @@ namespace hal
                 }
                 else if (event == GroupingEvent::event::name_changed)
                 {
-                    log_info("event", "changed name of net with id {:08x} to '{}'", grp->get_id(), grp->get_name());
+                    log_info("event", "changed name of grouping with id {:08x} to '{}'", grp->get_id(), grp->get_name());
+                }
+                else if (event == GroupingEvent::event::color_changed)
+                {
+                    log_info("event", "changed color of grouping with id {:08x} to '{}'", grp->get_id(), grp->get_color().toString());
                 }
                 else if (event == GroupingEvent::event::gate_assigned)
                 {

@@ -51,6 +51,7 @@ namespace hal
     class GraphContext : public QObject
     {
         friend class GraphContextManager;
+        friend class LayoutLockerManager;
         Q_OBJECT
 
     public:
@@ -180,6 +181,17 @@ namespace hal
          * @returns <b>true</b> if the context Show%s the content of the module.
          */
         bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
+
+        /**
+         * Convenience function to allow calls to GraphWidget::storeViewport via context
+         */
+        void storeViewport();
+
+        /**
+         * Called by layouter to signal progress
+         * @param percent
+         */
+        void layoutProgress(int percent) const;
 
 	void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
 
@@ -327,8 +339,9 @@ namespace hal
          * Reads a context from a given json object.
          *
          * @param json - The object to read from.
+         * @return true if reading was successful, false otherwise
          */
-        void readFromFile(const QJsonObject& json);
+        bool readFromFile(const QJsonObject& json);
 
         /**
          * Sets the dirty state.
@@ -344,12 +357,25 @@ namespace hal
          */
         bool isDirty() const {return mDirty; }
 
+        /**
+         * Set the special update state.
+         */
+        void setSpecialUpdate(bool state);
+
+        /**
+         * Get the special update state.
+         *
+         * @return The special update state.
+         */
+        bool getSpecialUpdate() const {return mSpecialUpdate; }
+
     Q_SIGNALS:
         void dataChanged();
 
+    public Q_SLOTS:
+        void abortLayout();
+
     private Q_SLOTS:
-        void handleLayouterUpdate(const int percent);
-        void handleLayouterUpdate(const QString& message);
         void handleLayouterFinished();
         void handleStyleChanged(int istyle);
 
@@ -357,6 +383,7 @@ namespace hal
         void evaluateChanges();
         void update();
         void applyChanges();
+        void requireSceneUpdate();
         void startSceneUpdate();
         bool testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId);
 
@@ -388,5 +415,7 @@ namespace hal
         bool mSceneUpdateInProgress;
 
         QDateTime mTimestamp;
+
+        bool mSpecialUpdate;
     };
 }

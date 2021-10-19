@@ -221,6 +221,8 @@ namespace hal
 
             :param hal_py.Net input_net: The input net.
             :param str port_name: The input port name.
+            :returns: True on success, False otherwise.
+            :rtype: bool
         )");
 
         py_module.def("get_input_port_name", &Module::get_input_port_name, py::arg("input_net"), R"(
@@ -257,6 +259,8 @@ namespace hal
 
             :param hal_py.Net output_net: The output net.
             :param str port_name: The output port name.
+            :returns: True on success, False otherwise.
+            :rtype: bool
         )");
 
         py_module.def("get_output_port_name", &Module::get_output_port_name, py::arg("output_net"), R"(

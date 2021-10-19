@@ -6,6 +6,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 #include "hal_core/utilities/log.h"
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
@@ -116,6 +117,7 @@ namespace hal
         }
 
         std::unique_ptr<GateTypeComponent> parent_component = nullptr;
+        std::vector<std::string> bf_vars                    = pin_ctx.pins;    // we MUST allow for output pins here
 
         if (gate_type.HasMember("lut_config") && gate_type["lut_config"].IsObject())
         {
@@ -127,7 +129,7 @@ namespace hal
         }
         else if (gate_type.HasMember("ff_config") && gate_type["ff_config"].IsObject())
         {
-            parent_component = parse_ff_config(gate_type["ff_config"], name, pin_ctx.pins);
+            parent_component = parse_ff_config(gate_type["ff_config"], name, bf_vars);
             if (parent_component == nullptr)
             {
                 return false;
@@ -135,7 +137,7 @@ namespace hal
         }
         else if (gate_type.HasMember("latch_config") && gate_type["latch_config"].IsObject())
         {
-            parent_component = parse_latch_config(gate_type["latch_config"], name, pin_ctx.pins);
+            parent_component = parse_latch_config(gate_type["latch_config"], name, bf_vars);
             if (parent_component == nullptr)
             {
                 return false;
@@ -143,7 +145,7 @@ namespace hal
         }
         else if (gate_type.HasMember("ram_config") && gate_type["ram_config"].IsObject())
         {
-            parent_component = parse_ram_config(gate_type["ram_config"], name, pin_ctx.pins);
+            parent_component = parse_ram_config(gate_type["ram_config"], name, bf_vars);
             if (parent_component == nullptr)
             {
                 return false;
@@ -170,7 +172,7 @@ namespace hal
 
         for (const auto& [f_name, func] : pin_ctx.boolean_functions)
         {
-            gt->add_boolean_function(f_name, BooleanFunction::from_string(func, pin_ctx.pins));
+            gt->add_boolean_function(f_name, BooleanFunction::from_string(func, bf_vars));
         }
 
         return true;
@@ -300,8 +302,29 @@ namespace hal
         return GateTypeComponent::create_lut_component(std::move(init_component), std::string(lut_config["bit_order"].GetString()) == "ascending");
     }
 
-    std::unique_ptr<GateTypeComponent> HGLParser::parse_ff_config(const rapidjson::Value& ff_config, const std::string& gt_name, const std::vector<std::string>& input_pins)
+    std::unique_ptr<GateTypeComponent> HGLParser::parse_ff_config(const rapidjson::Value& ff_config, const std::string& gt_name, std::vector<std::string>& bf_vars)
     {
+        if (!ff_config.HasMember("state") || !ff_config["state"].IsString())
+        {
+            log_error("hgl_parser", "invalid or missing 'state' specification for flip-flop gate type '{}'.", gt_name);
+            return nullptr;
+        }
+        if (!ff_config.HasMember("neg_state") || !ff_config["neg_state"].IsString())
+        {
+            log_error("hgl_parser", "invalid or missing 'neg_state' specification for flip-flop gate type '{}'.", gt_name);
+            return nullptr;
+        }
+        if (!ff_config.HasMember("next_state") || !ff_config["next_state"].IsString())
+        {
+            log_error("hgl_parser", "invalid or missing 'next_state' specification for flip-flop gate type '{}'.", gt_name);
+            return nullptr;
+        }
+        if (!ff_config.HasMember("clocked_on") || !ff_config["clocked_on"].IsString())
+        {
+            log_error("hgl_parser", "invalid or missing 'clocked_on' specification for flip-flop gate type '{}'.", gt_name);
+            return nullptr;
+        }
+
         std::unique_ptr<GateTypeComponent> init_component = nullptr;
         if (ff_config.HasMember("data_category") && ff_config["data_category"].IsString())
         {
@@ -323,31 +346,26 @@ namespace hal
             return nullptr;
         }
 
-        if (!ff_config.HasMember("next_state") || !ff_config["next_state"].IsString())
-        {
-            log_error("hgl_parser", "invalid or missing 'next_state' specification for flip-flop gate type '{}'.", gt_name);
-            return nullptr;
-        }
-
-        if (!ff_config.HasMember("clocked_on") || !ff_config["clocked_on"].IsString())
-        {
-            log_error("hgl_parser", "invalid or missing 'clocked_on' specification for flip-flop gate type '{}'.", gt_name);
-            return nullptr;
-        }
+        std::string state_identifier                       = ff_config["state"].GetString();
+        std::string neg_state_identifier                   = ff_config["neg_state"].GetString();
+        std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(std::move(init_component), state_identifier, neg_state_identifier);
+        bf_vars.push_back(state_identifier);
+        bf_vars.push_back(neg_state_identifier);
+        assert(state_component != nullptr);
 
         std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_ff_component(
-            std::move(init_component), BooleanFunction::from_string(ff_config["next_state"].GetString(), input_pins), BooleanFunction::from_string(ff_config["clocked_on"].GetString(), input_pins));
+            std::move(state_component), BooleanFunction::from_string(ff_config["next_state"].GetString(), bf_vars), BooleanFunction::from_string(ff_config["clocked_on"].GetString(), bf_vars));
         FFComponent* ff_component = component->convert_to<FFComponent>();
         assert(ff_component != nullptr);
 
         if (ff_config.HasMember("clear_on") && ff_config["clear_on"].IsString())
         {
-            ff_component->set_async_reset_function(BooleanFunction::from_string(ff_config["clear_on"].GetString(), input_pins));
+            ff_component->set_async_reset_function(BooleanFunction::from_string(ff_config["clear_on"].GetString(), bf_vars));
         }
 
         if (ff_config.HasMember("preset_on") && ff_config["preset_on"].IsString())
         {
-            ff_component->set_async_set_function(BooleanFunction::from_string(ff_config["preset_on"].GetString(), input_pins));
+            ff_component->set_async_set_function(BooleanFunction::from_string(ff_config["preset_on"].GetString(), bf_vars));
         }
 
         bool has_state     = ff_config.HasMember("state_clear_preset") && ff_config["state_clear_preset"].IsString();
@@ -388,33 +406,54 @@ namespace hal
         return component;
     }
 
-    std::unique_ptr<GateTypeComponent> HGLParser::parse_latch_config(const rapidjson::Value& latch_config, const std::string& gt_name, const std::vector<std::string>& input_pins)
+    std::unique_ptr<GateTypeComponent> HGLParser::parse_latch_config(const rapidjson::Value& latch_config, const std::string& gt_name, std::vector<std::string>& bf_vars)
     {
-        if (!latch_config.HasMember("data_in") || !latch_config["data_in"].IsString())
+        if (!latch_config.HasMember("state") || !latch_config["state"].IsString())
+        {
+            log_error("hgl_parser", "invalid or missing 'state' specification for latch gate type '{}'.", gt_name);
+            return nullptr;
+        }
+        if (!latch_config.HasMember("neg_state") || !latch_config["neg_state"].IsString())
+        {
+            log_error("hgl_parser", "invalid or missing 'neg_state' specification for latch gate type '{}'.", gt_name);
+            return nullptr;
+        }
+
+        std::string state_identifier                       = latch_config["state"].GetString();
+        std::string neg_state_identifier                   = latch_config["neg_state"].GetString();
+        std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, state_identifier, neg_state_identifier);
+        bf_vars.push_back(state_identifier);
+        bf_vars.push_back(neg_state_identifier);
+        assert(state_component != nullptr);
+
+        std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_latch_component(std::move(state_component));
+        LatchComponent* latch_component              = component->convert_to<LatchComponent>();
+        assert(latch_component != nullptr);
+
+        if (latch_config.HasMember("data_in") && latch_config["data_in"].IsString() && latch_config.HasMember("enable_on") && latch_config["enable_on"].IsString())
+        {
+            latch_component->set_data_in_function(BooleanFunction::from_string(latch_config["data_in"].GetString(), bf_vars));
+            latch_component->set_enable_function(BooleanFunction::from_string(latch_config["enable_on"].GetString(), bf_vars));
+        }
+        else if (latch_config.HasMember("data_in") && latch_config["data_in"].IsString())
+        {
+            log_error("hgl_parser", "invalid or missing 'enable_on' specification for latch gate type '{}'.", gt_name);
+            return nullptr;
+        }
+        else if (latch_config.HasMember("enable_on") && latch_config["enable_on"].IsString())
         {
             log_error("hgl_parser", "invalid or missing 'data_in' specification for latch gate type '{}'.", gt_name);
             return nullptr;
         }
 
-        if (!latch_config.HasMember("enable_on") || !latch_config["enable_on"].IsString())
-        {
-            log_error("hgl_parser", "invalid or missing 'enable_on' specification for latch gate type '{}'.", gt_name);
-            return nullptr;
-        }
-
-        std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_latch_component(BooleanFunction::from_string(latch_config["data_in"].GetString(), input_pins),
-                                                                                                 BooleanFunction::from_string(latch_config["enable_on"].GetString(), input_pins));
-        LatchComponent* latch_component              = component->convert_to<LatchComponent>();
-        assert(latch_component != nullptr);
-
         if (latch_config.HasMember("clear_on") && latch_config["clear_on"].IsString())
         {
-            latch_component->set_async_reset_function(BooleanFunction::from_string(latch_config["clear_on"].GetString(), input_pins));
+            latch_component->set_async_reset_function(BooleanFunction::from_string(latch_config["clear_on"].GetString(), bf_vars));
         }
 
         if (latch_config.HasMember("preset_on") && latch_config["preset_on"].IsString())
         {
-            latch_component->set_async_set_function(BooleanFunction::from_string(latch_config["preset_on"].GetString(), input_pins));
+            latch_component->set_async_set_function(BooleanFunction::from_string(latch_config["preset_on"].GetString(), bf_vars));
         }
 
         bool has_state     = latch_config.HasMember("state_clear_preset") && latch_config["state_clear_preset"].IsString();
@@ -455,7 +494,7 @@ namespace hal
         return component;
     }
 
-    std::unique_ptr<GateTypeComponent> HGLParser::parse_ram_config(const rapidjson::Value& ram_config, const std::string& gt_name, const std::vector<std::string>& input_pins)
+    std::unique_ptr<GateTypeComponent> HGLParser::parse_ram_config(const rapidjson::Value& ram_config, const std::string& gt_name, const std::vector<std::string>& bf_vars)
     {
         std::unique_ptr<GateTypeComponent> sub_component = nullptr;
         if (ram_config.HasMember("data_category") && ram_config["data_category"].IsString())
@@ -526,13 +565,13 @@ namespace hal
                 return nullptr;
             }
 
-            BooleanFunction fuck = BooleanFunction::from_string(ram_port["clocked_on"].GetString(), input_pins);
+            BooleanFunction fuck = BooleanFunction::from_string(ram_port["clocked_on"].GetString(), bf_vars);
 
             sub_component = GateTypeComponent::create_ram_port_component(std::move(sub_component),
                                                                          ram_port["data_group"].GetString(),
                                                                          ram_port["address_group"].GetString(),
-                                                                         BooleanFunction::from_string(ram_port["clocked_on"].GetString(), input_pins),
-                                                                         BooleanFunction::from_string(ram_port["enabled_on"].GetString(), input_pins),
+                                                                         BooleanFunction::from_string(ram_port["clocked_on"].GetString(), bf_vars),
+                                                                         BooleanFunction::from_string(ram_port["enabled_on"].GetString(), bf_vars),
                                                                          ram_port["is_write"].GetBool());
         }
 

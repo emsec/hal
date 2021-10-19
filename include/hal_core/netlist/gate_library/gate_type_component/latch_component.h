@@ -36,10 +36,8 @@ namespace hal
          * Construct a new LatchComponent with given child component and the Boolean functions describing the data input and the enable signal.
          * 
          * @param[in] component - Another component to be added as a child component.
-         * @param[in] data_in_bf - The function describing the internal state.
-         * @param[in] enable_bf - The function describing the enable behavior.
          */
-        LatchComponent(const BooleanFunction& data_in_bf, const BooleanFunction& enable_bf);
+        LatchComponent(std::unique_ptr<GateTypeComponent> component);
 
         /**
          * Get the type of the gate type component.
@@ -140,6 +138,8 @@ namespace hal
 
     private:
         static constexpr ComponentType m_type = ComponentType::latch;
+        std::unique_ptr<GateTypeComponent> m_component = nullptr;
+
 
         BooleanFunction m_data_in_bf                                                       = BooleanFunction();
         BooleanFunction m_enable_bf                                                        = BooleanFunction();

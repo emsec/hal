@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    GroupingProxyModel::GroupingProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical)
+    GroupingProxyModel::GroupingProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::natural)
     {
     }
 

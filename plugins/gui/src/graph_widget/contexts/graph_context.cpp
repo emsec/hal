@@ -3,6 +3,7 @@
 #include "hal_core/netlist/module.h"
 
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
+#include "gui/graph_widget/layout_locker.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_def.h"
@@ -27,7 +28,8 @@ namespace hal
           mUserUpdateCount(0),
           mUnappliedChanges(false),
           mSceneUpdateRequired(false),
-          mSceneUpdateInProgress(false)
+          mSceneUpdateInProgress(false),
+          mSpecialUpdate(false)
     {
         mTimestamp = QDateTime::currentDateTime();
         UserActionManager::instance()->clearWaitCount();
@@ -51,9 +53,6 @@ namespace hal
             delete mLayouter;
 
         mLayouter = layouter;
-
-        connect(layouter, qOverload<int>(&GraphLayouter::statusUpdate), this, qOverload<int>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
-        connect(layouter, qOverload<const QString&>(&GraphLayouter::statusUpdate), this, qOverload<const QString&>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
     }
 
     void GraphContext::setShader(GraphShader* shader)
@@ -226,6 +225,7 @@ namespace hal
             assert(!gates.empty() || !modules.empty());
 
             beginChange();
+            mLayouter->prepareRollback();
             remove({id}, {});
             add(modules, gates, plc);
             endChange();
@@ -298,10 +298,6 @@ namespace hal
         {
             modules.insert(sm->get_id());
         }
-        // qDebug() << "GATES" << gates;
-        // qDebug() << "MINUS_GATES" << minus_gates;
-        // qDebug() << "PLUS_GATES" << plus_gates;
-        // qDebug() << "MGATES" << mGates;
         return (mGates - mRemovedGates) + mAddedGates == (gates - minus_gates) + plus_gates
                 && (mModules - mRemovedModules) + mAddedModules == (modules - minus_modules) + plus_modules;
     }
@@ -437,16 +433,18 @@ namespace hal
         return mLayouter;
     }*/
 
-    void GraphContext::handleLayouterUpdate(const int percent)
+    void GraphContext::layoutProgress(int percent) const
     {
+        QString text;
+        if (!percent) text = QString("Layout %1[%2]").arg(mName).arg(mId);
         for (GraphContextSubscriber* s : mSubscribers)
-            s->handleStatusUpdate(percent);
+            s->showProgress(percent, text);
     }
 
-    void GraphContext::handleLayouterUpdate(const QString& message)
+    void GraphContext::storeViewport()
     {
         for (GraphContextSubscriber* s : mSubscribers)
-            s->handleStatusUpdate(message);
+            s->storeViewport();
     }
 
     void GraphContext::moveNodeAction(const QPoint& from, const QPoint& to)
@@ -465,7 +463,7 @@ namespace hal
 
         if (mSceneUpdateRequired)
         {
-            startSceneUpdate();
+            requireSceneUpdate();
         }
         else
         {
@@ -492,11 +490,13 @@ namespace hal
         if (mSceneUpdateInProgress)
             return;
 
+        storeViewport();
+
         if (mUnappliedChanges)
             applyChanges();
 
         if (mSceneUpdateRequired)
-            startSceneUpdate();
+            requireSceneUpdate();
     }
 
     void GraphContext::applyChanges()
@@ -570,6 +570,12 @@ namespace hal
         mSceneUpdateRequired = true;
     }
 
+    void GraphContext::requireSceneUpdate()
+    {
+        if (LayoutLockerManager::instance()->canUpdate(this))
+            startSceneUpdate();
+    }
+
     void GraphContext::startSceneUpdate()
     {
         mSceneUpdateRequired = false;
@@ -588,6 +594,25 @@ namespace hal
         handleLayouterFinished();
     }
 
+    void GraphContext::abortLayout()
+    {
+        if (!mSceneUpdateInProgress) return;
+        if (!mLayouter->rollback()) return;
+        mGates.clear();
+        mModules.clear();
+        for (const Node& nd : mLayouter->nodeToPositionMap().keys())
+        {
+            switch (nd.type())
+            {
+            case Node::Module: mModules.insert(nd.id()); break;
+            case Node::Gate:   mGates.insert(nd.id()); break;
+            default: break;
+            }
+        }
+        mLayouter->layout();
+        handleLayouterFinished();
+    }
+
     void GraphContext::handleStyleChanged(int istyle)
     {
         Q_UNUSED(istyle);
@@ -599,7 +624,7 @@ namespace hal
         return mTimestamp;
     }
 
-    void GraphContext::readFromFile(const QJsonObject& json)
+    bool GraphContext::readFromFile(const QJsonObject& json)
     {
         if (json.contains("timestamp") && json["timestamp"].isString())
             mTimestamp = QDateTime::fromString(json["timestamp"].toString());
@@ -613,6 +638,7 @@ namespace hal
                 QJsonObject jsonMod = jsonMods.at(imod).toObject();
                 if (!jsonMod.contains("id") || !jsonMod["id"].isDouble()) continue;
                 u32 id = jsonMod["id"].toInt();
+                if (!gNetlist->get_module_by_id(id)) return false;
                 mModules.insert(id);
                 if (!jsonMod.contains("x") || !jsonMod["x"].isDouble()) continue;
                 int x = jsonMod["x"].toInt();
@@ -632,6 +658,7 @@ namespace hal
                 QJsonObject jsonGat = jsonGats.at(igat).toObject();
                 if (!jsonGat.contains("id") || !jsonGat["id"].isDouble()) continue;
                 u32 id = jsonGat["id"].toInt();
+                if (!gNetlist->get_gate_by_id(id)) return false;
                 mGates.insert(id);
                 if (!jsonGat.contains("x") || !jsonGat["x"].isDouble()) continue;
                 int x = jsonGat["x"].toInt();
@@ -651,12 +678,14 @@ namespace hal
                 QJsonObject jsonNet = jsonNets.at(inet).toObject();
                 if (!jsonNet.contains("id") || !jsonNet["id"].isDouble()) continue;
                 u32 id = jsonNet["id"].toInt();
+                if (!gNetlist->get_net_by_id(id)) return false;
                 mNets.insert(id);
             }
         }
 
-        scheduleSceneUpdate();
+        //scheduleSceneUpdate();
         setDirty(false);
+        return true;
     }
 
     void GraphContext::writeToFile(QJsonObject& json)
@@ -712,5 +741,10 @@ namespace hal
         if (mDirty==dty) return;
         mDirty = dty;
         Q_EMIT(dataChanged());
+    }
+
+    void GraphContext::setSpecialUpdate(bool state)
+    {
+        mSpecialUpdate = state;
     }
 }

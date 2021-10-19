@@ -6,6 +6,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/mac_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 #include "hal_core/python_bindings/python_bindings.h"
 
 namespace hal
@@ -25,6 +26,7 @@ namespace hal
             .value("ram", GateTypeComponent::ComponentType::ram, R"(RAM component type.)")
             .value("mac", GateTypeComponent::ComponentType::mac, R"(MAC component type.)")
             .value("init", GateTypeComponent::ComponentType::init, R"(Initializiation component type.)")
+            .value("state", GateTypeComponent::ComponentType::state, R"(State component type.)")
             .value("ram_port", GateTypeComponent::ComponentType::ram_port, R"(RAM port component type.)")
             .export_values();
 
@@ -383,6 +385,56 @@ namespace hal
             Set the list of identifiers at which to find the initialization data.
 
             :param list[str] init_identifiers: The data identifiers.
+        )");
+
+        py::class_<StateComponent, GateTypeComponent, RawPtrWrapper<StateComponent>> py_state_component(m, "StateComponent", R"(
+            A StateComponent with given child component and the internal state identifiers.
+        )");
+
+        py_state_component.def_static("is_class_of", &StateComponent::is_class_of, py::arg("component"), R"(
+            Check whether a component is an StateComponent.
+
+            :param hal_py.GateTypeComponent component: The component to check.
+            :returns: True if component is a StateComponent, False otherwise.
+            :rtype: bool
+        )");
+
+        py_state_component.def_property("state_identifier", &StateComponent::get_state_identifier, &StateComponent::set_state_identifier, R"(
+            The identifier of the internal state.
+            
+            :type: str
+        )");
+
+        py_state_component.def("get_state_identifier", &StateComponent::get_state_identifier, R"(
+            Get the identifier of the internal state.
+
+            :returns: The identifier of the internal state.
+            :rtype: str
+        )");
+
+        py_state_component.def("set_state_identifier", &StateComponent::set_state_identifier, py::arg("state_identifier"), R"(
+            Set the identifier of the internal state.
+
+            :param str state_identifier: The identifier of the internal state.
+        )");
+
+        py_state_component.def_property("neg_state_identifier", &StateComponent::get_neg_state_identifier, &StateComponent::set_neg_state_identifier, R"(
+            The identifier of the negated internal state.
+            
+            :type: str
+        )");
+
+        py_state_component.def("get_neg_state_identifier", &StateComponent::get_neg_state_identifier, R"(
+            Get the identifier of the negated internal state.
+
+            :returns: The identifier of the negated internal state.
+            :rtype: str
+        )");
+
+        py_state_component.def("set_neg_state_identifier", &StateComponent::set_neg_state_identifier, py::arg("neg_state_identifier"), R"(
+            Set the identifier of the negated internal state.
+
+            :param str neg_state_identifier: The identifier of the negated internal state.
         )");
 
         py::class_<RAMPortComponent, GateTypeComponent, RawPtrWrapper<RAMPortComponent>> py_ram_port_component(m, "RAMPortComponent", R"(

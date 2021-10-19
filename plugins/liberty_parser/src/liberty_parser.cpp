@@ -768,18 +768,20 @@ namespace hal
         bool has_inputs = false;
         u32 num_outputs = 0;
         std::string output_func;
-        std::vector<std::string> input_pins;
-        std::vector<std::string> output_pins;
+        std::vector<std::string> bf_vars;
         for (const auto& pin : cell.pins)
         {
+            bf_vars.insert(bf_vars.end(), pin.pin_names.begin(), pin.pin_names.end());
+
             if (pin.direction == PinDirection::input || pin.direction == PinDirection::inout)
             {
-                input_pins.insert(input_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
-                has_inputs = true;
+                if (!pin.power && !pin.ground)
+                {
+                    has_inputs = true;
+                }
             }
             else if (pin.direction == PinDirection::output || pin.direction == PinDirection::inout)
             {
-                output_pins.insert(output_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
                 num_outputs += pin.pin_names.size();
                 output_func = pin.function;
             }
@@ -807,47 +809,46 @@ namespace hal
                 return false;
             }
 
-            parent_component =
-                GateTypeComponent::create_ff_component(nullptr, BooleanFunction::from_string(cell.ff->next_state, input_pins), BooleanFunction::from_string(cell.ff->clocked_on, input_pins));
+            std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.ff->state1, cell.ff->state2);
+            bf_vars.push_back(cell.ff->state1);
+            bf_vars.push_back(cell.ff->state2);
+
+            parent_component = GateTypeComponent::create_ff_component(
+                std::move(state_component), BooleanFunction::from_string(cell.ff->next_state, bf_vars), BooleanFunction::from_string(cell.ff->clocked_on, bf_vars));
 
             FFComponent* ff_component = parent_component->convert_to<FFComponent>();
             if (!cell.ff->clear.empty())
             {
-                ff_component->set_async_reset_function(BooleanFunction::from_string(cell.ff->clear, input_pins));
+                ff_component->set_async_reset_function(BooleanFunction::from_string(cell.ff->clear, bf_vars));
             }
             if (!cell.ff->preset.empty())
             {
-                ff_component->set_async_set_function(BooleanFunction::from_string(cell.ff->preset, input_pins));
+                ff_component->set_async_set_function(BooleanFunction::from_string(cell.ff->preset, bf_vars));
             }
 
             ff_component->set_async_set_reset_behavior(cell.ff->special_behavior_var1, cell.ff->special_behavior_var2);
 
             for (auto& pin : cell.pins)
             {
-                if (pin.function == cell.ff->state1)
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        pin_types[pin_name] = PinType::clock;
+                    }
+                }
+                else if (pin.function == cell.ff->state1)
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
                         pin_types[pin_name] = PinType::state;
                     }
-
-                    pin.function = "";
                 }
                 else if (pin.function == cell.ff->state2)
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
                         pin_types[pin_name] = PinType::neg_state;
-                    }
-
-                    pin.function = "";
-                }
-
-                if (pin.clock == true)
-                {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::clock;
                     }
                 }
             }
@@ -859,46 +860,62 @@ namespace hal
                 return false;
             }
 
-            parent_component = GateTypeComponent::create_latch_component(BooleanFunction::from_string(cell.latch->data_in, input_pins), BooleanFunction::from_string(cell.latch->enable, input_pins));
+            std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.latch->state1, cell.latch->state2);
+            bf_vars.push_back(cell.latch->state1);
+            bf_vars.push_back(cell.latch->state2);
 
+            parent_component                = GateTypeComponent::create_latch_component(std::move(state_component));
             LatchComponent* latch_component = parent_component->convert_to<LatchComponent>();
+            assert(latch_component != nullptr);
+
+            if (!cell.latch->data_in.empty() && !cell.latch->enable.empty())
+            {
+                latch_component->set_data_in_function(BooleanFunction::from_string(cell.latch->data_in, bf_vars));
+                latch_component->set_enable_function(BooleanFunction::from_string(cell.latch->enable, bf_vars));
+            }
+            else if (cell.latch->data_in.empty())
+            {
+                log_error("liberty_parser", "missing 'data_in' specification for latch gate type '{}'.", cell.name);
+                return false;
+            }
+            else if (cell.latch->enable.empty())
+            {
+                log_error("liberty_parser", "missing 'enable' specification for latch gate type '{}'.", cell.name);
+                return false;
+            }
+
             if (!cell.latch->clear.empty())
             {
-                latch_component->set_async_reset_function(BooleanFunction::from_string(cell.latch->clear, input_pins));
+                latch_component->set_async_reset_function(BooleanFunction::from_string(cell.latch->clear, bf_vars));
             }
             if (!cell.latch->preset.empty())
             {
-                latch_component->set_async_set_function(BooleanFunction::from_string(cell.latch->preset, input_pins));
+                latch_component->set_async_set_function(BooleanFunction::from_string(cell.latch->preset, bf_vars));
             }
 
             latch_component->set_async_set_reset_behavior(cell.latch->special_behavior_var1, cell.latch->special_behavior_var2);
 
             for (auto& pin : cell.pins)
             {
-                if (pin.function == cell.latch->state1)
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        pin_types[pin_name] = PinType::clock;
+                    }
+                }
+                else if (pin.function == cell.latch->state1)
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
                         pin_types[pin_name] = PinType::state;
                     }
-
-                    pin.function = "";
                 }
                 else if (pin.function == cell.latch->state2)
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
                         pin_types[pin_name] = PinType::neg_state;
-                    }
-
-                    pin.function = "";
-                }
-
-                if (pin.clock == true)
-                {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::clock;
                     }
                 }
             }
@@ -946,12 +963,9 @@ namespace hal
             gt->assign_pin_type(pin, type);
         }
 
-        std::vector<std::string> all_pins = input_pins;
-        all_pins.insert(all_pins.end(), output_pins.begin(), output_pins.end());
-
         if (!cell.buses.empty())
         {
-            auto functions = construct_bus_functions(cell, all_pins);
+            auto functions = construct_bus_functions(cell, bf_vars);
             gt->add_boolean_functions(functions);
         }
         else
@@ -960,7 +974,7 @@ namespace hal
             {
                 if (!pin.function.empty())
                 {
-                    auto function = BooleanFunction::from_string(pin.function, all_pins);
+                    auto function = BooleanFunction::from_string(pin.function, bf_vars);
                     for (const auto& name : pin.pin_names)
                     {
                         gt->add_boolean_function(name, function);
@@ -969,7 +983,7 @@ namespace hal
 
                 if (!pin.x_function.empty())
                 {
-                    auto function = BooleanFunction::from_string(pin.x_function, all_pins);
+                    auto function = BooleanFunction::from_string(pin.x_function, bf_vars);
                     for (const auto& name : pin.pin_names)
                     {
                         gt->add_boolean_function(name + "_undefined", function);
@@ -978,7 +992,7 @@ namespace hal
 
                 if (!pin.z_function.empty())
                 {
-                    auto function = BooleanFunction::from_string(pin.z_function, all_pins);
+                    auto function = BooleanFunction::from_string(pin.z_function, bf_vars);
                     for (const auto& name : pin.pin_names)
                     {
                         gt->add_boolean_function(name + "_tristate", function);

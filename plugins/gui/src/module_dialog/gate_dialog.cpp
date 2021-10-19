@@ -156,11 +156,14 @@ namespace hal {
     void GateDialog::handleToggleSearchbar()
     {
         if (mSearchbar->isHidden())
+        {
             mSearchbar->show();
+            mSearchbar->setFocus();
+        }
         else
         {
             mSearchbar->hide();
-            mSearchbar->clear();
+            setFocus();
         }
     }
 

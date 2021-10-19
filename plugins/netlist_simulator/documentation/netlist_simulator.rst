@@ -12,9 +12,6 @@ Netlist Simulator
 
    .. automethod:: __init__
 
-.. autoclass:: netlist_simulator.SignalValue
-   :members:
-
 .. autoclass:: netlist_simulator.Event
    :members:
 
