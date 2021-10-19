@@ -774,5 +774,16 @@ namespace hal
 
             :param set[int] ids: All freed grouping IDs.
         )");
+
+        py_netlist.def(
+            "load_gate_locations_from_data", &Netlist::load_gate_locations_from_data, py::arg("data_category") = std::string(), py::arg("data_identifiers") = std::pair<std::string, std::string>(), R"(
+            Load the locations of the gates in the netlist from their associated data using the specified category and identifier.
+            If no parameter is given, the data is querried using the default category and identifier stored with the gate library.
+
+            :param str data_category: The data category.
+            :param tuple(str,str) data_identifiers: The data identifiers for the x- and y-coordinates.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
     }
 }    // namespace hal

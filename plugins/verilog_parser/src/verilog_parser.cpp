@@ -300,7 +300,7 @@ namespace hal
             }
         }
 
-        // TODO load gate coordinates
+        m_netlist->load_gate_locations_from_data();
 
         return result;
     }

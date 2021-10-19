@@ -1,5 +1,10 @@
 {
     "library": "NangateOpenCellLibrary",
+    "gate_locations": {
+        "data_category": "generic",
+        "data_x_identifier": "X_COORDINATE",
+        "data_y_identifier": "Y_COORDINATE"
+    },
     "cells": [
         {
             "name": "AND2_X1",
