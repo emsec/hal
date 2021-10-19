@@ -41,6 +41,33 @@ namespace hal
             :rtype: hal_py.hal_path
         )");
 
+        py_gate_library.def("set_gate_location_data_category", &GateLibrary::set_gate_location_data_category, py::arg("category"), R"(
+            Set the data category of the gate location information.
+
+            :param str category: The data category.
+        )");
+
+        py_gate_library.def("get_gate_location_data_category", &GateLibrary::get_gate_location_data_category, R"(
+            Get the data category of the gate location information.
+
+            :returns: The data category.
+            :rtype: str
+        )");
+
+        py_gate_library.def("set_gate_location_data_identifiers", &GateLibrary::set_gate_location_data_identifiers, py::arg("x_coordinate"), py::arg("y_coordinate"), R"(
+            Set the data identifiers of the gate location information for both the x- and y-coordinates.
+
+            :param str x_coordinate: The data identifier for the x-coordinate.
+            :param str y_coordinate: The data identifier for the y-coordinate.
+        )");
+
+        py_gate_library.def("get_gate_location_data_category", &GateLibrary::get_gate_location_data_category, R"(
+            Get the data identifiers of the gate location information for both the x- and y-coordinates.
+
+            :returns: A pair of data identifiers.
+            :rtype: tuple(str,str)
+        )");
+
         // py_gate_library.def("create_gate_type", &GateLibrary::create_gate_type, py::arg("name"), py::arg("properties") = std::set<GateTypeProperty>(), R"(
         //     Create a new gate type, add it to the gate library, and return it.
 

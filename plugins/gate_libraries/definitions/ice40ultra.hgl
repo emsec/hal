@@ -1,5 +1,10 @@
 {
   "library": "ICE40ULTRA",
+  "gate_locations": {
+    "data_category": "generic",
+    "data_x_identifier": "X_COORDINATE",
+    "data_y_identifier": "Y_COORDINATE"
+  },
   "cells": [
     {
       "name": "SB_CARRY",
