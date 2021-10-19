@@ -987,11 +987,38 @@ namespace hal
         std::vector<Port*> ports;
         for (const auto [index, port] : port_indices)
         {
+            // TODO deal with ports that already are part of a port group
             port->m_group_name  = group;
             port->m_group_index = index;
             ports.push_back(port);
         }
         m_port_groups[group] = ports;
+
+        return true;
+    }
+
+    bool Module::delete_port_group(const std::string& group_name)
+    {
+        if (const auto it = m_port_groups.find(group_name); it == m_port_groups.end())
+        {
+            log_error("module",
+                      "port group '{}' cannot be deleted as it does not exists for module '{}' with ID {} in netlist with ID {}.",
+                      group_name,
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return false;
+        }
+        else
+        {
+            for (Port* port : it->second)
+            {
+                port->m_group_name  = "";
+                port->m_group_index = 0;
+            }
+
+            m_port_groups.erase(it);
+        }
 
         return true;
     }

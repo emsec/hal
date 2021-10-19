@@ -528,6 +528,14 @@ namespace hal
             :rtype: bool
         )");
 
+        py_module.def("delete_port_group", &Module::delete_port_group, py::arg("group_name"), R"(
+            Delete the given port group such that its pins do not belong to any group anymore.
+
+            :param str group_name: The name of the port group.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
         py_module.def("get_port_groups", &Module::get_port_groups, R"(
             Get all port groups of the module.
         

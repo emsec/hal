@@ -442,8 +442,8 @@ namespace hal
          */
         [[deprecated("Will be removed in a future version.")]] u32 get_next_output_port_id() const;
 
-        // TODO add Pybind + below
         /**
+         * TODO split into "change_port_name" and "change_port_type"
          * Add a new port to the module.
          * 
          * @param[in] port_net - The net passing through the port.
@@ -454,6 +454,7 @@ namespace hal
         bool add_port(Net* port_net, const std::string& port_name, PinType type = PinType::none);
 
         /**
+         * TODO remove
          * Add multiple new ports to the module.
          * 
          * @param[in] ports - Pairs of nets passing through the respective ports and port names.
@@ -504,6 +505,17 @@ namespace hal
         bool assign_port_group(const std::string& group_name, const std::vector<std::pair<u32, Port*>>& port_indices);
 
         /**
+         * TODO Test
+         * Delete the given port group such that its pins do not belong to any group anymore.
+         * 
+         * @param[in] group_name - The name of the port group.
+         * @returns True on success, false otherwise.
+         */
+        bool delete_port_group(const std::string& group_name);
+
+        // TODO remove port from group
+
+        /**
          * Get all port groups of the module.
          * 
          * @returns A map from port group name to a vector of ports.
@@ -517,7 +529,6 @@ namespace hal
          * @returns A vector of ports belonging to the specified port group.
          */
         std::vector<Port*> get_ports_of_group(const std::string& group_name) const;
-        // TODO stop
 
         /*
          * ################################################################
