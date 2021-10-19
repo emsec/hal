@@ -51,6 +51,7 @@ namespace hal
     class GraphContext : public QObject
     {
         friend class GraphContextManager;
+        friend class LayoutLockerManager;
         Q_OBJECT
 
     public:
@@ -382,6 +383,7 @@ namespace hal
         void evaluateChanges();
         void update();
         void applyChanges();
+        void requireSceneUpdate();
         void startSceneUpdate();
         bool testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId);
 
