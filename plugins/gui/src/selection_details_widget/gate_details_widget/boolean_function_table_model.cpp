@@ -58,7 +58,7 @@ namespace hal {
     CPBehaviorEntry::CPBehaviorEntry(u32 gateId, std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> cPBehavior)
     : BooleanFunctionTableEntry(gateId)
     {
-        mLeft = "set_clear_behavior";
+        mLeft = "set_reset_behavior";
         mRight = cPBehaviourToString(cPBehavior);
         mCPBehavior =cPBehavior;
     }
