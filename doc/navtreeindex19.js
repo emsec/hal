@@ -1,15 +1,5 @@
 var NAVTREEINDEX19 =
 {
-"net__layout__point_8h.html#a7feb466e42a0d4e1c5601fe9a6169154":[13,0,1,0,0,0,18,2,3,4],
-"net__layout__point_8h.html#a9175d5334a493e018757aac18ed79fa2":[13,0,1,0,0,0,18,2,3,1],
-"net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d":[13,0,1,0,0,0,18,2,3,0],
-"net__layout__point_8h.html#acc2ff595306dab2c33e934d7e24edac3":[13,0,1,0,0,0,18,2,3,3],
-"net__layout__point_8h_source.html":[13,0,1,0,0,0,18,2,3],
-"netlist_2boolean__function_8cpp.html":[13,0,2,0,6],
-"netlist_2boolean__function_8cpp.html#a269baf7c77d18645a4d0a9f759725f8f":[13,0,2,0,6,1],
-"netlist_2boolean__function_8cpp.html#a90756e09e3a11b7dd4e7362ae3101ce9":[13,0,2,0,6,0],
-"netlist_2boolean__function_8cpp.html#aef8d4a8f510965ea04184d31d5714c79":[13,0,2,0,6,2],
-"netlist_2boolean__function_8cpp_source.html":[13,0,2,0,6],
 "netlist_2data__container_8cpp.html":[13,0,2,0,7],
 "netlist_2data__container_8cpp_source.html":[13,0,2,0,7],
 "netlist_2endpoint_8cpp.html":[13,0,2,0,8],
@@ -249,5 +239,15 @@ var NAVTREEINDEX19 =
 "plugin__manager_8h.html#ad34e384af419d40a22d5486356772c24":[13,0,0,0,2,4,3],
 "plugin__manager_8h.html#ad66fea3d4017a3c7b058436924d3dda3":[13,0,0,0,2,4,9],
 "plugin__manager_8h.html#af13862a2a5565fb995d7cc93c0bfd980":[13,0,0,0,2,4,8],
-"plugin__manager_8h_source.html":[13,0,0,0,2,4]
+"plugin__manager_8h_source.html":[13,0,0,0,2,4],
+"plugin__relay_8cpp.html":[13,0,1,0,2,33,0],
+"plugin__relay_8cpp_source.html":[13,0,1,0,2,33,0],
+"plugin__relay_8h.html":[13,0,1,0,0,0,35,0],
+"plugin__relay_8h_source.html":[13,0,1,0,0,0,35,0],
+"plugin__system_2plugin__manager_8cpp.html":[13,0,2,1,1],
+"plugin__system_2plugin__manager_8cpp.html#a01b664fe781926cb67034f778e5242b1":[13,0,2,1,1,0],
+"plugin__system_2plugin__manager_8cpp.html#a09fe50a3d6651ef3eebbfcfb2f36cea8":[13,0,2,1,1,1],
+"plugin__system_2plugin__manager_8cpp.html#a54caf767ba2c2f754875e9aad4849767":[13,0,2,1,1,10],
+"plugin__system_2plugin__manager_8cpp.html#a5d5a62ed3f2759dda79dced8902aa376":[13,0,2,1,1,7],
+"plugin__system_2plugin__manager_8cpp.html#a6994c89986fbfb4dff006887d1aa5e12":[13,0,2,1,1,4]
 };

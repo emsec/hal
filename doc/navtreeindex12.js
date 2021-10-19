@@ -1,13 +1,5 @@
 var NAVTREEINDEX12 =
 {
-"classhal_1_1_selection_details_widget.html#a1c67af6ca68247138bbae71d2398be5f":[10,0,7,3,11,31],
-"classhal_1_1_selection_details_widget.html#a1d92935801758a5a2083ef04e346aa08":[10,0,7,3,11,35],
-"classhal_1_1_selection_details_widget.html#a1fbe8596d07fab1aeb5e84b9c9468461":[10,0,7,3,11,16],
-"classhal_1_1_selection_details_widget.html#a20ffc750d4e0fbdcca3049155d984465":[10,0,7,3,11,28],
-"classhal_1_1_selection_details_widget.html#a2281393d42e2c16e7ea25bf34da0832b":[10,0,7,3,11,20],
-"classhal_1_1_selection_details_widget.html#a2cee888960cc35395fd461c910ea2554":[10,0,7,3,11,17],
-"classhal_1_1_selection_details_widget.html#a2e56df6fcde04ef6ad58f755bac46a39":[10,0,7,3,11,1],
-"classhal_1_1_selection_details_widget.html#a36b921a6229c6367ac9180f4894cbe33":[10,0,7,3,11,5],
 "classhal_1_1_selection_details_widget.html#a43a06ae08fbc046cdeda0651e7bec713":[10,0,7,3,11,8],
 "classhal_1_1_selection_details_widget.html#a49460fa4394f7ecaa989a6f8e44e0e68":[10,0,7,3,11,3],
 "classhal_1_1_selection_details_widget.html#a49bf4c3e4a39d37e92ea4fcc42d4e2c9":[10,0,7,3,11,24],
@@ -249,5 +241,13 @@ var NAVTREEINDEX12 =
 "classhal_1_1_settings_item_keybind.html#a3af9226f0e8dab351ac42e2c9cce3317":[10,0,4,12,5],
 "classhal_1_1_settings_item_keybind.html#a58ddc35457276492c9dbff2789c257a1":[10,0,4,12,1],
 "classhal_1_1_settings_item_keybind.html#aad023a551bf9aadb4314461d29366519":[10,0,4,12,6],
-"classhal_1_1_settings_item_keybind.html#ac792d58bc14017b48f4c303d6148ed09":[10,0,4,12,0]
+"classhal_1_1_settings_item_keybind.html#ac792d58bc14017b48f4c303d6148ed09":[10,0,4,12,0],
+"classhal_1_1_settings_item_slider.html":[10,0,4,13],
+"classhal_1_1_settings_item_slider.html#a1b1990226d4c6838a8c76549694ca279":[10,0,4,13,7],
+"classhal_1_1_settings_item_slider.html#a218edde5e77f394e8924363bd6eb4f69":[10,0,4,13,2],
+"classhal_1_1_settings_item_slider.html#a3e6345212942237698e455810f04b54e":[10,0,4,13,0],
+"classhal_1_1_settings_item_slider.html#a419eb919f9fe747cc5d23fdd75ade78c":[10,0,4,13,8],
+"classhal_1_1_settings_item_slider.html#a44304de6e380c199428abdb737e76644":[10,0,4,13,6],
+"classhal_1_1_settings_item_slider.html#a44fd761a9c186da5b42be114b3504e0b":[10,0,4,13,9],
+"classhal_1_1_settings_item_slider.html#a5a78cf85729e947cc0679c06cffdfd2a":[10,0,4,13,5]
 };

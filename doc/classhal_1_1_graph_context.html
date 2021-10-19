@@ -132,10 +132,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac5d06178660e25f24c3a5d5e3943ab2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38129eb4e0c7ab1bb6d6e2d2a8b01c59"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a38129eb4e0c7ab1bb6d6e2d2a8b01c59">~GraphContext</a> ()</td></tr>
 <tr class="separator:a38129eb4e0c7ab1bb6d6e2d2a8b01c59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae3f4b33d0d907a4c05c0011873e36f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#aae3f4b33d0d907a4c05c0011873e36f6">subscribe</a> (<a class="el" href="classhal_1_1_graph_context_subscriber.html">GraphContextSubscriber</a> *const subscriber)</td></tr>
-<tr class="separator:aae3f4b33d0d907a4c05c0011873e36f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc8900f76c89c0b80315f28c22d4cf38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#acc8900f76c89c0b80315f28c22d4cf38">unsubscribe</a> (<a class="el" href="classhal_1_1_graph_context_subscriber.html">GraphContextSubscriber</a> *const subscriber)</td></tr>
-<tr class="separator:acc8900f76c89c0b80315f28c22d4cf38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13df27071c670c4bd04c08be3058afe1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a13df27071c670c4bd04c08be3058afe1">beginChange</a> ()</td></tr>
 <tr class="separator:a13df27071c670c4bd04c08be3058afe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad395230edea0ff1dd586145ef2c45c67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#ad395230edea0ff1dd586145ef2c45c67">endChange</a> ()</td></tr>
@@ -212,6 +208,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a06f09f6e50af4b7c47a15d427fe2d36b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71f9ecdd50c82999a2d9d21ac5e78a73"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a71f9ecdd50c82999a2d9d21ac5e78a73">getSpecialUpdate</a> () const</td></tr>
 <tr class="separator:a71f9ecdd50c82999a2d9d21ac5e78a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7869fa5e5577268e6d4ee36e09eb07a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a7869fa5e5577268e6d4ee36e09eb07a3">setParentWidget</a> (<a class="el" href="classhal_1_1_graph_widget.html">GraphWidget</a> *gw)</td></tr>
+<tr class="separator:a7869fa5e5577268e6d4ee36e09eb07a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qobject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qobject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qobject.html">QObject</a></td></tr>
 <tr class="memitem:metaObject inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject.html">QMetaObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#metaObject">metaObject</a> () const const</td></tr>
 <tr class="separator:metaObject inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -414,7 +412,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>Logical container for modules, gates, and nets. </p>
 <p>The <a class="el" href="classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets.">GraphContext</a> is a container that holds all elements (<a class="el" href="classhal_1_1_module.html">Module</a>s, <a class="el" href="classhal_1_1_gate.html">Gate</a>s, <a class="el" href="classhal_1_1_net.html">Net</a>s) that should be drawn in the scene. It uses a <a class="el" href="classhal_1_1_graph_layouter.html" title="Base class for all specific layouters.">GraphLayouter</a> to layout its elements and creates a scene with the corresponding <a class="el" href="classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl...">GraphicsItem</a>s. Afterwards this scene can be shown in the <a class="el" href="classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView.">GraphWidget</a>'s <a class="el" href="classhal_1_1_graph_graphics_view.html" title="A view to display the rendered graph (needs a GraphicsScene).">GraphGraphicsView</a>. <br  />
  Moreover the context may be changed (e.g. add/remove <a class="el" href="classhal_1_1_gate.html">Gate</a>s or <a class="el" href="classhal_1_1_module.html">Module</a>s). In this case the scene will be adapted as well. <br  />
- This class implements an observer pattern to notify subscribers (currently only <a class="el" href="classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView.">GraphWidget</a> objects) about certain events. </p>
+ This class notifies the <a class="el" href="classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView.">GraphWidget</a> parent about certain events. </p>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00051">51</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -489,7 +487,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Destructor. Used to notify all subscribers about the deletion. </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00039">39</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00040">40</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="graph__widget_8cpp_source.html#l00143">hal::GraphWidget::handleContextAboutToBeDeleted()</a>.</p>
 
 </div>
 </div>
@@ -517,7 +517,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00597">597</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00575">575</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00222">hal::GraphLayouter::layout()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00059">hal::GraphLayouter::nodeToPositionMap()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00268">hal::GraphLayouter::rollback()</a>.</p>
 
@@ -566,11 +566,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00099">99</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00082">82</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00366">gates()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="gui__def_8h_source.html#l00162">hal::PlacementHint::mode()</a>, <a class="el" href="graph__context_8cpp_source.html#l00361">modules()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00739">setDirty()</a>.</p>
+<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00349">gates()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="gui__def_8h_source.html#l00162">hal::PlacementHint::mode()</a>, <a class="el" href="graph__context_8cpp_source.html#l00344">modules()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00717">setDirty()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="action__add__items__to__object_8cpp_source.html#l00076">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00169">foldModuleAction()</a>, <a class="el" href="content__manager_8cpp_source.html#l00122">hal::ContentManager::handleOpenDocument()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00192">unfoldModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__add__items__to__object_8cpp_source.html#l00076">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00152">foldModuleAction()</a>, <a class="el" href="content__manager_8cpp_source.html#l00122">hal::ContentManager::handleOpenDocument()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00175">unfoldModule()</a>.</p>
 
 </div>
 </div>
@@ -591,9 +591,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Mark the beginning of a block of changes that are done successively. Used to prevent the scene from updating after every single step. The scene will be only updated after endChange is called. <br  />
  These 'changes-blocks' may be nested. In this case only the outer block will be considered. </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00084">84</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00067">67</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00054">hal::ActionRemoveItemsFromObject::exec()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00076">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00169">foldModuleAction()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00192">unfoldModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00054">hal::ActionRemoveItemsFromObject::exec()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00076">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00152">foldModuleAction()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00175">unfoldModule()</a>.</p>
 
 </div>
 </div>
@@ -613,7 +613,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Clear the context. All <a class="el" href="classhal_1_1_gate.html">Gate</a>s and <a class="el" href="classhal_1_1_module.html">Module</a>s as well as their placement hints will be removed. </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00151">151</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00134">134</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#clear">QSet::clear()</a>.</p>
 
@@ -642,7 +642,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="context__table__model_8cpp_source.html#l00115">hal::ContextTableModel::addContext()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00739">setDirty()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__table__model_8cpp_source.html#l00115">hal::ContextTableModel::addContext()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00717">setDirty()</a>.</p>
 
 </div>
 </div>
@@ -663,11 +663,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Check if the context is empty i.e. does not contain <a class="el" href="classhal_1_1_module.html">Module</a>s or <a class="el" href="classhal_1_1_gate.html">Gate</a>s.</p>
 <dl class="section return"><dt>Returns</dt><dd><b>true</b> if the context is empty. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00236">236</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00219">219</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#empty">QSet::empty()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00276">isShowingModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00259">isShowingModule()</a>.</p>
 
 </div>
 </div>
@@ -687,9 +687,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Mark the ending of a block of changes that are done successively. Used to prevent the scene from updating after every single step. </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00089">89</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00072">72</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00054">hal::ActionRemoveItemsFromObject::exec()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00076">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00169">foldModuleAction()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00192">unfoldModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00054">hal::ActionRemoveItemsFromObject::exec()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00076">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00152">foldModuleAction()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00175">unfoldModule()</a>.</p>
 
 </div>
 </div>
@@ -728,9 +728,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, False otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00169">169</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00152">152</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00099">add()</a>, <a class="el" href="graph__context_8cpp_source.html#l00084">beginChange()</a>, <a class="el" href="graph__context_8cpp_source.html#l00089">endChange()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00333">hal::Module::get_gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00089">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00200">hal::Module::get_submodules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00127">remove()</a>.</p>
+<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00082">add()</a>, <a class="el" href="graph__context_8cpp_source.html#l00067">beginChange()</a>, <a class="el" href="graph__context_8cpp_source.html#l00072">endChange()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00333">hal::Module::get_gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00089">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00200">hal::Module::get_submodules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00110">remove()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__fold__module_8cpp_source.html#l00033">hal::ActionFoldModule::exec()</a>.</p>
 
@@ -753,9 +753,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the ids of the Gates of the context.</p>
 <dl class="section return"><dt>Returns</dt><dd>a set of gate ids. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00366">366</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00349">349</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00099">add()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00855">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="graph__context_8cpp_source.html#l00276">isShowingModule()</a>, <a class="el" href="graph__context_8cpp_source.html#l00127">remove()</a>, <a class="el" href="graph__context_8cpp_source.html#l00192">unfoldModule()</a>, and <a class="el" href="module__shader_8cpp_source.html#l00036">hal::ModuleShader::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00082">add()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00855">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="graph__context_8cpp_source.html#l00259">isShowingModule()</a>, <a class="el" href="graph__context_8cpp_source.html#l00110">remove()</a>, <a class="el" href="graph__context_8cpp_source.html#l00175">unfoldModule()</a>, and <a class="el" href="module__shader_8cpp_source.html#l00036">hal::ModuleShader::update()</a>.</p>
 
 </div>
 </div>
@@ -784,9 +784,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the used <a class="el" href="classhal_1_1_graph_layouter.html" title="Base class for all specific layouters.">GraphLayouter</a>. Returns a <em>nullptr</em> if no layouter was configured yet.</p>
 <dl class="section return"><dt>Returns</dt><dd>the used <a class="el" href="classhal_1_1_graph_layouter.html" title="Base class for all specific layouters.">GraphLayouter</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00292">292</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00278">278</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="action__fold__module_8cpp_source.html#l00033">hal::ActionFoldModule::exec()</a>, <a class="el" href="action__unfold__module_8cpp_source.html#l00051">hal::ActionUnfoldModule::exec()</a>, <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00054">hal::ActionRemoveItemsFromObject::exec()</a>, <a class="el" href="action__move__node_8cpp_source.html#l00053">hal::ActionMoveNode::exec()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01103">hal::GraphGraphicsView::handleShortestPath()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00115">hal::GraphWidget::showProgress()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00149">hal::GraphWidget::storeViewport()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00691">writeToFile()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__fold__module_8cpp_source.html#l00033">hal::ActionFoldModule::exec()</a>, <a class="el" href="action__unfold__module_8cpp_source.html#l00051">hal::ActionUnfoldModule::exec()</a>, <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00054">hal::ActionRemoveItemsFromObject::exec()</a>, <a class="el" href="action__move__node_8cpp_source.html#l00053">hal::ActionMoveNode::exec()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01103">hal::GraphGraphicsView::handleShortestPath()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00115">hal::GraphWidget::showProgress()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00149">hal::GraphWidget::storeViewport()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00669">writeToFile()</a>.</p>
 
 </div>
 </div>
@@ -814,7 +814,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><b>true</b> The first visibible destination node, might be <a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34ac7228ae4039373b165b4c709c27f91f8">Node::None</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00350">350</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00333">333</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00291">hal::GraphLayouter::boxes()</a>, <a class="el" href="node__box_8h_source.html#l00182">hal::NodeBoxes::boxForGate()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00248">hal::Net::get_destinations()</a>, and <a class="el" href="node__box_8h_source.html#l00073">hal::NodeBox::getNode()</a>.</p>
 
@@ -844,7 +844,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><b>true</b> The first visibible source node, might be <a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34ac7228ae4039373b165b4c709c27f91f8">Node::None</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00339">339</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00322">322</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00291">hal::GraphLayouter::boxes()</a>, <a class="el" href="node__box_8h_source.html#l00182">hal::NodeBoxes::boxForGate()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00167">hal::Net::get_sources()</a>, and <a class="el" href="node__box_8h_source.html#l00073">hal::NodeBox::getNode()</a>.</p>
 
@@ -875,7 +875,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the special update state.</p>
 <dl class="section return"><dt>Returns</dt><dd>The special update state. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00370">370</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00356">356</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
 
 </div>
 </div>
@@ -896,7 +896,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Returns the timestamp of this context. The timestamp is generated in the constructor.</p>
 <dl class="section return"><dt>Returns</dt><dd>the timestamp of the context. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00622">622</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00600">600</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="context__table__model_8cpp_source.html#l00025">hal::ContextTableModel::data()</a>.</p>
 
@@ -919,7 +919,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the id of the context.</p>
 <dl class="section return"><dt>Returns</dt><dd>the context's id. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00381">381</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00364">364</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__create__object_8cpp_source.html#l00055">hal::ActionCreateObject::exec()</a>, <a class="el" href="action__move__node_8cpp_source.html#l00053">hal::ActionMoveNode::exec()</a>, and <a class="el" href="graph__context__manager_8cpp_source.html#l00079">hal::GraphContextManager::setContextId()</a>.</p>
 
@@ -950,7 +950,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the dirty state.</p>
 <dl class="section return"><dt>Returns</dt><dd>The dirty state. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00358">358</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00344">344</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
 
 </div>
 </div>
@@ -977,7 +977,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00186">186</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00169">169</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>.</p>
 
@@ -1007,7 +1007,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><b>true</b> if the context shows the content of the module </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00271">271</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00254">254</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 </div>
 </div>
@@ -1069,9 +1069,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><b>true</b> if the context Shows the content of the module. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00276">276</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00259">259</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00236">empty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00366">gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00333">hal::Module::get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00200">hal::Module::get_submodules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00361">modules()</a>.</p>
+<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00219">empty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00349">gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00333">hal::Module::get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00200">hal::Module::get_submodules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00344">modules()</a>.</p>
 
 </div>
 </div>
@@ -1099,7 +1099,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><b>true</b> if a destination gate of the net is shown </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00322">322</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00305">305</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00248">hal::Net::get_destinations()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00432">hal::Netlist::get_net_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00837">hal::ShortestPath::net()</a>.</p>
 
@@ -1129,7 +1129,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><b>true</b> if a source gate of the net is shown </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00305">305</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00288">288</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00432">hal::Netlist::get_net_by_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00167">hal::Net::get_sources()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00837">hal::ShortestPath::net()</a>.</p>
 
@@ -1157,9 +1157,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00436">436</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00419">419</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, and <a class="el" href="graph__widget_8cpp_source.html#l00115">hal::GraphWidget::showProgress()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00193">hal::GraphLayouter::alternateLayout()</a>.</p>
 
@@ -1182,9 +1182,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the ids of the <a class="el" href="classhal_1_1_module.html">Module</a>s of the context.</p>
 <dl class="section return"><dt>Returns</dt><dd>a set of <a class="el" href="classhal_1_1_module.html">Module</a> ids. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00361">361</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00344">344</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00099">add()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00855">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="graph__context_8cpp_source.html#l00276">isShowingModule()</a>, <a class="el" href="graph__context_8cpp_source.html#l00127">remove()</a>, <a class="el" href="graph__context_8cpp_source.html#l00192">unfoldModule()</a>, and <a class="el" href="module__shader_8cpp_source.html#l00036">hal::ModuleShader::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00082">add()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00855">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="graph__context_8cpp_source.html#l00259">isShowingModule()</a>, <a class="el" href="graph__context_8cpp_source.html#l00110">remove()</a>, <a class="el" href="graph__context_8cpp_source.html#l00175">unfoldModule()</a>, and <a class="el" href="module__shader_8cpp_source.html#l00036">hal::ModuleShader::update()</a>.</p>
 
 </div>
 </div>
@@ -1215,9 +1215,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Move node to antother grid location </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00450">450</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00431">431</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#constEnd">QMap::constEnd()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#find">QMap::find()</a>, <a class="el" href="_apache_01_license_8txt_source.html#l00045">from</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00077">hal::GraphLayouter::positionToNodeMap()</a>, <a class="el" href="graph__context_8cpp_source.html#l00397">scheduleSceneUpdate()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00082">hal::GraphLayouter::setNodePosition()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#constEnd">QMap::constEnd()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#find">QMap::find()</a>, <a class="el" href="_apache_01_license_8txt_source.html#l00045">from</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00077">hal::GraphLayouter::positionToNodeMap()</a>, <a class="el" href="graph__context_8cpp_source.html#l00380">scheduleSceneUpdate()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00082">hal::GraphLayouter::setNodePosition()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__move__node_8cpp_source.html#l00053">hal::ActionMoveNode::exec()</a>.</p>
 
@@ -1240,7 +1240,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the name of the context.</p>
 <dl class="section return"><dt>Returns</dt><dd>the context's name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00386">386</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00369">369</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="context__table__model_8cpp_source.html#l00025">hal::ContextTableModel::data()</a>, <a class="el" href="action__rename__object_8cpp_source.html#l00052">hal::ActionRenameObject::exec()</a>, and <a class="el" href="graph__tab__widget_8cpp_source.html#l00171">hal::GraphTabWidget::handleContextRenamed()</a>.</p>
 
@@ -1263,7 +1263,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the ids of the <a class="el" href="classhal_1_1_net.html">Net</a>s of the context.</p>
 <dl class="section return"><dt>Returns</dt><dd>a set of net ids. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00371">371</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00354">354</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00855">hal::GraphWidget::ensureSelectionVisible()</a>, and <a class="el" href="module__shader_8cpp_source.html#l00036">hal::ModuleShader::update()</a>.</p>
 
@@ -1296,7 +1296,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classhal_1_1_node.html" title="The Node class object represents a module or a gate.">Node</a> that contains the gate </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00409">409</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00392">392</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00273">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00089">hal::Module::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00169">hal::Gate::get_module()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00134">hal::Module::get_parent_module()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, and <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>.</p>
 
@@ -1326,9 +1326,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if reading was successful, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00627">627</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00605">605</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#at">QJsonArray::at()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">QJsonObject::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#fromString">QDateTime::fromString()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00273">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00432">hal::Netlist::get_net_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonobject.html#insert">QJsonObject::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>, <a class="el" href="graph__context_8cpp_source.html#l00739">setDirty()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00082">hal::GraphLayouter::setNodePosition()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#size">QJsonArray::size()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qjsonvalue.html#toObject-1">QJsonValue::toObject()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#at">QJsonArray::at()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">QJsonObject::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#fromString">QDateTime::fromString()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00273">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00432">hal::Netlist::get_net_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonobject.html#insert">QJsonObject::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>, <a class="el" href="graph__context_8cpp_source.html#l00717">setDirty()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00082">hal::GraphLayouter::setNodePosition()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#size">QJsonArray::size()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qjsonvalue.html#toObject-1">QJsonValue::toObject()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__context__manager_8cpp_source.html#l00520">hal::GraphContextManager::restoreFromFile()</a>.</p>
 
@@ -1368,11 +1368,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00127">127</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00110">110</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00366">gates()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00361">modules()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00739">setDirty()</a>.</p>
+<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00349">gates()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00344">modules()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00717">setDirty()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00054">hal::ActionRemoveItemsFromObject::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00169">foldModuleAction()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00192">unfoldModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00054">hal::ActionRemoveItemsFromObject::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00152">foldModuleAction()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00175">unfoldModule()</a>.</p>
 
 </div>
 </div>
@@ -1393,7 +1393,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the scene the context works on.</p>
 <dl class="section return"><dt>Returns</dt><dd>the scene. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00376">376</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00359">359</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="graph__layouter_8cpp_source.html#l00054">hal::GraphLayouter::scene()</a>.</p>
 
@@ -1418,7 +1418,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Returns whether the scene is in an updating process (i.e. layouter process) or not.</p>
 <dl class="section return"><dt>Returns</dt><dd><b>true</b> while the scene updates. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00392">392</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00375">375</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00855">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00054">hal::GraphWidget::GraphWidget()</a>, and <a class="el" href="graph__widget_8cpp_source.html#l00175">hal::GraphWidget::keyPressEvent()</a>.</p>
 
@@ -1440,9 +1440,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Notifies the context that a scene update is necessary. The scene will be updated immediately or as soon as the exterior beginChanges-endChanges-block is left. </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00397">397</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00380">380</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00450">moveNodeAction()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00241">testIfAffected()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00431">moveNodeAction()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00224">testIfAffected()</a>.</p>
 
 </div>
 </div>
@@ -1469,11 +1469,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00739">739</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00717">717</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="classhal_1_1_graph_context.html#ac705654c3f51c4117dc30a8c9fbf69a9">dataChanged()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00099">add()</a>, <a class="el" href="content__manager_8cpp_source.html#l00122">hal::ContentManager::handleOpenDocument()</a>, <a class="el" href="module__widget_8cpp_source.html#l00231">hal::ModuleWidget::openModuleInView()</a>, <a class="el" href="graph__context_8cpp_source.html#l00627">readFromFile()</a>, <a class="el" href="graph__context_8cpp_source.html#l00127">remove()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00520">hal::GraphContextManager::restoreFromFile()</a>, <a class="el" href="graph__context_8cpp_source.html#l00192">unfoldModule()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00691">writeToFile()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00082">add()</a>, <a class="el" href="content__manager_8cpp_source.html#l00122">hal::ContentManager::handleOpenDocument()</a>, <a class="el" href="module__widget_8cpp_source.html#l00231">hal::ModuleWidget::openModuleInView()</a>, <a class="el" href="graph__context_8cpp_source.html#l00605">readFromFile()</a>, <a class="el" href="graph__context_8cpp_source.html#l00110">remove()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00520">hal::GraphContextManager::restoreFromFile()</a>, <a class="el" href="graph__context_8cpp_source.html#l00175">unfoldModule()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00669">writeToFile()</a>.</p>
 
 </div>
 </div>
@@ -1500,9 +1500,45 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00048">48</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00047">47</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__context__manager_8cpp_source.html#l00061">hal::GraphContextManager::createNewContext()</a>, and <a class="el" href="graph__context__manager_8cpp_source.html#l00520">hal::GraphContextManager::restoreFromFile()</a>.</p>
+
+</div>
+</div>
+<a id="a7869fa5e5577268e6d4ee36e09eb07a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7869fa5e5577268e6d4ee36e09eb07a3">&#9670;&nbsp;</a></span>setParentWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GraphContext::setParentWidget </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_graph_widget.html">GraphWidget</a> *&#160;</td>
+          <td class="paramname"><em>gw</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set pointer to parent graph widget </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gw</td><td>parent of class <a class="el" href="classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView.">GraphWidget</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00362">362</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00054">hal::GraphWidget::GraphWidget()</a>.</p>
 
 </div>
 </div>
@@ -1529,7 +1565,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00058">58</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00057">57</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__context__manager_8cpp_source.html#l00061">hal::GraphContextManager::createNewContext()</a>, and <a class="el" href="graph__context__manager_8cpp_source.html#l00520">hal::GraphContextManager::restoreFromFile()</a>.</p>
 
@@ -1552,7 +1588,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Set the special update state. </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00746">746</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00724">724</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
 
@@ -1572,38 +1608,11 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Convenience function to allow calls to <a class="el" href="classhal_1_1_graph_widget.html#ac603af40752859f4bbf29925d2f91143">GraphWidget::storeViewport</a> via context </p>
+<p>Convenience function to allow calls to <a class="el" href="classhal_1_1_graph_widget.html#aa095d87d96b9269e98e8e38006cbb670">GraphWidget::storeViewport</a> via context </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00444">444</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00426">426</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-</div>
-</div>
-<a id="aae3f4b33d0d907a4c05c0011873e36f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae3f4b33d0d907a4c05c0011873e36f6">&#9670;&nbsp;</a></span>subscribe()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::GraphContext::subscribe </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_graph_context_subscriber.html">GraphContextSubscriber</a> *const&#160;</td>
-          <td class="paramname"><em>subscriber</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Register a subscriber that will notified about certain changes (see <a class="el" href="classhal_1_1_graph_context_subscriber.html" title="Interface for any class that wants to subscribe a GraphContext.">GraphContextSubscriber</a>).</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">subscriber</td><td>- The <a class="el" href="classhal_1_1_graph_context_subscriber.html" title="Interface for any class that wants to subscribe a GraphContext.">GraphContextSubscriber</a> to subscribe </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00068">68</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00054">hal::GraphWidget::GraphWidget()</a>.</p>
+<p class="reference">References <a class="el" href="graph__widget_8cpp_source.html#l00149">hal::GraphWidget::storeViewport()</a>.</p>
 
 </div>
 </div>
@@ -1639,9 +1648,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00241">241</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00224">224</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00397">scheduleSceneUpdate()</a>.</p>
+<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00380">scheduleSceneUpdate()</a>.</p>
 
 </div>
 </div>
@@ -1668,36 +1677,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00192">192</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00175">175</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00099">add()</a>, <a class="el" href="gui__def_8h_source.html#l00202">hal::PlacementHint::addGridPosition()</a>, <a class="el" href="graph__context_8cpp_source.html#l00084">beginChange()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#empty">QSet::empty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00089">endChange()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="graph__context_8cpp_source.html#l00366">gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00200">hal::Module::get_submodules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="el" href="gui__def_8h_source.html#l00148">hal::PlacementHint::GridPosition</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>, <a class="el" href="graph__context_8cpp_source.html#l00361">modules()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00059">hal::GraphLayouter::nodeToPositionMap()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00257">hal::GraphLayouter::prepareRollback()</a>, <a class="el" href="graph__context_8cpp_source.html#l00127">remove()</a>, <a class="el" href="graph__context_8cpp_source.html#l00739">setDirty()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>.</p>
-
-</div>
-</div>
-<a id="acc8900f76c89c0b80315f28c22d4cf38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc8900f76c89c0b80315f28c22d4cf38">&#9670;&nbsp;</a></span>unsubscribe()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::GraphContext::unsubscribe </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_graph_context_subscriber.html">GraphContextSubscriber</a> *const&#160;</td>
-          <td class="paramname"><em>subscriber</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Remove a subscriber.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">subscriber</td><td>- The <a class="el" href="classhal_1_1_graph_context_subscriber.html" title="Interface for any class that wants to subscribe a GraphContext.">GraphContextSubscriber</a> to unsubscribe </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00077">77</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00082">add()</a>, <a class="el" href="gui__def_8h_source.html#l00202">hal::PlacementHint::addGridPosition()</a>, <a class="el" href="graph__context_8cpp_source.html#l00067">beginChange()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#empty">QSet::empty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00072">endChange()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="graph__context_8cpp_source.html#l00349">gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00196">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00200">hal::Module::get_submodules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00048">hal::gNetlist</a>, <a class="el" href="gui__def_8h_source.html#l00148">hal::PlacementHint::GridPosition</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>, <a class="el" href="graph__context_8cpp_source.html#l00344">modules()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00059">hal::GraphLayouter::nodeToPositionMap()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00257">hal::GraphLayouter::prepareRollback()</a>, <a class="el" href="graph__context_8cpp_source.html#l00110">remove()</a>, <a class="el" href="graph__context_8cpp_source.html#l00717">setDirty()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>.</p>
 
 </div>
 </div>
@@ -1727,9 +1709,9 @@ Additional Inherited Members</h2></td></tr>
 <p>gates</p>
 <p>nets</p>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00691">691</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00669">669</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#append">QJsonArray::append()</a>, <a class="el" href="graph__layouter_8h_source.html#l00291">hal::GraphLayouter::boxes()</a>, <a class="el" href="node__box_8h_source.html#l00198">hal::NodeBoxes::boxForNode()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="graph__context_8h_source.html#l00292">getLayouter()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>, <a class="el" href="graph__context_8cpp_source.html#l00739">setDirty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#toString-1">QDateTime::toString()</a>, <a class="el" href="node__box_8h_source.html#l00091">hal::NodeBox::x()</a>, and <a class="el" href="node__box_8h_source.html#l00097">hal::NodeBox::y()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#append">QJsonArray::append()</a>, <a class="el" href="graph__layouter_8h_source.html#l00291">hal::GraphLayouter::boxes()</a>, <a class="el" href="node__box_8h_source.html#l00198">hal::NodeBoxes::boxForNode()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Gate</a>, <a class="el" href="graph__context_8h_source.html#l00278">getLayouter()</a>, <a class="el" href="gui__def_8h_source.html#l00058">hal::Node::Module</a>, <a class="el" href="graph__context_8cpp_source.html#l00717">setDirty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#toString-1">QDateTime::toString()</a>, <a class="el" href="node__box_8h_source.html#l00091">hal::NodeBox::x()</a>, and <a class="el" href="node__box_8h_source.html#l00097">hal::NodeBox::y()</a>.</p>
 
 </div>
 </div>
@@ -1792,7 +1774,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graph_context.html">GraphContext</a></li>
-    <li class="footer">Generated on Tue Oct 19 2021 13:04:17 for HAL by
+    <li class="footer">Generated on Tue Oct 19 2021 14:22:00 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

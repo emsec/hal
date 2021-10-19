@@ -106,7 +106,6 @@ var namespacehal =
     [ "GetInTouchWidget", "classhal_1_1_get_in_touch_widget.html", "classhal_1_1_get_in_touch_widget" ],
     [ "GraphContext", "classhal_1_1_graph_context.html", "classhal_1_1_graph_context" ],
     [ "GraphContextManager", "classhal_1_1_graph_context_manager.html", "classhal_1_1_graph_context_manager" ],
-    [ "GraphContextSubscriber", "classhal_1_1_graph_context_subscriber.html", "classhal_1_1_graph_context_subscriber" ],
     [ "GraphGraphicsView", "classhal_1_1_graph_graphics_view.html", "classhal_1_1_graph_graphics_view" ],
     [ "GraphicsGate", "classhal_1_1_graphics_gate.html", "classhal_1_1_graphics_gate" ],
     [ "GraphicsItem", "classhal_1_1_graphics_item.html", "classhal_1_1_graphics_item" ],

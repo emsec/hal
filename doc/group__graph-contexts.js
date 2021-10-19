@@ -37,24 +37,15 @@ var group__graph_contexts =
       [ "scheduleSceneUpdate", "classhal_1_1_graph_context.html#a7fe95e9258400d311c60c7fc3a2ad50d", null ],
       [ "setDirty", "classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8", null ],
       [ "setLayouter", "classhal_1_1_graph_context.html#ae73212d0e220914595f086399034a5c0", null ],
+      [ "setParentWidget", "classhal_1_1_graph_context.html#a7869fa5e5577268e6d4ee36e09eb07a3", null ],
       [ "setShader", "classhal_1_1_graph_context.html#a853ead405c7826297099205cd848636c", null ],
       [ "setSpecialUpdate", "classhal_1_1_graph_context.html#a06f09f6e50af4b7c47a15d427fe2d36b", null ],
       [ "storeViewport", "classhal_1_1_graph_context.html#a8889a0c74139f131610e6e8606579f6a", null ],
-      [ "subscribe", "classhal_1_1_graph_context.html#aae3f4b33d0d907a4c05c0011873e36f6", null ],
       [ "testIfAffected", "classhal_1_1_graph_context.html#a752666f0e3b3552d81ab76186980b7bd", null ],
       [ "unfoldModule", "classhal_1_1_graph_context.html#af5994fa27903de66f5af0453368f3cf3", null ],
-      [ "unsubscribe", "classhal_1_1_graph_context.html#acc8900f76c89c0b80315f28c22d4cf38", null ],
       [ "writeToFile", "classhal_1_1_graph_context.html#a246b2047c7dd7a7239779a383e2bb3f9", null ],
       [ "GraphContextManager", "classhal_1_1_graph_context.html#a86a0cb713ffa26636ccf96114f7566ec", null ],
       [ "LayoutLockerManager", "classhal_1_1_graph_context.html#a86285ea7584f0c31dd775ee66c145412", null ]
-    ] ],
-    [ "GraphContextSubscriber", "classhal_1_1_graph_context_subscriber.html", [
-      [ "~GraphContextSubscriber", "classhal_1_1_graph_context_subscriber.html#a61a66286e7cf9df3a8a040120029166e", null ],
-      [ "handleContextAboutToBeDeleted", "classhal_1_1_graph_context_subscriber.html#ac1627c1240fba720824a368b765cbea9", null ],
-      [ "handleSceneAvailable", "classhal_1_1_graph_context_subscriber.html#a4b57e630ef0e2f9642b82f7fd6cabebe", null ],
-      [ "handleSceneUnavailable", "classhal_1_1_graph_context_subscriber.html#a5da60d882118956e1832c967c6ac363f", null ],
-      [ "showProgress", "classhal_1_1_graph_context_subscriber.html#a9bb055b9e6383fb9473a4fd82cdf7736", null ],
-      [ "storeViewport", "classhal_1_1_graph_context_subscriber.html#a872498becf9c8588543049cec70d8b4c", null ]
     ] ],
     [ "GraphContextManager", "classhal_1_1_graph_context_manager.html", [
       [ "GraphContextManager", "classhal_1_1_graph_context_manager.html#a93e16d66ee9ac02e0df2ea888749aa9b", null ],

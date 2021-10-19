@@ -74,9 +74,6 @@ var hierarchy =
       [ "hal::RAMPortComponent", "classhal_1_1_r_a_m_port_component.html", null ],
       [ "hal::StateComponent", "classhal_1_1_state_component.html", null ]
     ] ],
-    [ "hal::GraphContextSubscriber", "classhal_1_1_graph_context_subscriber.html", [
-      [ "hal::GraphWidget", "classhal_1_1_graph_widget.html", null ]
-    ] ],
     [ "hal::GraphShader", "classhal_1_1_graph_shader.html", [
       [ "hal::ModuleShader", "classhal_1_1_module_shader.html", null ]
     ] ],

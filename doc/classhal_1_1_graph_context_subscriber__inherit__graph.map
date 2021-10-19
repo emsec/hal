@@ -1,4 +1,0 @@
-<map id="hal::GraphContextSubscriber" name="hal::GraphContextSubscriber">
-<area shape="rect" id="node1" title="Interface for any class that wants to subscribe a GraphContext." alt="" coords="5,5,268,156"/>
-<area shape="rect" id="node2" href="$classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView." alt="" coords="5,204,268,369"/>
-</map>
