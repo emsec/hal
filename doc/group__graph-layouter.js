@@ -215,6 +215,8 @@ var group__graph_layouter =
       [ "y", "classhal_1_1_node_box.html#ab2601570ab043da7e3dc5ad1285bf555", null ]
     ] ],
     [ "NodeBoxes", "classhal_1_1_node_boxes.html", [
+      [ "NodeBoxes", "classhal_1_1_node_boxes.html#a3d12d7072eb80a76b2c00c8af3fae956", null ],
+      [ "~NodeBoxes", "classhal_1_1_node_boxes.html#a6a5052eb086a3ae8fc2fee7835168e72", null ],
       [ "addBox", "classhal_1_1_node_boxes.html#a2ece4aaa0d759749b7fc4f920690f0f9", null ],
       [ "boxForGate", "classhal_1_1_node_boxes.html#a6243707f0b24d9aaf124f3d82786483b", null ],
       [ "boxForItem", "classhal_1_1_node_boxes.html#ac1e881a35e4dea4d4b842b1562f5228e", null ],

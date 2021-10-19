@@ -106,19 +106,19 @@ var NAVTREEINDEX =
 "classhal_1_1_module.html#ab7ad37f7e5b0982c387ec6c33651a25f",
 "classhal_1_1_net_layout_direction.html#a6e2e31de259a1d03b6ddd31b9ef700b4",
 "classhal_1_1_netlist_relay.html#a4f52aff49af92036cb6fe93d072e0320",
-"classhal_1_1_python_editor.html#a0b8f6c287fb9ae1f13668b392bfde7df",
-"classhal_1_1_selection_details_widget.html#a1fbe8596d07fab1aeb5e84b9c9468461",
-"classhal_1_1_settings_item_slider.html#a218edde5e77f394e8924363bd6eb4f69",
-"classhal_1_1_user_action.html#ad4976d95d07011dd9be187ddbcf75fde",
-"coordinate__from__data_8cpp.html",
-"event__handler_8cpp.html",
-"graph__context__manager_8cpp_source.html",
-"index.html#autotoc_md12",
-"net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d",
-"plugin__relay_8h.html",
-"settings__display_8h.html",
-"structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html",
-"utils_8h.html#a99df1ac028bf7f9696ea4c631ff0ff38"
+"classhal_1_1_python_editor.html#a027b86c5245b61f291f39539c3849f7f",
+"classhal_1_1_selection_details_widget.html#a1c67af6ca68247138bbae71d2398be5f",
+"classhal_1_1_settings_item_slider.html",
+"classhal_1_1_user_action.html#acbb007a480acf0f847434e86d71cf5bf",
+"context__table__proxy__model_8h.html",
+"enums_8h.html#afe11c53f9f94ae23527944574e1f5df3",
+"graph__context_8h_source.html",
+"index.html#autotoc_md10",
+"net__layout__point_8h.html#a7feb466e42a0d4e1c5601fe9a6169154",
+"plugin__relay_8cpp.html",
+"settings__display_8cpp.html",
+"structhal_1_1_s_m_t_1_1_model.html#ab315e7ca78ff1ce335a52e77fe6f95eb",
+"utils_8h.html#a94d00e2a6c7e4945e1301d5e96377459"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

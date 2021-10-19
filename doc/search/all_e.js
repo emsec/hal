@@ -267,7 +267,7 @@ var searchData=
   ['node_5fdrag_5fshadow_2ecpp_8372',['node_drag_shadow.cpp',['../node__drag__shadow_8cpp.html',1,'']]],
   ['node_5fdrag_5fshadow_2eh_8373',['node_drag_shadow.h',['../node__drag__shadow_8h.html',1,'']]],
   ['nodebox_8374',['NodeBox',['../classhal_1_1_node_box.html',1,'hal::NodeBox'],['../classhal_1_1_node_box.html#a62fbc6ee8c9025499ef9dba16d97935f',1,'hal::NodeBox::NodeBox()']]],
-  ['nodeboxes_8375',['NodeBoxes',['../classhal_1_1_node_boxes.html',1,'hal']]],
+  ['nodeboxes_8375',['NodeBoxes',['../classhal_1_1_node_boxes.html',1,'hal::NodeBoxes'],['../classhal_1_1_node_boxes.html#a3d12d7072eb80a76b2c00c8af3fae956',1,'hal::NodeBoxes::NodeBoxes()']]],
   ['nodebugoutputredirect_8376',['NoDebugOutputRedirect',['https://doc.qt.io/qt-5/qvulkaninstance.html#Flag-enum',1,'QVulkanInstance']]],
   ['nodecomposition_8377',['NoDecomposition',['https://doc.qt.io/qt-5/qchar.html#Decomposition-enum',1,'QChar']]],
   ['nodedragshadow_8378',['NodeDragShadow',['../classhal_1_1_node_drag_shadow.html',1,'hal::NodeDragShadow'],['../classhal_1_1_node_drag_shadow.html#a5d6ec00a7e96d05a96ad9cd77d03ba92',1,'hal::NodeDragShadow::NodeDragShadow()']]],
