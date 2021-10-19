@@ -770,7 +770,7 @@ namespace hal
          * @param[in] data_identifiers - The data identifiers for the x- and y-coordinates.
          * @returns True on success, false otherwise.
          */
-        bool load_gate_locations_from_data(const std::string& data_category = "", const std::pair<std::string, std::string>& data_identifiers = {"", ""});
+        bool load_gate_locations_from_data(const std::string& data_category = "", const std::pair<std::string, std::string>& data_identifiers = std::pair<std::string, std::string>());
 
     private:
         /* stores the gate library */
