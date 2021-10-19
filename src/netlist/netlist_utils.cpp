@@ -656,7 +656,7 @@ namespace netlist_utils {
                     }
                 }
 
-                func = func.optimize_constants();
+                func = func.optimize();
             }
 
             std::string func_str = func.to_string();

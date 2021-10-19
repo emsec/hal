@@ -38,23 +38,6 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_boolean_function.def("evaluate", &BooleanFunction::evaluate, py::arg("inputs") = std::unordered_map<std::string, BooleanFunction::Value>(), R"(
-            Evaluate the Boolean function on the given inputs and returns the result.
-
-            :param dict[str,hal_py.BooleanFunction.Value] inputs: A dict from variable names to values.
-            :returns: The value that the function evaluates to.
-            :rtype: hal_py.BooleanFunction.Value
-        )");
-
-        py_boolean_function.def(
-            "__call__", [](const BooleanFunction& f, const std::unordered_map<std::string, BooleanFunction::Value>& values) { return f(values); }, R"(
-            Evaluate the function on the given inputs and returns the result.
-
-            :param dict[str,hal_py.BooleanFunction.Value] inputs: A dict from variable names to values.
-            :returns: The value that the function evaluates to.
-            :rtype: hal_py.BooleanFunction.Value
-        )");
-
         py_boolean_function.def("is_constant_one", &BooleanFunction::is_constant_one, R"(
             Check whether the Boolean function always evaluates to ``ONE``.
 
@@ -202,13 +185,6 @@ namespace hal
 
         py_boolean_function.def("optimize", &BooleanFunction::optimize, R"(
             Optimize the Boolean function by first converting it to disjunctive normal form (DNF) and then applying the Quine-McCluskey algorithm.
-
-            :returns: The optimized Boolean function.
-            :rtype: hal_py.BooleanFunction
-        )");
-
-        py_boolean_function.def("optimize_constants", &BooleanFunction::optimize_constants, R"(
-            Removes constant values whenever possible.
 
             :returns: The optimized Boolean function.
             :rtype: hal_py.BooleanFunction

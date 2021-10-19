@@ -182,11 +182,11 @@ namespace hal
             T value {};
             ss >> value;
 
-            switch (ss.eof() && !ss.fail())
-            {
-                case true: return {true, value};
-                default  : return {false, 0ul};
+            if (ss.eof() && !ss.fail()) {
+                return {true, value};
             }
+
+            return {false, 0ul};
         }
 
         /**

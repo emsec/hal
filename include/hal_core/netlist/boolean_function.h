@@ -42,7 +42,7 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class BooleanFunction
+    class BooleanFunction final
     {
     public:
         ////////////////////////////////////////////////////////////////////////
@@ -90,6 +90,10 @@ namespace hal
          */
         friend std::ostream& operator<<(std::ostream& os, Value v);
 
+        ////////////////////////////////////////////////////////////////////////
+        // Constructors / Factories, Destructors, Operators
+        ////////////////////////////////////////////////////////////////////////
+
         /**
          * Construct an empty Boolean function and thus evaluates to X (undefined).
          */
@@ -103,107 +107,7 @@ namespace hal
         /// Creates a 'Constant' Boolean function.
         static BooleanFunction Const(const std::vector<BooleanFunction::Value>& value);
 
-        /**
-         * Substitute a variable with another one and thus renames the variable.
-         * The operation is applied to all instances of the variable in the function.
-         *
-         * @param[in] old_variable_name - The old variable to substitute.
-         * @param[in] new_variable_name - The new variable.
-         * @returns The resulting Boolean function.
-         */
-        BooleanFunction substitute(const std::string& old_variable_name, const std::string& new_variable_name) const;
 
-        /**
-         * Substitute a variable with another function.
-         * The operation is applied to all instances of the variable in the function.
-         *
-         * @param[in] variable_name - The variable to substitute.
-         * @param[in] function - The function replace the variable with.
-         * @returns The resulting Boolean function.
-         */
-        BooleanFunction substitute(const std::string& variable_name, const BooleanFunction& function) const;
-
-        /**
-         * Evaluate the Boolean function on the given inputs and returns the result.
-         *
-         * @param[in] inputs - A map from variable names to values.
-         * @returns The value that the function evaluates to.
-         */
-        Value evaluate(const std::unordered_map<std::string, Value>& inputs = {}) const;
-
-        /**
-         * Evaluate the function on the given inputs and returns the result.
-         *
-         * @param[in] inputs - A map from variable names to values.
-         * @returns The value that the function evaluates to.
-         */
-        Value operator()(const std::unordered_map<std::string, Value>& inputs = {}) const;
-
-
-
-        /** 
-         * Checks whether Boolean function is negated.
-         *
-         * @returns True in case Boolean function is negated, false otherwise.
-         */
-        bool is_neg() const;
-
-        /**
-         * Returns list of operands as Boolean function.
-         *
-         * @returns List of operands.
-         */
-        const std::vector<BooleanFunction>& get_operands() const;
-
-        /**
-         * Check whether the Boolean function always evaluates to ONE.
-         *
-         * @returns True if function is constant ONE, false otherwise.
-         */
-        bool is_constant_one() const;
-
-        /**
-         * Check whether the Boolean function always evaluates to ZERO.
-         *
-         * @returns True if function is constant ZERO, false otherwise.
-         */
-        bool is_constant_zero() const;
-
-        /**
-         * Check whether the function is empty.
-         *
-         * @returns True if function is empty, false otherwise.
-         */
-        bool is_empty() const;
-
-        /**
-         * Get all variable names utilized in this Boolean function.
-         *
-         * @returns A vector of all variable names.
-         */
-        std::vector<std::string> get_variables() const;
-
-        /**
-         * Parse a function from a string representation.
-         * Supported operators are  NOT ("!", "'"), AND ("&", "*", " "), OR ("|", "+"), XOR ("^") and brackets ("(", ")").
-         * Operator precedence is ! > & > ^ > |.
-         *
-         * Since, for example, '(' is interpreted as a new term, but might also be an intended part of a variable, a vector of known variable names can be supplied, which are extracted before parsing.
-         *
-         * If there is an error during bracket matching, X is returned for that part.
-         *
-         * @param[in] expression - String containing a Boolean function.
-         * @param[in] variable_names - List of variable names.
-         * @returns The Boolean function extracted from the string.
-         */
-        static BooleanFunction from_string(std::string expression, const std::vector<std::string>& variable_names = {});
-
-        /**
-         * Get the boolean function as a string.
-         *
-         * @returns A string describing the boolean function.
-         */
-        std::string to_string() const;
 
         /**
          * The ostream operator that forwards to_string of a boolean function.
@@ -294,6 +198,84 @@ namespace hal
          */
         bool operator!=(const BooleanFunction& other) const;
 
+        ////////////////////////////////////////////////////////////////////////
+        // Strings
+        ////////////////////////////////////////////////////////////////////////
+
+        /// Transforms the BooleanFunction into a human-readable string.
+        std::string to_string() const;
+        std::string to_string_old() const;
+
+        /**
+         * Parse a function from a string representation.
+         * Supported operators are  NOT ("!", "'"), AND ("&", "*", " "), OR ("|", "+"), XOR ("^") and brackets ("(", ")").
+         * Operator precedence is ! > & > ^ > |.
+         *
+         * Since, for example, '(' is interpreted as a new term, but might also be an intended part of a variable, a vector of known variable names can be supplied, which are extracted before parsing.
+         *
+         * If there is an error during bracket matching, X is returned for that part.
+         *
+         * @param[in] expression - String containing a Boolean function.
+         * @param[in] variable_names - List of variable names.
+         * @returns The Boolean function extracted from the string.
+         */
+        static BooleanFunction from_string(std::string expression, const std::vector<std::string>& variable_names = {});
+
+        /**
+         * Substitute a variable with another one and thus renames the variable.
+         * The operation is applied to all instances of the variable in the function.
+         *
+         * @param[in] old_variable_name - The old variable to substitute.
+         * @param[in] new_variable_name - The new variable.
+         * @returns The resulting Boolean function.
+         */
+        BooleanFunction substitute(const std::string& old_variable_name, const std::string& new_variable_name) const;
+
+        /**
+         * Substitute a variable with another function.
+         * The operation is applied to all instances of the variable in the function.
+         *
+         * @param[in] variable_name - The variable to substitute.
+         * @param[in] function - The function replace the variable with.
+         * @returns The resulting Boolean function.
+         */
+        BooleanFunction substitute(const std::string& variable_name, const BooleanFunction& function) const;
+
+        /**
+         * Check whether the Boolean function always evaluates to ONE.
+         *
+         * @returns True if function is constant ONE, false otherwise.
+         */
+        bool is_constant_one() const;
+
+        /**
+         * Check whether the Boolean function always evaluates to ZERO.
+         *
+         * @returns True if function is constant ZERO, false otherwise.
+         */
+        bool is_constant_zero() const;
+
+        /**
+         * Check whether the function is empty.
+         *
+         * @returns True if function is empty, false otherwise.
+         */
+        bool is_empty() const;
+
+        /**
+         * Get all variable names utilized in this Boolean function.
+         *
+         * @returns A vector of all variable names.
+         */
+        std::vector<std::string> get_variables() const;
+
+        /**
+         * Evaluate the Boolean function on the given inputs and returns the result.
+         *
+         * @param[in] inputs - A map from variable names to values.
+         * @returns The value that the function evaluates to.
+         */
+        Value evaluate(const std::unordered_map<std::string, Value>& inputs = {}) const;
         /**
          * Check whether the Boolean function is in disjunctive normal form (DNF).
          *
@@ -326,12 +308,6 @@ namespace hal
          */
         BooleanFunction optimize() const;
 
-        /**
-         * Removes constant values whenever possible.
-         * 
-         * @return The optimized Boolean function.
-         */
-        BooleanFunction optimize_constants() const;
 
         /**
          * Get the truth table outputs of the function.
@@ -388,6 +364,28 @@ namespace hal
         };
 
 
+
+        /**
+         * Evaluate the function on the given inputs and returns the result.
+         *
+         * @param[in] inputs - A map from variable names to values.
+         * @returns The value that the function evaluates to.
+         */
+        Value operator()(const std::unordered_map<std::string, Value>& inputs = {}) const;
+
+        /** 
+         * Checks whether Boolean function is negated.
+         *
+         * @returns True in case Boolean function is negated, false otherwise.
+         */
+        bool is_neg() const;
+        /**
+         * Returns list of operands as Boolean function.
+         *
+         * @returns List of operands.
+         */
+        const std::vector<BooleanFunction>& get_operands() const;
+
         BooleanFunction(Value constant);
 
         content_type get_type() const;
@@ -399,6 +397,7 @@ namespace hal
 
         static BooleanFunction from_string_internal(std::string expression, const std::vector<std::string>& variable_names);
 
+        BooleanFunction optimize_constants() const;
         /*
         * Constructor for a function of the form "term1 op term2 op term3 op ..."
         * Empty terms behaves like constant X.

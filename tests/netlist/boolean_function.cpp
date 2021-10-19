@@ -53,45 +53,6 @@ namespace hal {
         std::string no_space(std::string s) {
             return utils::replace<std::string>(s, " ", "");
         }
-
-        /**
-         * Create a string to value map, that can be used by the evaluate function. Each variable MUST be one character long.
-         * I.e: ("ABC","10X") creates the map: ("A" -> ONE, "B" -> ZERO, "C" -> X).
-         *
-         * If the inputs are invalid, an empty map s returned.
-         *
-         * @param variables - the names of the variables next to each others
-         * @param values - the values the variables should be set to
-         * @returns a variables to values map, that can be interpreted by the boolean funcitons evaluate function.
-         */
-        std::unordered_map<std::string, BooleanFunction::Value> create_input_map(std::string variables, std::string values) {
-            std::unordered_map<std::string, BooleanFunction::Value> res;
-            // Booth strings must be equal in length
-            if (variables.size() != values.size()) {
-                return res;
-            }
-            for (int c = 0; c < variables.size(); c++) {
-                std::string var = std::string(1, variables.at(c));
-                std::string val = std::string(1, values.at(c));
-                // Can't set the same variable twice
-                if (res.find(var) != res.end()) {
-                    return {};
-                }
-                if (val == "0") {
-                    res.insert(std::pair<std::string, BooleanFunction::Value>(var, BooleanFunction::ZERO));
-                } else if (val == "1") {
-                    res.insert(std::pair<std::string, BooleanFunction::Value>(var, BooleanFunction::ONE));
-                } else if (val == "x" || val == "X") {
-                    res.insert(std::pair<std::string, BooleanFunction::Value>(var, BooleanFunction::X));
-                }
-                    // If the values string contains an illegal character, exit
-                else {
-                    return {};
-                }
-            }
-            return res;
-        }
-
     };
 
     /**
@@ -105,7 +66,6 @@ namespace hal {
                 EXPECT_EQ( std::is_move_constructible<BooleanFunction>::value, true);
                 EXPECT_EQ( std::is_move_assignable<BooleanFunction>::value, true);
             }
-
         TEST_END
     }
 
@@ -118,6 +78,9 @@ namespace hal {
      */
     TEST_F(BooleanFunctionTest, check_main_example) {
         TEST_START
+            // TODO(@fyrbiak): replace this function with symbolic execution once implemented
+            /*
+
             {
                 const auto   a = BooleanFunction::Var("A"),
                              b = BooleanFunction::Var("B"),
@@ -146,7 +109,7 @@ namespace hal {
                     BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ZERO,  BooleanFunction::Value::ZERO
                 }));
             }
-
+            */
         TEST_END
     }
 
@@ -166,20 +129,20 @@ namespace hal {
             // Check some bf strings
             std::vector<std::pair<BooleanFunction, std::string>> test_cases =
                 {
-                    {(a & b), "A & B"},
-                    {(a & (b | c)), "A & (B | C)"},
-                    {((a & b) ^ (b & c)), "(A & B) ^ (B & C)"},
-                    {(a ^ _1), "A ^ 1"},
-                    {(a ^ _0), "A ^ 0"},
-                    {(~a), "!A"}
+                    {(a & b), "(A & B)"},
+                    {(a & (b | c)), "(A & (B | C))"},
+                    {((a & b) ^ (b & c)), "((A & B) ^ (B & C))"},
+                    {(a ^ _1), "(A ^ 0b1)"},
+                    {(a ^ _0), "(A ^ 0b0)"},
+                    {(~a), "(! A)"}
                 };
 
-            for (auto tc : test_cases) {
-                EXPECT_EQ(no_space(tc.first.to_string()), no_space(tc.second));
+            for (const auto& [function, str] : test_cases) {
+                EXPECT_EQ(function.to_string(), str);
             }
 
             // Check an empty boolean function
-            EXPECT_TRUE(test_utils::string_contains_substring(BooleanFunction().to_string(), "empty"));
+            EXPECT_EQ(BooleanFunction().to_string(), "<empty>");
 
         TEST_END
     }
@@ -202,41 +165,37 @@ namespace hal {
     TEST_F(BooleanFunctionTest, check_is_constant) {
         TEST_START
            const auto  a = BooleanFunction::Var("A"),
-                       b = BooleanFunction::Var("B"),
-                       c = BooleanFunction::Var("C"),
                       _0 = BooleanFunction::Const(BooleanFunction::Value::ZERO),
                       _1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
             {
                 // Some samples that are constant zero
                 EXPECT_TRUE((_0).is_constant_zero());
                 EXPECT_TRUE((~_1).is_constant_zero());
-                EXPECT_TRUE((a ^ a).is_constant_zero());
-                EXPECT_TRUE((a & (~a)).is_constant_zero());
-                EXPECT_TRUE((_0 | _0).is_constant_zero());
+                EXPECT_TRUE((a ^ a).optimize().is_constant_zero());
+                EXPECT_TRUE((a & (~a)).optimize().is_constant_zero());
+                EXPECT_TRUE((_0 | _0).optimize().is_constant_zero());
             }
             {
                 // Some samples that are constant one
                 EXPECT_TRUE((_1).is_constant_one());
                 EXPECT_TRUE((~_0).is_constant_one());
-                EXPECT_TRUE((a ^ (~a)).is_constant_one());
-                EXPECT_TRUE((a | (~a)).is_constant_one());
-                EXPECT_TRUE((_1 & _1).is_constant_one());
+                EXPECT_TRUE((a ^ (~a)).optimize().is_constant_one());
+                EXPECT_TRUE((a | (~a)).optimize().is_constant_one());
+                EXPECT_TRUE((_1 & _1).optimize().is_constant_one());
+                EXPECT_TRUE((_0 | _1).optimize().is_constant_one());
             }
             {
                 // Some samples that are NOT constant zero
                 EXPECT_FALSE((_1).is_constant_zero());
+                EXPECT_FALSE((_0 | _1).optimize().is_constant_zero());
                 EXPECT_FALSE((a).is_constant_zero());
-                EXPECT_FALSE((a ^ a ^ b).is_constant_zero());
-                EXPECT_FALSE((a & b).is_constant_zero());
-                EXPECT_FALSE((_0 | _1).is_constant_zero());
+                EXPECT_FALSE((_0 | _1).optimize().is_constant_zero());
             }
             {
                 // Some samples that are NOT constant one
                 EXPECT_FALSE((_0).is_constant_one());
                 EXPECT_FALSE((a).is_constant_one());
-                EXPECT_FALSE((a ^ b ^ c).is_constant_one());
-                EXPECT_FALSE((a & b).is_constant_one());
-                EXPECT_FALSE((_0 & _1).is_constant_one());
+                EXPECT_FALSE((_0 & _1).optimize().is_constant_one());
             }
 
         TEST_END
@@ -380,7 +339,7 @@ namespace hal {
             {
                 // Optimize MUX function
                 BooleanFunction bf = (a & c) | (b & ~c) | (a & b);
-                EXPECT_EQ(bf.optimize().to_string(), "(A & C) | (B & !C)");
+                EXPECT_EQ(bf.optimize().to_string(), "((A & C) | (B & (! C)))");
             }
         TEST_END
     }
