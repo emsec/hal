@@ -11,9 +11,7 @@ var classhal_1_1_netlist_event =
       [ "unmarked_global_gnd", "classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa5841f8cc9174ea3d44605f9d51a5a033", null ],
       [ "marked_global_input", "classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafaf483783b5cb1b87407dd87879cedaa4a", null ],
       [ "marked_global_output", "classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafae8c6c35b23ca8b21ff8acd068b2deada", null ],
-      [ "marked_global_inout", "classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafaaae62ffafa1c31d98b7087fd20773440", null ],
       [ "unmarked_global_input", "classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafad9cc107ff1da372cce7da6ef0636af22", null ],
-      [ "unmarked_global_output", "classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa20774fbd2429c44f20bef3cbbe7edde0", null ],
-      [ "unmarked_global_inout", "classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafaf1310b82452a412772beadc6245e8037", null ]
+      [ "unmarked_global_output", "classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa20774fbd2429c44f20bef3cbbe7edde0", null ]
     ] ]
 ];

@@ -124,6 +124,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1eaa13661da056d27b56a2198ed152ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5cb9be187148a5be1f9ee9e558df2c9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#ab5cb9be187148a5be1f9ee9e558df2c9">set_data</a> (const std::string &amp;category, const std::string &amp;key, const std::string &amp;data_type, const std::string &amp;value, const bool log_with_info_level=false)</td></tr>
 <tr class="separator:ab5cb9be187148a5be1f9ee9e558df2c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd955fb78b54c430d54666c3883220da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#acd955fb78b54c430d54666c3883220da">has_data</a> (const std::string &amp;category, const std::string &amp;key) const</td></tr>
+<tr class="separator:acd955fb78b54c430d54666c3883220da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15ddfdb9e6d693c4e29d535ad2be215b"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#a15ddfdb9e6d693c4e29d535ad2be215b">get_data</a> (const std::string &amp;category, const std::string &amp;key) const</td></tr>
 <tr class="separator:a15ddfdb9e6d693c4e29d535ad2be215b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad982665a18a25310ea22abf141dd9b65"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#ad982665a18a25310ea22abf141dd9b65">delete_data</a> (const std::string &amp;category, const std::string &amp;key, const bool log_with_info_level=false)</td></tr>
@@ -239,7 +241,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00041">41</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00071">log_debug</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="data__container_8h_source.html#l00112">m_data</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00071">log_debug</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="data__container_8h_source.html#l00121">m_data</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>.</p>
 
@@ -280,9 +282,9 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The tuple ((1) type, (2) value). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00082">82</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00097">97</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00071">log_debug</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="data__container_8h_source.html#l00112">m_data</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00071">log_debug</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, and <a class="el" href="data__container_8h_source.html#l00121">m_data</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>.</p>
 
@@ -307,9 +309,52 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00072">72</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="data__container_8h_source.html#l00112">m_data</a>.</p>
+<p class="reference">References <a class="el" href="data__container_8h_source.html#l00121">m_data</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00141">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="coordinate__from__data_8cpp_source.html#l00015">hal::CoordinateFromData::fromNode()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00298">hal::netlist_utils::get_partial_netlist()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00007">operator==()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00871">hal::netlist_utils::replace_gate()</a>.</p>
+
+</div>
+</div>
+<a id="acd955fb78b54c430d54666c3883220da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd955fb78b54c430d54666c3883220da">&#9670;&nbsp;</a></span>has_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::DataContainer::has_data </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>category</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Determine whether an entry of given category and key exists.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">category</td><td>- The data category. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>- The data key. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the entry exists, false otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00082">82</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="data__container_8h_source.html#l00121">m_data</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>.</p>
 
 </div>
 </div>
@@ -369,7 +414,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00007">7</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2data__container_8cpp_source.html#l00072">get_data_map()</a>, and <a class="el" href="data__container_8h_source.html#l00112">m_data</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2data__container_8cpp_source.html#l00072">get_data_map()</a>, and <a class="el" href="data__container_8h_source.html#l00121">m_data</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2data__container_8cpp_source.html#l00012">operator!=()</a>.</p>
 
@@ -434,7 +479,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00017">17</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00071">log_debug</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="data__container_8h_source.html#l00112">m_data</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00071">log_debug</a>, <a class="el" href="log_8h_source.html#l00075">log_error</a>, <a class="el" href="log_8h_source.html#l00067">log_info</a>, and <a class="el" href="data__container_8h_source.html#l00121">m_data</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>.</p>
 
@@ -465,7 +510,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00077">77</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="data__container_8h_source.html#l00112">m_data</a>.</p>
+<p class="reference">References <a class="el" href="data__container_8h_source.html#l00121">m_data</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00141">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00298">hal::netlist_utils::get_partial_netlist()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00871">hal::netlist_utils::replace_gate()</a>.</p>
 
@@ -492,9 +537,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="data__container_8h_source.html#l00112">112</a> of file <a class="el" href="data__container_8h_source.html">data_container.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="data__container_8h_source.html#l00121">121</a> of file <a class="el" href="data__container_8h_source.html">data_container.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2data__container_8cpp_source.html#l00041">delete_data()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00082">get_data()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00072">get_data_map()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00007">operator==()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00017">set_data()</a>, and <a class="el" href="netlist_2data__container_8cpp_source.html#l00077">set_data_map()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2data__container_8cpp_source.html#l00041">delete_data()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00097">get_data()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00072">get_data_map()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00082">has_data()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00007">operator==()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00017">set_data()</a>, and <a class="el" href="netlist_2data__container_8cpp_source.html#l00077">set_data_map()</a>.</p>
 
 </div>
 </div>
@@ -508,7 +553,7 @@ Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_data_container.html">DataContainer</a></li>
-    <li class="footer">Generated on Mon Oct 18 2021 17:39:54 for HAL by
+    <li class="footer">Generated on Tue Oct 19 2021 09:16:27 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
