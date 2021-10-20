@@ -109,17 +109,20 @@ namespace hal
                 net = gNetlist->get_net_by_id(mNetId);
                 if (mod && net)
                 {
+                    Module::Port* port;
                     switch (mPortType)
                     {
                         case NoPort:
                             return false;
                         case Input:
-                            oldName = QString::fromStdString(mod->get_port_by_net(net)->get_name());
-                            mod->add_port(net, mNewName.toStdString());
+                            port = mod->get_port_by_net(net);
+                            oldName    = QString::fromStdString(port->get_name());
+                            mod->change_port_name(port, mNewName.toStdString());
                             break;
                         case Output:
-                            oldName = QString::fromStdString(mod->get_port_by_net(net)->get_name());
-                            mod->add_port(net, mNewName.toStdString());
+                            port = mod->get_port_by_net(net);
+                            oldName    = QString::fromStdString(port->get_name());
+                            mod->change_port_name(port, mNewName.toStdString());
                             break;
                     }
                 }

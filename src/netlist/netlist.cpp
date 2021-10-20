@@ -57,8 +57,6 @@ namespace hal
             }
         }
 
-        // gates check included within modules
-
         // modules are checked recursively
         if (*m_top_module != *other.get_top_module())
         {

@@ -339,7 +339,9 @@ namespace hal
                 {
                     for (const auto& port_node : val["ports"].GetArray())
                     {
-                        sm->add_port(nl->get_net_by_id(port_node["port_net_id"].GetUint()), port_node["port_name"].GetString(), enum_from_string<PinType>(port_node["port_type"].GetString()));
+                        Module::Port* port = sm->get_port_by_net(nl->get_net_by_id(port_node["port_net_id"].GetUint()));
+                        sm->change_port_name(port, port_node["port_name"].GetString());
+                        sm->change_port_type(port, enum_from_string<PinType>(port_node["port_type"].GetString()));
                     }
                 }
 
@@ -367,7 +369,8 @@ namespace hal
                 {
                     for (const auto& port_node : val["input_ports"].GetArray())
                     {
-                        sm->add_port(nl->get_net_by_id(port_node["net_id"].GetUint()), port_node["port_name"].GetString());
+                        Module::Port* port = sm->get_port_by_net(nl->get_net_by_id(port_node["net_id"].GetUint()));
+                        sm->change_port_name(port, port_node["port_name"].GetString());
                     }
                 }
 
@@ -375,7 +378,8 @@ namespace hal
                 {
                     for (const auto& port_node : val["output_ports"].GetArray())
                     {
-                        sm->add_port(nl->get_net_by_id(port_node["net_id"].GetUint()), port_node["port_name"].GetString());
+                        Module::Port* port = sm->get_port_by_net(nl->get_net_by_id(port_node["net_id"].GetUint()));
+                        sm->change_port_name(port, port_node["port_name"].GetString());
                     }
                 }
                 // legacy code above

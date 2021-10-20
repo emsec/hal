@@ -411,16 +411,10 @@ namespace hal
             :rtype: hal_py.PinDirection
         )");
 
-        py_module_port.def_property("type", &Module::Port::get_type, &Module::Port::set_type, R"(
+        py_module_port.def_property_readonly("type", &Module::Port::get_type, R"(
             The type of the port.
             
             :type: hal_py.PinType
-        )");
-
-        py_module_port.def("set_type", &Module::Port::set_type, py::arg("type"), R"(
-            Set the type of the port.
-
-            :param hal_py.PinType type: The type to be assigned to the port.
         )");
 
         py_module_port.def("get_type", &Module::Port::get_type, R"(
@@ -462,21 +456,20 @@ namespace hal
             :rtype: int
         )");
 
-        py_module.def("add_port", &Module::add_port, py::arg("port_net"), py::arg("port_name"), py::arg("type") = PinType::none, R"(
-            Add a new port to the module.
-        
-            :param hal_py.Net port_net: The net passing through the port.
+        py_module.def("change_port_name", &Module::change_port_name, py::arg("port"), py::arg("port_name"), R"(
+            Change the name of an existing port.
+
+            :param hal_py.Module.Port port: The port.
             :param str port_name: The name of the port.
-            :param hal_py.PinType type: The type of the port.
             :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
-        py_module.def("add_ports", &Module::add_ports, py::arg("ports"), py::arg("type") = PinType::none, R"(
-            Add multiple new ports to the module.
-         
-            :param list[tuple(hal_py.Net,str)] ports: Pairs of nets passing through the respective ports and port names.
-            :param hal_py.PinType type: The type of the ports.
+        py_module.def("change_port_type", &Module::change_port_type, py::arg("port"), py::arg("port_type"), R"(
+            Change the type of an existing port.
+
+            :param hal_py.Module.Port port: The port.
+            :param hal_py.PinType port_type: The type of the port.
             :returns: True on success, False otherwise.
             :rtype: bool
         )");

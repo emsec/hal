@@ -265,13 +265,6 @@ namespace hal
             PinDirection get_direction() const;
 
             /**
-             * Set the type of the port.
-             * 
-             * @param[in] type - The type to be assigned to the port.
-             */
-            void set_type(PinType type);
-
-            /**
              * Get the type of the port.
              * 
              * @returns The type of the port.
@@ -317,7 +310,7 @@ namespace hal
          * @param[in] port_name - The input port name.
          * @returns True on success, false otherwise.
          */
-        [[deprecated("Will be removed in a future version. Use add_port() instead.")]] bool set_input_port_name(Net* input_net, const std::string& port_name);
+        [[deprecated("Will be removed in a future version. Use change_port_name() instead.")]] bool set_input_port_name(Net* input_net, const std::string& port_name);
 
         /**
          * \deprecated
@@ -357,7 +350,7 @@ namespace hal
          * @param[in] port_name - The output port name.
          * @returns True on success, false otherwise.
          */
-        [[deprecated("Will be removed in a future version. Use add_port() instead.")]] bool set_output_port_name(Net* output_net, const std::string& port_name);
+        [[deprecated("Will be removed in a future version. Use change_port_name() instead.")]] bool set_output_port_name(Net* output_net, const std::string& port_name);
 
         /**
          * \deprecated
@@ -443,25 +436,22 @@ namespace hal
         [[deprecated("Will be removed in a future version.")]] u32 get_next_output_port_id() const;
 
         /**
-         * TODO split into "change_port_name" and "change_port_type"
-         * Add a new port to the module.
+         * Change the name of an existing port.
          * 
-         * @param[in] port_net - The net passing through the port.
+         * @param[in] port - The port.
          * @param[in] port_name - The name of the port.
-         * @param[in] type - The type of the port.
-         * @returns True on success, false otherwise.
+         * @return True on success, false otherwise.
          */
-        bool add_port(Net* port_net, const std::string& port_name, PinType type = PinType::none);
+        bool change_port_name(Port* port, const std::string& port_name);
 
         /**
-         * TODO remove
-         * Add multiple new ports to the module.
+         * Change the type of an existing port.
          * 
-         * @param[in] ports - Pairs of nets passing through the respective ports and port names.
-         * @param[in] type - The type of the ports.
-         * @returns True on success, false otherwise.
+         * @param[in] port - The port.
+         * @param[in] port_type - The type of the port.
+         * @return True on success, false otherwise.
          */
-        bool add_ports(const std::vector<std::pair<Net*, std::string>>& ports, PinType type = PinType::none);
+        bool change_port_type(Port* port, PinType port_type);
 
         /**
          * Get all ports of the module.
@@ -599,8 +589,9 @@ namespace hal
          * @param[in] port_net - Net passing through the port.
          * @param[in] direction - Direction of the port.
          * @param[in] type - Type of the port.
+         * @returns The created port.
          */
-        void create_port(const std::string& port_name, Net* port_net, PinDirection direction, PinType type = PinType::none) const;
+        Port* create_port(const std::string& port_name, Net* port_net, PinDirection direction, PinType type = PinType::none) const;
 
         /**
          * Remove a port from the current module instance. Does not perform sanity checks.

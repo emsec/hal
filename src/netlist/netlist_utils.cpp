@@ -323,12 +323,20 @@ namespace hal
             // copy module port names
             for (const Module* module : nl->get_modules())
             {
-                const u32 module_id = module->get_id();
-                Module* c_module    = c_netlist->get_module_by_id(module_id);
+                Module* c_module = c_netlist->get_module_by_id(module->get_id());
+
+                // temporarily overwrite port names to allow for actual port names to be assigned
+                u32 ctr = 0;
+                for (Module::Port* c_port : c_module->get_ports())
+                {
+                    c_module->change_port_name(c_port, "____tmp_" + std::to_string(ctr++));
+                }
 
                 for (Module::Port* port : module->get_ports())
                 {
-                    c_module->add_port(c_netlist->get_net_by_id(port->get_net()->get_id()), port->get_name(), port->get_type());
+                    Module::Port* c_port = c_module->get_port_by_net(c_netlist->get_net_by_id(port->get_net()->get_id()));
+                    c_module->change_port_name(c_port, port->get_name());
+                    c_module->change_port_type(c_port, port->get_type());
                 }
 
                 for (const auto& [group_name, ports] : module->get_port_groups())

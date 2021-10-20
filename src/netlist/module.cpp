@@ -50,7 +50,7 @@ namespace hal
 
         for (const Port* port : get_ports())
         {
-            if (const Port* other_port = other.get_port_by_name(port->get_name()); other_port == nullptr || *other_port != *port)
+            if (const Port* other_port = other.get_port_by_net(other.get_netlist()->get_net_by_id(port->get_net()->get_id())); other_port == nullptr || *other_port != *port)
             {
                 log_info("module", "the modules with IDs {} and {} are not equal due to an unequal port.", m_id, other.get_id());
                 return false;
@@ -538,11 +538,6 @@ namespace hal
         return m_direction;
     }
 
-    void Module::Port::set_type(PinType type)
-    {
-        m_type = type;
-    }
-
     PinType Module::Port::get_type() const
     {
         return m_type;
@@ -560,12 +555,14 @@ namespace hal
 
     bool Module::set_input_port_name(Net* input_net, const std::string& port_name)
     {
-        return add_port(input_net, port_name);
+        Port* port = get_port_by_net(input_net);
+        return change_port_name(port, port_name);
     }
 
     bool Module::set_output_port_name(Net* output_net, const std::string& port_name)
     {
-        return add_port(output_net, port_name);
+        Port* port = get_port_by_net(output_net);
+        return change_port_name(port, port_name);
     }
 
     std::string Module::get_input_port_name(Net* net) const
@@ -694,7 +691,7 @@ namespace hal
         return m_next_input_index;
     }
 
-    void Module::create_port(const std::string& port_name, Net* port_net, PinDirection direction, PinType type) const
+    Module::Port* Module::create_port(const std::string& port_name, Net* port_net, PinDirection direction, PinType type) const
     {
         std::unique_ptr<Port> port_owner = std::make_unique<Port>(Port(port_name, port_net));
         Port* port                       = port_owner.get();
@@ -705,6 +702,7 @@ namespace hal
         port->m_direction         = direction;
         port->m_type              = type;
         m_port_nets.insert(port_net);
+        return port;
     }
 
     void Module::remove_port(Port* port) const
@@ -813,25 +811,36 @@ namespace hal
         }
     }
 
-    bool Module::add_port(Net* port_net, const std::string& port_name, PinType type)
+    bool Module::change_port_name(Port* port, const std::string& port_name)
     {
-        if (port_net == nullptr)
+        if (port == nullptr)
         {
-            log_error("module", "nullptr given as port net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
+            log_error("module",
+                      "cannot assign new port name to nullptr for module '{}' with ID {} in netlist with ID {}.",
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
             return false;
         }
 
         if (port_name.empty())
         {
-            log_error(
-                "module", "empty port name given for module '{}' with ID {} in netlist with ID {}.", port_net->get_name(), port_net->get_id(), m_name, m_id, m_internal_manager->m_netlist->get_id());
+            log_error("module",
+                      "cannot assign empty port name to net '{}' with ID {} of module '{}' with ID {} in netlist with ID {}.",
+                      port->get_net()->get_name(),
+                      port->get_net()->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
             return false;
         }
+
+        update_ports();
 
         if (m_name_to_port.find(port_name) != m_name_to_port.end())
         {
             log_debug("module",
-                      "port name '{}' already exists within module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
+                      "cannot assign port name '{}' as a port with that name already exists within module '{}' with ID {} in netlist with ID {}.",
                       port_name,
                       m_name,
                       m_id,
@@ -839,47 +848,35 @@ namespace hal
             return false;
         }
 
-        PinDirection direction = determine_port_direction(port_net);
-        if (direction == PinDirection::none)
+        std::string old_name      = port->get_name();
+        port->m_name              = port_name;
+        m_name_to_port[port_name] = port;
+        m_name_to_port.erase(old_name);
+
+        m_event_handler->notify(ModuleEvent::event::port_changed, this, port->get_net()->get_id());
+
+        return true;
+    }
+
+    bool Module::change_port_type(Port* port, PinType port_type)
+    {
+        if (port == nullptr)
         {
-            log_debug("module",
-                      "net '{}' with ID {} is not a port net of module '{}' with ID {} in netlist with ID {}, ignoring port assignment.",
-                      port_net->get_name(),
-                      port_net->get_id(),
+            log_error("module",
+                      "cannot assign new port type to nullptr for module '{}' with ID {} in netlist with ID {}.",
                       m_name,
                       m_id,
                       m_internal_manager->m_netlist->get_id());
             return false;
         }
 
-        if (auto it = m_net_to_port.find(port_net); it != m_net_to_port.end())
-        {
-            Port* port                = it->second;
-            std::string old_name      = port->get_name();
-            port->m_name              = port_name;
-            m_name_to_port[port_name] = port;
-            m_name_to_port.erase(old_name);
-        }
-        else
-        {
-            create_port(port_name, port_net, direction, type);
-        }
+        update_ports();
 
-        m_event_handler->notify(ModuleEvent::event::port_changed, this, port_net->get_id());
+        port->m_type = port_type;
+
+        m_event_handler->notify(ModuleEvent::event::port_changed, this, port->get_net()->get_id());
 
         return true;
-    }
-
-    bool Module::add_ports(const std::vector<std::pair<Net*, std::string>>& ports, PinType type)
-    {
-        bool success = true;
-
-        for (const auto& [port_net, port_name] : ports)
-        {
-            success &= add_port(port_net, port_name, type);
-        }
-
-        return success;
     }
 
     const std::vector<Module::Port*>& Module::get_ports() const
