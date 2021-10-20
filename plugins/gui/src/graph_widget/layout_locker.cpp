@@ -22,6 +22,7 @@ namespace hal {
         {
             for (GraphContext* ctx : mWaitingRoom)
                 ctx->startSceneUpdate();
+            mWaitingRoom.clear();
         }
     }
 

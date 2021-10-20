@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+* finished RAM simulation within HAL netlist simulator
+* fixed gate locations not being properly loaded from a gate's data fields
+* fixed multiple memory leaks
+* fixed rare segfault when adding gates to a module
+
 ## [3.3.0] - 2021-10-13 16:20:00+02:00 (urgency: medium)
 * **WARNING:** this release partially breaks the `GateType` API, please make sure to adjust your code accordingly.
 * added user action system to enable recording and reverting actions within the GUI
