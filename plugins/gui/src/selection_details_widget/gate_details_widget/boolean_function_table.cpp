@@ -20,7 +20,7 @@ namespace hal {
         this->setShowGrid(false);
         setFrameStyle(QFrame::NoFrame);
 
-        connect(this, &QTableView::customContextMenuRequested, this, &BooleanFunctionTable::handleContextMenuRequest);
+        //connect(this, &QTableView::customContextMenuRequested, this, &BooleanFunctionTable::handleContextMenuRequest);
     }
 
     BooleanFunctionTableModel* BooleanFunctionTable::getModel()
