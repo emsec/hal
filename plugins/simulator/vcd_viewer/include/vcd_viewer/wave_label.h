@@ -37,13 +37,14 @@ namespace hal {
         void triggerMove(int inx, int iypos);
 
     public:
-        explicit WaveLabel(int inx, const QString& nam, QWidget *parent = nullptr);
+        WaveLabel(int inx, const QString& nam, QWidget *parent = nullptr);
         void setDataIndex(int inx) { mDataIndex = inx; }
         void setValue(int val);
         void setHighlight(bool hl);
         void paintEvent(QPaintEvent *event) override;
         int state() const { return mState; }
         void setState(int v) { mState = v; }
+        void setText(const QString& txt) { mName = txt; }
         static QPixmap* piXdelete();
         QString text() const { return mName; }
         static const char* sStateColor[3];

@@ -45,6 +45,21 @@ namespace hal {
         */
     }
 
+    void WaveScene::handleWaveAdded(WaveData *wd)
+    {
+        addWave(wd);
+    }
+
+    void WaveScene::handleWaveDataChanged(int inx)
+    {
+
+    }
+
+    void WaveScene::handleWaveRemoved(int inx)
+    {
+
+    }
+
     int WaveScene::addWave(WaveData* wd)
     {
         int inx = mWaveItems.size();
@@ -110,7 +125,8 @@ namespace hal {
 
     float WaveScene::yPosition(int dataIndex) const
     {
-        return (dataIndex+2)*4;
+        int inx = dataIndex < 0 ? mWaveItems.size() : dataIndex;
+        return (inx+2)*4;
     }
 
     void WaveScene::deleteWave(int dataIndex)
@@ -143,12 +159,6 @@ namespace hal {
         mClearTimer->setSingleShot(true);
         connect(mClearTimer,&QTimer::timeout,this,&QGraphicsScene::clearSelection);
         mClearTimer->start(50);
-    }
-
-    const WaveData* WaveScene::waveData(int dataIndex) const
-    {
-        if (dataIndex >= mWaveItems.size()) return nullptr;
-        return mWaveItems.at(dataIndex)->wavedata();
     }
 
     void WaveScene::setWaveData(int dataIndex, WaveData* wd)

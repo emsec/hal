@@ -174,7 +174,13 @@ namespace hal
         u32 get_id() const { return mId; }
 
         /**
-         * run simulation and parse results
+         * Get simulated data from engine, either from shared memory or from VCD file
+         * @return true on success, false otherwise
+         */
+        bool get_results();
+
+        /**
+         * run simulation
          * @return true on success, false otherwise
          */
         bool run_simulation();
@@ -190,6 +196,23 @@ namespace hal
          * @param[in] filename the filename to read
          */
         void parse_vcd(const std::string& filename);
+
+        /**
+         * Generates the a VCD file for parts the simulated netlist.
+         *
+         * @param[in] path - The path to the VCD file.
+         * @param[in] start_time - Start of the timeframe to write to the file (in picoseconds).
+         * @param[in] end_time - End of the timeframe to write to the file (in picoseconds).
+         * @param[in] nets - Nets to include in the VCD file.
+         * @returns True if the file gerneration was successful, false otherwise.
+         */
+        bool generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets = {}) const;
+
+        /**
+         * Getter for wave data list - simulation input as well as output
+         * @return const pointer to wave data list
+         */
+        const WaveDataList* get_waves() const { return mWaveDataList; }
 
     public Q_SLOTS:
         void handleSimulSettings();
@@ -211,11 +234,9 @@ namespace hal
         SimulationState mState;
         SimulationEngine* mSimulationEngine;
 
-        WaveDataList mWaveDataList;
-        QMap<u32,const WaveData*> mResultMap;
+        WaveDataList* mWaveDataList;
 
         SimulationInput* mSimulationInput;
-        std::string mResultVcdFilename;
     };
 
     class NetlistSimulatorControllerMap : public QObject

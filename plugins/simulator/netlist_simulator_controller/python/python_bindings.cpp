@@ -124,11 +124,18 @@ namespace hal
                 :rtype: str
              )")
 
-             .def("get_id", &NetlistSimulatorController::get_id, R"()
+             .def("get_id", &NetlistSimulatorController::get_id, R"(
                 Get unique controller id.
 
                 :returns: The unique id of the controller.
                 :rtype: int
+             )")
+
+             .def("get_results", &NetlistSimulatorController::get_results, R"(
+                Get simulated data from engine, either from shared memory or from VCD file
+
+                :returns: True on success, False otherwise
+                :rtype: bool
              )")
 
              .def("create_simulation_engine", &NetlistSimulatorController::create_simulation_engine, py::arg("name"), R"(
@@ -199,10 +206,15 @@ namespace hal
                 :param str filename: filename of VCD file to be parsed.
             )")
 
-            .def("request_generate_vcd", &NetlistSimulatorController::request_generate_vcd, py::arg("filename"), R"(
-                Request to engine to generate VCD reult file upon successful completion.
+            .def("generate_vcd", &NetlistSimulatorController::generate_vcd, py::arg("path"), py::arg("start_time"), py::arg("end_time"), py::arg("nets") = std::set<u32>(), R"(
+                Generates the a VCD file for parts the simulated netlist.
 
-                :param str filename: filename for requested VCD result file in engine working directory."
+                :param hal_py.hal_path path: The path to the VCD file.
+                :param int start_time: Start of the timeframe to write to the file (in picoseconds).
+                :param int end_time: End of the timeframe to write to the file (in picoseconds).
+                :param set[hal_py.Net] nets: Nets to include in the VCD file.
+                :returns: True if the file gerneration was successful, false otherwise.
+                :rtype: bool
             )");
 
                 /*
@@ -317,7 +329,6 @@ namespace hal
                 :param str key: The property name.
                 :param str value: The property value.
         )");
-
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE
