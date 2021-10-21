@@ -3,13 +3,14 @@
 #include "netlist_simulator_controller/wave_data.h"
 #include "vcd_viewer/wave_cursor.h"
 #include "vcd_viewer/wave_timescale.h"
+#include "vcd_viewer/wave_index.h"
 #include "netlist_simulator_controller/vcd_serializer.h"
 #include <QDebug>
 
 namespace hal {
 
-    WaveScene::WaveScene(QObject* parent)
-        : QGraphicsScene(parent), mClearTimer(nullptr)
+    WaveScene::WaveScene(const WaveIndex *winx, QObject* parent)
+        : QGraphicsScene(parent), mWaveIndex(winx), mClearTimer(nullptr)
     {
         setSceneRect(QRectF(0,0,1500,20));
         mCursor = new WaveCursor();
@@ -52,12 +53,31 @@ namespace hal {
 
     void WaveScene::handleWaveDataChanged(int inx)
     {
-
+        int i0 = inx<0 ? 0 : inx;
+        int i1 = inx<0 ? mWaveItems.size() : inx+1;
+        for (int i=i0; i<i1; i++)
+        {
+            WaveItem* wi = mWaveItems.at(i);
+            wi->setWavedata(mWaveIndex->waveData(i));
+            wi->update();
+        }
+        update();
     }
 
     void WaveScene::handleWaveRemoved(int inx)
     {
-
+        if (inx < 0)
+        {
+            for (WaveItem* wi : mWaveItems)
+            {
+                removeItem(wi);
+                delete wi;
+            }
+            mWaveItems.clear();
+            update();
+        }
+        else
+            deleteWave(inx);
     }
 
     int WaveScene::addWave(WaveData* wd)

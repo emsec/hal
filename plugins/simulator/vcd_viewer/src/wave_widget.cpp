@@ -34,7 +34,7 @@ namespace hal {
         addWidget(mFrame);
         mWaveView = new WaveView(this);
         mWaveView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        mWaveScene = new WaveScene(mWaveView);
+        mWaveScene = new WaveScene(&mWaveIndex, mWaveView);
 
         connect(mWaveView,&WaveView::changedXscale,mWaveScene,&WaveScene::xScaleChanged);
         mWaveView->setScene(mWaveScene);

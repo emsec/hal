@@ -10,11 +10,13 @@ namespace hal {
     class WaveItem;
     class WaveCursor;
     class WaveTimescale;
+    class WaveIndex;
 
     class WaveScene : public QGraphicsScene
     {
         Q_OBJECT
 
+        const WaveIndex* mWaveIndex;
         QList<WaveItem*> mWaveItems;
         WaveTimescale* mTimescale;
         WaveCursor* mCursor;
@@ -31,7 +33,7 @@ namespace hal {
         void handleWaveRemoved(int inx);
 
     public:
-        WaveScene(QObject* parent = nullptr);
+        WaveScene(const WaveIndex* winx, QObject* parent = nullptr);
         ~WaveScene();
         void emitCursorMoved(float xpos);
         float cursorPos() const;
