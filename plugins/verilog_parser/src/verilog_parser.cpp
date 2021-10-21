@@ -1188,7 +1188,7 @@ namespace hal
         {
             const std::string& port_name = std::get<1>(port_info);
             Module* module               = std::get<2>(port_info);
-            module->change_port_name(module->get_port_by_net(net), port_name);
+            module->set_port_name(module->get_port(net), port_name);
         }
 
         return true;

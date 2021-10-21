@@ -50,7 +50,6 @@ namespace hal
 
         for (const Port* port : get_ports())
         {
-            // TODO
             if (const Port* other_port = other.get_port(other.get_netlist()->get_net_by_id(port->get_nets().front()->get_id())); other_port == nullptr || *other_port != *port)
             {
                 log_info("module", "the modules with IDs {} and {} are not equal due to an unequal port.", m_id, other.get_id());
