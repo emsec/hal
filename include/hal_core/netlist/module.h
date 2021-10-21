@@ -32,6 +32,7 @@
 #include "hal_core/utilities/enums.h"
 
 #include <functional>
+#include <list>
 #include <map>
 #include <memory>
 #include <string>
@@ -251,13 +252,6 @@ namespace hal
             const std::string& get_name() const;
 
             /**
-             * Get the net passing through the port.
-             * 
-             * @returns The net passing through the port.
-             */
-            Net* get_net() const;
-
-            /**
              * Get the direction of the port.
              * 
              * @returns The direction of the port.
@@ -272,114 +266,101 @@ namespace hal
             PinType get_type() const;
 
             /**
-             * Get the name of the group that the port is part of.
-             * Returns an empty string if the port is not part of a group.
+             * Set the type of the port.
              * 
-             * @returns The name of the port group.
+             * @param[in] type - The new type. 
+             * @returns True on success, false otherwise.
              */
-            const std::string& get_group_name() const;
+            bool set_type(PinType type);
 
             /**
-             * Get the index of the port within its port group.
-             * Returns 0 if the port is not part of a group. 
-             * Make sure to check the group name to determine whether the port is actually part of a group.
+             * Get the ordered pins of the port.
              * 
-             * @returns The index of the port within the port group.
+             * @returns An ordered vector of pins.
              */
-            u32 get_group_index() const;
+            std::vector<std::string> get_pins() const;
+
+            /**
+             * Get the ordered nets of the port.
+             * 
+             * @returns An ordered vector of nets.
+             */
+            std::vector<Net*> get_nets() const;
+
+            /**
+             * Get the ordered pins and the nets that pass through them.
+             * 
+             * @returns An ordered vector of pairs of pins and nets.
+             */
+            std::vector<std::pair<std::string, Net*>> get_pins_and_nets() const;
+
+            /**
+             * Check whether the port contains the specified pin.
+             * 
+             * @param[in] pin_name - The name of the pin.
+             * @returns True if the port contains the pin, false otherwise.
+             */
+            bool contains_pin(const std::string& pin_name) const;
+
+            /**
+             * Check whether the port contains the specified net.
+             * 
+             * @param[in] net - The net.
+             * @returns True if the port contains the net, false otherwise.
+             */
+            bool contains_net(Net* net) const;
+
+            /**
+             * Remove a pin from the port by its name.
+             * 
+             * @param[in] pin_name - The name of the pin.
+             * @returns True on success, false otherwise.
+             */
+            bool remove_pin_by_name(const std::string& pin_name);
+
+            /**
+             * Remove a pin from the port by its net.
+             * 
+             * @param[in] net - The net.
+             * @returns True on success, false otherwise.
+             */
+            bool remove_pin_by_net(Net* net);
+
+            /**
+             * Assign a new position to the pin specified by its name.
+             * All pins beyond the specified position will be shifted backwards.
+             * 
+             * @param[in] pin_name - The name of the pin.
+             * @param[in] new_index - The new position that the pin should be assigned to.
+             * @returns True on success, false otherwise.
+             */
+            bool move_pin_by_name(const std::string& pin_name, u32 new_index);
+
+            /**
+             * Assign a new position to the pin specified by its net.
+             * All pins beyond the specified position will be shifted backwards.
+             * 
+             * @param[in] net - The net.
+             * @param[in] new_index - The new position that the pin should be assigned to.
+             * @returns True on success, false otherwise.
+             */
+            bool move_pin_by_net(Net* net, u32 new_index);
 
         private:
-            friend Module;
+            friend class Module;
 
             std::string m_name;
-            Net* m_net;
+            std::list<std::pair<std::string, Net*>> m_pins;
             PinDirection m_direction;
-            PinType m_type           = PinType::none;
-            std::string m_group_name = "";
-            u32 m_group_index        = 0;
+            PinType m_type = PinType::none;
 
-            Port(const std::string& name, Net* net);
+            std::unordered_map<std::string, Net*> m_pin_to_net;
+            std::unordered_map<Net*, std::string> m_net_to_pin;
+
+            Port(const Port&) = delete;
+            Port(const std::string& name, Net* net, PinDirection direction, PinType type);
+            Port(const std::string& name, const std::vector<std::pair<std::string, Net*>>& pins_and_nets, PinDirection direction, PinType type);
         };
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Set the name of the port corresponding to the specified input net.
-         *
-         * @param[in] input_net - The input net.
-         * @param[in] port_name - The input port name.
-         * @returns True on success, false otherwise.
-         */
-        [[deprecated("Will be removed in a future version. Use change_port_name() instead.")]] bool set_input_port_name(Net* input_net, const std::string& port_name);
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Get the name of the port corresponding to the specified input net.
-         *
-         * @param[in] input_net - The input net.
-         * @returns The input port name.
-         */
-        [[deprecated("Will be removed in a future version. Use get_port_by_net() instead.")]] std::string get_input_port_name(Net* input_net) const;
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Get the input net of the port corresponding to the specified port name.
-         *
-         * @param[in] port_name - The input port name.
-         * @returns The input net or a nullptr.
-         */
-        [[deprecated("Will be removed in a future version. Use get_port_by_name() instead.")]] Net* get_input_port_net(const std::string& port_name) const;
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Get the mapping of all input nets to their corresponding port names.
-         *
-         * @returns The map from input net to port name.
-         */
-        [[deprecated("Will be removed in a future version. Use get_ports() instead.")]] std::map<Net*, std::string> get_input_port_names() const;
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Set the name of the port corresponding to the specified output net.
-         *
-         * @param[in] output_net - The output net.
-         * @param[in] port_name - The output port name.
-         * @returns True on success, false otherwise.
-         */
-        [[deprecated("Will be removed in a future version. Use change_port_name() instead.")]] bool set_output_port_name(Net* output_net, const std::string& port_name);
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Get the name of the port corresponding to the specified output net.
-         *
-         * @param[in] output_net - The output net.
-         * @returns The output port name.
-         */
-        [[deprecated("Will be removed in a future version. Use get_port_by_net() instead.")]] std::string get_output_port_name(Net* output_net) const;
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Get the output net of the port corresponding to the specified port name.
-         *
-         * @param[in] port_name - The output port name.
-         * @returns The output net or a nullptr.
-         */
-        [[deprecated("Will be removed in a future version. Use get_port_by_name() instead.")]] Net* get_output_port_net(const std::string& port_name) const;
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Get the mapping of all output nets to their corresponding port names.
-         *
-         * @returns The map from output net to port name.
-         */
-        [[deprecated("Will be removed in a future version. Use get_ports() instead.")]] std::map<Net*, std::string> get_output_port_names() const;
 
         /**
          * \deprecated
@@ -436,89 +417,83 @@ namespace hal
         [[deprecated("Will be removed in a future version.")]] u32 get_next_output_port_id() const;
 
         /**
-         * Change the name of an existing port.
-         * 
-         * @param[in] port - The port.
-         * @param[in] port_name - The name of the port.
-         * @return True on success, false otherwise.
-         */
-        bool change_port_name(Port* port, const std::string& port_name);
-
-        /**
-         * Change the type of an existing port.
-         * 
-         * @param[in] port - The port.
-         * @param[in] port_type - The type of the port.
-         * @return True on success, false otherwise.
-         */
-        bool change_port_type(Port* port, PinType port_type);
-
-        /**
          * Get all ports of the module.
-         * 
-         * @returns A vector of ports.
-         */
-        const std::vector<Port*>& get_ports() const;
-
-        /**
-         * Get all ports of the module.
-         * The filter is evaluated on every port such that the result only contains ports matching the specified condition.
+         * The optional filter is evaluated on every port such that the result only contains ports matching the specified condition.
          * 
          * @param[in] filter - Filter function to be evaluated on each port.
          * @returns A vector of ports.
          */
-        std::vector<Port*> get_ports(const std::function<bool(Port*)>& filter) const;
+        std::vector<Port*> get_ports(const std::function<bool(Port*)>& filter = nullptr) const;
 
         /**
-         * Get a port by the net that is passing through it.
-         * 
-         * @param[in] port_net - The net that passes through the port.
-         * @returns The port on success, a nullptr otherwise.
-         */
-        Port* get_port_by_net(Net* port_net) const;
-
-        /**
-         * Get a port by its name.
+         * Get the port specified by the given name.
          * 
          * @param[in] port_name - The name of the port.
          * @returns The port on success, a nullptr otherwise.
          */
-        Port* get_port_by_name(const std::string& port_name) const;
+        Port* get_port(const std::string& port_name) const;
 
         /**
-         * Create a new port group and assign existing ports to it.
+         * Get the port that contains the specified net.
          * 
-         * @param[in] group_name - The name of the port group to be created.
-         * @param[in] port_indices - A vector of pairs comprising a port indices as well as the ports themselves.
-         * @returns True on success, false otherweise.
+         * @param[in] port_net - The net that passes through the port.
+         * @returns The port on success, a nullptr otherwise.
          */
-        bool assign_port_group(const std::string& group_name, const std::vector<std::pair<u32, Port*>>& port_indices);
+        Port* get_port(Net* port_net) const;
 
         /**
-         * TODO Test
-         * Delete the given port group such that its pins do not belong to any group anymore.
+         * Get the port that contains the specified pin.
          * 
-         * @param[in] group_name - The name of the port group.
+         * @param[in] pin_name - The name of the pin.
+         * @returns The port on success, a nullptr otherwise.
+         */
+        Port* get_port_by_pin_name(const std::string& pin_name) const;
+
+        /**
+         * Set the name of the given port.
+         * For single-bit ports, the pin name is updated as well.
+         * 
+         * @param[in] port - The port.
+         * @param[in] new_name - The name to be assigned to the port.
          * @returns True on success, false otherwise.
          */
-        bool delete_port_group(const std::string& group_name);
-
-        // TODO remove port from group
+        bool set_port_name(Port* port, const std::string& new_name);
 
         /**
-         * Get all port groups of the module.
+         * Set the name of a pin within a port.
          * 
-         * @returns A map from port group name to a vector of ports.
+         * @param[in] port - The port that contains the pin.
+         * @param[in] old_name - The old name of the pin.
+         * @param[in] new_name - The new name of the pin.
+         * @returns True on success, false otherwise.
          */
-        const std::unordered_map<std::string, std::vector<Port*>>& get_port_groups() const;
+        bool set_port_pin_name(Port* port, const std::string& old_name, const std::string& new_name);
 
         /**
-         * Get all ports belonging to a given port group in order.
+         * TODO implement
+         * Set the name of a pin within a port.
          * 
-         * @param[in] group_name - The name of the port group.
-         * @returns A vector of ports belonging to the specified port group.
+         * @param[in] port - The port that contains the pin.
+         * @param[in] net - The net that passes through the pin.
+         * @param[in] new_name - The new name of the pin.
+         * @returns True on success, false otherwise.
          */
-        std::vector<Port*> get_ports_of_group(const std::string& group_name) const;
+        bool set_port_pin_name(Port* port, Net* net, const std::string& new_name);
+
+        /**
+         * Merge multiple existing ports into a single multi-bit port.
+         * 
+         * @param[in] name - The name of the new port.
+         * @param[in] ports_to_merge - The ports to be merged in the order in which they should be assigned to the new port.
+         */
+        bool create_multibit_port(const std::string& name, const std::vector<Port*>& ports_to_merge);
+
+        /**
+         * Split a multi-bit port into multiple single-bit ports.
+         * 
+         * @param[in] port - The port to be split.
+         */
+        bool delete_multibit_port(Port* port);
 
         /*
          * ################################################################
@@ -632,11 +607,9 @@ namespace hal
         mutable u32 m_next_inout_index  = 0;
         mutable u32 m_next_output_index = 0;
         mutable std::vector<std::unique_ptr<Port>> m_ports;
-        mutable std::set<Net*> m_port_nets;
-        mutable std::vector<Port*> m_ports_raw;
-        mutable std::unordered_map<Net*, Port*> m_net_to_port;
-        mutable std::unordered_map<std::string, Port*> m_name_to_port;
-        mutable std::unordered_map<std::string, std::vector<Port*>> m_port_groups;
+        mutable std::list<Port*> m_ports_raw;
+        mutable std::map<std::string, Port*> m_port_names_map;
+        mutable std::map<std::string, Port*> m_pin_names_map;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;
