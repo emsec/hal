@@ -598,6 +598,11 @@ namespace hal
         return res;
     }
 
+    bool Module::Port::is_multi_bit() const
+    {
+        return m_pins.size() > 1;
+    }
+
     bool Module::Port::set_type(PinType type)
     {
         m_type = type;
@@ -614,7 +619,7 @@ namespace hal
         return m_net_to_pin.find(net) != m_net_to_pin.end();
     }
 
-    bool Module::Port::remove_pin_by_name(const std::string& pin_name)
+    bool Module::Port::remove_pin(const std::string& pin_name)
     {
         if (const auto net_it = m_pin_to_net.find(pin_name); net_it != m_pin_to_net.end())
         {
@@ -632,16 +637,16 @@ namespace hal
         return false;
     }
 
-    bool Module::Port::remove_pin_by_net(Net* net)
+    bool Module::Port::remove_pin(Net* net)
     {
         if (const auto it = m_net_to_pin.find(net); it != m_net_to_pin.end())
         {
-            return remove_pin_by_name(it->second);
+            return remove_pin(it->second);
         }
         return false;
     }
 
-    bool Module::Port::move_pin_by_name(const std::string& pin_name, u32 new_index)
+    bool Module::Port::move_pin(const std::string& pin_name, u32 new_index)
     {
         if (const auto pin_it = std::find_if(m_pins.begin(), m_pins.end(), [pin_name](const std::pair<std::string, Net*>& pin) { return pin.first == pin_name; }); pin_it != m_pins.end())
         {
@@ -655,11 +660,11 @@ namespace hal
         return false;
     }
 
-    bool Module::Port::move_pin_by_net(Net* net, u32 new_index)
+    bool Module::Port::move_pin(Net* net, u32 new_index)
     {
         if (const auto it = m_net_to_pin.find(net); it != m_net_to_pin.end())
         {
-            return move_pin_by_name(it->second, new_index);
+            return move_pin(it->second, new_index);
         }
         return false;
     }
@@ -720,71 +725,72 @@ namespace hal
         return direction;
     }
 
-    // void Module::update_ports() const
-    // {
-    //     if (m_ports_dirty)
-    //     {
-    //         const std::vector<Net*>& input_nets  = get_input_nets();
-    //         const std::vector<Net*>& output_nets = get_output_nets();
+    void Module::update_ports() const
+    {
+        // TODO
+        //     if (m_ports_dirty)
+        //     {
+        //         const std::vector<Net*>& input_nets  = get_input_nets();
+        //         const std::vector<Net*>& output_nets = get_output_nets();
 
-    //         std::set<Net*> current_port_nets;
-    //         current_port_nets.insert(input_nets.begin(), input_nets.end());
-    //         current_port_nets.insert(output_nets.begin(), output_nets.end());
+        //         std::set<Net*> current_port_nets;
+        //         current_port_nets.insert(input_nets.begin(), input_nets.end());
+        //         current_port_nets.insert(output_nets.begin(), output_nets.end());
 
-    //         std::vector<Net*> diff_nets;
+        //         std::vector<Net*> diff_nets;
 
-    //         // find nets that are still in the port map but no longer a port net
-    //         std::set_difference(m_port_nets.begin(), m_port_nets.end(), current_port_nets.begin(), current_port_nets.end(), std::back_inserter(diff_nets));
-    //         for (Net* port_net : diff_nets)
-    //         {
-    //             remove_port(m_net_to_port.at(port_net));
-    //         }
+        //         // find nets that are still in the port map but no longer a port net
+        //         std::set_difference(m_port_nets.begin(), m_port_nets.end(), current_port_nets.begin(), current_port_nets.end(), std::back_inserter(diff_nets));
+        //         for (Net* port_net : diff_nets)
+        //         {
+        //             remove_port(m_net_to_port.at(port_net));
+        //         }
 
-    //         diff_nets.clear();
+        //         diff_nets.clear();
 
-    //         for (Port* port : m_ports_raw)
-    //         {
-    //             port->m_direction = determine_port_direction(port->get_net());
-    //         }
+        //         for (Port* port : m_ports_raw)
+        //         {
+        //             port->m_direction = determine_port_direction(port->get_net());
+        //         }
 
-    //         // find nets that are port nets but have not yet been assigned a port name
-    //         std::set_difference(current_port_nets.begin(), current_port_nets.end(), m_port_nets.begin(), m_port_nets.end(), std::back_inserter(diff_nets));
-    //         for (Net* port_net : diff_nets)
-    //         {
-    //             PinDirection direction = determine_port_direction(port_net);
+        //         // find nets that are port nets but have not yet been assigned a port name
+        //         std::set_difference(current_port_nets.begin(), current_port_nets.end(), m_port_nets.begin(), m_port_nets.end(), std::back_inserter(diff_nets));
+        //         for (Net* port_net : diff_nets)
+        //         {
+        //             PinDirection direction = determine_port_direction(port_net);
 
-    //             std::string port_prefix;
-    //             u32* index_counter;
-    //             switch (direction)
-    //             {
-    //                 case PinDirection::input:
-    //                     port_prefix   = "I";
-    //                     index_counter = &m_next_input_index;
-    //                     break;
-    //                 case PinDirection::inout:
-    //                     port_prefix   = "IO";
-    //                     index_counter = &m_next_inout_index;
-    //                     break;
-    //                 case PinDirection::output:
-    //                     port_prefix   = "O";
-    //                     index_counter = &m_next_output_index;
-    //                     break;
-    //                 default:
-    //                     continue;
-    //             }
+        //             std::string port_prefix;
+        //             u32* index_counter;
+        //             switch (direction)
+        //             {
+        //                 case PinDirection::input:
+        //                     port_prefix   = "I";
+        //                     index_counter = &m_next_input_index;
+        //                     break;
+        //                 case PinDirection::inout:
+        //                     port_prefix   = "IO";
+        //                     index_counter = &m_next_inout_index;
+        //                     break;
+        //                 case PinDirection::output:
+        //                     port_prefix   = "O";
+        //                     index_counter = &m_next_output_index;
+        //                     break;
+        //                 default:
+        //                     continue;
+        //             }
 
-    //             std::string port_name;
-    //             do
-    //             {
-    //                 port_name = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
-    //             } while (m_name_to_port.find(port_name) != m_name_to_port.end());
+        //             std::string port_name;
+        //             do
+        //             {
+        //                 port_name = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
+        //             } while (m_name_to_port.find(port_name) != m_name_to_port.end());
 
-    //             create_port(port_name, port_net, direction);
-    //         }
+        //             create_port(port_name, port_net, direction);
+        //         }
 
-    //         m_ports_dirty = false;
-    //     }
-    // }
+        //         m_ports_dirty = false;
+        //     }
+    }
 
     std::vector<Module::Port*> Module::get_ports(const std::function<bool(Port*)>& filter) const
     {
@@ -959,11 +965,11 @@ namespace hal
      * @param[in] name - The name of the new port.
      * @param[in] ports_to_merge - The ports to be merged in the order in which they should be assigned to the new port.
      */
-    bool Module::create_multibit_port(const std::string& name, const std::vector<Port*>& ports_to_merge)
+    Module::Port* Module::create_multi_bit_port(const std::string& name, const std::vector<Port*>& ports_to_merge)
     {
         if (name.empty() || m_port_names_map.find(name) != m_port_names_map.end())
         {
-            return false;
+            return nullptr;
         }
 
         Port* first_port       = ports_to_merge.front();
@@ -975,12 +981,12 @@ namespace hal
         {
             if (port == nullptr || port->m_direction != direction || port->m_type != type)
             {
-                return false;
+                return nullptr;
             }
 
             if (std::find(m_ports_raw.begin(), m_ports_raw.end(), port) == m_ports_raw.end())
             {
-                return false;
+                return nullptr;
             }
 
             for (const auto& [pin_name, net] : port->m_pins)
@@ -990,8 +996,8 @@ namespace hal
         }
 
         // create multi-bit port
-        std::unique_ptr<Port> port_owner = std::make_unique<Port>(name, pins_and_nets, direction, type);
-        Port* new_port                   = port_owner.get();
+        std::unique_ptr<Port> port_owner(new Port(name, pins_and_nets, direction, type));
+        Port* new_port = port_owner.get();
         m_ports.push_back(std::move(port_owner));
         m_ports_raw.push_back(new_port);
         m_port_names_map[name] = new_port;
@@ -1008,7 +1014,7 @@ namespace hal
             m_ports.erase(std::find_if(m_ports.begin(), m_ports.end(), [port](const std::unique_ptr<Port>& p) { return p.get() == port; }));
         }
 
-        return true;
+        return new_port;
     }
 
     /**
@@ -1016,7 +1022,7 @@ namespace hal
      * 
      * @param[in] port - The port to be split.
      */
-    bool Module::delete_multibit_port(Port* port)
+    bool Module::delete_multi_bit_port(Port* port)
     {
         if (port == nullptr || std::find(m_ports_raw.begin(), m_ports_raw.end(), port) == m_ports_raw.end())
         {
@@ -1026,8 +1032,8 @@ namespace hal
         // create ports
         for (const auto& [pin_name, net] : port->m_pins)
         {
-            std::unique_ptr<Port> port_owner = std::make_unique<Port>(Port(pin_name, net, port->m_direction, port->m_type));
-            Port* new_port                   = port_owner.get();
+            std::unique_ptr<Port> port_owner(new Port(pin_name, net, port->m_direction, port->m_type));
+            Port* new_port = port_owner.get();
             m_ports.push_back(std::move(port_owner));
             m_ports_raw.push_back(new_port);
             m_port_names_map[pin_name]   = new_port;

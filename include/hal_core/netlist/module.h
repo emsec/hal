@@ -220,8 +220,9 @@ namespace hal
          */
 
         /**
-         * The port of a module is a named entry or exit point where a net crosses the module boundary.
-         * A port always has a direction and may additionally feature a type and be part of a port group.
+         * A module port is a named entry or exit point of a module.
+         * It comprises one or more pins, each of them being connected to a net.
+         * A port always has a direction and may additionally feature a type.
          * 
          * @ingroup module
          */
@@ -295,6 +296,13 @@ namespace hal
             std::vector<std::pair<std::string, Net*>> get_pins_and_nets() const;
 
             /**
+             * Check whether the port is a multi-bit port, i.e., contains more than one pin.
+             * 
+             * @returns True if the port is a multi-bit port, false otherwise.
+             */
+            bool is_multi_bit() const;
+
+            /**
              * Check whether the port contains the specified pin.
              * 
              * @param[in] pin_name - The name of the pin.
@@ -316,7 +324,7 @@ namespace hal
              * @param[in] pin_name - The name of the pin.
              * @returns True on success, false otherwise.
              */
-            bool remove_pin_by_name(const std::string& pin_name);
+            bool remove_pin(const std::string& pin_name);
 
             /**
              * Remove a pin from the port by its net.
@@ -324,7 +332,7 @@ namespace hal
              * @param[in] net - The net.
              * @returns True on success, false otherwise.
              */
-            bool remove_pin_by_net(Net* net);
+            bool remove_pin(Net* net);
 
             /**
              * Assign a new position to the pin specified by its name.
@@ -334,7 +342,7 @@ namespace hal
              * @param[in] new_index - The new position that the pin should be assigned to.
              * @returns True on success, false otherwise.
              */
-            bool move_pin_by_name(const std::string& pin_name, u32 new_index);
+            bool move_pin(const std::string& pin_name, u32 new_index);
 
             /**
              * Assign a new position to the pin specified by its net.
@@ -344,7 +352,7 @@ namespace hal
              * @param[in] new_index - The new position that the pin should be assigned to.
              * @returns True on success, false otherwise.
              */
-            bool move_pin_by_net(Net* net, u32 new_index);
+            bool move_pin(Net* net, u32 new_index);
 
         private:
             friend class Module;
@@ -436,10 +444,10 @@ namespace hal
         /**
          * Get the port that contains the specified net.
          * 
-         * @param[in] port_net - The net that passes through the port.
+         * @param[in] net - The net.
          * @returns The port on success, a nullptr otherwise.
          */
-        Port* get_port(Net* port_net) const;
+        Port* get_port(Net* net) const;
 
         /**
          * Get the port that contains the specified pin.
@@ -470,7 +478,6 @@ namespace hal
         bool set_port_pin_name(Port* port, const std::string& old_name, const std::string& new_name);
 
         /**
-         * TODO implement
          * Set the name of a pin within a port.
          * 
          * @param[in] port - The port that contains the pin.
@@ -485,15 +492,17 @@ namespace hal
          * 
          * @param[in] name - The name of the new port.
          * @param[in] ports_to_merge - The ports to be merged in the order in which they should be assigned to the new port.
+         * @returns The port on success and a nullptr otherwise.
          */
-        bool create_multibit_port(const std::string& name, const std::vector<Port*>& ports_to_merge);
+        Port* create_multi_bit_port(const std::string& name, const std::vector<Port*>& ports_to_merge);
 
         /**
          * Split a multi-bit port into multiple single-bit ports.
          * 
          * @param[in] port - The port to be split.
+         * @returns True on success, false otherwise.
          */
-        bool delete_multibit_port(Port* port);
+        bool delete_multi_bit_port(Port* port);
 
         /*
          * ################################################################
