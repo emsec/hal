@@ -48,6 +48,7 @@ namespace hal {
 
     void WaveScene::handleWaveAdded(WaveData *wd)
     {
+        qDebug() << "handleWaveAdded" << wd->id() << wd->name() << wd->size() << hex << (quintptr) wd;
         addWave(wd);
     }
 
@@ -58,7 +59,9 @@ namespace hal {
         for (int i=i0; i<i1; i++)
         {
             WaveItem* wi = mWaveItems.at(i);
-            wi->setWavedata(mWaveIndex->waveData(i));
+            WaveData* wd = mWaveIndex->waveData(i);
+            qDebug() << "handleWaveChanged" << i << wd->id() << wd->name() << wd->size() << hex << (quintptr) wd;
+            wi->setWavedata(wd);
             wi->update();
         }
         update();

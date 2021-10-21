@@ -5,6 +5,7 @@
 #include <vector>
 #include <QString>
 #include <stdio.h>
+#include <QDebug>
 
 namespace hal {
 
@@ -41,7 +42,9 @@ namespace hal {
 
     WaveData::WaveData(u32 id_, const QString& nam, NetType tp, const QMap<u64,int> &other)
         : QMap<u64,int>(other), mId(id_), mName(nam), mNetType(tp)
-    {;}
+    {
+        qDebug() << "A:WaveData" << mId << mName << hex << (quintptr) this;
+    }
 
     WaveData::WaveData(const Net* n, NetType tp)
         : mId(n->get_id()),
@@ -49,7 +52,14 @@ namespace hal {
                 .arg(QString::fromStdString(n->get_name()))
                 .arg(n->get_id())),
           mNetType(tp)
-    {;}
+    {
+        qDebug() << "B:WaveData" << mId << mName << hex << (quintptr) this;
+    }
+
+    WaveData::~WaveData()
+    {
+        qDebug() << "X:WaveData" << mId << mName << hex << (quintptr) this;
+    }
 
     void WaveData::insertBooleanValue(u64 t, BooleanFunction::Value bval)
     {
@@ -184,8 +194,12 @@ namespace hal {
             WaveData* wdCopy = new WaveData(*wd);
             if (it.key() > start_time)
                 wdCopy->insert(start_time,wd->intValue(start_time));
-            while (it != wd->constEnd() && it.key() < end_time)
+            while (it != wd->constEnd())
+            {
+                if (end_time && it.key() > end_time) break;
                 wdCopy->insert(it.key(),it.value());
+                ++it;
+            }
             retval.append(wdCopy);
         }
         return retval;

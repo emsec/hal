@@ -394,14 +394,7 @@ namespace hal
         */
     }
 
-    bool NetlistSimulatorController::generate_vcd(const std::filesystem::path& path) const
-    {
-        VcdSerializer writer;
-        return writer.serialize(QString::fromStdString(path.string()), mWaveDataList->toList());
-    }
-
-
-    bool NetlistSimulatorController::generate_partial_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets) const
+    bool NetlistSimulatorController::generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets) const
     {
         VcdSerializer writer;
         QList<const WaveData*> partialList = mWaveDataList->partialList(start_time, end_time, nets);

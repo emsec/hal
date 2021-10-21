@@ -199,14 +199,6 @@ public:
     void parse_vcd(const std::string& filename);
 
     /**
-     * Generates the a VCD file for parts the simulated netlist.
-     *
-     * @param[in] path - The path to the VCD file.
-     * @returns True if the file gerneration was successful, false otherwise.
-     */
-    bool generate_vcd(const std::filesystem::path& path) const;
-
-    /**
      * Generates the a partial VCD file for parts the simulated netlist.
      *
      * @param[in] path - The path to the VCD file.
@@ -215,7 +207,7 @@ public:
      * @param[in] nets - Nets to include in the VCD file.
      * @returns True if the file gerneration was successful, false otherwise.
      */
-    bool generate_partial_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets = {}) const;
+    bool generate_vcd(const std::filesystem::path& path, u32 start_time=0, u32 end_time=0, std::set<const Net*> nets = {}) const;
 
     /**
      * Getter for wave data list - simulation input as well as output

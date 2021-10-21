@@ -119,8 +119,7 @@ namespace verilator {
     }
 
     class VerilatorEngine : public SimulationEngineScripted {
-        // path to VCD file with results when simulation done
-        std::string m_result_filename;
+        // path to VCD file with results when simulation done is SimulationEngine::mResultFilename
 
         static const int s_command_lines;
 
