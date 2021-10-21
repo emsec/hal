@@ -115,14 +115,10 @@ namespace hal
                         case NoPort:
                             return false;
                         case Input:
-                            port = mod->get_port_by_net(net);
-                            oldName    = QString::fromStdString(port->get_name());
-                            mod->change_port_name(port, mNewName.toStdString());
-                            break;
                         case Output:
-                            port = mod->get_port_by_net(net);
-                            oldName    = QString::fromStdString(port->get_name());
-                            mod->change_port_name(port, mNewName.toStdString());
+                            port    = mod->get_port(net);
+                            oldName = QString::fromStdString(port->get_name());
+                            mod->set_port_name(port, mNewName.toStdString());
                             break;
                     }
                 }

@@ -1,18 +1,22 @@
 #include "gui/selection_details_widget/module_details_widget/port_tree_model.h"
+
 #include "gui/basic_tree_model/tree_item.h"
+#include "gui/gui_globals.h"
+#include "hal_core/netlist/endpoint.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/endpoint.h"
 #include "hal_core/utilities/enums.h"
-#include "hal_core/netlist/gate_library/gate_type.h"
-#include "gui/gui_globals.h"
 
 namespace hal
 {
-    PortTreeModel::PortTreeModel(QObject *parent) : BaseTreeModel(parent)
+    PortTreeModel::PortTreeModel(QObject* parent) : BaseTreeModel(parent)
     {
-        setHeaderLabels(QList<QVariant>() << "Name" << "Direction" << "Type" << "Connected Net");
+        setHeaderLabels(QList<QVariant>() << "Name"
+                                          << "Direction"
+                                          << "Type"
+                                          << "Connected Net");
         setModule(gNetlist->get_module_by_id(1));
 
         //connections
@@ -32,7 +36,7 @@ namespace hal
         mPortGroupingToTreeItem.clear();
     }
 
-    void PortTreeModel::setModule(Module *m)
+    void PortTreeModel::setModule(Module* m)
     {
         clear();
         mModuleId = m->get_id();
@@ -40,23 +44,25 @@ namespace hal
         QMap<TreeItem*, u32> portItemToIndex;
         beginResetModel();
 
-        for(auto port : m->get_ports())
+        for (auto port : m->get_ports())
         {
-            QString portName = QString::fromStdString(port->get_name());
+            QString portName      = QString::fromStdString(port->get_name());
             QString portDirection = QString::fromStdString(enum_to_string(port->get_direction()));
-            QString portType = QString::fromStdString(enum_to_string(port->get_type()));
-            QString netName = port->get_net() ? QString::fromStdString(port->get_net()->get_name()) : "";
+            QString portType      = QString::fromStdString(enum_to_string(port->get_type()));
+            QString netName       = port->get_net() ? QString::fromStdString(port->get_net()->get_name()) : "";
 
             TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << portDirection << portType << netName);
             portItem->setAdditionalData(keyType, QVariant::fromValue(itemType::port));
 
-            if(!port->get_group_name().empty())
+            if (!port->get_group_name().empty())
             {
                 portItemToIndex.insert(portItem, port->get_group_index());
                 TreeItem* groupingsItem = mPortGroupingToTreeItem.value(port->get_group_name(), nullptr);
-                if(!groupingsItem)
+                if (!groupingsItem)
                 {
-                    groupingsItem = new TreeItem(QList<QVariant>() << QString::fromStdString(port->get_group_name()) << "" << "" << "");
+                    groupingsItem = new TreeItem(QList<QVariant>() << QString::fromStdString(port->get_group_name()) << ""
+                                                                   << ""
+                                                                   << "");
                     groupingsItem->setAdditionalData(keyType, QVariant::fromValue(itemType::grouping));
                     mRootItem->appendChild(groupingsItem);
                     mPortGroupingToTreeItem.insert(port->get_group_name(), groupingsItem);
@@ -65,29 +71,28 @@ namespace hal
             }
             else
                 mRootItem->appendChild(portItem);
-
         }
         //sort ports within all groupingitems (easy way) and "compute" the remaining columns
-        for(auto it = mPortGroupingToTreeItem.begin(); it != mPortGroupingToTreeItem.end(); it++)
+        for (auto it = mPortGroupingToTreeItem.begin(); it != mPortGroupingToTreeItem.end(); it++)
         {
             QMap<u32, TreeItem*> tmpSortedPortItems;
             TreeItem* groupingsItem = it.value();
 
-            QString initDirection = (groupingsItem->getChildCount() >  0) ? groupingsItem->getChild(0)->getData(sDirectionColumn).toString() : "-";
-            QString initType = (groupingsItem->getChildCount() >  0) ? groupingsItem->getChild(0)->getData(sTypeColumn).toString() : "-";
+            QString initDirection = (groupingsItem->getChildCount() > 0) ? groupingsItem->getChild(0)->getData(sDirectionColumn).toString() : "-";
+            QString initType      = (groupingsItem->getChildCount() > 0) ? groupingsItem->getChild(0)->getData(sTypeColumn).toString() : "-";
 
-            while(groupingsItem->getChildCount() > 0)
+            while (groupingsItem->getChildCount() > 0)
             {
                 TreeItem* currPortItem = groupingsItem->removeChildAtPos(0);
                 tmpSortedPortItems.insert(portItemToIndex.value(currPortItem), currPortItem);
 
-                if(initDirection != currPortItem->getData(sDirectionColumn).toString())
+                if (initDirection != currPortItem->getData(sDirectionColumn).toString())
                     initDirection = "-";
-                if(initType != currPortItem->getData(sTypeColumn).toString())
+                if (initType != currPortItem->getData(sTypeColumn).toString())
                     initType = "-";
             }
 
-            for(auto portItem : tmpSortedPortItems)
+            for (auto portItem : tmpSortedPortItems)
                 groupingsItem->appendChild(portItem);
 
             groupingsItem->setDataAtIndex(sDirectionColumn, initDirection);
@@ -98,15 +103,17 @@ namespace hal
         Q_EMIT numberOfPortsChanged(m->get_ports().size());
     }
 
-    Net* PortTreeModel::getNetFromItem(TreeItem *item)
+    Net* PortTreeModel::getNetFromItem(TreeItem* item)
     {
-        if(mModuleId == -1) //no current module = no represented net
+        if (mModuleId == -1)    //no current module = no represented net
             return nullptr;
 
-        if(getTypeOfItem(item) == itemType::grouping) return nullptr;
+        if (getTypeOfItem(item) == itemType::grouping)
+            return nullptr;
 
         Module* m = gNetlist->get_module_by_id(mModuleId);
-        if(!m) return nullptr;
+        if (!m)
+            return nullptr;
 
         return m->get_port_by_name(item->getData(sNameColumn).toString().toStdString())->get_net();
     }
@@ -116,22 +123,20 @@ namespace hal
         return mModuleId;
     }
 
-    PortTreeModel::itemType PortTreeModel::getTypeOfItem(TreeItem *item)
+    PortTreeModel::itemType PortTreeModel::getTypeOfItem(TreeItem* item)
     {
         return item->getAdditionalData(keyType).value<itemType>();
     }
 
-    void PortTreeModel::handleModuleInputOutputPortNameChanged(Module *m, int associated_data)
+    void PortTreeModel::handleModuleInputOutputPortNameChanged(Module* m, int associated_data)
     {
         Q_UNUSED(associated_data)
 
-        if((int)m->get_id() == mModuleId)
+        if ((int)m->get_id() == mModuleId)
         {
             setModule(m);
             Q_EMIT numberOfPortsChanged(m->get_ports().size());
         }
     }
 
-
-
-}
+}    // namespace hal
