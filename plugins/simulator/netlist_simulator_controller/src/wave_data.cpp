@@ -160,11 +160,26 @@ namespace hal {
         mMaxTime += deltaT;
     }
 
-    QList<const WaveData*> WaveDataList::toList() const
+    QList<const WaveData*> WaveDataList::partialList(u64 start_time, u64 end_time, std::set<const Net*> &nets) const
     {
+        QSet<u32> netIds;
+        for (const Net* n : nets)
+            netIds.insert(n->get_id());
+
         QList<const WaveData*> retval;
         for (const WaveData* wd : *this)
-            retval.append(wd);
+        {
+            if (!netIds.isEmpty() && !netIds.contains(wd->id())) continue;
+            auto it = wd->constBegin();
+            if (it.key() < start_time) it = wd->lowerBound(start_time);
+            if (it == wd->constEnd()) continue;
+            WaveData* wdCopy = new WaveData(*wd);
+            if (it.key() > start_time)
+                wdCopy->insert(start_time,wd->intValue(start_time));
+            while (it != wd->constEnd() && it.key() < end_time)
+                wdCopy->insert(it.key(),it.value());
+            retval.append(wdCopy);
+        }
         return retval;
     }
 

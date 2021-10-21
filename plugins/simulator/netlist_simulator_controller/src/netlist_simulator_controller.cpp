@@ -396,12 +396,12 @@ namespace hal
 
     bool NetlistSimulatorController::generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets) const
     {
-        Q_UNUSED(start_time)
-        Q_UNUSED(end_time)
-        Q_UNUSED(nets)
-
         VcdSerializer writer;
-        return writer.serialize(QString::fromStdString(path.string()),mWaveDataList->toList());
+        QList<const WaveData*> partialList = mWaveDataList->partialList(start_time, end_time, nets);
+        bool success = writer.serialize(QString::fromStdString(path.string()), partialList);
+        for (const WaveData* wd : partialList)
+            delete wd;
+        return success;
     }
 
     NetlistSimulatorControllerMap* NetlistSimulatorControllerMap::sInst = nullptr;
