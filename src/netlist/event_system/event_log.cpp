@@ -137,11 +137,6 @@ namespace hal
                     auto net = netlist->get_net_by_id(associated_data);
                     log_info("event", "marked net '{}' (id {:08x}) as a global output net in netlist with id {:08x}", net->get_name(), net->get_id(), netlist->get_id());
                 }
-                else if (event == NetlistEvent::event::marked_global_inout)
-                {
-                    auto net = netlist->get_net_by_id(associated_data);
-                    log_info("event", "marked net '{}' (id {:08x}) as a global input net in netlist with id {:08x}", net->get_name(), net->get_id(), netlist->get_id());
-                }
                 else if (event == NetlistEvent::event::unmarked_global_input)
                 {
                     auto net = netlist->get_net_by_id(associated_data);
@@ -151,11 +146,6 @@ namespace hal
                 {
                     auto net = netlist->get_net_by_id(associated_data);
                     log_info("event", "unmarked net '{}' (id {:08x}) as a global output net in netlist with id {:08x}", net->get_name(), net->get_id(), netlist->get_id());
-                }
-                else if (event == NetlistEvent::event::unmarked_global_inout)
-                {
-                    auto net = netlist->get_net_by_id(associated_data);
-                    log_info("event", "unmarked net '{}' (id {:08x}) as a global input net in netlist with id {:08x}", net->get_name(), net->get_id(), netlist->get_id());
                 }
                 else
                 {

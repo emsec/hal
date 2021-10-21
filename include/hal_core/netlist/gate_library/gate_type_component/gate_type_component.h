@@ -37,6 +37,8 @@ namespace hal
     class GateTypeComponent
     {
     public:
+        virtual ~GateTypeComponent() = default;
+
         /**
          * The type of a gate type component.
          */
