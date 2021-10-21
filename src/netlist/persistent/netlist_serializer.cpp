@@ -263,34 +263,23 @@ namespace hal
                     for (Module::Port* port : m->get_ports())
                     {
                         rapidjson::Value module_port(rapidjson::kObjectType);
-                        module_port.AddMember("port_net_id", port->get_net()->get_id(), allocator);
                         module_port.AddMember("port_name", port->get_name(), allocator);
                         module_port.AddMember("port_type", enum_to_string(port->get_type()), allocator);
+                        rapidjson::Value pins(rapidjson::kArrayType);
+                        for (const auto& [pin, net] : port->get_pins_and_nets())
+                        {
+                            rapidjson::Value module_pin(rapidjson::kObjectType);
+                            module_pin.AddMember("pin_name", pin, allocator);
+                            module_pin.AddMember("pin_net_id", net->get_id(), allocator);
+                            pins.PushBack(module_pin, allocator);
+                        }
+                        module_port.AddMember("pins", pins, allocator);
                         ports.PushBack(module_port, allocator);
                     }
                     if (!ports.Empty())
                     {
                         val.AddMember("ports", ports, allocator);
                     }
-                }
-                {
-                    rapidjson::Value port_groups(rapidjson::kArrayType);
-                    for (const auto& [group_name, ports] : m->get_port_groups())
-                    {
-                        rapidjson::Value port_indices(rapidjson::kArrayType);
-                        for (const Module::Port* port : ports)
-                        {
-                            rapidjson::Value port_index(rapidjson::kObjectType);
-                            std::string index_str = std::to_string(port->get_group_index());
-                            port_index.AddMember(JSON_STR_HELPER(index_str), JSON_STR_HELPER(port->get_name()), allocator);
-                            port_indices.PushBack(port_index, allocator);
-                        }
-                        rapidjson::Value port_group(rapidjson::kObjectType);
-                        port_group.AddMember("group_name", group_name, allocator);
-                        port_group.AddMember("ports", port_indices, allocator);
-                        port_groups.PushBack(port_group, allocator);
-                    }
-                    val.AddMember("port_groups", port_groups, allocator);
                 }
 
                 auto data_val = serialize(m->get_data_map(), allocator);
@@ -339,28 +328,37 @@ namespace hal
                 {
                     for (const auto& port_node : val["ports"].GetArray())
                     {
-                        Module::Port* port = sm->get_port_by_net(nl->get_net_by_id(port_node["port_net_id"].GetUint()));
-                        sm->change_port_name(port, port_node["port_name"].GetString());
-                        sm->change_port_type(port, enum_from_string<PinType>(port_node["port_type"].GetString()));
-                    }
-                }
+                        std::string port_name = port_node["port_name"].GetString();
+                        PinType port_type     = enum_from_string<PinType>(port_node["port_type"].GetString());
 
-                if (val.HasMember("port_groups"))
-                {
-                    for (const auto& port_group_node : val["port_groups"].GetArray())
-                    {
-                        std::string group_name = port_group_node["group_name"].GetString();
-                        std::vector<std::pair<u32, Module::Port*>> port_indices;
-                        for (const auto& port_node : port_group_node["ports"].GetArray())
+                        std::vector<std::pair<std::string, Net*>> pins_and_nets;
+                        for (const auto& pin_node : port_node["pins"].GetArray())
                         {
-                            const auto port_val   = port_node.GetObject().MemberBegin();
-                            u32 port_index        = std::stoul(port_val->name.GetString());
-                            std::string port_name = port_val->value.GetString();
-
-                            port_indices.push_back(std::make_pair(port_index, sm->get_port_by_name(port_name)));
+                            pins_and_nets.push_back(std::make_pair<std::string, Net*>(pin_node["pin_name"].GetString(), nl->get_net_by_id(port_node["pin_net_id"].GetUint())));
                         }
 
-                        sm->assign_port_group(group_name, port_indices);
+                        if (pins_and_nets.size() > 1)
+                        {
+                            std::vector<Module::Port*> ports;
+                            for (const auto& [pin, net] : pins_and_nets)
+                            {
+                                Module::Port* port = sm->get_port(net);
+                                sm->set_port_name(port, pin);
+                                ports.push_back(port);
+                            }
+                            Module::Port* new_port = sm->create_multi_bit_port(port_name, ports);
+                            new_port->set_type(port_type);
+                        }
+                        else
+                        {
+                            Module::Port* port = sm->get_port(pins_and_nets.front().second);
+                            if (port == nullptr)
+                            {
+                                return false;
+                            }
+                            sm->set_port_name(port, port_name);
+                            port->set_type(port_type);
+                        }
                     }
                 }
 
@@ -369,8 +367,8 @@ namespace hal
                 {
                     for (const auto& port_node : val["input_ports"].GetArray())
                     {
-                        Module::Port* port = sm->get_port_by_net(nl->get_net_by_id(port_node["net_id"].GetUint()));
-                        sm->change_port_name(port, port_node["port_name"].GetString());
+                        Module::Port* port = sm->get_port(nl->get_net_by_id(port_node["net_id"].GetUint()));
+                        sm->set_port_name(port, port_node["port_name"].GetString());
                     }
                 }
 
@@ -378,8 +376,8 @@ namespace hal
                 {
                     for (const auto& port_node : val["output_ports"].GetArray())
                     {
-                        Module::Port* port = sm->get_port_by_net(nl->get_net_by_id(port_node["net_id"].GetUint()));
-                        sm->change_port_name(port, port_node["port_name"].GetString());
+                        Module::Port* port = sm->get_port(nl->get_net_by_id(port_node["net_id"].GetUint()));
+                        sm->set_port_name(port, port_node["port_name"].GetString());
                     }
                 }
                 // legacy code above

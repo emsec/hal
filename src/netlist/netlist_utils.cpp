@@ -329,24 +329,28 @@ namespace hal
                 u32 ctr = 0;
                 for (Module::Port* c_port : c_module->get_ports())
                 {
-                    c_module->change_port_name(c_port, "____tmp_" + std::to_string(ctr++));
+                    c_module->set_port_name(c_port, "____tmp_" + std::to_string(ctr++));
                 }
 
                 for (Module::Port* port : module->get_ports())
                 {
-                    Module::Port* c_port = c_module->get_port_by_net(c_netlist->get_net_by_id(port->get_net()->get_id()));
-                    c_module->change_port_name(c_port, port->get_name());
-                    c_module->change_port_type(c_port, port->get_type());
-                }
-
-                for (const auto& [group_name, ports] : module->get_port_groups())
-                {
-                    std::vector<std::pair<u32, Module::Port*>> c_ports;
-                    for (const Module::Port* port : ports)
+                    std::vector<std::pair<std::string, Net*>> pins_and_nets = port->get_pins_and_nets();
+                    if (port->is_multi_bit())
                     {
-                        c_ports.push_back(std::make_pair(port->get_group_index(), c_module->get_port_by_name(port->get_name())));
+                        std::vector<Module::Port*> c_ports;
+                        for (const auto& pin_net : pins_and_nets)
+                        {
+                            c_ports.push_back(c_module->get_port(c_netlist->get_net_by_id(pin_net.second->get_id())));
+                        }
+
+                        c_module->create_multi_bit_port(port->get_name(), c_ports);
                     }
-                    c_module->assign_port_group(group_name, c_ports);
+                    else
+                    {
+                        Module::Port* c_port = c_module->get_port(c_netlist->get_net_by_id(pins_and_nets.front().second->get_id()));
+                        c_module->set_port_name(c_port, port->get_name());
+                        c_port->set_type(port->get_type());
+                    }
                 }
 
                 c_module->set_next_input_port_id(module->get_next_input_port_id());
