@@ -74,6 +74,7 @@ namespace hal {
         u64 maxTime() const { return mMaxTime; }
         void setValueForEmpty(int val);
         void dump() const;
+        QList<const WaveData*> toList() const;
         QList<const WaveData*> partialList(u64 start_time, u64 end_time, std::set<const Net*>& nets) const;
     Q_SIGNALS:
         void waveAdded();

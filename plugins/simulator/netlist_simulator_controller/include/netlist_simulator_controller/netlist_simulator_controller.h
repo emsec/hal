@@ -28,233 +28,241 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
 
-#include <functional>
-#include <map>
-#include <sstream>
-#include <QString>
 #include <QMap>
 #include <QObject>
+#include <QString>
 #include <QTemporaryDir>
-#include <vector>
+#include <functional>
+#include <map>
 #include <memory>
+#include <sstream>
+#include <vector>
 
-#include "netlist_simulator_controller/wave_data.h"
-#include "netlist_simulator_controller/simulation_input.h"
 #include "netlist_simulator_controller/simulation_engine.h"
+#include "netlist_simulator_controller/simulation_input.h"
+#include "netlist_simulator_controller/wave_data.h"
 
-namespace hal
-{
-    /* forward declaration */
-    class Netlist;
+namespace hal {
+/* forward declaration */
+class Netlist;
+
+/**
+ * @ingroup netlist_writer
+ */
+class NETLIST_API NetlistSimulatorController : public QObject {
+    Q_OBJECT
+
+public:
+    enum SimulationState { NoGatesSelected,
+        ParameterSetup,
+        SimulationRun,
+        ShowResults,
+        EngineFailed };
+
+    NetlistSimulatorController(u32 id, const std::string nam, QObject* parent = nullptr);
+    ~NetlistSimulatorController();
 
     /**
-     * @ingroup netlist_writer
+     * Call to one of the registered engine factories to create a new engine.
+     * Controller will take ownership for new engine.
+     * @param[in] name name of engine factory (thus name of the engine)
+     * @return Pointer to engine if successfully created, nullptr otherwise
      */
-    class NETLIST_API NetlistSimulatorController : public QObject
-    {
-        Q_OBJECT
+    SimulationEngine* create_simulation_engine(const std::string& name);
 
-    public:
+    /**
+     * Getter for simulation engine (if any)
+     * @return Pointer to engine or nullptr
+     */
+    SimulationEngine* get_simulation_engine() const;
 
-        enum SimulationState { NoGatesSelected, ParameterSetup, SimulationRun, ShowResults, EngineFailed };
+    /**
+     * Specify a net that carries the clock signal and set the clock frequency in hertz.
+     * This function can only be called before the simulation has been initialized.
+     *
+     * @param[in] clock_net - The net that carries the clock signal.
+     * @param[in] frequency - The clock frequency in hertz.
+     * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
+     */
+    void add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero = true);
 
-        NetlistSimulatorController(u32 id, const std::string nam, QObject* parent = nullptr);
-        ~NetlistSimulatorController();
+    /**
+     * Specify a net that carries the clock signal and set the clock period in picoseconds.
+     * This function can only be called before the simulation has been initialized.
+     *
+     * @param[in] clock_net - The net that carries the clock signal.
+     * @param[in] period - The clock period from rising edge to rising edge in picoseconds.
+     * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
+     */
+    void add_clock_period(const Net* clock_net, u64 period, bool start_at_zero = true);
 
-        /**
-         * Call to one of the registered engine factories to create a new engine.
-         * Controller will take ownership for new engine.
-         * @param[in] name name of engine factory (thus name of the engine)
-         * @return Pointer to engine if successfully created, nullptr otherwise
-         */
-        SimulationEngine* create_simulation_engine(const std::string& name);
+    /**
+     * Add gates to the simulation set that contains all gates that are considered during simulation.
+     * This function can only be called before the simulation has been initialized.
+     *
+     * @param[in] gates - The gates to add.
+     */
+    void add_gates(const std::vector<Gate*>& gates);
 
-        /**
-         * Getter for simulation engine (if any)
-         * @return Pointer to engine or nullptr
-         */
-        SimulationEngine* get_simulation_engine() const;
+    /**
+     * Set the signal for a specific wire to control input signals between simulation cycles.
+     *
+     * @param[in] net - The net to set a signal value for.
+     * @param[in] value - The value to set.
+     */
+    void set_input(const Net* net, BooleanFunction::Value value);
 
-        /**
-         * Specify a net that carries the clock signal and set the clock frequency in hertz.
-         * This function can only be called before the simulation has been initialized.
-         *
-         * @param[in] clock_net - The net that carries the clock signal.
-         * @param[in] frequency - The clock frequency in hertz.
-         * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
-         */
-        void add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero = true);
+    /**
+     * Initialize the simulation.
+     * No additional gates or clocks can be added after this point.
+     */
+    void initialize();
 
-        /**
-         * Specify a net that carries the clock signal and set the clock period in picoseconds.
-         * This function can only be called before the simulation has been initialized.
-         *
-         * @param[in] clock_net - The net that carries the clock signal.
-         * @param[in] period - The clock period from rising edge to rising edge in picoseconds.
-         * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
-         */
-        void add_clock_period(const Net* clock_net, u64 period, bool start_at_zero = true);
+    /**
+     * Simulate for a specific period, advancing the internal state.
+     * Automatically initializes the simulation if 'initialize' has not yet been called.
+     * Use 'set_input' to control specific signals.
+     *
+     * @param[in] picoseconds - The duration to simulate.
+     */
+    void simulate(u64 picoseconds);
 
-        /**
-         * Add gates to the simulation set that contains all gates that are considered during simulation.
-         * This function can only be called before the simulation has been initialized.
-         *
-         * @param[in] gates - The gates to add.
-         */
-        void add_gates(const std::vector<Gate*>& gates);
+    /**
+     * Reset the simulator state, i.e., treat all signals as unknown.
+     * Does not remove gates/nets from the simulation set.
+     */
+    void reset();
 
-        /**
-         * Set the signal for a specific wire to control input signals between simulation cycles.
-         *
-         * @param[in] net - The net to set a signal value for.
-         * @param[in] value - The value to set.
-         */
-        void set_input(const Net* net, BooleanFunction::Value value);
+    /**
+     * Shortcut to SimulationInput::get_gates
+     */
+    const std::unordered_set<const Gate*>& get_gates() const;
 
-        /**
-         * Initialize the simulation.
-         * No additional gates or clocks can be added after this point.
-         */
-        void initialize();
+    /**
+     * Shortcut to SimulationInput::get_input_nets
+     */
+    const std::unordered_set<const Net*>& get_input_nets() const;
 
-        /**
-         * Simulate for a specific period, advancing the internal state.
-         * Automatically initializes the simulation if 'initialize' has not yet been called.
-         * Use 'set_input' to control specific signals.
-         *
-         * @param[in] picoseconds - The duration to simulate.
-         */
-        void simulate(u64 picoseconds);
+    /**
+     * Shortcut to SimulationInput::get_output_nets
+     */
+    const std::vector<const Net*>& get_output_nets() const;
 
-        /**
-         * Reset the simulator state, i.e., treat all signals as unknown.
-         * Does not remove gates/nets from the simulation set.
-         */
-        void reset();
+    /**
+     * Shortcut to SimulationEngines::instance()->names()
+     * @return names of registered simulation engines
+     */
+    std::vector<std::string> get_engine_names() const;
 
-        /**
-         * Shortcut to SimulationInput::get_gates
-         */
-        const std::unordered_set<const Gate*>& get_gates() const;
+    //        SimulationInput* input() const { return mSimulationInput; }
 
-        /**
-         * Shortcut to SimulationInput::get_input_nets
-         */
-        const std::unordered_set<const Net *>& get_input_nets() const;
+    /**
+     * Getter for controller name
+     * @return name as QString
+     */
+    QString name() const { return mName; }
 
-        /**
-         * Shortcut to SimulationInput::get_output_nets
-         */
-        const std::vector<const Net*>& get_output_nets() const;
+    /**
+     * Getter for controller name
+     * @return name as std::string
+     */
+    std::string get_name() const { return mName.toStdString(); }
 
-        /**
-         * Shortcut to SimulationEngines::instance()->names()
-         * @return names of registered simulation engines
-         */
-        std::vector<std::string> get_engine_names() const;
+    /**
+     * Getter for controller ID
+     * @return the ID
+     */
+    u32 get_id() const { return mId; }
 
-//        SimulationInput* input() const { return mSimulationInput; }
+    /**
+     * Get simulated data from engine, either from shared memory or from VCD file
+     * @return true on success, false otherwise
+     */
+    bool get_results();
 
-        /**
-         * Getter for controller name
-         * @return name as QString
-         */
-        QString name() const { return mName; }
+    /**
+     * run simulation
+     * @return true on success, false otherwise
+     */
+    bool run_simulation();
 
-        /**
-         * Getter for controller name
-         * @return name as std::string
-         */
-        std::string get_name() const { return mName.toStdString(); }
+    /**
+     * Request to engine to generate a VCD file for simulated netlist.
+     * @param[in] filename requested filename to be generated by engine
+     */
+    void request_generate_vcd(const std::string& filename);
 
-        /**
-         * Getter for controller ID
-         * @return the ID
-         */
-        u32 get_id() const { return mId; }
+    /**
+     * Parse VCD file and set wave data
+     * @param[in] filename the filename to read
+     */
+    void parse_vcd(const std::string& filename);
 
-        /**
-         * Get simulated data from engine, either from shared memory or from VCD file
-         * @return true on success, false otherwise
-         */
-        bool get_results();
+    /**
+     * Generates the a VCD file for parts the simulated netlist.
+     *
+     * @param[in] path - The path to the VCD file.
+     * @returns True if the file gerneration was successful, false otherwise.
+     */
+    bool generate_vcd(const std::filesystem::path& path) const;
 
-        /**
-         * run simulation
-         * @return true on success, false otherwise
-         */
-        bool run_simulation();
+    /**
+     * Generates the a partial VCD file for parts the simulated netlist.
+     *
+     * @param[in] path - The path to the VCD file.
+     * @param[in] start_time - Start of the timeframe to write to the file (in picoseconds).
+     * @param[in] end_time - End of the timeframe to write to the file (in picoseconds).
+     * @param[in] nets - Nets to include in the VCD file.
+     * @returns True if the file gerneration was successful, false otherwise.
+     */
+    bool generate_partial_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets = {}) const;
 
-        /**
-         * Request to engine to generate a VCD file for simulated netlist.
-         * @param[in] filename requested filename to be generated by engine
-         */
-        void request_generate_vcd(const std::string& filename);
+    /**
+     * Getter for wave data list - simulation input as well as output
+     * @return const pointer to wave data list
+     */
+    const WaveDataList* get_waves() const { return mWaveDataList; }
 
-        /**
-         * Parse VCD file and set wave data
-         * @param[in] filename the filename to read
-         */
-        void parse_vcd(const std::string& filename);
+public Q_SLOTS:
+    void handleSimulSettings();
+    void handleOpenInputFile(const QString& filename);
+    void handleRunSimulation();
+    void handleSelectGates();
+    void handleRunFinished(bool success);
 
-        /**
-         * Generates the a VCD file for parts the simulated netlist.
-         *
-         * @param[in] path - The path to the VCD file.
-         * @param[in] start_time - Start of the timeframe to write to the file (in picoseconds).
-         * @param[in] end_time - End of the timeframe to write to the file (in picoseconds).
-         * @param[in] nets - Nets to include in the VCD file.
-         * @returns True if the file gerneration was successful, false otherwise.
-         */
-        bool generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets = {}) const;
+private:
+    void initSimulator();
+    void setState(SimulationState stat);
 
-        /**
-         * Getter for wave data list - simulation input as well as output
-         * @return const pointer to wave data list
-         */
-        const WaveDataList* get_waves() const { return mWaveDataList; }
+    bool isClockSet() const;
+    bool isInputSet() const;
 
-    public Q_SLOTS:
-        void handleSimulSettings();
-        void handleOpenInputFile(const QString& filename);
-        void handleRunSimulation();
-        void handleSelectGates();
-        void handleRunFinished(bool success);
+    u32 mId;
+    QString mName;
 
-    private:
-        void initSimulator();
-        void setState(SimulationState stat);
+    SimulationState mState;
+    SimulationEngine* mSimulationEngine;
 
-        bool isClockSet() const;
-        bool isInputSet() const;
+    WaveDataList* mWaveDataList;
 
-        u32 mId;
-        QString mName;
+    SimulationInput* mSimulationInput;
+};
 
-        SimulationState mState;
-        SimulationEngine* mSimulationEngine;
+class NetlistSimulatorControllerMap : public QObject {
+    Q_OBJECT
 
-        WaveDataList* mWaveDataList;
+    QMap<u32, NetlistSimulatorController*> mMap;
+    NetlistSimulatorControllerMap() { ; }
+    static NetlistSimulatorControllerMap* sInst;
 
-        SimulationInput* mSimulationInput;
-    };
+Q_SIGNALS:
+    void controllerAdded(u32 id);
+    void controllerRemoved(u32 id);
 
-    class NetlistSimulatorControllerMap : public QObject
-    {
-        Q_OBJECT
-
-        QMap<u32, NetlistSimulatorController*> mMap;
-        NetlistSimulatorControllerMap() {;}
-        static NetlistSimulatorControllerMap* sInst;
-
-    Q_SIGNALS:
-        void controllerAdded(u32 id);
-        void controllerRemoved(u32 id);
-
-    public:
-        static NetlistSimulatorControllerMap* instance();
-        void addController(NetlistSimulatorController* ctrl);
-        void removeController(u32 id);
-        NetlistSimulatorController* controller(u32 id) const { return mMap.value(id); }
-    };
-}    // namespace hal
+public:
+    static NetlistSimulatorControllerMap* instance();
+    void addController(NetlistSimulatorController* ctrl);
+    void removeController(u32 id);
+    NetlistSimulatorController* controller(u32 id) const { return mMap.value(id); }
+};
+} // namespace hal
