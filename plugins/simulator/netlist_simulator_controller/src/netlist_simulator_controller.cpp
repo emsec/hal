@@ -19,13 +19,14 @@
 #include <QDebug>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/netlist/netlist_utils.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 
 namespace hal
 {
     NetlistSimulatorController::NetlistSimulatorController(u32 id, const std::string nam, QObject *parent)
         : QObject(parent), mId(id), mName(QString::fromStdString(nam)), mState(NoGatesSelected), mSimulationEngine(nullptr),
-          mSimulationInput(new SimulationInput)
+          mWaveDataList(new WaveDataList), mSimulationInput(new SimulationInput)
     {
         if (mName.isEmpty()) mName = QString("sim_controller%1").arg(mId);
         LogManager::get_instance().add_channel(mName.toStdString(), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
@@ -35,6 +36,8 @@ namespace hal
     NetlistSimulatorController::~NetlistSimulatorController()
     {
         NetlistSimulatorControllerMap::instance()->removeController(mId);
+        mWaveDataList->deleteLater();
+        delete mSimulationInput;
     }
 
     void NetlistSimulatorController::setState(SimulationState stat)
@@ -130,7 +133,7 @@ namespace hal
         if (filename.isEmpty()) return;
         VcdSerializer reader;
         for (WaveData* wd : reader.deserialize(filename))
-            mWaveDataList.addOrReplace(wd);
+            mWaveDataList->addOrReplace(wd);
     }
 
     void NetlistSimulatorController::handleRunSimulation()
@@ -146,18 +149,13 @@ namespace hal
             return false;
         }
 
-        mResultMap.clear();
-
         if (mState != ParameterSetup)
         {
             log_warning(get_name(), "wrong state {}.", (u32) mState);
             return false;
         }
 
-        mWaveDataList.setValueForEmpty(0);
-
-        if (!mResultVcdFilename.empty())
-            mSimulationEngine->setResultFilename(mResultVcdFilename);
+        mWaveDataList->setValueForEmpty(0);
 
         QMultiMap<u64,QPair<const Net*, BooleanFunction::Value>> inputMap;
         for (const Net* n : mSimulationInput->get_input_nets())
@@ -176,13 +174,13 @@ namespace hal
                         break;
                     }
 
-                WaveDataClock* wdc = new WaveDataClock(n, clk, mWaveDataList.maxTime());
-                mWaveDataList.addOrReplace(wdc);
+                WaveDataClock* wdc = new WaveDataClock(n, clk, mWaveDataList->maxTime());
+                mWaveDataList->addOrReplace(wdc);
                 wd = wdc;
             }
             else
             {
-                wd = mWaveDataList.waveDataByNetId(n->get_id());
+                wd = mWaveDataList->waveDataByNetId(n->get_id());
                 if (!wd)
                 {
                     log_warning(get_name(), "no input data for net[{}] '{}'.", n->get_id(), n->get_name());
@@ -236,16 +234,11 @@ namespace hal
         return true;
     }
 
-    void NetlistSimulatorController::request_generate_vcd(const std::string &filename)
-    {
-        mResultVcdFilename = filename;
-    }
-
     void NetlistSimulatorController::parse_vcd(const std::string& filename)
     {
         VcdSerializer reader;
         for (WaveData* wd : reader.deserialize(QString::fromStdString(filename)))
-            mWaveDataList.addOrReplace(wd);
+            mWaveDataList->addOrReplace(wd);
     }
 
     void NetlistSimulatorController::handleRunFinished(bool success)
@@ -267,15 +260,40 @@ namespace hal
         mSimulator->generate_vcd("result.vcd",0,t);
 
 */
-        if (!mResultVcdFilename.empty())
+    }
+
+    bool NetlistSimulatorController::get_results()
+    {
+        if (mSimulationEngine->can_share_memory())
         {
-            std::string resultPath = mSimulationEngine->directory() + "/" + mResultVcdFilename;
-            VcdSerializer reader(this);
-            for (WaveData* wd : reader.deserialize(QString::fromStdString(resultPath)))
-                mWaveDataList.addOrReplace(wd);
+            SimulationEngineEventDriven* sevd = static_cast<SimulationEngineEventDriven*>(mSimulationEngine);
+            const std::vector<const Gate*> simGates(mSimulationInput->get_gates().begin(), mSimulationInput->get_gates().end());
+            std::unique_ptr<Netlist> partNl = netlist_utils::get_partial_netlist(simGates.at(0)->get_netlist(), simGates);
+            for (Net* n : partNl->get_nets())
+            {
+                WaveData* wd = mWaveDataList->waveDataByNetId(n->get_id());
+                if (!wd) wd = new WaveData(n);
+                wd->clear();
+                for (WaveEvent evt : sevd->get_simulation_events(n))
+                {
+                    wd->insertBooleanValue(evt.time,evt.new_value);
+                }
+                mWaveDataList->addOrReplace(wd);
+            }
         }
-        qDebug() << "number waves" << mWaveDataList.size();
+        else
+        {
+            std::filesystem::path resultFile = mSimulationEngine->get_result_filename();
+            if (resultFile.is_relative())
+                resultFile = mSimulationEngine->directory() / resultFile;
+            VcdSerializer reader(this);
+            QFileInfo info(QString::fromStdString(resultFile.string()));
+            if (!info.exists() || !info.isReadable()) return false;
+            for (WaveData* wd : reader.deserialize(QString::fromStdString(resultFile)))
+                mWaveDataList->addOrReplace(wd);
+        }
         setState(ShowResults);
+        return true;
     }
 
     void NetlistSimulatorController::add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero)
@@ -292,7 +310,7 @@ namespace hal
         clk.start_at_zero = start_at_zero;
         mSimulationInput->add_clock(clk);
         WaveData* wd = new WaveDataClock(clock_net, clk, 2000);
-        mWaveDataList.addOrReplace(wd);
+        mWaveDataList->addOrReplace(wd);
         if (mState == NoGatesSelected && mSimulationInput->is_ready()) mState = ParameterSetup;
     }
 
@@ -300,7 +318,7 @@ namespace hal
     {
         mSimulationInput->add_gates(gates);
 
-        QSet<u32> previousInputSet = mWaveDataList.toSet();
+        QSet<u32> previousInputSet = mWaveDataList->toSet();
         QSet<u32> currentInputSet;
         for (const Net* n : mSimulationInput->get_input_nets())
         {
@@ -308,14 +326,14 @@ namespace hal
             if (!previousInputSet.contains(nid))
             {
                 WaveData* wd = new WaveData(n, WaveData::InputNet);
-                mWaveDataList.addOrReplace(wd);
+                mWaveDataList->addOrReplace(wd);
             }
             currentInputSet.insert(nid);
         }
         previousInputSet -= currentInputSet;
         for (u32 id : previousInputSet)
         {
-            mWaveDataList.remove(id);
+            mWaveDataList->remove(id);
         }
         if (mState == NoGatesSelected && mSimulationInput->is_ready()) mState = ParameterSetup;
     }
@@ -343,13 +361,13 @@ namespace hal
             log_warning(get_name(), "net[{}] '{}' is not an input net, value not assigned.", net->get_id(), net->get_name());
             return;
         }
-        WaveData* wd = mWaveDataList.waveDataByNetId(net->get_id());
+        WaveData* wd = mWaveDataList->waveDataByNetId(net->get_id());
         if (!wd)
         {
             wd = new WaveData(net);
-            mWaveDataList.add(wd);
+            mWaveDataList->add(wd);
         }
-        u64 t = mWaveDataList.maxTime();
+        u64 t = mWaveDataList->maxTime();
         wd->insertBooleanValue(t,value);
     }
 
@@ -359,12 +377,12 @@ namespace hal
 
     void NetlistSimulatorController::reset()
     {
-        mWaveDataList.clearAll();
+        mWaveDataList->clearAll();
     }
 
     void NetlistSimulatorController::simulate(u64 picoseconds)
     {
-       mWaveDataList.incrementMaxTime(picoseconds);
+       mWaveDataList->incrementMaxTime(picoseconds);
     }
 
     void NetlistSimulatorController::handleSelectGates()
@@ -374,6 +392,16 @@ namespace hal
         mSimulateGates = gsd.selectedGates();
         initSimulator();
         */
+    }
+
+    bool NetlistSimulatorController::generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets) const
+    {
+        Q_UNUSED(start_time)
+        Q_UNUSED(end_time)
+        Q_UNUSED(nets)
+
+        VcdSerializer writer;
+        return writer.serialize(QString::fromStdString(path.string()),mWaveDataList->toList());
     }
 
     NetlistSimulatorControllerMap* NetlistSimulatorControllerMap::sInst = nullptr;
@@ -410,7 +438,7 @@ namespace hal
             const WaveData* wd = mResultMap.value(n->get_id());
             if (!wd) continue;
             WaveData* wdCopy = new WaveData(*wd);
-  //          mWaveDataList.addOrReplace(wdCopy);
+  //          mWaveDataList->addOrReplace(wdCopy);
         }
     }
         */

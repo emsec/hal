@@ -26,6 +26,9 @@ namespace hal {
 
     public Q_SLOTS:
         void xScaleChanged(float m11);
+        void handleWaveAdded(WaveData* wd);
+        void handleWaveDataChanged(int inx);
+        void handleWaveRemoved(int inx);
 
     public:
         WaveScene(QObject* parent = nullptr);
@@ -34,9 +37,7 @@ namespace hal {
         float cursorPos() const;
         void setCursorPos(float xp, bool relative);
 
-        int numberWaves() const { return mWaveItems.size(); }
         float yPosition(int dataIndex) const;
-        const WaveData* waveData(int dataIndex) const;
         void setWaveData(int dataIndex, WaveData* wd);
         void moveToIndex(int indexFrom, int indexTo);
         void deleteWave(int dataIndex);

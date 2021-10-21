@@ -4,6 +4,7 @@
 #include <QString>
 #include <QList>
 #include <QSet>
+#include <QObject>
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "netlist_simulator_controller/simulation_input.h"
@@ -50,14 +51,16 @@ namespace hal {
         void setMaxTime(u64 tmax);
     };
 
-    class WaveDataList : public QList<WaveData*>
+    class WaveDataList : public QObject, public QList<WaveData*>
     {
+        Q_OBJECT
+
         QMap<u32,int>     mIds;
         u64               mMaxTime;
         void restoreIndex();
         void updateMaxTime();
     public:
-        WaveDataList() : mMaxTime(0) {;}
+        WaveDataList(QObject* parent = nullptr) : QObject(parent), mMaxTime(0) {;}
         ~WaveDataList();
         void add(WaveData* wd);
         void addOrReplace(WaveData* wd);
@@ -70,5 +73,10 @@ namespace hal {
         u64 maxTime() const { return mMaxTime; }
         void setValueForEmpty(int val);
         void dump() const;
+        QList<const WaveData*> toList() const;
+    Q_SIGNALS:
+        void waveAdded();
+        void waveDataChanged(int inx);
+        void waveRemoved(int inx);
     };
 }

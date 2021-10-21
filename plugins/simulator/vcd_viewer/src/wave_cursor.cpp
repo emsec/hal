@@ -53,7 +53,7 @@ namespace hal {
         WaveScene* sc = static_cast<WaveScene*>(scene());
         if (!sc) return;
         float xpos = sc->cursorPos();
-        float ypos = sc->yPosition(sc->numberWaves());
+        float ypos = sc->yPosition(-1);
         QRectF rValue(boundingRect().left(),ypos,boundingRect().width(),2);
         painter->fillRect(rValue, Qt::black);
         painter->drawRoundRect(rValue, 35, 35);

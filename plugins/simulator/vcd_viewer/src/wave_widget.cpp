@@ -24,7 +24,8 @@
 namespace hal {
 
     WaveWidget::WaveWidget(NetlistSimulatorController *ctrl, QWidget *parent)
-        : QSplitter(parent), mController(ctrl), mControllerOwner(nullptr), mVisualizeNetState(false)
+        : QSplitter(parent), mController(ctrl), mControllerOwner(nullptr),
+          mWaveIndex(ctrl->get_waves()), mVisualizeNetState(false)
     {
         mFrame = new QFrame(this);
         mFrame->setLineWidth(3);
@@ -41,6 +42,14 @@ namespace hal {
         connect(mWaveScene,&WaveScene::cursorMoved,this,&WaveWidget::handleCursorMoved);
         connect(mWaveView,&WaveView::relativeYScroll,this,&WaveWidget::handleYScroll);
         connect(gContentManager->getSelectionDetailsWidget(),&SelectionDetailsWidget::triggerHighlight,this,&WaveWidget::handleSelectionHighlight);
+
+        connect(&mWaveIndex,&WaveIndex::waveAdded,this,&WaveWidget::handleWaveAdded);
+        connect(&mWaveIndex,&WaveIndex::waveRemoved,this,&WaveWidget::handleWaveRemoved);
+        connect(&mWaveIndex,&WaveIndex::waveDataChanged,this,&WaveWidget::handleWaveDataChanged);
+
+        connect(&mWaveIndex,&WaveIndex::waveAdded,mWaveScene,&WaveScene::handleWaveAdded);
+        connect(&mWaveIndex,&WaveIndex::waveRemoved,mWaveScene,&WaveScene::handleWaveRemoved);
+        connect(&mWaveIndex,&WaveIndex::waveDataChanged,mWaveScene,&WaveScene::handleWaveDataChanged);
     }
 
     WaveWidget::~WaveWidget()
@@ -67,29 +76,18 @@ namespace hal {
         return true;
     }
 
-    void WaveWidget::updateIndices()
-    {
-        int n = mValues.size();
-        float xpos = mWaveScene->cursorPos();
-        for (int i=0; i<n; i++)
-        {
-            mValues.at(i)->setDataIndex(i);
-            updateLabel(i,xpos);
-        }
-        mWaveIndices.clear();
-        for (int i=0; i<n; i++)
-            mWaveIndices.insert(mWaveScene->waveData(i)->id(),i);
-    }
-
     void WaveWidget::handleSelectionHighlight(const QVector<const SelectionTreeItem*>& highlight)
     {
         QSet<u32> hlIds;
         for (const SelectionTreeItem* sti : highlight)
             if (sti->itemType() == SelectionTreeItem::NetItem)
                 hlIds.insert(sti->id());
-        for (auto it = mWaveIndices.constBegin(); it != mWaveIndices.constEnd(); ++it)
+
+        int inx = 0;
+        for (auto it = mValues.begin(); it != mValues.end(); ++it)
         {
-            mValues.at(it.value())->setHighlight(hlIds.contains(it.key()));
+            (*it)->setHighlight(hlIds.contains(mWaveIndex.waveData(inx)->id()));
+            ++inx;
         }
     }
 
@@ -128,22 +126,23 @@ namespace hal {
     {
         WaveLabel* wl = mValues.at(dataIndex);
         mValues.removeAt(dataIndex);
-        mWaveScene->deleteWave(dataIndex);
-        updateIndices();
+        mWaveIndex.removeIndex(dataIndex);
         wl->deleteLater();
     }
 
-    void WaveWidget::addOrReplaceWave(WaveData* wd)
+    void WaveWidget::setGates(const std::vector<Gate*>& gats)
     {
-        auto it = mWaveIndices.find(wd->id());
-        if (it != mWaveIndices.end())
-        {
-            mWaveScene->setWaveData(it.value(),wd);
-            return;
-        }
-        int inx = mWaveScene->addWave(wd);
-        Q_ASSERT(mValues.size() == inx);
-        WaveLabel* wl = new WaveLabel(inx,mWaveScene->waveData(inx)->name(),mFrame);
+        if (!mController) return;
+        mController->reset();
+        mController->add_gates(gats);
+    }
+
+    void WaveWidget::handleWaveAdded(WaveData *wd)
+    {
+        Q_ASSERT(wd);
+        int inx = mValues.size();
+
+        WaveLabel* wl = new WaveLabel(inx,wd->name(),mFrame);
         connect(wl,&WaveLabel::doubleClicked,this,&WaveWidget::editWaveData);
         connect(wl,&WaveLabel::triggerDelete,this,&WaveWidget::deleteWave);
         connect(wl,&WaveLabel::triggerSwap,this,&WaveWidget::handleLabelSwap);
@@ -151,9 +150,31 @@ namespace hal {
         wl->setFixedWidth(250);
         wl->show();
         mValues.append(wl);
-        mWaveIndices.insert(wd->id(),inx);
         updateLabel(inx,mWaveScene->cursorPos());
         resizeEvent(nullptr);
+    }
+
+    void WaveWidget::handleWaveDataChanged(int inx)
+    {
+        int i0 = inx < 0 ? 0 : inx;
+        int i1 = inx < 0 ? mValues.size() : inx + 1;
+        for (int i=i0; i<i1; i++)
+            mValues.at(i)->setText(mWaveIndex.waveData(i)->name());
+    }
+
+    void WaveWidget::handleWaveRemoved(int inx)
+    {
+        if (inx < 0)
+        {
+            for (WaveLabel* wl : mValues)
+                delete wl;
+            mValues.clear();
+        }
+        else
+        {
+            delete mValues.at(inx);
+            mValues.removeAt(inx);
+        }
     }
 
     void WaveWidget::resizeEvent(QResizeEvent *event)
@@ -170,16 +191,9 @@ namespace hal {
         setSizes(QList<int>() << minw << w - minw );
     }
 
-    const WaveData* WaveWidget::waveDataByNetId(u32 id) const
-    {
-        int inx = mWaveIndices.value(id,-1);
-        if (inx < 0) return nullptr;
-        return mWaveScene->waveData(inx);
-    }
-
     void WaveWidget::editWaveData(int dataIndex)
     {
-        const WaveData* editorInput = mWaveScene->waveData(dataIndex);
+        const WaveData* editorInput = mWaveIndex.waveData(dataIndex);
         if (!editorInput) return;
         WaveData wd(*editorInput);
         WaveEditDialog wed(wd,this);
@@ -190,9 +204,9 @@ namespace hal {
     void WaveWidget::visualizeCurrentNetState(float xpos)
     {
         QSet<Net*> netState[3]; // x, 0, 1
-        for (int i=0; i<mWaveScene->numberWaves(); i++)
+        for (int i=0; i<mWaveIndex.numberWavesShown(); i++)
         {
-            const WaveData* wd = mWaveScene->waveData(i);
+            const WaveData* wd = mWaveIndex.waveData(i);
             Net* n = gNetlist->get_net_by_id(wd->id());
             if (!n) continue;
             int tval = wd->intValue(xpos);
@@ -223,7 +237,7 @@ namespace hal {
         if (wl->state()>=2) return;
         QPoint pos = mWaveView->mapFromScene(QPointF(xpos,mWaveScene->yPosition(dataIndex)-1));
         pos.setX(3);
-        wl->setValue(mWaveScene->waveData(dataIndex)->intValue(xpos));
+        wl->setValue(mWaveIndex.waveData(dataIndex)->intValue(xpos));
         wl->move(pos);
     }
 
@@ -237,7 +251,7 @@ namespace hal {
     {
         mWaveView->handleCursorMoved(xpos);
 
-        for (int i=0; i<mWaveScene->numberWaves(); i++)
+        for (int i=0; i<mWaveIndex.numberWavesShown(); i++)
             updateLabel(i,xpos);
 
         if (mVisualizeNetState) visualizeCurrentNetState(xpos);
@@ -283,8 +297,7 @@ namespace hal {
             WaveLabel* wl = mValues.at(isource);
             mValues.removeAt(isource);
             mValues.insert(itarget < isource ? itarget : itarget-1, wl);
-            mWaveScene->moveToIndex(isource,itarget);
-            updateIndices();
+            mWaveIndex.move(isource,itarget);
         }
         for (int i=0; i<n; i++)
             mValues.at(i)->update();

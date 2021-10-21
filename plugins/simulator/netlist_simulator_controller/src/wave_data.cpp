@@ -160,13 +160,24 @@ namespace hal {
         mMaxTime += deltaT;
     }
 
+    QList<const WaveData*> WaveDataList::toList() const
+    {
+        QList<const WaveData*> retval;
+        for (const WaveData* wd : *this)
+            retval.append(wd);
+        return retval;
+    }
+
     void WaveDataList::clearAll()
     {
+        bool notEmpty = ! isEmpty();
         for (auto it=begin(); it!=end(); ++it)
             delete *it;
         clear();
         mIds.clear();
         mMaxTime = 0;
+        if (notEmpty)
+            Q_EMIT waveRemoved(-1);
     }
 
     void WaveDataList::dump() const
@@ -210,6 +221,7 @@ namespace hal {
         mIds[wd->id()] = n;
         append(wd);
         updateMaxTime();
+        Q_EMIT waveAdded();
     }
 
     void WaveDataList::addOrReplace(WaveData* wd)
@@ -222,6 +234,7 @@ namespace hal {
             delete at(inx);
             operator[](inx) = wd;
             updateMaxTime();
+            Q_EMIT waveDataChanged(inx);
         }
         else
             add(wd);
@@ -252,13 +265,22 @@ namespace hal {
         delete at(inx);
         removeAt(inx);
         restoreIndex();
+        Q_EMIT waveRemoved(inx);
     }
 
     void WaveDataList::setValueForEmpty(int val)
     {
+        int inx = 0;
+
         for (auto it = constBegin(); it!= constEnd(); ++it)
+        {
             if ((*it)->isEmpty())
+            {
                 (*it)->insert(0,val);
+                Q_EMIT waveDataChanged(inx);
+            }
+            ++inx;
+        }
     }
 
 }

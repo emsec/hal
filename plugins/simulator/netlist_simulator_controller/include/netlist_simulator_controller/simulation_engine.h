@@ -81,6 +81,12 @@ namespace hal {
         virtual void setResultFilename(const std::string filename) {mResultFilename = filename; };
 
         /**
+         * Getter for file name of results as VCD
+         * @return the file name
+         */
+        std::string get_result_filename() const { return mResultFilename; }
+
+        /**
          * Must be implemented by derived class
          *
          * Will be called by controller to start simulation.

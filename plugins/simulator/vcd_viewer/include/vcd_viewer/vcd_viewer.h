@@ -100,11 +100,6 @@ namespace hal
         void displayStatusMessage(const QString& msg = QString());
 
     private:
-        void initSimulator();
-
-        std::shared_ptr<NetlistSimulatorController> mController;
-        QList<const Net*> mInputNets;
-        std::vector<Gate*> mSimulateGates;
         bool mVisualizeNetState;
 
         QMap<u32,const WaveData*> mResultMap;

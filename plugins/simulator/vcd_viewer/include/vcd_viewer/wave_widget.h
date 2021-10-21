@@ -9,6 +9,7 @@
 #include <QFrame>
 #include <hal_core/defines.h>
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
+#include "vcd_viewer/wave_index.h"
 
 namespace hal {
 
@@ -27,14 +28,13 @@ namespace hal {
     public:
         WaveWidget(NetlistSimulatorController* ctrl, QWidget* parent=nullptr);
         ~WaveWidget();
-        void addOrReplaceWave(WaveData* wd);
-        const WaveData* waveDataByNetId(u32 id) const;
         bool isVisulizeNetState() const { return mVisualizeNetState; }
         u32 controllerId() const;
         NetlistSimulatorController* controller() const { return mController; }
         void setVisualizeNetState(bool state, bool activeTab);
         void takeOwnership(std::unique_ptr<NetlistSimulatorController>& ctrl);
         bool triggerClose();
+        void setGates(const std::vector<Gate*>& gats);
 
     private Q_SLOTS:
         void handleCursorMoved(float xpos);
@@ -45,6 +45,9 @@ namespace hal {
         void editWaveData(int dataIndex);
         void deleteWave(int dataIndex);
         void handleSelectionHighlight(const QVector<const SelectionTreeItem*>& highlight);
+        void handleWaveAdded(WaveData* wd);
+        void handleWaveDataChanged(int inx);
+        void handleWaveRemoved(int inx);
 
     protected:
         void resizeEvent(QResizeEvent *event) override;
@@ -52,11 +55,10 @@ namespace hal {
     private:
         NetlistSimulatorController* mController;
         std::unique_ptr<NetlistSimulatorController> mControllerOwner;
-        QMap<u32,int> mWaveIndices;
+        WaveIndex mWaveIndex;
         QVector<WaveLabel*> mValues;
 
         void updateLabel(int dataIndex, float xpos);
-        void updateIndices();
         int  targetIndex(int ypos);
         void visualizeCurrentNetState(float xpos);
 
