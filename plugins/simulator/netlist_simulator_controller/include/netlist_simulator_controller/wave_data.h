@@ -8,6 +8,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "netlist_simulator_controller/simulation_input.h"
+#include <set>
 
 namespace hal {
 
@@ -73,7 +74,7 @@ namespace hal {
         u64 maxTime() const { return mMaxTime; }
         void setValueForEmpty(int val);
         void dump() const;
-        QList<const WaveData*> toList() const;
+        QList<const WaveData*> partialList(u64 start_time, u64 end_time, std::set<const Net*>& nets) const;
     Q_SIGNALS:
         void waveAdded();
         void waveDataChanged(int inx);
