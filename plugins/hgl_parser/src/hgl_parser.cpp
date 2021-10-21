@@ -54,6 +54,32 @@ namespace hal
 
         m_gate_lib = std::make_unique<GateLibrary>(m_path, document["library"].GetString());
 
+        if (document.HasMember("gate_locations") && document["gate_locations"].IsObject())
+        {
+            auto gate_locs = document["gate_locations"].GetObject();
+
+            if (!gate_locs.HasMember("data_category") || !gate_locs["data_category"].IsString())
+            {
+                log_error("hgl_parser", "missing 'data_category' for gate locations.");
+                return false;
+            }
+
+            if (!gate_locs.HasMember("data_x_identifier") || !gate_locs["data_x_identifier"].IsString())
+            {
+                log_error("hgl_parser", "missing 'data_x_identifier' for gate locations.");
+                return false;
+            }
+
+            if (!gate_locs.HasMember("data_y_identifier") || !gate_locs["data_y_identifier"].IsString())
+            {
+                log_error("hgl_parser", "missing 'data_y_identifier' for gate locations.");
+                return false;
+            }
+
+            m_gate_lib->set_gate_location_data_category(gate_locs["data_category"].GetString());
+            m_gate_lib->set_gate_location_data_identifiers(gate_locs["data_x_identifier"].GetString(), gate_locs["data_y_identifier"].GetString());
+        }
+
         if (!document.HasMember("cells"))
         {
             log_error("hgl_parser", "file does not include 'cells' node.");

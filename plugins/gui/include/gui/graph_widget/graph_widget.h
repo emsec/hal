@@ -28,7 +28,6 @@
 #include "gui/gui_globals.h"
 #include "gui/gui_def.h"
 #include "gui/content_widget/content_widget.h"
-#include "gui/graph_widget/contexts/graph_context_subscriber.h"
 
 #include <deque>
 
@@ -49,7 +48,7 @@ namespace hal
      * The content widget that wraps a graph view of a certain GraphContext. <br>
      * It represents one tab of the GraphTabWidgets QTabWidget.
      */
-    class GraphWidget : public ContentWidget, public GraphContextSubscriber
+    class GraphWidget : public ContentWidget
     {
         Q_OBJECT
 
@@ -73,22 +72,22 @@ namespace hal
          * Should be called whenever the scene becomes available (after a new layout). <br>
          * Used to enable interactions and show the loaded scene.
          */
-        void handleSceneAvailable() override;
+        void handleSceneAvailable();
         /**
          * Should be called whenever the scene becomes unavailable (at the beginning of a new layout or a scene update). <br>
          * Used to disable interactions.
          */
-        void handleSceneUnavailable() override;
+        void handleSceneUnavailable();
 
         /**
          * Notifies that the context this graph widget manages is about to be deleted.
          */
-        void handleContextAboutToBeDeleted() override;
+        void handleContextAboutToBeDeleted();
 
         /**
          * Subscriber should store the scene mapping to viewport so it can be restored upon handleSceneAvailable
          */
-        void storeViewport() override;
+        void storeViewport();
 
         /**
          * Get the GraphGraphicsView this object manages.
@@ -106,7 +105,7 @@ namespace hal
          * Show progress in overlay
          * @param percent percent done
          */
-        void showProgress(int percent, const QString& text=QString()) override;
+        void showProgress(int percent, const QString& text=QString());
 
         void focusGate(u32 gateId);
         void focusNet(u32 netId);
