@@ -29,6 +29,7 @@ namespace hal {
     {
         Q_OBJECT
         int mTime;
+        QMap<QString,QString> mDictionary;
         QMap<QString,WaveData*> mWaves;
 
         bool parseDataline(const QByteArray& line);
@@ -39,6 +40,7 @@ namespace hal {
         bool serialize(const QString& filename, const QList<const WaveData*>& waves) const;
         bool deserialize(const QString& filename);
         QList<WaveData*> waveList() const { return mWaves.values(); }
+        WaveData* waveByName(const QString& name) const;
     };
 
 }

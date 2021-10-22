@@ -300,15 +300,9 @@ namespace hal
             QHash<QString,u32> netIds;
             for (Net* n : partNl->get_nets())
             {
-                qDebug() << "simulated net" << n->get_id() << n->get_name().c_str();
-                netIds[QString::fromStdString(n->get_name())] = n->get_id();
-            }
-
-            for (WaveData* wd : reader.waveList())
-            {
-                if (!wd->id())
-                    wd->setId(netIds.value(wd->name()));
-                if (!wd->id()) continue;
+                WaveData* wd = reader.waveByName(QString::fromStdString(n->get_name()));
+                if (!wd) continue;
+                wd->setId(n->get_id());
                 mWaveDataList->addOrReplace(wd);
             }
         }

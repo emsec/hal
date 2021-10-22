@@ -184,9 +184,12 @@ QMap<int,int>::const_iterator mIterator;
                     else if (mHead.captured(1) == "var")
                     {
                         QRegularExpressionMatch mWire = reWire.match(mHead.captured(2));
-                        QString wireName = mWire.captured(3);
+                        QString wireName   = mWire.captured(3);
+                        QString wireAbbrev = mWire.captured(2);
+                        mDictionary.insert(wireName,wireAbbrev);
                         QRegularExpressionMatch mWiid = reWiid.match(wireName);
-                        mWaves.insert(mWire.captured(2),new WaveData(mWiid.captured(1).toUInt(),wireName));
+                        if (!mWaves.contains(wireAbbrev))
+                            mWaves.insert(mWire.captured(2),new WaveData(mWiid.captured(1).toUInt(),wireName));
                     }
                 }
             }
@@ -199,6 +202,13 @@ QMap<int,int>::const_iterator mIterator;
             }
         }
         return true;
+    }
+
+    WaveData* VcdSerializer::waveByName(const QString& name) const
+    {
+        auto it = mDictionary.find(name);
+        if (it == mDictionary.constEnd()) return nullptr;
+        return mWaves.value(it.value());
     }
 
 }
