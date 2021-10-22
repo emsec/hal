@@ -31,9 +31,9 @@ var NAVTREE =
       [ "Slack, Contact and Support", "index.html#autotoc_md14", null ]
     ] ],
     [ "Build Instructions", "index.html#autotoc_md15", [
-      [ "Ubuntu 18.04", "index.html#autotoc_md16", null ],
-      [ "Ubuntu 20.04", "index.html#autotoc_md17", null ],
-      [ "A few notes on Windows WSL", "index.html#autotoc_md18", null ],
+      [ "Ubuntu 20.04", "index.html#autotoc_md16", null ],
+      [ "macOS", "index.html#autotoc_md17", null ],
+      [ "Windows", "index.html#autotoc_md18", null ],
       [ "CMake Options", "index.html#autotoc_md19", null ]
     ] ],
     [ "Quickstart Guide", "index.html#autotoc_md20", null ],

@@ -140,9 +140,6 @@ Slack, Contact and Support</h2>
 <h1><a class="anchor" id="autotoc_md15"></a>
 Build Instructions</h1>
 <h2><a class="anchor" id="autotoc_md16"></a>
-Ubuntu 18.04</h2>
-<p>We do currently not support building HAL on Ubuntu 18.04. We are working towards a solution and will update this guide as soon as possible.</p>
-<h2><a class="anchor" id="autotoc_md17"></a>
 Ubuntu 20.04</h2>
 <p>If you want to build HAL on Ubuntu 20.04, run the following commands:</p>
 <ol type="1">
@@ -153,17 +150,24 @@ Ubuntu 20.04</h2>
 <li><code>make</code> to compile HAL</li>
 <li><code>make install</code> (optionally) to install HAL</li>
 </ol>
+<p>We do currently not support building on any other Linux distribution.</p>
+<h2><a class="anchor" id="autotoc_md17"></a>
+macOS</h2>
+<p><b>Warning:</b> Building on macOS is experimental and may not always work.</p>
+<p>Please make sure to use a compiler that supports OpenMP. You can install one using, e.g., Homebrew via: <code>brew install llvm</code>.</p>
+<p>To let cmake know of the custom compiler use following command.</p>
+<p><code>cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++</code></p>
 <h2><a class="anchor" id="autotoc_md18"></a>
-A few notes on Windows WSL</h2>
-<p>You can try using HAL directly on Windows with the help of the most recent Ubuntu 20.04 subsystem. Install Ubuntu 20.04 with Windows subsystem and follow the installation instructions above.</p>
-<p>To get the HAL GUI appearing you need an XServer. Install <code>VcXsrv</code>(<a href="https://sourceforge.net/projects/vcxsrv/">https://sourceforge.net/projects/vcxsrv/</a>) and start <code>Xlaunch</code> on your Windows machine. Now go to Ubuntu 20.04 and start HAL with GUI support. In the following command we assume that the DISPLAY is at localhost:0, this needs to be adjusted on your machine.</p>
+Windows</h2>
+<p>You can try using HAL directly on Windows using an Ubuntu 20.04 subsystem on WSL 2. After setting up WSL 2, follow the installation instructions for Ubuntu 20.04 provided above.</p>
+<p>To work with the HAL GUI, you will need to set up an XServer. Install <a href="https://sourceforge.net/projects/vcxsrv/"><code>VcXsrv</code></a> and run <code>Xlaunch</code> on your Windows machine. Now go to Ubuntu 20.04 and start HAL with GUI support using the command below. Note that the command assumes the <code>DISPLAY</code> to be at located at <code>localhost:0</code>. This will need adjustment on your machine.</p>
 <p><code>export LIBGL_ALWAYS_INDIRECT=1; export DISPLAY=:0; hal -g</code></p>
-<p>If you encounter an error try restarting the XServer and select <code>One Large Window</code>.</p>
+<p>In case you encounter an error, try restarting the XServer and select <code>One Large Window</code>.</p>
 <h2><a class="anchor" id="autotoc_md19"></a>
 CMake Options</h2>
 <p>Using the CMake build system, your HAL build can be configured quite easily (by adding <code>-D&lt;OPTION&gt;=1</code> to the cmake command). Here is a selection of the most important options:</p><ul>
 <li><code>BUILD_TESTS</code>: builds all available tests which can be executed by running <code>ctest</code> in the build directory. This also builds all tests of plugins that are built.</li>
-<li><code>BUILD_DOCUMENTATION</code>: builds the C++ and Python documentation in the directory &lt;build directory&gt;/documentation/</li>
+<li><code>BUILD_DOCUMENTATION</code>: build the C++ and Python documentation</li>
 <li><code>PL_&lt;plugin name&gt;</code>: enable (or disable) building a specific plugin</li>
 <li><code>BUILD_ALL_PLUGINS</code>: all-in-one option to build all available plugins, overrides the options for individual plugins</li>
 <li><code>SANITIZE_ADDRESS</code>, <code>SANITIZE_MEMORY</code>, <code>SANITIZE_THREAD</code>, <code>SANITIZE_UNDEFINED</code>: builds with the respective sanitizers (recommended only for debug builds)</li>
@@ -177,7 +181,7 @@ Quickstart Guide</h1>
 <p>Let's list all lookup tables and print their Boolean functions: </p><div class="fragment"><div class="line">for gate in netlist.get_gates():</div>
 <div class="line">    if &quot;LUT&quot; in gate.type.name:</div>
 <div class="line">        print(&quot;{} (id {}, type {})&quot;.format(gate.name, gate.id, gate.type.name))</div>
-<div class="line">        print(&quot;  {}-to-{} LUT&quot;.format(len(gate.input_pins), len(gate.output_pins)))</div>
+<div class="line">        print(&quot;  {}-to-{} LUT&quot;.format(len(gate.type.input_pins), len(gate.type.output_pins)))</div>
 <div class="line">        boolean_functions = gate.boolean_functions</div>
 <div class="line">        for name in boolean_functions:</div>
 <div class="line">            print(&quot;  {}: {}&quot;.format(name, boolean_functions[name]))</div>
@@ -247,7 +251,7 @@ Disclaimer</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Oct 21 2021 09:26:02 for HAL by
+    <li class="footer">Generated on Fri Oct 22 2021 07:04:13 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
