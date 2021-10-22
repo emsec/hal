@@ -29,5 +29,7 @@ namespace hal {
 
     public Q_SLOTS:
         void addWave();
+        void handleWaveReplaced(int iwave);
+        void handleWaveUpdated(int iwave);
     };
 }

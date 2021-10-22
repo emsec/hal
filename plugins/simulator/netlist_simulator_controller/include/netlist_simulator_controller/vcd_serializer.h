@@ -31,12 +31,14 @@ namespace hal {
         int mTime;
         QMap<QString,WaveData*> mWaves;
 
-        void parseDataline(const QByteArray& line);
+        bool parseDataline(const QByteArray& line);
+        bool parseDataNonDecimal(const QByteArray& line, int base);
         void storeValue(int val, const QByteArray& abrev);
     public:
         VcdSerializer(QObject* parent = nullptr);
         bool serialize(const QString& filename, const QList<const WaveData*>& waves) const;
-        QList<WaveData*> deserialize(const QString& filename);
+        bool deserialize(const QString& filename);
+        QList<WaveData*> waveList() const { return mWaves.values(); }
     };
 
 }

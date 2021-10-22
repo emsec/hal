@@ -16,9 +16,7 @@ namespace hal {
     }
 
     WaveItem::~WaveItem()
-    {
-        if (mData) delete mData;
-    }
+    {;}
 
     void WaveItem::construct()
     {
@@ -107,7 +105,6 @@ namespace hal {
 
     void WaveItem::setWavedata(const WaveData *dat)
     {
-        if (mData) delete mData;
         mData = dat;
         construct();
     }

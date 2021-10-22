@@ -58,7 +58,10 @@ namespace hal {
 
     WaveData::~WaveData()
     {
-        qDebug() << "X:WaveData" << mId << mName << hex << (quintptr) this;
+        if (mId > 1000000)
+            qDebug() << "==========";
+        else
+            qDebug() << "X:WaveData" << mId << mName << hex << (quintptr) this;
     }
 
     void WaveData::insertBooleanValue(u64 t, BooleanFunction::Value bval)
@@ -208,13 +211,13 @@ namespace hal {
     void WaveDataList::clearAll()
     {
         bool notEmpty = ! isEmpty();
-        for (auto it=begin(); it!=end(); ++it)
-            delete *it;
         clear();
         mIds.clear();
         mMaxTime = 0;
         if (notEmpty)
             Q_EMIT waveRemoved(-1);
+        for (auto it=begin(); it!=end(); ++it)
+            delete *it;
     }
 
     void WaveDataList::dump() const
@@ -268,10 +271,11 @@ namespace hal {
         if (inx >= 0)
         {
             // replace existing
-            delete at(inx);
+            WaveData* toDelete = at(inx);
             operator[](inx) = wd;
             updateMaxTime();
-            Q_EMIT waveDataChanged(inx);
+            Q_EMIT waveReplaced(inx);
+            delete toDelete;
         }
         else
             add(wd);
@@ -299,10 +303,11 @@ namespace hal {
         auto it = mIds.find(id);
         if (it == mIds.end()) return;
         int inx = it.value();
-        delete at(inx);
+        WaveData* toDelete = at(inx);
         removeAt(inx);
         restoreIndex();
         Q_EMIT waveRemoved(inx);
+        delete toDelete;
     }
 
     void WaveDataList::setValueForEmpty(int val)
@@ -314,7 +319,7 @@ namespace hal {
             if ((*it)->isEmpty())
             {
                 (*it)->insert(0,val);
-                Q_EMIT waveDataChanged(inx);
+                Q_EMIT waveUpdated(inx);
             }
             ++inx;
         }

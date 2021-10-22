@@ -132,8 +132,11 @@ namespace hal
     {
         if (filename.isEmpty()) return;
         VcdSerializer reader;
-        for (WaveData* wd : reader.deserialize(filename))
-            mWaveDataList->addOrReplace(wd);
+        if (reader.deserialize(filename))
+        {
+            for (WaveData* wd : reader.waveList())
+                mWaveDataList->addOrReplace(wd);
+        }
     }
 
     void NetlistSimulatorController::handleRunSimulation()
@@ -237,8 +240,11 @@ namespace hal
     void NetlistSimulatorController::parse_vcd(const std::string& filename)
     {
         VcdSerializer reader;
-        for (WaveData* wd : reader.deserialize(QString::fromStdString(filename)))
-            mWaveDataList->addOrReplace(wd);
+        if (reader.deserialize(QString::fromStdString(filename)))
+        {
+            for (WaveData* wd : reader.waveList())
+                mWaveDataList->addOrReplace(wd);
+        }
     }
 
     void NetlistSimulatorController::handleRunFinished(bool success)
@@ -264,11 +270,11 @@ namespace hal
 
     bool NetlistSimulatorController::get_results()
     {
+        SimulationEngineEventDriven* sevd = static_cast<SimulationEngineEventDriven*>(mSimulationEngine);
+        const std::vector<const Gate*> simGates(mSimulationInput->get_gates().begin(), mSimulationInput->get_gates().end());
+        std::unique_ptr<Netlist> partNl = netlist_utils::get_partial_netlist(simGates.at(0)->get_netlist(), simGates);
         if (mSimulationEngine->can_share_memory())
         {
-            SimulationEngineEventDriven* sevd = static_cast<SimulationEngineEventDriven*>(mSimulationEngine);
-            const std::vector<const Gate*> simGates(mSimulationInput->get_gates().begin(), mSimulationInput->get_gates().end());
-            std::unique_ptr<Netlist> partNl = netlist_utils::get_partial_netlist(simGates.at(0)->get_netlist(), simGates);
             for (Net* n : partNl->get_nets())
             {
                 WaveData* wd = mWaveDataList->waveDataByNetId(n->get_id());
@@ -289,8 +295,22 @@ namespace hal
             VcdSerializer reader(this);
             QFileInfo info(QString::fromStdString(resultFile.string()));
             if (!info.exists() || !info.isReadable()) return false;
-            for (WaveData* wd : reader.deserialize(QString::fromStdString(resultFile)))
+            if (!reader.deserialize(QString::fromStdString(resultFile))) return false;
+
+            QHash<QString,u32> netIds;
+            for (Net* n : partNl->get_nets())
+            {
+                qDebug() << "simulated net" << n->get_id() << n->get_name().c_str();
+                netIds[QString::fromStdString(n->get_name())] = n->get_id();
+            }
+
+            for (WaveData* wd : reader.waveList())
+            {
+                if (!wd->id())
+                    wd->setId(netIds.value(wd->name()));
+                if (!wd->id()) continue;
                 mWaveDataList->addOrReplace(wd);
+            }
         }
         setState(ShowResults);
         return true;

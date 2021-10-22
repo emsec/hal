@@ -35,6 +35,7 @@ namespace hal {
         NetType netType() const { return mNetType; }
         int intValue(float t) const;
         void setStartvalue(int val);
+        void setId(u32 id_) { mId = id_; }
         void insertBooleanValue(u64 t, BooleanFunction::Value bval);
         bool insertToggleTime(u64 t);
         char charValue(float t) const;
@@ -79,7 +80,9 @@ namespace hal {
         QList<const WaveData*> partialList(u64 start_time, u64 end_time, std::set<const Net*>& nets) const;
     Q_SIGNALS:
         void waveAdded();
-        void waveDataChanged(int inx);
+        void waveDataAboutToBeChanged(int inx);
+        void waveReplaced(int inx);
+        void waveUpdated(int inx);
         void waveRemoved(int inx);
     };
 }

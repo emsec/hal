@@ -10,6 +10,22 @@ namespace hal {
             mIndexToWave.append(i);
         updateWaveToIndex();
         connect(mWaveDataList,&WaveDataList::waveAdded,this,&WaveIndex::addWave);
+        connect(mWaveDataList,&WaveDataList::waveReplaced,this,&WaveIndex::handleWaveReplaced);
+        connect(mWaveDataList,&WaveDataList::waveUpdated,this,&WaveIndex::handleWaveUpdated);
+    }
+
+    void WaveIndex::handleWaveReplaced(int iwave)
+    {
+        auto it = mWaveToIndex.find(iwave);
+        if (it == mWaveToIndex.constEnd()) return;
+        Q_EMIT waveDataChanged(it.value());
+    }
+
+    void WaveIndex::handleWaveUpdated(int iwave)
+    {
+        auto it = mWaveToIndex.find(iwave);
+        if (it == mWaveToIndex.constEnd()) return;
+        Q_EMIT waveDataChanged(it.value());
     }
 
     WaveData* WaveIndex::waveData(int inx) const
@@ -46,6 +62,7 @@ namespace hal {
         if (inxTo > n) inxTo = n;
 
         if (inxFrom == inxTo) return;
+
         int iwave = mIndexToWave.at(inxFrom);
         if (inxFrom < inxTo)
         {

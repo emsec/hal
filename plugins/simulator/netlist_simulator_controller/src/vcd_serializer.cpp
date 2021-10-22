@@ -100,8 +100,26 @@ QMap<int,int>::const_iterator mIterator;
         return true;
     }
 
-    void VcdSerializer::parseDataline(const QByteArray &line)
+    bool VcdSerializer::parseDataNonDecimal(const QByteArray &line, int base)
     {
+        QList<QByteArray> sl = line.split(' ');
+        if (sl.size()!=2) return false;
+        bool ok;
+        int val = sl.at(0).toUInt(&ok,base);
+        if (ok) storeValue(val, sl.at(1));
+        return ok;
+    }
+
+    bool VcdSerializer::parseDataline(const QByteArray &line)
+    {
+        if (line.isEmpty()) return true;
+        switch(line.at(0))
+        {
+        case 'b': return parseDataNonDecimal(line.mid(1),2);
+        case 'o': return parseDataNonDecimal(line.mid(1),8);
+        case 'x': return parseDataNonDecimal(line.mid(1),16);
+        }
+
         for (QByteArray word : line.split(' '))
         {
             bool ok;
@@ -129,8 +147,10 @@ QMap<int,int>::const_iterator mIterator;
                 storeValue(word.at(0)-'0', word.mid(1));
                 continue;
             }
-            qDebug() << "cannot parse words starting with" << word.at(0);
+            qDebug() << "cannot parse words starting with" << word.at(0) << line;
+            return false;
         }
+        return true;
     }
 
     void VcdSerializer::storeValue(int val, const QByteArray& abrev)
@@ -140,17 +160,17 @@ QMap<int,int>::const_iterator mIterator;
         wd->insert(mTime,val);
     }
 
-    QList<WaveData*> VcdSerializer::deserialize(const QString& filename)
+    bool VcdSerializer::deserialize(const QString& filename)
     {
         mWaves.clear();
         mTime = 0;
         QFile ff(filename);
-        if (!ff.open(QIODevice::ReadOnly)) return QList<WaveData*>();
+        if (!ff.open(QIODevice::ReadOnly)) return false;
 
         bool parseHeader = true;
 
         QRegularExpression reHead("\\$(\\w*) (.*)\\$end");
-        QRegularExpression reWire("wire (\\d+) ([^ ]+) (.*) $");
+        QRegularExpression reWire("wire\\s+(\\d+) ([^ ]+) (.*) $");
         QRegularExpression reWiid("\\[(\\d+)\\]$");
         for (QByteArray line : ff.readAll().split('\n'))
         {
@@ -172,10 +192,13 @@ QMap<int,int>::const_iterator mIterator;
             }
             else
             {
-                parseDataline(line);
-           }
+                if (!parseDataline(line))
+                {
+                    return false;
+                }
+            }
         }
-        return mWaves.values();
+        return true;
     }
 
 }
