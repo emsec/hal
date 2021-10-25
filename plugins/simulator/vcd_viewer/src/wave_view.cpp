@@ -14,7 +14,7 @@ namespace hal {
 
     WaveView::WaveView(QWidget *parent)
         : QGraphicsView(parent),
-          mXmag(1), mYmag(1), mDx(0), mDy(0), mLastCursorPos(0), mLastWidth(0), mCursorPixelPos(20)
+          mXmag(1), mYmag(12), mDx(0), mDy(0), mLastCursorPos(0), mLastWidth(0), mCursorPixelPos(20)
     {;}
 
     void WaveView::resizeEvent(QResizeEvent *event)
@@ -27,7 +27,6 @@ namespace hal {
         int viewHeight = event ? event->size().height() : height();
         int viewWidth  = event ? event->size().width()  : width();
 
-        mYmag = viewHeight / scHeight;
         mDy = - mYmag* sceneRect().top();
 
         if (abs (mLastWidth - viewWidth) > 20)
@@ -43,10 +42,12 @@ namespace hal {
 
         setTransform(QTransform(mXmag, 0, 0, mYmag, mDx, mDy),false);
         Q_EMIT changedXscale(mXmag);
+        qDebug() << "transform:resize" << transform();
 
         WaveScene* sc = static_cast<WaveScene*>(scene());
         float xw = width()/mXmag;
-        ensureVisible(QRectF(0,sceneRect().top(),xw,sceneRect().height()));
+
+        ensureVisible(QRectF(0,sceneRect().top(),xw,viewHeight/mYmag));
         sc->setCursorPos(xw/10,false);
     }
 
@@ -78,9 +79,12 @@ namespace hal {
         if (x0 < 0) x0 = 0;
         float x1 = x0 + width() / mXmag;
 
-        fitInView(x0,sceneRect().top(),x1-x0,sceneRect().height());
+        mDx = ixMouse - mXmag * xfix;
+        setTransform(QTransform(mXmag, 0, 0, mYmag, mDx, mDy),false);
+//        fitInView(x0,0,x1-x0,viewport()->height()/mYmag,Qt::IgnoreAspectRatio);
 
-        Q_EMIT (changedXscale(transform().m11()));
+        Q_EMIT (changedXscale(mXmag));
+        qDebug() << "transform:wheel" << transform() << ixMouse << xfix << x1;
 
         restoreCursor();
     }

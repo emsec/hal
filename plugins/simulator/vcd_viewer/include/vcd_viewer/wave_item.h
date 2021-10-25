@@ -10,11 +10,11 @@ namespace hal {
     class WaveItem : public QGraphicsItem
     {
         const WaveData* mData;
-        QRectF mRect;
         QVector<QLine> mSolidLines;
         QVector<QLineF> mDotLines;
 
         int mYoffset;
+        float mMaxTime;
 
         void construct();
     public:
@@ -24,7 +24,8 @@ namespace hal {
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
         void setYoffset(int val);
         void setWavedata(const WaveData* dat);
-        void setSceneMax(float xmax);
+        void setMaxTime(float tmax);
+        float maxTime() const { return mMaxTime; }
         const WaveData* wavedata() const { return mData; }
         QRectF boundingRect() const override;
     };

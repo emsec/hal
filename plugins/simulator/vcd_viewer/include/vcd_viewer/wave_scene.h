@@ -4,6 +4,10 @@
 #include <QList>
 #include <QTimer>
 
+#include "hal_core/defines.h"
+
+class QGraphicsRectItem;
+
 namespace hal {
 
     class WaveData;
@@ -21,6 +25,7 @@ namespace hal {
         WaveTimescale* mTimescale;
         WaveCursor* mCursor;
         QTimer* mClearTimer;
+        QGraphicsRectItem* mDebugSceneRect;
 
         float adjustSceneRect();
     Q_SIGNALS:
@@ -31,6 +36,7 @@ namespace hal {
         void handleWaveAdded(WaveData* wd);
         void handleWaveDataChanged(int inx);
         void handleWaveRemoved(int inx);
+        void handleMaxTimeChanged(u64 tmax);
 
     public:
         WaveScene(const WaveIndex* winx, QObject* parent = nullptr);

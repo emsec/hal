@@ -46,9 +46,18 @@ QMap<int,int>::const_iterator mIterator;
         return mData->name();
     }
 
-    char VcdSerializerElement::charCode() const
+    QByteArray VcdSerializerElement::charCode() const
     {
-        return (char) ('!' + mIndex);
+        QByteArray retval;
+        int z = mIndex;
+        char firstChar = '!';
+        do
+        {
+            retval += (char) (firstChar + z%92);
+            z /= 92;
+            if (z<92) firstChar = ' '; // most significant digit must be non-zero
+        } while (z>0);
+        return retval;
     }
 
 //----------------------------------
@@ -75,7 +84,7 @@ QMap<int,int>::const_iterator mIterator;
                 delete vse;
             else
             {
-                QString line = QString("$var wire 1 %1 %2 $end\n").arg(vse->charCode()).arg(vse->name());
+                QString line = QString("$var wire 1 %1 %2 $end\n").arg(QString::fromUtf8(vse->charCode())).arg(vse->name());
                 of.write(line.toUtf8());
                 priorityMap.insert(prio,vse);
             }

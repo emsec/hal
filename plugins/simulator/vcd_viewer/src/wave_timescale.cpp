@@ -7,7 +7,7 @@
 namespace hal {
 
     WaveTimescale::WaveTimescale(int max)
-        : mMinorTicDistance(10), mMaxValue(max), mXmag(1)
+        : mMinorTicDistance(10), mMaxTime(max), mXmag(1)
     {;}
 
     void WaveTimescale::xScaleChanged(float mag)
@@ -19,13 +19,20 @@ namespace hal {
             mMinorTicDistance *= 10;
     }
 
+    void WaveTimescale::setMaxTime(float tmax)
+    {
+        if (tmax == mMaxTime) return;
+        mMaxTime = tmax;
+        update();
+    }
+
     void WaveTimescale::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget* widget)
     {
         Q_UNUSED(option);
         Q_UNUSED(widget);
         int count = 0;
         QPen pen = painter->pen();
-        for (int x=0; x<mMaxValue; x+=mMinorTicDistance)
+        for (int x=0; x<mMaxTime; x+=mMinorTicDistance)
             if (count++ % 10 == 0)
             {
                 /*
@@ -60,7 +67,7 @@ namespace hal {
                 labelDistance = closerDistance[i];
             else break;
 
-        for (int x=0; x<mMaxValue; x+= labelDistance*mMinorTicDistance)
+        for (int x=0; x<mMaxTime; x+= labelDistance*mMinorTicDistance)
         {
             pen.setColor(QColor("#c0c0c0")); // TODO : style
             QFont font = painter->font();
@@ -76,6 +83,6 @@ namespace hal {
 
     QRectF WaveTimescale::boundingRect() const
     {
-        return QRectF(0,0,mMaxValue,10);
+        return QRectF(0,0,mMaxTime,10);
     }
 }

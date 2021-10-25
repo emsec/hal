@@ -298,11 +298,14 @@ namespace hal
             if (!reader.deserialize(QString::fromStdString(resultFile))) return false;
 
             QHash<QString,u32> netIds;
+//            int wcount = 0;
             for (Net* n : partNl->get_nets())
             {
                 WaveData* wd = reader.waveByName(QString::fromStdString(n->get_name()));
                 if (!wd) continue;
+//                if (++wcount > 10) break;
                 wd->setId(n->get_id());
+                if (wd->isEmpty() || wd->firstKey() > 0) wd->insert(0,-1);
                 mWaveDataList->addOrReplace(wd);
             }
         }

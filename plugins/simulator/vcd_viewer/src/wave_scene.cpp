@@ -1,4 +1,5 @@
 #include "vcd_viewer/wave_scene.h"
+#include <QGraphicsRectItem>
 #include "vcd_viewer/wave_item.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "vcd_viewer/wave_cursor.h"
@@ -10,14 +11,18 @@
 namespace hal {
 
     WaveScene::WaveScene(const WaveIndex *winx, QObject* parent)
-        : QGraphicsScene(parent), mWaveIndex(winx), mClearTimer(nullptr)
+        : QGraphicsScene(parent), mWaveIndex(winx), mClearTimer(nullptr), mDebugSceneRect(nullptr)
     {
         setSceneRect(QRectF(0,0,1500,20));
+        mDebugSceneRect = new QGraphicsRectItem(sceneRect());
+        mDebugSceneRect->setPen(QPen(Qt::red,0));
+        addItem(mDebugSceneRect);
         mCursor = new WaveCursor();
         addItem(mCursor);
 
         mTimescale = new WaveTimescale(6000);
         addItem(mTimescale);
+        connect(mWaveIndex->waveDataList(),&WaveDataList::maxTimeChanged,this,&WaveScene::handleMaxTimeChanged);
     }
 
     WaveScene::~WaveScene()
@@ -87,13 +92,12 @@ namespace hal {
     {
         int inx = mWaveItems.size();
         WaveItem* wi = new WaveItem(wd, yPosition(inx));
+        if (wi->maxTime() < sceneRect().width())
+            wi->setMaxTime(sceneRect().width());
         addItem(wi);
         mWaveItems.append(wi);
 
-        float maxw = adjustSceneRect();
-
-        wi->setSceneMax(maxw);
-
+        // TODO : y-scroll to make new wave visible
         return inx;
     }
 
@@ -106,6 +110,8 @@ namespace hal {
             if (itm->boundingRect().width() > maxw)
                 maxw = itm->boundingRect().width();
         setSceneRect(QRectF(0,0,maxw,yPosition(n)+4));
+        if (mDebugSceneRect)
+            mDebugSceneRect->setRect(sceneRect());
         return maxw;
     }
 
@@ -184,13 +190,26 @@ namespace hal {
         mClearTimer->start(50);
     }
 
+    void WaveScene::handleMaxTimeChanged(u64 tmax)
+    {
+        int n = mWaveItems.size();
+        if (n<5) n=5;
+        float maxw = 1000;
+        if (maxw < tmax) maxw = tmax;
+
+        for (WaveItem* itm : mWaveItems)
+            itm->setMaxTime(maxw);
+        mTimescale->setMaxTime(maxw);
+        setSceneRect(QRectF(0,0,maxw,yPosition(n)+4));
+        if (mDebugSceneRect)
+            mDebugSceneRect->setRect(sceneRect());
+    }
+
     void WaveScene::setWaveData(int dataIndex, WaveData* wd)
     {
         Q_ASSERT(dataIndex < mWaveItems.size());
         WaveItem* wi = mWaveItems.at(dataIndex);
         wi->setWavedata(wd);
-        float wmax = adjustSceneRect();
-        wi->setSceneMax(wmax);
         wi->update();
         update();
         Q_EMIT (cursorMoved(cursorPos()));

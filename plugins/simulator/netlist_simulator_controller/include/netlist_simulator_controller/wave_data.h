@@ -84,5 +84,6 @@ namespace hal {
         void waveReplaced(int inx);
         void waveUpdated(int inx);
         void waveRemoved(int inx);
+        void maxTimeChanged(u64 tmax);
     };
 }

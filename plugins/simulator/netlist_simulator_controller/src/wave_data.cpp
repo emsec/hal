@@ -43,7 +43,7 @@ namespace hal {
     WaveData::WaveData(u32 id_, const QString& nam, NetType tp, const QMap<u64,int> &other)
         : QMap<u64,int>(other), mId(id_), mName(nam), mNetType(tp)
     {
-        qDebug() << "A:WaveData" << mId << mName << hex << (quintptr) this;
+        // qDebug() << "A:WaveData" << mId << mName << hex << (quintptr) this;
     }
 
     WaveData::WaveData(const Net* n, NetType tp)
@@ -53,15 +53,17 @@ namespace hal {
                 .arg(n->get_id())),
           mNetType(tp)
     {
-        qDebug() << "B:WaveData" << mId << mName << hex << (quintptr) this;
+       // qDebug() << "B:WaveData" << mId << mName << hex << (quintptr) this;
     }
 
     WaveData::~WaveData()
     {
+        /*
         if (mId > 1000000)
             qDebug() << "==========";
         else
             qDebug() << "X:WaveData" << mId << mName << hex << (quintptr) this;
+            */
     }
 
     void WaveData::insertBooleanValue(u64 t, BooleanFunction::Value bval)
@@ -171,6 +173,7 @@ namespace hal {
     void WaveDataList::incrementMaxTime(u64 deltaT)
     {
         mMaxTime += deltaT;
+        Q_EMIT maxTimeChanged(mMaxTime);
     }
     
     QList<const WaveData*> WaveDataList::toList() const
@@ -216,6 +219,7 @@ namespace hal {
         mMaxTime = 0;
         if (notEmpty)
             Q_EMIT waveRemoved(-1);
+        Q_EMIT maxTimeChanged(0);
         for (auto it=begin(); it!=end(); ++it)
             delete *it;
     }
@@ -251,7 +255,10 @@ namespace hal {
             if ((*it)->isEmpty()) continue;
             u64 maxT = (*it)->lastKey();
             if (maxT > mMaxTime)
+            {
                 mMaxTime = maxT;
+                Q_EMIT maxTimeChanged(mMaxTime);
+            }
         }
     }
 

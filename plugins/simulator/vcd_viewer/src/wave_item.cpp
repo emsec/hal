@@ -9,10 +9,12 @@
 namespace hal {
 
     WaveItem::WaveItem(const WaveData* dat, int off)
-        : mData(dat), mYoffset(off)
+        : mData(dat), mYoffset(off), mMaxTime(1000)
     {
+        if (!mData->empty() && mData->lastKey() > mMaxTime)
+            mMaxTime = mData->lastKey();
         construct();
-        setSceneMax(dat->size() < 2 ? 1 : dat->lastKey());
+        qDebug() << "WaveItem:construct" << mData->id() << mData->name() << mMaxTime;
     }
 
     WaveItem::~WaveItem()
@@ -55,10 +57,12 @@ namespace hal {
         }
     }
 
-    void WaveItem::setSceneMax(float xmax)
+    void WaveItem::setMaxTime(float tmax)
     {
+        if (!mData->isEmpty() && mData->lastKey() > tmax) return;
         prepareGeometryChange();
-        mRect = QRectF(0, mYoffset-1, xmax, 1);
+        mMaxTime = tmax > 1000 ? tmax : 1000;
+        qDebug() << "WaveItem:setmaxtim" << mData->id() << mData->name() << mMaxTime;
         update();
     }
 
@@ -74,11 +78,18 @@ namespace hal {
         painter->setPen(QPen(QBrush(Qt::cyan),0.));  // TODO : style
         painter->drawLines(mSolidLines);
 
-        if (mData->isEmpty()) return;
+        float  y = mYoffset;
+        float x1 = mMaxTime;
+
+        if (mData->isEmpty())
+        {
+            painter->setPen(QPen(QBrush(Qt::cyan),0.,Qt::DotLine));
+            y -= 0.5;
+            painter->drawLine(QLineF(0,y,x1,y));
+            return;
+        }
 
         float x0 = mData->lastKey();
-        float x1 = mRect.width();
-        float  y = mYoffset;
         if (x0 < x1)
         {
             if (mData->last() < 0)
@@ -94,7 +105,7 @@ namespace hal {
 
     QRectF WaveItem::boundingRect() const
     {
-        return mRect;
+        return QRectF(0,mYoffset-1.05,mMaxTime,1.1);
     }
 
     void WaveItem::setYoffset(int val)

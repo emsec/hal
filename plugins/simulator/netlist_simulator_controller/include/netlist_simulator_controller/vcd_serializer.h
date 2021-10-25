@@ -22,7 +22,7 @@ namespace hal {
         bool next();
         int priorityCode(int n) const;
         QString name() const;
-        char charCode() const;
+        QByteArray charCode() const;
     };
 
     class VcdSerializer : public QObject
