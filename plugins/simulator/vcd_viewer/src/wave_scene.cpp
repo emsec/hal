@@ -10,17 +10,23 @@
 
 namespace hal {
 
+    const int WaveScene::sMinItemHeight = 5;
+    const float WaveScene::sMinSceneWidth = 1000;
+
     WaveScene::WaveScene(const WaveIndex *winx, QObject* parent)
         : QGraphicsScene(parent), mWaveIndex(winx), mClearTimer(nullptr), mDebugSceneRect(nullptr)
     {
-        setSceneRect(QRectF(0,0,1500,20));
+        setSceneRect(QRectF(0,0,sMinSceneWidth,yPosition(sMinItemHeight)+4));
+
+        /*
         mDebugSceneRect = new QGraphicsRectItem(sceneRect());
         mDebugSceneRect->setPen(QPen(Qt::red,0));
         addItem(mDebugSceneRect);
+        */
         mCursor = new WaveCursor();
         addItem(mCursor);
 
-        mTimescale = new WaveTimescale(6000);
+        mTimescale = new WaveTimescale(sMinSceneWidth);
         addItem(mTimescale);
         connect(mWaveIndex->waveDataList(),&WaveDataList::maxTimeChanged,this,&WaveScene::handleMaxTimeChanged);
     }
@@ -51,9 +57,9 @@ namespace hal {
         */
     }
 
-    void WaveScene::handleWaveAdded(WaveData *wd)
+    void WaveScene::handleWaveAppended(WaveData *wd)
     {
-        qDebug() << "handleWaveAdded" << wd->id() << wd->name() << wd->size() << hex << (quintptr) wd;
+        qDebug() << "handleWaveAppended" << wd->id() << wd->name() << wd->size() << hex << (quintptr) wd;
         addWave(wd);
     }
 
@@ -92,23 +98,35 @@ namespace hal {
     {
         int inx = mWaveItems.size();
         WaveItem* wi = new WaveItem(wd, yPosition(inx));
-        if (wi->maxTime() < sceneRect().width())
-            wi->setMaxTime(sceneRect().width());
         addItem(wi);
         mWaveItems.append(wi);
+        adjustSceneRect();
 
         // TODO : y-scroll to make new wave visible
         return inx;
     }
 
-    float WaveScene::adjustSceneRect()
+    float WaveScene::adjustSceneRect(u64 tmax)
     {
+        // TODO : min lines = 5 as const
         int n = mWaveItems.size();
         if (n<5) n=5;
-        float maxw = 1000;
+
+
+        float maxw = sceneRect().width();
+        if (maxw < sMinSceneWidth) maxw = sMinSceneWidth;
+        if (maxw < tmax)           maxw = tmax;
         for (WaveItem* itm : mWaveItems)
             if (itm->boundingRect().width() > maxw)
                 maxw = itm->boundingRect().width();
+
+        // tell items that scene width changed
+        if (maxw != sceneRect().width())
+        {
+            for (WaveItem* itm : mWaveItems)
+                itm->setMaxTime(maxw);
+            mTimescale->setMaxTime(maxw);
+        }
         setSceneRect(QRectF(0,0,maxw,yPosition(n)+4));
         if (mDebugSceneRect)
             mDebugSceneRect->setRect(sceneRect());
@@ -192,17 +210,7 @@ namespace hal {
 
     void WaveScene::handleMaxTimeChanged(u64 tmax)
     {
-        int n = mWaveItems.size();
-        if (n<5) n=5;
-        float maxw = 1000;
-        if (maxw < tmax) maxw = tmax;
-
-        for (WaveItem* itm : mWaveItems)
-            itm->setMaxTime(maxw);
-        mTimescale->setMaxTime(maxw);
-        setSceneRect(QRectF(0,0,maxw,yPosition(n)+4));
-        if (mDebugSceneRect)
-            mDebugSceneRect->setRect(sceneRect());
+        adjustSceneRect(tmax);
     }
 
     void WaveScene::setWaveData(int dataIndex, WaveData* wd)

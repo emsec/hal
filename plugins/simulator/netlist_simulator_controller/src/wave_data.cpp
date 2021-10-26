@@ -268,7 +268,7 @@ namespace hal {
         mIds[wd->id()] = n;
         append(wd);
         updateMaxTime();
-        Q_EMIT waveAdded();
+        Q_EMIT waveAdded(n);
     }
 
     void WaveDataList::addOrReplace(WaveData* wd)

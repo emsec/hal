@@ -27,13 +27,16 @@ namespace hal {
         QTimer* mClearTimer;
         QGraphicsRectItem* mDebugSceneRect;
 
-        float adjustSceneRect();
+        float adjustSceneRect(u64 tmax = 0);
+
+        static const int sMinItemHeight;
+        static const float sMinSceneWidth;
     Q_SIGNALS:
         void cursorMoved(float xpos);
 
     public Q_SLOTS:
         void xScaleChanged(float m11);
-        void handleWaveAdded(WaveData* wd);
+        void handleWaveAppended(WaveData* wd);
         void handleWaveDataChanged(int inx);
         void handleWaveRemoved(int inx);
         void handleMaxTimeChanged(u64 tmax);

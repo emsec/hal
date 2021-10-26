@@ -15,7 +15,9 @@ namespace hal {
     WaveView::WaveView(QWidget *parent)
         : QGraphicsView(parent),
           mXmag(1), mYmag(12), mDx(0), mDy(0), mLastCursorPos(0), mLastWidth(0), mCursorPixelPos(20)
-    {;}
+    {
+        setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    }
 
     void WaveView::resizeEvent(QResizeEvent *event)
     {
@@ -24,7 +26,7 @@ namespace hal {
         float scWidth = sceneRect().width();
         if (scWidth <= 0) return;
 
-        int viewHeight = event ? event->size().height() : height();
+//        int viewHeight = event ? event->size().height() : height();
         int viewWidth  = event ? event->size().width()  : width();
 
         mDy = - mYmag* sceneRect().top();
@@ -42,12 +44,11 @@ namespace hal {
 
         setTransform(QTransform(mXmag, 0, 0, mYmag, mDx, mDy),false);
         Q_EMIT changedXscale(mXmag);
-        qDebug() << "transform:resize" << transform();
 
         WaveScene* sc = static_cast<WaveScene*>(scene());
         float xw = width()/mXmag;
 
-        ensureVisible(QRectF(0,sceneRect().top(),xw,viewHeight/mYmag));
+        //ensureVisible(QRectF(0,sceneRect().top(),xw,viewHeight/mYmag));
         sc->setCursorPos(xw/10,false);
     }
 
@@ -55,7 +56,10 @@ namespace hal {
     {
         QGraphicsView::scrollContentsBy(dx,dy);
         if (dx) restoreCursor();
-        Q_EMIT relativeYScroll(dy);
+        if (dy)
+        {
+            Q_EMIT relativeYScroll(dy);
+        }
     }
 
     void WaveView::wheelEvent(QWheelEvent *event)
@@ -71,20 +75,20 @@ namespace hal {
         scaleFac = m/mXmag;
         mXmag = m;
 
-        int ixMouse = (int) floor(event->pos().x()+0.5);
+        int ixMouse = (int) floor(event->pos().x());
         QPointF scenePoint = mapToScene(ixMouse,0);
 
         float xfix = scenePoint.x();
         float x0 = xfix - ixMouse / mXmag;
         if (x0 < 0) x0 = 0;
-        float x1 = x0 + width() / mXmag;
+        //float x1 = x0 + width() / mXmag;
 
         mDx = ixMouse - mXmag * xfix;
+
         setTransform(QTransform(mXmag, 0, 0, mYmag, mDx, mDy),false);
 //        fitInView(x0,0,x1-x0,viewport()->height()/mYmag,Qt::IgnoreAspectRatio);
 
         Q_EMIT (changedXscale(mXmag));
-        qDebug() << "transform:wheel" << transform() << ixMouse << xfix << x1;
 
         restoreCursor();
     }

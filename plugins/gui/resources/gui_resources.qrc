@@ -81,6 +81,8 @@
         <file alias="gate_cursor">icons/gate_cursor.png</file>
         <file alias="minus">icons/minus.svg</file>
         <file alias="spinner">icons/spinner.svg</file>
+        <file alias="add_waveform_net">icons/add_waveform_net.svg</file>
+        <file alias="add_waveform">icons/add_waveform_net.png</file>
         <file alias="x_delete">icons/x_delete.png</file>	
     </qresource>
     <qresource prefix="/images">

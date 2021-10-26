@@ -45,6 +45,7 @@
 #include <unordered_set>
 
 class QStatusBar;
+class QCloseEvent;
 
 namespace hal
 {
@@ -86,6 +87,8 @@ namespace hal
         void handleSimulSettings();
         void handleOpenInputFile();
         void handleRunSimulation();
+        void handleAddResultWave();
+
         void handleSelectGates();
         void handleClockSet();
 
@@ -98,6 +101,9 @@ namespace hal
         void handleControllerAdded(u32 controllerId);
         void handleControllerRemoved(u32 controllerId);
         void displayStatusMessage(const QString& msg = QString());
+        void closeEvent(QCloseEvent *event) override;
+        void currentTabChanged(int inx);
+        void currentStateChanged(NetlistSimulatorController::SimulationState state);
 
     private:
         bool mVisualizeNetState;
@@ -108,9 +114,11 @@ namespace hal
         QAction* mSimulSettingsAction;
         QAction* mOpenInputfileAction;
         QAction* mRunSimulationAction;
+        QAction* mAddResultWaveAction;
 
         QTabWidget* mTabWidget;
         QStatusBar* mStatusBar;
+        WaveWidget* mCurrentWaveWidget;
 
     };
 }    // namespace hal

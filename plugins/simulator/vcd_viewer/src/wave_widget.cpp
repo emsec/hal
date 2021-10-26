@@ -4,6 +4,7 @@
 #include "vcd_viewer/wave_label.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "vcd_viewer/wave_edit_dialog.h"
+#include "vcd_viewer/wave_selection_dialog.h"
 #include "math.h"
 
 #include <QResizeEvent>
@@ -43,13 +44,15 @@ namespace hal {
         connect(mWaveView,&WaveView::relativeYScroll,this,&WaveWidget::handleYScroll);
         connect(gContentManager->getSelectionDetailsWidget(),&SelectionDetailsWidget::triggerHighlight,this,&WaveWidget::handleSelectionHighlight);
 
-        connect(&mWaveIndex,&WaveIndex::waveAdded,this,&WaveWidget::handleWaveAdded);
+        connect(&mWaveIndex,&WaveIndex::waveAppended,this,&WaveWidget::handleWaveAppended);
         connect(&mWaveIndex,&WaveIndex::waveRemoved,this,&WaveWidget::handleWaveRemoved);
         connect(&mWaveIndex,&WaveIndex::waveDataChanged,this,&WaveWidget::handleWaveDataChanged);
 
-        connect(&mWaveIndex,&WaveIndex::waveAdded,mWaveScene,&WaveScene::handleWaveAdded);
+        connect(&mWaveIndex,&WaveIndex::waveAppended,mWaveScene,&WaveScene::handleWaveAppended);
         connect(&mWaveIndex,&WaveIndex::waveRemoved,mWaveScene,&WaveScene::handleWaveRemoved);
         connect(&mWaveIndex,&WaveIndex::waveDataChanged,mWaveScene,&WaveScene::handleWaveDataChanged);
+
+        connect(mController, &NetlistSimulatorController::stateChanged, this, &WaveWidget::handleStateChanged);
     }
 
     WaveWidget::~WaveWidget()
@@ -64,6 +67,12 @@ namespace hal {
         return mController->get_id();
     }
 
+    NetlistSimulatorController::SimulationState WaveWidget::state() const
+    {
+        if (!mController) return NetlistSimulatorController::NoGatesSelected;
+        return mController->get_state();
+    }
+
     void WaveWidget::takeOwnership(std::unique_ptr<NetlistSimulatorController>& ctrl)
     {
         mControllerOwner = std::move(ctrl);
@@ -74,6 +83,12 @@ namespace hal {
         if (!mControllerOwner) return false;
         deleteLater();
         return true;
+    }
+
+    void WaveWidget::handleStateChanged(NetlistSimulatorController::SimulationState state)
+    {
+        mWaveIndex.setAutoAddWaves(state < NetlistSimulatorController::SimulationRun);
+        Q_EMIT stateChanged(state);
     }
 
     void WaveWidget::handleSelectionHighlight(const QVector<const SelectionTreeItem*>& highlight)
@@ -122,6 +137,25 @@ namespace hal {
         }
     }
 
+    void WaveWidget::addResults()
+    {
+        if (mController->get_state() != NetlistSimulatorController::ShowResults) return;
+        QSet<int> alreadyShown = mWaveIndex.waveDataIndexSet();
+        int n = mWaveIndex.waveDataList()->size();
+        QMap<const WaveData*,int> wdMap;
+        for (int i=0; i<n; i++)
+        {
+            if (alreadyShown.contains(i)) continue;
+            wdMap.insert(mWaveIndex.waveDataList()->at(i),i);
+        }
+        WaveSelectionDialog wsd(wdMap,this);
+        if (wsd.exec() != QDialog::Accepted) return;
+        for (int i : wsd.selectedWaveIndices())
+        {
+            mWaveIndex.addWave(i);
+        }
+    }
+
     void WaveWidget::deleteWave(int dataIndex)
     {
         WaveLabel* wl = mValues.at(dataIndex);
@@ -137,7 +171,7 @@ namespace hal {
         mController->add_gates(gats);
     }
 
-    void WaveWidget::handleWaveAdded(WaveData *wd)
+    void WaveWidget::handleWaveAppended(WaveData *wd)
     {
         Q_ASSERT(wd);
         int inx = mValues.size();

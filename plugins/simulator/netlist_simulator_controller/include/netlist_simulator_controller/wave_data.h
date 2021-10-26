@@ -79,7 +79,7 @@ namespace hal {
         QList<const WaveData*> toList() const;
         QList<const WaveData*> partialList(u64 start_time, u64 end_time, std::set<const Net*>& nets) const;
     Q_SIGNALS:
-        void waveAdded();
+        void waveAdded(int inx);
         void waveDataAboutToBeChanged(int inx);
         void waveReplaced(int inx);
         void waveUpdated(int inx);

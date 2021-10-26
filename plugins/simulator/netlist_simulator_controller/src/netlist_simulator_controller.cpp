@@ -55,6 +55,7 @@ namespace hal
             if (mSimulationEngine) mSimulationEngine->failed();
             break;
         }
+        Q_EMIT stateChanged(mState);
     }
 
     SimulationEngine* NetlistSimulatorController::create_simulation_engine(const std::string& name)
@@ -328,7 +329,7 @@ namespace hal
         mSimulationInput->add_clock(clk);
         WaveData* wd = new WaveDataClock(clock_net, clk, 2000);
         mWaveDataList->addOrReplace(wd);
-        if (mState == NoGatesSelected && mSimulationInput->is_ready()) mState = ParameterSetup;
+        if (mState == NoGatesSelected && mSimulationInput->is_ready()) setState(ParameterSetup);
     }
 
     void NetlistSimulatorController::add_gates(const std::vector<Gate *> &gates)
@@ -352,7 +353,7 @@ namespace hal
         {
             mWaveDataList->remove(id);
         }
-        if (mState == NoGatesSelected && mSimulationInput->is_ready()) mState = ParameterSetup;
+        if (mState == NoGatesSelected && mSimulationInput->is_ready()) setState(ParameterSetup);
     }
 
     const std::unordered_set<const Gate*>& NetlistSimulatorController::get_gates() const

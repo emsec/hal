@@ -35,6 +35,8 @@ namespace hal {
         void takeOwnership(std::unique_ptr<NetlistSimulatorController>& ctrl);
         bool triggerClose();
         void setGates(const std::vector<Gate*>& gats);
+        void addResults();
+        NetlistSimulatorController::SimulationState state() const;
 
     private Q_SLOTS:
         void handleCursorMoved(float xpos);
@@ -45,9 +47,13 @@ namespace hal {
         void editWaveData(int dataIndex);
         void deleteWave(int dataIndex);
         void handleSelectionHighlight(const QVector<const SelectionTreeItem*>& highlight);
-        void handleWaveAdded(WaveData* wd);
+        void handleWaveAppended(WaveData* wd);
         void handleWaveDataChanged(int inx);
         void handleWaveRemoved(int inx);
+        void handleStateChanged(NetlistSimulatorController::SimulationState state);
+
+    Q_SIGNALS:
+        void stateChanged(NetlistSimulatorController::SimulationState state);
 
     protected:
         void resizeEvent(QResizeEvent *event) override;

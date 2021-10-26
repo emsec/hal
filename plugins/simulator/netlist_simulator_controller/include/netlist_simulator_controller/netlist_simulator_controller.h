@@ -215,12 +215,21 @@ public:
      */
     const WaveDataList* get_waves() const { return mWaveDataList; }
 
+    /**
+     * Getter for controller state
+     * @return state of type SimulationState
+     */
+    SimulationState get_state() const { return mState; }
+
 public Q_SLOTS:
     void handleSimulSettings();
     void handleOpenInputFile(const QString& filename);
     void handleRunSimulation();
     void handleSelectGates();
     void handleRunFinished(bool success);
+
+Q_SIGNALS:
+    void stateChanged(SimulationState state);
 
 private:
     void initSimulator();

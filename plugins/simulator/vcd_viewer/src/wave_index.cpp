@@ -3,15 +3,24 @@
 
 namespace hal {
     WaveIndex::WaveIndex(const WaveDataList *wdl, QObject* parent)
-        : QObject(parent), mWaveDataList(wdl)
+        : QObject(parent), mWaveDataList(wdl), mAutoAddWaves(false)
     {
         int n = wdl->size();
         for (int i=0; i<n; i++)
             mIndexToWave.append(i);
         updateWaveToIndex();
-        connect(mWaveDataList,&WaveDataList::waveAdded,this,&WaveIndex::addWave);
         connect(mWaveDataList,&WaveDataList::waveReplaced,this,&WaveIndex::handleWaveReplaced);
         connect(mWaveDataList,&WaveDataList::waveUpdated,this,&WaveIndex::handleWaveUpdated);
+        setAutoAddWaves(true);
+    }
+
+    void WaveIndex::setAutoAddWaves(bool enable)
+    {
+        if (enable == mAutoAddWaves) return;
+        if ((mAutoAddWaves = enable))
+            connect(mWaveDataList,&WaveDataList::waveAdded,this,&WaveIndex::addWave);
+        else
+            disconnect(mWaveDataList,&WaveDataList::waveAdded,this,&WaveIndex::addWave);
     }
 
     void WaveIndex::handleWaveReplaced(int iwave)
@@ -55,6 +64,11 @@ namespace hal {
         }
     }
 
+    QSet<int> WaveIndex::waveDataIndexSet() const
+    {
+        return mIndexToWave.toSet();
+    }
+
     void WaveIndex::move(int inxFrom, int inxTo)
     {
         int n = mIndexToWave.size();
@@ -78,14 +92,14 @@ namespace hal {
         Q_EMIT(waveDataChanged(-1));
     }
 
-    void WaveIndex::addWave()
+    void WaveIndex::addWave(int iwave)
     {
+        if (mWaveToIndex.contains(iwave)) return;
         Q_ASSERT(!mWaveDataList->isEmpty());
         int inx = mIndexToWave.size();
-        int iwave = mWaveDataList->size()-1;
         mWaveToIndex[iwave] = inx;
         mIndexToWave.append(iwave);
-        Q_EMIT waveAdded(mWaveDataList->at(iwave));
+        Q_EMIT waveAppended(mWaveDataList->at(iwave));
     }
 
 }

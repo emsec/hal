@@ -3,6 +3,7 @@
 #include "netlist_simulator_controller/wave_data.h"
 #include <QHash>
 #include <QObject>
+#include <QSet>
 
 namespace hal {
 
@@ -12,6 +13,7 @@ namespace hal {
         const WaveDataList*  mWaveDataList;
         QList<int>     mIndexToWave;
         QHash<int,int> mWaveToIndex;
+        bool mAutoAddWaves;
 
         void updateWaveToIndex();
     public:
@@ -21,14 +23,16 @@ namespace hal {
         void move(int inxFrom, int inxTo);
         WaveData* waveData(int inx) const;
         int numberWavesShown() const { return mIndexToWave.size(); }
+        void setAutoAddWaves(bool enable);
+        QSet<int> waveDataIndexSet() const;
 
     Q_SIGNALS:
-        void waveAdded(WaveData* wd);
+        void waveAppended(WaveData* wd);
         void waveDataChanged(int inx);
         void waveRemoved(int inx);
 
     public Q_SLOTS:
-        void addWave();
+        void addWave(int iwave);
         void handleWaveReplaced(int iwave);
         void handleWaveUpdated(int iwave);
     };
