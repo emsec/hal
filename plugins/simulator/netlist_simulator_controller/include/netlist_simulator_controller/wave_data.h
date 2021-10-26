@@ -67,6 +67,7 @@ namespace hal {
         ~WaveDataList();
         void add(WaveData* wd);
         void addOrReplace(WaveData* wd);
+        void replaceWave(int inx, WaveData *wd);
         WaveData* waveDataByNetId(u32 id) const;
         QSet<u32> toSet() const { return mIds.keys().toSet(); }
         void remove(u32 id);

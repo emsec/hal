@@ -55,6 +55,7 @@ class NETLIST_API NetlistSimulatorController : public QObject {
 public:
     enum SimulationState { NoGatesSelected,
         ParameterSetup,
+        ParameterReady,
         SimulationRun,
         ShowResults,
         EngineFailed };
@@ -93,8 +94,9 @@ public:
      * @param[in] clock_net - The net that carries the clock signal.
      * @param[in] period - The clock period from rising edge to rising edge in picoseconds.
      * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
+     * @param[in] duration - Optional max time limit when showing clock in VCD viewer or editor
      */
-    void add_clock_period(const Net* clock_net, u64 period, bool start_at_zero = true);
+    void add_clock_period(const Net* clock_net, u64 period, bool start_at_zero = true, u64 duration=0);
 
     /**
      * Add gates to the simulation set that contains all gates that are considered during simulation.
@@ -213,7 +215,7 @@ public:
      * Getter for wave data list - simulation input as well as output
      * @return const pointer to wave data list
      */
-    const WaveDataList* get_waves() const { return mWaveDataList; }
+    WaveDataList* get_waves() const { return mWaveDataList; }
 
     /**
      * Getter for controller state
@@ -237,6 +239,7 @@ private:
 
     bool isClockSet() const;
     bool isInputSet() const;
+    void checkReadyState();
 
     u32 mId;
     QString mName;

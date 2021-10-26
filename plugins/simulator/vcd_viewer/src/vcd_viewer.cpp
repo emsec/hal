@@ -126,8 +126,9 @@ namespace hal
         else
         {
             mSimulSettingsAction->setEnabled(true);
-            mOpenInputfileAction->setEnabled(state == NetlistSimulatorController::ParameterSetup);
-            mRunSimulationAction->setEnabled(state == NetlistSimulatorController::ParameterSetup);
+            mOpenInputfileAction->setEnabled(state == NetlistSimulatorController::ParameterSetup
+                                             || state == NetlistSimulatorController::ParameterReady);
+            mRunSimulationAction->setEnabled(state == NetlistSimulatorController::ParameterReady);
             mAddResultWaveAction->setEnabled(state == NetlistSimulatorController::ShowResults);
         }
         mSimulSettingsAction->setIcon(gui_utility::getStyledSvgIcon(mSimulSettingsAction->isEnabled() ? "all->#FFFFFF" : "all->#808080",":/icons/preferences"));
@@ -139,6 +140,7 @@ namespace hal
         else switch (state) {
         case NetlistSimulatorController::NoGatesSelected: displayStatusMessage("Select gates to create (partial) netlist for simulation");       break;
         case NetlistSimulatorController::ParameterSetup:  displayStatusMessage("Setup parameter for simulation");                                break;
+        case NetlistSimulatorController::ParameterReady:  displayStatusMessage("Continue parameter setup or start simulation");                                break;
         case NetlistSimulatorController::SimulationRun:   displayStatusMessage("Simulation engine running, please wait ...");                    break;
         case NetlistSimulatorController::ShowResults:     displayStatusMessage("Simulation successful, add waveform data to visualize results"); break;
         case NetlistSimulatorController::EngineFailed:    displayStatusMessage("Simulation engine failed");                                      break;
@@ -212,6 +214,7 @@ namespace hal
          {
              act = new QAction(QString::fromStdString(sef->name()), engineMenu);
              act->setCheckable(true);
+             connect(act,&QAction::triggered,this,&VcdViewer::handleEngineSelected);
              engineMenu->addAction(act);
              engineGroup->addAction(act);
          }
@@ -224,6 +227,15 @@ namespace hal
 
          settingMenu->exec(mapToGlobal(QPoint(10,3)));
     }
+
+    void VcdViewer::handleEngineSelected(bool checked)
+    {
+        if (!checked || !mCurrentWaveWidget) return;
+        const QAction* act = static_cast<const QAction*>(sender());
+        if (!act) return;
+        mCurrentWaveWidget->createEngine(act->text());
+    }
+
 
     void VcdViewer::setVisualizeNetState(bool state)
     {
@@ -259,37 +271,32 @@ namespace hal
 
     void VcdViewer::handleOpenInputFile()
     {
-        if (!mTabWidget->count()) return;
-        WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->currentWidget());
-        if (!ww) return;
+        if (!mCurrentWaveWidget) return;
+
         QString filename =
                 QFileDialog::getOpenFileName(this, "Load input wave file", ".", ("VCD Files (*.vcd)") );
         if (filename.isEmpty()) return;
-        ww->controller()->parse_vcd(filename.toStdString());
+        mCurrentWaveWidget->controller()->parse_vcd(filename.toStdString());
     }
 
     void VcdViewer::handleRunSimulation()
     {
-        mResultMap.clear();
-
-        qDebug() << "results" << mResultMap.size();
+        if (!mCurrentWaveWidget) return;
+        mCurrentWaveWidget->controller()->run_simulation();
     }
 
     void VcdViewer::handleAddResultWave()
     {
-        if (!mTabWidget->count()) return;
-        WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->currentWidget());
-        if (!ww) return;
-        ww->addResults();
+        if (!mCurrentWaveWidget) return;
+        mCurrentWaveWidget->addResults();
     }
 
     void VcdViewer::handleClockSet()
     {
-        WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->currentWidget());
-        if (!ww) return;
+        if (!mCurrentWaveWidget) return;
 
         QList<const Net*> inputNets;
-        for (const Net* n : ww->controller()->get_input_nets())
+        for (const Net* n : mCurrentWaveWidget->controller()->get_input_nets())
             inputNets.append(n);
         if (inputNets.isEmpty()) return;
 
@@ -300,24 +307,22 @@ namespace hal
         if (period <= 0) return;
 
         const Net* clk = inputNets.at(csd.netIndex());
-        ww->controller()->add_clock_period(clk,csd.duration(),csd.startValue()==0);
-
-        // TODO : ww->update() ?
-   }
+        mCurrentWaveWidget->controller()->add_clock_period(clk,period,csd.startValue()==0,csd.duration());
+    }
 
     void VcdViewer::handleSelectGates()
     {
-        WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->currentWidget());
-        if (!ww) return;
+        if (!mCurrentWaveWidget) return;
         GateSelectionDialog gsd(this);
         if (gsd.exec() != QDialog::Accepted) return;
 
-        ww->setGates(gsd.selectedGates());
+        mCurrentWaveWidget->setGates(gsd.selectedGates());
     }
 
     void VcdViewer::handleSelectionChanged(void* sender)
     {
         Q_UNUSED(sender);
+        /*
         for (u32 nid : gSelectionRelay->selectedNetsList())
         {
             Net* n = gNetlist->get_net_by_id(nid);
@@ -327,5 +332,6 @@ namespace hal
             WaveData* wdCopy = new WaveData(*wd);
 // TODO             mWaveWidget->addOrReplaceWave(wdCopy);
         }
+        */
     }
 }    // namespace hal

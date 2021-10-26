@@ -37,6 +37,7 @@ namespace hal {
         void setGates(const std::vector<Gate*>& gats);
         void addResults();
         NetlistSimulatorController::SimulationState state() const;
+        void createEngine(const QString& engineFactoryName);
 
     private Q_SLOTS:
         void handleCursorMoved(float xpos);

@@ -46,7 +46,12 @@ namespace hal {
 
     bool SimulationInput::is_ready() const
     {
-        return !mSimulationSet.empty() && !m_clocks.empty() && !m_input_nets.empty();
+        return has_gates() && !m_clocks.empty() && !m_input_nets.empty();
+    }
+
+    bool SimulationInput::has_gates() const
+    {
+        return !mSimulationSet.empty();
     }
 
     const std::unordered_set<const Net *>& SimulationInput::get_input_nets() const

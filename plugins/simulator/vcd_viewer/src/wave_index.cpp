@@ -2,7 +2,7 @@
 #include "netlist_simulator_controller/wave_data.h"
 
 namespace hal {
-    WaveIndex::WaveIndex(const WaveDataList *wdl, QObject* parent)
+    WaveIndex::WaveIndex(WaveDataList *wdl, QObject* parent)
         : QObject(parent), mWaveDataList(wdl), mAutoAddWaves(false)
     {
         int n = wdl->size();
@@ -35,6 +35,14 @@ namespace hal {
         auto it = mWaveToIndex.find(iwave);
         if (it == mWaveToIndex.constEnd()) return;
         Q_EMIT waveDataChanged(it.value());
+    }
+
+    void WaveIndex::setWaveData(int inx, WaveData* wd)
+    {
+        Q_ASSERT(inx < mIndexToWave.size());
+        int iwave = mIndexToWave.at(inx);
+        Q_ASSERT(iwave < mWaveDataList->size());
+        mWaveDataList->replaceWave(iwave,wd);
     }
 
     WaveData* WaveIndex::waveData(int inx) const

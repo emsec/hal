@@ -48,6 +48,7 @@ namespace hal
         {
         case NoGatesSelected:  log_info(get_name(), "Select gates for simulation");              break;
         case ParameterSetup:   log_info(get_name(), "Expecting parameter and input");            break;
+        case ParameterReady:   log_info(get_name(), "Preconditions to start simulation met");    break;
         case SimulationRun:    log_info(get_name(), "Running simulation, please wait...");       break;
         case ShowResults:      log_info(get_name(), "Simulation engine completed successfully"); break;
         case EngineFailed:
@@ -65,6 +66,7 @@ namespace hal
         if (mSimulationEngine) delete mSimulationEngine;
         mSimulationEngine = fac->createEngine();
         log_info(get_name(), "engine '{}' created with working directory {}.", mSimulationEngine->name(), mSimulationEngine->directory());
+        checkReadyState();
         return mSimulationEngine;
     }
 
@@ -138,6 +140,7 @@ namespace hal
             for (WaveData* wd : reader.waveList())
                 mWaveDataList->addOrReplace(wd);
         }
+        checkReadyState();
     }
 
     void NetlistSimulatorController::handleRunSimulation()
@@ -153,7 +156,7 @@ namespace hal
             return false;
         }
 
-        if (mState != ParameterSetup)
+        if (mState != ParameterReady)
         {
             log_warning(get_name(), "wrong state {}.", (u32) mState);
             return false;
@@ -246,6 +249,7 @@ namespace hal
             for (WaveData* wd : reader.waveList())
                 mWaveDataList->addOrReplace(wd);
         }
+        checkReadyState();
     }
 
     void NetlistSimulatorController::handleRunFinished(bool success)
@@ -320,16 +324,24 @@ namespace hal
         add_clock_period(clock_net, period, start_at_zero);
     }
 
-    void NetlistSimulatorController::add_clock_period(const Net* clock_net, u64 period, bool start_at_zero)
+    void NetlistSimulatorController::checkReadyState()
+    {
+        if (mState >= ParameterReady) return; // nothing to do
+
+        if (mSimulationInput->is_ready() && mSimulationEngine && mWaveDataList->maxTime() > 0)
+            setState(ParameterReady);
+    }
+
+    void NetlistSimulatorController::add_clock_period(const Net* clock_net, u64 period, bool start_at_zero, u64 duration)
     {
         SimulationInput::Clock clk;
         clk.clock_net     = clock_net;
         clk.switch_time   = period / 2;
         clk.start_at_zero = start_at_zero;
         mSimulationInput->add_clock(clk);
-        WaveData* wd = new WaveDataClock(clock_net, clk, 2000);
+        WaveData* wd = new WaveDataClock(clock_net, clk, duration ? duration : 2000);
         mWaveDataList->addOrReplace(wd);
-        if (mState == NoGatesSelected && mSimulationInput->is_ready()) setState(ParameterSetup);
+        checkReadyState();
     }
 
     void NetlistSimulatorController::add_gates(const std::vector<Gate *> &gates)
@@ -353,7 +365,8 @@ namespace hal
         {
             mWaveDataList->remove(id);
         }
-        if (mState == NoGatesSelected && mSimulationInput->is_ready()) setState(ParameterSetup);
+        if (mState == NoGatesSelected && mSimulationInput->has_gates()) setState(ParameterSetup);
+        checkReadyState();
     }
 
     const std::unordered_set<const Gate*>& NetlistSimulatorController::get_gates() const
@@ -401,6 +414,7 @@ namespace hal
     void NetlistSimulatorController::simulate(u64 picoseconds)
     {
        mWaveDataList->incrementMaxTime(picoseconds);
+       checkReadyState();
     }
 
     void NetlistSimulatorController::handleSelectGates()

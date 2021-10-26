@@ -91,7 +91,7 @@ namespace hal
 
         void handleSelectGates();
         void handleClockSet();
-
+        void handleEngineSelected(bool checked);
 
         void handleSelectionChanged(void* sender);
         void setVisualizeNetState(bool state);
@@ -107,8 +107,6 @@ namespace hal
 
     private:
         bool mVisualizeNetState;
-
-        QMap<u32,const WaveData*> mResultMap;
 
         QAction* mCreateControlAction;
         QAction* mSimulSettingsAction;

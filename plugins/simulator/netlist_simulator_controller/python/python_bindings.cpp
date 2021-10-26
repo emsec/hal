@@ -74,12 +74,13 @@ namespace hal
                 :param bool start_at_zero: Initial clock state is 0 if true, 1 otherwise.
             )")
 
-            .def("add_clock_period", &NetlistSimulatorController::add_clock_period, py::arg("clock_net"), py::arg("period"), py::arg("start_at_zero") = true, R"(
+            .def("add_clock_period", &NetlistSimulatorController::add_clock_period, py::arg("clock_net"), py::arg("period"), py::arg("start_at_zero") = true, py::arg("duration") = 0, R"(
                 Specify a net that carries the clock signal and set the clock period in picoseconds.
         
                 :param hal_py.Net clock_net: The net that carries the clock signal.
                 :param int period: The clock period from rising edge to rising edge in picoseconds.
                 :param bool start_at_zero: Initial clock state is 0 if true, 1 otherwise.
+                :param int duration: Optional max time limit when showing clock in VCD viewer or editor
             )")
 
             .def("get_gates", &NetlistSimulatorController::get_gates, R"(

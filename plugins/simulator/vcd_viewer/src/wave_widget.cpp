@@ -106,6 +106,11 @@ namespace hal {
         }
     }
 
+    void WaveWidget::createEngine(const QString &engineFactoryName)
+    {
+        mController->create_simulation_engine(engineFactoryName.toStdString());
+    }
+
     void WaveWidget::setVisualizeNetState(bool state, bool activeTab)
     {
         GroupingTableModel* gtm = gContentManager->getGroupingManagerWidget()->getModel();

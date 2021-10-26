@@ -51,6 +51,12 @@ namespace hal {
         bool is_ready() const;
 
         /**
+         * Checks whether gates have been selected for simulation
+         * @return true if at least one gate is in simulation set, false otherwise
+         */
+        bool has_gates() const;
+
+        /**
          * Checks whether a gate is part of the simulation set
          * @param[in] g the gate
          * @return true if part, false otherwise

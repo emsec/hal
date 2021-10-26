@@ -271,19 +271,23 @@ namespace hal {
         Q_EMIT waveAdded(n);
     }
 
+    void WaveDataList::replaceWave(int inx, WaveData* wd)
+    {
+        // replace existing
+        WaveData* toDelete = at(inx);
+        operator[](inx) = wd;
+        updateMaxTime();
+        Q_EMIT waveReplaced(inx);
+        delete toDelete;
+    }
+
+
     void WaveDataList::addOrReplace(WaveData* wd)
     {
         Q_ASSERT(wd);
         int inx = mIds.value(wd->id(),-1);
         if (inx >= 0)
-        {
-            // replace existing
-            WaveData* toDelete = at(inx);
-            operator[](inx) = wd;
-            updateMaxTime();
-            Q_EMIT waveReplaced(inx);
-            delete toDelete;
-        }
+            replaceWave(inx, wd);
         else
             add(wd);
     }
