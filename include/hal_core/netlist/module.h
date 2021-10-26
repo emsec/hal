@@ -366,8 +366,8 @@ namespace hal
             std::unordered_map<Net*, std::string> m_net_to_pin;
 
             Port(const Port&) = delete;
-            Port(const std::string& name, Net* net, PinDirection direction, PinType type);
-            Port(const std::string& name, const std::vector<std::pair<std::string, Net*>>& pins_and_nets, PinDirection direction, PinType type);
+            Port(const std::string& name, Net* net, PinDirection direction, PinType type = PinType::none);
+            Port(const std::string& name, const std::vector<std::pair<std::string, Net*>>& pins_and_nets, PinDirection direction, PinType type = PinType::none);
         };
 
         /**
@@ -567,24 +567,6 @@ namespace hal
         Module& operator=(const Module&) = delete;    //disable copy-assignment
 
         /**
-         * Create a new port and assign it to the current module instance. Does not perform sanity checks.
-         * 
-         * @param[in] port_name - Name of the port.
-         * @param[in] port_net - Net passing through the port.
-         * @param[in] direction - Direction of the port.
-         * @param[in] type - Type of the port.
-         * @returns The created port.
-         */
-        Port* create_port(const std::string& port_name, Net* port_net, PinDirection direction, PinType type = PinType::none) const;
-
-        /**
-         * Remove a port from the current module instance. Does not perform sanity checks.
-         * 
-         * @param[in] port - The port to be removed.
-         */
-        void remove_port(Port* port) const;
-
-        /**
          * Determine the direction of a port using the net passing through the port.
          * 
          * @param[in] net - The net passing through the port.
@@ -619,6 +601,7 @@ namespace hal
         mutable std::list<Port*> m_ports_raw;
         mutable std::map<std::string, Port*> m_port_names_map;
         mutable std::map<std::string, Port*> m_pin_names_map;
+        mutable std::set<Net*> m_port_nets;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;

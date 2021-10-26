@@ -727,69 +727,83 @@ namespace hal
 
     void Module::update_ports() const
     {
-        // TODO
-        //     if (m_ports_dirty)
-        //     {
-        //         const std::vector<Net*>& input_nets  = get_input_nets();
-        //         const std::vector<Net*>& output_nets = get_output_nets();
+        if (m_ports_dirty)
+        {
+            const std::vector<Net*>& input_nets  = get_input_nets();
+            const std::vector<Net*>& output_nets = get_output_nets();
 
-        //         std::set<Net*> current_port_nets;
-        //         current_port_nets.insert(input_nets.begin(), input_nets.end());
-        //         current_port_nets.insert(output_nets.begin(), output_nets.end());
+            std::set<Net*> current_port_nets;
+            current_port_nets.insert(input_nets.begin(), input_nets.end());
+            current_port_nets.insert(output_nets.begin(), output_nets.end());
 
-        //         std::vector<Net*> diff_nets;
+            std::vector<Net*> diff_nets;
 
-        //         // find nets that are still in the port map but no longer a port net
-        //         std::set_difference(m_port_nets.begin(), m_port_nets.end(), current_port_nets.begin(), current_port_nets.end(), std::back_inserter(diff_nets));
-        //         for (Net* port_net : diff_nets)
-        //         {
-        //             remove_port(m_net_to_port.at(port_net));
-        //         }
+            // find nets that are still in the port map but no longer a port net
+            std::set_difference(m_port_nets.begin(), m_port_nets.end(), current_port_nets.begin(), current_port_nets.end(), std::back_inserter(diff_nets));
+            for (Net* port_net : diff_nets)
+            {
+                Port* old_port = get_port(port_net);
+                for (const std::string& pin : old_port->get_pins())
+                {
+                    m_pin_names_map.erase(pin);
+                }
 
-        //         diff_nets.clear();
+                m_port_names_map.erase(old_port->get_name());
 
-        //         for (Port* port : m_ports_raw)
-        //         {
-        //             port->m_direction = determine_port_direction(port->get_net());
-        //         }
+                m_ports_raw.erase(std::find(m_ports_raw.begin(), m_ports_raw.end(), old_port));
+                m_ports.erase(std::find_if(m_ports.begin(), m_ports.end(), [old_port](const std::unique_ptr<Port>& p) { return p.get() == old_port; }));
+            }
 
-        //         // find nets that are port nets but have not yet been assigned a port name
-        //         std::set_difference(current_port_nets.begin(), current_port_nets.end(), m_port_nets.begin(), m_port_nets.end(), std::back_inserter(diff_nets));
-        //         for (Net* port_net : diff_nets)
-        //         {
-        //             PinDirection direction = determine_port_direction(port_net);
+            diff_nets.clear();
 
-        //             std::string port_prefix;
-        //             u32* index_counter;
-        //             switch (direction)
-        //             {
-        //                 case PinDirection::input:
-        //                     port_prefix   = "I";
-        //                     index_counter = &m_next_input_index;
-        //                     break;
-        //                 case PinDirection::inout:
-        //                     port_prefix   = "IO";
-        //                     index_counter = &m_next_inout_index;
-        //                     break;
-        //                 case PinDirection::output:
-        //                     port_prefix   = "O";
-        //                     index_counter = &m_next_output_index;
-        //                     break;
-        //                 default:
-        //                     continue;
-        //             }
+            // update port directions
+            for (Port* port : m_ports_raw)
+            {
+                port->m_direction = determine_port_direction(port->get_nets().front());
+            }
 
-        //             std::string port_name;
-        //             do
-        //             {
-        //                 port_name = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
-        //             } while (m_name_to_port.find(port_name) != m_name_to_port.end());
+            // find nets that are port nets but have not yet been assigned a port name
+            std::set_difference(current_port_nets.begin(), current_port_nets.end(), m_port_nets.begin(), m_port_nets.end(), std::back_inserter(diff_nets));
+            for (Net* port_net : diff_nets)
+            {
+                PinDirection direction = determine_port_direction(port_net);
 
-        //             create_port(port_name, port_net, direction);
-        //         }
+                std::string port_prefix;
+                u32* index_counter;
+                switch (direction)
+                {
+                    case PinDirection::input:
+                        port_prefix   = "I";
+                        index_counter = &m_next_input_index;
+                        break;
+                    case PinDirection::inout:
+                        port_prefix   = "IO";
+                        index_counter = &m_next_inout_index;
+                        break;
+                    case PinDirection::output:
+                        port_prefix   = "O";
+                        index_counter = &m_next_output_index;
+                        break;
+                    default:
+                        continue;
+                }
 
-        //         m_ports_dirty = false;
-        //     }
+                std::string port_name;
+                do
+                {
+                    port_name = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
+                } while (m_port_names_map.find(port_name) != m_port_names_map.end());
+
+                std::unique_ptr<Port> port_owner(new Port(port_name, port_net, direction));
+                Port* new_port = port_owner.get();
+                m_ports.push_back(std::move(port_owner));
+                m_ports_raw.push_back(new_port);
+                m_port_names_map[port_name] = new_port;
+                m_pin_names_map[port_name]  = new_port;
+            }
+
+            m_ports_dirty = false;
+        }
     }
 
     std::vector<Module::Port*> Module::get_ports(const std::function<bool(Port*)>& filter) const
