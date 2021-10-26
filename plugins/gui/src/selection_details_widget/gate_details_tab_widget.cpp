@@ -3,6 +3,7 @@
 #include "gui/selection_details_widget/details_frame_widget.h"
 #include "gui/selection_details_widget/gate_details_widget/gate_info_table.h"
 #include "gui/selection_details_widget/gate_details_widget/gate_pin_tree.h"
+#include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"
 #include "gui/gui_globals.h"
 
 
@@ -43,13 +44,17 @@ namespace hal
         mLatchFunctionTable = new BooleanFunctionTable(this);
         mLutFunctionTable = new BooleanFunctionTable(this);
         mLutTable = new LUTTableWidget(this);
+        mLutConfigLabel = new QLabel("default", this);
+        mLutConfigLabel->setWordWrap(true);
+        mLutConfigLabel->setStyleSheet(QString("QLabel{color: %1;}").arg(PythonQssAdapter::instance()->numberColor().name()));//tmp.
 
         mFfFrame = new DetailsFrameWidget(mFfFunctionTable, "FF Information", this);
         mLatchFrame = new DetailsFrameWidget(mLatchFunctionTable, "Latch Information", this);
-        mLutFrame = new DetailsFrameWidget(mLutFunctionTable, "LUT Information", this); 
+        mLutFrame = new DetailsFrameWidget(mLutFunctionTable, "Boolean Function", this);
+        mLutConfigurationFrame = new DetailsFrameWidget(mLutConfigLabel, "Configuration String", this);
         mTruthTableFrame = new DetailsFrameWidget(mLutTable, "Truth Table", this); 
 
-        QList<DetailsFrameWidget*> framesFfLatchLutTab({mFfFrame, mLatchFrame, mLutFrame, mTruthTableFrame});
+        QList<DetailsFrameWidget*> framesFfLatchLutTab({mFfFrame, mLatchFrame, mLutFrame, mLutConfigurationFrame, mTruthTableFrame});
         mMultiTabIndex = addTab("(FF / Latch / LUT)", framesFfLatchLutTab); //save index of multi tab -> needed for show / hide
         mMultiTabContent = widget(mMultiTabIndex); // save content of multi tab -> needed for show / hide
 
@@ -126,6 +131,7 @@ namespace hal
             case GateDetailsTabWidget::GateTypeCategory::lut:
             {
                 mLutFrame->setVisible(true);
+                mLutConfigurationFrame->setVisible(true);
                 mTruthTableFrame->setVisible(true);
                 mFfFrame->setVisible(false);
                 mLatchFrame->setVisible(false);
@@ -135,6 +141,7 @@ namespace hal
             case GateDetailsTabWidget::GateTypeCategory::ff:
             {
                 mLutFrame->setVisible(false);
+                mLutConfigurationFrame->setVisible(false);
                 mTruthTableFrame->setVisible(false);
                 mFfFrame->setVisible(true);
                 mLatchFrame->setVisible(false);
@@ -144,6 +151,7 @@ namespace hal
             case GateDetailsTabWidget::GateTypeCategory::latch:
             {
                 mLutFrame->setVisible(false);
+                mLutConfigurationFrame->setVisible(false);
                 mTruthTableFrame->setVisible(false);
                 mFfFrame->setVisible(false);
                 mLatchFrame->setVisible(true);
@@ -308,6 +316,10 @@ namespace hal
                     }
                 }
                 mLutFunctionTable->setEntries(lutEntries);
+
+                //Setup LUT CONFIGURATION STRING
+                auto typeAndValueTuple = gate->get_data("generic", "INIT");
+                mLutConfigLabel->setText(" 0x" + QString::fromStdString(std::get<1>(typeAndValueTuple)));//some space to align
 
                 // The table is only updated if the gate has a LUT pin
                 if(lutPins.size() > 0){

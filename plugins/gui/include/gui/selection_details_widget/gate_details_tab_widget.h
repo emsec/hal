@@ -133,6 +133,9 @@ namespace hal
         BooleanFunctionTable* mLutFunctionTable;
         DetailsFrameWidget* mLutFrame;
 
+        QLabel* mLutConfigLabel;
+        DetailsFrameWidget* mLutConfigurationFrame;
+
         LUTTableWidget* mLutTable;
         DetailsFrameWidget* mTruthTableFrame;
 
