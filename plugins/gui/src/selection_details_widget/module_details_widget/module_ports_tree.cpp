@@ -25,7 +25,7 @@ namespace hal
         setModel(mPortModel);
 
         //connections
-        connect(this, &QTreeView::customContextMenuRequested, this, &ModulePortsTree::handleContextMenuRequested);
+        //connect(this, &QTreeView::customContextMenuRequested, this, &ModulePortsTree::handleContextMenuRequested);
         connect(mPortModel, &PortTreeModel::numberOfPortsChanged, this, &ModulePortsTree::handleNumberOfPortsChanged);
 
     }
@@ -72,7 +72,7 @@ namespace hal
         QMenu menu;
 
         //For now, if the item is a grouping item, only list of ports and namechange options
-        if(type == PortTreeModel::itemType::grouping)
+        if(type == PortTreeModel::itemType::portMultiBit)
         {
             menu.addAction(QIcon(":/icons/python"), "Extract ports as python list",
                 [modId, name]()

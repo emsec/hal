@@ -42,7 +42,7 @@ namespace hal
     public:
 
         //metatype declaration at the end of file
-        enum class itemType{grouping = 0, port = 1};
+        enum class itemType{portSingleBit = 0, portMultiBit = 1, pin = 2};
 
         /**
          * The constructor.
