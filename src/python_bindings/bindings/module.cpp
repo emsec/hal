@@ -298,6 +298,19 @@ namespace hal
             :rtype: bool
         )");
 
+        py_module_port.def_property_readonly("module", &Module::Port::get_module, R"(
+            The module the port is assigned to.
+            
+            :type: hal_py.Module
+        )");
+
+        py_module_port.def("get_module", &Module::Port::get_module, R"(
+            Get the module the port is assigned to.
+
+            :returns: The module.
+            :rtype: hal_py.Module
+        )");
+
         py_module_port.def_property_readonly("name", &Module::Port::get_name, R"(
             The name of the port.
             
@@ -324,7 +337,7 @@ namespace hal
             :rtype: hal_py.PinDirection
         )");
 
-        py_module_port.def_property("type", &Module::Port::get_type, &Module::Port::set_type, R"(
+        py_module_port.def_property_readonly("type", &Module::Port::get_type, R"(
             The type of the port.
             
             :type: hal_py.PinType
@@ -335,14 +348,6 @@ namespace hal
 
             :returns: The type of the port.
             :rtype: hal_py.PinType
-        )");
-
-        py_module_port.def("set_type", &Module::Port::set_type, py::arg("type"), R"(
-            Set the type of the port.
-
-            :param hal_py.PinType type: The new type. 
-            :returns: True on success, False otherwise.
-            :rtype: bool
         )");
 
         py_module_port.def("get_pins", &Module::Port::get_pins, R"(
@@ -438,7 +443,7 @@ namespace hal
             :rtype: list[hal_py.Module.Port]
         )");
 
-        py_module.def("get_port", py::overload_cast<const std::string&>(&Module::get_port, py::const_), py::arg("port_name"), R"(
+        py_module.def("get_port", py::overload_cast<const std::string&>(&Module::get_port), py::arg("port_name"), R"(
             Get the port specified by the given name.
         
             :param str port_name: The name of the port.
@@ -446,7 +451,7 @@ namespace hal
             :rtype: hal_py.Module.Port or None
         )");
 
-        py_module.def("get_port", py::overload_cast<Net*>(&Module::get_port, py::const_), py::arg("net"), R"(
+        py_module.def("get_port", py::overload_cast<Net*>(&Module::get_port), py::arg("net"), R"(
             Get the port that contains the specified net.
         
             :param hal_py.Net net: The net.
@@ -468,6 +473,15 @@ namespace hal
 
             :param hal_py.Module.Port port: The port.
             :param str new_name: The name to be assigned to the port.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("set_port_type", &Module::set_port_type, py::arg("port"), py::arg("new_type"), R"(
+            Set the type of the given port.
+
+            :param hal_py.Module.Port port: The port.
+            :param hal_py.PinType new_type: The type to be assigned to the port.
             :returns: True on success, False otherwise.
             :rtype: bool
         )");

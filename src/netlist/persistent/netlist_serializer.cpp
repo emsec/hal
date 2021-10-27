@@ -347,7 +347,7 @@ namespace hal
                                 ports.push_back(port);
                             }
                             Module::Port* new_port = sm->create_multi_bit_port(port_name, ports);
-                            new_port->set_type(port_type);
+                            sm->set_port_type(new_port, port_type);
                         }
                         else
                         {
@@ -357,7 +357,7 @@ namespace hal
                                 return false;
                             }
                             sm->set_port_name(port, port_name);
-                            port->set_type(port_type);
+                            sm->set_port_type(port, port_type);
                         }
                     }
                 }

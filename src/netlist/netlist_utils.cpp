@@ -321,7 +321,7 @@ namespace hal
             c_netlist->set_free_grouping_ids(nl->get_free_grouping_ids());
 
             // copy module port names
-            for (const Module* module : nl->get_modules())
+            for (Module* module : nl->get_modules())
             {
                 Module* c_module = c_netlist->get_module_by_id(module->get_id());
 
@@ -349,7 +349,7 @@ namespace hal
                     {
                         Module::Port* c_port = c_module->get_port(c_netlist->get_net_by_id(pins_and_nets.front().second->get_id()));
                         c_module->set_port_name(c_port, port->get_name());
-                        c_port->set_type(port->get_type());
+                        c_module->set_port_type(c_port, port->get_type());
                     }
                 }
 

@@ -17,17 +17,17 @@ namespace hal
         std::stringstream res_stream;
 
         // get modules in hierarchical order (bottom-up)
-        std::vector<const Module*> ordered_modules;
+        std::vector<Module*> ordered_modules;
         {
             const std::vector<Module*> modules = netlist->get_modules();
-            std::unordered_set<const Module*> modules_set(modules.begin(), modules.end());
+            std::unordered_set<Module*> modules_set(modules.begin(), modules.end());
 
             while (!modules_set.empty())
             {
                 for (auto it = modules_set.begin(); it != modules_set.end();)
                 {
                     std::vector<Module*> submodules = (*it)->get_submodules();
-                    if (submodules.empty() || std::all_of(submodules.begin(), submodules.end(), [modules_set](const Module* submod) { return modules_set.find(submod) == modules_set.end(); }))
+                    if (submodules.empty() || std::all_of(submodules.begin(), submodules.end(), [modules_set](Module* submod) { return modules_set.find(submod) == modules_set.end(); }))
                     {
                         ordered_modules.push_back(*it);
                         it = modules_set.erase(it);
@@ -46,7 +46,7 @@ namespace hal
 
         std::unordered_map<const Module*, std::string> module_aliases;
         std::unordered_map<std::string, u32> module_identifier_occurrences;
-        for (const Module* mod : ordered_modules)
+        for (Module* mod : ordered_modules)
         {
             if (!write_module_declaration(res_stream, mod, module_aliases, module_identifier_occurrences))
             {
@@ -70,7 +70,7 @@ namespace hal
     }
 
     bool VerilogWriter::write_module_declaration(std::stringstream& res_stream,
-                                                 const Module* module,
+                                                 Module* module,
                                                  std::unordered_map<const Module*, std::string>& module_type_aliases,
                                                  std::unordered_map<std::string, u32>& module_type_occurrences) const
     {
@@ -166,7 +166,7 @@ namespace hal
         }
 
         // write module instances
-        for (const Module* sub_module : module->get_submodules())
+        for (Module* sub_module : module->get_submodules())
         {
             res_stream << std::endl;
             if (!write_module_instance(res_stream, sub_module, aliases, identifier_occurrences, module_type_aliases))
@@ -263,7 +263,7 @@ namespace hal
     }
 
     bool VerilogWriter::write_module_instance(std::stringstream& res_stream,
-                                              const Module* module,
+                                              Module* module,
                                               std::unordered_map<const DataContainer*, std::string>& aliases,
                                               std::unordered_map<std::string, u32>& identifier_occurrences,
                                               std::unordered_map<const Module*, std::string>& module_type_aliases) const

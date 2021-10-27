@@ -213,7 +213,7 @@ namespace hal
          */
         void set_cache_dirty(bool is_dirty = true);
 
-        /*
+        /* TODO fix const correctness
          * ################################################################
          *      port functions
          * ################################################################
@@ -246,6 +246,13 @@ namespace hal
             bool operator!=(const Port& other) const;
 
             /**
+             * Get the module the port is assigned to.
+             * 
+             * @returns The module.
+             */
+            Module* get_module() const;
+
+            /**
              * Get the name of the port.
              * 
              * @returns The name of the port.
@@ -265,14 +272,6 @@ namespace hal
              * @returns The type of the port.
              */
             PinType get_type() const;
-
-            /**
-             * Set the type of the port.
-             * 
-             * @param[in] type - The new type. 
-             * @returns True on success, false otherwise.
-             */
-            bool set_type(PinType type);
 
             /**
              * Get the ordered pins of the port.
@@ -357,6 +356,7 @@ namespace hal
         private:
             friend class Module;
 
+            Module* m_module;
             std::string m_name;
             std::list<std::pair<std::string, Net*>> m_pins;
             PinDirection m_direction;
@@ -366,8 +366,8 @@ namespace hal
             std::unordered_map<Net*, std::string> m_net_to_pin;
 
             Port(const Port&) = delete;
-            Port(const std::string& name, Net* net, PinDirection direction, PinType type = PinType::none);
-            Port(const std::string& name, const std::vector<std::pair<std::string, Net*>>& pins_and_nets, PinDirection direction, PinType type = PinType::none);
+            Port(Module* module, const std::string& name, Net* net, PinDirection direction, PinType type = PinType::none);
+            Port(Module* module, const std::string& name, const std::vector<std::pair<std::string, Net*>>& pins_and_nets, PinDirection direction, PinType type = PinType::none);
         };
 
         /**
@@ -431,7 +431,7 @@ namespace hal
          * @param[in] filter - Filter function to be evaluated on each port.
          * @returns A vector of ports.
          */
-        std::vector<Port*> get_ports(const std::function<bool(Port*)>& filter = nullptr) const;
+        std::vector<Port*> get_ports(const std::function<bool(Port*)>& filter = nullptr);
 
         /**
          * Get the port specified by the given name.
@@ -439,7 +439,7 @@ namespace hal
          * @param[in] port_name - The name of the port.
          * @returns The port on success, a nullptr otherwise.
          */
-        Port* get_port(const std::string& port_name) const;
+        Port* get_port(const std::string& port_name);
 
         /**
          * Get the port that contains the specified net.
@@ -447,7 +447,7 @@ namespace hal
          * @param[in] net - The net.
          * @returns The port on success, a nullptr otherwise.
          */
-        Port* get_port(Net* net) const;
+        Port* get_port(Net* net);
 
         /**
          * Get the port that contains the specified pin.
@@ -455,7 +455,7 @@ namespace hal
          * @param[in] pin_name - The name of the pin.
          * @returns The port on success, a nullptr otherwise.
          */
-        Port* get_port_by_pin_name(const std::string& pin_name) const;
+        Port* get_port_by_pin_name(const std::string& pin_name);
 
         /**
          * Set the name of the given port.
@@ -466,6 +466,15 @@ namespace hal
          * @returns True on success, false otherwise.
          */
         bool set_port_name(Port* port, const std::string& new_name);
+
+        /**
+         * Set the type of the given port.
+         * 
+         * @param[in] port - The port.
+         * @param[in] new_type - The type to be assigned to the port.
+         * @returns True on success, false otherwise.
+         */
+        bool set_port_type(Port* port, PinType new_type);
 
         /**
          * Set the name of a pin within a port.
@@ -577,7 +586,7 @@ namespace hal
         /**
          * Update the ports of the module by analyzing its input and output nets.
          */
-        void update_ports() const;
+        void update_ports();
 
         std::string m_name;
         std::string m_type;
@@ -594,14 +603,14 @@ namespace hal
 
         // ports
         mutable bool m_ports_dirty;
-        mutable u32 m_next_input_index  = 0;
-        mutable u32 m_next_inout_index  = 0;
-        mutable u32 m_next_output_index = 0;
-        mutable std::vector<std::unique_ptr<Port>> m_ports;
-        mutable std::list<Port*> m_ports_raw;
-        mutable std::map<std::string, Port*> m_port_names_map;
-        mutable std::map<std::string, Port*> m_pin_names_map;
-        mutable std::set<Net*> m_port_nets;
+        u32 m_next_input_index  = 0;
+        u32 m_next_inout_index  = 0;
+        u32 m_next_output_index = 0;
+        std::vector<std::unique_ptr<Port>> m_ports;
+        std::list<Port*> m_ports_raw;
+        std::map<std::string, Port*> m_port_names_map;
+        std::map<std::string, Port*> m_pin_names_map;
+        std::set<Net*> m_port_nets;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;

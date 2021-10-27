@@ -167,8 +167,8 @@ namespace hal {
             EXPECT_TRUE(*nl2_m8 == *nl1_m8);
             EXPECT_FALSE(*nl1_m8 != *nl2_m8);
             EXPECT_FALSE(*nl2_m8 != *nl1_m8);
-            nl1_m8->change_port_name(nl1_m8->get_port_by_net(nl1_net_in), "in_a");
-            nl2_m8->change_port_name(nl2_m8->get_port_by_net(nl2_net_in), "in_b");
+            nl1_m8->set_port_name(nl1_m8->get_port(nl1_net_in), "in_a");
+            nl2_m8->set_port_name(nl2_m8->get_port(nl2_net_in), "in_b");
             EXPECT_FALSE(*nl1_m8 == *nl2_m8);       // different input port names
             EXPECT_FALSE(*nl2_m8 == *nl1_m8);
             EXPECT_TRUE(*nl1_m8 != *nl2_m8);
@@ -188,8 +188,8 @@ namespace hal {
             EXPECT_TRUE(*nl2_m9 == *nl1_m9);
             EXPECT_FALSE(*nl1_m9 != *nl2_m9);
             EXPECT_FALSE(*nl2_m9 != *nl1_m9);
-            nl1_m9->change_port_name(nl1_m9->get_port_by_net(nl1_net_out), "out_a");
-            nl2_m9->change_port_name(nl2_m9->get_port_by_net(nl2_net_out), "out_b");
+            nl1_m9->set_port_name(nl1_m9->get_port(nl1_net_out), "out_a");
+            nl2_m9->set_port_name(nl2_m9->get_port(nl2_net_out), "out_b");
             EXPECT_FALSE(*nl1_m9 == *nl2_m9);       // different input port names
             EXPECT_FALSE(*nl2_m9 == *nl1_m9);
             EXPECT_TRUE(*nl1_m9 != *nl2_m9);
@@ -756,48 +756,50 @@ namespace hal {
             ASSERT_NE(m_0, nullptr);
             {
                 // Get the input port name of a Net, which port name was not specified yet
-                EXPECT_EQ(m_0->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 13))->get_name(), "I(0)");
+                EXPECT_EQ(m_0->get_port(nl->get_net_by_id(MIN_NET_ID + 13))->get_name(), "I(0)");
             }
             {
                 // Get the output port name of a Net, which port name was not specified yet
-                EXPECT_EQ(m_0->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 045))->get_name(), "O(0)");
+                EXPECT_EQ(m_0->get_port(nl->get_net_by_id(MIN_NET_ID + 045))->get_name(), "O(0)");
             }
             {
                 // Set and get an input port name
-                EXPECT_TRUE(m_0->change_port_name(m_0->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3"));
-                Module::Port* port_by_net = m_0->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 13));
+                EXPECT_TRUE(m_0->set_port_name(m_0->get_port(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3"));
+                Module::Port* port_by_net = m_0->get_port(nl->get_net_by_id(MIN_NET_ID + 13));
                 ASSERT_NE(port_by_net, nullptr);
-                Module::Port* port_by_name = m_0->get_port_by_name("port_name_net_1_3");
+                Module::Port* port_by_name = m_0->get_port("port_name_net_1_3");
                 ASSERT_NE(port_by_name, nullptr);
                 EXPECT_EQ(port_by_net, port_by_name);
                 EXPECT_EQ(port_by_net->get_name(), "port_name_net_1_3");
-                EXPECT_EQ(port_by_net->get_net(), nl->get_net_by_id(MIN_NET_ID + 13));
+                ASSERT_EQ(port_by_net->get_pins().size(), 1);
+                EXPECT_EQ(port_by_net->get_pins().front(), "port_name_net_1_3");
+                ASSERT_EQ(port_by_net->get_nets().size(), 1);
+                EXPECT_EQ(port_by_net->get_nets().front(), nl->get_net_by_id(MIN_NET_ID + 13));
                 EXPECT_EQ(port_by_net->get_type(), PinType::none);
                 EXPECT_EQ(port_by_net->get_direction(), PinDirection::input);
-                EXPECT_TRUE(port_by_net->get_group_name().empty());
-                EXPECT_EQ(port_by_net->get_group_index(), 0);
 
                 // test setting type
-                m_0->change_port_type(port_by_net, PinType::data);
+                port_by_net->set_type(PinType::data);
                 EXPECT_EQ(port_by_net->get_type(), PinType::data);
             }
             {
                 // Set and get an output port name
-                EXPECT_TRUE(m_0->change_port_name(m_0->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 045)), "port_name_net_0_4_5"));
-                Module::Port* port_by_net = m_0->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 045));
+                EXPECT_TRUE(m_0->set_port_name(m_0->get_port(nl->get_net_by_id(MIN_NET_ID + 045)), "port_name_net_0_4_5"));
+                Module::Port* port_by_net = m_0->get_port(nl->get_net_by_id(MIN_NET_ID + 045));
                 ASSERT_NE(port_by_net, nullptr);
-                Module::Port* port_by_name = m_0->get_port_by_name("port_name_net_0_4_5");
+                Module::Port* port_by_name = m_0->get_port("port_name_net_0_4_5");
                 ASSERT_NE(port_by_name, nullptr);
                 EXPECT_EQ(port_by_net, port_by_name);
                 EXPECT_EQ(port_by_net->get_name(), "port_name_net_0_4_5");
-                EXPECT_EQ(port_by_net->get_net(), nl->get_net_by_id(MIN_NET_ID + 045));
+                ASSERT_EQ(port_by_net->get_pins().size(), 1);
+                EXPECT_EQ(port_by_net->get_pins().front(), "port_name_net_0_4_5");
+                ASSERT_EQ(port_by_net->get_nets().size(), 1);
+                EXPECT_EQ(port_by_net->get_nets().front(), nl->get_net_by_id(MIN_NET_ID + 045));
                 EXPECT_EQ(port_by_net->get_type(), PinType::none);
                 EXPECT_EQ(port_by_net->get_direction(), PinDirection::output);
-                EXPECT_TRUE(port_by_net->get_group_name().empty());
-                EXPECT_EQ(port_by_net->get_group_index(), 0);
 
                 // test setting type
-                m_0->change_port_type(port_by_net, PinType::data);
+                port_by_net->set_type(PinType::data);
                 EXPECT_EQ(port_by_net->get_type(), PinType::data);
             }
 
@@ -805,18 +807,18 @@ namespace hal {
             Module* m_1 = nl->create_module("mod_1", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 0), nl->get_gate_by_id(MIN_GATE_ID + 3), nl->get_gate_by_id(MIN_GATE_ID + 7)});
             ASSERT_NE(m_1, nullptr);
             // Specify exactly one input and output port name
-            EXPECT_TRUE(m_1->change_port_name(m_1->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3"));
-            EXPECT_TRUE(m_1->change_port_name(m_1->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 045)), "port_name_net_0_4_5"));
+            EXPECT_TRUE(m_1->set_port_name(m_1->get_port(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3"));
+            EXPECT_TRUE(m_1->set_port_name(m_1->get_port(nl->get_net_by_id(MIN_NET_ID + 045)), "port_name_net_0_4_5"));
             {
                 // Get all input ports
-                std::set<Module::Port*> expected_input_ports = {m_1->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 13)), m_1->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 20))};
+                std::set<Module::Port*> expected_input_ports = {m_1->get_port(nl->get_net_by_id(MIN_NET_ID + 13)), m_1->get_port(nl->get_net_by_id(MIN_NET_ID + 20))};
                 std::vector<Module::Port*> tmp = m_1->get_ports([](Module::Port* p){ return p->get_direction() == PinDirection::input; });
                 std::set<Module::Port*> actual_input_ports(tmp.begin(), tmp.end());
                 EXPECT_EQ(actual_input_ports, expected_input_ports);
             }
             {
                 // Get all output ports
-                std::set<Module::Port*> expected_output_ports = {m_1->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 045)), m_1->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 78))};
+                std::set<Module::Port*> expected_output_ports = {m_1->get_port(nl->get_net_by_id(MIN_NET_ID + 045)), m_1->get_port(nl->get_net_by_id(MIN_NET_ID + 78))};
                 std::vector<Module::Port*> tmp = m_1->get_ports([](Module::Port* p){ return p->get_direction() == PinDirection::output; });
                 std::set<Module::Port*> actual_output_ports(tmp.begin(), tmp.end());
                 EXPECT_EQ(actual_output_ports, expected_output_ports);
@@ -825,20 +827,20 @@ namespace hal {
             Module* m_2 = nl->create_module("mod_2", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 3)});
             ASSERT_NE(m_2, nullptr);
             // Add an input and an output port name
-            EXPECT_TRUE(m_2->change_port_name(m_2->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3"));
-            EXPECT_TRUE(m_2->change_port_name(m_2->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 30)), "port_name_net_3_0"));
+            EXPECT_TRUE(m_2->set_port_name(m_2->get_port(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3"));
+            EXPECT_TRUE(m_2->set_port_name(m_2->get_port(nl->get_net_by_id(MIN_NET_ID + 30)), "port_name_net_3_0"));
             // Add additional gates to the Module so that the port name nets are no longer input/output nets of the Module
             ASSERT_TRUE(m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 1)));
             ASSERT_TRUE(m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0)));
             {
                 // Get all input port names. The old ports shouldn't be contained.
-                std::vector<Module::Port*> expected_input_ports = {m_2->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 20))};
+                std::vector<Module::Port*> expected_input_ports = {m_2->get_port(nl->get_net_by_id(MIN_NET_ID + 20))};
                 std::vector<Module::Port*> actual_input_ports = m_2->get_ports([](Module::Port* p){ return p->get_direction() == PinDirection::input; });
                 EXPECT_EQ(actual_input_ports, expected_input_ports);
             }
             {
                 // Get all output port names. The old ports shouldn't be contained.
-                std::vector<Module::Port*> expected_input_ports = {m_2->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 37))};
+                std::vector<Module::Port*> expected_input_ports = {m_2->get_port(nl->get_net_by_id(MIN_NET_ID + 37))};
                 std::vector<Module::Port*> actual_input_ports = m_2->get_ports([](Module::Port* p){ return p->get_direction() == PinDirection::output; });
                 EXPECT_EQ(actual_input_ports, expected_input_ports);
             }
@@ -847,16 +849,16 @@ namespace hal {
             {
                 // empty port name
                 NO_COUT_TEST_BLOCK;
-                EXPECT_FALSE(m_0->change_port_name(m_0->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 13)), ""));
-                EXPECT_EQ(m_0->get_port_by_net(nl->get_net_by_id(MIN_NET_ID + 13)), nullptr);
-                EXPECT_EQ(m_0->get_port_by_name(""), nullptr);
+                EXPECT_FALSE(m_0->set_port_name(m_0->get_port(nl->get_net_by_id(MIN_NET_ID + 13)), ""));
+                EXPECT_EQ(m_0->get_port(nl->get_net_by_id(MIN_NET_ID + 13)), nullptr);
+                EXPECT_EQ(m_0->get_port(""), nullptr);
             }
             {
                 // nullptr net
                 NO_COUT_TEST_BLOCK;
-                EXPECT_FALSE(m_0->change_port_name(nullptr, "port_name"));
-                EXPECT_EQ(m_0->get_port_by_net(nullptr), nullptr);
-                EXPECT_EQ(m_0->get_port_by_name("port_name"), nullptr);
+                EXPECT_FALSE(m_0->set_port_name(nullptr, "port_name"));
+                EXPECT_EQ(m_0->get_port(nullptr), nullptr);
+                EXPECT_EQ(m_0->get_port("port_name"), nullptr);
             }
         TEST_END
     }
@@ -916,11 +918,11 @@ namespace hal {
             std::function<void(void)> trigger_gate_removed = [=](){test_mod->remove_gate(test_gate);};
             std::function<void(void)> trigger_input_port_name_changed = [=](){
                 test_mod->assign_gate(test_gate);
-                test_mod->change_port_name(test_mod->get_port_by_net(test_gate->get_fan_in_net("I0")), "mod_in_0");
+                test_mod->set_port_name(test_mod->get_port(test_gate->get_fan_in_net("I0")), "mod_in_0");
             };
             std::function<void(void)> trigger_output_port_name_changed = [=](){
                 test_mod->assign_gate(test_gate);
-                test_mod->change_port_name(test_mod->get_port_by_net(test_gate->get_fan_out_net("O")), "mod_out");
+                test_mod->set_port_name(test_mod->get_port(test_gate->get_fan_out_net("O")), "mod_out");
             };
 
             // The events that are tested

@@ -813,9 +813,9 @@ namespace hal
         }
         for (const Module::Port* p_0 : m_0->get_ports())
         {
-            if (const Module::Port* p_1 = m_1->get_port_by_name(p_0->get_name()); p_1 != nullptr)
+            if (const Module::Port* p_1 = m_1->get_port(p_0->get_name()); p_1 != nullptr)
             {
-                if ((p_0->get_name() != p_1->get_name()) || (p_0->get_net()->get_name() != p_1->get_net()->get_name()) || (p_0->get_direction() != p_1->get_direction()) || (p_0->get_type() != p_1->get_type()) || (p_0->get_group_name() != p_1->get_group_name()) || (p_0->get_group_index() != p_1->get_group_index())) 
+                if ((p_0->get_name() != p_1->get_name()) || (p_0->get_direction() != p_1->get_direction()) || (p_0->get_type() != p_1->get_type()) || (p_0->get_net()->get_name() != p_1->get_net()->get_name())) 
                 {
                     log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two ports are different (\"{}\" vs \"{}\")", p_0->get_name(), p_1->get_name());
                     return false;

@@ -48,14 +48,15 @@ namespace hal
             }
         }
 
-        for (const Port* port : get_ports())
-        {
-            if (const Port* other_port = other.get_port(other.get_netlist()->get_net_by_id(port->get_nets().front()->get_id())); other_port == nullptr || *other_port != *port)
-            {
-                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal port.", m_id, other.get_id());
-                return false;
-            }
-        }
+        // TODO add checking for ports again
+        // for (const Port* port : get_ports())
+        // {
+        //     if (const Port* other_port = other.get_port(other.get_netlist()->get_net_by_id(port->get_nets().front()->get_id())); other_port == nullptr || *other_port != *port)
+        //     {
+        //         log_info("module", "the modules with IDs {} and {} are not equal due to an unequal port.", m_id, other.get_id());
+        //         return false;
+        //     }
+        // }
 
         if (!DataContainer::operator==(other))
         {
@@ -508,15 +509,15 @@ namespace hal
      * ################################################################
      */
 
-    Module::Port::Port(const std::string& name, Net* net, PinDirection direction, PinType type) : m_name(name), m_direction(direction), m_type(type)
+    Module::Port::Port(Module* module, const std::string& name, Net* net, PinDirection direction, PinType type) : m_module(module), m_name(name), m_direction(direction), m_type(type)
     {
         m_pins.push_back(std::make_pair(name, net));
         m_pin_to_net[name] = net;
         m_net_to_pin[net]  = name;
     }
 
-    Module::Port::Port(const std::string& name, const std::vector<std::pair<std::string, Net*>>& pins_and_nets, PinDirection direction, PinType type)
-        : m_name(name), m_direction(direction), m_type(type)
+    Module::Port::Port(Module* module, const std::string& name, const std::vector<std::pair<std::string, Net*>>& pins_and_nets, PinDirection direction, PinType type)
+        : m_module(module), m_name(name), m_direction(direction), m_type(type)
     {
         for (const std::pair<std::string, Net*>& pin : pins_and_nets)
         {
@@ -548,6 +549,11 @@ namespace hal
     bool Module::Port::operator!=(const Port& other) const
     {
         return !operator==(other);
+    }
+
+    Module* Module::Port::get_module() const
+    {
+        return m_module;
     }
 
     const std::string& Module::Port::get_name() const
@@ -601,12 +607,6 @@ namespace hal
     bool Module::Port::is_multi_bit() const
     {
         return m_pins.size() > 1;
-    }
-
-    bool Module::Port::set_type(PinType type)
-    {
-        m_type = type;
-        return true;
     }
 
     bool Module::Port::contains_pin(const std::string& pin_name) const
@@ -725,7 +725,7 @@ namespace hal
         return direction;
     }
 
-    void Module::update_ports() const
+    void Module::update_ports()
     {
         if (m_ports_dirty)
         {
@@ -794,7 +794,7 @@ namespace hal
                     port_name = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
                 } while (m_port_names_map.find(port_name) != m_port_names_map.end());
 
-                std::unique_ptr<Port> port_owner(new Port(port_name, port_net, direction));
+                std::unique_ptr<Port> port_owner(new Port(this, port_name, port_net, direction));
                 Port* new_port = port_owner.get();
                 m_ports.push_back(std::move(port_owner));
                 m_ports_raw.push_back(new_port);
@@ -806,7 +806,7 @@ namespace hal
         }
     }
 
-    std::vector<Module::Port*> Module::get_ports(const std::function<bool(Port*)>& filter) const
+    std::vector<Module::Port*> Module::get_ports(const std::function<bool(Port*)>& filter)
     {
         update_ports();
 
@@ -831,7 +831,7 @@ namespace hal
         return res;
     }
 
-    Module::Port* Module::get_port(const std::string& port_name) const
+    Module::Port* Module::get_port(const std::string& port_name)
     {
         if (port_name.empty())
         {
@@ -850,7 +850,7 @@ namespace hal
         return nullptr;
     }
 
-    Module::Port* Module::get_port(Net* port_net) const
+    Module::Port* Module::get_port(Net* port_net)
     {
         if (port_net == nullptr)
         {
@@ -875,7 +875,7 @@ namespace hal
         return nullptr;
     }
 
-    Module::Port* Module::get_port_by_pin_name(const std::string& pin_name) const
+    Module::Port* Module::get_port_by_pin_name(const std::string& pin_name)
     {
         if (pin_name.empty())
         {
@@ -896,7 +896,7 @@ namespace hal
 
     bool Module::set_port_name(Port* port, const std::string& new_name)
     {
-        if (port == nullptr || new_name.empty())
+        if (port == nullptr || port->get_module() != this || new_name.empty())
         {
             return false;
         }
@@ -924,9 +924,20 @@ namespace hal
         return true;
     }
 
+    bool Module::set_port_type(Port* port, PinType new_type)
+    {
+        if (port == nullptr || port->get_module() != this)
+        {
+            return false;
+        }
+
+        port->m_type = new_type;
+        return true;
+    }
+
     bool Module::set_port_pin_name(Port* port, const std::string& old_name, const std::string& new_name)
     {
-        if (port == nullptr || old_name.empty() || new_name.empty())
+        if (port == nullptr || port->get_module() != this || old_name.empty() || new_name.empty())
         {
             return false;
         }
@@ -958,7 +969,7 @@ namespace hal
 
     bool Module::set_port_pin_name(Port* port, Net* net, const std::string& new_name)
     {
-        if (port == nullptr || net == nullptr || new_name.empty())
+        if (port == nullptr || port->get_module() != this || net == nullptr || new_name.empty())
         {
             return false;
         }
@@ -993,7 +1004,7 @@ namespace hal
         std::vector<std::pair<std::string, Net*>> pins_and_nets;
         for (Port* port : ports_to_merge)
         {
-            if (port == nullptr || port->m_direction != direction || port->m_type != type)
+            if (port == nullptr || port->get_module() != this || port->m_direction != direction || port->m_type != type)
             {
                 return nullptr;
             }
@@ -1010,7 +1021,7 @@ namespace hal
         }
 
         // create multi-bit port
-        std::unique_ptr<Port> port_owner(new Port(name, pins_and_nets, direction, type));
+        std::unique_ptr<Port> port_owner(new Port(this, name, pins_and_nets, direction, type));
         Port* new_port = port_owner.get();
         m_ports.push_back(std::move(port_owner));
         m_ports_raw.push_back(new_port);
@@ -1038,7 +1049,7 @@ namespace hal
      */
     bool Module::delete_multi_bit_port(Port* port)
     {
-        if (port == nullptr || std::find(m_ports_raw.begin(), m_ports_raw.end(), port) == m_ports_raw.end())
+        if (port == nullptr || port->get_module() != this || std::find(m_ports_raw.begin(), m_ports_raw.end(), port) == m_ports_raw.end())
         {
             return false;
         }
@@ -1046,7 +1057,7 @@ namespace hal
         // create ports
         for (const auto& [pin_name, net] : port->m_pins)
         {
-            std::unique_ptr<Port> port_owner(new Port(pin_name, net, port->m_direction, port->m_type));
+            std::unique_ptr<Port> port_owner(new Port(this, pin_name, net, port->m_direction, port->m_type));
             Port* new_port = port_owner.get();
             m_ports.push_back(std::move(port_owner));
             m_ports_raw.push_back(new_port);
