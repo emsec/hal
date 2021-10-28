@@ -288,6 +288,22 @@ namespace hal
             std::vector<Net*> get_nets() const;
 
             /**
+             * Get the pin through which the specified net runs.
+             * 
+             * @param[in] net - The net.
+             * @returns The pin through which the net runs.
+             */
+            const std::string& get_pin(Net* net) const;
+
+            /**
+             * Get the net that runs through the specified pin.
+             * 
+             * @param[in] pin_name - The name of the pin.
+             * @returns The net that runs through the pin.
+             */
+            Net* get_net(const std::string& pin_name) const;
+
+            /**
              * Get the ordered pins and the nets that pass through them.
              * 
              * @returns An ordered vector of pairs of pins and nets.

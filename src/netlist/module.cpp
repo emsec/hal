@@ -593,6 +593,36 @@ namespace hal
         return res;
     }
 
+    const std::string& Module::Port::get_pin(Net* net) const
+    {
+        if (net == nullptr)
+        {
+            return "";
+        }
+
+        if (const auto it = m_net_to_pin.find(net); it != m_net_to_pin.end())
+        {
+            return it->second;
+        }
+
+        return "";
+    }
+
+    Net* Module::Port::get_net(const std::string& pin_name) const
+    {
+        if (pin_name.empty())
+        {
+            return nullptr;
+        }
+
+        if (const auto it = m_pin_to_net.find(pin_name); it != m_pin_to_net.end())
+        {
+            return it->second;
+        }
+
+        return nullptr;
+    }
+
     std::vector<std::pair<std::string, Net*>> Module::Port::get_pins_and_nets() const
     {
         std::vector<std::pair<std::string, Net*>> res;
@@ -885,9 +915,9 @@ namespace hal
 
         update_ports();
 
-        if (const auto it = std::find_if(m_ports_raw.begin(), m_ports_raw.end(), [pin_name](Port* port) { return port->contains_pin(pin_name); }); it != m_ports_raw.end())
+        if (const auto it = m_pin_names_map.find(pin_name); it != m_pin_names_map.end())
         {
-            return *it;
+            return it->second;
         }
 
         log_debug("module", "'{}' is not a pin of a port of module '{}' with ID {} in netlist with ID {}.", pin_name, m_name, m_id, m_internal_manager->m_netlist->get_id());

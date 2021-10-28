@@ -364,6 +364,22 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
+        py_module_port.def("get_pin", &Module::Port::get_pin, py::arg("net"), R"(
+            Get the pin through which the specified net runs.
+
+            :param hal_py.Net net: The net.
+            :returns: The pin through which the net runs.
+            :rtype: str
+        )");
+
+        py_module_port.def("get_net", &Module::Port::get_net, py::arg("pin_name"), R"(
+            Get the net that runs through the specified pin.
+
+            :param str pin_name: The name of the pin.
+            :returns: The net that runs through the pin.
+            :rtype: hal_py.Net
+        )");
+
         py_module_port.def("get_pins_and_nets", &Module::Port::get_pins_and_nets, R"(
             Get the ordered pins and the nets that pass through them.
 
