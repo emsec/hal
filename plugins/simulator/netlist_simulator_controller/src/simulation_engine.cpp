@@ -49,9 +49,9 @@ namespace hal {
         mCanShareMemory = true;
     }
 
-    std::vector<WaveEvent> SimulationEngineEventDriven::get_simulation_events(Net *n) const
+    std::vector<WaveEvent> SimulationEngineEventDriven::get_simulation_events(u32 netId) const
     {
-        Q_UNUSED(n);
+        Q_UNUSED(netId);
         return std::vector<WaveEvent>();
     }
 

@@ -15,6 +15,7 @@
 
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include "hal_core/netlist/grouping.h"
+#include "hal_core/utilities/log.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
@@ -51,6 +52,10 @@ namespace hal {
         connect(&mWaveIndex,&WaveIndex::waveAppended,mWaveScene,&WaveScene::handleWaveAppended);
         connect(&mWaveIndex,&WaveIndex::waveRemoved,mWaveScene,&WaveScene::handleWaveRemoved);
         connect(&mWaveIndex,&WaveIndex::waveDataChanged,mWaveScene,&WaveScene::handleWaveDataChanged);
+        connect(mWaveIndex.waveDataList(),&WaveDataList::maxTimeChanged,mWaveScene,&WaveScene::handleMaxTimeChanged);
+
+        connect(&mWaveIndex,&WaveIndex::waveRemoved,mWaveView,&WaveView::handleWaveRemoved);
+        connect(mWaveIndex.waveDataList(),&WaveDataList::maxTimeChanged,mWaveView,&WaveView::handleMaxTimeChanged);
 
         connect(mController, &NetlistSimulatorController::stateChanged, this, &WaveWidget::handleStateChanged);
     }
@@ -163,10 +168,7 @@ namespace hal {
 
     void WaveWidget::deleteWave(int dataIndex)
     {
-        WaveLabel* wl = mValues.at(dataIndex);
-        mValues.removeAt(dataIndex);
         mWaveIndex.removeIndex(dataIndex);
-        wl->deleteLater();
     }
 
     void WaveWidget::setGates(const std::vector<Gate*>& gats)
@@ -211,8 +213,16 @@ namespace hal {
         }
         else
         {
-            delete mValues.at(inx);
-            mValues.removeAt(inx);
+            int ilast = mValues.size()-1;
+            Q_ASSERT(inx <= ilast);
+            delete mValues.at(ilast);
+            mValues.removeAt(ilast);
+            for (int i=inx; i < ilast; i++)
+            {
+                WaveLabel* wl = mValues.at(i);
+                wl->setText(mWaveIndex.waveData(i)->name());
+                wl->update();
+            }
         }
     }
 
@@ -237,7 +247,14 @@ namespace hal {
         WaveData wd(*editorInput);
         WaveEditDialog wed(wd,this);
         if (wed.exec() != QDialog::Accepted) return;
-        mWaveScene->setWaveData(dataIndex,wed.dataFactory()); // TODO : sanitize input data
+        mWaveIndex.setWaveData(dataIndex,wed.dataFactory());
+    }
+
+    void WaveWidget::handleEngineFinished(bool success)
+    {
+        if (!success) return;
+        if (!mController->get_results())
+            log_warning(mController->get_name(), "Cannot get simulation results");
     }
 
     void WaveWidget::visualizeCurrentNetState(float xpos)
@@ -325,7 +342,6 @@ namespace hal {
 
     void WaveWidget::handleLabelSwap(int isource, int ypos)
     {
-
         int n = mValues.size();
         for (int i=0; i<n; i++)
             mValues.at(i)->setState(0);
@@ -333,13 +349,16 @@ namespace hal {
         int itarget = targetIndex(ypos);
         if (itarget >= 0 && itarget != isource)
         {
-            WaveLabel* wl = mValues.at(isource);
-            mValues.removeAt(isource);
-            mValues.insert(itarget < isource ? itarget : itarget-1, wl);
             mWaveIndex.move(isource,itarget);
+            int i0 = isource < itarget ? isource : itarget;
+            int i1 = isource < itarget ? itarget : isource;
+            for (int i=i0; i<i1; i++)
+            {
+                WaveLabel* wl = mValues.at(i);
+                wl->setText(mWaveIndex.waveData(i)->name());
+                wl->update();
+            }
         }
-        for (int i=0; i<n; i++)
-            mValues.at(i)->update();
         update();
     }
 

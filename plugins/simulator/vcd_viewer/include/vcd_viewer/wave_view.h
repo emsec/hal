@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QVector>
 #include <QMap>
+#include "hal_core/defines.h"
 
 namespace hal {
 
@@ -28,6 +29,8 @@ namespace hal {
 
     public Q_SLOTS:
         void handleCursorMoved(float xpos);
+        void handleWaveRemoved(int inx);
+        void handleMaxTimeChanged(u64 tmax);
 
     protected:
         void wheelEvent(QWheelEvent *event) override;

@@ -19,6 +19,7 @@ namespace hal {
     public:
         WaveIndex(WaveDataList* wdl, QObject* parent=nullptr);
         void removeIndex(int inx);
+        void clearAll();
         const WaveDataList* waveDataList() const { return mWaveDataList; }
         void move(int inxFrom, int inxTo);
         WaveData* waveData(int inx) const;

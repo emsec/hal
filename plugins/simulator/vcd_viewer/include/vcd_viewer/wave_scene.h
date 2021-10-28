@@ -30,7 +30,6 @@ namespace hal {
         float adjustSceneRect(u64 tmax = 0);
 
         static const int sMinItemHeight;
-        static const float sMinSceneWidth;
     Q_SIGNALS:
         void cursorMoved(float xpos);
 
@@ -49,11 +48,11 @@ namespace hal {
         void setCursorPos(float xp, bool relative);
 
         float yPosition(int dataIndex) const;
-        void setWaveData(int dataIndex, WaveData* wd);
         void moveToIndex(int indexFrom, int indexTo);
         void deleteWave(int dataIndex);
-        int addWave(WaveData* wd);
         void generateDataSample();
+
+        static const float sMinSceneWidth;
     };
 
 }

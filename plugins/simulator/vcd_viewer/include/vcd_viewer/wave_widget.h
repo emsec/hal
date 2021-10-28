@@ -39,6 +39,9 @@ namespace hal {
         NetlistSimulatorController::SimulationState state() const;
         void createEngine(const QString& engineFactoryName);
 
+    public Q_SLOTS:
+        void handleEngineFinished(bool success);
+
     private Q_SLOTS:
         void handleCursorMoved(float xpos);
         void handleYScroll(int dy);

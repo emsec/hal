@@ -12,10 +12,15 @@ namespace hal {
         mComboNet = new QComboBox(this);
         int j = 0;
         int iclk = -1;
+
         for (const Net* n : inputs)
         {
             QString netName = QString::fromStdString(n->get_name());
-            if (netName.toUpper().contains("CLK")) iclk = j;
+            QString upcase = netName.toUpper();
+            if (upcase == "CLK" || upcase == "CLOCK")
+                iclk = j;
+            else if ((upcase.contains("CLK") || upcase.contains("CLOCK")) && j<0 )
+                iclk = j;
             mComboNet->insertItem(j++,QString("%1[%2]").arg(netName).arg(n->get_id()));
         }
         if (iclk >= 0) mComboNet->setCurrentIndex(iclk);

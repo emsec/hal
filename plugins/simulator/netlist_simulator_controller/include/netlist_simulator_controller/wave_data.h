@@ -34,6 +34,7 @@ namespace hal {
         QString name()    const { return mName; }
         NetType netType() const { return mNetType; }
         int intValue(float t) const;
+        u64  maxTime() const;
         void setStartvalue(int val);
         void setId(u32 id_) { mId = id_; }
         void insertBooleanValue(u64 t, BooleanFunction::Value bval);
@@ -52,6 +53,7 @@ namespace hal {
         WaveDataClock(const Net* n, const SimulationInput::Clock& clk, u64 tmax);
         WaveDataClock(const Net* n, int start, u64 period, u64 tmax);
         void setMaxTime(u64 tmax);
+        SimulationInput::Clock clock() const { return mClock; }
     };
 
     class WaveDataList : public QObject, public QList<WaveData*>

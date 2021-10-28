@@ -23,7 +23,6 @@
 
 #include <QFile>
 #include <QDate>
-#include <QDebug>
 #include <QColor>
 #include <QFileDialog>
 #include <QStatusBar>
@@ -186,7 +185,6 @@ namespace hal
         for (int inx=0; inx<mTabWidget->count(); inx++)
         {
             WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
-            qDebug() << "search controller" << ctrlId << ww->controllerId();
             if (ctrlId == ww->controllerId())
             {
                 ww->takeOwnership(ctrlRef);
@@ -282,6 +280,7 @@ namespace hal
     void VcdViewer::handleRunSimulation()
     {
         if (!mCurrentWaveWidget) return;
+        connect(mCurrentWaveWidget->controller(),&NetlistSimulatorController::engineFinished,mCurrentWaveWidget,&WaveWidget::handleEngineFinished);
         mCurrentWaveWidget->controller()->run_simulation();
     }
 

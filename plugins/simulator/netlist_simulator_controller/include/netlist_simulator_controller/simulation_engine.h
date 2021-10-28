@@ -151,7 +151,7 @@ namespace hal {
          * @param[in] n - The net for which events where simulated
          * @return Vector of events
          */
-        virtual std::vector<WaveEvent> get_simulation_events(Net *n) const;
+        virtual std::vector<WaveEvent> get_simulation_events(u32 netId) const;
     };
 
     class SimulationEngineScripted : public SimulationEngine

@@ -61,6 +61,13 @@ namespace hal {
         Q_EMIT waveRemoved(inx);
     }
 
+    void WaveIndex::clearAll()
+    {
+        if (mIndexToWave.isEmpty()) return;
+        mIndexToWave.clear();
+        mWaveToIndex.clear();
+    }
+
     void WaveIndex::updateWaveToIndex()
     {
         mWaveToIndex.clear();
@@ -87,15 +94,10 @@ namespace hal {
 
         int iwave = mIndexToWave.at(inxFrom);
         if (inxFrom < inxTo)
-        {
+            mIndexToWave.insert(inxTo+1,iwave);
+        mIndexToWave.removeAt(inxFrom);
+        if (inxFrom > inxTo)
             mIndexToWave.insert(inxTo,iwave);
-            mIndexToWave.removeAt(inxFrom);
-        }
-        else
-        {
-            mIndexToWave.removeAt(inxFrom);
-            mIndexToWave.insert(inxTo,iwave);
-        }
         updateWaveToIndex();
         Q_EMIT(waveDataChanged(-1));
     }

@@ -6,11 +6,10 @@
 #include "vcd_viewer/wave_timescale.h"
 #include "vcd_viewer/wave_index.h"
 #include "netlist_simulator_controller/vcd_serializer.h"
-#include <QDebug>
 
 namespace hal {
 
-    const int WaveScene::sMinItemHeight = 5;
+    const int WaveScene::sMinItemHeight = 2;
     const float WaveScene::sMinSceneWidth = 1000;
 
     WaveScene::WaveScene(const WaveIndex *winx, QObject* parent)
@@ -28,7 +27,6 @@ namespace hal {
 
         mTimescale = new WaveTimescale(sMinSceneWidth);
         addItem(mTimescale);
-        connect(mWaveIndex->waveDataList(),&WaveDataList::maxTimeChanged,this,&WaveScene::handleMaxTimeChanged);
     }
 
     WaveScene::~WaveScene()
@@ -36,31 +34,13 @@ namespace hal {
         // TODO
     }
 
-    void WaveScene::generateDataSample()
-    {
-        /*
-        int freq[5] = {50, 100, 200, 400, 800};
-        u32 ids[5] = {9, 7, 6, 4, 8};
-
-        QList<const WaveData*> wlist;
-        for (int i=0; i<5; i++)
-            wlist.append(WaveData::clockFactory(ids[i], QString("INPUT_%1[%2]").arg(i).arg(ids[i]), 0, freq[i], 2000));
-
-        VcdSerializer writer(this);
-        writer.serialize("fsmin.vcd", wlist);
-        QList<WaveData*> wparse = writer.deserialize("fsmin.vcd");
-
-        for (WaveData* wd : wparse)
-        {
-            addWave(wd);
-        }
-        */
-    }
-
     void WaveScene::handleWaveAppended(WaveData *wd)
     {
-        qDebug() << "handleWaveAppended" << wd->id() << wd->name() << wd->size() << hex << (quintptr) wd;
-        addWave(wd);
+        int inx = mWaveItems.size();
+        WaveItem* wi = new WaveItem(wd, yPosition(inx));
+        addItem(wi);
+        mWaveItems.append(wi);
+        adjustSceneRect();
     }
 
     void WaveScene::handleWaveDataChanged(int inx)
@@ -71,7 +51,6 @@ namespace hal {
         {
             WaveItem* wi = mWaveItems.at(i);
             WaveData* wd = mWaveIndex->waveData(i);
-            qDebug() << "handleWaveChanged" << i << wd->id() << wd->name() << wd->size() << hex << (quintptr) wd;
             wi->setWavedata(wd);
             wi->update();
         }
@@ -94,23 +73,10 @@ namespace hal {
             deleteWave(inx);
     }
 
-    int WaveScene::addWave(WaveData* wd)
-    {
-        int inx = mWaveItems.size();
-        WaveItem* wi = new WaveItem(wd, yPosition(inx));
-        addItem(wi);
-        mWaveItems.append(wi);
-        adjustSceneRect();
-
-        // TODO : y-scroll to make new wave visible
-        return inx;
-    }
-
     float WaveScene::adjustSceneRect(u64 tmax)
     {
-        // TODO : min lines = 5 as const
         int n = mWaveItems.size();
-        if (n<5) n=5;
+        if (n<sMinItemHeight) n=sMinItemHeight;
 
 
         float maxw = sceneRect().width();
@@ -123,8 +89,6 @@ namespace hal {
         // tell items that scene width changed
         if (maxw != sceneRect().width())
         {
-            for (WaveItem* itm : mWaveItems)
-                itm->setMaxTime(maxw);
             mTimescale->setMaxTime(maxw);
         }
         setSceneRect(QRectF(0,0,maxw,yPosition(n)+4));
@@ -179,9 +143,9 @@ namespace hal {
     void WaveScene::deleteWave(int dataIndex)
     {
         WaveItem* wiDelete = mWaveItems.at(dataIndex);
-        mWaveItems.removeAt(dataIndex);
+        wiDelete->aboutToBeDeleted();
         removeItem(wiDelete);
-        wiDelete->update();
+        mWaveItems.removeAt(dataIndex);
         int n = mWaveItems.size();
         for (int i= dataIndex; i<n; i++)
         {
@@ -190,7 +154,7 @@ namespace hal {
             wi->update();
         }
         update();
-        delete wiDelete;
+ //       delete wiDelete;
     }
 
     void WaveScene::emitCursorMoved(float xpos)
@@ -212,15 +176,4 @@ namespace hal {
     {
         adjustSceneRect(tmax);
     }
-
-    void WaveScene::setWaveData(int dataIndex, WaveData* wd)
-    {
-        Q_ASSERT(dataIndex < mWaveItems.size());
-        WaveItem* wi = mWaveItems.at(dataIndex);
-        wi->setWavedata(wd);
-        wi->update();
-        update();
-        Q_EMIT (cursorMoved(cursorPos()));
-    }
-
 }

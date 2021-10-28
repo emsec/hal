@@ -15,19 +15,19 @@ namespace hal {
 
         int mYoffset;
         float mMaxTime;
+        bool mInactive;
 
         void construct();
     public:
         WaveItem(const WaveData* dat, int off);
-        ~WaveItem();
 
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
         void setYoffset(int val);
         void setWavedata(const WaveData* dat);
-        void setMaxTime(float tmax);
-        float maxTime() const { return mMaxTime; }
         const WaveData* wavedata() const { return mData; }
         QRectF boundingRect() const override;
+        float maxTime() const;
+        void aboutToBeDeleted();
     };
 
 }

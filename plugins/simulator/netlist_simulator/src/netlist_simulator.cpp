@@ -219,13 +219,9 @@ namespace hal
         return m_timeout_iterations;
     }
 
-    std::vector<WaveEvent> NetlistSimulator::get_simulation_events(Net* n) const
+    std::vector<WaveEvent> NetlistSimulator::get_simulation_events(u32 netId) const
     {
-        std::unordered_map<const Net*, std::vector<WaveEvent>> sim_events = m_simulation.get_events();
-        auto it = sim_events.find(n);
-        if (it == sim_events.end())
-            return std::vector<WaveEvent>();
-        return it->second;
+        return m_simulation.get_events_by_net_id(netId);
     }
 
     bool NetlistSimulator::inputEvent(const SimulationInputNetEvent& netEv)

@@ -226,12 +226,12 @@ public:
 public Q_SLOTS:
     void handleSimulSettings();
     void handleOpenInputFile(const QString& filename);
-    void handleRunSimulation();
     void handleSelectGates();
     void handleRunFinished(bool success);
 
 Q_SIGNALS:
     void stateChanged(SimulationState state);
+    void engineFinished(bool success);
 
 private:
     void initSimulator();

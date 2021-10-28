@@ -86,7 +86,6 @@ namespace hal {
         else if (abs(delta.y())>height())
             Q_EMIT triggerSwap(mDataIndex, (event->pos()-mMouseRelative).y());
         mMousePoint = QPoint(-99999,0);
-        update();
     }
 
     QBrush WaveLabel::valueBackground() const

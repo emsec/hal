@@ -5,7 +5,6 @@
 #include <vector>
 #include <QString>
 #include <stdio.h>
-#include <QDebug>
 
 namespace hal {
 
@@ -79,26 +78,6 @@ namespace hal {
         insert(t,val);
     }
 
-    /* TODO transfer results from netlist_simulator
-
-    WaveData* WaveData::simulationResultFactory(Net *n, const NetlistSimulator* sim)
-    {
-        const std::vector<WaveEvent>& evts = sim->get_simulation_events(n);
-        if (evts.empty()) return nullptr;
-        WaveData* retval = new WaveData(n);
-        for (const Event& evt : evts)
-        {
-        insertBooleanValue(evt.time,evt.new_value)
-        }
-        // no start value defined?
-        auto it = retval->lowerBound(0);
-        if (it == retval->end() || it.key() > 0)
-            retval->insert(0,-1);
-        return retval;
-    }
-
-    */
-
     void WaveData::setStartvalue(int val)
     {
         for (auto it=begin(); it!=end(); ++it)
@@ -164,6 +143,14 @@ namespace hal {
         }
         return '\0';
     }
+
+    u64 WaveData::maxTime() const
+    {
+        if (isEmpty()) return 0;
+        return lastKey();
+    }
+
+//--------------------------------------------
 
     WaveDataList::~WaveDataList()
     {
@@ -252,8 +239,7 @@ namespace hal {
     {
         for (auto it = constBegin(); it!= constEnd(); ++it)
         {
-            if ((*it)->isEmpty()) continue;
-            u64 maxT = (*it)->lastKey();
+            u64 maxT = (*it)->maxTime();
             if (maxT > mMaxTime)
             {
                 mMaxTime = maxT;
@@ -274,11 +260,12 @@ namespace hal {
     void WaveDataList::replaceWave(int inx, WaveData* wd)
     {
         // replace existing
-        WaveData* toDelete = at(inx);
+        WaveData* wdDelete = at(inx);
         operator[](inx) = wd;
-        updateMaxTime();
+        if (wd->maxTime() > mMaxTime)
+            updateMaxTime();
         Q_EMIT waveReplaced(inx);
-        delete toDelete;
+        delete wdDelete;
     }
 
 

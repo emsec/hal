@@ -32,4 +32,17 @@ namespace hal
     {
         return m_events;
     }
+
+    std::vector<WaveEvent> Simulation::get_events_by_net_id(u32 netId, bool* found) const
+    {
+        for (auto it=m_events.begin(); it!=m_events.end(); ++it)
+            if (it->first->get_id() == netId)
+            {
+                if (found) *found = true;
+                return it->second;
+            }
+        if (found) *found = false;
+        return std::vector<WaveEvent>();
+    }
+
 }    // namespace hal

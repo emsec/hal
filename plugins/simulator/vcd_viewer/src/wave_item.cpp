@@ -1,34 +1,27 @@
 #include <QPainter>
 
 #include "vcd_viewer/wave_item.h"
+#include "vcd_viewer/wave_scene.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include <QGraphicsScene>
-#include <QDebug>
 #include <math.h>
 
 namespace hal {
 
     WaveItem::WaveItem(const WaveData* dat, int off)
-        : mData(dat), mYoffset(off), mMaxTime(1000)
+        : mData(dat), mYoffset(off), mMaxTime(WaveScene::sMinSceneWidth), mInactive(false)
     {
-        if (!mData->empty() && mData->lastKey() > mMaxTime)
-            mMaxTime = mData->lastKey();
         construct();
-        qDebug() << "WaveItem:construct" << mData->id() << mData->name() << mMaxTime;
     }
-
-    WaveItem::~WaveItem()
-    {;}
 
     void WaveItem::construct()
     {
+        prepareGeometryChange();
         if (!mData)
         {
             QRectF(0,mYoffset,1,1);
             return;
         }
-
-        prepareGeometryChange();
 
         mSolidLines.clear();
         mDotLines.clear();
@@ -57,19 +50,34 @@ namespace hal {
         }
     }
 
-    void WaveItem::setMaxTime(float tmax)
+    void WaveItem::aboutToBeDeleted()
     {
-        if (!mData->isEmpty() && mData->lastKey() > tmax) return;
-        prepareGeometryChange();
-        mMaxTime = tmax > 1000 ? tmax : 1000;
-        qDebug() << "WaveItem:setmaxtim" << mData->id() << mData->name() << mMaxTime;
-        update();
+//        mMaxTime = 1;
+//        prepareGeometryChange();
+        mInactive = true;
+    }
+
+    float WaveItem::maxTime() const
+    {
+        float retval = WaveScene::sMinSceneWidth;
+        if (wavedata()->maxTime() > retval) retval = wavedata()->maxTime();
+        if (scene() && scene()->sceneRect().width() > retval) retval = scene()->sceneRect().width();
+        return retval;
     }
 
     void WaveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
     {
         Q_UNUSED(option);
         Q_UNUSED(widget);
+
+        if (mInactive) return;
+
+        float x1 = maxTime();
+        if (x1 != mMaxTime)
+        {
+            prepareGeometryChange();
+            mMaxTime = x1;
+        }
 
         painter->setRenderHint(QPainter::Antialiasing,true);
         painter->setPen(QPen(QBrush(Qt::cyan),0.,Qt::DotLine)); // TODO : style
@@ -79,7 +87,6 @@ namespace hal {
         painter->drawLines(mSolidLines);
 
         float  y = mYoffset;
-        float x1 = mMaxTime;
 
         if (mData->isEmpty())
         {
@@ -89,7 +96,7 @@ namespace hal {
             return;
         }
 
-        float x0 = mData->lastKey();
+        float x0 = mData->maxTime();
         if (x0 < x1)
         {
             if (mData->last() < 0)

@@ -7,7 +7,6 @@
 
 #include <QResizeEvent>
 #include <QWheelEvent>
-#include <QDebug>
 #include <QScrollBar>
 
 namespace hal {
@@ -17,6 +16,12 @@ namespace hal {
           mXmag(1), mYmag(12), mDx(0), mDy(0), mLastCursorPos(0), mLastWidth(0), mCursorPixelPos(20)
     {
         setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    }
+
+    void WaveView::handleWaveRemoved(int inx)
+    {
+        Q_UNUSED(inx);
+        invalidateScene(sceneRect());
     }
 
     void WaveView::resizeEvent(QResizeEvent *event)
@@ -50,6 +55,13 @@ namespace hal {
 
         //ensureVisible(QRectF(0,sceneRect().top(),xw,viewHeight/mYmag));
         sc->setCursorPos(xw/10,false);
+    }
+
+    void WaveView::handleMaxTimeChanged(u64 tmax)
+    {
+        float scWidth = tmax;
+        if (scWidth <= 0) return;
+        mXmagMin = mLastWidth * 0.95 / scWidth;
     }
 
     void WaveView::scrollContentsBy(int dx, int dy)
