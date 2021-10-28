@@ -10,12 +10,11 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 
-
 namespace hal
 {
     NetlistInternalManager::NetlistInternalManager(Netlist* nl, EventHandler* eh)
     {
-        m_netlist = nl;
+        m_netlist       = nl;
         m_event_handler = eh;
         assert(nl != nullptr);
         assert(eh != nullptr);
@@ -545,7 +544,6 @@ namespace hal
         {
             parent->m_submodules_map[id] = raw;
             parent->m_submodules.push_back(raw);
-            parent->set_cache_dirty();
         }
 
         m_event_handler->notify(ModuleEvent::event::created, raw);
@@ -671,8 +669,8 @@ namespace hal
         g->m_module = m;
 
         // notify event handlers
-        m_event_handler->notify(ModuleEvent::event::gate_removed,prev_module,g->get_id());
-        m_event_handler->notify(ModuleEvent::event::gate_assigned,m,g->get_id());
+        m_event_handler->notify(ModuleEvent::event::gate_removed, prev_module, g->get_id());
+        m_event_handler->notify(ModuleEvent::event::gate_assigned, m, g->get_id());
         return true;
     }
 
