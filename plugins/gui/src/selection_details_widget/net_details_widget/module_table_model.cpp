@@ -91,36 +91,51 @@ namespace hal
         //1.variant
         for(auto const &m : gNetlist->get_modules())
         {
-            auto portMap = m->get_input_port_names();
-            auto it = portMap.find(net);
-            if(it != portMap.end())
+            for(auto port : m->get_ports())
             {
-                Entry newEntry;
+                if(port->contains_net(net))
+                {
+                    Entry newEntry;
 
-                newEntry.name = QString::fromStdString(m->get_name());
-                newEntry.id = m->get_id();
-                newEntry.type = QString::fromStdString(m->get_type());
-                newEntry.used_port = QString::fromStdString(it->second);
+                    newEntry.name = QString::fromStdString(m->get_name());
+                    newEntry.id = m->get_id();
+                    newEntry.type = QString::fromStdString(m->get_type());
+                    newEntry.used_port = QString::fromStdString(port->get_name());//change to pin?
 
-                newEntryList.append(newEntry);
-
-            }
-
-            portMap = m->get_output_port_names();
-            it = portMap.find(net);
-            if(it != portMap.end())
-            {
-                Entry newEntry;
-
-                newEntry.name = QString::fromStdString(m->get_name());
-                newEntry.id = m->get_id();
-                newEntry.type = QString::fromStdString(m->get_type());
-                newEntry.used_port = QString::fromStdString(it->second);
-
-                newEntryList.append(newEntry);
-
+                    newEntryList.append(newEntry);
+                }
             }
         }
+//            auto portMap = m->get_input_port_names();
+//            auto it = portMap.find(net);
+//            if(it != portMap.end())
+//            {
+//                Entry newEntry;
+
+//                newEntry.name = QString::fromStdString(m->get_name());
+//                newEntry.id = m->get_id();
+//                newEntry.type = QString::fromStdString(m->get_type());
+//                newEntry.used_port = QString::fromStdString(it->second);
+
+//                newEntryList.append(newEntry);
+
+//            }
+
+//            portMap = m->get_output_port_names();
+//            it = portMap.find(net);
+//            if(it != portMap.end())
+//            {
+//                Entry newEntry;
+
+//                newEntry.name = QString::fromStdString(m->get_name());
+//                newEntry.id = m->get_id();
+//                newEntry.type = QString::fromStdString(m->get_type());
+//                newEntry.used_port = QString::fromStdString(it->second);
+
+//                newEntryList.append(newEntry);
+
+//            }
+//        }
 
         beginResetModel();
         mEntries = newEntryList;
