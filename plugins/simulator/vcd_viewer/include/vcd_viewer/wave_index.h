@@ -27,6 +27,7 @@ namespace hal {
         int numberWavesShown() const { return mIndexToWave.size(); }
         void setAutoAddWaves(bool enable);
         QSet<int> waveDataIndexSet() const;
+        int indexForWave(int iwave) const { return mWaveToIndex.value(iwave,-1); }
 
     Q_SIGNALS:
         void waveAppended(WaveData* wd);

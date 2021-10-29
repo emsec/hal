@@ -38,6 +38,7 @@ namespace hal {
         void addResults();
         NetlistSimulatorController::SimulationState state() const;
         void createEngine(const QString& engineFactoryName);
+        void refreshNetNames();
 
     public Q_SLOTS:
         void handleEngineFinished(bool success);

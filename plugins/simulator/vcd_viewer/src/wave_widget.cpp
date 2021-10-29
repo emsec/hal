@@ -66,6 +66,24 @@ namespace hal {
         disconnect(mWaveView,&WaveView::relativeYScroll,this,&WaveWidget::handleYScroll);
     }
 
+    void WaveWidget::refreshNetNames()
+    {
+        int n = mWaveIndex.waveDataList()->size();
+        for (int i=0; i<n; i++)
+        {
+            WaveData* wd = mWaveIndex.waveDataList()->at(i);
+            if (!wd->id()) continue;
+            Net* n = gNetlist->get_net_by_id(wd->id());
+            if (!n) continue;
+            QString netName = QString::fromStdString(n->get_name());
+            if (netName == wd->name()) continue;
+            wd->setName(netName);
+            int inx = mWaveIndex.indexForWave(i);
+            if (inx < 0) continue;
+            handleWaveDataChanged(inx);
+        }
+    }
+
     u32 WaveWidget::controllerId() const
     {
         if (!mController) return 0;

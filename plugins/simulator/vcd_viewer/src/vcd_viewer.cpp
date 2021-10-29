@@ -88,6 +88,11 @@ namespace hal
         currentStateChanged(NetlistSimulatorController::NoGatesSelected);
     }
 
+    VcdViewer::~VcdViewer()
+    {
+        closeEvent(nullptr);
+    }
+
     void VcdViewer::closeEvent(QCloseEvent*event)
     {
         Q_UNUSED(event);
@@ -200,10 +205,12 @@ namespace hal
          act = new QAction("Select gates for simulation", settingMenu);
          connect(act, &QAction::triggered, this, &VcdViewer::handleSelectGates);
          settingMenu->addAction(act);
+
          act = new QAction("Select clock net", settingMenu);
          connect(act, &QAction::triggered, this, &VcdViewer::handleClockSet);
-  // TODO       act->setEnabled(mState==SimulationClockSet);
+         // TODO : enable/disable according to state of current WaveWidget/Controller
          settingMenu->addAction(act);
+
          settingMenu->addSeparator();
          QMenu* engineMenu = settingMenu->addMenu("Select engine ...");
          QActionGroup* engineGroup = new QActionGroup(this);
@@ -217,6 +224,10 @@ namespace hal
              engineGroup->addAction(act);
          }
          settingMenu->addSeparator();
+         act = new QAction("Refresh net names", settingMenu);
+         connect(act, &QAction::triggered, this, &VcdViewer::handleRefreshNetNames);
+         settingMenu->addAction(act);
+
          act = new QAction("Visualize net state by color", settingMenu);
          act->setCheckable(true);
          act->setChecked(mVisualizeNetState);
@@ -234,6 +245,14 @@ namespace hal
         mCurrentWaveWidget->createEngine(act->text());
     }
 
+    void VcdViewer::handleRefreshNetNames()
+    {
+        for (int inx=0; inx<mTabWidget->count(); inx++)
+        {
+            WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
+            ww->refreshNetNames();
+        }
+    }
 
     void VcdViewer::setVisualizeNetState(bool state)
     {

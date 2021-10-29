@@ -33,10 +33,11 @@ namespace hal {
         u32     id()      const { return mId; }
         QString name()    const { return mName; }
         NetType netType() const { return mNetType; }
+        void setId(u32 id_)              { mId = id_; }
+        void setName(const QString& nam) { mName = nam; }
         int intValue(float t) const;
         u64  maxTime() const;
         void setStartvalue(int val);
-        void setId(u32 id_) { mId = id_; }
         void insertBooleanValue(u64 t, BooleanFunction::Value bval);
         bool insertToggleTime(u64 t);
         char charValue(float t) const;

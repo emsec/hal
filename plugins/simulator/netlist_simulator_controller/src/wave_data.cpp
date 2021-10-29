@@ -47,9 +47,7 @@ namespace hal {
 
     WaveData::WaveData(const Net* n, NetType tp)
         : mId(n->get_id()),
-          mName(QString("%1[%2]")
-                .arg(QString::fromStdString(n->get_name()))
-                .arg(n->get_id())),
+          mName(QString::fromStdString(n->get_name())),
           mNetType(tp)
     {
        // qDebug() << "B:WaveData" << mId << mName << hex << (quintptr) this;

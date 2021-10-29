@@ -73,7 +73,7 @@ namespace hal
     public:
 
         VcdViewer(QWidget* parent = nullptr);
-        ~VcdViewer() = default;
+        ~VcdViewer();
 
         /**
          * Setups the toolbar with the actions that are supported by the vcd-viewer.
@@ -94,6 +94,7 @@ namespace hal
         void handleEngineSelected(bool checked);
 
         void handleSelectionChanged(void* sender);
+        void handleRefreshNetNames();
         void setVisualizeNetState(bool state);
         void handleTabClosed(int inx);
 

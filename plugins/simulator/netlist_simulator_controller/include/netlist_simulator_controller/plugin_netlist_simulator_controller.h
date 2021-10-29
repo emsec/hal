@@ -49,6 +49,11 @@ namespace hal
         std::string get_version() const override;
 
         /**
+         * Delete all bindings upon unload
+         */
+        void on_unload();
+
+        /**
          * Create a netlist simulator instance.
          *
          * @returns The simulator instance.

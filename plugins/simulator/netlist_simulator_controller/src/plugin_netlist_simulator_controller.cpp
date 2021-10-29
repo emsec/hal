@@ -28,5 +28,9 @@ namespace hal
         return std::unique_ptr<NetlistSimulatorController>(new NetlistSimulatorController(++mMaxControllerId, nam));
     }
 
+    void NetlistSimulatorControllerPlugin::on_unload()
+    {
+        NetlistSimulatorControllerMap::instance()->shutdown();
+    }
 
 }    // namespace hal
