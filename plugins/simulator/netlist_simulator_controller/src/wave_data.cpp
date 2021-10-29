@@ -157,10 +157,21 @@ namespace hal {
         clearAll();
     }
 
+    void WaveDataList::setMaxTime(u64 tmax)
+    {
+        if (mMaxTime == tmax) return;
+
+        // adjust clock settings
+        bool mustUpdateClocks = (tmax > mMaxTime);
+
+        mMaxTime = tmax;
+        if (mustUpdateClocks) updateClocks();
+        Q_EMIT maxTimeChanged(mMaxTime);
+    }
+
     void WaveDataList::incrementMaxTime(u64 deltaT)
     {
-        mMaxTime += deltaT;
-        Q_EMIT maxTimeChanged(mMaxTime);
+        setMaxTime(mMaxTime + deltaT);
     }
     
     QList<const WaveData*> WaveDataList::toList() const
@@ -203,10 +214,9 @@ namespace hal {
         bool notEmpty = ! isEmpty();
         clear();
         mIds.clear();
-        mMaxTime = 0;
         if (notEmpty)
             Q_EMIT waveRemoved(-1);
-        Q_EMIT maxTimeChanged(0);
+        setMaxTime(0);
         for (auto it=begin(); it!=end(); ++it)
             delete *it;
     }
@@ -237,15 +247,13 @@ namespace hal {
 
     void WaveDataList::updateMaxTime()
     {
+        u64 tmax = 0;
         for (auto it = constBegin(); it!= constEnd(); ++it)
         {
-            u64 maxT = (*it)->maxTime();
-            if (maxT > mMaxTime)
-            {
-                mMaxTime = maxT;
-                Q_EMIT maxTimeChanged(mMaxTime);
-            }
+            u64 tmaxWave = (*it)->maxTime();
+            if (tmaxWave > tmax) tmax = tmaxWave;
         }
+        setMaxTime(tmax);
     }
 
     void WaveDataList::add(WaveData* wd)

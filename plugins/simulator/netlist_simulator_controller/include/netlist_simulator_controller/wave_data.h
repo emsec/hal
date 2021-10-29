@@ -29,7 +29,7 @@ namespace hal {
         WaveData(u32 id_, const QString& nam, NetType tp = RegularNet,
                  const QMap<u64,int>& other = QMap<u64,int>() );
         WaveData(const Net* n, NetType tp = RegularNet);
-        ~WaveData();
+        virtual ~WaveData();
         u32     id()      const { return mId; }
         QString name()    const { return mName; }
         NetType netType() const { return mNetType; }
@@ -64,6 +64,7 @@ namespace hal {
         u64               mMaxTime;
         void restoreIndex();
         void updateMaxTime();
+        void setMaxTime(u64 tmax);
     public:
         WaveDataList(QObject* parent = nullptr) : QObject(parent), mMaxTime(0) {;}
         ~WaveDataList();

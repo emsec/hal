@@ -75,8 +75,11 @@ namespace hal {
         float x1 = maxTime();
         if (x1 != mMaxTime)
         {
-            prepareGeometryChange();
             mMaxTime = x1;
+            if (mData->netType() == WaveData::ClockNet)
+                construct();
+            else
+                prepareGeometryChange();
         }
 
         painter->setRenderHint(QPainter::Antialiasing,true);
