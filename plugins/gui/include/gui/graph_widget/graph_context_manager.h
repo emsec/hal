@@ -183,9 +183,8 @@ namespace hal
          * Used to apply the changes in the affected contexts.
          *
          * @param m - The module with the changed port
-         * @param net - The net that is connected to the changed port
          */
-        void handleModulePortChanged(Module* m, const u32 net);
+        void handleModulePortsChanged(Module* m);
 
         /**
          * Handler to be called after a gate has been removed. <br>

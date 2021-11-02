@@ -265,9 +265,9 @@ namespace hal
             {
                 log_info("event", "removed gate with id {:08x} from module '{}' (id {:08x})", associated_data, module->get_name(), module->get_id());
             }
-            else if (event == ModuleEvent::event::port_changed)
+            else if (event == ModuleEvent::event::ports_changed)
             {
-                log_info("event", "changed port of net with id {:08x} from module '{}' (id {:08x})", associated_data, module->get_name(), module->get_id());
+                log_info("event", "changed port of module '{}' (id {:08x})", module->get_name(), module->get_id());
             }
             else
             {

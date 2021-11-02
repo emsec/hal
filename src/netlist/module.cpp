@@ -555,12 +555,12 @@ namespace hal
                 if (Port* port = get_port(net); port != nullptr)
                 {
                     port->m_direction = PinDirection::inout;
+                    m_event_handler->notify(ModuleEvent::event::ports_changed, this);
                 }
                 else
                 {
                     assign_port_net(net, PinDirection::inout);
                 }
-                m_event_handler->notify(ModuleEvent::event::port_changed, this, net->get_id());
             }
         }
         else
@@ -573,12 +573,12 @@ namespace hal
                     if (Port* port = get_port(net); port != nullptr)
                     {
                         port->m_direction = PinDirection::input;
+                        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
                     }
                     else
                     {
                         assign_port_net(net, PinDirection::input);
                     }
-                    m_event_handler->notify(ModuleEvent::event::port_changed, this, net->get_id());
                 }
             }
             else
@@ -587,7 +587,6 @@ namespace hal
                 {
                     m_input_nets.erase(net);
                     remove_port_net(net);
-                    m_event_handler->notify(ModuleEvent::event::port_changed, this, net->get_id());
                 }
             }
 
@@ -599,12 +598,12 @@ namespace hal
                     if (Port* port = get_port(net); port != nullptr)
                     {
                         port->m_direction = PinDirection::output;
+                        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
                     }
                     else
                     {
                         assign_port_net(net, PinDirection::output);
                     }
-                    m_event_handler->notify(ModuleEvent::event::port_changed, this, net->get_id());
                 }
             }
             else
@@ -614,7 +613,6 @@ namespace hal
                     m_output_nets.erase(net);
                     remove_port_net(net);
                 }
-                m_event_handler->notify(ModuleEvent::event::port_changed, this, net->get_id());
             }
         }
 
@@ -668,7 +666,8 @@ namespace hal
             return false;
         }
 
-        auto other_it = other.get_pins_and_nets().begin();
+        std::vector<std::pair<std::string, Net*>> pins_and_nets = other.get_pins_and_nets();
+        auto other_it                                           = pins_and_nets.begin();
         for (auto this_it = m_pins.begin(); this_it != m_pins.end(); this_it++, other_it++)
         {
             if (this_it->first != other_it->first || *this_it->second != *other_it->second)
@@ -936,10 +935,16 @@ namespace hal
 
         if (port->m_pins.size() == 1)
         {
+            Net* net                          = port->m_pins.front().second;
             std::get<0>(port->m_pins.front()) = new_name;
+            port->m_net_to_pin[net]           = new_name;
+            port->m_pin_to_net.erase(old_name);
+            port->m_pin_to_net[new_name] = net;
             m_pin_names_map.erase(old_name);
             m_pin_names_map[new_name] = port;
         }
+
+        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
 
         return true;
     }
@@ -951,7 +956,11 @@ namespace hal
             return false;
         }
 
-        port->m_type = new_type;
+        if (port->m_type != new_type)
+        {
+            port->m_type = new_type;
+            m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+        }
         return true;
     }
 
@@ -978,6 +987,7 @@ namespace hal
                 port->m_pin_to_net[new_name] = net;
                 port->m_net_to_pin[net]      = new_name;
                 std::get<0>(*pin_it)         = new_name;
+                m_event_handler->notify(ModuleEvent::event::ports_changed, this);
                 return true;
             }
         }
@@ -1034,6 +1044,7 @@ namespace hal
         m_ports_raw.push_back(new_port);
         m_port_names_map[port_name] = new_port;
         m_pin_names_map[port_name]  = new_port;
+        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
         return new_port;
     }
 
@@ -1064,6 +1075,7 @@ namespace hal
             m_ports_raw.erase(std::find(m_ports_raw.begin(), m_ports_raw.end(), port));
             m_ports.erase(std::find_if(m_ports.begin(), m_ports.end(), [port](const std::unique_ptr<Port>& p) { return p.get() == port; }));
         }
+        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
 
         return true;
     }
@@ -1122,6 +1134,7 @@ namespace hal
             m_ports_raw.erase(std::find(m_ports_raw.begin(), m_ports_raw.end(), port));
             m_ports.erase(std::find_if(m_ports.begin(), m_ports.end(), [port](const std::unique_ptr<Port>& p) { return p.get() == port; }));
         }
+        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
 
         return new_port;
     }
@@ -1153,6 +1166,7 @@ namespace hal
         m_port_names_map.erase(port->m_name);
         m_ports_raw.erase(std::find(m_ports_raw.begin(), m_ports_raw.end(), port));
         m_ports.erase(std::find_if(m_ports.begin(), m_ports.end(), [port](const std::unique_ptr<Port>& p) { return p.get() == port; }));
+        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
 
         return true;
     }

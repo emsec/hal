@@ -109,7 +109,7 @@ namespace hal
             submodule_removed,    ///< associated_data = id of removed module
             gate_assigned,        ///< associated_data = id of inserted gate
             gate_removed,         ///< associated_data = id of removed gate
-            port_changed,         ///< associated_data = id of respective net
+            ports_changed,        ///< no associated_data
         };
     };
 

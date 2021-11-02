@@ -314,9 +314,8 @@ namespace hal
         xout << "-------\n";
     }
 
-    void GraphContextManager::handleModulePortChanged(Module* m, const u32 net)
+    void GraphContextManager::handleModulePortsChanged(Module* m)
     {
-        Q_UNUSED(net);
         for (GraphContext* context : mContextTableModel->list())
             if (context->modules().contains(m->get_id()))
                 context->scheduleSceneUpdate();

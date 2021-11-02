@@ -323,12 +323,12 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a port of a module has been changed. <br>
-         * Relays the following hal-core event: <i>ModuleEvent::event::port_changed</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::ports_changed</i>
          *
          * @param m - The module with the changed port
          * @param respective_net - The id of the net of the renamed input port
          */
-        void modulePortChanged(Module* m, const u32 respective_net) const;
+        void modulePortsChanged(Module* m) const;
 
         /**
          * Q_SIGNAL to notify that the type of a module has been changed. <br>
@@ -376,7 +376,7 @@ namespace hal
          * @param g - The gate which boolean functions haven been changed
          */
         void gateBooleanFunctionChanged(Gate* g) const;
-        
+
         /**
          * Q_SIGNAL to notify that the location of a gate has been changed. <br>
          * Relays the following hal-core event: <i>GateEvent::event::location_changed</i>

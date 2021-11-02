@@ -756,7 +756,7 @@ namespace hal {
             ASSERT_NE(m_0, nullptr);
             {
                 // Get the input port name of a Net, which port name was not specified yet
-                EXPECT_EQ(m_0->get_port(nl->get_net_by_id(MIN_NET_ID + 13))->get_name(), "I(0)");
+                EXPECT_EQ(m_0->get_port(nl->get_net_by_id(MIN_NET_ID + 13))->get_name(), "I(2)");
             }
             {
                 // Get the output port name of a Net, which port name was not specified yet
@@ -779,7 +779,7 @@ namespace hal {
                 EXPECT_EQ(port_by_net->get_direction(), PinDirection::input);
 
                 // test setting type
-                port_by_net->set_type(PinType::data);
+                m_0->set_port_type(port_by_net, PinType::data);
                 EXPECT_EQ(port_by_net->get_type(), PinType::data);
             }
             {
@@ -799,7 +799,7 @@ namespace hal {
                 EXPECT_EQ(port_by_net->get_direction(), PinDirection::output);
 
                 // test setting type
-                port_by_net->set_type(PinType::data);
+                m_0->set_port_type(port_by_net, PinType::data);
                 EXPECT_EQ(port_by_net->get_type(), PinType::data);
             }
 
@@ -917,11 +917,9 @@ namespace hal {
             std::function<void(void)> trigger_gate_assigned = [=](){test_mod->assign_gate(test_gate);};
             std::function<void(void)> trigger_gate_removed = [=](){test_mod->remove_gate(test_gate);};
             std::function<void(void)> trigger_input_port_name_changed = [=](){
-                test_mod->assign_gate(test_gate);
                 test_mod->set_port_name(test_mod->get_port(test_gate->get_fan_in_net("I0")), "mod_in_0");
             };
             std::function<void(void)> trigger_output_port_name_changed = [=](){
-                test_mod->assign_gate(test_gate);
                 test_mod->set_port_name(test_mod->get_port(test_gate->get_fan_out_net("O")), "mod_out");
             };
 
@@ -929,13 +927,12 @@ namespace hal {
             std::vector<ModuleEvent::event> event_type = {
                 ModuleEvent::event::name_changed, ModuleEvent::event::type_changed,
                 ModuleEvent::event::parent_changed, ModuleEvent::event::submodule_added,
-                ModuleEvent::event::submodule_removed, ModuleEvent::event::gate_assigned,
-                ModuleEvent::event::gate_removed, ModuleEvent::event::port_changed};
+                ModuleEvent::event::submodule_removed, ModuleEvent::event::gate_assigned, ModuleEvent::event::ports_changed, ModuleEvent::event::ports_changed,
+                ModuleEvent::event::gate_removed};
 
             // A list of the functions that will trigger its associated event exactly once
             std::vector<std::function<void(void)>> trigger_event = { trigger_name_changed, trigger_type_changed,
-                 trigger_parent_changed, trigger_submodule_added, trigger_submodule_removed, trigger_gate_assigned,
-                 trigger_gate_removed, trigger_input_port_name_changed, trigger_output_port_name_changed};
+                 trigger_parent_changed, trigger_submodule_added, trigger_submodule_removed, trigger_gate_assigned, trigger_input_port_name_changed, trigger_output_port_name_changed, trigger_gate_removed};
 
             // The parameters of the events that are expected
             std::vector<std::tuple<ModuleEvent::event, Module*, u32>> expected_parameter = {
@@ -945,9 +942,9 @@ namespace hal {
                 std::make_tuple(ModuleEvent::event::submodule_added, test_mod, other_mod_sub->get_id()),
                 std::make_tuple(ModuleEvent::event::submodule_removed, test_mod, other_mod_sub->get_id()),
                 std::make_tuple(ModuleEvent::event::gate_assigned, test_mod, test_gate->get_id()),
-                std::make_tuple(ModuleEvent::event::gate_removed, test_mod, test_gate->get_id()),
-                std::make_tuple(ModuleEvent::event::port_changed, test_mod, test_gate->get_fan_in_net("I0")->get_id()),
-                std::make_tuple(ModuleEvent::event::port_changed, test_mod, test_gate->get_fan_out_net("O")->get_id())
+                std::make_tuple(ModuleEvent::event::ports_changed, test_mod, NO_DATA),
+                std::make_tuple(ModuleEvent::event::ports_changed, test_mod, NO_DATA),
+                std::make_tuple(ModuleEvent::event::gate_removed, test_mod, test_gate->get_id())
             };
 
             // Check all events in a for-loop

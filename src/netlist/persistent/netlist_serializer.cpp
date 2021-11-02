@@ -334,7 +334,7 @@ namespace hal
                         std::vector<std::pair<std::string, Net*>> pins_and_nets;
                         for (const auto& pin_node : port_node["pins"].GetArray())
                         {
-                            pins_and_nets.push_back(std::make_pair<std::string, Net*>(pin_node["pin_name"].GetString(), nl->get_net_by_id(port_node["pin_net_id"].GetUint())));
+                            pins_and_nets.push_back(std::make_pair<std::string, Net*>(pin_node["pin_name"].GetString(), nl->get_net_by_id(pin_node["pin_net_id"].GetUint())));
                         }
 
                         if (pins_and_nets.size() > 1)

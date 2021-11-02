@@ -30,7 +30,7 @@ namespace hal
 
     template<>
     std::vector<std::string> EnumStrings<ModuleEvent::event>::data =
-        {"created", "removed", "name_changed", "type_changed", "parent_changed", "submodule_added", "submodule_removed", "gate_assigned", "gate_removed", "port_changed"};
+        {"created", "removed", "name_changed", "type_changed", "parent_changed", "submodule_added", "submodule_removed", "gate_assigned", "gate_removed", "ports_changed"};
 
     template<>
     std::vector<std::string> EnumStrings<GroupingEvent::event>::data =
