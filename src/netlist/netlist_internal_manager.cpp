@@ -614,7 +614,7 @@ namespace hal
         }
 
         // re-assign gates
-        std::unordered_map<Module*, std::vector<Net*>> nets_to_check;
+        std::unordered_map<Module*, std::unordered_set<Net*>> nets_to_check;
         for (Gate* g : gates)
         {
             // remove gate from old module
@@ -632,12 +632,12 @@ namespace hal
 
             // collect affected nets
             std::vector<Net*> fan_in = g->get_fan_in_nets();
-            nets_to_check[prev_module].insert(nets_to_check[prev_module].begin(), fan_in.begin(), fan_in.end());
-            nets_to_check[module].insert(nets_to_check[module].begin(), fan_in.begin(), fan_in.end());
+            nets_to_check[prev_module].insert(fan_in.begin(), fan_in.end());
+            nets_to_check[module].insert(fan_in.begin(), fan_in.end());
 
-            std::vector<Net*> fan_out = g->get_fan_in_nets();
-            nets_to_check[prev_module].insert(nets_to_check[prev_module].begin(), fan_out.begin(), fan_out.end());
-            nets_to_check[module].insert(nets_to_check[module].begin(), fan_out.begin(), fan_out.end());
+            std::vector<Net*> fan_out = g->get_fan_out_nets();
+            nets_to_check[prev_module].insert(fan_out.begin(), fan_out.end());
+            nets_to_check[module].insert(fan_out.begin(), fan_out.end());
         }
 
         for (const auto& [affected_module, nets] : nets_to_check)
