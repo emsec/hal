@@ -1,19 +1,18 @@
 #include "gui/selection_details_widget/net_details_widget/net_info_table.h"
 
-#include "hal_core/netlist/net.h"
-
 #include "gui/gui_globals.h"
 #include "gui/python/py_code_provider.h"
 #include "gui/user_action/action_rename_object.h"
+#include "hal_core/netlist/net.h"
 
-#include <QMenu>
 #include <QInputDialog>
+#include <QMenu>
 
 namespace hal
 {
-    const QString NetInfoTable::nameRowKey = "Name";
-    const QString NetInfoTable::idRowKey = "ID";
-    const QString NetInfoTable::typeRowKey = "Type";
+    const QString NetInfoTable::nameRowKey    = "Name";
+    const QString NetInfoTable::idRowKey      = "ID";
+    const QString NetInfoTable::typeRowKey    = "Type";
     const QString NetInfoTable::noOfSrcRowKey = "No. of Sources";
     const QString NetInfoTable::noOfDstRowKey = "No. of Destinations";
 
@@ -50,13 +49,11 @@ namespace hal
         connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalInput, this, &NetInfoTable::handleNetTypeChanged);
         connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalOutput, this, &NetInfoTable::handleNetTypeChanged);
         connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalOutput, this, &NetInfoTable::handleNetTypeChanged);
-        connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalInout, this, &NetInfoTable::handleNetTypeChanged);
-        connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalInout, this, &NetInfoTable::handleNetTypeChanged);
     }
 
     void NetInfoTable::setNet(hal::Net* net)
     {
-        if(gNetlist->is_net_in_netlist(net))
+        if (gNetlist->is_net_in_netlist(net))
         {
             mNet = net;
 
@@ -84,15 +81,15 @@ namespace hal
     {
         QString type = "";
 
-        if(mNet->is_global_input_net())
+        if (mNet->is_global_input_net())
             type = "Global input";
-        else if(mNet->is_global_output_net())
+        else if (mNet->is_global_output_net())
             type = "Global output";
-        else if(mNet->is_unrouted())
+        else if (mNet->is_unrouted())
             type = "Unrouted";
         else
             type = "Internal";
-        
+
         return type;
     }
 
@@ -109,7 +106,7 @@ namespace hal
     void NetInfoTable::changeName()
     {
         QString oldName = QString::fromStdString(mNet->get_name());
-        QString prompt = "Change net name";
+        QString prompt  = "Change net name";
 
         bool confirm;
         QString newName = QInputDialog::getText(this, prompt, "New name:", QLineEdit::Normal, oldName, &confirm);
@@ -141,12 +138,12 @@ namespace hal
     {
         copyToClipboard(type());
     }
-    
+
     void NetInfoTable::pyCopyType() const
     {
         copyToClipboard(PyCodeProvider::pyCodeNetType(mNet->get_id()));
     }
-    
+
     void NetInfoTable::copyNumberOfSrcs() const
     {
         copyToClipboard(numberOfSrcs());
@@ -159,7 +156,7 @@ namespace hal
 
     void NetInfoTable::handleNetRemoved(Net* net)
     {
-        if(mNet == net)
+        if (mNet == net)
         {
             mNet = nullptr;
 
@@ -177,7 +174,7 @@ namespace hal
 
     void NetInfoTable::handleNetNameChanged(Net* net)
     {
-        if(mNet == net)
+        if (mNet == net)
             refresh();
     }
 
@@ -185,7 +182,7 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if(mNet->get_id() == netId)
+        if (mNet->get_id() == netId)
             refresh();
     }
 
@@ -193,7 +190,7 @@ namespace hal
     {
         Q_UNUSED(srcDstGateId)
 
-        if(mNet == net)
+        if (mNet == net)
             refresh();
     }
 
@@ -201,4 +198,4 @@ namespace hal
     {
         setNet(mNet);
     }
-}
+}    // namespace hal
