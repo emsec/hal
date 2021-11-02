@@ -125,7 +125,7 @@ namespace hal
     std::vector<Module*> Module::get_parent_modules(const std::function<bool(Module*)>& filter, bool recursive) const
     {
         std::vector<Module*> res;
-        if (m_parent == nullptr) 
+        if (m_parent == nullptr)
         {
             return {};
         }
@@ -561,7 +561,7 @@ namespace hal
         }
 
         std::vector<Net*> update_port_nets;
-        if (external_source && external_destination)
+        if (internal_source && internal_destination && external_source && external_destination)
         {
             if (m_input_nets.find(net) == m_input_nets.end() || m_output_nets.find(net) == m_output_nets.end())
             {
