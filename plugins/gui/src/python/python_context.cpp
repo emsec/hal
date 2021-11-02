@@ -238,8 +238,14 @@ namespace hal
                 namespaces.append(tmp_context);
             }
             auto jedi   = py::module::import("jedi");
-            auto script = jedi.attr("Interpreter")(text.toStdString(), namespaces);
-            auto list   = script.attr("completions")();
+            py::object script = jedi.attr("Interpreter")(text.toStdString(), namespaces);
+            py::object list;
+            if (py::hasattr(script,"complete"))
+                list = script.attr("complete")();
+            else if (py::hasattr(script,"completions"))
+                list   = script.attr("completions")();
+            else
+                log_warning("python", "Jedi autocompletion failed, neither complete() nor completions() found.");
 
             for (const auto& entry : list)
             {
