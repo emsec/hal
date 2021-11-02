@@ -574,6 +574,7 @@ namespace hal
                 {
                     assign_port_net(net, PinDirection::inout);
                 }
+                m_event_handler->notify(ModuleEvent::event::port_changed, this, net->get_id());
             }
         }
         else
@@ -591,6 +592,7 @@ namespace hal
                     {
                         assign_port_net(net, PinDirection::input);
                     }
+                    m_event_handler->notify(ModuleEvent::event::port_changed, this, net->get_id());
                 }
             }
             else
@@ -599,6 +601,7 @@ namespace hal
                 {
                     m_input_nets.erase(net);
                     remove_port_net(net);
+                    m_event_handler->notify(ModuleEvent::event::port_changed, this, net->get_id());
                 }
             }
 
@@ -615,6 +618,7 @@ namespace hal
                     {
                         assign_port_net(net, PinDirection::output);
                     }
+                    m_event_handler->notify(ModuleEvent::event::port_changed, this, net->get_id());
                 }
             }
             else
@@ -624,6 +628,7 @@ namespace hal
                     m_output_nets.erase(net);
                     remove_port_net(net);
                 }
+                m_event_handler->notify(ModuleEvent::event::port_changed, this, net->get_id());
             }
         }
 

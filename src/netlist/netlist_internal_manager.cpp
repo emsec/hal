@@ -638,6 +638,8 @@ namespace hal
             std::vector<Net*> fan_out = g->get_fan_out_nets();
             nets_to_check[prev_module].insert(fan_out.begin(), fan_out.end());
             nets_to_check[module].insert(fan_out.begin(), fan_out.end());
+            m_event_handler->notify(ModuleEvent::event::gate_removed, prev_module, g->get_id());
+            m_event_handler->notify(ModuleEvent::event::gate_assigned, module, g->get_id());
         }
 
         for (const auto& [affected_module, nets] : nets_to_check)
