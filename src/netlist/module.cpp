@@ -579,7 +579,7 @@ namespace hal
         }
         else
         {
-            if (external_source)
+            if (external_source && internal_destination)
             {
                 if (m_input_nets.find(net) == m_input_nets.end())
                 {
@@ -603,7 +603,7 @@ namespace hal
                 }
             }
 
-            if (external_destination)
+            if (external_destination && internal_source)
             {
                 if (m_output_nets.find(net) == m_output_nets.end())
                 {
