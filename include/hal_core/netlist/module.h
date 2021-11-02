@@ -411,22 +411,6 @@ namespace hal
             bool contains_net(Net* net) const;
 
             /**
-             * Remove a pin from the port by its name.
-             * 
-             * @param[in] pin_name - The name of the pin.
-             * @returns True on success, false otherwise.
-             */
-            bool remove_pin(const std::string& pin_name);
-
-            /**
-             * Remove a pin from the port by its net.
-             * 
-             * @param[in] net - The net.
-             * @returns True on success, false otherwise.
-             */
-            bool remove_pin(Net* net);
-
-            /**
              * Assign a new position to the pin specified by its name.
              * All pins beyond the specified position will be shifted backwards.
              * 
@@ -691,20 +675,9 @@ namespace hal
         Module(const Module&) = delete;               //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
 
-        /**
-         * Determine the direction of a port using the net passing through the port.
-         * 
-         * @param[in] net - The net passing through the port.
-         * @returns The direction of the port or PinDirection::none if the net is not an input or output of the module.
-         */
-        PinDirection determine_port_direction(Net* net) const;
-
-        /**
-         * Update the ports of the module by analyzing its input and output nets.
-         */
-        void update_ports();
-
         void check_net(Net* net, bool recursive = false);
+        Port* assign_port_net(Net* net, PinDirection direction);
+        bool remove_port_net(Net* net);
 
         std::string m_name;
         std::string m_type;
@@ -720,7 +693,6 @@ namespace hal
         std::vector<Module*> m_submodules;
 
         // ports
-        mutable bool m_ports_dirty;
         u32 m_next_input_index  = 0;
         u32 m_next_inout_index  = 0;
         u32 m_next_output_index = 0;
@@ -728,7 +700,6 @@ namespace hal
         std::list<Port*> m_ports_raw;
         std::map<std::string, Port*> m_port_names_map;
         std::map<std::string, Port*> m_pin_names_map;
-        std::set<Net*> m_port_nets;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;

@@ -404,22 +404,6 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module_port.def("remove_pin", py::overload_cast<const std::string&>(&Module::Port::remove_pin), py::arg("pin_name"), R"(
-            Remove a pin from the port by its name.
-
-            :param str pin_name: The name of the pin.
-            :returns: True on success, False otherwise.
-            :rtype: bool
-        )");
-
-        py_module_port.def("remove_pin", py::overload_cast<Net*>(&Module::Port::remove_pin), py::arg("net"), R"(
-            Remove a pin from the port by its name.
-
-            :param hal_py.Net net: The net.
-            :returns: True on success, False otherwise.
-            :rtype: bool
-        )");
-
         py_module_port.def("move_pin", py::overload_cast<const std::string&, u32>(&Module::Port::move_pin), py::arg("pin_name"), py::arg("new_index"), R"(
             Remove a pin from the port by its name.
 

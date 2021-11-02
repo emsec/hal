@@ -555,22 +555,72 @@ namespace hal
             }
         }
 
-        if (external_source)
+        std::vector<Net*> update_port_nets;
+        if (external_source && external_destination)
         {
-            m_input_nets.insert(net);
+            if (m_input_nets.find(net) == m_input_nets.end() || m_output_nets.find(net) == m_output_nets.end())
+            {
+                m_input_nets.insert(net);
+                m_output_nets.insert(net);
+                if (Port* port = get_port(net); port == nullptr)
+                {
+                    port->m_direction = PinDirection::inout;
+                }
+                else
+                {
+                    assign_port_net(net, PinDirection::inout);
+                }
+            }
         }
         else
         {
-            m_input_nets.erase(net);
-        }
+            if (external_source)
+            {
+                if (m_input_nets.find(net) == m_input_nets.end())
+                {
+                    m_input_nets.insert(net);
+                    if (Port* port = get_port(net); port == nullptr)
+                    {
+                        port->m_direction = PinDirection::input;
+                    }
+                    else
+                    {
+                        assign_port_net(net, PinDirection::input);
+                    }
+                }
+            }
+            else
+            {
+                if (m_input_nets.find(net) != m_input_nets.end())
+                {
+                    m_input_nets.erase(net);
+                    remove_port_net(net);
+                }
+            }
 
-        if (external_destination)
-        {
-            m_output_nets.insert(net);
-        }
-        else
-        {
-            m_output_nets.erase(net);
+            if (external_destination)
+            {
+                if (m_output_nets.find(net) == m_output_nets.end())
+                {
+                    m_output_nets.insert(net);
+                    if (Port* port = get_port(net); port == nullptr)
+                    {
+                        port->m_direction = PinDirection::output;
+                    }
+                    else
+                    {
+                        assign_port_net(net, PinDirection::output);
+                    }
+                }
+            }
+            else
+            {
+                if (m_output_nets.find(net) != m_output_nets.end())
+                {
+                    m_output_nets.erase(net);
+                    remove_port_net(net);
+                }
+            }
         }
 
         if (internal_source && internal_destination)
@@ -738,33 +788,6 @@ namespace hal
         return m_net_to_pin.find(net) != m_net_to_pin.end();
     }
 
-    bool Module::Port::remove_pin(const std::string& pin_name)
-    {
-        if (const auto net_it = m_pin_to_net.find(pin_name); net_it != m_pin_to_net.end())
-        {
-            if (const auto pin_it = std::find_if(m_pins.begin(), m_pins.end(), [pin_name](const std::pair<std::string, Net*>& pin) { return pin.first == pin_name; }); pin_it != m_pins.end())
-            {
-                m_net_to_pin.erase(net_it->second);
-                m_pin_to_net.erase(net_it);
-                m_pins.erase(pin_it);
-
-                return true;
-            }
-
-            return false;
-        }
-        return false;
-    }
-
-    bool Module::Port::remove_pin(Net* net)
-    {
-        if (const auto it = m_net_to_pin.find(net); it != m_net_to_pin.end())
-        {
-            return remove_pin(it->second);
-        }
-        return false;
-    }
-
     bool Module::Port::move_pin(const std::string& pin_name, u32 new_index)
     {
         if (const auto pin_it = std::find_if(m_pins.begin(), m_pins.end(), [pin_name](const std::pair<std::string, Net*>& pin) { return pin.first == pin_name; }); pin_it != m_pins.end())
@@ -818,112 +841,8 @@ namespace hal
         return m_next_input_index;
     }
 
-    PinDirection Module::determine_port_direction(Net* net) const
-    {
-        PinDirection direction = PinDirection::none;
-
-        const std::vector<Net*>& input_nets  = get_input_nets();
-        const std::vector<Net*>& output_nets = get_output_nets();
-
-        if (std::find(input_nets.begin(), input_nets.end(), net) != input_nets.end())
-        {
-            direction = PinDirection::input;
-        }
-        if (std::find(output_nets.begin(), output_nets.end(), net) != output_nets.end())
-        {
-            if (direction == PinDirection::input)
-            {
-                direction = PinDirection::inout;
-            }
-            else
-            {
-                direction = PinDirection::output;
-            }
-        }
-
-        return direction;
-    }
-
-    void Module::update_ports()
-    {
-        const std::vector<Net*>& input_nets  = get_input_nets();
-        const std::vector<Net*>& output_nets = get_output_nets();
-
-        std::set<Net*> current_port_nets;
-        current_port_nets.insert(input_nets.begin(), input_nets.end());
-        current_port_nets.insert(output_nets.begin(), output_nets.end());
-
-        std::vector<Net*> diff_nets;
-
-        // find nets that are still in the port map but no longer a port net
-        std::set_difference(m_port_nets.begin(), m_port_nets.end(), current_port_nets.begin(), current_port_nets.end(), std::back_inserter(diff_nets));
-        for (Net* port_net : diff_nets)
-        {
-            Port* old_port = get_port(port_net);
-            for (const std::string& pin : old_port->get_pins())
-            {
-                m_pin_names_map.erase(pin);
-            }
-
-            m_port_names_map.erase(old_port->get_name());
-
-            m_ports_raw.erase(std::find(m_ports_raw.begin(), m_ports_raw.end(), old_port));
-            m_ports.erase(std::find_if(m_ports.begin(), m_ports.end(), [old_port](const std::unique_ptr<Port>& p) { return p.get() == old_port; }));
-        }
-
-        diff_nets.clear();
-
-        // update port directions
-        for (Port* port : m_ports_raw)
-        {
-            port->m_direction = determine_port_direction(port->get_nets().front());
-        }
-
-        // find nets that are port nets but have not yet been assigned a port name
-        std::set_difference(current_port_nets.begin(), current_port_nets.end(), m_port_nets.begin(), m_port_nets.end(), std::back_inserter(diff_nets));
-        for (Net* port_net : diff_nets)
-        {
-            PinDirection direction = determine_port_direction(port_net);
-
-            std::string port_prefix;
-            u32* index_counter;
-            switch (direction)
-            {
-                case PinDirection::input:
-                    port_prefix   = "I";
-                    index_counter = &m_next_input_index;
-                    break;
-                case PinDirection::inout:
-                    port_prefix   = "IO";
-                    index_counter = &m_next_inout_index;
-                    break;
-                case PinDirection::output:
-                    port_prefix   = "O";
-                    index_counter = &m_next_output_index;
-                    break;
-                default:
-                    continue;
-            }
-
-            std::string port_name;
-            do
-            {
-                port_name = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
-            } while (m_port_names_map.find(port_name) != m_port_names_map.end());
-
-            std::unique_ptr<Port> port_owner(new Port(this, port_name, port_net, direction));
-            Port* new_port = port_owner.get();
-            m_ports.push_back(std::move(port_owner));
-            m_ports_raw.push_back(new_port);
-            m_port_names_map[port_name] = new_port;
-            m_pin_names_map[port_name]  = new_port;
-        }
-    }
-
     std::vector<Module::Port*> Module::get_ports(const std::function<bool(Port*)>& filter)
     {
-        update_ports();
-
         std::vector<Port*> res;
         if (!filter)
         {
@@ -953,8 +872,6 @@ namespace hal
             return nullptr;
         }
 
-        update_ports();
-
         if (const auto it = m_port_names_map.find(port_name); it != m_port_names_map.end())
         {
             return it->second;
@@ -971,8 +888,6 @@ namespace hal
             log_warning("module", "nullptr given as port net for module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return nullptr;
         }
-
-        update_ports();
 
         if (const auto it = std::find_if(m_ports_raw.begin(), m_ports_raw.end(), [port_net](Port* port) { return port->contains_net(port_net); }); it != m_ports_raw.end())
         {
@@ -997,8 +912,6 @@ namespace hal
             return nullptr;
         }
 
-        update_ports();
-
         if (const auto it = m_pin_names_map.find(pin_name); it != m_pin_names_map.end())
         {
             return it->second;
@@ -1014,8 +927,6 @@ namespace hal
         {
             return false;
         }
-
-        update_ports();
 
         if (m_port_names_map.find(new_name) != m_port_names_map.end() || m_pin_names_map.find(new_name) != m_pin_names_map.end()
             || std::find(m_ports_raw.begin(), m_ports_raw.end(), port) == m_ports_raw.end())
@@ -1056,8 +967,6 @@ namespace hal
             return false;
         }
 
-        update_ports();
-
         if (m_port_names_map.find(new_name) != m_port_names_map.end() || m_pin_names_map.find(new_name) != m_pin_names_map.end()
             || std::find(m_ports_raw.begin(), m_ports_raw.end(), port) == m_ports_raw.end())
         {
@@ -1088,14 +997,80 @@ namespace hal
             return false;
         }
 
-        update_ports();
-
         if (const auto it = port->m_net_to_pin.find(net); it != port->m_net_to_pin.end())
         {
             return set_port_pin_name(port, it->second, new_name);
         }
 
         return false;
+    }
+
+    Module::Port* Module::assign_port_net(Net* net, PinDirection direction)
+    {
+        std::string port_prefix;
+        u32* index_counter;
+        switch (direction)
+        {
+            case PinDirection::input:
+                port_prefix   = "I";
+                index_counter = &m_next_input_index;
+                break;
+            case PinDirection::inout:
+                port_prefix   = "IO";
+                index_counter = &m_next_inout_index;
+                break;
+            case PinDirection::output:
+                port_prefix   = "O";
+                index_counter = &m_next_output_index;
+                break;
+            default:
+                return nullptr;
+        }
+
+        std::string port_name;
+        do
+        {
+            port_name = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
+        } while (m_port_names_map.find(port_name) != m_port_names_map.end());
+
+        std::unique_ptr<Port> port_owner(new Port(this, port_name, net, direction));
+        Port* new_port = port_owner.get();
+        m_ports.push_back(std::move(port_owner));
+        m_ports_raw.push_back(new_port);
+        m_port_names_map[port_name] = new_port;
+        m_pin_names_map[port_name]  = new_port;
+        return new_port;
+    }
+
+    bool Module::remove_port_net(Net* net)
+    {
+        Port* port = get_port(net);
+        if (port == nullptr)
+        {
+            return false;
+        }
+
+        if (const auto it = port->m_net_to_pin.find(net); it != port->m_net_to_pin.end())
+        {
+            std::string pin = it->second;
+            port->m_net_to_pin.erase(it);
+            port->m_pin_to_net.erase(pin);
+            port->m_pins.erase(std::find_if(port->m_pins.begin(), port->m_pins.end(), [pin](std::pair<std::string, Net*> pin_net) { return pin_net.first == pin; }));
+            m_pin_names_map.erase(pin);
+        }
+        else
+        {
+            return false;
+        }
+
+        if (port->m_pins.empty())
+        {
+            m_port_names_map.erase(port->get_name());
+            m_ports_raw.erase(std::find(m_ports_raw.begin(), m_ports_raw.end(), port));
+            m_ports.erase(std::find_if(m_ports.begin(), m_ports.end(), [port](const std::unique_ptr<Port>& p) { return p.get() == port; }));
+        }
+
+        return true;
     }
 
     /**
