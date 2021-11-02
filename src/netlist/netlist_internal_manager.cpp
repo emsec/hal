@@ -20,19 +20,6 @@ namespace hal
         assert(eh != nullptr);
     }
 
-    template<typename T>
-    static bool unordered_vector_erase(std::vector<T>& vec, T element)
-    {
-        auto it = std::find(vec.begin(), vec.end(), element);
-        if (it == vec.end())
-        {
-            return false;
-        }
-        *it = vec.back();
-        vec.pop_back();
-        return true;
-    }
-
     //######################################################################
     //###                      gates                                     ###
     //######################################################################
@@ -129,13 +116,13 @@ namespace hal
 
         // remove gate from modules
         gate->m_module->m_gates_map.erase(gate->m_module->m_gates_map.find(gate->get_id()));
-        unordered_vector_erase(gate->m_module->m_gates, gate);
+        utils::unordered_vector_erase(gate->m_module->m_gates, gate);
 
         auto it  = m_netlist->m_gates_map.find(gate->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_gates_map.erase(it);
         m_netlist->m_gates_set.erase(gate);
-        unordered_vector_erase(m_netlist->m_gates, gate);
+        utils::unordered_vector_erase(m_netlist->m_gates, gate);
 
         // free ids
         m_netlist->m_free_gate_ids.insert(gate->get_id());
@@ -236,7 +223,7 @@ namespace hal
         auto ptr = std::move(it->second);
         m_netlist->m_nets_map.erase(it);
         m_netlist->m_nets_set.erase(net);
-        unordered_vector_erase(m_netlist->m_nets, net);
+        utils::unordered_vector_erase(m_netlist->m_nets, net);
 
         m_netlist->m_free_net_ids.insert(net->get_id());
         m_netlist->m_used_net_ids.erase(net->get_id());
@@ -291,25 +278,19 @@ namespace hal
             return nullptr;
         }
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        affected_modules.insert(gate->get_module());
-        for (Endpoint* ep : net->get_destinations())
-        {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
-        }
-
         auto new_endpoint     = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, false));
         auto new_endpoint_raw = new_endpoint.get();
         net->m_sources.push_back(std::move(new_endpoint));
         net->m_sources_raw.push_back(new_endpoint_raw);
         gate->m_out_endpoints.push_back(new_endpoint_raw);
         gate->m_out_nets.push_back(net);
+
+        // update internal nets and port nets
+        gate->get_module()->check_net(net, true);
+        for (Endpoint* ep : net->get_destinations())
+        {
+            ep->get_gate()->get_module()->check_net(net, true);
+        }
 
         m_event_handler->notify(NetEvent::event::src_added, net, gate->get_id());
 
@@ -325,26 +306,13 @@ namespace hal
             return false;
         }
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        affected_modules.insert(ep->get_gate()->get_module());
-        for (Endpoint* e : net->get_destinations())
-        {
-            affected_modules.insert(e->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
-        }
-
         bool removed = false;
         for (u32 i = 0; i < net->m_sources.size(); ++i)
         {
             if (net->m_sources_raw[i] == ep)
             {
-                unordered_vector_erase(gate->m_out_endpoints, ep);
-                unordered_vector_erase(gate->m_out_nets, net);
+                utils::unordered_vector_erase(gate->m_out_endpoints, ep);
+                utils::unordered_vector_erase(gate->m_out_nets, net);
                 net->m_sources[i] = std::move(net->m_sources.back());
                 net->m_sources.pop_back();
                 net->m_sources_raw[i] = net->m_sources_raw.back();
@@ -365,6 +333,15 @@ namespace hal
                         net->get_name(),
                         net->get_id(),
                         m_netlist->m_netlist_id);
+        }
+        else
+        {
+            // update internal nets and port nets
+            ep->get_gate()->get_module()->check_net(net, true);
+            for (Endpoint* dst : net->get_destinations())
+            {
+                dst->get_gate()->get_module()->check_net(net, true);
+            }
         }
 
         return true;
@@ -415,25 +392,19 @@ namespace hal
             return nullptr;
         }
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        affected_modules.insert(gate->get_module());
-        for (Endpoint* ep : net->get_sources())
-        {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
-        }
-
-        auto new_endpoint     = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, true));
-        auto new_endpoint_raw = new_endpoint.get();
+        std::unique_ptr<Endpoint> new_endpoint = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, true));
+        Endpoint* new_endpoint_raw             = new_endpoint.get();
         net->m_destinations.push_back(std::move(new_endpoint));
         net->m_destinations_raw.push_back(new_endpoint_raw);
         gate->m_in_endpoints.push_back(new_endpoint_raw);
         gate->m_in_nets.push_back(net);
+
+        // update internal nets and port nets
+        gate->get_module()->check_net(net, true);
+        for (Endpoint* ep : net->get_sources())
+        {
+            ep->get_gate()->get_module()->check_net(net, true);
+        }
 
         m_event_handler->notify(NetEvent::event::dst_added, net, gate->get_id());
 
@@ -448,26 +419,13 @@ namespace hal
             return false;
         }
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
-        affected_modules.insert(ep->get_gate()->get_module());
-        for (Endpoint* e : net->get_sources())
-        {
-            affected_modules.insert(e->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
-        }
-
         bool removed = false;
         for (u32 i = 0; i < net->m_destinations.size(); ++i)
         {
             if (net->m_destinations_raw[i] == ep)
             {
-                unordered_vector_erase(gate->m_in_endpoints, ep);
-                unordered_vector_erase(gate->m_in_nets, net);
+                utils::unordered_vector_erase(gate->m_in_endpoints, ep);
+                utils::unordered_vector_erase(gate->m_in_nets, net);
                 net->m_destinations[i] = std::move(net->m_destinations.back());
                 net->m_destinations.pop_back();
                 net->m_destinations_raw[i] = net->m_destinations_raw.back();
@@ -488,6 +446,14 @@ namespace hal
                         net->get_name(),
                         net->get_id(),
                         m_netlist->m_netlist_id);
+        }
+        else
+        {    // update internal nets and port nets
+            ep->get_gate()->get_module()->check_net(net, true);
+            for (Endpoint* src : net->get_sources())
+            {
+                src->get_gate()->get_module()->check_net(net, true);
+            }
         }
 
         return true;
@@ -577,11 +543,8 @@ namespace hal
         }
 
         // move gates and nets to parent, work on a copy since assign_gate will modify m_gates
-        auto gates_copy = to_remove->m_gates;
-        for (auto gate : gates_copy)
-        {
-            to_remove->m_parent->assign_gate(gate);
-        }
+        std::vector<Gate*> gates_copy = to_remove->m_gates;
+        to_remove->m_parent->assign_gates(gates_copy);
 
         // move all submodules to parent
         for (auto sm : to_remove->m_submodules)
@@ -599,14 +562,14 @@ namespace hal
 
         // remove module from parent
         to_remove->m_parent->m_submodules_map.erase(to_remove->get_id());
-        unordered_vector_erase(to_remove->m_parent->m_submodules, to_remove);
+        utils::unordered_vector_erase(to_remove->m_parent->m_submodules, to_remove);
         m_event_handler->notify(ModuleEvent::event::submodule_removed, to_remove->m_parent, to_remove->get_id());
 
         auto it  = m_netlist->m_modules_map.find(to_remove->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_modules_map.erase(it);
         m_netlist->m_modules_set.erase(to_remove);
-        unordered_vector_erase(m_netlist->m_modules, to_remove);
+        utils::unordered_vector_erase(m_netlist->m_modules, to_remove);
 
         m_netlist->m_free_module_ids.insert(to_remove->get_id());
         m_netlist->m_used_module_ids.erase(to_remove->get_id());
@@ -617,60 +580,80 @@ namespace hal
 
     bool NetlistInternalManager::module_assign_gate(Module* m, Gate* g)
     {
-        if (g == nullptr)
-        {
-            log_error("module", "gate cannot be a nullptr.");
-            return false;
-        }
+        return module_assign_gates(m, {g});
+    }
 
-        if (m == nullptr)
+    bool NetlistInternalManager::module_assign_gates(Module* module, const std::vector<Gate*>& gates)
+    {
+        // check all gates for validity
+        if (module == nullptr)
         {
             log_error("module", "module cannot be a nullptr.");
             return false;
         }
 
-        auto prev_module = g->m_module;
-        if (prev_module == m)
+        for (const Gate* g : gates)
         {
-            log_error("module",
-                      "gate '{}' with ID {} is already contained in module '{}' with ID {} in netlist with ID {}.",
-                      g->get_name(),
-                      g->get_id(),
-                      m->get_name(),
-                      m->get_id(),
-                      m_netlist->m_netlist_id);
-            return false;
+            if (g == nullptr)
+            {
+                log_error("module", "gate cannot be a nullptr.");
+                return false;
+            }
+
+            if (g->m_module == module)
+            {
+                log_error("module",
+                          "gate '{}' with ID {} is already contained in module '{}' with ID {} in netlist with ID {}.",
+                          g->get_name(),
+                          g->get_id(),
+                          module->get_name(),
+                          module->get_id(),
+                          m_netlist->m_netlist_id);
+                return false;
+            }
         }
 
-        // mark caches as dirty
-        m->set_cache_dirty();
-        prev_module->set_cache_dirty();
-
-        // remove gate from old module
-        auto it = prev_module->m_gates_map.find(g->get_id());
-        if (it == m->m_gates_map.end())
+        // re-assign gates
+        std::unordered_map<Module*, std::vector<Net*>> nets_to_check;
+        for (Gate* g : gates)
         {
-            log_error("module",
-                      "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.",
-                      g->get_name(),
-                      g->get_id(),
-                      prev_module->get_name(),
-                      prev_module->get_id(),
-                      m_netlist->m_netlist_id);
-            return false;
+            // remove gate from old module
+            Module* prev_module = g->m_module;
+            const auto it       = prev_module->m_gates_map.find(g->get_id());
+            assert(it != prev_module->m_gates_map.end());
+            prev_module->m_gates_map.erase(it);
+
+            utils::unordered_vector_erase(prev_module->m_gates, g);
+
+            // move gate to new module
+            module->m_gates_map[g->get_id()] = g;
+            module->m_gates.push_back(g);
+            g->m_module = module;
+
+            // collect affected nets
+            std::vector<Net*> fan_in = g->get_fan_in_nets();
+            nets_to_check[prev_module].insert(nets_to_check[prev_module].begin(), fan_in.begin(), fan_in.end());
+            nets_to_check[module].insert(nets_to_check[module].begin(), fan_in.begin(), fan_in.end());
+
+            std::vector<Net*> fan_out = g->get_fan_in_nets();
+            nets_to_check[prev_module].insert(nets_to_check[prev_module].begin(), fan_out.begin(), fan_out.end());
+            nets_to_check[module].insert(nets_to_check[module].begin(), fan_out.begin(), fan_out.end());
         }
 
-        prev_module->m_gates_map.erase(it);
-        unordered_vector_erase(prev_module->m_gates, g);
+        for (const auto& [affected_module, nets] : nets_to_check)
+        {
+            for (Net* net : nets)
+            {
+                affected_module->check_net(net, true);
+            }
+        }
 
-        // move gate to new module
-        m->m_gates_map[g->get_id()] = g;
-        m->m_gates.push_back(g);
-        g->m_module = m;
+        return true;
+    }
 
-        // notify event handlers
-        m_event_handler->notify(ModuleEvent::event::gate_removed, prev_module, g->get_id());
-        m_event_handler->notify(ModuleEvent::event::gate_assigned, m, g->get_id());
+    bool NetlistInternalManager::module_check_net(Module* module, Net* net, bool recursive)
+    {
+        module->check_net(net, recursive);
         return true;
     }
 
@@ -744,7 +727,7 @@ namespace hal
         auto ptr = std::move(it->second);
         m_netlist->m_groupings_map.erase(it);
         m_netlist->m_groupings_set.erase(grouping);
-        unordered_vector_erase(m_netlist->m_groupings, grouping);
+        utils::unordered_vector_erase(m_netlist->m_groupings, grouping);
 
         // free ids
         m_netlist->m_free_grouping_ids.insert(grouping->get_id());
