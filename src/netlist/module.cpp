@@ -125,6 +125,11 @@ namespace hal
     std::vector<Module*> Module::get_parent_modules(const std::function<bool(Module*)>& filter, bool recursive) const
     {
         std::vector<Module*> res;
+        if (m_parent == nullptr) 
+        {
+            return {};
+        }
+
         if (!filter)
         {
             res.push_back(m_parent);
@@ -562,7 +567,7 @@ namespace hal
             {
                 m_input_nets.insert(net);
                 m_output_nets.insert(net);
-                if (Port* port = get_port(net); port == nullptr)
+                if (Port* port = get_port(net); port != nullptr)
                 {
                     port->m_direction = PinDirection::inout;
                 }
@@ -579,7 +584,7 @@ namespace hal
                 if (m_input_nets.find(net) == m_input_nets.end())
                 {
                     m_input_nets.insert(net);
-                    if (Port* port = get_port(net); port == nullptr)
+                    if (Port* port = get_port(net); port != nullptr)
                     {
                         port->m_direction = PinDirection::input;
                     }
@@ -603,7 +608,7 @@ namespace hal
                 if (m_output_nets.find(net) == m_output_nets.end())
                 {
                     m_output_nets.insert(net);
-                    if (Port* port = get_port(net); port == nullptr)
+                    if (Port* port = get_port(net); port != nullptr)
                     {
                         port->m_direction = PinDirection::output;
                     }
