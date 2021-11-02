@@ -337,7 +337,7 @@ namespace hal
         else
         {
             // update internal nets and port nets
-            ep->get_gate()->get_module()->check_net(net, true);
+            gate->get_module()->check_net(net, true);
             for (Endpoint* dst : net->get_destinations())
             {
                 dst->get_gate()->get_module()->check_net(net, true);
@@ -449,7 +449,7 @@ namespace hal
         }
         else
         {    // update internal nets and port nets
-            ep->get_gate()->get_module()->check_net(net, true);
+            gate->get_module()->check_net(net, true);
             for (Endpoint* src : net->get_sources())
             {
                 src->get_gate()->get_module()->check_net(net, true);
