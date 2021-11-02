@@ -48,15 +48,14 @@ namespace hal
             }
         }
 
-        // TODO add checking for ports again
-        // for (const Port* port : get_ports())
-        // {
-        //     if (const Port* other_port = other.get_port(other.get_netlist()->get_net_by_id(port->get_nets().front()->get_id())); other_port == nullptr || *other_port != *port)
-        //     {
-        //         log_info("module", "the modules with IDs {} and {} are not equal due to an unequal port.", m_id, other.get_id());
-        //         return false;
-        //     }
-        // }
+        for (const Port* port : get_ports())
+        {
+            if (const Port* other_port = other.get_port(other.get_netlist()->get_net_by_id(port->get_nets().front()->get_id())); other_port == nullptr || *other_port != *port)
+            {
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal port.", m_id, other.get_id());
+                return false;
+            }
+        }
 
         if (!DataContainer::operator==(other))
         {
@@ -301,7 +300,7 @@ namespace hal
 
     bool Module::assign_gate(Gate* gate)
     {
-        return m_internal_manager->module_assign_gate(this, gate);
+        return m_internal_manager->module_assign_gates(this, {gate});
     }
 
     bool Module::assign_gates(const std::vector<Gate*>& gates)
@@ -311,20 +310,7 @@ namespace hal
 
     bool Module::remove_gate(Gate* gate)
     {
-        if (contains_gate(gate))
-        {
-            return m_internal_manager->module_assign_gate(m_internal_manager->m_netlist->get_top_module(), gate);
-        }
-
-        if (gate == nullptr)
-        {
-            log_error("module", "gate cannot be a nullptr.");
-            return false;
-        }
-
-        log_error(
-            "module", "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.", gate->get_name(), gate->get_id(), m_name, m_id, m_internal_manager->m_netlist->get_id());
-        return false;
+        return remove_gates({gate});
     }
 
     bool Module::remove_gates(const std::vector<Gate*>& gates)
@@ -850,7 +836,7 @@ namespace hal
         return m_next_input_index;
     }
 
-    std::vector<Module::Port*> Module::get_ports(const std::function<bool(Port*)>& filter)
+    std::vector<Module::Port*> Module::get_ports(const std::function<bool(Port*)>& filter) const
     {
         std::vector<Port*> res;
         if (!filter)
@@ -873,7 +859,7 @@ namespace hal
         return res;
     }
 
-    Module::Port* Module::get_port(const std::string& port_name)
+    Module::Port* Module::get_port(const std::string& port_name) const
     {
         if (port_name.empty())
         {
@@ -890,7 +876,7 @@ namespace hal
         return nullptr;
     }
 
-    Module::Port* Module::get_port(Net* port_net)
+    Module::Port* Module::get_port(Net* port_net) const
     {
         if (port_net == nullptr)
         {
@@ -913,7 +899,7 @@ namespace hal
         return nullptr;
     }
 
-    Module::Port* Module::get_port_by_pin_name(const std::string& pin_name)
+    Module::Port* Module::get_port_by_pin_name(const std::string& pin_name) const
     {
         if (pin_name.empty())
         {

@@ -134,14 +134,14 @@ namespace hal
         Module* get_parent_module() const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get all direct parent of this module.<br>
          * If \p recursive is set to true, all indirect parents are also included.<br>
          * A filter can be applied to the result to only get parents matching the specified condition.
          *
          * @param[in] filter - Filter to be applied to the modules.
          * @param[in] recursive - True to include indirect parents as well, false otherwise.
-         * @returns The vector of parent modules.
+         * @returns A vector of parent modules.
          */
         std::vector<Module*> get_parent_modules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
 
@@ -155,7 +155,7 @@ namespace hal
         bool set_parent_module(Module* new_parent);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Check if the module is a parent of the specified module.
          * 
          * @param[in] module - The module.
@@ -165,19 +165,18 @@ namespace hal
         bool is_parent_module_of(Module* module, bool recursive = true) const;
 
         /**
-         * TODO update pybind docs
          * Get all direct submodules of this module.<br>
          * If \p recursive is set to true, all indirect submodules are also included.<br>
          * A filter can be applied to the result to only get submodules matching the specified condition.
          *
          * @param[in] filter - Filter to be applied to the modules.
          * @param[in] recursive - True to include indirect submodules as well, false otherwise.
-         * @returns The vector of submodules.
+         * @returns A vector of submodules.
          */
         std::vector<Module*> get_submodules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Check if the module is a submodule of the specified module.
          * 
          * @param[in] module - The module.
@@ -210,14 +209,14 @@ namespace hal
          */
         Netlist* get_netlist() const;
 
-        /* TODO fix const correctness
+        /* 
          * ################################################################
          *      net functions
          * ################################################################
          */
 
         /**
-         * TODO pybind
+         * TODO test
          * Check whether a net is contained in the module.<br>
          * If \p recursive is set to true, nets in submodules are considered as well.
          *
@@ -228,7 +227,7 @@ namespace hal
         bool contains_net(Net* net, bool recursive = false) const;
 
         /**
-         * TODO test, update doc
+         * TODO test
          * Get all nets that have at least one source or one destination within the module.<br>
          * A filter can be applied to the result to only get nets matching the specified condition.<br>
          * If \p recursive is true, nets in submodules are considered as well.
@@ -240,7 +239,6 @@ namespace hal
         std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr, bool recursive = false) const;
 
         /**
-         * TODO update doc
          * Get all nets that are either a global input to the netlist or have at least one source outside of the module.
          *
          * @returns A vector of input nets.
@@ -248,7 +246,6 @@ namespace hal
         std::vector<Net*> get_input_nets() const;
 
         /**
-         * TODO update doc
          * Get all nets that are either a global output to the netlist or have at least one destination outside of the module.
          *
          * @returns A vector of output nets.
@@ -256,7 +253,6 @@ namespace hal
         std::vector<Net*> get_output_nets() const;
 
         /**
-         * TODO update doc
          * Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
          *
          * @returns A vector of internal nets.
@@ -264,7 +260,7 @@ namespace hal
         std::vector<Net*> get_internal_nets() const;
 
         /** 
-         * TODO pybind
+         * TODO test
          * Check whether the given net is an input of the module, i.e., whether the net is a global input to the netlist or has at least one source outside of the module.
          * 
          * @param[in] net - The net.
@@ -273,7 +269,7 @@ namespace hal
         bool is_input_net(Net* net) const;
 
         /** 
-         * TODO pybind
+         * TODO test
          * Check whether the given net is an output of the module, i.e., whether the net is a global output to the netlist or has at least one destination outside of the module.
          * 
          * @param[in] net - The net.
@@ -282,7 +278,7 @@ namespace hal
         bool is_output_net(Net* net) const;
 
         /** 
-         * TODO pybind
+         * TODO test
          * Check whether the given net is an internal net of the module, i.e. whether the net has at least one source and one destination within the module.
          * 
          * @param[in] net - The net.
@@ -290,7 +286,7 @@ namespace hal
          */
         bool is_internal_net(Net* net) const;
 
-        /* TODO fix const correctness
+        /* 
          * ################################################################
          *      port functions
          * ################################################################
@@ -508,7 +504,7 @@ namespace hal
          * @param[in] filter - Filter function to be evaluated on each port.
          * @returns A vector of ports.
          */
-        std::vector<Port*> get_ports(const std::function<bool(Port*)>& filter = nullptr);
+        std::vector<Port*> get_ports(const std::function<bool(Port*)>& filter = nullptr) const;
 
         /**
          * Get the port specified by the given name.
@@ -516,7 +512,7 @@ namespace hal
          * @param[in] port_name - The name of the port.
          * @returns The port on success, a nullptr otherwise.
          */
-        Port* get_port(const std::string& port_name);
+        Port* get_port(const std::string& port_name) const;
 
         /**
          * Get the port that contains the specified net.
@@ -524,7 +520,7 @@ namespace hal
          * @param[in] net - The net.
          * @returns The port on success, a nullptr otherwise.
          */
-        Port* get_port(Net* net);
+        Port* get_port(Net* net) const;
 
         /**
          * Get the port that contains the specified pin.
@@ -532,7 +528,7 @@ namespace hal
          * @param[in] pin_name - The name of the pin.
          * @returns The port on success, a nullptr otherwise.
          */
-        Port* get_port_by_pin_name(const std::string& pin_name);
+        Port* get_port_by_pin_name(const std::string& pin_name) const;
 
         /**
          * Set the name of the given port.
@@ -606,7 +602,7 @@ namespace hal
         bool assign_gate(Gate* gate);
 
         /**
-         * TODO pybind
+         * TODO test
          * Assign a vector of gates to the module.<br>
          * The gates are removed from their previous module in the process.
          *
@@ -625,7 +621,7 @@ namespace hal
         bool remove_gate(Gate* gate);
 
         /**
-         * TODO pybind
+         * TODO test
          * Remove a vector of gates from the module.<br>
          * Automatically moves the gates to the top module of the netlist.
          *
@@ -635,9 +631,8 @@ namespace hal
         bool remove_gates(const std::vector<Gate*>& gates);
 
         /**
-         * TODO pydoc update
          * Check whether a gate is contained in the module.<br>
-         * If \p recursive is set to true, gates in submodules are considered as well.
+         * If \p recursive is true, gates in submodules are considered as well.
          *
          * @param[in] gate - The gate to check for.
          * @param[in] recursive - True to also consider gates in submodules, false otherwise.
@@ -646,9 +641,8 @@ namespace hal
         bool contains_gate(Gate* gate, bool recursive = false) const;
 
         /**
-         * TODO pydoc update
          * Get a gate specified by the given ID.<br>
-         * If \p recursive is true, all submodules are searched as well.
+         * If \p recursive is true, gates in submodules are considered as well.
          *
          * @param[in] id - The unique ID of the gate.
          * @param[in] recursive - True to also consider gates in submodules, false otherwise.
@@ -657,7 +651,6 @@ namespace hal
         Gate* get_gate_by_id(const u32 id, bool recursive = false) const;
 
         /**
-         * TODO pydoc update
          * Get all gates contained within the module.<br>
          * A filter can be applied to the result to only get gates matching the specified condition.<br>
          * If \p recursive is true, gates in submodules are considered as well.

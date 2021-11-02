@@ -84,7 +84,8 @@ namespace hal
         )");
 
         py_module.def_property("parent_module", &Module::get_parent_module, &Module::set_parent_module, R"(
-            The parent module of this module. Set to None for the top module.
+            The parent module of this module.
+            Is set to None for the top module, but cannot be set to None by the user.
 
             :type: hal_py.Module or None
         )");
@@ -97,12 +98,39 @@ namespace hal
             :rtype: hal_py.Module or None
         )");
 
+        py_module.def_property_readonly(
+            "parent_modules", [](Module* mod) { return mod->get_parent_modules(); }, R"(
+            The parent modules of this module.
+
+            :type: list[hal_py.Module]
+        )");
+
+        py_module.def("get_parent_modules", &Module::get_parent_modules, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
+            Get all direct parent of this module.
+            If recursive is set to true, all indirect parents are also included.
+            A filter can be applied to the result to only get parents matching the specified condition.
+
+            :param lambda filter: Filter to be applied to the modules.
+            :param bool recursive: True to include indirect parents as well, False otherwise.
+            :returns: A list of parent modules.
+            :rtype: list[hal_py.Module]
+        )");
+
         py_module.def("set_parent_module", &Module::set_parent_module, py::arg("new_parent"), R"(
             Set a new parent for this module.
             If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.
 
             :param hal_py.Module new_parent: The new parent module.
             :returns: True if the parent was changed, false otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("is_parent_module_of", &Module::is_parent_module_of, py::arg("module"), py::arg("recursive") = true, R"(
+            Check if the module is a parent of the specified module.
+         
+            :param hal_py.Module module: The module.
+            :param bool recursive: True to check recursively, False otherwise.
+            :returns: True if the module is a parent of the specified module, False otherwise.
             :rtype: bool
         )");
 
@@ -119,9 +147,17 @@ namespace hal
             A filter can be applied to the result to only get submodules matching the specified condition.
 
             :param lambda filter: Filter to be applied to the modules.
-            :param bool recursive: True to include indirect submodules as well.
-            :returns: The vector of submodules.
+            :param bool recursive: True to include indirect submodules as well, false otherwise.
+            :returns: A list of submodules.
             :rtype: list[hal_py.Module]
+        )");
+
+        py_module.def("is_submodule_of", &Module::is_submodule_of, py::arg("module"), py::arg("recursive") = true, R"(
+            Check if the module is a submodule of the specified module.
+
+            :param hal_py.Module module: The module.
+            :param bool recursive: True to check recursively, False otherwise.
+            :returns: True if the module is a submodule of the specified module, False otherwise.
         )");
 
         py_module.def("contains_module", &Module::contains_module, py::arg("other"), py::arg("recusive") = false, R"(
@@ -164,21 +200,36 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
-        py_module.def_property_readonly("nets", &Module::get_nets, R"(
-            A sorted list of all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
+        py_module.def("contains_net", &Module::contains_net, py::arg("net"), py::arg("recursive") = false, R"(
+            Check whether a net is contained in the module.
+            If recursive is set to true, nets in submodules are considered as well.
+        
+            :param hal_py.Net net: The net to check for.
+            :param bool recursive: True to also consider nets in submodules, false otherwise.
+            :returns: True if the net is contained in the module, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def_property_readonly(
+            "nets", [](Module* mod) { return mod->get_nets(); }, R"(
+            A list of all nets that have at least one source or one destination within the module.
 
             :type: list[hal_py.Net]
         )");
 
-        py_module.def("get_nets", &Module::get_nets, R"(
-            Get all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
+        py_module.def("get_nets", &Module::get_nets, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
+            Get all nets that have at least one source or one destination within the module.
+            A filter can be applied to the result to only get nets matching the specified condition.
+            If recursive is True, nets in submodules are considered as well.
 
-            :returns: A sorted list of nets.
+            :param lambda filter: Filter to be applied to the nets.
+            :param bool recursive: True to also consider nets in submodules, False otherwise.
+            :returns: A list of nets.
             :rtype: list[hal_py.Net]
         )");
 
         py_module.def_property_readonly("input_nets", &Module::get_input_nets, R"(
-            A sorted list of all nets that are either a global input to the netlist or have at least one source outside of the module.
+            A list of all nets that are either a global input to the netlist or have at least one source outside of the module.
 
             :type: list[hal_py.Net]
         )");
@@ -186,12 +237,12 @@ namespace hal
         py_module.def("get_input_nets", &Module::get_input_nets, R"(
             Get all nets that are either a global input to the netlist or have at least one source outside of the module.
 
-            :returns: A sorted list of input nets.
+            :returns: A list of input nets.
             :rtype: list[hal_py.Net]
         )");
 
         py_module.def_property_readonly("output_nets", &Module::get_output_nets, R"(
-            A sorted list of all nets that are either a global output to the netlist or have at least one destination outside of the module.
+            A list of all nets that are either a global output to the netlist or have at least one destination outside of the module.
 
             :type: set[hal_py.Net]
         )");
@@ -199,21 +250,45 @@ namespace hal
         py_module.def("get_output_nets", &Module::get_output_nets, R"(
             Get all nets that are either a global output to the netlist or have at least one destination outside of the module.
 
-            :returns: A sorted list of output nets.
+            :returns: A list of output nets.
             :rtype: list[hal_py.Net]
         )");
 
         py_module.def_property_readonly("internal_nets", &Module::get_internal_nets, R"(
-            A sorted list of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
+            A list of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
 
             :type: list[hal_py.Net]
         )");
 
         py_module.def("get_internal_nets", &Module::get_internal_nets, R"(
-            Get all nets that have at least one source and one destination within the module. The result may contain nets that are also regarded as input or output nets.
+            Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
 
-            :returns: A sorted list of internal nets.
+            :returns: A list of internal nets.
             :rtype: list[hal_py.Net]
+        )");
+
+        py_module.def("is_input_net", &Module::is_input_net, py::arg("net"), R"(
+            Check whether the given net is an input of the module, i.e., whether the net is a global input to the netlist or has at least one source outside of the module.
+            
+            :param hal_py.Net net: The net.
+            :returns: True if the net is an input net, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("is_output_net", &Module::is_output_net, py::arg("net"), R"(
+            Check whether the given net is an output of the module, i.e., whether the net is a global output to the netlist or has at least one destination outside of the module.
+            
+            :param hal_py.Net net: The net.
+            :returns: True if the net is an output net, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("is_internal_net", &Module::is_internal_net, py::arg("net"), R"(
+            Check whether the given net is an internal net of the module, i.e. whether the net has at least one source and one destination within the module.
+            
+            :param hal_py.Net net: The net.
+            :returns: True if the net is an internal net, False otherwise.
+            :rtype: bool
         )");
 
         py_module.def("assign_gate", &Module::assign_gate, py::arg("gate"), R"(
@@ -222,6 +297,15 @@ namespace hal
 
             :param hal_py.Gate gate: The gate to assign.
             :returns: True on success, false otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("assign_gates", &Module::assign_gates, py::arg("gates"), R"(
+            Assign a list of gates to the module.
+            The gates are removed from their previous module in the process.
+
+            :param list[hal_py.Gate] gates: The gates to assign.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
@@ -234,22 +318,31 @@ namespace hal
             :rtype: bool
         )");
 
+        py_module.def("remove_gates", &Module::remove_gates, py::arg("gates"), R"(
+            Remove a list of gates from the module.
+            Automatically moves the gates to the top module of the netlist.
+
+            :param list[hal_py.Gate] gates: The gates to remove.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
         py_module.def("contains_gate", &Module::contains_gate, py::arg("gate"), py::arg("recusive") = false, R"(
-            Check whether a gate is in the module.
-            If recursive is set to true, all submodules are searched as well.
+            Check whether a gate is contained in the module.
+            If recursive is True, gates in submodules are considered as well.
 
             :param hal_py.Gate gate: The gate to check for.
-            :param bool recursive: True to also search in submodules.
-            :returns: True if the gate is in the module, false otherwise.
+            :param bool recursive: True to also consider gates in submodules, false otherwise.
+            :returns: True if the gate is contained in the module, false otherwise.
             :rtype: bool
         )");
 
         py_module.def("get_gate_by_id", &Module::get_gate_by_id, py::arg("id"), py::arg("recursive") = false, R"(
             Get a gate specified by the given ID.
-            If recursive is true, all submodules are searched as well.
+            If recursive is True, gates in submodules are considered as well.
 
             :param int id: The unique ID of the gate.
-            :param bool recursive: True to also search in submodules.
+            :param bool recursive: True to also consider gates in submodules, false otherwise.
             :returns: The gate if found, None otherwise.
             :rtype: hal_py.Gate or None
         )");
@@ -262,13 +355,13 @@ namespace hal
         )");
 
         py_module.def("get_gates", &Module::get_gates, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
-            Get all modules contained within the module.
-            A filter can be applied to the result to only get gates matching the specified condition.
-            If recursive is true, all submodules are searched as well.
+            Get all gates contained within the module.<br>
+            A filter can be applied to the result to only get gates matching the specified condition.<br>
+            If recursive is True, gates in submodules are considered as well.
 
             :param lambda filter: Filter to be applied to the gates.
-            :param bool recursive: True to also search in submodules.
-            :returns: The list of all gates.
+            :param bool recursive: True to also consider gates in submodules, false otherwise.
+            :returns: A list of gates.
             :rtype: list[hal_py.Gate]
         )");
 
@@ -437,7 +530,7 @@ namespace hal
             :rtype: list[hal_py.Module.Port]
         )");
 
-        py_module.def("get_port", py::overload_cast<const std::string&>(&Module::get_port), py::arg("port_name"), R"(
+        py_module.def("get_port", py::overload_cast<const std::string&>(&Module::get_port, py::const_), py::arg("port_name"), R"(
             Get the port specified by the given name.
         
             :param str port_name: The name of the port.
@@ -445,7 +538,7 @@ namespace hal
             :rtype: hal_py.Module.Port or None
         )");
 
-        py_module.def("get_port", py::overload_cast<Net*>(&Module::get_port), py::arg("net"), R"(
+        py_module.def("get_port", py::overload_cast<Net*>(&Module::get_port, py::const_), py::arg("net"), R"(
             Get the port that contains the specified net.
         
             :param hal_py.Net net: The net.
