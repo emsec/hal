@@ -560,7 +560,6 @@ namespace hal
             }
         }
 
-        std::vector<Net*> update_port_nets;
         if (internal_source && internal_destination && external_source && external_destination)
         {
             if (m_input_nets.find(net) == m_input_nets.end() || m_output_nets.find(net) == m_output_nets.end())
