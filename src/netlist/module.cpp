@@ -636,7 +636,7 @@ namespace hal
             m_internal_nets.erase(net);
         }
 
-        if (recursive)
+        if (recursive && m_parent != nullptr)
         {
             m_parent->check_net(net, true);
         }
