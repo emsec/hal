@@ -12,10 +12,9 @@ HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation fr
 
 # Navigation
 1. [Introduction](#introduction)
-2. [Install Instructions](#install-instructions)
-3. [Build Instructions](#build-instructions)
-4. [Quickstart Guide](#quickstart)
-5. [Academic Context](#academic-context)
+2. [Build Instructions](#build-instructions)
+3. [Quickstart Guide](#quickstart)
+4. [Academic Context](#academic-context)
 
 ## What the hell is HAL?
 Virtually all available research on netlist analysis operates on a graph-based representation of the netlist under inspection.
@@ -56,21 +55,8 @@ A comprehensive documentation of HAL's features from a user perspective is avail
 ## Slack, Contact and Support
 For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@csp.mpg.de](mailto:hal@csp.mpg.de). To receive an invite to our dedicated hal-support Slack workspace, please write us an e-mail as well.
 
-
-<a name="install-instructions"></a>
-# Install Instructions 
-
-## Ubuntu 20.04
-
-HAL releases are available via it's own ppa, which can be found here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal). If you wish to always work with the most recent version of HAL, we recommend building HAL yourself.
-
-
 <a name="build-instructions"></a>
 # Build Instructions 
-
-## Ubuntu 18.04
-
-We do currently not support building HAL on Ubuntu 18.04. We are working towards a solution and will update this guide as soon as possible.
 
 ## Ubuntu 20.04
 
@@ -83,13 +69,34 @@ If you want to build HAL on Ubuntu 20.04, run the following commands:
 5. `make` to compile HAL
 6. `make install` (optionally) to install HAL
 
+We do currently not support building on any other Linux distribution.
+
+## macOS
+
+**Warning:** Building on macOS is experimental and may not always work.
+
+Please make sure to use a compiler that supports OpenMP. You can install one using, e.g., Homebrew via: `brew install llvm`.
+
+To let cmake know of the custom compiler use following command.
+
+`cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
+
+## Windows
+
+You can try using HAL directly on Windows using an Ubuntu 20.04 subsystem on WSL 2. After setting up WSL 2, follow the installation instructions for Ubuntu 20.04 provided above.
+
+To work with the HAL GUI, you will need to set up an XServer. Install [`VcXsrv`](https://sourceforge.net/projects/vcxsrv/) and run `Xlaunch` on your Windows machine. Now go to Ubuntu 20.04 and start HAL with GUI support using the command below. Note that the command assumes the `DISPLAY` to be at located at `localhost:0`. This will need adjustment on your machine. 
+
+`export LIBGL_ALWAYS_INDIRECT=1; export DISPLAY=:0; hal -g`
+
+In case you encounter an error, try restarting the XServer and select `One Large Window`.
 
 ## CMake Options
 Using the CMake build system, your HAL build can be configured quite easily (by adding `-D<OPTION>=1` to the cmake command).
 Here is a selection of the most important options:
 - `BUILD_TESTS`: builds all available tests which can be executed by running `ctest` in the build directory.
 This also builds all tests of plugins that are built.
-- `BUILD_DOCUMENTATION`: builds the C++ and Python documentation in the directory \<build directory\>/documentation/
+- `BUILD_DOCUMENTATION`: build the C++ and Python documentation
 - `PL_<plugin name>`: enable (or disable) building a specific plugin
 - `BUILD_ALL_PLUGINS`: all-in-one option to build all available plugins, overrides the options for individual plugins
 - `SANITIZE_ADDRESS`, `SANITIZE_MEMORY`, `SANITIZE_THREAD`, `SANITIZE_UNDEFINED `: builds with the respective sanitizers (recommended only for debug builds)
@@ -111,7 +118,7 @@ Let's list all lookup tables and print their Boolean functions:
 for gate in netlist.get_gates():
     if "LUT" in gate.type.name:
         print("{} (id {}, type {})".format(gate.name, gate.id, gate.type.name))
-        print("  {}-to-{} LUT".format(len(gate.input_pins), len(gate.output_pins)))
+        print("  {}-to-{} LUT".format(len(gate.type.input_pins), len(gate.type.output_pins)))
         boolean_functions = gate.boolean_functions
         for name in boolean_functions:
             print("  {}: {}".format(name, boolean_functions[name]))

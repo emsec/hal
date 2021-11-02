@@ -2,6 +2,7 @@
 #include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/layout_locker.h"
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/grouping.h"
 #include <QDebug>
@@ -78,6 +79,8 @@ namespace hal
         GraphContext* ctx;
         Grouping* grp;
         mUndoAction = nullptr;
+
+        LayoutLocker llock;
 
         switch (mObject.type())
         {

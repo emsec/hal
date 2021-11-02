@@ -266,7 +266,8 @@ namespace hal
             std::vector<Port> m_ports;
             std::vector<u64> m_data;
             u32 m_bit_size;
-            std::vector<size_t> m_clocked_port_indices;
+            std::vector<size_t> m_clocked_read_ports;
+            std::vector<size_t> m_clocked_write_ports;
 
             SimulationGateRAM(const Gate* gate);
 

@@ -2,8 +2,9 @@
 
 #include "hal_core/netlist/module.h"
 
-#include "gui/graph_widget/contexts/graph_context_subscriber.h"
+#include "gui/graph_widget/layout_locker.h"
 #include "gui/graph_widget/graphics_scene.h"
+#include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_def.h"
 #include "gui/implementations/qpoint_extension.h"
@@ -21,6 +22,7 @@ namespace hal
         : QObject(parent),
           mId(id_),
           mName(name),
+          mParentWidget(nullptr),
           mDirty(false),
           mLayouter(nullptr),
           mShader(nullptr),
@@ -37,9 +39,7 @@ namespace hal
 
     GraphContext::~GraphContext()
     {
-        for (GraphContextSubscriber* subscriber : mSubscribers)
-            subscriber->handleContextAboutToBeDeleted();
-
+        if (mParentWidget) mParentWidget->handleContextAboutToBeDeleted();
         delete mLayouter;
         delete mShader;
     }
@@ -62,22 +62,6 @@ namespace hal
             delete mShader;
 
         mShader = shader;
-    }
-
-    void GraphContext::subscribe(GraphContextSubscriber* const subscriber)
-    {
-        assert(subscriber);
-        assert(!mSubscribers.contains(subscriber));
-
-        mSubscribers.append(subscriber);
-        update();
-    }
-
-    void GraphContext::unsubscribe(GraphContextSubscriber* const subscriber)
-    {
-        assert(subscriber);
-
-        mSubscribers.removeOne(subscriber);
     }
 
     void GraphContext::beginChange()
@@ -398,7 +382,7 @@ namespace hal
         mSceneUpdateRequired = true;
 
         if (sLazyUpdates)
-            if (mSubscribers.empty())
+            if (!mParentWidget)
                 return;
 
         if(mUserUpdateCount == 0)
@@ -436,14 +420,12 @@ namespace hal
     {
         QString text;
         if (!percent) text = QString("Layout %1[%2]").arg(mName).arg(mId);
-        for (GraphContextSubscriber* s : mSubscribers)
-            s->showProgress(percent, text);
+        if (mParentWidget) mParentWidget->showProgress(percent,text);
     }
 
     void GraphContext::storeViewport()
     {
-        for (GraphContextSubscriber* s : mSubscribers)
-            s->storeViewport();
+        if (mParentWidget) mParentWidget->storeViewport();
     }
 
     void GraphContext::moveNodeAction(const QPoint& from, const QPoint& to)
@@ -462,7 +444,7 @@ namespace hal
 
         if (mSceneUpdateRequired)
         {
-            startSceneUpdate();
+            requireSceneUpdate();
         }
         else
         {
@@ -473,8 +455,7 @@ namespace hal
 
             mLayouter->scene()->connectAll();
 
-            for (GraphContextSubscriber* s : mSubscribers)
-                s->handleSceneAvailable();
+            if (mParentWidget) mParentWidget->handleSceneAvailable();
         }
     }
 
@@ -495,7 +476,7 @@ namespace hal
             applyChanges();
 
         if (mSceneUpdateRequired)
-            startSceneUpdate();
+            requireSceneUpdate();
     }
 
     void GraphContext::applyChanges()
@@ -569,14 +550,18 @@ namespace hal
         mSceneUpdateRequired = true;
     }
 
+    void GraphContext::requireSceneUpdate()
+    {
+        if (LayoutLockerManager::instance()->canUpdate(this))
+            startSceneUpdate();
+    }
+
     void GraphContext::startSceneUpdate()
     {
         mSceneUpdateRequired = false;
         mSceneUpdateInProgress = true;
 
-        for (GraphContextSubscriber* s : mSubscribers)
-            s->handleSceneUnavailable();
-
+        if (mParentWidget) mParentWidget->handleSceneUnavailable();
         mLayouter->scene()->disconnectAll();
 
     //    LayouterTask* task = new LayouterTask(mLayouter);

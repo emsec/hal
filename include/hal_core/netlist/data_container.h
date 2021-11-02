@@ -76,6 +76,15 @@ namespace hal
         bool set_data(const std::string& category, const std::string& key, const std::string& data_type, const std::string& value, const bool log_with_info_level = false);
 
         /**
+         * Determine whether an entry of given category and key exists.
+         * 
+         * @param[in] category - The data category.
+         * @param[in] key - The data key.
+         * @returns True if the entry exists, false otherwise.
+         */
+        bool has_data(const std::string& category, const std::string& key) const;
+
+        /**
          * Get the data entry specified by the given category and key.
          *
          * @param[in] category - The data category.

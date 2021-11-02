@@ -258,12 +258,6 @@ namespace hal
                 Q_EMIT netlistMarkedGlobalOutput(object, associated_data);
                 break;
             }
-            case NetlistEvent::event::marked_global_inout: {
-                ///< associated_data = id of net
-
-                Q_EMIT netlistMarkedGlobalInout(object, associated_data);
-                break;
-            }
             case NetlistEvent::event::unmarked_global_input: {
                 ///< associated_data = id of net
                 gGraphContextManager->handleUnmarkedGlobalInput(associated_data);
@@ -276,12 +270,6 @@ namespace hal
                 gGraphContextManager->handleUnmarkedGlobalOutput(associated_data);
 
                 Q_EMIT netlistUnmarkedGlobalOutput(object, associated_data);
-                break;
-            }
-            case NetlistEvent::event::unmarked_global_inout: {
-                ///< associated_data = id of net
-
-                Q_EMIT netlistUnmarkedGlobalInout(object, associated_data);
                 break;
             }
         }
@@ -474,25 +462,23 @@ namespace hal
 
                 gGraphContextManager->handleGateNameChanged(gat);
 
-            Q_EMIT gateNameChanged(gat);
-            break;
-        }
-        case GateEvent::event::boolean_function_changed:
-        {
-            //< no associated_data
+                Q_EMIT gateNameChanged(gat);
+                break;
+            }
+            case GateEvent::event::boolean_function_changed: {
+                //< no associated_data
 
-            Q_EMIT gateBooleanFunctionChanged(gat);
-            break;
-        }
-        case GateEvent::event::location_changed:
-        {
-            //< no associated_data
-            
-            Q_EMIT gateLocationChanged(gat);
-            break;
-        }
-        default:
-            break;
+                Q_EMIT gateBooleanFunctionChanged(gat);
+                break;
+            }
+            case GateEvent::event::location_changed: {
+                //< no associated_data
+
+                Q_EMIT gateLocationChanged(gat);
+                break;
+            }
+            default:
+                break;
         }
     }
 
