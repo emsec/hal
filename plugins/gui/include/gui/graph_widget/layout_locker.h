@@ -32,7 +32,7 @@ namespace hal
     class LayoutLockerManager
     {
         static LayoutLockerManager* inst;
-        LayoutLockerManager() {;}
+        LayoutLockerManager();
 
         int mLockCount;
         QSet<GraphContext*> mWaitingRoom;
