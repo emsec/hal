@@ -9,19 +9,22 @@
 
 namespace hal
 {
-    class GatePinGroup;
+    class PinGroup;
 
     class GatePin
     {
     public:
         GatePin(const std::string& name, PinDirection direction, PinType type = PinType::none);
+        virtual ~GatePin() = default;
 
         const std::string& get_name() const;
         PinDirection get_direction() const;
         PinType get_type() const;
-        const std::pair<GatePinGroup*, u32>& get_group() const;
+        const std::pair<PinGroup*, u32>& get_group() const;
 
     private:
+        friend PinGroup;
+
         GatePin(const GatePin&) = delete;
         GatePin(GatePin&&)      = delete;
         GatePin& operator=(const GatePin&) = delete;
@@ -31,6 +34,6 @@ namespace hal
         std::string m_name;
         PinDirection m_direction;
         PinType m_type;
-        std::pair<GatePinGroup*, u32> m_group;
+        std::pair<PinGroup*, u32> m_group = {nullptr, 0};
     };
 }    // namespace hal

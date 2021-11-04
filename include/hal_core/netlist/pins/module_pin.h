@@ -11,13 +11,11 @@ namespace hal
     class ModulePin : GatePin
     {
     public:
-        ModulePin(DataContainer* parent, const std::string& name, Net* net, PinDirection direction, PinType type = PinType::none);
+        ModulePin(const std::string& name, Net* net, PinDirection direction, PinType type = PinType::none);
 
         Net* get_net() const;
 
     private:
-        friend Module;
-
         ModulePin(const ModulePin&) = delete;
         ModulePin(ModulePin&&)      = delete;
         ModulePin& operator=(const ModulePin&) = delete;

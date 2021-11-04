@@ -29,6 +29,8 @@
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/pins/module_pin.h"
+#include "hal_core/netlist/pins/pin_group.h"
 #include "hal_core/utilities/enums.h"
 
 #include <functional>
@@ -693,6 +695,14 @@ namespace hal
         std::list<Port*> m_ports_raw;
         std::map<std::string, Port*> m_port_names_map;
         std::map<std::string, Port*> m_pin_names_map;
+
+        // pins
+        // TODO implement
+        // std::vector<std::unique_ptr<ModulePin>> m_pins;
+        // std::vector<std::unique_ptr<PinGroup>> m_pin_groups;
+        // std::list<PinGroup*> m_pin_groups_ordered;
+        // std::unordered_map<std::string, Pin*> m_pin_names_map;
+        // std::unordered_map<std::string, PinGroup*> m_pin_group_names_map;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;
