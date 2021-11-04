@@ -365,7 +365,7 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py::class_<Module::Port> py_module_port(py_module, "Port", R"(
+        py::class_<Module::Port, RawPtrWrapper<Module::Port>> py_module_port(py_module, "Port", R"(
             A module port is a named entry or exit point of a module.
             It comprises one or more pins, each of them being connected to a net.
             A port always has a direction and may additionally feature a type.
