@@ -2,7 +2,11 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 
 namespace hal {
+
     LayoutLockerManager* LayoutLockerManager::inst = nullptr;
+
+    LayoutLockerManager::LayoutLockerManager()
+        : mLockCount(0) {;}
 
     LayoutLockerManager* LayoutLockerManager::instance()
     {

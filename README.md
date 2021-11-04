@@ -58,10 +58,6 @@ For all kinds of inquiries, please contact us using our dedicated e-mail address
 <a name="build-instructions"></a>
 # Build Instructions 
 
-## Ubuntu 18.04
-
-We do currently not support building HAL on Ubuntu 18.04. We are working towards a solution and will update this guide as soon as possible.
-
 ## Ubuntu 20.04
 
 If you want to build HAL on Ubuntu 20.04, run the following commands:
@@ -73,22 +69,34 @@ If you want to build HAL on Ubuntu 20.04, run the following commands:
 5. `make` to compile HAL
 6. `make install` (optionally) to install HAL
 
-## A few notes on Windows WSL
-You can try using HAL directly on Windows with the help of the most recent Ubuntu 20.04 subsystem. Install Ubuntu 20.04 with Windows subsystem and follow the installation instructions above.
+We do currently not support building on any other Linux distribution.
 
-To get the HAL GUI appearing you need an XServer. Install `VcXsrv`(https://sourceforge.net/projects/vcxsrv/) and start `Xlaunch` on your Windows machine. Now go to Ubuntu 20.04 and start HAL with GUI support. In the following command we assume that the DISPLAY is at localhost:0, this needs to be adjusted on your machine. 
+## macOS
+
+**Warning:** Building on macOS is experimental and may not always work.
+
+Please make sure to use a compiler that supports OpenMP. You can install one using, e.g., Homebrew via: `brew install llvm`.
+
+To let cmake know of the custom compiler use following command.
+
+`cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
+
+## Windows
+
+You can try using HAL directly on Windows using an Ubuntu 20.04 subsystem on WSL 2. After setting up WSL 2, follow the installation instructions for Ubuntu 20.04 provided above.
+
+To work with the HAL GUI, you will need to set up an XServer. Install [`VcXsrv`](https://sourceforge.net/projects/vcxsrv/) and run `Xlaunch` on your Windows machine. Now go to Ubuntu 20.04 and start HAL with GUI support using the command below. Note that the command assumes the `DISPLAY` to be at located at `localhost:0`. This will need adjustment on your machine. 
 
 `export LIBGL_ALWAYS_INDIRECT=1; export DISPLAY=:0; hal -g`
 
-If you encounter an error try restarting the XServer and select `One Large Window`.
-
+In case you encounter an error, try restarting the XServer and select `One Large Window`.
 
 ## CMake Options
 Using the CMake build system, your HAL build can be configured quite easily (by adding `-D<OPTION>=1` to the cmake command).
 Here is a selection of the most important options:
 - `BUILD_TESTS`: builds all available tests which can be executed by running `ctest` in the build directory.
 This also builds all tests of plugins that are built.
-- `BUILD_DOCUMENTATION`: builds the C++ and Python documentation in the directory \<build directory\>/documentation/
+- `BUILD_DOCUMENTATION`: build the C++ and Python documentation
 - `PL_<plugin name>`: enable (or disable) building a specific plugin
 - `BUILD_ALL_PLUGINS`: all-in-one option to build all available plugins, overrides the options for individual plugins
 - `SANITIZE_ADDRESS`, `SANITIZE_MEMORY`, `SANITIZE_THREAD`, `SANITIZE_UNDEFINED `: builds with the respective sanitizers (recommended only for debug builds)
@@ -110,7 +118,7 @@ Let's list all lookup tables and print their Boolean functions:
 for gate in netlist.get_gates():
     if "LUT" in gate.type.name:
         print("{} (id {}, type {})".format(gate.name, gate.id, gate.type.name))
-        print("  {}-to-{} LUT".format(len(gate.input_pins), len(gate.output_pins)))
+        print("  {}-to-{} LUT".format(len(gate.type.input_pins), len(gate.type.output_pins)))
         boolean_functions = gate.boolean_functions
         for name in boolean_functions:
             print("  {}: {}".format(name, boolean_functions[name]))

@@ -62,8 +62,8 @@ elif [[ "$platform" == 'linux' ]]; then
         yay -S --needed base-devel lsb-release git cmake boost-libs pkgconf \
         qt5-base python ccache autoconf libsodium igraph qt5-svg ninja lcov \
         gcovr python-sphinx doxygen python-sphinx_rtd_theme python-jedi \
-        python-pip pybind11 rapidjson spdlog graphviz libsuitesparse-dev
-        sudo pip3 install -r requirements.txt
+        python-pip pybind11 rapidjson spdlog graphviz boost \
+        python-dateutil z3 
     else
        echo "Unsupported Linux distribution: abort!"
        exit 255
