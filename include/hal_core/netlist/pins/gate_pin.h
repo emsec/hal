@@ -4,13 +4,12 @@
 #include "hal_core/netlist/data_container.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
+#include "hal_core/netlist/pins/pin_group.h"
 
 #include <string>
 
 namespace hal
 {
-    class PinGroup;
-
     class GatePin
     {
     public:
@@ -20,10 +19,12 @@ namespace hal
         const std::string& get_name() const;
         PinDirection get_direction() const;
         PinType get_type() const;
-        const std::pair<PinGroup*, u32>& get_group() const;
+        const std::pair<PinGroup<GatePin>*, u32>& get_group() const;
 
     private:
-        friend PinGroup;
+        friend PinGroup<GatePin>;
+
+        std::pair<PinGroup<GatePin>*, u32> m_group = {nullptr, 0};
 
         GatePin(const GatePin&) = delete;
         GatePin(GatePin&&)      = delete;
@@ -34,6 +35,5 @@ namespace hal
         std::string m_name;
         PinDirection m_direction;
         PinType m_type;
-        std::pair<PinGroup*, u32> m_group = {nullptr, 0};
     };
 }    // namespace hal

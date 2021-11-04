@@ -10,4 +10,9 @@ namespace hal
     {
         return m_net;
     }
+
+    const std::pair<PinGroup<ModulePin>*, u32>& ModulePin::get_group() const
+    {
+        return m_group;
+    }
 }    // namespace hal

@@ -21,7 +21,7 @@ namespace hal
         return m_type;
     }
 
-    const std::pair<PinGroup*, u32>& GatePin::get_group() const
+    const std::pair<PinGroup<GatePin>*, u32>& GatePin::get_group() const
     {
         return m_group;
     }

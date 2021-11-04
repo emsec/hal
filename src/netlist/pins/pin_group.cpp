@@ -4,30 +4,19 @@
 
 namespace hal
 {
-    PinGroup::PinGroup(const std::string& name, bool ascending, u32 start_index) : m_name(name), m_ascending(m_ascending), m_start_index(start_index), m_next_index(start_index)
+    template<class T>
+    PinGroup<T>::PinGroup(const std::string& name, bool ascending, u32 start_index) : m_name(name), m_ascending(m_ascending), m_start_index(start_index), m_next_index(start_index)
     {
     }
 
-    bool PinGroup::assign_pin(GatePin* pin)
+    template<class T>
+    std::vector<T*> PinGroup<T>::get_pins() const
     {
-        if (m_name_to_pin.find(pin->m_name) != m_name_to_pin.end() || pin->m_group.first != nullptr)
-        {
-            return false;
-        }
-
-        u32 index = m_next_index++;
-        m_pins.push_back(pin);
-        m_name_to_pin[pin->get_name()] = pin;
-        pin->m_group                   = std::make_pair(this, index);
-        return true;
+        return std::vector<T*>(m_pins.begin(), m_pins.end());
     }
 
-    std::vector<GatePin*> PinGroup::get_pins() const
-    {
-        return std::vector<GatePin*>(m_pins.begin(), m_pins.end());
-    }
-
-    GatePin* PinGroup::get_pin(u32 index) const
+    template<class T>
+    T* PinGroup<T>::get_pin(u32 index) const
     {
         if (index >= m_start_index && index < m_next_index)
         {
@@ -38,7 +27,8 @@ namespace hal
         return nullptr;
     }
 
-    GatePin* PinGroup::get_pin(const std::string& name) const
+    template<class T>
+    T* PinGroup<T>::get_pin(const std::string& name) const
     {
         if (const auto it = m_name_to_pin.find(name); it != m_name_to_pin.end())
         {
@@ -47,7 +37,8 @@ namespace hal
         return nullptr;
     }
 
-    bool PinGroup::move_pin(GatePin* pin, u32 new_index)
+    template<class T>
+    bool PinGroup<T>::move_pin(T* pin, u32 new_index)
     {
         if (new_index >= m_start_index && new_index < m_next_index && pin->m_group.first == this)
         {
@@ -72,7 +63,49 @@ namespace hal
         return false;
     }
 
-    bool PinGroup::remove_pin(GatePin* pin)
+    template<class T>
+    i32 PinGroup<T>::get_index(const T* pin) const
+    {
+        if (pin != nullptr && pin->m_group.first == this)
+        {
+            return pin->m_group.second;
+        }
+        return -1;
+    }
+
+    template<class T>
+    i32 PinGroup<T>::get_index(const std::string& name) const
+    {
+        if (const T* pin = get_pin(name); pin != nullptr)
+        {
+            return get_index(pin);
+        }
+        return -1;
+    }
+
+    template<class T>
+    bool PinGroup<T>::is_ascending() const
+    {
+        return m_ascending;
+    }
+
+    template<class T>
+    bool PinGroup<T>::assign_pin(T* pin)
+    {
+        if (m_name_to_pin.find(pin->m_name) != m_name_to_pin.end() || pin->m_group.first != nullptr)
+        {
+            return false;
+        }
+
+        u32 index = m_next_index++;
+        m_pins.push_back(pin);
+        m_name_to_pin[pin->get_name()] = pin;
+        pin->m_group                   = std::make_pair(this, index);
+        return true;
+    }
+
+    template<class T>
+    bool PinGroup<T>::remove_pin(T* pin)
     {
         // TODO this needs to happen externally to properly take care of moving the pin into a single-bit pin group
         if (pin == nullptr || pin->m_group.first != this)
@@ -91,28 +124,5 @@ namespace hal
         m_next_index--;
 
         return true;
-    }
-
-    i32 PinGroup::get_index(const GatePin* pin) const
-    {
-        if (pin != nullptr && pin->m_group.first == this)
-        {
-            return pin->m_group.second;
-        }
-        return -1;
-    }
-
-    i32 PinGroup::get_index(const std::string& name) const
-    {
-        if (const GatePin* pin = get_pin(name); pin != nullptr)
-        {
-            return get_index(pin);
-        }
-        return -1;
-    }
-
-    bool PinGroup::is_ascending() const
-    {
-        return m_ascending;
     }
 }    // namespace hal
