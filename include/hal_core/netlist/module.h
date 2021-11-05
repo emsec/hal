@@ -294,157 +294,6 @@ namespace hal
          * ################################################################
          */
 
-        // /**
-        //  * A module port is a named entry or exit point of a module.
-        //  * It comprises one or more pins, each of them being connected to a net.
-        //  * A port always has a direction and may additionally feature a type.
-        //  *
-        //  * @ingroup module
-        //  */
-        // class Port
-        // {
-        // public:
-        //     /**
-        //      * Check whether two ports are equal.
-        //      *
-        //      * @param[in] other - The port to compare against.
-        //      * @returns True if both ports are equal, false otherwise.
-        //      */
-        //     bool operator==(const Port& other) const;
-
-        //     /**
-        //      * Check whether two ports are unequal.
-        //      *
-        //      * @param[in] other - The port to compare against.
-        //      * @returns True if both ports are unequal, false otherwise.
-        //      */
-        //     bool operator!=(const Port& other) const;
-
-        //     /**
-        //      * Get the module the port is assigned to.
-        //      *
-        //      * @returns The module.
-        //      */
-        //     Module* get_module() const;
-
-        //     /**
-        //      * Get the name of the port.
-        //      *
-        //      * @returns The name of the port.
-        //      */
-        //     const std::string& get_name() const;
-
-        //     /**
-        //      * Get the direction of the port.
-        //      *
-        //      * @returns The direction of the port.
-        //      */
-        //     PinDirection get_direction() const;
-
-        //     /**
-        //      * Get the type of the port.
-        //      *
-        //      * @returns The type of the port.
-        //      */
-        //     PinType get_type() const;
-
-        //     /**
-        //      * Get the ordered pins of the port.
-        //      *
-        //      * @returns An ordered vector of pins.
-        //      */
-        //     std::vector<std::string> get_pins() const;
-
-        //     /**
-        //      * Get the ordered nets of the port.
-        //      *
-        //      * @returns An ordered vector of nets.
-        //      */
-        //     std::vector<Net*> get_nets() const;
-
-        //     /**
-        //      * Get the pin through which the specified net runs.
-        //      *
-        //      * @param[in] net - The net.
-        //      * @returns The pin through which the net runs.
-        //      */
-        //     std::string get_pin(Net* net) const;
-
-        //     /**
-        //      * Get the net that runs through the specified pin.
-        //      *
-        //      * @param[in] pin_name - The name of the pin.
-        //      * @returns The net that runs through the pin.
-        //      */
-        //     Net* get_net(const std::string& pin_name) const;
-
-        //     /**
-        //      * Get the ordered pins and the nets that pass through them.
-        //      *
-        //      * @returns An ordered vector of pairs of pins and nets.
-        //      */
-        //     std::vector<std::pair<std::string, Net*>> get_pins_and_nets() const;
-
-        //     /**
-        //      * Check whether the port is a multi-bit port, i.e., contains more than one pin.
-        //      *
-        //      * @returns True if the port is a multi-bit port, false otherwise.
-        //      */
-        //     bool is_multi_bit() const;
-
-        //     /**
-        //      * Check whether the port contains the specified pin.
-        //      *
-        //      * @param[in] pin_name - The name of the pin.
-        //      * @returns True if the port contains the pin, false otherwise.
-        //      */
-        //     bool contains_pin(const std::string& pin_name) const;
-
-        //     /**
-        //      * Check whether the port contains the specified net.
-        //      *
-        //      * @param[in] net - The net.
-        //      * @returns True if the port contains the net, false otherwise.
-        //      */
-        //     bool contains_net(Net* net) const;
-
-        //     /**
-        //      * Assign a new position to the pin specified by its name.
-        //      * All pins beyond the specified position will be shifted backwards.
-        //      *
-        //      * @param[in] pin_name - The name of the pin.
-        //      * @param[in] new_index - The new position that the pin should be assigned to.
-        //      * @returns True on success, false otherwise.
-        //      */
-        //     bool move_pin(const std::string& pin_name, u32 new_index);
-
-        //     /**
-        //      * Assign a new position to the pin specified by its net.
-        //      * All pins beyond the specified position will be shifted backwards.
-        //      *
-        //      * @param[in] net - The net.
-        //      * @param[in] new_index - The new position that the pin should be assigned to.
-        //      * @returns True on success, false otherwise.
-        //      */
-        //     bool move_pin(Net* net, u32 new_index);
-
-        // private:
-        //     friend class Module;
-
-        //     Module* m_module;
-        //     std::string m_name;
-        //     std::list<std::pair<std::string, Net*>> m_pins;
-        //     PinDirection m_direction;
-        //     PinType m_type = PinType::none;
-
-        //     std::unordered_map<std::string, Net*> m_pin_to_net;
-        //     std::unordered_map<Net*, std::string> m_net_to_pin;
-
-        //     Port(const Port&) = delete;
-        //     Port(Module* module, const std::string& name, Net* net, PinDirection direction, PinType type = PinType::none);
-        //     Port(Module* module, const std::string& name, const std::vector<std::pair<std::string, Net*>>& pins_and_nets, PinDirection direction, PinType type = PinType::none);
-        // };
-
         /**
          * \deprecated
          * DEPRECATED <br>
@@ -500,7 +349,7 @@ namespace hal
         [[deprecated("Will be removed in a future version.")]] u32 get_next_output_port_id() const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get all pins of the module.
          * The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
          * 
@@ -510,7 +359,7 @@ namespace hal
         std::vector<ModulePin*> get_pins(const std::function<bool(ModulePin*)>& filter = nullptr) const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get all pin groups of the module.
          * The optional filter is evaluated on every pin group such that the result only contains pin groups matching the specified condition.
          * 
@@ -520,7 +369,7 @@ namespace hal
         std::vector<PinGroup<ModulePin>*> get_pin_groups(const std::function<bool(PinGroup<ModulePin>*)>& filter = nullptr) const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get the pin specified by the given name.
          * 
          * @param[in] name - The name of the pin.
@@ -529,8 +378,8 @@ namespace hal
         ModulePin* get_pin(const std::string& name) const;
 
         /**
-         * TODO pybind, test
-         * Get the pin that contains the specified net.
+         * TODO test
+         * Get the pin that passes through the specified net.
          * 
          * @param[in] net - The net.
          * @returns The pin on success, a nullptr otherwise.
@@ -538,7 +387,7 @@ namespace hal
         ModulePin* get_pin(Net* net) const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Get the pin group specified by the given name.
          * 
          * @param[in] name - The name of the pin group.
@@ -547,7 +396,7 @@ namespace hal
         PinGroup<ModulePin>* get_pin_group(const std::string& name) const;
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Set the name of the given pin.
          * 
          * @param[in] pin - The pin.
@@ -557,7 +406,7 @@ namespace hal
         bool set_pin_name(ModulePin* pin, const std::string& new_name);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Set the name of the given pin group.
          * 
          * @param[in] pin_group - The pin group.
@@ -567,7 +416,7 @@ namespace hal
         bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Set the type of the given pin.
          * 
          * @param[in] pin - The pin.
@@ -577,7 +426,7 @@ namespace hal
         bool set_pin_type(ModulePin* pin, PinType new_type);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Create a new pin group with the given name.
          * 
          * @param[in] name - The name of the pin group.
@@ -587,7 +436,7 @@ namespace hal
         PinGroup<ModulePin>* create_pin_group(const std::string& name, const std::vector<ModulePin*> pins, bool ascending = false, u32 start_index = 0);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Delete the given pin group.
          * 
          * @param[in] pin_group - The pin group to be deleted.
@@ -596,7 +445,7 @@ namespace hal
         bool delete_pin_group(PinGroup<ModulePin>* pin_group);
 
         /**
-         * TODO pybind, test
+         * TODO test
          * Assign a pin to a pin group.
          * 
          * @param[in] pin_group - The pin group.
@@ -604,23 +453,6 @@ namespace hal
          * @returns True on success, false otherwise.
          */
         bool assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin);
-
-        // /**
-        //  * Merge multiple existing ports into a single multi-bit port.
-        //  *
-        //  * @param[in] name - The name of the new port.
-        //  * @param[in] ports_to_merge - The ports to be merged in the order in which they should be assigned to the new port.
-        //  * @returns The port on success and a nullptr otherwise.
-        //  */
-        // Port* create_multi_bit_port(const std::string& name, const std::vector<Port*>& ports_to_merge);
-
-        // /**
-        //  * Split a multi-bit port into multiple single-bit ports.
-        //  *
-        //  * @param[in] port - The port to be split.
-        //  * @returns True on success, false otherwise.
-        //  */
-        // bool delete_multi_bit_port(Port* port);
 
         /*
          * ################################################################

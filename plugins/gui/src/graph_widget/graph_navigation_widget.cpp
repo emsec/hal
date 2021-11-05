@@ -222,7 +222,7 @@ namespace hal
         Net* epNet      = ep->get_net();
         if (epNet)
         {
-            pinName = QString::fromStdString(m->get_port(epNet)->get_name());
+            pinName = QString::fromStdString(m->get_pin(epNet)->get_name());
         }
         return QStringList() << QString::fromStdString(m->get_name()) << QString::number(m->get_id()) << mtype << pinName << parentName;
     }

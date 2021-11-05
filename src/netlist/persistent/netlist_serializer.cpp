@@ -353,7 +353,7 @@ namespace hal
                             pins.push_back(pin);
                         }
 
-                        PinGroup<ModulePin>* pin_group = sm->create_pin_group(json_pin_group["name"].GetString(), pins, json_pin_group["ascending"].GetBool(), json_pin_group["start_index"].GetUint());
+                        sm->create_pin_group(json_pin_group["name"].GetString(), pins, json_pin_group["ascending"].GetBool(), json_pin_group["start_index"].GetUint());
                     }
                 }
 

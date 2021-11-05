@@ -365,100 +365,111 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        // py_module.def_property_readonly("ports", &Module::get_ports, R"(
-        //     All ports of the module.
+        py_module.def_property_readonly("pins", &Module::get_pins, R"(
+            All pins of the module.
 
-        //     :type: list[hal_py.Module.Port]
-        // )");
+            :type: list[hal_py.ModulePin]
+        )");
 
-        // py_module.def("get_ports", &Module::get_ports, py::arg("filter") = nullptr, R"(
-        //     Get all ports of the module.
-        //     The optional filter is evaluated on every port such that the result only contains ports matching the specified condition.
+        py_module.def("get_pins", &Module::get_pins, py::arg("filter") = nullptr, R"(
+            Get all pins of the module.
+            The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
 
-        //     :param lambda filter: Filter function to be evaluated on each port.
-        //     :returns: A list of ports.
-        //     :rtype: list[hal_py.Module.Port]
-        // )");
+            :param lambda filter: Filter function to be evaluated on each pin.
+            :returns: A list of pins.
+            :rtype: list[hal_py.ModulePin]
+        )");
 
-        // py_module.def("get_port", py::overload_cast<const std::string&>(&Module::get_port, py::const_), py::arg("port_name"), R"(
-        //     Get the port specified by the given name.
+        py_module.def_property_readonly("pin_groups", &Module::get_pin_groups, R"(
+            All pin_groups of the module.
 
-        //     :param str port_name: The name of the port.
-        //     :returns: The port on success, None otherwise.
-        //     :rtype: hal_py.Module.Port or None
-        // )");
+            :type: list[hal_py.ModulePinGroup]
+        )");
 
-        // py_module.def("get_port", py::overload_cast<Net*>(&Module::get_port, py::const_), py::arg("net"), R"(
-        //     Get the port that contains the specified net.
+        py_module.def("get_pin_groups", &Module::get_pin_groups, py::arg("filter") = nullptr, R"(
+            Get all pin groups of the module.
+            The optional filter is evaluated on every pin group such that the result only contains pin groups matching the specified condition.
 
-        //     :param hal_py.Net net: The net.
-        //     :returns: The port on success, None otherwise.
-        //     :rtype: hal_py.Module.Port or None
-        // )");
+            :param lambda filter: Filter function to be evaluated on each pin group.
+            :returns: A list of pin groups.
+            :rtype: list[hal_py.ModulePinGroup]
+        )");
 
-        // py_module.def("get_port_by_pin_name", &Module::get_port_by_pin_name, py::arg("pin_name"), R"(
-        //     Get the port that contains the specified pin.
+        py_module.def("get_pin", py::overload_cast<const std::string&>(&Module::get_pin, py::const_), py::arg("name"), R"(
+            Get the pin specified by the given name.
 
-        //     :param str pin_name: The name of the pin.
-        //     :returns: The port on success, None otherwise.
-        //     :rtype: hal_py.Module.Port or None
-        // )");
+            :param str name: The name of the pin.
+            :returns: The pin on success, None otherwise.
+            :rtype: hal_py.ModulePin or None
+        )");
 
-        // py_module.def("set_port_name", &Module::set_port_name, py::arg("port"), py::arg("new_name"), R"(
-        //     Set the name of the given port.
-        //     For single-bit ports, the pin name is updated as well.
+        py_module.def("get_pin", py::overload_cast<Net*>(&Module::get_pin, py::const_), py::arg("net"), R"(
+            Get the pin that passes through the specified net.
 
-        //     :param hal_py.Module.Port port: The port.
-        //     :param str new_name: The name to be assigned to the port.
-        //     :returns: True on success, False otherwise.
-        //     :rtype: bool
-        // )");
+            :param hal_py.Net net: The net.
+            :returns: The pin on success, None otherwise.
+            :rtype: hal_py.ModulePin or None
+        )");
 
-        // py_module.def("set_port_type", &Module::set_port_type, py::arg("port"), py::arg("new_type"), R"(
-        //     Set the type of the given port.
+        py_module.def("get_pin_group", &Module::get_pin_group, py::arg("name"), R"(
+            Get the pin group specified by the given name.
 
-        //     :param hal_py.Module.Port port: The port.
-        //     :param hal_py.PinType new_type: The type to be assigned to the port.
-        //     :returns: True on success, False otherwise.
-        //     :rtype: bool
-        // )");
+            :param str name: The name of the pin group.
+            :returns: The pin group on success, None otherwise.
+            :rtype: hal_py.ModulePinGroup or None
+        )");
 
-        // py_module.def(
-        //     "set_port_pin_name", py::overload_cast<Module::Port*, const std::string&, const std::string&>(&Module::set_port_pin_name), py::arg("port"), py::arg("old_name"), py::arg("new_name"), R"(
-        //     Set the name of a pin within a port.
+        py_module.def("set_pin_name", &Module::set_pin_name, py::arg("pin"), py::arg("new_name"), R"(
+            Set the name of the given pin.
 
-        //     :param hal_py.Module.Port port: The port that contains the pin.
-        //     :param str old_name: The old name of the pin.
-        //     :param str new_name: The new name of the pin.
-        //     :returns: True on success, False otherwise.
-        //     :rtype: bool
-        // )");
+            :param hal_py.ModulePin pin: The pin.
+            :param str new_name: The name to be assigned to the pin.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
 
-        // py_module.def("set_port_pin_name", py::overload_cast<Module::Port*, Net*, const std::string&>(&Module::set_port_pin_name), py::arg("port"), py::arg("net"), py::arg("new_name"), R"(
-        //     Set the name of a pin within a port.
+        py_module.def("set_pin_group_name", &Module::set_pin_group_name, py::arg("pin_group"), py::arg("new_name"), R"(
+            Set the name of the given pin group.
 
-        //     :param hal_py.Module.Port port: The port that contains the pin.
-        //     :param str net: The net that passes through the pin.
-        //     :param str new_name: The new name of the pin.
-        //     :returns: True on success, False otherwise.
-        //     :rtype: bool
-        // )");
+            :param hal_py.ModulePinGroup pin_group: The pin group.
+            :param str new_name: The name to be assigned to the pin group.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
 
-        // py_module.def("create_multi_bit_port", &Module::create_multi_bit_port, py::arg("name"), py::arg("ports_to_merge"), R"(
-        //     Merge multiple existing ports into a single multi-bit port.
+        py_module.def("set_pin_type", &Module::set_pin_type, py::arg("pin"), py::arg("new_type"), R"(
+            Set the type of the given port.
 
-        //     :param str name: The name of the new port.
-        //     :param list[hal_py.Module.Port] ports_to_merge: The ports to be merged in the order in which they should be assigned to the new port.
-        //     :returns: The port on success and None otherwise.
-        //     :rtype: hal_py.Module.Port or None
-        // )");
+            :param hal_py.ModulePin pin: The pin.
+            :param hal_py.PinType new_type: The type to be assigned to the pin.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
 
-        // py_module.def("delete_multi_bit_port", &Module::delete_multi_bit_port, py::arg("port"), R"(
-        //     Split a multi-bit port into multiple single-bit ports.
+        py_module.def("create_pin_group", &Module::create_pin_group, py::arg("name"), py::arg("pins"), py::arg("ascending") = false, py::arg("start_index") = 0, R"(
+            Create a new pin group with the given name.
 
-        //     :param hal_py.Module.Port port: The port to be split.
-        //     :returns: True on success, False otherwise.
-        //     :rtype: bool
-        // )");
+            :param str name: The name of the pin group.
+            param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group.
+            :returns: The pin group on success, a nullptr otherwise.
+            :rtype: hal_py.ModulePinGroup
+        )");
+
+        py_module.def("delete_pin_group", &Module::delete_pin_group, py::arg("pin_group"), R"(
+            Delete the given pin group.
+
+            :param hal_py.ModulePinGroup pin_group: The pin group to be deleted.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("assign_pin_to_group", &Module::assign_pin_to_group, py::arg("pin_group"), py::arg("pin"), R"(
+            Assign a pin to a pin group.
+
+            :param hal_py.ModulePinGroup pin_group: The pin group.
+            :param hal_py.ModulePin pin: The pin to be added.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
     }
 }    // namespace hal

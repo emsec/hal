@@ -8,6 +8,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/enums.h"
+
 #include <QDebug>
 
 namespace hal
@@ -43,25 +44,34 @@ namespace hal
         mModuleId = m->get_id();
         beginResetModel();
 
-        for (auto port : m->get_ports())
+        for (PinGroup<ModulePin>* pinGroup : m->get_pin_groups())
         {
-            QString portName = QString::fromStdString(port->get_name());
-            QString portDirection = QString ::fromStdString(enum_to_string(port->get_direction()));
-            QString portType = QString::fromStdString(enum_to_string(port->get_type()));
+            ModulePin* firstPin = pinGroup->get_pins().front();
+            QString portName;
+            QString portDirection = QString::fromStdString(enum_to_string(firstPin->get_direction()));
+            QString portType      = QString::fromStdString(enum_to_string(firstPin->get_type()));
+            if (pinGroup->size() == 1)
+            {
+                portName = QString::fromStdString(firstPin->get_name());
+            }
+            else
+            {
+                portName = QString::fromStdString(pinGroup->get_name());
+            }
+
             TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << portDirection << portType << "");
 
-            if(!port->is_multi_bit())
+            if (pinGroup->size() == 1)
             {
-                portItem->setDataAtIndex(sNetColumn, QString::fromStdString(port->get_nets().at(0)->get_name()));
+                portItem->setDataAtIndex(sNetColumn, QString::fromStdString(firstPin->get_net()->get_name()));
                 portItem->setAdditionalData(keyType, QVariant::fromValue(itemType::portSingleBit));
             }
             else
             {
                 portItem->setAdditionalData(keyType, QVariant::fromValue(itemType::portMultiBit));
-                for(auto pinNetPair : port->get_pins_and_nets()) //pair str,net
+                for (ModulePin* pin : pinGroup->get_pins())
                 {
-                    TreeItem* pinItem = new TreeItem(QList<QVariant>() << QString::fromStdString(pinNetPair.first)
-                                                     << portDirection << portType << QString::fromStdString(pinNetPair.second->get_name()));
+                    TreeItem* pinItem = new TreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name()) << portDirection << portType << QString::fromStdString(pin->get_net()->get_name()));
                     pinItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
                     portItem->appendChild(pinItem);
                 }
@@ -70,7 +80,7 @@ namespace hal
         }
         endResetModel();
 
-        Q_EMIT numberOfPortsChanged(m->get_ports().size());
+        Q_EMIT numberOfPortsChanged(m->get_pin_groups().size());
     }
 
     Net* PortTreeModel::getNetFromItem(TreeItem* item)
@@ -87,12 +97,12 @@ namespace hal
             return nullptr;
 
         std::string name = item->getData(sNameColumn).toString().toStdString();
-        auto port = (type == itemType::portSingleBit) ? m->get_port(name) : m->get_port_by_pin_name(name);
-        auto it = std::find_if(port->get_pins_and_nets().begin(), port->get_pins_and_nets().end(),[&name](const std::pair<std::string, Net*> e){return e.first == name;});
-        if(it != port->get_pins_and_nets().end())
-            return it->second;
-        else
-            return nullptr;
+        if (ModulePin* pin = m->get_pin(name); pin != nullptr)
+        {
+            return pin->get_net();
+        }
+
+        return nullptr;
     }
 
     int PortTreeModel::getRepresentedModuleId()
@@ -112,7 +122,7 @@ namespace hal
         if ((int)m->get_id() == mModuleId)
         {
             setModule(m);
-            Q_EMIT numberOfPortsChanged(m->get_ports().size());
+            Q_EMIT numberOfPortsChanged(m->get_pin_groups().size());
         }
     }
 

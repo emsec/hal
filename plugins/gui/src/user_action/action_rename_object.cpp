@@ -32,7 +32,7 @@ namespace hal
     void ActionRenameObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
         xmlOut.writeTextElement("name", mNewName);
-        if (mObject.type() == UserActionObjectType::Port && mPortType != NoPort)
+        if (mObject.type() == UserActionObjectType::Pin && mPortType != NoPort)
         {
             xmlOut.writeTextElement("netid", QString::number(mNetId));
             xmlOut.writeTextElement("porttype", mPortType == Input ? "input" : "output");
@@ -104,27 +104,30 @@ namespace hal
                 else
                     return false;
                 break;
-            case UserActionObjectType::Port:
+            case UserActionObjectType::Pin:
                 mod = gNetlist->get_module_by_id(mObject.id());
                 net = gNetlist->get_net_by_id(mNetId);
                 if (mod && net)
                 {
-                    Module::Port* port;
+                    ModulePin* pin;
                     switch (mPortType)
                     {
                         case NoPort:
                             return false;
                         case Input:
                         case Output:
-                            port    = mod->get_port(net);
-                            oldName = QString::fromStdString(port->get_name());
-                            mod->set_port_name(port, mNewName.toStdString());
+                            pin     = mod->get_pin(net);
+                            oldName = QString::fromStdString(pin->get_name());
+                            mod->set_pin_name(pin, mNewName.toStdString());
                             break;
                     }
                 }
                 else
                     return false;
                 break;
+            case UserActionObjectType::PinGroup:
+                // TODO @Sebastian implement
+                return false;
             default:
                 return false;
         }

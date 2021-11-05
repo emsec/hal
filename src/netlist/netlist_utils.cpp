@@ -350,7 +350,7 @@ namespace hal
                         c_pins.push_back(c_pin);
                     }
 
-                    PinGroup<ModulePin>* c_pin_group = c_module->create_pin_group(pin_group->get_name(), c_pins, pin_group->is_ascending(), pin_group->get_start_index());
+                    c_module->create_pin_group(pin_group->get_name(), c_pins, pin_group->is_ascending(), pin_group->get_start_index());
                 }
 
                 c_module->set_next_input_port_id(module->get_next_input_port_id());
