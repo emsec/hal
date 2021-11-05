@@ -259,26 +259,28 @@ namespace hal
                     }
                 }
                 {
-                    rapidjson::Value ports(rapidjson::kArrayType);
-                    for (Module::Port* port : m->get_ports())
+                    rapidjson::Value json_pin_groups(rapidjson::kArrayType);
+                    for (PinGroup<ModulePin>* pin_group : m->get_pin_groups())
                     {
-                        rapidjson::Value module_port(rapidjson::kObjectType);
-                        module_port.AddMember("port_name", port->get_name(), allocator);
-                        module_port.AddMember("port_type", enum_to_string(port->get_type()), allocator);
-                        rapidjson::Value pins(rapidjson::kArrayType);
-                        for (const auto& [pin, net] : port->get_pins_and_nets())
+                        rapidjson::Value json_pin_group(rapidjson::kObjectType);
+                        json_pin_group.AddMember("name", pin_group->get_name(), allocator);
+                        json_pin_group.AddMember("ascending", pin_group->is_ascending(), allocator);
+                        json_pin_group.AddMember("start_index", pin_group->get_start_index(), allocator);
+                        rapidjson::Value json_pins(rapidjson::kArrayType);
+                        for (ModulePin* pin : pin_group->get_pins())
                         {
-                            rapidjson::Value module_pin(rapidjson::kObjectType);
-                            module_pin.AddMember("pin_name", pin, allocator);
-                            module_pin.AddMember("pin_net_id", net->get_id(), allocator);
-                            pins.PushBack(module_pin, allocator);
+                            rapidjson::Value json_pin(rapidjson::kObjectType);
+                            json_pin.AddMember("name", pin->get_name(), allocator);
+                            json_pin.AddMember("type", enum_to_string(pin->get_type()), allocator);
+                            json_pin.AddMember("net_id", pin->get_net()->get_id(), allocator);
+                            json_pins.PushBack(json_pin, allocator);
                         }
-                        module_port.AddMember("pins", pins, allocator);
-                        ports.PushBack(module_port, allocator);
+                        json_pin_group.AddMember("pins", json_pins, allocator);
+                        json_pin_groups.PushBack(json_pin_group, allocator);
                     }
-                    if (!ports.Empty())
+                    if (!json_pin_groups.Empty())
                     {
-                        val.AddMember("ports", ports, allocator);
+                        val.AddMember("pin_groups", json_pin_groups, allocator);
                     }
                 }
 
@@ -324,60 +326,53 @@ namespace hal
                     deserialize_data(sm, val["data"]);
                 }
 
-                if (val.HasMember("ports"))
+                u32 ctr = 0;
+                for (ModulePin* pin : sm->get_pins())
                 {
-                    for (const auto& port_node : val["ports"].GetArray())
+                    // pin names must be unique, hence automatically generated groups may conflict with deserialized ones
+                    sm->set_pin_name(pin, "____deserialize_tmp_pin_[" + std::to_string(ctr) + "]____");
+                }
+
+                ctr = 0;
+                for (PinGroup<ModulePin>* pin_group : sm->get_pin_groups())
+                {
+                    // pin group names must be unique, hence automatically generated groups may conflict with deserialized ones
+                    sm->set_pin_group_name(pin_group, "____deserialize_tmp_pin_group_[" + std::to_string(ctr) + "]____");
+                }
+
+                if (val.HasMember("pin_groups"))
+                {
+                    for (const auto& json_pin_group : val["pin_groups"].GetArray())
                     {
-                        std::string port_name = port_node["port_name"].GetString();
-                        PinType port_type     = enum_from_string<PinType>(port_node["port_type"].GetString());
-
-                        std::vector<std::pair<std::string, Net*>> pins_and_nets;
-                        for (const auto& pin_node : port_node["pins"].GetArray())
+                        std::vector<ModulePin*> pins;
+                        for (const auto& pin_node : json_pin_group["pins"].GetArray())
                         {
-                            pins_and_nets.push_back(std::make_pair<std::string, Net*>(pin_node["pin_name"].GetString(), nl->get_net_by_id(pin_node["pin_net_id"].GetUint())));
+                            ModulePin* pin = sm->get_pin(nl->get_net_by_id(pin_node["net_id"].GetUint()));
+                            sm->set_pin_name(pin, pin_node["name"].GetString());
+                            sm->set_pin_type(pin, enum_from_string<PinType>(pin_node["type"].GetString()));
+                            pins.push_back(pin);
                         }
 
-                        if (pins_and_nets.size() > 1)
-                        {
-                            std::vector<Module::Port*> ports;
-                            for (const auto& [pin, net] : pins_and_nets)
-                            {
-                                Module::Port* port = sm->get_port(net);
-                                sm->set_port_name(port, pin);
-                                ports.push_back(port);
-                            }
-                            Module::Port* new_port = sm->create_multi_bit_port(port_name, ports);
-                            sm->set_port_type(new_port, port_type);
-                        }
-                        else
-                        {
-                            Module::Port* port = sm->get_port(pins_and_nets.front().second);
-                            if (port == nullptr)
-                            {
-                                return false;
-                            }
-                            sm->set_port_name(port, port_name);
-                            sm->set_port_type(port, port_type);
-                        }
+                        PinGroup<ModulePin>* pin_group = sm->create_pin_group(json_pin_group["name"].GetString(), pins, json_pin_group["ascending"].GetBool(), json_pin_group["start_index"].GetUint());
                     }
                 }
 
                 // legacy code below
                 if (val.HasMember("input_ports"))
                 {
-                    for (const auto& port_node : val["input_ports"].GetArray())
+                    for (const auto& json_pin_legacy : val["input_ports"].GetArray())
                     {
-                        Module::Port* port = sm->get_port(nl->get_net_by_id(port_node["net_id"].GetUint()));
-                        sm->set_port_name(port, port_node["port_name"].GetString());
+                        ModulePin* pin = sm->get_pin(nl->get_net_by_id(json_pin_legacy["net_id"].GetUint()));
+                        sm->set_pin_name(pin, json_pin_legacy["port_name"].GetString());
                     }
                 }
 
                 if (val.HasMember("output_ports"))
                 {
-                    for (const auto& port_node : val["output_ports"].GetArray())
+                    for (const auto& json_pin_legacy : val["output_ports"].GetArray())
                     {
-                        Module::Port* port = sm->get_port(nl->get_net_by_id(port_node["net_id"].GetUint()));
-                        sm->set_port_name(port, port_node["port_name"].GetString());
+                        ModulePin* port = sm->get_pin(nl->get_net_by_id(json_pin_legacy["net_id"].GetUint()));
+                        sm->set_pin_name(port, json_pin_legacy["port_name"].GetString());
                     }
                 }
                 // legacy code above

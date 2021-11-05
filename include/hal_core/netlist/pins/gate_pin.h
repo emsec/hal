@@ -10,15 +10,42 @@
 
 namespace hal
 {
+    /**
+     * The pin of a gate type. Each pin has a name, a direction, and a type. 
+     * 
+     * @ingroup pins
+     */
     class GatePin
     {
     public:
-        GatePin(const std::string& name, PinDirection direction, PinType type = PinType::none);
         virtual ~GatePin() = default;
 
+        /**
+         * Get the name of the pin.
+         * 
+         * @returns The name of the pin.
+         */
         const std::string& get_name() const;
+
+        /**
+         * Get the direction of the pin.
+         * 
+         * @returns The direction of the pin.
+         */
         PinDirection get_direction() const;
+
+        /**
+         * Get the type of the pin.
+         * 
+         * @returns The type of the pin.
+         */
         PinType get_type() const;
+
+        /**
+         * Get the group of the pin as well as the index of the pin within the group.
+         * 
+         * @returns The group and the index of the pin.
+         */
         const std::pair<PinGroup<GatePin>*, u32>& get_group() const;
 
     private:
@@ -35,5 +62,14 @@ namespace hal
         std::string m_name;
         PinDirection m_direction;
         PinType m_type;
+
+        /**
+         * Construct a new gate pin from its name, direction and type.
+         * 
+         * @param[in] name - The pin name.
+         * @param[in] direction - The direction of the pin.
+         * @param[in] type - The type of the pin.
+         */
+        GatePin(const std::string& name, PinDirection direction, PinType type = PinType::none);
     };
 }    // namespace hal

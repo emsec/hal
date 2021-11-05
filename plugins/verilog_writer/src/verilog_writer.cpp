@@ -100,24 +100,22 @@ namespace hal
         std::stringstream tmp_stream;
 
         res_stream << "(";
-        for (Module::Port* port : module->get_ports())
+        for (ModulePin* pin : module->get_pins())
         {
-            for (const auto& [pin, net] : port->get_pins_and_nets())
+            Net* net = pin->get_net();
+            if (first_port)
             {
-                if (first_port)
-                {
-                    first_port = false;
-                }
-                else
-                {
-                    res_stream << ",";
-                }
-
-                aliases[net] = escape(get_unique_alias(identifier_occurrences, pin));
-
-                res_stream << aliases.at(net);
-                tmp_stream << "    " << enum_to_string(port->get_direction()) << " " << aliases.at(net) << ";" << std::endl;
+                first_port = false;
             }
+            else
+            {
+                res_stream << ",";
+            }
+
+            aliases[net] = escape(get_unique_alias(identifier_occurrences, pin->get_name()));
+
+            res_stream << aliases.at(net);
+            tmp_stream << "    " << enum_to_string(pin->get_direction()) << " " << aliases.at(net) << ";" << std::endl;
         }
 
         res_stream << ");" << std::endl;
@@ -279,12 +277,9 @@ namespace hal
         // extract port assignments
         std::vector<std::pair<std::string, std::vector<const Net*>>> port_assignments;
 
-        for (Module::Port* port : module->get_ports())
+        for (ModulePin* pin : module->get_pins())
         {
-            for (const auto& [pin, net] : port->get_pins_and_nets())
-            {
-                port_assignments.push_back(std::make_pair(pin, std::vector<const Net*>({net})));
-            }
+            port_assignments.push_back(std::make_pair(pin->get_name(), std::vector<const Net*>({pin->get_net()})));
         }
 
         if (!write_pin_assignments(res_stream, port_assignments, aliases))

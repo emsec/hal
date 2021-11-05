@@ -325,32 +325,32 @@ namespace hal
             {
                 Module* c_module = c_netlist->get_module_by_id(module->get_id());
 
-                // temporarily overwrite port names to allow for actual port names to be assigned
                 u32 ctr = 0;
-                for (Module::Port* c_port : c_module->get_ports())
+                for (ModulePin* c_pin : c_module->get_pins())
                 {
-                    c_module->set_port_name(c_port, "____tmp_" + std::to_string(ctr++));
+                    // pin names must be unique, hence automatically generated groups may conflict with copied ones
+                    c_module->set_pin_name(c_pin, "____netlist_copy_tmp_pin_[" + std::to_string(ctr) + "]____");
                 }
 
-                for (Module::Port* port : module->get_ports())
+                ctr = 0;
+                for (PinGroup<ModulePin>* c_pin_group : c_module->get_pin_groups())
                 {
-                    std::vector<std::pair<std::string, Net*>> pins_and_nets = port->get_pins_and_nets();
-                    if (port->is_multi_bit())
-                    {
-                        std::vector<Module::Port*> c_ports;
-                        for (const auto& pin_net : pins_and_nets)
-                        {
-                            c_ports.push_back(c_module->get_port(c_netlist->get_net_by_id(pin_net.second->get_id())));
-                        }
+                    // pin group names must be unique, hence automatically generated groups may conflict with copied ones
+                    c_module->set_pin_group_name(c_pin_group, "____netlist_copy_tmp_pin_group_[" + std::to_string(ctr) + "]____");
+                }
 
-                        c_module->create_multi_bit_port(port->get_name(), c_ports);
-                    }
-                    else
+                for (PinGroup<ModulePin>* pin_group : module->get_pin_groups())
+                {
+                    std::vector<ModulePin*> c_pins;
+                    for (ModulePin* pin : pin_group->get_pins())
                     {
-                        Module::Port* c_port = c_module->get_port(c_netlist->get_net_by_id(pins_and_nets.front().second->get_id()));
-                        c_module->set_port_name(c_port, port->get_name());
-                        c_module->set_port_type(c_port, port->get_type());
+                        ModulePin* c_pin = c_module->get_pin(pin->get_net());
+                        c_module->set_pin_name(c_pin, pin->get_name());
+                        c_module->set_pin_type(c_pin, pin->get_type());
+                        c_pins.push_back(c_pin);
                     }
+
+                    PinGroup<ModulePin>* c_pin_group = c_module->create_pin_group(pin_group->get_name(), c_pins, pin_group->is_ascending(), pin_group->get_start_index());
                 }
 
                 c_module->set_next_input_port_id(module->get_next_input_port_id());
