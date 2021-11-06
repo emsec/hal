@@ -48,6 +48,7 @@ namespace hal
          * 
          * @param[in] vec - The unordered vector.
          * @param[in] element - The element to delete.
+         * @returns True on success, false otherwise.
          */
         template<typename T>
         CORE_API inline bool unordered_vector_erase(std::vector<T>& vec, T element)

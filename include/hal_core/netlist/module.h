@@ -431,6 +431,8 @@ namespace hal
          * 
          * @param[in] name - The name of the pin group.
          * @param[in] pins - The pins to be assigned to the pin group.
+         * @param[in] ascending - True for ascending pin order (from 0 to n-1), false otherwise (from n-1 to 0).
+         * @param[in] start_index - The start index of the pin group.
          * @returns The pin group on success, a nullptr otherwise.
          */
         PinGroup<ModulePin>* create_pin_group(const std::string& name, const std::vector<ModulePin*> pins, bool ascending = false, u32 start_index = 0);
