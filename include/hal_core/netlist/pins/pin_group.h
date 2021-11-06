@@ -11,7 +11,6 @@ namespace hal
 {
     class Module;
     class GateType;
-    class GatePin;
 
     /**
      * A group of pins made up of a name, the pins, a pin order, and a start index.
@@ -23,6 +22,51 @@ namespace hal
     {
     public:
         ~PinGroup() = default;
+
+        /**
+         * TODO pybind, test
+         * Check whether two pin groups are equal.
+         *
+         * @param[in] other - The pin group to compare against.
+         * @returns True if both pin groups are equal, false otherwise.
+         */
+        bool operator==(const PinGroup<T>& other) const 
+        {
+            if (m_name != other.get_name() || m_start_index != other.get_start_index() || m_ascending != other.is_ascending())
+            {
+                return false;
+            }
+
+            std::vector<T*> other_pins = other.get_pins();
+            if (m_pins.size() != other_pins.size()) 
+            {
+                return false;
+            }
+
+            auto this_it = m_pins.begin();
+            auto other_it = other_pins.begin();
+            while(this_it != m_pins.end() && other_it != other_pins.end())
+            {
+                if (**this_it++ != **other_it++)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /**
+         * TODO pybind, test
+         * Check whether two pin groups are unequal.
+         *
+         * @param[in] other - The pin group to compare against.
+         * @returns True if both pin groups are unequal, false otherwise.
+         */
+        bool operator!=(const PinGroup<T>& other) const
+        {
+            return !operator==(other);
+        }
 
         /**
          * Get the name of the pin group.
