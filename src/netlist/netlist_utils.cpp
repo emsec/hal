@@ -344,7 +344,7 @@ namespace hal
                     std::vector<ModulePin*> c_pins;
                     for (ModulePin* pin : pin_group->get_pins())
                     {
-                        ModulePin* c_pin = c_module->get_pin(pin->get_net());
+                        ModulePin* c_pin = c_module->get_pin(c_netlist->get_net_by_id(pin->get_net()->get_id()));
                         c_module->set_pin_name(c_pin, pin->get_name());
                         c_module->set_pin_type(c_pin, pin->get_type());
                         c_pins.push_back(c_pin);
