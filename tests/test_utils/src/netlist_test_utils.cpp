@@ -802,33 +802,55 @@ namespace hal
             }
         }
 
-        // Check that the ports are the same
-        if (m_0->get_ports().size() != m_0->get_ports().size())
+        // Check that the pins and pin groups are the same
+        if (m_0->get_pins().size() != m_0->get_pins().size())
         {
             log_info("test_utils",
-                     "modules_are_equal: Modules are not equal! Reason: The number of ports are different ({} vs {})",
-                     m_0->get_ports().size(),
-                     m_1->get_ports().size());
+                     "modules_are_equal: Modules are not equal! Reason: The number of pins is different ({} vs {})",
+                     m_0->get_pins().size(),
+                     m_1->get_pins().size());
             return false;
         }
-        for (const Module::Port* p_0 : m_0->get_ports())
+        if (m_0->get_pin_groups().size() != m_0->get_pin_groups().size())
         {
-            if (const Module::Port* p_1 = m_1->get_port(p_0->get_name()); p_1 != nullptr)
-            {
-                if ((p_0->get_name() != p_1->get_name()) || (p_0->get_direction() != p_1->get_direction()) || (p_0->get_type() != p_1->get_type())) 
-                {
-                    log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two ports are different (\"{}\" vs \"{}\")", p_0->get_name(), p_1->get_name());
-                    return false;
-                }
+            log_info("test_utils",
+                     "modules_are_equal: Modules are not equal! Reason: The number of pin groups is different ({} vs {})",
+                     m_0->get_pin_groups().size(),
+                     m_1->get_pin_groups().size());
+            return false;
+        }
 
-                for (Net* net : p_0->get_nets()) 
+        for (const PinGroup<ModulePin>* pg_0 : m_0->get_pin_groups())
+        {
+            if (const PinGroup<ModulePin>* pg_1 = m_1->get_pin_group(pg_0->get_name()); pg_1 != nullptr)
+            {
+                if (pg_0->get_name() != pg_1->get_name() || pg_0->get_start_index() != pg_1->get_start_index() || pg_0->is_ascending() != pg_1->is_ascending() || pg_0->size() != pg_1->size()) 
                 {
-                    if (net->get_name() != p_1->get_net(p_0->get_pin(net))->get_name())
+                    log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two pin groups are different (\"{}\" vs \"{}\")", pg_0->get_name(), pg_1->get_name());
+                    return false; 
+                }
+                
+                for (const ModulePin* p_0 : pg_0->get_pins())
+                {
+                    if(const ModulePin* p_1 = pg_1->get_pin(p_0->get_name()); p_1 != nullptr) 
                     {
-                        log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two ports are different (\"{}\" vs \"{}\")", p_0->get_name(), p_1->get_name());
+                        if(p_0->get_name() != p_1->get_name() || p_0->get_type() != p_1->get_type() || p_0->get_direction() != p_1->get_direction() || !nets_are_equal(p_0->get_net(), p_1->get_net(), ignore_id, ignore_name)) 
+                        {
+                            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two pins are different (\"{}\" vs \"{}\")", p_0->get_name(), p_1->get_name());
+                            return false; 
+                        }
+                    }
+                    else 
+                    {
+                        log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: There is no pin with name '{}' in pin group '{}' of module '{}' with ID {} within netlist with ID {}", p_0->get_name(), pg_1->get_name(), m_1->get_name(), m_1->get_netlist()->get_id());
                         return false;
                     }
                 }
+            } 
+            else 
+            {
+                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: There is no pin group with name '{}' in module '{}' with ID {} within netlist with ID {}", pg_0->get_name(), m_1->get_name(), m_1->get_netlist()->get_id());
+                return false;
             }
         }
 
