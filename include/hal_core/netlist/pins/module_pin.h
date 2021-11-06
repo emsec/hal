@@ -2,7 +2,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/net.h"
-#include "hal_core/netlist/pins/gate_pin.h"
+#include "hal_core/netlist/pins/base_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
 
 #include <string>
@@ -16,29 +16,39 @@ namespace hal
      * 
      * @ingroup pins
      */
-    class ModulePin : public GatePin
+    class ModulePin : public BasePin<ModulePin>
     {
     public:
         /**
+         * TODO pybind, test
+         * Check whether two module pins are equal.
+         *
+         * @param[in] other - The module pin to compare against.
+         * @returns True if both module pins are equal, false otherwise.
+         */
+        bool operator==(const ModulePin& other) const;
+
+        /**
+         * TODO pybind, test
+         * Check whether two module pins are unequal.
+         *
+         * @param[in] other - The module pin to compare against.
+         * @returns True if both module pins are unequal, false otherwise.
+         */
+        bool operator!=(const ModulePin& other) const;
+
+        /**
+         * TODO test
          * Get the net passing through the pin.
          * 
          * @returns The net of the pin.
          */
         Net* get_net() const;
 
-        /**
-         * Get the group of the pin as well as the index of the pin within the group.
-         * 
-         * @returns The group and the index of the pin.
-         */
-        const std::pair<PinGroup<ModulePin>*, u32>& get_group() const;
-
     private:
         friend Module;
-        friend PinGroup<ModulePin>;
 
         Net* m_net;
-        std::pair<PinGroup<ModulePin>*, u32> m_group = {nullptr, 0};
 
         ModulePin(const ModulePin&) = delete;
         ModulePin(ModulePin&&)      = delete;

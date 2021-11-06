@@ -2,17 +2,22 @@
 
 namespace hal
 {
-    ModulePin::ModulePin(const std::string& name, Net* net, PinDirection direction, PinType type) : GatePin(name, direction, type), m_net(net)
+    ModulePin::ModulePin(const std::string& name, Net* net, PinDirection direction, PinType type) : BasePin(name, direction, type), m_net(net)
     {
+    }
+
+    bool ModulePin::operator==(const ModulePin& other) const
+    {
+        return m_net->get_id() == other.get_net()->get_id() && BasePin::operator==(other);
+    }
+
+    bool ModulePin::operator!=(const ModulePin& other) const
+    {
+        return !operator==(other);
     }
 
     Net* ModulePin::get_net() const
     {
         return m_net;
-    }
-
-    const std::pair<PinGroup<ModulePin>*, u32>& ModulePin::get_group() const
-    {
-        return m_group;
     }
 }    // namespace hal

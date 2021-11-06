@@ -40,6 +40,7 @@
 #include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
+#include "hal_core/netlist/pins/base_pin.h"
 #include "hal_core/netlist/pins/gate_pin.h"
 #include "hal_core/netlist/pins/module_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
@@ -173,6 +174,13 @@ namespace hal
      * @param[in] m - the python module
      */
     void netlist_utils_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL base pins in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void base_pin_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL gate pins in a python module.

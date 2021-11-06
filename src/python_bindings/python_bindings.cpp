@@ -37,6 +37,8 @@ namespace hal
 
         netlist_utils_init(m);
 
+        base_pin_init(m);
+
         gate_pin_init(m);
 
         module_pin_init(m);
