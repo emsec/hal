@@ -42,6 +42,7 @@ namespace hal
 {
     class LoggerMarshall;
     class ChannelSelector;
+    class Searchbar;
 
     /**
      * @ingroup logging
@@ -52,6 +53,9 @@ namespace hal
     class LoggerWidget : public ContentWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
+        Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
+        Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
 
     public:
         /**
@@ -84,6 +88,16 @@ namespace hal
          * @param event
          */
         void resizeEvent(QResizeEvent* event) override;
+
+        /////
+        QString searchIconPath() const;
+        QString searchIconStyle() const;
+        QString searchActiveIconStyle() const;
+
+        void setSearchIconPath(const QString &path);
+        void setSearchIconStyle(const QString &style);
+        void setSearchActiveIconStyle(const QString &style);
+        /////
 
     public Q_SLOTS:
         /**
@@ -122,7 +136,21 @@ namespace hal
 
         void handleCustomChannel();
 
+        //////
+        void toggleSearchbar();
+        //////
+
     private:
+        //////
+        Searchbar* mSearchbar;
+        QAction* mSearchAction;
+        QString mSearchIconPath;
+        QString mSearchIconStyle;
+        QString mSearchActiveIconStyle;
+        QString mDisabledIconStyle;
+        //////
+
+
         void saveSettings();
         void restoreSettings();
 
@@ -142,6 +170,10 @@ namespace hal
         bool mErrorSeverity;
         bool mDebugSeverity;
 
+        //////
+        void handleFilterTextChanged(const QString& filter_text);
+        void enableSearchbar(bool enable);
+        //////
 
         LoggerMarshall* mLogMarshall;
         int mCurrentChannelIndex;

@@ -5,6 +5,7 @@
 #include "gui/toolbar/toolbar.h"
 #include "gui/logger/logger_settings.h"
 #include "gui/settings/settings_manager.h"
+#include "gui/searchbar/searchbar.h"
 
 #include <QHeaderView>
 #include <QVBoxLayout>
@@ -13,6 +14,7 @@
 #include <QLabel>
 #include <QSpacerItem>
 #include <QLineEdit>
+#include <QAction>
 
 #include <iostream>
 
@@ -35,10 +37,16 @@ namespace hal
 
         restoreSettings();
 
+        mSearchbar = new Searchbar(mPlainTextEdit);
+        //mSearchbar->hide();
+        mContentLayout->addWidget(mSearchbar);
+
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
 
         ChannelModel* model = ChannelModel::instance();
         connect(model, SIGNAL(updated(spdlog::level::level_enum, std::string, std::string)), this, SLOT(handleChannelUpdated(spdlog::level::level_enum, std::string, std::string)));
+
+
     }
 
     LoggerWidget::~LoggerWidget()
@@ -46,8 +54,31 @@ namespace hal
 
     }
 
+
+    void LoggerWidget::enableSearchbar(bool enable)
+    {
+        QString iconStyle = enable
+                ? mSearchIconStyle
+                : mDisabledIconStyle;
+        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mSearchIconPath));
+        if (!enable && mSearchbar->isVisible())
+        {
+            mSearchbar->hide();
+            setFocus();
+        }
+        mSearchAction->setEnabled(enable);
+    }
+
+
     void LoggerWidget::setupToolbar(Toolbar* Toolbar)
     {
+        mSearchAction = new QAction(this);
+        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+        Toolbar->addAction(mSearchAction);
+
+
+
+        enableSearchbar(true);
 
         mChannelLabel = new QLabel(this);
         mChannelLabel->setText("all");
@@ -59,6 +90,8 @@ namespace hal
         connect(selector->lineEdit(), SIGNAL(editingFinished()), this, SLOT(handleCustomChannel()));
         connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
         selector->setStyleSheet("QCombobox {background-color : rgb(32, 43, 63); border-radius: 2px;}");
+        selector->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
+        //selector->resize(5, selector->height());
         Toolbar->addWidget(selector);
 
         mDebugButton = new QPushButton("Debug", this);
@@ -155,7 +188,7 @@ namespace hal
         // set ALL Channel
         if (p == -1) {
             mCurrentChannelIndex = model->rowCount() - 1;
-            selector->setCurrentIndex(mCurrentChannelIndex);
+            //selector->setCurrentIndex(mCurrentChannelIndex);
         }
 
         ChannelItem* item   = static_cast<ChannelItem*>((model->index(mCurrentChannelIndex, 0, QModelIndex())).internalPointer());
@@ -272,5 +305,39 @@ namespace hal
         mInfoSeverity = settings.infoSeverity;
         mWarningSeverity = settings.warningSeverity;
         mErrorSeverity = settings.errorSeverity;
+    }
+
+    void LoggerWidget::toggleSearchbar()
+    {
+        if(mSearchbar->isHidden())
+        {
+            mSearchbar->show();
+            mSearchbar->setFocus();
+        }
+        else
+        {
+            mSearchbar->hide();
+            setFocus();
+        }
+    }
+
+    QString LoggerWidget::searchIconPath() const
+    {
+        return mSearchIconPath;
+    }
+
+    QString LoggerWidget::searchIconStyle() const
+    {
+        return mSearchIconStyle;
+    }
+
+    void LoggerWidget::setSearchIconPath(const QString& path)
+    {
+        mSearchIconPath = path;
+    }
+
+    void LoggerWidget::setSearchIconStyle(const QString& style)
+    {
+        mSearchIconStyle = style;
     }
 }
