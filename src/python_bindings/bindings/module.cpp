@@ -450,7 +450,7 @@ namespace hal
             Create a new pin group with the given name.
 
             :param str name: The name of the pin group.
-            param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group.
+            :param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group.
             :returns: The pin group on success, a nullptr otherwise.
             :rtype: hal_py.ModulePinGroup
         )");

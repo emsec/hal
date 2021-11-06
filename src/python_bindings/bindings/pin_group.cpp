@@ -14,6 +14,20 @@ namespace hal
             A group of module pins made up of a name, the pins, a pin order, and a start index.
         )");
 
+        py_module_pin_group.def(py::self == py::self, R"(
+            Check whether two module pin groups are equal.
+
+            :returns: True if both module pin groups are equal, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module_pin_group.def(py::self != py::self, R"(
+            Check whether two module pin groups are unequal.
+
+            :returns: True if both module pin groups are unequal, False otherwise.
+            :rtype: bool
+        )");
+
         py_module_pin_group.def_property_readonly("name", &PinGroup<ModulePin>::get_name, R"(
             The name of the pin group.
 

@@ -8,6 +8,20 @@ namespace hal
             Base class for gate pins.
         )");
 
+        py_gate_base_pin.def(py::self == py::self, R"(
+            Check whether two pins are equal.
+
+            :returns: True if both pins are equal, False otherwise.
+            :rtype: bool
+        )");
+
+        py_gate_base_pin.def(py::self != py::self, R"(
+            Check whether two pins are unequal.
+
+            :returns: True if both pins are unequal, False otherwise.
+            :rtype: bool
+        )");
+
         py_gate_base_pin.def_property_readonly("name", &BasePin<GatePin>::get_name, R"(
             The name of the pin.
 
@@ -62,6 +76,20 @@ namespace hal
 
         py::class_<BasePin<ModulePin>, RawPtrWrapper<BasePin<ModulePin>>> py_module_base_pin(m, "ModuleBasePin", R"(
             Base class for module pins.
+        )");
+
+        py_module_base_pin.def(py::self == py::self, R"(
+            Check whether two pins are equal.
+
+            :returns: True if both pins are equal, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module_base_pin.def(py::self != py::self, R"(
+            Check whether two pins are unequal.
+
+            :returns: True if both pins are unequal, False otherwise.
+            :rtype: bool
         )");
 
         py_module_base_pin.def_property_readonly("name", &BasePin<ModulePin>::get_name, R"(
