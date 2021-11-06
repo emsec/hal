@@ -48,15 +48,14 @@ namespace hal
             }
         }
 
-        // TODO check ports and groups
-        // for (const Port* port : get_ports())
-        // {
-        //     if (const Port* other_port = other.get_port(other.get_netlist()->get_net_by_id(port->get_nets().front()->get_id())); other_port == nullptr || *other_port != *port)
-        //     {
-        //         log_info("module", "the modules with IDs {} and {} are not equal due to an unequal port.", m_id, other.get_id());
-        //         return false;
-        //     }
-        // }
+        for (const PinGroup<ModulePin>* pin_group : get_pin_groups())
+        {
+            if (const PinGroup<ModulePin>* other_pin_group = other.get_pin_group(pin_group->get_name()); other_pin_group == nullptr || *other_pin_group != *pin_group)
+            {
+                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal pin group.", m_id, other.get_id());
+                return false;
+            }
+        }
 
         if (!DataContainer::operator==(other))
         {
