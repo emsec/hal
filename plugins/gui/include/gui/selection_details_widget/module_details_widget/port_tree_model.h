@@ -97,7 +97,7 @@ namespace hal
         /** @name Event Handler Functions
          */
         ///@{
-        void handleModuleInputOutputPortNameChanged(Module* m, int associated_data);
+        void handleModulePortsChanged(Module* m);
         ///@}
 
         //column identifier

@@ -410,7 +410,7 @@ namespace hal
                 break;
             }
             case ModuleEvent::event::ports_changed: {
-                //< associated data = respective net
+                //< no associated_data
 
                 gGraphContextManager->handleModulePortsChanged(mod);
 

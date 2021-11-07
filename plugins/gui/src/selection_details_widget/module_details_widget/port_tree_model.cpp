@@ -22,8 +22,7 @@ namespace hal
         setModule(gNetlist->get_module_by_id(1));
 
         //connections
-        //connect(gNetlistRelay, &NetlistRelay::moduleInputPortNameChanged, this, &PortTreeModel::handleModuleInputOutputPortNameChanged);
-        //connect(gNetlistRelay, &NetlistRelay::moduleOutputPortNameChanged, this, &PortTreeModel::handleModuleInputOutputPortNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::modulePortsChanged, this, &PortTreeModel::handleModulePortsChanged);
     }
 
     PortTreeModel::~PortTreeModel()
@@ -47,36 +46,36 @@ namespace hal
         for (PinGroup<ModulePin>* pinGroup : m->get_pin_groups())
         {
             ModulePin* firstPin = pinGroup->get_pins().front();
-            QString portName;
-            QString portDirection = QString::fromStdString(enum_to_string(firstPin->get_direction()));
-            QString portType      = QString::fromStdString(enum_to_string(firstPin->get_type()));
+            QString pinGroupName;
+            QString pinGroupDirection = QString::fromStdString(enum_to_string(firstPin->get_direction()));
+            QString pinGroupType      = QString::fromStdString(enum_to_string(firstPin->get_type()));
             if (pinGroup->size() == 1)
             {
-                portName = QString::fromStdString(firstPin->get_name());
+                pinGroupName = QString::fromStdString(firstPin->get_name());
             }
             else
             {
-                portName = QString::fromStdString(pinGroup->get_name());
+                pinGroupName = QString::fromStdString(pinGroup->get_name());
             }
 
-            TreeItem* portItem = new TreeItem(QList<QVariant>() << portName << portDirection << portType << "");
+            TreeItem* pinGroupItem = new TreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
 
             if (pinGroup->size() == 1)
             {
-                portItem->setDataAtIndex(sNetColumn, QString::fromStdString(firstPin->get_net()->get_name()));
-                portItem->setAdditionalData(keyType, QVariant::fromValue(itemType::portSingleBit));
+                pinGroupItem->setDataAtIndex(sNetColumn, QString::fromStdString(firstPin->get_net()->get_name()));
+                pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::portSingleBit));
             }
             else
             {
-                portItem->setAdditionalData(keyType, QVariant::fromValue(itemType::portMultiBit));
+                pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::portMultiBit));
                 for (ModulePin* pin : pinGroup->get_pins())
                 {
-                    TreeItem* pinItem = new TreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name()) << portDirection << portType << QString::fromStdString(pin->get_net()->get_name()));
+                    TreeItem* pinItem = new TreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name()) << pinGroupDirection << pinGroupType << QString::fromStdString(pin->get_net()->get_name()));
                     pinItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
-                    portItem->appendChild(pinItem);
+                    pinGroupItem->appendChild(pinItem);
                 }
             }
-            mRootItem->appendChild(portItem);
+            mRootItem->appendChild(pinGroupItem);
         }
         endResetModel();
 
@@ -115,15 +114,12 @@ namespace hal
         return item->getAdditionalData(keyType).value<itemType>();
     }
 
-    void PortTreeModel::handleModuleInputOutputPortNameChanged(Module* m, int associated_data)
+    void PortTreeModel::handleModulePortsChanged(Module *m)
     {
-        Q_UNUSED(associated_data)
-
         if ((int)m->get_id() == mModuleId)
         {
             setModule(m);
             Q_EMIT numberOfPortsChanged(m->get_pin_groups().size());
         }
     }
-
 }    // namespace hal
