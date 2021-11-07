@@ -2,14 +2,17 @@
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/netlist/module.h"
 
 #include <QDebug>
-#include <QSet>
 
 namespace hal
 {
     ModuleTableModel::ModuleTableModel(QObject* parent) : QAbstractTableModel(parent)
     {
+        //connections
+        connect(gNetlistRelay, &NetlistRelay::modulePortsChanged, this, &ModuleTableModel::handleModulePortsChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleRemoved, this, &ModuleTableModel::handleModuleRemoved);
     }
 
     void ModuleTableModel::clear()
@@ -17,6 +20,8 @@ namespace hal
         beginResetModel();
         mEntries.clear();
         endResetModel();
+
+        mModIds.clear();
     }
 
     int ModuleTableModel::rowCount(const QModelIndex& parent) const
@@ -86,8 +91,10 @@ namespace hal
         if (net == nullptr)
             return;
 
-        mNetId = net->get_id();
 
+
+        mNetId = net->get_id();
+        mModIds.clear();
         QList<Entry> newEntryList;
 
         //1. variant: simple brute force through all modules
@@ -108,8 +115,14 @@ namespace hal
                 newEntry.used_port = QString::fromStdString(pin->get_name());
 
                 newEntryList.append(newEntry);
+                mModIds.insert((int)m->get_id());
             }
         }
+
+        beginResetModel();
+        mEntries = newEntryList;
+        endResetModel();
+
         //            auto portMap = m->get_input_port_names();
         //            auto it = portMap.find(net);
         //            if(it != portMap.end())
@@ -140,10 +153,6 @@ namespace hal
 
         //            }
         //        }
-
-        beginResetModel();
-        mEntries = newEntryList;
-        endResetModel();
     }
 
     int ModuleTableModel::getCurrentNetID()
@@ -159,5 +168,29 @@ namespace hal
     QString ModuleTableModel::getPortNameFromIndex(const QModelIndex& index)
     {
         return mEntries[index.row()].used_port;
+    }
+
+    void ModuleTableModel::handleModulePortsChanged(Module *m)
+    {
+        if(mModIds.find((int)m->get_id()) != mModIds.end())
+        {
+            auto net = gNetlist->get_net_by_id(mNetId);
+            auto inputNets = m->get_input_nets();
+            auto outputNets = m->get_output_nets();
+            if(std::find(inputNets.begin(), inputNets.end(), net) != inputNets.end() ||
+               std::find(outputNets.begin(), outputNets.end(), net) != outputNets.end())
+                setNet(net);
+        }
+    }
+
+    void ModuleTableModel::handleModuleRemoved(Module *m)
+    {
+        if(mModIds.find((int)m->get_id()) != mModIds.end())
+        {
+            auto net = gNetlist->get_net_by_id(mNetId);
+            if(net)
+                setNet(net);
+        }
+
     }
 }    // namespace hal

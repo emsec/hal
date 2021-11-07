@@ -27,11 +27,13 @@
 
 #include <QAbstractTableModel>
 #include <QList>
+#include <QSet>
 
 namespace hal
 {
 
     class Net;
+    class Module;
 
 /**
  * @ingroup gui
@@ -129,9 +131,17 @@ public:
      */
     QString getPortNameFromIndex(const QModelIndex& index);
 
+    /** @name Event Handler Functions
+     */
+    ///@{
+    void handleModulePortsChanged(Module* m);
+    void handleModuleRemoved(Module* m);
+    ///@}
+
 private:
     u32 mNetId;
     QList<Entry> mEntries;
+    QSet<int> mModIds;
 };
 
 }
