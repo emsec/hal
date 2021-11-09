@@ -73,6 +73,13 @@ namespace hal
         bool operator!=(const Module& other) const;
 
         /**
+         * Hash function for python binding
+         *
+         * @return Pybind11 compatible hash
+         */
+        ssize_t get_hash() const;
+
+        /**
          * Get the unique ID of the module.
          *
          * @returns The unique id.

@@ -25,6 +25,13 @@ namespace hal
             :rtype: bool
         )");
 
+        py_module.def ("__hash__", &Module::get_hash, R"(
+            Python requires hash for set and dict container.
+
+            :returns: The hash.
+            :rtype: Py_hash_t
+        )");
+
         py_module.def_property_readonly("id", &Module::get_id, R"(
             The unique ID of the module.
 

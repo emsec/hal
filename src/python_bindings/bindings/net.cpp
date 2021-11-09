@@ -20,6 +20,13 @@ namespace hal
             :rtype: bool
         )");
 
+        py_net.def ("__hash__", &Net::get_hash, R"(
+            Python requires hash for set and dict container.
+
+            :returns: The hash.
+            :rtype: Py_hash_t
+        )");
+
         py_net.def_property_readonly("id", &Net::get_id, R"(
             The unique id of the net.
 
