@@ -29,7 +29,7 @@
 namespace hal
 {
     class Module;
-    class PortTreeModel;
+    class ModulePinsTreeModel;
 
     /**
      * @brief A widget to display the ports of a given module.
@@ -87,7 +87,7 @@ namespace hal
         void updateText(const QString& newHeadline);
 
     private:
-        PortTreeModel* mPortModel;
+        ModulePinsTreeModel* mPortModel;
         int mModuleID;
 
         void handleNumberOfPortsChanged(int newNumberPorts);

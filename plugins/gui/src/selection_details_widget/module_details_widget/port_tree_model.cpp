@@ -13,7 +13,7 @@
 
 namespace hal
 {
-    PortTreeModel::PortTreeModel(QObject* parent) : BaseTreeModel(parent)
+    ModulePinsTreeModel::ModulePinsTreeModel(QObject* parent) : BaseTreeModel(parent)
     {
         setHeaderLabels(QList<QVariant>() << "Name"
                                           << "Direction"
@@ -22,22 +22,22 @@ namespace hal
         setModule(gNetlist->get_module_by_id(1));
 
         //connections
-        connect(gNetlistRelay, &NetlistRelay::modulePortsChanged, this, &PortTreeModel::handleModulePortsChanged);
+        connect(gNetlistRelay, &NetlistRelay::modulePortsChanged, this, &ModulePinsTreeModel::handleModulePortsChanged);
     }
 
-    PortTreeModel::~PortTreeModel()
+    ModulePinsTreeModel::~ModulePinsTreeModel()
     {
         delete mRootItem;
     }
 
-    void PortTreeModel::clear()
+    void ModulePinsTreeModel::clear()
     {
         BaseTreeModel::clear();
         mModuleId = -1;
         mPortGroupingToTreeItem.clear();
     }
 
-    void PortTreeModel::setModule(Module* m)
+    void ModulePinsTreeModel::setModule(Module* m)
     {
         clear();
         mModuleId = m->get_id();
@@ -79,10 +79,10 @@ namespace hal
         }
         endResetModel();
 
-        Q_EMIT numberOfPortsChanged(m->get_pin_groups().size());
+        Q_EMIT numberOfPortsChanged(m->get_pins().size());
     }
 
-    Net* PortTreeModel::getNetFromItem(TreeItem* item)
+    Net* ModulePinsTreeModel::getNetFromItem(TreeItem* item)
     {
         if (mModuleId == -1)    //no current module = no represented net
             return nullptr;
@@ -104,17 +104,17 @@ namespace hal
         return nullptr;
     }
 
-    int PortTreeModel::getRepresentedModuleId()
+    int ModulePinsTreeModel::getRepresentedModuleId()
     {
         return mModuleId;
     }
 
-    PortTreeModel::itemType PortTreeModel::getTypeOfItem(TreeItem* item)
+    ModulePinsTreeModel::itemType ModulePinsTreeModel::getTypeOfItem(TreeItem* item)
     {
         return item->getAdditionalData(keyType).value<itemType>();
     }
 
-    void PortTreeModel::handleModulePortsChanged(Module *m)
+    void ModulePinsTreeModel::handleModulePortsChanged(Module *m)
     {
         if ((int)m->get_id() == mModuleId)
         {

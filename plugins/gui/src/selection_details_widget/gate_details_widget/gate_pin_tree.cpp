@@ -12,7 +12,7 @@
 namespace hal
 {
 
-    GatePinTree::GatePinTree(QWidget *parent) : SizeAdjustableTreeView(parent), mPinModel(new PinTreeModel(this)), mGateID(-1)
+    GatePinTree::GatePinTree(QWidget *parent) : SizeAdjustableTreeView(parent), mPinModel(new GatePinsTreeModel(this)), mGateID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -65,27 +65,27 @@ namespace hal
 
         TreeItem* clickedItem = mPinModel->getItemFromIndex(idx);
         QMenu menu;
-        PinTreeModel::itemType type = mPinModel->getTypeOfItem(clickedItem);
+        GatePinsTreeModel::itemType type = mPinModel->getTypeOfItem(clickedItem);
 
         //PLAINTEXT: NAME, DIRECTION, TYPE
         menu.addAction("Extract name as plain text",
             [clickedItem](){
-            QApplication::clipboard()->setText(clickedItem->getData(PinTreeModel::sNameColumn).toString());
+            QApplication::clipboard()->setText(clickedItem->getData(GatePinsTreeModel::sNameColumn).toString());
         });
 
         menu.addAction("Extract direction as plain text",
             [clickedItem](){
-            QApplication::clipboard()->setText(clickedItem->getData(PinTreeModel::sDirectionColumn).toString());
+            QApplication::clipboard()->setText(clickedItem->getData(GatePinsTreeModel::sDirectionColumn).toString());
         });
 
         menu.addAction("Extract type as plain text",
             [clickedItem](){
-            QApplication::clipboard()->setText(clickedItem->getData(PinTreeModel::sTypeColumn).toString());
+            QApplication::clipboard()->setText(clickedItem->getData(GatePinsTreeModel::sTypeColumn).toString());
         });
 
         //Add nets to selection if possible
         QList<int> netIds;
-        if(type == PinTreeModel::itemType::pin)
+        if(type == GatePinsTreeModel::itemType::pin)
         {
             netIds = mPinModel->getNetIDsOfTreeItem(clickedItem);
         }
@@ -108,7 +108,7 @@ namespace hal
 
         menu.addSection("Python");
 
-        if(type == PinTreeModel::itemType::pin)
+        if(type == GatePinsTreeModel::itemType::pin)
             buildPythonMenuForPin(menu, clickedItem);
         else
             buildPythonMenuForPinGroup(menu, clickedItem);
@@ -142,7 +142,7 @@ namespace hal
             });
 
         // 2.) DIRECTION
-        QString pythonCommandDirection = PyCodeProvider::pyCodeGateTypePinDirection(mPinModel->getCurrentGateID(), clickedPinItem->getData(PinTreeModel::sNameColumn).toString());
+        QString pythonCommandDirection = PyCodeProvider::pyCodeGateTypePinDirection(mPinModel->getCurrentGateID(), clickedPinItem->getData(GatePinsTreeModel::sNameColumn).toString());
         menu.addAction(QIcon(":/icons/python"), "Extract pin direction as python code",
             [pythonCommandDirection]()
             {
@@ -151,7 +151,7 @@ namespace hal
 
 
         // 3.) type
-        QString pythonCommandType = PyCodeProvider::pyCodeGateTypePinType(mPinModel->getCurrentGateID(), clickedPinItem->getData(PinTreeModel::sNameColumn).toString());
+        QString pythonCommandType = PyCodeProvider::pyCodeGateTypePinType(mPinModel->getCurrentGateID(), clickedPinItem->getData(GatePinsTreeModel::sNameColumn).toString());
         menu.addAction(QIcon(":/icons/python"), "Extract pin type as python code",
             [pythonCommandType]()
             {
@@ -165,7 +165,7 @@ namespace hal
         // 1. PYTHON LIST OF PIN GROUPS
         QString pythonList = "[";
         for(auto childPin : clickedPinIGrouptem->getChildren())
-            pythonList += "\"" + childPin->getData(PinTreeModel::sNameColumn).toString() + "\", ";
+            pythonList += "\"" + childPin->getData(GatePinsTreeModel::sNameColumn).toString() + "\", ";
         pythonList = pythonList.left(pythonList.size()-2);
         pythonList += "]";
 
@@ -180,7 +180,7 @@ namespace hal
         if(firstPinItemOfGroup)
         {
             QString pythonCommandGroupDirection = PyCodeProvider::pyCodeGateTypePinDirection(mPinModel->getCurrentGateID(),
-                                                                                             firstPinItemOfGroup->getData(PinTreeModel::sNameColumn).toString());
+                                                                                             firstPinItemOfGroup->getData(GatePinsTreeModel::sNameColumn).toString());
             menu.addAction(QIcon(":/icons/python"), "Extract direction of pingroup as python code",
                 [pythonCommandGroupDirection]()
                 {
@@ -188,7 +188,7 @@ namespace hal
                 });
 
             QString pythonCommandGroupType = PyCodeProvider::pyCodeGateTypePinType(mPinModel->getCurrentGateID(),
-                                                                                             firstPinItemOfGroup->getData(PinTreeModel::sNameColumn).toString());
+                                                                                             firstPinItemOfGroup->getData(GatePinsTreeModel::sNameColumn).toString());
             menu.addAction(QIcon(":/icons/python"), "Extract type of pingroup as python code",
                 [pythonCommandGroupType]()
                 {

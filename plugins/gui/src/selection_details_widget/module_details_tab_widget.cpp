@@ -25,12 +25,12 @@ namespace hal
         addTab("General", framesGeneralTab);
 
         //ports tab
-        mPortsTree = new ModulePortsTree(this);
-        mPortsFrame = new DetailsFrameWidget(mPortsTree, "Ports", this);
-        connect(mPortsTree, &ModulePortsTree::updateText, mPortsFrame, &DetailsFrameWidget::setText);
+        mPinsTree = new ModulePortsTree(this);
+        mPinsFrame = new DetailsFrameWidget(mPinsTree, "Pins", this);
+        connect(mPinsTree, &ModulePortsTree::updateText, mPinsFrame, &DetailsFrameWidget::setText);
 
-        QList<DetailsFrameWidget*> framesPortTab({mPortsFrame});
-        addTab("Ports", framesPortTab);
+        QList<DetailsFrameWidget*> framesPortTab({mPinsFrame});
+        addTab("Pins", framesPortTab);
 
         //elements tab
         mElementsTree = new ModuleElementsTree(this);
@@ -51,7 +51,7 @@ namespace hal
     {
         //pass module or other stuff to widgets
         mModuleInfoTable->setModule(module);
-        mPortsTree->setModule(module);
+        mPinsTree->setModule(module);
         mElementsTree->setModule(module);
         mGroupingsOfItemTable->setModule(module);
         mDataTable->setModule(module);

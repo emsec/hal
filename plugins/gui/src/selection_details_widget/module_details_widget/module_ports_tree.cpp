@@ -13,10 +13,11 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QQueue>
+#include <QDebug>
 
 namespace hal
 {
-    ModulePortsTree::ModulePortsTree(QWidget* parent) : SizeAdjustableTreeView(parent), mPortModel(new PortTreeModel(this)), mModuleID(-1)
+    ModulePortsTree::ModulePortsTree(QWidget* parent) : SizeAdjustableTreeView(parent), mPortModel(new ModulePinsTreeModel(this)), mModuleID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -27,7 +28,7 @@ namespace hal
 
         //connections
         //connect(this, &QTreeView::customContextMenuRequested, this, &ModulePortsTree::handleContextMenuRequested);
-        connect(mPortModel, &PortTreeModel::numberOfPortsChanged, this, &ModulePortsTree::handleNumberOfPortsChanged);
+        connect(mPortModel, &ModulePinsTreeModel::numberOfPortsChanged, this, &ModulePortsTree::handleNumberOfPortsChanged);
     }
 
     void ModulePortsTree::setModule(u32 moduleID)
@@ -67,14 +68,14 @@ namespace hal
             return;
 
         TreeItem* clickedItem        = mPortModel->getItemFromIndex(clickedIndex);
-        PortTreeModel::itemType type = mPortModel->getTypeOfItem(clickedItem);
+        ModulePinsTreeModel::itemType type = mPortModel->getTypeOfItem(clickedItem);
         Net* n                       = mPortModel->getNetFromItem(clickedItem);
-        QString name                 = clickedItem->getData(PortTreeModel::sNameColumn).toString();
+        QString name                 = clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString();
         u32 modId                    = mPortModel->getRepresentedModuleId();
         QMenu menu;
 
         //For now, if the item is a grouping item, only list of ports and namechange options
-        if (type == PortTreeModel::itemType::portMultiBit)
+        if (type == ModulePinsTreeModel::itemType::portMultiBit)
         {
             menu.addAction(QIcon(":/icons/python"), "Extract ports as python list", [modId, name]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePortsOfGroup(modId, name)); });
 
@@ -84,21 +85,21 @@ namespace hal
         }
 
         //PLAINTEXT: NAME, DIRECTION, TYPE (for now, only port)
-        menu.addAction("Extract name as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(PortTreeModel::sNameColumn).toString()); });
+        menu.addAction("Extract name as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString()); });
 
-        menu.addAction("Extract direction as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(PortTreeModel::sDirectionColumn).toString()); });
+        menu.addAction("Extract direction as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sDirectionColumn).toString()); });
 
-        menu.addAction("Extract type as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(PortTreeModel::sTypeColumn).toString()); });
+        menu.addAction("Extract type as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sTypeColumn).toString()); });
 
         //Misc section: port renaming, selection change
         if (n)
         {
-            bool isInputPort   = clickedItem->getData(PortTreeModel::sDirectionColumn).toString().toStdString() == enum_to_string(PinDirection::input);
+            bool isInputPort   = clickedItem->getData(ModulePinsTreeModel::sDirectionColumn).toString().toStdString() == enum_to_string(PinDirection::input);
             QString renameText = isInputPort ? "Change input port name" : "Change output port name";
 
             menu.addSection("Misc");
             menu.addAction(renameText, [this, isInputPort, n, clickedItem]() {
-                InputDialog ipd("Change port name", "New port name", clickedItem->getData(PortTreeModel::sNameColumn).toString());
+                InputDialog ipd("Change port name", "New port name", clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString());
                 if (ipd.exec() == QDialog::Accepted)
                 {
                     ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
@@ -130,7 +131,7 @@ namespace hal
     void ModulePortsTree::handleNumberOfPortsChanged(int newNumberPorts)
     {
         adjustSizeToContents();
-        Q_EMIT updateText(QString("Ports (%1)").arg(newNumberPorts));
+        Q_EMIT updateText(QString("Pins (%1)").arg(newNumberPorts));
     }
 
 }    // namespace hal

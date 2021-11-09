@@ -36,7 +36,7 @@ namespace hal
     /**
      * @brief A model to represent the ports of a module.
      */
-    class PortTreeModel : public BaseTreeModel
+    class ModulePinsTreeModel : public BaseTreeModel
     {
         Q_OBJECT
     public:
@@ -49,12 +49,12 @@ namespace hal
          *
          * @param parent - THe model's parent.
          */
-        PortTreeModel(QObject* parent = nullptr);
+        ModulePinsTreeModel(QObject* parent = nullptr);
 
         /**
           * The destructor.
           */
-        ~PortTreeModel();
+        ~ModulePinsTreeModel();
 
         /**
          *  Overwritten BaseTreeModel function.
@@ -124,4 +124,4 @@ namespace hal
     };
 }
 
-Q_DECLARE_METATYPE(hal::PortTreeModel::itemType)
+Q_DECLARE_METATYPE(hal::ModulePinsTreeModel::itemType)

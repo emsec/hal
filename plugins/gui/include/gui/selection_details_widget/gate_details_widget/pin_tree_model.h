@@ -36,7 +36,7 @@ namespace hal
  * @ingroup gui
  * @brief A model to display the pins of a gate.
  */
-class PinTreeModel : public BaseTreeModel
+class GatePinsTreeModel : public BaseTreeModel
 {
     Q_OBJECT
 
@@ -50,12 +50,12 @@ public:
      *
      * @param parent - The model's parent.
      */
-    PinTreeModel(QObject* parent = nullptr);
+    GatePinsTreeModel(QObject* parent = nullptr);
 
     /**
       * The destructor.
       */
-    ~PinTreeModel();
+    ~GatePinsTreeModel();
 
     /**
      * Overwritten BaseTreeModel function.
@@ -121,4 +121,4 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(hal::PinTreeModel::itemType)
+Q_DECLARE_METATYPE(hal::GatePinsTreeModel::itemType)

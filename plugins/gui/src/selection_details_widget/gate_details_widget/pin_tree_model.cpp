@@ -11,7 +11,7 @@
 namespace hal
 {
 
-    PinTreeModel::PinTreeModel(QObject *parent) : BaseTreeModel(parent)
+    GatePinsTreeModel::GatePinsTreeModel(QObject *parent) : BaseTreeModel(parent)
     {
         setHeaderLabels(QList<QVariant>() << "Name" << "Direction" << "Type" << "Connected Net");
 
@@ -20,13 +20,13 @@ namespace hal
         qRegisterMetaType<QList<int>>();
     }
 
-    PinTreeModel::~PinTreeModel()
+    GatePinsTreeModel::~GatePinsTreeModel()
     {
         delete mRootItem;
 
     }
 
-    void PinTreeModel::clear()
+    void GatePinsTreeModel::clear()
     {
         BaseTreeModel::clear();
         mPinGroupingToTreeItem.clear();
@@ -34,7 +34,7 @@ namespace hal
 
     }
 
-    void PinTreeModel::setGate(Gate *g)
+    void GatePinsTreeModel::setGate(Gate *g)
     {
         clear();
         mGateId = g->get_id();
@@ -110,22 +110,22 @@ namespace hal
         endResetModel();
     }
 
-    int PinTreeModel::getCurrentGateID()
+    int GatePinsTreeModel::getCurrentGateID()
     {
         return mGateId;
     }
 
-    QList<int> PinTreeModel::getNetIDsOfTreeItem(TreeItem *item)
+    QList<int> GatePinsTreeModel::getNetIDsOfTreeItem(TreeItem *item)
     {
         return item->getAdditionalData(keyRepresentedNetsID).value<QList<int>>();
     }
 
-    PinTreeModel::itemType PinTreeModel::getTypeOfItem(TreeItem *item)
+    GatePinsTreeModel::itemType GatePinsTreeModel::getTypeOfItem(TreeItem *item)
     {
         return item->getAdditionalData(keyType).value<itemType>();
     }
 
-    int PinTreeModel::getNumberOfDisplayedPins()
+    int GatePinsTreeModel::getNumberOfDisplayedPins()
     {
         Gate* g = gNetlist->get_gate_by_id(mGateId);
         if(!g)

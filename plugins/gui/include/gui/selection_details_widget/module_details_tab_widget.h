@@ -73,8 +73,8 @@ namespace hal
         DetailsFrameWidget* mGroupingsFrame;
 
         //ports tab
-        ModulePortsTree* mPortsTree;
-        DetailsFrameWidget* mPortsFrame;
+        ModulePortsTree* mPinsTree;
+        DetailsFrameWidget* mPinsFrame;
 
         //elements tab
         ModuleElementsTree* mElementsTree;

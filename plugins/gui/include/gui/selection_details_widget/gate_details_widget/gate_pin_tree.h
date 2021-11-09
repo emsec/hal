@@ -28,7 +28,7 @@
 
 namespace hal
 {
-    class PinTreeModel;
+    class GatePinsTreeModel;
     class Gate;
     class TreeItem;
 
@@ -80,7 +80,7 @@ namespace hal
         void updateText(const QString& newHeadline);
 
     private:
-        PinTreeModel* mPinModel;
+        GatePinsTreeModel* mPinModel;
         int mGateID;
 
         //helper functions
