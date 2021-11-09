@@ -1,5 +1,6 @@
 #include "netlist_simulator_controller/vcd_serializer.h"
 #include "netlist_simulator_controller/wave_data.h"
+#include "hal_core/utilities/log.h"
 #include <QFile>
 #include <QRegularExpression>
 #include <QDebug>
@@ -115,8 +116,14 @@ QMap<int,int>::const_iterator mIterator;
         if (sl.size()!=2) return false;
         bool ok;
         int val = sl.at(0).toUInt(&ok,base);
-        if (ok) storeValue(val, sl.at(1));
-        return ok;
+        if (!ok)
+        {
+            log_warning("vcd_viewer", "Cannot parse VCD data value '{}'", std::string(sl.at(0).data()));
+            val = 0;
+        }
+        storeValue(val, sl.at(1));
+        // [return ok] return statement if we want to bail out upon data parse error
+        return true; // ignore parse errors
     }
 
     bool VcdSerializer::parseDataline(const QByteArray &line)
@@ -174,7 +181,11 @@ QMap<int,int>::const_iterator mIterator;
         mWaves.clear();
         mTime = 0;
         QFile ff(filename);
-        if (!ff.open(QIODevice::ReadOnly)) return false;
+        if (!ff.open(QIODevice::ReadOnly))
+        {
+            log_warning("vcd_viewer", "Cannot open VCD input file '{}'.", filename.toStdString());
+            return false;
+        }
 
         bool parseHeader = true;
 
@@ -206,6 +217,7 @@ QMap<int,int>::const_iterator mIterator;
             {
                 if (!parseDataline(line))
                 {
+                    log_warning("vcd_viewer", "Cannot parse VCD data line '{}'.", std::string(line.data()));
                     return false;
                 }
             }

@@ -271,6 +271,13 @@ namespace hal
 
     bool NetlistSimulatorController::get_results()
     {
+        bool success = getResultsInternal();
+        setState(success ? ShowResults : EngineFailed);
+        return success;
+    }
+
+    bool NetlistSimulatorController::getResultsInternal()
+    {
         SimulationEngineEventDriven* sevd = static_cast<SimulationEngineEventDriven*>(mSimulationEngine);
         const std::vector<const Gate*> simGates(mSimulationInput->get_gates().begin(), mSimulationInput->get_gates().end());
         std::unique_ptr<Netlist> partNl = netlist_utils::get_partial_netlist(simGates.at(0)->get_netlist(), simGates);
@@ -310,7 +317,6 @@ namespace hal
                 mWaveDataList->addOrReplace(wd);
             }
         }
-        setState(ShowResults);
         return true;
     }
 

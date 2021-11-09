@@ -236,6 +236,7 @@ Q_SIGNALS:
 private:
     void initSimulator();
     void setState(SimulationState stat);
+    bool getResultsInternal();
 
     bool isClockSet() const;
     bool isInputSet() const;

@@ -46,6 +46,7 @@ namespace hal
         : ContentWidget("VcdViewer",parent),
           mVisualizeNetState(false), mCurrentWaveWidget(nullptr)
     {
+        LogManager::get_instance().add_channel(std::string("vcd_viewer"), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         mCreateControlAction = new QAction(this);
         mSimulSettingsAction = new QAction(this);
         mOpenInputfileAction = new QAction(this);
