@@ -6,6 +6,7 @@ var classhal_1_1_module =
     [ "get_gate_by_id", "classhal_1_1_module.html#a3498d3a2a908f8c9beb7c8a741fc6cef", null ],
     [ "get_gates", "classhal_1_1_module.html#a49b749b873deac748be305b71aca962c", null ],
     [ "get_grouping", "classhal_1_1_module.html#a8b32ef344fda511501b3eefcb34abfdc", null ],
+    [ "get_hash", "classhal_1_1_module.html#af095c826fa1e507107519455f0cba13a", null ],
     [ "get_id", "classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b", null ],
     [ "get_input_nets", "classhal_1_1_module.html#a1a51135930d6989903c0f67fd9cd5298", null ],
     [ "get_input_port_name", "classhal_1_1_module.html#a4b001c39877c766f037aad7a520114a7", null ],

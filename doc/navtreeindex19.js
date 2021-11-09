@@ -1,5 +1,8 @@
 var NAVTREEINDEX19 =
 {
+"net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d":[13,0,1,0,0,0,18,2,3,0],
+"net__layout__point_8h.html#acc2ff595306dab2c33e934d7e24edac3":[13,0,1,0,0,0,18,2,3,3],
+"net__layout__point_8h_source.html":[13,0,1,0,0,0,18,2,3],
 "netlist_2boolean__function_8cpp.html":[13,0,2,0,6],
 "netlist_2boolean__function_8cpp.html#a269baf7c77d18645a4d0a9f759725f8f":[13,0,2,0,6,1],
 "netlist_2boolean__function_8cpp.html#a90756e09e3a11b7dd4e7362ae3101ce9":[13,0,2,0,6,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX19 =
 "plugin__manager_8h.html#af13862a2a5565fb995d7cc93c0bfd980":[13,0,0,0,2,4,8],
 "plugin__manager_8h_source.html":[13,0,0,0,2,4],
 "plugin__relay_8cpp.html":[13,0,1,0,2,33,0],
-"plugin__relay_8cpp_source.html":[13,0,1,0,2,33,0],
-"plugin__relay_8h.html":[13,0,1,0,0,0,35,0],
-"plugin__relay_8h_source.html":[13,0,1,0,0,0,35,0],
-"plugin__system_2plugin__manager_8cpp.html":[13,0,2,1,1]
+"plugin__relay_8cpp_source.html":[13,0,1,0,2,33,0]
 };

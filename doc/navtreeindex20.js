@@ -1,5 +1,8 @@
 var NAVTREEINDEX20 =
 {
+"plugin__relay_8h.html":[13,0,1,0,0,0,35,0],
+"plugin__relay_8h_source.html":[13,0,1,0,0,0,35,0],
+"plugin__system_2plugin__manager_8cpp.html":[13,0,2,1,1],
 "plugin__system_2plugin__manager_8cpp.html#a01b664fe781926cb67034f778e5242b1":[13,0,2,1,1,0],
 "plugin__system_2plugin__manager_8cpp.html#a09fe50a3d6651ef3eebbfcfb2f36cea8":[13,0,2,1,1,1],
 "plugin__system_2plugin__manager_8cpp.html#a54caf767ba2c2f754875e9aad4849767":[13,0,2,1,1,10],
@@ -246,8 +249,5 @@ var NAVTREEINDEX20 =
 "separated__graphics__net_8h.html":[13,0,1,0,0,0,18,1,0,4],
 "separated__graphics__net_8h_source.html":[13,0,1,0,0,0,18,1,0,4],
 "settings__display_8cpp.html":[13,0,1,0,2,38,4],
-"settings__display_8cpp_source.html":[13,0,1,0,2,38,4],
-"settings__display_8h.html":[13,0,1,0,0,0,40,5],
-"settings__display_8h_source.html":[13,0,1,0,0,0,40,5],
-"settings__item_8h.html":[13,0,1,0,0,0,40,0,0]
+"settings__display_8cpp_source.html":[13,0,1,0,2,38,4]
 };

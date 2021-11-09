@@ -12,6 +12,7 @@ var classhal_1_1_gate =
     [ "get_fan_out_net", "classhal_1_1_gate.html#aaeecea9fb6d0532d9ed3c7ba64c538b7", null ],
     [ "get_fan_out_nets", "classhal_1_1_gate.html#af5288f4473c529fa29b5a347091ffc2f", null ],
     [ "get_grouping", "classhal_1_1_gate.html#a5b0652086f601967e3fac66118571117", null ],
+    [ "get_hash", "classhal_1_1_gate.html#a99c1b9a0cad7b9f5e04d48d636b36ee6", null ],
     [ "get_id", "classhal_1_1_gate.html#afc66cb905518bd5b03c1323caea00b81", null ],
     [ "get_input_pins", "classhal_1_1_gate.html#a0a6692d6ed8bff35f957d205fbaeeedb", null ],
     [ "get_location", "classhal_1_1_gate.html#a2713a08abda05435d4172b2dba549df5", null ],

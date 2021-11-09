@@ -139,101 +139,103 @@ $(document).ready(function(){initNavTree('net_8h_source.html',''); initResizable
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>&amp; other) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> get_id() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        ssize_t get_hash() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* get_netlist() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> get_id() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keyword">const</span> std::string&amp; get_name() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* get_netlist() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">void</span> set_name(<span class="keyword">const</span> std::string&amp; name);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keyword">const</span> std::string&amp; get_name() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <a class="code" href="classhal_1_1_grouping.html">Grouping</a>* get_grouping() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="comment">/*</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">         *      src specific functions</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment">         */</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* add_source(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordtype">bool</span> remove_source(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin);</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordtype">bool</span> remove_source(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep);</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordtype">bool</span> is_a_source(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <span class="keywordtype">bool</span> is_a_source(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> get_num_of_sources() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        std::vector&lt;Endpoint*&gt; get_sources(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        [[deprecated(<span class="stringliteral">&quot;Will be removed in a future version. Use get_sources() instead.&quot;</span>)]] <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_source() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        <span class="comment">/*</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="comment">         *      dst specific functions</span></div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="comment">         */</span></div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* add_destination(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin);</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordtype">bool</span> remove_destination(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin);</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keywordtype">bool</span> remove_destination(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep);</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keywordtype">bool</span> is_a_destination(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keywordtype">bool</span> is_a_destination(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> get_num_of_destinations() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        std::vector&lt;Endpoint*&gt; get_destinations(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="keywordtype">bool</span> is_unrouted() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordtype">void</span> set_name(<span class="keyword">const</span> std::string&amp; name);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <a class="code" href="classhal_1_1_grouping.html">Grouping</a>* get_grouping() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="comment">/*</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment">         *      src specific functions</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment">         */</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* add_source(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordtype">bool</span> remove_source(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin);</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="keywordtype">bool</span> remove_source(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep);</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keywordtype">bool</span> is_a_source(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordtype">bool</span> is_a_source(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> get_num_of_sources() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        std::vector&lt;Endpoint*&gt; get_sources(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        [[deprecated(<span class="stringliteral">&quot;Will be removed in a future version. Use get_sources() instead.&quot;</span>)]] <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_source() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="comment">/*</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment">         *      dst specific functions</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="comment">         */</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* add_destination(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordtype">bool</span> remove_destination(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin);</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="keywordtype">bool</span> remove_destination(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep);</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        <span class="keywordtype">bool</span> is_a_destination(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <span class="keywordtype">bool</span> is_a_destination(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> get_num_of_destinations() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        std::vector&lt;Endpoint*&gt; get_destinations(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160; </div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        <span class="keywordtype">bool</span> is_gnd_net() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        <span class="keywordtype">bool</span> is_unrouted() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160; </div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordtype">bool</span> is_vcc_net() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordtype">bool</span> is_gnd_net() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordtype">bool</span> mark_global_input_net();</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordtype">bool</span> is_vcc_net() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160; </div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        <span class="keywordtype">bool</span> mark_global_output_net();</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        <span class="keywordtype">bool</span> mark_global_input_net();</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        <span class="keywordtype">bool</span> unmark_global_input_net();</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        <span class="keywordtype">bool</span> mark_global_output_net();</div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keywordtype">bool</span> unmark_global_output_net();</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keywordtype">bool</span> unmark_global_input_net();</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        <span class="keywordtype">bool</span> is_global_input_net() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        <span class="keywordtype">bool</span> unmark_global_output_net();</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordtype">bool</span> is_global_output_net() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordtype">bool</span> is_global_input_net() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00312"></a><span class="lineno"><a class="line" href="classhal_1_1_net.html#a71851ef81c1a491be6395f4c883218de">  312</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>;</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_net.html">Net</a>(<a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>* internal_manager, <a class="code" href="classhal_1_1_event_handler.html">EventHandler</a>* event_handler, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> std::string&amp; name = <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160; </div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>(<a class="code" href="classhal_1_1_net.html">Net</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>&amp; operator=(<a class="code" href="classhal_1_1_net.html">Net</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>* m_internal_manager;</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keywordtype">bool</span> is_global_output_net() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160; </div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00319"></a><span class="lineno"><a class="line" href="classhal_1_1_net.html#a71851ef81c1a491be6395f4c883218de">  319</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>;</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_net.html">Net</a>(<a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>* internal_manager, <a class="code" href="classhal_1_1_event_handler.html">EventHandler</a>* event_handler, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> std::string&amp; name = <span class="stringliteral">&quot;&quot;</span>);</div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="comment">/* stores the id of the net */</span></div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> m_id;</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160; </div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="comment">/* stores the name of the net */</span></div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        std::string m_name;</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="comment">/* grouping */</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <a class="code" href="classhal_1_1_grouping.html">Grouping</a>* m_grouping = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <span class="comment">/* stores the dst gate and pin id of the dst gate */</span></div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        std::vector&lt;std::unique_ptr&lt;Endpoint&gt;&gt; m_destinations;</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        std::vector&lt;std::unique_ptr&lt;Endpoint&gt;&gt; m_sources;</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        std::vector&lt;Endpoint*&gt; m_destinations_raw;</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        std::vector&lt;Endpoint*&gt; m_sources_raw;</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160; </div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        <a class="code" href="classhal_1_1_event_handler.html">EventHandler</a>* m_event_handler;</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    };</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>(<a class="code" href="classhal_1_1_net.html">Net</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>&amp; operator=(<a class="code" href="classhal_1_1_net.html">Net</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160; </div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>* m_internal_manager;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="comment">/* stores the id of the net */</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> m_id;</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        <span class="comment">/* stores the name of the net */</span></div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        std::string m_name;</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <span class="comment">/* grouping */</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <a class="code" href="classhal_1_1_grouping.html">Grouping</a>* m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        <span class="comment">/* stores the dst gate and pin id of the dst gate */</span></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        std::vector&lt;std::unique_ptr&lt;Endpoint&gt;&gt; m_destinations;</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        std::vector&lt;std::unique_ptr&lt;Endpoint&gt;&gt; m_sources;</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        std::vector&lt;Endpoint*&gt; m_destinations_raw;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        std::vector&lt;Endpoint*&gt; m_sources_raw;</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        <a class="code" href="classhal_1_1_event_handler.html">EventHandler</a>* m_event_handler;</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    };</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aevent__handler_8h_html"><div class="ttname"><a href="event__handler_8h.html">event_handler.h</a></div></div>
@@ -255,7 +257,7 @@ $(document).ready(function(){initNavTree('net_8h_source.html',''); initResizable
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="net_8h.html">net.h</a></li>
-    <li class="footer">Generated on Wed Nov 3 2021 12:27:03 for HAL by
+    <li class="footer">Generated on Tue Nov 9 2021 16:08:07 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
