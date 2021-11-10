@@ -25,9 +25,9 @@ namespace hal
         addTab("General", framesGeneralTab);
 
         //ports tab
-        mPinsTree = new ModulePortsTree(this);
+        mPinsTree = new ModulePinsTree(this);
         mPinsFrame = new DetailsFrameWidget(mPinsTree, "Pins", this);
-        connect(mPinsTree, &ModulePortsTree::updateText, mPinsFrame, &DetailsFrameWidget::setText);
+        connect(mPinsTree, &ModulePinsTree::updateText, mPinsFrame, &DetailsFrameWidget::setText);
 
         QList<DetailsFrameWidget*> framesPortTab({mPinsFrame});
         addTab("Pins", framesPortTab);

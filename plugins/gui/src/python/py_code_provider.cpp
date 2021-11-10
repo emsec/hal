@@ -191,28 +191,38 @@ namespace hal
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
-    QString PyCodeProvider::pyCodeModulePortsOfGroup(u32 moduleId, QString groupName)
+    QString PyCodeProvider::pyCodeModulePinGroup(u32 moduleId, QString groupName)
     {
-        const QString suffix = QString("get_ports_of_group(\"%1\")").arg(groupName);
+        const QString suffix = QString("get_pin_group(\"%1\")").arg(groupName);
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
-    QString PyCodeProvider::pyCodeModulePortByName(u32 moduleId, QString portName)
+    QString PyCodeProvider::pyCodeModulePinGroupName(u32 moduleId, QString groupName)
     {
-        const QString suffix = QString("get_port_by_name(\"%1\")").arg(portName);
+        return pyCodeModulePinGroup(moduleId, groupName) + ".get_name()";
+    }
+
+    QString PyCodeProvider::pyCodeModulePinByName(u32 moduleId, QString pinName)
+    {
+        const QString suffix = QString("get_pin(\"%1\")").arg(pinName);
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }
 
-    QString PyCodeProvider::pyCodeModulePortDirection(u32 moduleId, QString portName)
+    QString PyCodeProvider::pyCodeModulePinName(u32 moduleId, QString pinName)
     {
-        return pyCodeModulePortByName(moduleId, portName) + ".get_direction()";
+        return pyCodeModulePinByName(moduleId, pinName) + ".get_name()";
     }
 
-    QString PyCodeProvider::pyCodeModulePortType(u32 moduleId, QString portName)
+    QString PyCodeProvider::pyCodeModulePinDirection(u32 moduleId, QString pinName)
     {
-        return pyCodeModulePortByName(moduleId, portName) + ".get_type()";
+        return pyCodeModulePinByName(moduleId, pinName) + ".get_direction()";
+    }
+
+    QString PyCodeProvider::pyCodeModulePinType(u32 moduleId, QString pinName)
+    {
+        return pyCodeModulePinByName(moduleId, pinName) + ".get_type()";
     }
 
     QString PyCodeProvider::pyCodeGrouping(u32 groupingId)

@@ -17,7 +17,7 @@
 
 namespace hal
 {
-    ModulePortsTree::ModulePortsTree(QWidget* parent) : SizeAdjustableTreeView(parent), mPortModel(new ModulePinsTreeModel(this)), mModuleID(-1)
+    ModulePinsTree::ModulePinsTree(QWidget* parent) : SizeAdjustableTreeView(parent), mPortModel(new ModulePinsTreeModel(this)), mModuleID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -27,11 +27,11 @@ namespace hal
         setModel(mPortModel);
 
         //connections
-        //connect(this, &QTreeView::customContextMenuRequested, this, &ModulePortsTree::handleContextMenuRequested);
-        connect(mPortModel, &ModulePinsTreeModel::numberOfPortsChanged, this, &ModulePortsTree::handleNumberOfPortsChanged);
+        connect(this, &QTreeView::customContextMenuRequested, this, &ModulePinsTree::handleContextMenuRequested);
+        connect(mPortModel, &ModulePinsTreeModel::numberOfPortsChanged, this, &ModulePinsTree::handleNumberOfPortsChanged);
     }
 
-    void ModulePortsTree::setModule(u32 moduleID)
+    void ModulePinsTree::setModule(u32 moduleID)
     {
         Module* m = gNetlist->get_module_by_id(moduleID);
         if (!m)
@@ -42,7 +42,7 @@ namespace hal
         adjustSizeToContents();
     }
 
-    void ModulePortsTree::setModule(Module* m)
+    void ModulePinsTree::setModule(Module* m)
     {
         if (!m)
             return;
@@ -50,23 +50,24 @@ namespace hal
         setModule(m->get_id());
     }
 
-    void ModulePortsTree::removeContent()
+    void ModulePinsTree::removeContent()
     {
         mPortModel->clear();
         mModuleID = -1;
     }
 
-    int ModulePortsTree::getRepresentedModuleId()
+    int ModulePinsTree::getRepresentedModuleId()
     {
         return mModuleID;
     }
 
-    void ModulePortsTree::handleContextMenuRequested(const QPoint& pos)
+    void ModulePinsTree::handleContextMenuRequested(const QPoint& pos)
     {
         QModelIndex clickedIndex = indexAt(pos);
         if (!clickedIndex.isValid())
             return;
 
+        //all relevant information
         TreeItem* clickedItem        = mPortModel->getItemFromIndex(clickedIndex);
         ModulePinsTreeModel::itemType type = mPortModel->getTypeOfItem(clickedItem);
         Net* n                       = mPortModel->getNetFromItem(clickedItem);
@@ -74,61 +75,59 @@ namespace hal
         u32 modId                    = mPortModel->getRepresentedModuleId();
         QMenu menu;
 
-        //For now, if the item is a grouping item, only list of ports and namechange options
-        if (type == ModulePinsTreeModel::itemType::portMultiBit)
-        {
-            menu.addAction(QIcon(":/icons/python"), "Extract ports as python list", [modId, name]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePortsOfGroup(modId, name)); });
+        //PLAINTEXT: NAME, DIRECTION, TYPE (shared with pins and groups
+        menu.addAction("Extract name as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString()); });
+        menu.addAction("Extract direction as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sDirectionColumn).toString()); });
+        menu.addAction("Extract type as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sTypeColumn).toString()); });
 
+        if(type == ModulePinsTreeModel::itemType::portMultiBit)//group specific context
+        {
+            menu.addSection("Misc");
+            menu.addAction("Change group name", [name, modId](){
+                InputDialog ipd("Change group name", "New group name", name);
+                if(ipd.exec() == QDialog::Accepted)
+                {
+                    auto group = gNetlist->get_module_by_id(modId)->get_pin_group(name.toStdString());
+                    gNetlist->get_module_by_id(modId)->set_pin_group_name(group, ipd.textValue().toStdString());
+                }
+            });
+            menu.addSection("Python");
+            menu.addAction(QIcon(":/icons/python"), "Extract pin group", [name, modId](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroup(modId, name));});
+            menu.addAction(QIcon(":/icons/python"), "Extract pin group name", [name, modId](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroupName(modId, name));});
             menu.move(mapToGlobal(pos));
             menu.exec();
             return;
         }
 
-        //PLAINTEXT: NAME, DIRECTION, TYPE (for now, only port)
-        menu.addAction("Extract name as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString()); });
-
-        menu.addAction("Extract direction as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sDirectionColumn).toString()); });
-
-        menu.addAction("Extract type as plain text", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sTypeColumn).toString()); });
-
-        //Misc section: port renaming, selection change
-        if (n)
+        menu.addSection("Misc");
+        if(n)//should never be nullptr, but you never know
         {
-            bool isInputPort   = clickedItem->getData(ModulePinsTreeModel::sDirectionColumn).toString().toStdString() == enum_to_string(PinDirection::input);
-            QString renameText = isInputPort ? "Change input port name" : "Change output port name";
-
-            menu.addSection("Misc");
-            menu.addAction(renameText, [this, isInputPort, n, clickedItem]() {
-                InputDialog ipd("Change port name", "New port name", clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString());
-                if (ipd.exec() == QDialog::Accepted)
+            menu.addAction("Rename pin", [modId, name](){
+                InputDialog ipd("Change pin name", "New pin name", name);
+                if(ipd.exec() == QDialog::Accepted)
                 {
-                    ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
-                    act->setObject(UserActionObject(mModuleID, UserActionObjectType::Pin));
-                    isInputPort ? act->setInputNetId(n->get_id()) : act->setOutputNetId(n->get_id());
-                    act->exec();
-                    setModule(mModuleID);
+                    auto pin = gNetlist->get_module_by_id(modId)->get_pin(name.toStdString());
+                    gNetlist->get_module_by_id(modId)->set_pin_name(pin, ipd.textValue().toStdString());
                 }
             });
-
-            menu.addAction("Add net to current selection", [this, n]() {
+            menu.addAction("Add net to current selection", [this, n](){
                 gSelectionRelay->addNet(n->get_id());
                 gSelectionRelay->relaySelectionChanged(this);
             });
+
         }
 
-        //PYTHON: port, direction, type
         menu.addSection("Python");
-        menu.addAction(QIcon(":/icons/python"), "Extract port as python code", [modId, name]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePortByName(modId, name)); });
-
-        menu.addAction(QIcon(":/icons/python"), "Extract direction as python code", [modId, name]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePortDirection(modId, name)); });
-
-        menu.addAction(QIcon(":/icons/python"), "Extract type as python code", [modId, name]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePortType(modId, name)); });
+        menu.addAction(QIcon(":/icons/python"), "Extract pin object", [modId, name](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinByName(modId, name));});
+        menu.addAction(QIcon(":/icons/python"), "Extract pin name", [modId, name](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinName(modId, name));});
+        menu.addAction(QIcon(":/icons/python"), "Extract pin direction", [modId, name](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinDirection(modId, name));});
+        menu.addAction(QIcon(":/icons/python"), "Extract pin type", [modId, name](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinType(modId, name));});
 
         menu.move(mapToGlobal(pos));
         menu.exec();
     }
 
-    void ModulePortsTree::handleNumberOfPortsChanged(int newNumberPorts)
+    void ModulePinsTree::handleNumberOfPortsChanged(int newNumberPorts)
     {
         adjustSizeToContents();
         Q_EMIT updateText(QString("Pins (%1)").arg(newNumberPorts));

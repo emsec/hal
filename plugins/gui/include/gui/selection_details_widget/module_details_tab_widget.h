@@ -32,7 +32,7 @@ namespace hal
     class Module;
     class DetailsFrameWidget;
     class ModuleInfoTable;
-    class ModulePortsTree;
+    class ModulePinsTree;
     class ModuleElementsTree;
     class DataTableWidget;
     class GroupingsOfItemWidget;
@@ -73,7 +73,7 @@ namespace hal
         DetailsFrameWidget* mGroupingsFrame;
 
         //ports tab
-        ModulePortsTree* mPinsTree;
+        ModulePinsTree* mPinsTree;
         DetailsFrameWidget* mPinsFrame;
 
         //elements tab

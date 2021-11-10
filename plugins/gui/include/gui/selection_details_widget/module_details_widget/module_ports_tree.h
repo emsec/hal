@@ -34,7 +34,7 @@ namespace hal
     /**
      * @brief A widget to display the ports of a given module.
      */
-    class ModulePortsTree : public SizeAdjustableTreeView
+    class ModulePinsTree : public SizeAdjustableTreeView
     {
         Q_OBJECT
     public:
@@ -43,7 +43,7 @@ namespace hal
          *
          * @param parent - The widget's parent.
          */
-        ModulePortsTree(QWidget* parent = nullptr);
+        ModulePinsTree(QWidget* parent = nullptr);
 
         /**
          * Sets the module and updates its model to display the ports.
