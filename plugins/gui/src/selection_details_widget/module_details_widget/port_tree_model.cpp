@@ -117,9 +117,6 @@ namespace hal
     void ModulePinsTreeModel::handleModulePortsChanged(Module *m)
     {
         if ((int)m->get_id() == mModuleId)
-        {
             setModule(m);
-            Q_EMIT numberOfPortsChanged(m->get_pin_groups().size());
-        }
     }
 }    // namespace hal
