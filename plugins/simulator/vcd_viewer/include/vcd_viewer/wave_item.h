@@ -9,20 +9,20 @@ namespace hal {
 
     class WaveItem : public QGraphicsItem
     {
+        int mWaveIndex;
         const WaveData* mData;
         QVector<QLine> mSolidLines;
         QVector<QLineF> mDotLines;
 
-        int mYoffset;
         float mMaxTime;
         bool mInactive;
 
         void construct();
     public:
-        WaveItem(const WaveData* dat, int off);
+        WaveItem(int iwave, const WaveData* dat);
 
+        int waveIndex() const { return mWaveIndex; }
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-        void setYoffset(int val);
         void setWavedata(const WaveData* dat);
         const WaveData* wavedata() const { return mData; }
         QRectF boundingRect() const override;

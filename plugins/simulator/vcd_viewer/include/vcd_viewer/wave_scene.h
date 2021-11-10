@@ -1,58 +1,53 @@
 #pragma once
 
 #include <QGraphicsScene>
-#include <QList>
+#include <QHash>
 #include <QTimer>
-
 #include "hal_core/defines.h"
 
-class QGraphicsRectItem;
-
 namespace hal {
-
-    class WaveData;
     class WaveItem;
+    class WaveDataList;
+    class VolatileWaveData;
     class WaveCursor;
-    class WaveTimescale;
-    class WaveIndex;
 
     class WaveScene : public QGraphicsScene
     {
         Q_OBJECT
 
-        const WaveIndex* mWaveIndex;
-        QList<WaveItem*> mWaveItems;
-        WaveTimescale* mTimescale;
+        WaveDataList* mWaveDataList;
+        VolatileWaveData* mVolatileWaveData;
+
+        QHash<int,WaveItem*> mWaveItems;
+        QHash<int,WaveItem*> mVolatileItems;
+        QHash<int,int>   mWavePositions;
+        int mMaxPosition;
         WaveCursor* mCursor;
         QTimer* mClearTimer;
-        QGraphicsRectItem* mDebugSceneRect;
 
+        static float yPosition(int irow);
+        void addWaveInternal(int iwave, int ypos);
         float adjustSceneRect(u64 tmax = 0);
 
         static const int sMinItemHeight;
+
     Q_SIGNALS:
         void cursorMoved(float xpos);
 
     public Q_SLOTS:
         void xScaleChanged(float m11);
-        void handleWaveAppended(WaveData* wd);
-        void handleWaveDataChanged(int inx);
-        void handleWaveRemoved(int inx);
-        void handleMaxTimeChanged(u64 tmax);
+        void handleWaveAdded(int iwave);
+        void setWavePositions(const QHash<int,int>& wpos);
+        void handleVolatileRepaint();
+        void handleIndexRemoved(int iwave, bool isVolatile);
+//        void handleIndexInserted(int iwave, bool isVolatile);
 
     public:
-        WaveScene(const WaveIndex* winx, QObject* parent = nullptr);
-        ~WaveScene();
+        WaveScene(WaveDataList* wdlist, VolatileWaveData* wdVol, QObject* parent = nullptr);
         void emitCursorMoved(float xpos);
-        float cursorPos() const;
-        void setCursorPos(float xp, bool relative);
-
-        float yPosition(int dataIndex) const;
-        void moveToIndex(int indexFrom, int indexTo);
-        void deleteWave(int dataIndex);
-        void generateDataSample();
+        void setCursorPosition(const QPointF& pos);
+        float cursorXpostion() const;
 
         static const float sMinSceneWidth;
     };
-
 }

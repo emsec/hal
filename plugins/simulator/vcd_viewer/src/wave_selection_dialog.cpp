@@ -1,5 +1,4 @@
 #include "vcd_viewer/wave_selection_dialog.h"
-#include "vcd_viewer/wave_label.h"
 #include <QTableView>
 #include <QGridLayout>
 #include <QDialogButtonBox>

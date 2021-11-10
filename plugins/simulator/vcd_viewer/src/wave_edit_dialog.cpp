@@ -1,5 +1,4 @@
 #include "vcd_viewer/wave_edit_dialog.h"
-#include "vcd_viewer/wave_label.h"
 #include <QTableView>
 #include <QGridLayout>
 #include <QDialogButtonBox>
@@ -17,7 +16,8 @@ namespace hal {
         QGridLayout* layout = new QGridLayout(this);
         QTableView* tv = new QTableView(this);
         mWaveModel = new WaveEditTable(wd,tv);
-        tv->setItemDelegateForColumn(2, new WaveDeleteDelegate(mWaveModel));
+        if (wd.bits() <= 1)
+            tv->setItemDelegateForColumn(2, new WaveDeleteDelegate(mWaveModel));
         tv->setModel(mWaveModel);
         QHeaderView* hv = tv->horizontalHeader();
         hv->setSectionResizeMode(0,QHeaderView::Stretch);
@@ -40,6 +40,8 @@ namespace hal {
 
     //-------------------------------------------
 
+    QPixmap* WaveDeleteDelegate::sXdelete = nullptr;
+
     QWidget* WaveDeleteDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const
     {
@@ -53,7 +55,7 @@ namespace hal {
                const QModelIndex &index) const
     {
         if (!index.row() || index.row() >= mTable->rowCount()-1) return;
-        QPixmap* pix = WaveLabel::piXdelete();
+        QPixmap* pix = piXdelete();
         QRect rPlace(option.rect.x(),option.rect.y(),option.rect.height()/2,option.rect.height()/2);
         painter->drawPixmap(rPlace ,QPixmap(*pix));
     }
@@ -63,13 +65,19 @@ namespace hal {
     {
         Q_UNUSED(option);
         Q_UNUSED(index);
-        return WaveLabel::piXdelete()->size();
+        return piXdelete()->size();
     }
 
     void WaveDeleteDelegate::deleteClicked()
     {
         QPushButton* but = static_cast<QPushButton*>(sender());
         if (!but) return;
+    }
+
+    QPixmap* WaveDeleteDelegate::piXdelete()
+    {
+        if (!sXdelete) sXdelete = new QPixmap(":/icons/x_delete", "PNG");
+        return sXdelete;
     }
 
     //-------------------------------------------
@@ -106,7 +114,7 @@ namespace hal {
             switch (index.column())
             {
             case 0: return QVariant::fromValue(it.key());
-            case 1: return QChar(mWaveData.charValue(it));
+            case 1: return mWaveData.strValue(it);
             case 2: return QString();
             default: return QVariant();
             }
@@ -150,10 +158,9 @@ namespace hal {
 
     Qt::ItemFlags WaveEditTable::flags(const QModelIndex &index) const
     {
-        if (index.column()==2)
-           return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
-        if (index.row() && index.column())
-            return Qt::NoItemFlags;
+        if (mWaveData.bits() > 1) return Qt::NoItemFlags;
+        if (index.column()==1) return Qt::NoItemFlags;
+        if (index.column()==2 && (!index.row() || index.row() >= rowCount() - 1)) return Qt::NoItemFlags;
         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
     }
 

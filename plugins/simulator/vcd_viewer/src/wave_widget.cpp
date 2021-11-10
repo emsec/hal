@@ -1,7 +1,10 @@
 #include "vcd_viewer/wave_widget.h"
-#include "vcd_viewer/wave_view.h"
+#include "vcd_viewer/wave_tree_view.h"
+#include "vcd_viewer/wave_tree_model.h"
+#include "vcd_viewer/wave_graphics_view.h"
 #include "vcd_viewer/wave_scene.h"
-#include "vcd_viewer/wave_label.h"
+#include "vcd_viewer/wave_item.h"
+#include "vcd_viewer/volatile_wave_data.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "vcd_viewer/wave_edit_dialog.h"
 #include "vcd_viewer/wave_selection_dialog.h"
@@ -11,6 +14,7 @@
 #include <QWheelEvent>
 #include <QScrollBar>
 #include <QResizeEvent>
+#include <QHeaderView>
 #include <QDebug>
 
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
@@ -27,24 +31,43 @@ namespace hal {
 
     WaveWidget::WaveWidget(NetlistSimulatorController *ctrl, QWidget *parent)
         : QSplitter(parent), mController(ctrl), mControllerOwner(nullptr),
-          mWaveIndex(ctrl->get_waves()), mVisualizeNetState(false)
+          mOngoingYscroll(false), mVisualizeNetState(false), mAutoAddWaves(true)
     {
-        mFrame = new QFrame(this);
-        mFrame->setLineWidth(3);
-        mFrame->setFrameStyle(QFrame::Sunken);
-        mFrame->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-        addWidget(mFrame);
-        mWaveView = new WaveView(this);
-        mWaveView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        mWaveScene = new WaveScene(&mWaveIndex, mWaveView);
+        mWaveDataList = new WaveDataList(this);
+        mVolatileWaveData = new VolatileWaveData(this);
+        mTreeView     = new WaveTreeView(mWaveDataList, mVolatileWaveData, this);
+        mTreeModel    = new WaveTreeModel(mWaveDataList, mVolatileWaveData, this);
+        mTreeView->setModel(mTreeModel);
+        mTreeView->expandAll();
+        mTreeView->setColumnWidth(0,220);
+        mTreeView->setColumnWidth(1,40);
+        mTreeView->setColumnWidth(2,40);
+        mTreeView->header()->setStretchLastSection(true);
+        addWidget(mTreeView);
 
-        connect(mWaveView,&WaveView::changedXscale,mWaveScene,&WaveScene::xScaleChanged);
-        mWaveView->setScene(mWaveScene);
+        mGraphicsView = new WaveGraphicsView(this);
+        mScene = new WaveScene(mWaveDataList, mVolatileWaveData, this);
+        mGraphicsView->setScene(mScene);
+        mGraphicsView->setDefaultTransform();
+        addWidget(mGraphicsView);
 
-        connect(mWaveScene,&WaveScene::cursorMoved,this,&WaveWidget::handleCursorMoved);
-        connect(mWaveView,&WaveView::relativeYScroll,this,&WaveWidget::handleYScroll);
+        connect(mTreeModel,&WaveTreeModel::inserted,mTreeView,&WaveTreeView::handleInserted);
+        connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
+        connect(mWaveDataList,&WaveDataList::waveAdded,mScene,&WaveScene::handleWaveAdded);
+        connect(mTreeView,&WaveTreeView::viewportHeightChanged,mGraphicsView,&WaveGraphicsView::handleViewportHeightChanged);
+        connect(mTreeView,&WaveTreeView::sizeChanged,mGraphicsView,&WaveGraphicsView::handleSizeChanged);
+        connect(mTreeModel,&WaveTreeModel::dropped,mTreeView,&WaveTreeView::reorder);
+        connect(mTreeModel,&WaveTreeModel::indexRemoved,mScene,&WaveScene::handleIndexRemoved);
+//        connect(mTreeModel,&WaveTreeModel::indexInserted,mScene,&WaveScene::handleIndexInserted);
+        connect(mTreeView,&WaveTreeView::reordered,mScene,&WaveScene::setWavePositions);
+        connect(mVolatileWaveData,&VolatileWaveData::triggerRepaint,mScene,&WaveScene::handleVolatileRepaint);
+        connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);
+        connect(mScene,&WaveScene::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
+
+
         connect(gContentManager->getSelectionDetailsWidget(),&SelectionDetailsWidget::triggerHighlight,this,&WaveWidget::handleSelectionHighlight);
 
+        /*
         connect(&mWaveIndex,&WaveIndex::waveAppended,this,&WaveWidget::handleWaveAppended);
         connect(&mWaveIndex,&WaveIndex::waveRemoved,this,&WaveWidget::handleWaveRemoved);
         connect(&mWaveIndex,&WaveIndex::waveDataChanged,this,&WaveWidget::handleWaveDataChanged);
@@ -56,18 +79,18 @@ namespace hal {
 
         connect(&mWaveIndex,&WaveIndex::waveRemoved,mWaveView,&WaveView::handleWaveRemoved);
         connect(mWaveIndex.waveDataList(),&WaveDataList::maxTimeChanged,mWaveView,&WaveView::handleMaxTimeChanged);
-
+*/
         connect(mController, &NetlistSimulatorController::stateChanged, this, &WaveWidget::handleStateChanged);
     }
 
     WaveWidget::~WaveWidget()
     {
-        disconnect(mWaveScene,&WaveScene::cursorMoved,this,&WaveWidget::handleCursorMoved);
-        disconnect(mWaveView,&WaveView::relativeYScroll,this,&WaveWidget::handleYScroll);
+//        disconnect(mScene,&WaveScene::cursorMoved,this,&WaveWidget::handleCursorMoved);
     }
 
     void WaveWidget::refreshNetNames()
     {
+        /* TODO
         int n = mWaveIndex.waveDataList()->size();
         for (int i=0; i<n; i++)
         {
@@ -82,6 +105,7 @@ namespace hal {
             if (inx < 0) continue;
             handleWaveDataChanged(inx);
         }
+        */
     }
 
     u32 WaveWidget::controllerId() const
@@ -110,7 +134,12 @@ namespace hal {
 
     void WaveWidget::handleStateChanged(NetlistSimulatorController::SimulationState state)
     {
-        mWaveIndex.setAutoAddWaves(state < NetlistSimulatorController::SimulationRun);
+        if (mAutoAddWaves && state >= NetlistSimulatorController::SimulationRun)
+        {
+            disconnect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
+            mAutoAddWaves = false;
+        }
+
         Q_EMIT stateChanged(state);
     }
 
@@ -121,12 +150,7 @@ namespace hal {
             if (sti->itemType() == SelectionTreeItem::NetItem)
                 hlIds.insert(sti->id());
 
-        int inx = 0;
-        for (auto it = mValues.begin(); it != mValues.end(); ++it)
-        {
-            (*it)->setHighlight(hlIds.contains(mWaveIndex.waveData(inx)->id()));
-            ++inx;
-        }
+        mTreeView->setWaveSelection(hlIds);
     }
 
     void WaveWidget::createEngine(const QString &engineFactoryName)
@@ -148,11 +172,11 @@ namespace hal {
                 if (!grp)
                 {
                     grp = gNetlist->create_grouping(grpNames[i]);
-                    gtm->recolorGrouping(grp->get_id(),QColor(WaveLabel::sStateColor[i]));
+                    gtm->recolorGrouping(grp->get_id(),QColor(WaveTreeModel::sStateColor[i]));
                 }
                 mGroupIds[i] = grp->get_id();
             }
-            visualizeCurrentNetState(mWaveScene->cursorPos());
+            visualizeCurrentNetState(mScene->cursorXpostion());
         }
         else
         {
@@ -168,25 +192,20 @@ namespace hal {
     void WaveWidget::addResults()
     {
         if (mController->get_state() != NetlistSimulatorController::ShowResults) return;
-        QSet<int> alreadyShown = mWaveIndex.waveDataIndexSet();
-        int n = mWaveIndex.waveDataList()->size();
+        QSet<int> alreadyShown = mTreeModel->waveDataIndexSet();
+        int n = mWaveDataList->size();
         QMap<const WaveData*,int> wdMap;
         for (int i=0; i<n; i++)
         {
             if (alreadyShown.contains(i)) continue;
-            wdMap.insert(mWaveIndex.waveDataList()->at(i),i);
+            wdMap.insert(mWaveDataList->at(i),i);
         }
         WaveSelectionDialog wsd(wdMap,this);
         if (wsd.exec() != QDialog::Accepted) return;
         for (int i : wsd.selectedWaveIndices())
         {
-            mWaveIndex.addWave(i);
+            mTreeModel->handleWaveAdded(i);
         }
-    }
-
-    void WaveWidget::deleteWave(int dataIndex)
-    {
-        mWaveIndex.removeIndex(dataIndex);
     }
 
     void WaveWidget::setGates(const std::vector<Gate*>& gats)
@@ -199,30 +218,22 @@ namespace hal {
     void WaveWidget::handleWaveAppended(WaveData *wd)
     {
         Q_ASSERT(wd);
-        int inx = mValues.size();
-
-        WaveLabel* wl = new WaveLabel(inx,wd->name(),mFrame);
-        connect(wl,&WaveLabel::doubleClicked,this,&WaveWidget::editWaveData);
-        connect(wl,&WaveLabel::triggerDelete,this,&WaveWidget::deleteWave);
-        connect(wl,&WaveLabel::triggerSwap,this,&WaveWidget::handleLabelSwap);
-        connect(wl,&WaveLabel::triggerMove,this,&WaveWidget::handleLabelMove);
-        wl->setFixedWidth(250);
-        wl->show();
-        mValues.append(wl);
-        updateLabel(inx,mWaveScene->cursorPos());
-        resizeEvent(nullptr);
+        //TODO
     }
 
     void WaveWidget::handleWaveDataChanged(int inx)
     {
+        /* TODO name change ?
         int i0 = inx < 0 ? 0 : inx;
         int i1 = inx < 0 ? mValues.size() : inx + 1;
         for (int i=i0; i<i1; i++)
             mValues.at(i)->setText(mWaveIndex.waveData(i)->name());
+            */
     }
 
     void WaveWidget::handleWaveRemoved(int inx)
     {
+        /* TODO
         if (inx < 0)
         {
             for (WaveLabel* wl : mValues)
@@ -242,30 +253,29 @@ namespace hal {
                 wl->update();
             }
         }
+        */
     }
 
     void WaveWidget::resizeEvent(QResizeEvent *event)
     {
-        int w = event ? event->size().width() : width();
-        int maxw = w / 2;
-        int minw = 10;
-        int n = mValues.size();
-        for (int i=0; i<n; i++)
-            if (mValues.at(i)->width()>minw)
-                minw = mValues.at(i)->width();
-        minw += 6;
-        if (minw > maxw) minw = maxw;
-        setSizes(QList<int>() << minw << w - minw );
+        QSplitter::resizeEvent(event);
+        int w = event->size().width() - 300;
+        int h = event->size().height();
+        if (w < 100) return;
+        setSizes({300,w});
+        mGraphicsView->setCursorPos(QPoint(w/3,3*h/4));
     }
 
     void WaveWidget::editWaveData(int dataIndex)
     {
+        /* TODO
         const WaveData* editorInput = mWaveIndex.waveData(dataIndex);
         if (!editorInput) return;
         WaveData wd(*editorInput);
         WaveEditDialog wed(wd,this);
         if (wed.exec() != QDialog::Accepted) return;
         mWaveIndex.setWaveData(dataIndex,wed.dataFactory());
+        */
     }
 
     void WaveWidget::handleEngineFinished(bool success)
@@ -305,79 +315,16 @@ namespace hal {
         }
     }
 
-    void WaveWidget::updateLabel(int dataIndex, float xpos)
+    void WaveWidget::scrollToYpos(int ypos)
     {
-        WaveLabel* wl = mValues.at(dataIndex);
-        if (wl->state()>=2) return;
-        QPoint pos = mWaveView->mapFromScene(QPointF(xpos,mWaveScene->yPosition(dataIndex)-1));
-        pos.setX(3);
-        wl->setValue(mWaveIndex.waveData(dataIndex)->intValue(xpos));
-        wl->move(pos);
+        if (mOngoingYscroll) return;
+        mOngoingYscroll = true;
+        if (mTreeView->verticalScrollBar()->value() != ypos)
+            mTreeView->verticalScrollBar()->setValue(ypos);
+        if (mGraphicsView->verticalScrollBar()->value() != ypos)
+            mGraphicsView->verticalScrollBar()->setValue(ypos);
+        mOngoingYscroll = false;
     }
 
-    void WaveWidget::handleYScroll(int dy)
-    {
-        for (WaveLabel* wl : mValues)
-            wl->move(3,wl->pos().y() + dy);
-    }
-
-    void WaveWidget::handleCursorMoved(float xpos)
-    {
-        mWaveView->handleCursorMoved(xpos);
-
-        for (int i=0; i<mWaveIndex.numberWavesShown(); i++)
-            updateLabel(i,xpos);
-
-        if (mVisualizeNetState) visualizeCurrentNetState(xpos);
-    }
-
-    void WaveWidget::handleLabelMove(int isource, int ypos)
-    {
-        int itarget = targetIndex(ypos);
-        int n = mValues.size();
-        for (int i=0; i<n; i++)
-        {
-            if (i == isource) continue;
-            WaveLabel* wl = mValues.at(i);
-            wl->setState(i == itarget ? 2 : 0);
-            wl->update();
-        }
-        update();
-    }
-
-    int WaveWidget::targetIndex(int ypos)
-    {
-        int n = mValues.size() -1;
-        if (n <= 0) return -1;
-        int labh = mValues.at(0)->height();
-        int y0 = + mValues.at(0)->pos().y();
-        int yn = + mValues.at(n)->pos().y();
-
-        int retval = (int) floor ( (1.5 + labh + ypos - y0) * n / (yn - y0));
-        if (retval > n) return -1;
-        return retval;
-    }
-
-    void WaveWidget::handleLabelSwap(int isource, int ypos)
-    {
-        int n = mValues.size();
-        for (int i=0; i<n; i++)
-            mValues.at(i)->setState(0);
-
-        int itarget = targetIndex(ypos);
-        if (itarget >= 0 && itarget != isource)
-        {
-            mWaveIndex.move(isource,itarget);
-            int i0 = isource < itarget ? isource : itarget;
-            int i1 = isource < itarget ? itarget : isource;
-            for (int i=i0; i<i1; i++)
-            {
-                WaveLabel* wl = mValues.at(i);
-                wl->setText(mWaveIndex.waveData(i)->name());
-                wl->update();
-            }
-        }
-        update();
-    }
 
 }

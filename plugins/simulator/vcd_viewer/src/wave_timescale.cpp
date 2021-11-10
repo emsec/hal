@@ -1,88 +1,62 @@
 #include "vcd_viewer/wave_timescale.h"
-#include <math.h>
 #include <QPainter>
+#include <math.h>
 #include <QDebug>
-#include <QWidget>
+#include <QPaintEvent>
 
 namespace hal {
 
-    WaveTimescale::WaveTimescale(int max)
-        : mMinorTicDistance(10), mMaxTime(max), mXmag(1)
-    {;}
-
-    void WaveTimescale::xScaleChanged(float mag)
+    WaveTimescale::WaveTimescale(QWidget *parent)
+        : QWidget(parent), mXmag(1), mWidth(100), mXscrollValue(0)
     {
-        mXmag = mag;
-        int n = floor(log10(100./mXmag));
-        mMinorTicDistance = 1;
-        for (int i=0; i<n; i++)
-            mMinorTicDistance *= 10;
+        setFixedHeight(28);
+        setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     }
 
-    void WaveTimescale::setMaxTime(float tmax)
+    void WaveTimescale::paintEvent(QPaintEvent *event)
     {
-        if (tmax == mMaxTime) return;
-        mMaxTime = tmax;
-        update();
-    }
+        Q_UNUSED(event);
+//        qDebug() << "repaint" << event->rect();
+        QPainter painter(this);
+        painter.setBrush(QColor::fromRgb(0xE0,0xE0,0xE0));
+        painter.drawRect(rect());
 
-    void WaveTimescale::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget* widget)
-    {
-        Q_UNUSED(option);
-        Q_UNUSED(widget);
-        int count = 0;
-        QPen pen = painter->pen();
-        for (int x=0; x<mMaxTime; x+=mMinorTicDistance)
-            if (count++ % 10 == 0)
+        if (mXmag <= 0) return;
+        int ilog = ceil(log(10/mXmag) / log(10));
+        double minorTick = pow(10,ilog);
+        float x;
+        for(int i = 0; (x = i*minorTick*mXmag-mXscrollValue) <= width(); i++)
+        {
+            if (x<0) continue;
+            if (x > width()) break;
+            if (i%5)
             {
-                /*
-                if (mXmag > 0)
-                {
-                    pen.setColor(Qt::gray);
-                    pen.setWidth(5./mXmag);
-                    pen.setCosmetic(false);
-                }
-                else
-                {
-                    */
-                pen.setColor(QColor("#c0c0c0")); // TODO : style
-                pen.setWidth(0);
-                pen.setCosmetic(true);
-                // }
-                painter->setPen(pen);
-                painter->drawLine(x,0,x,2);
+                painter.setPen(QPen(QColor::fromRgb(0xA0,0xA0,0xA0),0));
+                painter.drawLine(QLineF(x,0,x,10));
             }
             else
             {
-                pen.setColor(QColor("#a0a0a0")); // TODO : style
-                pen.setWidth(0);
-                pen.setCosmetic(true);
-                painter->setPen(pen);
-                painter->drawLine(x,0,x,1);
-            }
-        int labelDistance = 10;
-        int closerDistance[3] = {5, 2, 1};
-        for (int i=0; i<3; i++)
-            if ( closerDistance[i] * mXmag * mMinorTicDistance > 200 )
-                labelDistance = closerDistance[i];
-            else break;
+                painter.setPen(QPen(QColor::fromRgb(0x70,0x70,0x70),0));
+                painter.drawLine(QLineF(x,0,x,24));
 
-        for (int x=0; x<mMaxTime; x+= labelDistance*mMinorTicDistance)
-        {
-            pen.setColor(QColor("#c0c0c0")); // TODO : style
-            QFont font = painter->font();
-            font.setBold(true);
-            font.setPointSizeF(1.5);
-            painter->setFont(font);
-            QTransform trans = painter->transform();
-            painter->setTransform(QTransform(15./mXmag,0,0,1.,x,4.2),true);
-            painter->drawText(QPointF(0,0),QString::number(x));
-            painter->setTransform(trans);
+                if (i%10 == 0)
+                {
+                    int ilabel = floor(i*minorTick+0.5);
+                    painter.setPen(QPen(Qt::black,0));
+                    painter.drawText(x,24,QString::number(ilabel));
+                }
+            }
         }
     }
 
-    QRectF WaveTimescale::boundingRect() const
+    void WaveTimescale::setScale(float m11, float scWidth, int xScrollValue)
     {
-        return QRectF(0,0,mMaxTime,10);
+        mXmag = m11;
+        mWidth = floor(scWidth * m11 + 0.5);
+        mXscrollValue = xScrollValue;
+        setFixedWidth(mWidth);
+        move(0,0);
+        update();
     }
+
 }

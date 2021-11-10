@@ -1,20 +1,21 @@
 #pragma once
-
-#include <QGraphicsItem>
+#include <QWidget>
 
 namespace hal {
 
-    class WaveTimescale : public QGraphicsItem
+    class WaveTimescale : public QWidget
     {
-        int mMinorTicDistance;
-        int mMaxTime;
-        float mXmag;
-    public:
-        WaveTimescale(int max);
-        void xScaleChanged(float mag);
-        void setMaxTime(float tmax);
+        Q_OBJECT
 
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-        QRectF boundingRect() const override;
+        double mXmag;
+        int mWidth;
+        int mXscrollValue;
+
+    protected:
+        void paintEvent(QPaintEvent *event) override;
+
+    public:
+        WaveTimescale(QWidget *parent = nullptr);
+        void setScale(float m11, float scWidth, int xScrollValue);
     };
 }

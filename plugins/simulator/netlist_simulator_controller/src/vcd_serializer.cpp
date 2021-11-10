@@ -204,12 +204,19 @@ QMap<int,int>::const_iterator mIterator;
                     else if (mHead.captured(1) == "var")
                     {
                         QRegularExpressionMatch mWire = reWire.match(mHead.captured(2));
-                        QString wireName   = mWire.captured(3);
+                        bool ok;
+                        int     wireBits   = mWire.captured(1).toUInt(&ok);
                         QString wireAbbrev = mWire.captured(2);
+                        QString wireName   = mWire.captured(3);
+                        if (!ok) wireBits = 1;
                         mDictionary.insert(wireName,wireAbbrev);
                         QRegularExpressionMatch mWiid = reWiid.match(wireName);
                         if (!mWaves.contains(wireAbbrev))
-                            mWaves.insert(mWire.captured(2),new WaveData(mWiid.captured(1).toUInt(),wireName));
+                        {
+                            WaveData* wd = new WaveData(mWiid.captured(1).toUInt(),wireName);
+                            wd->setBits(wireBits);
+                            mWaves.insert(mWire.captured(2),wd);
+                        }
                     }
                 }
             }

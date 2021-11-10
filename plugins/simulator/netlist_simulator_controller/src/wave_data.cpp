@@ -48,9 +48,50 @@ namespace hal {
     WaveData::WaveData(const Net* n, NetType tp)
         : mId(n->get_id()),
           mName(QString::fromStdString(n->get_name())),
-          mNetType(tp)
+          mNetType(tp), mBits(1)
     {
        // qDebug() << "B:WaveData" << mId << mName << hex << (quintptr) this;
+    }
+
+    WaveData::WaveData(u32 id_, const QString& nam, const QList<WaveData*>& wdList, NetType tp)
+        : mId(id_),
+          mName(nam),
+          mNetType(tp), mBits(wdList.size())
+    {
+        if (mBits < 1 || mBits > 30) return;
+        QMultiMap<u64,int> tIndex;
+        u32 value = 0;
+        u32 undef = 0;
+        for (int ibit = 0; ibit < mBits; ibit++)
+        {
+            undef |= (1 << ibit);
+            WaveData* wd = wdList.at(ibit);
+            for (u64 t : wd->keys())
+                tIndex.insert(t,ibit);
+        }
+        u64 t0 = 0;
+        for (auto it = tIndex.constBegin(); it != tIndex.constEnd(); ++it)
+        {
+            if (it.key() != t0)
+            {
+                insert(t0, undef ? -1 : value);
+                t0 = it.key();
+            }
+            int ibit = it.value();
+            int v = wdList.at(ibit)->value(t0);
+            int mask = (1 << ibit);
+            if (v<0)
+                undef |= mask;
+            else
+            {
+                undef &= ( ~mask );
+                if (v)
+                    value |= mask;
+                else
+                    value &= ( ~mask );
+            }
+        }
+        insert(t0, undef ? -1 : value);
     }
 
     WaveData::~WaveData()
@@ -117,29 +158,20 @@ namespace hal {
         return it.value();
     }
 
-    char WaveData::charValue(float t) const
+    QString WaveData::strValue(float t) const
     {
         QMap<u64,int>::const_iterator it = timeIterator(t);
-        return charValue(it);
+        return strValue(it);
     }
 
-    char WaveData::charValue(const QMap<u64,int>::const_iterator& it) const
+    QString WaveData::strValue(const QMap<u64,int>::const_iterator& it) const
     {
-        if (it == constEnd()) return '\0';
+        if (it == constEnd()) return QString();
         switch (it.value()) {
-        case -2 : return 'z';
-        case -1 : return 'x';
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-            return (char) ('0' + it.value());
+        case -2 : return "z";
+        case -1 : return "x";
         }
-        return '\0';
+        return QString::number(it.value());
     }
 
     u64 WaveData::maxTime() const
@@ -300,6 +332,13 @@ namespace hal {
         {
             mIds[wd->id()] = inx++;
         }
+    }
+
+    QSet<u32> WaveDataList::toSet() const
+    {
+        QList<u32> keyList = mIds.keys();
+        // Qt > 5.15       return QSet<u32>(keyList.begin(),keyList.end());
+        return keyList.toSet();
     }
 
     void WaveDataList::remove(u32 id)

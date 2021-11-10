@@ -1,82 +1,69 @@
 #include "vcd_viewer/wave_scene.h"
-#include <QGraphicsRectItem>
 #include "vcd_viewer/wave_item.h"
-#include "netlist_simulator_controller/wave_data.h"
+#include "vcd_viewer/volatile_wave_data.h"
 #include "vcd_viewer/wave_cursor.h"
-#include "vcd_viewer/wave_timescale.h"
-#include "vcd_viewer/wave_index.h"
-#include "netlist_simulator_controller/vcd_serializer.h"
+#include "netlist_simulator_controller/wave_data.h"
+#include <QDebug>
+#include <QColor>
 
 namespace hal {
-
-    const int WaveScene::sMinItemHeight = 2;
+    const int WaveScene::sMinItemHeight = 4;
     const float WaveScene::sMinSceneWidth = 1000;
 
-    WaveScene::WaveScene(const WaveIndex *winx, QObject* parent)
-        : QGraphicsScene(parent), mWaveIndex(winx), mClearTimer(nullptr), mDebugSceneRect(nullptr)
+    WaveScene::WaveScene(WaveDataList* wdlist, VolatileWaveData *wdVol, QObject *parent)
+        : QGraphicsScene(parent), mWaveDataList(wdlist), mVolatileWaveData(wdVol), mMaxPosition(0),
+          mClearTimer(nullptr)
     {
-        setSceneRect(QRectF(0,0,sMinSceneWidth,yPosition(sMinItemHeight)+4));
+        setSceneRect(0,0,sMinSceneWidth,yPosition(sMinItemHeight)+2);
 
-        /*
-        mDebugSceneRect = new QGraphicsRectItem(sceneRect());
-        mDebugSceneRect->setPen(QPen(Qt::red,0));
-        addItem(mDebugSceneRect);
-        */
-        mCursor = new WaveCursor();
+        mCursor = new WaveCursor;
         addItem(mCursor);
-
-        mTimescale = new WaveTimescale(sMinSceneWidth);
-        addItem(mTimescale);
+        mCursor->setZValue(100);
+        mCursor->setPos(5,5);
     }
 
-    WaveScene::~WaveScene()
+    float WaveScene::yPosition(int irow)
     {
-        // TODO
+        return irow * 2 + 2.5;
     }
 
-    void WaveScene::handleWaveAppended(WaveData *wd)
+    void WaveScene::setCursorPosition(const QPointF &pos)
     {
-        int inx = mWaveItems.size();
-        WaveItem* wi = new WaveItem(wd, yPosition(inx));
-        addItem(wi);
-        mWaveItems.append(wi);
-        adjustSceneRect();
+        mCursor->setPos(pos);
     }
 
-    void WaveScene::handleWaveDataChanged(int inx)
+    float WaveScene::cursorXpostion() const
     {
-        int i0 = inx<0 ? 0 : inx;
-        int i1 = inx<0 ? mWaveItems.size() : inx+1;
-        for (int i=i0; i<i1; i++)
+        return mCursor->pos().x();
+    }
+
+    void WaveScene::handleIndexRemoved(int iwave, bool isVolatile)
+    {
+        QHash<int,WaveItem*>& wiHash = isVolatile ? mVolatileItems : mWaveItems;
+
+        WaveItem* wi = nullptr;
+        for (auto it = wiHash.begin(); it != wiHash.end(); it++)
         {
-            WaveItem* wi = mWaveItems.at(i);
-            WaveData* wd = mWaveIndex->waveData(i);
-            wi->setWavedata(wd);
-            wi->update();
-        }
-        update();
-    }
-
-    void WaveScene::handleWaveRemoved(int inx)
-    {
-        if (inx < 0)
-        {
-            for (WaveItem* wi : mWaveItems)
+            if (it.value()->waveIndex() == iwave)
             {
-                removeItem(wi);
-                delete wi;
+                wi = it.value();
+                wiHash.erase(it);
+                break;
             }
-            mWaveItems.clear();
-            update();
         }
-        else
-            deleteWave(inx);
+
+        if (wi)
+        {
+            removeItem(wi);
+            delete wi;
+        }
     }
 
     float WaveScene::adjustSceneRect(u64 tmax)
     {
         int n = mWaveItems.size();
         if (n<sMinItemHeight) n=sMinItemHeight;
+        if (n<mMaxPosition) n=mMaxPosition;
 
 
         float maxw = sceneRect().width();
@@ -89,72 +76,55 @@ namespace hal {
         // tell items that scene width changed
         if (maxw != sceneRect().width())
         {
-            mTimescale->setMaxTime(maxw);
+// TODO : timescale            mTimescale->setMaxTime(maxw);
         }
-        setSceneRect(QRectF(0,0,maxw,yPosition(n)+4));
-        if (mDebugSceneRect)
-            mDebugSceneRect->setRect(sceneRect());
+        setSceneRect(QRectF(0,0,maxw,yPosition(n)+2));
         return maxw;
     }
 
-    void WaveScene::moveToIndex(int indexFrom, int indexTo)
+    void WaveScene::handleWaveAdded(int iwave)
     {
-        if (indexFrom==indexTo) return;
-        WaveItem* wi = mWaveItems.at(indexFrom);
-        mWaveItems.removeAt(indexFrom);
-        mWaveItems.insert(indexTo < indexFrom ? indexTo : indexTo-1, wi);
-        int i0 = indexFrom < indexTo ? indexFrom : indexTo;
-        int i1 = indexFrom < indexTo ? indexTo : indexFrom;
-        for (int i= i0; i<=i1; i++)
-        {
-            WaveItem* wii = mWaveItems.at(i);
-            wii->setYoffset(yPosition(i));
-            wii->update();
-        }
+        addWaveInternal(iwave,mMaxPosition++);
+        adjustSceneRect();
     }
 
     void WaveScene::xScaleChanged(float m11)
     {
-        mTimescale->xScaleChanged(m11);
-        mTimescale->update();
         mCursor->xScaleChanged(m11);
         mCursor->update();
-   }
-
-    float WaveScene::cursorPos() const
-    {
-        return mCursor->pos().x();
     }
 
-    void WaveScene::setCursorPos(float xp, bool relative)
+    void WaveScene::addWaveInternal(int iwave, int ypos)
     {
-        if (relative)
-            mCursor->setPos(mCursor->pos() + QPointF(xp,0));
-        else
-            mCursor->setPos(xp,0);
+        WaveItem* wi = new WaveItem(iwave, mWaveDataList->at(iwave));
+        addItem(wi);
+        mWaveItems.insert(iwave,wi);
+        wi->setPos(0,yPosition(ypos));
     }
 
-    float WaveScene::yPosition(int dataIndex) const
+    void WaveScene::setWavePositions(const QHash<int,int>& wpos)
     {
-        int inx = dataIndex < 0 ? mWaveItems.size() : dataIndex;
-        return (inx+2)*4;
-    }
+        mWavePositions = wpos;
+        QHash<int,int> tempHash = wpos;
 
-    void WaveScene::deleteWave(int dataIndex)
-    {
-        WaveItem* wiDelete = mWaveItems.at(dataIndex);
-        wiDelete->aboutToBeDeleted();
-        removeItem(wiDelete);
-        mWaveItems.removeAt(dataIndex);
-        int n = mWaveItems.size();
-        for (int i= dataIndex; i<n; i++)
+        for (auto itWave = mWaveItems.begin(); itWave != mWaveItems.end(); ++itWave)
         {
-            WaveItem* wi = mWaveItems.at(i);
-            wi->setYoffset(yPosition(i));
-            wi->update();
+            WaveItem* wi = itWave.value();
+            auto itPos = tempHash.constFind(itWave.key());
+            if (itPos == tempHash.constEnd())
+                wi->setVisible(false);
+            else
+            {
+                wi->setVisible(true);
+                wi->setPos(0, yPosition(itPos.value()));
+                tempHash.erase(itPos);
+            }
         }
-        update();
- //       delete wiDelete;
+
+        for (auto itPos = tempHash.begin(); itPos != tempHash.end(); ++itPos)
+        {
+            addWaveInternal(itPos.key(), itPos.value());
+        }
     }
 
     void WaveScene::emitCursorMoved(float xpos)
@@ -172,8 +142,22 @@ namespace hal {
         mClearTimer->start(50);
     }
 
-    void WaveScene::handleMaxTimeChanged(u64 tmax)
+
+    void WaveScene::handleVolatileRepaint()
     {
-        adjustSceneRect(tmax);
+        for (WaveItem* vit : mVolatileItems.values())
+        {
+            removeItem(vit);
+            delete vit;
+        }
+        mVolatileItems.clear();
+
+        for (const VolatileWaveData::VolatileWaveItem& vwi : mVolatileWaveData->yPositionData())
+        {
+            WaveItem* vit = new WaveItem(vwi.groupId,vwi.wd);
+            addItem(vit);
+            vit->setPos(0, yPosition(vwi.yPosition));
+            mVolatileItems.insert(vwi.yPosition,vit);
+        }
     }
 }

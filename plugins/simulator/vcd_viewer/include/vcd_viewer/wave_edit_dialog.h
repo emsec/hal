@@ -4,6 +4,7 @@
 #include <QAbstractTableModel>
 #include <QTableView>
 #include <QStyledItemDelegate>
+#include <QPixmap>
 #include "netlist_simulator_controller/wave_data.h"
 
 namespace hal {
@@ -28,6 +29,8 @@ namespace hal {
     {
         Q_OBJECT
         WaveEditTable* mTable;
+        static QPixmap* sXdelete;
+        static QPixmap* piXdelete();
     public:
         WaveDeleteDelegate(WaveEditTable*tab) : mTable(tab) {;}
 

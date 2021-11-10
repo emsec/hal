@@ -23,25 +23,29 @@ namespace hal {
         u32 mId;
         QString mName;
         NetType mNetType;
+        int mBits;
 
         QMap<u64,int>::const_iterator timeIterator(float t) const;
     public:
         WaveData(u32 id_, const QString& nam, NetType tp = RegularNet,
                  const QMap<u64,int>& other = QMap<u64,int>() );
         WaveData(const Net* n, NetType tp = RegularNet);
+        WaveData(u32 id_, const QString& nam, const QList<WaveData*>& wdList, NetType tp = RegularNet);
         virtual ~WaveData();
         u32     id()      const { return mId; }
         QString name()    const { return mName; }
         NetType netType() const { return mNetType; }
+        int     bits()    const { return mBits; }
         void setId(u32 id_)              { mId = id_; }
         void setName(const QString& nam) { mName = nam; }
+        void setBits(int bts)            { mBits = bts; }
         int intValue(float t) const;
         u64  maxTime() const;
         void setStartvalue(int val);
         void insertBooleanValue(u64 t, BooleanFunction::Value bval);
         bool insertToggleTime(u64 t);
-        char charValue(float t) const;
-        char charValue(const QMap<u64,int>::const_iterator& it) const;
+        QString strValue(float t) const;
+        QString strValue(const QMap<u64,int>::const_iterator& it) const;
 //        static WaveData* simulationResultFactory(Net* n, const NetlistSimulator* sim);
     };
 
@@ -73,7 +77,7 @@ namespace hal {
         void addOrReplace(WaveData* wd);
         void replaceWave(int inx, WaveData *wd);
         WaveData* waveDataByNetId(u32 id) const;
-        QSet<u32> toSet() const { return mIds.keys().toSet(); }
+        QSet<u32> toSet() const;
         void remove(u32 id);
         void incrementMaxTime(u64 deltaT);
         void clearAll();

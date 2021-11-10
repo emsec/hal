@@ -9,14 +9,16 @@
 #include <QFrame>
 #include <hal_core/defines.h>
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
-#include "vcd_viewer/wave_index.h"
 
 namespace hal {
 
-    class WaveLabel;
     class WaveData;
-    class WaveView;
+    class WaveDataList;
+    class WaveGraphicsView;
     class WaveScene;
+    class WaveTreeModel;
+    class WaveTreeView;
+    class VolatileWaveData;
     class SelectionTreeItem;
 
 //    enum SimulationState { SimulationSelectGates, SimulationClockSet, SimulationInputGenerate, SimulationShowResults };
@@ -39,18 +41,14 @@ namespace hal {
         NetlistSimulatorController::SimulationState state() const;
         void createEngine(const QString& engineFactoryName);
         void refreshNetNames();
+        void scrollToYpos(int ypos);
 
     public Q_SLOTS:
         void handleEngineFinished(bool success);
 
     private Q_SLOTS:
-        void handleCursorMoved(float xpos);
-        void handleYScroll(int dy);
-        void handleLabelSwap(int isource, int ypos);
-        void handleLabelMove(int isource, int ypos);
 
         void editWaveData(int dataIndex);
-        void deleteWave(int dataIndex);
         void handleSelectionHighlight(const QVector<const SelectionTreeItem*>& highlight);
         void handleWaveAppended(WaveData* wd);
         void handleWaveDataChanged(int inx);
@@ -66,17 +64,19 @@ namespace hal {
     private:
         NetlistSimulatorController* mController;
         std::unique_ptr<NetlistSimulatorController> mControllerOwner;
-        WaveIndex mWaveIndex;
-        QVector<WaveLabel*> mValues;
 
-        void updateLabel(int dataIndex, float xpos);
-        int  targetIndex(int ypos);
         void visualizeCurrentNetState(float xpos);
 
-        WaveView *mWaveView;
-        WaveScene *mWaveScene;
-        QFrame *mFrame;
+        WaveTreeView*     mTreeView;
+        WaveTreeModel*    mTreeModel;
+        WaveGraphicsView* mGraphicsView;
+        WaveScene*        mScene;
+        bool              mOngoingYscroll;
+        WaveDataList*     mWaveDataList;
+        VolatileWaveData* mVolatileWaveData;
+
         bool mVisualizeNetState;
+        bool mAutoAddWaves;
         u32 mGroupIds[3];
     };
 

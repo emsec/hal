@@ -1,15 +1,14 @@
-#include <QPainter>
-
 #include "vcd_viewer/wave_item.h"
 #include "vcd_viewer/wave_scene.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include <QGraphicsScene>
+#include <QPainter>
 #include <math.h>
 
 namespace hal {
 
-    WaveItem::WaveItem(const WaveData* dat, int off)
-        : mData(dat), mYoffset(off), mMaxTime(WaveScene::sMinSceneWidth), mInactive(false)
+    WaveItem::WaveItem(int iwave, const WaveData* dat)
+        : mWaveIndex(iwave), mData(dat), mMaxTime(WaveScene::sMinSceneWidth), mInactive(false)
     {
         construct();
     }
@@ -17,36 +16,72 @@ namespace hal {
     void WaveItem::construct()
     {
         prepareGeometryChange();
+        mSolidLines.clear();
+        mDotLines.clear();
+
+        if (!childItems().isEmpty())
+        {
+            for (QGraphicsItem* cit : childItems())
+                delete cit;
+            childItems().clear();
+        }
+
         if (!mData)
         {
-            QRectF(0,mYoffset,1,1);
             return;
         }
 
-        mSolidLines.clear();
-        mDotLines.clear();
         auto lastIt = mData->constEnd();
-        for (auto nextIt = mData->constBegin(); nextIt != mData->end(); ++nextIt)
+        for (auto nextIt = mData->constBegin(); nextIt != mData->constEnd(); ++nextIt)
         {
+            u64 t1 = nextIt.key();
+            if (t1 > mMaxTime) mMaxTime = t1;
             if (lastIt != mData->constEnd())
             {
+                u64 t0 = lastIt.key();
                 if (lastIt.value() < 0)
                 {
-                    float ydot = mYoffset-0.5;
-                    mDotLines.append(QLineF(lastIt.key(),ydot,nextIt.key(),ydot));
+                    float ydot = 0.5;
+                    mDotLines.append(QLineF(t0,ydot,t1,ydot));
                 }
                 else
                 {
-                    int lastVal = mYoffset - lastIt.value();
-                    mSolidLines.append(QLine(lastIt.key(),lastVal,nextIt.key(),lastVal)); // hline
-                    if (nextIt.value() >= 0)
+                    int lastVal = 1. - lastIt.value();
+                    if (mData->bits()==1 || !lastIt.value())
                     {
-                        int nextVal = mYoffset - nextIt.value();
-                        mSolidLines.append(QLine(nextIt.key(),lastVal,nextIt.key(),nextVal)); // vline
+                        mSolidLines.append(QLine(t0,lastVal,t1,lastVal)); // hline
+
+                        if (nextIt.value() >= 0)
+                        {
+                            int nextVal = 1. - nextIt.value();
+                            if (mData->bits()==1 || !nextIt.value())
+                                mSolidLines.append(QLine(t1,lastVal,t1,nextVal)); // vline
+                        }
                     }
                 }
             }
             lastIt = nextIt;
+        }
+
+        if (mData->bits() > 1)
+        {
+            for (auto it = mData->constBegin(); it != mData->constEnd();)
+            {
+                u64 t0 = it.key();
+                int v0 = it.value();
+                ++it;
+                if (v0 > 0)
+                {
+                    u64 t1 = it == mData->constEnd() ? mMaxTime : it.key();
+                    QGraphicsSimpleTextItem* gti = new QGraphicsSimpleTextItem(QString::number(v0,16),this);
+                    gti->setFlags(gti->flags() | QGraphicsItem::ItemIgnoresTransformations);
+                    QFont font = gti->font();
+                    font.setPixelSize(9);
+                    gti->setFont(font);
+                    gti->setPos( (t0+t1)/2. , 0);
+                }
+            }
+
         }
     }
 
@@ -83,20 +118,36 @@ namespace hal {
         }
 
         painter->setRenderHint(QPainter::Antialiasing,true);
-        painter->setPen(QPen(QBrush(Qt::cyan),0.,Qt::DotLine)); // TODO : style
+        painter->setPen(QPen(QBrush(Qt::darkBlue),0.,Qt::DotLine)); // TODO : style
         painter->drawLines(mDotLines);
 
-        painter->setPen(QPen(QBrush(Qt::cyan),0.));  // TODO : style
+        painter->setPen(QPen(QBrush(Qt::darkBlue),0.));  // TODO : style
         painter->drawLines(mSolidLines);
 
-        float  y = mYoffset;
+        float  y = 1;
 
         if (mData->isEmpty())
         {
-            painter->setPen(QPen(QBrush(Qt::cyan),0.,Qt::DotLine));
+            painter->setPen(QPen(QBrush(Qt::darkBlue),0.,Qt::DotLine));
             y -= 0.5;
             painter->drawLine(QLineF(0,y,x1,y));
             return;
+        }
+
+        if (mData->bits() > 1)
+        {
+            for (auto it = mData->constBegin(); it!=mData->constEnd();)
+            {
+                u64 t0 = it.key();
+                int v0 = it.value();
+                ++it;
+                if (v0>0)
+                {
+                    u64 t1 = it==mData->constEnd() ? mMaxTime : it.key();
+                    QRectF r(t0,-0.05,t1-t0,1.1);
+                    painter->drawRoundedRect(r,50.0,0.5);
+                }
+            }
         }
 
         float x0 = mData->maxTime();
@@ -115,13 +166,7 @@ namespace hal {
 
     QRectF WaveItem::boundingRect() const
     {
-        return QRectF(0,mYoffset-1.05,mMaxTime,1.1);
-    }
-
-    void WaveItem::setYoffset(int val)
-    {
-        mYoffset = val;
-        construct();
+        return QRectF(0,-0.05,mMaxTime,1.1);
     }
 
     void WaveItem::setWavedata(const WaveData *dat)
