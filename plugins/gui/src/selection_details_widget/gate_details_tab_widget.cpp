@@ -308,9 +308,9 @@ namespace hal
         if(StateComponent* state_component = gt->get_component_as<StateComponent>([](const GateTypeComponent* c) { return StateComponent::is_class_of(c); }); state_component != nullptr)
         {
             if(state_component->get_state_identifier() != "")
-                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "internal_state", state_component->get_state_identifier())));
+                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new StateComponentEntry(gate->get_id(), "internal_state", QString::fromStdString(state_component->get_state_identifier()),StateComponentEntry::StateCompType::PosState)));
             if(state_component->get_neg_state_identifier() != "")
-                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "internal_neg_state", state_component->get_neg_state_identifier())));
+                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new StateComponentEntry(gate->get_id(), "internal_neg_state", QString::fromStdString(state_component->get_neg_state_identifier()), StateComponentEntry::StateCompType::NegState)));
         }
 
 

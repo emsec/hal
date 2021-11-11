@@ -20,7 +20,7 @@ namespace hal {
         this->setShowGrid(false);
         setFrameStyle(QFrame::NoFrame);
 
-        //connect(this, &QTableView::customContextMenuRequested, this, &BooleanFunctionTable::handleContextMenuRequest);
+        connect(this, &QTableView::customContextMenuRequested, this, &BooleanFunctionTable::handleContextMenuRequest);
     }
 
     BooleanFunctionTableModel* BooleanFunctionTable::getModel()
@@ -59,7 +59,7 @@ namespace hal {
 
         QString toClipboardText = entry->getEntryIdentifier() + " = " + entry->getEntryValueString();
         menu.addAction(
-            "Copy boolean function to clipboard",
+            "Copy plain function to clipboard",
             [toClipboardText]()
             {
                 QApplication::clipboard()->setText( toClipboardText );
@@ -68,28 +68,38 @@ namespace hal {
 
         /*====================================
                 Python to Clipboard 
-          ====================================*/ 
+          ====================================*/
+        pythonCode = entry->getPythonCode();
+        if(!pythonCode.isEmpty())
+        {
+            menu.addAction(QIcon(":/icons/python"), "Extract value as python code", [pythonCode](){
+                QApplication::clipboard()->setText(pythonCode);
+            });
+        }
+
+        menu.move(mapToGlobal(pos));
+        menu.exec();
 
         // Entry is a boolean function
-        if(!entry->isCPBehavior())
-        {
-            menuText = "Extract boolean function as python code (copy to clipboard)";
-            pythonCode = PyCodeProvider::pyCodeGateBooleanFunction(entry->getGateId(), entry->getEntryIdentifier());
-        }
-        // Entry is clear-preset behavior
-        else
-        {
-            menuText = "Extract clear-preset behavior as python code (copy to clipboard)";
-            pythonCode = PyCodeProvider::pyCodeGateAsyncSetResetBehavior(entry->getGateId());
-        }
-        menu.addAction(QIcon(":/icons/python"), menuText,
-           [pythonCode]()
-           {
-               QApplication::clipboard()->setText( pythonCode );
-           }
-        );
-        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
-        menu.exec();
+//        if(!entry->isCPBehavior())
+//        {
+//            menuText = "Extract boolean function as python code (copy to clipboard)";
+//            pythonCode = PyCodeProvider::pyCodeGateBooleanFunction(entry->getGateId(), entry->getEntryIdentifier());
+//        }
+//        // Entry is clear-preset behavior
+//        else
+//        {
+//            menuText = "Extract clear-preset behavior as python code (copy to clipboard)";
+//            pythonCode = PyCodeProvider::pyCodeGateAsyncSetResetBehavior(entry->getGateId());
+//        }
+//        menu.addAction(QIcon(":/icons/python"), menuText,
+//           [pythonCode]()
+//           {
+//               QApplication::clipboard()->setText( pythonCode );
+//           }
+//        );
+//        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+//        menu.exec();
     }
 
     void BooleanFunctionTable::adjustTableSizes()

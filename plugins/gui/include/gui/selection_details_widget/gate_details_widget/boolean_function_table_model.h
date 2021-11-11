@@ -49,7 +49,7 @@ namespace hal {
     {
     public:
 
-        enum class EntryType{BooleanFunction, CPBehavior, State};
+        enum class EntryType{BooleanFunctionStandard, CPBehavior, State};
         /**
          * Constructor.
          *
@@ -57,13 +57,6 @@ namespace hal {
          *                 to no gate, an invalid id can be passed (i.e. gateId=0).
          */
         BooleanFunctionTableEntry(u32 gateId);
-
-        /**
-         * Tells if the entry is a CPBehavior (true) or a boolean function (false)
-         *
-         * @returns true iff the BooleanFunctionTableEntry represents a CPBehavior
-         */
-        virtual bool isCPBehavior() const = 0;
 
         /**
          * Gets the left side of the equation.
@@ -92,6 +85,15 @@ namespace hal {
          * @return The entry's type.
          */
         EntryType getEntryType() const;
+
+        /**
+         * Returns the python code necessary to access the entry's value through a gate.
+         * This function should return an empty string if no python code is available.
+         * (E.g. when a "random" boolean function is displayed that belongs to no gate or component)
+         *
+         * @return The python code if available or an empty string otherwise.
+         */
+        virtual QString getPythonCode(){return "";};
 
     protected:
         QString mLeft;
@@ -124,7 +126,6 @@ namespace hal {
          */
         BooleanFunction getBooleanFunction() const;
 
-        virtual bool isCPBehavior() const;
     private:
         BooleanFunction mBF;
     };
@@ -155,8 +156,6 @@ namespace hal {
         //std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> getCPBehavior() const;
         std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> getCPBehavior() const;
 
-        virtual bool isCPBehavior() const;
-
     private:
         //QString cPBehaviourToString (std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cPBehaviour);
         //std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> mCPBehavior;
@@ -172,8 +171,9 @@ namespace hal {
      */
     class StateComponentEntry : public BooleanFunctionTableEntry
     {
-        //perhaps own enum declaring if this entry stores the pos/neg state?
     public:
+        //perhaps own enum declaring if this entry stores the pos/neg state?
+        enum class StateCompType{PosState, NegState};
         /**
          * The constructor.
          *
@@ -181,7 +181,12 @@ namespace hal {
          * @param name - The name of the state (pos. / neg.).
          * @param stateVal - The value of the state.
          */
-        StateComponentEntry(u32 gateId, QString name, QString stateVal);
+        StateComponentEntry(u32 gateId, QString name, QString stateVal, StateCompType type);
+
+        QString getPythonCode() override;
+
+    private:
+        StateCompType specificType;
     };
 
     /**

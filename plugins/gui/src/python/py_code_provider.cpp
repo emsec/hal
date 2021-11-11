@@ -80,6 +80,21 @@ namespace hal
         return buildPyCode(gateCodePrefix, suffix, gateId);
     }
 
+    QString PyCodeProvider::pyCodeStateComp(u32 gateId)
+    {
+        return pyCodeGateType(gateId) + ".get_component(filter = hal_py.StateComponent.is_class_of)";
+    }
+
+    QString PyCodeProvider::pyCodeStateCompPosState(u32 gateId)
+    {
+        return pyCodeStateComp(gateId) + ".get_state_identifier()";
+    }
+
+    QString PyCodeProvider::pyCodeStateCompNegState(u32 gateId)
+    {
+        return pyCodeStateComp(gateId) + ".get_neg_state_identifier()";
+    }
+
     QString PyCodeProvider::pyCodeProperties(u32 gateId)
     {
         const QString suffix = "get_type().get_properties()";

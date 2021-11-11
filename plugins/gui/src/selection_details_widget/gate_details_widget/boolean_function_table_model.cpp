@@ -2,6 +2,7 @@
 #include <gui/include/gui/selection_details_widget/gate_details_widget/boolean_function_table_model.h>
 
 #include "gui/selection_details_widget/gate_details_widget/lut_table_model.h"
+#include "gui/python/py_code_provider.h"
 #include "hal_core/utilities/log.h"
 
 namespace hal {
@@ -14,7 +15,7 @@ namespace hal {
     BooleanFunctionTableEntry::BooleanFunctionTableEntry(u32 gateId)
     {
         mGateId = gateId;
-        mType = EntryType::BooleanFunction;
+        mType = EntryType::BooleanFunctionStandard;
     }
 
     QString BooleanFunctionTableEntry::getEntryIdentifier() const
@@ -45,17 +46,12 @@ namespace hal {
     {
         mLeft = functionName;
         mRight = QString::fromStdString(bf.to_string());
-        mType = EntryType::BooleanFunction;
+        mType = EntryType::BooleanFunctionStandard;
     }
 
     BooleanFunction BooleanFunctionEntry::getBooleanFunction() const
     {
         return mBF;
-    }
-
-    bool BooleanFunctionEntry::isCPBehavior() const
-    {
-        return false;
     }
 
     /* ========================================================
@@ -76,11 +72,6 @@ namespace hal {
         return mCPBehavior;
     }
 
-    bool CPBehaviorEntry::isCPBehavior() const
-    {
-        return true;
-    }
-
     QString CPBehaviorEntry::cPBehaviourToString (std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> cPBehaviour)
     {
         static QMap<hal::AsyncSetResetBehavior, QString> cPBehaviourToString {
@@ -94,11 +85,22 @@ namespace hal {
         return QString(cPBehaviourToString[cPBehaviour.first] + ", " + cPBehaviourToString[cPBehaviour.second]);
     }
 
-    StateComponentEntry::StateComponentEntry(u32 gateId, QString name, QString stateVal) : BooleanFunctionTableEntry(gateId)
+    StateComponentEntry::StateComponentEntry(u32 gateId, QString name, QString stateVal, StateCompType type) : BooleanFunctionTableEntry(gateId)
     {
         mLeft = name;
         mRight = stateVal;
         mType = EntryType::State;
+        specificType = type;
+    }
+
+    QString StateComponentEntry::getPythonCode()
+    {
+        switch (specificType)
+        {
+            case StateCompType::NegState: return PyCodeProvider::pyCodeStateCompNegState(mGateId); break;
+            case StateCompType::PosState: return PyCodeProvider::pyCodeStateCompPosState(mGateId); break;
+            default: return "";
+        }
     }
 
     /* ========================================================

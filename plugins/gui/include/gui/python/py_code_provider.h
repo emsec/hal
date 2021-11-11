@@ -47,6 +47,10 @@ namespace hal
         static QString pyCodeGateData(u32 gateId, QString category, QString key);
         static QString pyCodeGateDataMap(u32 gateId);
 
+        static QString pyCodeStateComp(u32 gateId);
+        static QString pyCodeStateCompPosState(u32 gateId);
+        static QString pyCodeStateCompNegState(u32 gateId);
+
         static QString pyCodeNet(u32 netId);
         static QString pyCodeNetName(u32 netId);
         static QString pyCodeNetType(u32 netId);
