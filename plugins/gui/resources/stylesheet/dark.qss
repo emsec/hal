@@ -44,6 +44,7 @@ QMenu
 {
     background-color : rgba(60, 63, 65, 1);
     color            : rgba(228, 228, 228, 1);
+    border: 1px solid black;
 }
 
 QDialog
