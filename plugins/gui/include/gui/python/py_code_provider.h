@@ -51,6 +51,21 @@ namespace hal
         static QString pyCodeStateCompPosState(u32 gateId);
         static QString pyCodeStateCompNegState(u32 gateId);
 
+        static QString pyCodeFFComp(u32 gateId);
+        static QString pyCodeFFCompClockFunc(u32 gateId);
+        static QString pyCodeFFCompNextStateFunc(u32 gateId);
+        static QString pyCodeFFCompAsyncSetFunc(u32 gateId);
+        static QString pyCodeFFCompAsyncResetFunc(u32 gateId);
+        static QString pyCodeFFCompSetResetBehav(u32 gateId);
+
+        static QString pyCodeLatchComp(u32 gateId);
+        static QString pyCodeLatchCompEnableFunc(u32 gateId);
+        static QString pyCodeLatchCompDataInFunc(u32 gateId);
+        static QString pyCodeLatchCompAsyncSetFunc(u32 gateId);
+        static QString pyCodeLatchCompAsyncResetFunc(u32 gateId);
+        static QString pyCodeLatchCompSetResetBehav(u32 gateId);
+
+
         static QString pyCodeNet(u32 netId);
         static QString pyCodeNetName(u32 netId);
         static QString pyCodeNetType(u32 netId);

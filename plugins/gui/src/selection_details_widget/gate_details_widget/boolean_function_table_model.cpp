@@ -85,12 +85,12 @@ namespace hal {
         return QString(cPBehaviourToString[cPBehaviour.first] + ", " + cPBehaviourToString[cPBehaviour.second]);
     }
 
-    StateComponentEntry::StateComponentEntry(u32 gateId, QString name, QString stateVal, StateCompType type) : BooleanFunctionTableEntry(gateId)
+    StateComponentEntry::StateComponentEntry(u32 gateId, StateCompType type, QString stateVal) : BooleanFunctionTableEntry(gateId)
     {
-        mLeft = name;
-        mRight = stateVal;
         mType = EntryType::State;
         specificType = type;
+        mLeft = enumTypeToString();
+        mRight = stateVal;
     }
 
     QString StateComponentEntry::getPythonCode()
@@ -101,6 +101,12 @@ namespace hal {
             case StateCompType::PosState: return PyCodeProvider::pyCodeStateCompPosState(mGateId); break;
             default: return "";
         }
+    }
+
+    QString StateComponentEntry::enumTypeToString()
+    {
+        const QString types[] = {"internal_state", "neg_internal_state"};
+        return types[specificType];
     }
 
     /* ========================================================
@@ -191,6 +197,98 @@ namespace hal {
         Q_EMIT layoutAboutToBeChanged();
         mEntries = entries;
         Q_EMIT layoutChanged();
+    }
+
+    FFComponentEntry::FFComponentEntry(u32 gateId, FFComponentEntry::FFCompFunc type, BooleanFunction func) : BooleanFunctionTableEntry(gateId)
+    {
+        mSpecificType = type;
+        mLeft = enumToString();
+        mRight = QString::fromStdString(func.to_string());
+    }
+
+    FFComponentEntry::FFComponentEntry(u32 gateId, std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> behav) : BooleanFunctionTableEntry(gateId)
+    {
+        mSpecificType = FFCompFunc::SetResetBehav;
+        mLeft = enumToString();
+        mRight = behaviorToString(behav);
+    }
+
+    QString FFComponentEntry::getPythonCode()
+    {
+        switch (mSpecificType)
+        {
+            case FFCompFunc::Clock: return PyCodeProvider::pyCodeFFCompClockFunc(mGateId);
+            case FFCompFunc::AsyncSet: return PyCodeProvider::pyCodeFFCompAsyncSetFunc(mGateId);
+            case FFCompFunc::NextState: return PyCodeProvider::pyCodeFFCompNextStateFunc(mGateId);
+            case FFCompFunc::AsyncReset: return PyCodeProvider::pyCodeFFCompAsyncResetFunc(mGateId);
+            case FFCompFunc::SetResetBehav: return PyCodeProvider::pyCodeFFCompSetResetBehav(mGateId);
+            default: return "";
+        }
+    }
+
+    QString FFComponentEntry::enumToString()
+    {
+        static QString types[] = {"clock", "next_state", "async_set", "async_reset", "set_reset_behavior"};
+        return types[mSpecificType];
+    }
+
+    QString FFComponentEntry::behaviorToString(std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> behav)
+    {
+        static QMap<hal::AsyncSetResetBehavior, QString> cPBehaviourToString {
+            {hal::AsyncSetResetBehavior::L, "L"},
+            {hal::AsyncSetResetBehavior::H, "H"},
+            {hal::AsyncSetResetBehavior::N, "N"},
+            {hal::AsyncSetResetBehavior::T, "T"},
+            {hal::AsyncSetResetBehavior::X, "X"},
+            {hal::AsyncSetResetBehavior::undef, "Undefined"},
+        };
+        return QString(cPBehaviourToString[behav.first] + ", " + cPBehaviourToString[behav.second]);
+    }
+
+    LatchComponentEntry::LatchComponentEntry(u32 gateId, LatchComponentEntry::LatchCompFunc type, BooleanFunction func) : BooleanFunctionTableEntry(gateId)
+    {
+        mSpecificType = type;
+        mLeft = enumToString();
+        mRight = QString::fromStdString(func.to_string());
+    }
+
+    LatchComponentEntry::LatchComponentEntry(u32 gateId, std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> behav) : BooleanFunctionTableEntry(gateId)
+    {
+        mSpecificType = LatchCompFunc::SetResetBehav;
+        mLeft = enumToString();
+        mRight = behaviorToString(behav);
+    }
+
+    QString LatchComponentEntry::getPythonCode()
+    {
+        switch (mSpecificType)
+        {
+            case LatchCompFunc::Enable: return PyCodeProvider::pyCodeLatchCompEnableFunc(mGateId);
+            case LatchCompFunc::AsyncSet: return PyCodeProvider::pyCodeLatchCompAsyncSetFunc(mGateId);
+            case LatchCompFunc::AsyncReset: return PyCodeProvider::pyCodeLatchCompAsyncResetFunc(mGateId);
+            case LatchCompFunc::DataInFunc: return PyCodeProvider::pyCodeLatchCompDataInFunc(mGateId);
+            case LatchCompFunc::SetResetBehav: return PyCodeProvider::pyCodeLatchCompSetResetBehav(mGateId);
+            default: return "";
+        }
+    }
+
+    QString LatchComponentEntry::enumToString()
+    {
+        const QString types[] = {"enable", "data_in_func", "async_set", "async_reset", "set_reset_behav"};
+        return types[mSpecificType];
+    }
+
+    QString LatchComponentEntry::behaviorToString(std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> behav)
+    {
+        static QMap<hal::AsyncSetResetBehavior, QString> cPBehaviourToString {
+            {hal::AsyncSetResetBehavior::L, "L"},
+            {hal::AsyncSetResetBehavior::H, "H"},
+            {hal::AsyncSetResetBehavior::N, "N"},
+            {hal::AsyncSetResetBehavior::T, "T"},
+            {hal::AsyncSetResetBehavior::X, "X"},
+            {hal::AsyncSetResetBehavior::undef, "Undefined"},
+        };
+        return QString(cPBehaviourToString[behav.first] + ", " + cPBehaviourToString[behav.second]);
     }
 
 }// namespace hal

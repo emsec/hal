@@ -133,6 +133,79 @@ namespace hal {
     /**
      * @ingroup utility_widgets-selection_details
      *
+     * @brief A entry type that represents properties (functions and behaviors) of an FFCompont.
+     */
+    class FFComponentEntry : public BooleanFunctionTableEntry
+    {
+        public:
+            //perhabs exclude SetResetBehav and make it a private boolean?
+            enum FFCompFunc{Clock = 0, NextState = 1, AsyncSet = 2, AsyncReset = 3, SetResetBehav = 4};
+
+            /**
+             * The constructor. For the FFCompFunc parameter, everything except SetResetBehav
+             * should be set.
+             *
+             * @param gateId - The represented gate's id.
+             * @param type - The entry's type (except SetResetBehav, this has its own constructor).
+             * @param func - The function to display.
+             */
+            FFComponentEntry(u32 gateId, FFCompFunc type, BooleanFunction func);
+
+            /**
+             * The constructor for the SetResetBehav.
+             *
+             * @param gateId - The gate's id.
+             * @param behav - The behavior to display.
+             */
+            FFComponentEntry(u32 gateId, std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> behav);
+
+            QString getPythonCode() override;
+
+        private:
+            QString enumToString();
+            QString behaviorToString(std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> behav);
+            FFCompFunc mSpecificType;
+    };
+
+    /**
+     * @ingroup utility_widgets-selection_details
+     *
+     * @brief An entry type that represents properties (functions or behaviors) of a LatchComponent.
+     */
+    class LatchComponentEntry : public BooleanFunctionTableEntry
+    {
+    public:
+        enum LatchCompFunc{ Enable = 0, DataInFunc = 1, AsyncSet = 2, AsyncReset = 3, SetResetBehav = 4};
+
+        /**
+         * The constructor. For the LatchCompFunc parameter, everything except SetResetBehav
+         * should be set.
+         *
+         * @param gateId - The gate's id.
+         * @param type - The entry's type (except SetResetBehav).
+         * @param func - The function to display.
+         */
+        LatchComponentEntry(u32 gateId, LatchCompFunc type, BooleanFunction func);
+
+        /**
+         * The constructor for the set_reset behavior.
+         *
+         * @param gateId - The gate's id.
+         * @param behav - The behavior.
+         */
+        LatchComponentEntry(u32 gateId, std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> behav);
+
+        QString getPythonCode() override;
+
+    private:
+        QString enumToString();
+        QString behaviorToString(std::pair<hal::AsyncSetResetBehavior, hal::AsyncSetResetBehavior> behav);
+        LatchCompFunc mSpecificType;
+    };
+
+    /**
+     * @ingroup utility_widgets-selection_details
+     *
      * @brief A BooleanFunctionTableEntry that represents a clear-preset behavior.
      */
     class CPBehaviorEntry : public BooleanFunctionTableEntry
@@ -173,7 +246,7 @@ namespace hal {
     {
     public:
         //perhaps own enum declaring if this entry stores the pos/neg state?
-        enum class StateCompType{PosState, NegState};
+        enum StateCompType{PosState = 0, NegState = 1};
         /**
          * The constructor.
          *
@@ -181,11 +254,13 @@ namespace hal {
          * @param name - The name of the state (pos. / neg.).
          * @param stateVal - The value of the state.
          */
-        StateComponentEntry(u32 gateId, QString name, QString stateVal, StateCompType type);
+        StateComponentEntry(u32 gateId, StateCompType type, QString stateVal);
 
         QString getPythonCode() override;
 
     private:
+
+        QString enumTypeToString();
         StateCompType specificType;
     };
 

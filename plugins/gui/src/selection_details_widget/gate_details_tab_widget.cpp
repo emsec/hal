@@ -279,16 +279,26 @@ namespace hal
         GateType* gt = gate->get_type();
         if(FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); }); ff_component != nullptr)
         {
+//            if(ff_component->get_async_set_reset_behavior().first != AsyncSetResetBehavior::undef)
+//                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new CPBehaviorEntry(gate->get_id(), ff_component->get_async_set_reset_behavior())));
+//            if(!ff_component->get_clock_function().is_empty())
+//                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "clock", ff_component->get_clock_function())));
+//            if(!ff_component->get_next_state_function().is_empty())
+//                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "next_state", ff_component->get_next_state_function())));
+//            if(!ff_component->get_async_set_function().is_empty())
+//                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "async_set", ff_component->get_async_set_function())));
+//            if(!ff_component->get_async_reset_function().is_empty())
+//                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "async_reset", ff_component->get_async_reset_function())));
             if(ff_component->get_async_set_reset_behavior().first != AsyncSetResetBehavior::undef)
-                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new CPBehaviorEntry(gate->get_id(), ff_component->get_async_set_reset_behavior())));
+                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new FFComponentEntry(gate->get_id(), ff_component->get_async_set_reset_behavior())));
             if(!ff_component->get_clock_function().is_empty())
-                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "clock", ff_component->get_clock_function())));
+                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new FFComponentEntry(gate->get_id(), FFComponentEntry::FFCompFunc::Clock, ff_component->get_clock_function())));
             if(!ff_component->get_next_state_function().is_empty())
-                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "next_state", ff_component->get_next_state_function())));
+                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new FFComponentEntry(gate->get_id(), FFComponentEntry::FFCompFunc::NextState, ff_component->get_next_state_function())));
             if(!ff_component->get_async_set_function().is_empty())
-                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "async_set", ff_component->get_async_set_function())));
+                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new FFComponentEntry(gate->get_id(), FFComponentEntry::FFCompFunc::AsyncSet, ff_component->get_async_set_function())));
             if(!ff_component->get_async_reset_function().is_empty())
-                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new BooleanFunctionEntry(gate->get_id(), "async_reset", ff_component->get_async_reset_function())));
+                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new FFComponentEntry(gate->get_id(), FFComponentEntry::FFCompFunc::AsyncReset, ff_component->get_async_reset_function())));
 
         }
         else if(LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* c) { return LatchComponent::is_class_of(c); }); latch_component != nullptr)
@@ -308,9 +318,9 @@ namespace hal
         if(StateComponent* state_component = gt->get_component_as<StateComponent>([](const GateTypeComponent* c) { return StateComponent::is_class_of(c); }); state_component != nullptr)
         {
             if(state_component->get_state_identifier() != "")
-                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new StateComponentEntry(gate->get_id(), "internal_state", QString::fromStdString(state_component->get_state_identifier()),StateComponentEntry::StateCompType::PosState)));
+                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new StateComponentEntry(gate->get_id(), StateComponentEntry::StateCompType::PosState, QString::fromStdString(state_component->get_state_identifier()))));
             if(state_component->get_neg_state_identifier() != "")
-                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new StateComponentEntry(gate->get_id(), "internal_neg_state", QString::fromStdString(state_component->get_neg_state_identifier()), StateComponentEntry::StateCompType::NegState)));
+                setPresetBehavior.append(QSharedPointer<BooleanFunctionTableEntry>(new StateComponentEntry(gate->get_id(), StateComponentEntry::StateCompType::NegState, QString::fromStdString(state_component->get_neg_state_identifier()))));
         }
 
 

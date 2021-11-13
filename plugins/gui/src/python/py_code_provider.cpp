@@ -95,6 +95,66 @@ namespace hal
         return pyCodeStateComp(gateId) + ".get_neg_state_identifier()";
     }
 
+    QString PyCodeProvider::pyCodeFFComp(u32 gateId)
+    {
+        return pyCodeGateType(gateId) + ".get_component(filter = hal_py.FFComponent.is_class_of)";
+    }
+
+    QString PyCodeProvider::pyCodeFFCompClockFunc(u32 gateId)
+    {
+        return pyCodeFFComp(gateId) + ".get_clock_function()";
+    }
+
+    QString PyCodeProvider::pyCodeFFCompNextStateFunc(u32 gateId)
+    {
+        return pyCodeFFComp(gateId) + ".get_next_state_function()";
+    }
+
+    QString PyCodeProvider::pyCodeFFCompAsyncSetFunc(u32 gateId)
+    {
+        return pyCodeFFComp(gateId) + ".get_async_set_function()";
+    }
+
+    QString PyCodeProvider::pyCodeFFCompAsyncResetFunc(u32 gateId)
+    {
+        return pyCodeFFComp(gateId) + ".get_async_reset_function()";
+    }
+
+    QString PyCodeProvider::pyCodeFFCompSetResetBehav(u32 gateId)
+    {
+        return pyCodeFFComp(gateId) + ".get_async_set_reset_behavior()";
+    }
+
+    QString PyCodeProvider::pyCodeLatchComp(u32 gateId)
+    {
+        return pyCodeGateType(gateId) + ".get_component(filter = hal_py.LatchComponent.is_class_of)";
+    }
+
+    QString PyCodeProvider::pyCodeLatchCompEnableFunc(u32 gateId)
+    {
+        return pyCodeLatchComp(gateId) + ".get_enable_function()";
+    }
+
+    QString PyCodeProvider::pyCodeLatchCompDataInFunc(u32 gateId)
+    {
+        return pyCodeLatchComp(gateId) + ".get_data_in_function()";
+    }
+
+    QString PyCodeProvider::pyCodeLatchCompAsyncSetFunc(u32 gateId)
+    {
+        return pyCodeLatchComp(gateId) + ".get_async_set_function()";
+    }
+
+    QString PyCodeProvider::pyCodeLatchCompAsyncResetFunc(u32 gateId)
+    {
+        return pyCodeLatchComp(gateId) + ".get_async_reset_function()";
+    }
+
+    QString PyCodeProvider::pyCodeLatchCompSetResetBehav(u32 gateId)
+    {
+        return pyCodeLatchComp(gateId) + ".get_async_set_reset_behavior()";
+    }
+
     QString PyCodeProvider::pyCodeProperties(u32 gateId)
     {
         const QString suffix = "get_type().get_properties()";
