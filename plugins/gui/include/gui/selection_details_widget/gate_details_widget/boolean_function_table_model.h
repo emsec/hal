@@ -49,7 +49,7 @@ namespace hal {
     {
     public:
 
-        enum class EntryType{BooleanFunctionStandard, CPBehavior, State};
+        enum class EntryType{BooleanFunctionStandard, CPBehavior, StateComp, FFComp, LatchComp};
         /**
          * Constructor.
          *
@@ -111,7 +111,8 @@ namespace hal {
     {
     public:
         /**
-         * Constructor.
+         * Constructor to display a boolean function of a specific gate.
+         * Impacts the getPythonCode method (returns the actual code to get the bf).
          *
          * @param gateId - The id of the gate the boolean function belongs to
          * @param functionName - The name of the boolean function (e.g. "O")
@@ -120,11 +121,22 @@ namespace hal {
         BooleanFunctionEntry(u32 gateId, QString functionName, BooleanFunction bf);
 
         /**
+         * Constructor to display an arbitrary boolean function. Impacts the getPythonCode
+         * method (returns empty string in this case).
+         *
+         * @param functionName - The name of the boolean function (e.g. "O").
+         * @param bf - The boolean function.
+         */
+        BooleanFunctionEntry(QString functionName, BooleanFunction bf);
+
+        /**
          * Get the stored boolean function (copy).
          *
          * @returns the boolean function of the entry.
          */
         BooleanFunction getBooleanFunction() const;
+
+        QString getPythonCode() override;
 
     private:
         BooleanFunction mBF;

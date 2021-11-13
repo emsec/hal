@@ -79,27 +79,6 @@ namespace hal {
 
         menu.move(mapToGlobal(pos));
         menu.exec();
-
-        // Entry is a boolean function
-//        if(!entry->isCPBehavior())
-//        {
-//            menuText = "Extract boolean function as python code (copy to clipboard)";
-//            pythonCode = PyCodeProvider::pyCodeGateBooleanFunction(entry->getGateId(), entry->getEntryIdentifier());
-//        }
-//        // Entry is clear-preset behavior
-//        else
-//        {
-//            menuText = "Extract clear-preset behavior as python code (copy to clipboard)";
-//            pythonCode = PyCodeProvider::pyCodeGateAsyncSetResetBehavior(entry->getGateId());
-//        }
-//        menu.addAction(QIcon(":/icons/python"), menuText,
-//           [pythonCode]()
-//           {
-//               QApplication::clipboard()->setText( pythonCode );
-//           }
-//        );
-//        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
-//        menu.exec();
     }
 
     void BooleanFunctionTable::adjustTableSizes()

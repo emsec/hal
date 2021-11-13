@@ -49,9 +49,25 @@ namespace hal {
         mType = EntryType::BooleanFunctionStandard;
     }
 
+    BooleanFunctionEntry::BooleanFunctionEntry(QString functionName, BooleanFunction bf) : BooleanFunctionTableEntry(0)
+    {
+        //set the gateId to 0, indicating that this entry is an arbitrary boolean function
+        mLeft = functionName;
+        mRight = QString::fromStdString(bf.to_string());
+        mType = EntryType::BooleanFunctionStandard;
+    }
+
     BooleanFunction BooleanFunctionEntry::getBooleanFunction() const
     {
         return mBF;
+    }
+
+    QString BooleanFunctionEntry::getPythonCode()
+    {
+        if(mGateId == 0)
+            return "";
+        else
+            return PyCodeProvider::pyCodeGateBooleanFunction(mGateId, mLeft);
     }
 
     /* ========================================================
@@ -87,7 +103,7 @@ namespace hal {
 
     StateComponentEntry::StateComponentEntry(u32 gateId, StateCompType type, QString stateVal) : BooleanFunctionTableEntry(gateId)
     {
-        mType = EntryType::State;
+        mType = EntryType::StateComp;
         specificType = type;
         mLeft = enumTypeToString();
         mRight = stateVal;
@@ -201,6 +217,7 @@ namespace hal {
 
     FFComponentEntry::FFComponentEntry(u32 gateId, FFComponentEntry::FFCompFunc type, BooleanFunction func) : BooleanFunctionTableEntry(gateId)
     {
+        mType = EntryType::FFComp;
         mSpecificType = type;
         mLeft = enumToString();
         mRight = QString::fromStdString(func.to_string());
@@ -208,6 +225,7 @@ namespace hal {
 
     FFComponentEntry::FFComponentEntry(u32 gateId, std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> behav) : BooleanFunctionTableEntry(gateId)
     {
+        mType = EntryType::FFComp;
         mSpecificType = FFCompFunc::SetResetBehav;
         mLeft = enumToString();
         mRight = behaviorToString(behav);
@@ -247,6 +265,7 @@ namespace hal {
 
     LatchComponentEntry::LatchComponentEntry(u32 gateId, LatchComponentEntry::LatchCompFunc type, BooleanFunction func) : BooleanFunctionTableEntry(gateId)
     {
+        mType = EntryType::LatchComp;
         mSpecificType = type;
         mLeft = enumToString();
         mRight = QString::fromStdString(func.to_string());
@@ -254,6 +273,7 @@ namespace hal {
 
     LatchComponentEntry::LatchComponentEntry(u32 gateId, std::pair<AsyncSetResetBehavior, AsyncSetResetBehavior> behav) : BooleanFunctionTableEntry(gateId)
     {
+        mType = EntryType::LatchComp;
         mSpecificType = LatchCompFunc::SetResetBehav;
         mLeft = enumToString();
         mRight = behaviorToString(behav);
