@@ -16,6 +16,7 @@
 #include <QLineEdit>
 #include <QAction>
 
+#include <string>
 #include <iostream>
 
 namespace hal
@@ -74,6 +75,7 @@ namespace hal
     {
         mSearchAction = new QAction(this);
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+        connect(mSearchbar, SIGNAL(textEdited(QString)), this, SLOT(handleSearchChanged(QString)));
         Toolbar->addAction(mSearchAction);
 
 
@@ -200,21 +202,27 @@ namespace hal
         QWriteLocker item_locker(item->getLock());
         for (ChannelEntry* entry : *(item->getList()))
         {
+            // filter nach allen einträgen die entsprechenden suchstring haben. str.find() usw
             bool filter = false;
-            if ((entry->mMsgType == spdlog::level::level_enum::info) && mInfoSeverity) {
-                filter = true;
-            }
-            else if ((entry->mMsgType == spdlog::level::level_enum::warn) && mWarningSeverity) {
-                filter = true;
-            }
-            else if ((entry->mMsgType == spdlog::level::level_enum::err) && mErrorSeverity) {
-                filter = true;
-            }
-            else if ((entry->mMsgType == spdlog::level::level_enum::debug) && mDebugSeverity) {
-                filter = true;
-            }
-            else if (entry->mMsgType == spdlog::level::level_enum::critical) {
-                filter = true;
+
+            if ((entry->mMsg.find(mSearchFilter) != std::string::npos) || (mSearchFilter.length() < 1))
+            {
+                std::cout << mSearchFilter << std::endl;
+                if ((entry->mMsgType == spdlog::level::level_enum::info) && mInfoSeverity) {
+                    filter = true;
+                }
+                else if ((entry->mMsgType == spdlog::level::level_enum::warn) && mWarningSeverity) {
+                    filter = true;
+                }
+                else if ((entry->mMsgType == spdlog::level::level_enum::err) && mErrorSeverity) {
+                    filter = true;
+                }
+                else if ((entry->mMsgType == spdlog::level::level_enum::debug) && mDebugSeverity) {
+                    filter = true;
+                }
+                else if (entry->mMsgType == spdlog::level::level_enum::critical) {
+                    filter = true;
+                }
             }
 
             if (filter)
@@ -260,6 +268,12 @@ namespace hal
 
         handleCurrentFilterChanged(1);
         saveSettings();
+    }
+
+    void LoggerWidget::handleSearchChanged(QString filter)
+    {
+        mSearchFilter = filter.toStdString();
+        handleCurrentFilterChanged(1);
     }
 
     void LoggerWidget::handleFirstUserInteraction(int value)

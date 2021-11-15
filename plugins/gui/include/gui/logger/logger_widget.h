@@ -126,6 +126,8 @@ namespace hal
         void handleCurrentFilterChanged(int index);
 
         void handleSeverityChanged(bool state);
+
+        void handleSearchChanged(QString filter);
         /**
          * Q_SLOT to handle interactions with the scrollbar. After the first scrollbar interaction the scrollbar wont
          * be locked at the bottom anymore (e.g. after a resize event).
@@ -169,6 +171,7 @@ namespace hal
         bool mWarningSeverity;
         bool mErrorSeverity;
         bool mDebugSeverity;
+        std::string mSearchFilter;
 
         //////
         void handleFilterTextChanged(const QString& filter_text);
