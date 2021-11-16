@@ -322,11 +322,16 @@ namespace hal
         ClockSetDialog csd(inputNets, this);
         if (csd.exec() != QDialog::Accepted) return;
 
-        int period = csd.period();
-        if (period <= 0) return;
+        if (csd.dontUseClock())
+            mCurrentWaveWidget->controller()->set_no_clock_used();
+        else
+        {
+            int period = csd.period();
+            if (period <= 0) return;
 
-        const Net* clk = inputNets.at(csd.netIndex());
-        mCurrentWaveWidget->controller()->add_clock_period(clk,period,csd.startValue()==0,csd.duration());
+            const Net* clk = inputNets.at(csd.netIndex());
+            mCurrentWaveWidget->controller()->add_clock_period(clk,period,csd.startValue()==0,csd.duration());
+        }
     }
 
     void VcdViewer::handleSelectGates()

@@ -83,6 +83,10 @@ namespace hal
                 :param int duration: Optional max time limit when showing clock in VCD viewer or editor
             )")
 
+            .def("set_no_clock_used", &NetlistSimulatorController::set_no_clock_used, R"(
+                 Prepare simulation where no net is defined as clock input.
+            )")
+
             .def("get_gates", &NetlistSimulatorController::get_gates, R"(
                 Get all gates that are in the simulation set.
 
@@ -102,6 +106,21 @@ namespace hal
 
                 :returns: The output nets.
                 :rtype: list[hal_py.Net]
+            )")
+
+            .def("add_waveform_group", &NetlistSimulatorController::add_waveform_group, py::arg("name"), py::arg("nets"), R"(
+                Add waveform group. Netlist must not be empty. First net in list is considered the lowest significant bit.
+
+                :param str name: The waveform group name.
+                :param list[hal_py.Net] nets: List of nets for group.
+                :returns: ID of new waveform group.
+                :rtype: int
+            )")
+
+            .def("remove_waveform_group", &NetlistSimulatorController::remove_waveform_group, py::arg("group_id"), R"(
+                Remove waveform group identified by group ID. Waveform for nets will still be shown but they are not bundled.
+
+                :param int group_id: The ID of waveform group to be removed.
             )")
 
             .def("set_input", &NetlistSimulatorController::set_input, py::arg("net"), py::arg("value"), R"(

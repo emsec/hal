@@ -37,12 +37,13 @@ namespace hal {
         std::vector<const Net*> m_output_nets;
 
         std::vector<SimulationInputNetEvent> mSimulationInputNetEvents;
+        bool mNoClockUsed;
 
         void compute_input_nets();
         void compute_output_nets();
 
     public:
-        SimulationInput() {;}
+        SimulationInput() : mNoClockUsed(false) {;}
 
         /**
          * Checks whether essential data for simulation has been provided (gates, clock, input_nets)
@@ -81,6 +82,11 @@ namespace hal {
          * @return true if net has been selected as clock, false otherwise
          */
         bool is_clock(const Net* n) const;
+
+        /**
+         * Prepare simulation where no net is defined as clock input
+         */
+        void set_no_clock_used();
 
         /**
          * Tests whether net is an input net

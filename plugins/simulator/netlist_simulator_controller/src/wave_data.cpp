@@ -42,7 +42,7 @@ namespace hal {
     }
 
     WaveData::WaveData(const WaveData& other)
-        : mId(other.mId), mName(other.mName), mNetType(other.mNetType), mBits(other.mBits), mValueBase(16),
+        : mId(other.mId), mName(other.mName), mNetType(other.mNetType), mBits(other.mBits), mValueBase(other.mValueBase),
           mData(other.mData), mGraphicsItem(nullptr)
     {;}
 
@@ -138,23 +138,27 @@ namespace hal {
     QString WaveData::strValue(const QMap<u64,int>::const_iterator& it) const
     {
         if (it == mData.constEnd()) return QString();
-        int v = it.value();
+        return strValue(it.value());
+    }
+
+    QString WaveData::strValue(int val) const
+    {
         int bts = bits();
-        switch (v) {
+        switch (val) {
         case -2 : return "z";
         case -1 : return "x";
         }
-        if (bts <= 1 || !v)
-            return QString::number(it.value());
+        if (bts <= 1 || !val)
+            return QString::number(val);
         if (mValueBase<0)
         {
             int mask = 1 << (bts-1);
-            if (v&mask)
-                return QString("-%1").arg((1 << bts) - v);
+            if (val&mask)
+                return QString("-%1").arg((1 << bts) - val);
             else
-                return QString::number(v);
+                return QString::number(val);
         }
-        QString retval = QString::number(v,mValueBase);
+        QString retval = QString::number(val,mValueBase);
         switch (mValueBase)
         {
         case 2:  return "0b" + retval;
@@ -468,6 +472,12 @@ namespace hal {
         }
         fflush(stderr);
 
+    }
+
+    void WaveDataList::updateWaveName(int inx, const QString& nam)
+    {
+        at(inx)->setName(nam);
+        Q_EMIT nameUpdated(inx);
     }
 
     void WaveDataList::updateWaveData(int inx)

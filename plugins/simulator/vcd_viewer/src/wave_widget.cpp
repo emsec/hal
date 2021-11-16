@@ -52,6 +52,7 @@ namespace hal {
         connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded);
         connect(mWaveDataList,&WaveDataList::waveMovedToGroup,mTreeModel,&WaveTreeModel::handleWaveMovedToGroup);
         connect(mWaveDataList,&WaveDataList::groupAboutToBeRemoved,mTreeModel,&WaveTreeModel::handleGroupAboutToBeRemoved);
+        connect(mWaveDataList,&WaveDataList::nameUpdated,mTreeModel,&WaveTreeModel::handleNameUpdated);
         connect(mWaveDataList,&WaveDataList::waveUpdated,mScene,&WaveScene::handleWaveUpdated);
         connect(mTreeModel,&WaveTreeModel::inserted,mTreeView,&WaveTreeView::handleInserted);
         connect(mTreeModel,&WaveTreeModel::triggerReorder,mTreeView,&WaveTreeView::reorder);
@@ -62,6 +63,7 @@ namespace hal {
         connect(mTreeModel,&WaveTreeModel::indexRemoved,mScene,&WaveScene::handleIndexRemoved);
 //        connect(mTreeModel,&WaveTreeModel::indexInserted,mScene,&WaveScene::handleIndexInserted);
         connect(mTreeView,&WaveTreeView::reordered,mScene,&WaveScene::setWavePositions);
+        connect(mTreeView,&WaveTreeView::valueBaseChanged,mScene,&WaveScene::updateWaveItemValues);
         connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);
         connect(mScene,&WaveScene::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
 
@@ -70,8 +72,6 @@ namespace hal {
 
         /*
         connect(&mWaveIndex,&WaveIndex::waveAppended,this,&WaveWidget::handleWaveAppended);
-        connect(&mWaveIndex,&WaveIndex::waveRemoved,this,&WaveWidget::handleWaveRemoved);
-        connect(&mWaveIndex,&WaveIndex::waveDataChanged,this,&WaveWidget::handleWaveDataChanged);
 
         connect(&mWaveIndex,&WaveIndex::waveAppended,mWaveScene,&WaveScene::handleWaveAppended);
         connect(&mWaveIndex,&WaveIndex::waveRemoved,mWaveScene,&WaveScene::handleWaveRemoved);
@@ -93,22 +93,17 @@ namespace hal {
 
     void WaveWidget::refreshNetNames()
     {
-        /* TODO
-        int n = mWaveIndex.waveDataList()->size();
+        int n = mWaveDataList->size();
         for (int i=0; i<n; i++)
         {
-            WaveData* wd = mWaveIndex.waveDataList()->at(i);
+            const WaveData* wd = mWaveDataList->at(i);
             if (!wd->id()) continue;
             Net* n = gNetlist->get_net_by_id(wd->id());
             if (!n) continue;
             QString netName = QString::fromStdString(n->get_name());
             if (netName == wd->name()) continue;
-            wd->setName(netName);
-            int inx = mWaveIndex.indexForWave(i);
-            if (inx < 0) continue;
-            handleWaveDataChanged(inx);
+            mWaveDataList->updateWaveName(i,netName);
         }
-        */
     }
 
     u32 WaveWidget::controllerId() const
@@ -226,41 +221,6 @@ namespace hal {
     {
         Q_ASSERT(wd);
         //TODO
-    }
-
-    void WaveWidget::handleWaveDataChanged(int inx)
-    {
-        /* TODO name change ?
-        int i0 = inx < 0 ? 0 : inx;
-        int i1 = inx < 0 ? mValues.size() : inx + 1;
-        for (int i=i0; i<i1; i++)
-            mValues.at(i)->setText(mWaveIndex.waveData(i)->name());
-            */
-    }
-
-    void WaveWidget::handleWaveRemoved(int inx)
-    {
-        /* TODO
-        if (inx < 0)
-        {
-            for (WaveLabel* wl : mValues)
-                delete wl;
-            mValues.clear();
-        }
-        else
-        {
-            int ilast = mValues.size()-1;
-            Q_ASSERT(inx <= ilast);
-            delete mValues.at(ilast);
-            mValues.removeAt(ilast);
-            for (int i=inx; i < ilast; i++)
-            {
-                WaveLabel* wl = mValues.at(i);
-                wl->setText(mWaveIndex.waveData(i)->name());
-                wl->update();
-            }
-        }
-        */
     }
 
     void WaveWidget::resizeEvent(QResizeEvent* event)

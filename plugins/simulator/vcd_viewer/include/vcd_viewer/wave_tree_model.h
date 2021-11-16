@@ -26,7 +26,6 @@ namespace hal {
         float mCursorPosition;
         bool mIgnoreSignals;
 
-        WaveData* item(const QModelIndex& index) const;
         void dropRow(const QModelIndex& parentTo, int row);
         void invalidateParent(const QModelIndex& parentRow);
         void updateGroup(WaveDataGroup* grp);
@@ -39,6 +38,7 @@ namespace hal {
     public Q_SLOTS:
         void handleUpdateValueFormat();
         void handleWaveAdded(int iwave);
+        void handleNameUpdated(int iwave);
         void handleWaveMovedToGroup(int iwave, WaveDataGroup* grp);
         void handleGroupAdded(int grpId);
         void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
@@ -68,6 +68,8 @@ namespace hal {
         void insertGroup(const QModelIndex& groupIndex, WaveDataGroup *grp=nullptr);
         int waveIndex(const QModelIndex& index) const;
         int groupId(const QModelIndex& grpIndex) const;
+        WaveData* item(const QModelIndex& index) const;
+
         void setGroupPosition(int ypos, const QModelIndex& index);
 
         QSet<int> waveDataIndexSet() const;

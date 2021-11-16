@@ -16,6 +16,7 @@
 
 #include <QFile>
 #include <QDate>
+#include <QVector>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/netlist/netlist_utils.h"
@@ -81,41 +82,6 @@ namespace hal
 
     void NetlistSimulatorController::initSimulator()
     {
-        /*
-        NetlistSimulatorPlugin* simPlug = static_cast<NetlistSimulatorPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator"));
-        if (!simPlug)
-        {
-            qDebug() << "Plugin 'netlist_simulator' not found";
-            return;
-        }
-        qDebug() << "access to plugin" << simPlug->get_name().c_str() << simPlug->get_version().c_str();
-        mSimulator = simPlug->get_shared_simulator("vcd_viewer");
-        if (!mSimulator)
-        {
-            qDebug() << "Cannot create new simulator";
-            return;
-        }
-        mSimulator->reset();
-        qDebug() << "sim has gates " << mSimulator->get_gates().size();
-        if (!gNetlist)
-        {
-            qDebug() << "No netlist loaded";
-            return;
-        }
-        qDebug() << "net has gates " << gNetlist->get_gates().size();
-        mSimulator->add_gates(mSimulateGates);
-
-
-        mClkNet = nullptr;
-        mInputNets = mSimulator->get_input_nets();
-        for (const Net* n : mInputNets)
-        {
-            WaveData* wd = new WaveData(n);
-            wd->insert(0,0);
-        }
-        mSimulator->set_iteration_timeout(1000);
-        setState(ParameterSetup);
-        */
     }
 
 
@@ -128,6 +94,26 @@ namespace hal
          connect(act, &QAction::triggered, this, &NetlistSimulatorController::handleClockSet);
          act->setEnabled(mState==SimulationClockSet);
 */
+    }
+
+    void NetlistSimulatorController::set_no_clock_used()
+    {
+        mSimulationInput->set_no_clock_used();
+        checkReadyState();
+    }
+
+    u32 NetlistSimulatorController::add_waveform_group(const std::string& name, const std::vector<Net*> nets)
+    {
+        if (nets.empty() || name.empty()) return 0;
+        QVector<u32> netVector;
+        netVector.reserve(nets.size());
+        for (Net* n : nets) netVector.append(n->get_id());
+        return mWaveDataList->createGroup(QString::fromStdString(name), netVector);
+    }
+
+    void NetlistSimulatorController::remove_waveform_group(u32 group_id)
+    {
+        mWaveDataList->removeGroup(group_id);
     }
 
     void NetlistSimulatorController::handleOpenInputFile(const QString &filename)

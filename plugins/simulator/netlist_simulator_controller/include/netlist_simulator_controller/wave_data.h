@@ -66,6 +66,7 @@ namespace hal {
         void insertBooleanValue(u64 t, BooleanFunction::Value bval);
         void eraseAtTime(u64 t);
         bool insertToggleTime(u64 t);
+        QString strValue(int val) const;
         QString strValue(float t) const;
         QString strValue(const QMap<u64,int>::const_iterator& it) const;
         void setValueBase(int bas) { mValueBase = bas; }
@@ -114,6 +115,7 @@ namespace hal {
         void clearAll();
         void updateClocks();
         void updateWaveData(int inx);
+        void updateWaveName(int inx, const QString& nam);
         u64 maxTime() const { return mMaxTime; }
         void setValueForEmpty(int val);
         void dump() const;
@@ -125,6 +127,7 @@ namespace hal {
         void groupAboutToBeRemoved(WaveDataGroup* grp);
         void waveDataAboutToBeChanged(int inx);
         void waveUpdated(int inx);
+        void nameUpdated(int inx);
         void waveRemoved(int inx);
         void waveMovedToGroup(int inx, WaveDataGroup* grp);
         void maxTimeChanged(u64 tmax);

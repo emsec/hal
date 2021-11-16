@@ -99,6 +99,25 @@ public:
     void add_clock_period(const Net* clock_net, u64 period, bool start_at_zero = true, u64 duration=0);
 
     /**
+     * Prepare simulation where no net is defined as clock input
+     */
+    void set_no_clock_used();
+
+    /**
+     * Add waveform group. Netlist must not be empty. First net in list is considered the lowest significant bit.
+     * @param name The waveform group name
+     * @param nets List of nets for group
+     * @return ID of new waveform group
+     */
+    u32 add_waveform_group(const std::string& name, const std::vector<Net*> nets);
+
+    /**
+     * Remove waveform group identified by group ID. Waveform for nets will still be shown but they are not bundled.
+     * @param group_id The ID of waveform group to be removed
+     */
+    void remove_waveform_group(u32 group_id);
+
+    /**
      * Add gates to the simulation set that contains all gates that are considered during simulation.
      * This function can only be called before the simulation has been initialized.
      *

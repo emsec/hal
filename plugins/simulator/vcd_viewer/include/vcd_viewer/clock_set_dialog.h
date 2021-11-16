@@ -4,6 +4,7 @@
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QSpinBox>
+#include <QCheckBox>
 #include <QList>
 #include <vector>
 
@@ -21,11 +22,16 @@ namespace hal {
         int period() const { return mSpinPeriod->value(); }
         int startValue() const { return mSpinStartValue->value(); }
         int duration() const { return mSpinDuration->value(); }
+        bool dontUseClock() const { return mDontUseClock->isChecked(); }
+    private Q_SLOTS:
+        void dontUseClockChanged(bool state);
     private:
         QComboBox* mComboNet;
         QSpinBox* mSpinPeriod;
         QSpinBox* mSpinStartValue;
         QSpinBox* mSpinDuration;
+        QCheckBox* mDontUseClock;
+
         QDialogButtonBox* mButtonBox;
     };
 }

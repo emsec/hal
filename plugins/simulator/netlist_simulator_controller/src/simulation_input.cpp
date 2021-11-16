@@ -46,7 +46,7 @@ namespace hal {
 
     bool SimulationInput::is_ready() const
     {
-        return has_gates() && !m_clocks.empty() && !m_input_nets.empty();
+        return has_gates() && (!m_clocks.empty() || mNoClockUsed) && !m_input_nets.empty();
     }
 
     bool SimulationInput::has_gates() const
@@ -67,6 +67,11 @@ namespace hal {
     bool SimulationInput::is_input_net(const Net* n) const
     {
         return (m_input_nets.find(n) != m_input_nets.end());
+    }
+
+    void SimulationInput::set_no_clock_used()
+    {
+        mNoClockUsed = true;
     }
 
     void SimulationInput::dump(std::string filename) const

@@ -88,7 +88,7 @@ const char* WaveItem::sLineColor[] = { "#10E0FF", "#C08010"} ;
                 {
                     u64 t1 = it == mData->data().constEnd() ? mMaxTime : it.key();
                     float w = (t1 < t0+10 ? 10 : t1-t0);
-                    WaveValueAsTextItem* wvti = new WaveValueAsTextItem(QString::number(v0,16),w,m11,this);
+                    WaveValueAsTextItem* wvti = new WaveValueAsTextItem(v0,w,m11,this);
                     wvti->setPos(t0,0);
                 }
             }
@@ -207,8 +207,8 @@ const char* WaveItem::sLineColor[] = { "#10E0FF", "#C08010"} ;
         return QRectF(0,-0.05,mMaxTime,1.1);
     }
 
-    WaveValueAsTextItem::WaveValueAsTextItem(const QString& txt, float w, float m11, QGraphicsItem *parentItem)
-        : QGraphicsItem(parentItem), mText(txt), mWidth(w), mXmag(m11)
+    WaveValueAsTextItem::WaveValueAsTextItem(int val, float w, float m11, QGraphicsItem *parentItem)
+        : QGraphicsItem(parentItem), mValue(val), mWidth(w), mXmag(m11)
     {
 //        setFlags(flags() | QGraphicsItem::ItemIgnoresTransformations);
     }
@@ -225,6 +225,8 @@ const char* WaveItem::sLineColor[] = { "#10E0FF", "#C08010"} ;
         Q_UNUSED(option);
         Q_UNUSED(widget);
 
+        const WaveItem* pItem = static_cast<const WaveItem*>(parentItem());
+        QString txt = pItem->wavedata()->strValue(mValue);
         painter->setTransform(QTransform(1/mXmag,0,0,1/14.,0,0),true);
         QRectF rTrans(0,0,boundingRect().width()*mXmag,boundingRect().height()*14);
         QFont font = painter->font();
@@ -232,9 +234,9 @@ const char* WaveItem::sLineColor[] = { "#10E0FF", "#C08010"} ;
         font.setBold(true);
         painter->setFont(font);
         painter->setPen(QPen(Qt::white,0)); // TODO : style
-        float textWidth = painter->boundingRect(rTrans,Qt::AlignHCenter | Qt::AlignVCenter, mText).width();
+        float textWidth = painter->boundingRect(rTrans,Qt::AlignHCenter | Qt::AlignVCenter, txt).width();
         if (textWidth + 6 <= rTrans.width())
-            painter->drawText(rTrans,Qt::AlignHCenter | Qt::AlignVCenter, mText);
+            painter->drawText(rTrans,Qt::AlignHCenter | Qt::AlignVCenter, txt);
     }
 
     QRectF WaveValueAsTextItem::boundingRect() const

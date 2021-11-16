@@ -122,6 +122,13 @@ namespace hal {
         insertItem(mRoot->size(),createIndex(0,0,nullptr),wd);
     }
 
+    void WaveTreeModel::handleNameUpdated(int iwave)
+    {
+        WaveData* wd = mWaveDataList->at(iwave);
+        for (QModelIndex inx : indexes(wd))
+            Q_EMIT dataChanged(inx,inx);
+    }
+
     void WaveTreeModel::handleWaveMovedToGroup(int iwave, WaveDataGroup* grp)
     {
         WaveData* wd = mWaveDataList->at(iwave);
@@ -300,6 +307,7 @@ namespace hal {
     {
         QModelIndex i0 = createIndex(0,2,mRoot);
         QModelIndex i1 = createIndex(mRoot->size()-1,2,mRoot);
+
         Q_EMIT dataChanged(i0,i1);
     }
 

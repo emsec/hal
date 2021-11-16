@@ -18,7 +18,6 @@ namespace hal {
 
         QHash<int,WaveItem*> mWaveItems;
         QHash<int,WaveItem*> mGroupItems;
-        int                  mMaxPosition;
         WaveCursor* mCursor;
         QTimer* mClearTimer;
         float   mXmag;
@@ -27,6 +26,7 @@ namespace hal {
         void addWaveInternal(int iwave, int ypos);
         void addGroupInternal(int grpId, int ypos);
         float adjustSceneRect(u64 tmax = 0);
+        int nextWavePosition() const;
 
         static const int sMinItemHeight;
     Q_SIGNALS:
@@ -34,6 +34,7 @@ namespace hal {
 
     public Q_SLOTS:
         void xScaleChanged(float m11);
+        void updateWaveItemValues();
         void handleWaveAdded(int iwave);
         void handleWaveUpdated(int iwave);
         void handleGroupAdded(int grpId);

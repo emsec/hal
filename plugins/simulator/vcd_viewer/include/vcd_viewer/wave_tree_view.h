@@ -26,11 +26,14 @@ namespace hal {
         void viewportHeightChanged(int height);
         void sizeChanged(int widgetHeight, int viewportHeight);
         void reordered(QHash<int,int> wavePosition, QHash<int,int> groupPosition);
+        void valueBaseChanged();
 
     private Q_SLOTS:
         void handleExpandCollapse(const QModelIndex& index);
         void handleContextMenuRequested(const QPoint& pos);
         void handleRemoveItem();
+        void handleRenameItem();
+        void handleEditOrBrowseItem();
         void handleRemoveGroup();
         void handleInsertGroup();
         void handleSetValueFormat();

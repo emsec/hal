@@ -10,7 +10,7 @@ namespace hal {
     const float WaveScene::sMinSceneWidth = 1000;
 
     WaveScene::WaveScene(WaveDataList* wdlist, QObject *parent)
-        : QGraphicsScene(parent), mWaveDataList(wdlist), mMaxPosition(0),
+        : QGraphicsScene(parent), mWaveDataList(wdlist),
           mClearTimer(nullptr), mXmag(1)
     {
         setSceneRect(0,0,sMinSceneWidth,yPosition(sMinItemHeight)+2);
@@ -52,11 +52,16 @@ namespace hal {
         }
     }
 
+    int WaveScene::nextWavePosition() const
+    {
+        return mWaveItems.size() + mGroupItems.size();
+    }
+
+
     float WaveScene::adjustSceneRect(u64 tmax)
     {
-        int n = mWaveItems.size();
+        int n = nextWavePosition();
         if (n<sMinItemHeight) n=sMinItemHeight;
-        if (n<mMaxPosition) n=mMaxPosition;
 
 
         float maxw = sceneRect().width();
@@ -78,13 +83,13 @@ namespace hal {
 
     void WaveScene::handleWaveAdded(int iwave)
     {
-        addWaveInternal(iwave,mMaxPosition++);
+        addWaveInternal(iwave,nextWavePosition());
         adjustSceneRect();
     }
 
     void WaveScene::handleGroupAdded(int grpId)
     {
-        addGroupInternal(grpId,mMaxPosition++);
+        addGroupInternal(grpId,nextWavePosition());
         adjustSceneRect();
     }
 
@@ -94,14 +99,19 @@ namespace hal {
         adjustSceneRect();
     }
 
+    void WaveScene::updateWaveItemValues()
+    {
+        for (WaveItem* itm : mGroupItems)
+            itm->updateScaleFactor(mXmag);
+    }
+
     void WaveScene::xScaleChanged(float m11)
     {
         if (m11 == mXmag) return;
         mXmag = m11;
         mCursor->xScaleChanged(mXmag);
         mCursor->update();
-        for (WaveItem* itm : mGroupItems)
-            itm->updateScaleFactor(mXmag);
+        updateWaveItemValues();
     }
 
     void WaveScene::addWaveInternal(int iwave, int ypos)

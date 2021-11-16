@@ -47,9 +47,22 @@ namespace hal {
         mSpinDuration->setValue(2000);
         layout->addWidget(mSpinDuration,3,1);
 
+        mDontUseClock = new QCheckBox("Do not use clock in simulation",this);
+        mDontUseClock->setCheckState(Qt::Unchecked);
+        connect(mDontUseClock,&QCheckBox::stateChanged,this,&ClockSetDialog::dontUseClockChanged);
+        layout->addWidget(mDontUseClock,4,0,1,2);
+
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-        layout->addWidget(mButtonBox,4,1);
+        layout->addWidget(mButtonBox,5,1);
+    }
+
+    void ClockSetDialog::dontUseClockChanged(bool state)
+    {
+        mComboNet->setDisabled(state);
+        mSpinPeriod->setDisabled(state);
+        mSpinStartValue->setDisabled(state);
+        mSpinDuration->setDisabled(state);
     }
 }

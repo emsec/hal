@@ -8,11 +8,11 @@ namespace hal {
 
     class WaveValueAsTextItem : public QGraphicsItem
     {
-        QString mText;
+        int mValue;
         float mWidth;
         float mXmag;
     public:
-        WaveValueAsTextItem(const QString& txt, float w, float m11, QGraphicsItem* parentItem = nullptr);
+        WaveValueAsTextItem(int val, float w, float m11, QGraphicsItem* parentItem = nullptr);
         void updateScaleFactor(float m11);
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
         QRectF boundingRect() const override;

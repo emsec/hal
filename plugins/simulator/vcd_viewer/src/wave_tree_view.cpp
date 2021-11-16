@@ -8,6 +8,8 @@
 #include <QDebug>
 #include <QMenu>
 #include <QAction>
+#include <QLineEdit>
+#include <QInputDialog>
 #include <QMimeData>
 
 namespace hal {
@@ -102,16 +104,22 @@ namespace hal {
         act = menu->addAction("Insert new group");
         connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertGroup);
 
+        act = menu->addAction("Rename '" + wtm->netName(mContextIndex) + "'");
+        connect(act,&QAction::triggered,this,&WaveTreeView::handleRenameItem);
+
         if (wtm->isLeaveItem(mContextIndex))
         {
-            act = menu->addAction("Rename net " + wtm->netName(mContextIndex));
             act = menu->addAction("Edit net wave " + wtm->netName(mContextIndex));
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleEditOrBrowseItem);
+
             act = menu->addAction("Remove net wave " + wtm->netName(mContextIndex));
             connect(act,&QAction::triggered,this,&WaveTreeView::handleRemoveItem);
         }
         else
         {
             act = menu->addAction("View group data " + wtm->netName(mContextIndex));
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleEditOrBrowseItem);
+
             act = menu->addAction("Remove group " + wtm->netName(mContextIndex));
             connect(act,&QAction::triggered,this,&WaveTreeView::handleRemoveGroup);
 
@@ -143,6 +151,34 @@ namespace hal {
         QAction* act = static_cast<QAction*>(sender());
         grp->setValueBase(act->data().toInt());
         wtm->handleUpdateValueFormat();
+        Q_EMIT valueBaseChanged();
+    }
+
+    void WaveTreeView::handleRenameItem()
+    {
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        WaveData* wd = wtm->item(mContextIndex);
+        if (!wd) return;
+        bool confirm;
+        QString newName =
+                QInputDialog::getText(this, "Change name in waveform list", "New name:", QLineEdit::Normal,
+                                      wd->name(), &confirm);
+        if (confirm && !newName.isEmpty())
+            wd->setName(newName);
+    }
+
+    void WaveTreeView::handleEditOrBrowseItem()
+    {
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        WaveData* wd = wtm->item(mContextIndex);
+        if (!wd) return;
+
+        WaveEditDialog wed(wd, this);
+        if (wed.exec() == QDialog::Accepted)
+        {
+            wd->setData(wed.dataMap());
+            mWaveDataList->updateWaveData(mWaveDataList->waveIndexByNetId(wd->id()));
+        }
     }
 
     void WaveTreeView::handleRemoveItem()
