@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    const std::set<std::string> VerilogWriter::valid_types = {"string", "integer", "floating_point", "bit_value", "bit_vector"};
+    const std::set<std::string> VerilogWriter::valid_types = {"string", "integer", "floating_point", "bit_value", "bit_vector", "bit_string"};
 
     bool VerilogWriter::write(Netlist* netlist, const std::filesystem::path& file_path)
     {
@@ -466,6 +466,23 @@ namespace hal
             //     len -= 1;
             // }
             res_stream << len << "'h" << value;
+        }
+        else if (type == "bit_string")
+        {
+            u32 len = value.size();
+            // if (value.at(0) == '0' || value.at(0) == '1')
+            // {
+            //     len -= 3;
+            // }
+            // else if (value.at(0) == '2' || value.at(0) == '3')
+            // {
+            //     len -= 2;
+            // }
+            // else if (value.at(0) >= '4' && value.at(0) <= '7')
+            // {
+            //     len -= 1;
+            // }
+            res_stream << len << "'b" << value;
         }
         else
         {
