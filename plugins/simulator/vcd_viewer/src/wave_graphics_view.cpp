@@ -28,7 +28,9 @@ namespace hal {
         if (dy)
         {
             WaveWidget* ww = static_cast<WaveWidget*>(parent());
-            ww->scrollToYpos(verticalScrollBar()->value());
+            int ypos = verticalScrollBar()->value();
+            ww->scrollToYpos(ypos);
+            mTimescale->move(0,0);
         }
         if (dx)
         {
@@ -75,6 +77,7 @@ namespace hal {
         mXmag = m;
 
         int ixMouseViewp = (int) floor(event->pos().x()+0.25);
+//        int ixMouseViewp = (int) floor(event->position().x()+0.25);
         float xMouseScene = mapToScene(ixMouseViewp,0).x();
 
         setTransform(QTransform(mXmag, 0, 0, 14, 0, 0),false);

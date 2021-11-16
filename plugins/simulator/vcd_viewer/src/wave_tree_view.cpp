@@ -1,7 +1,6 @@
 #include "vcd_viewer/wave_tree_view.h"
 #include "vcd_viewer/wave_tree_model.h"
 #include "vcd_viewer/wave_widget.h"
-#include "vcd_viewer/volatile_wave_data.h"
 #include "vcd_viewer/wave_edit_dialog.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include <QScrollBar>
@@ -12,8 +11,8 @@
 #include <QMimeData>
 
 namespace hal {
-    WaveTreeView::WaveTreeView(WaveDataList* wdList, VolatileWaveData* wdVol, QWidget* parent)
-        : QTreeView(parent), mWaveDataList(wdList), mVolatileWaveData(wdVol)
+    WaveTreeView::WaveTreeView(WaveDataList* wdList, QWidget* parent)
+        : QTreeView(parent), mWaveDataList(wdList)
     {
         setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -49,12 +48,16 @@ namespace hal {
             {
                 int grpId = wtm->groupId(inx);
                 if (grpId >= 0)
-                    wd = mVolatileWaveData->waveData(grpId);
+                    wd = mWaveDataList->mDataGroups.value(grpId);
             }
             if (wd)
             {
-                WaveEditDialog wed(*wd, this);
-                wed.exec();
+                WaveEditDialog wed(wd, this);
+                if (wed.exec() == QDialog::Accepted)
+                {
+                    wd->setData(wed.dataMap());
+                    mWaveDataList->updateWaveData(iwave);
+                }
                 return;
             }
         }
@@ -96,17 +99,6 @@ namespace hal {
         QMenu* menu = new QMenu(this);
         QAction* act;
 
-        QMenu* menuBase = menu->addMenu("Value format ...");
-        act = menuBase->addAction("Binary");
-        act->setData(2);
-        connect(act,&QAction::triggered,wtm,&WaveTreeModel::handleSetValueFormat);
-        act = menuBase->addAction("Decimal");
-        act->setData(10);
-        connect(act,&QAction::triggered,wtm,&WaveTreeModel::handleSetValueFormat);
-        act = menuBase->addAction("Hexdec");
-        act->setData(16);
-        connect(act,&QAction::triggered,wtm,&WaveTreeModel::handleSetValueFormat);
-
         act = menu->addAction("Insert new group");
         connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertGroup);
 
@@ -122,15 +114,41 @@ namespace hal {
             act = menu->addAction("View group data " + wtm->netName(mContextIndex));
             act = menu->addAction("Remove group " + wtm->netName(mContextIndex));
             connect(act,&QAction::triggered,this,&WaveTreeView::handleRemoveGroup);
+
+            QMenu* menuBase = menu->addMenu("Value format for " + wtm->netName(mContextIndex));
+            act = menuBase->addAction("Binary");
+            act->setData(2);
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
+            act = menuBase->addAction("Decimal (signed)");
+            act->setData(-10);
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
+            act = menuBase->addAction("Decimal (unsigned)");
+            act->setData(10);
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
+            act = menuBase->addAction("Hexdec");
+            act->setData(16);
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
         }
         menu->popup(viewport()->mapToGlobal(pos));
+    }
+
+    void WaveTreeView::handleSetValueFormat()
+    {
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        int grpId = wtm->groupId(mContextIndex);
+        if (grpId<0) return;
+        WaveDataGroup* grp = mWaveDataList->mDataGroups.value(grpId);
+        if (!grp) return;
+
+        QAction* act = static_cast<QAction*>(sender());
+        grp->setValueBase(act->data().toInt());
+        wtm->handleUpdateValueFormat();
     }
 
     void WaveTreeView::handleRemoveItem()
     {
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
-        WaveTreeItem* wti = wtm->removeItem(mContextIndex.row(),mContextIndex.parent());
-        delete wti;
+        wtm->removeItem(mContextIndex.row(),mContextIndex.parent());
         reorder();
     }
 
@@ -166,42 +184,35 @@ namespace hal {
 
     void WaveTreeView::handleInserted(const QModelIndex& index)
     {
+        reorder();
         selectionModel()->setCurrentIndex(index,
                                           QItemSelectionModel::Clear  |
                                           QItemSelectionModel::Select |
                                           QItemSelectionModel::Rows );
     }
 
-    void WaveTreeView::setWaveSelection(const QSet<u32>& netIds)
-    {
-        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
-        QList<QModelIndex> selIndex = wtm->indexByNetIds(netIds);
-        selectionModel()->reset();
-        for (QModelIndex sel : selIndex)
-        {
-            QModelIndex p = sel.parent();
-            if (p.isValid() && !isExpanded(p)) expand(p);
-            selectionModel()->select(sel,QItemSelectionModel::Select);
-        }
-    }
 
     void WaveTreeView::reorder()
     {
-        mOrder.clear();
+        mItemOrder.clear();
 
         orderRecursion(QModelIndex());
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
         QHash<int,int> wavePositionMap;
-        for (int i=0; i<mOrder.size(); i++)
+        QHash<int,int> groupPositionMap;
+        for (int i=0; i<mItemOrder.size(); i++)
         {
-            int iwave = wtm->waveIndex(mOrder.at(i));
+            int iwave = wtm->waveIndex(mItemOrder.at(i));
             if (iwave < 0)
-                wtm->setVolatilePosition(i,mOrder.at(i));
+            {
+                int groupId = wtm->groupId(mItemOrder.at(i));
+                if (groupId > 0)
+                    groupPositionMap[groupId] = i;
+            }
             else
                 wavePositionMap[iwave] = i;
         }
-        Q_EMIT reordered(wavePositionMap);
-        mVolatileWaveData->ready();
+        Q_EMIT reordered(wavePositionMap, groupPositionMap);
     }
 
     void WaveTreeView::orderRecursion(const QModelIndex &parent)
@@ -211,8 +222,18 @@ namespace hal {
         {
             QModelIndex inx = model()->index(i,0,parent);
             if (!inx.isValid()) continue;
-            mOrder.append(inx);
+            mItemOrder.append(inx);
             if (isExpanded(inx)) orderRecursion(inx);
+        }
+    }
+
+    void WaveTreeView::setWaveSelection(const QSet<u32>& netIds)
+    {
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        selectionModel()->clear();
+        for (QModelIndex inx : wtm->indexes(netIds))
+        {
+            selectionModel()->select(inx, QItemSelectionModel::Select);
         }
     }
 }

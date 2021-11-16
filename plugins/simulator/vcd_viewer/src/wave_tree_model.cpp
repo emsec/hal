@@ -1,5 +1,4 @@
 #include "vcd_viewer/wave_tree_model.h"
-#include "vcd_viewer/volatile_wave_data.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include <QApplication>
 #include <QFont>
@@ -9,57 +8,16 @@
 #include <stdlib.h>
 
 namespace hal {
-    WaveTreeItem::WaveTreeItem(u32 id_, const QString& nam, int iwave)
-        : mId(id_), mName(nam), mWaveIndex(iwave)
-    {;}
-
-    /*
-    QVariant WaveTreeItem::data(int icol) const
-    {
-        switch(icol)
-        {
-        case 0: return mName;
-        case 1: return mId;
-        case 2: return QString::number(value(),16);
-        }
-        return QVariant();
-    }
-
-
-    int WaveTreeGroup::value() const
-    {
-        if (size()>30) return -1;
-        int retval = 0;
-        int mask = 1;
-        for (auto it = constBegin(); it!= constEnd(); ++it)
-        {
-            int v = (*it)->value();
-            if (v<0) return v;
-            if (v) retval |= mask;
-            mask <<= 1;
-        }
-        return retval;
-    }
-    */
-
-    u32 WaveTreeGroup::sMaxGroupId = 0;
-
-    WaveTreeGroup::WaveTreeGroup(const QString& nam)
-        : WaveTreeItem(0,nam,-1)
-    {
-        mGroupId = ++sMaxGroupId;
-        if (nam.isEmpty())
-            setName(QString("group_%1").arg(mGroupId));
-    }
 
     const char* WaveTreeModel::sStateColor[3] = {"#707071", "#102080", "#802010"};
 
-    WaveTreeModel::WaveTreeModel(WaveDataList *wdlist, VolatileWaveData *wdVol, QObject *obj)
-        : QAbstractItemModel(obj), mWaveDataList(wdlist), mVolatileWaveData(wdVol),
-          mValueBase(16), mCursorPosition(0)
+
+    WaveTreeModel::WaveTreeModel(WaveDataList *wdlist, QObject *obj)
+        : QAbstractItemModel(obj), mWaveDataList(wdlist),
+          mCursorPosition(0), mIgnoreSignals(false)
     {
 
-        mRoot = new WaveTreeGroup;
+        mRoot = new WaveDataRoot(mWaveDataList);
 
         /*
         for (int i=100; i<104; i++)
@@ -77,28 +35,102 @@ namespace hal {
             */
     }
 
-    WaveTreeItem* WaveTreeModel::item(const QModelIndex& index) const
+    WaveData *WaveTreeModel::item(const QModelIndex& index) const
     {
         if (!index.isValid()) return nullptr;
-        WaveTreeGroup* grp = static_cast<WaveTreeGroup*>(index.internalPointer());
+        WaveDataGroup* grp = static_cast<WaveDataGroup*>(index.internalPointer());
         if (!grp) return mRoot;
-        return grp->at(index.row());
+        return grp->childAt(index.row());
     }
 
     QModelIndex WaveTreeModel::index(int row, int column, const QModelIndex &parent) const
     {
-        WaveTreeItem* wti = item(parent);
-        if (!wti) return createIndex(row,0,mRoot);
-        WaveTreeGroup* grp = dynamic_cast<WaveTreeGroup*>(wti);
+        WaveData* wd = item(parent);
+        if (!wd) return createIndex(row,0,mRoot);
+        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(wd);
         if (!grp || row >= grp->size()) return QModelIndex();
         return createIndex(row,column,grp);
+    }
+
+    QModelIndexList WaveTreeModel::indexes(const WaveData* wd) const
+    {
+        QModelIndexList retval;
+        int rootRow = 0;
+        for (WaveData* rootChild : mRoot->children())
+        {
+            if (rootChild == wd)
+                retval.append(createIndex(rootRow,0,mRoot));
+            else
+            {
+                WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(rootChild);
+                if (grp)
+                {
+                    int groupRow = 0;
+                    for (const WaveData* grpChild : grp->children())
+                    {
+                        if (grpChild == wd)
+                            retval.append(createIndex(groupRow,0,grp));
+                        groupRow++;
+                    }
+                }
+            }
+            rootRow++;
+        }
+        return retval;
+    }
+
+    QModelIndexList WaveTreeModel::indexes(const QSet<u32>& netIds) const
+    {
+        QModelIndexList retval;
+        int rootRow = 0;
+        for (WaveData* rootChild : mRoot->children())
+        {
+            WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(rootChild);
+            if (grp)
+            {
+                int groupRow = 0;
+                for (const WaveData* grpChild : grp->children())
+                {
+                    if (netIds.contains(grpChild->id()))
+                        for (int icol=0; icol<3; icol++)
+                            retval.append(createIndex(groupRow,0,grp));
+                    groupRow++;
+                }
+            }
+            else
+            {
+                if (netIds.contains(rootChild->id()))
+                    for (int icol=0; icol<3; icol++)
+                        retval.append(createIndex(rootRow,0,mRoot));
+            }
+            rootRow++;
+        }
+        return retval;
+    }
+
+    void WaveTreeModel::handleGroupAdded(int grpId)
+    {
+        if (mIgnoreSignals) return;
+        WaveDataGroup* grp = mWaveDataList->mDataGroups.value(grpId);
+        if (!grp) return;
+        insertGroup(createIndex(mRoot->size(),0,mRoot),grp);
     }
 
     void WaveTreeModel::handleWaveAdded(int iwave)
     {
         WaveData* wd = mWaveDataList->at(iwave);
-        WaveTreeItem* wti = new WaveTreeItem(wd->id(),wd->name(),iwave);
-        insertItem(mRoot->size(),createIndex(0,0,nullptr),wti);
+        insertItem(mRoot->size(),createIndex(0,0,nullptr),wd);
+    }
+
+    void WaveTreeModel::handleWaveMovedToGroup(int iwave, WaveDataGroup* grp)
+    {
+        WaveData* wd = mWaveDataList->at(iwave);
+        for (QModelIndex inx : indexes(wd))
+        {
+            if (inx.internalPointer() == grp) continue;
+            removeItem(inx.row(),inx.parent());
+        }
+        Q_EMIT triggerReorder();
     }
 
     QVariant WaveTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -142,39 +174,27 @@ namespace hal {
         case Qt::BackgroundRole:
         {
             if (index.column() != 2) return QVariant();
-            WaveTreeItem* wti = item(index);
-            int v = itemValue(wti);
+            WaveData* wd = item(index);
+            int v = wd->intValue(mCursorPosition);
             if (v<-1) v=-1;
             if (v>1) v=1;
             return QColor(sStateColor[v+1]);
         }
         case Qt::DisplayRole:
         {
-            WaveTreeItem* wti = item(index);
-            if (!wti) return QVariant();
+            WaveData* wd = item(index);
+            if (!wd) return QVariant();
             switch (index.column())
             {
             case 0:
-                return wti->name();
+                return wd->name();
             case 1:
-                if (wti->id() < 1)
+                if (wd->id() < 1)
                     return QString();
-                return QString::number(wti->id());
+                return QString::number(wd->id());
             case 2:
-            {
-                int v = itemValue(wti);
-                if (v<0) return "X";
-                QString retval = QString::number(v,mValueBase);
-                if (v>1) switch (mValueBase) {
-                case 2:
-                    retval.prepend("0b");
-                    break;
-                case 16:
-                    retval.prepend("0x");
-                    break;
-                }
-                return retval;
-            }}
+                return wd->strValue(mCursorPosition);
+            }
         }
         default:
                 break;
@@ -183,52 +203,35 @@ namespace hal {
         return QVariant();
     }
 
-    int WaveTreeModel::itemValue(const WaveTreeItem* wti) const
-    {
-        WaveData* wd = nullptr;
-        int iwave = wti->waveIndex();
-        if (iwave >= 0)
-            wd = mWaveDataList->at(iwave);
-        else
-        {
-            const WaveTreeGroup* grp = dynamic_cast<const WaveTreeGroup*>(wti);
-            if (grp)
-            {
-                wd = mVolatileWaveData->waveData(grp->groupId());
-            }
-        }
-        if (!wd || wd->isEmpty()) return -1;
-        return wd->intValue(mCursorPosition);
-    }
-
     int WaveTreeModel::waveIndex(const QModelIndex& index) const
     {
-         WaveTreeItem* wti = item(index);
-         if (!wti) return -1;
-         return wti->waveIndex();
+         WaveData* wd = item(index);
+         if (!wd) return -1;
+         if (dynamic_cast<WaveDataGroup*>(wd)) return -1;
+         return mWaveDataList->waveIndexByNetId(wd->id());
     }
 
     int WaveTreeModel::groupId(const QModelIndex& grpIndex) const
     {
-        WaveTreeGroup* grp = dynamic_cast<WaveTreeGroup*>(item(grpIndex));
+        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(item(grpIndex));
         if (!grp) return -1;
-        return grp->groupId();
+        return grp->id();
     }
 
     QString WaveTreeModel::netName(const QModelIndex &index) const
     {
-        WaveTreeItem* wti = item(index);
-        if (!wti) return QString();
-        return wti->name();
+        WaveData* wd = item(index);
+        if (!wd) return QString();
+        return wd->name();
     }
 
     int WaveTreeModel::rowCount(const QModelIndex &parent) const
     {
         if (!parent.isValid())
             return mRoot->size();
-        WaveTreeItem* wti = item(parent);
-        if (!wti) return 0;
-        WaveTreeGroup* grp = dynamic_cast<WaveTreeGroup*>(wti);
+        WaveData* wd = item(parent);
+        if (!wd) return 0;
+        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(wd);
         if (!grp) return 0;
         return grp->size();
     }
@@ -242,7 +245,7 @@ namespace hal {
     QModelIndex WaveTreeModel::parent(const QModelIndex &child) const
     {
         if (!child.isValid()) return QModelIndex();
-        WaveTreeGroup* grp = static_cast<WaveTreeGroup*>(child.internalPointer());
+        WaveDataGroup* grp = static_cast<WaveDataGroup*>(child.internalPointer());
         if (!grp) return QModelIndex();
         if (grp == mRoot)
             return createIndex(0,0,nullptr);
@@ -250,56 +253,13 @@ namespace hal {
         int n = mRoot->size();
         for (int i=0; i<n; i++)
         {
-            if (mRoot->at(i) == grp)
+            if (mRoot->childAt(i) == grp)
             {
                 return createIndex(i,0,mRoot);
             }
         }
         return QModelIndex();
     }
-
-    QSet<int> WaveTreeModel::waveDataIndexSet() const
-    {
-        QSet<int> retval;
-        for (const WaveTreeItem* wti : *mRoot)
-        {
-            const WaveTreeGroup* grp = dynamic_cast<const WaveTreeGroup*>(wti);
-            if (grp)
-            {
-                for (const WaveTreeItem* wtii : *grp )
-                    retval.insert(wtii->waveIndex());
-            }
-            else
-                retval.insert(wti->waveIndex());
-        }
-        return retval;
-    }
-
-    QList<QModelIndex> WaveTreeModel::indexByNetIds(const QSet<u32>& netIds)
-    {
-        QList<QModelIndex> retval;
-        for (int i=0; i<mRoot->size(); i++)
-        {
-            const WaveTreeItem* wti = mRoot->at(i);
-            const WaveTreeGroup* grp = dynamic_cast<const WaveTreeGroup*>(wti);
-            if (grp)
-            {
-                for (int j=0; j<grp->size(); j++)
-                {
-                    const WaveTreeItem* wtii = grp->at(j);
-                    if (netIds.contains(wtii->id()))
-                        retval.append(index(j,0,index(i,0)));
-                }
-            }
-            else
-            {
-                if (netIds.contains(wti->id()))
-                retval.append(index(i,0));
-            }
-        }
-        return retval;
-    }
-
 
     Qt::DropActions WaveTreeModel::supportedDragActions() const
     {
@@ -310,6 +270,7 @@ namespace hal {
     {
         Qt::ItemFlags retval = Qt::ItemIsDropEnabled | Qt:: ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
         if (!index.isValid()) return retval;
+        if (item(index)->bits()>1) return retval;
         if (isLeaveItem(index)) return retval | Qt::ItemIsDragEnabled | Qt::ItemNeverHasChildren;
         return retval;
     }
@@ -321,10 +282,10 @@ namespace hal {
         QModelIndex targetIndex = parentTo;
         if (parentTo.internalPointer() == mDragIndex.internalPointer() && mDragIndex.row() < parentTo.row())
             targetIndex = createIndex(parentTo.row()-1,0,parentTo.internalPointer());
-        WaveTreeItem* itm = removeItem(mDragIndex.row(),parentFrom);
-        if (!itm) return;
-        insertItem(targetRow,targetIndex,itm);
-        Q_EMIT dropped();
+        WaveData* wd = removeItem(mDragIndex.row(),parentFrom);
+        if (!wd) return;
+        insertItem(targetRow,targetIndex,wd);
+        Q_EMIT triggerReorder();
     }
 
     void WaveTreeModel::handleCursorMoved(float xpos)
@@ -335,10 +296,8 @@ namespace hal {
         Q_EMIT dataChanged(i0,i1);
     }
 
-    void WaveTreeModel::handleSetValueFormat()
+    void WaveTreeModel::handleUpdateValueFormat()
     {
-        QAction* act = static_cast<QAction*>(sender());
-        mValueBase = act->data().toInt();
         QModelIndex i0 = createIndex(0,2,mRoot);
         QModelIndex i1 = createIndex(mRoot->size()-1,2,mRoot);
         Q_EMIT dataChanged(i0,i1);
@@ -352,11 +311,11 @@ namespace hal {
         if (!mimeData->formats().contains("application/x-qabstractitemmodeldatalist")) return false;
         if (isLeaveItem(dropParent))
         {
-            WaveTreeItem* itm = item(dropParent);
-            WaveTreeGroup* grp = static_cast<WaveTreeGroup*>(dropParent.internalPointer());
+            WaveData* wd = item(dropParent);
+            WaveDataGroup* grp = static_cast<WaveDataGroup*>(dropParent.internalPointer());
             int n=grp->size();
             for (int i=0; i<n; i++)
-                if (grp->at(i) == itm)
+                if (grp->childAt(i) == wd)
                 {
                     dropRow(dropParent.parent(),i+1);
                     return true;
@@ -385,52 +344,28 @@ namespace hal {
 
     bool WaveTreeModel::isLeaveItem(const QModelIndex &index) const
     {
-        WaveTreeItem*  itm = item(index);
-        if (!itm) return false;
-        return dynamic_cast<WaveTreeGroup*>(itm)==nullptr;
+        WaveData* wd = item(index);
+        if (!wd) return false;
+        return dynamic_cast<WaveDataGroup*>(wd)==nullptr;
     }
 
-    bool WaveTreeModel::insertItem(int row, const QModelIndex &parent, WaveTreeItem* itm)
+    bool WaveTreeModel::insertItem(int row, const QModelIndex &parent, WaveData *wd)
     {
         if (!parent.isValid()) return false;
-        WaveTreeGroup* grp = dynamic_cast<WaveTreeGroup*>(item(parent));
+        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(item(parent));
         if (!grp) return false;
         if (row < 0) row = 0;
-        beginInsertRows(parent,row,row);
-        if (row >= grp->size())
-        {
-            row = grp->size();
-            grp->append(itm);
-        }
-        else
-            grp->insert(row,itm);
-        endInsertRows();
+      //  beginInsertRows(parent,row,row);
+        beginResetModel();
+        if (row > grp->size()) row = grp->size();
+        grp->insert(row,wd);
+      //  endInsertRows();
+        endResetModel();
         Q_EMIT inserted(index(row,0,parent));
 //        Q_EMIT indexInserted(itm->waveIndex(),false);
         invalidateParent(parent);
-        updateVolatile(grp);
+        if (grp != mRoot) grp->recalcData();
         return true;
-    }
-
-    void WaveTreeModel::updateVolatile(WaveTreeGroup *grp)
-    {
-        if (!grp || grp == mRoot) return;
-
-        WaveData* wd;
-
-        if (grp->isEmpty())
-            wd = new WaveData(grp->groupId(),grp->name());
-        else
-        {
-            QList<WaveData*> wdList;
-            for (WaveTreeItem* wti : *grp)
-            {
-                if (wti->waveIndex()<0) return;
-                wdList.append(mWaveDataList->at(wti->waveIndex()));
-            }
-            wd = new WaveData(grp->groupId(),grp->name(),wdList);
-        }
-        mVolatileWaveData->addOrReplace(grp->groupId(),wd);
     }
 
     void WaveTreeModel::invalidateParent(const QModelIndex &parentRow)
@@ -439,58 +374,82 @@ namespace hal {
         Q_EMIT dataChanged(parentValueInx,parentValueInx);
     }
 
-    WaveTreeItem* WaveTreeModel::removeItem(int row, const QModelIndex &parent)
+    WaveData *WaveTreeModel::removeItem(int row, const QModelIndex &parent)
     {
         if (!parent.isValid()) return nullptr;
-        WaveTreeGroup* grp = dynamic_cast<WaveTreeGroup*>(item(parent));
+        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(item(parent));
         if (!grp) return nullptr;
         beginRemoveRows(parent,row,row);
-        WaveTreeItem* retval = grp->at(row);
-        grp->removeAt(row);
+        WaveData* wd = grp->removeAt(row);
         endRemoveRows();
         invalidateParent(parent);
-        updateVolatile(grp);
-        Q_EMIT indexRemoved(retval->waveIndex(),false);
-        return retval;
+        grp->recalcData();
+        int iwave = mWaveDataList->waveIndexByNetId(wd->id());
+        Q_EMIT indexRemoved(iwave,false);
+        return mWaveDataList->at(iwave);
     }
 
     void WaveTreeModel::removeGroup(const QModelIndex& groupIndex)
     {
         if (groupIndex.internalPointer() != mRoot) return;
         int irow = groupIndex.row();
-        WaveTreeGroup* grp = dynamic_cast<WaveTreeGroup*>(mRoot->at(irow));
+        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(mRoot->childAt(irow));
+        mWaveDataList->removeGroup(grp->id());
+    }
+
+    void WaveTreeModel::handleGroupAboutToBeRemoved(WaveDataGroup* grp)
+    {
         if (!grp) return;
+        int irow = mRoot->childIndex(grp);
+        if (irow<0) return;
         beginResetModel();
         mRoot->removeAt(irow);
         if (!grp->isEmpty())
         {
-            auto it = grp->end();
-            while (it != grp->begin())
-            {
-                --it;
-                mRoot->insert(irow,*it);
-            }
+            int n = grp->size() - 1;
+            for (int i=n; i>=0; i--)
+                mRoot->insert(irow,grp->childAt(i));
         }
         endResetModel();
-        Q_EMIT indexRemoved(grp->groupId(),true);
-        delete grp;
+        Q_EMIT indexRemoved(grp->id(),true);
+        Q_EMIT triggerReorder();
     }
 
-    void WaveTreeModel::insertGroup(const QModelIndex &groupIndex)
+    void WaveTreeModel::insertGroup(const QModelIndex &groupIndex, WaveDataGroup* grp)
     {
          if (groupIndex.internalPointer() != mRoot) return;
-         WaveTreeGroup* grp = new WaveTreeGroup;
+         mIgnoreSignals = true;
+         if (!grp) grp = new WaveDataGroup(mWaveDataList);
          beginResetModel();
          insertItem(groupIndex.row(),groupIndex.parent(),grp);
          endResetModel();
-         updateVolatile(grp);
+         mIgnoreSignals = false;
+         grp->recalcData();
     }
 
-    void WaveTreeModel::setVolatilePosition(int ypos, const QModelIndex& index)
+    // ---- WaveDataRoot
+
+    QSet<int> WaveTreeModel::waveDataIndexSet() const
     {
-         WaveTreeGroup* grp = dynamic_cast<WaveTreeGroup*>(item(index));
-         u32 gid = grp->groupId();
-         if (mVolatileWaveData->hasGroup(gid))
-             mVolatileWaveData->setYposition(gid,ypos);
+        QSet<int> retval;
+        for (const WaveData* wd : mRoot->children())
+        {
+            const WaveDataGroup* grp = dynamic_cast<const WaveDataGroup*>(wd);
+            if (grp)
+            {
+                for (const WaveData* wdGrp : grp->children())
+                {
+                    int iwave = mWaveDataList->waveIndexByNetId(wdGrp->id());
+                    if (iwave >= 0) retval.insert(iwave);
+                }
+            }
+            else
+            {
+                int iwave = mWaveDataList->waveIndexByNetId(wd->id());
+                if (iwave >= 0) retval.insert(iwave);
+            }
+        }
+        return retval;
     }
+
 }

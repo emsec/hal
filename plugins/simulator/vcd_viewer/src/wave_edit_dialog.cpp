@@ -10,13 +10,13 @@
 
 namespace hal {
 
-    WaveEditDialog::WaveEditDialog(const WaveData& wd, QWidget *parent)
+    WaveEditDialog::WaveEditDialog(const WaveData *wd, QWidget *parent)
         : QDialog(parent)
     {
         QGridLayout* layout = new QGridLayout(this);
         QTableView* tv = new QTableView(this);
         mWaveModel = new WaveEditTable(wd,tv);
-        if (wd.bits() <= 1)
+        if (wd->bits() <= 1)
             tv->setItemDelegateForColumn(2, new WaveDeleteDelegate(mWaveModel));
         tv->setModel(mWaveModel);
         QHeaderView* hv = tv->horizontalHeader();
@@ -27,15 +27,18 @@ namespace hal {
         tv->setColumnWidth(2,16);
         layout->addWidget(tv,0,0,1,2);
         QDialogButtonBox* dbb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
-        connect(dbb, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(dbb, &QDialogButtonBox::rejected, this, &QDialog::reject);
+        if (wd->bits() > 1)
+            dbb->button(QDialogButtonBox::Ok)->setDisabled(true);
+        else
+            connect(dbb, &QDialogButtonBox::accepted, this, &QDialog::accept);
         layout->addWidget(dbb,1,1);
-        setWindowTitle(wd.name());
+        setWindowTitle(wd->name());
     }
 
-    WaveData* WaveEditDialog::dataFactory() const
+    const QMap<u64,int>& WaveEditDialog::dataMap() const
     {
-        return mWaveModel->dataFactory();
+        return mWaveModel->mWaveData.data();
     }
 
     //-------------------------------------------
@@ -81,21 +84,16 @@ namespace hal {
     }
 
     //-------------------------------------------
-    WaveData* WaveEditTable::dataFactory() const
+    WaveEditTable::WaveEditTable(const WaveData* wd, QObject* parent)
+        : QAbstractTableModel(parent), mWaveData(*wd)
     {
-        return new WaveData(mWaveData);
-    }
-
-    WaveEditTable::WaveEditTable(const WaveData& wd, QObject* parent)
-        : QAbstractTableModel(parent), mWaveData(wd)
-    {
-        if (mWaveData.isEmpty()) mWaveData[0] = 0;
+        if (mWaveData.data().isEmpty()) mWaveData.insert(0,0);
     }
 
     int WaveEditTable::rowCount(const QModelIndex &parent) const
     {
         Q_UNUSED(parent);
-        return mWaveData.size() + 1;
+        return mWaveData.data().size() + 1;
     }
 
     int WaveEditTable::columnCount(const QModelIndex &parent) const
@@ -107,9 +105,9 @@ namespace hal {
     QVariant WaveEditTable::data(const QModelIndex &index, int role) const
     {
         if (role != Qt::DisplayRole) return QVariant();
-        if (index.row() >= mWaveData.size()) return QString();
-        auto it = mWaveData.constBegin() + index.row();
-        if (it != mWaveData.constEnd())
+        if (index.row() >= mWaveData.data().size()) return QString();
+        auto it = mWaveData.data().constBegin() + index.row();
+        if (it != mWaveData.data().constEnd())
         {
             switch (index.column())
             {
@@ -131,12 +129,12 @@ namespace hal {
 
         if (!index.row() && index.column()==1)
         {
-            if (iValue < 0 || iValue > 1 || iValue == mWaveData.value(0)) return false;
+            if (iValue < 0 || iValue > 1 || iValue == mWaveData.data().value(0)) return false;
             mWaveData.setStartvalue(iValue);
-            Q_EMIT(dataChanged(this->index(0,1),this->index(mWaveData.size(),1)));
+            Q_EMIT(dataChanged(this->index(0,1),this->index(mWaveData.data().size(),1)));
             return true;
         }
-        if (index.column() || mWaveData.contains(iValue)) return false;
+        if (index.column() || mWaveData.data().contains(iValue)) return false;
 
         beginResetModel();
         mWaveData.insertToggleTime(iValue);
@@ -169,18 +167,8 @@ namespace hal {
         int key = data(index(irow,0)).toInt();
         if (!key) return;
 
-        auto it = mWaveData.find(key);
-        if (it==mWaveData.end()) return;
-
         beginResetModel();
-        int val = it.value();
-        it = mWaveData.erase(it);
-        while (it != mWaveData.end())
-        {
-            int nextVal = it.value();
-            *(it++) = val;
-            val = nextVal;
-        }
+        mWaveData.eraseAtTime(key);
         endResetModel();
     }
 }

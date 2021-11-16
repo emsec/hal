@@ -79,7 +79,7 @@ namespace hal {
         {
         case 0: return wd->id();
         case 1: return wd->name();
-        case 2: return wd->size();
+        case 2: return wd->data().size();
         }
         return QVariant();
     }

@@ -4,7 +4,6 @@
 #include "vcd_viewer/wave_graphics_view.h"
 #include "vcd_viewer/wave_scene.h"
 #include "vcd_viewer/wave_item.h"
-#include "vcd_viewer/volatile_wave_data.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "vcd_viewer/wave_edit_dialog.h"
 #include "vcd_viewer/wave_selection_dialog.h"
@@ -13,7 +12,6 @@
 #include <QResizeEvent>
 #include <QWheelEvent>
 #include <QScrollBar>
-#include <QResizeEvent>
 #include <QHeaderView>
 #include <QDebug>
 
@@ -33,34 +31,37 @@ namespace hal {
         : QSplitter(parent), mController(ctrl), mControllerOwner(nullptr),
           mOngoingYscroll(false), mVisualizeNetState(false), mAutoAddWaves(true)
     {
-        mWaveDataList = new WaveDataList(this);
-        mVolatileWaveData = new VolatileWaveData(this);
-        mTreeView     = new WaveTreeView(mWaveDataList, mVolatileWaveData, this);
-        mTreeModel    = new WaveTreeModel(mWaveDataList, mVolatileWaveData, this);
+        mWaveDataList = ctrl->get_waves();
+        mTreeView     = new WaveTreeView(mWaveDataList,  this);
+        mTreeModel    = new WaveTreeModel(mWaveDataList, this);
         mTreeView->setModel(mTreeModel);
         mTreeView->expandAll();
-        mTreeView->setColumnWidth(0,220);
+        mTreeView->setColumnWidth(0,200);
         mTreeView->setColumnWidth(1,40);
-        mTreeView->setColumnWidth(2,40);
+        mTreeView->setColumnWidth(2,60);
         mTreeView->header()->setStretchLastSection(true);
         addWidget(mTreeView);
 
         mGraphicsView = new WaveGraphicsView(this);
-        mScene = new WaveScene(mWaveDataList, mVolatileWaveData, this);
+        mScene = new WaveScene(mWaveDataList, this);
         mGraphicsView->setScene(mScene);
         mGraphicsView->setDefaultTransform();
         addWidget(mGraphicsView);
 
-        connect(mTreeModel,&WaveTreeModel::inserted,mTreeView,&WaveTreeView::handleInserted);
         connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
-        connect(mWaveDataList,&WaveDataList::waveAdded,mScene,&WaveScene::handleWaveAdded);
+        connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded);
+        connect(mWaveDataList,&WaveDataList::waveMovedToGroup,mTreeModel,&WaveTreeModel::handleWaveMovedToGroup);
+        connect(mWaveDataList,&WaveDataList::groupAboutToBeRemoved,mTreeModel,&WaveTreeModel::handleGroupAboutToBeRemoved);
+        connect(mWaveDataList,&WaveDataList::waveUpdated,mScene,&WaveScene::handleWaveUpdated);
+        connect(mTreeModel,&WaveTreeModel::inserted,mTreeView,&WaveTreeView::handleInserted);
+        connect(mTreeModel,&WaveTreeModel::triggerReorder,mTreeView,&WaveTreeView::reorder);
+//        connect(mWaveDataList,&WaveDataList::waveAdded,mScene,&WaveScene::handleWaveAdded);
+        connect(mWaveDataList,&WaveDataList::groupAdded,mScene,&WaveScene::handleGroupAdded);
         connect(mTreeView,&WaveTreeView::viewportHeightChanged,mGraphicsView,&WaveGraphicsView::handleViewportHeightChanged);
         connect(mTreeView,&WaveTreeView::sizeChanged,mGraphicsView,&WaveGraphicsView::handleSizeChanged);
-        connect(mTreeModel,&WaveTreeModel::dropped,mTreeView,&WaveTreeView::reorder);
         connect(mTreeModel,&WaveTreeModel::indexRemoved,mScene,&WaveScene::handleIndexRemoved);
 //        connect(mTreeModel,&WaveTreeModel::indexInserted,mScene,&WaveScene::handleIndexInserted);
         connect(mTreeView,&WaveTreeView::reordered,mScene,&WaveScene::setWavePositions);
-        connect(mVolatileWaveData,&VolatileWaveData::triggerRepaint,mScene,&WaveScene::handleVolatileRepaint);
         connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);
         connect(mScene,&WaveScene::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
 
@@ -81,6 +82,8 @@ namespace hal {
         connect(mWaveIndex.waveDataList(),&WaveDataList::maxTimeChanged,mWaveView,&WaveView::handleMaxTimeChanged);
 */
         connect(mController, &NetlistSimulatorController::stateChanged, this, &WaveWidget::handleStateChanged);
+        mTreeView->verticalScrollBar()->setValue(0);
+        setSizes({320,880});
     }
 
     WaveWidget::~WaveWidget()
@@ -136,7 +139,9 @@ namespace hal {
     {
         if (mAutoAddWaves && state >= NetlistSimulatorController::SimulationRun)
         {
+            qDebug() << "disconnect WaveDataList::waveAdded" << hex << (quintptr) mWaveDataList << (quintptr) mTreeModel;
             disconnect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
+ //           disconnect(mWaveDataList,&WaveDataList::waveAdded,mScene,&WaveScene::handleWaveAdded);
             mAutoAddWaves = false;
         }
 
@@ -176,10 +181,12 @@ namespace hal {
                 }
                 mGroupIds[i] = grp->get_id();
             }
-            visualizeCurrentNetState(mScene->cursorXpostion());
+            visualizeCurrentNetState(mScene->cursorXposition());
+            connect(mScene,&WaveScene::cursorMoved,this,&WaveWidget::visualizeCurrentNetState);
         }
         else
         {
+            disconnect(mScene,&WaveScene::cursorMoved,this,&WaveWidget::visualizeCurrentNetState);
             for (int i=0; i<3; i++)
             {
                 Grouping* grp = gtm->groupingByName(grpNames[i]);
@@ -256,26 +263,14 @@ namespace hal {
         */
     }
 
-    void WaveWidget::resizeEvent(QResizeEvent *event)
+    void WaveWidget::resizeEvent(QResizeEvent* event)
     {
         QSplitter::resizeEvent(event);
-        int w = event->size().width() - 300;
+        int w = event->size().width() - 320;
         int h = event->size().height();
         if (w < 100) return;
-        setSizes({300,w});
+        setSizes({320,w});
         mGraphicsView->setCursorPos(QPoint(w/3,3*h/4));
-    }
-
-    void WaveWidget::editWaveData(int dataIndex)
-    {
-        /* TODO
-        const WaveData* editorInput = mWaveIndex.waveData(dataIndex);
-        if (!editorInput) return;
-        WaveData wd(*editorInput);
-        WaveEditDialog wed(wd,this);
-        if (wed.exec() != QDialog::Accepted) return;
-        mWaveIndex.setWaveData(dataIndex,wed.dataFactory());
-        */
     }
 
     void WaveWidget::handleEngineFinished(bool success)
@@ -327,5 +322,18 @@ namespace hal {
         mOngoingYscroll = false;
     }
 
+    u32 WaveWidget::addGroup(const std::string& name, const std::vector<u32>& netIds)
+    {
+ //       QVector<u32> nets = QVector<u32>(netIds.begin(),netIds.end());
+        QVector<u32> nets;
+        nets.reserve(netIds.size());
+        for (u32 id : netIds) nets.append(id);
+        return mWaveDataList->createGroup(QString::fromStdString(name),nets);
+    }
 
+    void WaveWidget::removeGroup(u32 grpId)
+    {
+        if (!grpId) return;
+        mWaveDataList->removeGroup(grpId);
+    }
 }

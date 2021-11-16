@@ -1,16 +1,26 @@
+#include <QPainter>
+#include <QDebug>
 #include "vcd_viewer/wave_item.h"
 #include "vcd_viewer/wave_scene.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include <QGraphicsScene>
-#include <QPainter>
 #include <math.h>
+#include <QColor>
 
 namespace hal {
 
-    WaveItem::WaveItem(int iwave, const WaveData* dat)
+const char* WaveItem::sLineColor[] = { "#10E0FF", "#C08010"} ;
+
+    WaveItem::WaveItem(int iwave, WaveData *dat)
         : mWaveIndex(iwave), mData(dat), mMaxTime(WaveScene::sMinSceneWidth), mInactive(false)
     {
         construct();
+        if (mData) mData->setGraphicsItem(this);
+    }
+
+    WaveItem::~WaveItem()
+    {
+        mData->setGraphicsItem(nullptr);
     }
 
     void WaveItem::construct()
@@ -31,12 +41,12 @@ namespace hal {
             return;
         }
 
-        auto lastIt = mData->constEnd();
-        for (auto nextIt = mData->constBegin(); nextIt != mData->constEnd(); ++nextIt)
+        auto lastIt = mData->data().constEnd();
+        for (auto nextIt = mData->data().constBegin(); nextIt != mData->data().constEnd(); ++nextIt)
         {
             u64 t1 = nextIt.key();
             if (t1 > mMaxTime) mMaxTime = t1;
-            if (lastIt != mData->constEnd())
+            if (lastIt != mData->data().constEnd())
             {
                 u64 t0 = lastIt.key();
                 if (lastIt.value() < 0)
@@ -65,23 +75,51 @@ namespace hal {
 
         if (mData->bits() > 1)
         {
-            for (auto it = mData->constBegin(); it != mData->constEnd();)
+            float m11 = 1;
+            const WaveScene* sc = static_cast<WaveScene*>(scene());
+            if (sc) m11 = sc->xScaleFactor();
+
+            for (auto it = mData->data().constBegin(); it != mData->data().constEnd();)
             {
                 u64 t0 = it.key();
                 int v0 = it.value();
                 ++it;
                 if (v0 > 0)
                 {
-                    u64 t1 = it == mData->constEnd() ? mMaxTime : it.key();
-                    QGraphicsSimpleTextItem* gti = new QGraphicsSimpleTextItem(QString::number(v0,16),this);
-                    gti->setFlags(gti->flags() | QGraphicsItem::ItemIgnoresTransformations);
-                    QFont font = gti->font();
-                    font.setPixelSize(9);
-                    gti->setFont(font);
-                    gti->setPos( (t0+t1)/2. , 0);
+                    u64 t1 = it == mData->data().constEnd() ? mMaxTime : it.key();
+                    float w = (t1 < t0+10 ? 10 : t1-t0);
+                    WaveValueAsTextItem* wvti = new WaveValueAsTextItem(QString::number(v0,16),w,m11,this);
+                    wvti->setPos(t0,0);
                 }
             }
 
+        }
+    }
+
+    void WaveItem::updateGraphicsItem(WaveData *wd)
+    {
+        mData = wd;
+        if (mData) mData->setGraphicsItem(this);
+        construct();
+    }
+
+    void WaveItem::removeGraphicsItem()
+    {
+        if (scene()) scene()->removeItem(this);
+    }
+
+    void WaveItem::setItemVisible(bool vis)
+    {
+        setVisible(vis);
+    }
+
+    void WaveItem::updateScaleFactor(float m11)
+    {
+        if (childItems().isEmpty()) return;
+        for (QGraphicsItem* cit : childItems())
+        {
+            WaveValueAsTextItem* wvti = static_cast<WaveValueAsTextItem*>(cit);
+            wvti->updateScaleFactor(m11);
         }
     }
 
@@ -118,17 +156,17 @@ namespace hal {
         }
 
         painter->setRenderHint(QPainter::Antialiasing,true);
-        painter->setPen(QPen(QBrush(Qt::darkBlue),0.,Qt::DotLine)); // TODO : style
+        painter->setPen(QPen(QBrush(QColor(sLineColor[1])),0.,Qt::DotLine)); // TODO : style
         painter->drawLines(mDotLines);
 
-        painter->setPen(QPen(QBrush(Qt::darkBlue),0.));  // TODO : style
+        painter->setPen(QPen(QBrush(QColor(sLineColor[0])),0.));  // TODO : style
         painter->drawLines(mSolidLines);
 
         float  y = 1;
 
-        if (mData->isEmpty())
+        if (mData->data().isEmpty())
         {
-            painter->setPen(QPen(QBrush(Qt::darkBlue),0.,Qt::DotLine));
+            painter->setPen(QPen(QBrush(QColor(sLineColor[1])),0.,Qt::DotLine));
             y -= 0.5;
             painter->drawLine(QLineF(0,y,x1,y));
             return;
@@ -136,14 +174,14 @@ namespace hal {
 
         if (mData->bits() > 1)
         {
-            for (auto it = mData->constBegin(); it!=mData->constEnd();)
+            for (auto it = mData->data().constBegin(); it!=mData->data().constEnd();)
             {
                 u64 t0 = it.key();
                 int v0 = it.value();
                 ++it;
                 if (v0>0)
                 {
-                    u64 t1 = it==mData->constEnd() ? mMaxTime : it.key();
+                    u64 t1 = it==mData->data().constEnd() ? mMaxTime : it.key();
                     QRectF r(t0,-0.05,t1-t0,1.1);
                     painter->drawRoundedRect(r,50.0,0.5);
                 }
@@ -153,13 +191,13 @@ namespace hal {
         float x0 = mData->maxTime();
         if (x0 < x1)
         {
-            if (mData->last() < 0)
+            if (mData->data().last() < 0)
             {
                 y -= 0.5;
-                painter->setPen(QPen(QBrush(Qt::cyan),0.,Qt::DotLine));
+                painter->setPen(QPen(QBrush(QColor(sLineColor[1])),0.,Qt::DotLine));
             }
             else
-                y -= mData->last();
+                y -= mData->data().last();
             painter->drawLine(QLineF(x0,y,x1,y));
         }
     }
@@ -169,9 +207,38 @@ namespace hal {
         return QRectF(0,-0.05,mMaxTime,1.1);
     }
 
-    void WaveItem::setWavedata(const WaveData *dat)
+    WaveValueAsTextItem::WaveValueAsTextItem(const QString& txt, float w, float m11, QGraphicsItem *parentItem)
+        : QGraphicsItem(parentItem), mText(txt), mWidth(w), mXmag(m11)
     {
-        mData = dat;
-        construct();
+//        setFlags(flags() | QGraphicsItem::ItemIgnoresTransformations);
+    }
+
+    void WaveValueAsTextItem::updateScaleFactor(float m11)
+    {
+        if (mXmag==m11) return;
+        mXmag = m11;
+        update();
+    }
+
+    void WaveValueAsTextItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+    {
+        Q_UNUSED(option);
+        Q_UNUSED(widget);
+
+        painter->setTransform(QTransform(1/mXmag,0,0,1/14.,0,0),true);
+        QRectF rTrans(0,0,boundingRect().width()*mXmag,boundingRect().height()*14);
+        QFont font = painter->font();
+        font.setPixelSize(11);
+        font.setBold(true);
+        painter->setFont(font);
+        painter->setPen(QPen(Qt::white,0)); // TODO : style
+        float textWidth = painter->boundingRect(rTrans,Qt::AlignHCenter | Qt::AlignVCenter, mText).width();
+        if (textWidth + 6 <= rTrans.width())
+            painter->drawText(rTrans,Qt::AlignHCenter | Qt::AlignVCenter, mText);
+    }
+
+    QRectF WaveValueAsTextItem::boundingRect() const
+    {
+        return QRectF(0,0,mWidth,1);
     }
 }

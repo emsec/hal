@@ -192,7 +192,7 @@ namespace hal
                 }
             }
 
-            for (auto it=wd->constBegin(); it != wd->constEnd(); ++it)
+            for (auto it=wd->data().constBegin(); it != wd->data().constEnd(); ++it)
             {
                 BooleanFunction::Value sv;
                 switch (it.value())
@@ -313,7 +313,7 @@ namespace hal
                 if (!wd) continue;
 //                if (++wcount > 10) break;
                 wd->setId(n->get_id());
-                if (wd->isEmpty() || wd->firstKey() > 0) wd->insert(0,-1);
+                if (wd->data().isEmpty() || wd->data().firstKey() > 0) wd->insert(0,-1);
                 mWaveDataList->addOrReplace(wd);
             }
         }
@@ -398,7 +398,7 @@ namespace hal
         if (!wd)
         {
             wd = new WaveData(net);
-            mWaveDataList->add(wd);
+            mWaveDataList->add(wd,false);
         }
         u64 t = mWaveDataList->maxTime();
         wd->insertBooleanValue(t,value);

@@ -18,7 +18,6 @@ namespace hal {
     class WaveScene;
     class WaveTreeModel;
     class WaveTreeView;
-    class VolatileWaveData;
     class SelectionTreeItem;
 
 //    enum SimulationState { SimulationSelectGates, SimulationClockSet, SimulationInputGenerate, SimulationShowResults };
@@ -42,18 +41,20 @@ namespace hal {
         void createEngine(const QString& engineFactoryName);
         void refreshNetNames();
         void scrollToYpos(int ypos);
+        u32 addGroup(const std::string& name, const std::vector<u32>& netIds);
+        void removeGroup(u32 grpId);
 
     public Q_SLOTS:
         void handleEngineFinished(bool success);
 
     private Q_SLOTS:
 
-        void editWaveData(int dataIndex);
         void handleSelectionHighlight(const QVector<const SelectionTreeItem*>& highlight);
         void handleWaveAppended(WaveData* wd);
         void handleWaveDataChanged(int inx);
         void handleWaveRemoved(int inx);
         void handleStateChanged(NetlistSimulatorController::SimulationState state);
+        void visualizeCurrentNetState(float xpos);
 
     Q_SIGNALS:
         void stateChanged(NetlistSimulatorController::SimulationState state);
@@ -65,7 +66,6 @@ namespace hal {
         NetlistSimulatorController* mController;
         std::unique_ptr<NetlistSimulatorController> mControllerOwner;
 
-        void visualizeCurrentNetState(float xpos);
 
         WaveTreeView*     mTreeView;
         WaveTreeModel*    mTreeModel;
@@ -73,7 +73,6 @@ namespace hal {
         WaveScene*        mScene;
         bool              mOngoingYscroll;
         WaveDataList*     mWaveDataList;
-        VolatileWaveData* mVolatileWaveData;
 
         bool mVisualizeNetState;
         bool mAutoAddWaves;

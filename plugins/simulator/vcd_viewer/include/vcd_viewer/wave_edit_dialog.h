@@ -11,11 +11,11 @@ namespace hal {
 
     class WaveEditTable : public QAbstractTableModel
     {
+        friend class WaveEditDialog;
         Q_OBJECT
         WaveData mWaveData;
     public:
-        WaveData* dataFactory() const;
-        WaveEditTable(const WaveData& wd, QObject* parent = nullptr);
+        WaveEditTable(const WaveData* wd, QObject* parent = nullptr);
         int rowCount(const QModelIndex &parent = QModelIndex()) const override;
         int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -51,8 +51,8 @@ namespace hal {
         Q_OBJECT
         WaveEditTable* mWaveModel;
     public:
-        WaveEditDialog(const WaveData& wd, QWidget* parent = nullptr);
-        WaveData* dataFactory() const;
+        WaveEditDialog(const WaveData* wd, QWidget* parent = nullptr);
+        const QMap<u64,int>& dataMap() const;
     };
 
 }

@@ -13,7 +13,7 @@ QMap<int,int>::const_iterator mIterator;
     VcdSerializerElement::VcdSerializerElement(int inx, const WaveData* wd)
         : mIndex(inx), mData(wd)
     {
-        mIterator = mData->constBegin();
+        mIterator = mData->data().constBegin();
     }
 
     void VcdSerializerElement::hasNextElement() const
@@ -23,7 +23,7 @@ QMap<int,int>::const_iterator mIterator;
 
     int VcdSerializerElement::time() const
     {
-        if (mIterator == mData->constEnd()) return -1;
+        if (mIterator == mData->data().constEnd()) return -1;
         return mIterator.key();
     }
 
@@ -34,7 +34,7 @@ QMap<int,int>::const_iterator mIterator;
 
     bool VcdSerializerElement::next()
     {
-        return (++mIterator != mData->constEnd());
+        return (++mIterator != mData->data().constEnd());
     }
 
     int VcdSerializerElement::priorityCode(int n) const

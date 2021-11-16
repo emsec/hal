@@ -2,21 +2,18 @@
 
 #include <QTreeView>
 #include <QHash>
-#include <QSet>
 #include <QResizeEvent>
 #include "hal_core/defines.h"
 
 namespace hal {
     class WaveDataList;
-    class VolatileWaveData;
 
     class WaveTreeView : public QTreeView
     {
         Q_OBJECT
-        QList<QModelIndex> mOrder;
+        QList<QModelIndex> mItemOrder;
         QModelIndex mContextIndex;
         WaveDataList* mWaveDataList;
-        VolatileWaveData* mVolatileWaveData;
 
     protected:
         void mouseDoubleClickEvent(QMouseEvent *event) override;
@@ -28,7 +25,7 @@ namespace hal {
     Q_SIGNALS:
         void viewportHeightChanged(int height);
         void sizeChanged(int widgetHeight, int viewportHeight);
-        void reordered(QHash<int,int> wavePosition);
+        void reordered(QHash<int,int> wavePosition, QHash<int,int> groupPosition);
 
     private Q_SLOTS:
         void handleExpandCollapse(const QModelIndex& index);
@@ -36,14 +33,15 @@ namespace hal {
         void handleRemoveItem();
         void handleRemoveGroup();
         void handleInsertGroup();
+        void handleSetValueFormat();
 
     public Q_SLOTS:
         void handleInserted(const QModelIndex& index);
         void reorder();
+        void setWaveSelection(const QSet<u32>& netIds);
 
     public:
-        WaveTreeView(WaveDataList* wdList, VolatileWaveData* wdVol, QWidget* parent = nullptr);
-        void setWaveSelection(const QSet<u32>& netIds);
+        WaveTreeView(WaveDataList* wdList, QWidget* parent = nullptr);
 
     private:
         void orderRecursion(const QModelIndex& parent);

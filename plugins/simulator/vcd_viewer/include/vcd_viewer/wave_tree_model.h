@@ -1,68 +1,55 @@
 #pragma once
 #include "hal_core/defines.h"
+#include "netlist_simulator_controller/wave_data.h"
 #include <QAbstractItemModel>
 #include <QList>
 
 namespace hal {
     class WaveData;
     class WaveDataList;
-    class VolatileWaveData;
+    class WaveDataGroup;
 
-    class WaveTreeItem
+    class WaveDataRoot : public WaveDataGroup
     {
-        u32 mId;
-        QString mName;
-        int mWaveIndex;
     public:
-        WaveTreeItem(u32 id_, const QString& nam, int iwave);
-        virtual ~WaveTreeItem() {;}
-        virtual int childCount() const { return 0; }
-        virtual u32 id() const { return mId; }
-        virtual QString name() const { return mName; }
-        virtual int waveIndex() const { return mWaveIndex; }
-        virtual void setName(const QString& nam) { mName = nam; }
-    };
-
-    class WaveTreeGroup : public WaveTreeItem, public QList<WaveTreeItem*>
-    {
-        static u32 sMaxGroupId;
-
-        u32 mGroupId;
-    public:
-        WaveTreeGroup(const QString& nam = QString());
-        u32 groupId() const { return mGroupId; }
+        WaveDataRoot(WaveDataList* wdList)
+            : WaveDataGroup(wdList,"root") {;}
+        void recalcData() override {;}
     };
 
     class WaveTreeModel : public QAbstractItemModel
     {
         Q_OBJECT
         WaveDataList* mWaveDataList;
-        VolatileWaveData* mVolatileWaveData;
-        WaveTreeGroup* mRoot;
+        WaveDataRoot* mRoot;
         QModelIndex mDragIndex;
-        int mValueBase;
         float mCursorPosition;
+        bool mIgnoreSignals;
 
-        WaveTreeItem* item(const QModelIndex& index) const;
+        WaveData* item(const QModelIndex& index) const;
         void dropRow(const QModelIndex& parentTo, int row);
         void invalidateParent(const QModelIndex& parentRow);
-        void updateVolatile(WaveTreeGroup* grp);
-        int  itemValue(const WaveTreeItem* wti) const;
+        void updateGroup(WaveDataGroup* grp);
     Q_SIGNALS:
         void inserted(QModelIndex index);
-//        void indexInserted(int iwave, bool isVolatile);
-        void indexRemoved(int iwave, bool isVolatile);
-        void dropped();
+//        void indexInserted(int iwave, bool isGroup);
+        void indexRemoved(int iwave, bool isGroup);
+        void triggerReorder();
 
     public Q_SLOTS:
-        void handleSetValueFormat();
+        void handleUpdateValueFormat();
         void handleWaveAdded(int iwave);
+        void handleWaveMovedToGroup(int iwave, WaveDataGroup* grp);
+        void handleGroupAdded(int grpId);
+        void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
         void handleCursorMoved(float xpos);
 
     public:
-        WaveTreeModel(WaveDataList* wdlist, VolatileWaveData* wdVol, QObject* obj=nullptr);
+        WaveTreeModel(WaveDataList* wdlist, QObject* obj=nullptr);
         bool isLeaveItem(const QModelIndex &index) const;
         QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+        QModelIndexList indexes(const WaveData* wd) const;
+        QModelIndexList indexes(const QSet<u32>& netIds) const;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
         QString netName(const QModelIndex& index) const;
@@ -75,16 +62,15 @@ namespace hal {
         bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const override;
         void setDragIndex(const QModelIndex& index) { mDragIndex = index; }
 
-        bool insertItem(int row, const QModelIndex &parent, WaveTreeItem* itm);
-        WaveTreeItem* removeItem(int row, const QModelIndex &parent);
+        bool insertItem(int row, const QModelIndex &parent, WaveData* wd);
+        WaveData* removeItem(int row, const QModelIndex &parent);
         void removeGroup(const QModelIndex& groupIndex);
-        void insertGroup(const QModelIndex& groupIndex);
+        void insertGroup(const QModelIndex& groupIndex, WaveDataGroup *grp=nullptr);
         int waveIndex(const QModelIndex& index) const;
         int groupId(const QModelIndex& grpIndex) const;
-        void setVolatilePosition(int ypos, const QModelIndex& index);
+        void setGroupPosition(int ypos, const QModelIndex& index);
 
         QSet<int> waveDataIndexSet() const;
-        QList<QModelIndex> indexByNetIds(const QSet<u32>& netIds);
 
         static const char* sStateColor[3];
     };
