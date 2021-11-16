@@ -288,9 +288,10 @@ namespace hal {
     void WaveWidget::visualizeCurrentNetState(float xpos)
     {
         QSet<Net*> netState[3]; // x, 0, 1
-        for (int i=0; i<mWaveIndex.numberWavesShown(); i++)
+        QList<int> iwaveList = mTreeModel->waveDataIndexSet().toList();
+        for (int iwave : iwaveList)
         {
-            const WaveData* wd = mWaveIndex.waveData(i);
+            const WaveData* wd = mWaveDataList->at(iwave);
             Net* n = gNetlist->get_net_by_id(wd->id());
             if (!n) continue;
             int tval = wd->intValue(xpos);

@@ -176,12 +176,13 @@ namespace hal {
     {
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
         QList<QModelIndex> selIndex = wtm->indexByNetIds(netIds);
+        selectionModel()->reset();
         for (QModelIndex sel : selIndex)
         {
             QModelIndex p = sel.parent();
             if (p.isValid() && !isExpanded(p)) expand(p);
+            selectionModel()->select(sel,QItemSelectionModel::Select);
         }
-        setSe
     }
 
     void WaveTreeView::reorder()
