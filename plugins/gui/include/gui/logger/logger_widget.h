@@ -96,7 +96,7 @@ namespace hal
 
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
-        void setSearchActiveIconStyle(const QString &style);
+        //void setSearchActiveIconStyle(const QString &style);
         /////
 
     public Q_SLOTS:
