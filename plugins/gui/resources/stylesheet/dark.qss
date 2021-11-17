@@ -1121,7 +1121,6 @@ hal--SelectionDetailsWidget
 
 hal--LoggerWidget
 {
-    qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-searchIconStyle: "all->#e8e8e8";
     qproperty-searchIconPath: ":/icons/search";
 }

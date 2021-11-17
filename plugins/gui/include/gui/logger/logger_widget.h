@@ -55,7 +55,7 @@ namespace hal
         Q_OBJECT
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
-        Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
+        //Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
 
     public:
         /**
@@ -92,7 +92,7 @@ namespace hal
         /////
         QString searchIconPath() const;
         QString searchIconStyle() const;
-        QString searchActiveIconStyle() const;
+        //QString searchActiveIconStyle() const;
 
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
@@ -148,7 +148,7 @@ namespace hal
         QAction* mSearchAction;
         QString mSearchIconPath;
         QString mSearchIconStyle;
-        QString mSearchActiveIconStyle;
+        //QString mSearchActiveIconStyle;
         QString mDisabledIconStyle;
         //////
 
