@@ -24,13 +24,12 @@ namespace hal
         ~PinGroup() = default;
 
         /**
-         * TODO pybind, test
          * Check whether two pin groups are equal.
          *
          * @param[in] other - The pin group to compare against.
          * @returns True if both pin groups are equal, false otherwise.
          */
-        bool operator==(const PinGroup<T>& other) const 
+        bool operator==(const PinGroup<T>& other) const
         {
             if (m_name != other.get_name() || m_start_index != other.get_start_index() || m_ascending != other.is_ascending())
             {
@@ -38,14 +37,14 @@ namespace hal
             }
 
             std::vector<T*> other_pins = other.get_pins();
-            if (m_pins.size() != other_pins.size()) 
+            if (m_pins.size() != other_pins.size())
             {
                 return false;
             }
 
-            auto this_it = m_pins.begin();
+            auto this_it  = m_pins.begin();
             auto other_it = other_pins.begin();
-            while(this_it != m_pins.end() && other_it != other_pins.end())
+            while (this_it != m_pins.end() && other_it != other_pins.end())
             {
                 if (**this_it++ != **other_it++)
                 {
@@ -57,7 +56,6 @@ namespace hal
         }
 
         /**
-         * TODO pybind, test
          * Check whether two pin groups are unequal.
          *
          * @param[in] other - The pin group to compare against.
@@ -173,6 +171,26 @@ namespace hal
         }
 
         /**
+         * Get the direction of the pin group.
+         * 
+         * @returns The direction of the pin group.
+         */
+        PinDirection get_direction() const
+        {
+            return m_direction;
+        }
+
+        /**
+         * Get the type of the pin group.
+         * 
+         * @returns The type of the pin group.
+         */
+        PinType get_type() const
+        {
+            return m_type;
+        }
+
+        /**
          * Check whether the pin group is empty, i.e., contains no pins.
          * 
          * @returns True if the pin group is empty, false otherwise.
@@ -197,6 +215,8 @@ namespace hal
         friend Module;
 
         std::string m_name;
+        PinDirection m_direction;
+        PinType m_type;
         std::list<T*> m_pins;
         std::unordered_map<std::string, T*> m_pin_name_map;
         bool m_ascending;
@@ -212,10 +232,13 @@ namespace hal
          * Construct a new pin group from its name, pin order, and start index.
          * 
          * @param[in] name - The name of the pin group.
+         * @param[in] direction - The direction of the pin group.
+         * @param[in] type - The type of the pin group.
          * @param[in] ascending - True for ascending pin order (from 0 to n-1), false otherwise (from n-1 to 0).
          * @param[in] start_index - The start index of the pin group.
          */
-        PinGroup(const std::string& name, bool ascending = false, u32 start_index = 0) : m_name(name), m_ascending(ascending), m_start_index(start_index), m_next_index(start_index)
+        PinGroup(const std::string& name, PinDirection direction, PinType type, bool ascending = false, u32 start_index = 0)
+            : m_name(name), m_direction(direction), m_type(type), m_ascending(ascending), m_start_index(start_index), m_next_index(start_index)
         {
         }
 

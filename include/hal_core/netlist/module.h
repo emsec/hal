@@ -349,7 +349,6 @@ namespace hal
         [[deprecated("Will be removed in a future version.")]] u32 get_next_output_port_id() const;
 
         /**
-         * TODO test
          * Get all pins of the module.
          * The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
          * 
@@ -359,7 +358,6 @@ namespace hal
         std::vector<ModulePin*> get_pins(const std::function<bool(ModulePin*)>& filter = nullptr) const;
 
         /**
-         * TODO test
          * Get all pin groups of the module.
          * The optional filter is evaluated on every pin group such that the result only contains pin groups matching the specified condition.
          * 
@@ -369,7 +367,6 @@ namespace hal
         std::vector<PinGroup<ModulePin>*> get_pin_groups(const std::function<bool(PinGroup<ModulePin>*)>& filter = nullptr) const;
 
         /**
-         * TODO test
          * Get the pin specified by the given name.
          * 
          * @param[in] name - The name of the pin.
@@ -378,7 +375,6 @@ namespace hal
         ModulePin* get_pin(const std::string& name) const;
 
         /**
-         * TODO test
          * Get the pin that passes through the specified net.
          * 
          * @param[in] net - The net.
@@ -387,7 +383,6 @@ namespace hal
         ModulePin* get_pin(Net* net) const;
 
         /**
-         * TODO test
          * Get the pin group specified by the given name.
          * 
          * @param[in] name - The name of the pin group.
@@ -396,7 +391,6 @@ namespace hal
         PinGroup<ModulePin>* get_pin_group(const std::string& name) const;
 
         /**
-         * TODO test
          * Set the name of the given pin.
          * 
          * @param[in] pin - The pin.
@@ -406,7 +400,6 @@ namespace hal
         bool set_pin_name(ModulePin* pin, const std::string& new_name);
 
         /**
-         * TODO test
          * Set the name of the given pin group.
          * 
          * @param[in] pin_group - The pin group.
@@ -416,7 +409,6 @@ namespace hal
         bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
 
         /**
-         * TODO test
          * Set the type of the given pin.
          * 
          * @param[in] pin - The pin.
@@ -426,8 +418,8 @@ namespace hal
         bool set_pin_type(ModulePin* pin, PinType new_type);
 
         /**
-         * TODO test
          * Create a new pin group with the given name.
+         * All pins to be added to the pin group must have the same direction and type.
          * 
          * @param[in] name - The name of the pin group.
          * @param[in] pins - The pins to be assigned to the pin group.
@@ -438,7 +430,6 @@ namespace hal
         PinGroup<ModulePin>* create_pin_group(const std::string& name, const std::vector<ModulePin*> pins, bool ascending = false, u32 start_index = 0);
 
         /**
-         * TODO test
          * Delete the given pin group.
          * 
          * @param[in] pin_group - The pin group to be deleted.
@@ -447,8 +438,8 @@ namespace hal
         bool delete_pin_group(PinGroup<ModulePin>* pin_group);
 
         /**
-         * TODO test
          * Assign a pin to a pin group.
+         * Only pins with matching direction and type can be assigned to an existing pin group.
          * 
          * @param[in] pin_group - The pin group.
          * @param[in] pin - The pin to be added.

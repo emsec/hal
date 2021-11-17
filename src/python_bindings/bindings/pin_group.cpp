@@ -116,6 +116,32 @@ namespace hal
             :rtype: int
         )");
 
+        py_module_pin_group.def_property_readonly("direction", &PinGroup<ModulePin>::get_direction, R"(
+            The direction of the pin group.
+
+            :type: hal_py.PinDirection
+        )");
+
+        py_module_pin_group.def("get_direction", &PinGroup<ModulePin>::get_direction, R"(
+            Get the direction of the pin group.
+
+            :returns: The direction of the pin.
+            :rtype: hal_py.PinDirection
+        )");
+
+        py_module_pin_group.def_property_readonly("type", &PinGroup<ModulePin>::get_type, R"(
+            The type of the pin group.
+
+            :type: hal_py.PinType
+        )");
+
+        py_module_pin_group.def("get_type", &PinGroup<ModulePin>::get_type, R"(
+            Get the type of the pin group.
+
+            :returns: The type of the pin.
+            :rtype: hal_py.PinType
+        )");
+
         py_module_pin_group.def("empty", &PinGroup<ModulePin>::empty, R"(
             Check whether the pin group is empty, i.e., contains no pins.
 

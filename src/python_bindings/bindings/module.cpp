@@ -448,6 +448,7 @@ namespace hal
 
         py_module.def("create_pin_group", &Module::create_pin_group, py::arg("name"), py::arg("pins"), py::arg("ascending") = false, py::arg("start_index") = 0, R"(
             Create a new pin group with the given name.
+            All pins to be added to the pin group must have the same direction and type.
 
             :param str name: The name of the pin group.
             :param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group.
@@ -465,6 +466,7 @@ namespace hal
 
         py_module.def("assign_pin_to_group", &Module::assign_pin_to_group, py::arg("pin_group"), py::arg("pin"), R"(
             Assign a pin to a pin group.
+            Only pins with matching direction and type can be assigned to an existing pin group.
 
             :param hal_py.ModulePinGroup pin_group: The pin group.
             :param hal_py.ModulePin pin: The pin to be added.

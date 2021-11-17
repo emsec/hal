@@ -862,7 +862,29 @@ namespace hal
             return nullptr;
         }
 
-        std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(name, ascending, start_index));
+        PinDirection master_direction = pins.front()->get_direction();
+        PinType master_type           = pins.front()->get_type();
+        for (ModulePin* pin : pins)
+        {
+            if (pin == nullptr)
+            {
+                return nullptr;
+            }
+
+            if (pin->get_direction() != master_direction || pin->get_type() != master_type)
+            {
+                // wrong direction or type
+                return nullptr;
+            }
+
+            if (const auto it = m_pin_names_map.find(pin->m_name); it == m_pin_names_map.end() || it->second != pin)
+            {
+                // pin does not belong to module
+                return nullptr;
+            }
+        }
+
+        std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(name, master_direction, master_type, ascending, start_index));
         PinGroup<ModulePin>* pin_group = pin_group_owner.get();
         m_pin_groups.push_back(std::move(pin_group_owner));
         m_pin_groups_ordered.push_back(pin_group);
@@ -871,19 +893,6 @@ namespace hal
         bool failed = false;
         for (ModulePin* pin : pins)
         {
-            if (pin == nullptr)
-            {
-                failed = true;
-                break;
-            }
-
-            if (const auto it = m_pin_names_map.find(pin->m_name); it == m_pin_names_map.end() || it->second != pin)
-            {
-                // pin does not belong to module
-                failed = true;
-                break;
-            }
-
             if (!assign_pin_to_group(pin_group, pin))
             {
                 failed = true;
@@ -956,6 +965,12 @@ namespace hal
             return false;
         }
 
+        if (pin->get_direction() != pin_group->get_direction() || pin->get_type() != pin_group->get_type())
+        {
+            // wrong direction or type
+            return false;
+        }
+
         if (PinGroup<ModulePin>* pg = pin->m_group.first; pg != nullptr)
         {
             // remove from old group and potentially delete old group if empty
@@ -1003,18 +1018,19 @@ namespace hal
             name = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
         } while (m_pin_names_map.find(name) != m_pin_names_map.end() && m_pin_group_names_map.find(name) != m_pin_group_names_map.end());
 
-        // create pin group (every pin must be within exactly one pin group)
-        std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(name));
-        PinGroup<ModulePin>* pin_group = pin_group_owner.get();
-        m_pin_groups.push_back(std::move(pin_group_owner));
-        m_pin_groups_ordered.push_back(pin_group);
-        m_pin_group_names_map[name] = pin_group;
-
         // create pin
         std::unique_ptr<ModulePin> pin_owner(new ModulePin(name, net, direction));
         ModulePin* pin = pin_owner.get();
         m_pins.push_back(std::move(pin_owner));
         m_pin_names_map[name] = pin;
+
+        // create pin group (every pin must be within exactly one pin group)
+        std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(name, pin->m_direction, pin->m_type));
+        PinGroup<ModulePin>* pin_group = pin_group_owner.get();
+        m_pin_groups.push_back(std::move(pin_group_owner));
+        m_pin_groups_ordered.push_back(pin_group);
+        m_pin_group_names_map[name] = pin_group;
+
         assign_pin_to_group(pin_group, pin);
 
         m_event_handler->notify(ModuleEvent::event::ports_changed, this);
