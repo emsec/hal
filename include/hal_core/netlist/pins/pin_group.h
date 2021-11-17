@@ -31,7 +31,7 @@ namespace hal
          */
         bool operator==(const PinGroup<T>& other) const
         {
-            if (m_name != other.get_name() || m_start_index != other.get_start_index() || m_ascending != other.is_ascending())
+            if (m_name != other.get_name() || m_direction != other.get_direction() || m_type != other.get_type() || m_start_index != other.get_start_index() || m_ascending != other.is_ascending())
             {
                 return false;
             }
