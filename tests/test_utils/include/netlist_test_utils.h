@@ -191,36 +191,17 @@ namespace hal
          * @returns TRUE if both vectors have the same content. FALSE otherwise
          */
         template<typename T>
-        bool vectors_have_same_content(const std::vector<T> vector_1, const std::vector<T> vector_2)
+        bool vectors_have_same_content(std::vector<T> vector_1, std::vector<T> vector_2)
         {
-            std::vector<T> vec_1(vector_1);
-            std::vector<T> vec_2(vector_2);
-
-            if (vec_1.size() != vec_2.size())
-                return false;
-
-            // Each element of vec_1 must be found in vec_2
-            while (vec_1.size() > 0)
+            if (vector_1.size() != vector_2.size())
             {
-                auto it_1       = vec_1.begin();
-                bool found_elem = false;
-                for (auto it_2 = vec_2.begin(); it_2 != vec_2.end(); it_2++)
-                {
-                    if (*it_1 == *it_2)
-                    {
-                        found_elem = true;
-                        vec_2.erase(it_2);
-                        break;
-                    }
-                }
-                if (!found_elem)
-                {
-                    return false;
-                }
-                vec_1.erase(it_1);
+                return false;
             }
 
-            return true;
+            std::sort(vector_1.begin(), vector_1.end());
+            std::sort(vector_2.begin(), vector_2.end());
+
+            return vector_1 == vector_2;
         }
 
         /**

@@ -39,6 +39,7 @@ namespace hal {
                 EXPECT_TRUE(top_module->is_top_module());
                 EXPECT_TRUE(top_module->get_type().empty());
                 EXPECT_EQ(top_module->get_parent_module(), nullptr);
+                EXPECT_EQ(top_module->get_parent_modules(), std::vector<Module*>());
 
                 Module* dummy_module = netlist->create_module(12, "dummy_module", top_module);
                 ASSERT_NE(dummy_module, nullptr);
@@ -48,6 +49,7 @@ namespace hal {
                 EXPECT_EQ(dummy_module->get_netlist(), netlist.get());
                 EXPECT_TRUE(dummy_module->get_type().empty());
                 EXPECT_EQ(dummy_module->get_parent_module(), top_module);
+                EXPECT_EQ(dummy_module->get_parent_modules(), std::vector<Module*>({top_module}));
             }
         TEST_END
     }
@@ -241,7 +243,7 @@ namespace hal {
     /**
      * Test changing the parent module.
      *
-     * Functions: set_parent_module, get_parent_module, get_submodules
+     * Functions: set_parent_module, get_parent_module, get_parent_modules, get_submodules, is_parent_module_of, is_submodule_of
      */
     TEST_F(ModuleTest, check_set_parent_module) {
         TEST_START
@@ -265,6 +267,29 @@ namespace hal {
                 ASSERT_NE(dummy_module_3, nullptr);
                 Module* dummy_module_4 = netlist->create_module("dummy_module_4", dummy_module_1);
                 ASSERT_NE(dummy_module_4, nullptr);
+                Module* top_module = netlist->get_top_module();
+
+                EXPECT_EQ(top_module->get_parent_modules(), std::vector<Module*>());
+                EXPECT_EQ(dummy_module_1->get_parent_modules(), std::vector<Module*>({top_module}));
+                EXPECT_EQ(dummy_module_2->get_parent_modules(), std::vector<Module*>({top_module}));
+                EXPECT_EQ(dummy_module_3->get_parent_modules(), std::vector<Module*>({dummy_module_1, top_module}));
+                EXPECT_EQ(dummy_module_3->get_parent_modules(nullptr, false), std::vector<Module*>({dummy_module_1}));
+                EXPECT_EQ(dummy_module_4->get_parent_modules(), std::vector<Module*>({dummy_module_1, top_module}));
+                EXPECT_EQ(dummy_module_4->get_parent_modules(nullptr, false), std::vector<Module*>({dummy_module_1}));
+
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_1));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_2));
+                EXPECT_FALSE(top_module->is_parent_module_of(dummy_module_3));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_3, true));
+                EXPECT_FALSE(top_module->is_parent_module_of(dummy_module_4));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_4, true));
+
+                EXPECT_TRUE(dummy_module_1->is_submodule_of(top_module));
+                EXPECT_TRUE(dummy_module_2->is_submodule_of(top_module));
+                EXPECT_FALSE(dummy_module_3->is_submodule_of(top_module));
+                EXPECT_TRUE(dummy_module_3->is_submodule_of(top_module, true));
+                EXPECT_FALSE(dummy_module_4->is_submodule_of(top_module));
+                EXPECT_TRUE(dummy_module_4->is_submodule_of(top_module, true));
 
                 dummy_module_1->set_parent_module(dummy_module_2);
                 EXPECT_EQ(dummy_module_1->get_parent_module(), dummy_module_2);
@@ -277,6 +302,31 @@ namespace hal {
                 EXPECT_EQ(dummy_module_2->get_submodules([](const Module* module){ return module->get_name() == "dummy_module_4";}, true).size(), 1);
                 EXPECT_EQ(dummy_module_1->get_submodules([](const Module* module){ return module->get_name() == "dummy_module_3";}, false).size(), 1);
                 EXPECT_EQ(dummy_module_1->get_submodules([](const Module* module){ return module->get_name() == "dummy_module_4";}, false).size(), 1);
+
+                EXPECT_EQ(top_module->get_parent_modules(), std::vector<Module*>());
+                EXPECT_EQ(dummy_module_1->get_parent_modules(), std::vector<Module*>({dummy_module_2, top_module}));
+                EXPECT_EQ(dummy_module_1->get_parent_modules(nullptr, false), std::vector<Module*>({dummy_module_2}));
+                EXPECT_EQ(dummy_module_2->get_parent_modules(), std::vector<Module*>({top_module}));
+                EXPECT_EQ(dummy_module_3->get_parent_modules(), std::vector<Module*>({dummy_module_1, dummy_module_2, top_module}));
+                EXPECT_EQ(dummy_module_3->get_parent_modules(nullptr, false), std::vector<Module*>({dummy_module_1}));
+                EXPECT_EQ(dummy_module_4->get_parent_modules(), std::vector<Module*>({dummy_module_1, dummy_module_2, top_module}));
+                EXPECT_EQ(dummy_module_4->get_parent_modules(nullptr, false), std::vector<Module*>({dummy_module_1}));
+
+                EXPECT_FALSE(top_module->is_parent_module_of(dummy_module_1));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_1, true));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_2));
+                EXPECT_FALSE(top_module->is_parent_module_of(dummy_module_3));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_3, true));
+                EXPECT_FALSE(top_module->is_parent_module_of(dummy_module_4));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_4, true));
+
+                EXPECT_FALSE(dummy_module_1->is_submodule_of(top_module));
+                EXPECT_TRUE(dummy_module_1->is_submodule_of(top_module, true));
+                EXPECT_TRUE(dummy_module_2->is_submodule_of(top_module));
+                EXPECT_FALSE(dummy_module_3->is_submodule_of(top_module));
+                EXPECT_TRUE(dummy_module_3->is_submodule_of(top_module, true));
+                EXPECT_FALSE(dummy_module_4->is_submodule_of(top_module));
+                EXPECT_TRUE(dummy_module_4->is_submodule_of(top_module, true));
             }
             {
                 /*  Hang m_0 to one of its childs (m_1). m_1 should be connected to the top_module afterwards
@@ -393,7 +443,7 @@ namespace hal {
      * Testing the addition of gates to the Module. Verify the addition by call the
      * get_gates function and the contains_gate function
      *
-     * Functions: assign_gate, contains_gate
+     * Functions: assign_gate, assign_gates, contains_gate
      */
     TEST_F(ModuleTest, check_assign_gate) {
         TEST_START
@@ -409,6 +459,25 @@ namespace hal {
                 Module* test_module = nl->create_module("test Module", nl->get_top_module());
                 test_module->assign_gate(gate_0);
                 test_module->assign_gate(gate_1);
+
+                std::vector<Gate*> expRes = {gate_0, gate_1};
+
+                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_gates(), expRes));
+                EXPECT_TRUE(test_module->contains_gate(gate_0));
+                EXPECT_TRUE(test_module->contains_gate(gate_1));
+                EXPECT_FALSE(test_module->contains_gate(gate_not_in_m));
+            }
+            {
+                // Add some gates to the Module
+                auto nl = test_utils::create_empty_netlist();
+                Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+                Gate* gate_1 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_1");
+                // this gate is not part of the Module
+                Gate* gate_not_in_m = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_not_in_m");
+
+                // Add gate_0 and gate_1 to a Module
+                Module* test_module = nl->create_module("test Module", nl->get_top_module());
+                test_module->assign_gates({gate_0, gate_1});
 
                 std::vector<Gate*> expRes = {gate_0, gate_1};
 
@@ -684,7 +753,7 @@ namespace hal {
     /**
      * Testing the get_input_nets, get_output_nets and get_internal_nets function
      *
-     * Functions: get_input_nets, get_output_nets, get_internal_nets
+     * Functions: gte_nets, get_input_nets, get_output_nets, get_internal_nets, contains_net, is_input_net, is_output_net, is_internal_net
      */
     TEST_F(ModuleTest, check_get_input_nets) {
         TEST_START
@@ -724,20 +793,42 @@ namespace hal {
             {
                 // Get input nets of the test Module
                 std::vector<Net*> exp_result = {net_g_0, net_4_1_2};
-                std::sort(exp_result.begin(), exp_result.end());
-                EXPECT_EQ(test_module->get_input_nets(), exp_result);
+                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_input_nets(), exp_result));
+                EXPECT_TRUE(test_module->is_input_net(net_g_0));
+                EXPECT_TRUE(test_module->is_input_net(net_4_1_2));
+                EXPECT_FALSE(test_module->is_input_net(net_0_g));
+                EXPECT_FALSE(test_module->is_input_net(net_2_3_5));
+                EXPECT_FALSE(test_module->is_input_net(net_1_2));
             }
             {
                 // Get output nets of the test Module
                 std::vector<Net*> exp_result = {net_0_g, net_2_3_5};
-                std::sort(exp_result.begin(), exp_result.end());
-                EXPECT_EQ(test_module->get_output_nets(), exp_result);
+                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_output_nets(), exp_result));
+                EXPECT_TRUE(test_module->is_output_net(net_0_g));
+                EXPECT_TRUE(test_module->is_output_net(net_2_3_5));
+                EXPECT_FALSE(test_module->is_output_net(net_g_0));
+                EXPECT_FALSE(test_module->is_output_net(net_4_1_2));
+                EXPECT_FALSE(test_module->is_output_net(net_1_2));
             }
             {
                 // Get internal nets of the test Module
                 std::vector<Net*> exp_result = {net_1_2, net_2_3_5};
-                std::sort(exp_result.begin(), exp_result.end());
-                EXPECT_EQ(test_module->get_internal_nets(), exp_result);
+                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_internal_nets(), exp_result));
+                EXPECT_TRUE(test_module->is_internal_net(net_1_2));
+                EXPECT_TRUE(test_module->is_internal_net(net_2_3_5));
+                EXPECT_FALSE(test_module->is_internal_net(net_g_0));
+                EXPECT_FALSE(test_module->is_internal_net(net_4_1_2));
+                EXPECT_FALSE(test_module->is_internal_net(net_0_g));
+            }
+            {
+                // Get nets of the test Module
+                std::vector<Net*> exp_result = {net_g_0, net_0_g, net_4_1_2, net_1_2, net_2_3_5};
+                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_nets(), exp_result));
+                EXPECT_TRUE(test_module->contains_net(net_1_2));
+                EXPECT_TRUE(test_module->contains_net(net_2_3_5));
+                EXPECT_TRUE(test_module->contains_net(net_g_0));
+                EXPECT_TRUE(test_module->contains_net(net_4_1_2));
+                EXPECT_TRUE(test_module->contains_net(net_0_g));
             }
         TEST_END
     }
@@ -756,7 +847,7 @@ namespace hal {
             ASSERT_NE(m_0, nullptr);
             {
                 // Get the input port name of a Net, which port name was not specified yet
-                EXPECT_EQ(m_0->get_pin(nl->get_net_by_id(MIN_NET_ID + 13))->get_name(), "I(2)");
+                EXPECT_EQ(m_0->get_pin(nl->get_net_by_id(MIN_NET_ID + 13))->get_name(), "I(0)");
             }
             {
                 // Get the output port name of a Net, which port name was not specified yet
