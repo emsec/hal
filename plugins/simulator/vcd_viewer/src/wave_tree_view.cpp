@@ -11,6 +11,7 @@
 #include <QLineEdit>
 #include <QInputDialog>
 #include <QMimeData>
+#include <QPainter>
 
 namespace hal {
     WaveTreeView::WaveTreeView(WaveDataList* wdList, QWidget* parent)
@@ -29,6 +30,7 @@ namespace hal {
         setMouseTracking(true);
         setAcceptDrops(true);
         setContextMenuPolicy(Qt::CustomContextMenu);
+        setItemDelegateForColumn(2,new WaveValueDelegate);
         connect(this,&QTreeView::expanded,this,&WaveTreeView::handleExpandCollapse);
         connect(this,&QTreeView::collapsed,this,&WaveTreeView::handleExpandCollapse);
         connect(this,&QTreeView::customContextMenuRequested,this,&WaveTreeView::handleContextMenuRequested);
@@ -271,5 +273,33 @@ namespace hal {
         {
             selectionModel()->select(inx, QItemSelectionModel::Select);
         }
+    }
+
+    void WaveValueDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                  const QModelIndex &index) const
+    {
+        QPen textPen = QPen(option.palette.text(),0);
+        if (option.state & QStyle::State_Selected)
+        {
+            painter->fillRect(option.rect, option.palette.highlight());
+            textPen = QPen(option.palette.highlightedText(),0);
+        }
+        QString txt = index.data(Qt::DisplayRole).toString();
+        QRect rectTxt = option.rect;
+        int w = rectTxt.width()-22;
+        if (w > 30)
+        {
+            rectTxt.setWidth(w);
+            QColor  col = index.data(Qt::BackgroundRole).value<QColor>();
+            QRect rectCol(rectTxt.left()+w+3,rectTxt.top()+3,16,16);
+            painter->setBrush(QBrush(col));
+            painter->drawEllipse(rectCol);
+        }
+        painter->setPen(textPen);
+        QFont font = painter->font();
+        font.setPixelSize(12);
+        font.setBold(true);
+        painter->setFont(font);
+        painter->drawText(rectTxt,Qt::AlignRight|Qt::AlignTop,txt);
     }
 }

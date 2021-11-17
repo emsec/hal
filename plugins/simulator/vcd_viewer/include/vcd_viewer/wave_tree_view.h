@@ -3,10 +3,21 @@
 #include <QTreeView>
 #include <QHash>
 #include <QResizeEvent>
+#include <QStyledItemDelegate>
 #include "hal_core/defines.h"
 
 namespace hal {
     class WaveDataList;
+
+    class WaveValueDelegate : public QStyledItemDelegate
+    {
+        Q_OBJECT
+    public:
+        using QStyledItemDelegate::QStyledItemDelegate;
+
+        void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                      const QModelIndex &index) const override;
+    };
 
     class WaveTreeView : public QTreeView
     {
