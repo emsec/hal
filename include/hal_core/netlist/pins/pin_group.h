@@ -320,7 +320,7 @@ namespace hal
 
             u32 index    = pin->m_group.second;
             pin->m_group = std::make_pair(nullptr, 0);
-            auto it      = std::next(m_pins.begin(), index);
+            auto it      = std::next(m_pins.begin(), index - m_start_index);
             it           = m_pins.erase(it);
             for (; it != m_pins.end(); it++)
             {
