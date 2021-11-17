@@ -39,7 +39,7 @@ namespace hal
         restoreSettings();
 
         mSearchbar = new Searchbar(mPlainTextEdit);
-        //mSearchbar->hide();
+        mSearchbar->hide();
         mContentLayout->addWidget(mSearchbar);
 
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
@@ -76,6 +76,8 @@ namespace hal
         mSearchAction = new QAction(this);
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
         connect(mSearchbar, SIGNAL(textEdited(QString)), this, SLOT(handleSearchChanged(QString)));
+
+        connect(mSearchAction, SIGNAL(triggered()), this, SLOT(toggleSearchbar()));
         Toolbar->addAction(mSearchAction);
 
 
