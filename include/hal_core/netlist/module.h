@@ -136,7 +136,6 @@ namespace hal
         Module* get_parent_module() const;
 
         /**
-         * TODO test
          * Get all direct parent of this module.<br>
          * If \p recursive is set to true, all indirect parents are also included.<br>
          * A filter can be applied to the result to only get parents matching the specified condition.
@@ -145,7 +144,7 @@ namespace hal
          * @param[in] recursive - True to include indirect parents as well, false otherwise.
          * @returns A vector of parent modules.
          */
-        std::vector<Module*> get_parent_modules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
+        std::vector<Module*> get_parent_modules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = true) const;
 
         /**
          * Set a new parent for this module.<br>
@@ -157,14 +156,13 @@ namespace hal
         bool set_parent_module(Module* new_parent);
 
         /**
-         * TODO test
          * Check if the module is a parent of the specified module.
          * 
          * @param[in] module - The module.
          * @param[in] recursive - True to check recursively, false otherwise.
          * @returns True if the module is a parent of the specified module, false otherwise.
          */
-        bool is_parent_module_of(Module* module, bool recursive = true) const;
+        bool is_parent_module_of(Module* module, bool recursive = false) const;
 
         /**
          * Get all direct submodules of this module.<br>
@@ -178,14 +176,13 @@ namespace hal
         std::vector<Module*> get_submodules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
 
         /**
-         * TODO test
          * Check if the module is a submodule of the specified module.
          * 
          * @param[in] module - The module.
          * @param[in] recursive - True to check recursively, false otherwise.
          * @returns True if the module is a submodule of the specified module, false otherwise.
          */
-        bool is_submodule_of(Module* module, bool recursive = true) const;
+        bool is_submodule_of(Module* module, bool recursive = false) const;
 
         /**
          * Checks whether another module is a submodule of this module.<br>
@@ -218,7 +215,6 @@ namespace hal
          */
 
         /**
-         * TODO test
          * Check whether a net is contained in the module.<br>
          * If \p recursive is set to true, nets in submodules are considered as well.
          *
@@ -229,7 +225,6 @@ namespace hal
         bool contains_net(Net* net, bool recursive = false) const;
 
         /**
-         * TODO test
          * Get all nets that have at least one source or one destination within the module.<br>
          * A filter can be applied to the result to only get nets matching the specified condition.<br>
          * If \p recursive is true, nets in submodules are considered as well.
@@ -262,7 +257,6 @@ namespace hal
         std::vector<Net*> get_internal_nets() const;
 
         /** 
-         * TODO test
          * Check whether the given net is an input of the module, i.e., whether the net is a global input to the netlist or has at least one source outside of the module.
          * 
          * @param[in] net - The net.
@@ -271,7 +265,6 @@ namespace hal
         bool is_input_net(Net* net) const;
 
         /** 
-         * TODO test
          * Check whether the given net is an output of the module, i.e., whether the net is a global output to the netlist or has at least one destination outside of the module.
          * 
          * @param[in] net - The net.
@@ -280,7 +273,6 @@ namespace hal
         bool is_output_net(Net* net) const;
 
         /** 
-         * TODO test
          * Check whether the given net is an internal net of the module, i.e. whether the net has at least one source and one destination within the module.
          * 
          * @param[in] net - The net.
@@ -463,7 +455,6 @@ namespace hal
         bool assign_gate(Gate* gate);
 
         /**
-         * TODO test
          * Assign a vector of gates to the module.<br>
          * The gates are removed from their previous module in the process.
          *
@@ -482,7 +473,6 @@ namespace hal
         bool remove_gate(Gate* gate);
 
         /**
-         * TODO test
          * Remove a vector of gates from the module.<br>
          * Automatically moves the gates to the top module of the netlist.
          *

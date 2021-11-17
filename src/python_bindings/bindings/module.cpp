@@ -105,7 +105,7 @@ namespace hal
             :type: list[hal_py.Module]
         )");
 
-        py_module.def("get_parent_modules", &Module::get_parent_modules, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
+        py_module.def("get_parent_modules", &Module::get_parent_modules, py::arg("filter") = nullptr, py::arg("recursive") = true, R"(
             Get all direct parent of this module.
             If recursive is set to true, all indirect parents are also included.
             A filter can be applied to the result to only get parents matching the specified condition.
@@ -125,7 +125,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def("is_parent_module_of", &Module::is_parent_module_of, py::arg("module"), py::arg("recursive") = true, R"(
+        py_module.def("is_parent_module_of", &Module::is_parent_module_of, py::arg("module"), py::arg("recursive") = false, R"(
             Check if the module is a parent of the specified module.
          
             :param hal_py.Module module: The module.
@@ -152,7 +152,7 @@ namespace hal
             :rtype: list[hal_py.Module]
         )");
 
-        py_module.def("is_submodule_of", &Module::is_submodule_of, py::arg("module"), py::arg("recursive") = true, R"(
+        py_module.def("is_submodule_of", &Module::is_submodule_of, py::arg("module"), py::arg("recursive") = false, R"(
             Check if the module is a submodule of the specified module.
 
             :param hal_py.Module module: The module.
