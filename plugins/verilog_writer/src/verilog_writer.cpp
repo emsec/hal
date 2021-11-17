@@ -144,8 +144,19 @@ namespace hal
             }
         }
 
-        for (Net* net : module->get_nets())
+        std::vector<Net*> input_nets_tmp = module->get_input_nets();
+        std::unordered_set<Net*> port_nets(input_nets_tmp.begin(), input_nets_tmp.end());
+        std::vector<Net*> output_nets_tmp = module->get_output_nets();
+        port_nets.insert(output_nets_tmp.begin(), output_nets_tmp.end());
+
+
+        for (Net* net : module->get_internal_nets())
         {
+            if (port_nets.find(net) != port_nets.end()) 
+            {
+                continue;
+            }
+
             if (aliases.find(net) == aliases.end())
             {
                 aliases[net] = escape(get_unique_alias(identifier_occurrences, net->get_name()));
