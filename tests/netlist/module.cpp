@@ -1003,6 +1003,29 @@ namespace hal {
                 EXPECT_EQ(in_group_0->is_ascending(), false);
                 EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group_0, u32(0)));
                 EXPECT_EQ(in_group_0->get_index(in_pin_0), 0);
+
+                // assign pin to group
+                EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, in_pin_1));
+                EXPECT_EQ(m_1->get_pin_groups().size(), 3);
+                EXPECT_EQ(in_group_0->size(), 2);
+                EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group_0, u32(0)));
+                EXPECT_EQ(in_group_0->get_index(in_pin_0), 0);
+                EXPECT_EQ(in_pin_1->get_group(), std::pair(in_group_0, u32(1)));
+                EXPECT_EQ(in_group_0->get_index(in_pin_1), 1);
+                EXPECT_EQ(in_group_0->get_pin(0), in_pin_0);
+                EXPECT_EQ(in_group_0->get_pin(1), in_pin_1);
+
+                // try invalid inputs
+                EXPECT_TRUE(m_1->set_pin_type(out_pin_0, PinType::address));
+                EXPECT_TRUE(m_1->set_pin_type(out_pin_1, PinType::data));
+                EXPECT_FALSE(m_1->assign_pin_to_group(in_group_0, out_pin_0)); // wrong direction
+                EXPECT_FALSE(m_1->assign_pin_to_group(in_group_0, out_pin_1)); // wrong type
+                EXPECT_FALSE(m_1->create_pin_group("O1", {out_pin_0, out_pin_1})); // different types
+                EXPECT_EQ(m_1->get_pin_group("O1"), nullptr);
+                EXPECT_FALSE(m_1->create_pin_group("O2", {out_pin_0, in_pin_0})); // different directions
+                EXPECT_EQ(m_1->get_pin_group("O2"), nullptr);
+                EXPECT_EQ(in_group_0->size(), 2);
+                EXPECT_EQ(m_1->get_pin_groups().size(), 3);
             }
             // Create a new Module with more modules (with 2 input and ouput nets)
             Module* m_2 = nl->create_module("mod_2", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 3)});
