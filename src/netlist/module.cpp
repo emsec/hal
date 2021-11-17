@@ -844,9 +844,40 @@ namespace hal
             return false;
         }
 
+        if (pin->m_group.first->size() != 1)
+        {
+            return false;
+        }
+
         if (pin->m_type != new_type)
         {
             pin->m_type = new_type;
+            pin->m_group.first->m_type = new_type;
+            m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+        }
+        return true;
+    }
+
+    bool Module::set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type)
+    {
+        if (pin_group == nullptr)
+        {
+            return false;
+        }
+
+        if (const auto it = m_pin_group_names_map.find(pin_group->m_name); it == m_pin_group_names_map.end() || it->second != pin_group)
+        {
+            // pin group does not belong to current module
+            return false;
+        }
+
+        if (pin_group->m_type != new_type)
+        {
+            pin_group->m_type = new_type;
+            for (const std::unique_ptr<ModulePin>& pin : m_pins) 
+            {
+                pin->m_type = new_type;
+            }
             m_event_handler->notify(ModuleEvent::event::ports_changed, this);
         }
         return true;

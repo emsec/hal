@@ -438,10 +438,22 @@ namespace hal
         )");
 
         py_module.def("set_pin_type", &Module::set_pin_type, py::arg("pin"), py::arg("new_type"), R"(
-            Set the type of the given port.
+            Set the type of the given pin.
+            The pin type can only be changed this way if the pin is in a pin group of size 1.
+            The new type will also be assigned to the pin group.
 
             :param hal_py.ModulePin pin: The pin.
             :param hal_py.PinType new_type: The type to be assigned to the pin.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("set_pin_group_type", &Module::set_pin_group_type, py::arg("pin_group"), py::arg("new_type"), R"(
+            Set the type of the given pin group.
+            The new type will also be assigned to all pins of the group.
+
+            :param hal_py.ModulePinGroup pin_group: The pin group.
+            :param hal_py.PinType new_type: The type to be assigned to the pin group.
             :returns: True on success, False otherwise.
             :rtype: bool
         )");

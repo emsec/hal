@@ -402,12 +402,24 @@ namespace hal
 
         /**
          * Set the type of the given pin.
+         * The pin type can only be changed this way if the pin is in a pin group of size 1.
+         * The new type will also be assigned to the pin group.
          * 
          * @param[in] pin - The pin.
          * @param[in] new_type - The type to be assigned to the pin.
          * @returns True on success, false otherwise.
          */
         bool set_pin_type(ModulePin* pin, PinType new_type);
+
+        /**
+         * Set the type of the given pin group.
+         * The new type will also be assigned to all pins of the group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_type - The type to be assigned to the pin group.
+         * @returns True on success, false otherwise.
+         */
+        bool set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type);
 
         /**
          * Create a new pin group with the given name.
