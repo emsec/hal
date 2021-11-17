@@ -958,20 +958,18 @@ namespace hal
         }
 
         bool removed_pins = false;
-        for (ModulePin* pin : pin_group->m_pins)
+
+        std::vector<ModulePin*> pins_copy(pin_group->m_pins.begin(), pin_group->m_pins.end());
+        for (ModulePin* pin : pins_copy)
         {
             removed_pins     = true;
             std::string name = pin->m_name;
-            do
+            while (m_pin_group_names_map.find(name) != m_pin_group_names_map.end())
             {
                 name += "_";
-            } while (m_pin_group_names_map.find(name) != m_pin_group_names_map.end());
+            } 
             create_pin_group(name, {pin});
         }
-
-        m_pin_group_names_map.erase(pin_group->m_name);
-        m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group));
-        m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pin_group](const std::unique_ptr<PinGroup<ModulePin>>& pg) { return pg.get() == pin_group; }));
 
         if (removed_pins)
         {
@@ -1011,7 +1009,9 @@ namespace hal
             pg->remove_pin(pin);
             if (pg->empty())
             {
-                delete_pin_group(pg);
+                m_pin_group_names_map.erase(pg->m_name);
+                m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pg));
+                m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pg](const std::unique_ptr<PinGroup<ModulePin>>& pg2) { return pg2.get() == pg; }));
             }
         }
 
@@ -1084,7 +1084,10 @@ namespace hal
             pin_group->remove_pin(pin);
             if (pin_group->empty())
             {
-                delete_pin_group(pin_group);
+                // remove pin group
+                m_pin_group_names_map.erase(pin_group->m_name);
+                m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group));
+                m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pin_group](const std::unique_ptr<PinGroup<ModulePin>>& pg) { return pg.get() == pin_group; }));
             }
         }
 
