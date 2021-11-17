@@ -388,11 +388,11 @@ namespace hal
         // update internal nets and port nets
         for (Endpoint* ep : n->get_sources())
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n);
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
         for (Endpoint* ep : n->get_destinations())
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n);
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
 
         m_event_handler->notify(NetlistEvent::event::marked_global_input, this, n->get_id());
@@ -415,11 +415,11 @@ namespace hal
         // update internal nets and port nets
         for (Endpoint* ep : n->get_sources())
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n);
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
         for (Endpoint* ep : n->get_destinations())
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n);
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
 
         m_event_handler->notify(NetlistEvent::event::marked_global_output, this, n->get_id());
@@ -443,11 +443,11 @@ namespace hal
         // update internal nets and port nets
         for (Endpoint* ep : n->get_sources())
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n);
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
         for (Endpoint* ep : n->get_destinations())
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n);
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
 
         m_event_handler->notify(NetlistEvent::event::unmarked_global_input, this, n->get_id());
@@ -471,11 +471,11 @@ namespace hal
         // update internal nets and port nets
         for (Endpoint* ep : n->get_sources())
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n);
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
         for (Endpoint* ep : n->get_destinations())
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n);
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
 
         m_event_handler->notify(NetlistEvent::event::unmarked_global_output, this, n->get_id());
@@ -528,10 +528,7 @@ namespace hal
         {
             return nullptr;
         }
-        for (auto g : gates)
-        {
-            m->assign_gate(g);
-        }
+        m->assign_gates(gates);
         return m;
     }
 

@@ -196,7 +196,7 @@ namespace hal
 
         for (Net* net : m_parent->get_nets(nullptr, true))
         {
-            m_parent->check_net(net);
+            m_parent->check_net(net, true);
         }
 
         m_event_handler->notify(ModuleEvent::event::submodule_removed, m_parent, m_id);
@@ -208,7 +208,7 @@ namespace hal
 
         for (Net* net : m_parent->get_nets(nullptr, true))
         {
-            m_parent->check_net(net);
+            m_parent->check_net(net, true);
         }
 
         m_event_handler->notify(ModuleEvent::event::parent_changed, this);
@@ -219,9 +219,20 @@ namespace hal
 
     bool Module::is_parent_module_of(Module* module, bool recursive) const
     {
-        if (!module->get_parent_modules([this](Module* m) { return this->get_id() == m->get_id(); }, recursive).empty())
+        if (module == nullptr)
         {
-            return true;
+            return false;
+        }
+        for (auto sm : m_submodules)
+        {
+            if (sm == module)
+            {
+                return true;
+            }
+            else if (recursive && sm->is_parent_module_of(module, true))
+            {
+                return true;
+            }
         }
 
         return false;
@@ -259,7 +270,15 @@ namespace hal
 
     bool Module::is_submodule_of(Module* module, bool recursive) const
     {
-        if (!get_parent_modules([module](Module* m) { return module->get_id() == m->get_id(); }, recursive).empty())
+        if (module == nullptr)
+        {
+            return false;
+        }
+        if (m_parent == module)
+        {
+            return true;
+        } 
+        else if (recursive && m_parent->is_submodule_of(module, true)) 
         {
             return true;
         }
@@ -269,23 +288,7 @@ namespace hal
 
     bool Module::contains_module(Module* other, bool recursive) const
     {
-        if (other == nullptr)
-        {
-            return false;
-        }
-        for (auto sm : m_submodules)
-        {
-            if (sm == other)
-            {
-                return true;
-            }
-            else if (recursive && sm->contains_module(other, true))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return is_parent_module_of(other, recursive);
     }
 
     bool Module::is_top_module() const
@@ -514,7 +517,7 @@ namespace hal
 
         for (Endpoint* ep : sources)
         {
-            if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod))
+            if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod, true))
             {
                 external_source = true;
             }
@@ -531,7 +534,7 @@ namespace hal
 
         for (Endpoint* ep : destinations)
         {
-            if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod))
+            if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod, true))
             {
                 external_destination = true;
             }

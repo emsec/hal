@@ -253,7 +253,7 @@ namespace hal
                 c_module->set_parent_module(c_parent);
             }
 
-            // copy grougpings
+            // copy groupings
             for (const Grouping* grouping : nl->get_groupings())
             {
                 Grouping* c_grouping = c_netlist->create_grouping(grouping->get_id(), grouping->get_name());
@@ -329,14 +329,14 @@ namespace hal
                 for (ModulePin* c_pin : c_module->get_pins())
                 {
                     // pin names must be unique, hence automatically generated groups may conflict with copied ones
-                    c_module->set_pin_name(c_pin, "____netlist_copy_tmp_pin_[" + std::to_string(ctr) + "]____");
+                    c_module->set_pin_name(c_pin, "____netlist_copy_tmp_pin_[" + std::to_string(ctr++) + "]____");
                 }
 
                 ctr = 0;
                 for (PinGroup<ModulePin>* c_pin_group : c_module->get_pin_groups())
                 {
                     // pin group names must be unique, hence automatically generated groups may conflict with copied ones
-                    c_module->set_pin_group_name(c_pin_group, "____netlist_copy_tmp_pin_group_[" + std::to_string(ctr) + "]____");
+                    c_module->set_pin_group_name(c_pin_group, "____netlist_copy_tmp_pin_group_[" + std::to_string(ctr++) + "]____");
                 }
 
                 for (PinGroup<ModulePin>* pin_group : module->get_pin_groups())
