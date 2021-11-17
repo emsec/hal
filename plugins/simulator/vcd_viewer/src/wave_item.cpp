@@ -36,7 +36,7 @@ const char* WaveItem::sLineColor[] = { "#10E0FF", "#C08010"} ;
             childItems().clear();
         }
 
-        if (!mData)
+        if (!mData || mData->data().isEmpty())
         {
             return;
         }
@@ -100,6 +100,11 @@ const char* WaveItem::sLineColor[] = { "#10E0FF", "#C08010"} ;
     {
         mData = wd;
         if (mData) mData->setGraphicsItem(this);
+        construct();
+    }
+
+    void WaveItem::repaintGraphicsItem()
+    {
         construct();
     }
 

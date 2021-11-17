@@ -57,6 +57,12 @@ namespace hal {
         return mWaveItems.size() + mGroupItems.size();
     }
 
+    void WaveScene::handleMaxTimeChanged(u64 tmax)
+    {
+        if (tmax > sceneRect().width())
+            adjustSceneRect(tmax);
+    }
+
 
     float WaveScene::adjustSceneRect(u64 tmax)
     {

@@ -66,7 +66,9 @@ namespace hal {
         connect(mTreeView,&WaveTreeView::valueBaseChanged,mScene,&WaveScene::updateWaveItemValues);
         connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);
         connect(mScene,&WaveScene::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
-
+        connect(mWaveDataList,&WaveDataList::maxTimeChanged,mScene,&WaveScene::handleMaxTimeChanged);
+        connect(mWaveDataList,&WaveDataList::triggerBeginResetModel,mTreeModel,&WaveTreeModel::forwardBeginResetModel);
+        connect(mWaveDataList,&WaveDataList::triggerEndResetModel,mTreeModel,&WaveTreeModel::forwardEndResetModel);
 
         connect(gContentManager->getSelectionDetailsWidget(),&SelectionDetailsWidget::triggerHighlight,this,&WaveWidget::handleSelectionHighlight);
 
@@ -76,7 +78,6 @@ namespace hal {
         connect(&mWaveIndex,&WaveIndex::waveAppended,mWaveScene,&WaveScene::handleWaveAppended);
         connect(&mWaveIndex,&WaveIndex::waveRemoved,mWaveScene,&WaveScene::handleWaveRemoved);
         connect(&mWaveIndex,&WaveIndex::waveDataChanged,mWaveScene,&WaveScene::handleWaveDataChanged);
-        connect(mWaveIndex.waveDataList(),&WaveDataList::maxTimeChanged,mWaveScene,&WaveScene::handleMaxTimeChanged);
 
         connect(&mWaveIndex,&WaveIndex::waveRemoved,mWaveView,&WaveView::handleWaveRemoved);
         connect(mWaveIndex.waveDataList(),&WaveDataList::maxTimeChanged,mWaveView,&WaveView::handleMaxTimeChanged);
@@ -93,8 +94,8 @@ namespace hal {
 
     void WaveWidget::refreshNetNames()
     {
-        int n = mWaveDataList->size();
-        for (int i=0; i<n; i++)
+        int nWaves = mWaveDataList->size();
+        for (int i=0; i<nWaves; i++)
         {
             const WaveData* wd = mWaveDataList->at(i);
             if (!wd->id()) continue;

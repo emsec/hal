@@ -13,7 +13,7 @@ namespace hal {
     {
     public:
         WaveDataRoot(WaveDataList* wdList)
-            : WaveDataGroup(wdList,"root") {;}
+            : WaveDataGroup(wdList,0,"root") {;}
         void recalcData() override {;}
     };
 
@@ -43,6 +43,8 @@ namespace hal {
         void handleGroupAdded(int grpId);
         void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
         void handleCursorMoved(float xpos);
+        void forwardBeginResetModel();
+        void forwardEndResetModel();
 
     public:
         WaveTreeModel(WaveDataList* wdlist, QObject* obj=nullptr);

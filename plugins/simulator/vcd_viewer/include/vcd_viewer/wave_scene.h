@@ -40,6 +40,7 @@ namespace hal {
         void handleGroupAdded(int grpId);
         void setWavePositions(const QHash<int,int>& wpos, const QHash<int, int>& gpos);
         void handleIndexRemoved(int iwave, bool isGroup);
+        void handleMaxTimeChanged(u64 tmax);
 //        void handleIndexInserted(int iwave, bool isGroup);
 
     public:

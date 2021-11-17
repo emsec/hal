@@ -95,7 +95,10 @@ namespace hal {
 
     void WaveGraphicsView::handleSizeChanged(int widgetHeight, int viewportHeight)
     {
-//        qDebug() << "scene" << height() << rect().height() << "tree" << widgetHeight << viewportHeight << "scrollbar" << verticalScrollBar()->maximum();
+//        qDebug() << "graph view" << height() << rect().height() << viewport()->height() << "tree" << widgetHeight << viewportHeight << "scrollbar" << verticalScrollBar()->maximum()
+//                 << "adjust" <<  (widgetHeight==viewportHeight && verticalScrollBar()->maximum() > viewportHeight);
+        if (viewport()->height() < viewportHeight)
+            viewport()->setMinimumHeight(viewportHeight);
         if (widgetHeight==viewportHeight && verticalScrollBar()->maximum() > viewportHeight)
         {
             verticalScrollBar()->setMaximum(viewportHeight);

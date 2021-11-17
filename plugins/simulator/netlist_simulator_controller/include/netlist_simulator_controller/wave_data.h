@@ -23,6 +23,7 @@ namespace hal {
         virtual ~WaveGraphicsItem() {;}
         virtual void updateGraphicsItem(WaveData* wd) = 0;
         virtual void removeGraphicsItem()     = 0;
+        virtual void repaintGraphicsItem()    = 0;
         virtual void setItemVisible(bool vis) = 0;
     };
 
@@ -92,31 +93,33 @@ namespace hal {
         Q_OBJECT
 
         QMap<u32,int>     mIds;
+        u64               mSimulTime;
         u64               mMaxTime;
         void restoreIndex();
         void updateMaxTime();
         void setMaxTime(u64 tmax);
     public:
         QMap<u32,WaveDataGroup*> mDataGroups;
-        WaveDataList(QObject* parent = nullptr) : QObject(parent), mMaxTime(0) {;}
+        WaveDataList(QObject* parent = nullptr) : QObject(parent), mSimulTime(0), mMaxTime(0) {;}
         ~WaveDataList();
         void add(WaveData* wd, bool silent);
         void addGroup(WaveDataGroup* grp);
         u32  createGroup(QString grpName, const QVector<u32>& netIds);
         void removeGroup(u32 grpId);
         void addOrReplace(WaveData* wd);
-        void replaceWaveData(int inx, const WaveData *wdNew);
+        void replaceWaveData(int inx, WaveData *wdNew);
         WaveData* waveDataByNetId(u32 id) const;
         int waveIndexByNetId(u32 id) const { return mIds.value(id,-1); }
         bool hasNet(u32 id) const { return mIds.contains(id); }
         QSet<u32> toSet() const;
         void remove(u32 id);
-        void incrementMaxTime(u64 deltaT);
+        void incrementSimulTime(u64 deltaT);
         void clearAll();
         void updateClocks();
         void updateWaveData(int inx);
         void updateWaveName(int inx, const QString& nam);
-        u64 maxTime() const { return mMaxTime; }
+        u64 simulTime() const { return mSimulTime; }
+        u64 maxTime()   const { return mMaxTime; }
         void setValueForEmpty(int val);
         void dump() const;
         QList<const WaveData*> toList() const;
@@ -131,6 +134,8 @@ namespace hal {
         void waveRemoved(int inx);
         void waveMovedToGroup(int inx, WaveDataGroup* grp);
         void maxTimeChanged(u64 tmax);
+        void triggerBeginResetModel();
+        void triggerEndResetModel();
     };
 
     class WaveDataGroup : public WaveData
@@ -142,6 +147,7 @@ namespace hal {
         QMap<u32,int>    mIds;
         void restoreIndex();
     public:
+        WaveDataGroup(WaveDataList* wdList, int grpId, const QString& nam);
         WaveDataGroup(WaveDataList* wdList, const QString& nam = QString());
         WaveDataGroup(WaveDataList* wdList, const WaveData* wdGrp);
         virtual ~WaveDataGroup();
@@ -157,5 +163,6 @@ namespace hal {
         virtual bool isEmpty() const { return mGroupList.isEmpty(); }
         virtual void updateWaveData(WaveData* wd);
         virtual int childIndex(WaveData* wd) const;
+        virtual void replaceChild(WaveData* wd);
     };
 }

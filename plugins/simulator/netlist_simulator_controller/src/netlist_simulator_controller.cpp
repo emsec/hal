@@ -163,7 +163,7 @@ namespace hal
                             break;
                         }
 
-                    WaveDataClock* wdc = new WaveDataClock(n, clk, mWaveDataList->maxTime());
+                    WaveDataClock* wdc = new WaveDataClock(n, clk, mWaveDataList->simulTime());
                     mWaveDataList->addOrReplace(wdc);
                     wd = wdc;
                 }
@@ -316,7 +316,7 @@ namespace hal
     {
         if (mState >= ParameterReady) return; // nothing to do
 
-        if (mSimulationInput->is_ready() && mSimulationEngine && mWaveDataList->maxTime() > 0)
+        if (mSimulationInput->is_ready() && mSimulationEngine && mWaveDataList->simulTime() > 0)
             setState(ParameterReady);
     }
 
@@ -386,7 +386,7 @@ namespace hal
             wd = new WaveData(net);
             mWaveDataList->add(wd,false);
         }
-        u64 t = mWaveDataList->maxTime();
+        u64 t = mWaveDataList->simulTime();
         wd->insertBooleanValue(t,value);
     }
 
@@ -401,7 +401,7 @@ namespace hal
 
     void NetlistSimulatorController::simulate(u64 picoseconds)
     {
-       mWaveDataList->incrementMaxTime(picoseconds);
+       mWaveDataList->incrementSimulTime(picoseconds);
        checkReadyState();
     }
 

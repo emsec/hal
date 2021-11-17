@@ -268,6 +268,16 @@ namespace hal {
         return QModelIndex();
     }
 
+    void WaveTreeModel::forwardBeginResetModel()
+    {
+        beginResetModel();
+    }
+
+    void WaveTreeModel::forwardEndResetModel()
+    {
+        endResetModel();
+    }
+
     Qt::DropActions WaveTreeModel::supportedDragActions() const
     {
         return Qt::MoveAction | Qt::CopyAction;

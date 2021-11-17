@@ -43,6 +43,7 @@ namespace hal {
         void aboutToBeDeleted();
         void updateScaleFactor(float m11);
         void updateGraphicsItem(WaveData* wd) override;
+        void repaintGraphicsItem() override;
         void removeGraphicsItem() override;
         void setItemVisible(bool vis) override;
     };
