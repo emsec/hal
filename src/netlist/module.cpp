@@ -277,8 +277,8 @@ namespace hal
         if (m_parent == module)
         {
             return true;
-        } 
-        else if (recursive && m_parent->is_submodule_of(module, true)) 
+        }
+        else if (recursive && m_parent->is_submodule_of(module, true))
         {
             return true;
         }
@@ -851,7 +851,7 @@ namespace hal
 
         if (pin->m_type != new_type)
         {
-            pin->m_type = new_type;
+            pin->m_type                = new_type;
             pin->m_group.first->m_type = new_type;
             m_event_handler->notify(ModuleEvent::event::ports_changed, this);
         }
@@ -874,7 +874,7 @@ namespace hal
         if (pin_group->m_type != new_type)
         {
             pin_group->m_type = new_type;
-            for (const std::unique_ptr<ModulePin>& pin : m_pins) 
+            for (const std::unique_ptr<ModulePin>& pin : m_pins)
             {
                 pin->m_type = new_type;
             }
@@ -967,7 +967,7 @@ namespace hal
             while (m_pin_group_names_map.find(name) != m_pin_group_names_map.end())
             {
                 name += "_";
-            } 
+            }
             create_pin_group(name, {pin});
         }
 
@@ -1022,6 +1022,77 @@ namespace hal
 
         m_event_handler->notify(ModuleEvent::event::ports_changed, this);
         return true;
+    }
+
+    bool Module::move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index)
+    {
+        if (pin_group == nullptr || pin == nullptr)
+        {
+            return false;
+        }
+
+        if (pin->m_group.first != pin_group)
+        {
+            // pin does not belong to group
+            return false;
+        }
+
+        if (const auto it = m_pin_group_names_map.find(pin_group->m_name); it == m_pin_group_names_map.end() || it->second != pin_group)
+        {
+            // pin group does not belong to module
+            return false;
+        }
+
+        if (const auto it = m_pin_names_map.find(pin->m_name); it == m_pin_names_map.end() || it->second != pin)
+        {
+            // pin does not belong to module
+            return false;
+        }
+
+        if (pin_group->move_pin(pin, new_index))
+        {
+            m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+            return true;
+        }
+        return false;
+    }
+
+    bool Module::remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin)
+    {
+        if (pin_group == nullptr || pin == nullptr)
+        {
+            return false;
+        }
+
+        if (pin->m_group.first != pin_group)
+        {
+            // pin does not belong to group
+            return false;
+        }
+
+        if (const auto it = m_pin_group_names_map.find(pin_group->m_name); it == m_pin_group_names_map.end() || it->second != pin_group)
+        {
+            // pin group does not belong to module
+            return false;
+        }
+
+        if (const auto it = m_pin_names_map.find(pin->m_name); it == m_pin_names_map.end() || it->second != pin)
+        {
+            // pin does not belong to module
+            return false;
+        }
+
+        std::string name = pin->m_name;
+        while (m_pin_group_names_map.find(name) != m_pin_group_names_map.end())
+        {
+            name += "_";
+        }
+
+        if (create_pin_group(name, {pin}) != nullptr)
+        {
+            return true;
+        }
+        return false;
     }
 
     ModulePin* Module::assign_pin_net(Net* net, PinDirection direction)

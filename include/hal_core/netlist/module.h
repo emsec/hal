@@ -445,11 +445,32 @@ namespace hal
          * Assign a pin to a pin group.
          * Only pins with matching direction and type can be assigned to an existing pin group.
          * 
-         * @param[in] pin_group - The pin group.
+         * @param[in] pin_group - The new pin group.
          * @param[in] pin - The pin to be added.
          * @returns True on success, false otherwise.
          */
         bool assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin);
+
+        /**
+         * Move a pin to another index within the given pin group.
+         * The indices of some other pins within the group will be incremented or decremented to make room for the moved pin to be inserted at the desired position.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] pin - The pin to be moved.
+         * @param[in] new_index - The index to which the pin is moved.
+         * @returns True on success, false otherwise.
+         */
+        bool move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index);
+
+        /**
+         * Remove a pin from a pin group.
+         * The pin will be moved to a new group that goes by the pin's name.
+         * 
+         * @param[in] pin_group - The old pin group.
+         * @param[in] pin - The pin to be removed.
+         * @returns True on success, false otherwise.
+         */
+        bool remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin);
 
         /*
          * ################################################################

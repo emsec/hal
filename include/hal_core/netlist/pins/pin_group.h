@@ -290,15 +290,16 @@ namespace hal
                     return true;
                 }
 
-                i32 direction             = (old_index < new_index) ? -1 : 1;
-                auto it                   = std::next(m_pins.begin(), new_index - m_start_index);
-                it                        = m_pins.insert(it, pin);
-                std::get<1>(pin->m_group) = new_index;
+                i32 direction = (old_index > new_index) ? 1 : -1;
+                m_pins.erase(std::next(m_pins.begin(), old_index - m_start_index));
+                auto it = std::next(m_pins.begin(), new_index - m_start_index);
+                it      = m_pins.insert(it, pin);
                 for (u32 i = new_index; i != old_index; i += direction)
                 {
-                    ++it;
+                    std::advance(it, direction);
                     std::get<1>((*it)->m_group) += direction;
                 }
+                std::get<1>(pin->m_group) = new_index;
 
                 return true;
             }

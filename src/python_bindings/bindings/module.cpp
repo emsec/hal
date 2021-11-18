@@ -480,8 +480,29 @@ namespace hal
             Assign a pin to a pin group.
             Only pins with matching direction and type can be assigned to an existing pin group.
 
-            :param hal_py.ModulePinGroup pin_group: The pin group.
+            :param hal_py.ModulePinGroup pin_group: The new pin group.
             :param hal_py.ModulePin pin: The pin to be added.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("move_pin_within_group", &Module::move_pin_within_group, py::arg("pin_group"), py::arg("pin"), py::arg("new_index"), R"(
+            Move a pin to another index within the given pin group.
+            The indices of some other pins within the group will be incremented or decremented to make room for the moved pin to be inserted at the desired position.
+
+            :param hal_py.ModulePinGroup pin_group: The pin group.
+            :param hal_py.ModulePin pin: The pin to be moved.
+            :param int new_index: The index to which the pin is moved.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("remove_pin_from_group", &Module::remove_pin_from_group, py::arg("pin_group"), py::arg("pin"), R"(
+            Remove a pin from a pin group.
+            The pin will be moved to a new group that goes by the pin's name.
+
+            :param hal_py.ModulePinGroup pin_group: The old pin group.
+            :param hal_py.ModulePin pin: The pin to be removed.
             :returns: True on success, False otherwise.
             :rtype: bool
         )");
