@@ -60,9 +60,8 @@ namespace hal
     private:
         static const std::set<std::string> valid_types;
 
-        // TODO reapply const correctness to modules
         bool write_module_declaration(std::stringstream& res_stream,
-                                      Module* module,
+                                      const Module* module,
                                       std::unordered_map<const Module*, std::string>& module_type_aliases,
                                       std::unordered_map<std::string, u32>& module_type_occurrences) const;
         bool write_gate_instance(std::stringstream& res_stream,
@@ -70,7 +69,7 @@ namespace hal
                                  std::unordered_map<const DataContainer*, std::string>& aliases,
                                  std::unordered_map<std::string, u32>& identifier_occurrences) const;
         bool write_module_instance(std::stringstream& res_stream,
-                                   Module* module,
+                                   const Module* module,
                                    std::unordered_map<const DataContainer*, std::string>& aliases,
                                    std::unordered_map<std::string, u32>& identifier_occurrences,
                                    std::unordered_map<const Module*, std::string>& module_type_aliases) const;

@@ -229,10 +229,10 @@ namespace hal
                 }
 
                 // create all modules with the top module as parent module and update later
-                Module* new_module = c_netlist->create_module(module->get_id(), module->get_name(), c_netlist->get_top_module(), c_gates);
+                Module* c_module = c_netlist->create_module(module->get_id(), module->get_name(), c_netlist->get_top_module(), c_gates);
 
-                new_module->set_data_map(module->get_data_map());
-                new_module->set_type(module->get_type());
+                c_module->set_data_map(module->get_data_map());
+                c_module->set_type(module->get_type());
             }
 
             // update parent_module in modules

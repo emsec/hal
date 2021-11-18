@@ -20,11 +20,11 @@ namespace hal
     {
         namespace
         {
-            CallbackHook<bool(const std::filesystem::path&, Netlist* netlist, rapidjson::Document&)> m_on_serialize_hook;
+            CallbackHook<bool(const std::filesystem::path&, const Netlist* netlist, rapidjson::Document&)> m_on_serialize_hook;
             CallbackHook<bool(const std::filesystem::path&, Netlist* netlist, rapidjson::Document&)> m_on_deserialize_hook;
         }    // namespace
 
-        bool serialize(const std::filesystem::path& file, Netlist* netlist, rapidjson::Document& document)
+        bool serialize(const std::filesystem::path& file, const Netlist* netlist, rapidjson::Document& document)
         {
             for (auto id : m_on_serialize_hook.get_ids())
             {
@@ -50,7 +50,7 @@ namespace hal
             return true;
         }
 
-        void register_on_serialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, Netlist* netlist, rapidjson::Document&)> callback)
+        void register_on_serialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, const Netlist* netlist, rapidjson::Document&)> callback)
         {
             m_on_serialize_hook.add_callback(identifier, callback);
         }

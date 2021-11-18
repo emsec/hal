@@ -49,7 +49,7 @@ namespace hal
          * @param[in] document - The JSON document to serialize to.
          * @returns True if all registered callbacks succeed.
          */
-        bool serialize(const std::filesystem::path& file, Netlist* netlist, rapidjson::Document& document);
+        bool serialize(const std::filesystem::path& file, const Netlist* netlist, rapidjson::Document& document);
 
         /**
          * Starts deserialization of a .hal file.<br>

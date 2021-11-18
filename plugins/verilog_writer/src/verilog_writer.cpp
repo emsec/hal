@@ -70,7 +70,7 @@ namespace hal
     }
 
     bool VerilogWriter::write_module_declaration(std::stringstream& res_stream,
-                                                 Module* module,
+                                                 const Module* module,
                                                  std::unordered_map<const Module*, std::string>& module_type_aliases,
                                                  std::unordered_map<std::string, u32>& module_type_occurrences) const
     {
@@ -100,7 +100,7 @@ namespace hal
         std::stringstream tmp_stream;
 
         res_stream << "(";
-        for (ModulePin* pin : module->get_pins())
+        for (const ModulePin* pin : module->get_pins())
         {
             Net* net = pin->get_net();
             if (first_port)
@@ -175,7 +175,7 @@ namespace hal
         }
 
         // write module instances
-        for (Module* sub_module : module->get_submodules())
+        for (const Module* sub_module : module->get_submodules())
         {
             res_stream << std::endl;
             if (!write_module_instance(res_stream, sub_module, aliases, identifier_occurrences, module_type_aliases))
@@ -272,7 +272,7 @@ namespace hal
     }
 
     bool VerilogWriter::write_module_instance(std::stringstream& res_stream,
-                                              Module* module,
+                                              const Module* module,
                                               std::unordered_map<const DataContainer*, std::string>& aliases,
                                               std::unordered_map<std::string, u32>& identifier_occurrences,
                                               std::unordered_map<const Module*, std::string>& module_type_aliases) const
@@ -288,7 +288,7 @@ namespace hal
         // extract port assignments
         std::vector<std::pair<std::string, std::vector<const Net*>>> port_assignments;
 
-        for (ModulePin* pin : module->get_pins())
+        for (const ModulePin* pin : module->get_pins())
         {
             port_assignments.push_back(std::make_pair(pin->get_name(), std::vector<const Net*>({pin->get_net()})));
         }
