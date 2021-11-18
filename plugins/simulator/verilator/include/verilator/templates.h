@@ -259,7 +259,7 @@ namespace hal
                                    << "#include <verilated.h>\n"
                                    << "#include <verilated_vcd_c.h>\n"
                                    << "#include \"V<top_system>.h\"\n"
-                                   << "include \"testbench.h\"\n"
+                                   << "#include \"testbench.h\"\n"
                                    << "\n"
                                    << "#define MAX_SIM_TIME 20\n"
                                    << "vluint64_t sim_time = 0;\n"
