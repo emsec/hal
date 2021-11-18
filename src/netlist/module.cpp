@@ -71,6 +71,11 @@ namespace hal
         return !operator==(other);
     }
 
+    ssize_t Module::get_hash() const
+    {
+        return (uintptr_t) this;
+    }
+
     u32 Module::get_id() const
     {
         return m_id;

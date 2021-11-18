@@ -22,6 +22,13 @@ namespace hal
             :rtype: bool
         )");
 
+        py_gate.def ("__hash__", &Gate::get_hash, R"(
+            Python requires hash for set and dict container.
+
+            :returns: The hash.
+            :rtype: Py_hash_t
+        )");
+
         py_gate.def_property_readonly("id", &Gate::get_id, R"(
             The unique ID of the gate.
 

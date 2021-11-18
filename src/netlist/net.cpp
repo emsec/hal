@@ -80,6 +80,11 @@ namespace hal
         return !operator==(other);
     }
 
+    ssize_t Net::get_hash() const
+    {
+        return (uintptr_t) this;
+    }
+
     u32 Net::get_id() const
     {
         return m_id;

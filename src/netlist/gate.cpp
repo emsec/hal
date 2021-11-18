@@ -85,6 +85,11 @@ namespace hal
         return !operator==(other);
     }
 
+    ssize_t Gate::get_hash() const
+    {
+        return (uintptr_t) this;
+    }
+
     u32 Gate::get_id() const
     {
         return m_id;
