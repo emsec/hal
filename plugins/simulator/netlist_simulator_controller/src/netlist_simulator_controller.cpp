@@ -377,7 +377,7 @@ namespace hal
         Q_ASSERT(net);
         if (!mSimulationInput->is_input_net(net))
         {
-            log_warning(get_name(), "net[{}] '{}' is not an input net, value not assigned.", net->get_id(), net->get_name());
+            //log_warning(get_name(), "net[{}] '{}' is not an input net, value not assigned.", net->get_id(), net->get_name());
             return;
         }
         WaveData* wd = mWaveDataList->waveDataByNetId(net->get_id());

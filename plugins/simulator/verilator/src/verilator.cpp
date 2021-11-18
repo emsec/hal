@@ -69,7 +69,7 @@ namespace verilator {
         if (m_design_name.empty())
         {
             m_design_name = "dummy";
-            log_warning("verilator", "No design name for partial metlist, set to '{}'.", m_design_name);
+            log_warning("verilator", "no design name for partial metlist, set to '{}'.", m_design_name);
         }
         else
             std::cerr << "m_design_name = <" << m_design_name << ">" << std::endl;
@@ -79,7 +79,7 @@ namespace verilator {
         std::filesystem::path provided_models;
         auto it = mProperties.find(std::string("provided_models"));
         if (it == mProperties.end())
-            log_warning("verilator", "Mandatory property 'provided_models' not set (use set_engine_property method to assign).");
+            log_info("verilator", "the property 'provided_models' has not been set (use set_engine_property method to assign).");
         else
             provided_models = it->second;
 
@@ -96,6 +96,8 @@ namespace verilator {
         std::stringstream simulation_data;
 
         log_info("verilator", "simulating {} net events", simInput->get_simulation_net_events().size());
+        
+        u64 partial_testbenches;
 
         for (const auto& sim_event : simInput->get_simulation_net_events()) {
             u32 duration = sim_event.get_simulation_duration();
@@ -160,7 +162,7 @@ namespace verilator {
             return retval;
         } break;
         case 1: {
-            const char* cl[] = { "make", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr };
+            const char* cl[] = { "make", "-j8", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr };
             std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
             retval.push_back("V" + m_design_name + ".mk");
             return retval;
