@@ -129,6 +129,7 @@ namespace verilator {
         std::filesystem::path m_simulator_dir;
 
         std::string m_design_name;
+        u64 m_partial_testbenches;
 
         bool setSimulationInput(SimulationInput* simInput) override;
         int numberCommandLines() const override;

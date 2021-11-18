@@ -275,6 +275,7 @@ namespace hal
                                    << "\n"
                                    << "<insert_trace_here>\n"
                                    << "\n"
+                                   << "\tm_trace->dump(sim_time);"
                                    << "    m_trace->close();\n"
                                    << "    delete dut;\n"
                                    << "    exit(EXIT_SUCCESS);\n"
@@ -285,14 +286,27 @@ namespace hal
         {
             std::stringstream partial_testbench_cpp_template;
             partial_testbench_cpp_template << "#include <stdlib.h>\n"
-                                   << "#include <verilated.h>\n"
-                                   << "#include <verilated_vcd_c.h>\n"
-                                   << "#include \"V<top_system>.h\"\n"
-                                   << "\n"
-                                   << "int <part_XY>(V<top_system>* dut, VerilatedVcdC* m_trace, vluint64_t& sim_time) {\n"
-                                   << "<insert_trace_here>\n"
-                                   << "}";
+                                           << "#include <verilated.h>\n"
+                                           << "#include <verilated_vcd_c.h>\n"
+                                           << "#include \"V<top_system>.h\"\n"
+                                           << "include \"testbench.h\"\n"
+                                           << "\n"
+                                           << "void <part_xy>(V<top_system>* dut, VerilatedVcdC* m_trace, vluint64_t& sim_time) {\n"
+                                           << "<insert_trace_here>\n"
+                                           << "}";
             return partial_testbench_cpp_template.str();
+        }
+
+        const std::string get_testbench_h_template()
+        {
+            std::stringstream partial_testbench_h_template;
+            partial_testbench_h_template << "#include <stdlib.h>\n"
+                                         << "#include <verilated.h>\n"
+                                         << "#include <verilated_vcd_c.h>\n"
+                                         << "#include \"V<top_system>.h\"\n"
+                                         << "\n"
+                                         << "<insert_partial_testbench_here>\n";
+            return partial_testbench_h_template.str();
         }
 
     }    // namespace verilator
