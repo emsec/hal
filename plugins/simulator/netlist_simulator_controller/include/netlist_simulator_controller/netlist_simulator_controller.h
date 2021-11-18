@@ -220,6 +220,12 @@ public:
     void parse_vcd(const std::string& filename);
 
     /**
+     * Parse CSV file and set wave data
+     * @param[in] filename the filename to read
+     */
+    void parse_csv_input(const std::string& filename, u64 timescale = 1000000000);
+
+    /**
      * Generates the a partial VCD file for parts the simulated netlist.
      *
      * @param[in] path - The path to the VCD file.
@@ -270,6 +276,8 @@ private:
     WaveDataList* mWaveDataList;
 
     SimulationInput* mSimulationInput;
+
+    QHash<u32,int> mBadAssignInputWarnings;
 };
 
 class NetlistSimulatorControllerMap : public QObject {

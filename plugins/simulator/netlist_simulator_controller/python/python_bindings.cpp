@@ -220,10 +220,17 @@ namespace hal
                 Does not remove gates/nets from the simulation set.
             )")
 
-            .def("parse_vcd", &NetlistSimulatorController::parse_vcd, R"(
+            .def("parse_vcd", &NetlistSimulatorController::parse_vcd, py::arg("filename"), R"(
                 Parse VCD data (e.g. simulation input).
 
                 :param str filename: filename of VCD file to be parsed.
+            )")
+
+            .def("parse_csv_input", &NetlistSimulatorController::parse_csv_input, py::arg("filename"), py::arg("timescale")=1000000000, R"(
+                Parse CVS data as simulation input.
+
+                :param str filename: filename of CSV file to be parsed.
+                :param int timescale: multiplicator for values in time column
             )")
 
             .def("generate_vcd", &NetlistSimulatorController::generate_vcd, py::arg("path"), py::arg("start_time")=0, py::arg("end_time")=0, py::arg("nets") = std::set<u32>(), R"(

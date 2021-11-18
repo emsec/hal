@@ -176,7 +176,111 @@ QMap<int,int>::const_iterator mIterator;
         wd->insert(mTime,val);
     }
 
-    bool VcdSerializer::deserialize(const QString& filename)
+    bool VcdSerializer::parseCsvHeader(const QByteArray &line)
+    {
+        int icol = 0;
+        for (QByteArray header : line.split(','))
+        {
+            if (icol) // dont parse time header
+            {
+                bool ok;
+                QString abbrev = QString::number(icol);
+                u32 id = header.trimmed().toUInt(&ok);
+                WaveData* wd = nullptr;
+                if (ok)
+                    wd = new WaveData(id, QString("net[%1]").arg(id));
+                else
+                {
+                    QString name = QString::fromUtf8(header.trimmed());
+                    int n = name.size() - 1;
+                    if (n<2 || name.at(0) != '"' || name.at(n) != '"') return false;
+                    wd = new WaveData(0,name.mid(1,n-1));
+                }
+                if (wd)
+                {
+                    mDictionary.insert(wd->name(),abbrev);
+                    mWaves.insert(abbrev,wd);
+                }
+                else
+                    return false;
+            }
+            icol++;
+        }
+        return true;
+    }
+
+    bool VcdSerializer::parseCsvDataline(const QByteArray &line, int dataLineIndex, u64 timeScale)
+    {
+        int icol = 0;
+        bool ok;
+        for (QByteArray value : line.split(','))
+        {
+            if (icol)
+            {
+                int ival = value.toInt(&ok);
+                if (!ok) return false;
+                WaveData* wd = mWaves.value(QString::number(icol));
+                if (!wd) return false;
+                if (wd->data().isEmpty() || wd->data().last() != ival)
+                    wd->insert(mTime,ival);
+            }
+            else
+            {
+                // time
+                double tDouble = value.toDouble(&ok);
+                if (!ok) return false;
+                u64 tInt = (u64) floor ( tDouble * timeScale + 0.5);
+                if (!dataLineIndex)
+                {
+                    mFirstTimestamp = tInt;
+                    mTime = 0;
+                }
+                else
+                    mTime = tInt - mFirstTimestamp;
+            }
+            icol++;
+        }
+        return true;
+    }
+
+    bool VcdSerializer::deserializeCsv(const QString& filename, u64 timeScale)
+    {
+        mWaves.clear();
+        mTime = 0;
+        QFile ff(filename);
+        if (!ff.open(QIODevice::ReadOnly))
+        {
+            log_warning("vcd_viewer", "Cannot open CSV input file '{}'.", filename.toStdString());
+            return false;
+        }
+
+        bool parseHeader = true;
+        int dataLineIndex = 0;
+        for (QByteArray line : ff.readAll().split('\n'))
+        {
+            if (line.isEmpty()) continue;
+            if (parseHeader)
+            {
+                if (!parseCsvHeader(line))
+                {
+                    log_warning("vcd_viewer", "Cannot parse CSV header line '{}'.", std::string(line.data()));
+                    return false;
+                }
+                parseHeader = false;
+            }
+            else
+            {
+                if (!parseCsvDataline(line,dataLineIndex++,timeScale))
+                {
+                    log_warning("vcd_viewer", "Cannot parse CSV data line '{}'.", std::string(line.data()));
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    bool VcdSerializer::deserializeVcd(const QString& filename)
     {
         mWaves.clear();
         mTime = 0;
@@ -239,4 +343,14 @@ QMap<int,int>::const_iterator mIterator;
         return mWaves.value(it.value());
     }
 
+    WaveData* VcdSerializer::waveById(u32 id) const
+    {
+        if (!id) return nullptr;
+        for (WaveData* wd : mWaves.values())
+        {
+            if (wd->id() == id)
+                return wd;
+        }
+        return nullptr;
+    }
 }

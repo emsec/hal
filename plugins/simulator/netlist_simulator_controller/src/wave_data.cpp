@@ -585,6 +585,7 @@ namespace hal {
             wdOld->setGraphicsItem(nullptr);
         }
 
+        wdNew->setName(wdOld->name());
         operator[](inx) = wdNew;
         if (wdNew->maxTime() > mMaxTime)
             updateMaxTime();

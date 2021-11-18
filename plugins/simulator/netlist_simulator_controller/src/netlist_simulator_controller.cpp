@@ -120,7 +120,7 @@ namespace hal
     {
         if (filename.isEmpty()) return;
         VcdSerializer reader;
-        if (reader.deserialize(filename))
+        if (reader.deserializeVcd(filename))
         {
             for (WaveData* wd : reader.waveList())
                 mWaveDataList->addOrReplace(wd);
@@ -143,6 +143,10 @@ namespace hal
         }
 
         mWaveDataList->setValueForEmpty(0);
+
+        for (auto it = mBadAssignInputWarnings.constBegin(); it != mBadAssignInputWarnings.constEnd(); ++it)
+            if (it.value() > 3)
+                log_warning(get_name(), "Totally {} attempts to set input values for net ID={}, but net is not an input.", it.value(), it.key());
 
         QMultiMap<u64,QPair<const Net*, BooleanFunction::Value>> inputMap;
         for (const Net* n : mSimulationInput->get_input_nets())
@@ -226,10 +230,31 @@ namespace hal
     void NetlistSimulatorController::parse_vcd(const std::string& filename)
     {
         VcdSerializer reader;
-        if (reader.deserialize(QString::fromStdString(filename)))
+        if (reader.deserializeVcd(QString::fromStdString(filename)))
         {
             for (WaveData* wd : reader.waveList())
                 mWaveDataList->addOrReplace(wd);
+        }
+        checkReadyState();
+    }
+
+    void NetlistSimulatorController::parse_csv_input(const std::string& filename, u64 timescale)
+    {
+        VcdSerializer reader;
+        if (reader.deserializeCsv(QString::fromStdString(filename),timescale))
+        {
+            bool waveFound = false;
+            for (const Net* n : mSimulationInput->get_input_nets())
+            {
+                WaveData* wd = reader.waveByName(QString::fromStdString(n->get_name()));
+                if (!wd)  wd = reader.waveById(n->get_id());
+                if (!wd) continue;
+                wd->setId(n->get_id());
+                wd->setName(QString::fromStdString(n->get_name()));
+                mWaveDataList->addOrReplace(wd);
+                waveFound = true;
+            }
+            if (waveFound) mWaveDataList->incrementSimulTime(reader.maxTime());
         }
         checkReadyState();
     }
@@ -289,7 +314,7 @@ namespace hal
             VcdSerializer reader(this);
             QFileInfo info(QString::fromStdString(resultFile.string()));
             if (!info.exists() || !info.isReadable()) return false;
-            if (!reader.deserialize(QString::fromStdString(resultFile))) return false;
+            if (!reader.deserializeVcd(QString::fromStdString(resultFile))) return false;
 
             QHash<QString,u32> netIds;
 //            int wcount = 0;
@@ -377,7 +402,8 @@ namespace hal
         Q_ASSERT(net);
         if (!mSimulationInput->is_input_net(net))
         {
-            //log_warning(get_name(), "net[{}] '{}' is not an input net, value not assigned.", net->get_id(), net->get_name());
+            if (mBadAssignInputWarnings[net->get_id()]++ < 3)
+                log_warning(get_name(), "net[{}] '{}' is not an input net, value not assigned.", net->get_id(), net->get_name());
             return;
         }
         WaveData* wd = mWaveDataList->waveDataByNetId(net->get_id());
