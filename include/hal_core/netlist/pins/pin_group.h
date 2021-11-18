@@ -323,6 +323,7 @@ namespace hal
             pin->m_group = std::make_pair(nullptr, 0);
             auto it      = std::next(m_pins.begin(), index - m_start_index);
             it           = m_pins.erase(it);
+            m_pin_name_map.erase(pin->m_name);
             for (; it != m_pins.end(); it++)
             {
                 std::get<1>((*it)->m_group)--;

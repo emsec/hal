@@ -1031,6 +1031,7 @@ namespace hal {
                 EXPECT_EQ(in_group_0->get_pin(0), in_pin_1);
                 EXPECT_EQ(in_pin_0->get_group().first->get_name(), in_pin_0->get_name());
                 EXPECT_EQ(in_pin_0->get_group().second, 0);
+                EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, in_pin_0));
 
                 // try invalid inputs
                 EXPECT_TRUE(m_1->set_pin_type(out_pin_0, PinType::address));
@@ -1041,8 +1042,8 @@ namespace hal {
                 EXPECT_EQ(m_1->get_pin_group("O1"), nullptr);
                 EXPECT_FALSE(m_1->create_pin_group("O2", {out_pin_0, in_pin_0})); // different directions
                 EXPECT_EQ(m_1->get_pin_group("O2"), nullptr);
-                EXPECT_EQ(in_group_0->size(), 1);
-                EXPECT_EQ(m_1->get_pin_groups().size(), 4);
+                EXPECT_EQ(in_group_0->size(), 2);
+                EXPECT_EQ(m_1->get_pin_groups().size(), 3);
             }
             // Create a new Module with more modules (with 2 input and ouput nets)
             Module* m_2 = nl->create_module("mod_2", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 3)});
