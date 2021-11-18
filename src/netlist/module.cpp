@@ -73,7 +73,7 @@ namespace hal
 
     ssize_t Module::get_hash() const
     {
-        return (uintptr_t) this;
+        return (uintptr_t)this;
     }
 
     u32 Module::get_id() const
@@ -645,39 +645,9 @@ namespace hal
 
     /*
      * ################################################################
-     *      port functions
+     *      pin functions
      * ################################################################
      */
-
-    void Module::set_next_input_port_id(u32 id)
-    {
-        m_next_input_index = id;
-    }
-
-    void Module::set_next_inout_port_id(u32 id)
-    {
-        m_next_inout_index = id;
-    }
-
-    void Module::set_next_output_port_id(u32 id)
-    {
-        m_next_output_index = id;
-    }
-
-    u32 Module::get_next_input_port_id() const
-    {
-        return m_next_input_index;
-    }
-
-    u32 Module::get_next_inout_port_id() const
-    {
-        return m_next_inout_index;
-    }
-
-    u32 Module::get_next_output_port_id() const
-    {
-        return m_next_input_index;
-    }
 
     std::vector<ModulePin*> Module::get_pins(const std::function<bool(ModulePin*)>& filter) const
     {

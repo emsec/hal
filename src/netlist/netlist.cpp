@@ -139,6 +139,11 @@ namespace hal
         return m_event_handler.get();
     }
 
+    std::unique_ptr<Netlist> Netlist::copy() const
+    {
+        return std::move(m_manager->copy_netlist(this));
+    }
+
     /*
      * ################################################################
      *      gate functions

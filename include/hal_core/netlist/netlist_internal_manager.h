@@ -59,6 +59,9 @@ namespace hal
         explicit NetlistInternalManager(Netlist* nl, EventHandler* eh);
         ~NetlistInternalManager() = default;
 
+        // netlist functions
+        std::unique_ptr<Netlist> copy_netlist(const Netlist* nl) const;
+
         // gate functions
         Gate* create_gate(u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
         bool delete_gate(Gate* gate);

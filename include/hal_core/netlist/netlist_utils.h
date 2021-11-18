@@ -66,16 +66,15 @@ namespace hal
         CORE_API BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates);
 
         /**
-         * TODO move into netlist class
+         * \deprecated
          * Get a deep copy of an entire netlist including all of its gates, nets, modules, and groupings.
          *
          * @param[in] nl - The netlist to copy.
          * @returns The deep copy of the netlist.
          */
-        CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
+        [[deprecated("Will be removed in a future version, use Netlist::copy instead.")]] CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
 
         /**
-         * TODO move into netlist class
          * Get a deep copy of an entire partial netlist including all of its gates, nets, excluding modules and groupings.
          *
          * @param[in] nl - The netlist consisting of the subgraph.
@@ -229,15 +228,6 @@ namespace hal
          * @param[in] netlist - The target netlist.
          */
         void remove_unused_lut_endpoints(Netlist* netlist);
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Rename LUTs that implement simple functions to better reflect their functionality.
-         * 
-         * @param[in] netlist - The target netlist.
-         */
-        [[deprecated("Will be removed in a future version.")]] void rename_luts_according_to_function(Netlist* netlist);
 
         /**
          * Returns all nets that are considered to be common inputs to the provided gates.

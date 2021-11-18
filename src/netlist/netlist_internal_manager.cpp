@@ -8,6 +8,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/utilities/log.h"
 
 namespace hal
@@ -18,6 +19,204 @@ namespace hal
         m_event_handler = eh;
         assert(nl != nullptr);
         assert(eh != nullptr);
+    }
+
+    //######################################################################
+    //###                      netlist                                   ###
+    //######################################################################
+
+    std::unique_ptr<Netlist> NetlistInternalManager::copy_netlist(const Netlist* nl) const
+    {
+        std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->m_gate_library);
+
+        // manager, netlist_id, and top_module are set in the constructor
+
+        // copy nets
+        for (const Net* net : nl->m_nets)
+        {
+            Net* c_net    = c_netlist->create_net(net->m_id, net->m_name);
+            c_net->m_data = net->m_data;
+        }
+
+        // copy gates
+        for (const Gate* gate : nl->m_gates)
+        {
+            Gate* c_gate = c_netlist->create_gate(gate->m_id, gate->m_type, gate->m_name, gate->m_x, gate->m_y);
+
+            for (const auto& [name, func] : gate->get_boolean_functions(true))
+            {
+                c_gate->add_boolean_function(name, func);
+            }
+
+            for (const Endpoint* in_point : gate->get_fan_in_endpoints())
+            {
+                const auto net_id = in_point->get_net()->m_id;
+                auto c_net        = c_netlist->get_net_by_id(net_id);
+
+                c_net->add_destination(c_gate, in_point->get_pin());
+            }
+
+            for (const Endpoint* out_point : gate->get_fan_out_endpoints())
+            {
+                const auto net_id = out_point->get_net()->m_id;
+                auto c_net        = c_netlist->get_net_by_id(net_id);
+
+                c_net->add_source(c_gate, out_point->get_pin());
+            }
+
+            c_gate->m_data = gate->m_data;
+        }
+
+        // copy modules
+        for (const Module* module : nl->m_modules)
+        {
+            // ignore top module, since this is already created by the constructor
+            if (module->m_id == 1)
+            {
+                c_netlist->m_top_module->m_data = module->get_data_map();
+                c_netlist->m_top_module->m_type = module->m_type;
+                continue;
+            }
+
+            std::vector<Gate*> c_gates;
+            for (const Gate* gate : module->m_gates)
+            {
+                // find gates of module in the copied netlist by id
+                Gate* c_gate = c_netlist->get_gate_by_id(gate->m_id);
+                c_gates.push_back(c_gate);
+            }
+
+            // create all modules with the top module as parent module and update later
+            Module* c_module = c_netlist->create_module(module->m_id, module->m_name, c_netlist->m_top_module, c_gates);
+
+            c_module->m_data = module->m_data;
+            c_module->m_type = module->m_type;
+        }
+
+        // update parent_module in modules
+        for (const Module* module : nl->m_modules)
+        {
+            // ignore top_module
+            if (module->m_parent == nullptr)
+            {
+                continue;
+            }
+
+            // find parent and child module in the copied netlist by id
+            const u32 module_id = module->m_id;
+            const u32 parent_id = module->m_parent->m_id;
+            Module* c_module    = c_netlist->get_module_by_id(module_id);
+            Module* c_parent    = c_netlist->get_module_by_id(parent_id);
+
+            c_module->set_parent_module(c_parent);
+        }
+
+        // copy groupings
+        for (const Grouping* grouping : nl->m_groupings)
+        {
+            Grouping* c_grouping = c_netlist->create_grouping(grouping->m_id, grouping->m_name);
+
+            for (const Module* module : grouping->m_modules)
+            {
+                const u32 module_id = module->m_id;
+                c_grouping->assign_module_by_id(module_id);
+            }
+
+            for (const Net* net : grouping->m_nets)
+            {
+                const u32 net_id = net->m_id;
+                c_grouping->assign_net_by_id(net_id);
+            }
+
+            for (const Gate* gate : grouping->m_gates)
+            {
+                const u32 gate_id = gate->m_id;
+                c_grouping->assign_gate_by_id(gate_id);
+            }
+        }
+
+        // mark globals
+        for (const Net* global_input_net : nl->m_global_input_nets)
+        {
+            Net* c_global_input_net = c_netlist->get_net_by_id(global_input_net->m_id);
+            c_netlist->mark_global_input_net(c_global_input_net);
+        }
+        for (const Net* global_output_net : nl->m_global_output_nets)
+        {
+            Net* c_global_output_net = c_netlist->get_net_by_id(global_output_net->m_id);
+            c_netlist->mark_global_output_net(c_global_output_net);
+        }
+        for (const Gate* gnd_gate : nl->m_gnd_gates)
+        {
+            Gate* c_gnd_gate = c_netlist->get_gate_by_id(gnd_gate->m_id);
+            c_netlist->mark_gnd_gate(c_gnd_gate);
+        }
+        for (const Gate* vcc_gate : nl->m_vcc_gates)
+        {
+            Gate* c_vcc_gate = c_netlist->get_gate_by_id(vcc_gate->m_id);
+            c_netlist->mark_vcc_gate(c_vcc_gate);
+        }
+
+        c_netlist->m_design_name = nl->m_design_name;
+        c_netlist->m_device_name = nl->m_device_name;
+        c_netlist->m_file_name   = nl->m_file_name;
+
+        // update ids last, after all the creation
+        c_netlist->m_next_gate_id  = nl->m_next_gate_id;
+        c_netlist->m_used_gate_ids = nl->m_used_gate_ids;
+        c_netlist->m_free_gate_ids = nl->m_free_gate_ids;
+
+        c_netlist->m_next_net_id  = nl->m_next_net_id;
+        c_netlist->m_used_net_ids = nl->m_used_net_ids;
+        c_netlist->m_free_net_ids = nl->m_free_net_ids;
+
+        c_netlist->m_next_module_id  = nl->m_next_module_id;
+        c_netlist->m_used_module_ids = nl->m_used_module_ids;
+        c_netlist->m_free_module_ids = nl->m_free_module_ids;
+
+        c_netlist->m_next_grouping_id  = nl->m_next_grouping_id;
+        c_netlist->m_used_grouping_ids = nl->m_used_grouping_ids;
+        c_netlist->m_free_grouping_ids = nl->m_free_grouping_ids;
+
+        // copy module port names
+        for (Module* module : nl->m_modules)
+        {
+            Module* c_module = c_netlist->get_module_by_id(module->m_id);
+
+            u32 ctr = 0;
+            for (const std::unique_ptr<ModulePin>& c_pin : c_module->m_pins)
+            {
+                // pin names must be unique, hence automatically generated groups may conflict with copied ones
+                c_module->set_pin_name(c_pin.get(), "____netlist_copy_tmp_pin_[" + std::to_string(ctr++) + "]____");
+            }
+
+            ctr = 0;
+            for (const std::unique_ptr<PinGroup<ModulePin>>& c_pin_group : c_module->m_pin_groups)
+            {
+                // pin group names must be unique, hence automatically generated groups may conflict with copied ones
+                c_module->set_pin_group_name(c_pin_group.get(), "____netlist_copy_tmp_pin_group_[" + std::to_string(ctr++) + "]____");
+            }
+
+            for (const std::unique_ptr<PinGroup<ModulePin>>& pin_group : module->m_pin_groups)
+            {
+                std::vector<ModulePin*> c_pins;
+                for (ModulePin* pin : pin_group->get_pins())
+                {
+                    ModulePin* c_pin = c_module->get_pin(c_netlist->get_net_by_id(pin->get_net()->m_id));
+                    c_module->set_pin_name(c_pin, pin->get_name());
+                    c_module->set_pin_type(c_pin, pin->get_type());
+                    c_pins.push_back(c_pin);
+                }
+
+                c_module->create_pin_group(pin_group->get_name(), c_pins, pin_group->is_ascending(), pin_group->get_start_index());
+            }
+
+            c_module->m_next_input_index  = module->m_next_input_index;
+            c_module->m_next_inout_index  = module->m_next_inout_index;
+            c_module->m_next_output_index = module->m_next_output_index;
+        }
+
+        return c_netlist;
     }
 
     //######################################################################
