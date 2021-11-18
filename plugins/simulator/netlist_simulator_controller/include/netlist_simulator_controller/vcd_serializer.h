@@ -28,19 +28,25 @@ namespace hal {
     class VcdSerializer : public QObject
     {
         Q_OBJECT
-        int mTime;
+        u64 mTime;
+        u64 mFirstTimestamp;
         QMap<QString,QString> mDictionary;
         QMap<QString,WaveData*> mWaves;
 
         bool parseDataline(const QByteArray& line);
         bool parseDataNonDecimal(const QByteArray& line, int base);
         void storeValue(int val, const QByteArray& abrev);
+        bool parseCsvHeader(const QByteArray& line);
+        bool parseCsvDataline(const QByteArray& line, int dataLineIndex, u64 timeScale);
     public:
         VcdSerializer(QObject* parent = nullptr);
         bool serialize(const QString& filename, const QList<const WaveData*>& waves) const;
-        bool deserialize(const QString& filename);
+        bool deserializeVcd(const QString& filename);
+        bool deserializeCsv(const QString& filename, u64 timeScale = 1000000000);
         QList<WaveData*> waveList() const { return mWaves.values(); }
         WaveData* waveByName(const QString& name) const;
+        WaveData* waveById(u32 id) const;
+        u64 maxTime() const { return mTime; }
     };
 
 }
