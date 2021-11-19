@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include "hal_core/defines.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 
 namespace hal
@@ -51,13 +52,20 @@ namespace hal
         /**
          * Delete all bindings upon unload
          */
-        void on_unload();
+        void on_unload() override;
 
         /**
-         * Create a netlist simulator instance.
+         * Create a netlist simulator controller instance.
          *
          * @returns The simulator instance.
          */
         std::unique_ptr<NetlistSimulatorController> create_simulator_controller(const std::string& nam=std::string()) const;
+
+        /**
+         * Share netlist simulator controller instance addressed by id
+         * @param[in] id Controller-Id
+         * @return Shared pointer to simulator
+         */
+        std::shared_ptr<NetlistSimulatorController> simulator_controller_by_id(u32 id) const;
     };
 }    // namespace hal

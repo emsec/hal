@@ -97,6 +97,11 @@ namespace hal {
         }
     }
 
+    int WaveData::get_value_at(int t) const
+    {
+        return intValue(t);
+    }
+
     bool WaveData::insertToggleTime(u64 t)
     {
         if (mData.isEmpty()) return false; // no start value

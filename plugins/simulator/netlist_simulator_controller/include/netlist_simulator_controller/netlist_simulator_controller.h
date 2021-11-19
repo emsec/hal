@@ -248,6 +248,13 @@ public:
      */
     SimulationState get_state() const { return mState; }
 
+    /**
+     * Getter for a single waveform
+     * @param[in] Pointer to net waveform is associated with
+     * @return The waveform data
+     */
+    WaveData* get_waveform_by_net(Net* n) const;
+
 public Q_SLOTS:
     void handleSimulSettings();
     void handleOpenInputFile(const QString& filename);
