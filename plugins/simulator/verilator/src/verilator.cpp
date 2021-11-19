@@ -80,24 +80,65 @@ namespace hal
 
             std::filesystem::path netlist_verilog = m_simulator_dir / std::string(m_partial_netlist->get_design_name() + ".v");
 
-            std::filesystem::path provided_models;
-            auto it = mProperties.find(std::string("provided_models"));
-            if (it == mProperties.end())
-                log_info("verilator", "the property 'provided_models' has not been set (use set_engine_property method to assign).");
-            else
-                provided_models = it->second;
-
-            // todo: delete folder if not empty
-            if (std::filesystem::exists(m_simulator_dir))
+            // check for provided models and set path
+            std::filesystem::path provided_models = get_engine_property("provided_models");
+            if (provided_models.empty())
             {
-                std::filesystem::remove_all(m_simulator_dir);
+                log_info("verilator", "the property 'provided_models' has not been set (use set_engine_property method to assign).");
             }
-            std::filesystem::create_directories(m_simulator_dir);
 
-            std::vector<SimulationInput::Clock> clocks = simInput->get_clocks();
+            if (!write_testbench_files(simInput))
+            {
+                log_error("verilator", "error, testbench files for verilog could not be written");
+            }
 
+            // hacky workaround, will be changed later
+            // TODO: remove hacks
+            if (!get_engine_property("use_server").empty())
+            {
+                write_server_script();
+                client_location             = get_engine_property("client_location");
+                predefined_archive_location = get_engine_property("predefined_archive_location");
+                predefined_server_output    = get_engine_property("predefined_server_output");
+                server_execution            = true;
+            }
+
+            if (!converter::convert_gate_library_to_verilog(m_partial_netlist.get(), m_simulator_dir, provided_models))
+            {
+                log_error("verilator", "could not create gate definitions in verilog");
+                return false;
+            };
+
+            netlist_writer_manager::write(m_partial_netlist.get(), netlist_verilog);
+
+            return true;    // everything ok
+        }
+
+        void VerilatorEngine::write_server_script()
+        {
+            std::stringstream simulation_commands;
+
+            for (int i = 0; i < numberCommandLines(); i++)
+            {
+                std::vector<std::string> commands = commandLine(i);
+                for (const auto& command : commands)
+                {
+                    simulation_commands << command << " ";
+                }
+                simulation_commands << std::endl;
+            }
+
+            std::filesystem::path simulation_commands_path = directory();
+            simulation_commands_path /= std::string("execute_testbench.sh");
+
+            std::ofstream simulation_commands_file(simulation_commands_path);
+            simulation_commands_file << simulation_commands.str();
+            simulation_commands_file.close();
+        }
+
+        bool VerilatorEngine::write_testbench_files(SimulationInput* simInput)
+        {
             // set inputs in testbench
-
             std::stringstream simulation_data;
 
             log_info("verilator", "simulating {} net events", simInput->get_simulation_net_events().size());
@@ -186,16 +227,7 @@ namespace hal
             std::ofstream testbench_h_file(m_simulator_dir / "testbench.h");
             testbench_h_file << testbench_h;
             testbench_h_file.close();
-
-            if (!converter::convert_gate_library_to_verilog(m_partial_netlist.get(), m_simulator_dir, provided_models))
-            {
-                log_error("verilator", "could not create gate definitions in verilog");
-                return false;
-            };
-
-            netlist_writer_manager::write(m_partial_netlist.get(), netlist_verilog);
-
-            return true;    // everything ok
+            return true;
         }
 
         int VerilatorEngine::numberCommandLines() const
@@ -205,53 +237,91 @@ namespace hal
 
         std::vector<std::string> VerilatorEngine::commandLine(int lineIndex) const
         {
-            // returns commands to be executed
-            switch (lineIndex)
+            // TODO: remove hacks
+            if (server_execution)
             {
-                case 0: {
-                    const char* cl[]                = {"verilator",
-                                        "-I.",
-                                        "-Wall",
-                                        "-Wno-fatal",
-                                        "--MMD",
-                                        "-trace",
-                                        "-y",
-                                        "gate_definitions/",
-                                        "--Mdir",
-                                        "obj_dir",
-                                        "--exe",
-                                        "-cc",
-                                        "-DSIM_VERILATOR",
-                                        "--trace-depth",
-                                        "2",
-                                        "--compiler",
-                                        "clang",
-                                        "testbench.cpp",
-                                        nullptr};
-                    std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
-                    for (u64 i = 0; i < m_partial_testbenches; i++)
-                    {
-                        retval.push_back("part_" + std::to_string(i) + ".cpp");
+                // returns commands to be executed
+                switch (lineIndex)
+                {
+                    case 0: {
+                        std::vector<std::string> retval{std::string("cd"),
+                                                        m_simulator_dir,
+                                                        std::string("&&"),
+                                                        std::string("tar"),
+                                                        std::string("-zcvf"),
+                                                        std::string("testbench.tar.gz"),
+                                                        std::string("*"),
+                                                        std::string("&&"),
+                                                        std::string("mv"),
+                                                        std::string("testbench.tar.gz"),
+                                                        predefined_archive_location};
+                        return retval;
                     }
-                    retval.push_back(m_design_name + ".v");
-                    return retval;
-                }
-                break;
-                case 1: {
-                    const char* cl[]                = {"make", "-j4", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr};
-                    std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
-                    retval.push_back("V" + m_design_name + ".mk");
-                    return retval;
-                }
-                break;
-                case 2: {
-                    std::vector<std::string> retval;
-                    retval.push_back("obj_dir/V" + m_design_name);
-                    return retval;
-                }
-                break;
-                default:
                     break;
+                    case 1: {
+                        const char* cl[]                = {"cargo", "test", "--manifest-path", nullptr};
+                        std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
+                        retval.push_back(client_location);
+                        return retval;
+                    }
+                    break;
+                    case 2: {
+                        std::vector<std::string> retval{std::string("mv"), predefined_server_output, m_simulator_dir};
+                        return retval;
+                    }
+                    break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                // returns commands to be executed
+                switch (lineIndex)
+                {
+                    case 0: {
+                        const char* cl[]                = {"verilator",
+                                            "-I.",
+                                            "-Wall",
+                                            "-Wno-fatal",
+                                            "--MMD",
+                                            "-trace",
+                                            "-y",
+                                            "gate_definitions/",
+                                            "--Mdir",
+                                            "obj_dir",
+                                            "--exe",
+                                            "-cc",
+                                            "-DSIM_VERILATOR",
+                                            "--trace-depth",
+                                            "2",
+                                            "testbench.cpp",
+                                            nullptr};
+                        std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
+                        for (u64 i = 0; i < m_partial_testbenches; i++)
+                        {
+                            retval.push_back("part_" + std::to_string(i) + ".cpp");
+                        }
+                        retval.push_back(m_design_name + ".v");
+                        return retval;
+                    }
+                    break;
+                    case 1: {
+                        const char* cl[]                = {"make", "-j4", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr};
+                        std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
+                        retval.push_back("V" + m_design_name + ".mk");
+                        return retval;
+                    }
+                    break;
+                    case 2: {
+                        std::vector<std::string> retval;
+                        retval.push_back("obj_dir/V" + m_design_name);
+                        return retval;
+                    }
+                    break;
+                    default:
+                        break;
+                }
             }
 
             return std::vector<std::string>();

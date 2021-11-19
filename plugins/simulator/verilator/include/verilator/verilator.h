@@ -135,6 +135,17 @@ namespace verilator {
         int numberCommandLines() const override;
         std::vector<std::string> commandLine(int lineIndex) const override;
         bool finalize() override;
+
+    private:
+
+        // TODO: remove hacks
+        bool write_testbench_files(SimulationInput* simInput);
+        void write_server_script();
+
+        bool server_execution = true;
+        std::string client_location;
+        std::string predefined_archive_location;
+        std::string predefined_server_output;
     };
 
     class VerilatorEngineFactory : public SimulationEngineFactory {
