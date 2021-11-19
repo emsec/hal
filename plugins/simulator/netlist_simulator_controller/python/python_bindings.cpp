@@ -144,28 +144,28 @@ namespace hal
                 :rtype: list[str]
              )")
 
-             .def("get_name", &NetlistSimulatorController::get_name, R"(
+            .def("get_name", &NetlistSimulatorController::get_name, R"(
                 Get controller name.
 
                 :returns: The name of the controller.
                 :rtype: str
              )")
 
-             .def("get_id", &NetlistSimulatorController::get_id, R"(
+            .def("get_id", &NetlistSimulatorController::get_id, R"(
                 Get unique controller id.
 
                 :returns: The unique id of the controller.
                 :rtype: int
              )")
 
-             .def("get_results", &NetlistSimulatorController::get_results, R"(
+            .def("get_results", &NetlistSimulatorController::get_results, R"(
                 Get simulated data from engine, either from shared memory or from VCD file
 
                 :returns: True on success, False otherwise
                 :rtype: bool
              )")
 
-             .def("create_simulation_engine", &NetlistSimulatorController::create_simulation_engine, py::arg("name"), R"(
+            .def("create_simulation_engine", &NetlistSimulatorController::create_simulation_engine, py::arg("name"), R"(
                   Select and set the engine for simulation. The list of available engines is provided by function get_engine_names().
 
                   :param str name: The name of the engine to be selected.
@@ -173,13 +173,13 @@ namespace hal
                   :rtype: netlist_simulator_controller.SimulationEngine or None
               )")
 
-             .def("run_simulation", &NetlistSimulatorController::run_simulation, R"("
+            .def("run_simulation", &NetlistSimulatorController::run_simulation, R"("
                   Run the simulation
 
                   :returns: True if all simulation steps could be processed successfully, False otherwise
                   :rtype: bool
              )")
-                /*
+            /*
             .def("initialize_sequential_gates", py::overload_cast<const std::function<bool(const Gate*)>&>(&NetlistSimulator::initialize_sequential_gates), py::arg("filter") = nullptr, R"(
                 Configure the sequential gates matching the (optional) user-defined filter condition with initialization data specified within the netlist.
                 Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
@@ -233,14 +233,14 @@ namespace hal
                 :param str filename: filename of VCD file to be parsed.
             )")
 
-            .def("parse_csv_input", &NetlistSimulatorController::parse_csv_input, py::arg("filename"), py::arg("timescale")=1000000000, R"(
+            .def("parse_csv_input", &NetlistSimulatorController::parse_csv_input, py::arg("filename"), py::arg("timescale") = 1000000000, R"(
                 Parse CVS data as simulation input.
 
                 :param str filename: filename of CSV file to be parsed.
                 :param int timescale: multiplicator for values in time column
             )")
 
-            .def("generate_vcd", &NetlistSimulatorController::generate_vcd, py::arg("path"), py::arg("start_time")=0, py::arg("end_time")=0, py::arg("nets") = std::set<u32>(), R"(
+            .def("generate_vcd", &NetlistSimulatorController::generate_vcd, py::arg("path"), py::arg("start_time") = 0, py::arg("end_time") = 0, py::arg("nets") = std::set<u32>(), R"(
                 Generates the a VCD file for parts the simulated netlist.
 
                 :param hal_py.hal_path path: The path to the VCD file.
@@ -257,7 +257,7 @@ namespace hal
                 :param hal_py.Net net: The net waveform is associated with.
                 :rtype: hal_py.WaveData
             )")
-                /*
+            /*
             .def("set_simulation_state", &NetlistSimulator::set_simulation_state, py::arg("state"), R"(
                 Set the simulator state, i.e., net signals, to a given state.
                 Does not influence gates/nets added to the simulation set.
@@ -296,7 +296,8 @@ namespace hal
                 :param set[hal_py.Net] nets: Nets to include in the VCD file.
                 :returns: True if the file gerneration was successful, false otherwise.
                 :rtype: bool
-            )")*/;
+            )")*/
+            ;
 
         py::class_<WaveEvent>(m, "WaveEvent")
             .def(py::init<>(), R"(Construct a new event.)")
@@ -374,20 +375,27 @@ namespace hal
                 Waveform data.
         )");
 
-        py_wave_data("name", &WaveData::name, R"(
+        py_wave_data.def("name", &WaveData::name, R"(
                 Get the name of waveform net.
 
                 :returns: The name of the waveform.
                 :rtype: str
         )");
 
-        py_wave_data("id", &WaveData::id, R"(
+        py_wave_data.def("id", &WaveData::id, R"(
                 Get the ID of waveform net.
 
                 :returns: The ID of the waveform.
                 :rtype: int
         )");
 
+        py_wave_data.def("get_value_at", &WaveData::get_value_at, py::arg("time"), R"(
+                Get the waveform value at time.
+
+                :param int time: Time value.
+                :returns: The waveform value.
+                :rtype: int
+        )");
 
 #ifndef PYBIND11_MODULE
         return m.ptr();
