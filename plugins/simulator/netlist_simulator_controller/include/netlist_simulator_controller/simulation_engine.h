@@ -1,29 +1,40 @@
 #pragma once
-#include <vector>
-#include <string>
-#include <unordered_map>
+#include "hal_core/defines.h"
+#include "hal_core/netlist/boolean_function.h"
 #include "netlist_simulator_controller/simulation_input.h"
 #include "netlist_simulator_controller/wave_event.h"
-#include "hal_core/netlist/boolean_function.h"
-#include "hal_core/defines.h"
+
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 class QTemporaryDir;
 
-namespace hal {
+namespace hal
+{
     class NetlistSimulatorController;
 
-    class SimulationEngine {
+    class SimulationEngine
+    {
         std::string mName;
 
     public:
-        enum State { Failed = -1, Done = 0, Running = 1, Preparing = 2};
+        enum State
+        {
+            Failed    = -1,
+            Done      = 0,
+            Running   = 1,
+            Preparing = 2
+        };
+
     protected:
         bool mRequireClockEvents;
         bool mCanShareMemory;
         std::string mResultFilename;
         State mState;
-        std::unordered_map<std::string,std::string> mProperties;
+        std::unordered_map<std::string, std::string> mProperties;
         QTemporaryDir* mTempDir;
+
     public:
         SimulationEngine(const std::string& nam);
         virtual ~SimulationEngine();
@@ -32,19 +43,28 @@ namespace hal {
          * Getter for enging name
          * @return name as std::string
          */
-        std::string name() const { return mName; }
+        std::string name() const
+        {
+            return mName;
+        }
 
         /**
          * State of the engine
          * @return possible state values are Preparing, Running, Done, Failed
          */
-        State state() const { return mState; }
+        State state() const
+        {
+            return mState;
+        }
 
         /**
          * State of the engine as integer
          * @return possible state values are Preparing = 2, Running = 1, Done = 0, Failed = -1
          */
-        int get_state() const { return mState; }
+        int get_state() const
+        {
+            return mState;
+        }
 
         /**
          * The working directory. Directory is temporary and will be removed when engine gets deleted
@@ -56,14 +76,20 @@ namespace hal {
          * Request clock change as regular net input event
          * @return true if clock events are required by engine, false otherwise
          */
-        bool clock_events_required() const {return mRequireClockEvents; }
+        bool clock_events_required() const
+        {
+            return mRequireClockEvents;
+        }
 
         /**
          * Tells the caller whether engine can share simulation results directly from memory.
          * If not the caller will most likely ask to have a VCD result file created.
          * @return true if results can be read from memory
          */
-        bool can_share_memory() const { return mCanShareMemory; }
+        bool can_share_memory() const
+        {
+            return mCanShareMemory;
+        }
 
         /**
          * Must be implemented by derived class
@@ -78,13 +104,19 @@ namespace hal {
          * Set the name of VCD result file. If set engine is requested to produce such a file upon finalize
          * @param[in] the name of the file to be created.
          */
-        virtual void setResultFilename(const std::string filename) {mResultFilename = filename; };
+        virtual void setResultFilename(const std::string filename)
+        {
+            mResultFilename = filename;
+        };
 
         /**
          * Getter for file name of results as VCD
          * @return the file name
          */
-        std::string get_result_filename() const { return mResultFilename; }
+        std::string get_result_filename() const
+        {
+            return mResultFilename;
+        }
 
         /**
          * Must be implemented by derived class
@@ -125,14 +157,25 @@ namespace hal {
          * @param value property value
          */
         virtual void set_engine_property(const std::string& key, const std::string& value);
+        
+        
+        /**
+         * Set property which can be evaluated by engine
+         *
+         * @param key property name
+         * @param value property value
+         */
+        virtual std::string get_engine_property(const std::string& key);
     };
 
     class SimulationEngineEventDriven : public SimulationEngine
     {
         bool run(NetlistSimulatorController* controller) override;
-        bool setSimulationInput(SimulationInput *simInput) override;
+        bool setSimulationInput(SimulationInput* simInput) override;
+
     protected:
         SimulationInput* mSimulationInput;
+
     public:
         SimulationEngineEventDriven(const std::string& nam);
 
@@ -157,8 +200,12 @@ namespace hal {
     class SimulationEngineScripted : public SimulationEngine
     {
         virtual bool run(NetlistSimulatorController* controller) override;
+
     public:
-        SimulationEngineScripted(const std::string& nam) : SimulationEngine(nam) {;}
+        SimulationEngineScripted(const std::string& nam) : SimulationEngine(nam)
+        {
+            ;
+        }
 
         /**
          * Must be implemented by derived class
@@ -183,17 +230,28 @@ namespace hal {
     {
     protected:
         std::string mName;
+
     public:
         SimulationEngineFactory(const std::string& nam);
-        virtual ~SimulationEngineFactory() {;}
+        virtual ~SimulationEngineFactory()
+        {
+            ;
+        }
         virtual SimulationEngine* createEngine() const = 0;
-        std::string name() const { return mName; }
+        std::string name() const
+        {
+            return mName;
+        }
     };
 
     class SimulationEngineFactories : public std::vector<SimulationEngineFactory*>
     {
-        SimulationEngineFactories() {;}
+        SimulationEngineFactories()
+        {
+            ;
+        }
         static SimulationEngineFactories* inst;
+
     public:
         static SimulationEngineFactories* instance();
 
@@ -201,4 +259,4 @@ namespace hal {
         SimulationEngineFactory* factoryByName(const std::string nam) const;
         void deleteFactory(const std::string nam);
     };
-}
+}    // namespace hal

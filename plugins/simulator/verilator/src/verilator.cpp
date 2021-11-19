@@ -187,21 +187,6 @@ namespace hal
             testbench_h_file << testbench_h;
             testbench_h_file.close();
 
-            std::stringstream simulation_commands;
-            for (int i = 0; i < numberCommandLines(); i++)
-            {
-                std::vector<std::string> commands = commandLine(i);
-                for (const auto& command : commands)
-                {
-                    simulation_commands << command << " ";
-                }
-                simulation_commands << std::endl;
-            }
-
-            std::ofstream simulation_commands_file(m_simulator_dir / "execute_testbench.sh");
-            simulation_commands_file << simulation_commands.str();
-            simulation_commands_file.close();
-
             if (!converter::convert_gate_library_to_verilog(m_partial_netlist.get(), m_simulator_dir, provided_models))
             {
                 log_error("verilator", "could not create gate definitions in verilog");

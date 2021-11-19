@@ -1,18 +1,21 @@
 #include "netlist_simulator_controller/simulation_engine.h"
-#include "netlist_simulator_controller/simulation_thread.h"
-#include "netlist_simulator_controller/simulation_process.h"
-#include "netlist_simulator_controller/netlist_simulator_controller.h"
-#include <QProcess>
-#include <QThread>
-#include <QTemporaryDir>
-#include <QDir>
 
-namespace hal {
-    SimulationEngine::SimulationEngine(const std::string& nam)
-        : mName(nam), mRequireClockEvents(false), mCanShareMemory(false), mState(Preparing)
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_process.h"
+#include "netlist_simulator_controller/simulation_thread.h"
+
+#include <QDir>
+#include <QProcess>
+#include <QTemporaryDir>
+#include <QThread>
+
+namespace hal
+{
+    SimulationEngine::SimulationEngine(const std::string& nam) : mName(nam), mRequireClockEvents(false), mCanShareMemory(false), mState(Preparing)
     {
         QString templatePath = QDir::tempPath();
-        if (!templatePath.isEmpty()) templatePath += '/';
+        if (!templatePath.isEmpty())
+            templatePath += '/';
         templatePath += "hal_simulation_" + QString::fromStdString(mName) + "_XXXXXX";
         mTempDir = new QTemporaryDir(templatePath);
     }
@@ -43,8 +46,17 @@ namespace hal {
         mProperties[key] = value;
     }
 
-    SimulationEngineEventDriven::SimulationEngineEventDriven(const std::string& nam)
-        : SimulationEngine(nam), mSimulationInput(nullptr)
+    std::string SimulationEngine::get_engine_property(const std::string& key)
+    {
+        if (mProperties.find(key) != mProperties.end())
+        {
+            return mProperties[key];
+        }
+
+        return std::string();
+    }
+
+    SimulationEngineEventDriven::SimulationEngineEventDriven(const std::string& nam) : SimulationEngine(nam), mSimulationInput(nullptr)
     {
         mCanShareMemory = true;
     }
@@ -55,7 +67,7 @@ namespace hal {
         return std::vector<WaveEvent>();
     }
 
-    bool SimulationEngineEventDriven::setSimulationInput(SimulationInput *simInput)
+    bool SimulationEngineEventDriven::setSimulationInput(SimulationInput* simInput)
     {
         mSimulationInput = simInput;
         return true;
@@ -63,24 +75,22 @@ namespace hal {
 
     bool SimulationEngineEventDriven::run(NetlistSimulatorController* controller)
     {
-        SimulationThread* thread = new SimulationThread(controller,mSimulationInput,this);
-        mState = Running;
+        SimulationThread* thread = new SimulationThread(controller, mSimulationInput, this);
+        mState                   = Running;
         thread->start();
         return true;
     }
 
-    bool SimulationEngineScripted::run(NetlistSimulatorController *controller)
+    bool SimulationEngineScripted::run(NetlistSimulatorController* controller)
     {
-        SimulationProcess* proc = new SimulationProcess(controller,this);
-        mState = Running;
+        SimulationProcess* proc = new SimulationProcess(controller, this);
+        mState                  = Running;
         proc->start();
         return true;
     }
 
-
     //======================= FACTORY ================================
-    SimulationEngineFactory::SimulationEngineFactory(const std::string& nam)
-        : mName(nam)
+    SimulationEngineFactory::SimulationEngineFactory(const std::string& nam) : mName(nam)
     {
         SimulationEngineFactories::instance()->push_back(this);
     }
@@ -89,22 +99,24 @@ namespace hal {
 
     SimulationEngineFactories* SimulationEngineFactories::instance()
     {
-        if (!inst) inst = new SimulationEngineFactories;
+        if (!inst)
+            inst = new SimulationEngineFactories;
         return inst;
     }
 
     std::vector<std::string> SimulationEngineFactories::factoryNames() const
     {
         std::vector<std::string> retval;
-        for (auto it=begin(); it!=end(); ++it)
+        for (auto it = begin(); it != end(); ++it)
             retval.push_back((*it)->name());
         return retval;
     }
 
     SimulationEngineFactory* SimulationEngineFactories::factoryByName(const std::string nam) const
     {
-        for (auto it=begin(); it!=end(); ++it)
-            if ((*it)->name() == nam) return (*it);
+        for (auto it = begin(); it != end(); ++it)
+            if ((*it)->name() == nam)
+                return (*it);
 
         return nullptr;
     }
@@ -124,5 +136,4 @@ namespace hal {
         }
     }
 
-
-}
+}    // namespace hal
