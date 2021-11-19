@@ -71,7 +71,7 @@ namespace hal
          * * const std::filesystem::path& - The hal file.
          * * rapidjson::Document& - The content to fill.
          */
-        void register_on_serialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, Netlist*, rapidjson::Document&)> callback);
+        void register_on_serialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, const Netlist*, rapidjson::Document&)> callback);
 
         /**
          * Removes a callback to notify when a .hal file is being serialized.
