@@ -60,7 +60,8 @@ namespace hal {
         void setGraphicsItem(WaveGraphicsItem* wgi) { mGraphicsItem = wgi; }
         void setData(const QMap<u64,int>& dat);
         int  intValue(float t) const;
-        int get_value_at(int t) const;
+        int get_value_at(u64 t) const;
+        std::vector<std::pair<u64,int>> get_events() const;
         u64  maxTime() const;
         void clear() { mData.clear(); }
         void insert(u64 t, int val) { mData.insert(t,val); }

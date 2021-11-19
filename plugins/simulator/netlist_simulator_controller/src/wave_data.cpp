@@ -97,10 +97,19 @@ namespace hal {
         }
     }
 
-    int WaveData::get_value_at(int t) const
+    int WaveData::get_value_at(u64 t) const
     {
         return intValue(t);
     }
+
+    std::vector<std::pair<u64,int>> WaveData::get_events() const
+    {
+        std::vector<std::pair<u64,int>> retval;
+        for (auto it = mData.constBegin(); it != mData.constEnd(); ++it)
+            retval.push_back(std::make_pair(it.key(),it.value()));
+        return retval;
+    }
+
 
     bool WaveData::insertToggleTime(u64 t)
     {

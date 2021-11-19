@@ -375,14 +375,14 @@ namespace hal
                 Waveform data.
         )");
 
-        py_wave_data.def("name", &WaveData::name, R"(
+        py_wave_data.def("get_name", &WaveData::name, R"(
                 Get the name of waveform net.
 
                 :returns: The name of the waveform.
                 :rtype: str
         )");
 
-        py_wave_data.def("id", &WaveData::id, R"(
+        py_wave_data.def("get_id", &WaveData::id, R"(
                 Get the ID of waveform net.
 
                 :returns: The ID of the waveform.
@@ -395,6 +395,13 @@ namespace hal
                 :param int time: Time value.
                 :returns: The waveform value.
                 :rtype: int
+        )");
+
+        py_wave_data.def("get_events", &WaveData::get_events, R"(
+                Get all waveform events.
+
+                :returns: Waveform events.
+                :rtype: list[tuple(int,int)]
         )");
 
 #ifndef PYBIND11_MODULE
