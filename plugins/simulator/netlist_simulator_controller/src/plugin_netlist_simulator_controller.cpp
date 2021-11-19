@@ -28,6 +28,13 @@ namespace hal
         return std::unique_ptr<NetlistSimulatorController>(new NetlistSimulatorController(++mMaxControllerId, nam));
     }
 
+    std::shared_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::simulator_controller_by_id(u32 id) const
+    {
+        NetlistSimulatorController* ctrl = NetlistSimulatorControllerMap::instance()->controller(id);
+        if (!ctrl) return nullptr;
+        return std::shared_ptr<NetlistSimulatorController>(ctrl,[](void*){;});
+    }
+
     void NetlistSimulatorControllerPlugin::on_unload()
     {
         NetlistSimulatorControllerMap::instance()->shutdown();

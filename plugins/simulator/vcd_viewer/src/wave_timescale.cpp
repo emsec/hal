@@ -54,7 +54,8 @@ namespace hal {
         mXmag = m11;
         mWidth = floor(scWidth * m11 + 0.5);
         mXscrollValue = xScrollValue;
-        setFixedWidth(mWidth);
+        if (mWidth < 160000)
+            setFixedWidth(mWidth);
         move(0,0);
         update();
     }

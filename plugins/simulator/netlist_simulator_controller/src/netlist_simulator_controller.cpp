@@ -227,6 +227,12 @@ namespace hal
         return true;
     }
 
+    WaveData* NetlistSimulatorController::get_waveform_by_net(Net* n) const
+    {
+        return mWaveDataList->waveDataByNetId(n->get_id());
+    }
+
+
     void NetlistSimulatorController::parse_vcd(const std::string& filename)
     {
         VcdSerializer reader;

@@ -55,9 +55,16 @@ namespace hal
                 :returns: The simulator controller instance.
                 :param str name: Optional name for new controller.
                 :rtype: netlist_simulator_controller.NetlistSimulatorController
+            )")
+
+            .def("simulator_controller_by_id", &NetlistSimulatorControllerPlugin::simulator_controller_by_id, py::arg("id"), R"(
+                Share netlist simulator controller instance addressed by id.
+
+                :param int id: The controller-ID.
+                :rtype: netlist_simulator_controller.NetlistSimulatorController
             )");
 
-        py::class_<NetlistSimulatorController>(m, "NetlistSimulatorController")
+        py::class_<NetlistSimulatorController>(m, "NetlistSimulatorController::NetlistSimulatorController")
 
             .def("add_gates", &NetlistSimulatorController::add_gates, py::arg("gates"), R"(
                 Add gates to the simulation set.
@@ -244,6 +251,12 @@ namespace hal
                 :rtype: bool
             )")
 
+            .def("get_waveform_by_net", &NetlistSimulatorController::get_waveform_by_net, py::arg("net"), R"(
+                Getter for a single waveform.
+
+                :param hal_py.Net net: The net waveform is associated with.
+                :rtype: hal_py.WaveData
+            )")
                 /*
             .def("set_simulation_state", &NetlistSimulator::set_simulation_state, py::arg("state"), R"(
                 Set the simulator state, i.e., net signals, to a given state.
@@ -356,6 +369,26 @@ namespace hal
                 :param str key: The property name.
                 :param str value: The property value.
         )");
+
+        py::class_<WaveData, RawPtrWrapper<WaveData>> py_wave_data(m, "WaveData", R"(
+                Waveform data.
+        )");
+
+        py_wave_data("name", &WaveData::name, R"(
+                Get the name of waveform net.
+
+                :returns: The name of the waveform.
+                :rtype: str
+        )");
+
+        py_wave_data("id", &WaveData::id, R"(
+                Get the ID of waveform net.
+
+                :returns: The ID of the waveform.
+                :rtype: int
+        )");
+
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE
