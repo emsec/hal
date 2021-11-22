@@ -86,6 +86,7 @@ namespace hal
         void handleCreateControl();
         void handleSimulSettings();
         void handleOpenInputFile();
+        void handleSaveWaveforms();
         void handleRunSimulation();
         void handleAddResultWave();
 
@@ -112,6 +113,7 @@ namespace hal
         QAction* mCreateControlAction;
         QAction* mSimulSettingsAction;
         QAction* mOpenInputfileAction;
+        QAction* mSaveWaveformsAction;
         QAction* mRunSimulationAction;
         QAction* mAddResultWaveAction;
 

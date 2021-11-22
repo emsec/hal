@@ -50,6 +50,7 @@ namespace hal
         mCreateControlAction = new QAction(this);
         mSimulSettingsAction = new QAction(this);
         mOpenInputfileAction = new QAction(this);
+        mSaveWaveformsAction = new QAction(this);
         mRunSimulationAction = new QAction(this);
         mAddResultWaveAction = new QAction(this);
 
@@ -59,12 +60,14 @@ namespace hal
         mCreateControlAction->setToolTip("Create simulation controller");
         mSimulSettingsAction->setToolTip("Simulation settings");
         mOpenInputfileAction->setToolTip("Open input file");
+        mSaveWaveformsAction->setToolTip("Save waveform data to file");
         mRunSimulationAction->setToolTip("Run simulation");
         mAddResultWaveAction->setToolTip("Add waveform net");
 
         connect(mCreateControlAction, &QAction::triggered, this, &VcdViewer::handleCreateControl);
         connect(mSimulSettingsAction, &QAction::triggered, this, &VcdViewer::handleSimulSettings);
         connect(mOpenInputfileAction, &QAction::triggered, this, &VcdViewer::handleOpenInputFile);
+        connect(mSaveWaveformsAction, &QAction::triggered, this, &VcdViewer::handleSaveWaveforms);
         connect(mRunSimulationAction, &QAction::triggered, this, &VcdViewer::handleRunSimulation);
         connect(mAddResultWaveAction, &QAction::triggered, this, &VcdViewer::handleAddResultWave);
 
@@ -125,6 +128,7 @@ namespace hal
         {
             mSimulSettingsAction->setDisabled(true);
             mOpenInputfileAction->setDisabled(true);
+            mSaveWaveformsAction->setDisabled(true);
             mRunSimulationAction->setDisabled(true);
             mAddResultWaveAction->setDisabled(true);
         }
@@ -133,11 +137,13 @@ namespace hal
             mSimulSettingsAction->setEnabled(true);
             mOpenInputfileAction->setEnabled(state == NetlistSimulatorController::ParameterSetup
                                              || state == NetlistSimulatorController::ParameterReady);
+            mSaveWaveformsAction->setEnabled(state != NetlistSimulatorController::NoGatesSelected);
             mRunSimulationAction->setEnabled(state == NetlistSimulatorController::ParameterReady);
             mAddResultWaveAction->setEnabled(state == NetlistSimulatorController::ShowResults);
         }
         mSimulSettingsAction->setIcon(gui_utility::getStyledSvgIcon(mSimulSettingsAction->isEnabled() ? "all->#FFFFFF" : "all->#808080",":/icons/preferences"));
         mOpenInputfileAction->setIcon(gui_utility::getStyledSvgIcon(mOpenInputfileAction->isEnabled() ? "all->#3192C5" : "all->#808080",":/icons/folder"));
+        mSaveWaveformsAction->setIcon(gui_utility::getStyledSvgIcon(mSaveWaveformsAction->isEnabled() ? "all->#3192C5" : "all->#808080",":/icons/save"));
         mRunSimulationAction->setIcon(gui_utility::getStyledSvgIcon(mRunSimulationAction->isEnabled() ? "all->#20FF80" : "all->#808080",":/icons/run"));
 
         if (!mCurrentWaveWidget)
@@ -167,6 +173,7 @@ namespace hal
         toolbar->addAction(mCreateControlAction);
         toolbar->addAction(mSimulSettingsAction);
         toolbar->addAction(mOpenInputfileAction);
+        toolbar->addAction(mSaveWaveformsAction);
         toolbar->addAction(mRunSimulationAction);
         toolbar->addAction(mAddResultWaveAction);
     }
@@ -292,9 +299,24 @@ namespace hal
         if (!mCurrentWaveWidget) return;
 
         QString filename =
-                QFileDialog::getOpenFileName(this, "Load input wave file", ".", ("VCD Files (*.vcd)") );
+                QFileDialog::getOpenFileName(this, "Load input wave file", ".", ("VCD files (*.vcd);; CSV files (*.csv)") );
         if (filename.isEmpty()) return;
-        mCurrentWaveWidget->controller()->parse_vcd(filename.toStdString());
+        if (filename.toLower().endsWith(".vcd"))
+            mCurrentWaveWidget->controller()->parse_vcd(filename.toStdString());
+        else if (filename.toLower().endsWith(".csv"))
+            mCurrentWaveWidget->controller()->parse_csv_input(filename.toStdString());
+        else
+            log_warning(mCurrentWaveWidget->controller()->get_name(), "Unknown extension, cannot parse file '{}'.", filename.toStdString());
+    }
+
+    void VcdViewer::handleSaveWaveforms()
+    {
+        if (!mCurrentWaveWidget) return;
+
+        QString filename =
+                QFileDialog::getSaveFileName(this, "Save waveform data to file", ".", ("VCD Files (*.vcd)") );
+        if (filename.isEmpty()) return;
+        mCurrentWaveWidget->controller()->generate_vcd(filename.toStdString());
     }
 
     void VcdViewer::handleRunSimulation()
