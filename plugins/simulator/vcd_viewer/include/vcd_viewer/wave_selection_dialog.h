@@ -5,6 +5,7 @@
 #include <QAbstractTableModel>
 #include <QTableView>
 #include <QStyledItemDelegate>
+#include <QPushButton>
 #include "netlist_simulator_controller/wave_data.h"
 
 class QSortFilterProxyModel;
@@ -33,6 +34,15 @@ namespace hal {
         QSortFilterProxyModel* mProxyModel;
         QTableView* mTableView;
         QMap<const WaveData*,int> mWaveDataMap;
+        QPushButton* mButAll;
+        QPushButton* mButNone;
+        QPushButton* mButSel;
+
+    private Q_SLOTS:
+        void handleSelectAll();
+        void handleCurrentGuiSelection();
+        void handleClearSelection();
+
     public:
         WaveSelectionDialog(const QMap<const WaveData*,int>& wdMap, QWidget* parent = nullptr);
         QList<int> selectedWaveIndices() const;

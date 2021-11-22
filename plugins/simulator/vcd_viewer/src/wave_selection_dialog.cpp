@@ -8,6 +8,7 @@
 #include <QPainter>
 #include <QHeaderView>
 #include <QSortFilterProxyModel>
+#include "gui/gui_globals.h"
 
 namespace hal {
 
@@ -15,6 +16,16 @@ namespace hal {
         : QDialog(parent), mWaveDataMap(wdMap)
     {
         QGridLayout* layout = new QGridLayout(this);
+        mButAll = new QPushButton("All waveform items", this);
+        connect(mButAll,&QPushButton::clicked,this,&WaveSelectionDialog::handleSelectAll);
+        layout->addWidget(mButAll,0,0);
+        mButSel = new QPushButton("Current GUI selection", this);
+        connect(mButSel,&QPushButton::clicked,this,&WaveSelectionDialog::handleCurrentGuiSelection);
+        layout->addWidget(mButSel,0,1);
+        mButNone = new QPushButton("Clear selection", this);
+        connect(mButNone,&QPushButton::clicked,this,&WaveSelectionDialog::handleClearSelection);
+        layout->addWidget(mButNone,0,2);
+
         mTableView = new QTableView(this);
         mProxyModel = new QSortFilterProxyModel(this);
         mWaveModel = new WaveSelectionTable(mWaveDataMap.keys(),mTableView);
@@ -30,12 +41,42 @@ namespace hal {
         mTableView->setColumnWidth(0,36);
         mTableView->setColumnWidth(1,256);
         mTableView->setColumnWidth(2,36);
-        layout->addWidget(mTableView,0,0,1,2);
+        layout->addWidget(mTableView,1,0,1,2);
         QDialogButtonBox* dbb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
         connect(dbb, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(dbb, &QDialogButtonBox::rejected, this, &QDialog::reject);
-        layout->addWidget(dbb,1,1);
+        layout->addWidget(dbb,2,1);
         setWindowTitle("Add Waveform Net");
+    }
+
+    void WaveSelectionDialog::handleSelectAll()
+    {
+        mTableView->selectAll();
+    }
+
+    void WaveSelectionDialog::handleCurrentGuiSelection()
+    {
+        QSet<u32> guiNetSel = gSelectionRelay->selectedNets();
+
+        const QAbstractItemModel* modl = mTableView->model(); // proxy model
+        int nrows = modl->rowCount();
+        mTableView->clearSelection();
+
+        bool ok;
+
+        for (int irow = 0; irow<nrows; irow++)
+        {
+            u32 gid = modl->data(modl->index(irow,0)).toUInt(&ok);
+            if (!ok) continue;
+            if (guiNetSel.contains(gid))
+                mTableView->selectRow(irow);
+        }
+
+    }
+
+    void WaveSelectionDialog::handleClearSelection()
+    {
+        mTableView->clearSelection();
     }
 
     QList<int> WaveSelectionDialog::selectedWaveIndices() const

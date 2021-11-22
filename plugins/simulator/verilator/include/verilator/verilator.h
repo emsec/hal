@@ -142,7 +142,7 @@ namespace verilator {
         bool write_testbench_files(SimulationInput* simInput);
         void write_server_script();
 
-        bool server_execution = true;
+        bool server_execution;
         std::string client_location;
         std::string predefined_archive_location;
         std::string predefined_server_output;

@@ -102,6 +102,8 @@ namespace hal
                 predefined_server_output    = get_engine_property("predefined_server_output");
                 server_execution            = true;
             }
+            else
+                server_execution            = false;
 
             if (!converter::convert_gate_library_to_verilog(m_partial_netlist.get(), m_simulator_dir, provided_models))
             {
@@ -327,7 +329,8 @@ namespace hal
             return std::vector<std::string>();
         }
 
-        VerilatorEngine::VerilatorEngine(const std::string& nam) : SimulationEngineScripted(nam)
+        VerilatorEngine::VerilatorEngine(const std::string& nam)
+            : SimulationEngineScripted(nam), server_execution(true)
         {
             mRequireClockEvents = true;
         }
