@@ -18,7 +18,7 @@ namespace hal
     const QString GateInfoTable::locationRowKey = "Location";
     const QString GateInfoTable::moduleRowKey = "Parent module";
 
-    GateInfoTable::GateInfoTable(QWidget* parent) : GeneralTableWidget(parent)
+    GateInfoTable::GateInfoTable(QWidget* parent) : GeneralTableWidget(parent), mGate(nullptr)
     {
         mNameEntryContextMenu = new QMenu();
         mNameEntryContextMenu->addAction("Extract gate name as plain text", std::bind(&GateInfoTable::copyName, this));
@@ -132,6 +132,9 @@ namespace hal
 
     QString GateInfoTable::parentModule() const
     {
+        if(!mGate)
+            return "";
+
         Module* module = mGate->get_module();
 
         return QString::fromStdString(module->get_name()) + "[ID:" + QString::number(module->get_id()) + "]";
@@ -250,6 +253,9 @@ namespace hal
 
     void GateInfoTable::handleModuleNameChanged(Module* module)
     {
+        if(!mGate)
+            return;
+
         if(mGate->get_module() == module)
             refresh();
     }
@@ -257,6 +263,9 @@ namespace hal
     void GateInfoTable::handleModuleGateAssigned(Module* module, const u32 gateId)
     {
         Q_UNUSED(module)
+
+        if(!mGate)
+            return;
 
         if(mGate->get_id() == gateId)
             refresh();
