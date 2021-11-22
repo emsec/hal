@@ -302,9 +302,9 @@ namespace hal
                 QFileDialog::getOpenFileName(this, "Load input wave file", ".", ("VCD files (*.vcd);; CSV files (*.csv)") );
         if (filename.isEmpty()) return;
         if (filename.toLower().endsWith(".vcd"))
-            mCurrentWaveWidget->controller()->parse_vcd(filename.toStdString());
+            mCurrentWaveWidget->controller()->parse_vcd(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
         else if (filename.toLower().endsWith(".csv"))
-            mCurrentWaveWidget->controller()->parse_csv_input(filename.toStdString());
+            mCurrentWaveWidget->controller()->parse_csv(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
         else
             log_warning(mCurrentWaveWidget->controller()->get_name(), "Unknown extension, cannot parse file '{}'.", filename.toStdString());
     }

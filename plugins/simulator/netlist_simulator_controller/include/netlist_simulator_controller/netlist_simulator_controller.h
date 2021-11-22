@@ -53,12 +53,20 @@ class NETLIST_API NetlistSimulatorController : public QObject {
     Q_OBJECT
 
 public:
-    enum SimulationState { NoGatesSelected,
+    enum SimulationState {
+        NoGatesSelected,
         ParameterSetup,
         ParameterReady,
         SimulationRun,
         ShowResults,
         EngineFailed };
+
+    enum FilterInputFlag {
+        GlobalInputs,
+        PartialNetlist,
+        CompleteNetlist,
+        NoFilter
+    };
 
     NetlistSimulatorController(u32 id, const std::string nam, QObject* parent = nullptr);
     ~NetlistSimulatorController();
@@ -216,14 +224,17 @@ public:
     /**
      * Parse VCD file and set wave data
      * @param[in] filename the filename to read
+     * @param[in] filter filter to select waveform data from file
      */
-    void parse_vcd(const std::string& filename);
+    void parse_vcd(const std::string& filename, FilterInputFlag filter);
 
     /**
      * Parse CSV file and set wave data
      * @param[in] filename the filename to read
+     * @param[in] filter filter to select waveform data from file
+     * @param[in] timescale multiplication factor for time value in first column
      */
-    void parse_csv_input(const std::string& filename, u64 timescale = 1000000000);
+    void parse_csv(const std::string& filename, FilterInputFlag filter, u64 timescale = 1000000000);
 
     /**
      * Generates the a partial VCD file for parts the simulated netlist.
@@ -266,6 +277,7 @@ Q_SIGNALS:
     void engineFinished(bool success);
 
 private:
+    std::vector<const Net*> getFilterNets(FilterInputFlag filter) const;
     void initSimulator();
     void setState(SimulationState stat);
     bool getResultsInternal();

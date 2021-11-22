@@ -22,6 +22,14 @@ namespace hal
         py::module m("netlist_simulator_controller", "hal NetlistSimulatorControllerPlugin python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
+        py::enum_<NetlistSimulatorController::FilterInputFlag>(m, "FilterInputFlag", R"(Defines the filter of input file.)")
+            .value("GlobalInputs", NetlistSimulatorController::GlobalInputs, R"(Read data only for global inputs.)")
+            .value("PartialNetlist", NetlistSimulatorController::PartialNetlist,R"(Read data for partial netlist used in simulation.)")
+            .value("CompleteNetlist", NetlistSimulatorController::CompleteNetlist, R"(Read data for all nets in netlist.)")
+            .value("NoFilter", NetlistSimulatorController::NoFilter, R"(No filter, read entire input file.)")
+            .export_values();
+
+
         py::class_<NetlistSimulatorControllerPlugin, RawPtrWrapper<NetlistSimulatorControllerPlugin>, BasePluginInterface>(m, "NetlistSimulatorControllerPlugin")
             .def_property_readonly("name", &NetlistSimulatorControllerPlugin::get_name, R"(
                 The name of the plugin.
@@ -227,16 +235,18 @@ namespace hal
                 Does not remove gates/nets from the simulation set.
             )")
 
-            .def("parse_vcd", &NetlistSimulatorController::parse_vcd, py::arg("filename"), R"(
+            .def("parse_vcd", &NetlistSimulatorController::parse_vcd, py::arg("filename"), py::arg("filter"), R"(
                 Parse VCD data (e.g. simulation input).
 
                 :param str filename: filename of VCD file to be parsed.
+                :param hal_py.FilterInputFlag filter: filter to select waveform data from file.
             )")
 
-            .def("parse_csv_input", &NetlistSimulatorController::parse_csv_input, py::arg("filename"), py::arg("timescale") = 1000000000, R"(
+            .def("parse_csv", &NetlistSimulatorController::parse_csv, py::arg("filename"), py::arg("filter"), py::arg("timescale") = 1000000000, R"(
                 Parse CVS data as simulation input.
 
                 :param str filename: filename of CSV file to be parsed.
+                :param hal_py.FilterInputFlag filter: filter to select waveform data from file.
                 :param int timescale: multiplicator for values in time column
             )")
 

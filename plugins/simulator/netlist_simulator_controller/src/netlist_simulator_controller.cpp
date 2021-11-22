@@ -232,34 +232,87 @@ namespace hal
         return mWaveDataList->waveDataByNetId(n->get_id());
     }
 
+    std::vector<const Net *> NetlistSimulatorController::getFilterNets(FilterInputFlag filter) const
+    {
+        if (!mSimulationInput->has_gates()) return std::vector<const Net*>();
+        switch (filter)
+        {
+        case GlobalInputs:
+            return std::vector<const Net*>(get_input_nets().begin(), get_input_nets().end());
+        case PartialNetlist:
+        {
+            std::vector<const Gate*> simGates(mSimulationInput->get_gates().begin(), mSimulationInput->get_gates().end());
+            std::unique_ptr<Netlist> partNl = netlist_utils::get_partial_netlist(simGates.at(0)->get_netlist(), simGates);
+            return std::vector<const Net*>(partNl->get_nets().begin(), partNl->get_nets().end());
+        }
+        case CompleteNetlist:
+        {
+            std::vector<Net*> tmp = (*mSimulationInput->get_gates().begin())->get_netlist()->get_nets();
+            return  std::vector<const Net*>(tmp.begin(),tmp.end());
+        }
+        case NoFilter:
+            break;
+        }
+        return std::vector<const Net*>();
+    }
 
-    void NetlistSimulatorController::parse_vcd(const std::string& filename)
+    void NetlistSimulatorController::parse_vcd(const std::string& filename, FilterInputFlag filter)
     {
         VcdSerializer reader;
+
         if (reader.deserializeVcd(QString::fromStdString(filename)))
         {
-            for (WaveData* wd : reader.waveList())
-                mWaveDataList->addOrReplace(wd);
+            bool waveFound = false;
+
+            if (filter == NoFilter)
+            {
+                for (WaveData* wd : reader.waveList())
+                    mWaveDataList->addOrReplace(wd);
+            }
+            else
+            {
+                for (const Net* n: getFilterNets(filter))
+                {
+                    WaveData* wd = reader.waveByName(QString::fromStdString(n->get_name()));
+                    if (!wd) continue;
+                    wd->setId(n->get_id());
+                    wd->setName(QString::fromStdString(n->get_name()));
+                    mWaveDataList->addOrReplace(wd);
+                    waveFound = true;
+                }
+            }
+
+            if (waveFound) mWaveDataList->incrementSimulTime(reader.maxTime());
         }
         checkReadyState();
     }
 
-    void NetlistSimulatorController::parse_csv_input(const std::string& filename, u64 timescale)
+    void NetlistSimulatorController::parse_csv(const std::string& filename, FilterInputFlag filter, u64 timescale)
     {
         VcdSerializer reader;
         if (reader.deserializeCsv(QString::fromStdString(filename),timescale))
         {
             bool waveFound = false;
-            for (const Net* n : mSimulationInput->get_input_nets())
+
+            if (filter == NoFilter)
             {
-                WaveData* wd = reader.waveByName(QString::fromStdString(n->get_name()));
-                if (!wd)  wd = reader.waveById(n->get_id());
-                if (!wd) continue;
-                wd->setId(n->get_id());
-                wd->setName(QString::fromStdString(n->get_name()));
-                mWaveDataList->addOrReplace(wd);
-                waveFound = true;
+                for (WaveData* wd : reader.waveList())
+                    mWaveDataList->addOrReplace(wd);
             }
+            else
+            {
+                for (const Net* n: getFilterNets(filter))
+                {
+                    WaveData* wd = reader.waveByName(QString::fromStdString(n->get_name()));
+                    if (!wd)  wd = reader.waveById(n->get_id());
+                    if (!wd) continue;
+                    wd->setId(n->get_id());
+                    wd->setName(QString::fromStdString(n->get_name()));
+                    mWaveDataList->addOrReplace(wd);
+                    waveFound = true;
+                }
+            }
+
             if (waveFound) mWaveDataList->incrementSimulTime(reader.maxTime());
         }
         checkReadyState();
