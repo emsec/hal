@@ -295,7 +295,7 @@ namespace hal
             bool deserialize_module(Netlist* nl, const rapidjson::Value& val)
             {
                 u32 parent_id = val["parent"].GetUint();
-                Module* sm     = nl->get_top_module();
+                Module* sm    = nl->get_top_module();
                 if (parent_id != 0)
                 {
                     sm = nl->create_module(val["id"].GetUint(), val["name"].GetString(), nl->get_module_by_id(parent_id));
@@ -312,13 +312,15 @@ namespace hal
 
                 if (val.HasMember("gates"))
                 {
+                    std::vector<Gate*> gates;
                     for (auto& gate_node : val["gates"].GetArray())
                     {
                         if (!sm->is_top_module())
                         {
-                            sm->assign_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                            gates.push_back(nl->get_gate_by_id(gate_node.GetUint()));
                         }
                     }
+                    sm->assign_gates(gates);
                 }
 
                 if (val.HasMember("data"))
