@@ -67,6 +67,7 @@ namespace hal
 
         bool VerilatorEngine::setSimulationInput(SimulationInput* simInput)
         {
+            server_execution = false;
             const std::vector<const Gate*> simulation_gates(simInput->get_gates().begin(), simInput->get_gates().end());
             m_partial_netlist = netlist_utils::get_partial_netlist(simulation_gates.at(0)->get_netlist(), simulation_gates);
 
@@ -243,6 +244,7 @@ namespace hal
 
         std::vector<std::string> VerilatorEngine::commandLine(int lineIndex) const
         {
+            log_info("verilator", "server_execution: {}", server_execution);
             // TODO: remove hacks
             if (server_execution)
             {
@@ -255,11 +257,11 @@ namespace hal
                                                         std::string("&&"),
                                                         std::string("tar"),
                                                         std::string("-zcvf"),
-                                                        std::string(m_simulator_dir.string() + "/testbench.tar.gz"),
-                                                        std::string(m_simulator_dir.string() + "/*"),
+                                                        std::string("testbench.tar.gz"),
+                                                        std::string("*"),
                                                         std::string("&&"),
                                                         std::string("mv"),
-                                                        std::string(m_simulator_dir.string() + "/testbench.tar.gz"),
+                                                        std::string("testbench.tar.gz"),
                                                         predefined_archive_location};
                         return retval;
                     }
