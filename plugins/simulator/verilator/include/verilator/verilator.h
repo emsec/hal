@@ -146,10 +146,10 @@ namespace hal
             // TODO: remove hacks
             void write_server_script();
 
-            bool server_execution = false;
-            std::string client_location;
-            std::string predefined_archive_location;
-            std::string predefined_server_output;
+            // bool server_execution = false;
+            // std::string client_location;
+            // std::string predefined_archive_location;
+            // std::string predefined_server_output;
         };
 
         class VerilatorEngineFactory : public SimulationEngineFactory

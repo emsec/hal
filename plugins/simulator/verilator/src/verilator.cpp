@@ -67,7 +67,7 @@ namespace hal
 
         bool VerilatorEngine::setSimulationInput(SimulationInput* simInput)
         {
-            server_execution = false;
+            //server_execution = false;
             const std::vector<const Gate*> simulation_gates(simInput->get_gates().begin(), simInput->get_gates().end());
             m_partial_netlist = netlist_utils::get_partial_netlist(simulation_gates.at(0)->get_netlist(), simulation_gates);
 
@@ -97,18 +97,18 @@ namespace hal
                 log_error("verilator", "error, testbench files for verilog could not be written");
             }
 
-            // hacky workaround, will be changed later
-            // TODO: remove hacks
-            if (!get_engine_property("use_server").empty())
-            {
-                write_server_script();
-                client_location             = get_engine_property("client_location");
-                predefined_archive_location = get_engine_property("predefined_archive_location");
-                predefined_server_output    = get_engine_property("predefined_server_output");
-                server_execution            = true;
-            }
-            else
-                server_execution = false;
+            // // hacky workaround, will be changed later
+            // // TODO: remove hacks
+            // if (!get_engine_property("use_server").empty())
+            // {
+            //     write_server_script();
+            //     client_location             = get_engine_property("client_location");
+            //     predefined_archive_location = get_engine_property("predefined_archive_location");
+            //     predefined_server_output    = get_engine_property("predefined_server_output");
+            //     server_execution            = true;
+            // }
+            // else
+            //     server_execution = false;
 
             if (!converter::convert_gate_library_to_verilog(m_partial_netlist.get(), m_simulator_dir, provided_models))
             {
@@ -152,6 +152,7 @@ namespace hal
 
             u64 sim_counter                      = 0;
             u64 max_events_per_partial_testbench = 10000;
+            bool initial_event                   = true;
 
             for (const auto& sim_event : simInput->get_simulation_net_events())
             {
@@ -159,33 +160,45 @@ namespace hal
 
                 for (const auto& [net, boolean_value] : sim_event)
                 {
-                    simulation_data << "\tdut->" << escape_net_name(net->get_name()) << " = ";
-
                     switch (boolean_value)
                     {
                         case BooleanFunction::Value::ONE:
-                            simulation_data << "0x1";
+                            simulation_data << "\tdut->" << escape_net_name(net->get_name()) << " = 0x1;";
                             break;
 
                         case BooleanFunction::Value::ZERO:
-                            simulation_data << "0x0";
+                            simulation_data << "\tdut->" << escape_net_name(net->get_name()) << " = 0x0;";
+                            break;
+
+                        case BooleanFunction::Value::X:
+                            // do nothing for initial event
+                            if (!initial_event)
+                            {
+                                log_error("verilator",
+                                          "cannot assign value '{}' to net '{}' at {}ps, only supporting 1, 0 aborting...",
+                                          BooleanFunction::to_string(boolean_value),
+                                          net->get_name(),
+                                          duration);
+                                return false;
+                            }
+
                             break;
 
                         default:
                             log_error("verilator",
-                                      "cannot assign value '{}' to net '{}' at {}ps, only supporting 1 and 0, aborting...",
+                                      "cannot assign value '{}' to net '{}' at {}ps, only supporting 1, 0 aborting...",
                                       BooleanFunction::to_string(boolean_value),
                                       net->get_name(),
                                       duration);
                             return false;
                             break;
                     }
-                    simulation_data << ";" << std::endl;
                 }
                 simulation_data << "\tdut->eval();" << std::endl;
                 simulation_data << "\tm_trace->dump(sim_time);" << std::endl;
                 simulation_data << "\tsim_time += " << duration << ";" << std::endl;
                 simulation_data << std::endl;
+                initial_event = false;
 
                 // split testbench or write the rest to the last file
                 if ((sim_counter % max_events_per_partial_testbench) == (max_events_per_partial_testbench - 1) || sim_counter == simInput->get_simulation_net_events().size() - 1)
@@ -244,98 +257,98 @@ namespace hal
 
         std::vector<std::string> VerilatorEngine::commandLine(int lineIndex) const
         {
-            log_info("verilator", "server_execution: {}", server_execution);
-            // TODO: remove hacks
-            if (server_execution)
+            // log_info("verilator", "server_execution: {}", server_execution);
+            // // TODO: remove hacks
+            // if (server_execution)
+            // {
+            //     // returns commands to be executed
+            //     switch (lineIndex)
+            //     {
+            //         case 0: {
+            //             std::vector<std::string> retval{std::string("cd"),
+            //                                             std::string(m_simulator_dir),
+            //                                             std::string("&&"),
+            //                                             std::string("tar"),
+            //                                             std::string("-zcvf"),
+            //                                             std::string("testbench.tar.gz"),
+            //                                             std::string("*"),
+            //                                             std::string("&&"),
+            //                                             std::string("mv"),
+            //                                             std::string("testbench.tar.gz"),
+            //                                             predefined_archive_location};
+            //             return retval;
+            //         }
+            //         break;
+            //         case 1: {
+            //             const char* cl[]                = {"cargo", "test", "--manifest-path", nullptr};
+            //             std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
+            //             retval.push_back(client_location);
+            //             return retval;
+            //         }
+            //         break;
+            //         case 2: {
+            //             std::vector<std::string> retval{std::string("mv"), predefined_server_output, m_simulator_dir, std::string("&&"), std::string("rm"), predefined_archive_location};
+            //             return retval;
+            //         }
+            //         break;
+            //         default:
+            //             break;
+            //     }
+            // }
+            // else
+            // {
+            //     // returns commands to be executed
+            switch (lineIndex)
             {
-                // returns commands to be executed
-                switch (lineIndex)
-                {
-                    case 0: {
-                        std::vector<std::string> retval{std::string("cd"),
-                                                        std::string(m_simulator_dir),
-                                                        std::string("&&"),
-                                                        std::string("tar"),
-                                                        std::string("-zcvf"),
-                                                        std::string("testbench.tar.gz"),
-                                                        std::string("*"),
-                                                        std::string("&&"),
-                                                        std::string("mv"),
-                                                        std::string("testbench.tar.gz"),
-                                                        predefined_archive_location};
-                        return retval;
+                case 0: {
+                    const char* cl[]                = {"verilator",
+                                        "-I.",
+                                        "-Wall",
+                                        "-Wno-fatal",
+                                        "--MMD",
+                                        "-trace",
+                                        "-y",
+                                        "gate_definitions/",
+                                        "--Mdir",
+                                        "obj_dir",
+                                        "--exe",
+                                        "-cc",
+                                        "-DSIM_VERILATOR",
+                                        "--trace-depth",
+                                        "2",
+                                        "testbench.cpp",
+                                        nullptr};
+                    std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
+                    for (u64 i = 0; i < m_partial_testbenches; i++)
+                    {
+                        retval.push_back("part_" + std::to_string(i) + ".cpp");
                     }
-                    break;
-                    case 1: {
-                        const char* cl[]                = {"cargo", "test", "--manifest-path", nullptr};
-                        std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
-                        retval.push_back(client_location);
-                        return retval;
-                    }
-                    break;
-                    case 2: {
-                        std::vector<std::string> retval{std::string("mv"), predefined_server_output, m_simulator_dir, std::string("&&"), std::string("rm"), predefined_archive_location};
-                        return retval;
-                    }
-                    break;
-                    default:
-                        break;
+                    retval.push_back(m_design_name + ".v");
+                    return retval;
                 }
-            }
-            else
-            {
-                // returns commands to be executed
-                switch (lineIndex)
-                {
-                    case 0: {
-                        const char* cl[]                = {"verilator",
-                                            "-I.",
-                                            "-Wall",
-                                            "-Wno-fatal",
-                                            "--MMD",
-                                            "-trace",
-                                            "-y",
-                                            "gate_definitions/",
-                                            "--Mdir",
-                                            "obj_dir",
-                                            "--exe",
-                                            "-cc",
-                                            "-DSIM_VERILATOR",
-                                            "--trace-depth",
-                                            "2",
-                                            "testbench.cpp",
-                                            nullptr};
-                        std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
-                        for (u64 i = 0; i < m_partial_testbenches; i++)
-                        {
-                            retval.push_back("part_" + std::to_string(i) + ".cpp");
-                        }
-                        retval.push_back(m_design_name + ".v");
-                        return retval;
-                    }
-                    break;
-                    case 1: {
-                        const char* cl[]                = {"make", "-j8", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr};
-                        std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
-                        retval.push_back("V" + m_design_name + ".mk");
-                        return retval;
-                    }
-                    break;
-                    case 2: {
-                        std::vector<std::string> retval;
-                        retval.push_back("obj_dir/V" + m_design_name);
-                        return retval;
-                    }
-                    break;
-                    default:
-                        break;
+                break;
+                case 1: {
+                    const char* cl[]                = {"make", "-j8", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr};
+                    std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
+                    retval.push_back("V" + m_design_name + ".mk");
+                    return retval;
                 }
+                break;
+                case 2: {
+                    std::vector<std::string> retval;
+                    retval.push_back("obj_dir/V" + m_design_name);
+                    return retval;
+                }
+                break;
+                default:
+                    break;
             }
+            // }
 
             return std::vector<std::string>();
         }
 
-        VerilatorEngine::VerilatorEngine(const std::string& nam) : SimulationEngineScripted(nam), server_execution(true)
+        VerilatorEngine::VerilatorEngine(const std::string& nam) : SimulationEngineScripted(nam)
         {
             mRequireClockEvents = true;
         }
