@@ -221,8 +221,9 @@ QMap<int,int>::const_iterator mIterator;
                 if (!ok) return false;
                 WaveData* wd = mWaves.value(QString::number(icol));
                 if (!wd) return false;
-                if (wd->data().isEmpty() || wd->data().last() != ival)
+                if (wd->data().isEmpty() || wd->data().last() != ival){
                     wd->insert(mTime,ival);
+                }
             }
             else
             {

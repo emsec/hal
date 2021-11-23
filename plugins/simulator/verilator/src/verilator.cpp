@@ -45,6 +45,10 @@ namespace hal
                 gate->delete_data("generic", "X_COORDINATE");
                 gate->delete_data("generic", "Y_COORDINATE");
 
+                // TODO: remove this from netlist
+                gate->delete_data("generic", "READ_MODE");
+                gate->delete_data("generic", "WRITE_MODE");
+
                 if (!gate->get_type()->has_property(hal::GateTypeProperty::lut) && gate->get_type()->has_property(hal::GateTypeProperty::combinational))
                 {
                     gate->delete_data("generic", "INIT");
@@ -103,7 +107,7 @@ namespace hal
                 server_execution            = true;
             }
             else
-                server_execution            = false;
+                server_execution = false;
 
             if (!converter::convert_gate_library_to_verilog(m_partial_netlist.get(), m_simulator_dir, provided_models))
             {
@@ -247,15 +251,15 @@ namespace hal
                 {
                     case 0: {
                         std::vector<std::string> retval{std::string("cd"),
-                                                        m_simulator_dir,
+                                                        std::string(m_simulator_dir),
                                                         std::string("&&"),
                                                         std::string("tar"),
                                                         std::string("-zcvf"),
-                                                        std::string("testbench.tar.gz"),
-                                                        std::string("*"),
+                                                        std::string(m_simulator_dir.string() + "/testbench.tar.gz"),
+                                                        std::string(m_simulator_dir.string() + "/*"),
                                                         std::string("&&"),
                                                         std::string("mv"),
-                                                        std::string("testbench.tar.gz"),
+                                                        std::string(m_simulator_dir.string() + "/testbench.tar.gz"),
                                                         predefined_archive_location};
                         return retval;
                     }
@@ -268,7 +272,7 @@ namespace hal
                     }
                     break;
                     case 2: {
-                        std::vector<std::string> retval{std::string("mv"), predefined_server_output, m_simulator_dir};
+                        std::vector<std::string> retval{std::string("mv"), predefined_server_output, m_simulator_dir, std::string("&&"), std::string("rm"), predefined_archive_location};
                         return retval;
                     }
                     break;
@@ -309,7 +313,7 @@ namespace hal
                     }
                     break;
                     case 1: {
-                        const char* cl[]                = {"make", "-j4", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr};
+                        const char* cl[]                = {"make", "-j8", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr};
                         std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
                         retval.push_back("V" + m_design_name + ".mk");
                         return retval;
@@ -329,8 +333,7 @@ namespace hal
             return std::vector<std::string>();
         }
 
-        VerilatorEngine::VerilatorEngine(const std::string& nam)
-            : SimulationEngineScripted(nam), server_execution(true)
+        VerilatorEngine::VerilatorEngine(const std::string& nam) : SimulationEngineScripted(nam), server_execution(true)
         {
             mRequireClockEvents = true;
         }
