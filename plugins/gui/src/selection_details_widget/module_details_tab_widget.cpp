@@ -56,4 +56,10 @@ namespace hal
         mGroupingsOfItemTable->setModule(module);
         mDataTable->setModule(module);
     }
+
+    void ModuleDetailsTabWidget::clear()
+    {
+        mPinsTree->removeContent();
+        mElementsTree->removeContent();
+    }
 }

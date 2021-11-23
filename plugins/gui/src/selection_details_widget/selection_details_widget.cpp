@@ -401,6 +401,8 @@ namespace hal
         switch (tp) {
         case SelectionTreeItem::NullItem:
             //mModuleDetails->update(0);
+            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
+                mModuleDetailsTabs->clear();
             mStackedWidget->setCurrentWidget(mNoSelectionLabel);
 //            set_name("Selection Details");
             break;
@@ -410,11 +412,15 @@ namespace hal
 //            if (mNumberSelectedItems==1) set_name("Module Details");
             break;
         case SelectionTreeItem::GateItem:
+            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
+                mModuleDetailsTabs->clear();
             mGateDetailsTabs->setGate(gNetlist->get_gate_by_id(sti->id()));
             mStackedWidget->setCurrentWidget(mGateDetailsTabs);
 //            if (mNumberSelectedItems==1) set_name("Gate Details");
             break;
         case SelectionTreeItem::NetItem:
+            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
+                mModuleDetailsTabs->clear();
             mNetDetailsTabs->setNet(gNetlist->get_net_by_id(sti->id()));
             mStackedWidget->setCurrentWidget(mNetDetailsTabs);
 //            if (mNumberSelectedItems==1) set_name("Net Details");

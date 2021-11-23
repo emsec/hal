@@ -63,6 +63,11 @@ namespace hal
          */
         void setModule(Module* module);
 
+        /**
+         * Resets the widget's pin- and elements-widget to its initial state.
+         */
+        void clear();
+
     private:
 
         //general tab
