@@ -338,6 +338,24 @@ namespace hal
          */
         void moduleTypeChanged(Module* m) const;
 
+        /**
+         * Q_SIGNAL to notify that a certain amount of gates will be assigned to a module. <br>
+         * Relays the following hal-core event: <i>ModuleEvent::event::gates_assign_begin</i>
+         *
+         * @param m - The module to which gates will be assigned.
+         * @param number_gates - The amount of gates to be assigned.
+         */
+        void moduleGatesAssignBegin(Module* m, u32 number_gates) const;
+
+        /**
+         * Q_SIGNAL to notify that a certain amount of gates has been assigned to a module. <br>
+         * Relays the following hal-core event: <i>ModuleEvent::event::gates_assign_end</i>
+         *
+         * @param m - The module to which gates has been assigned.
+         * @param number_gates - The number of gates that has been assigned.
+         */
+        void moduleGatesAssignEnd(Module* m, u32 number_gates) const;
+
         /*=======================================
            Gate Event Signals
          ========================================*/
