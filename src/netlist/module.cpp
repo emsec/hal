@@ -563,7 +563,7 @@ namespace hal
                 if (ModulePin* pin = get_pin(net); pin != nullptr)
                 {
                     pin->m_direction = PinDirection::inout;
-                    m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
                 }
                 else
                 {
@@ -581,7 +581,7 @@ namespace hal
                     if (ModulePin* pin = get_pin(net); pin != nullptr)
                     {
                         pin->m_direction = PinDirection::input;
-                        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+                        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
                     }
                     else
                     {
@@ -606,7 +606,7 @@ namespace hal
                     if (ModulePin* pin = get_pin(net); pin != nullptr)
                     {
                         pin->m_direction = PinDirection::output;
-                        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+                        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
                     }
                     else
                     {
@@ -772,7 +772,7 @@ namespace hal
             group->m_pin_name_map[new_name] = pin;
         }
 
-        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
 
         return true;
     }
@@ -801,7 +801,7 @@ namespace hal
         m_pin_group_names_map.erase(old_name);
         m_pin_group_names_map[new_name] = pin_group;
 
-        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
 
         return true;
     }
@@ -828,7 +828,7 @@ namespace hal
         {
             pin->m_type                = new_type;
             pin->m_group.first->m_type = new_type;
-            m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         }
         return true;
     }
@@ -853,7 +853,7 @@ namespace hal
             {
                 pin->m_type = new_type;
             }
-            m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         }
         return true;
     }
@@ -914,7 +914,7 @@ namespace hal
             delete_pin_group(pin_group);
             return nullptr;
         }
-        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
 
         return pin_group;
     }
@@ -948,7 +948,7 @@ namespace hal
 
         if (removed_pins)
         {
-            m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         }
         return true;
     }
@@ -995,7 +995,7 @@ namespace hal
             return false;
         }
 
-        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         return true;
     }
 
@@ -1026,7 +1026,7 @@ namespace hal
 
         if (pin_group->move_pin(pin, new_index))
         {
-            m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
             return true;
         }
         return false;
@@ -1113,7 +1113,7 @@ namespace hal
 
         assign_pin_to_group(pin_group, pin);
 
-        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         return pin;
     }
 
@@ -1140,7 +1140,7 @@ namespace hal
         m_pin_names_map.erase(pin->m_name);
         m_pins.erase(std::find_if(m_pins.begin(), m_pins.end(), [pin](const std::unique_ptr<ModulePin>& p) { return p.get() == pin; }));
 
-        m_event_handler->notify(ModuleEvent::event::ports_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
 
         return true;
     }

@@ -29,8 +29,18 @@ namespace hal
     std::vector<std::string> EnumStrings<NetEvent::event>::data = {"created", "removed", "name_changed", "src_added", "src_removed", "dst_added", "dst_removed"};
 
     template<>
-    std::vector<std::string> EnumStrings<ModuleEvent::event>::data =
-        {"created", "removed", "name_changed", "type_changed", "parent_changed", "submodule_added", "submodule_removed", "gate_assigned", "gate_removed", "ports_changed"};
+    std::vector<std::string> EnumStrings<ModuleEvent::event>::data = {"created",
+                                                                      "removed",
+                                                                      "name_changed",
+                                                                      "type_changed",
+                                                                      "parent_changed",
+                                                                      "submodule_added",
+                                                                      "submodule_removed",
+                                                                      "gates_assign_begin",
+                                                                      "gates_assign_end",
+                                                                      "gate_assigned",
+                                                                      "gate_removed",
+                                                                      "pin_changed"};
 
     template<>
     std::vector<std::string> EnumStrings<GroupingEvent::event>::data =

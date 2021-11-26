@@ -100,16 +100,18 @@ namespace hal
     public:
         enum class event
         {
-            created,              ///< no associated_data
-            removed,              ///< no associated_data
-            name_changed,         ///< no associated_data
-            type_changed,         ///< no associated_data
-            parent_changed,       ///< no associated_data
-            submodule_added,      ///< associated_data = id of added module
-            submodule_removed,    ///< associated_data = id of removed module
-            gate_assigned,        ///< associated_data = id of inserted gate
-            gate_removed,         ///< associated_data = id of removed gate
-            ports_changed,        ///< no associated_data
+            created,               ///< no associated_data
+            removed,               ///< no associated_data
+            name_changed,          ///< no associated_data
+            type_changed,          ///< no associated_data
+            parent_changed,        ///< no associated_data
+            submodule_added,       ///< associated_data = id of added module
+            submodule_removed,     ///< associated_data = id of removed module
+            gates_assign_begin,    ///< associated_data = number of gates to assign
+            gates_assign_end,      ///< associated_data = number of assigned gates
+            gate_assigned,         ///< associated_data = id of inserted gate
+            gate_removed,          ///< associated_data = id of removed gate
+            pin_changed,           ///< no associated_data
         };
     };
 

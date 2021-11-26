@@ -409,7 +409,7 @@ namespace hal
                 Q_EMIT moduleGateRemoved(mod, associated_data);
                 break;
             }
-            case ModuleEvent::event::ports_changed: {
+            case ModuleEvent::event::pin_changed: {
                 //< no associated_data
 
                 gGraphContextManager->handleModulePortsChanged(mod);

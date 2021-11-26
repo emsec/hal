@@ -1155,7 +1155,7 @@ namespace hal {
             std::vector<ModuleEvent::event> event_type = {
                 ModuleEvent::event::name_changed, ModuleEvent::event::type_changed,
                 ModuleEvent::event::parent_changed, ModuleEvent::event::submodule_added,
-                ModuleEvent::event::submodule_removed, ModuleEvent::event::gate_assigned, ModuleEvent::event::ports_changed, ModuleEvent::event::ports_changed,
+                ModuleEvent::event::submodule_removed, ModuleEvent::event::gate_assigned, ModuleEvent::event::pin_changed, ModuleEvent::event::pin_changed,
                 ModuleEvent::event::gate_removed};
 
             // A list of the functions that will trigger its associated event exactly once
@@ -1170,8 +1170,8 @@ namespace hal {
                 std::make_tuple(ModuleEvent::event::submodule_added, test_mod, other_mod_sub->get_id()),
                 std::make_tuple(ModuleEvent::event::submodule_removed, test_mod, other_mod_sub->get_id()),
                 std::make_tuple(ModuleEvent::event::gate_assigned, test_mod, test_gate->get_id()),
-                std::make_tuple(ModuleEvent::event::ports_changed, test_mod, NO_DATA),
-                std::make_tuple(ModuleEvent::event::ports_changed, test_mod, NO_DATA),
+                std::make_tuple(ModuleEvent::event::pin_changed, test_mod, NO_DATA),
+                std::make_tuple(ModuleEvent::event::pin_changed, test_mod, NO_DATA),
                 std::make_tuple(ModuleEvent::event::gate_removed, test_mod, test_gate->get_id())
             };
 

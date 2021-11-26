@@ -323,7 +323,7 @@ namespace hal
 
         /**
          * Q_SIGNAL to notify that a port of a module has been changed. <br>
-         * Relays the following hal-core event: <i>ModuleEvent::event::ports_changed</i>
+         * Relays the following hal-core event: <i>ModuleEvent::event::pin_changed</i>
          *
          * @param m - The module with the changed port
          * @param respective_net - The id of the net of the renamed input port

@@ -256,6 +256,16 @@ namespace hal
             {
                 log_info("event", "removed submodule with id {:08x} from module '{}' (id {:08x})", associated_data, module->get_name(), module->get_id());
             }
+            else if (event == ModuleEvent::event::gates_assign_begin)
+            {
+                u32 num_gates = associated_data;
+                log_info("event", "trying to assign {} gates to module '{}' (id {:08x})", num_gates, module->get_name(), module->get_id());
+            }
+            else if (event == ModuleEvent::event::gates_assign_end)
+            {
+                u32 num_gates = associated_data;
+                log_info("event", "successfully assigned {} gates to module '{}' (id {:08x})", num_gates, module->get_name(), module->get_id());
+            }
             else if (event == ModuleEvent::event::gate_assigned)
             {
                 auto gate = module->get_netlist()->get_gate_by_id(associated_data);
@@ -265,7 +275,7 @@ namespace hal
             {
                 log_info("event", "removed gate with id {:08x} from module '{}' (id {:08x})", associated_data, module->get_name(), module->get_id());
             }
-            else if (event == ModuleEvent::event::ports_changed)
+            else if (event == ModuleEvent::event::pin_changed)
             {
                 log_info("event", "changed port of module '{}' (id {:08x})", module->get_name(), module->get_id());
             }

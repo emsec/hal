@@ -812,6 +812,8 @@ namespace hal
             }
         }
 
+        m_event_handler->notify(ModuleEvent::event::gates_assign_begin, module, gates.size());
+
         // re-assign gates
         std::unordered_map<Module*, std::unordered_set<Net*>> nets_to_check;
         for (Gate* g : gates)
@@ -848,6 +850,8 @@ namespace hal
                 affected_module->check_net(net, true);
             }
         }
+
+        m_event_handler->notify(ModuleEvent::event::gates_assign_end, module, gates.size());
 
         return true;
     }
