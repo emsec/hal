@@ -134,6 +134,9 @@ namespace hal
                 act->exec();
                 GraphContext* context = gGraphContextManager->getContextById(act->object().id());
                 context->setDirty(false);
+                // Save id in graph context if it is exclusively showing a module
+                if (gSelectionRelay->selectedGates().empty() && gSelectionRelay->selectedModules().size() == 1)
+                    context->setExclusiveModuleId(*gSelectionRelay->selectedModules().begin());
                 return;
             }
         }

@@ -361,6 +361,18 @@ namespace hal
          */
         void setParentWidget(GraphWidget* gw) { mParentWidget = gw; }
 
+        /**
+         * Get the exclusive module id.
+         *
+         * @return The exclusive module id.
+         */
+        u32 getExclusiveModuleId() { return mExclusiveModuleId; }
+
+        /**
+         * Sets the exclusive module id.
+         */
+        void setExclusiveModuleId(u32 id) { mExclusiveModuleId = id; };
+
     Q_SIGNALS:
         void dataChanged();
 
@@ -378,6 +390,7 @@ namespace hal
         void requireSceneUpdate();
         void startSceneUpdate();
         bool testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId);
+
 
         u32 mId;
         QString mName;
@@ -409,5 +422,7 @@ namespace hal
         QDateTime mTimestamp;
 
         bool mSpecialUpdate;
+
+        u32 mExclusiveModuleId;
     };
 }

@@ -30,7 +30,8 @@ namespace hal
           mUnappliedChanges(false),
           mSceneUpdateRequired(false),
           mSceneUpdateInProgress(false),
-          mSpecialUpdate(false)
+          mSpecialUpdate(false),
+          mExclusiveModuleId(0)
     {
         mTimestamp = QDateTime::currentDateTime();
         UserActionManager::instance()->clearWaitCount();
