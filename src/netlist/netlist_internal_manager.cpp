@@ -828,7 +828,7 @@ namespace hal
         m_event_handler->notify(ModuleEvent::event::gates_assign_begin, module, gates.size());
         for (const auto& [prev_mod, num_gates] : prev_modules)
         {
-            m_event_handler->notify(ModuleEvent::event::gates_remove_begin, prev_mod, gates.size());
+            m_event_handler->notify(ModuleEvent::event::gates_remove_begin, prev_mod, num_gates);
         }
         prev_modules.clear();
 
@@ -881,7 +881,7 @@ namespace hal
         m_event_handler->notify(ModuleEvent::event::gates_assign_end, module, gates.size());
         for (const auto& [prev_mod, num_gates] : prev_modules)
         {
-            m_event_handler->notify(ModuleEvent::event::gates_remove_end, prev_mod, gates.size());
+            m_event_handler->notify(ModuleEvent::event::gates_remove_end, prev_mod, num_gates);
         }
 
         return true;
