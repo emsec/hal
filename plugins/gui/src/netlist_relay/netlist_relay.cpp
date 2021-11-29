@@ -425,6 +425,17 @@ namespace hal
                 Q_EMIT moduleTypeChanged(mod);
                 break;
             }
+            case ModuleEvent::event::gates_assign_begin: {
+                //< associated_data = number of gates
+
+                Q_EMIT moduleGatesAssignBegin(mod, associated_data);
+                break;
+            }
+            case ModuleEvent::event::gates_assign_end: {
+                //< associated_data = number of gates
+                Q_EMIT moduleGatesAssignEnd(mod, associated_data);
+                break;
+            }
         }
     }
 
