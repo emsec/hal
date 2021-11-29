@@ -271,6 +271,16 @@ namespace hal
                 auto gate = module->get_netlist()->get_gate_by_id(associated_data);
                 log_info("event", "inserted gate '{}' (id {:08x}) into module '{}' (id {:08x})", gate->get_name(), associated_data, module->get_name(), module->get_id());
             }
+            else if (event == ModuleEvent::event::gates_remove_begin)
+            {
+                u32 num_gates = associated_data;
+                log_info("event", "trying to remove {} gates to module '{}' (id {:08x})", num_gates, module->get_name(), module->get_id());
+            }
+            else if (event == ModuleEvent::event::gates_remove_end)
+            {
+                u32 num_gates = associated_data;
+                log_info("event", "successfully removed {} gates to module '{}' (id {:08x})", num_gates, module->get_name(), module->get_id());
+            }
             else if (event == ModuleEvent::event::gate_removed)
             {
                 log_info("event", "removed gate with id {:08x} from module '{}' (id {:08x})", associated_data, module->get_name(), module->get_id());

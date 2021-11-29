@@ -791,6 +791,8 @@ namespace hal
             return false;
         }
 
+        std::map<Module*, u32> prev_modules;
+
         for (const Gate* g : gates)
         {
             if (g == nullptr)
@@ -799,7 +801,9 @@ namespace hal
                 return false;
             }
 
-            if (g->m_module == module)
+            Module* prev_mod = g->m_module;
+
+            if (prev_mod == module)
             {
                 log_error("module",
                           "gate '{}' with ID {} is already contained in module '{}' with ID {} in netlist with ID {}.",
@@ -810,21 +814,35 @@ namespace hal
                           m_netlist->m_netlist_id);
                 return false;
             }
+
+            if (auto it = prev_modules.find(prev_mod); it == prev_modules.end())
+            {
+                prev_modules[prev_mod] = 1;
+            }
+            else
+            {
+                std::get<1>(*it)++;
+            }
         }
 
         m_event_handler->notify(ModuleEvent::event::gates_assign_begin, module, gates.size());
+        for (const auto& [prev_mod, num_gates] : prev_modules)
+        {
+            m_event_handler->notify(ModuleEvent::event::gates_remove_begin, prev_mod, num_gates);
+        }
+        prev_modules.clear();
 
         // re-assign gates
         std::unordered_map<Module*, std::unordered_set<Net*>> nets_to_check;
         for (Gate* g : gates)
         {
             // remove gate from old module
-            Module* prev_module = g->m_module;
-            const auto it       = prev_module->m_gates_map.find(g->get_id());
-            assert(it != prev_module->m_gates_map.end());
-            prev_module->m_gates_map.erase(it);
+            Module* prev_mod = g->m_module;
+            const auto it    = prev_mod->m_gates_map.find(g->get_id());
+            assert(it != prev_mod->m_gates_map.end());
+            prev_mod->m_gates_map.erase(it);
 
-            utils::unordered_vector_erase(prev_module->m_gates, g);
+            utils::unordered_vector_erase(prev_mod->m_gates, g);
 
             // move gate to new module
             module->m_gates_map[g->get_id()] = g;
@@ -833,14 +851,23 @@ namespace hal
 
             // collect affected nets
             std::vector<Net*> fan_in = g->get_fan_in_nets();
-            nets_to_check[prev_module].insert(fan_in.begin(), fan_in.end());
+            nets_to_check[prev_mod].insert(fan_in.begin(), fan_in.end());
             nets_to_check[module].insert(fan_in.begin(), fan_in.end());
 
             std::vector<Net*> fan_out = g->get_fan_out_nets();
-            nets_to_check[prev_module].insert(fan_out.begin(), fan_out.end());
+            nets_to_check[prev_mod].insert(fan_out.begin(), fan_out.end());
             nets_to_check[module].insert(fan_out.begin(), fan_out.end());
-            m_event_handler->notify(ModuleEvent::event::gate_removed, prev_module, g->get_id());
+            m_event_handler->notify(ModuleEvent::event::gate_removed, prev_mod, g->get_id());
             m_event_handler->notify(ModuleEvent::event::gate_assigned, module, g->get_id());
+
+            if (auto it = prev_modules.find(prev_mod); it == prev_modules.end())
+            {
+                prev_modules[prev_mod] = 1;
+            }
+            else
+            {
+                std::get<1>(*it)++;
+            }
         }
 
         for (const auto& [affected_module, nets] : nets_to_check)
@@ -852,6 +879,10 @@ namespace hal
         }
 
         m_event_handler->notify(ModuleEvent::event::gates_assign_end, module, gates.size());
+        for (const auto& [prev_mod, num_gates] : prev_modules)
+        {
+            m_event_handler->notify(ModuleEvent::event::gates_remove_end, prev_mod, num_gates);
+        }
 
         return true;
     }

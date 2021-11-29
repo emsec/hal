@@ -110,6 +110,8 @@ namespace hal
             gates_assign_begin,    ///< associated_data = number of gates to assign
             gates_assign_end,      ///< associated_data = number of assigned gates
             gate_assigned,         ///< associated_data = id of inserted gate
+            gates_remove_begin,    ///< associated_data = number of gates to remove
+            gates_remove_end,      ///< associated_data = number of removed gates
             gate_removed,          ///< associated_data = id of removed gate
             pin_changed,           ///< no associated_data
         };
