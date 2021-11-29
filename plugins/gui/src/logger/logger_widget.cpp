@@ -23,6 +23,7 @@ namespace hal
 {
     LoggerWidget::LoggerWidget(QWidget* parent) : ContentWidget("Log", parent)
     {
+        ensurePolished();
         mPlainTextEdit = new QPlainTextEdit(this);
         mPlainTextEdit->setReadOnly(true);
         mPlainTextEdit->setFrameStyle(QFrame::NoFrame);
@@ -46,8 +47,6 @@ namespace hal
 
         ChannelModel* model = ChannelModel::instance();
         connect(model, SIGNAL(updated(spdlog::level::level_enum, std::string, std::string)), this, SLOT(handleChannelUpdated(spdlog::level::level_enum, std::string, std::string)));
-
-
     }
 
     LoggerWidget::~LoggerWidget()
@@ -76,10 +75,8 @@ namespace hal
         mSearchAction = new QAction(this);
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
         connect(mSearchbar, SIGNAL(textEdited(QString)), this, SLOT(handleSearchChanged(QString)));
-
         connect(mSearchAction, SIGNAL(triggered()), this, SLOT(toggleSearchbar()));
         Toolbar->addAction(mSearchAction);
-
 
 
         enableSearchbar(true);
