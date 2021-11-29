@@ -66,6 +66,12 @@ QMap<int,int>::const_iterator mIterator;
         : QObject(parent)
     {;}
 
+    VcdSerializer::~VcdSerializer()
+    {
+        for (WaveData* wd : mWaves.values())
+            delete wd;
+    }
+
     bool VcdSerializer::serialize(const QString& filename, const QList<const WaveData*>& waves) const
     {
         QFile of(filename);
@@ -172,7 +178,8 @@ QMap<int,int>::const_iterator mIterator;
     void VcdSerializer::storeValue(int val, const QByteArray& abrev)
     {
         WaveData* wd = mWaves.value(abrev);
-        Q_ASSERT(wd);
+        if (!wd) return;
+    //    Q_ASSERT(wd);
         wd->insert(mTime,val);
     }
 
@@ -281,7 +288,7 @@ QMap<int,int>::const_iterator mIterator;
         return true;
     }
 
-    bool VcdSerializer::deserializeVcd(const QString& filename)
+    bool VcdSerializer::deserializeVcd(const QString& filename, const QStringList &netNames)
     {
         mWaves.clear();
         mTime = 0;
@@ -310,9 +317,10 @@ QMap<int,int>::const_iterator mIterator;
                     {
                         QRegularExpressionMatch mWire = reWire.match(mHead.captured(2));
                         bool ok;
-                        int     wireBits   = mWire.captured(1).toUInt(&ok);
-                        QString wireAbbrev = mWire.captured(2);
                         QString wireName   = mWire.captured(3);
+                        if (!netNames.isEmpty() && !netNames.contains(wireName)) continue;
+                        QString wireAbbrev = mWire.captured(2);
+                        int     wireBits   = mWire.captured(1).toUInt(&ok);
                         if (!ok) wireBits = 1;
                         mDictionary.insert(wireName,wireAbbrev);
                         QRegularExpressionMatch mWiid = reWiid.match(wireName);
@@ -337,21 +345,34 @@ QMap<int,int>::const_iterator mIterator;
         return true;
     }
 
-    WaveData* VcdSerializer::waveByName(const QString& name) const
+    WaveData* VcdSerializer::waveByName(const QString& name)
     {
         auto it = mDictionary.find(name);
         if (it == mDictionary.constEnd()) return nullptr;
-        return mWaves.value(it.value());
+        auto jt = mWaves.find(it.value());
+        Q_ASSERT(jt != mWaves.end());
+        WaveData* wd = jt.value();
+        mDictionary.erase(it);
+        mWaves.erase(jt);
+        return wd;
     }
 
-    WaveData* VcdSerializer::waveById(u32 id) const
+    WaveData* VcdSerializer::waveById(u32 id)
     {
         if (!id) return nullptr;
-        for (WaveData* wd : mWaves.values())
+        WaveData* wd = nullptr;
+        for (auto jt = mWaves.begin(); jt != mWaves.end(); ++jt)
         {
-            if (wd->id() == id)
-                return wd;
+            if (jt.value()->id() == id)
+            {
+                wd = jt.value();
+                auto it = mDictionary.find(jt.key());
+                if (it != mDictionary.end())
+                    mDictionary.erase(it);
+                mWaves.erase(jt);
+                break;
+            }
         }
-        return nullptr;
+        return wd;
     }
 }

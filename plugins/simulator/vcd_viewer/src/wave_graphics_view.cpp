@@ -12,13 +12,13 @@ namespace hal {
     const float WaveGraphicsView::sYmag = 14;
 
     WaveGraphicsView::WaveGraphicsView(QWidget *parent)
-        : QGraphicsView(parent), mXmag(1), mXmagMin(0.0001)
+        : QGraphicsView(parent), mXmag(1), mXmagMin(0.0001), mMinViewportHeight(1)
     {
         setAlignment(Qt::AlignLeft | Qt::AlignTop);
         setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        mTimescale = new WaveTimescale(viewport());
+        setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        mTimescale = new WaveTimescale(this);
         mTimescale->move(0,0);
     }
 
@@ -47,6 +47,7 @@ namespace hal {
     void WaveGraphicsView::resizeEvent(QResizeEvent *event)
     {
         QGraphicsView::resizeEvent(event);
+//SIZE        qDebug() << "resize" << event->oldSize().height() << event->size().height() << height() << viewport()->height();
         mTimescale->setScale(mXmag,scene()->sceneRect().width(),horizontalScrollBar()->value());
     }
 
@@ -93,27 +94,50 @@ namespace hal {
 //        restoreCursor();
     }
 
-    void WaveGraphicsView::handleSizeChanged(int widgetHeight, int viewportHeight)
+    void WaveGraphicsView::handleSizeChanged(int treeViewportHeight, int scrollbarMax, int scrollbarPos)
     {
-//        qDebug() << "graph view" << height() << rect().height() << viewport()->height() << "tree" << widgetHeight << viewportHeight << "scrollbar" << verticalScrollBar()->maximum()
-//                 << "adjust" <<  (widgetHeight==viewportHeight && verticalScrollBar()->maximum() > viewportHeight);
+//SIZE        qDebug() << "handleSizeChanged" << height() << viewport()->height() << "tree" << treeViewportHeight << "scrollbar" << verticalScrollBar()->maximum();
+  /*
         if (viewport()->height() < viewportHeight)
-            viewport()->setMinimumHeight(viewportHeight);
-        if (widgetHeight==viewportHeight && verticalScrollBar()->maximum() > viewportHeight)
         {
-            verticalScrollBar()->setMaximum(viewportHeight);
-            verticalScrollBar()->setValue(0);
+            mMinViewportHeight = viewportHeight;
+            viewport()->setMinimumHeight(viewportHeight);
+            qDebug() << "adjusted viewport" << viewport()->height();
         }
-        if (height() == widgetHeight) return;
+        */
+            viewport()->setFixedHeight(treeViewportHeight + 30);
+            if (scrollbarMax >= 0)
+            {
+                verticalScrollBar()->setMaximum(scrollbarMax);
+                verticalScrollBar()->setValue(scrollbarPos);
+//SIZE                qDebug() << "scrollbar" << treeViewportHeight << scrollbarMax << scrollbarPos;
+            }
+    }
+
+    void WaveGraphicsView::handleNumberVisibileChanged(int nVisible, int scrollbarMax, int scrollbarPos)
+    {
+        int h = (nVisible+1) * 28;
+        mMinViewportHeight = h > height() ? h : height();
+        if (scrollbarMax >= 0)
+        {
+            verticalScrollBar()->setMaximum(scrollbarMax);
+            verticalScrollBar()->setValue(scrollbarPos);
+        }
+//        viewport()->setMinimumHeight(mMinViewportHeight);
+//SIZE        qDebug() << "numberVisibleChanged height" << mMinViewportHeight;
     }
 
     void WaveGraphicsView::handleViewportHeightChanged(int height)
     {
+        Q_UNUSED(height);
+//SIZE        qDebug() << "tree-viewportChanged height" << height << mMinViewportHeight;
+        /*
         if (!height) return;
         viewport()->setFixedHeight(height);
 //        qDebug() << "can scroll A" << height << verticalScrollBar()->maximum();
         verticalScrollBar()->setMaximum(height);
 //        qDebug() << "can scroll B" << height << verticalScrollBar()->maximum();
+*/
     }
 
 }

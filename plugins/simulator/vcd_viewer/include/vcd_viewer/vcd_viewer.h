@@ -97,6 +97,7 @@ namespace hal
         void handleSelectionChanged(void* sender);
         void handleRefreshNetNames();
         void setVisualizeNetState(bool state);
+        void setGroupValuesAsText(bool state);
         void handleTabClosed(int inx);
 
     public Q_SLOTS:

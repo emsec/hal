@@ -14,11 +14,11 @@
 #include <QPainter>
 
 namespace hal {
-    WaveTreeView::WaveTreeView(WaveDataList* wdList, QWidget* parent)
-        : QTreeView(parent), mWaveDataList(wdList)
+    WaveTreeView::WaveTreeView(WaveDataList* wdList, WaveItemHash *wHash, QWidget* parent)
+        : QTreeView(parent), mWaveDataList(wdList), mWaveItemHash(wHash)
     {
         setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         setUniformRowHeights(true);
         setSelectionBehavior(QAbstractItemView::SelectRows);
         setSelectionMode(QAbstractItemView::SingleSelection);
@@ -92,7 +92,10 @@ namespace hal {
     void WaveTreeView::resizeEvent(QResizeEvent *event)
     {
         QAbstractItemView::resizeEvent(event);
-        Q_EMIT sizeChanged(event->size().height(),viewport()->height());
+        if (verticalScrollBar()->isVisible())
+            Q_EMIT sizeChanged(viewport()->height(), verticalScrollBar()->maximum(), verticalScrollBar()->value());
+        else
+            Q_EMIT sizeChanged(viewport()->height(), -1, -1);
     }
 
     void WaveTreeView::handleContextMenuRequested(const QPoint& pos)
@@ -202,7 +205,6 @@ namespace hal {
     {
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
         wtm->insertGroup(mContextIndex);
-        reorder();
     }
 
     void WaveTreeView::startDrag(Qt::DropActions supportedActions)
@@ -233,24 +235,67 @@ namespace hal {
     void WaveTreeView::reorder()
     {
         mItemOrder.clear();
-
         orderRecursion(QModelIndex());
+
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
-        QHash<int,int> wavePositionMap;
-        QHash<int,int> groupPositionMap;
-        for (int i=0; i<mItemOrder.size(); i++)
+        WaveItemHash notPlaced = *mWaveItemHash;
+        int nVisible = mItemOrder.size();
+        if (nVisible != mWaveItemHash->visibleEntries())
         {
-            int iwave = wtm->waveIndex(mItemOrder.at(i));
+            mWaveItemHash->setVisibleEntries(nVisible);
+            if (verticalScrollBar()->isVisible())
+                Q_EMIT numberVisibleChanged(nVisible, verticalScrollBar()->maximum(), verticalScrollBar()->value());
+            else
+                Q_EMIT numberVisibleChanged(nVisible, -1, -1);
+        }
+        for (int i=0; i<nVisible; i++)
+        {
+            QModelIndex currentIndex = mItemOrder.at(i);
+            int iwave = wtm->waveIndex(currentIndex);
             if (iwave < 0)
             {
-                int groupId = wtm->groupId(mItemOrder.at(i));
+                int groupId = wtm->groupId(currentIndex);
                 if (groupId > 0)
-                    groupPositionMap[groupId] = i;
+                {
+                    WaveItemIndex wii(groupId, WaveItemIndex::Group);
+                    WaveItem* wi = mWaveItemHash->value(wii);
+                    if (!wi)
+                    {
+                        mWaveItemHash->dump("Crash");
+                        qDebug() << "group wii not found" << groupId;
+                    }
+                    Q_ASSERT(wi);
+                    if (!wi->scene()) wi->setRequest(WaveItem::AddRequest);
+                    wi->setYposition(i);
+                    wi->setWaveVisible(true);
+                    auto it = notPlaced.find(wii);
+                    if (it != notPlaced.end()) notPlaced.erase(it);
+                }
             }
             else
-                wavePositionMap[iwave] = i;
+            {
+                int groupId = wtm->groupId(currentIndex.parent());
+                if (groupId < 0) groupId = 0;
+                WaveItemIndex wii(iwave, WaveItemIndex::Wire, groupId);
+                WaveItem* wi = mWaveItemHash->value(wii);
+                if (!wi)
+                {
+                    mWaveItemHash->dump("Crash");
+                    qDebug() << "wire wii not found" << iwave << groupId;
+                }
+                Q_ASSERT(wi);
+                if (!wi->scene()) wi->setRequest(WaveItem::AddRequest);
+                wi->setYposition(i);
+                wi->setWaveVisible(true);
+                auto it = notPlaced.find(wii);
+                if (it != notPlaced.end()) notPlaced.erase(it);
+            }
         }
-        Q_EMIT reordered(wavePositionMap, groupPositionMap);
+
+        for (WaveItem* wi : notPlaced.values())
+            wi->setWaveVisible(false);
+
+        Q_EMIT triggerUpdateWaveItems();
     }
 
     void WaveTreeView::orderRecursion(const QModelIndex &parent)

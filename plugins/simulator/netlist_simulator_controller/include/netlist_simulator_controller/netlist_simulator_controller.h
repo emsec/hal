@@ -267,7 +267,6 @@ public:
     WaveData* get_waveform_by_net(Net* n) const;
 
 public Q_SLOTS:
-    void handleSimulSettings();
     void handleOpenInputFile(const QString& filename);
     void handleSelectGates();
     void handleRunFinished(bool success);

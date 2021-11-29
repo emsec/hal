@@ -242,6 +242,12 @@ namespace hal
          connect (act, &QAction::triggered, this, &VcdViewer::setVisualizeNetState);
          settingMenu->addAction(act);
 
+         act = new QAction("Net groups: display text value in graph", settingMenu);
+         act->setCheckable(true);
+         act->setChecked(WaveItem::sValuesAsText);
+         connect (act, &QAction::triggered, this, &VcdViewer::setGroupValuesAsText);
+         settingMenu->addAction(act);
+
          settingMenu->exec(mapToGlobal(QPoint(10,3)));
     }
 
@@ -270,6 +276,17 @@ namespace hal
         {
             WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
             ww->setVisualizeNetState(mVisualizeNetState, inx==mTabWidget->currentIndex());
+        }
+    }
+
+    void VcdViewer::setGroupValuesAsText(bool state)
+    {
+        if (state == WaveItem::sValuesAsText) return;
+        WaveItem::sValuesAsText = state;
+        for (int inx=0; inx < mTabWidget->count(); inx++)
+        {
+            WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
+            ww->update();
         }
     }
 

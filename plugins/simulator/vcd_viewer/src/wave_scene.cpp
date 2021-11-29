@@ -9,11 +9,17 @@ namespace hal {
     const int WaveScene::sMinItemHeight = 4;
     const float WaveScene::sMinSceneWidth = 1000;
 
-    WaveScene::WaveScene(WaveDataList* wdlist, QObject *parent)
-        : QGraphicsScene(parent), mWaveDataList(wdlist),
+    WaveScene::WaveScene(WaveDataList* wdlist, WaveItemHash *wHash, QObject *parent)
+        : QGraphicsScene(parent), mWaveDataList(wdlist), mWaveItemHash(wHash),
           mClearTimer(nullptr), mXmag(1)
     {
         setSceneRect(0,0,sMinSceneWidth,yPosition(sMinItemHeight)+2);
+
+        /* debug scene rect
+        mSceneRect = new QGraphicsRectItem(sceneRect());
+        mSceneRect->setBrush(QColor::fromRgb(20,40,80));
+        addItem(mSceneRect);
+        */
 
         mCursor = new WaveCursor;
         addItem(mCursor);
@@ -36,25 +42,71 @@ namespace hal {
         return mCursor->pos().x();
     }
 
-    void WaveScene::handleIndexRemoved(int iwave, bool isGroup)
+    void WaveScene::updateWaveItems()
     {
-        QHash<int,WaveItem*>& wiHash = isGroup ? mGroupItems : mWaveItems;
-
-        auto it = wiHash.find(iwave);
-        if (it == wiHash.end()) return;
-        WaveItem* wi = it.value();
-        wiHash.erase(it);
-
-        if (wi)
+        // height
+        int n = nextWavePosition();
+        if (n<sMinItemHeight) n=sMinItemHeight;
+        float h = yPosition(n)+2;
+        QRectF scr = sceneRect();
+        if (scr.height() < h)
         {
-            removeItem(wi);
-            delete wi;
+            scr.setHeight(h);
+            setSceneRect(scr);
+  //          mSceneRect->setRect(sceneRect());
+        }
+
+//        mWaveItemHash->dump("scene");
+        auto it = mWaveItemHash->begin();
+        while (it != mWaveItemHash->end())
+        {
+            WaveItem* wi = it.value();
+
+            if (wi->hasRequest(WaveItem::AddRequest))
+            {
+                addItem(wi);
+                wi->clearRequest(WaveItem::AddRequest);
+            }
+
+            if (wi->hasRequest(WaveItem::DeleteRequest))
+            {
+                removeItem(wi);
+                wi->clearRequest(WaveItem::DeleteRequest);
+                wi->setRequest(WaveItem::DeleteAcknowledged);
+            }
+
+            if (wi->hasRequest(WaveItem::DeleteAcknowledged))
+            {
+                delete wi;
+                it = mWaveItemHash->erase(it);
+            }
+            else
+            {
+                if (wi->hasRequest(WaveItem::SetPosition))
+                {
+                    wi->setPos(0, yPosition(wi->yPosition()));
+                    wi->clearRequest(WaveItem::SetPosition);
+                }
+
+
+                if (wi->hasRequest(WaveItem::DataChanged))
+                {
+                    wi->update();
+                }
+
+                if (wi->hasRequest(WaveItem::SetVisible) && wi->scene())
+                {
+                    wi->setVisible(wi->waveVisibile());
+                    wi->clearRequest(WaveItem::SetVisible);
+                }
+                ++it;
+            }
         }
     }
 
     int WaveScene::nextWavePosition() const
     {
-        return mWaveItems.size() + mGroupItems.size();
+        return mWaveItemHash->size();
     }
 
     void WaveScene::handleMaxTimeChanged(u64 tmax)
@@ -66,49 +118,42 @@ namespace hal {
 
     float WaveScene::adjustSceneRect(u64 tmax)
     {
+        // height
         int n = nextWavePosition();
         if (n<sMinItemHeight) n=sMinItemHeight;
+        float h = yPosition(n)+2;
 
-
+        // width
         float maxw = sceneRect().width();
         if (maxw < sMinSceneWidth) maxw = sMinSceneWidth;
         if (maxw < tmax)           maxw = tmax;
-        for (WaveItem* itm : mWaveItems)
+        for (WaveItem* itm : mWaveItemHash->values())
             if (itm->boundingRect().width() > maxw)
                 maxw = itm->boundingRect().width();
 
         // tell items that scene width changed
-        float h = yPosition(n)+2;
 
         if (maxw != sceneRect().width() || h != sceneRect().height())
         {
             setSceneRect(QRectF(0,0,maxw,h));
+//            mSceneRect->setRect(sceneRect());
         }
         return maxw;
     }
 
-    void WaveScene::handleWaveAdded(int iwave)
+    void WaveScene::handleWaveUpdated(int iwave, int groupId)
     {
-        addWaveInternal(iwave,nextWavePosition());
-        adjustSceneRect();
-    }
-
-    void WaveScene::handleGroupAdded(int grpId)
-    {
-        addGroupInternal(grpId,nextWavePosition());
-        adjustSceneRect();
-    }
-
-    void WaveScene::handleWaveUpdated(int iwave)
-    {
-        if (mWaveItems.find(iwave) == mWaveItems.end()) return;
+        WaveItemIndex wii(iwave, WaveItemIndex::Wire, groupId);
+        WaveItem* wi = mWaveItemHash->value(wii);
+        if (!wi) return;
+        wi->setWaveData(mWaveDataList->at(iwave));
+        wi->update();
         adjustSceneRect();
     }
 
     void WaveScene::updateWaveItemValues()
     {
-        for (WaveItem* itm : mGroupItems)
-            itm->updateScaleFactor(mXmag);
+        // TODO : base value changed
     }
 
     void WaveScene::xScaleChanged(float m11)
@@ -117,71 +162,6 @@ namespace hal {
         mXmag = m11;
         mCursor->xScaleChanged(mXmag);
         mCursor->update();
-        updateWaveItemValues();
-    }
-
-    void WaveScene::addWaveInternal(int iwave, int ypos)
-    {
-        WaveItem* wi = new WaveItem(iwave, mWaveDataList->at(iwave));
-        addItem(wi);
-        mWaveItems.insert(iwave,wi);
-        wi->setPos(0,yPosition(ypos));
-    }
-
-    void WaveScene::addGroupInternal(int grpId, int ypos)
-    {
-        WaveDataGroup* grp = mWaveDataList->mDataGroups.value(grpId);
-        if (!grp) return;
-        WaveItem* wi = new WaveItem(grpId, grp);
-        addItem(wi);
-        mGroupItems.insert(grpId,wi);
-        wi->setPos(0,yPosition(ypos));
-    }
-
-    void WaveScene::setWavePositions(const QHash<int,int>& wpos, const QHash<int,int>& gpos)
-    {
-        QHash<int,int> tempHash = wpos;
-
-
-        for (auto itWave = mWaveItems.begin(); itWave != mWaveItems.end(); ++itWave)
-        {
-            WaveItem* wi = itWave.value();
-            auto itPos = tempHash.constFind(itWave.key());
-            if (itPos == tempHash.constEnd())
-                wi->setVisible(false);
-            else
-            {
-                wi->setVisible(true);
-                wi->setPos(0, yPosition(itPos.value()));
-                tempHash.erase(itPos);
-            }
-        }
-
-        for (auto itPos = tempHash.begin(); itPos != tempHash.end(); ++itPos)
-        {
-            addWaveInternal(itPos.key(), itPos.value());
-        }
-
-        tempHash = gpos;
-        for (auto itGrp = mGroupItems.begin(); itGrp != mGroupItems.end(); ++itGrp)
-        {
-            WaveItem* wi = itGrp.value();
-            auto itPos = tempHash.constFind(itGrp.key());
-            if (itPos == tempHash.constEnd())
-                wi->setVisible(false);
-            else
-            {
-                wi->setVisible(true);
-                wi->setPos(0, yPosition(itPos.value()));
-                tempHash.erase(itPos);
-            }
-        }
-
-        for (auto itPos = tempHash.begin(); itPos != tempHash.end(); ++itPos)
-        {
-            addGroupInternal(itPos.key(), itPos.value());
-        }
-        adjustSceneRect();
     }
 
     void WaveScene::emitCursorMoved(float xpos)

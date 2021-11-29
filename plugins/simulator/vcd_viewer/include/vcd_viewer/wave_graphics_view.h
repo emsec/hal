@@ -12,6 +12,7 @@ namespace hal {
 
         float mXmag, mXmagMin;
         WaveTimescale* mTimescale;
+        int mMinViewportHeight;
 
         static const float sYmag;
     protected:
@@ -25,7 +26,8 @@ namespace hal {
 
     public Q_SLOTS:
         void handleViewportHeightChanged(int height);
-        void handleSizeChanged(int widgetHeight, int viewportHeight);
+        void handleSizeChanged(int treeViewportHeight, int scrollbarMax, int scrollbarPos);
+        void handleNumberVisibileChanged(int nVisible, int scrollbarMax, int scrollbarPos);
 
     public:
         WaveGraphicsView(QWidget* parent=nullptr);

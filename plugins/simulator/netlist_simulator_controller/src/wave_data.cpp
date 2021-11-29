@@ -7,6 +7,7 @@
 #include <QVector>
 #include <QSet>
 #include <stdio.h>
+#include <QDebug>
 
 namespace hal {
 
@@ -43,28 +44,41 @@ namespace hal {
 
     WaveData::WaveData(const WaveData& other)
         : mId(other.mId), mName(other.mName), mNetType(other.mNetType), mBits(other.mBits), mValueBase(other.mValueBase),
-          mData(other.mData), mGraphicsItem(nullptr)
+          mData(other.mData), mDirty(true)
     {;}
 
     WaveData::WaveData(u32 id_, const QString& nam, NetType tp, const QMap<u64,int> &dat)
-        : mId(id_), mName(nam), mNetType(tp), mBits(1), mValueBase(16), mData(dat), mGraphicsItem(nullptr)
+        : mId(id_), mName(nam), mNetType(tp), mBits(1), mValueBase(16), mData(dat), mDirty(true)
     {;}
 
     WaveData::WaveData(const Net* n, NetType tp)
         : mId(n->get_id()),
           mName(QString::fromStdString(n->get_name())),
-          mNetType(tp), mBits(1), mValueBase(16), mGraphicsItem(nullptr)
-    {
-       // qDebug() << "B:WaveData" << mId << mName << hex << (quintptr) this;
-    }
+          mNetType(tp), mBits(1), mValueBase(16), mDirty(true)
+    {;}
 
     WaveData::~WaveData()
     {
-        if (mGraphicsItem) {
-            mGraphicsItem->removeGraphicsItem();
-            delete mGraphicsItem;
-        }
     }
+
+    void WaveData::setId(u32 id_)
+    {
+        mId    = id_;
+        mDirty = true;
+    }
+
+    void WaveData::setName(const QString& nam)
+    {
+        mName  = nam;
+        mDirty = true;
+    }
+
+    void WaveData::setBits(int bts)
+    {
+        mBits  = bts;
+        mDirty = true;
+    }
+
 
     void WaveData::insertBooleanValue(u64 t, BooleanFunction::Value bval)
     {
@@ -77,15 +91,13 @@ namespace hal {
         case BooleanFunction::Value::ONE:  val =  1; break;
         }
         mData.insert(t,val);
-        if (mGraphicsItem)
-            mGraphicsItem->repaintGraphicsItem();
+        mDirty = true;
     }
 
     void WaveData::setData(const QMap<u64,int>& dat)
     {
         mData = dat;
-        if (mGraphicsItem)
-            mGraphicsItem->updateGraphicsItem(this);
+        mDirty = true;
     }
 
     void WaveData::setStartvalue(int val)
@@ -174,15 +186,18 @@ namespace hal {
             else
                 return QString::number(val);
         }
-        QString retval = QString::number(val,mValueBase);
+        int nDigits = 0;
         switch (mValueBase)
         {
-        case 2:  return "0b" + retval;
-        case 16: return "0x" + retval;
+        case 2:
+            nDigits = bits();
+            return QString("0b%1").arg((uint)val,nDigits,2,QLatin1Char('0'));
+        case 16:
+            nDigits = bits() / 4;
+            return QString("0x%1").arg((uint)val,nDigits,16,QLatin1Char('0'));
         default: break;
         }
-
-        return retval;
+        return QString::number(val,mValueBase);
     }
 
     u64 WaveData::maxTime() const
@@ -207,19 +222,40 @@ namespace hal {
     }
 
 //--------------------------------------------
+    WaveDataGroupIndex::WaveDataGroupIndex(const WaveData* wd)
+    {
+        if (!wd->id()) mCode = 0;
+        else
+        {
+            const WaveDataGroup* grp = dynamic_cast<const WaveDataGroup*>(wd);
+            if (grp) construct (grp->id(), false);
+            else     construct (wd->id(),  true);
+        }
+    }
+
+    void WaveDataGroupIndex::construct(u32 id, bool isNet)
+    {
+        if (!id) mCode = 0;
+        else
+            mCode = (id << 1) | (isNet?0:1);
+    }
+
+    uint qHash(const WaveDataGroupIndex& wdgi) { return wdgi.mCode; }
+
+//--------------------------------------------
     u32 WaveDataGroup::sMaxGroupId = 0;
 
     WaveDataGroup::WaveDataGroup(WaveDataList *wdList, int grpId, const QString& nam)
         : WaveData(grpId,nam,WaveData::NetGroup), mWaveDataList(wdList)
     {
-        mWaveDataList->addGroup(this);
+        mWaveDataList->registerGroup(this);
     }
 
     WaveDataGroup::WaveDataGroup(WaveDataList* wdList, const QString& nam)
         : WaveData(++sMaxGroupId,nam,WaveData::NetGroup), mWaveDataList(wdList)
     {
         if (nam.isEmpty()) setName(QString("group_%1").arg(id()));
-        mWaveDataList->addGroup(this);
+        mWaveDataList->registerGroup(this);
     }
 
     WaveDataGroup::WaveDataGroup(WaveDataList* wdList, const WaveData* wdGrp)
@@ -251,12 +287,12 @@ namespace hal {
             WaveData* wd = new WaveData(id()*10000+i, QString("%1_bit%2").arg(name()).arg(i), WaveData::RegularNet, *bitValue[i]);
             wd->setBits(1);
             mGroupList.append(wd);
-            mIds.insert(wd->id(),i);
+            mIndex.insert(WaveDataGroupIndex(wd),i);
             mWaveDataList->add(wd,true);
             delete bitValue[i];
         }
         delete [] bitValue;
-        mWaveDataList->addGroup(this);
+        mWaveDataList->registerGroup(this);
     }
 
     WaveDataGroup::~WaveDataGroup()
@@ -276,11 +312,11 @@ namespace hal {
 
     void WaveDataGroup::restoreIndex()
     {
-        mIds.clear();
+        mIndex.clear();
         int inx = 0;
         for (const WaveData* wd : mGroupList)
         {
-            mIds[wd->id()] = inx++;
+            mIndex[WaveDataGroupIndex(wd)] = inx++;
         }
     }
 
@@ -295,7 +331,7 @@ namespace hal {
             wd = mWaveDataList->waveDataByNetId(netId);
         int inx = mGroupList.size();
         mGroupList.append(wd);
-        mIds.insert(netId,inx);
+        mIndex.insert(WaveDataGroupIndex(wd),inx);
     }
 
     QList<WaveData*> WaveDataGroup::children() const
@@ -311,22 +347,23 @@ namespace hal {
 
     int WaveDataGroup::childIndex(WaveData* wd) const
     {
-        return mIds.value(wd->id(),-1);
-        /*
-        int inx = 0;
-        for (WaveData* wdTest : mGroupList)
-        {
-            if (wdTest==wd) return inx;
-            ++inx;
-        }
-        return -1;
-        */
+        return mIndex.value(WaveDataGroupIndex(wd),-1);
+    }
+
+    int WaveDataGroup::netIndex(u32 id) const
+    {
+        return mIndex.value(WaveDataGroupIndex(id,true),-1);
+    }
+
+    bool WaveDataGroup::hasNetId(u32 id) const
+    {
+        return mIndex.contains(WaveDataGroupIndex(id,true));
     }
 
     int WaveDataGroup::bits() const
     {
         int n = mGroupList.size();
-        if (n < 1) return 1;
+        if (n < 1) n=1;
         return n;
     }
 
@@ -352,7 +389,7 @@ namespace hal {
 
     void WaveDataGroup::updateWaveData(WaveData* wd)
     {
-        int inx = mIds.value(wd->id(),-1);
+        int inx = childIndex(wd);
         if (inx < 0) return;
         mGroupList[inx] = wd;
         recalcData();
@@ -369,7 +406,7 @@ namespace hal {
         if (mGroupList.isEmpty())
         {
             mData[0] = -1;
-            if (mGraphicsItem) mGraphicsItem->updateGraphicsItem(this);
+            mDirty = true;
             return;
         }
         for (int ibit = 0; ibit < nChildren; ibit++)
@@ -405,7 +442,8 @@ namespace hal {
         }
         mData.insert(t0, undef ? -1 : value);
         delete [] wdArray;
-        if (mGraphicsItem) mGraphicsItem->updateGraphicsItem(this);
+        mDirty = true;
+        mWaveDataList->emitGroupUpdated(id());
     }
 
 //--------------------------------------------
@@ -514,13 +552,32 @@ namespace hal {
         Q_EMIT nameUpdated(inx);
     }
 
+    void WaveDataList::emitWaveUpdated(int inx)
+    {
+        u32 netId = at(inx)->id();
+        for (auto it = mDataGroups.begin(); it != mDataGroups.end(); ++it)
+            if (it.value()->hasNetId(netId))
+            {
+                Q_EMIT waveUpdated(inx,it.value()->id());
+            }
+        Q_EMIT waveUpdated(inx,0);
+    }
+
+    void WaveDataList::emitGroupUpdated(int grpId)
+    {
+        Q_EMIT groupUpdated(grpId);
+    }
+
     void WaveDataList::updateWaveData(int inx)
     {
         u32 netId = at(inx)->id();
         for (auto it = mDataGroups.begin(); it != mDataGroups.end(); ++it)
             if (it.value()->hasNetId(netId))
+            {
                 it.value()->recalcData();
-        Q_EMIT waveUpdated(inx);
+                Q_EMIT waveUpdated(inx,it.value()->id());
+            }
+        Q_EMIT waveUpdated(inx,0);
     }
 
     void WaveDataList::updateClocks()
@@ -544,16 +601,19 @@ namespace hal {
         setMaxTime(tmax);
     }
 
+    int ddd = 0;
     void WaveDataList::add(WaveData* wd, bool silent)
     {
         int n = size();
+
         mIds[wd->id()] = n;
         append(wd);
         updateMaxTime();
         if (!silent) Q_EMIT waveAdded(n);
+        testDoubleCount();
     }
 
-    void WaveDataList::addGroup(WaveDataGroup *grp)
+    void WaveDataList::registerGroup(WaveDataGroup *grp)
     {
         u32 grpId = grp->id();
         Q_ASSERT(!mDataGroups.contains(grpId));
@@ -565,18 +625,25 @@ namespace hal {
         }
     }
 
-    u32 WaveDataList::createGroup(QString grpName, const QVector<u32>& netIds)
+    u32 WaveDataList::createGroup(QString grpName)
     {
         WaveDataGroup* grp = new WaveDataGroup(this, grpName);
-        int inx = 0;
+        return grp->id();
+    }
+
+    void WaveDataList::addNetsToGroup(u32 grpId, const QVector<u32>& netIds)
+    {
+        WaveDataGroup* grp = mDataGroups.value(grpId);
+        if (!grp) return;
+        int inx = grp->size();
         for (u32 netId : netIds)
         {
             WaveData* wd = waveDataByNetId(netId);
             if (!wd) continue;
             grp->insert(inx++,wd);
-            Q_EMIT waveMovedToGroup(mIds.value(netId),grp);
         }
-        return grp->id();
+        grp->recalcData();
+        Q_EMIT waveAddedToGroup(netIds,grpId);
     }
 
     void WaveDataList::removeGroup(u32 grpId)
@@ -593,21 +660,15 @@ namespace hal {
         triggerBeginResetModel();
         WaveData* wdOld = at(inx);
         Q_ASSERT(wdOld);
-        if (wdOld->graphicsItem())
-        {
-            wdOld->graphicsItem()->updateGraphicsItem(wdNew);
-            wdOld->setGraphicsItem(nullptr);
-        }
-
         wdNew->setName(wdOld->name());
         operator[](inx) = wdNew;
-        if (wdNew->maxTime() > mMaxTime)
-            updateMaxTime();
         for (WaveDataGroup* grp : mDataGroups.values())
             if (grp->hasNetId(wdNew->id()))
                 grp->replaceChild(wdNew);
+        if (wdNew->maxTime() > mMaxTime)
+            updateMaxTime();
 
-        Q_EMIT waveUpdated(inx);
+        emitWaveUpdated(inx);
         delete wdOld;
         triggerEndResetModel();
     }
@@ -630,14 +691,28 @@ namespace hal {
         return at(inx);
     }
 
+    void WaveDataList::testDoubleCount()
+    {
+        QMap<u32,int> doubleCount;
+        for (const WaveData* wd : *this)
+           ++doubleCount[wd->id()];
+        for (auto it=doubleCount.constBegin(); it!=doubleCount.constEnd(); ++it)
+        {
+            if (it.value() > 1)
+            {
+                qDebug() << "duplicate net" << it.value() << at(mIds.value(it.key()))->name();
+            }
+        }
+    }
+
     void WaveDataList::restoreIndex()
     {
         mIds.clear();
         int inx = 0;
+
         for (const WaveData* wd : *this)
-        {
             mIds[wd->id()] = inx++;
-        }
+        testDoubleCount();
     }
 
     QSet<u32> WaveDataList::toSet() const
@@ -668,7 +743,7 @@ namespace hal {
             if ((*it)->data().isEmpty())
             {
                 (*it)->insert(0,val);
-                Q_EMIT waveUpdated(inx);
+                emitWaveUpdated(inx);
             }
             ++inx;
         }

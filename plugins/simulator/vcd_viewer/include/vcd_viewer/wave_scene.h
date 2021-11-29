@@ -4,6 +4,7 @@
 #include <QHash>
 #include <QTimer>
 #include "hal_core/defines.h"
+#include "vcd_viewer/wave_item.h"
 
 namespace hal {
     class WaveItem;
@@ -15,16 +16,13 @@ namespace hal {
         Q_OBJECT
 
         WaveDataList* mWaveDataList;
+        WaveItemHash* mWaveItemHash;
 
-        QHash<int,WaveItem*> mWaveItems;
-        QHash<int,WaveItem*> mGroupItems;
         WaveCursor* mCursor;
         QTimer* mClearTimer;
         float   mXmag;
+//        QGraphicsRectItem* mSceneRect;
 
-        static float yPosition(int irow);
-        void addWaveInternal(int iwave, int ypos);
-        void addGroupInternal(int grpId, int ypos);
         float adjustSceneRect(u64 tmax = 0);
         int nextWavePosition() const;
 
@@ -35,21 +33,18 @@ namespace hal {
     public Q_SLOTS:
         void xScaleChanged(float m11);
         void updateWaveItemValues();
-        void handleWaveAdded(int iwave);
-        void handleWaveUpdated(int iwave);
-        void handleGroupAdded(int grpId);
-        void setWavePositions(const QHash<int,int>& wpos, const QHash<int, int>& gpos);
-        void handleIndexRemoved(int iwave, bool isGroup);
+        void handleWaveUpdated(int iwave, int groupId);
         void handleMaxTimeChanged(u64 tmax);
-//        void handleIndexInserted(int iwave, bool isGroup);
+        void updateWaveItems();
 
     public:
-        WaveScene(WaveDataList* wdlist, QObject* parent = nullptr);
+        WaveScene(WaveDataList* wdlist, WaveItemHash* wHash, QObject* parent = nullptr);
         void emitCursorMoved(float xpos);
         void setCursorPosition(const QPointF& pos);
         float xScaleFactor() const { return mXmag; }
         float cursorXposition() const;
 
         static const float sMinSceneWidth;
+        static float yPosition(int irow);
     };
 }

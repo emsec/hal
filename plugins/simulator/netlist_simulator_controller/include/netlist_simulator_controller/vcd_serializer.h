@@ -40,12 +40,13 @@ namespace hal {
         bool parseCsvDataline(const QByteArray& line, int dataLineIndex, u64 timeScale);
     public:
         VcdSerializer(QObject* parent = nullptr);
+        ~VcdSerializer();
         bool serialize(const QString& filename, const QList<const WaveData*>& waves) const;
-        bool deserializeVcd(const QString& filename);
+        bool deserializeVcd(const QString& filename, const QStringList& netNames = QStringList());
         bool deserializeCsv(const QString& filename, u64 timeScale = 1000000000);
         QList<WaveData*> waveList() const { return mWaves.values(); }
-        WaveData* waveByName(const QString& name) const;
-        WaveData* waveById(u32 id) const;
+        WaveData* waveByName(const QString& name);
+        WaveData* waveById(u32 id);
         u64 maxTime() const { return mTime; }
     };
 

@@ -1,4 +1,5 @@
 #include "vcd_viewer/wave_timescale.h"
+#include "vcd_viewer/wave_graphics_view.h"
 #include <QPainter>
 #include <math.h>
 #include <QDebug>
@@ -54,8 +55,8 @@ namespace hal {
         mXmag = m11;
         mWidth = floor(scWidth * m11 + 0.5);
         mXscrollValue = xScrollValue;
-        if (mWidth < 160000)
-            setFixedWidth(mWidth);
+        WaveGraphicsView* wgv = dynamic_cast<WaveGraphicsView*>(parent());
+        if (wgv) setFixedWidth(wgv->width());
         move(0,0);
         update();
     }

@@ -8,12 +8,11 @@
 #include <QSplitter>
 #include <QFrame>
 #include <hal_core/defines.h>
+#include "vcd_viewer/wave_item.h"
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 
 namespace hal {
 
-    class WaveData;
-    class WaveDataList;
     class WaveGraphicsView;
     class WaveScene;
     class WaveTreeModel;
@@ -41,7 +40,6 @@ namespace hal {
         void createEngine(const QString& engineFactoryName);
         void refreshNetNames();
         void scrollToYpos(int ypos);
-        u32 addGroup(const std::string& name, const std::vector<u32>& netIds);
         void removeGroup(u32 grpId);
 
     public Q_SLOTS:
@@ -71,6 +69,7 @@ namespace hal {
         WaveScene*        mScene;
         bool              mOngoingYscroll;
         WaveDataList*     mWaveDataList;
+        WaveItemHash*     mWaveItemHash;
 
         bool mVisualizeNetState;
         bool mAutoAddWaves;

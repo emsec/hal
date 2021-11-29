@@ -16,17 +16,6 @@ namespace hal {
     class NetlistSimulator;
     class Net;
 
-    class WaveGraphicsItem
-    {
-    public:
-        WaveGraphicsItem() {;}
-        virtual ~WaveGraphicsItem() {;}
-        virtual void updateGraphicsItem(WaveData* wd) = 0;
-        virtual void removeGraphicsItem()     = 0;
-        virtual void repaintGraphicsItem()    = 0;
-        virtual void setItemVisible(bool vis) = 0;
-    };
-
     class WaveData
     {
     public:
@@ -39,7 +28,7 @@ namespace hal {
         int mValueBase;
     protected:
         QMap<u64,int> mData;
-        WaveGraphicsItem* mGraphicsItem;
+        bool mDirty;
 
         QMap<u64,int>::const_iterator timeIterator(float t) const;
     public:
@@ -52,12 +41,12 @@ namespace hal {
         QString name()                      const { return mName; }
         NetType netType()                   const { return mNetType; }
         virtual int bits()                  const { return mBits; }
-        WaveGraphicsItem*    graphicsItem() const { return mGraphicsItem; }
+        bool    isDirty()                   const { return mDirty; }
         const QMap<u64,int>& data()         const { return mData; }
-        void setId(u32 id_)                         { mId = id_; }
-        void setName(const QString& nam)            { mName = nam; }
-        void setBits(int bts)                       { mBits = bts; }
-        void setGraphicsItem(WaveGraphicsItem* wgi) { mGraphicsItem = wgi; }
+        void setId(u32 id_);
+        void setName(const QString& nam);
+        void setBits(int bts);
+        void setDirty(bool dty)                     { mDirty = dty; }
         void setData(const QMap<u64,int>& dat);
         int  intValue(float t) const;
         int get_value_at(u64 t) const;
@@ -73,7 +62,6 @@ namespace hal {
         QString strValue(float t) const;
         QString strValue(const QMap<u64,int>::const_iterator& it) const;
         void setValueBase(int bas) { mValueBase = bas; }
-//        static WaveData* simulationResultFactory(Net* n, const NetlistSimulator* sim);
     };
 
     class WaveDataClock : public WaveData
@@ -97,16 +85,21 @@ namespace hal {
         QMap<u32,int>     mIds;
         u64               mSimulTime;
         u64               mMaxTime;
+        void testDoubleCount();
         void restoreIndex();
         void updateMaxTime();
         void setMaxTime(u64 tmax);
+
+        using QList<WaveData*>::append;
+        using QList<WaveData*>::insert;
     public:
         QMap<u32,WaveDataGroup*> mDataGroups;
         WaveDataList(QObject* parent = nullptr) : QObject(parent), mSimulTime(0), mMaxTime(0) {;}
         ~WaveDataList();
         void add(WaveData* wd, bool silent);
-        void addGroup(WaveDataGroup* grp);
-        u32  createGroup(QString grpName, const QVector<u32>& netIds);
+        void registerGroup(WaveDataGroup* grp);
+        u32  createGroup(QString grpName);
+        void addNetsToGroup(u32 grpId, const QVector<u32>& netIds);
         void removeGroup(u32 grpId);
         void addOrReplace(WaveData* wd);
         void replaceWaveData(int inx, WaveData *wdNew);
@@ -126,19 +119,34 @@ namespace hal {
         void dump() const;
         QList<const WaveData*> toList() const;
         QList<const WaveData*> partialList(u64 start_time, u64 end_time, std::set<const Net*>& nets) const;
+        void emitWaveUpdated(int inx);
+        void emitGroupUpdated(int grpId);
     Q_SIGNALS:
         void waveAdded(int inx);
         void groupAdded(int grpId);
         void groupAboutToBeRemoved(WaveDataGroup* grp);
         void waveDataAboutToBeChanged(int inx);
-        void waveUpdated(int inx);
+        void waveUpdated(int inx, int grpId);
+        void groupUpdated(int grpId);
         void nameUpdated(int inx);
         void waveRemoved(int inx);
-        void waveMovedToGroup(int inx, WaveDataGroup* grp);
+        void waveAddedToGroup(const QVector<u32>& netIds, int grpId);
         void maxTimeChanged(u64 tmax);
         void triggerBeginResetModel();
         void triggerEndResetModel();
     };
+
+    class WaveDataGroupIndex {
+        friend uint qHash(const WaveDataGroupIndex& wdgi);
+        uint mCode;
+        void construct(u32 id, bool isNet);
+    public:
+        WaveDataGroupIndex(const WaveData* wd);
+        WaveDataGroupIndex(u32 id, bool isNet) { construct(id, isNet); }
+        bool operator==(const WaveDataGroupIndex& other) const { return mCode == other.mCode; }
+    };
+
+    uint qHash(const WaveDataGroupIndex& wdgi);
 
     class WaveDataGroup : public WaveData
     {
@@ -146,7 +154,8 @@ namespace hal {
 
         WaveDataList* mWaveDataList;
         QList<WaveData*> mGroupList;
-        QMap<u32,int>    mIds;
+
+        QHash<WaveDataGroupIndex,int> mIndex;
         void restoreIndex();
     public:
         WaveDataGroup(WaveDataList* wdList, int grpId, const QString& nam);
@@ -158,13 +167,14 @@ namespace hal {
         void addNet(const Net* n);
         virtual void insert(int inx, WaveData* wd);
         virtual void recalcData();
-        virtual bool hasNetId(u32 id) const { return mIds.contains(id); }
+        virtual bool hasNetId(u32 id) const;
         virtual QList<WaveData*> children() const;
         virtual WaveData* childAt(int inx) const;
         virtual WaveData* removeAt(int inx);
         virtual bool isEmpty() const { return mGroupList.isEmpty(); }
         virtual void updateWaveData(WaveData* wd);
         virtual int childIndex(WaveData* wd) const;
+        virtual int netIndex(u32 id) const;
         virtual void replaceChild(WaveData* wd);
     };
 }

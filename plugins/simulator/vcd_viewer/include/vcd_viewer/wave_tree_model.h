@@ -1,6 +1,7 @@
 #pragma once
 #include "hal_core/defines.h"
 #include "netlist_simulator_controller/wave_data.h"
+#include "vcd_viewer/wave_item.h"
 #include <QAbstractItemModel>
 #include <QList>
 
@@ -20,34 +21,51 @@ namespace hal {
     class WaveTreeModel : public QAbstractItemModel
     {
         Q_OBJECT
+
+    public:
+        enum DragCommand { None, Move, Copy };
+    private:
         WaveDataList* mWaveDataList;
+        WaveItemHash* mWaveItemHash;
         WaveDataRoot* mRoot;
         QModelIndex mDragIndex;
+        DragCommand mDragCommand;
         float mCursorPosition;
         bool mIgnoreSignals;
+        int mReorderRequestWaiting;
+
+        class ReorderRequest
+        {
+            WaveTreeModel* mParent;
+        public:
+            ReorderRequest(WaveTreeModel* p) : mParent(p) { mParent->mReorderRequestWaiting++; }
+            ~ReorderRequest() {
+                if (--mParent->mReorderRequestWaiting <= 0) mParent->emitReorder();
+            }
+        };
 
         void dropRow(const QModelIndex& parentTo, int row);
         void invalidateParent(const QModelIndex& parentRow);
         void updateGroup(WaveDataGroup* grp);
+        void emitReorder();
     Q_SIGNALS:
         void inserted(QModelIndex index);
-//        void indexInserted(int iwave, bool isGroup);
-        void indexRemoved(int iwave, bool isGroup);
         void triggerReorder();
 
     public Q_SLOTS:
         void handleUpdateValueFormat();
         void handleWaveAdded(int iwave);
         void handleNameUpdated(int iwave);
-        void handleWaveMovedToGroup(int iwave, WaveDataGroup* grp);
+        void handleWaveAddedToGroup(const QVector<u32>& netIds, int grpId);
         void handleGroupAdded(int grpId);
         void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
+        void handleGroupUpdated(int grpId);
         void handleCursorMoved(float xpos);
         void forwardBeginResetModel();
         void forwardEndResetModel();
 
     public:
-        WaveTreeModel(WaveDataList* wdlist, QObject* obj=nullptr);
+        WaveTreeModel(WaveDataList* wdlist, WaveItemHash* wHash, QObject* obj=nullptr);
         bool isLeaveItem(const QModelIndex &index) const;
         QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
         QModelIndexList indexes(const WaveData* wd) const;
@@ -62,7 +80,7 @@ namespace hal {
         Qt::DropActions supportedDragActions() const override;
         bool dropMimeData(const QMimeData *mimeData, Qt::DropAction action, int row, int column, const QModelIndex &dropParent) override;
         bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const override;
-        void setDragIndex(const QModelIndex& index) { mDragIndex = index; }
+        void setDragIndex(const QModelIndex& index);
 
         bool insertItem(int row, const QModelIndex &parent, WaveData* wd);
         WaveData* removeItem(int row, const QModelIndex &parent);

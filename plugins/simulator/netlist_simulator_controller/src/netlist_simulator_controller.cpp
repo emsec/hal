@@ -17,6 +17,7 @@
 #include <QFile>
 #include <QDate>
 #include <QVector>
+#include <QDebug>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/netlist/netlist_utils.h"
@@ -84,18 +85,6 @@ namespace hal
     {
     }
 
-
-    void NetlistSimulatorController::handleSimulSettings()
-    {
-        /*
-         act = new QAction("Select gates for simulation", settingMenu);
-         connect(act, &QAction::triggered, this, &NetlistSimulatorController::handleSelectGates);
-         act = new QAction("Select clock net", settingMenu);
-         connect(act, &QAction::triggered, this, &NetlistSimulatorController::handleClockSet);
-         act->setEnabled(mState==SimulationClockSet);
-*/
-    }
-
     void NetlistSimulatorController::set_no_clock_used()
     {
         mSimulationInput->set_no_clock_used();
@@ -104,11 +93,19 @@ namespace hal
 
     u32 NetlistSimulatorController::add_waveform_group(const std::string& name, const std::vector<Net*> nets)
     {
-        if (nets.empty() || name.empty()) return 0;
+        if (name.empty()) return 0;
         QVector<u32> netVector;
         netVector.reserve(nets.size());
         for (Net* n : nets) netVector.append(n->get_id());
-        return mWaveDataList->createGroup(QString::fromStdString(name), netVector);
+        /*
+        QString s = QString("add_waveform_group <%1> :").arg(name.c_str());
+        for (Net* n : nets)
+            s += QString(" [%1,%2]").arg(n->get_name().c_str()).arg(n->get_id());
+        qDebug() << s;
+        */
+        u32 grpId = mWaveDataList->createGroup(QString::fromStdString(name));
+        mWaveDataList->addNetsToGroup(grpId, netVector);
+        return grpId;
     }
 
     void NetlistSimulatorController::remove_waveform_group(u32 group_id)
@@ -260,7 +257,14 @@ namespace hal
     {
         VcdSerializer reader;
 
-        if (reader.deserializeVcd(QString::fromStdString(filename)))
+        QStringList netNames;
+        if (filter != NoFilter)
+        {
+            for (const Net* n: getFilterNets(filter))
+                netNames << QString::fromStdString(n->get_name());
+        }
+
+        if (reader.deserializeVcd(QString::fromStdString(filename),netNames))
         {
             bool waveFound = false;
 
@@ -373,7 +377,11 @@ namespace hal
             VcdSerializer reader(this);
             QFileInfo info(QString::fromStdString(resultFile.string()));
             if (!info.exists() || !info.isReadable()) return false;
-            if (!reader.deserializeVcd(QString::fromStdString(resultFile))) return false;
+
+            QStringList netNames;
+            for (Net* n : partNl->get_nets())
+                netNames << QString::fromStdString(n->get_name());
+            if (!reader.deserializeVcd(QString::fromStdString(resultFile),netNames)) return false;
 
             QHash<QString,u32> netIds;
 //            int wcount = 0;

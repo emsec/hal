@@ -5,6 +5,7 @@
 #include <QResizeEvent>
 #include <QStyledItemDelegate>
 #include "hal_core/defines.h"
+#include "vcd_viewer/wave_item.h"
 
 namespace hal {
     class WaveDataList;
@@ -25,6 +26,7 @@ namespace hal {
         QList<QModelIndex> mItemOrder;
         QModelIndex mContextIndex;
         WaveDataList* mWaveDataList;
+        WaveItemHash* mWaveItemHash;
 
     protected:
         void mouseDoubleClickEvent(QMouseEvent *event) override;
@@ -35,8 +37,9 @@ namespace hal {
 
     Q_SIGNALS:
         void viewportHeightChanged(int height);
-        void sizeChanged(int widgetHeight, int viewportHeight);
-        void reordered(QHash<int,int> wavePosition, QHash<int,int> groupPosition);
+        void sizeChanged(int viewportHeight, int scrollbarMax, int scrollbarPos);
+        void numberVisibleChanged(int nVisible, int scrollbarMax, int scrollbarPos);
+        void triggerUpdateWaveItems();
         void valueBaseChanged();
 
     private Q_SLOTS:
@@ -55,7 +58,7 @@ namespace hal {
         void setWaveSelection(const QSet<u32>& netIds);
 
     public:
-        WaveTreeView(WaveDataList* wdList, QWidget* parent = nullptr);
+        WaveTreeView(WaveDataList* wdList, WaveItemHash* wHash, QWidget* parent = nullptr);
 
     private:
         void orderRecursion(const QModelIndex& parent);
