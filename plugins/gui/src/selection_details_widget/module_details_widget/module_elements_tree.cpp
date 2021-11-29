@@ -1,5 +1,6 @@
 #include "gui/selection_details_widget/module_details_widget/module_elements_tree.h"
 #include "gui/selection_details_widget/module_details_widget/netlist_elements_tree_model.h"
+#include "gui/selection_details_widget/module_details_widget/module_tree_model.h"
 #include "gui/python/py_code_provider.h"
 #include "gui/gui_globals.h"
 #include <QMenu>
@@ -10,19 +11,21 @@
 namespace hal
 {
 
-    ModuleElementsTree::ModuleElementsTree(QWidget *parent) : SizeAdjustableTreeView(parent), mNetlistElementsModel(new NetlistElementsTreeModel(this)),
-        mModuleID(-1)
+    ModuleElementsTree::ModuleElementsTree(QWidget *parent) : SizeAdjustableTreeView(parent), //mNetlistElementsModel(new NetlistElementsTreeModel(this)),
+        mModel(new ModuleTreeModel(this)), mModuleID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         setSelectionMode(QAbstractItemView::NoSelection);
         setFocusPolicy(Qt::NoFocus);
         header()->setStretchLastSection(true);
-        setModel(mNetlistElementsModel);
+        //setModel(mNetlistElementsModel);
+        setModel(mModel);
 
         //connections
         connect(this, &QTreeView::customContextMenuRequested, this, &ModuleElementsTree::handleContextMenuRequested);
-        connect(mNetlistElementsModel, &NetlistElementsTreeModel::numberOfSubmodulesChanged, this, &ModuleElementsTree::handleNumberSubmodulesChanged);
+        //connect(mNetlistElementsModel, &NetlistElementsTreeModel::numberOfSubmodulesChanged, this, &ModuleElementsTree::handleNumberSubmodulesChanged);
+        connect(mModel, &ModuleTreeModel::numberOfSubmodulesChanged, this, &ModuleElementsTree::handleNumberSubmodulesChanged);
     }
 
     void ModuleElementsTree::setModule(u32 moduleID)
@@ -35,16 +38,19 @@ namespace hal
 
     void ModuleElementsTree::setModule(Module *m)
     {
-        if(!m) return;
+        //if(!m) return;
 
-        mNetlistElementsModel->setModule(m, true, false, false);
+        //mNetlistElementsModel->setModule(m, true, false, false);
+
+        mModel->setModule(m);
         mModuleID = m->get_id();
         adjustSizeToContents();
     }
 
     void ModuleElementsTree::removeContent()
     {
-        mNetlistElementsModel->clear();
+        //mNetlistElementsModel->clear();
+        mModel->clear();
         mModuleID = -1;
     }
 
@@ -165,5 +171,4 @@ namespace hal
     {
         Q_EMIT updateText(QString("Submodules(%1)").arg(number));
     }
-
 }

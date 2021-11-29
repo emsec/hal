@@ -30,6 +30,7 @@ namespace hal
 {
     class Module;
     class NetlistElementsTreeModel;
+    class ModuleTreeModel;
 
     /**
      * @brief A widget to display the specific (direct submodules, gates) items of a given module.
@@ -84,6 +85,7 @@ namespace hal
 
     private:
         NetlistElementsTreeModel* mNetlistElementsModel;
+        ModuleTreeModel* mModel;
         int mModuleID;
 
         void handleNumberSubmodulesChanged(const int number);
