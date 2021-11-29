@@ -39,6 +39,8 @@ namespace hal
                                                                       "gates_assign_begin",
                                                                       "gates_assign_end",
                                                                       "gate_assigned",
+                                                                      "gates_remove_begin",
+                                                                      "gates_remove_end",
                                                                       "gate_removed",
                                                                       "pin_changed"};
 
