@@ -55,7 +55,6 @@ namespace hal
         Q_OBJECT
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
-        //Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
 
     public:
         /**
@@ -89,15 +88,33 @@ namespace hal
          */
         void resizeEvent(QResizeEvent* event) override;
 
-        /////
+        /**
+         * Q_PROPERTY READ function for the "search"-icon path.
+         *
+         * @return The "search" icon path.
+         */
         QString searchIconPath() const;
-        QString searchIconStyle() const;
-        //QString searchActiveIconStyle() const;
 
+        /**
+         * Q_PROPERTY READ function for the "search active"-icon style.
+         *
+         * @return The "search activate" icon style.
+         */
+        QString searchIconStyle() const;
+
+        /**
+         * Q_PROPERTY WRITE function for the "search"-icon path.
+         *
+         * @param path - The new path.
+         */
         void setSearchIconPath(const QString &path);
+
+        /**
+         * Q_PROPERTY WRITE function for the "search"-icon style.
+         *
+         * @param style - The new style.
+         */
         void setSearchIconStyle(const QString &style);
-        //void setSearchActiveIconStyle(const QString &style);
-        /////
 
     public Q_SLOTS:
         /**
@@ -119,15 +136,26 @@ namespace hal
 
         /**
          * Q_SLOT to handle that the currently selected filter has been changed (e.g. by choosing another one in the
-         * the ChannelSelector combobox or by toggling a severity checkbox).
+         * the ChannelSelector combobox or by toggling a severity button).
          *
-         * @param p - New channel index or new state of a severity checkbox
+         * @param p - New channel index or new state of a severity button
          */
-        void handleCurrentFilterChanged(int index);
+        void handleCurrentFilterChanged(int p);
 
+        /**
+         * Q_SLOT to handle that the severity filter has been changed (e.g. by toggling a severity).
+         *
+         * @param state - New state of a severity button
+         */
         void handleSeverityChanged(bool state);
 
+        /**
+         * Q_SLOT to handle that a new search filter has been set.
+         *
+         * @param filter - Search string to filter
+         */
         void handleSearchChanged(QString filter);
+
         /**
          * Q_SLOT to handle interactions with the scrollbar. After the first scrollbar interaction the scrollbar wont
          * be locked at the bottom anymore (e.g. after a resize event).
@@ -136,22 +164,22 @@ namespace hal
          */
         void handleFirstUserInteraction(int value);
 
+        /**
+         * Q_SLOT to handle that a new channel has been added to the ChannelSelector combobox.
+         */
         void handleCustomChannel();
 
-        //////
+        /**
+         * Toggles the visibiliy of the searchbar.
+         */
         void toggleSearchbar();
-        //////
 
     private:
-        //////
         Searchbar* mSearchbar;
         QAction* mSearchAction;
+
         QString mSearchIconPath;
         QString mSearchIconStyle;
-        //QString mSearchActiveIconStyle;
-        QString mDisabledIconStyle;
-        //////
-
 
         void saveSettings();
         void restoreSettings();
@@ -159,24 +187,23 @@ namespace hal
         void scrollToBottom();
 
         QPlainTextEdit* mPlainTextEdit;
+
         ChannelSelector* selector;
         QLabel* mChannelLabel;
+
         QPushButton* mMuteButton;
         QPushButton* mVerboseButton;
         QPushButton* mDebugButton;
         QPushButton* mInfoButton;
         QPushButton* mWarningButton;
         QPushButton* mErrorButton;
+
         bool mInfoSeverity;
         bool mWarningSeverity;
         bool mErrorSeverity;
         bool mDebugSeverity;
-        std::string mSearchFilter;
 
-        //////
-        void handleFilterTextChanged(const QString& filter_text);
-        void enableSearchbar(bool enable);
-        //////
+        std::string mSearchFilter;
 
         LoggerMarshall* mLogMarshall;
         int mCurrentChannelIndex;

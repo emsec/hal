@@ -17,13 +17,14 @@
 #include <QAction>
 
 #include <string>
-#include <iostream>
 
 namespace hal
 {
     LoggerWidget::LoggerWidget(QWidget* parent) : ContentWidget("Log", parent)
     {
+        // Active QPropertys
         ensurePolished();
+
         mPlainTextEdit = new QPlainTextEdit(this);
         mPlainTextEdit->setReadOnly(true);
         mPlainTextEdit->setFrameStyle(QFrame::NoFrame);
@@ -37,6 +38,7 @@ namespace hal
 
         mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
 
+        // Get last severity settings
         restoreSettings();
 
         mSearchbar = new Searchbar(mPlainTextEdit);
@@ -54,86 +56,71 @@ namespace hal
 
     }
 
-
-    void LoggerWidget::enableSearchbar(bool enable)
-    {
-        QString iconStyle = enable
-                ? mSearchIconStyle
-                : mDisabledIconStyle;
-        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mSearchIconPath));
-        if (!enable && mSearchbar->isVisible())
-        {
-            mSearchbar->hide();
-            setFocus();
-        }
-        mSearchAction->setEnabled(enable);
-    }
-
-
     void LoggerWidget::setupToolbar(Toolbar* Toolbar)
     {
+        // Action button to activate Searchbar
         mSearchAction = new QAction(this);
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-        connect(mSearchbar, SIGNAL(textEdited(QString)), this, SLOT(handleSearchChanged(QString)));
-        connect(mSearchAction, SIGNAL(triggered()), this, SLOT(toggleSearchbar()));
         Toolbar->addAction(mSearchAction);
 
-
-        enableSearchbar(true);
-
+        // Show current channel
         mChannelLabel = new QLabel(this);
         mChannelLabel->setText("all");
         Toolbar->addWidget(mChannelLabel);
 
-        //selector will be deleted within the toolbars destructor
+        // ChannelSelector
         selector = new ChannelSelector(this);
         selector->setEditable(true);
         connect(selector->lineEdit(), SIGNAL(editingFinished()), this, SLOT(handleCustomChannel()));
         connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
         selector->setStyleSheet("QCombobox {background-color : rgb(32, 43, 63); border-radius: 2px;}");
         selector->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
-        //selector->resize(5, selector->height());
         Toolbar->addWidget(selector);
 
+        // Severity buttons
         mDebugButton = new QPushButton("Debug", this);
         mDebugButton->setCheckable(true);
         mDebugButton->setChecked(mDebugSeverity);
         mDebugButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        connect(mDebugButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mDebugButton);
 
         mInfoButton = new QPushButton("Info", this);
         mInfoButton->setCheckable(true);
         mInfoButton->setChecked(mInfoSeverity);
         mInfoButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        connect(mInfoButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mInfoButton);
 
         mWarningButton = new QPushButton("Warning", this);
         mWarningButton->setCheckable(true);
         mWarningButton->setChecked(mWarningSeverity);
         mWarningButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        connect(mWarningButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mWarningButton);
 
         mErrorButton = new QPushButton("Error", this);
         mErrorButton->setCheckable(true);
         mErrorButton->setChecked(mErrorSeverity);
         mErrorButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) } QPushButton:checked:hover { background-color : rgb(66, 66, 66) } QPushButton:checked { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        connect(mErrorButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mErrorButton);
 
         Toolbar->addSpacer();
 
         mMuteButton = new QPushButton("Mute all", this);
         mMuteButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) }  QPushButton:pressed { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        connect(mMuteButton, SIGNAL(clicked(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mMuteButton);
 
         mVerboseButton = new QPushButton("Show all", this);
         mVerboseButton->setStyleSheet("QPushButton { border : none; background-color : rgb(26, 26, 26) } QPushButton:hover { background-color : rgb(46, 46, 46) }  QPushButton:pressed { background-color : rgb(89, 89, 89); color : rgb(204, 204, 204)} ");
-        connect(mVerboseButton, SIGNAL(clicked(bool)), this, SLOT(handleSeverityChanged(bool)));
         Toolbar->addWidget(mVerboseButton);
+
+        connect(mSearchAction, SIGNAL(triggered()), this, SLOT(toggleSearchbar()));
+        connect(mSearchbar, SIGNAL(textEdited(QString)), this, SLOT(handleSearchChanged(QString)));
+        connect(mDebugButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
+        connect(mInfoButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
+        connect(mWarningButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
+        connect(mErrorButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
+        connect(mMuteButton, SIGNAL(clicked(bool)), this, SLOT(handleSeverityChanged(bool)));
+        connect(mVerboseButton, SIGNAL(clicked(bool)), this, SLOT(handleSeverityChanged(bool)));
+
     }
 
     QPlainTextEdit* LoggerWidget::getPlainTextEdit()
@@ -182,14 +169,15 @@ namespace hal
     void LoggerWidget::handleCurrentFilterChanged(int p)
     {
         ChannelModel* model = ChannelModel::instance();
+
+        // Channel has been changed or initially set
         if ((sender() == selector) || p == 0) {
             mCurrentChannelIndex = p;
         }
 
-        // set ALL Channel
+        // Set "all" Channel
         if (p == -1) {
             mCurrentChannelIndex = model->rowCount() - 1;
-            //selector->setCurrentIndex(mCurrentChannelIndex);
         }
 
         ChannelItem* item   = static_cast<ChannelItem*>((model->index(mCurrentChannelIndex, 0, QModelIndex())).internalPointer());
@@ -199,14 +187,17 @@ namespace hal
 
         mPlainTextEdit->clear();
         QWriteLocker item_locker(item->getLock());
+
+        // Iterate through every log entry
         for (ChannelEntry* entry : *(item->getList()))
         {
-            // filter nach allen einträgen die entsprechenden suchstring haben. str.find() usw
             bool filter = false;
 
+            // If entry msg matches with search string
             if ((entry->mMsg.find(mSearchFilter) != std::string::npos) || (mSearchFilter.length() < 1))
             {
-                std::cout << mSearchFilter << std::endl;
+
+                // If entry severity matches the choosen severitys
                 if ((entry->mMsgType == spdlog::level::level_enum::info) && mInfoSeverity) {
                     filter = true;
                 }
@@ -224,15 +215,18 @@ namespace hal
                 }
             }
 
+            // If log entry should be shown
             if (filter)
             {
-            mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg));
+                mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg));
             }
         }
     }
 
     void LoggerWidget::handleSeverityChanged(bool state)
     {
+
+        // change Severitys
         if (sender() == mDebugButton)
         {
             mDebugSeverity = state;
@@ -262,10 +256,14 @@ namespace hal
             mInfoButton->setChecked(true);
             mWarningButton->setChecked(true);
             mErrorButton->setChecked(true);
+            // "all" channel
             handleCurrentFilterChanged(-1);
         }
 
+        // Make changes
         handleCurrentFilterChanged(1);
+
+        // Save severity settings for next session
         saveSettings();
     }
 
