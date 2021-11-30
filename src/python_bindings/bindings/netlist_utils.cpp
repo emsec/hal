@@ -30,6 +30,16 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
+        py_netlist_utils.def(
+            "get_ff_dependency_matrix", &netlist_utils::get_ff_dependency_matrix, py::arg("nl"), R"(
+            Get the FF dependency matrix of a netlist.
+
+            :param hal_py.Netlist nl: The netlist to extract the dependency matrix from.
+            :returns: A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
+            :rtype: pair(dict(int, hal_py.Gate), list[list[int]])
+        )");
+
+
         py_netlist_utils.def("get_next_gates", &netlist_utils::get_next_gates, py::arg("gate"), py::arg("get_successors"), py::arg("depth") = 0, py::arg("filter") = nullptr, R"(
             Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
             Higher number of depth causes as many steps of recursive calls. 
@@ -94,6 +104,7 @@ namespace hal
             :returns: All sequential successors or predecessors of the net.
             :rtype: list[hal_py.Net]
         )");
+
 
         py_netlist_utils.def("get_next_sequential_gates", py::overload_cast<const Net*, bool>(&netlist_utils::get_next_sequential_gates), py::arg("net"), py::arg("get_successors"), R"(
             Find all sequential predecessors or successors of a net.
