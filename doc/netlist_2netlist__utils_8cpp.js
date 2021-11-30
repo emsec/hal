@@ -3,6 +3,7 @@ var netlist_2netlist__utils_8cpp =
     [ "copy_netlist", "netlist_2netlist__utils_8cpp.html#a491fd812517e94f3ee40e64813d7f9c5", null ],
     [ "get_common_inputs", "netlist_2netlist__utils_8cpp.html#a3169b0d80a1e57298fcc969959e39b95", null ],
     [ "get_complex_gate_chain", "netlist_2netlist__utils_8cpp.html#ada68c8b906930852f7ac416a7b1195d8", null ],
+    [ "get_ff_dependency_matrix", "netlist_2netlist__utils_8cpp.html#af2c5370e1cfb407c98dd5c855e1e9022", null ],
     [ "get_gate_chain", "netlist_2netlist__utils_8cpp.html#a172560a7199c07a507db7b51a08057c7", null ],
     [ "get_nets_at_pins", "netlist_2netlist__utils_8cpp.html#ade1a86f1a00d212317171745c969a6ac", null ],
     [ "get_next_gates", "netlist_2netlist__utils_8cpp.html#a20b1517e6064ffac5b416353c47d7178", null ],

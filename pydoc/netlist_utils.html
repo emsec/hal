@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Utils &mdash; hal_py v3.3.0-21-gf98759867 documentation</title>
+  <title>Netlist Utils &mdash; hal_py v3.3.0-22-g16fa0378b documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.3.0-21-gf98759867
+                v3.3.0-22-g16fa0378b
               </div>
             
           
@@ -253,6 +253,24 @@ Before adding a gate to the chain, an optional user-defined filter is evaluated 
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistUtils.get_ff_dependency_matrix">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_ff_dependency_matrix</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Tuple[Dict[int, hal::Gate], List[List[int]]]<a class="headerlink" href="#hal_py.NetlistUtils.get_ff_dependency_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the FF dependency matrix of a netlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to extract the dependency matrix from.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A pair consisting of std::map&lt;u32, Gate*&gt;, which includes the mapping from the original gate</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pair(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>, <a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>), <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>]])</td>
 </tr>
 </tbody>
 </table>
