@@ -25,8 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/data_container.h"
-#include "hal_core/netlist/event_handler.h"
-
+#include "hal_core/netlist/event_system/event_handler.h"
 
 #include <functional>
 #include <map>
@@ -68,6 +67,13 @@ namespace hal
          * @returns True if both nets are unequal, false otherwise.
          */
         bool operator!=(const Net& other) const;
+
+        /**
+         * Hash function for python binding
+         *
+         * @return Pybind11 compatible hash
+         */
+        ssize_t get_hash() const;
 
         /**
          * Get the unique id of the net.
@@ -179,7 +185,7 @@ namespace hal
          *
          * @returns The (first) source endpoint.
          */
-        [[deprecated("Use get_sources() instead.")]] Endpoint* get_source() const;
+        [[deprecated("Will be removed in a future version. Use get_sources() instead.")]] Endpoint* get_source() const;
 
         /*
          *      dst specific functions

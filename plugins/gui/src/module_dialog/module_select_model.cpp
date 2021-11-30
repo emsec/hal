@@ -17,6 +17,8 @@
 namespace hal
 {
     //---------------- HISTORY ----------------------------------------
+    const int ModuleSelectHistory::sMaxEntries = 10;
+
     ModuleSelectHistory* ModuleSelectHistory::inst = nullptr;
 
     ModuleSelectHistory* ModuleSelectHistory::instance()
@@ -30,6 +32,7 @@ namespace hal
     {
         removeAll(id);
         prepend(id);
+        while (size() > sMaxEntries) takeLast();
     }
 
     //---------------- ENTRY ------------------------------------------
@@ -256,9 +259,9 @@ namespace hal
     {
         if (sCurrentPicker)
             sCurrentPicker->deleteLater();
-        connect(this, &ModuleSelectPicker::triggerModuleCursor, gContentManager->getGraphTabWidget(), &GraphTabWidget::setModuleSelectCursor);
+        connect(this, &ModuleSelectPicker::triggerCursor, gContentManager->getGraphTabWidget(), &GraphTabWidget::setSelectCursor);
         sCurrentPicker = this;
-        Q_EMIT(triggerModuleCursor(true));
+        Q_EMIT(triggerCursor(GraphTabWidget::PickModule));
     }
 
     void ModuleSelectPicker::handleSelectionChanged(void* sender)
@@ -323,7 +326,7 @@ namespace hal
             return;
         ModuleSelectPicker* toDelete = sCurrentPicker;
         sCurrentPicker               = nullptr;
-        toDelete->triggerModuleCursor(false);
+        toDelete->triggerCursor(false);
         disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, toDelete, &ModuleSelectPicker::handleSelectionChanged);
         toDelete->deleteLater();
     }
@@ -341,7 +344,7 @@ namespace hal
         prox->setSourceModel(modl);
         setModel(prox);
 
-        connect(selectionModel(), &QItemSelectionModel::currentChanged, this, &ModuleSelectView::handleCurrentChanged);
+        connect(selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleSelectView::handleSelectionChanged);
         connect(this, &QTableView::doubleClicked, this, &ModuleSelectView::handleDoubleClick);
         setSortingEnabled(true);
         sortByColumn(history ? -1 : 2, Qt::AscendingOrder);
@@ -350,13 +353,18 @@ namespace hal
         verticalHeader()->hide();
     }
 
-    void ModuleSelectView::handleCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
+    void ModuleSelectView::handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
     {
-        Q_UNUSED(previous);
+        if (selected.indexes().empty())
+        {
+            Q_EMIT(moduleSelected(0, false));
+            return;
+        }
+        Q_UNUSED(deselected);
         const ModuleSelectProxy* prox = static_cast<const ModuleSelectProxy*>(model());
         Q_ASSERT(prox);
         const ModuleSelectModel* modl = static_cast<const ModuleSelectModel*>(prox->sourceModel());
-        QModelIndex sourceIndex       = prox->mapToSource(current);
+        QModelIndex sourceIndex       = prox->mapToSource(selected.indexes().at(0));
         u32 selModId                  = modl->moduleId(sourceIndex.row());
         Q_EMIT(moduleSelected(selModId, false));
     }

@@ -272,13 +272,6 @@ namespace hal
             Q_EMIT netlistMarkedGlobalOutput(object, associated_data);
             break;
         }
-        case NetlistEvent::event::marked_global_inout:
-        {
-            ///< associated_data = id of net
-
-            Q_EMIT netlistMarkedGlobalInout(object, associated_data);
-            break;
-        }
         case NetlistEvent::event::unmarked_global_input:
         {
             ///< associated_data = id of net
@@ -293,13 +286,6 @@ namespace hal
             gGraphContextManager->handleUnmarkedGlobalOutput(associated_data);
 
             Q_EMIT netlistUnmarkedGlobalOutput(object, associated_data);
-            break;
-        }
-        case NetlistEvent::event::unmarked_global_inout:
-        {
-            ///< associated_data = id of net
-
-            Q_EMIT netlistUnmarkedGlobalInout(object, associated_data);
             break;
         }
         }
@@ -326,6 +312,9 @@ namespace hal
             break;
         case GroupingEvent::event::name_changed:
             Q_EMIT groupingNameChanged(grp);
+            break;
+        case GroupingEvent::event::color_changed:
+            Q_EMIT groupingColorChanged(grp);
             break;
         case GroupingEvent::event::gate_assigned:
             Q_EMIT groupingGateAssigned(grp,associated_data);
@@ -369,6 +358,8 @@ namespace hal
             {
                 mModuleModel->setRandomColor(mod->get_id());
             }
+
+            gGraphContextManager->handleModuleCreated(mod);
 
             Q_EMIT moduleCreated(mod);
             break;
@@ -498,6 +489,8 @@ namespace hal
             //< no associated_data
 
            gSelectionRelay->handleGateRemoved(gat->get_id());
+
+           gGraphContextManager->handleGateRemoved(gat);
 
             Q_EMIT gateRemoved(gat);
             break;

@@ -10,6 +10,7 @@
 #include "gui/spinner_widget/spinner_widget.h"
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
+#include "gui/graph_widget/progress_bar.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 #include "gui/module_widget/module_widget.h"
@@ -22,12 +23,12 @@
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/action_rename_object.h"
+#include "gui/settings/settings_items/settings_item_spinbox.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/utils.h"
 
-#include <QDebug>
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
@@ -35,12 +36,24 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
+#include <QGraphicsRectItem>
+#include <QApplication>
+#include <QDebug>
 
 namespace hal
 {
+    SettingsItemSpinbox* GraphWidget::sSettingAnimationDuration = new SettingsItemSpinbox(
+                "Animation Duration [1/10s]",
+                "graph_view/animation_duration",
+                10,
+                "Appearance:Graph View",
+                "Duration of 'fly to gate' animation when viewport is zooming in on new target. Unit is 1/10 second, thus 20=2sec, 10=1sec. Value of zero turns animation off."
+            );
+
+
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
         : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)),
-          mNavigationWidgetV3(new GraphNavigationWidget(false)),
+          mNavigationWidgetV3(new GraphNavigationWidget(false)), mProgressBar(nullptr),
           mSpinnerWidget(new SpinnerWidget(this)), mCurrentExpansion(0)
     {
         connect(mNavigationWidgetV3, &GraphNavigationWidget::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);
@@ -61,7 +74,7 @@ namespace hal
         mView->setRenderHint(QPainter::Antialiasing, false);
         mView->setDragMode(QGraphicsView::RubberBandDrag);
 
-        mContext->subscribe(this);
+        mContext->setParentWidget(this);
 
         if (!mContext->sceneUpdateInProgress())
         {
@@ -82,11 +95,37 @@ namespace hal
         connect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
 
         mOverlay->hide();
+        if (mProgressBar)
+        {
+            ProgressBar* removeBar = mProgressBar;
+            mProgressBar = nullptr;
+            removeBar->deleteLater();
+        }
         mSpinnerWidget->hide();
         mOverlay->setWidget(mNavigationWidgetV3);
 
         if (hasFocus())
             mView->setFocus();
+        else if (mStoreViewport.mValid)
+        {
+            mView->fitInView(restoreViewport(),Qt::KeepAspectRatio);
+        }
+    }
+
+    void GraphWidget::showProgress(int percent, const QString &text)
+    {
+        if (!mProgressBar)
+        {
+            mProgressBar = new ProgressBar(mContext->getLayouter()->canRollback() ? mContext : nullptr);
+            mProgressBar->setMinimumSize(width()/2,height()/4);
+            mOverlay->setWidget(mProgressBar);
+            mProgressBar->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+            mOverlay->show();
+        }
+
+        if (!text.isEmpty()) mProgressBar->setText(text);
+        mProgressBar->setValue(percent);
+        qApp->processEvents();
     }
 
     void GraphWidget::handleSceneUnavailable()
@@ -107,14 +146,30 @@ namespace hal
         mContext = nullptr;
     }
 
-    void GraphWidget::handleStatusUpdate(const int percent)
+    void GraphWidget::storeViewport()
     {
-        Q_UNUSED(percent)
+        if (!mContext->getLayouter()->done())
+        {
+            mStoreViewport.mValid = false;
+            return;
+        }
+        QRect vg = mView->viewport()->geometry();
+        QPoint viewportCenter = (vg.topLeft() + vg.bottomRight()) / 2;
+        mStoreViewport.mValid = true;
+        mStoreViewport.mRect  = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+        mStoreViewport.mGrid  = mView->closestLayouterPos(mView->mapToScene(QPoint(viewportCenter)));
+//        qDebug() << "store" << viewportCenter << mStoreViewport.mGrid[0] << mStoreViewport.mGrid[1] << mStoreViewport.mRect;
     }
 
-    void GraphWidget::handleStatusUpdate(const QString& message)
+    QRectF GraphWidget::restoreViewport(bool reset)
     {
-        Q_UNUSED(message)
+        if (!mStoreViewport.mValid) return QRectF();
+        if (reset) mStoreViewport.mValid = false;
+
+        QPointF centerPos(mContext->getLayouter()->gridXposition(mStoreViewport.mGrid[0].x()),
+                          mContext->getLayouter()->gridYposition(mStoreViewport.mGrid[0].y()));
+        QPointF topLeft = mStoreViewport.mRect.topLeft() - mStoreViewport.mGrid[1] + centerPos;
+        return QRectF(topLeft,mStoreViewport.mRect.size());
     }
 
     void GraphWidget::keyPressEvent(QKeyEvent* event)
@@ -308,9 +363,10 @@ namespace hal
 
     void GraphWidget::handleNavigationJumpRequested(const Node &origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
     {
-        bool bail_animation = false;
+//        bool bail_animation = false;
 
         setFocus();
+        storeViewport();
 
         // ASSERT INPUTS ARE VALID
         auto n = gNetlist->get_net_by_id(via_net);
@@ -375,7 +431,7 @@ namespace hal
             // FIXME find out how to do this properly
             // If we have added any gates, the scene may have resized. In that case, the animation can be erratic,
             // so we set a mFlag here that we can't run the animation. See end of this method for more details.
-            bail_animation = true;
+            //            bail_animation = true;
         }
         else
         {
@@ -403,7 +459,7 @@ namespace hal
 
             u32 cnt = 0;
             // TODO simplify (we do actually know if we're navigating left or right)
-            for (const auto& pin : g->get_input_pins())
+            for (const auto& pin : g->get_type()->get_input_pins())
             {
                 if (g->get_fan_in_net(pin) == n)    // input net
                 {
@@ -416,7 +472,7 @@ namespace hal
             if (sfoc == SelectionRelay::Subfocus::None)
             {
                 cnt = 0;
-                for (const auto& pin : g->get_output_pins())
+                for (const auto& pin : g->get_type()->get_output_pins())
                 {
                     if (g->get_fan_out_net(pin) == n)    // input net
                     {
@@ -499,7 +555,7 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left)
                 {
-                    std::string pin_type = g->get_input_pins()[gSelectionRelay->subfocusIndex()];
+                    std::string pin_type = g->get_type()->get_input_pins()[gSelectionRelay->subfocusIndex()];
                     Net* n               = g->get_fan_in_net(pin_type);
 
                     if (!n)
@@ -523,7 +579,7 @@ namespace hal
                         mOverlay->show();
                     }
                 }
-                else if (g->get_input_pins().size())
+                else if (g->get_type()->get_input_pins().size())
                 {
                     gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, g->get_id(),
                                               SelectionRelay::Subfocus::Left, 0);
@@ -620,7 +676,7 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right)
                 {
-                    auto n = g->get_fan_out_net(g->get_output_pins()[gSelectionRelay->subfocusIndex()]);
+                    auto n = g->get_fan_out_net(g->get_type()->get_output_pins()[gSelectionRelay->subfocusIndex()]);
                     if (!n)
                         return;
 
@@ -642,7 +698,7 @@ namespace hal
                         mOverlay->show();
                     }
                 }
-                else if (g->get_output_pins().size())
+                else if (g->get_type()->get_output_pins().size())
                 {
                     gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,g->get_id(),
                                               SelectionRelay::Subfocus::Right,0);
@@ -847,7 +903,23 @@ namespace hal
 
     void GraphWidget::focusRect(QRectF targetRect, bool applyCenterFix)
     {
-        auto currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+        QRectF currentRect;
+        if (mStoreViewport.mValid)
+        {
+            currentRect = restoreViewport();
+            mView->fitInView(currentRect, Qt::KeepAspectRatio);
+/*
+            QRect vg = mView->viewport()->geometry();
+            QPoint viewportCenter = (vg.topLeft() + vg.bottomRight()) / 2;
+            QVector<QPoint> qp = mView->closestLayouterPos(mView->mapToScene(QPoint(viewportCenter)));
+            qDebug() << "focus" << viewportCenter << qp[0] << qp[1] << currentRect;
+            */
+        }
+        else {
+            currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+        }
+
+        int durationMsec = sSettingAnimationDuration->value().toInt() * 100;
 
         //check prevents jitter bug / resizing bug occuring due to error in 'fitToView'
         //only happens when current and target are the same as on last usage
@@ -864,20 +936,27 @@ namespace hal
                 targetRect.moveCenter(centerFix);
             }
 
-            auto anim = new QVariantAnimation();
-            anim->setDuration(1000);
-            anim->setStartValue(currentRect);
-            anim->setEndValue(targetRect);
+            if (durationMsec)
+            {
+                auto anim = new QVariantAnimation();
+                anim->setDuration(durationMsec);
+                anim->setStartValue(currentRect);
+                anim->setEndValue(targetRect);
 
-            connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
-                mView->fitInView(value.toRectF(), Qt::KeepAspectRatio);
-            });
+                connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
+                    mView->fitInView(value.toRectF(), Qt::KeepAspectRatio);
+                });
 
-            connect(anim, &QVariantAnimation::finished, [this](){
-                mRectAfterFocus = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
-            });
+                connect(anim, &QVariantAnimation::finished, [this](){
+                    mRectAfterFocus = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+                });
 
-            anim->start(QAbstractAnimation::DeleteWhenStopped);
+                anim->start(QAbstractAnimation::DeleteWhenStopped);
+            }
+            else
+            {
+                mView->fitInView(targetRect, Qt::KeepAspectRatio);
+            }
         }
     }
 

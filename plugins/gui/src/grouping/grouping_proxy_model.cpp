@@ -4,27 +4,22 @@
 
 namespace hal
 {
-    GroupingProxyModel::GroupingProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical)
+    GroupingProxyModel::GroupingProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::natural)
     {
     }
 
     bool GroupingProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
     {
-        if(!filterRegExp().isEmpty())
+        if(filterRegularExpression().pattern().isEmpty())
+            return true;
+
+        QModelIndex source_index = sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent);
+        if(source_index.isValid())
         {
-            QModelIndex source_index = sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent);
-            //QModelIndex source_index = sourceModel()->index(sourceRow, 0, sourceParent);
-            if(source_index.isValid())
-            {
-                if (sourceModel()->data(source_index, filterRole()).toString().contains(filterRegExp()))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+            if (sourceModel()->data(source_index, filterRole()).toString().contains(filterRegularExpression()))
+                return true;
+            else
+                return false;
         }
 
         return true;

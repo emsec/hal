@@ -25,7 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/data_container.h"
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 
 #include <functional>
@@ -73,6 +73,13 @@ namespace hal
         bool operator!=(const Module& other) const;
 
         /**
+         * Hash function for python binding
+         *
+         * @return Pybind11 compatible hash
+         */
+        ssize_t get_hash() const;
+
+        /**
          * Get the unique ID of the module.
          *
          * @returns The unique id.
@@ -113,6 +120,12 @@ namespace hal
          * @returns The grouping.
          */
         Grouping* get_grouping() const;
+
+        /**
+         * Get submodule depth of module
+         * @returns 0=top_level module, 1=submodule from top_level, 2=submodule from submodule, ...
+         */
+        int get_submodule_depth() const;
 
         /**
          * Get the parent module of this module.<br>
@@ -167,6 +180,7 @@ namespace hal
         Netlist* get_netlist() const;
 
         /**
+         * TODO test
          * Get all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
          *
          * @returns A sorted vector of nets.
@@ -199,8 +213,9 @@ namespace hal
          *
          * @param[in] input_net - The input net.
          * @param[in] port_name - The input port name.
+         * @returns True on success, false otherwise.
          */
-        void set_input_port_name(Net* input_net, const std::string& port_name);
+        bool set_input_port_name(Net* input_net, const std::string& port_name);
 
         /**
          * Get the name of the port corresponding to the specified input net.
@@ -244,8 +259,9 @@ namespace hal
          *
          * @param[in] output_net - The output net.
          * @param[in] port_name - The output port name.
+         * @returns True on success, false otherwise.
          */
-        void set_output_port_name(Net* output_net, const std::string& port_name);
+        bool set_output_port_name(Net* output_net, const std::string& port_name);
 
         /**
          * Get the name of the port corresponding to the specified output net.

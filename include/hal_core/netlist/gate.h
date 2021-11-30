@@ -27,7 +27,7 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/data_container.h"
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <functional>
@@ -72,6 +72,13 @@ namespace hal
          * @returns True if both gates are unequal, false otherwise.
          */
         bool operator!=(const Gate& other) const;
+
+        /**
+         * Hash function for python binding
+         *
+         * @return Pybind11 compatible hash
+         */
+        ssize_t get_hash() const;
 
         /**
          * Get the unique id of the gate.
@@ -253,18 +260,22 @@ namespace hal
          */
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get a list of all input pin types of the gate.
          *
          * @returns A vector of input pin types.
          */
-        std::vector<std::string> get_input_pins() const;
+        [[deprecated("Will be removed in a future version. Use get_type()->get_input_pins() instead.")]] std::vector<std::string> get_input_pins() const;
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Get a list of all output pin types of the gate.
          *
          * @returns A vector of output pin types.
          */
-        std::vector<std::string> get_output_pins() const;
+        [[deprecated("Will be removed in a future version. Use get_type()->get_output_pins() instead.")]] std::vector<std::string> get_output_pins() const;
 
         /**
          * Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.

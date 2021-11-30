@@ -73,6 +73,32 @@ namespace hal
          */
         CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
 
+
+        /**
+         * Get a deep copy of an entire partial netlist including all of its gates, nets, excluding modules and groupings.
+         *
+         * @param[in] nl - The netlist consisting of the subgraph.
+         * @param[in] subgraph_gates - The gates the subgraph is supposed to consist of.
+         * @returns The deep copy of the netlist.
+         */
+        CORE_API std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<Gate*>& subgraph_gates);
+
+        /**
+         * TODO test
+         * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors
+         * will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0
+         * there is no limitation and the loop continues until no more predecessors/succesors are found.
+         * If a filter function is given only gates matching the filter will be added to the result vector.
+         * The result will not include the provided gate itself.
+         *
+         * @param gate[in] - The initial gate.
+         * @param get_successors[in] - True to return successors, false for Predecessors.
+         * @param depth[in] - Depth of recursion.
+         * @param filter[in] - User-defined filter function.
+         * @return Vector of predecessor/successor gates.
+         */
+        CORE_API std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
+
         /**
          * Find all sequential predecessors or successors of a gate.
          * Traverses combinational logic of all input or output nets until sequential gates are found.
@@ -182,10 +208,10 @@ namespace hal
          * 
          * @param[in] gate - The gate.
          * @param[in] pins - The targeted pins.
-         * @param[in] is_inputs - True to look for fan-in nets, false for fan-out.
+         * @param[in] is_input - True to look for fan-in nets, false for fan-out.
          * @returns The set of nets connected to the pins.
          */
-        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_inputs);
+        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_input);
 
         /**
          * Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
@@ -204,11 +230,13 @@ namespace hal
         void remove_unused_lut_endpoints(Netlist* netlist);
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Rename LUTs that implement simple functions to better reflect their functionality.
          * 
          * @param[in] netlist - The target netlist.
          */
-        void rename_luts_according_to_function(Netlist* netlist);
+        [[deprecated("Will be removed in a future version.")]] void rename_luts_according_to_function(Netlist* netlist);
 
         /**
          * Returns all nets that are considered to be common inputs to the provided gates.
@@ -222,6 +250,7 @@ namespace hal
         std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
 
         /**
+         * TODO test
          * Replace the given gate with a gate of the specified gate type.
          * A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs.
          * A pin can be omitted if no connection at that pin is desired.
@@ -250,6 +279,7 @@ namespace hal
             get_gate_chain(Gate* start_gate, const std::set<std::string>& input_pins = {}, const std::set<std::string>& output_pins = {}, const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
+         * TODO test
          * Find a repeating sequence of gates that are of the specified gate types and connect through the specified pins.
          * The start gate may be any gate within a chain of such sequences, it is not required to be the first or the last gate.
          * However, the start gate must be of the first gate type of the repeating sequence.
@@ -270,5 +300,18 @@ namespace hal
                                                   const std::map<GateType*, std::set<std::string>>& input_pins  = {},
                                                   const std::map<GateType*, std::set<std::string>>& output_pins = {},
                                                   const std::function<bool(const Gate*)>& filter                = nullptr);
+
+        /**
+         * TODO test
+         * Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. 
+         * The gate where the search started from will be the first in the result vector, the end gate will be the last. 
+         * If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
+         *
+         * @param[in] start_gate - The gate to start from.
+         * @param[in] end_gate - The gate to connect to.
+         * @param[in] search_both_directions - True to additionally check whether a shorter path from end to start exists, false otherwise.
+         * @return A vector of gates that connect the start with end gate (possibly in reverse order).
+         */
+        std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
     }    // namespace netlist_utils
 }    // namespace hal

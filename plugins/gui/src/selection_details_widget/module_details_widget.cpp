@@ -95,10 +95,8 @@ namespace hal
 
         connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalInput, this, &ModuleDetailsWidget::handleNetlistMarkedGlobalInput);
         connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalOutput, this, &ModuleDetailsWidget::handleNetlistMarkedGlobalOutput);
-        connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalInout, this, &ModuleDetailsWidget::handleNetlistMarkedGlobalInout);
         connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalInput, this, &ModuleDetailsWidget::handleNetlistUnmarkedGlobalInput);
         connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalOutput, this, &ModuleDetailsWidget::handleNetlistUnmarkedGlobalOutput);
-        connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalInout, this, &ModuleDetailsWidget::handleNetlistUnmarkedGlobalInout);
 
         connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &ModuleDetailsWidget::handleModuleNameChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleAdded, this, &ModuleDetailsWidget::handleSubmoduleAdded);
@@ -617,7 +615,7 @@ namespace hal
             gSelectionRelay->clear();
             gSelectionRelay->addGate(ep->get_gate()->get_id());
 
-            auto pins                          = ep->get_gate()->get_input_pins();
+            auto pins                          = ep->get_gate()->get_type()->get_input_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
             gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,ep->get_gate()->get_id(),
                                       SelectionRelay::Subfocus::Left,index);
@@ -663,7 +661,7 @@ namespace hal
             gSelectionRelay->clear();
             gSelectionRelay->addGate(ep->get_gate()->get_id());
 
-            auto pins                          = ep->get_gate()->get_output_pins();
+            auto pins                          = ep->get_gate()->get_type()->get_output_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
             gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,ep->get_gate()->get_id(),
                                       SelectionRelay::Subfocus::Right,index);
@@ -712,7 +710,7 @@ namespace hal
             auto g = gNetlist->get_gate_by_id(*to_gates.constBegin());
 
             u32 index_cnt = 0;
-            for (const auto& pin : g->get_input_pins())
+            for (const auto& pin : g->get_type()->get_input_pins())
             {
                 if (g->get_fan_in_net(pin) == n)
                 {

@@ -1,6 +1,6 @@
 #include "hal_core/netlist/netlist.h"
 
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -141,101 +141,11 @@ namespace hal
         return m_event_handler.get();
     }
 
-    void Netlist::clear_caches()
-    {
-        m_manager->clear_caches();
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-
-    u32 Netlist::get_unique_module_id()
-    {
-        if (!m_free_module_ids.empty())
-        {
-            return *(m_free_module_ids.begin());
-        }
-        while (m_used_module_ids.find(m_next_module_id) != m_used_module_ids.end())
-        {
-            m_next_module_id++;
-        }
-        return m_next_module_id;
-    }
-
-    Module* Netlist::create_module(const u32 id, const std::string& name, Module* parent, const std::vector<Gate*>& gates)
-    {
-        auto m = m_manager->create_module(id, parent, name);
-        if (m == nullptr)
-        {
-            return nullptr;
-        }
-        for (auto g : gates)
-        {
-            m->assign_gate(g);
-        }
-        return m;
-    }
-
-    Module* Netlist::create_module(const std::string& name, Module* parent, const std::vector<Gate*>& gates)
-    {
-        return create_module(get_unique_module_id(), name, parent, gates);
-    }
-
-    bool Netlist::delete_module(Module* module)
-    {
-        return m_manager->delete_module(module);
-    }
-
-    Module* Netlist::get_top_module() const
-    {
-        return m_top_module;
-    }
-
-    Module* Netlist::get_module_by_id(u32 id) const
-    {
-        auto it = m_modules_map.find(id);
-        if (it == m_modules_map.end())
-        {
-            log_error("netlist", "there is no module with ID {} in the netlist with ID {}.", id, m_netlist_id);
-            return nullptr;
-        }
-        return it->second.get();
-    }
-
-    const std::vector<Module*>& Netlist::get_modules() const
-    {
-        return m_modules;
-    }
-
-    std::vector<Module*> Netlist::get_modules(const std::function<bool(Module*)>& filter) const
-    {
-        if (!filter)
-        {
-            return m_modules;
-        }
-        std::vector<Module*> res;
-        for (auto module : m_modules)
-        {
-            if (!filter(module))
-            {
-                continue;
-            }
-            res.push_back(module);
-        }
-        return res;
-    }
-
-    bool Netlist::is_module_in_netlist(Module* module) const
-    {
-        return (module != nullptr) && (m_modules_set.find(module) != m_modules_set.end());
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+     * ################################################################
+     *      gate functions
+     * ################################################################
+     */
 
     u32 Netlist::get_unique_gate_id()
     {
@@ -391,10 +301,11 @@ namespace hal
         return m_gnd_gates;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+     * ################################################################
+     *      net functions
+     * ################################################################
+     */
 
     u32 Netlist::get_unique_net_id()
     {
@@ -617,10 +528,98 @@ namespace hal
         return m_global_output_nets;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+     * ################################################################
+     *      module functions
+     * ################################################################
+     */
+
+    u32 Netlist::get_unique_module_id()
+    {
+        if (!m_free_module_ids.empty())
+        {
+            return *(m_free_module_ids.begin());
+        }
+        while (m_used_module_ids.find(m_next_module_id) != m_used_module_ids.end())
+        {
+            m_next_module_id++;
+        }
+        return m_next_module_id;
+    }
+
+    Module* Netlist::create_module(const u32 id, const std::string& name, Module* parent, const std::vector<Gate*>& gates)
+    {
+        auto m = m_manager->create_module(id, parent, name);
+        if (m == nullptr)
+        {
+            return nullptr;
+        }
+        for (auto g : gates)
+        {
+            m->assign_gate(g);
+        }
+        return m;
+    }
+
+    Module* Netlist::create_module(const std::string& name, Module* parent, const std::vector<Gate*>& gates)
+    {
+        return create_module(get_unique_module_id(), name, parent, gates);
+    }
+
+    bool Netlist::delete_module(Module* module)
+    {
+        return m_manager->delete_module(module);
+    }
+
+    Module* Netlist::get_top_module() const
+    {
+        return m_top_module;
+    }
+
+    Module* Netlist::get_module_by_id(u32 id) const
+    {
+        auto it = m_modules_map.find(id);
+        if (it == m_modules_map.end())
+        {
+            log_error("netlist", "there is no module with ID {} in the netlist with ID {}.", id, m_netlist_id);
+            return nullptr;
+        }
+        return it->second.get();
+    }
+
+    const std::vector<Module*>& Netlist::get_modules() const
+    {
+        return m_modules;
+    }
+
+    std::vector<Module*> Netlist::get_modules(const std::function<bool(Module*)>& filter) const
+    {
+        if (!filter)
+        {
+            return m_modules;
+        }
+        std::vector<Module*> res;
+        for (auto module : m_modules)
+        {
+            if (!filter(module))
+            {
+                continue;
+            }
+            res.push_back(module);
+        }
+        return res;
+    }
+
+    bool Netlist::is_module_in_netlist(Module* module) const
+    {
+        return (module != nullptr) && (m_modules_set.find(module) != m_modules_set.end());
+    }
+
+    /*
+     * ################################################################
+     *      grouping functions
+     * ################################################################
+     */
 
     u32 Netlist::get_unique_grouping_id()
     {
@@ -684,10 +683,11 @@ namespace hal
         return res;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+     * ################################################################
+     *      getter/setter for ID tracking
+     * ################################################################
+     */
 
     u32 Netlist::get_next_gate_id() const
     {
@@ -807,6 +807,65 @@ namespace hal
     void Netlist::set_free_grouping_ids(const std::set<u32> ids)
     {
         m_free_grouping_ids = ids;
+    }
+
+    /*
+     * ################################################################
+     *      utility functions
+     * ################################################################
+     */
+
+    void Netlist::clear_caches()
+    {
+        m_manager->clear_caches();
+    }
+
+    bool Netlist::load_gate_locations_from_data(const std::string& data_category, const std::pair<std::string, std::string>& data_identifiers)
+    {
+        std::string category;
+        std::pair<std::string, std::string> identifiers;
+
+        if (data_category.empty())
+        {
+            category    = m_gate_library->get_gate_location_data_category();
+            identifiers = m_gate_library->get_gate_location_data_identifiers();
+        }
+        else
+        {
+            category    = data_category;
+            identifiers = data_identifiers;
+        }
+
+        u32 failed = 0;
+        for (Gate* gate : m_gates)
+        {
+            if (gate->has_data(category, identifiers.first))
+            {
+                try
+                {
+                    i32 x_loc = std::stoi(std::get<1>(gate->get_data(category, identifiers.first)));
+                    i32 y_loc = std::stoi(std::get<1>(gate->get_data(category, identifiers.second)));
+
+                    gate->set_location(std::make_pair(x_loc, y_loc));
+
+                    continue;
+                }
+                catch (const std::exception& e)
+                {
+                    log_error("netlist", "{}", e.what());
+                    return false;
+                }
+            }
+
+            failed++;
+        }
+
+        if (failed > 0)
+        {
+            log_warning("netlist", "failed to load locations of {} gates.", failed);
+        }
+
+        return true;
     }
 
 }    // namespace hal

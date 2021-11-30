@@ -76,8 +76,9 @@ namespace hal {
         void handlePickFromGraph();
         void handleCreateNewModule();
         void handleToggleSearchbar();
-        void handleTreeSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
+        void handleTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
         void handleTreeDoubleClick(const QModelIndex& index);
+        void handleCurrentTabChanged(int index);
 
     public Q_SLOTS:
         /**
@@ -103,6 +104,13 @@ namespace hal {
          */
         void keybindToggleSearchbar(const QKeySequence& seq);
 
+        /**
+         * Q_SLOT to overwrite the filter with the regular expression given in <i>text</i>.
+         *
+         * @param text - Contains the regular expression filter as a string
+         */
+        void filter(const QString& text);
+
     private:
         u32 mSelectedId;
         QDialogButtonBox* mButtonBox;
@@ -112,7 +120,9 @@ namespace hal {
         QTabWidget* mTabWidget;
 
         ModuleProxyModel* mModuleTreeProxyModel;
+        ModuleSelectProxy* mModuleTableProxyModel;
         ModuleSelectModel* mModuleSelectModel;
+
         Searchbar* mSearchbar;
         QAction* mToggleSearchbar;
         ModuleSelectExclude mSelectExclude;

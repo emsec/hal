@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 
 #include <functional>
@@ -146,12 +146,6 @@ namespace hal
          * @returns The gate library.
          */
         const GateLibrary* get_gate_library() const;
-
-        /**
-         * Clear all internal caches of the netlist.<br>
-         * In a typical application, calling this function is not required.
-         */
-        void clear_caches();
 
         /*
          * ################################################################
@@ -755,6 +749,28 @@ namespace hal
          * @return Pointer to netlist event handler
          */
         EventHandler* get_event_handler() const;
+
+        /*
+         * ################################################################
+         *      utility functions
+         * ################################################################
+         */
+
+        /**
+         * Clear all internal caches of the netlist.<br>
+         * In a typical application, calling this function is not required.
+         */
+        void clear_caches();
+
+        /**
+         * Load the locations of the gates in the netlist from their associated data using the specified category and identifier.
+         * If no parameter is given, the data is querried using the default category and identifier stored with the gate library.
+         * 
+         * @param[in] data_category - The data category.
+         * @param[in] data_identifiers - The data identifiers for the x- and y-coordinates.
+         * @returns True on success, false otherwise.
+         */
+        bool load_gate_locations_from_data(const std::string& data_category = "", const std::pair<std::string, std::string>& data_identifiers = std::pair<std::string, std::string>());
 
     private:
         /* stores the gate library */

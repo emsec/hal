@@ -1,7 +1,7 @@
 #include "hal_core/netlist/net.h"
 
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/netlist.h"
@@ -78,6 +78,11 @@ namespace hal
     bool Net::operator!=(const Net& other) const
     {
         return !operator==(other);
+    }
+
+    ssize_t Net::get_hash() const
+    {
+        return (uintptr_t) this;
     }
 
     u32 Net::get_id() const

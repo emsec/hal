@@ -300,7 +300,7 @@ namespace hal
             }
         }
 
-        // TODO load gate coordinates
+        m_netlist->load_gate_locations_from_data();
 
         return result;
     }
@@ -489,7 +489,7 @@ namespace hal
                     return false;
                 }
             }
-            else if (next_token == "wire")
+            else if (next_token == "wire" || next_token == "tri")
             {
                 if (!parse_signal_definition(module, internal_attributes))
                 {
@@ -685,7 +685,8 @@ namespace hal
 
     bool VerilogParser::parse_signal_definition(VerilogModule& module, std::map<std::string, std::string>& attributes)
     {
-        m_token_stream.consume("wire", true);
+        // consume "wire" or "tri"
+        m_token_stream.consume();
 
         TokenStream<std::string> signal_stream = m_token_stream.extract_until(";");
         m_token_stream.consume(";", true);
@@ -919,9 +920,13 @@ namespace hal
         m_instance_name_occurrences["top_module"]++;
 
         // global input/output signals will be named after ports, so take into account for aliases
-        for (const std::string& port_identifier : top_module.m_port_identifiers)
+        for (const auto& [_, expanded_identifiers] : top_module.m_expanded_port_identifiers)
         {
-            m_signal_name_occurrences[port_identifier]++;
+            UNUSED(_);
+            for (const std::string& port_identifier : expanded_identifiers)
+            {
+                m_signal_name_occurrences[port_identifier]++;
+            }
         }
 
         while (!q.empty())
@@ -931,9 +936,13 @@ namespace hal
 
             instantiation_count[module->m_name]++;
 
-            for (const std::string& signal_identifier : module->m_signals)
+            for (const auto& [_, expanded_identifiers] : module->m_expanded_signals)
             {
-                m_signal_name_occurrences[signal_identifier]++;
+                UNUSED(_);
+                for (const std::string& signal_identifier : expanded_identifiers)
+                {
+                    m_signal_name_occurrences[signal_identifier]++;
+                }
             }
 
             for (const auto& instance_identifier : module->m_instances)

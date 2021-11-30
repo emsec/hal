@@ -23,9 +23,9 @@
 
 #pragma once
 
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
-#include "hal_core/netlist/event_handler.h"
-
+#include "hal_core/utilities/utils.h"
 
 #include <functional>
 #include <unordered_map>
@@ -68,6 +68,27 @@ namespace hal
          * @returns The name.
          */
         std::string get_name() const;
+
+        /**
+         * Set the color of the grouping.
+         *
+         * @param[in] c - The new color.
+         */
+        void set_color(utils::Color c);
+
+        /**
+         * Get the color of the grouping.
+         *
+         * @returns The color.
+         */
+        utils::Color get_color() const;
+
+        /**
+         * Generates a new color distinct from previous colors. Called for each new grouping.
+         *
+         * @returns The next color.
+         */
+        utils::Color next_color();
 
         /**
          * Get the netlist this grouping is associated with.
@@ -323,6 +344,7 @@ namespace hal
 
         u32 m_id;
         std::string m_name;
+        utils::Color m_color;
         NetlistInternalManager* m_internal_manager;
 
         std::vector<Gate*> m_gates;

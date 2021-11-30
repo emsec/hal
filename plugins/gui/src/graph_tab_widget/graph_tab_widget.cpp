@@ -76,7 +76,7 @@ namespace hal
 
     GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent),
         mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2),
-        mModuleSelectCursor(false)
+        mSelectCursor(Select)
     {
         mContentLayout->addWidget(mTabWidget);
         mTabWidget->setTabsClosable(true);
@@ -266,20 +266,26 @@ namespace hal
 
         QMenu contextMenu("Context menu", this);
 
-        contextMenu.addAction("Close This Tab", [this, index](){
+        contextMenu.addAction("Close", [this, index](){
             handleTabCloseRequested(index);
         });
 
-        contextMenu.addAction("Close Other Tabs", [this, index](){
+        contextMenu.addSeparator();
+
+        contextMenu.addAction("Close all", [this, index](){
+            handleCloseAllTabs();
+        });
+
+        contextMenu.addAction("Close all others", [this, index](){
             handleCloseTabsToRight(index);
             handleCloseTabsToLeft(index);
         });
 
-        contextMenu.addAction("Close Tabs To Right", [this, index](){
+        contextMenu.addAction("Close all right", [this, index](){
             handleCloseTabsToRight(index);
         });
 
-        contextMenu.addAction("Close Tabs To Left", [this, index](){
+        contextMenu.addAction("Close all left", [this, index](){
             handleCloseTabsToLeft(index);
         });
 
@@ -304,19 +310,31 @@ namespace hal
         }
     }
 
-    void GraphTabWidget::setModuleSelectCursor(bool on)
+    void GraphTabWidget::handleCloseAllTabs()
     {
-        mModuleSelectCursor = on;
-        int n = mTabWidget->count();
-        if (mModuleSelectCursor)
+        int count = mTabWidget->count();
+        for (int i = 0; i < count; i++)
         {
-            ;
-            QCursor modCurs(QPixmap(":/icons/module_cursor","PNG"));
-            for (int i=0; i<n; i++)
-                mTabWidget->widget(i)->setCursor(modCurs);
+            handleTabCloseRequested(0);
         }
-        else
+    }
+
+    void GraphTabWidget::setSelectCursor(int icurs)
+    {
+        mSelectCursor = (GraphCursor) icurs;
+        int n = mTabWidget->count();
+        if (mSelectCursor == Select)
+        {
             for (int i=0; i<n; i++)
                 mTabWidget->widget(i)->unsetCursor();
+        }
+        else
+        {
+            QCursor gcurs(mSelectCursor == PickModule
+                          ? QPixmap(":/icons/module_cursor","PNG")
+                          : QPixmap(":/icons/gate_cursor","PNG"));
+            for (int i=0; i<n; i++)
+                mTabWidget->widget(i)->setCursor(gcurs);
+        }
     }
 }

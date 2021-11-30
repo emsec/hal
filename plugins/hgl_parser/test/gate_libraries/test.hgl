@@ -167,8 +167,61 @@
         },
         {
             "name": "gt_ff",
-            "types": ["ff"],
+            "types": ["ff", "sequential"],
             "ff_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "D",
+                "clocked_on": "CLK & EN",
+                "clear_on": "R",
+                "preset_on": "S",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "H"
+            },
+            "pins": [
+                {
+                    "name": "CLK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "EN",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "R",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "S",
+                    "direction": "input",
+                    "type": "set"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "gt_ff_init",
+            "types": ["ff", "sequential"],
+            "ff_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "next_state": "D",
                 "clocked_on": "CLK & EN",
                 "clear_on": "R",
@@ -218,8 +271,10 @@
         },
         {
             "name": "gt_latch",
-            "types": ["latch"],
+            "types": ["latch", "sequential"],
             "latch_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
                 "data_in": "D",
                 "enable_on": "EN",
                 "clear_on": "R",

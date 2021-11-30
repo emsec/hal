@@ -66,7 +66,7 @@ namespace hal
     protected:
         /**
          * Overrides QSortFilterProxyModel::filterAcceptsRow to implement the filter logic based on the regular
-         * expression stored by setFilterRegExp.<br>
+         * expression stored by setFilterRegularExpression.<br>
          * Returns <b>true</b> if the item in the row indicated by <i>sourceRow</i> and <i>sourceParent</i> should be included
          * in the model.
          *

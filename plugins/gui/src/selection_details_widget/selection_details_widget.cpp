@@ -5,6 +5,7 @@
 #include "gui/selection_details_widget/net_details_widget.h"
 #include "gui/selection_details_widget/module_details_widget.h"
 #include "gui/module_dialog/module_dialog.h"
+#include "gui/grouping_dialog/grouping_dialog.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/user_action/action_add_items_to_object.h"
@@ -56,8 +57,7 @@ namespace hal
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
         : ContentWidget("Selection Details", parent), mNumberSelectedItems(0),
           mSelectionToGrouping(new QAction),
-          mSelectionToModule(new QAction),
-          mSearchAction(new QAction)
+          mSelectionToModule(new QAction)
     {
         //needed to load the properties
         ensurePolished();
@@ -153,7 +153,7 @@ namespace hal
         connect(mSelectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &SelectionDetailsWidget::handleSelectionUpdate);
         connect(mSearchbar, &Searchbar::textEdited, mSelectionTreeView, &SelectionTreeView::handleFilterTextChanged);
-        connect(mSearchbar, &Searchbar::textEdited, this, &SelectionDetailsWidget::handleFilterTextChanged);
+        connect(mSearchbar, &Searchbar::textEdited, this, &SelectionDetailsWidget::updateSearchIcon);
         connect(mSelectionTreeView, &SelectionTreeView::itemDoubleClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
         connect(mSelectionTreeView, &SelectionTreeView::focusItemClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
     }
@@ -222,39 +222,15 @@ namespace hal
 
     void SelectionDetailsWidget::selectionToGrouping()
     {
-        QStringList groupingNames =
-                gContentManager->getGroupingManagerWidget()->getModel()->groupingNames();
-        if (groupingNames.isEmpty())
-            selectionToNewGrouping();
-        else
+        GroupingDialog gd(this);
+        if (gd.exec() != QDialog::Accepted) return;
+        if (gd.isNewGrouping())
         {
-            QMenu* contextMenu = new QMenu(this);
-
-            QAction* newGrouping = contextMenu->addAction("Create new grouping from selected items");
-            connect(newGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToNewGrouping);
-
-            contextMenu->addSeparator();
-
-            for (const QString& gn : groupingNames)
-            {
-                QAction* toGrouping = contextMenu->addAction(sAddToGrouping+gn);
-                connect(toGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToExistingGrouping);
-            }
-            contextMenu->exec(mapToGlobal(geometry().topLeft()+QPoint(100,0)));
+            selectionToGroupingAction();
+            return;
         }
-    }
-
-    void SelectionDetailsWidget::selectionToNewGrouping()
-    {
-        selectionToGroupingAction();
-    }
-
-    void SelectionDetailsWidget::selectionToExistingGrouping()
-    {
-        const QAction* action = static_cast<const QAction*>(QObject::sender());
-        QString grpName = action->text();
-        if (grpName.startsWith(sAddToGrouping)) grpName.remove(0,sAddToGrouping.size());
-        selectionToGroupingAction(grpName);
+        QString groupName = QString::fromStdString(gNetlist->get_grouping_by_id(gd.groupId())->get_name());
+        selectionToGroupingAction(groupName);
     }
 
     UserAction* SelectionDetailsWidget::groupingUnassignActionFactory(const UserActionObject& obj) const
@@ -322,9 +298,7 @@ namespace hal
 
     void SelectionDetailsWidget::enableSearchbar(bool enable)
     {
-        QString iconStyle = enable
-                ? mSearchIconStyle
-                : mDisabledIconStyle;
+        QString iconStyle = enable ? mSearchIconStyle : mDisabledIconStyle;
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mSearchIconPath));
         if (!enable && mSearchbar->isVisible())
         {
@@ -339,7 +313,7 @@ namespace hal
                 ? mToModuleIconStyle
                 : mDisabledIconStyle;
         mSelectionToModule->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mToModuleIconPath));
-        mSelectionToModule->setEnabled(!gContentManager->getGraphTabWidget()->isModuleSelectCursor()
+        mSelectionToModule->setEnabled(gContentManager->getGraphTabWidget()->selectCursor()==GraphTabWidget::Select
                                        && nodes > 0);
     }
 
@@ -357,8 +331,7 @@ namespace hal
         if (proxy->isGraphicsBusy()) return;
 
         mSearchbar->clear();
-        proxy->handleFilterTextChanged(QString());
-        handleFilterTextChanged(QString());
+        updateSearchIcon();
 
         mNumberSelectedItems = gSelectionRelay->numberSelectedItems();
         QVector<const SelectionTreeItem*> defaultHighlight;
@@ -372,7 +345,7 @@ namespace hal
             canMoveToModule(gSelectionRelay->numberSelectedNodes());
             enableSearchbar(true);
 
-            bool toModuleEnabled = !gContentManager->getGraphTabWidget()->isModuleSelectCursor();
+            bool toModuleEnabled = gContentManager->getGraphTabWidget()->selectCursor()==GraphTabWidget::Select;
             mSelectionToGrouping->setEnabled(true);
             mSelectionToModule->setEnabled(toModuleEnabled);
             mSelectionToGrouping->setIcon(gui_utility::getStyledSvgIcon(mToGroupingIconStyle, mToGroupingIconPath));
@@ -471,7 +444,10 @@ namespace hal
 
     void SelectionDetailsWidget::toggleSearchbar()
     {
-        if(mSearchbar->isHidden())
+        if (!mSearchAction->isEnabled())
+            return;
+
+        if (mSearchbar->isHidden())
         {
             mSearchbar->show();
             mSearchbar->setFocus();
@@ -483,12 +459,12 @@ namespace hal
         }
     }
 
-    void SelectionDetailsWidget::handleFilterTextChanged(const QString& filter_text)
+    void SelectionDetailsWidget::updateSearchIcon()
     {
-        if(filter_text.isEmpty())
-            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-        else
+        if (mSearchbar->filterApplied() && mSearchbar->isVisible())
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
+        else
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
     }
 
     void SelectionDetailsWidget::handleTreeViewItemFocusClicked(const SelectionTreeItem* sti)

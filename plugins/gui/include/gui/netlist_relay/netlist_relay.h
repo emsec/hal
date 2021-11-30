@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 
 #include <QMap>
 #include <QObject>
@@ -229,17 +229,6 @@ namespace hal
         void netlistMarkedGlobalOutput(Netlist* n, const u32 associated_data) const;
 
         /**
-         * Q_SIGNAL to notify that a gate has been marked as a global input net. <br>
-         * Relays the following hal-core event: <i>NetlistEvent::event::marked_global_inout</i>
-         *
-         * @deprecated Inout nets do not exist anymore. Therefore this event is never triggered.
-         *
-         * @param n - The affected netlist
-         * @param associated_data - The id of the newly marked global inout net
-         */
-        void netlistMarkedGlobalInout(Netlist* n, const u32 associated_data) const;
-
-        /**
          * Q_SIGNAL to notify that a net has been unmarked from being a global input net. <br>
          * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_input</i>
          *
@@ -256,17 +245,6 @@ namespace hal
          * @param associated_data - The id of the net that is not a global output net anymore
          */
         void netlistUnmarkedGlobalOutput(Netlist* n, const u32 associated_data) const;
-
-        /**
-         * Q_SIGNAL to notify that a net has been unmarked from being a global inout net. <br>
-         * Relays the following hal-core event: <i>NetlistEvent::event::unmarked_global_inout</i>
-         *
-         * @deprecated Inout nets do not exist anymore. Therefore this event is never triggered.
-         *
-         * @param n - The affected netlist
-         * @param associated_data - The id of the net that is not a global inout net anymore
-         */
-        void netlistUnmarkedGlobalInout(Netlist* n, const u32 associated_data) const;
 
         /*=======================================
            Module Event Signals
@@ -497,6 +475,14 @@ namespace hal
          * @param grp - The renamed grouping
          */
         void groupingNameChanged(Grouping* grp) const;
+
+        /**
+         * Q_SIGNAL to notify that a grouping has been recolored. <br>
+         * Relays the following hal-core event: <i>GroupingEvent::event::color_changed</i>
+         *
+         * @param grp - The renamed grouping
+         */
+        void groupingColorChanged(Grouping* grp) const;
 
         /**
          * Q_SIGNAL to notify that a gate has been assigned to a grouping. <br>

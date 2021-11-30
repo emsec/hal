@@ -2,6 +2,7 @@
 #include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/layout_locker.h"
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/grouping.h"
 #include <QDebug>
@@ -79,6 +80,8 @@ namespace hal
         Grouping* grp;
         mUndoAction = nullptr;
 
+        LayoutLocker llock;
+
         switch (mObject.type())
         {
         case UserActionObjectType::Module:
@@ -148,11 +151,11 @@ namespace hal
             if (grp)
             {
                 for (u32 id : mModules)
-                    grp->assign_module_by_id(id);
+                    grp->assign_module_by_id(id,true);
                 for (u32 id : mGates)
-                    grp->assign_gate_by_id(id);
+                    grp->assign_gate_by_id(id,true);
                 for (u32 id : mNets)
-                    grp->assign_net_by_id(id);
+                    grp->assign_net_by_id(id,true);
             }
             else
                 return false;

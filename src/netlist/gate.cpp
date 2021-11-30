@@ -1,8 +1,10 @@
 #include "hal_core/netlist/gate.h"
 
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -81,6 +83,11 @@ namespace hal
     bool Gate::operator!=(const Gate& other) const
     {
         return !operator==(other);
+    }
+
+    ssize_t Gate::get_hash() const
+    {
+        return (uintptr_t) this;
     }
 
     u32 Gate::get_id() const
@@ -186,7 +193,7 @@ namespace hal
             name = output_pins[0];
         }
 
-        if (m_type->has_property(GateTypeProperty::lut))
+        if (m_type->has_component_of_type(GateTypeComponent::ComponentType::lut))
         {
             auto lut_pins = m_type->get_pins_of_type(PinType::lut);
             if (std::find(lut_pins.begin(), lut_pins.end(), name) != lut_pins.end())
@@ -223,7 +230,7 @@ namespace hal
             res.emplace(it.first, it.second);
         }
 
-        if (!only_custom_functions && m_type->has_property(GateTypeProperty::lut))
+        if (!only_custom_functions && m_type->has_component_of_type(GateTypeComponent::ComponentType::lut))
         {
             for (auto pin : m_type->get_pins_of_type(PinType::lut))
             {
@@ -238,11 +245,24 @@ namespace hal
     {
         UNUSED(pin);
 
-        std::string category   = m_type->get_config_data_category();
-        std::string key        = m_type->get_config_data_identifier();
-        std::string config_str = std::get<1>(get_data(category, key));
-        auto is_ascending      = m_type->is_lut_init_ascending();
-        auto inputs            = get_input_pins();
+        LUTComponent* lut_component = m_type->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
+        if (lut_component == nullptr)
+        {
+            return BooleanFunction();
+        }
+
+        InitComponent* init_component =
+            lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+        if (init_component == nullptr)
+        {
+            return BooleanFunction();
+        }
+
+        const std::string& category     = init_component->get_init_category();
+        const std::string& key          = init_component->get_init_identifiers().front();
+        std::string config_str          = std::get<1>(get_data(category, key));
+        auto is_ascending               = lut_component->is_init_ascending();
+        std::vector<std::string> inputs = m_type->get_input_pins();
 
         BooleanFunction result = BooleanFunction::ZERO;
 
@@ -342,47 +362,52 @@ namespace hal
 
     void Gate::add_boolean_function(const std::string& name, const BooleanFunction& func)
     {
-        if (m_type->has_property(GateTypeProperty::lut))
+        LUTComponent* lut_component = m_type->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
+        if (lut_component != nullptr)
         {
-            auto output_pins = m_type->get_output_pins();
-            if (!output_pins.empty() && name == output_pins[0])
+            InitComponent* init_component =
+            lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+            if (init_component != nullptr)
             {
-                auto tt = func.get_truth_table(get_input_pins());
+                std::vector<std::string> output_pins = m_type->get_output_pins();
+                if (!output_pins.empty() && name == output_pins[0])
+                {
+                    std::vector<BooleanFunction::Value> tt = func.get_truth_table(m_type->get_input_pins());
 
-                u64 config_value = 0;
-                if (!m_type->is_lut_init_ascending())
-                {
-                    std::reverse(tt.begin(), tt.end());
-                }
-                for (auto v : tt)
-                {
-                    if (v == BooleanFunction::X)
+                    u64 config_value = 0;
+                    if (!lut_component->is_init_ascending())
                     {
-                        log_error("netlist",
-                                  "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {} in netlist with ID {} as its truth table contains undefined values.",
-                                  name,
-                                  func.to_string(),
-                                  m_name,
-                                  m_id,
-                                  m_internal_manager->m_netlist->get_id());
-                        return;
+                        std::reverse(tt.begin(), tt.end());
                     }
-                    config_value <<= 1;
-                    config_value |= v;
+                    for (auto v : tt)
+                    {
+                        if (v == BooleanFunction::X)
+                        {
+                            log_error("netlist",
+                                      "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {} in netlist with ID {} as its truth table contains undefined values.",
+                                      name,
+                                      func.to_string(),
+                                      m_name,
+                                      m_id,
+                                      m_internal_manager->m_netlist->get_id());
+                            return;
+                        }
+                        config_value <<= 1;
+                        config_value |= v;
+                    }
+
+                    const std::string& category = init_component->get_init_category();
+                    const std::string& key      = init_component->get_init_identifiers().front();
+
+                    std::stringstream stream;
+                    stream << std::hex << config_value;
+                    set_data(category, key, "bit_vector", stream.str());
                 }
-
-                std::string category = m_type->get_config_data_category();
-                std::string key      = m_type->get_config_data_identifier();
-
-                std::stringstream stream;
-                stream << std::hex << config_value;
-                set_data(category, key, "bit_vector", stream.str());
-
-                return;
             }
         }
 
         m_functions.emplace(name, func);
+        m_event_handler->notify(GateEvent::event::boolean_function_changed, this);
     }
 
     bool Gate::mark_vcc_gate()

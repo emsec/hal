@@ -185,8 +185,9 @@ namespace hal
          * Marks all occurrences of the specified string in the code editor.
          *
          * @param string - The string to mark
+         * @param options - Optional QTextDocument::FindFlags (e.g. "FindCaseSensitively" or "FindWholeWords")
          */
-        void search(const QString& string);
+        void search(const QString& string, QTextDocument::FindFlags options = QTextDocument::FindFlags());
 
         /**
          * Shows/Hides the line numbers at the left side of the code editor.

@@ -290,7 +290,7 @@ namespace hal
             }
         }
 
-        // TODO load gate coordinates
+        m_netlist->load_gate_locations_from_data();
 
         return result;
     }
@@ -1059,9 +1059,13 @@ namespace hal
         m_instance_name_occurrences["top_module"]++;
 
         // global input/output signals will be named after ports, so take into account for aliases
-        for (const ci_string& port_name : top_entity.m_port_names)
+        for (const auto& [_, expanded_names] : top_entity.m_expanded_port_names)
         {
-            m_signal_name_occurrences[port_name]++;
+            UNUSED(_);
+            for (const ci_string& port_identifier : expanded_names)
+            {
+                m_signal_name_occurrences[port_identifier]++;
+            }
         }
 
         while (!q.empty())
@@ -1071,9 +1075,13 @@ namespace hal
 
             instantiation_count[entity->m_name]++;
 
-            for (const ci_string& signal_identifier : entity->m_signals)
+            for (const auto& [_, expanded_names] : entity->m_expanded_signals)
             {
-                m_signal_name_occurrences[signal_identifier]++;
+                UNUSED(_);
+                for (const ci_string& signal_identifier : expanded_names)
+                {
+                    m_signal_name_occurrences[signal_identifier]++;
+                }
             }
 
             for (const ci_string& instance_identifier : entity->m_instances)

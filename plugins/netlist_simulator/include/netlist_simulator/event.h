@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/netlist/net.h"
-#include "netlist_simulator/signal_value.h"
+#include "hal_core/netlist/boolean_function.h"
 
 namespace hal
 {
@@ -33,12 +33,12 @@ namespace hal
         /**
          * The net affected by the event.
          */
-        Net* affected_net;
+        const Net* affected_net;
 
         /**
          * The new value caused by the event.
          */
-        SignalValue new_value;
+        BooleanFunction::Value new_value;
 
         /**
          * The time of the event.

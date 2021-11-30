@@ -41,14 +41,41 @@ namespace hal
             :rtype: hal_py.hal_path
         )");
 
-        py_gate_library.def("create_gate_type", &GateLibrary::create_gate_type, py::arg("name"), py::arg("properties") = std::set<GateTypeProperty>(), R"(
-            Create a new gate type, add it to the gate library, and return it.
+        py_gate_library.def("set_gate_location_data_category", &GateLibrary::set_gate_location_data_category, py::arg("category"), R"(
+            Set the data category of the gate location information.
 
-            :param str name: The name of the gate type.
-            :param set[hal_py.GateTypeProperty] properties: The properties of the gate type.
-            :returns: The new gate type instance on success, None otherwise.
-            :rtype: hal_py.GateType
+            :param str category: The data category.
         )");
+
+        py_gate_library.def("get_gate_location_data_category", &GateLibrary::get_gate_location_data_category, R"(
+            Get the data category of the gate location information.
+
+            :returns: The data category.
+            :rtype: str
+        )");
+
+        py_gate_library.def("set_gate_location_data_identifiers", &GateLibrary::set_gate_location_data_identifiers, py::arg("x_coordinate"), py::arg("y_coordinate"), R"(
+            Set the data identifiers of the gate location information for both the x- and y-coordinates.
+
+            :param str x_coordinate: The data identifier for the x-coordinate.
+            :param str y_coordinate: The data identifier for the y-coordinate.
+        )");
+
+        py_gate_library.def("get_gate_location_data_category", &GateLibrary::get_gate_location_data_category, R"(
+            Get the data identifiers of the gate location information for both the x- and y-coordinates.
+
+            :returns: A pair of data identifiers.
+            :rtype: tuple(str,str)
+        )");
+
+        // py_gate_library.def("create_gate_type", &GateLibrary::create_gate_type, py::arg("name"), py::arg("properties") = std::set<GateTypeProperty>(), R"(
+        //     Create a new gate type, add it to the gate library, and return it.
+
+        //     :param str name: The name of the gate type.
+        //     :param set[hal_py.GateTypeProperty] properties: The properties of the gate type.
+        //     :returns: The new gate type instance on success, None otherwise.
+        //     :rtype: hal_py.GateType
+        // )");
 
         py_gate_library.def("contains_gate_type", &GateLibrary::contains_gate_type, py::arg("gate_type"), R"(
             Check whether the given gate type is contained in this library.
@@ -80,9 +107,11 @@ namespace hal
             :type: dict[str,hal_py.GateType]
         )");
 
-        py_gate_library.def("get_gate_types", &GateLibrary::get_gate_types, R"(
+        py_gate_library.def("get_gate_types", &GateLibrary::get_gate_types, py::arg("filter") = nullptr, R"(
             Get all gate types of the library.
+            In case a filter is applied, only the gate types matching the filter condition are returned.
 
+            :param lambda filter: The user-defined filter function.
             :returns: A dict from gate type names to gate types.
             :rtype: dict[str,hal_py.GateType]
         )");

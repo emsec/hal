@@ -184,6 +184,7 @@ namespace hal
     void SelectionTreeView::handleFilterTextChanged(const QString& filter_text)
     {
         mSelectionTreeProxyModel->handleFilterTextChanged(filter_text);
+        expandAll();
         QModelIndex defaultSel = mSelectionTreeProxyModel->index(0, 0, rootIndex());
         if (defaultSel.isValid())
             selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);

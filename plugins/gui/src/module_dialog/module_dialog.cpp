@@ -7,6 +7,7 @@
 #include "gui/searchbar/searchbar.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
+#include "hal_core/utilities/log.h"
 
 #include <QDialogButtonBox>
 #include <QGridLayout>
@@ -17,7 +18,11 @@
 
 namespace hal {
     ModuleDialog::ModuleDialog(QWidget* parent)
-        : QDialog(parent), mSelectedId(0), mNewModule(false)
+        : QDialog(parent),
+          mSelectedId(0),
+          mLastUsed(nullptr),
+          mSearchbar(new Searchbar(this)),
+          mNewModule(false)
     {
         setWindowTitle("Move to module …");
         QGridLayout* layout = new QGridLayout(this);
@@ -30,15 +35,17 @@ namespace hal {
         connect(mButtonPick, &QPushButton::pressed, this, &ModuleDialog::handlePickFromGraph);
         layout->addWidget(mButtonPick, 0, 1);
 
-        mSearchbar = new Searchbar(this);
-        layout->addWidget(mSearchbar, 1, 0, 1, 2);
+        QPushButton* butSearch = new QPushButton("Search", this);
+        connect(butSearch, &QPushButton::pressed, this, &ModuleDialog::handleToggleSearchbar);
+        layout->addWidget(butSearch, 0, 2);
 
+        layout->addWidget(mSearchbar, 1, 0, 1, 3);
         mTabWidget = new QTabWidget(this);
         mTreeView  = new QTreeView(mTabWidget);
         mTabWidget->addTab(mTreeView, "Module tree");
 
-        mTableView = new ModuleSelectView(false,mSearchbar,mTabWidget);
-        connect(mTableView,&ModuleSelectView::moduleSelected,this,&ModuleDialog::handleTableSelection);
+        mTableView = new ModuleSelectView(false, mSearchbar, mTabWidget);
+        connect(mTableView, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
         if (!ModuleSelectHistory::instance()->isEmpty())
@@ -46,25 +53,28 @@ namespace hal {
             mLastUsed = new ModuleSelectView(true,mSearchbar,mTabWidget);
             if (mLastUsed->model()->rowCount())
             {
-                connect(mLastUsed,&ModuleSelectView::moduleSelected,this,&ModuleDialog::handleTableSelection);
+                connect(mLastUsed, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
                 mTabWidget->addTab(mLastUsed, "Recent selection");
             }
             else
+            {
                 delete mLastUsed;
+                mLastUsed = nullptr;
+            }
+
         }
 
-        layout->addWidget(mTabWidget, 2, 0, 1, 2);
+        layout->addWidget(mTabWidget, 2, 0, 1, 3);
 
         mModuleTreeProxyModel = new ModuleProxyModel(this);
         mModuleTreeProxyModel->setFilterKeyColumn(-1);
         mModuleTreeProxyModel->setDynamicSortFilter(true);
         mModuleTreeProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
-       //mModuleProxyModel->setRecursiveFilteringEnabled(true);
-        mModuleTreeProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
         mTreeView->setModel(mModuleTreeProxyModel);
+        mTreeView->expandAll();
 
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
-        layout->addWidget(mButtonBox, 3, 1);
+        layout->addWidget(mButtonBox, 3, 0, 1, 3, Qt::AlignHCenter);
 
         mToggleSearchbar = new QAction(this);
         mToggleSearchbar->setShortcut(QKeySequence(ContentManager::sSettingSearch->value().toString()));
@@ -72,12 +82,17 @@ namespace hal {
 
         mTabWidget->setCurrentIndex(1);
         enableButtons();
+        mSearchbar->hide();
 
-        connect(mToggleSearchbar,&QAction::triggered,this,&ModuleDialog::handleToggleSearchbar);
-        connect(ContentManager::sSettingSearch,&SettingsItemKeybind::keySequenceChanged,this,&ModuleDialog::keybindToggleSearchbar);
+
+        connect(mTabWidget, &QTabWidget::currentChanged, this, &ModuleDialog::handleCurrentTabChanged);
+        connect(mToggleSearchbar, &QAction::triggered, this, &ModuleDialog::handleToggleSearchbar);
+        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleDialog::filter);
+        connect(ContentManager::sSettingSearch, &SettingsItemKeybind::keySequenceChanged, this, &ModuleDialog::keybindToggleSearchbar);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-        connect(mTreeView->selectionModel(),&QItemSelectionModel::currentChanged,this,&ModuleDialog::handleTreeSelectionChanged);
+        connect(mTreeView, &QTreeView::doubleClicked, this, &ModuleDialog::handleTreeDoubleClick);
+        connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleDialog::handleTreeSelectionChanged);
     }
 
     void ModuleDialog::enableButtons()
@@ -104,17 +119,20 @@ namespace hal {
         return item->id();
      }
 
-     void ModuleDialog::handleTreeSelectionChanged(const QModelIndex& current, const QModelIndex& previous)
+     void ModuleDialog::handleTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
      {
-         Q_UNUSED(previous);
-         u32 moduleId = treeModuleId(current);
-         if (moduleId) handleTableSelection(moduleId,false);
+        Q_UNUSED(deselected);
+        auto sel = selected.indexes();
+        if (sel.empty())
+            handleTableSelection(0, false);
+        else
+            handleTableSelection(treeModuleId(sel.at(0)), false);
      }
 
      void ModuleDialog::handleTreeDoubleClick(const QModelIndex& index)
      {
-         u32 moduleId = treeModuleId(index);
-         if (moduleId) handleTableSelection(moduleId,true);
+        u32 moduleId = treeModuleId(index);
+        handleTableSelection(moduleId, true);
      }
 
     void ModuleDialog::handleTableSelection(u32 id, bool doubleClick)
@@ -140,23 +158,45 @@ namespace hal {
     void ModuleDialog::handleCreateNewModule()
     {
         mNewModule = true;
-        accept();
+        QDialog::accept();
     }
 
     void ModuleDialog::handleToggleSearchbar()
     {
         if (mSearchbar->isHidden())
+        {
             mSearchbar->show();
+            mSearchbar->setFocus();
+        }
         else
         {
             mSearchbar->hide();
-            mSearchbar->clear();
+            setFocus();
         }
+    }
+
+    void ModuleDialog::handleCurrentTabChanged(int index)
+    {
+        Q_UNUSED(index);
+        mTreeView->clearSelection();
+        mTableView->clearSelection();
+        mSearchbar->clear();
+        if (mLastUsed) mLastUsed->clearSelection();
     }
 
     void ModuleDialog::keybindToggleSearchbar(const QKeySequence& seq)
     {
         mToggleSearchbar->setShortcut(seq);
+    }
+
+    void ModuleDialog::filter(const QString& text)
+    {
+        mModuleTreeProxyModel->setFilterRegularExpression(text);
+        static_cast<ModuleSelectProxy*>(mTableView->model())->setFilterRegularExpression(text);
+        if (mLastUsed)
+            static_cast<ModuleSelectProxy*>(mLastUsed->model())->setFilterRegularExpression(text);
+        QString output = "navigation regular expression '" + text + "' entered.";
+        log_info("user", output.toStdString());
     }
 }
 

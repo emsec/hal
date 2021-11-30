@@ -288,8 +288,9 @@ namespace hal
     private Q_SLOTS:
 
         /**
-         * Restores the previous selection that is contained in its history.
+         * Q_SLOT to update the search icon style. The search icon style indicates wether a filter is applied or not.
          */
+        void updateSearchIcon();
 
         /**
          * Opens a context menu and calls, depending on the cosen action, either selectionToNewGrouping()
@@ -307,18 +308,6 @@ namespace hal
          * Toggles the visibiliy of the searchbar.
          */
         void toggleSearchbar();
-
-        /**
-         * Creates a new grouping by calling addDefault() from the GroupingManagerWidget's model and adds
-         * the current selection to the grouping.
-         */
-        void selectionToNewGrouping();
-
-        /**
-         * Gets an existing grouping based on the before selected QAction in the ContextMenu created by
-         * selectionToGrouping() and adds the current selection to the grouping.
-         */
-        void selectionToExistingGrouping();
 
         /**
          * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
@@ -361,7 +350,6 @@ namespace hal
 
         QAction* mSelectionToGrouping;
         QAction* mSelectionToModule;
-        QAction* mSearchAction;
 
         QString mDisabledIconStyle;
 
@@ -375,7 +363,6 @@ namespace hal
         QString mToModuleIconPath;
         QString mToModuleIconStyle;
         
-        void handleFilterTextChanged(const QString& filter_text);
         void canMoveToModule(int nodes);
         void enableSearchbar(bool enable);
 

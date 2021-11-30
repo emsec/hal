@@ -1,11 +1,10 @@
-#include "hal_core/utilities/log.h"
+#include "SubgraphFunctionGenerator.h"
+
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
-
-#include "SubgraphFunctionGenerator.h"
-
+#include "hal_core/utilities/log.h"
 #include "z3++.h"
 
 #include <queue>
@@ -29,7 +28,7 @@ namespace hal
             }
 
             // before replacing input pins with their connected net id, check if the function depends on other output pins
-            auto output_pins = gate->get_output_pins();
+            auto output_pins = gate->get_type()->get_output_pins();
             while (true)
             {
                 auto vars = bf.get_variables();
@@ -48,12 +47,12 @@ namespace hal
             }
 
             // replace input pins with their connected net id
-            for (auto const& input_pin : gate->get_input_pins())
+            for (auto const& input_pin : gate->get_type()->get_input_pins())
             {
                 const auto& input_net = gate->get_fan_in_net(input_pin);
                 if (!input_net)
                 {
-                    log_info("z3_utils", "Pin ({}) has no input net. Gate id: ({})", input_pin, gate->get_id());
+                    log_debug("z3_utils", "Pin ({}) has no input net. Gate id: ({})", input_pin, gate->get_id());
                     continue;
                 }
                 bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));
@@ -65,10 +64,10 @@ namespace hal
         }
 
         void SubgraphFunctionGenerator::get_subgraph_z3_function(const Net* output_net,
-                                      const std::vector<Gate*> subgraph_gates,
-                                      z3::context& ctx,
-                                      z3::expr& result,
-                                      std::unordered_set<u32>& input_net_ids)
+                                                                 const std::vector<Gate*> subgraph_gates,
+                                                                 z3::context& ctx,
+                                                                 z3::expr& result,
+                                                                 std::unordered_set<u32>& input_net_ids)
         {
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
@@ -94,11 +93,12 @@ namespace hal
                 auto start_gate = source->get_gate();
 
                 // Check wether start gate is in the subgraph gates
-                if (std::find(subgraph_gates.begin(), subgraph_gates.end(), start_gate) == subgraph_gates.end()) {
+                if (std::find(subgraph_gates.begin(), subgraph_gates.end(), start_gate) == subgraph_gates.end())
+                {
                     result = ctx.bv_const(std::to_string(output_net->get_id()).c_str(), 1);
                     return;
                 }
-                
+
                 auto f = get_function_of_gate(start_gate, source->get_pin());
 
                 for (auto id_string : f.get_variables())
@@ -166,9 +166,9 @@ namespace hal
             }
         }
 
-        RecursiveSubgraphFunctionGenerator::RecursiveSubgraphFunctionGenerator(z3::context& ctx, const std::vector<Gate*>& subgraph_gates) : m_ctx(&ctx), m_subgraph_gates(subgraph_gates) {
-
-        };
+        RecursiveSubgraphFunctionGenerator::RecursiveSubgraphFunctionGenerator(z3::context& ctx, const std::vector<Gate*>& subgraph_gates) : m_ctx(&ctx), m_subgraph_gates(subgraph_gates)
+        {
+        }
 
         BooleanFunction RecursiveSubgraphFunctionGenerator::get_function_of_gate(const Gate* gate, const std::string& out_pin)
         {
@@ -186,7 +186,7 @@ namespace hal
 
             // TODO should this also take internal pins into account?
             // before replacing input pins with their connected net id, check if the function depends on other output pins
-            auto output_pins = gate->get_output_pins();
+            std::vector<std::string> output_pins = gate->get_type()->get_output_pins();
             while (true)
             {
                 auto vars = bf.get_variables();
@@ -209,22 +209,25 @@ namespace hal
             return bf;
         }
 
-        z3::expr RecursiveSubgraphFunctionGenerator::get_function_of_net(const Net* net, z3::context& ctx, const std::vector<Gate*>& subgraph_gates) {
-            
-            if (m_expr_cache.find(net) != m_expr_cache.end()) {
+        z3::expr RecursiveSubgraphFunctionGenerator::get_function_of_net(const Net* net, z3::context& ctx, const std::vector<Gate*>& subgraph_gates)
+        {
+            if (m_expr_cache.find(net) != m_expr_cache.end())
+            {
                 return m_expr_cache.at(net);
             }
 
             const std::vector<Endpoint*> sources = net->get_sources();
 
             // net is multi driven
-            if (sources.size() > 1) {
+            if (sources.size() > 1)
+            {
                 log_error("z3_utils", "Cannot handle multi driven nets! Encountered at net {}.", net->get_id());
                 return ctx.bv_const("ERROR", 1);
             }
 
             // net has no source
-            if (sources.empty()) {
+            if (sources.empty())
+            {
                 z3::expr ret = ctx.bv_const(std::to_string(net->get_id()).c_str(), 1);
                 m_expr_cache.insert({net, ret});
                 return ret;
@@ -232,14 +235,16 @@ namespace hal
 
             const Endpoint* src_ep = sources.front();
 
-            if (src_ep->get_gate() == nullptr) {
+            if (src_ep->get_gate() == nullptr)
+            {
                 log_error("z3_utils", "Gate at source for net {} is null.", net->get_id());
             }
 
             const Gate* src = src_ep->get_gate();
 
             // source is not in subgraph gates
-            if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src) == subgraph_gates.end()) {
+            if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src) == subgraph_gates.end())
+            {
                 z3::expr ret = ctx.bv_const(std::to_string(net->get_id()).c_str(), 1);
                 m_expr_cache.insert({net, ret});
                 return ret;
@@ -248,16 +253,18 @@ namespace hal
             const BooleanFunction bf = get_function_of_gate(src, src_ep->get_pin());
 
             std::map<std::string, z3::expr> pin_to_expr;
-            
-            for (const std::string& pin : bf.get_variables()) {
+
+            for (const std::string& pin : bf.get_variables())
+            {
                 Net* in_net = src->get_fan_in_net(pin);
 
-                if (in_net == nullptr) {
+                if (in_net == nullptr)
+                {
                     log_error("z3_utils", "Cannot find in_net at pin {} of gate {}!", pin, src->get_id());
                 }
 
                 pin_to_expr.insert({pin, get_function_of_net(in_net, ctx, subgraph_gates)});
-            } 
+            }
 
             z3::expr ret = bf.to_z3(ctx, pin_to_expr);
             m_expr_cache.insert({net, ret});
@@ -279,6 +286,6 @@ namespace hal
             result = get_function_of_net(net, *m_ctx, m_subgraph_gates);
             return;
         }
-    
+
     }    // namespace z3_utils
 }    // namespace hal
