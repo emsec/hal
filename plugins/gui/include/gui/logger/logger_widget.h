@@ -203,7 +203,7 @@ namespace hal
         bool mErrorSeverity;
         bool mDebugSeverity;
 
-        std::string mSearchFilter;
+        QString mSearchFilter;
 
         LoggerMarshall* mLogMarshall;
         int mCurrentChannelIndex;

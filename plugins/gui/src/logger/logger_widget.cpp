@@ -17,6 +17,8 @@
 #include <QAction>
 
 #include <string>
+#include <QRegularExpression>
+#include <iostream>
 
 namespace hal
 {
@@ -192,11 +194,12 @@ namespace hal
         for (ChannelEntry* entry : *(item->getList()))
         {
             bool filter = false;
-
+            std::cout << entry->mMsg << std::endl;
             // If entry msg matches with search string
-            if ((entry->mMsg.find(mSearchFilter) != std::string::npos) || (mSearchFilter.length() < 1))
+            QRegularExpression re(mSearchFilter);
+            if (re.match(QString::fromStdString(entry->mMsg)).hasMatch())
             {
-
+                std::cout << "match" << std::endl;
                 // If entry severity matches the choosen severitys
                 if ((entry->mMsgType == spdlog::level::level_enum::info) && mInfoSeverity) {
                     filter = true;
@@ -269,7 +272,8 @@ namespace hal
 
     void LoggerWidget::handleSearchChanged(QString filter)
     {
-        mSearchFilter = filter.toStdString();
+        mSearchFilter = filter;
+        std::cout << mSearchFilter.QString::toStdString() << std::endl;
         handleCurrentFilterChanged(1);
     }
 
