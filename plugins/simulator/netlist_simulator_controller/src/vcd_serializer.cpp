@@ -124,7 +124,8 @@ QMap<int,int>::const_iterator mIterator;
         int val = sl.at(0).toUInt(&ok,base);
         if (!ok)
         {
-            log_warning("vcd_viewer", "Cannot parse VCD data value '{}'", std::string(sl.at(0).data()));
+            if (mErrorCount++ < 5)
+                log_warning("vcd_viewer", "Cannot parse VCD data value '{}'", std::string(sl.at(0).data()));
             val = 0;
         }
         storeValue(val, sl.at(1));
@@ -253,6 +254,7 @@ QMap<int,int>::const_iterator mIterator;
 
     bool VcdSerializer::deserializeCsv(const QString& filename, u64 timeScale)
     {
+        mErrorCount = 0;
         mWaves.clear();
         mTime = 0;
         QFile ff(filename);
@@ -271,7 +273,8 @@ QMap<int,int>::const_iterator mIterator;
             {
                 if (!parseCsvHeader(line))
                 {
-                    log_warning("vcd_viewer", "Cannot parse CSV header line '{}'.", std::string(line.data()));
+                    if (mErrorCount++ < 5)
+                        log_warning("vcd_viewer", "Cannot parse CSV header line '{}'.", std::string(line.data()));
                     return false;
                 }
                 parseHeader = false;
@@ -280,7 +283,8 @@ QMap<int,int>::const_iterator mIterator;
             {
                 if (!parseCsvDataline(line,dataLineIndex++,timeScale))
                 {
-                    log_warning("vcd_viewer", "Cannot parse CSV data line '{}'.", std::string(line.data()));
+                    if (mErrorCount++ < 5)
+                        log_warning("vcd_viewer", "Cannot parse CSV data line '{}'.", std::string(line.data()));
                     return false;
                 }
             }
@@ -290,6 +294,7 @@ QMap<int,int>::const_iterator mIterator;
 
     bool VcdSerializer::deserializeVcd(const QString& filename, const QStringList &netNames)
     {
+        mErrorCount = 0;
         mWaves.clear();
         mTime = 0;
         QFile ff(filename);
@@ -337,7 +342,8 @@ QMap<int,int>::const_iterator mIterator;
             {
                 if (!parseDataline(line))
                 {
-                    log_warning("vcd_viewer", "Cannot parse VCD data line '{}'.", std::string(line.data()));
+                    if (mErrorCount++ < 5)
+                        log_warning("vcd_viewer", "Cannot parse VCD data line '{}'.", std::string(line.data()));
                     return false;
                 }
             }
@@ -351,28 +357,20 @@ QMap<int,int>::const_iterator mIterator;
         if (it == mDictionary.constEnd()) return nullptr;
         auto jt = mWaves.find(it.value());
         Q_ASSERT(jt != mWaves.end());
-        WaveData* wd = jt.value();
-        mDictionary.erase(it);
-        mWaves.erase(jt);
-        return wd;
+        return new WaveData(*jt.value());
     }
 
     WaveData* VcdSerializer::waveById(u32 id)
     {
         if (!id) return nullptr;
-        WaveData* wd = nullptr;
         for (auto jt = mWaves.begin(); jt != mWaves.end(); ++jt)
         {
             if (jt.value()->id() == id)
             {
-                wd = jt.value();
-                auto it = mDictionary.find(jt.key());
-                if (it != mDictionary.end())
-                    mDictionary.erase(it);
-                mWaves.erase(jt);
+                return new WaveData(*jt.value());
                 break;
             }
         }
-        return wd;
+        return nullptr;
     }
 }

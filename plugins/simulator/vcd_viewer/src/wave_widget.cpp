@@ -3,6 +3,7 @@
 #include "vcd_viewer/wave_tree_model.h"
 #include "vcd_viewer/wave_graphics_view.h"
 #include "vcd_viewer/wave_scene.h"
+#include "vcd_viewer/vcd_viewer.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "vcd_viewer/wave_edit_dialog.h"
 #include "vcd_viewer/wave_selection_dialog.h"
@@ -69,6 +70,13 @@ namespace hal {
         connect(mWaveDataList,&WaveDataList::triggerBeginResetModel,mTreeModel,&WaveTreeModel::forwardBeginResetModel);
         connect(mWaveDataList,&WaveDataList::triggerEndResetModel,mTreeModel,&WaveTreeModel::forwardEndResetModel);
 
+
+        if (parent && parent->parent())   // VcdViewer -> QTabWidget -> WaveWidget
+        {
+            VcdViewer* vv = static_cast<VcdViewer*>(parent->parent());
+            if (vv) connect(mController,&NetlistSimulatorController::parseComplete,vv,&VcdViewer::handleParseComplete);
+        }
+
         connect(gContentManager->getSelectionDetailsWidget(),&SelectionDetailsWidget::triggerHighlight,this,&WaveWidget::handleSelectionHighlight);
 
         /*
@@ -121,6 +129,11 @@ namespace hal {
     void WaveWidget::takeOwnership(std::unique_ptr<NetlistSimulatorController>& ctrl)
     {
         mControllerOwner = std::move(ctrl);
+    }
+
+    bool WaveWidget::canImportWires() const
+    {
+        return mWaveDataList->size() > mWaveItemHash->importedWires();
     }
 
     bool WaveWidget::triggerClose()
@@ -193,7 +206,7 @@ namespace hal {
 
     void WaveWidget::addResults()
     {
-        if (mController->get_state() != NetlistSimulatorController::ShowResults) return;
+        if (!canImportWires()) return;
         QSet<int> alreadyShown = mTreeModel->waveDataIndexSet();
         int n = mWaveDataList->size();
         QMap<const WaveData*,int> wdMap;

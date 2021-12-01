@@ -97,12 +97,6 @@ namespace hal
         QVector<u32> netVector;
         netVector.reserve(nets.size());
         for (Net* n : nets) netVector.append(n->get_id());
-        /*
-        QString s = QString("add_waveform_group <%1> :").arg(name.c_str());
-        for (Net* n : nets)
-            s += QString(" [%1,%2]").arg(n->get_name().c_str()).arg(n->get_id());
-        qDebug() << s;
-        */
         u32 grpId = mWaveDataList->createGroup(QString::fromStdString(name));
         mWaveDataList->addNetsToGroup(grpId, netVector);
         return grpId;
@@ -237,11 +231,7 @@ namespace hal
         case GlobalInputs:
             return std::vector<const Net*>(get_input_nets().begin(), get_input_nets().end());
         case PartialNetlist:
-        {
-            std::vector<const Gate*> simGates(mSimulationInput->get_gates().begin(), mSimulationInput->get_gates().end());
-            std::unique_ptr<Netlist> partNl = netlist_utils::get_partial_netlist(simGates.at(0)->get_netlist(), simGates);
-            return std::vector<const Net*>(partNl->get_nets().begin(), partNl->get_nets().end());
-        }
+            return get_partial_netlist_nets();
         case CompleteNetlist:
         {
             std::vector<Net*> tmp = (*mSimulationInput->get_gates().begin())->get_netlist()->get_nets();
@@ -253,7 +243,7 @@ namespace hal
         return std::vector<const Net*>();
     }
 
-    void NetlistSimulatorController::parse_vcd(const std::string& filename, FilterInputFlag filter)
+    void NetlistSimulatorController::parse_vcd(const std::string& filename, FilterInputFlag filter, bool silent)
     {
         VcdSerializer reader;
 
@@ -271,7 +261,7 @@ namespace hal
             if (filter == NoFilter)
             {
                 for (WaveData* wd : reader.waveList())
-                    mWaveDataList->addOrReplace(wd);
+                    mWaveDataList->addOrReplace(wd,silent);
             }
             else
             {
@@ -281,7 +271,7 @@ namespace hal
                     if (!wd) continue;
                     wd->setId(n->get_id());
                     wd->setName(QString::fromStdString(n->get_name()));
-                    mWaveDataList->addOrReplace(wd);
+                    mWaveDataList->addOrReplace(wd,silent);
                     waveFound = true;
                 }
             }
@@ -289,6 +279,7 @@ namespace hal
             if (waveFound) mWaveDataList->incrementSimulTime(reader.maxTime());
         }
         checkReadyState();
+        Q_EMIT parseComplete();
     }
 
     void NetlistSimulatorController::parse_csv(const std::string& filename, FilterInputFlag filter, u64 timescale)
@@ -320,6 +311,7 @@ namespace hal
             if (waveFound) mWaveDataList->incrementSimulTime(reader.maxTime());
         }
         checkReadyState();
+        Q_EMIT parseComplete();
     }
 
     void NetlistSimulatorController::handleRunFinished(bool success)
@@ -353,12 +345,10 @@ namespace hal
     bool NetlistSimulatorController::getResultsInternal()
     {
         SimulationEngineEventDriven* sevd = static_cast<SimulationEngineEventDriven*>(mSimulationEngine);
-        const std::vector<const Gate*> simGates(mSimulationInput->get_gates().begin(), mSimulationInput->get_gates().end());
-        std::unique_ptr<Netlist> partNl = netlist_utils::get_partial_netlist(simGates.at(0)->get_netlist(), simGates);
         // mWaveDataList->dump();
         if (mSimulationEngine->can_share_memory())
         {
-            for (Net* n : partNl->get_nets())
+            for (const Net* n : get_partial_netlist_nets())
             {
                 WaveData* wd = new WaveData(n);
                 for (WaveEvent evt : sevd->get_simulation_events(n->get_id()))
@@ -379,13 +369,13 @@ namespace hal
             if (!info.exists() || !info.isReadable()) return false;
 
             QStringList netNames;
-            for (Net* n : partNl->get_nets())
+            for (const Net* n : get_partial_netlist_nets())
                 netNames << QString::fromStdString(n->get_name());
             if (!reader.deserializeVcd(QString::fromStdString(resultFile),netNames)) return false;
 
             QHash<QString,u32> netIds;
 //            int wcount = 0;
-            for (Net* n : partNl->get_nets())
+            for (const Net* n : get_partial_netlist_nets())
             {
                 WaveData* wd = reader.waveByName(QString::fromStdString(n->get_name()));
                 if (!wd) continue;
@@ -462,6 +452,11 @@ namespace hal
     const std::vector<const Net*>& NetlistSimulatorController::get_output_nets() const
     {
         return mSimulationInput->get_output_nets();
+    }
+
+    const std::vector<const Net*>& NetlistSimulatorController::get_partial_netlist_nets() const
+    {
+        return mSimulationInput->get_partial_netlist_nets();
     }
 
     void NetlistSimulatorController::set_input(const Net* net, BooleanFunction::Value value)

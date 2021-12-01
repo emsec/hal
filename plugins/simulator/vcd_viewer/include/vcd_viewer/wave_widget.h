@@ -41,6 +41,7 @@ namespace hal {
         void refreshNetNames();
         void scrollToYpos(int ypos);
         void removeGroup(u32 grpId);
+        bool canImportWires() const;
 
     public Q_SLOTS:
         void handleEngineFinished(bool success);

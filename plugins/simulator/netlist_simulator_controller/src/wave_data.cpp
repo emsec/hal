@@ -1,6 +1,7 @@
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/wave_event.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/utilities/log.h"
 #include <math.h>
 #include <vector>
 #include <QString>
@@ -639,7 +640,11 @@ namespace hal {
         for (u32 netId : netIds)
         {
             WaveData* wd = waveDataByNetId(netId);
-            if (!wd) continue;
+            if (!wd)
+            {
+                log_warning("waveform_data", "Cannot add unkown waveform Id {} to group '{}'.", netId, grp->name().toStdString());
+                continue;
+            }
             grp->insert(inx++,wd);
         }
         grp->recalcData();
@@ -674,14 +679,14 @@ namespace hal {
     }
 
 
-    void WaveDataList::addOrReplace(WaveData* wd)
+    void WaveDataList::addOrReplace(WaveData* wd, bool silent)
     {
         Q_ASSERT(wd);
         int inx = mIds.value(wd->id(),-1);
         if (inx >= 0)
             replaceWaveData(inx, wd);
         else
-            add(wd,false);
+            add(wd,silent);
     }
 
     WaveData* WaveDataList::waveDataByNetId(u32 id) const

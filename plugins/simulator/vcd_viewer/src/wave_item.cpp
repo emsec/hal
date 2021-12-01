@@ -309,6 +309,16 @@ namespace hal {
         return (wii.parentId() << 20) | ((wii.index()+1) << 1) | (wii.isGroup() ? 1 : 0);
     }
 
+    int WaveItemHash::importedWires() const
+    {
+        QSet<u32> ids;
+        for (const WaveItemIndex& wii : keys())
+        {
+            if (wii.isWire()) ids.insert(wii.index());
+        }
+        return ids.size();
+    }
+
     void WaveItemHash::addOrReplace(WaveData*wd, WaveItemIndex::IndexType tp, int inx, int parentId)
     {
         WaveItemIndex wii(inx, tp, parentId);

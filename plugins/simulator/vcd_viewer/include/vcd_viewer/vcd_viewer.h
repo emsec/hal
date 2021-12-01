@@ -103,6 +103,7 @@ namespace hal
     public Q_SLOTS:
         void handleControllerAdded(u32 controllerId);
         void handleControllerRemoved(u32 controllerId);
+        void handleParseComplete();
         void displayStatusMessage(const QString& msg = QString());
         void closeEvent(QCloseEvent *event) override;
         void currentTabChanged(int inx);

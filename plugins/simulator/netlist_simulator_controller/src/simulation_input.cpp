@@ -17,6 +17,7 @@ namespace hal {
 
         compute_input_nets();
         compute_output_nets();
+        compute_partial_nets();
     }
 
     const std::unordered_set<const Gate*>& SimulationInput::get_gates() const
@@ -42,6 +43,7 @@ namespace hal {
         m_clocks.clear();
         m_input_nets.clear();
         m_output_nets.clear();
+        m_partial_nets.clear();
     }
 
     bool SimulationInput::is_ready() const
@@ -62,6 +64,11 @@ namespace hal {
     const std::vector<const Net*>& SimulationInput::get_output_nets() const
     {
         return m_output_nets;
+    }
+
+    const std::vector<const Net*>& SimulationInput::get_partial_netlist_nets() const
+    {
+        return m_partial_nets;
     }
 
     bool SimulationInput::is_input_net(const Net* n) const
@@ -101,6 +108,11 @@ namespace hal {
         }
         fprintf(of, "Output nets:________________________________\n");
         for (const Net* n: m_output_nets)
+        {
+            fprintf(of, "  %4d <%s>\n", n->get_id(), n->get_name().c_str());
+        }
+        fprintf(of, "Partial netlist nets:________________________________\n");
+        for (const Net* n: m_partial_nets)
         {
             fprintf(of, "  %4d <%s>\n", n->get_id(), n->get_name().c_str());
         }
@@ -167,6 +179,31 @@ namespace hal {
                             break;
                         }
                     }
+                }
+            }
+        }
+    }
+
+    void SimulationInput::compute_partial_nets()
+    {
+        m_partial_nets.clear();
+        std::unordered_set<const Net*> found;
+        for (const Gate* g : mSimulationSet)
+        {
+            for (const Net* n : g->get_fan_in_nets())
+            {
+                if (found.find(n) == found.end())
+                {
+                    found.insert(n);
+                    m_partial_nets.push_back(n);
+                }
+            }
+            for (const Net* n : g->get_fan_out_nets())
+            {
+                if (found.find(n) == found.end())
+                {
+                    found.insert(n);
+                    m_partial_nets.push_back(n);
                 }
             }
         }

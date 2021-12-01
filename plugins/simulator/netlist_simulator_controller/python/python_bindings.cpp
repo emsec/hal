@@ -123,6 +123,12 @@ namespace hal
                 :rtype: list[hal_py.Net]
             )")
 
+            .def("get_partial_netlist_nets", &NetlistSimulatorController::get_partial_netlist_nets, R"(
+                Get all nets for partial netlist.
+                :returns: The nets for partial netlist.
+                :rtype: list[hal_py.Net]
+            )")
+
             .def("add_waveform_group", &NetlistSimulatorController::add_waveform_group, py::arg("name"), py::arg("nets"), R"(
                 Add waveform group. Netlist must not be empty. First net in list is considered the lowest significant bit.
 
@@ -235,11 +241,12 @@ namespace hal
                 Does not remove gates/nets from the simulation set.
             )")
 
-            .def("parse_vcd", &NetlistSimulatorController::parse_vcd, py::arg("filename"), py::arg("filter"), R"(
+            .def("parse_vcd", &NetlistSimulatorController::parse_vcd, py::arg("filename"), py::arg("filter"), py::arg("silent") = false, R"(
                 Parse VCD data (e.g. simulation input).
 
                 :param str filename: filename of VCD file to be parsed.
                 :param hal_py.FilterInputFlag filter: filter to select waveform data from file.
+                :param bool silent: if true other applications (e.g. viewer) are not notified about waveform data loaded, thus they are not visible in the beginning.
             )")
 
             .def("parse_csv", &NetlistSimulatorController::parse_csv, py::arg("filename"), py::arg("filter"), py::arg("timescale") = 1000000000, R"(

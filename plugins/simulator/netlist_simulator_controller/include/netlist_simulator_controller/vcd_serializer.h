@@ -32,6 +32,7 @@ namespace hal {
         u64 mFirstTimestamp;
         QMap<QString,QString> mDictionary;
         QMap<QString,WaveData*> mWaves;
+        int mErrorCount;
 
         bool parseDataline(const QByteArray& line);
         bool parseDataNonDecimal(const QByteArray& line, int base);
