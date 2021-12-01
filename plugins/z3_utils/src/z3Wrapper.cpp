@@ -275,6 +275,7 @@ namespace hal
             }
 
             m_expr = std::make_unique<z3::expr>(m_expr->simplify());
+            extract_function_inputs();
         }
 
         void z3Wrapper::remove_static_inputs(const Netlist* nl) {
@@ -305,7 +306,7 @@ namespace hal
                 new_expr = new_expr.substitute(from_vec, to_vec);
             }
 
-            m_expr = std::make_unique<z3::expr>(new_expr);
+            m_expr = std::make_unique<z3::expr>(new_expr.simplify());
         }
 
         z3::expr z3Wrapper::get_expr() const
