@@ -459,7 +459,10 @@ namespace hal
             else if (next_token == "clock")
             {
                 pin_str.consume(":", true);
-                pin.clock = pin_str.consume("true");
+                if (pin_str.consume() == "true")
+                {
+                    pin.clock = true;
+                }
                 pin_str.consume(";", true);
             }
         }
@@ -526,7 +529,6 @@ namespace hal
                 }
                 else
                 {
-                    log_warning("liberty_parser", "unsupported pg_type '{}' of pg_pin '{}' for cell '{}'.", type, name, cell.name);
                     return std::nullopt;
                 }
                 pin_str.consume(";", true);
