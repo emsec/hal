@@ -168,6 +168,8 @@ namespace hal
          */
         bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
+        bool isShowingModuleExclusively();
+
         /**
          * Convenience function to allow calls to GraphWidget::storeViewport via context
          */
@@ -371,10 +373,11 @@ namespace hal
         /**
          * Sets the exclusive module id.
          */
-        void setExclusiveModuleId(u32 id) { mExclusiveModuleId = id; };
+        void setExclusiveModuleId(u32 id) { mExclusiveModuleId = id; }
 
     Q_SIGNALS:
         void dataChanged();
+        void test();
 
     public Q_SLOTS:
         void abortLayout();
@@ -382,6 +385,7 @@ namespace hal
     private Q_SLOTS:
         void handleLayouterFinished();
         void handleStyleChanged(int istyle);
+        void handleExclusiveModuleCheck();
 
     private:
         void evaluateChanges();

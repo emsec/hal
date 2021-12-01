@@ -36,6 +36,7 @@ namespace hal
         mTimestamp = QDateTime::currentDateTime();
         UserActionManager::instance()->clearWaitCount();
         connect(MainWindow::sSettingStyle,&SettingsItemDropdown::intChanged,this,&GraphContext::handleStyleChanged);
+        connect(this, &GraphContext::test, this, &GraphContext::handleExclusiveModuleCheck);
     }
 
     GraphContext::~GraphContext()
@@ -284,6 +285,23 @@ namespace hal
         }
         return (mGates - mRemovedGates) + mAddedGates == (gates - minus_gates) + plus_gates
                 && (mModules - mRemovedModules) + mAddedModules == (modules - minus_modules) + plus_modules;
+    }
+
+    bool GraphContext::isShowingModuleExclusively()
+    {
+        // This function checks if a context only shows the module (or its contents) with the id mExclusiveModuleId
+        if (!mExclusiveModuleId) return false;
+
+        auto containedModules = mModules + mAddedModules - mRemovedModules;
+        auto containedGates = mGates + mAddedGates - mRemovedGates;
+
+        // folded module
+        if (containedGates.empty() && containedModules.size() == 1 && mExclusiveModuleId)
+            return true;
+        // unfolded module
+        if (isShowingModule(mExclusiveModuleId))
+            return true;
+        return false;
     }
 
     bool GraphContext::isShowingNetSource(const u32 mNetId) const
@@ -549,6 +567,7 @@ namespace hal
 
         mUnappliedChanges     = false;
         mSceneUpdateRequired = true;
+        Q_EMIT(test());
     }
 
     void GraphContext::requireSceneUpdate()
@@ -596,6 +615,13 @@ namespace hal
     {
         Q_UNUSED(istyle);
         handleLayouterFinished();
+    }
+
+    void GraphContext::handleExclusiveModuleCheck()
+    {
+        // add functionality for restoring the connection?
+        if (!isShowingModuleExclusively())
+            mExclusiveModuleId = 0;
     }
 
     QDateTime GraphContext::getTimestamp() const

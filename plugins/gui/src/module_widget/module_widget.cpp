@@ -253,6 +253,7 @@ namespace hal
             act->exec();
             moduleContext = gGraphContextManager->getContextById(act->object().id());
             moduleContext->setDirty(false);
+            moduleContext->setExclusiveModuleId(module->get_id());
         }
     }
 
