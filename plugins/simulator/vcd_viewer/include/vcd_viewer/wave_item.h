@@ -22,6 +22,7 @@ namespace hal {
             : mType(tp), mIndex(inx), mParentId(pid) {;}
         bool isValid() const { return mType != Invalid; }
         bool isGroup() const { return mType == Group; }
+        bool isWire() const  { return mType == Wire; }
         u32 index() const { return mIndex; }
         u32 parentId() const { return mParentId; }
         bool operator== (const WaveItemIndex& other) const;
@@ -87,6 +88,7 @@ namespace hal {
         int mVisibleEntries;
     public:
         int visibleEntries() const { return mVisibleEntries; }
+        int importedWires() const;
         void setVisibleEntries(int ve) { mVisibleEntries = ve; }
         void addOrReplace(WaveData*wd, WaveItemIndex::IndexType tp, int inx, int parentId);
         void dump(const char* stub);

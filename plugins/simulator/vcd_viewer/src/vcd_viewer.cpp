@@ -122,6 +122,12 @@ namespace hal
         connect(mCurrentWaveWidget,&WaveWidget::stateChanged,this,&VcdViewer::currentStateChanged);
     }
 
+    void VcdViewer::handleParseComplete()
+    {
+        if (!mCurrentWaveWidget) return;
+        mAddResultWaveAction->setEnabled(mCurrentWaveWidget->canImportWires());
+    }
+
     void VcdViewer::currentStateChanged(NetlistSimulatorController::SimulationState state)
     {
         if (!mCurrentWaveWidget || state == NetlistSimulatorController::SimulationRun)
@@ -139,8 +145,7 @@ namespace hal
                                              || state == NetlistSimulatorController::ParameterReady);
             mSaveWaveformsAction->setEnabled(state != NetlistSimulatorController::NoGatesSelected);
             mRunSimulationAction->setEnabled(state == NetlistSimulatorController::ParameterReady);
-            mAddResultWaveAction->setEnabled(state == NetlistSimulatorController::ShowResults);
-        }
+       }
         mSimulSettingsAction->setIcon(gui_utility::getStyledSvgIcon(mSimulSettingsAction->isEnabled() ? "all->#FFFFFF" : "all->#808080",":/icons/preferences"));
         mOpenInputfileAction->setIcon(gui_utility::getStyledSvgIcon(mOpenInputfileAction->isEnabled() ? "all->#3192C5" : "all->#808080",":/icons/folder"));
         mSaveWaveformsAction->setIcon(gui_utility::getStyledSvgIcon(mSaveWaveformsAction->isEnabled() ? "all->#3192C5" : "all->#808080",":/icons/save"));
@@ -148,13 +153,17 @@ namespace hal
 
         if (!mCurrentWaveWidget)
             displayStatusMessage();
-        else switch (state) {
-        case NetlistSimulatorController::NoGatesSelected: displayStatusMessage("Select gates to create (partial) netlist for simulation");       break;
-        case NetlistSimulatorController::ParameterSetup:  displayStatusMessage("Setup parameter for simulation");                                break;
-        case NetlistSimulatorController::ParameterReady:  displayStatusMessage("Continue parameter setup or start simulation");                                break;
-        case NetlistSimulatorController::SimulationRun:   displayStatusMessage("Simulation engine running, please wait ...");                    break;
-        case NetlistSimulatorController::ShowResults:     displayStatusMessage("Simulation successful, add waveform data to visualize results"); break;
-        case NetlistSimulatorController::EngineFailed:    displayStatusMessage("Simulation engine failed");                                      break;
+        else
+        {
+            mAddResultWaveAction->setEnabled(mCurrentWaveWidget->canImportWires());
+            switch (state) {
+            case NetlistSimulatorController::NoGatesSelected: displayStatusMessage("Select gates to create (partial) netlist for simulation");       break;
+            case NetlistSimulatorController::ParameterSetup:  displayStatusMessage("Setup parameter for simulation");                                break;
+            case NetlistSimulatorController::ParameterReady:  displayStatusMessage("Continue parameter setup or start simulation");                                break;
+            case NetlistSimulatorController::SimulationRun:   displayStatusMessage("Simulation engine running, please wait ...");                    break;
+            case NetlistSimulatorController::ShowResults:     displayStatusMessage("Simulation successful, add waveform data to visualize results"); break;
+            case NetlistSimulatorController::EngineFailed:    displayStatusMessage("Simulation engine failed");                                      break;
+            }
         }
     }
 

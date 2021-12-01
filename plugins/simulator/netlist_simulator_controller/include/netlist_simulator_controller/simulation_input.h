@@ -35,12 +35,14 @@ namespace hal {
 
         std::unordered_set<const Net*> m_input_nets;
         std::vector<const Net*> m_output_nets;
+        std::vector<const Net*> m_partial_nets;
 
         std::vector<SimulationInputNetEvent> mSimulationInputNetEvents;
         bool mNoClockUsed;
 
         void compute_input_nets();
         void compute_output_nets();
+        void compute_partial_nets();
 
     public:
         SimulationInput() : mNoClockUsed(false) {;}
@@ -124,6 +126,13 @@ namespace hal {
          * @returns The output nets.
          */
         const std::vector<const Net*>& get_output_nets() const;
+
+        /**
+         * Get all nets from the partial netlist.
+         *
+         * @return The nets from partial netlist
+         */
+        const std::vector<const Net*>& get_partial_netlist_nets() const;
 
         /**
          * Add single event to simulation input net event vector. This method will be used by controller to setup

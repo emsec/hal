@@ -178,6 +178,11 @@ public:
     const std::vector<const Net*>& get_output_nets() const;
 
     /**
+     * Shortcut to SimulationInput::get_partial_netlist_nets
+     */
+    const std::vector<const Net*>& get_partial_netlist_nets() const;
+
+    /**
      * Shortcut to SimulationEngines::instance()->names()
      * @return names of registered simulation engines
      */
@@ -226,7 +231,7 @@ public:
      * @param[in] filename the filename to read
      * @param[in] filter filter to select waveform data from file
      */
-    void parse_vcd(const std::string& filename, FilterInputFlag filter);
+    void parse_vcd(const std::string& filename, FilterInputFlag filter, bool silent=false);
 
     /**
      * Parse CSV file and set wave data
@@ -274,6 +279,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void stateChanged(SimulationState state);
     void engineFinished(bool success);
+    void parseComplete();
 
 private:
     std::vector<const Net*> getFilterNets(FilterInputFlag filter) const;
