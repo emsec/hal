@@ -56,7 +56,8 @@ namespace hal
         dsp,           /**< DSP gate type. **/
         mux,           /**< MUX gate type. **/
         buffer,        /**< Buffer gate type. **/
-        carry          /**< Carry gate type. **/
+        carry,         /**< Carry gate type. **/
+        pll,           /**< PLL gate type. **/
     };
 
     template<>
