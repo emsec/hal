@@ -5,7 +5,7 @@
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry"};
+    std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry", "pll"};
 
     const std::unordered_map<PinDirection, std::unordered_set<PinType>> GateType::m_direction_to_types = {
         {PinDirection::none, {}},
