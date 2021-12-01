@@ -46,7 +46,6 @@ namespace hal
             m_input_mapping_hal_to_z3.clear();
             m_inputs_net_ids.clear();
             m_inputs_z3_expr.clear();
-            //m_input_mapping_z3_to_hal.clear();
 
             // get inputs from smt2 string, much faster than iterating over z3 things
             auto smt = get_smt2_string();
@@ -66,12 +65,17 @@ namespace hal
 
                     auto var_name = line.substr(start_index, end_index - start_index);
                     auto net_id   = std::stoi(var_name);
-                    auto z3_expr  = m_ctx->bv_const(var_name.c_str(), 1);
                     m_inputs_net_ids.push_back(net_id);
-                    m_inputs_z3_expr.push_back(z3_expr);
-                    m_input_mapping_hal_to_z3.insert({net_id, z3_expr});
-                    //m_input_mapping_z3_to_hal.insert({z3_expr, net_id});
                 }
+            }
+
+            std::sort(m_inputs_net_ids.begin(), m_inputs_net_ids.end()); 
+
+            for (const u32 net_id : m_inputs_net_ids) 
+            {
+                z3::expr z3_expr  = m_ctx->bv_const(std::to_string(net_id).c_str(), 1);
+                m_inputs_z3_expr.push_back(z3_expr);
+                m_input_mapping_hal_to_z3.insert({net_id, z3_expr});
             }
 
             return true;
@@ -243,6 +247,7 @@ namespace hal
             return true;
         }
 
+        /*
         void z3Wrapper::remove_global_inputs(const Netlist* nl)
         {
             auto vcc_gates = nl->get_vcc_gates();
@@ -277,6 +282,7 @@ namespace hal
             m_expr = std::make_unique<z3::expr>(m_expr->simplify());
             extract_function_inputs();
         }
+        */ 
 
         void z3Wrapper::remove_static_inputs(const Netlist* nl) {
             auto new_expr = *m_expr;
@@ -290,7 +296,7 @@ namespace hal
                 from_vec.push_back(m_ctx->bv_val(1, 1));
                 to_vec.push_back(v_ex);
 
-                new_expr = new_expr.substitute(from_vec, to_vec);
+                new_expr = new_expr.substitute(to_vec, from_vec);
             }
 
             for (const auto& g : nl->get_gnd_gates()) {
@@ -303,11 +309,46 @@ namespace hal
                 from_vec.push_back(m_ctx->bv_val(0, 1));
                 to_vec.push_back(g_ex);
 
-                new_expr = new_expr.substitute(from_vec, to_vec);
+                new_expr = new_expr.substitute(to_vec, from_vec);
             }
 
             m_expr = std::make_unique<z3::expr>(new_expr.simplify());
+            extract_function_inputs();
         }
+
+        std::vector<BooleanFunction::Value> z3Wrapper::generate_truth_table() const
+        {
+            std::vector<BooleanFunction::Value> tt(1 << m_inputs_net_ids.size());
+
+            for (u32 input = 0; input < (1 << m_inputs_net_ids.size()); input++)
+            {
+                z3::expr eval_expr = *m_expr;
+
+                z3::expr_vector from_vec(*m_ctx);
+                z3::expr_vector to_vec(*m_ctx);
+
+                for (u32 index = 0; index < m_inputs_net_ids.size(); index++)
+                {
+                    z3::expr val = ((input >> index) & 1) ? m_ctx->bv_val(1, 1) : m_ctx->bv_val(0, 1);
+                    z3::expr var = m_input_mapping_hal_to_z3.at(m_inputs_net_ids.at(index)); 
+
+                    from_vec.push_back(val);
+                    to_vec.push_back(var);
+                }
+
+                eval_expr = eval_expr.substitute(to_vec, from_vec).simplify();
+
+                if (!eval_expr.is_numeral())
+                {
+                    log_error("z3_utils", "after substituting every input the expr is not constant: {}", eval_expr.to_string());
+                }
+
+                BooleanFunction::Value eval = (eval_expr.get_numeral_uint() == 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO;
+                tt.at(input) = eval;
+            }
+
+            return tt;
+        }   
 
         z3::expr z3Wrapper::get_expr() const
         {
