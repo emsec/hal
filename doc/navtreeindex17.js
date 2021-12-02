@@ -1,5 +1,6 @@
 var NAVTREEINDEX17 =
 {
+"graph__context_8h.html":[13,0,1,0,0,0,18,0,0],
 "graph__context_8h_source.html":[13,0,1,0,0,0,18,0,0],
 "graph__context__manager_8cpp.html":[13,0,1,0,2,17,4],
 "graph__context__manager_8cpp_source.html":[13,0,1,0,2,17,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX17 =
 "include_2hal__core_2netlist_2netlist_8h.html":[13,0,0,0,1,13],
 "include_2hal__core_2netlist_2netlist_8h_source.html":[13,0,0,0,1,13],
 "index.html":[],
-"index.html#autotoc_md10":[1],
-"index.html#autotoc_md11":[1,0]
+"index.html#autotoc_md10":[1]
 };
