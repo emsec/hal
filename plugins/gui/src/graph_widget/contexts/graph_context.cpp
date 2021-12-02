@@ -1,4 +1,5 @@
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/layout_locker.h"
 
 #include "hal_core/netlist/module.h"
 
@@ -39,6 +40,7 @@ namespace hal
 
     GraphContext::~GraphContext()
     {
+        LayoutLockerManager::instance()->removeWaitingContext(this);
         if (mParentWidget) mParentWidget->handleContextAboutToBeDeleted();
         delete mLayouter;
         delete mShader;
