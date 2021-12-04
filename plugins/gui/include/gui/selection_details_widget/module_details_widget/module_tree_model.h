@@ -69,6 +69,7 @@ namespace hal
 
         QString mKeyItemType = "type";
         QString mKeyRepId = "id";
+        int mThreshold = 1;
 
         int mModId;
         QMap<Module*, TreeItem*> mModuleToTreeitems;
@@ -90,12 +91,19 @@ namespace hal
         //guards
         void handleModuleGatesAssignBegin(Module* m, u32 associated_data);
         void handleModuleGatesAssignEnd(Module* m, u32 associated_data);
+        void handleModuleGatesRemoveBegin(Module* m, u32 associated_data);
+        void handleModuleGatesRemoveEnd(Module* m, u32 associated_data);
 
         //actual functions
         void handleModuleSubmoduleAdded(Module* m, u32 added_module);
         void handleModuleSubmoduleRemoved(Module* m, u32 removed_module);
         void handleModuleGateAssigned(Module* m, u32 assigned_gate);
         void handleModuleGateRemoved(Module* m, u32 removed_gate);
+        void handleModuleRemoved(Module* m);
+
+        void handleGateNameChanged(Gate* g);
+        void handleModuleNameChanged(Module* m);
+        void handleModuleTypeChanged(Module* m);
 
         void disconnectEvents();
         void connectEvents();

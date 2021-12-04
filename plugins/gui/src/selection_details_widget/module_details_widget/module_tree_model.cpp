@@ -16,6 +16,8 @@ namespace hal
         //guards
         connect(gNetlistRelay, &NetlistRelay::moduleGatesAssignEnd, this, &ModuleTreeModel::handleModuleGatesAssignEnd);
         connect(gNetlistRelay, &NetlistRelay::moduleGatesAssignBegin, this, &ModuleTreeModel::handleModuleGatesAssignBegin);
+        connect(gNetlistRelay, &NetlistRelay::moduleGatesRemoveBegin, this, &ModuleTreeModel::handleModuleGatesRemoveBegin);
+        connect(gNetlistRelay, &NetlistRelay::moduleGatesRemoveEnd, this, &ModuleTreeModel::handleModuleGatesRemoveEnd);
 
         //actual events
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleAdded, this, &ModuleTreeModel::handleModuleSubmoduleAdded);
@@ -24,10 +26,12 @@ namespace hal
         connect(gNetlistRelay, &NetlistRelay::moduleGateAssigned, this, &ModuleTreeModel::handleModuleGateAssigned);
         connect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &ModuleTreeModel::handleModuleGateRemoved);
 
-        //connect(gNetlistRelay, &NetlistRelay::gateCreated, this, );
-        //conenct(gNetlistRelay, &NetlistRelay::gateRemoved, this, );
+        connect(gNetlistRelay, &NetlistRelay::moduleRemoved, this, &ModuleTreeModel::handleModuleRemoved);
 
-        //connect(gNetlistRelay, &NetlistRelay::moduleRemoved, this, );
+        //information change
+        connect(gNetlistRelay, &NetlistRelay::gateNameChanged, this, &ModuleTreeModel::handleGateNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &ModuleTreeModel::handleModuleNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleTypeChanged, this, &ModuleTreeModel::handleModuleTypeChanged);
 
         qDebug() << "In constructor";
     }
@@ -69,6 +73,7 @@ namespace hal
             mRootItem->appendChild(modItem);
             mModuleToTreeitems.insert(mod, modItem);
         }
+        //add gates
         for(auto gate : m->get_gates())
         {
             TreeItem* gateItem = new TreeItem(QList<QVariant>() << QString::fromStdString(gate->get_name())
@@ -166,8 +171,6 @@ namespace hal
         if(mModuleToTreeitems.value(m, nullptr) || (int)m->get_id() == mModId)
         {
             disconnect(gNetlistRelay, &NetlistRelay::moduleGateAssigned, this, &ModuleTreeModel::handleModuleGateAssigned);
-            //need own guard?
-            disconnect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &ModuleTreeModel::handleModuleGateRemoved);
         }
     }
 
@@ -183,6 +186,24 @@ namespace hal
             //need own guards?
             connect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &ModuleTreeModel::handleModuleGateRemoved);
             setModule(gNetlist->get_module_by_id(mModId));
+        }
+    }
+
+    void ModuleTreeModel::handleModuleGatesRemoveBegin(Module *m, u32 associated_data)
+    {
+        Q_UNUSED(m)
+        if((int)associated_data > mThreshold)
+            disconnect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &ModuleTreeModel::handleModuleGateRemoved);
+    }
+
+    void ModuleTreeModel::handleModuleGatesRemoveEnd(Module *m, u32 associated_data)
+    {
+        if((int)associated_data > mThreshold)
+        {
+            connect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &ModuleTreeModel::handleModuleGateRemoved);
+            //OPTIMIZE: Only update specific Module (everywhere)
+            if(mModuleToTreeitems.value(m, nullptr) || (int)m->get_id() == mModId)
+                setModule(gNetlist->get_module_by_id(mModId));
         }
     }
 
@@ -278,17 +299,57 @@ namespace hal
         endRemoveRows();
     }
 
+    void ModuleTreeModel::handleModuleRemoved(Module *m)
+    {
+        if((int)m->get_id() == mModId)
+            clear();
+    }
+
+    void ModuleTreeModel::handleGateNameChanged(Gate *g)
+    {
+        auto gateItem = mGateToTreeitems.value(g, nullptr);
+        if(gateItem)
+        {
+            gateItem->setDataAtIndex(sNameColumn, QString::fromStdString(g->get_name()));
+            QModelIndex inx0 = getIndexFromItem(gateItem);
+            QModelIndex inx1 = createIndex(inx0.row(), sNameColumn, inx0.internalPointer());
+            Q_EMIT dataChanged(inx0, inx1);
+        }
+    }
+
+    void ModuleTreeModel::handleModuleNameChanged(Module *m)
+    {
+        auto moduleItem = mModuleToTreeitems.value(m, nullptr);
+        if(moduleItem)
+        {
+            moduleItem->setDataAtIndex(sNameColumn, QString::fromStdString(m->get_name()));
+            QModelIndex inx0 = getIndexFromItem(moduleItem);
+            QModelIndex inx1 = createIndex(inx0.row(), sNameColumn, inx0.internalPointer());
+            Q_EMIT dataChanged(inx0, inx1);
+        }
+    }
+
+    void ModuleTreeModel::handleModuleTypeChanged(Module *m)
+    {
+        auto moduleItem = mModuleToTreeitems.value(m, nullptr);
+        if(moduleItem)
+        {
+            moduleItem->setDataAtIndex(sTypeColumn, QString::fromStdString(m->get_type()));
+            QModelIndex inx0 = getIndexFromItem(moduleItem);
+            QModelIndex inx1 = createIndex(inx0.row(), sTypeColumn, inx0.internalPointer());
+            Q_EMIT dataChanged(inx0, inx1);
+        }
+    }
+
     void ModuleTreeModel::disconnectEvents()
     {
         disconnect(gNetlistRelay, &NetlistRelay::moduleGateAssigned, this, &ModuleTreeModel::handleModuleGateAssigned);
-        //need own guard?
         disconnect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &ModuleTreeModel::handleModuleGateRemoved);
     }
 
     void ModuleTreeModel::connectEvents()
     {
         connect(gNetlistRelay, &NetlistRelay::moduleGateAssigned, this, &ModuleTreeModel::handleModuleGateAssigned);
-        //need own guards?
         connect(gNetlistRelay, &NetlistRelay::moduleGateRemoved, this, &ModuleTreeModel::handleModuleGateRemoved);
     }
 }
