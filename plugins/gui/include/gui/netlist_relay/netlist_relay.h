@@ -356,6 +356,23 @@ namespace hal
          */
         void moduleGatesAssignEnd(Module* m, u32 number_gates) const;
 
+        /**
+         * Q_SIGNAL to notify that a certain amount of gates will be removed from a module. <br>
+         * Relays the following hal-core event: <i>ModuleEvent::event::gates_remove_begin</i>
+         *
+         * @param m - The module from which gates will be removed.
+         * @param number_gates - The amount of gates to be removed.
+         */
+        void moduleGatesRemoveBegin(Module* m, u32 number_gates) const;
+
+        /**
+         * Q_SIGNAL to notify that a certain amount of gates has been removed from a module. <br>
+         * Relays the following hal-core event: <i>ModuleEvent::event::gates_remove_end</i>
+         * @param m
+         * @param number_gates
+         */
+        void moduleGatesRemoveEnd(Module* m, u32 number_gates) const;
+
         /*=======================================
            Gate Event Signals
          ========================================*/
