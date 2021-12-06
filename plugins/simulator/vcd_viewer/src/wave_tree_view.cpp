@@ -15,7 +15,7 @@
 
 namespace hal {
     WaveTreeView::WaveTreeView(WaveDataList* wdList, WaveItemHash *wHash, QWidget* parent)
-        : QTreeView(parent), mWaveDataList(wdList), mWaveItemHash(wHash)
+        : QTreeView(parent), mWaveDataList(wdList), mWaveItemHash(wHash), mKillMode(false)
     {
         setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -39,9 +39,33 @@ namespace hal {
     void WaveTreeView::mouseDoubleClickEvent(QMouseEvent *event)
     {
         QModelIndex inx = indexAt(event->pos());
-        if (inx.isValid())
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        if (mKillMode)
         {
-            WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+            QModelIndexList toDeleteInx;
+            if (selectionModel()->hasSelection())
+                toDeleteInx = selectionModel()->selectedRows(0);
+            else
+                toDeleteInx << inx;
+            auto it = toDeleteInx.begin();
+            while (it != toDeleteInx.end())
+            {
+                if (wtm->isLeaveItem(*it))
+                {
+                    wtm->removeItem(it->row(),it->parent());
+                    it = toDeleteInx.erase(it);
+                }
+                else
+                    ++it;
+            }
+            for (QModelIndex dinx : toDeleteInx)
+            {
+                WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(wtm->item(dinx));
+                if (grp) wtm->removeGroup(dinx);
+            }
+        }
+        else if (inx.isValid())
+        {
             WaveData* wd = nullptr;
             int iwave = wtm->waveIndex(inx);
             if (iwave >= 0)
@@ -98,8 +122,29 @@ namespace hal {
             Q_EMIT sizeChanged(viewport()->height(), -1, -1);
     }
 
+    void WaveTreeView::toggleKillMode()
+    {
+        mKillMode = ! mKillMode;
+        if (mKillMode)
+        {
+            setCursor(QCursor(QPixmap(":/icons/kill_cursor","PNG")));
+            setSelectionMode(QAbstractItemView::MultiSelection);
+        }
+        else
+        {
+            unsetCursor();
+            setSelectionMode(QAbstractItemView::SingleSelection);
+            clearSelection();
+        }
+    }
+
     void WaveTreeView::handleContextMenuRequested(const QPoint& pos)
     {
+        if (mKillMode)
+        {
+            toggleKillMode();
+            return;
+        }
         mContextIndex = indexAt(pos);
         if (!mContextIndex.isValid()) return;
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
@@ -142,6 +187,9 @@ namespace hal {
             act->setData(16);
             connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
         }
+        menu->addSeparator();
+        act = menu->addAction("Remove multiple items by select & double click");
+        connect(act,&QAction::triggered,this,&WaveTreeView::toggleKillMode);
         menu->popup(viewport()->mapToGlobal(pos));
     }
 
@@ -224,11 +272,11 @@ namespace hal {
 
     void WaveTreeView::handleInserted(const QModelIndex& index)
     {
-        reorder();
         selectionModel()->setCurrentIndex(index,
                                           QItemSelectionModel::Clear  |
                                           QItemSelectionModel::Select |
                                           QItemSelectionModel::Rows );
+        reorder();
     }
 
 
@@ -237,6 +285,7 @@ namespace hal {
         mItemOrder.clear();
         orderRecursion(QModelIndex());
 
+        QSet<QModelIndex>sel = selectionModel()->selectedRows().toSet();
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
         WaveItemHash notPlaced = *mWaveItemHash;
         int nVisible = mItemOrder.size();
@@ -268,6 +317,7 @@ namespace hal {
                     if (!wi->scene()) wi->setRequest(WaveItem::AddRequest);
                     wi->setYposition(i);
                     wi->setWaveVisible(true);
+                    wi->setWaveSelected(sel.contains(currentIndex));
                     auto it = notPlaced.find(wii);
                     if (it != notPlaced.end()) notPlaced.erase(it);
                 }
@@ -287,6 +337,7 @@ namespace hal {
                 if (!wi->scene()) wi->setRequest(WaveItem::AddRequest);
                 wi->setYposition(i);
                 wi->setWaveVisible(true);
+                wi->setWaveSelected(sel.contains(currentIndex));
                 auto it = notPlaced.find(wii);
                 if (it != notPlaced.end()) notPlaced.erase(it);
             }
@@ -310,13 +361,43 @@ namespace hal {
         }
     }
 
+    void WaveTreeView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
+    {
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        if (previous.isValid())
+        {
+            WaveItem* wi = mWaveItemHash->value(wtm->hashIndex(previous));
+            if (wi)
+            {
+                wi->setWaveSelected(false);
+                wi->update();
+            }
+        }
+        if (current.isValid())
+        {
+            WaveItem* wi = mWaveItemHash->value(wtm->hashIndex(current));
+            if (wi)
+            {
+                if (wi) wi->setWaveSelected(true);
+                wi->update();
+            }
+        }
+    }
+
     void WaveTreeView::setWaveSelection(const QSet<u32>& netIds)
     {
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
         selectionModel()->clear();
+        bool first = true;
         for (QModelIndex inx : wtm->indexes(netIds))
         {
-            selectionModel()->select(inx, QItemSelectionModel::Select);
+            selectionModel()->select(inx, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+            if (first)
+            {
+                first = false;
+                setCurrentIndex(inx);
+                scrollTo(inx, EnsureVisible);
+            }
         }
     }
 

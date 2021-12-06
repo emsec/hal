@@ -10,13 +10,13 @@
 
 namespace hal {
 
-    const char* WaveItem::sLineColor[] = { "#10E0FF", "#C08010"} ;
+    const char* WaveItem::sLineColor[] = { "#10E0FF", "#60F0FF", "#C08010", "#0D293E"} ;
 
     bool WaveItem::sValuesAsText = false;
 
     WaveItem::WaveItem(WaveData *dat)
         : mData(dat), mYposition(-1), mRequest(0),
-          mMaxTime(WaveScene::sMinSceneWidth), mVisibile(true)
+          mMaxTime(WaveScene::sMinSceneWidth), mVisibile(true), mSelected(false)
     {
         construct();
     }
@@ -45,6 +45,12 @@ namespace hal {
         setRequest(SetVisible);
     }
 
+    void WaveItem::setWaveSelected(bool sel)
+    {
+        if (mSelected==sel) return;
+        mSelected = sel;
+        setRequest(SelectionChanged);
+    }
 
     void WaveItem::enforceYposition()
     {
@@ -60,6 +66,7 @@ namespace hal {
         mGrpRects.clear();
 
         clearRequest(DataChanged);
+        clearRequest(SelectionChanged);
 
         if (!childItems().isEmpty())
         {
@@ -148,18 +155,21 @@ namespace hal {
         if (hasRequest(SetPosition))
             enforceYposition();
 
-        /*
-        painter->setBrush(QColor::fromRgb(0,5,10));
-        painter->setPen(Qt::NoPen);
-        painter->drawRect(boundingRect());
-*/
+        if (mSelected)
+        {
+            painter->setBrush(QBrush(sLineColor[Background]));
+            painter->setPen(Qt::NoPen);
+            painter->drawRect(boundingRect());
+            painter->setBrush(Qt::NoBrush);
+        }
 
         float x1 = maxTime();
-        if (hasRequest(DataChanged))
+        if (hasRequest(DataChanged) || hasRequest(SelectionChanged))
         {
             mMaxTime = x1;
             construct();
             clearRequest(DataChanged);
+            clearRequest(SelectionChanged);
         }
         else
         {
@@ -185,17 +195,17 @@ namespace hal {
         }
 
         painter->setRenderHint(QPainter::Antialiasing,true);
-        painter->setPen(QPen(QBrush(QColor(sLineColor[1])),0.,Qt::DotLine)); // TODO : style
+        painter->setPen(QPen(QBrush(QColor(sLineColor[Dotted])),0.,Qt::DotLine)); // TODO : style
         painter->drawLines(mDotLines);
 
-        painter->setPen(QPen(QBrush(QColor(sLineColor[0])),0.));  // TODO : style
+        painter->setPen(QPen(QBrush(QColor(sLineColor[mSelected?HiLight:Solid])),0.));  // TODO : style
         painter->drawLines(mSolidLines);
 
         float  y = 1;
 
         if (mData->data().isEmpty())
         {
-            painter->setPen(QPen(QBrush(QColor(sLineColor[1])),0.,Qt::DotLine));
+            painter->setPen(QPen(QBrush(QColor(sLineColor[Dotted])),0.,Qt::DotLine));
             y -= 0.5;
             painter->drawLine(QLineF(0,y,x1,y));
             return;
@@ -220,7 +230,7 @@ namespace hal {
             if (mData->data().last() < 0)
             {
                 y -= 0.5;
-                painter->setPen(QPen(QBrush(QColor(sLineColor[1])),0.,Qt::DotLine));
+                painter->setPen(QPen(QBrush(QColor(sLineColor[Dotted])),0.,Qt::DotLine));
             }
             else
                 y -= mData->data().last();
@@ -229,7 +239,7 @@ namespace hal {
 
         if (!sValuesAsText && !mGrpRects.isEmpty())
         {
-            painter->setPen(QPen(QBrush(QColor(sLineColor[0])),0.));
+            painter->setPen(QPen(QBrush(QColor(sLineColor[mSelected?HiLight:Solid])),0.));
             painter->setBrush(Qt::NoBrush);
             painter->drawRects(mGrpRects);
         }
@@ -237,7 +247,7 @@ namespace hal {
 
     QRectF WaveItem::boundingRect() const
     {
-        return QRectF(0,-0.1,mMaxTime,1.2);
+        return QRectF(0,-0.2,mMaxTime,1.4);
     }
 
     bool WaveItem::hasRequest(Request rq) const
@@ -339,7 +349,7 @@ namespace hal {
 
     void WaveItemHash::dump(const char* stub)
     {
-        const char* req = "+CVP-D";
+        const char* req = "+CVPS-D";
         QGraphicsScene* sc = nullptr;
         for (WaveItem* wi : values())
         {

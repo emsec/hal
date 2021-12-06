@@ -43,7 +43,7 @@ namespace hal {
     class WaveItem : public QGraphicsItem
     {
     public:
-        enum Request { AddRequest, DataChanged, SetVisible, SetPosition, DeleteRequest, DeleteAcknowledged };
+        enum Request { AddRequest, DataChanged, SetVisible, SetPosition, SelectionChanged, DeleteRequest, DeleteAcknowledged };
     private:
         WaveData* mData;
         int       mYposition;
@@ -54,13 +54,15 @@ namespace hal {
 
         float mMaxTime;
         bool mVisibile;
+        bool mSelected;
 
         void construct();
         void constructWire();
         void constructGroup();
 
         void enforceYposition();
-        static const char* sLineColor[];  // 0=value(solid)  1=X(dotted)
+        static const char* sLineColor[];
+        enum ColorIndex { Solid, HiLight, Dotted, Background };
     public:
         WaveItem(WaveData* dat);
         ~WaveItem();
@@ -73,6 +75,7 @@ namespace hal {
         void setYposition(int pos);
         void setWaveData(WaveData* wd);
         void setWaveVisible(bool vis);
+        void setWaveSelected(bool sel);
         QRectF boundingRect() const override;
         float maxTime() const;
         bool hasRequest(Request rq) const;

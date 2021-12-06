@@ -152,6 +152,7 @@ namespace hal {
     {
         static u32 sMaxGroupId;
 
+    protected:
         WaveDataList* mWaveDataList;
         QList<WaveData*> mGroupList;
 

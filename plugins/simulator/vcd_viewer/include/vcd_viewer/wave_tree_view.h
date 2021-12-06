@@ -27,6 +27,7 @@ namespace hal {
         QModelIndex mContextIndex;
         WaveDataList* mWaveDataList;
         WaveItemHash* mWaveItemHash;
+        bool mKillMode;
 
     protected:
         void mouseDoubleClickEvent(QMouseEvent *event) override;
@@ -34,6 +35,7 @@ namespace hal {
         void scrollContentsBy(int dx, int dy) override;
         bool viewportEvent(QEvent *event) override;
         void resizeEvent(QResizeEvent *event) override;
+        void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
     Q_SIGNALS:
         void viewportHeightChanged(int height);
@@ -51,6 +53,7 @@ namespace hal {
         void handleRemoveGroup();
         void handleInsertGroup();
         void handleSetValueFormat();
+        void toggleKillMode();
 
     public Q_SLOTS:
         void handleInserted(const QModelIndex& index);

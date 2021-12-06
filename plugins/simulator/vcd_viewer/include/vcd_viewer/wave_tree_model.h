@@ -16,6 +16,7 @@ namespace hal {
         WaveDataRoot(WaveDataList* wdList)
             : WaveDataGroup(wdList,0,"root") {;}
         void recalcData() override {;}
+        bool moveGroupPosition(int sourceRow, int targetRow);
     };
 
     class WaveTreeModel : public QAbstractItemModel
@@ -30,6 +31,7 @@ namespace hal {
         WaveDataRoot* mRoot;
         QModelIndex mDragIndex;
         DragCommand mDragCommand;
+        bool mDragIsGroup;
         float mCursorPosition;
         bool mIgnoreSignals;
         int mReorderRequestWaiting;
@@ -44,6 +46,7 @@ namespace hal {
             }
         };
 
+        bool dropGroup(const QModelIndex& parentTo, int row);
         void dropRow(const QModelIndex& parentTo, int row);
         void invalidateParent(const QModelIndex& parentRow);
         void updateGroup(WaveDataGroup* grp);
@@ -89,6 +92,7 @@ namespace hal {
         int waveIndex(const QModelIndex& index) const;
         int groupId(const QModelIndex& grpIndex) const;
         WaveData* item(const QModelIndex& index) const;
+        WaveItemIndex hashIndex(const QModelIndex& index) const;
 
         void setGroupPosition(int ypos, const QModelIndex& index);
 

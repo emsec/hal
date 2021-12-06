@@ -13,7 +13,7 @@ namespace hal {
 
     WaveTreeModel::WaveTreeModel(WaveDataList *wdlist, WaveItemHash *wHash, QObject *obj)
         : QAbstractItemModel(obj), mWaveDataList(wdlist), mWaveItemHash(wHash),
-          mDragCommand(None),
+          mDragCommand(None), mDragIsGroup(false),
           mCursorPosition(0), mIgnoreSignals(false),
           mReorderRequestWaiting(0)
     {
@@ -36,12 +36,24 @@ namespace hal {
             */
     }
 
-    WaveData *WaveTreeModel::item(const QModelIndex& index) const
+    WaveData* WaveTreeModel::item(const QModelIndex& index) const
     {
         if (!index.isValid()) return nullptr;
         WaveDataGroup* grp = static_cast<WaveDataGroup*>(index.internalPointer());
         if (!grp) return mRoot;
         return grp->childAt(index.row());
+    }
+
+    WaveItemIndex WaveTreeModel::hashIndex(const QModelIndex& index) const
+    {
+        WaveData* wd = item(index);
+        if (!wd) return WaveItemIndex();
+        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(wd);
+        if (grp) return WaveItemIndex(grp->id(),WaveItemIndex::Group);
+        int iwave = mWaveDataList->waveIndexByNetId(wd->id());
+        WaveDataGroup* parentGrp = static_cast<WaveDataGroup*>(index.internalPointer());
+        if (!parentGrp || parentGrp == mRoot) return WaveItemIndex(iwave,WaveItemIndex::Wire);
+        return WaveItemIndex(iwave,WaveItemIndex::Wire,parentGrp->id());
     }
 
     QModelIndex WaveTreeModel::index(int row, int column, const QModelIndex &parent) const
@@ -326,15 +338,26 @@ namespace hal {
     {
         Qt::ItemFlags retval = Qt::ItemIsDropEnabled | Qt:: ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
         if (!index.isValid()) return retval;
-
-        if (item(index)->bits()>1) return retval;
-        if (isLeaveItem(index)) return retval | Qt::ItemIsDragEnabled | Qt::ItemNeverHasChildren;
+        retval |= Qt::ItemIsDragEnabled;
+        if (isLeaveItem(index)) return retval | Qt::ItemNeverHasChildren;
         return retval;
     }
 
     void WaveTreeModel::setDragIndex(const QModelIndex& index) {
         mDragIndex = index;
         mDragCommand = Move;
+        mDragIsGroup = !isLeaveItem(index);
+    }
+
+    bool WaveTreeModel::dropGroup(const QModelIndex &parentTo, int row)
+    {
+        ReorderRequest req(this);
+        if (row < 0) row = parentTo.row();
+        if (mDragIndex.internalPointer() != mRoot) return false;
+        beginResetModel();
+        if (!mRoot->moveGroupPosition(mDragIndex.row(),row)) return false;
+        endResetModel();
+        return true;
     }
 
     void WaveTreeModel::dropRow(const QModelIndex& parentTo, int row)
@@ -374,6 +397,7 @@ namespace hal {
         Q_UNUSED(column);
         if (!dropParent.isValid()) return false;
         if (!mimeData->formats().contains("application/x-qabstractitemmodeldatalist")) return false;
+        if (mDragIsGroup) return dropGroup(dropParent,row);
         if (isLeaveItem(dropParent))
         {
             WaveData* wd = item(dropParent);
@@ -402,8 +426,8 @@ namespace hal {
         Q_UNUSED(column);
         if (!parent.isValid()) return false;
         if (!data->formats().contains("application/x-qabstractitemmodeldatalist")) return false;
-        if (isLeaveItem(parent)) return true;
         if (parent.internalPointer() == mRoot) return true;
+        if (!mDragIsGroup && isLeaveItem(parent)) return true;
         return false;
     }
 
@@ -526,8 +550,6 @@ namespace hal {
         grp->recalcData();
     }
 
-    // ---- WaveDataRoot
-
     QSet<int> WaveTreeModel::waveDataIndexSet() const
     {
         QSet<int> retval;
@@ -549,6 +571,18 @@ namespace hal {
             }
         }
         return retval;
+    }
+
+    // ---- WaveDataRoot
+
+    bool WaveDataRoot::moveGroupPosition(int sourceRow, int targetRow)
+    {
+        if (targetRow==sourceRow) return false;
+        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(mGroupList.at(sourceRow));
+        if (!grp) return false;
+        mGroupList.removeAt(sourceRow);
+        mGroupList.insert( targetRow, grp);
+        return true;
     }
 
 }
