@@ -45,6 +45,18 @@ namespace hal
          */
         itemType getTypeOfItem(TreeItem* item) const;
 
+        /**
+         * Disconnects all events from the model. Can be called to increase performance when
+         * no module is displayed.
+         */
+        void disconnectEvents();
+
+        /**
+         * Connects all events to the model. When setting a module, all events will be
+         * automatically conneceted.
+         */
+        void connectEvents();
+
         //Column identifier
         static const int sNameColumn = 0;
         static const int sIdColumn = 1;
@@ -70,6 +82,9 @@ namespace hal
         QString mKeyItemType = "type";
         QString mKeyRepId = "id";
         int mThreshold = 1;
+        //only for "all events", specific events that are disabled by event-guard handlers
+        //musst be handled there (disconnect specific events at begin, connect them at end)
+        bool mEventsConnected = false;
 
         int mModId;
         QMap<Module*, TreeItem*> mModuleToTreeitems;
@@ -77,6 +92,9 @@ namespace hal
 
         //necessary because setModule uses beginResetModel (should not be called by each recursive iteration)
         void moduleRecursive(Module* mod, TreeItem* modItem);
+
+        //perhaps more performance instead of setting the whole displayed module anew
+        void updateGatesOfModule(Module* mod);
 
         /**
          * Utility function to determine the displayed icon for a given item
@@ -104,11 +122,6 @@ namespace hal
         void handleGateNameChanged(Gate* g);
         void handleModuleNameChanged(Module* m);
         void handleModuleTypeChanged(Module* m);
-
-        void disconnectEvents();
-        void connectEvents();
-
-        //module_deleted(for the case the displayed mod is the deleted one)
     };
 
 }
