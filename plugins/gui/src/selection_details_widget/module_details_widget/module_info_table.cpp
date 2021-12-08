@@ -20,7 +20,7 @@ namespace hal
     const QString ModuleInfoTable::noOfModulesRowKey = "No. of Submodules";
     const QString ModuleInfoTable::noOfNetsRowKey = "No. of Nets";
 
-    ModuleInfoTable::ModuleInfoTable(QWidget* parent) : GeneralTableWidget(parent)
+    ModuleInfoTable::ModuleInfoTable(QWidget* parent) : GeneralTableWidget(parent), mModule(nullptr)
     {
         mNameEntryContextMenu = new QMenu();
         mNameEntryContextMenu->addAction("Extract module name as plain text", std::bind(&ModuleInfoTable::copyName, this));
@@ -275,6 +275,9 @@ namespace hal
     {
         Q_UNUSED(affectedModuleId);
 
+        if(!mModule)
+            return;
+
         if(mModule == parentModule || mModule->contains_module(parentModule))
             refresh();
     }
@@ -283,6 +286,9 @@ namespace hal
     {
         Q_UNUSED(affectedGateId);
 
+        if(!mModule)
+            return;
+
         if(mModule == parentModule || mModule->contains_module(parentModule))
             refresh();
     }
@@ -290,6 +296,9 @@ namespace hal
     void ModuleInfoTable::handleNetChaned(Net* net, u32 affectedGateId)
     {
         Q_UNUSED(net);
+
+        if(!mModule)
+            return;
 
         Gate* affectedGate = gNetlist->get_gate_by_id(affectedGateId);
         std::vector<Gate*> allChildGates = mModule->get_gates(nullptr, true);

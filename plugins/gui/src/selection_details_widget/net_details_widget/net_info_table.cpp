@@ -16,7 +16,7 @@ namespace hal
     const QString NetInfoTable::noOfSrcRowKey = "No. of Sources";
     const QString NetInfoTable::noOfDstRowKey = "No. of Destinations";
 
-    NetInfoTable::NetInfoTable(QWidget* parent) : GeneralTableWidget(parent)
+    NetInfoTable::NetInfoTable(QWidget* parent) : GeneralTableWidget(parent), mNet(nullptr)
     {
         mNameEntryContextMenu = new QMenu();
         mNameEntryContextMenu->addAction("Extract net name as plain text", std::bind(&NetInfoTable::copyName, this));
@@ -181,6 +181,9 @@ namespace hal
     void NetInfoTable::handleNetTypeChanged(Netlist* netlist, const u32 netId)
     {
         Q_UNUSED(netlist)
+
+        if(!mNet)
+            return;
 
         if (mNet->get_id() == netId)
             refresh();
