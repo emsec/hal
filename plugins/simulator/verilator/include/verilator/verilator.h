@@ -133,7 +133,6 @@ namespace hal
             std::filesystem::path m_simulator_dir;
 
             std::string m_design_name;
-            u64 m_partial_testbenches = 0;
 
             bool setSimulationInput(SimulationInput* simInput) override;
             int numberCommandLines() const override;
@@ -142,14 +141,8 @@ namespace hal
 
         private:
             bool write_testbench_files(SimulationInput* simInput);
-            
-            // TODO: remove hacks
-            void write_server_script();
-
-            // bool server_execution = false;
-            // std::string client_location;
-            // std::string predefined_archive_location;
-            // std::string predefined_server_output;
+            u64 m_partial_testbenches = 0;
+            int m_num_of_threads      = 4;
         };
 
         class VerilatorEngineFactory : public SimulationEngineFactory

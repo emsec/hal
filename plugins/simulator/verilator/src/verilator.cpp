@@ -92,23 +92,15 @@ namespace hal
                 log_info("verilator", "the property 'provided_models' has not been set (use set_engine_property method to assign).");
             }
 
+            if (!get_engine_property("num_of_threads").empty())
+            {
+                m_num_of_threads = std::stoi(get_engine_property("num_of_threads"));
+            }
+
             if (!write_testbench_files(simInput))
             {
                 log_error("verilator", "error, testbench files for verilog could not be written");
             }
-
-            // // hacky workaround, will be changed later
-            // // TODO: remove hacks
-            // if (!get_engine_property("use_server").empty())
-            // {
-            //     write_server_script();
-            //     client_location             = get_engine_property("client_location");
-            //     predefined_archive_location = get_engine_property("predefined_archive_location");
-            //     predefined_server_output    = get_engine_property("predefined_server_output");
-            //     server_execution            = true;
-            // }
-            // else
-            //     server_execution = false;
 
             if (!converter::convert_gate_library_to_verilog(m_partial_netlist.get(), m_simulator_dir, provided_models))
             {
@@ -121,27 +113,6 @@ namespace hal
             return true;    // everything ok
         }
 
-        void VerilatorEngine::write_server_script()
-        {
-            std::stringstream simulation_commands;
-
-            for (int i = 0; i < numberCommandLines(); i++)
-            {
-                std::vector<std::string> commands = commandLine(i);
-                for (const auto& command : commands)
-                {
-                    simulation_commands << command << " ";
-                }
-                simulation_commands << std::endl;
-            }
-
-            std::filesystem::path simulation_commands_path = directory();
-            simulation_commands_path /= std::string("execute_testbench.sh");
-
-            std::ofstream simulation_commands_file(simulation_commands_path);
-            simulation_commands_file << simulation_commands.str();
-            simulation_commands_file.close();
-        }
 
         bool VerilatorEngine::write_testbench_files(SimulationInput* simInput)
         {
@@ -185,11 +156,8 @@ namespace hal
                             break;
 
                         default:
-                            log_error("verilator",
-                                      "cannot assign value '{}' to net '{}' at {}ps, only supporting 1, 0 aborting...",
-                                      BooleanFunction::to_string(boolean_value),
-                                      net->get_name(),
-                                      duration);
+                            log_error(
+                                "verilator", "cannot assign value '{}' to net '{}' at {}ps, only supporting 1, 0 aborting...", BooleanFunction::to_string(boolean_value), net->get_name(), duration);
                             return false;
                             break;
                     }
@@ -203,7 +171,7 @@ namespace hal
                 // split testbench or write the rest to the last file
                 if ((sim_counter % max_events_per_partial_testbench) == (max_events_per_partial_testbench - 1) || sim_counter == simInput->get_simulation_net_events().size() - 1)
                 {
-                    log_info("verilator", "creating new partial testbench {}", m_partial_testbenches);
+                    log_debug("verilator", "creating new partial testbench {}", m_partial_testbenches);
                     std::string partial_testbench_cpp = get_partial_testbench_cpp_template();
 
                     partial_testbench_cpp = utils::replace(partial_testbench_cpp, std::string("<top_system>"), m_partial_netlist->get_design_name());
@@ -257,47 +225,7 @@ namespace hal
 
         std::vector<std::string> VerilatorEngine::commandLine(int lineIndex) const
         {
-            // log_info("verilator", "server_execution: {}", server_execution);
-            // // TODO: remove hacks
-            // if (server_execution)
-            // {
-            //     // returns commands to be executed
-            //     switch (lineIndex)
-            //     {
-            //         case 0: {
-            //             std::vector<std::string> retval{std::string("cd"),
-            //                                             std::string(m_simulator_dir),
-            //                                             std::string("&&"),
-            //                                             std::string("tar"),
-            //                                             std::string("-zcvf"),
-            //                                             std::string("testbench.tar.gz"),
-            //                                             std::string("*"),
-            //                                             std::string("&&"),
-            //                                             std::string("mv"),
-            //                                             std::string("testbench.tar.gz"),
-            //                                             predefined_archive_location};
-            //             return retval;
-            //         }
-            //         break;
-            //         case 1: {
-            //             const char* cl[]                = {"cargo", "test", "--manifest-path", nullptr};
-            //             std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
-            //             retval.push_back(client_location);
-            //             return retval;
-            //         }
-            //         break;
-            //         case 2: {
-            //             std::vector<std::string> retval{std::string("mv"), predefined_server_output, m_simulator_dir, std::string("&&"), std::string("rm"), predefined_archive_location};
-            //             return retval;
-            //         }
-            //         break;
-            //         default:
-            //             break;
-            //     }
-            // }
-            // else
-            // {
-            //     // returns commands to be executed
+            // returns commands to be executed
             switch (lineIndex)
             {
                 case 0: {
@@ -328,9 +256,11 @@ namespace hal
                 }
                 break;
                 case 1: {
-                    const char* cl[]                = {"make", "-j8", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr};
+                    const char* cl[]                = {"make", "-j4", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr};
                     std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
                     retval.push_back("V" + m_design_name + ".mk");
+
+                    retval[1] = "-j" + std::to_string(m_num_of_threads);
                     return retval;
                 }
                 break;
@@ -343,8 +273,6 @@ namespace hal
                 default:
                     break;
             }
-            // }
-
             return std::vector<std::string>();
         }
 

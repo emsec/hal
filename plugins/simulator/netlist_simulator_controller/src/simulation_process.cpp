@@ -71,7 +71,7 @@ namespace hal {
         mProcess->setWorkingDirectory(localDir.absolutePath());
         QStringList args;
         args << shellScriptName;
-        QString prog("/usr/bin/bash");
+        QString prog("bash");
         mProcess->start(prog, args);
 
         if (!mProcess->waitForStarted())

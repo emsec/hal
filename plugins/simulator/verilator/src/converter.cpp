@@ -42,8 +42,7 @@ namespace verilator {
 
                 // check if model has been given
                 if (provided_models.find(gate_type->get_name()) != provided_models.end()) {
-                    log_info("verilator", "using provided model for gate: {}", gate_type->get_name());
-                    // todo
+                    log_debug("verilator", "using provided model for gate: {}", gate_type->get_name());
                     continue;
                 }
 
