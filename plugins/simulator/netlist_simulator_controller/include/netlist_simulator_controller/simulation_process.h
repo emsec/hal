@@ -30,15 +30,8 @@ namespace hal {
     private:
         void runLocal();
 
-        std::string mPathToCompressedSimulationFiles;
-
         // server execution
         void runRemote();
-        bool createServerScript();
-        bool compressSimulationFiles();
-        bool sendFilesToServer();
-        bool loadVCDFromServer();
-        bool deleteJobFromServer();
 
     };
 }

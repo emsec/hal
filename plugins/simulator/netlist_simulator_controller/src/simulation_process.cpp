@@ -5,6 +5,9 @@
 #include <vector>
 #include <QStringList>
 #include <QTextStream>
+#include <QDir>
+#include <QDebug>
+#include <QFileInfo>
 
 namespace hal {
 
@@ -21,6 +24,81 @@ namespace hal {
     }
 
     void SimulationProcess::run()
+    {
+        if (mEngine->get_engine_property("ssh_server").empty())
+            runLocal();
+        else
+            runRemote();
+    }
+
+    void SimulationProcess::runRemote()
+    {
+        QDir localDir(QString::fromStdString(mEngine->directory()));
+        QString remoteDir = localDir.absolutePath().mid(1);
+        QString shellScriptName(localDir.absoluteFilePath("remote.sh"));
+        QString hostname = QString::fromStdString(mEngine->get_engine_property("ssh_server"));
+        QString resultFile("waveform.vcd");
+        QTextStream xout(stdout, QIODevice::WriteOnly);
+        xout << "ssh_server   <" << hostname << ">\n";
+        xout << "result_file  <" << resultFile << ">\n";
+        xout << "local_dir    <" << localDir.absolutePath() << ">\n";
+        xout << "remote_dir   <" << remoteDir << ">\n";
+        xout << "script       <" << shellScriptName << ">\n";
+        QFile ff(shellScriptName);
+        if (!ff.open(QIODevice::WriteOnly))
+        {
+            qDebug() << "cannot open remote script for writing" << shellScriptName;
+            return abortOnError();
+        }
+        ff.write("set -x\n");
+        ff.write(QString("tar -czf - %1 | ssh %2 tar -xzf -\n").arg(localDir.absolutePath()).arg(hostname).toUtf8());
+        mNumberLines = mEngine->numberCommandLines();
+        for (int i=0; i<mNumberLines; i++)
+        {
+            QString remoteCmd = QString("ssh %1 'cd %2 ;").arg(hostname).arg(remoteDir);
+            for (const std::string s : mEngine->commandLine(i))
+            {
+                remoteCmd += " " + QString::fromStdString(s);
+            }
+            remoteCmd +=  QString("'\n");
+            ff.write(remoteCmd.toUtf8());
+        }
+        ff.write(QString("ssh %1 'cd %2 ; cat %3' > %4\n").arg(hostname).arg(remoteDir).arg(resultFile).arg(localDir.absoluteFilePath(resultFile)).toUtf8());
+        ff.close();
+        ff.setPermissions(QFileDevice::ReadOwner|QFileDevice::WriteOwner|QFileDevice::ExeOwner);
+
+        mProcess = new QProcess;
+        mProcess->setWorkingDirectory(localDir.absolutePath());
+        QStringList args;
+        args << shellScriptName;
+        QString prog("/usr/bin/bash");
+        mProcess->start(prog, args);
+
+        if (!mProcess->waitForStarted())
+            return abortOnError();
+
+        bool success = mProcess->waitForFinished(-1);
+
+        xout << "process stdout......\n";
+        xout << mProcess->readAllStandardOutput();
+        xout << "\n--------------------\n";
+        xout << "process stderr......\n";
+        xout << mProcess->readAllStandardError();
+        xout << "\n--------------------\n";
+
+        if (!success)
+            return abortOnError();
+
+        if (mProcess->exitStatus() != QProcess::NormalExit || mProcess->exitCode() != 0)
+            return abortOnError();
+
+        if (!mEngine->finalize())
+            return abortOnError();
+
+        Q_EMIT processFinished(true);
+    }
+
+    void SimulationProcess::runLocal()
     {
         mNumberLines = mEngine->numberCommandLines();
         while (mLineIndex < mNumberLines)
