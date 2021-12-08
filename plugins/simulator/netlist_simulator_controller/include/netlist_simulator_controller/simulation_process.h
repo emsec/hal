@@ -16,9 +16,9 @@ namespace hal {
 
         int mLineIndex;
         int mNumberLines;
-        QProcess* mProcess;
 
         void abortOnError();
+        bool runProcess(const QString& prog, const QStringList& args);
 
     Q_SIGNALS:
         void processFinished(bool success);
