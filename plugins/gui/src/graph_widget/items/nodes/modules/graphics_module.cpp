@@ -20,18 +20,18 @@ namespace hal
             switch (pin->get_direction())
             {
                 case PinDirection::input:
-                    mInputPins.append(hal::GraphicsModule::ModulePin{pinName, netId});
                     mInputByNet.insert(netId, mInputPins.size());
+                    mInputPins.append(hal::GraphicsModule::ModulePin{pinName, netId});
                     break;
                 case PinDirection::output:
+                    mOutputByNet.insert(netId, mOutputPins.size());
                     mOutputPins.append(hal::GraphicsModule::ModulePin{pinName, netId});
-                    mOutputByNet.insert(netId, mInputPins.size());
                     break;
                 case PinDirection::inout:
+                    mInputByNet.insert(netId, mInputPins.size());
+                    mOutputByNet.insert(netId, mOutputPins.size());
                     mInputPins.append(hal::GraphicsModule::ModulePin{pinName, netId});
                     mOutputPins.append(hal::GraphicsModule::ModulePin{pinName, netId});
-                    mInputByNet.insert(netId, mInputPins.size());
-                    mOutputByNet.insert(netId, mInputPins.size());
                     break;
                 default:
                     break;
