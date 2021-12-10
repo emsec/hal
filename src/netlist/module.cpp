@@ -658,7 +658,7 @@ namespace hal
             for (const auto& group : m_pin_groups)
             {
                 std::vector<ModulePin*> pins = group->get_pins();
-                res.insert(res.begin(), pins.begin(), pins.end());
+                res.insert(res.end(), pins.begin(), pins.end());
             }
         }
         else
