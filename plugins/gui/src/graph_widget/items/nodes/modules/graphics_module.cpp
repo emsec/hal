@@ -12,20 +12,30 @@ namespace hal
         mNodeText[1]                              = QString::fromStdString(m->get_type());
         mNodeText[mNodeText[1].isEmpty() ? 1 : 2] = "Module";
 
-        for (Net* n : m->get_input_nets())
-            mInputPins.append(ModulePin{QString::fromStdString(m->get_pin(n)->get_name()), n->get_id()});
+        for (hal::ModulePin* pin : m->get_pins())
+        {
+            u32 netId       = pin->get_net()->get_id();
+            QString pinName = QString::fromStdString(pin->get_name());
 
-        for (Net* n : m->get_output_nets())
-            mOutputPins.append(ModulePin{QString::fromStdString(m->get_pin(n)->get_name()), n->get_id()});
-
-        if (mInputPins.size() > 1)
-            std::sort(mInputPins.begin(), mInputPins.end());
-        if (mOutputPins.size() > 1)
-            std::sort(mOutputPins.begin(), mOutputPins.end());
-        for (int inp = 0; inp < mInputPins.size(); inp++)
-            mInputByNet.insert(mInputPins.at(inp).mNetId, inp);
-
-        for (int outp = 0; outp < mOutputPins.size(); outp++)
-            mOutputByNet.insert(mOutputPins.at(outp).mNetId, outp);
+            switch (pin->get_direction())
+            {
+                case PinDirection::input:
+                    mInputPins.append(hal::GraphicsModule::ModulePin{pinName, netId});
+                    mInputByNet.insert(netId, mInputPins.size());
+                    break;
+                case PinDirection::output:
+                    mOutputPins.append(hal::GraphicsModule::ModulePin{pinName, netId});
+                    mOutputByNet.insert(netId, mInputPins.size());
+                    break;
+                case PinDirection::inout:
+                    mInputPins.append(hal::GraphicsModule::ModulePin{pinName, netId});
+                    mOutputPins.append(hal::GraphicsModule::ModulePin{pinName, netId});
+                    mInputByNet.insert(netId, mInputPins.size());
+                    mOutputByNet.insert(netId, mInputPins.size());
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }    // namespace hal
