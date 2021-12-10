@@ -24,7 +24,6 @@ namespace hal
 
         //connections
         connect(this, &QTreeView::customContextMenuRequested, this, &ModuleElementsTree::handleContextMenuRequested);
-        //connect(mNetlistElementsModel, &NetlistElementsTreeModel::numberOfSubmodulesChanged, this, &ModuleElementsTree::handleNumberSubmodulesChanged);
         connect(mModel, &ModuleTreeModel::numberOfSubmodulesChanged, this, &ModuleElementsTree::handleNumberSubmodulesChanged);
     }
 
@@ -60,9 +59,9 @@ namespace hal
         if(!clickedIndex.isValid())
             return;
 
-        TreeItem* clickedItem = mNetlistElementsModel->getItemFromIndex(clickedIndex);
-        int id = mNetlistElementsModel->getRepresentedIdOfItem(clickedItem);
-        NetlistElementsTreeModel::itemType type = mNetlistElementsModel->getTypeOfItem(clickedItem);
+        TreeItem* clickedItem = mModel->getItemFromIndex(clickedIndex);
+        int id = clickedItem->getData(ModuleTreeModel::sIdColumn).toInt();
+        ModuleTreeModel::itemType type = mModel->getTypeOfItem(clickedItem);
         QMenu menu;
 
         //Strings for first menu entry (python get net/gate/module)
@@ -82,23 +81,17 @@ namespace hal
 
         switch (type)
         {
-            case NetlistElementsTreeModel::itemType::module:
+            case ModuleTreeModel::itemType::module:
                 descriptions = createCommonDescriptionList("module");
                 pythonGetObject = PyCodeProvider::pyCodeModule(id);
                 pythonGetName = PyCodeProvider::pyCodeModuleName(id);
                 pythonGetType = PyCodeProvider::pyCodeModuleType(id);
                 break;
-            case NetlistElementsTreeModel::itemType::gate:
+            case ModuleTreeModel::itemType::gate:
                 descriptions = createCommonDescriptionList("gate");
                 pythonGetObject = PyCodeProvider::pyCodeGate(id);
                 pythonGetName = PyCodeProvider::pyCodeGateName(id);
                 pythonGetType = PyCodeProvider::pyCodeGateType(id);
-                break;
-            case NetlistElementsTreeModel::itemType::net:
-                descriptions = createCommonDescriptionList("net");
-                pythonGetObject = PyCodeProvider::pyCodeNet(id);
-                pythonGetName = PyCodeProvider::pyCodeNetName(id);
-                pythonGetType = PyCodeProvider::pyCodeNetType(id);
                 break;
         }
 
@@ -132,9 +125,8 @@ namespace hal
            {
             switch(type)
             {
-                case NetlistElementsTreeModel::itemType::module: gSelectionRelay->addModule(id); break;
-                case NetlistElementsTreeModel::itemType::gate: gSelectionRelay->addGate(id); break;
-                case NetlistElementsTreeModel::itemType::net: gSelectionRelay->addNet(id); break;
+                case ModuleTreeModel::itemType::module: gSelectionRelay->addModule(id); break;
+                case ModuleTreeModel::itemType::gate: gSelectionRelay->addGate(id); break;
             }
             gSelectionRelay->relaySelectionChanged(this);
            }

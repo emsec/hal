@@ -29,7 +29,6 @@
 namespace hal
 {
     class Module;
-    class NetlistElementsTreeModel;
     class ModuleTreeModel;
 
     /**
@@ -84,7 +83,6 @@ namespace hal
         void updateText(const QString& newHeadline);
 
     private:
-        NetlistElementsTreeModel* mNetlistElementsModel;
         ModuleTreeModel* mModel;
         int mModuleID;
 
