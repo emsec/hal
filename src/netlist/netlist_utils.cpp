@@ -172,6 +172,51 @@ namespace hal
             return nl->copy();
         }
 
+        std::pair<std::map<u32, Gate*>, std::vector<std::vector<int>>> get_ff_dependency_matrix(const Netlist* nl)
+        {
+            std::map<u32, Gate*> matrix_id_to_gate;
+            std::map<Gate*, u32> gate_to_matrix_id;
+            std::vector<std::vector<int>> matrix;
+
+            u32 matrix_gates = 0;
+            for (const auto& gate : nl->get_gates())
+            {
+                if (!gate->get_type()->has_property(GateTypeProperty::ff))
+                {
+                    continue;
+                }
+                gate_to_matrix_id[gate]         = matrix_gates;
+                matrix_id_to_gate[matrix_gates] = gate;
+                matrix_gates++;
+            }
+
+            for (const auto& [id, gate] : matrix_id_to_gate)
+            {
+                std::vector<int> line_of_matrix;
+
+                std::set<u32> gates_to_add;
+                for (const auto& pred_gate : netlist_utils::get_next_sequential_gates(gate, false))
+                {
+                    gates_to_add.insert(gate_to_matrix_id[pred_gate]);
+                }
+
+                for (u32 i = 0; i < matrix_gates; i++)
+                {
+                    if (gates_to_add.find(i) != gates_to_add.end())
+                    {
+                        line_of_matrix.push_back(1);
+                    }
+                    else
+                    {
+                        line_of_matrix.push_back(0);
+                    }
+                }
+                matrix.push_back(line_of_matrix);
+            }
+
+            return std::make_pair(matrix_id_to_gate, matrix);
+        }
+
         std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<Gate*>& subgraph_gates)
         {
             std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->get_gate_library());

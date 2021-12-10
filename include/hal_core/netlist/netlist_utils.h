@@ -75,6 +75,15 @@ namespace hal
         [[deprecated("Will be removed in a future version, use Netlist::copy instead.")]] CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
 
         /**
+         * Get the FF dependency matrix of a netlist.
+         *
+         * @param[in] nl - The netlist to extract the dependency matrix from.
+         * @returns A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
+         *          IDs to the ones in the matrix, and a std::vector<std::vector<int>, which is the ff dependency matrix
+         */
+        std::pair<std::map<u32, Gate*>, std::vector<std::vector<int>>> get_ff_dependency_matrix(const Netlist* nl);
+
+        /**
          * Get a deep copy of an entire partial netlist including all of its gates, nets, excluding modules and groupings.
          *
          * @param[in] nl - The netlist consisting of the subgraph.

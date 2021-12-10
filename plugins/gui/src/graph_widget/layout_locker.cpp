@@ -37,6 +37,13 @@ namespace hal {
         return false;
     }
 
+    void LayoutLockerManager::removeWaitingContext(GraphContext* ctx)
+    {
+        auto it = mWaitingRoom.find(ctx);
+        if (it != mWaitingRoom.end())
+            mWaitingRoom.erase(it);
+    }
+
     LayoutLocker::LayoutLocker()
     {
         LayoutLockerManager::instance()->addLock();

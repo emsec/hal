@@ -860,13 +860,13 @@ namespace hal
             m_event_handler->notify(ModuleEvent::event::gate_removed, prev_mod, g->get_id());
             m_event_handler->notify(ModuleEvent::event::gate_assigned, module, g->get_id());
 
-            if (auto it = prev_modules.find(prev_mod); it == prev_modules.end())
+            if (auto prev_mod_it = prev_modules.find(prev_mod); prev_mod_it == prev_modules.end())
             {
                 prev_modules[prev_mod] = 1;
             }
             else
             {
-                std::get<1>(*it)++;
+                std::get<1>(*prev_mod_it)++;
             }
         }
 
