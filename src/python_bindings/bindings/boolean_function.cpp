@@ -4,6 +4,7 @@ namespace hal
 {
     void boolean_function_init(py::module& m)
     {
+        /*
         py::class_<BooleanFunction> py_boolean_function(m, "BooleanFunction", R"(Boolean function class.)");
 
         py::enum_<BooleanFunction::Value>(py_boolean_function, "Value", R"(Represents the logic value that a boolean function operates on.)")
@@ -204,5 +205,6 @@ namespace hal
             :returns: The list of output values.
             :rtype: list[hal_py.BooleanFunction.Value]
         )");
+        */
     }
 }    // namespace hal

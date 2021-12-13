@@ -135,7 +135,10 @@ namespace hal
                         auto functions = val["custom_functions"].GetObject();
                         for (auto f_it = functions.MemberBegin(); f_it != functions.MemberEnd(); ++f_it)
                         {
-                            g->add_boolean_function(f_it->name.GetString(), BooleanFunction::from_string(f_it->value.GetString()));
+                            auto function = BooleanFunction::from(f_it->value.GetString());
+                            g->add_boolean_function(f_it->name.GetString(), 
+                                (std::get_if<BooleanFunction>(&function) != nullptr) ? std::get<BooleanFunction>(function) : BooleanFunction()
+                            );
                         }
                     }
 

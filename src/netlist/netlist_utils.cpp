@@ -58,7 +58,7 @@ namespace netlist_utils {
             } else {
                 BooleanFunction bf = gate->get_boolean_function();
 
-                for (const std::string& input_pin : bf.get_variables()) {
+                for (const std::string& input_pin : bf.get_variable_names()) {
                     const Net* const input_net = gate->get_fan_in_net(input_pin);
                     if (input_net == nullptr) {
                         // if no net is connected, the input pin name cannot be replaced
@@ -93,7 +93,7 @@ namespace netlist_utils {
             Gate* src_gate = n->get_sources()[0]->get_gate();
 
             if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end()) {
-                result = result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate, cache));
+                result = std::get<BooleanFunction>(result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate, cache)));
 
                 for (Net* sn : src_gate->get_fan_in_nets()) {
                     subgraph_function_bfs(sn, result, stack, subgraph_gates, cache);
@@ -650,13 +650,13 @@ namespace netlist_utils {
                     }
 
                     if (sources.front()->get_gate()->is_gnd_gate()) {
-                        func = func.substitute(ep->get_pin(), BooleanFunction::Const(BooleanFunction::Value::ZERO));
+                        func = std::get<BooleanFunction>(func.substitute(ep->get_pin(), BooleanFunction::Const(BooleanFunction::Value::ZERO)));
                     } else if (sources.front()->get_gate()->is_vcc_gate()) {
-                        func = func.substitute(ep->get_pin(), BooleanFunction::Const(BooleanFunction::Value::ONE));
+                        func = std::get<BooleanFunction>(func.substitute(ep->get_pin(), BooleanFunction::Const(BooleanFunction::Value::ONE)));
                     }
                 }
 
-                func = func.optimize();
+                func = func.simplify();
             }
 
             std::string func_str = func.to_string();
@@ -749,7 +749,7 @@ namespace netlist_utils {
                 continue;
             }
 
-            std::vector<std::string> active_pins = functions.begin()->second.get_variables();
+            auto active_pins = functions.begin()->second.get_variable_names();
 
             // if there are more fan-in nets than there are active pins, we need to get rid of some nets
             if (fan_in.size() > active_pins.size()) {
@@ -819,12 +819,15 @@ namespace netlist_utils {
                 continue;
             }
 
-            std::string truth_table = "";
-            for (BooleanFunction::Value val : functions.begin()->second.get_truth_table()) {
-                truth_table += BooleanFunction::to_string(val);
+            std::string truth_table_str = "";
+            
+            if (auto truth_table = functions.begin()->second.compute_truth_table(); std::get_if<std::vector<std::vector<BooleanFunction::Value>>>(&truth_table) != nullptr) {
+                for (const auto& value : std::get<std::vector<std::vector<BooleanFunction::Value>>>(truth_table)[0])  {
+                    truth_table_str += BooleanFunction::to_string(value);
+                }
             }
 
-            if (auto it = truth_table_to_function.find(truth_table); it != truth_table_to_function.end()) {
+            if (auto it = truth_table_to_function.find(truth_table_str); it != truth_table_to_function.end()) {
                 gate->set_name(it->second + "_" + std::to_string(gate->get_id()));
                 num_luts++;
             }

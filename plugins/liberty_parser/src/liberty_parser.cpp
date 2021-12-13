@@ -813,17 +813,29 @@ namespace hal
             bf_vars.push_back(cell.ff->state1);
             bf_vars.push_back(cell.ff->state2);
 
+            auto next_state_function = BooleanFunction::from(cell.ff->next_state);
+            auto clocked_on_function = BooleanFunction::from(cell.ff->clocked_on);
+
             parent_component = GateTypeComponent::create_ff_component(
-                std::move(state_component), BooleanFunction::from_string(cell.ff->next_state, bf_vars), BooleanFunction::from_string(cell.ff->clocked_on, bf_vars));
+                std::move(state_component),
+                (std::get_if<BooleanFunction>(&next_state_function) != nullptr) ? std::get<BooleanFunction>(next_state_function) : BooleanFunction(),
+                (std::get_if<BooleanFunction>(&clocked_on_function) != nullptr) ? std::get<BooleanFunction>(clocked_on_function) : BooleanFunction()
+            );
 
             FFComponent* ff_component = parent_component->convert_to<FFComponent>();
             if (!cell.ff->clear.empty())
             {
-                ff_component->set_async_reset_function(BooleanFunction::from_string(cell.ff->clear, bf_vars));
+                auto clear_function = BooleanFunction::from(cell.ff->clear);
+                ff_component->set_async_reset_function(
+                    (std::get_if<BooleanFunction>(&clear_function) != nullptr) ? std::get<BooleanFunction>(clear_function) : BooleanFunction()
+                );
             }
             if (!cell.ff->preset.empty())
             {
-                ff_component->set_async_set_function(BooleanFunction::from_string(cell.ff->preset, bf_vars));
+                auto preset_function = BooleanFunction::from(cell.ff->preset);
+                ff_component->set_async_set_function(
+                    (std::get_if<BooleanFunction>(&preset_function) != nullptr) ? std::get<BooleanFunction>(preset_function) : BooleanFunction()
+                );
             }
 
             ff_component->set_async_set_reset_behavior(cell.ff->special_behavior_var1, cell.ff->special_behavior_var2);
@@ -870,8 +882,15 @@ namespace hal
 
             if (!cell.latch->data_in.empty() && !cell.latch->enable.empty())
             {
-                latch_component->set_data_in_function(BooleanFunction::from_string(cell.latch->data_in, bf_vars));
-                latch_component->set_enable_function(BooleanFunction::from_string(cell.latch->enable, bf_vars));
+                auto data_in_function = BooleanFunction::from(cell.latch->data_in);
+                latch_component->set_data_in_function(
+                    (std::get_if<BooleanFunction>(&data_in_function) != nullptr) ? std::get<BooleanFunction>(data_in_function) : BooleanFunction()
+                );
+
+                auto enable_function = BooleanFunction::from(cell.latch->enable);
+                latch_component->set_enable_function(
+                    (std::get_if<BooleanFunction>(&enable_function) != nullptr) ? std::get<BooleanFunction>(enable_function) : BooleanFunction()
+                );
             }
             else if (cell.latch->data_in.empty())
             {
@@ -886,11 +905,17 @@ namespace hal
 
             if (!cell.latch->clear.empty())
             {
-                latch_component->set_async_reset_function(BooleanFunction::from_string(cell.latch->clear, bf_vars));
+                auto clear_function = BooleanFunction::from(cell.latch->clear);
+                latch_component->set_async_reset_function(
+                    (std::get_if<BooleanFunction>(&clear_function) != nullptr) ? std::get<BooleanFunction>(clear_function) : BooleanFunction()
+                );
             }
             if (!cell.latch->preset.empty())
             {
-                latch_component->set_async_set_function(BooleanFunction::from_string(cell.latch->preset, bf_vars));
+                auto preset_function = BooleanFunction::from(cell.latch->preset);
+                latch_component->set_async_set_function(
+                    (std::get_if<BooleanFunction>(&preset_function) != nullptr) ? std::get<BooleanFunction>(preset_function) : BooleanFunction()
+                );
             }
 
             latch_component->set_async_set_reset_behavior(cell.latch->special_behavior_var1, cell.latch->special_behavior_var2);
@@ -974,28 +999,37 @@ namespace hal
             {
                 if (!pin.function.empty())
                 {
-                    auto function = BooleanFunction::from_string(pin.function, bf_vars);
                     for (const auto& name : pin.pin_names)
                     {
-                        gt->add_boolean_function(name, function);
+                        auto function = BooleanFunction::from(pin.function);
+                        gt->add_boolean_function(
+                            name,
+                            (std::get_if<BooleanFunction>(&function) != nullptr) ? std::get<BooleanFunction>(function) : BooleanFunction()
+                        );
                     }
                 }
 
                 if (!pin.x_function.empty())
                 {
-                    auto function = BooleanFunction::from_string(pin.x_function, bf_vars);
                     for (const auto& name : pin.pin_names)
                     {
-                        gt->add_boolean_function(name + "_undefined", function);
+                        auto function = BooleanFunction::from(pin.x_function);
+                        gt->add_boolean_function(
+                            name + "_undefined",
+                            (std::get_if<BooleanFunction>(&function) != nullptr) ? std::get<BooleanFunction>(function) : BooleanFunction()
+                        );
                     }
                 }
 
                 if (!pin.z_function.empty())
                 {
-                    auto function = BooleanFunction::from_string(pin.z_function, bf_vars);
                     for (const auto& name : pin.pin_names)
                     {
-                        gt->add_boolean_function(name + "_tristate", function);
+                        auto function = BooleanFunction::from(pin.z_function);
+                        gt->add_boolean_function(
+                            name + "_tristate",
+                            (std::get_if<BooleanFunction>(&function) != nullptr) ? std::get<BooleanFunction>(function) : BooleanFunction()
+                        );
                     }
                 }
             }
@@ -1214,7 +1248,11 @@ namespace hal
                 {
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.function))
                     {
-                        res.emplace(pin_name, BooleanFunction::from_string(function, all_pins));
+                        auto bf = BooleanFunction::from(function);
+                        res.emplace(
+                            pin_name,
+                            (std::get_if<BooleanFunction>(&bf) != nullptr) ? std::get<BooleanFunction>(bf) : BooleanFunction()
+                        );
                     }
                 }
 
@@ -1222,7 +1260,11 @@ namespace hal
                 {
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.x_function))
                     {
-                        res.emplace(pin_name + "_undefined", BooleanFunction::from_string(function, all_pins));
+                        auto bf = BooleanFunction::from(function);
+                        res.emplace(
+                            pin_name + "_undefined", 
+                            (std::get_if<BooleanFunction>(&bf) != nullptr) ? std::get<BooleanFunction>(bf) : BooleanFunction()
+                        );
                     }
                 }
 
@@ -1230,7 +1272,11 @@ namespace hal
                 {
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.z_function))
                     {
-                        res.emplace(pin_name + "_tristate", BooleanFunction::from_string(function, all_pins));
+                        auto bf = BooleanFunction::from(function);
+                        res.emplace(
+                            pin_name + "_tristate", 
+                            (std::get_if<BooleanFunction>(&bf) != nullptr) ? std::get<BooleanFunction>(bf) : BooleanFunction()
+                        );
                     }
                 }
             }
@@ -1242,10 +1288,10 @@ namespace hal
             {
                 if (auto function = prepare_pin_function(cell.buses, pin.function); !function.empty())
                 {
-                    auto b_function = BooleanFunction::from_string(function, all_pins);
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        res.emplace(pin_name, b_function);
+                        auto bf = BooleanFunction::from(function);
+                        res.emplace(pin_name, (std::get_if<BooleanFunction>(&bf) != nullptr) ? std::get<BooleanFunction>(bf) : BooleanFunction());
                     }
                 }
             }
@@ -1254,10 +1300,10 @@ namespace hal
             {
                 if (auto function = prepare_pin_function(cell.buses, pin.x_function); !function.empty())
                 {
-                    auto b_function = BooleanFunction::from_string(function, all_pins);
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        res.emplace(pin_name + "_undefined", b_function);
+                        auto bf = BooleanFunction::from(function);
+                        res.emplace(pin_name + "_undefined", (std::get_if<BooleanFunction>(&bf) != nullptr) ? std::get<BooleanFunction>(bf) : BooleanFunction());
                     }
                 }
             }
@@ -1266,10 +1312,13 @@ namespace hal
             {
                 if (auto function = prepare_pin_function(cell.buses, pin.z_function); !function.empty())
                 {
-                    auto b_function = BooleanFunction::from_string(function, all_pins);
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        res.emplace(pin_name + "_tristate", b_function);
+                        auto bf = BooleanFunction::from(function);
+                        res.emplace(
+                            pin_name + "_tristate",
+                            (std::get_if<BooleanFunction>(&bf) != nullptr) ? std::get<BooleanFunction>(bf) : BooleanFunction()
+                        );
                     }
                 }
             }

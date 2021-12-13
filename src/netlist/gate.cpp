@@ -49,7 +49,7 @@ namespace hal
     {
         if (m_id != other.get_id() || m_name != other.get_name() || m_type != other.get_type())
         {
-            // log_info("gate", "the gates with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
+            log_info("gate", "the gates with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
             return false;
         }
 
@@ -332,25 +332,25 @@ namespace hal
             config >>= 1;
             if (bit == 1)
             {
-                BooleanFunction clause;
+                auto conjunction = BooleanFunction::Const(1, 1);
                 auto input_values = i;
                 for (auto input : inputs)
                 {
                     if ((input_values & 1) == 1)
                     {
-                        clause &= BooleanFunction::Var(input);
+                        conjunction &= BooleanFunction::Var(input);
                     }
                     else
                     {
-                        clause &= ~BooleanFunction::Var(input);
+                        conjunction &= ~BooleanFunction::Var(input);
                     }
                     input_values >>= 1;
                 }
-                result |= clause;
+                result |= conjunction;
             }
         }
 
-        auto f = result.optimize();
+        auto f = result.simplify();
         cache.emplace(cache_key, f);
         return f;
     }
@@ -367,14 +367,23 @@ namespace hal
                 std::vector<std::string> output_pins = m_type->get_output_pins();
                 if (!output_pins.empty() && name == output_pins[0])
                 {
-                    std::vector<BooleanFunction::Value> tt = func.get_truth_table(m_type->get_input_pins());
+                    auto tt = func.compute_truth_table(m_type->get_input_pins());
+                    if (std::get_if<std::string>(&tt) != nullptr) {
+                        log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' wiht ID {}.", name, func.to_string(), m_name, m_id);
+                        return;
+                    }
+                    auto truth_table = std::get<std::vector<std::vector<BooleanFunction::Value>>>(tt);
+                    if (truth_table.size() > 1) {
+                        log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {} (= function is > 1-bit in output size). ", name, func.to_string(), m_name, m_id);
+                        return;
+                    }
 
                     u64 config_value = 0;
                     if (!lut_component->is_init_ascending())
                     {
-                        std::reverse(tt.begin(), tt.end());
+                        std::reverse(truth_table[0].begin(), truth_table[0].end());
                     }
-                    for (auto v : tt)
+                    for (auto v : truth_table[0])
                     {
                         if (v == BooleanFunction::X)
                         {
