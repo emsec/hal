@@ -391,7 +391,7 @@ namespace hal
         /// Appends a list of Boolan function nodes to the instance.
         void append(std::vector<std::shared_ptr<BooleanFunction::Node>>&& nodes);
 
-        /// Returns the Boolean function in reverse-polish notation
+        /// Returns the Boolean function in reverse-polish notation.
         std::string to_string_in_reverse_polish_notation() const;
 
         // static std::vector<std::vector<Value>> qmc(std::vector<std::vector<Value>> terms);

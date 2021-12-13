@@ -33,21 +33,18 @@ namespace hal
 
     std::variant<BooleanFunction, std::string> BooleanFunction::build(std::shared_ptr<Node>&& node, std::vector<BooleanFunction>&& parameters) {
         auto function = BooleanFunction(node->clone(), std::move(parameters));
-        if (function.to_string() != "") {
+        if (!function.to_string().empty()) {
             return function;
         }
-
-        // TODO: call a generic validate function
-        return "Cannot build a Boolean function for '" + node->to_string() + "'";
+        return "Cannot build a boolean function for '(" + function.to_string_in_reverse_polish_notation() + ")'.";
     }
 
     std::variant<BooleanFunction, std::string> BooleanFunction::build(std::vector<std::shared_ptr<BooleanFunction::Node>>&& nodes) {
-        auto function = BooleanFunction(std::move(nodes));
-        if (function.to_string() != "") {
+        auto function = BooleanFunction(std::move(nodes));    
+        if (!function.to_string().empty()) {
             return function;
         }
-        // TODO: call a generic validate function
-        return "Cannot build a boolean function ...";
+        return "Cannot build a boolean function for '(" + function.to_string_in_reverse_polish_notation() + ")'.";
     }
 
     BooleanFunction BooleanFunction::Var(const std::string& name, u16 size) {

@@ -15,12 +15,12 @@ namespace BooleanFunctionParser {
         // (1) Semantic actions to generate tokens
         ////////////////////////////////////////////////////////////////////////
 
-        auto AndAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::And()); };
-        auto NotAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::Not()); };
-        auto  OrAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::Or()); };
-        auto XorAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::Xor()); };
+        const auto AndAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::And()); };
+        const auto NotAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::Not()); };
+        const auto  OrAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::Or()); };
+        const auto XorAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::Xor()); };
         
-        auto NotSuffixAction = [&tokens] (auto ctx) { 
+        const auto NotSuffixAction = [&tokens] (auto ctx) { 
             // The liberty format defines a ' character as an inversion of the 
             // previous expression. Since the only occurrences in the liberty 
             // file format belong to variables (e.g., " TE' "), we limit the
@@ -40,21 +40,21 @@ namespace BooleanFunctionParser {
             tokens.emplace_back(variable);
         };
 
-        auto BracketOpenAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::BracketOpen()); };
-        auto BracketCloseAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::BracketClose()); };
+        const auto BracketOpenAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::BracketOpen()); };
+        const auto BracketCloseAction = [&tokens] (auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::BracketClose()); };
         
-        auto VariableAction = [&tokens] (auto& ctx) { 
+        const auto VariableAction = [&tokens] (auto& ctx) { 
             // combines the first matched character with the remaining string
             std::stringstream name; name << std::string(1, at_c<0>(_attr(ctx))) << at_c<1>(_attr(ctx));
 
             tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), 1));
         };
-        auto VariableIndexAction = [&tokens] (auto& ctx) {
+        const auto VariableIndexAction = [&tokens] (auto& ctx) {
             // combines the first matched character with the remaining string
             std::stringstream name; name << std::string(1, at_c<0>(_attr(ctx))) << at_c<1>(_attr(ctx)) << at_c<2>(_attr(ctx)) << at_c<3>(_attr(ctx)) << at_c<4>(_attr(ctx));
             tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), 1));
         };
-        auto ConstantAction = [&tokens] (auto& ctx) { 
+        const auto ConstantAction = [&tokens] (auto& ctx) { 
             auto value = (_attr(ctx) == '0') ? BooleanFunction::Value::ZERO : BooleanFunction::Value::ONE;
             tokens.emplace_back(BooleanFunctionParser::Token::Constant({value}));
         };
@@ -65,21 +65,21 @@ namespace BooleanFunctionParser {
 
         namespace x3 = boost::spirit::x3;
 
-        auto AndRule = x3::char_("& *") [AndAction];
-        auto NotRule = x3::lit("!") [NotAction];
-        auto NotSuffixRule = x3::lit("'") [NotSuffixAction];
-        auto OrRule  = x3::lit("|+") [OrAction];
-        auto XorRule = x3::lit("^") [XorAction];
+        const auto AndRule = x3::char_("& *") [AndAction];
+        const auto NotRule = x3::lit("!") [NotAction];
+        const auto NotSuffixRule = x3::lit("'") [NotSuffixAction];
+        const auto OrRule  = x3::lit("|+") [OrAction];
+        const auto XorRule = x3::lit("^") [XorAction];
         
-        auto BracketOpenRule = x3::lit("(") [BracketOpenAction];
-        auto BracketCloseRule = x3::lit(")") [BracketCloseAction];
+        const auto BracketOpenRule = x3::lit("(") [BracketOpenAction];
+        const auto BracketCloseRule = x3::lit(")") [BracketCloseAction];
         
-        auto VariableRule = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9"))] [VariableAction];
-        auto VariableIndexRule = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9") >> x3::char_("(") >> x3::int_ >> x3::char_(")"))] [VariableIndexAction];
-        auto ConstantRule = x3::lexeme[x3::char_("0-1")] [ConstantAction];
+        const auto VariableRule = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9"))] [VariableAction];
+        const auto VariableIndexRule = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9") >> x3::char_("(") >> x3::int_ >> x3::char_(")"))] [VariableIndexAction];
+        const auto ConstantRule = x3::lexeme[x3::char_("0-1")] [ConstantAction];
 
         auto iter = expression.begin();
-        auto ok = x3::phrase_parse(iter, expression.end(),
+        const auto ok = x3::phrase_parse(iter, expression.end(),
             ////////////////////////////////////////////////////////////////////
             // (3) Parsing Expression Grammar
             ////////////////////////////////////////////////////////////////////

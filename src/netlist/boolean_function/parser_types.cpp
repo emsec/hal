@@ -40,7 +40,7 @@ namespace BooleanFunctionParser {
     }
 
     unsigned Token::precedence(const ParserType& parser) const {
-        static std::map<ParserType, std::map<TokenType, unsigned>> parser2precedence = {
+        static const std::map<ParserType, std::map<TokenType, unsigned>> parser2precedence = {
             {ParserType::Liberty, std::map<TokenType, unsigned>({
                 {TokenType::Not, 4},
                 {TokenType::And, 3},
@@ -68,7 +68,7 @@ namespace BooleanFunctionParser {
     }
 
     std::ostream& operator<<(std::ostream& os, const Token& token) {
-        static std::map<TokenType, std::string> type2str = {
+        static const std::map<TokenType, std::string> type2str = {
             {TokenType::And, "And"},
             {TokenType::Or, "Or"},
             {TokenType::Not, "Not"},
