@@ -59,15 +59,19 @@ namespace hal
             {
                 gates_to_add.insert(gate_to_matrix_id[pred_gate]);
             }
-
+            std::map<Net*, double> boolean_influence_for_gate;
+            if (with_boolean_influence)
+            {
+                boolean_influence_for_gate = get_boolean_influences_of_gate(gate);
+            }
+            
             for (u32 i = 0; i < matrix_gates; i++)
             {
                 if (gates_to_add.find(i) != gates_to_add.end())
                 {
                     if (with_boolean_influence)
                     {
-                        double influence                                  = 0.0;
-                        std::map<Net*, double> boolean_influence_for_gate = get_boolean_influences_of_gate(gate);
+                        double influence = 0.0;
 
                         Gate* pred_ff = matrix_id_to_gate[i];
 
