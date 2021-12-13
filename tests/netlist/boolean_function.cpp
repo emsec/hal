@@ -88,6 +88,12 @@ namespace hal {
             {"1", 
                 BooleanFunction::Const(1, 1)
             },
+            {"0b0", 
+                BooleanFunction::Const(0, 1)
+            },
+            {"0b1", 
+                BooleanFunction::Const(1, 1)
+            },
             {"A & B", 
                 BooleanFunction::Var("A") & BooleanFunction::Var("B")
             },
