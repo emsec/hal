@@ -29,6 +29,10 @@
 
 namespace hal
 {
+    class Net;
+    class Netlist;
+    class Gate;
+
     class PLUGIN_API BooleanInfluencePlugin : public BasePluginInterface
     {
     public:
@@ -45,6 +49,7 @@ namespace hal
          * @returns A mapping of the gates that appear in the function of the data net to their boolean influence in said function.
          */
         std::map<Net*, double> get_boolean_influences_of_gate(const Gate* gate);
+        std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>> get_ff_dependency_matrix(const Netlist* nl, bool with_boolean_influence);
 
     private:
         std::vector<Gate*> extract_function_gates(const Gate* start, const std::string& pin);
