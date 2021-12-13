@@ -448,6 +448,11 @@ namespace hal
     }
 
     std::variant<BooleanFunction::Value, std::string> BooleanFunction::evaluate(const std::unordered_map<std::string, Value>& inputs) const {
+        // (0) workaround to preserve the API functionality
+        if (this->m_nodes.empty()) {
+            return BooleanFunction::Value::X;
+        }
+
         // (1) validate whether the input sizes match the boolean function
         if (this->size() != 1) {
             return "Cannot use the single-bit evaluate() on '" + this->to_string() + "' (= " + std::to_string(this->size()) + "-bit).";
@@ -468,6 +473,11 @@ namespace hal
     }
 
     std::variant<std::vector<BooleanFunction::Value>, std::string> BooleanFunction::evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const {
+        // (0) workaround to preserve the API functionality
+        if (this->m_nodes.empty()) {
+            return BooleanFunction::Value::X;
+        }
+
         // (1) validate whether the input sizes match the boolean function
         for (const auto& [name, value]: inputs) {
             for (const auto& node: this->m_nodes) {
@@ -490,8 +500,9 @@ namespace hal
             auto value = std::get<BooleanFunction>(result);
             if (value.is_constant()) {
                 return value.get_top_level_node()->get_as<OperandNode>()->constant;
+            } else {
+                return std::vector<BooleanFunction::Value>(this->size(), BooleanFunction::Value::X);
             }
-            return "Cannot evaluate '" + this->to_string() + "' as the result is '" + value.to_string() + "'.";
         }
         return std::get<std::string>(result);
     }

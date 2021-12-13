@@ -62,7 +62,7 @@ namespace hal
                         }
                     }
                     std::sort(variables.begin(), variables.end());
-                    return std::tuple(variables, f.get_truth_table(variables, true));
+                    return std::tuple(variables, std::get<0>(f.compute_truth_table(variables))[0]);
                 }
 
                 void merge_duplicated_logic_cones(NetlistAbstraction& netlist_abstr)

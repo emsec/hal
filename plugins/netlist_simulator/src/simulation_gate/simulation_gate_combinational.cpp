@@ -17,13 +17,13 @@ namespace hal
             BooleanFunction& func = functions.at(pin);
             while (true)
             {
-                std::vector<std::string> vars = func.get_variables();
+                auto vars = func.get_variable_names();
                 bool exit                     = true;
                 for (const std::string& other_pin : m_output_pins)
                 {
                     if (std::find(vars.begin(), vars.end(), other_pin) != vars.end())
                     {
-                        func = func.substitute(other_pin, functions.at(other_pin));
+                        func = std::get<0>(func.substitute(other_pin, functions.at(other_pin)));
                         exit = false;
                     }
                 }
@@ -45,7 +45,7 @@ namespace hal
 
         for (auto out_net : m_output_nets)
         {
-            BooleanFunction::Value result = m_functions[out_net].evaluate(m_input_values);
+            BooleanFunction::Value result = std::get<0>(m_functions[out_net].evaluate(m_input_values));
 
             new_events[std::make_pair(out_net, event.time + delay)] = result;
         }
