@@ -20,6 +20,26 @@ namespace hal
         return m_path;
     }
 
+    void GateLibrary::set_gate_location_data_category(const std::string& category)
+    {
+        m_gate_location_data_category = category;
+    }
+
+    const std::string& GateLibrary::get_gate_location_data_category() const
+    {
+        return m_gate_location_data_category;
+    }
+
+    void GateLibrary::set_gate_location_data_identifiers(const std::string& x_coordinate, const std::string& y_coordinate)
+    {
+        m_gate_location_data_identifiers = std::make_pair(x_coordinate, y_coordinate);
+    }
+
+    const std::pair<std::string, std::string>& GateLibrary::get_gate_location_data_identifiers() const
+    {
+        return m_gate_location_data_identifiers;
+    }
+
     GateType* GateLibrary::create_gate_type(const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
     {
         if (m_gate_type_map.find(name) != m_gate_type_map.end())

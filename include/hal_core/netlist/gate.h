@@ -74,6 +74,13 @@ namespace hal
         bool operator!=(const Gate& other) const;
 
         /**
+         * Hash function for python binding
+         *
+         * @return Pybind11 compatible hash
+         */
+        ssize_t get_hash() const;
+
+        /**
          * Get the unique id of the gate.
          *
          * @returns The unique id.

@@ -34,7 +34,7 @@
 
 namespace hal
 {
-    class GraphContextSubscriber;
+    class GraphWidget;
 
     /**
      * @ingroup graph-contexts
@@ -45,12 +45,13 @@ namespace hal
      * Afterwards this scene can be shown in the GraphWidget's GraphGraphicsView. <br>
      * Moreover the context may be changed (e.g. add/remove Gate%s or Module%s). In this case the scene will be adapted
      * as well. <br>
-     * This class implements an observer pattern to notify subscribers (currently only GraphWidget objects) about
+     * This class notifies the GraphWidget parent about
      * certain events.
      */
     class GraphContext : public QObject
     {
         friend class GraphContextManager;
+        friend class LayoutLockerManager;
         Q_OBJECT
 
     public:
@@ -69,20 +70,6 @@ namespace hal
          * Used to notify all subscribers about the deletion.
          */
         ~GraphContext();
-
-        /**
-         * Register a subscriber that will notified about certain changes (see GraphContextSubscriber).
-         *
-         * @param subscriber - The GraphContextSubscriber to subscribe
-         */
-        void subscribe(GraphContextSubscriber* const subscriber);
-
-        /**
-         * Remove a subscriber.
-         *
-         * @param subscriber - The GraphContextSubscriber to unsubscribe
-         */
-        void unsubscribe(GraphContextSubscriber* const subscriber);
 
         /**
          * Mark the beginning of a block of changes that are done successively. Used to prevent the scene from updating
@@ -368,6 +355,12 @@ namespace hal
          */
         bool getSpecialUpdate() const {return mSpecialUpdate; }
 
+        /**
+         * Set pointer to parent graph widget
+         * @param[in] gw parent of class GraphWidget
+         */
+        void setParentWidget(GraphWidget* gw) { mParentWidget = gw; }
+
     Q_SIGNALS:
         void dataChanged();
 
@@ -382,13 +375,14 @@ namespace hal
         void evaluateChanges();
         void update();
         void applyChanges();
+        void requireSceneUpdate();
         void startSceneUpdate();
         bool testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId);
 
-        QList<GraphContextSubscriber*> mSubscribers;
-
         u32 mId;
         QString mName;
+        GraphWidget* mParentWidget;
+
         bool mDirty;
 
         GraphLayouter* mLayouter;

@@ -69,6 +69,13 @@ namespace hal
         bool operator!=(const Net& other) const;
 
         /**
+         * Hash function for python binding
+         *
+         * @return Pybind11 compatible hash
+         */
+        ssize_t get_hash() const;
+
+        /**
          * Get the unique id of the net.
          *
          * @returns The unique id.

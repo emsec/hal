@@ -74,7 +74,7 @@ namespace hal
         {
             ZERO = 0, /**< Represents a logical 0. */
             ONE  = 1, /**< Represents a logical 1 */
-            Z,        /**< Represents an undefined value. */
+            Z,        /**< Represents a high-impedance value. */
             X         /**< Represents an undefined value. */
         };
 

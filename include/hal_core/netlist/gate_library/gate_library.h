@@ -65,6 +65,34 @@ namespace hal
         std::filesystem::path get_path() const;
 
         /**
+         * Set the data category of the gate location information.
+         * 
+         * @param[in] category - The data category.
+         */
+        void set_gate_location_data_category(const std::string& category);
+
+        /**
+         * Get the data category of the gate location information.
+         * 
+         * @returns The data category.
+         */
+        const std::string& get_gate_location_data_category() const;
+        /**
+         * Set the data identifiers of the gate location information for both the x- and y-coordinates.
+         * 
+         * @param[in] x_coordinate - The data identifier for the x-coordinate.
+         * @param[in] y_coordinate - The data identifier for the y-coordinate.
+         */
+        void set_gate_location_data_identifiers(const std::string& x_coordinate, const std::string& y_coordinate);
+
+        /**
+         * Get the data identifiers of the gate location information for both the x- and y-coordinates.
+         * 
+         * @returns A pair of data identifiers.
+         */
+        const std::pair<std::string, std::string>& get_gate_location_data_identifiers() const;
+
+        /**
          * TODO pybind
          * Create a new gate type, add it to the gate library, and return it.
          * 
@@ -100,7 +128,6 @@ namespace hal
         GateType* get_gate_type_by_name(const std::string& name) const;
 
         /**
-         * TODO pybind
          * Get all gate types of the library.
          * In case a filter is applied, only the gate types matching the filter condition are returned.
          *
@@ -156,6 +183,9 @@ namespace hal
     private:
         std::string m_name;
         std::filesystem::path m_path;
+
+        std::string m_gate_location_data_category                            = "generic";
+        std::pair<std::string, std::string> m_gate_location_data_identifiers = {"X_COORDINATE", "Y_COORDINATE"};
 
         u32 m_next_gate_type_id;
 

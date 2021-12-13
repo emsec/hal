@@ -59,6 +59,14 @@ namespace hal
         // library name
         document.AddMember("library", gate_lib->get_name(), allocator);
 
+        // gate location data specification
+        rapidjson::Value gate_locs(rapidjson::kObjectType);
+        gate_locs.AddMember("data_category", gate_lib->get_gate_location_data_category(), allocator);
+        const std::pair<std::string, std::string>& location_identifiers = gate_lib->get_gate_location_data_identifiers();
+        gate_locs.AddMember("data_x_identifier", location_identifiers.first, allocator);
+        gate_locs.AddMember("data_y_identifier", location_identifiers.second, allocator);
+        document.AddMember("gate_locations", gate_locs, allocator);
+
         // gate types
         std::vector<GateType*> gate_types;
 

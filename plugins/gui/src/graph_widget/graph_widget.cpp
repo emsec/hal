@@ -74,7 +74,7 @@ namespace hal
         mView->setRenderHint(QPainter::Antialiasing, false);
         mView->setDragMode(QGraphicsView::RubberBandDrag);
 
-        mContext->subscribe(this);
+        mContext->setParentWidget(this);
 
         if (!mContext->sceneUpdateInProgress())
         {
