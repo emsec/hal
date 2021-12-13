@@ -139,7 +139,15 @@ namespace hal
             if (it.value() > 3)
                 log_warning(get_name(), "Totally {} attempts to set input values for net ID={}, but net is not an input.", it.value(), it.key());
 
-        QMultiMap<u64,QPair<const Net*, BooleanFunction::Value>> inputMap;
+        struct WaveIterator
+        {
+            const Net* n;
+            const WaveData* wd;
+            QMap<u64,int>::const_iterator it;
+        };
+
+        QMultiMap<u64,WaveIterator> nextInTimeLine;
+
         for (const Net* n : mSimulationInput->get_input_nets())
         {
             const WaveData* wd = mWaveDataList->waveDataByNetId(n->get_id());
@@ -168,37 +176,42 @@ namespace hal
                 if (!wd)
                 {
                     log_warning(get_name(), "no input data for net[{}] '{}'.", n->get_id(), n->get_name());
-                    inputMap.insertMulti(0,QPair<const Net*,BooleanFunction::Value>(n,BooleanFunction::Value::X));
-                    continue;
                 }
             }
+            if (!wd || wd->data().isEmpty()) continue;
 
-            for (auto it=wd->data().constBegin(); it != wd->data().constEnd(); ++it)
-            {
-                BooleanFunction::Value sv;
-                switch (it.value())
-                {
-                case -2: sv = BooleanFunction::Value::Z; break;
-                case -1: sv = BooleanFunction::Value::X; break;
-                case  0: sv = BooleanFunction::Value::ZERO; break;
-                case  1: sv = BooleanFunction::Value::ONE; break;
-                default: continue;
-                }
-                inputMap.insertMulti(it.key(),QPair<const Net*,BooleanFunction::Value>(n,sv));
-            }
+            nextInTimeLine.insert(wd->data().firstKey(), {n, wd, wd->data().constBegin()});
         }
+
         u64 t=0;
         SimulationInputNetEvent netEv;
-        for (auto it = inputMap.begin(); it != inputMap.end(); ++it)
+        while (!nextInTimeLine.isEmpty())
         {
-            if (it.key() != t)
+            auto jt = nextInTimeLine.begin();
+            u64 tt = jt.key();
+            WaveIterator wit = jt.value();
+            Q_ASSERT(tt == wit.it.key());
+            nextInTimeLine.erase(jt);
+            if (tt != t)
             {
-                netEv.set_simulation_duration(it.key() - t);
+                netEv.set_simulation_duration(tt - t);
                 mSimulationInput->add_simulation_net_event(netEv);
                 netEv.clear();
-                t = it.key();
+                t = tt;
             }
-            netEv[it.value().first] = it.value().second;
+            BooleanFunction::Value sv;
+            switch (wit.it.value())
+            {
+            case -2: sv = BooleanFunction::Value::Z; break;
+            case -1: sv = BooleanFunction::Value::X; break;
+            case  0: sv = BooleanFunction::Value::ZERO; break;
+            case  1: sv = BooleanFunction::Value::ONE; break;
+            default: continue;
+            }
+            netEv[wit.n] = sv;
+
+            if (++wit.it != wit.wd->data().constEnd())
+                nextInTimeLine.insert(wit.it.key(),wit);
         }
 
         if (!mSimulationEngine->setSimulationInput(mSimulationInput))

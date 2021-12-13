@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QList>
+#include <QVector>
 #include <QMap>
 #include "hal_core/defines.h"
 
@@ -32,13 +33,16 @@ namespace hal {
         u64 mFirstTimestamp;
         QMap<QString,QString> mDictionary;
         QMap<QString,WaveData*> mWaves;
+        QVector<int> mLastValue;
         int mErrorCount;
+        bool mSaleae;
 
         bool parseDataline(const QByteArray& line);
         bool parseDataNonDecimal(const QByteArray& line, int base);
         void storeValue(int val, const QByteArray& abrev);
-        bool parseCsvHeader(const QByteArray& line);
-        bool parseCsvDataline(const QByteArray& line, int dataLineIndex, u64 timeScale);
+        bool parseCsvHeader(char* buf);
+        bool parseCsvDataline(char* buf, int dataLineIndex, u64 timeScale);
+        bool parseSalea(const QString& filenameStub, const QString& abbrev, u64 timeScale);
     public:
         VcdSerializer(QObject* parent = nullptr);
         ~VcdSerializer();

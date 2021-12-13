@@ -4,6 +4,9 @@
 #include <QFile>
 #include <QRegularExpression>
 #include <QDebug>
+#include <QDataStream>
+#include <QFileInfo>
+#include <QDir>
 
 namespace hal {
 
@@ -184,15 +187,25 @@ QMap<int,int>::const_iterator mIterator;
         wd->insert(mTime,val);
     }
 
-    bool VcdSerializer::parseCsvHeader(const QByteArray &line)
+    bool VcdSerializer::parseCsvHeader(char *buf)
     {
         int icol = 0;
-        for (QByteArray header : line.split(','))
+        char* pos = buf;
+        bool loop = (*pos != 0);
+        QString abbrev;
+        while (loop)
         {
-            if (icol) // dont parse time header
+            QByteArray header;
+            while (*pos && *pos!=',' && *pos != '\n') header += *(pos++);
+            loop = (*(pos++) == ',');
+            if (!icol)
+            {
+                if (mSaleae) abbrev = QString::fromUtf8(header);
+            }
+            else
             {
                 bool ok;
-                QString abbrev = QString::number(icol);
+                if (!mSaleae) abbrev = QString::number(icol);
                 u32 id = header.trimmed().toUInt(&ok);
                 WaveData* wd = nullptr;
                 if (ok)
@@ -214,38 +227,124 @@ QMap<int,int>::const_iterator mIterator;
             }
             icol++;
         }
+
         return true;
     }
 
-    bool VcdSerializer::parseCsvDataline(const QByteArray &line, int dataLineIndex, u64 timeScale)
+    bool VcdSerializer::parseSalea(const QString& filenameStub, const QString& abbrev, u64 timeScale)
+    {
+        WaveData *wd = mWaves.value(abbrev);
+        Q_ASSERT(wd);
+
+        QString filename = filenameStub.arg(abbrev);
+        QFile ff(filename);
+        if (!ff.open(QIODevice::ReadOnly))
+        {
+            qDebug() << "TODO : hell";
+            return false;
+        }
+
+        QDataStream bin(&ff);
+        bin.setByteOrder(QDataStream::LittleEndian);
+
+        char ident[9];
+        qint32 version;
+        qint32 type;
+        quint32 value;
+        double beginTime;
+        double endTime;
+        quint64 numTransitions;
+        if (bin.readRawData(ident,8) < 8) return false;
+        ident[8] = 0;
+        bin >> version >> type;
+        if (type != 0) return false; // read only digital data
+        bin >> value >> beginTime >> endTime >> numTransitions;
+
+//        qDebug() << ident << version << type << value << beginTime << endTime << numTransitions;
+
+        double tDouble;
+
+         wd->insert(0,value);
+
+        for (quint64 i=0; i<numTransitions; i++)
+        {
+            bin >> tDouble;
+            u64 tInt = (u64) floor ( (tDouble-beginTime) * timeScale + 0.5);
+            value = value ? 0 : 1;
+            wd->insert(tInt,value);
+            if (tInt > mTime) mTime = tInt;
+            if (bin.atEnd()) break;
+        }
+
+        return true;
+    }
+
+    bool VcdSerializer::parseCsvDataline(char* buf, int dataLineIndex, u64 timeScale)
     {
         int icol = 0;
         bool ok;
-        for (QByteArray value : line.split(','))
+        char* pos = buf;
+        bool loop = (*pos != 0);
+        while (loop)
         {
-            if (icol)
+            QByteArray value;
+            while (*pos && *pos != ',' && *pos != '\n') value += *(pos++);
+            loop = (*(pos++) == ',');
+            if (!value.isEmpty())
             {
-                int ival = value.toInt(&ok);
-                if (!ok) return false;
-                WaveData* wd = mWaves.value(QString::number(icol));
-                if (!wd) return false;
-                if (wd->data().isEmpty() || wd->data().last() != ival){
-                    wd->insert(mTime,ival);
-                }
-            }
-            else
-            {
-                // time
-                double tDouble = value.toDouble(&ok);
-                if (!ok) return false;
-                u64 tInt = (u64) floor ( tDouble * timeScale + 0.5);
-                if (!dataLineIndex)
+                if (icol)
                 {
-                    mFirstTimestamp = tInt;
-                    mTime = 0;
+                    int ival = 0;
+                    ok = true;
+                    if (value.size()==1)
+                        switch (value.at(0))
+                        {
+                        case '0': break;
+                        case '1':
+                            ival = 1;
+                            break;
+                        default:
+                            ival = value.trimmed().toInt(&ok);
+                            break;
+                        }
+                    else
+                        ival = value.trimmed().toInt(&ok);
+                    if (!ok) return false;
+
+                    bool wdInsert = false;
+                    if (icol >= mLastValue.size())
+                    {
+                        while (icol > mLastValue.size()) mLastValue.append(-99);
+                        mLastValue.append(ival);
+                        wdInsert = true;
+                    }
+                    else if (mLastValue.at(icol) != ival)
+                    {
+                        mLastValue[icol] = ival;
+                        wdInsert = true;
+                    }
+
+                    if (wdInsert)
+                    {
+                        WaveData* wd = mWaves.value(QString::number(icol));
+                        if (!wd) return false;
+                        wd->insert(mTime,ival);
+                    }
                 }
                 else
-                    mTime = tInt - mFirstTimestamp;
+                {
+                    // time
+                    double tDouble = value.toDouble(&ok);
+                    if (!ok) return false;
+                    u64 tInt = (u64) floor ( tDouble * timeScale + 0.5);
+                    if (!dataLineIndex)
+                    {
+                        mFirstTimestamp = tInt;
+                        mTime = 0;
+                    }
+                    else
+                        mTime = tInt - mFirstTimestamp;
+                }
             }
             icol++;
         }
@@ -254,9 +353,15 @@ QMap<int,int>::const_iterator mIterator;
 
     bool VcdSerializer::deserializeCsv(const QString& filename, u64 timeScale)
     {
+        mLastValue.clear();
         mErrorCount = 0;
         mWaves.clear();
         mTime = 0;
+        mSaleae = false;
+
+        static const int bufsize = 4095;
+        char buf[bufsize+1];
+
         QFile ff(filename);
         if (!ff.open(QIODevice::ReadOnly))
         {
@@ -266,25 +371,61 @@ QMap<int,int>::const_iterator mIterator;
 
         bool parseHeader = true;
         int dataLineIndex = 0;
-        for (QByteArray line : ff.readAll().split('\n'))
+        while(!ff.atEnd())
         {
-            if (line.isEmpty()) continue;
+            int sizeRead = ff.readLine(buf,bufsize);
+            if (sizeRead >= bufsize)
+            {
+                log_warning("vcd_viewer", "CSV line {} exceeds buffer size {}.", dataLineIndex, bufsize);
+                return false;
+            }
+
+            if (sizeRead < 0)
+            {
+                log_warning("vcd_viewer", "CSV parse error reading line {} from file '{}'.", dataLineIndex, filename.toStdString());
+                return false;
+            }
+            if (!sizeRead) continue;
+
             if (parseHeader)
             {
-                if (!parseCsvHeader(line))
+                if (sizeRead >= 8 && QByteArray(buf,8) == "<SALEAE>")
+                {
+                    mSaleae = true;
+                    while (!ff.atEnd())
+                    {
+                        sizeRead = ff.readLine(buf,bufsize);
+                        if (!parseCsvHeader(buf))
+                        {
+                           log_warning("vcd_viewer", "Cannot parse <SALEAEA> index line '{}'.", buf);
+                           return false;
+                        }
+                    }
+                    QFileInfo finfo(ff.fileName());
+                    QString fstub = finfo.absoluteDir().absoluteFilePath("digital_%1.bin");
+                    for (auto it= mWaves.begin(); it !=mWaves.end(); ++it)
+                        if (!parseSalea(fstub,it.key(),timeScale))
+                        {
+                            log_warning("vcd_viewer", "Cannot parse <SALEAEA> binaray file '{}' '{}'.", fstub.toStdString(), it.key().toStdString());
+                            return false;
+                        }
+                    return true;
+                }
+
+                if (!parseCsvHeader(buf))
                 {
                     if (mErrorCount++ < 5)
-                        log_warning("vcd_viewer", "Cannot parse CSV header line '{}'.", std::string(line.data()));
+                        log_warning("vcd_viewer", "Cannot parse CSV header line '{}'.", buf);
                     return false;
                 }
                 parseHeader = false;
             }
             else
             {
-                if (!parseCsvDataline(line,dataLineIndex++,timeScale))
+                if (!parseCsvDataline(buf,dataLineIndex++,timeScale))
                 {
                     if (mErrorCount++ < 5)
-                        log_warning("vcd_viewer", "Cannot parse CSV data line '{}'.", std::string(line.data()));
+                        log_warning("vcd_viewer", "Cannot parse CSV data line '{}'.", buf);
                     return false;
                 }
             }
