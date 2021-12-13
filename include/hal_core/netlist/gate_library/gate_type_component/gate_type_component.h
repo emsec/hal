@@ -54,8 +54,6 @@ namespace hal
             ram_port /**< RAM port component type. */
         };
 
-        virtual ~GateTypeComponent() = default;
-
         /**
          * Create a new LUTComponent with given child component and bit-order.
          * 
