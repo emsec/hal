@@ -44,10 +44,10 @@ namespace hal
         gate_0->add_boolean_function("O", std::get<BooleanFunction>(BooleanFunction::from("I0 & I1")));
         gate_7->add_boolean_function("O", std::get<BooleanFunction>(BooleanFunction::from("!I")));
         // -- Get the names of the connected nets
-        std::string net_13_name = std::to_string(MIN_NET_ID + 13);
-        std::string net_20_name = std::to_string(MIN_NET_ID + 20);
-        std::string net_78_name = std::to_string(MIN_NET_ID + 78);
-        std::string net_30_name = std::to_string(MIN_NET_ID + 30);
+        auto net_13_name = "net_" + std::to_string(MIN_NET_ID + 13);
+        auto net_20_name = "net_" + std::to_string(MIN_NET_ID + 20);
+        auto net_78_name = "net_" + std::to_string(MIN_NET_ID + 78);
+        auto net_30_name = "net_" + std::to_string(MIN_NET_ID + 30);
 
         {
             // Get the boolean function of a normal sub-graph

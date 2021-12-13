@@ -79,7 +79,7 @@ namespace hal
                             return bf;
                         }
 
-                        bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));
+                        bf = bf.substitute(input_pin, "net_" + std::to_string(input_net->get_id()));
                     }
                     cache.emplace(gate->get_id(), bf);
                     return bf;
@@ -111,7 +111,7 @@ namespace hal
 
                 if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
                 {
-                    if (auto substitution = result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate, cache)); std::get_if<0>(&substitution) != nullptr) {
+                    if (auto substitution = result.substitute("net_" + std::to_string(n->get_id()), get_function_of_gate(src_gate, cache)); std::get_if<0>(&substitution) != nullptr) {
                         result = std::get<0>(substitution);    
                     }
 

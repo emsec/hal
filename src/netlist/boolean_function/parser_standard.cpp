@@ -52,8 +52,8 @@ namespace BooleanFunctionParser {
         const auto BracketOpenRule = x3::lit("(") [BracketOpenAction];
         const auto BracketCloseRule = x3::lit(")") [BracketCloseAction];
         
-        const auto VariableRule = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9"))] [VariableAction];
-        const auto VariableIndexRule = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9") >> x3::char_("(") >> x3::int_ >> x3::char_(")"))] [VariableIndexAction];
+        const auto VariableRule = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_"))] [VariableAction];
+        const auto VariableIndexRule = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("(") >> x3::int_ >> x3::char_(")"))] [VariableIndexAction];
         const auto ConstantRule = x3::lexeme[x3::char_("0-1")] [ConstantAction];
 
         auto iter = expression.begin();

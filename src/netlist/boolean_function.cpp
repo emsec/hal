@@ -475,7 +475,7 @@ namespace hal
     std::variant<std::vector<BooleanFunction::Value>, std::string> BooleanFunction::evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const {
         // (0) workaround to preserve the API functionality
         if (this->m_nodes.empty()) {
-            return BooleanFunction::Value::X;
+            return std::vector<BooleanFunction::Value>({BooleanFunction::Value::X});
         }
 
         // (1) validate whether the input sizes match the boolean function
