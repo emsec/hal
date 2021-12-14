@@ -485,10 +485,13 @@ namespace hal
         gate->m_out_nets.push_back(net);
 
         // update internal nets and port nets
-        gate->get_module()->check_net(net, true);
-        for (Endpoint* ep : net->get_destinations())
+        if (m_net_checks_enabled)
         {
-            ep->get_gate()->get_module()->check_net(net, true);
+            gate->get_module()->check_net(net, true);
+            for (Endpoint* ep : net->get_destinations())
+            {
+                ep->get_gate()->get_module()->check_net(net, true);
+            }
         }
 
         m_event_handler->notify(NetEvent::event::src_added, net, gate->get_id());
@@ -536,10 +539,13 @@ namespace hal
         else
         {
             // update internal nets and port nets
-            gate->get_module()->check_net(net, true);
-            for (Endpoint* dst : net->get_destinations())
+            if (m_net_checks_enabled)
             {
-                dst->get_gate()->get_module()->check_net(net, true);
+                gate->get_module()->check_net(net, true);
+                for (Endpoint* dst : net->get_destinations())
+                {
+                    dst->get_gate()->get_module()->check_net(net, true);
+                }
             }
         }
 
@@ -599,10 +605,13 @@ namespace hal
         gate->m_in_nets.push_back(net);
 
         // update internal nets and port nets
-        gate->get_module()->check_net(net, true);
-        for (Endpoint* ep : net->get_sources())
+        if (m_net_checks_enabled)
         {
-            ep->get_gate()->get_module()->check_net(net, true);
+            gate->get_module()->check_net(net, true);
+            for (Endpoint* ep : net->get_sources())
+            {
+                ep->get_gate()->get_module()->check_net(net, true);
+            }
         }
 
         m_event_handler->notify(NetEvent::event::dst_added, net, gate->get_id());
@@ -648,10 +657,13 @@ namespace hal
         }
         else
         {    // update internal nets and port nets
-            gate->get_module()->check_net(net, true);
-            for (Endpoint* src : net->get_sources())
+            if (m_net_checks_enabled)
             {
-                src->get_gate()->get_module()->check_net(net, true);
+                gate->get_module()->check_net(net, true);
+                for (Endpoint* src : net->get_sources())
+                {
+                    src->get_gate()->get_module()->check_net(net, true);
+                }
             }
         }
 
@@ -870,11 +882,14 @@ namespace hal
             }
         }
 
-        for (const auto& [affected_module, nets] : nets_to_check)
+        if (m_net_checks_enabled)
         {
-            for (Net* net : nets)
+            for (const auto& [affected_module, nets] : nets_to_check)
             {
-                affected_module->check_net(net, true);
+                for (Net* net : nets)
+                {
+                    affected_module->check_net(net, true);
+                }
             }
         }
 

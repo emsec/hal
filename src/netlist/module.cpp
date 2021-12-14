@@ -199,9 +199,12 @@ namespace hal
         m_parent->m_submodules_map.erase(m_id);
         m_parent->m_submodules.erase(std::find(m_parent->m_submodules.begin(), m_parent->m_submodules.end(), this));
 
-        for (Net* net : m_parent->get_nets(nullptr, true))
+        if (m_internal_manager->m_net_checks_enabled)
         {
-            m_parent->check_net(net, true);
+            for (Net* net : m_parent->get_nets(nullptr, true))
+            {
+                m_parent->check_net(net, true);
+            }
         }
 
         m_event_handler->notify(ModuleEvent::event::submodule_removed, m_parent, m_id);
@@ -211,9 +214,12 @@ namespace hal
         m_parent->m_submodules_map[m_id] = this;
         m_parent->m_submodules.push_back(this);
 
-        for (Net* net : m_parent->get_nets(nullptr, true))
+        if (m_internal_manager->m_net_checks_enabled)
         {
-            m_parent->check_net(net, true);
+            for (Net* net : m_parent->get_nets(nullptr, true))
+            {
+                m_parent->check_net(net, true);
+            }
         }
 
         m_event_handler->notify(ModuleEvent::event::parent_changed, this);
@@ -222,7 +228,7 @@ namespace hal
         return true;
     }
 
-    bool Module::is_parent_module_of(Module* module, bool recursive) const
+    bool Module::is_parent_module_of(const Module* module, bool recursive) const
     {
         if (module == nullptr)
         {
@@ -273,7 +279,7 @@ namespace hal
         return res;
     }
 
-    bool Module::is_submodule_of(Module* module, bool recursive) const
+    bool Module::is_submodule_of(const Module* module, bool recursive) const
     {
         if (module == nullptr)
         {
@@ -291,7 +297,7 @@ namespace hal
         return false;
     }
 
-    bool Module::contains_module(Module* other, bool recursive) const
+    bool Module::contains_module(const Module* other, bool recursive) const
     {
         return is_parent_module_of(other, recursive);
     }
@@ -510,28 +516,29 @@ namespace hal
         return m_internal_nets.find(net) != m_internal_nets.end();
     }
 
-    void Module::check_net(Net* net, bool recursive)
+    Module::NetConnectivity Module::check_net_endpoints(Net* net) const
     {
         std::vector<Endpoint*> sources      = net->get_sources();
         std::vector<Endpoint*> destinations = net->get_destinations();
 
-        bool external_source      = net->is_global_input_net();
-        bool internal_source      = false;
-        bool external_destination = net->is_global_output_net();
-        bool internal_destination = false;
+        NetConnectivity res;
+        res.has_external_source      = net->is_global_input_net();
+        res.has_internal_source      = false;
+        res.has_external_destination = net->is_global_output_net();
+        res.has_internal_destination = false;
 
         for (Endpoint* ep : sources)
         {
             if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod, true))
             {
-                external_source = true;
+                res.has_external_source = true;
             }
             else
             {
-                internal_source = true;
+                res.has_internal_source = true;
             }
 
-            if (external_source && internal_source)
+            if (res.has_external_source && res.has_internal_source)
             {
                 break;
             }
@@ -541,20 +548,44 @@ namespace hal
         {
             if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod, true))
             {
-                external_destination = true;
+                res.has_external_destination = true;
             }
             else
             {
-                internal_destination = true;
+                res.has_internal_destination = true;
             }
 
-            if (external_destination && internal_destination)
+            if (res.has_external_destination && res.has_internal_destination)
             {
                 break;
             }
         }
 
-        if (internal_source && internal_destination && external_source && external_destination)
+        return res;
+    }
+
+    void Module::check_net(Net* net, bool recursive)
+    {
+        NetConnectivity con = check_net_endpoints(net);
+        if (con.has_internal_source && con.has_internal_destination)
+        {
+            m_internal_nets.insert(net);
+        }
+        else
+        {
+            m_internal_nets.erase(net);
+        }
+
+        if (con.has_internal_source || con.has_internal_destination)
+        {
+            m_nets.insert(net);
+        }
+        else
+        {
+            m_nets.erase(net);
+        }
+
+        if (con.has_internal_source && con.has_internal_destination && con.has_external_source && con.has_external_destination)
         {
             if (m_input_nets.find(net) == m_input_nets.end() || m_output_nets.find(net) == m_output_nets.end())
             {
@@ -573,7 +604,7 @@ namespace hal
         }
         else
         {
-            if (external_source && internal_destination)
+            if (con.has_external_source && con.has_internal_destination)
             {
                 if (m_input_nets.find(net) == m_input_nets.end())
                 {
@@ -598,7 +629,7 @@ namespace hal
                 }
             }
 
-            if (external_destination && internal_source)
+            if (con.has_internal_source && con.has_external_destination)
             {
                 if (m_output_nets.find(net) == m_output_nets.end())
                 {
@@ -624,20 +655,7 @@ namespace hal
             }
         }
 
-        if (internal_source && internal_destination)
-        {
-            m_internal_nets.insert(net);
-        }
-        else
-        {
-            if (internal_source || internal_destination)
-            {
-                m_nets.insert(net);
-            }
-            m_internal_nets.erase(net);
-        }
-
-        if (recursive && m_parent != nullptr)
+        if (m_internal_manager->m_net_checks_enabled && recursive && m_parent != nullptr)
         {
             m_parent->check_net(net, true);
         }
@@ -648,6 +666,111 @@ namespace hal
      *      pin functions
      * ################################################################
      */
+
+    ModulePin* Module::assign_pin(const std::string& name, Net* net, PinDirection direction, PinType type)
+    {
+        if (!m_internal_manager->m_net_checks_enabled)
+        {
+            log_error(
+                "module",
+                "cannot manually assign pin as automatic net checks are enabled. Disable these checks using 'Netlist::enable_automatic_net_checks(false)' in case you want to manage pins manually.");
+            return nullptr;
+        }
+
+        if (name.empty())
+        {
+            log_error("module",
+                      "empty name provided for pin at net '{}' with ID {} within module '{}' with ID {} in netlist with ID {}.",
+                      net->get_name(),
+                      net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return nullptr;
+        }
+
+        if (net == nullptr)
+        {
+            log_error("module", "provided 'nullptr' for net of pin '{}' within module '{}' with ID {} in netlist with ID {}.", name, m_name, m_id, m_internal_manager->m_netlist->get_id());
+            return nullptr;
+        }
+
+        NetConnectivity con = check_net_endpoints(net);
+        PinDirection actual_direction;
+        if (con.has_internal_source && con.has_internal_destination && con.has_external_source && con.has_external_destination)
+        {
+            actual_direction = PinDirection::inout;
+        }
+        else if (con.has_external_source && con.has_internal_destination)
+        {
+            actual_direction = PinDirection::input;
+        }
+        else if (con.has_internal_source && con.has_external_destination)
+        {
+            actual_direction = PinDirection::output;
+        }
+        else
+        {
+            log_error("module",
+                      "cannot assign pin '{}' to net '{}' with ID {} as net is not an input or output of module '{}' with ID {} in netlist with ID {}.",
+                      name,
+                      net->get_name(),
+                      net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return nullptr;
+        }
+
+        if (direction == PinDirection::none)
+        {
+            direction = actual_direction;
+        }
+        else if (direction != actual_direction)
+        {
+            log_error("module",
+                      "direction '{}' does not match the actual direction '{}' of net '{}' with ID {} for pin '{}' in module '{}' with ID {} in netlist with ID {}.",
+                      enum_to_string(direction),
+                      enum_to_string(actual_direction),
+                      net->get_name(),
+                      net->get_id(),
+                      name,
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return nullptr;
+        }
+
+        switch (direction)
+        {
+            case PinDirection::input:
+                m_input_nets.insert(net);
+                break;
+
+            case PinDirection::output:
+                m_output_nets.insert(net);
+                break;
+
+            case PinDirection::inout:
+                m_input_nets.insert(net);
+                m_output_nets.insert(net);
+                break;
+
+            default:
+                log_error("module",
+                          "invalid pin direction 'PinDirection::{}' given for pin '{}' at net '{}' with ID {} within module '{}' with ID {} in netlist with ID {}.",
+                          enum_to_string(direction),
+                          name,
+                          net->get_name(),
+                          net->get_id(),
+                          m_name,
+                          m_id,
+                          m_internal_manager->m_netlist->get_id());
+                return nullptr;
+        }
+
+        return assign_pin_net(net, direction, name, type);
+    }
 
     std::vector<ModulePin*> Module::get_pins(const std::function<bool(ModulePin*)>& filter) const
     {
@@ -1070,46 +1193,65 @@ namespace hal
         return false;
     }
 
-    ModulePin* Module::assign_pin_net(Net* net, PinDirection direction)
+    ModulePin* Module::assign_pin_net(Net* net, PinDirection direction, const std::string& name, PinType type)
     {
-        std::string port_prefix;
-        u32* index_counter;
-        switch (direction)
+        std::string name_internal;
+        if (m_pin_names_map.find(name) == m_pin_names_map.end() && m_pin_group_names_map.find(name) != m_pin_group_names_map.end())
         {
-            case PinDirection::input:
-                port_prefix   = "I";
-                index_counter = &m_next_input_index;
-                break;
-            case PinDirection::inout:
-                port_prefix   = "IO";
-                index_counter = &m_next_inout_index;
-                break;
-            case PinDirection::output:
-                port_prefix   = "O";
-                index_counter = &m_next_output_index;
-                break;
-            default:
-                return nullptr;
+            log_warning("module",
+                        "assigning auto generated pin name to net '{}' with ID {} as '{}' is already in use within module '{}' with ID {} in netlist with ID {}.",
+                        net->get_name(),
+                        net->get_id(),
+                        name,
+                        m_name,
+                        m_id,
+                        m_internal_manager->m_netlist->get_id());
+        }
+        else
+        {
+            name_internal = name;
         }
 
-        std::string name;
-        do
+        if (name_internal.empty())
         {
-            name = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
-        } while (m_pin_names_map.find(name) != m_pin_names_map.end() && m_pin_group_names_map.find(name) != m_pin_group_names_map.end());
+            std::string port_prefix;
+            u32* index_counter;
+            switch (direction)
+            {
+                case PinDirection::input:
+                    port_prefix   = "I";
+                    index_counter = &m_next_input_index;
+                    break;
+                case PinDirection::inout:
+                    port_prefix   = "IO";
+                    index_counter = &m_next_inout_index;
+                    break;
+                case PinDirection::output:
+                    port_prefix   = "O";
+                    index_counter = &m_next_output_index;
+                    break;
+                default:
+                    return nullptr;
+            }
+
+            do
+            {
+                name_internal = port_prefix + "(" + std::to_string((*index_counter)++) + ")";
+            } while (m_pin_names_map.find(name_internal) != m_pin_names_map.end() && m_pin_group_names_map.find(name_internal) != m_pin_group_names_map.end());
+        }
 
         // create pin
-        std::unique_ptr<ModulePin> pin_owner(new ModulePin(name, net, direction));
+        std::unique_ptr<ModulePin> pin_owner(new ModulePin(name_internal, net, direction, type));
         ModulePin* pin = pin_owner.get();
         m_pins.push_back(std::move(pin_owner));
-        m_pin_names_map[name] = pin;
+        m_pin_names_map[name_internal] = pin;
 
         // create pin group (every pin must be within exactly one pin group)
-        std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(name, pin->m_direction, pin->m_type));
+        std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(name_internal, pin->m_direction, pin->m_type));
         PinGroup<ModulePin>* pin_group = pin_group_owner.get();
         m_pin_groups.push_back(std::move(pin_group_owner));
         m_pin_groups_ordered.push_back(pin_group);
-        m_pin_group_names_map[name] = pin_group;
+        m_pin_group_names_map[name_internal] = pin_group;
 
         assign_pin_to_group(pin_group, pin);
 

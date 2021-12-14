@@ -391,13 +391,16 @@ namespace hal
         m_global_input_nets.push_back(n);
 
         // update internal nets and port nets
-        for (Endpoint* ep : n->get_sources())
+        if (m_manager->m_net_checks_enabled)
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
-        }
-        for (Endpoint* ep : n->get_destinations())
-        {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            for (Endpoint* ep : n->get_sources())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
+            for (Endpoint* ep : n->get_destinations())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
         }
 
         m_event_handler->notify(NetlistEvent::event::marked_global_input, this, n->get_id());
@@ -418,13 +421,16 @@ namespace hal
         m_global_output_nets.push_back(n);
 
         // update internal nets and port nets
-        for (Endpoint* ep : n->get_sources())
+        if (m_manager->m_net_checks_enabled)
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
-        }
-        for (Endpoint* ep : n->get_destinations())
-        {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            for (Endpoint* ep : n->get_sources())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
+            for (Endpoint* ep : n->get_destinations())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
         }
 
         m_event_handler->notify(NetlistEvent::event::marked_global_output, this, n->get_id());
@@ -446,13 +452,16 @@ namespace hal
         m_global_input_nets.erase(it);
 
         // update internal nets and port nets
-        for (Endpoint* ep : n->get_sources())
+        if (m_manager->m_net_checks_enabled)
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
-        }
-        for (Endpoint* ep : n->get_destinations())
-        {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            for (Endpoint* ep : n->get_sources())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
+            for (Endpoint* ep : n->get_destinations())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
         }
 
         m_event_handler->notify(NetlistEvent::event::unmarked_global_input, this, n->get_id());
@@ -474,13 +483,16 @@ namespace hal
         m_global_output_nets.erase(it);
 
         // update internal nets and port nets
-        for (Endpoint* ep : n->get_sources())
+        if (m_manager->m_net_checks_enabled)
         {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
-        }
-        for (Endpoint* ep : n->get_destinations())
-        {
-            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            for (Endpoint* ep : n->get_sources())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
+            for (Endpoint* ep : n->get_destinations())
+            {
+                m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
+            }
         }
 
         m_event_handler->notify(NetlistEvent::event::unmarked_global_output, this, n->get_id());
@@ -507,7 +519,7 @@ namespace hal
         return m_global_output_nets;
     }
 
-    void Netlist::enable_automatic_net_checks(bool enable_checks = true)
+    void Netlist::enable_automatic_net_checks(bool enable_checks)
     {
         m_manager->m_net_checks_enabled = enable_checks;
     }

@@ -169,7 +169,7 @@ namespace hal
          * @param[in] recursive - True to check recursively, false otherwise.
          * @returns True if the module is a parent of the specified module, false otherwise.
          */
-        bool is_parent_module_of(Module* module, bool recursive = false) const;
+        bool is_parent_module_of(const Module* module, bool recursive = false) const;
 
         /**
          * Get all direct submodules of this module.<br>
@@ -189,7 +189,7 @@ namespace hal
          * @param[in] recursive - True to check recursively, false otherwise.
          * @returns True if the module is a submodule of the specified module, false otherwise.
          */
-        bool is_submodule_of(Module* module, bool recursive = false) const;
+        bool is_submodule_of(const Module* module, bool recursive = false) const;
 
         /**
          * Checks whether another module is a submodule of this module.<br>
@@ -199,7 +199,7 @@ namespace hal
          * @param[in] recursive - True to include indirect submodules as well.
          * @returns True if the other module is a submodule, false otherwise.
          */
-        bool contains_module(Module* other, bool recursive = false) const;
+        bool contains_module(const Module* other, bool recursive = false) const;
 
         /**
          * Returns true only if the module is the top module of the netlist.
@@ -292,6 +292,21 @@ namespace hal
          *      pin functions
          * ################################################################
          */
+
+        /**
+         * TODO pybind
+         * Manually assigns a module pin to a net.
+         * Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
+         * The respective net will also be added to the set of input and/or outout nets.
+         * \warning{\b WARNING: can only be used when automatic net checks have been disabled using `Netlist::enable_automatic_net_checks`.}
+         * 
+         * @param[in] name - The name of the pin.
+         * @param[in] net - The net that the pin is being assigned to.
+         * @param[in] direction - The direction of the pin.
+         * @param[in] type - The type of the pin. Defaults to `PinType::none`.
+         * @returns The module pin on success, a `nullptr` on failure.
+         */
+        ModulePin* assign_pin(const std::string& name, Net* net, PinDirection direction, PinType type = PinType::none);
 
         /**
          * Get all pins of the module.
@@ -505,8 +520,17 @@ namespace hal
         Module(const Module&) = delete;               //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
 
+        struct NetConnectivity
+        {
+            bool has_internal_source;
+            bool has_internal_destination;
+            bool has_external_source;
+            bool has_external_destination;
+        };
+
+        NetConnectivity check_net_endpoints(Net* net) const;
         void check_net(Net* net, bool recursive = false);
-        ModulePin* assign_pin_net(Net* net, PinDirection direction);
+        ModulePin* assign_pin_net(Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none);
         bool remove_pin_net(Net* net);
 
         std::string m_name;
