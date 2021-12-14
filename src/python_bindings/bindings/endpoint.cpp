@@ -17,14 +17,14 @@ namespace hal
         py_endpoint.def(py::self == py::self, R"(
             Check whether two endpoints are equal.
 
-            :returns: True if both endpoints are equal, false otherwise.
+            :returns: True if both endpoints are equal, False otherwise.
             :rtype: bool
         )");
 
         py_endpoint.def(py::self != py::self, R"(
             Check whether two endpoints are unequal.
 
-            :returns: True if both endpoints are unequal, false otherwise.
+            :returns: True if both endpoints are unequal, False otherwise.
             :rtype: bool
         )");
 
@@ -61,8 +61,8 @@ namespace hal
             :rtype: hal_py.Net
         )");
 
-        py_endpoint.def_property_readonly("is_source", &Endpoint::is_source_pin, R"(
-            True if the pin of the endpoint is a source (output) pin, false otherwise.
+        py_endpoint.def_property_readonly("source_pin", &Endpoint::is_source_pin, R"(
+            True if the pin of the endpoint is a source (output) pin, False otherwise.
 
             :type: bool
         )");
@@ -70,12 +70,12 @@ namespace hal
         py_endpoint.def("is_source_pin", &Endpoint::is_source_pin, R"(
             Checks whether the pin of the endpoint is a source (output) pin.
 
-            :returns: True if the endpoint is an source (output) pin, false otherwise.
+            :returns: True if the endpoint is an source (output) pin, False otherwise.
             :rtype: bool
         )");
 
-        py_endpoint.def_property_readonly("is_destination", &Endpoint::is_destination_pin, R"(
-            True if the pin of the endpoint is a destination (input) pin, false otherwise.
+        py_endpoint.def_property_readonly("destination_pin", &Endpoint::is_destination_pin, R"(
+            True if the pin of the endpoint is a destination (input) pin, False otherwise.
 
             :type: bool
         )");
@@ -83,7 +83,7 @@ namespace hal
         py_endpoint.def("is_destination_pin", &Endpoint::is_destination_pin, R"(
             Checks whether the pin of the endpoint is a destination (input) pin.
 
-            :returns: True if the endpoint is an destination (input) pin, false otherwise.
+            :returns: True if the endpoint is an destination (input) pin, False otherwise.
             :rtype: bool
         )");
     }

@@ -36,10 +36,13 @@ namespace hal
                                                                       "parent_changed",
                                                                       "submodule_added",
                                                                       "submodule_removed",
+                                                                      "gates_assign_begin",
+                                                                      "gates_assign_end",
                                                                       "gate_assigned",
+                                                                      "gates_remove_begin",
+                                                                      "gates_remove_end",
                                                                       "gate_removed",
-                                                                      "input_port_name_changed",
-                                                                      "output_port_name_changed"};
+                                                                      "pin_changed"};
 
     template<>
     std::vector<std::string> EnumStrings<GroupingEvent::event>::data =

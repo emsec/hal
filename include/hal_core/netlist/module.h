@@ -26,15 +26,22 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/data_container.h"
 #include "hal_core/netlist/event_system/event_handler.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/pins/module_pin.h"
+#include "hal_core/netlist/pins/pin_group.h"
+#include "hal_core/utilities/enums.h"
 
 #include <functional>
+#include <list>
 #include <map>
 #include <memory>
-#include <set>
 #include <string>
 #include <tuple>
 #include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace hal
 {
@@ -58,7 +65,7 @@ namespace hal
          * Check whether two modules are equal.
          * Does not check for parent module.
          *
-         * @param[in] other - The module to compare again.
+         * @param[in] other - The module to compare against.
          * @returns True if both modules are equal, false otherwise.
          */
         bool operator==(const Module& other) const;
@@ -67,7 +74,7 @@ namespace hal
          * Check whether two modules are unequal.
          * Does not check for parent module.
          *
-         * @param[in] other - The module to compare again.
+         * @param[in] other - The module to compare against.
          * @returns True if both modules are unequal, false otherwise.
          */
         bool operator!=(const Module& other) const;
@@ -136,6 +143,17 @@ namespace hal
         Module* get_parent_module() const;
 
         /**
+         * Get all direct parent of this module.<br>
+         * If \p recursive is set to true, all indirect parents are also included.<br>
+         * A filter can be applied to the result to only get parents matching the specified condition.
+         *
+         * @param[in] filter - Filter to be applied to the modules.
+         * @param[in] recursive - True to include indirect parents as well, false otherwise.
+         * @returns A vector of parent modules.
+         */
+        std::vector<Module*> get_parent_modules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = true) const;
+
+        /**
          * Set a new parent for this module.<br>
          * If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.
          *
@@ -145,15 +163,33 @@ namespace hal
         bool set_parent_module(Module* new_parent);
 
         /**
+         * Check if the module is a parent of the specified module.
+         * 
+         * @param[in] module - The module.
+         * @param[in] recursive - True to check recursively, false otherwise.
+         * @returns True if the module is a parent of the specified module, false otherwise.
+         */
+        bool is_parent_module_of(Module* module, bool recursive = false) const;
+
+        /**
          * Get all direct submodules of this module.<br>
          * If \p recursive is set to true, all indirect submodules are also included.<br>
          * A filter can be applied to the result to only get submodules matching the specified condition.
          *
          * @param[in] filter - Filter to be applied to the modules.
-         * @param[in] recursive - True to include indirect submodules as well.
-         * @returns The vector of submodules.
+         * @param[in] recursive - True to include indirect submodules as well, false otherwise.
+         * @returns A vector of submodules.
          */
         std::vector<Module*> get_submodules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
+
+        /**
+         * Check if the module is a submodule of the specified module.
+         * 
+         * @param[in] module - The module.
+         * @param[in] recursive - True to check recursively, false otherwise.
+         * @returns True if the module is a submodule of the specified module, false otherwise.
+         */
+        bool is_submodule_of(Module* module, bool recursive = false) const;
 
         /**
          * Checks whether another module is a submodule of this module.<br>
@@ -179,133 +215,215 @@ namespace hal
          */
         Netlist* get_netlist() const;
 
-        /**
-         * TODO test
-         * Get all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
-         *
-         * @returns A sorted vector of nets.
+        /* 
+         * ################################################################
+         *      net functions
+         * ################################################################
          */
-        const std::vector<Net*>& get_nets() const;
+
+        /**
+         * Check whether a net is contained in the module.<br>
+         * If \p recursive is set to true, nets in submodules are considered as well.
+         *
+         * @param[in] net - The net to check for.
+         * @param[in] recursive - True to also consider nets in submodules, false otherwise.
+         * @returns True if the net is contained in the module, false otherwise.
+         */
+        bool contains_net(Net* net, bool recursive = false) const;
+
+        /**
+         * Get all nets that have at least one source or one destination within the module.<br>
+         * A filter can be applied to the result to only get nets matching the specified condition.<br>
+         * If \p recursive is true, nets in submodules are considered as well.
+         *
+         * @param[in] filter - Filter to be applied to the nets.
+         * @param[in] recursive - True to also consider nets in submodules, false otherwise.
+         * @returns A vector of nets.
+         */
+        std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr, bool recursive = false) const;
 
         /**
          * Get all nets that are either a global input to the netlist or have at least one source outside of the module.
          *
-         * @returns A sorted vector of input nets.
+         * @returns A vector of input nets.
          */
-        const std::vector<Net*>& get_input_nets() const;
+        std::vector<Net*> get_input_nets() const;
 
         /**
          * Get all nets that are either a global output to the netlist or have at least one destination outside of the module.
          *
-         * @returns A sorted vector of output nets.
+         * @returns A vector of output nets.
          */
-        const std::vector<Net*>& get_output_nets() const;
+        std::vector<Net*> get_output_nets() const;
 
         /**
          * Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
          *
-         * @returns A sorted vector of internal nets.
+         * @returns A vector of internal nets.
          */
-        const std::vector<Net*>& get_internal_nets() const;
+        std::vector<Net*> get_internal_nets() const;
+
+        /** 
+         * Check whether the given net is an input of the module, i.e., whether the net is a global input to the netlist or has at least one source outside of the module.
+         * 
+         * @param[in] net - The net.
+         * @returns True if the net is an input net, false otherwise.
+         */
+        bool is_input_net(Net* net) const;
+
+        /** 
+         * Check whether the given net is an output of the module, i.e., whether the net is a global output to the netlist or has at least one destination outside of the module.
+         * 
+         * @param[in] net - The net.
+         * @returns True if the net is an ouput net, false otherwise.
+         */
+        bool is_output_net(Net* net) const;
+
+        /** 
+         * Check whether the given net is an internal net of the module, i.e. whether the net has at least one source and one destination within the module.
+         * 
+         * @param[in] net - The net.
+         * @returns True if the net is an internal net, false otherwise.
+         */
+        bool is_internal_net(Net* net) const;
+
+        /* 
+         * ################################################################
+         *      pin functions
+         * ################################################################
+         */
 
         /**
-         * Set the name of the port corresponding to the specified input net.
-         *
-         * @param[in] input_net - The input net.
-         * @param[in] port_name - The input port name.
+         * Get all pins of the module.
+         * The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+         * 
+         * @param[in] filter - Filter function to be evaluated on each pin.
+         * @returns A vector of pins.
+         */
+        std::vector<ModulePin*> get_pins(const std::function<bool(ModulePin*)>& filter = nullptr) const;
+
+        /**
+         * Get all pin groups of the module.
+         * The optional filter is evaluated on every pin group such that the result only contains pin groups matching the specified condition.
+         * 
+         * @param[in] filter - Filter function to be evaluated on each pin group.
+         * @returns A vector of pin groups.
+         */
+        std::vector<PinGroup<ModulePin>*> get_pin_groups(const std::function<bool(PinGroup<ModulePin>*)>& filter = nullptr) const;
+
+        /**
+         * Get the pin specified by the given name.
+         * 
+         * @param[in] name - The name of the pin.
+         * @returns The pin on success, a nullptr otherwise.
+         */
+        ModulePin* get_pin(const std::string& name) const;
+
+        /**
+         * Get the pin that passes through the specified net.
+         * 
+         * @param[in] net - The net.
+         * @returns The pin on success, a nullptr otherwise.
+         */
+        ModulePin* get_pin(Net* net) const;
+
+        /**
+         * Get the pin group specified by the given name.
+         * 
+         * @param[in] name - The name of the pin group.
+         * @returns The pin group on success, a nullptr otherwise.
+         */
+        PinGroup<ModulePin>* get_pin_group(const std::string& name) const;
+
+        /**
+         * Set the name of the given pin.
+         * 
+         * @param[in] pin - The pin.
+         * @param[in] new_name - The name to be assigned to the pin.
          * @returns True on success, false otherwise.
          */
-        bool set_input_port_name(Net* input_net, const std::string& port_name);
+        bool set_pin_name(ModulePin* pin, const std::string& new_name);
 
         /**
-         * Get the name of the port corresponding to the specified input net.
-         *
-         * @param[in] input_net - The input net.
-         * @returns The input port name.
-         */
-        std::string get_input_port_name(Net* input_net) const;
-
-        /**
-         * Get the input net of the port corresponding to the specified port name.
-         *
-         * @param[in] port_name - The input port name.
-         * @returns The input net or a nullptr.
-         */
-        Net* get_input_port_net(const std::string& port_name) const;
-
-        /**
-         * Get the mapping of all input nets to their corresponding port names.
-         *
-         * @returns The map from input net to port name.
-         */
-        const std::map<Net*, std::string>& get_input_port_names() const;
-
-        /**
-         * Set the next free input port ID to the given value.
+         * Set the name of the given pin group.
          * 
-         * @param[in] id - The next input port ID. 
-         */
-        void set_next_input_port_id(u32 id);
-
-        /**
-         * Get the next free input port ID.
-         * 
-         * @returns The next input port ID.
-         */
-        u32 get_next_input_port_id() const;
-
-        /**
-         * Set the name of the port corresponding to the specified output net.
-         *
-         * @param[in] output_net - The output net.
-         * @param[in] port_name - The output port name.
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_name - The name to be assigned to the pin group.
          * @returns True on success, false otherwise.
          */
-        bool set_output_port_name(Net* output_net, const std::string& port_name);
+        bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
 
         /**
-         * Get the name of the port corresponding to the specified output net.
-         *
-         * @param[in] output_net - The output net.
-         * @returns The output port name.
-         */
-        std::string get_output_port_name(Net* output_net) const;
-
-        /**
-         * Get the output net of the port corresponding to the specified port name.
-         *
-         * @param[in] port_name - The output port name.
-         * @returns The output net or a nullptr.
-         */
-        Net* get_output_port_net(const std::string& port_name) const;
-
-        /**
-         * Get the mapping of all output nets to their corresponding port names.
-         *
-         * @returns The map from output net to port name.
-         */
-        const std::map<Net*, std::string>& get_output_port_names() const;
-
-        /**
-         * Set the next free output port ID to the given value.
+         * Set the type of the given pin.
+         * The pin type can only be changed this way if the pin is in a pin group of size 1.
+         * The new type will also be assigned to the pin group.
          * 
-         * @param[in] id - The next output port ID. 
+         * @param[in] pin - The pin.
+         * @param[in] new_type - The type to be assigned to the pin.
+         * @returns True on success, false otherwise.
          */
-        void set_next_output_port_id(u32 id);
+        bool set_pin_type(ModulePin* pin, PinType new_type);
 
         /**
-         * Get the next free output port ID.
+         * Set the type of the given pin group.
+         * The new type will also be assigned to all pins of the group.
          * 
-         * @returns The next output port ID.
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_type - The type to be assigned to the pin group.
+         * @returns True on success, false otherwise.
          */
-        u32 get_next_output_port_id() const;
+        bool set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type);
 
         /**
-         * Mark all internal caches as dirty. Caches are primarily used for the nets connected to the gates of a module.
+         * Create a new pin group with the given name.
+         * All pins to be added to the pin group must have the same direction and type.
          * 
-         * @param[in] is_dirty - True to mark caches as dirty, false otherwise.
+         * @param[in] name - The name of the pin group.
+         * @param[in] pins - The pins to be assigned to the pin group.
+         * @param[in] ascending - True for ascending pin order (from 0 to n-1), false otherwise (from n-1 to 0).
+         * @param[in] start_index - The start index of the pin group.
+         * @returns The pin group on success, a nullptr otherwise.
          */
-        void set_cache_dirty(bool is_dirty = true);
+        PinGroup<ModulePin>* create_pin_group(const std::string& name, const std::vector<ModulePin*> pins, bool ascending = false, u32 start_index = 0);
+
+        /**
+         * Delete the given pin group.
+         * 
+         * @param[in] pin_group - The pin group to be deleted.
+         * @returns True on success, false otherwise.
+         */
+        bool delete_pin_group(PinGroup<ModulePin>* pin_group);
+
+        /**
+         * Assign a pin to a pin group.
+         * Only pins with matching direction and type can be assigned to an existing pin group.
+         * 
+         * @param[in] pin_group - The new pin group.
+         * @param[in] pin - The pin to be added.
+         * @returns True on success, false otherwise.
+         */
+        bool assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin);
+
+        /**
+         * Move a pin to another index within the given pin group.
+         * The indices of some other pins within the group will be incremented or decremented to make room for the moved pin to be inserted at the desired position.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] pin - The pin to be moved.
+         * @param[in] new_index - The index to which the pin is moved.
+         * @returns True on success, false otherwise.
+         */
+        bool move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index);
+
+        /**
+         * Remove a pin from a pin group.
+         * The pin will be moved to a new group that goes by the pin's name.
+         * 
+         * @param[in] pin_group - The old pin group.
+         * @param[in] pin - The pin to be removed.
+         * @returns True on success, false otherwise.
+         */
+        bool remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin);
 
         /*
          * ################################################################
@@ -323,6 +441,15 @@ namespace hal
         bool assign_gate(Gate* gate);
 
         /**
+         * Assign a vector of gates to the module.<br>
+         * The gates are removed from their previous module in the process.
+         *
+         * @param[in] gates - The gates to assign.
+         * @returns True on success, false otherwise.
+         */
+        bool assign_gates(const std::vector<Gate*>& gates);
+
+        /**
          * Remove a gate from the module.<br>
          * Automatically moves the gate to the top module of the netlist.
          *
@@ -332,21 +459,30 @@ namespace hal
         bool remove_gate(Gate* gate);
 
         /**
-         * Check whether a gate is in the module.<br>
-         * If \p recursive is set to true, all submodules are searched as well.
+         * Remove a vector of gates from the module.<br>
+         * Automatically moves the gates to the top module of the netlist.
+         *
+         * @param[in] gates - The gates to remove.
+         * @returns True on success, false otherwise.
+         */
+        bool remove_gates(const std::vector<Gate*>& gates);
+
+        /**
+         * Check whether a gate is contained in the module.<br>
+         * If \p recursive is true, gates in submodules are considered as well.
          *
          * @param[in] gate - The gate to check for.
-         * @param[in] recursive - True to also search in submodules.
-         * @returns True if the gate is in the module, false otherwise.
+         * @param[in] recursive - True to also consider gates in submodules, false otherwise.
+         * @returns True if the gate is contained in the module, false otherwise.
          */
         bool contains_gate(Gate* gate, bool recursive = false) const;
 
         /**
          * Get a gate specified by the given ID.<br>
-         * If \p recursive is true, all submodules are searched as well.
+         * If \p recursive is true, gates in submodules are considered as well.
          *
          * @param[in] id - The unique ID of the gate.
-         * @param[in] recursive - True to also search in submodules.
+         * @param[in] recursive - True to also consider gates in submodules, false otherwise.
          * @returns The gate if found, a nullptr otherwise.
          */
         Gate* get_gate_by_id(const u32 id, bool recursive = false) const;
@@ -354,11 +490,11 @@ namespace hal
         /**
          * Get all gates contained within the module.<br>
          * A filter can be applied to the result to only get gates matching the specified condition.<br>
-         * If \p recursive is true, all submodules are searched as well.
+         * If \p recursive is true, gates in submodules are considered as well.
          *
          * @param[in] filter - Filter to be applied to the gates.
-         * @param[in] recursive - True to also search in submodules.
-         * @return The vector of all gates.
+         * @param[in] recursive - True to also consider gates in submodules, false otherwise.
+         * @return A vector of gates.
          */
         std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
 
@@ -368,6 +504,10 @@ namespace hal
 
         Module(const Module&) = delete;               //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
+
+        void check_net(Net* net, bool recursive = false);
+        ModulePin* assign_pin_net(Net* net, PinDirection direction);
+        bool remove_pin_net(Net* net);
 
         std::string m_name;
         std::string m_type;
@@ -382,28 +522,30 @@ namespace hal
         std::unordered_map<u32, Module*> m_submodules_map;
         std::vector<Module*> m_submodules;
 
-        /* port names */
-        mutable u32 m_next_input_port_id  = 0;
-        mutable u32 m_next_output_port_id = 0;
-        mutable std::set<Net*> m_named_input_nets;                        // ordering necessary, cannot be replaced with unordered_set
-        mutable std::set<Net*> m_named_output_nets;                       // ordering necessary, cannot be replaced with unordered_set
-        mutable std::map<Net*, std::string> m_input_net_to_port_name;     // ordering necessary, cannot be replaced with unordered_map
-        mutable std::map<Net*, std::string> m_output_net_to_port_name;    // ordering necessary, cannot be replaced with unordered_map
-        mutable std::unordered_set<std::string> m_input_port_names;
-        mutable std::unordered_set<std::string> m_output_port_names;
+        // ports
+        u32 m_next_input_index  = 0;
+        u32 m_next_inout_index  = 0;
+        u32 m_next_output_index = 0;
+        // std::vector<std::unique_ptr<Port>> m_ports;
+        // std::list<Port*> m_ports_raw;
+        // std::map<std::string, Port*> m_port_names_map;
+        // std::map<std::string, Port*> m_pin_names_map;
+
+        // pins
+        std::vector<std::unique_ptr<ModulePin>> m_pins;
+        std::vector<std::unique_ptr<PinGroup<ModulePin>>> m_pin_groups;
+        std::list<PinGroup<ModulePin>*> m_pin_groups_ordered;
+        std::unordered_map<std::string, ModulePin*> m_pin_names_map;
+        std::unordered_map<std::string, PinGroup<ModulePin>*> m_pin_group_names_map;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;
         std::vector<Gate*> m_gates;
 
-        mutable bool m_nets_dirty;
-        mutable std::vector<Net*> m_nets;
-        mutable bool m_input_nets_dirty;
-        mutable std::vector<Net*> m_input_nets;
-        mutable bool m_output_nets_dirty;
-        mutable std::vector<Net*> m_output_nets;
-        mutable bool m_internal_nets_dirty;
-        mutable std::vector<Net*> m_internal_nets;
+        std::set<Net*> m_nets;
+        std::set<Net*> m_input_nets;
+        std::set<Net*> m_output_nets;
+        std::set<Net*> m_internal_nets;
 
         EventHandler* m_event_handler;
     };

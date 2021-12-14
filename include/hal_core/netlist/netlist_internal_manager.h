@@ -59,6 +59,9 @@ namespace hal
         explicit NetlistInternalManager(Netlist* nl, EventHandler* eh);
         ~NetlistInternalManager() = default;
 
+        // netlist functions
+        std::unique_ptr<Netlist> copy_netlist(const Netlist* nl) const;
+
         // gate functions
         Gate* create_gate(u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
         bool delete_gate(Gate* gate);
@@ -76,6 +79,8 @@ namespace hal
         Module* create_module(u32 id, Module* parent, const std::string& name);
         bool delete_module(Module* module);
         bool module_assign_gate(Module* m, Gate* g);
+        bool module_assign_gates(Module* module, const std::vector<Gate*>& gates);
+        bool module_check_net(Module* module, Net* net, bool recursive = false);
 
         // grouping functions
         Grouping* create_grouping(u32 id, const std::string name);

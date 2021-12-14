@@ -1285,3 +1285,30 @@ QToolBar QToolButton
 {
     color : white;
 }
+
+hal--DetailsFrameWidget QPushButton
+{
+    font: bold "Iosevka";
+    font-size: 12px;
+    background: rgb(200, 200, 200);;
+    border-color: #666666;
+    border-width: 1px;
+    color: #222222;
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:checked
+{
+    font: bold "Iosevka";
+    font-size: 12px;
+    background: rgb(200, 200, 200);;
+    border-color: #999999;
+    border-width: 1px;
+    color: black;
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:hover
+{
+    background-color : rgba(220, 220, 220, 1);
+}

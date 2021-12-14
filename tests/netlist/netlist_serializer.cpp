@@ -128,10 +128,11 @@ namespace hal {
             test_m_0->set_data("category", "key_3", "data_type", "test_value");
 
             // Set some input/output port names of module 0
-            test_m_0->set_input_port_name(net_1_3, "test_m_0_net_1_3_in");
-            test_m_0->set_input_port_name(net_2_0, "test_m_0_net_2_0_in");
-            test_m_0->set_output_port_name(net_0_4_5, "test_m_0_net_0_4_5_out");
-            test_m_1->set_output_port_name(net_1_3, "test_m_1_net_1_3_out");
+            test_m_0->set_pin_name(test_m_0->get_pin(net_1_3), "test_m_0_net_1_3_in");
+            test_m_0->set_pin_name(test_m_0->get_pin(net_2_0), "test_m_0_net_2_0_in");
+            test_m_0->create_pin_group("great_group", {test_m_0->get_pin(net_1_3), test_m_0->get_pin(net_2_0)});
+            test_m_0->set_pin_name(test_m_0->get_pin(net_0_4_5), "test_m_0_net_0_4_5_out");
+            test_m_1->set_pin_name(test_m_1->get_pin(net_1_3), "test_m_1_net_1_3_out");
 
             // Store some boolean functions in some gates
             gate_0->add_boolean_function("O_and", BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0","I1"})));
@@ -195,10 +196,10 @@ namespace hal {
                 test_m_0_flipped->set_data("category", "key_3", "data_type", "test_value");
 
                 // Set some input/output port names of module 0
-                test_m_0_flipped->set_input_port_name(nl->get_net_by_id(13), "test_m_0_flipped_net_1_3_in");
-                test_m_0_flipped->set_input_port_name(nl->get_net_by_id(20), "test_m_0_flipped_net_2_0_in");
-                test_m_0_flipped->set_output_port_name(nl->get_net_by_id(45), "test_m_0_flipped_net_0_4_5_out");
-                test_m_1_flipped->set_output_port_name(nl->get_net_by_id(13), "test_m_1_flipped_net_1_3_out");
+                test_m_0_flipped->set_pin_name(test_m_0_flipped->get_pin(nl->get_net_by_id(13)), "test_m_0_flipped_net_1_3_in");
+                test_m_0_flipped->set_pin_name(test_m_0_flipped->get_pin(nl->get_net_by_id(20)), "test_m_0_flipped_net_2_0_in");
+                test_m_0_flipped->set_pin_name(test_m_0_flipped->get_pin(nl->get_net_by_id(45)), "test_m_0_flipped_net_0_4_5_out");
+                test_m_1_flipped->set_pin_name(test_m_1_flipped->get_pin(nl->get_net_by_id(13)), "test_m_1_flipped_net_1_3_out");
 
                 // Serialize and deserialize the netlist now
                 std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");

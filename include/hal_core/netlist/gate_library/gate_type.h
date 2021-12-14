@@ -244,20 +244,20 @@ namespace hal
          *
          * @param[in] pin - The pin.
          * @param[in] direction - The pin direction to be assigned.
-         * @param[in] pin_type - The pin type to be assigned.
+         * @param[in] type - The pin type to be assigned.
          * @returns True on success, false otherwise.
          */
-        bool add_pin(const std::string& pin, PinDirection direction, PinType pin_type = PinType::none);
+        bool add_pin(const std::string& pin, PinDirection direction, PinType type = PinType::none);
 
         /**
          * Add a vector of pin of the specified direction and type to the gate type.
          *
          * @param[in] pins - The pins.
          * @param[in] direction - The pin direction to be assigned.
-         * @param[in] pin_type - The pin type to be assigned.
+         * @param[in] type - The pin type to be assigned.
          * @returns True on success, false otherwise.
          */
-        bool add_pins(const std::vector<std::string>& pins, PinDirection direction, PinType pin_type = PinType::none);
+        bool add_pins(const std::vector<std::string>& pins, PinDirection direction, PinType type = PinType::none);
 
         /**
          * Get all pins belonging to the gate type.
@@ -293,10 +293,10 @@ namespace hal
          * Assign a pin type to the given pin. The pin must have been added to the gate type beforehand.
          *
          * @param[in] pin - The pin.
-         * @param[in] pin_type - The pin type to be assigned.
+         * @param[in] type - The pin type to be assigned.
          * @returns True on success, false otherwise.
          */
-        bool assign_pin_type(const std::string& pin, PinType pin_type);
+        bool assign_pin_type(const std::string& pin, PinType type);
 
         /**
          * Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the type 'none' will be returned.
@@ -316,10 +316,10 @@ namespace hal
         /**
          * Get all pins of the specified pin type.
          *
-         * @param[in] pin_type - The pin type.
+         * @param[in] type - The pin type.
          * @returns A set of pins.
          */
-        std::unordered_set<std::string> get_pins_of_type(PinType pin_type) const;
+        std::unordered_set<std::string> get_pins_of_type(PinType type) const;
 
         /**
          * Assign existing pins to a pin group.
@@ -343,7 +343,7 @@ namespace hal
          *
          * @returns A map from pin group names to the pins of each group including their indices.
          */
-        std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> get_pin_groups() const;
+        const std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>>& get_pin_groups() const;
 
         /**
          * Get all pins of the specified pin group including their indices.
@@ -407,14 +407,13 @@ namespace hal
         std::vector<std::string> m_pins;
         std::unordered_set<std::string> m_pins_set;
 
-        // pin direction
+        // pin directions
         std::unordered_map<std::string, PinDirection> m_pin_to_direction;
         std::unordered_map<PinDirection, std::unordered_set<std::string>> m_direction_to_pins;
 
-        // pin type
+        // pin types
         std::unordered_map<std::string, PinType> m_pin_to_type;
         std::unordered_map<PinType, std::unordered_set<std::string>> m_type_to_pins;
-        static const std::unordered_map<PinDirection, std::unordered_set<PinType>> m_direction_to_types;
 
         // pin groups
         std::unordered_map<std::string, std::string> m_pin_to_group;

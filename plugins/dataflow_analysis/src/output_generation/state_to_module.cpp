@@ -17,11 +17,13 @@ namespace hal
         {
             for (const auto& [id, group] : state->gates_of_group)
             {
-                Module* group_module = nl->create_module("group_" + std::to_string(id), nl->get_top_module());
-                for (const auto& gateId : group)
+                std::vector<Gate*> gates;
+                for (const auto& gate_id : group)
                 {
-                    group_module->assign_gate(nl->get_gate_by_id(gateId));
+                    gates.push_back(nl->get_gate_by_id(gate_id));
                 }
+
+                Module* group_module = nl->create_module("group_" + std::to_string(id), nl->get_top_module(), gates);
             }
             return true;
         }

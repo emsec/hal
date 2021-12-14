@@ -125,6 +125,13 @@ namespace hal
             :rtype: hal_py.GateLibrary
         )");
 
+        py_netlist.def("copy", &Netlist::copy, R"(
+            Create a deep copy of the netlist.
+
+            :returns: The copy of the netlist.
+            :rtype: hal_py.Netlist
+        )");
+
         py_netlist.def("clear_caches", &Netlist::clear_caches, R"(
             Clear all internal caches of the netlist.
             In a typical application, calling this function is not required.

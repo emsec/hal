@@ -50,7 +50,7 @@ namespace hal
             rapidjson::Value serialize(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kArrayType);
-                for (const auto& it : data)
+                for (const std::pair<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& it : data)
                 {
                     rapidjson::Value entry(rapidjson::kArrayType);
                     entry.PushBack(JSON_STR_HELPER(std::get<0>(it.first)), allocator);
@@ -61,6 +61,7 @@ namespace hal
                 }
                 return val;
             }
+
             void deserialize_data(DataContainer* c, const rapidjson::Value& val)
             {
                 for (const auto& entry : val.GetArray())
@@ -70,24 +71,26 @@ namespace hal
             }
 
             // serialize endpoint
-            rapidjson::Value serialize(Endpoint* ep, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Endpoint* ep, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("gate_id", ep->get_gate()->get_id(), allocator);
                 val.AddMember("pin_type", ep->get_pin(), allocator);
                 return val;
             }
+
             bool deserialize_destination(Netlist* nl, Net* net, const rapidjson::Value& val)
             {
                 return net->add_destination(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString());
             }
+
             bool deserialize_source(Netlist* nl, Net* net, const rapidjson::Value& val)
             {
                 return net->add_source(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString());
             }
 
             // serialize gate
-            rapidjson::Value serialize(Gate* g, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Gate* g, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("id", g->get_id(), allocator);
@@ -100,10 +103,10 @@ namespace hal
                 }
                 {
                     rapidjson::Value functions(rapidjson::kObjectType);
-                    for (const auto& it : g->get_boolean_functions(true))
+                    for (const auto& [name, function] : g->get_boolean_functions(true))
                     {
-                        auto s = it.second.to_string();
-                        functions.AddMember(JSON_STR_HELPER(it.first), JSON_STR_HELPER(s), allocator);
+                        const std::string function_str = function.to_string();
+                        functions.AddMember(JSON_STR_HELPER(name), JSON_STR_HELPER(function_str), allocator);
                     }
                     if (functions.MemberCount() > 0)
                     {
@@ -112,6 +115,7 @@ namespace hal
                 }
                 return val;
             }
+
             bool deserialize_gate(Netlist* nl, const rapidjson::Value& val, const std::unordered_map<std::string, hal::GateType*>& gate_types)
             {
                 auto gt_name = val["type"].GetString();
@@ -146,7 +150,7 @@ namespace hal
             }
 
             // serialize net
-            rapidjson::Value serialize(Net* n, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Net* n, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("id", n->get_id(), allocator);
@@ -154,9 +158,9 @@ namespace hal
 
                 {
                     rapidjson::Value srcs(rapidjson::kArrayType);
-                    auto sorted = n->get_sources();
+                    std::vector<Endpoint*> sorted = n->get_sources();
                     std::sort(sorted.begin(), sorted.end(), [](Endpoint* lhs, Endpoint* rhs) { return lhs->get_gate()->get_id() < rhs->get_gate()->get_id(); });
-                    for (auto src : sorted)
+                    for (const Endpoint* src : sorted)
                     {
                         srcs.PushBack(serialize(src, allocator), allocator);
                     }
@@ -168,9 +172,9 @@ namespace hal
 
                 {
                     rapidjson::Value dsts(rapidjson::kArrayType);
-                    auto sorted = n->get_destinations();
+                    std::vector<Endpoint*> sorted = n->get_destinations();
                     std::sort(sorted.begin(), sorted.end(), [](Endpoint* lhs, Endpoint* rhs) { return lhs->get_gate()->get_id() < rhs->get_gate()->get_id(); });
-                    for (auto dst : sorted)
+                    for (const Endpoint* dst : sorted)
                     {
                         dsts.PushBack(serialize(dst, allocator), allocator);
                     }
@@ -187,6 +191,7 @@ namespace hal
                 }
                 return val;
             }
+
             bool deserialize_net(Netlist* nl, const rapidjson::Value& val)
             {
                 auto n = nl->create_net(val["id"].GetUint(), val["name"].GetString());
@@ -225,39 +230,8 @@ namespace hal
                 return true;
             }
 
-            // serialize module port
-            rapidjson::Value serialize(const std::pair<Net*, std::string>& port, rapidjson::Document::AllocatorType& allocator)
-            {
-                rapidjson::Value val(rapidjson::kObjectType);
-                val.AddMember("net_id", port.first->get_id(), allocator);
-                val.AddMember("port_name", port.second, allocator);
-                return val;
-            }
-            bool deserialize_module_ports(Netlist* nl, const rapidjson::Value& val)
-            {
-                Module* sm = nl->get_module_by_id(val["id"].GetUint());
-
-                if (val.HasMember("input_ports"))
-                {
-                    for (const auto& port_node : val["input_ports"].GetArray())
-                    {
-                        sm->set_input_port_name(nl->get_net_by_id(port_node["net_id"].GetUint()), port_node["port_name"].GetString());
-                    }
-                }
-
-                if (val.HasMember("output_ports"))
-                {
-                    for (const auto& port_node : val["output_ports"].GetArray())
-                    {
-                        sm->set_output_port_name(nl->get_net_by_id(port_node["net_id"].GetUint()), port_node["port_name"].GetString());
-                    }
-                }
-
-                return true;
-            }
-
             // serialize module
-            rapidjson::Value serialize(Module* m, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Module* m, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("id", m->get_id(), allocator);
@@ -273,9 +247,9 @@ namespace hal
                 }
                 {
                     rapidjson::Value gates(rapidjson::kArrayType);
-                    auto sorted = m->get_gates(nullptr, false);
+                    std::vector<Gate*> sorted = m->get_gates(nullptr, false);
                     std::sort(sorted.begin(), sorted.end(), [](Gate* lhs, Gate* rhs) { return lhs->get_id() < rhs->get_id(); });
-                    for (auto g : sorted)
+                    for (const Gate* g : sorted)
                     {
                         gates.PushBack(g->get_id(), allocator);
                     }
@@ -285,25 +259,28 @@ namespace hal
                     }
                 }
                 {
-                    rapidjson::Value input_ports(rapidjson::kArrayType);
-                    for (const auto& port : m->get_input_port_names())
+                    rapidjson::Value json_pin_groups(rapidjson::kArrayType);
+                    for (const PinGroup<ModulePin>* pin_group : m->get_pin_groups())
                     {
-                        input_ports.PushBack(serialize(port, allocator), allocator);
+                        rapidjson::Value json_pin_group(rapidjson::kObjectType);
+                        json_pin_group.AddMember("name", pin_group->get_name(), allocator);
+                        json_pin_group.AddMember("ascending", pin_group->is_ascending(), allocator);
+                        json_pin_group.AddMember("start_index", pin_group->get_start_index(), allocator);
+                        rapidjson::Value json_pins(rapidjson::kArrayType);
+                        for (const ModulePin* pin : pin_group->get_pins())
+                        {
+                            rapidjson::Value json_pin(rapidjson::kObjectType);
+                            json_pin.AddMember("name", pin->get_name(), allocator);
+                            json_pin.AddMember("type", enum_to_string(pin->get_type()), allocator);
+                            json_pin.AddMember("net_id", pin->get_net()->get_id(), allocator);
+                            json_pins.PushBack(json_pin, allocator);
+                        }
+                        json_pin_group.AddMember("pins", json_pins, allocator);
+                        json_pin_groups.PushBack(json_pin_group, allocator);
                     }
-                    if (!input_ports.Empty())
+                    if (!json_pin_groups.Empty())
                     {
-                        val.AddMember("input_ports", input_ports, allocator);
-                    }
-                }
-                {
-                    rapidjson::Value output_ports(rapidjson::kArrayType);
-                    for (const auto& port : m->get_output_port_names())
-                    {
-                        output_ports.PushBack(serialize(port, allocator), allocator);
-                    }
-                    if (!output_ports.Empty())
-                    {
-                        val.AddMember("output_ports", output_ports, allocator);
+                        val.AddMember("pin_groups", json_pin_groups, allocator);
                     }
                 }
 
@@ -314,10 +291,11 @@ namespace hal
                 }
                 return val;
             }
+
             bool deserialize_module(Netlist* nl, const rapidjson::Value& val)
             {
-                auto parent_id = val["parent"].GetUint();
-                Module* sm     = nl->get_top_module();
+                u32 parent_id = val["parent"].GetUint();
+                Module* sm    = nl->get_top_module();
                 if (parent_id != 0)
                 {
                     sm = nl->create_module(val["id"].GetUint(), val["name"].GetString(), nl->get_module_by_id(parent_id));
@@ -334,24 +312,78 @@ namespace hal
 
                 if (val.HasMember("gates"))
                 {
+                    std::vector<Gate*> gates;
                     for (auto& gate_node : val["gates"].GetArray())
                     {
-                        if(!sm->is_top_module()) 
+                        if (!sm->is_top_module())
                         {
-                            sm->assign_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                            gates.push_back(nl->get_gate_by_id(gate_node.GetUint()));
                         }
                     }
+                    sm->assign_gates(gates);
                 }
 
                 if (val.HasMember("data"))
                 {
                     deserialize_data(sm, val["data"]);
                 }
+
+                u32 ctr = 0;
+                for (ModulePin* pin : sm->get_pins())
+                {
+                    // pin names must be unique, hence automatically generated groups may conflict with deserialized ones
+                    sm->set_pin_name(pin, "____deserialize_tmp_pin_[" + std::to_string(ctr) + "]____");
+                }
+
+                ctr = 0;
+                for (PinGroup<ModulePin>* pin_group : sm->get_pin_groups())
+                {
+                    // pin group names must be unique, hence automatically generated groups may conflict with deserialized ones
+                    sm->set_pin_group_name(pin_group, "____deserialize_tmp_pin_group_[" + std::to_string(ctr) + "]____");
+                }
+
+                if (val.HasMember("pin_groups"))
+                {
+                    for (const auto& json_pin_group : val["pin_groups"].GetArray())
+                    {
+                        std::vector<ModulePin*> pins;
+                        for (const auto& pin_node : json_pin_group["pins"].GetArray())
+                        {
+                            ModulePin* pin = sm->get_pin(nl->get_net_by_id(pin_node["net_id"].GetUint()));
+                            sm->set_pin_name(pin, pin_node["name"].GetString());
+                            sm->set_pin_type(pin, enum_from_string<PinType>(pin_node["type"].GetString()));
+                            pins.push_back(pin);
+                        }
+
+                        sm->create_pin_group(json_pin_group["name"].GetString(), pins, json_pin_group["ascending"].GetBool(), json_pin_group["start_index"].GetUint());
+                    }
+                }
+
+                // legacy code below
+                if (val.HasMember("input_ports"))
+                {
+                    for (const auto& json_pin_legacy : val["input_ports"].GetArray())
+                    {
+                        ModulePin* pin = sm->get_pin(nl->get_net_by_id(json_pin_legacy["net_id"].GetUint()));
+                        sm->set_pin_name(pin, json_pin_legacy["port_name"].GetString());
+                    }
+                }
+
+                if (val.HasMember("output_ports"))
+                {
+                    for (const auto& json_pin_legacy : val["output_ports"].GetArray())
+                    {
+                        ModulePin* port = sm->get_pin(nl->get_net_by_id(json_pin_legacy["net_id"].GetUint()));
+                        sm->set_pin_name(port, json_pin_legacy["port_name"].GetString());
+                    }
+                }
+                // legacy code above
+
                 return true;
             }
 
             // serialize grouping
-            rapidjson::Value serialize(Grouping* grouping, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(const Grouping* grouping, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("id", grouping->get_id(), allocator);
@@ -360,7 +392,7 @@ namespace hal
                     rapidjson::Value gates(rapidjson::kArrayType);
                     std::vector<Gate*> sorted = grouping->get_gates();
                     std::sort(sorted.begin(), sorted.end(), [](Gate* lhs, Gate* rhs) { return lhs->get_id() < rhs->get_id(); });
-                    for (auto gate : sorted)
+                    for (const Gate* gate : sorted)
                     {
                         gates.PushBack(gate->get_id(), allocator);
                     }
@@ -373,7 +405,7 @@ namespace hal
                     rapidjson::Value nets(rapidjson::kArrayType);
                     std::vector<Net*> sorted = grouping->get_nets();
                     std::sort(sorted.begin(), sorted.end(), [](Net* lhs, Net* rhs) { return lhs->get_id() < rhs->get_id(); });
-                    for (auto net : sorted)
+                    for (const Net* net : sorted)
                     {
                         nets.PushBack(net->get_id(), allocator);
                     }
@@ -386,7 +418,7 @@ namespace hal
                     rapidjson::Value modules(rapidjson::kArrayType);
                     std::vector<Module*> sorted = grouping->get_modules();
                     std::sort(sorted.begin(), sorted.end(), [](Module* lhs, Module* rhs) { return lhs->get_id() < rhs->get_id(); });
-                    for (auto module : sorted)
+                    for (const Module* module : sorted)
                     {
                         modules.PushBack(module->get_id(), allocator);
                     }
@@ -398,6 +430,7 @@ namespace hal
 
                 return val;
             }
+
             bool deserialize_grouping(Netlist* nl, const rapidjson::Value& val)
             {
                 Grouping* grouping = nl->create_grouping(val["id"].GetUint(), val["name"].GetString());
@@ -434,7 +467,7 @@ namespace hal
             }
 
             // serialize netlist
-            void serialize(Netlist* nl, rapidjson::Document& document)
+            void serialize(const Netlist* nl, rapidjson::Document& document)
             {
                 rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
                 rapidjson::Value root(rapidjson::kObjectType);
@@ -451,7 +484,7 @@ namespace hal
                     rapidjson::Value global_gnds(rapidjson::kArrayType);
                     std::vector<Gate*> sorted = nl->get_gates();
                     std::sort(sorted.begin(), sorted.end(), [](Gate* lhs, Gate* rhs) { return lhs->get_id() < rhs->get_id(); });
-                    for (auto gate : sorted)
+                    for (const Gate* gate : sorted)
                     {
                         gates.PushBack(serialize(gate, allocator), allocator);
                         if (nl->is_gnd_gate(gate))
@@ -473,7 +506,7 @@ namespace hal
                     rapidjson::Value global_out(rapidjson::kArrayType);
                     std::vector<Net*> sorted = nl->get_nets();
                     std::sort(sorted.begin(), sorted.end(), [](Net* lhs, Net* rhs) { return lhs->get_id() < rhs->get_id(); });
-                    for (auto net : sorted)
+                    for (const Net* net : sorted)
                     {
                         nets.PushBack(serialize(net, allocator), allocator);
                         if (nl->is_global_input_net(net))
@@ -493,16 +526,16 @@ namespace hal
                     rapidjson::Value modules(rapidjson::kArrayType);
 
                     // module ids are not sorted to preserve hierarchy
-                    std::queue<Module*> q;
+                    std::queue<const Module*> q;
                     q.push(nl->get_top_module());
                     while (!q.empty())
                     {
-                        auto m = q.front();
+                        const Module* m = q.front();
                         q.pop();
 
                         modules.PushBack(serialize(m, allocator), allocator);
 
-                        for (auto sm : m->get_submodules())
+                        for (const Module* sm : m->get_submodules())
                         {
                             q.push(sm);
                         }
@@ -514,7 +547,7 @@ namespace hal
 
                     std::vector<Grouping*> sorted = nl->get_groupings();
                     std::sort(sorted.begin(), sorted.end(), [](Grouping* lhs, Grouping* rhs) { return lhs->get_id() < rhs->get_id(); });
-                    for (auto grouping : sorted)
+                    for (const Grouping* grouping : sorted)
                     {
                         groupings.PushBack(serialize(grouping, allocator), allocator);
                     }
@@ -606,13 +639,6 @@ namespace hal
                         return nullptr;
                     }
                 }
-                for (auto& module_node : root["modules"].GetArray())
-                {
-                    if (!deserialize_module_ports(nl.get(), module_node))
-                    {
-                        return nullptr;
-                    }
-                }
 
                 if (root.HasMember("groupings"))
                 {
@@ -629,7 +655,7 @@ namespace hal
             }
         }    // namespace
 
-        bool serialize_to_file(Netlist* nl, const std::filesystem::path& hal_file)
+        bool serialize_to_file(const Netlist* nl, const std::filesystem::path& hal_file)
         {
             if (nl == nullptr)
             {

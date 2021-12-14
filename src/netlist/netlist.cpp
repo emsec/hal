@@ -57,8 +57,6 @@ namespace hal
             }
         }
 
-        // gates check included within modules
-
         // modules are checked recursively
         if (*m_top_module != *other.get_top_module())
         {
@@ -139,6 +137,11 @@ namespace hal
     EventHandler* Netlist::get_event_handler() const
     {
         return m_event_handler.get();
+    }
+
+    std::unique_ptr<Netlist> Netlist::copy() const
+    {
+        return std::move(m_manager->copy_netlist(this));
     }
 
     /*
@@ -387,20 +390,14 @@ namespace hal
         }
         m_global_input_nets.push_back(n);
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
+        // update internal nets and port nets
         for (Endpoint* ep : n->get_sources())
         {
-            affected_modules.insert(ep->get_gate()->get_module());
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
         for (Endpoint* ep : n->get_destinations())
         {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
 
         m_event_handler->notify(NetlistEvent::event::marked_global_input, this, n->get_id());
@@ -420,20 +417,14 @@ namespace hal
         }
         m_global_output_nets.push_back(n);
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
+        // update internal nets and port nets
         for (Endpoint* ep : n->get_sources())
         {
-            affected_modules.insert(ep->get_gate()->get_module());
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
         for (Endpoint* ep : n->get_destinations())
         {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
 
         m_event_handler->notify(NetlistEvent::event::marked_global_output, this, n->get_id());
@@ -454,20 +445,14 @@ namespace hal
         }
         m_global_input_nets.erase(it);
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
+        // update internal nets and port nets
         for (Endpoint* ep : n->get_sources())
         {
-            affected_modules.insert(ep->get_gate()->get_module());
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
         for (Endpoint* ep : n->get_destinations())
         {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
 
         m_event_handler->notify(NetlistEvent::event::unmarked_global_input, this, n->get_id());
@@ -488,20 +473,14 @@ namespace hal
         }
         m_global_output_nets.erase(it);
 
-        // mark module caches as dirty
-        std::unordered_set<Module*> affected_modules;
+        // update internal nets and port nets
         for (Endpoint* ep : n->get_sources())
         {
-            affected_modules.insert(ep->get_gate()->get_module());
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
         for (Endpoint* ep : n->get_destinations())
         {
-            affected_modules.insert(ep->get_gate()->get_module());
-        }
-
-        for (Module* m : affected_modules)
-        {
-            m->set_cache_dirty();
+            m_manager->module_check_net(ep->get_gate()->get_module(), n, true);
         }
 
         m_event_handler->notify(NetlistEvent::event::unmarked_global_output, this, n->get_id());
@@ -554,10 +533,7 @@ namespace hal
         {
             return nullptr;
         }
-        for (auto g : gates)
-        {
-            m->assign_gate(g);
-        }
+        m->assign_gates(gates);
         return m;
     }
 

@@ -31,6 +31,11 @@
  */
 
 /**
+ * @defgroup pins Pins
+ * @ingroup core
+ */
+
+/**
  * @defgroup netlist_parser Netlist Parser
  * @ingroup netlist
  */

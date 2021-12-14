@@ -366,6 +366,18 @@ namespace hal {
         return QColor();
     }
 
+    QColor GroupingTableModel::colorForGrouping(Grouping* grouping) const
+    {
+        if (grouping != nullptr)
+        {
+            for (const GroupingTableEntry& gte : mGroupings)
+                if (gte.grouping() == grouping)
+                    return gte.color();
+
+        }
+        return QColor();
+    }
+
     Grouping* GroupingTableModel::groupingByName(const QString& name) const
     {
         for (const GroupingTableEntry& gte : mGroupings)
