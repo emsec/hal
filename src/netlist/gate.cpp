@@ -355,7 +355,9 @@ namespace hal
             }
         }
 
+        std::cout << result.to_string() << std::endl;
         auto f = result.optimize();
+        std::cout << f.to_string() << std::endl;
         cache.emplace(cache_key, f);
         return f;
     }

@@ -90,5 +90,6 @@ namespace hal
         // caches
         void clear_caches();
         mutable std::map<std::pair<std::vector<std::string>, u64>, BooleanFunction> m_lut_function_cache;
+        bool m_net_checks_enabled = true;
     };
 }    // namespace hal

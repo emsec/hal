@@ -528,6 +528,11 @@ namespace hal
         return m_global_output_nets;
     }
 
+    void Netlist::enable_automatic_net_checks(bool enable_checks = true)
+    {
+        m_manager->m_net_checks_enabled = enable_checks;
+    }
+
     /*
      * ################################################################
      *      module functions
