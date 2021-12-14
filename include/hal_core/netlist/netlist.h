@@ -147,6 +147,13 @@ namespace hal
          */
         const GateLibrary* get_gate_library() const;
 
+        /**
+         * Create a deep copy of the netlist.
+         * 
+         * @returns The copy of the netlist.
+         */
+        std::unique_ptr<Netlist> copy() const;
+
         /*
          * ################################################################
          *      gate functions

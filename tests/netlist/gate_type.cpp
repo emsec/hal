@@ -435,8 +435,7 @@ namespace hal
             GateType* gt = gl.create_gate_type("dummy1", {GateTypeProperty::combinational});
             ASSERT_NE(gt, nullptr);
 
-            std::unordered_set<std::string> in_pins = {"I0", "I1"};
-            std::unordered_set<std::string> out_pins = {"O"};
+            std::unordered_set<std::string> pins = {"I0", "I1", "O"};
             std::unordered_map<std::string, PinType> pin_to_type;
 
             EXPECT_TRUE(gt->add_pins({"I0", "I1"}, PinDirection::input, PinType::ground));
@@ -448,35 +447,33 @@ namespace hal
 
             ASSERT_TRUE(gt->assign_pin_type("I0", PinType::power));
             ASSERT_TRUE(gt->assign_pin_type("I1", PinType::power));
-            ASSERT_FALSE(gt->assign_pin_type("O", PinType::power));
+            ASSERT_TRUE(gt->assign_pin_type("O", PinType::power));
 
             pin_to_type = {
                 {"I0", PinType::power}, 
                 {"I1", PinType::power}, 
-                {"O", PinType::none}};
+                {"O", PinType::power}};
 
             EXPECT_EQ(gt->get_pin_types(), pin_to_type);
-            EXPECT_EQ(gt->get_pins_of_type(PinType::power), in_pins);
-            EXPECT_EQ(gt->get_pins_of_type(PinType::none), out_pins);
+            EXPECT_EQ(gt->get_pins_of_type(PinType::power), pins);
             EXPECT_EQ(gt->get_pin_type("I0"), PinType::power);
             EXPECT_EQ(gt->get_pin_type("I1"), PinType::power);
-            EXPECT_EQ(gt->get_pin_type("O"), PinType::none);
+            EXPECT_EQ(gt->get_pin_type("O"), PinType::power);
 
             ASSERT_TRUE(gt->assign_pin_type("I0", PinType::ground));
             ASSERT_TRUE(gt->assign_pin_type("I1", PinType::ground));
-            ASSERT_FALSE(gt->assign_pin_type("O", PinType::ground));
+            ASSERT_TRUE(gt->assign_pin_type("O", PinType::ground));
 
             pin_to_type = {
                 {"I0", PinType::ground}, 
                 {"I1", PinType::ground}, 
-                {"O", PinType::none}};
+                {"O", PinType::ground}};
 
             EXPECT_EQ(gt->get_pin_types(), pin_to_type);
-            EXPECT_EQ(gt->get_pins_of_type(PinType::ground), in_pins);
-            EXPECT_EQ(gt->get_pins_of_type(PinType::none), out_pins);
+            EXPECT_EQ(gt->get_pins_of_type(PinType::ground), pins);
             EXPECT_EQ(gt->get_pin_type("I0"), PinType::ground);
             EXPECT_EQ(gt->get_pin_type("I1"), PinType::ground);
-            EXPECT_EQ(gt->get_pin_type("O"), PinType::none);
+            EXPECT_EQ(gt->get_pin_type("O"), PinType::ground);
         }
 
         // LUT pin types
@@ -486,8 +483,7 @@ namespace hal
 
             std::unordered_map<std::string, PinType> pin_to_type;
 
-            std::unordered_set<std::string> in_pins = {"I"};
-            std::unordered_set<std::string> out_pins = {"O"};
+            std::unordered_set<std::string> pins = {"I", "O"};
 
             EXPECT_TRUE(gt->add_pins({"I"}, PinDirection::input));
             EXPECT_TRUE(gt->add_pins({"O"}, PinDirection::output));
@@ -495,17 +491,16 @@ namespace hal
             EXPECT_EQ(gt->get_pin_type("I"), PinType::none);
             EXPECT_EQ(gt->get_pin_type("O"), PinType::none);
 
-            ASSERT_FALSE(gt->assign_pin_type("I", PinType::lut));
+            ASSERT_TRUE(gt->assign_pin_type("I", PinType::lut));
             ASSERT_TRUE(gt->assign_pin_type("O", PinType::lut));
 
             pin_to_type = {
-                {"I", PinType::none},
+                {"I", PinType::lut},
                 {"O", PinType::lut}};
 
             EXPECT_EQ(gt->get_pin_types(), pin_to_type);
-            EXPECT_EQ(gt->get_pins_of_type(PinType::none), in_pins);
-            EXPECT_EQ(gt->get_pins_of_type(PinType::lut), out_pins);
-            EXPECT_EQ(gt->get_pin_type("I"), PinType::none);
+            EXPECT_EQ(gt->get_pins_of_type(PinType::lut), pins);
+            EXPECT_EQ(gt->get_pin_type("I"), PinType::lut);
             EXPECT_EQ(gt->get_pin_type("O"), PinType::lut);
         }
 
@@ -537,16 +532,16 @@ namespace hal
             ASSERT_TRUE(gt->assign_pin_type("I3", PinType::reset));
             ASSERT_TRUE(gt->assign_pin_type("I4", PinType::data));
             ASSERT_TRUE(gt->assign_pin_type("I5", PinType::address));
-            ASSERT_FALSE(gt->assign_pin_type("I6", PinType::state));
-            ASSERT_FALSE(gt->assign_pin_type("I6", PinType::neg_state));
+            ASSERT_TRUE(gt->assign_pin_type("I6", PinType::state));
+            ASSERT_TRUE(gt->assign_pin_type("I6", PinType::neg_state));
             ASSERT_TRUE(gt->assign_pin_type("O0", PinType::state));
             ASSERT_TRUE(gt->assign_pin_type("O1", PinType::neg_state));
             ASSERT_TRUE(gt->assign_pin_type("O2", PinType::data));
             ASSERT_TRUE(gt->assign_pin_type("O3", PinType::address));
             ASSERT_TRUE(gt->assign_pin_type("O4", PinType::clock));
-            ASSERT_FALSE(gt->assign_pin_type("O5", PinType::enable));
-            ASSERT_FALSE(gt->assign_pin_type("O5", PinType::set));
-            ASSERT_FALSE(gt->assign_pin_type("O5", PinType::reset));
+            ASSERT_TRUE(gt->assign_pin_type("O5", PinType::enable));
+            ASSERT_TRUE(gt->assign_pin_type("O5", PinType::set));
+            ASSERT_TRUE(gt->assign_pin_type("O5", PinType::reset));
             
 
             pin_to_type = {
@@ -556,13 +551,13 @@ namespace hal
                 {"I3", PinType::reset},
                 {"I4", PinType::data},
                 {"I5", PinType::address},
-                {"I6", PinType::none},
+                {"I6", PinType::neg_state},
                 {"O0", PinType::state},
                 {"O1", PinType::neg_state},
                 {"O2", PinType::data},
                 {"O3", PinType::address},
                 {"O4", PinType::clock},
-                {"O5", PinType::none}};
+                {"O5", PinType::reset}};
 
             EXPECT_EQ(gt->get_pin_types(), pin_to_type);
         }

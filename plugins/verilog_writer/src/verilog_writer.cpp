@@ -17,17 +17,17 @@ namespace hal
         std::stringstream res_stream;
 
         // get modules in hierarchical order (bottom-up)
-        std::vector<const Module*> ordered_modules;
+        std::vector<Module*> ordered_modules;
         {
             const std::vector<Module*> modules = netlist->get_modules();
-            std::unordered_set<const Module*> modules_set(modules.begin(), modules.end());
+            std::unordered_set<Module*> modules_set(modules.begin(), modules.end());
 
             while (!modules_set.empty())
             {
                 for (auto it = modules_set.begin(); it != modules_set.end();)
                 {
                     std::vector<Module*> submodules = (*it)->get_submodules();
-                    if (submodules.empty() || std::all_of(submodules.begin(), submodules.end(), [modules_set](const Module* submod) { return modules_set.find(submod) == modules_set.end(); }))
+                    if (submodules.empty() || std::all_of(submodules.begin(), submodules.end(), [modules_set](Module* submod) { return modules_set.find(submod) == modules_set.end(); }))
                     {
                         ordered_modules.push_back(*it);
                         it = modules_set.erase(it);
@@ -46,7 +46,7 @@ namespace hal
 
         std::unordered_map<const Module*, std::string> module_aliases;
         std::unordered_map<std::string, u32> module_identifier_occurrences;
-        for (const Module* mod : ordered_modules)
+        for (Module* mod : ordered_modules)
         {
             if (!write_module_declaration(res_stream, mod, module_aliases, module_identifier_occurrences))
             {
@@ -100,8 +100,9 @@ namespace hal
         std::stringstream tmp_stream;
 
         res_stream << "(";
-        for (const auto& [net, port] : module->get_input_port_names())
+        for (const ModulePin* pin : module->get_pins())
         {
+            Net* net = pin->get_net();
             if (first_port)
             {
                 first_port = false;
@@ -111,29 +112,10 @@ namespace hal
                 res_stream << ",";
             }
 
-            aliases[net] = escape(get_unique_alias(identifier_occurrences, port));
+            aliases[net] = escape(get_unique_alias(identifier_occurrences, pin->get_name()));
 
             res_stream << aliases.at(net);
-
-            tmp_stream << "    input " << aliases.at(net) << ";" << std::endl;
-        }
-
-        for (const auto& [net, port] : module->get_output_port_names())
-        {
-            if (first_port)
-            {
-                first_port = false;
-            }
-            else
-            {
-                res_stream << ",";
-            }
-
-            aliases[net] = escape(get_unique_alias(identifier_occurrences, port));
-
-            res_stream << aliases.at(net);
-
-            tmp_stream << "    output " << aliases.at(net) << ";" << std::endl;
+            tmp_stream << "    " << enum_to_string(pin->get_direction()) << " " << aliases.at(net) << ";" << std::endl;
         }
 
         res_stream << ");" << std::endl;
@@ -162,8 +144,19 @@ namespace hal
             }
         }
 
-        for (Net* net : module->get_nets())
+        std::vector<Net*> input_nets_tmp = module->get_input_nets();
+        std::unordered_set<Net*> port_nets(input_nets_tmp.begin(), input_nets_tmp.end());
+        std::vector<Net*> output_nets_tmp = module->get_output_nets();
+        port_nets.insert(output_nets_tmp.begin(), output_nets_tmp.end());
+
+
+        for (Net* net : module->get_internal_nets())
         {
+            if (port_nets.find(net) != port_nets.end()) 
+            {
+                continue;
+            }
+
             if (aliases.find(net) == aliases.end())
             {
                 aliases[net] = escape(get_unique_alias(identifier_occurrences, net->get_name()));
@@ -295,14 +288,9 @@ namespace hal
         // extract port assignments
         std::vector<std::pair<std::string, std::vector<const Net*>>> port_assignments;
 
-        for (const auto& [net, port] : module->get_input_port_names())
+        for (const ModulePin* pin : module->get_pins())
         {
-            port_assignments.push_back(std::make_pair(port, std::vector<const Net*>({net})));
-        }
-
-        for (const auto& [net, port] : module->get_output_port_names())
-        {
-            port_assignments.push_back(std::make_pair(port, std::vector<const Net*>({net})));
+            port_assignments.push_back(std::make_pair(pin->get_name(), std::vector<const Net*>({pin->get_net()})));
         }
 
         if (!write_pin_assignments(res_stream, port_assignments, aliases))

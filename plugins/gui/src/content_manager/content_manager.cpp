@@ -214,6 +214,7 @@ namespace hal
         connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mSelectionDetailsWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
 
         sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
+        
 
         GraphContext* new_context = nullptr;
         new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
@@ -222,7 +223,6 @@ namespace hal
         mContextManagerWidget->selectViewContext(new_context);
         gGraphContextManager->restoreFromFile();
         new_context->setDirty(false);
-
     }
 
     void ContentManager::setWindowTitle(const QString &filename)

@@ -1186,19 +1186,9 @@ namespace hal
         // assign module ports
         for (const auto& [net, port_info] : m_module_ports)
         {
-            const PinDirection direction = std::get<0>(port_info);
             const std::string& port_name = std::get<1>(port_info);
             Module* module               = std::get<2>(port_info);
-
-            if (direction == PinDirection::input || direction == PinDirection::inout)
-            {
-                module->set_input_port_name(net, port_name);
-            }
-
-            if (direction == PinDirection::output || direction == PinDirection::inout)
-            {
-                module->set_output_port_name(net, port_name);
-            }
+            module->set_pin_name(module->get_pin(net), port_name);
         }
 
         return true;

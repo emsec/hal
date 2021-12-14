@@ -247,6 +247,14 @@ namespace hal {
          */
         QColor colorForItem(ItemType itemType, u32 itemId) const;
 
+       /**
+        * Gets the grouping color of a specified Grouping.
+        * 
+        * @param grouping - the specified grouping
+        * @returns the color of the grouping
+        */
+        QColor colorForGrouping(Grouping* grouping) const;
+
       /**
          * Renames the grouping at the given table row of the groupings table.
          *

@@ -44,6 +44,26 @@ namespace hal
     namespace utils
     {
         /**
+         * Erase the first occurence of a given element from an unordered vector.
+         * 
+         * @param[in] vec - The unordered vector.
+         * @param[in] element - The element to delete.
+         * @returns True on success, false otherwise.
+         */
+        template<typename T>
+        CORE_API inline bool unordered_vector_erase(std::vector<T>& vec, T element)
+        {
+            auto it = std::find(vec.begin(), vec.end(), element);
+            if (it == vec.end())
+            {
+                return false;
+            }
+            *it = vec.back();
+            vec.pop_back();
+            return true;
+        }
+
+        /**
          * Get a single bit of an integer value.
          *
          * @param[in] value - The integer value.
@@ -692,7 +712,9 @@ namespace hal
             int s;
             int v;
 
-            Color(int _h = 0, int _s = 0, int _v = 0) : h(_h), s(_s), v(_v) {}
+            Color(int _h = 0, int _s = 0, int _v = 0) : h(_h), s(_s), v(_v)
+            {
+            }
 
             std::string toString()
             {

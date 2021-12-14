@@ -13,7 +13,7 @@ namespace hal
             Check whether two modules are equal.
             Does not check for parent module.
 
-            :returns: True if both modules are equal, false otherwise.
+            :returns: True if both modules are equal, False otherwise.
             :rtype: bool
         )");
 
@@ -21,7 +21,7 @@ namespace hal
             Check whether two modules are unequal.
             Does not check for parent module.
 
-            :returns: True if both modules are unequal, false otherwise.
+            :returns: True if both modules are unequal, False otherwise.
             :rtype: bool
         )");
 
@@ -91,7 +91,8 @@ namespace hal
         )");
 
         py_module.def_property("parent_module", &Module::get_parent_module, &Module::set_parent_module, R"(
-            The parent module of this module. Set to None for the top module.
+            The parent module of this module.
+            Is set to None for the top module, but cannot be set to None by the user.
 
             :type: hal_py.Module or None
         )");
@@ -104,12 +105,39 @@ namespace hal
             :rtype: hal_py.Module or None
         )");
 
+        py_module.def_property_readonly(
+            "parent_modules", [](Module* mod) { return mod->get_parent_modules(); }, R"(
+            The parent modules of this module.
+
+            :type: list[hal_py.Module]
+        )");
+
+        py_module.def("get_parent_modules", &Module::get_parent_modules, py::arg("filter") = nullptr, py::arg("recursive") = true, R"(
+            Get all direct parent of this module.
+            If recursive is set to true, all indirect parents are also included.
+            A filter can be applied to the result to only get parents matching the specified condition.
+
+            :param lambda filter: Filter to be applied to the modules.
+            :param bool recursive: True to include indirect parents as well, False otherwise.
+            :returns: A list of parent modules.
+            :rtype: list[hal_py.Module]
+        )");
+
         py_module.def("set_parent_module", &Module::set_parent_module, py::arg("new_parent"), R"(
             Set a new parent for this module.
             If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.
 
             :param hal_py.Module new_parent: The new parent module.
             :returns: True if the parent was changed, false otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("is_parent_module_of", &Module::is_parent_module_of, py::arg("module"), py::arg("recursive") = false, R"(
+            Check if the module is a parent of the specified module.
+         
+            :param hal_py.Module module: The module.
+            :param bool recursive: True to check recursively, False otherwise.
+            :returns: True if the module is a parent of the specified module, False otherwise.
             :rtype: bool
         )");
 
@@ -126,9 +154,17 @@ namespace hal
             A filter can be applied to the result to only get submodules matching the specified condition.
 
             :param lambda filter: Filter to be applied to the modules.
-            :param bool recursive: True to include indirect submodules as well.
-            :returns: The vector of submodules.
+            :param bool recursive: True to include indirect submodules as well, false otherwise.
+            :returns: A list of submodules.
             :rtype: list[hal_py.Module]
+        )");
+
+        py_module.def("is_submodule_of", &Module::is_submodule_of, py::arg("module"), py::arg("recursive") = false, R"(
+            Check if the module is a submodule of the specified module.
+
+            :param hal_py.Module module: The module.
+            :param bool recursive: True to check recursively, False otherwise.
+            :returns: True if the module is a submodule of the specified module, False otherwise.
         )");
 
         py_module.def("contains_module", &Module::contains_module, py::arg("other"), py::arg("recusive") = false, R"(
@@ -171,21 +207,36 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
-        py_module.def_property_readonly("nets", &Module::get_nets, R"(
-            A sorted list of all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
+        py_module.def("contains_net", &Module::contains_net, py::arg("net"), py::arg("recursive") = false, R"(
+            Check whether a net is contained in the module.
+            If recursive is set to true, nets in submodules are considered as well.
+        
+            :param hal_py.Net net: The net to check for.
+            :param bool recursive: True to also consider nets in submodules, false otherwise.
+            :returns: True if the net is contained in the module, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def_property_readonly(
+            "nets", [](Module* mod) { return mod->get_nets(); }, R"(
+            A list of all nets that have at least one source or one destination within the module.
 
             :type: list[hal_py.Net]
         )");
 
-        py_module.def("get_nets", &Module::get_nets, R"(
-            Get all nets that have at least one source or one destination within the module. Includes nets that are input and/or output to any of the submodules.
+        py_module.def("get_nets", &Module::get_nets, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
+            Get all nets that have at least one source or one destination within the module.
+            A filter can be applied to the result to only get nets matching the specified condition.
+            If recursive is True, nets in submodules are considered as well.
 
-            :returns: A sorted list of nets.
+            :param lambda filter: Filter to be applied to the nets.
+            :param bool recursive: True to also consider nets in submodules, False otherwise.
+            :returns: A list of nets.
             :rtype: list[hal_py.Net]
         )");
 
         py_module.def_property_readonly("input_nets", &Module::get_input_nets, R"(
-            A sorted list of all nets that are either a global input to the netlist or have at least one source outside of the module.
+            A list of all nets that are either a global input to the netlist or have at least one source outside of the module.
 
             :type: list[hal_py.Net]
         )");
@@ -193,12 +244,12 @@ namespace hal
         py_module.def("get_input_nets", &Module::get_input_nets, R"(
             Get all nets that are either a global input to the netlist or have at least one source outside of the module.
 
-            :returns: A sorted list of input nets.
+            :returns: A list of input nets.
             :rtype: list[hal_py.Net]
         )");
 
         py_module.def_property_readonly("output_nets", &Module::get_output_nets, R"(
-            A sorted list of all nets that are either a global output to the netlist or have at least one destination outside of the module.
+            A list of all nets that are either a global output to the netlist or have at least one destination outside of the module.
 
             :type: set[hal_py.Net]
         )");
@@ -206,137 +257,45 @@ namespace hal
         py_module.def("get_output_nets", &Module::get_output_nets, R"(
             Get all nets that are either a global output to the netlist or have at least one destination outside of the module.
 
-            :returns: A sorted list of output nets.
+            :returns: A list of output nets.
             :rtype: list[hal_py.Net]
         )");
 
         py_module.def_property_readonly("internal_nets", &Module::get_internal_nets, R"(
-            A sorted list of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
+            A list of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
 
             :type: list[hal_py.Net]
         )");
 
         py_module.def("get_internal_nets", &Module::get_internal_nets, R"(
-            Get all nets that have at least one source and one destination within the module. The result may contain nets that are also regarded as input or output nets.
+            Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
 
-            :returns: A sorted list of internal nets.
+            :returns: A list of internal nets.
             :rtype: list[hal_py.Net]
         )");
 
-        py_module.def("set_input_port_name", &Module::set_input_port_name, py::arg("input_net"), py::arg("port_name"), R"(
-            Set the name of the port corresponding to the specified input net.
-
-            :param hal_py.Net input_net: The input net.
-            :param str port_name: The input port name.
-            :returns: True on success, False otherwise.
+        py_module.def("is_input_net", &Module::is_input_net, py::arg("net"), R"(
+            Check whether the given net is an input of the module, i.e., whether the net is a global input to the netlist or has at least one source outside of the module.
+            
+            :param hal_py.Net net: The net.
+            :returns: True if the net is an input net, False otherwise.
             :rtype: bool
         )");
 
-        py_module.def("get_input_port_name", &Module::get_input_port_name, py::arg("input_net"), R"(
-            Get the name of the port corresponding to the specified input net.
-
-            :param hal_py.Net input_net: The input net.
-            :returns: The input port name.
-            :rtype: str
-        )");
-
-        py_module.def("get_input_port_net", &Module::get_input_port_net, py::arg("port_name"), R"(
-            Get the input net of the port corresponding to the specified port name.
-
-            :param str port_name: The input port name.
-            :returns: The input net.
-            :rtype: hal_py.Net or None
-        )");
-
-        py_module.def_property_readonly("input_port_names", &Module::get_input_port_names, R"(
-            The dictionary mapping all input nets to their corresponding port names.
-
-            :type: dict[hal_py.Net,str]
-        )");
-
-        py_module.def("get_input_port_names", &Module::get_input_port_names, R"(
-            Get the mapping of all input nets to their corresponding port names.
-
-            :returns: The dictionary from input net to port name.
-            :rtype: dict[hal_py.Net,str]
-        )");
-
-        py_module.def("set_output_port_name", &Module::set_output_port_name, py::arg("output_net"), py::arg("port_name"), R"(
-            Set the name of the port corresponding to the specified output net.
-
-            :param hal_py.Net output_net: The output net.
-            :param str port_name: The output port name.
-            :returns: True on success, False otherwise.
+        py_module.def("is_output_net", &Module::is_output_net, py::arg("net"), R"(
+            Check whether the given net is an output of the module, i.e., whether the net is a global output to the netlist or has at least one destination outside of the module.
+            
+            :param hal_py.Net net: The net.
+            :returns: True if the net is an output net, False otherwise.
             :rtype: bool
         )");
 
-        py_module.def("get_output_port_name", &Module::get_output_port_name, py::arg("output_net"), R"(
-            Get the name of the port corresponding to the specified output net.
-
-            :param hal_py.Net output_net: The output net.
-            :returns: The output port name.
-            :rtype: str
-        )");
-
-        py_module.def("get_output_port_net", &Module::get_output_port_net, py::arg("port_name"), R"(
-            Get the output net of the port corresponding to the specified port name.
-
-            :param str port_name: The output port name.
-            :returns: The output net.
-            :rtype: hal_py.Net or None
-        )");
-
-        py_module.def_property_readonly("output_port_names", &Module::get_output_port_names, R"(
-            The dictionary mapping all output nets to their corresponding port names.
-
-            :type: dict[hal_py.Net,str]
-        )");
-
-        py_module.def("get_output_port_names", &Module::get_output_port_names, R"(
-            Get the mapping of all output nets to their corresponding port names.
-
-            :returns: The dictionary from output net to port name.
-            :rtype: dict[hal_py.Net,str]
-        )");
-
-        py_module.def_property("next_input_port_id", &Module::get_next_input_port_id, &Module::set_next_input_port_id, R"(
-            The next free input port ID.
-        )");
-
-        py_module.def("get_next_input_port_id", &Module::get_next_input_port_id, R"(
-            Get the next free input port ID.
-
-            :returns: The next input port ID.
-            :rtype: int
-        )");
-
-        py_module.def("set_next_input_port_id", &Module::set_next_input_port_id, py::arg("id"), R"(
-            Set the next free input port ID to the given value.
-
-            :param int id: The next input port ID.
-        )");
-
-        py_module.def_property("next_output_port_id", &Module::get_next_output_port_id, &Module::set_next_output_port_id, R"(
-            The next free output port ID.
-        )");
-
-        py_module.def("get_next_output_port_id", &Module::get_next_output_port_id, R"(
-            Get the next free output port ID.
-
-            :returns: The next output port ID.
-            :rtype: int
-        )");
-
-        py_module.def("set_next_output_port_id", &Module::set_next_output_port_id, py::arg("id"), R"(
-            Set the next free output port ID to the given value.
-
-            :param int id: The next output port ID.
-        )");
-
-        py_module.def("set_cache_dirty", &Module::set_cache_dirty, py::arg("is_dirty") = true, R"(
-            Mark all internal caches as dirty. Caches are primarily used for the nets connected to the gates of a module.
-
-            :param bool is_dirty: True to mark caches as dirty, False otherwise.
+        py_module.def("is_internal_net", &Module::is_internal_net, py::arg("net"), R"(
+            Check whether the given net is an internal net of the module, i.e. whether the net has at least one source and one destination within the module.
+            
+            :param hal_py.Net net: The net.
+            :returns: True if the net is an internal net, False otherwise.
+            :rtype: bool
         )");
 
         py_module.def("assign_gate", &Module::assign_gate, py::arg("gate"), R"(
@@ -345,6 +304,15 @@ namespace hal
 
             :param hal_py.Gate gate: The gate to assign.
             :returns: True on success, false otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("assign_gates", &Module::assign_gates, py::arg("gates"), R"(
+            Assign a list of gates to the module.
+            The gates are removed from their previous module in the process.
+
+            :param list[hal_py.Gate] gates: The gates to assign.
+            :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
@@ -357,22 +325,31 @@ namespace hal
             :rtype: bool
         )");
 
+        py_module.def("remove_gates", &Module::remove_gates, py::arg("gates"), R"(
+            Remove a list of gates from the module.
+            Automatically moves the gates to the top module of the netlist.
+
+            :param list[hal_py.Gate] gates: The gates to remove.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
         py_module.def("contains_gate", &Module::contains_gate, py::arg("gate"), py::arg("recusive") = false, R"(
-            Check whether a gate is in the module.
-            If recursive is set to true, all submodules are searched as well.
+            Check whether a gate is contained in the module.
+            If recursive is True, gates in submodules are considered as well.
 
             :param hal_py.Gate gate: The gate to check for.
-            :param bool recursive: True to also search in submodules.
-            :returns: True if the gate is in the module, false otherwise.
+            :param bool recursive: True to also consider gates in submodules, false otherwise.
+            :returns: True if the gate is contained in the module, false otherwise.
             :rtype: bool
         )");
 
         py_module.def("get_gate_by_id", &Module::get_gate_by_id, py::arg("id"), py::arg("recursive") = false, R"(
             Get a gate specified by the given ID.
-            If recursive is true, all submodules are searched as well.
+            If recursive is True, gates in submodules are considered as well.
 
             :param int id: The unique ID of the gate.
-            :param bool recursive: True to also search in submodules.
+            :param bool recursive: True to also consider gates in submodules, false otherwise.
             :returns: The gate if found, None otherwise.
             :rtype: hal_py.Gate or None
         )");
@@ -385,14 +362,156 @@ namespace hal
         )");
 
         py_module.def("get_gates", &Module::get_gates, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
-            Get all modules contained within the module.
-            A filter can be applied to the result to only get gates matching the specified condition.
-            If recursive is true, all submodules are searched as well.
+            Get all gates contained within the module.<br>
+            A filter can be applied to the result to only get gates matching the specified condition.<br>
+            If recursive is True, gates in submodules are considered as well.
 
             :param lambda filter: Filter to be applied to the gates.
-            :param bool recursive: True to also search in submodules.
-            :returns: The list of all gates.
+            :param bool recursive: True to also consider gates in submodules, false otherwise.
+            :returns: A list of gates.
             :rtype: list[hal_py.Gate]
+        )");
+
+        py_module.def_property_readonly("pins", &Module::get_pins, R"(
+            All pins of the module.
+
+            :type: list[hal_py.ModulePin]
+        )");
+
+        py_module.def("get_pins", &Module::get_pins, py::arg("filter") = nullptr, R"(
+            Get all pins of the module.
+            The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each pin.
+            :returns: A list of pins.
+            :rtype: list[hal_py.ModulePin]
+        )");
+
+        py_module.def_property_readonly("pin_groups", &Module::get_pin_groups, R"(
+            All pin_groups of the module.
+
+            :type: list[hal_py.ModulePinGroup]
+        )");
+
+        py_module.def("get_pin_groups", &Module::get_pin_groups, py::arg("filter") = nullptr, R"(
+            Get all pin groups of the module.
+            The optional filter is evaluated on every pin group such that the result only contains pin groups matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each pin group.
+            :returns: A list of pin groups.
+            :rtype: list[hal_py.ModulePinGroup]
+        )");
+
+        py_module.def("get_pin", py::overload_cast<const std::string&>(&Module::get_pin, py::const_), py::arg("name"), R"(
+            Get the pin specified by the given name.
+
+            :param str name: The name of the pin.
+            :returns: The pin on success, None otherwise.
+            :rtype: hal_py.ModulePin or None
+        )");
+
+        py_module.def("get_pin", py::overload_cast<Net*>(&Module::get_pin, py::const_), py::arg("net"), R"(
+            Get the pin that passes through the specified net.
+
+            :param hal_py.Net net: The net.
+            :returns: The pin on success, None otherwise.
+            :rtype: hal_py.ModulePin or None
+        )");
+
+        py_module.def("get_pin_group", &Module::get_pin_group, py::arg("name"), R"(
+            Get the pin group specified by the given name.
+
+            :param str name: The name of the pin group.
+            :returns: The pin group on success, None otherwise.
+            :rtype: hal_py.ModulePinGroup or None
+        )");
+
+        py_module.def("set_pin_name", &Module::set_pin_name, py::arg("pin"), py::arg("new_name"), R"(
+            Set the name of the given pin.
+
+            :param hal_py.ModulePin pin: The pin.
+            :param str new_name: The name to be assigned to the pin.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("set_pin_group_name", &Module::set_pin_group_name, py::arg("pin_group"), py::arg("new_name"), R"(
+            Set the name of the given pin group.
+
+            :param hal_py.ModulePinGroup pin_group: The pin group.
+            :param str new_name: The name to be assigned to the pin group.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("set_pin_type", &Module::set_pin_type, py::arg("pin"), py::arg("new_type"), R"(
+            Set the type of the given pin.
+            The pin type can only be changed this way if the pin is in a pin group of size 1.
+            The new type will also be assigned to the pin group.
+
+            :param hal_py.ModulePin pin: The pin.
+            :param hal_py.PinType new_type: The type to be assigned to the pin.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("set_pin_group_type", &Module::set_pin_group_type, py::arg("pin_group"), py::arg("new_type"), R"(
+            Set the type of the given pin group.
+            The new type will also be assigned to all pins of the group.
+
+            :param hal_py.ModulePinGroup pin_group: The pin group.
+            :param hal_py.PinType new_type: The type to be assigned to the pin group.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("create_pin_group", &Module::create_pin_group, py::arg("name"), py::arg("pins"), py::arg("ascending") = false, py::arg("start_index") = 0, R"(
+            Create a new pin group with the given name.
+            All pins to be added to the pin group must have the same direction and type.
+
+            :param str name: The name of the pin group.
+            :param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group.
+            :returns: The pin group on success, a nullptr otherwise.
+            :rtype: hal_py.ModulePinGroup
+        )");
+
+        py_module.def("delete_pin_group", &Module::delete_pin_group, py::arg("pin_group"), R"(
+            Delete the given pin group.
+
+            :param hal_py.ModulePinGroup pin_group: The pin group to be deleted.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("assign_pin_to_group", &Module::assign_pin_to_group, py::arg("pin_group"), py::arg("pin"), R"(
+            Assign a pin to a pin group.
+            Only pins with matching direction and type can be assigned to an existing pin group.
+
+            :param hal_py.ModulePinGroup pin_group: The new pin group.
+            :param hal_py.ModulePin pin: The pin to be added.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("move_pin_within_group", &Module::move_pin_within_group, py::arg("pin_group"), py::arg("pin"), py::arg("new_index"), R"(
+            Move a pin to another index within the given pin group.
+            The indices of some other pins within the group will be incremented or decremented to make room for the moved pin to be inserted at the desired position.
+
+            :param hal_py.ModulePinGroup pin_group: The pin group.
+            :param hal_py.ModulePin pin: The pin to be moved.
+            :param int new_index: The index to which the pin is moved.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def("remove_pin_from_group", &Module::remove_pin_from_group, py::arg("pin_group"), py::arg("pin"), R"(
+            Remove a pin from a pin group.
+            The pin will be moved to a new group that goes by the pin's name.
+
+            :param hal_py.ModulePinGroup pin_group: The old pin group.
+            :param hal_py.ModulePin pin: The pin to be removed.
+            :returns: True on success, False otherwise.
+            :rtype: bool
         )");
     }
 }    // namespace hal

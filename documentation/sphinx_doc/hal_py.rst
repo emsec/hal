@@ -18,6 +18,8 @@ HAL Core Documentation
    grouping
    gui_plugin_interface
    module
+   module_pin
+   module_pin_group
    net
    netlist
    netlist_factory

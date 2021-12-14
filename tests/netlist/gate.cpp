@@ -360,8 +360,8 @@ namespace hal
         auto nl         = test_utils::create_empty_netlist();
         Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("AND2"), "gate_name");
 
-        EXPECT_EQ(test_gate->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
-        EXPECT_EQ(test_gate->get_output_pins(), std::vector<std::string>({"O"}));
+        EXPECT_EQ(test_gate->get_type()->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
+        EXPECT_EQ(test_gate->get_type()->get_output_pins(), std::vector<std::string>({"O"}));
 
         TEST_END
     }

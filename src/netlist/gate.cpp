@@ -368,7 +368,7 @@ namespace hal
         if (lut_component != nullptr)
         {
             InitComponent* init_component =
-            lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
+                lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
             if (init_component != nullptr)
             {
                 std::vector<std::string> output_pins = m_type->get_output_pins();
