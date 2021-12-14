@@ -222,6 +222,17 @@ namespace hal
          */
 
         /**
+         * Manually assign a net to the module.
+         * Verifies that the net has at least one source or destination within the module.
+         * Checks whether the net is an input, output, and/or internal net.
+         * \warning{\b WARNING: can only be used when automatic net checks have been disabled using `Netlist::enable_automatic_net_checks`.}
+         * 
+         * @param[in] net - The net.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool assign_net(Net* net);
+
+        /**
          * Check whether a net is contained in the module.<br>
          * If \p recursive is set to true, nets in submodules are considered as well.
          *
@@ -294,19 +305,17 @@ namespace hal
          */
 
         /**
-         * TODO pybind
-         * Manually assigns a module pin to a net.
+         * Manually assign a module pin to a net.
          * Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-         * The respective net will also be added to the set of input and/or outout nets.
+         * Hence, the net must have been manually assigned to the module beforehand using `Module::assign_net`.
          * \warning{\b WARNING: can only be used when automatic net checks have been disabled using `Netlist::enable_automatic_net_checks`.}
          * 
          * @param[in] name - The name of the pin.
          * @param[in] net - The net that the pin is being assigned to.
-         * @param[in] direction - The direction of the pin.
          * @param[in] type - The type of the pin. Defaults to `PinType::none`.
          * @returns The module pin on success, a `nullptr` on failure.
          */
-        ModulePin* assign_pin(const std::string& name, Net* net, PinDirection direction, PinType type = PinType::none);
+        ModulePin* assign_pin(const std::string& name, Net* net, PinType type = PinType::none);
 
         /**
          * Get all pins of the module.

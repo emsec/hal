@@ -452,6 +452,14 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
+        py_netlist.def("enable_automatic_net_checks", &Netlist::enable_automatic_net_checks, py::arg("enable_checks") = true, R"(
+            Enables or disables automatic checks on nets that determine whether a net is an input or output of a module.
+            
+            WARNING: if disabled, the user is responsible to assign correct input and output nets and create respective module pins. Wrong usage may result in unknown behavior or crashes.
+
+            :param bool enable_checks: Set True to enable automatic checks, False otherwise.
+        )");
+
         py_netlist.def("get_unique_module_id", &Netlist::get_unique_module_id, R"(
             Get a spare module ID.
             The value of 0 is reserved and represents an invalid ID.

@@ -432,7 +432,7 @@ namespace hal
          * Enables or disables automatic checks on nets that determine whether a net is an input or output of a module.
          * \warning{\b WARNING: if disabled, the user is responsible to assign correct input and output nets and create respective module pins. Wrong usage may result in unknown behavior or crashes.}
          * 
-         * @param[in] enable_check - Set `true` to enable automatic checks, `false` otherwise.
+         * @param[in] enable_checks - Set `true` to enable automatic checks, `false` otherwise.
          */
         void enable_automatic_net_checks(bool enable_checks = true);
 

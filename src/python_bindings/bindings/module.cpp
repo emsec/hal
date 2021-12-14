@@ -25,7 +25,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def ("__hash__", &Module::get_hash, R"(
+        py_module.def("__hash__", &Module::get_hash, R"(
             Python requires hash for set and dict container.
 
             :returns: The hash.
@@ -207,6 +207,18 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
+        py_module.def("assign_net", &Module::assign_net, py::arg("net"), R"(
+            Manually assign a net to the module.
+            Verifies that the net has at least one source or destination within the module.
+            Checks whether the net is an input, output, and/or internal net.
+
+            WARNING: can only be used when automatic net checks have been disabled using hal_py.Netlist.enable_automatic_net_checks.
+
+            :param hal_py.Net net: The net.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
         py_module.def("contains_net", &Module::contains_net, py::arg("net"), py::arg("recursive") = false, R"(
             Check whether a net is contained in the module.
             If recursive is set to true, nets in submodules are considered as well.
@@ -370,6 +382,20 @@ namespace hal
             :param bool recursive: True to also consider gates in submodules, false otherwise.
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
+        )");
+
+        py_module.def("assign_pin", &Module::assign_pin, py::arg("name"), py::arg("net"), py::arg("type") = PinType::none, R"(
+            Manually assign a module pin to a net.
+            Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
+            Hence, the net must have been manually assigned to the module beforehand using hal_py.Module.assign_net.
+            
+            WARNING: can only be used when automatic net checks have been disabled using hal_py.Netlist.enable_automatic_net_checks.
+
+            :param str name: The name of the pin.
+            :param hal_py.Net net: The net that the pin is being assigned to.
+            :param hal_py.PinType type: The type of the pin. Defaults to hal_py.PinType.none.
+            :returns: The module pin on success, a None on failure.
+            :rtype: hal_py.ModulePin or None
         )");
 
         py_module.def_property_readonly("pins", &Module::get_pins, R"(

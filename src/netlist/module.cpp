@@ -419,6 +419,60 @@ namespace hal
      * ################################################################
      */
 
+    bool Module::assign_net(Net* net)
+    {
+        if (!m_internal_manager->m_net_checks_enabled)
+        {
+            log_error("module",
+                      "cannot manually net as automatic net checks are enabled. Disable these checks using 'Netlist::enable_automatic_net_checks(false)' in case you want to manage pins manually.");
+            return false;
+        }
+
+        if (net == nullptr)
+        {
+            log_error("module", "provided 'nullptr' for net of module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
+            return false;
+        }
+
+        NetConnectivity con = check_net_endpoints(net);
+        if (con.has_internal_source || con.has_internal_destination)
+        {
+            m_nets.insert(net);
+        }
+        else
+        {
+            log_error("module",
+                      "net '{}' with ID {} is not contained in module '{}' with ID {} in netlist with ID {}.",
+                      net->get_name(),
+                      net->get_id(),
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id());
+            return false;
+        }
+
+        if (con.has_internal_source && con.has_internal_destination)
+        {
+            m_internal_nets.insert(net);
+        }
+
+        if (con.has_internal_source && con.has_internal_destination && con.has_external_source && con.has_external_destination)
+        {
+            m_input_nets.insert(net);
+            m_output_nets.insert(net);
+        }
+        else if (con.has_external_source && con.has_internal_destination)
+        {
+            m_input_nets.insert(net);
+        }
+        else if (con.has_internal_source && con.has_external_destination)
+        {
+            m_output_nets.insert(net);
+        }
+
+        return true;
+    }
+
     bool Module::contains_net(Net* net, bool recursive) const
     {
         if (net == nullptr)
@@ -667,13 +721,13 @@ namespace hal
      * ################################################################
      */
 
-    ModulePin* Module::assign_pin(const std::string& name, Net* net, PinDirection direction, PinType type)
+    ModulePin* Module::assign_pin(const std::string& name, Net* net, PinType type)
     {
         if (!m_internal_manager->m_net_checks_enabled)
         {
-            log_error(
-                "module",
-                "cannot manually assign pin as automatic net checks are enabled. Disable these checks using 'Netlist::enable_automatic_net_checks(false)' in case you want to manage pins manually.");
+            log_error("module",
+                      "cannot manually assign pin as automatic net checks are enabled. Disable these checks using 'Netlist::enable_automatic_net_checks(false)' in case you want to manage pins "
+                      "manually.");
             return nullptr;
         }
 
@@ -695,19 +749,21 @@ namespace hal
             return nullptr;
         }
 
-        NetConnectivity con = check_net_endpoints(net);
-        PinDirection actual_direction;
-        if (con.has_internal_source && con.has_internal_destination && con.has_external_source && con.has_external_destination)
+        PinDirection direction;
+        bool is_input  = is_input_net(net);
+        bool is_output = is_output_net(net);
+
+        if (is_input && is_output)
         {
-            actual_direction = PinDirection::inout;
+            direction = PinDirection::inout;
         }
-        else if (con.has_external_source && con.has_internal_destination)
+        else if (is_input)
         {
-            actual_direction = PinDirection::input;
+            direction = PinDirection::input;
         }
-        else if (con.has_internal_source && con.has_external_destination)
+        else if (is_output)
         {
-            actual_direction = PinDirection::output;
+            direction = PinDirection::output;
         }
         else
         {
@@ -720,53 +776,6 @@ namespace hal
                       m_id,
                       m_internal_manager->m_netlist->get_id());
             return nullptr;
-        }
-
-        if (direction == PinDirection::none)
-        {
-            direction = actual_direction;
-        }
-        else if (direction != actual_direction)
-        {
-            log_error("module",
-                      "direction '{}' does not match the actual direction '{}' of net '{}' with ID {} for pin '{}' in module '{}' with ID {} in netlist with ID {}.",
-                      enum_to_string(direction),
-                      enum_to_string(actual_direction),
-                      net->get_name(),
-                      net->get_id(),
-                      name,
-                      m_name,
-                      m_id,
-                      m_internal_manager->m_netlist->get_id());
-            return nullptr;
-        }
-
-        switch (direction)
-        {
-            case PinDirection::input:
-                m_input_nets.insert(net);
-                break;
-
-            case PinDirection::output:
-                m_output_nets.insert(net);
-                break;
-
-            case PinDirection::inout:
-                m_input_nets.insert(net);
-                m_output_nets.insert(net);
-                break;
-
-            default:
-                log_error("module",
-                          "invalid pin direction 'PinDirection::{}' given for pin '{}' at net '{}' with ID {} within module '{}' with ID {} in netlist with ID {}.",
-                          enum_to_string(direction),
-                          name,
-                          net->get_name(),
-                          net->get_id(),
-                          m_name,
-                          m_id,
-                          m_internal_manager->m_netlist->get_id());
-                return nullptr;
         }
 
         return assign_pin_net(net, direction, name, type);
