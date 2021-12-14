@@ -394,7 +394,16 @@ namespace hal
         /// Returns the Boolean function in reverse-polish notation.
         std::string to_string_in_reverse_polish_notation() const;
 
-        // static std::vector<std::vector<Value>> qmc(std::vector<std::vector<Value>> terms);
+        /// Checks whether the Boolean function is valid.
+        ///
+        /// @returns Validated Boolean function on success, error message string otherwise.
+        static std::variant<BooleanFunction, std::string> validate(BooleanFunction&& function);
+        
+        /// Implements the Quine-McCluskey algorithm to simplify Boolean functions.
+        ///
+        /// @param[in] function - Boolean function to simplify.
+        /// @returns Simplified boolean function on success, error message string otherwise.
+        static std::variant<BooleanFunction, std::string> quine_mccluskey(const BooleanFunction& function);
 
         ////////////////////////////////////////////////////////////////////////
         // Member

@@ -32,19 +32,11 @@ namespace hal
     BooleanFunction::BooleanFunction() {}
 
     std::variant<BooleanFunction, std::string> BooleanFunction::build(std::shared_ptr<Node>&& node, std::vector<BooleanFunction>&& parameters) {
-        auto function = BooleanFunction(node->clone(), std::move(parameters));
-        if (!function.to_string().empty()) {
-            return function;
-        }
-        return "Cannot build a boolean function for '(" + function.to_string_in_reverse_polish_notation() + ")'.";
+        return BooleanFunction::validate(BooleanFunction(node->clone(), std::move(parameters)));
     }
 
     std::variant<BooleanFunction, std::string> BooleanFunction::build(std::vector<std::shared_ptr<BooleanFunction::Node>>&& nodes) {
-        auto function = BooleanFunction(std::move(nodes));    
-        if (!function.to_string().empty()) {
-            return function;
-        }
-        return "Cannot build a boolean function for '(" + function.to_string_in_reverse_polish_notation() + ")'.";
+        return BooleanFunction::validate(BooleanFunction(std::move(nodes)));
     }
 
     BooleanFunction BooleanFunction::Var(const std::string& name, u16 size) {
@@ -184,7 +176,7 @@ namespace hal
             return false;
         }
 
-        return this->to_string() < other.to_string();
+        return this->to_string_in_reverse_polish_notation() < other.to_string_in_reverse_polish_notation();
     }
  
     bool BooleanFunction::is_empty() const
@@ -382,22 +374,40 @@ namespace hal
 
     BooleanFunction BooleanFunction::simplify() const 
     {
-        auto symbolic_execution = SMT::SymbolicExecution();
+        auto local_simplification = [] (auto&& function) -> std::variant<BooleanFunction, std::string>
+        {
+            auto current = function,
+                  before = BooleanFunction();
 
-        auto current = this->clone(),
-             before = BooleanFunction();
+            do {
+                before = current.clone();
+                auto simplified = SMT::SymbolicExecution().evaluate(current); 
+                if (std::get_if<std::string>(&simplified) != nullptr) {
+                    return std::get<std::string>(simplified);
+                }
+                current = std::get<BooleanFunction>(simplified);
+            } while (before != current);
 
-        do {
-            before = current.clone();
-            auto simplified = symbolic_execution.evaluate(current); 
-            if (std::get_if<std::string>(&simplified) != nullptr) {
-                log_error("netlist", "{}", std::get<std::string>(simplified));
-                return this->clone();
-            }
-            current = std::get<BooleanFunction>(simplified);
-        } while (before != current);
+            return current;
+        };
 
-        return current;
+        // (1) perform local simplification to minimize the Boolean function 
+        auto simplified = local_simplification(this->clone());
+        if (std::get_if<std::string>(&simplified) != nullptr) {
+            log_error("netlist", "{}", std::get<std::string>(simplified));
+            return this->clone();
+        }
+
+        // (2) perform a global simplification based on the QuineMcClusky algorithm
+        simplified = quine_mccluskey(std::get<BooleanFunction>(simplified));
+        if (std::get_if<std::string>(&simplified) != nullptr) {
+            log_error("netlist", "{}", std::get<std::string>(simplified));
+            return this->clone();
+        }
+
+        // TOOD: check whether we need a local simplifcation afterwards again to minimze the min-terms
+
+        return std::get<BooleanFunction>(simplified);
     }
 
     BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const 
@@ -657,177 +667,47 @@ namespace hal
         }
         return s;
     }
-/*
-    std::vector<std::vector<BooleanFunction::Value>> BooleanFunction::qmc(std::vector<std::vector<Value>> terms)
-    {
-        if (terms.empty())
+
+    std::variant<BooleanFunction, std::string> BooleanFunction::validate(BooleanFunction&& function) {
+        /// Local function to validate a given BooleanFunction::Node.
+        ///
+        /// @param[in] node - BooleanFunction node.
+        /// @param[in] p - Parameters of Boolean function node.
+        /// @returns Boolean function on success, error message string otherwise.
+        auto validate = [] (auto&& node, auto&& p) -> std::variant<BooleanFunction, std::string>
         {
-            return {};
-        }
-
-        u32 num_variables = terms[0].size();
-
-        // repeatedly merge all groups that only differ in a single value
-        while (true)
-        {
-            bool any_changes = false;
-            std::vector<std::vector<Value>> new_merged_terms;
-            std::vector<bool> removed_by_merge(terms.size(), false);
-            // pairwise compare all terms...
-            for (u32 i = 0; i < terms.size(); ++i)
-            {
-                for (u32 j = i + 1; j < terms.size(); ++j)
-                {
-                    // ...merge their values and count differences...
-                    std::vector<Value> merged(num_variables, Value::X);
-                    u32 cnt = 0;
-                    for (u32 k = 0; k < num_variables; ++k)
-                    {
-                        if (terms[i][k] == terms[j][k])
-                        {
-                            merged[k] = terms[i][k];
-                        }
-                        else
-                        {
-                            ++cnt;
-                        }
-                    }
-                    // ...and if they differ only in a single value, replace them with the merged term
-                    if (cnt == 1)
-                    {
-                        removed_by_merge[i] = removed_by_merge[j] = true;
-                        new_merged_terms.push_back(merged);
-                        any_changes = true;
-                    }
-                }
+            if (node->get_arity() != p.size()) {
+                return "Arity '" + std::to_string(node->get_arity()) + "' does not match number of parameters (= " + std::to_string(p.size()) + ").";
             }
-            if (!any_changes)
-            {
-                break;
-            }
-            for (u32 i = 0; i < terms.size(); ++i)
-            {
-                if (!removed_by_merge[i])
-                {
-                    new_merged_terms.push_back(terms[i]);
-                }
-            }
-            std::sort(new_merged_terms.begin(), new_merged_terms.end());
-            new_merged_terms.erase(std::unique(new_merged_terms.begin(), new_merged_terms.end()), new_merged_terms.end());
-            terms = new_merged_terms;
-        }
-
-        std::vector<std::vector<Value>> output;
-
-        // build ON-set minterms to later identify essential implicants
-        std::map<u32, std::vector<u32>> table;
-        for (u32 i = 0; i < terms.size(); ++i)
-        {
-            // find all inputs that are covered by term i
-            // Example: term=01-1 --> all inputs covered are 0101 and 0111
-            std::vector<u32> covered_inputs;
-            for (u32 j = 0; j < num_variables; ++j)
-            {
-                if (terms[i][j] != Value::X)
-                {
-                    if (covered_inputs.empty())
-                    {
-                        covered_inputs.push_back(terms[i][j]);
-                    }
-                    else
-                    {
-                        for (auto& v : covered_inputs)
-                        {
-                            v = (v << 1) | terms[i][j];
-                        }
-                    }
-                }
-                else
-                {
-                    if (covered_inputs.empty())
-                    {
-                        covered_inputs.push_back(0);
-                        covered_inputs.push_back(1);
-                    }
-                    else
-                    {
-                        std::vector<u32> tmp;
-                        for (auto v : covered_inputs)
-                        {
-                            tmp.push_back((v << 1) | 0);
-                            tmp.push_back((v << 1) | 1);
-                        }
-                        covered_inputs = tmp;
-                    }
-                }
-            }
-
-            std::sort(covered_inputs.begin(), covered_inputs.end());
-            covered_inputs.erase(std::unique(covered_inputs.begin(), covered_inputs.end()), covered_inputs.end());
-
-            // now memorize that all these inputs are covered by term i
-            for (auto v : covered_inputs)
-            {
-                table[v].push_back(i);
-            }
-        }
-
-        // helper function to add a term to the output and remove it from the table
-        auto add_to_output = [&](u32 term_index) {
-            output.push_back(terms[term_index]);
-            for (auto it2 = table.cbegin(); it2 != table.cend();)
-            {
-                if (std::find(it2->second.begin(), it2->second.end(), term_index) != it2->second.end())
-                {
-                    it2 = table.erase(it2);
-                }
-                else
-                {
-                    ++it2;
-                }
-            }
+            return BooleanFunction(std::move(node), std::move(p));
         };
 
-        // finally, identify essential implicants and add them to the output
-        while (!table.empty())
-        {
-            bool no_change = true;
+        // backup output string for error messages
+        auto str = function.to_string_in_reverse_polish_notation();
 
-            for (auto& it : table)
-            {
-                if (it.second.size() == 1)
-                {
-                    no_change = false;
-                    add_to_output(it.second[0]);
-                    break;    // 'add_to_output' invalidates table iterator, so break and restart in next iteration
-                }
+        std::vector<BooleanFunction> stack;
+        for (auto&& node : function.m_nodes) {
+            std::vector<BooleanFunction> operands;
+            if (stack.size() < node->get_arity()) {
+                return "Cannot fetch " + std::to_string(node->get_arity()) + " nodes from the stack (= imbalanced stack for '" + str + ").";
             }
 
-            if (no_change)
-            {
-                // none of the remaining terms is essential, just pick the one that covers most input values
-                std::unordered_map<u32, u32> counter;
-                for (auto it : table)
-                {
-                    for (auto term_index : it.second)
-                    {
-                        counter[term_index]++;
-                    }
-                }
-
-                u32 index = std::max_element(counter.begin(), counter.end(), [](const auto& p1, const auto& p2) { return p1.second < p2.second; })->first;
-                add_to_output(index);
+            std::move(stack.end() - static_cast<i64>(node->get_arity()), stack.end(), std::back_inserter(operands));
+            stack.erase(stack.end() - static_cast<i64>(node->get_arity()), stack.end());
+            
+            auto reduction = validate(std::move(node), std::move(operands));
+            if (std::get_if<BooleanFunction>(&reduction) != nullptr) {
+                stack.emplace_back(std::get<BooleanFunction>(reduction));
+            } else {
+                return "Cannot validate '" + str + "' (= " + std::get<std::string>(reduction) + ").";
             }
         }
 
-        // sort output terms for deterministic output order (no impact on functionality)
-        std::sort(output.begin(), output.end());
-
-        return output;
+        switch (stack.size()) {
+            case 1:  return stack.back();
+            default: return "Cannot validate '" + str + "' (= imbalanced stack with " + std::to_string(stack.size()) + " remaining parts).";
+        }
     }
-    
-   
-*/
 
     BooleanFunction::Node::Node(u16 _type, u16 _size) : 
         type(_type), size(_size) {}

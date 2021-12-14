@@ -41,10 +41,10 @@ namespace hal {
     }
 
     TEST(BooleanFunction, Operator) {
-        auto  a = BooleanFunction::Var("A"),
-              b = BooleanFunction::Var("B"),
-             _0 = BooleanFunction::Const(0, 1),
-             _1 = BooleanFunction::Const(1, 1);
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                  _0 = BooleanFunction::Const(0, 1),
+                  _1 = BooleanFunction::Const(1, 1);
 
         EXPECT_TRUE(a == a);
         EXPECT_TRUE(a != b);
@@ -56,13 +56,13 @@ namespace hal {
     }
 
     TEST(BooleanFunction, ToString) {
-        auto a = BooleanFunction::Var("A"),
-             b = BooleanFunction::Var("B"),
-             c = BooleanFunction::Var("C"),
-            _0 = BooleanFunction::Const(0, 1),
-            _1 = BooleanFunction::Const(1, 1);
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C"),
+                  _0 = BooleanFunction::Const(0, 1),
+                _1 = BooleanFunction::Const(1, 1);
 
-        auto data = std::vector<std::tuple<std::string, BooleanFunction>>{
+        const auto data = std::vector<std::tuple<std::string, BooleanFunction>>{
             {"<empty>", BooleanFunction()},
             {"(A & B)", a.clone() & b.clone()},
             {"(A & (B | C))", (a.clone() & (b.clone() | c.clone()))},
@@ -78,7 +78,7 @@ namespace hal {
     }
 
     TEST(BooleanFunction, Parser) {
-        std::vector<std::tuple<std::string, BooleanFunction>> data = {
+        const std::vector<std::tuple<std::string, BooleanFunction>> data = {
             ////////////////////////////////////////////////////////////////////
             // GENERIC PARSER
             ////////////////////////////////////////////////////////////////////
@@ -133,18 +133,18 @@ namespace hal {
     }
 
     TEST(BooleanFunction, Parameters) {
-        auto a = BooleanFunction::Var("A"),
-             b = BooleanFunction::Var("B"),
-             c = BooleanFunction::Var("C");
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C");
 
         EXPECT_EQ((a.clone() & b.clone()).get_parameters(), std::vector<BooleanFunction>({a.clone(), b.clone()}));
         EXPECT_EQ(((a.clone() & b.clone()) | c.clone()).get_parameters(), std::vector<BooleanFunction>({(a.clone() & b.clone()), c.clone()}));
     }
 
     TEST(BooleanFunction, ConstantSimplification) {
-        auto _0 = BooleanFunction::Const(0, 1),
-             _1 = BooleanFunction::Const(1, 1),
-              a = BooleanFunction::Var("A");
+        const auto _0 = BooleanFunction::Const(0, 1),
+                   _1 = BooleanFunction::Const(1, 1),
+                    a = BooleanFunction::Var("A");
 
         EXPECT_TRUE(_0.is_constant(0));
         EXPECT_TRUE(_1.is_constant(1));
@@ -170,12 +170,12 @@ namespace hal {
         EXPECT_TRUE((a.clone() & _0.clone()).simplify().is_constant(0));
     }
 
-    TEST(BooleanFunction, Simplification) {
-        auto a = BooleanFunction::Var("A"),
-             b = BooleanFunction::Var("B"),
-             c = BooleanFunction::Var("C"),
-            _0 = BooleanFunction::Const(0, 1),
-            _1 = BooleanFunction::Const(1, 1);
+    TEST(BooleanFunction, SimplificationRules) {
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C"),
+                  _0 = BooleanFunction::Const(0, 1),
+                  _1 = BooleanFunction::Const(1, 1);
 
         ////////////////////////////////////////////////////////////////////////
         // AND RULES
@@ -303,21 +303,42 @@ namespace hal {
         // GENERAL SIMPLIFICATION RULES
         ////////////////////////////////////////////////////////////////////////
 
-        // TODO: fixme (uncomment simplification rules and check for endless loop)
-
         // (a & ~a) | (b & ~b)  =>   0
-        // EXPECT_EQ(((a.clone() & ~a.clone()) | (b.clone() & ~b.clone())).simplify(), _0.clone());
+        EXPECT_EQ(((a.clone() & ~a.clone()) | (b.clone() & ~b.clone())).simplify(), _0.clone());
         // (a & b) | (~a & b)   =>   b
-        // EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone())).simplify(), b.clone());
+        EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone())).simplify(), b.clone());
         // (a & ~b) | (~a & ~b)  =>  ~b
-        // EXPECT_EQ(((a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), ~b.clone());
+        EXPECT_EQ(((a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), ~b.clone());
+    }
+
+    TEST(BooleanFunction, SimplificationQuineMcCluskey) 
+    {
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C"),
+                  _0 = BooleanFunction::Const(0, 1),
+                  _1 = BooleanFunction::Const(1, 1);
+
         // (a & b) | (~a & b) | (a & ~b) | (~a & ~b)   =>   1
         // EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone()) | (a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), _1.clone());
+    
         // (a | b) | (b & c)   => a | b
         // EXPECT_EQ(((a.clone() | b.clone()) | (b.clone() & c.clone())).simplify(), a.clone() | b.clone());    
+    
         // (a & c) | (b & ~c) | (a & b)   =>   (a & c) | (b & ~c)
         // EXPECT_EQ(((a.clone() & c.clone()) | (b.clone() & ~c.clone()) | (a.clone() & b.clone())).simplify(), (a.clone() & c.clone()) | (b.clone() & ~c.clone()));
     }
+
+    TEST(BooleanFunction, SimplificationPerformance)
+    {
+        const auto start = std::chrono::system_clock::now();
+
+        const auto function = std::get<0>(BooleanFunction::from("((((((((((((((((((((((((((((((((0b0 | (((((I0 & (! I1)) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | ((((((! I0) & I1) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & I1) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & I2) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & I1) & I2) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & I3) & (! I4)) & (! I5))) | (((((I0 & I1) & (! I2)) & I3) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & I2) & I3) & (! I4)) & (! I5))) | (((((I0 & I1) & I2) & I3) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & (! I2)) & (! I3)) & I4) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & (! I3)) & I4) & (! I5))) | ((((((! I0) & (! I1)) & (! I2)) & I3) & I4) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & I3) & I4) & (! I5))) | (((((I0 & I1) & (! I2)) & I3) & I4) & (! I5))) | ((((((! I0) & I1) & I2) & I3) & I4) & (! I5))) | ((((((! I0) & I1) & (! I2)) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & I2) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & I1) & I2) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & (! I2)) & I3) & (! I4)) & I5)) | (((((I0 & (! I1)) & (! I2)) & I3) & (! I4)) & I5)) | (((((I0 & I1) & (! I2)) & I3) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & I2) & I3) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & (! I2)) & (! I3)) & I4) & I5)) | (((((I0 & (! I1)) & (! I2)) & (! I3)) & I4) & I5)) | ((((((! I0) & I1) & (! I2)) & (! I3)) & I4) & I5)) | ((((((! I0) & I1) & I2) & (! I3)) & I4) & I5)) | (((((I0 & I1) & I2) & (! I3)) & I4) & I5)) | (((((I0 & (! I1)) & (! I2)) & I3) & I4) & I5)) | ((((((! I0) & I1) & (! I2)) & I3) & I4) & I5)) | ((((((! I0) & (! I1)) & I2) & I3) & I4) & I5)) | (((((I0 & (! I1)) & I2) & I3) & I4) & I5)) | (((((I0 & I1) & I2) & I3) & I4) & I5))"));
+        const auto simplified = function.simplify();
+
+        const auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+    }
+
 
     TEST(BooleanFunction, Substitution) {
         const auto  a = BooleanFunction::Var("A"),
@@ -342,7 +363,7 @@ namespace hal {
 
         using Value = BooleanFunction::Value;
 
-        std::vector<std::tuple<BooleanFunction, std::unordered_map<std::string, Value>, Value>> data = {
+        const std::vector<std::tuple<BooleanFunction, std::unordered_map<std::string, Value>, Value>> data = {
             {a, {{"A", Value::ZERO}}, Value::ZERO},
             {a, {{"A", Value::ONE}}, Value::ONE},
 
@@ -379,7 +400,7 @@ namespace hal {
 
         using Value = BooleanFunction::Value;
 
-        std::vector<std::tuple<BooleanFunction, std::unordered_map<std::string, std::vector<Value>>, std::vector<Value>>> data = {
+        const std::vector<std::tuple<BooleanFunction, std::unordered_map<std::string, std::vector<Value>>, std::vector<Value>>> data = {
             {a, {{"A", {Value::ZERO, Value::ZERO}}}, {Value::ZERO, Value::ZERO}},
             {a, {{"A", {Value::ONE, Value::ZERO}}}, {Value::ONE, Value::ZERO}},
             {a, {{"A", {Value::ONE, Value::ONE}}}, {Value::ONE, Value::ONE}},
@@ -414,12 +435,13 @@ namespace hal {
     }
 
     TEST(BooleanFunction, TruthTable) {
-        auto a = BooleanFunction::Var("A"),
-             b = BooleanFunction::Var("B"),
-             c = BooleanFunction::Var("C");
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C");
 
         using Value = BooleanFunction::Value;
-        std::vector<std::tuple<BooleanFunction, std::vector<std::vector<Value>>, std::vector<std::string>>> data = {
+
+        const std::vector<std::tuple<BooleanFunction, std::vector<std::vector<Value>>, std::vector<std::string>>> data = {
             {a.clone() & b.clone(), std::vector<std::vector<Value>>({
                 {Value::ZERO, Value::ZERO, Value::ZERO, Value::ONE}
             }), {}},
@@ -449,7 +471,7 @@ namespace hal {
                     c = BooleanFunction::Var("C"),
                    _1 = BooleanFunction::Const(1, 1);
         
-        std::vector<BooleanFunction> data = {
+        const std::vector<BooleanFunction> data = {
             (~(a ^ b & c) | (b | c & _1)) ^ ((a & b) | (a | b | c)),
             (a | b | c),
         };
@@ -473,14 +495,14 @@ namespace hal {
             EXPECT_EQ(config.timeout_in_seconds, 42);
         }
         {
-        const auto config = SMT::QueryConfig()
-            .with_solver(SMT::SolverType::Boolector)
-            .with_remote_solver()
-            .without_model_generation();
+            const auto config = SMT::QueryConfig()
+                .with_solver(SMT::SolverType::Boolector)
+                .with_remote_solver()
+                .without_model_generation();
 
-        EXPECT_EQ(config.solver, SMT::SolverType::Boolector);
-        EXPECT_EQ(config.local, false);
-        EXPECT_EQ(config.generate_model, false);
+            EXPECT_EQ(config.solver, SMT::SolverType::Boolector);
+            EXPECT_EQ(config.local, false);
+            EXPECT_EQ(config.generate_model, false);
         }
     }
 

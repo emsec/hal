@@ -156,6 +156,12 @@ namespace ConstantPropagation {
 	    	p = SymbolicExecution::normalize(std::move(p));
 	    }
 
+	    /// # Developer Note
+	    /// Since the simplify() function vists the abstract syntax tree of the
+	    /// Boolean function, we want to prevent the use of any recursive call
+	    /// to the simplify() function of a sub-expression tree. Hence, use the
+	    /// simplify() function with care, as otherwise run-time may explode :)
+
 	   	switch (node->type) {
 			case BooleanFunction::NodeType::Variable: {
 				return this->state.get(BooleanFunction::Var(node->get_as<BooleanFunction::OperandNode>()->variable, node->size));
@@ -220,17 +226,6 @@ namespace ConstantPropagation {
 					if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0])) {
 						return BooleanFunction::Const(0, node->size);
 					}
-/*
-					// X & (Y & Z)    =>  (X & Z) & Y   if (X & Z) can be simplified
-					if (auto simplified = (p[0] & p1_parameter[1]).simplify(); 
-						simplified.length() < (p[0].length() + p1_parameter[1].length() + 1)) {
-						return (simplified & p1_parameter[0]).simplify();
-					}
-					// X & (Y & Z)    =>  (X & Y) & Z   if (X & Y) can be simplified
-					if (auto simplified = (p[0] & p1_parameter[0]).simplify(); simplified.length() < (p[0].length() + p1_parameter[0].length() + 1)) {
-						return (simplified & p1_parameter[1]).simplify();
-					}
-*/
 				}
 
 				if (p[1].is(BooleanFunction::NodeType::Or)) {
@@ -252,16 +247,6 @@ namespace ConstantPropagation {
 					if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0])) {
 						return p[0] & p1_parameter[0];
 					}
-/*
-					// X & (Y | Z)   =>   (X & Y) | (X & Z)  if (X & Y) can be simplified
-					if (auto simplified = (p[0] & p1_parameter[0]).simplify(); simplified.length() < (p[0].length() + p1_parameter[0].length() + 1)) {
-						return simplified | (p[0] & p1_parameter[1]);
-					}
-					// X & (Y | Z)   =>   (X & Y) | (X & Z)  if (X & Z) can be simplified
-					if (auto simplified = (p[0] & p1_parameter[1]).simplify(); simplified.length() < (p[0].length() + p1_parameter[1].length() + 1)) {
-						return ((p[0] & p1_parameter[0]) | simplified);
-					}
-*/
 				}
 
 				if (p[0].is(BooleanFunction::NodeType::And)) {
@@ -284,17 +269,6 @@ namespace ConstantPropagation {
 					if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1])) {
 						return BooleanFunction::Const(0, node->size);
 					}
-/*
-					// (X & Y) & Z   =>   (X & Z) & Y   if (X & Z) can be simplified
-					if (auto simplified = (p0_parameter[0] & p[1]).simplify(); simplified.length() + p < (p0_parameter[0].length() + p[1].length() + 1)) {
-						return simplified & p0_parameter[1];
-					}
-
-					// (X & Y) & Z   =>   X & (Y & Z)   if (Y & Z) can be simplified
-					if (auto simplified = (p0_parameter[1] & p[1]).simplify(); simplified.length() < (p0_parameter[1].length() + p[1].length() + 1)) {
-						return p0_parameter[0] & simplified;
-					}
-*/
 				}
 
 				if (p[0].is(BooleanFunction::NodeType::Or)) {
@@ -316,17 +290,6 @@ namespace ConstantPropagation {
 					if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1])) {
 						return p[1] & p0_parameter[0];
 					}
-/*
-					// (X | Y) & Z    =>   (X & Z) | (Y & Z)   if (X & Z) can be simplified
-					if (auto simplified = (p0_parameter[0] & p[1]).simplify(); simplified.length() < (p0_parameter[0].length() + p[1].length() + 1)) {
-						return simplified | (p0_parameter[1] & p[1]);
-					}
-
-					// (X | Y) & Z    =>   (X & Z) | (Y & Z)   if (Y & Z) can be simplified
-					if (auto simplified = (p0_parameter[1] & p[1]).simplify(); simplified.length() < (p0_parameter[1].length() + p[1].length() + 1)) {
-						return (p0_parameter[0] & p[1]) | simplified;
-					}
-*/
 				}
 	   			return BooleanFunction::build(node->clone(), std::move(p));
 	   		}
@@ -352,13 +315,11 @@ namespace ConstantPropagation {
 					}
 				}
 
-/*
 				// ~(X | Y)   =>   ~X & ~Y
 				if (p[0].is(BooleanFunction::NodeType::Or)) {
 					auto p0_parameter = p[0].get_parameters();
-					return (~p0_parameter[0]).simplify() & (~p0_parameter[1]).simplify();
+					return (~p0_parameter[0]) & (~p0_parameter[1]);
 				}
-*/
 				return BooleanFunction::build(node->clone(), std::move(p));
 			}
 
@@ -379,19 +340,14 @@ namespace ConstantPropagation {
 	   			}
 
 				// X | ~X   =>   1
-				if (~p[0] == p[1]) {
+				if ((~p[0] == p[1]) || (p[0] == ~p[1])) {
 					return ~BooleanFunction::Const(0, node->size).simplify();
 				}
 
 				if (p[0].is(BooleanFunction::NodeType::And) && p[1].is(BooleanFunction::NodeType::And)) {
 	   				auto p0_parameter = p[0].get_parameters();
 	   				auto p1_parameter = p[1].get_parameters();
-/*
-					// (X & Y) | (~X & Y)   =>   Y
-	   				if ((~p0_parameter[0].simplify() == p1_parameter[0]) && (p0_parameter[1] == p1_parameter[1])) {
-	   					return p0_parameter[1];
-	   				}
-*/
+
 					// (X & Y) | (X & Z)    => X & (Y | Z)
 					if (p0_parameter[0] == p1_parameter[0]) {
 						return p0_parameter[0] & (p0_parameter[1] | p1_parameter[1]);
@@ -413,7 +369,7 @@ namespace ConstantPropagation {
 				if (p[1].is(BooleanFunction::NodeType::And)) {
 					auto p1_parameter = p[1].get_parameters();
 					// X | (Y & !X)   =>   X | Y
-					if ((~p1_parameter[1]).simplify() == p[0]) {
+					if ((~p1_parameter[1]) == p[0]) {
 						return p[0] | p1_parameter[0];
 					}
 
@@ -430,16 +386,6 @@ namespace ConstantPropagation {
 					if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0])) {
 						return p[0] | p1_parameter[0];
 					}
-/*
-					// X | (Y & Z)    =>   (X | Y) & (X | Z) if (X | Y) can be simplified
-					if (auto simplified = (p[0] | p1_parameter[0]).simplify(); simplified.length() < (p[0].length() + p1_parameter[0].length() + 1)) {
-						return simplified & (p[0] | p1_parameter[1]);
-					}
-					// X | (Y & Z)    =>   (X | Y) & (X | Z) if (X | Z) can be simplified
-					if (auto simplified = (p[0] | p1_parameter[1]).simplify(); simplified.length() < (p[0].length() + p1_parameter[1].length() + 1)) {
-						return (p[0] | p1_parameter[0]) & simplified;
-					}
-*/
 				}
 
 				if (p[1].is(BooleanFunction::NodeType::Or)) {
@@ -463,16 +409,6 @@ namespace ConstantPropagation {
 					if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0])) {
 						return (~BooleanFunction::Const(0, node->size)).simplify();
 					}
-/*
-					// X | (Y | Z)   =>   (X | Y) | Z if (X | Y) can be simplified
-					if (auto simplified = (p[0] | p1_parameter[0]).simplify(); simplified.length() < (p[0].length() + p1_parameter[0].length() + 1)) {
-						return simplified  | p1_parameter[1];
-					}
-					// X | (Y | Z)   =>   (X | Z) | Y if (X | Z) can be simplified
-					if (auto simplified = (p[0] | p1_parameter[1]).simplify(); simplified.length() < (p[0].length() + p1_parameter[1].length() + 1)) {
-						return simplified  | p1_parameter[0];
-					}
-*/
 				}
 
 				if (p[0].is(BooleanFunction::NodeType::Or)) {
@@ -496,16 +432,6 @@ namespace ConstantPropagation {
 					if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1])) {
 						return (~BooleanFunction::Const(0, node->size)).simplify();
 					}
-/*
-					// (X | Y) | Z   =>    X | (Y | Z)   if (Y | Z) can be simplified
-					if (auto simplified = (p0_parameter[1] | p[1]).simplify(); simplified.length() < (p0_parameter[1].length() + p[1].length() + 1)) {
-	   					return p0_parameter[0] | simplified;
-	   				}
-					// (X | Y) | Z   =>   (X | Z) | Y    if (X | Z) can be simplified
-					if (auto simplified = (p0_parameter[0] | p[1]).simplify(); simplified.length() < (p0_parameter[0].length() + p[1].length() + 1)) {
-	   					return simplified | p0_parameter[1];
-	   				}
-*/
 				}			
 
 				if (p[0].is(BooleanFunction::NodeType::And)) {
@@ -529,17 +455,6 @@ namespace ConstantPropagation {
 					if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1])) {
 						return p0_parameter[0] | p[1];
 					}
-/*
-					// (X & Y) | Z    =>   (X | Z) & (Y | Z)   if (X | Z) can be simplified
-					if (auto simplified = (p0_parameter[0] | p[1]).simplify(); simplified.length() < (p0_parameter[0].length() + p[1].length() + 1)) {
-						return simplified & (p0_parameter[1] | p[1]);
-					}
-
-					// (X & Y) | Z    =>   (X | Z) & (Y | Z)   if (Y | Z) can be simplified
-					if (auto simplified = (p0_parameter[1] | p[1]).simplify(); simplified.length() < (p0_parameter[1].length() + p[1].length() + 1)) {
-						return (p0_parameter[0] | p[1]) & simplified;
-					}
-*/
 				}
 
 	   			return BooleanFunction::build(node->clone(), std::move(p));
