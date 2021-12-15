@@ -122,7 +122,7 @@ namespace hal
             log_info("verilator", "simulating {} net events", simInput->get_simulation_net_events().size());
 
             u64 sim_counter                      = 0;
-            u64 max_events_per_partial_testbench = 10000;
+            u64 max_events_per_partial_testbench = 50000;
             bool initial_event                   = true;
 
             for (const auto& sim_event : simInput->get_simulation_net_events())
@@ -244,6 +244,8 @@ namespace hal
                                         "-DSIM_VERILATOR",
                                         "--trace-depth",
                                         "2",
+                                        "-CFLAGS",
+                                        "-mcmodel=large",
                                         "testbench.cpp",
                                         nullptr};
                     std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
