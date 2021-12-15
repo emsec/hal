@@ -54,7 +54,6 @@ namespace hal
             marked_global_output,      ///< associated_data = id of net
             unmarked_global_input,     ///< associated_data = id of net
             unmarked_global_output,    ///< associated_data = id of net
-
         };
     };
 

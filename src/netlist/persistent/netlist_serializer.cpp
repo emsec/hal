@@ -35,7 +35,7 @@ namespace hal
         // serializing functions
         namespace
         {
-            const int SERIALIZATION_FORMAT_VERSION = 9;
+            const int SERIALIZATION_FORMAT_VERSION = 10;
 
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
 
@@ -45,6 +45,25 @@ namespace hal
         log_critical("netlist_persistent", "'netlist' node does not include a '{}' node", MEMBER); \
         return nullptr;                                                                            \
     }
+
+            namespace
+            {
+                struct PinGroupInformation
+                {
+                    struct PinInformation
+                    {
+                        Net* net;
+                        std::string name;
+                        PinType type = PinType::none;
+                    };
+
+                    std::string name;
+                    std::vector<PinInformation> pins;
+                    bool ascending  = false;
+                    u32 start_index = 0;
+                };
+
+            }    // namespace
 
             // serialize container data
             rapidjson::Value serialize(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data, rapidjson::Document::AllocatorType& allocator)
@@ -292,7 +311,7 @@ namespace hal
                 return val;
             }
 
-            bool deserialize_module(Netlist* nl, const rapidjson::Value& val)
+            bool deserialize_module(Netlist* nl, const rapidjson::Value& val, std::unordered_map<Module*, std::vector<PinGroupInformation>>& pin_group_cache)
             {
                 u32 parent_id = val["parent"].GetUint();
                 Module* sm    = nl->get_top_module();
@@ -344,18 +363,23 @@ namespace hal
 
                 if (val.HasMember("pin_groups"))
                 {
+                    // pins need to be cached until all modules have been instantiated
                     for (const auto& json_pin_group : val["pin_groups"].GetArray())
                     {
-                        std::vector<ModulePin*> pins;
+                        PinGroupInformation pin_group;
+                        pin_group.name        = json_pin_group["name"].GetString();
+                        pin_group.ascending   = json_pin_group["ascending"].GetBool();
+                        pin_group.start_index = json_pin_group["start_index"].GetUint();
+
                         for (const auto& pin_node : json_pin_group["pins"].GetArray())
                         {
-                            ModulePin* pin = sm->get_pin(nl->get_net_by_id(pin_node["net_id"].GetUint()));
-                            sm->set_pin_name(pin, pin_node["name"].GetString());
-                            sm->set_pin_type(pin, enum_from_string<PinType>(pin_node["type"].GetString()));
-                            pins.push_back(pin);
+                            PinGroupInformation::PinInformation pin;
+                            pin.name = pin_node["name"].GetString();
+                            pin.net  = nl->get_net_by_id(pin_node["net_id"].GetUint());
+                            pin.type = enum_from_string<PinType>(pin_node["type"].GetString());
+                            pin_group.pins.push_back(pin);
                         }
-
-                        sm->create_pin_group(json_pin_group["name"].GetString(), pins, json_pin_group["ascending"].GetBool(), json_pin_group["start_index"].GetUint());
+                        pin_group_cache[sm].push_back(pin_group);
                     }
                 }
 
@@ -364,8 +388,13 @@ namespace hal
                 {
                     for (const auto& json_pin_legacy : val["input_ports"].GetArray())
                     {
-                        ModulePin* pin = sm->get_pin(nl->get_net_by_id(json_pin_legacy["net_id"].GetUint()));
-                        sm->set_pin_name(pin, json_pin_legacy["port_name"].GetString());
+                        PinGroupInformation pin_group;
+                        pin_group.name = json_pin_legacy["port_name"].GetString();
+                        PinGroupInformation::PinInformation pin;
+                        pin.name = json_pin_legacy["port_name"].GetString();
+                        pin.net  = nl->get_net_by_id(json_pin_legacy["net_id"].GetUint());
+                        pin_group.pins.push_back(pin);
+                        pin_group_cache[sm].push_back(pin_group);
                     }
                 }
 
@@ -373,12 +402,42 @@ namespace hal
                 {
                     for (const auto& json_pin_legacy : val["output_ports"].GetArray())
                     {
-                        ModulePin* port = sm->get_pin(nl->get_net_by_id(json_pin_legacy["net_id"].GetUint()));
-                        sm->set_pin_name(port, json_pin_legacy["port_name"].GetString());
+                        PinGroupInformation pin_group;
+                        pin_group.name = json_pin_legacy["port_name"].GetString();
+                        PinGroupInformation::PinInformation pin;
+                        pin.name = json_pin_legacy["port_name"].GetString();
+                        pin.net  = nl->get_net_by_id(json_pin_legacy["net_id"].GetUint());
+                        pin_group.pins.push_back(pin);
+                        pin_group_cache[sm].push_back(pin_group);
                     }
                 }
                 // legacy code above
 
+                return true;
+            }
+
+            bool deserialize_module_pins(const std::unordered_map<Module*, std::vector<PinGroupInformation>>& pin_group_cache)
+            {
+                for (const auto& [sm, pin_groups] : pin_group_cache)
+                {
+                    for (const PinGroupInformation& pg : pin_groups)
+                    {
+                        std::vector<ModulePin*> pins;
+                        for (const PinGroupInformation::PinInformation& p : pg.pins)
+                        {
+                            ModulePin* pin = sm->assign_pin(p.name, p.net, p.type, false);
+                            if (pin == nullptr)
+                            {
+                                return false;
+                            }
+                            pins.push_back(pin);
+                        }
+                        if (sm->create_pin_group(pg.name, pins, pg.ascending, pg.start_index) == nullptr)
+                        {
+                            return false;
+                        }
+                    }
+                }
                 return true;
             }
 
@@ -576,6 +635,9 @@ namespace hal
 
                 auto nl = std::make_unique<Netlist>(lib);
 
+                // disable automatically checking module nets
+                nl->enable_automatic_net_checks(false);
+
                 assert_availablility("id");
                 nl->set_id(root["id"].GetUint());
 
@@ -632,12 +694,25 @@ namespace hal
                 }
 
                 assert_availablility("modules");
+                std::unordered_map<Module*, std::vector<PinGroupInformation>> pin_group_cache;
                 for (auto& module_node : root["modules"].GetArray())
                 {
-                    if (!deserialize_module(nl.get(), module_node))
+                    if (!deserialize_module(nl.get(), module_node, pin_group_cache))
                     {
                         return nullptr;
                     }
+                }
+
+                // update module nets, internal nets, input nets, and output nets
+                for (Module* mod : nl->get_modules())
+                {
+                    mod->update_nets();
+                }
+
+                // load module pins (nets must have been updated beforehand)
+                if (!deserialize_module_pins(pin_group_cache))
+                {
+                    return nullptr;
                 }
 
                 if (root.HasMember("groupings"))
@@ -650,6 +725,9 @@ namespace hal
                         }
                     }
                 }
+
+                // re-enable automatically checking module nets
+                nl->enable_automatic_net_checks(true);
 
                 return nl;
             }

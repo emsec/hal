@@ -419,58 +419,53 @@ namespace hal
      * ################################################################
      */
 
-    bool Module::assign_net(Net* net)
+    void Module::update_nets()
     {
-        if (!m_internal_manager->m_net_checks_enabled)
+        m_nets.clear();
+        m_input_nets.clear();
+        m_output_nets.clear();
+        m_internal_nets.clear();
+
+        std::unordered_set<Net*> net_cache;
+        for (const Gate* gate : get_gates(nullptr, true))
         {
-            log_error("module",
-                      "cannot manually net as automatic net checks are enabled. Disable these checks using 'Netlist::enable_automatic_net_checks(false)' in case you want to manage pins manually.");
-            return false;
+            for (Net* net : gate->get_fan_in_nets())
+            {
+                net_cache.insert(net);
+            }
+            for (Net* net : gate->get_fan_out_nets())
+            {
+                net_cache.insert(net);
+            }
         }
 
-        if (net == nullptr)
+        for (Net* net : net_cache)
         {
-            log_error("module", "provided 'nullptr' for net of module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return false;
-        }
+            NetConnectivity con = check_net_endpoints(net);
+            if (con.has_internal_source || con.has_internal_destination)
+            {
+                m_nets.insert(net);
 
-        NetConnectivity con = check_net_endpoints(net);
-        if (con.has_internal_source || con.has_internal_destination)
-        {
-            m_nets.insert(net);
-        }
-        else
-        {
-            log_error("module",
-                      "net '{}' with ID {} is not contained in module '{}' with ID {} in netlist with ID {}.",
-                      net->get_name(),
-                      net->get_id(),
-                      m_name,
-                      m_id,
-                      m_internal_manager->m_netlist->get_id());
-            return false;
-        }
+                if (con.has_internal_source && con.has_internal_destination)
+                {
+                    m_internal_nets.insert(net);
+                }
 
-        if (con.has_internal_source && con.has_internal_destination)
-        {
-            m_internal_nets.insert(net);
+                if (con.has_internal_source && con.has_internal_destination && con.has_external_source && con.has_external_destination)
+                {
+                    m_input_nets.insert(net);
+                    m_output_nets.insert(net);
+                }
+                else if (con.has_external_source && con.has_internal_destination)
+                {
+                    m_input_nets.insert(net);
+                }
+                else if (con.has_internal_source && con.has_external_destination)
+                {
+                    m_output_nets.insert(net);
+                }
+            }
         }
-
-        if (con.has_internal_source && con.has_internal_destination && con.has_external_source && con.has_external_destination)
-        {
-            m_input_nets.insert(net);
-            m_output_nets.insert(net);
-        }
-        else if (con.has_external_source && con.has_internal_destination)
-        {
-            m_input_nets.insert(net);
-        }
-        else if (con.has_internal_source && con.has_external_destination)
-        {
-            m_output_nets.insert(net);
-        }
-
-        return true;
     }
 
     bool Module::contains_net(Net* net, bool recursive) const
@@ -570,7 +565,7 @@ namespace hal
         return m_internal_nets.find(net) != m_internal_nets.end();
     }
 
-    Module::NetConnectivity Module::check_net_endpoints(Net* net) const
+    Module::NetConnectivity Module::check_net_endpoints(const Net* net) const
     {
         std::vector<Endpoint*> sources      = net->get_sources();
         std::vector<Endpoint*> destinations = net->get_destinations();
@@ -721,9 +716,9 @@ namespace hal
      * ################################################################
      */
 
-    ModulePin* Module::assign_pin(const std::string& name, Net* net, PinType type)
+    ModulePin* Module::assign_pin(const std::string& name, Net* net, PinType type, bool create_group)
     {
-        if (!m_internal_manager->m_net_checks_enabled)
+        if (m_internal_manager->m_net_checks_enabled)
         {
             log_error("module",
                       "cannot manually assign pin as automatic net checks are enabled. Disable these checks using 'Netlist::enable_automatic_net_checks(false)' in case you want to manage pins "
@@ -778,7 +773,7 @@ namespace hal
             return nullptr;
         }
 
-        return assign_pin_net(net, direction, name, type);
+        return assign_pin_net(net, direction, name, type, create_group);
     }
 
     std::vector<ModulePin*> Module::get_pins(const std::function<bool(ModulePin*)>& filter) const
@@ -1202,7 +1197,7 @@ namespace hal
         return false;
     }
 
-    ModulePin* Module::assign_pin_net(Net* net, PinDirection direction, const std::string& name, PinType type)
+    ModulePin* Module::assign_pin_net(Net* net, PinDirection direction, const std::string& name, PinType type, bool create_group)
     {
         std::string name_internal;
         if (m_pin_names_map.find(name) == m_pin_names_map.end() && m_pin_group_names_map.find(name) != m_pin_group_names_map.end())
@@ -1255,16 +1250,22 @@ namespace hal
         m_pins.push_back(std::move(pin_owner));
         m_pin_names_map[name_internal] = pin;
 
-        // create pin group (every pin must be within exactly one pin group)
-        std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(name_internal, pin->m_direction, pin->m_type));
-        PinGroup<ModulePin>* pin_group = pin_group_owner.get();
-        m_pin_groups.push_back(std::move(pin_group_owner));
-        m_pin_groups_ordered.push_back(pin_group);
-        m_pin_group_names_map[name_internal] = pin_group;
+        if (create_group)
+        {
+            // create pin group (every pin must be within exactly one pin group)
+            std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(name_internal, pin->m_direction, pin->m_type));
+            PinGroup<ModulePin>* pin_group = pin_group_owner.get();
+            m_pin_groups.push_back(std::move(pin_group_owner));
+            m_pin_groups_ordered.push_back(pin_group);
+            m_pin_group_names_map[name_internal] = pin_group;
 
-        assign_pin_to_group(pin_group, pin);
+            assign_pin_to_group(pin_group, pin);    // triggers 'pin_changed' event
+        }
+        else
+        {
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        }
 
-        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         return pin;
     }
 

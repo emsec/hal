@@ -39,6 +39,7 @@ namespace hal
 
     namespace netlist_serializer
     {
+
         /**
          * Serializes a netlist into a .hal file.
          *

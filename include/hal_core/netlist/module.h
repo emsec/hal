@@ -222,15 +222,13 @@ namespace hal
          */
 
         /**
-         * Manually assign a net to the module.
-         * Verifies that the net has at least one source or destination within the module.
-         * Checks whether the net is an input, output, and/or internal net.
+         * Iterates over all nets connected to at least one gate of the module to update the nets, internal nets, input nets, and output nets of the module.
+         * Has no effect on module pins. 
          * \warning{\b WARNING: can only be used when automatic net checks have been disabled using `Netlist::enable_automatic_net_checks`.}
          * 
-         * @param[in] net - The net.
          * @returns `true` on success, `false` otherwise.
          */
-        bool assign_net(Net* net);
+        void update_nets();
 
         /**
          * Check whether a net is contained in the module.<br>
@@ -307,15 +305,17 @@ namespace hal
         /**
          * Manually assign a module pin to a net.
          * Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-         * Hence, the net must have been manually assigned to the module beforehand using `Module::assign_net`.
+         * Hence, update the module nets beforehand using `Module::update_nets`.
+         * If `create_group` is set to `false`, the pin will not be added to a pin group.
          * \warning{\b WARNING: can only be used when automatic net checks have been disabled using `Netlist::enable_automatic_net_checks`.}
          * 
          * @param[in] name - The name of the pin.
          * @param[in] net - The net that the pin is being assigned to.
          * @param[in] type - The type of the pin. Defaults to `PinType::none`.
+         * @param[in] create_group - Set `true` to automatically create a pin group and assign the pin, `false` otherwise.
          * @returns The module pin on success, a `nullptr` on failure.
          */
-        ModulePin* assign_pin(const std::string& name, Net* net, PinType type = PinType::none);
+        ModulePin* assign_pin(const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true);
 
         /**
          * Get all pins of the module.
@@ -537,9 +537,9 @@ namespace hal
             bool has_external_destination;
         };
 
-        NetConnectivity check_net_endpoints(Net* net) const;
+        NetConnectivity check_net_endpoints(const Net* net) const;
         void check_net(Net* net, bool recursive = false);
-        ModulePin* assign_pin_net(Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none);
+        ModulePin* assign_pin_net(Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none, bool create_group = true);
         bool remove_pin_net(Net* net);
 
         std::string m_name;

@@ -207,14 +207,12 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
-        py_module.def("assign_net", &Module::assign_net, py::arg("net"), R"(
-            Manually assign a net to the module.
-            Verifies that the net has at least one source or destination within the module.
-            Checks whether the net is an input, output, and/or internal net.
+        py_module.def("update_nets", &Module::update_nets, R"(
+            Iterates over all nets connected to at least one gate of the module to update the nets, internal nets, input nets, and output nets of the module.
+            Has no effect on module pins. 
 
             WARNING: can only be used when automatic net checks have been disabled using hal_py.Netlist.enable_automatic_net_checks.
 
-            :param hal_py.Net net: The net.
             :returns: True on success, False otherwise.
             :rtype: bool
         )");
@@ -384,16 +382,18 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_module.def("assign_pin", &Module::assign_pin, py::arg("name"), py::arg("net"), py::arg("type") = PinType::none, R"(
+        py_module.def("assign_pin", &Module::assign_pin, py::arg("name"), py::arg("net"), py::arg("type") = PinType::none, py::arg("create_group") = true, R"(
             Manually assign a module pin to a net.
             Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-            Hence, the net must have been manually assigned to the module beforehand using hal_py.Module.assign_net.
+            Hence, update the module nets beforehand using hal_py.Module.update_net.
+            If create_group is set to False, the pin will not be added to a pin group.
             
             WARNING: can only be used when automatic net checks have been disabled using hal_py.Netlist.enable_automatic_net_checks.
 
             :param str name: The name of the pin.
             :param hal_py.Net net: The net that the pin is being assigned to.
             :param hal_py.PinType type: The type of the pin. Defaults to hal_py.PinType.none.
+            :param bool create_group: Set True to automatically create a pin group and assign the pin, False otherwise.
             :returns: The module pin on success, a None on failure.
             :rtype: hal_py.ModulePin or None
         )");
