@@ -87,8 +87,12 @@ namespace hal
                 InputDialog ipd("Change group name", "New group name", name);
                 if(ipd.exec() == QDialog::Accepted)
                 {
-                    auto group = gNetlist->get_module_by_id(modId)->get_pin_group(name.toStdString());
-                    gNetlist->get_module_by_id(modId)->set_pin_group_name(group, ipd.textValue().toStdString());
+                    if(ipd.textValue().isEmpty())
+                        return;
+                    ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
+                    act->setObject(UserActionObject(modId, UserActionObjectType::PinGroup));
+                    act->setPinOrPingroupIdentifier(name);
+                    act->exec();
                 }
             });
             menu.addSection("Python");
@@ -106,8 +110,12 @@ namespace hal
                 InputDialog ipd("Change pin name", "New pin name", name);
                 if(ipd.exec() == QDialog::Accepted)
                 {
-                    auto pin = gNetlist->get_module_by_id(modId)->get_pin(name.toStdString());
-                    gNetlist->get_module_by_id(modId)->set_pin_name(pin, ipd.textValue().toStdString());
+                    if(ipd.textValue().isEmpty())
+                        return;
+                    ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
+                    act->setObject(UserActionObject(modId, UserActionObjectType::Pin));
+                    act->setPinOrPingroupIdentifier(name);
+                    act->exec();
                 }
             });
             menu.addAction("Add net to current selection", [this, n](){

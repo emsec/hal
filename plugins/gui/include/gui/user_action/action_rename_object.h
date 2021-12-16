@@ -31,16 +31,17 @@ namespace hal
      * @ingroup user_action
      * @brief Renames an item.
      *
-     * Assigns a new name to the UserActionObject's object. If the object is a pin type it has to be specified by the
-     * id of the input/output net (configured by calling setInputNetId/setOutputNetId).
+     * Assigns a new name to the UserActionObject's object. If the object is a pin or pingroup type the current
+     * name is used to identify the pin or group (configured by setPinOrPingroupIdentifier)
      *
      * Undo Action: ActionRenameObject
      */
     class ActionRenameObject : public UserAction
     {
         QString mNewName;
-        u32 mNetId;
-        enum PortType { NoPort, Input, Output } mPortType;
+
+        //perhaps pin or pingroup itslef?
+        QString mPinOrPingroupIdentifier;
     public:
         /**
          * Action constructor.
@@ -48,7 +49,7 @@ namespace hal
          * @param name - The new name
          */
         ActionRenameObject(const QString& name=QString())
-            : mNewName(name), mNetId(0), mPortType(NoPort) {;}
+            : mNewName(name), mPinOrPingroupIdentifier("") {;}
         bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
@@ -56,18 +57,12 @@ namespace hal
         void addToHash(QCryptographicHash& cryptoHash) const override;
 
         /**
-         * If the object to rename is a port, this function specifies the port by the connected input net.
+         * Sets the current identifier of the pin or pingroup
+         * (the current name).
          *
-         * @param id - The id of the input net
+         * @param identifier - The 'old' pin or pingroup name.
          */
-        void setInputNetId(u32 id)  { mPortType=Input;  mNetId=id; }
-
-        /**
-         * If the object to rename is a port, this function specifies the port by the connected output net.
-         *
-         * @param id - The id of the output net
-         */
-        void setOutputNetId(u32 id) { mPortType=Output; mNetId=id; }
+        void setPinOrPingroupIdentifier(QString identifier){mPinOrPingroupIdentifier = identifier;}
     };
 
     /**
