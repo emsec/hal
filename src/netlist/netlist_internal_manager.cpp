@@ -28,6 +28,7 @@ namespace hal
     std::unique_ptr<Netlist> NetlistInternalManager::copy_netlist(const Netlist* nl) const
     {
         std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->m_gate_library);
+        c_netlist->enable_automatic_net_checks(false);
 
         // manager, netlist_id, and top_module are set in the constructor
 
@@ -182,29 +183,18 @@ namespace hal
         for (Module* module : nl->m_modules)
         {
             Module* c_module = c_netlist->get_module_by_id(module->m_id);
-
-            u32 ctr = 0;
-            for (const std::unique_ptr<ModulePin>& c_pin : c_module->m_pins)
-            {
-                // pin names must be unique, hence automatically generated groups may conflict with copied ones
-                c_module->set_pin_name(c_pin.get(), "____netlist_copy_tmp_pin_[" + std::to_string(ctr++) + "]____");
-            }
-
-            ctr = 0;
-            for (const std::unique_ptr<PinGroup<ModulePin>>& c_pin_group : c_module->m_pin_groups)
-            {
-                // pin group names must be unique, hence automatically generated groups may conflict with copied ones
-                c_module->set_pin_group_name(c_pin_group.get(), "____netlist_copy_tmp_pin_group_[" + std::to_string(ctr++) + "]____");
-            }
+            c_module->update_nets();
 
             for (const std::unique_ptr<PinGroup<ModulePin>>& pin_group : module->m_pin_groups)
             {
                 std::vector<ModulePin*> c_pins;
                 for (ModulePin* pin : pin_group->get_pins())
                 {
-                    ModulePin* c_pin = c_module->get_pin(c_netlist->get_net_by_id(pin->get_net()->m_id));
-                    c_module->set_pin_name(c_pin, pin->get_name());
-                    c_module->set_pin_type(c_pin, pin->get_type());
+                    ModulePin* c_pin = c_module->assign_pin(pin->get_name(), c_netlist->get_net_by_id(pin->get_net()->m_id), PinType::none, false);
+                    if (c_pin == nullptr)
+                    {
+                        return nullptr;
+                    }
                     c_pins.push_back(c_pin);
                 }
 
@@ -216,6 +206,7 @@ namespace hal
             c_module->m_next_output_index = module->m_next_output_index;
         }
 
+        c_netlist->enable_automatic_net_checks(true);
         return c_netlist;
     }
 
