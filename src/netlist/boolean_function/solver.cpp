@@ -205,8 +205,8 @@ namespace Boolector {
 			std::set<std::tuple<std::string, u16>> inputs;
 			for (const auto& constraint : _constraints) {
 				for (const auto& node : constraint.lhs.get_nodes()) {
-					if (auto variable = node->get_as<BooleanFunction::OperandNode>(); node->is_variable()) {
-						inputs.insert(std::make_tuple(variable->variable, node->size));
+					if (node.is_variable()) {
+						inputs.insert(std::make_tuple(node.variable, node.size));
 					}
 				}
 			}

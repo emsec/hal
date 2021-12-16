@@ -66,9 +66,6 @@ namespace hal
         struct Node;     /// represents an abstract syntax tree node
         struct NodeType; /// represents the type of the node
 
-        struct OperationNode; /// represents an operation node (e.g., AND)
-        struct OperandNode;   /// reprsents an operand node (e.g., a variable)
-
         /// Represents the logic value that a boolean function operates on.
         enum Value
         {
@@ -103,21 +100,12 @@ namespace hal
         explicit BooleanFunction();
 
         /**
-         * Builds a Boolean function from a node and list of operands.
-         * 
-         * @param[in] node Boolean function node.
-         * @param[in] parameters Boolean function node parameters.
-         * @returns Boolean function on success, error message otherwise.
-         */
-        static std::variant<BooleanFunction, std::string> build(std::shared_ptr<Node>&& node, std::vector<BooleanFunction>&& parameters);
-
-        /**
-         * Builds a Boolean function from a list of nodes.
+         * Builds and validates a Boolean function from a list of nodes.
          * 
          * @param[in] nodes List of Boolean function nodes.
          * @returns Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> build(std::vector<std::shared_ptr<Node>>&& nodes);
+        static std::variant<BooleanFunction, std::string> build(std::vector<Node>&& nodes);
 
         /// Creates a 'Variable' Boolean function.
         static BooleanFunction Var(const std::string& name, u16 size = 1);
@@ -238,10 +226,10 @@ namespace hal
         /// Short-hand check whether the Boolean function is a constant with a specific value.
         bool is_constant(u64 value) const;
 
-        /// Short-hand function to query the top-level Boolean function node.
-        const BooleanFunction::Node* get_top_level_node() const;
+        /// Short-hand function to query the top-level Boolean function node (may fail if Boolean function is empty).
+        const BooleanFunction::Node& get_top_level_node() const;
 
-        /// Short-hand functoin to get the number of nodes in the Boolean function.
+        /// Short-hand function to get the number of nodes in the Boolean function.
         unsigned length() const;
 
         /**
@@ -249,7 +237,7 @@ namespace hal
          *
          * @returns List of non-owning pointers to nodes.
          */
-        std::vector<const BooleanFunction::Node*> get_nodes() const;
+        const std::vector<BooleanFunction::Node>& get_nodes() const;
 
         /**
          * Returns the parameter list of the top-level node.
@@ -354,9 +342,8 @@ namespace hal
         // Constructors, Destructors, Operators
         ////////////////////////////////////////////////////////////////////////
 
-
         /// Constructs a Boolean function with a reverse-polish notation node list.
-        explicit BooleanFunction(std::vector<std::shared_ptr<BooleanFunction::Node>>&& nodes);
+        explicit BooleanFunction(std::vector<BooleanFunction::Node>&& nodes);
 
         /** 
          * Constructs a Boolean function from a single node and an arbitrary list
@@ -367,9 +354,12 @@ namespace hal
          * @returns Initialized Boolean function.
          */
         template<typename ...T, typename = std::enable_if_t<std::conjunction_v<std::is_same<T, BooleanFunction>...>>>
-        explicit BooleanFunction(std::shared_ptr<BooleanFunction::Node>&& node, T&&... p) {
+        explicit BooleanFunction(BooleanFunction::Node&& node, T&&... p) {
+            auto size = 1; ((size += p.size()), ...);
+            this->m_nodes.reserve(size);
+
             (this->append(std::move(p.m_nodes)), ...);
-            this->append(std::move(node));
+            this->m_nodes.emplace_back(std::move(node));
         }
 
         /** 
@@ -379,17 +369,14 @@ namespace hal
          * @param[in] p - Boolean function node parameters.
          * @returns Initialized Boolean function.
          */
-        explicit BooleanFunction(std::shared_ptr<BooleanFunction::Node>&& node, std::vector<BooleanFunction>&& p);
+        explicit BooleanFunction(BooleanFunction::Node&& node, std::vector<BooleanFunction>&& p);
 
         ////////////////////////////////////////////////////////////////////////
         // Internal Interface
         ////////////////////////////////////////////////////////////////////////
 
-        /// Appends a Boolean function node to the instance.
-        void append(std::shared_ptr<BooleanFunction::Node>&& node);
-        
         /// Appends a list of Boolan function nodes to the instance.
-        void append(std::vector<std::shared_ptr<BooleanFunction::Node>>&& nodes);
+        inline void append(std::vector<BooleanFunction::Node>&& nodes);
 
         /// Returns the Boolean function in reverse-polish notation.
         std::string to_string_in_reverse_polish_notation() const;
@@ -398,6 +385,9 @@ namespace hal
         ///
         /// @returns Validated Boolean function on success, error message string otherwise.
         static std::variant<BooleanFunction, std::string> validate(BooleanFunction&& function);
+
+        /// Computes the coverage value of each node in the Boolean function.
+        std::vector<u32> compute_node_coverage() const;
         
         /// Implements the Quine-McCluskey algorithm to simplify Boolean functions.
         ///
@@ -410,14 +400,7 @@ namespace hal
         ////////////////////////////////////////////////////////////////////////
 
         /// refers to the list of nodes in reverse polish notation
-        ///
-        /// # TODO
-        /// We want to change the shared_ptr into a unique_ptr to prevent any 
-        /// accidental copy, however, this has implications for various HAL 
-        /// components as they need to have explicit move / clone semantics. 
-        /// Since this rework affects various components, we opted to postpone 
-        /// this change for later and stick with a shared_ptr for now.
-        std::vector<std::shared_ptr<BooleanFunction::Node>> m_nodes{};
+        std::vector<BooleanFunction::Node> m_nodes{};
     };
 
     template<>
@@ -428,26 +411,42 @@ namespace hal
      * is an abstract base class for either an operation (e.g., AND, XOR) or an 
      * operand (e.g., a signal name variable).
      *
+     * # Developer Note
+     * We deliberately opted to have a single (littered) memory space for a node
+     * i.e. no separation from operation / operand nodes via inheritance, due to 
+     * optimization reasons to keep node data closely together and prevent the 
+     * use of smart pointers to manage memory safely.
+     *
      * @ingroup netlist
      */
-    struct BooleanFunction::Node {
+    struct BooleanFunction::Node final {
         ////////////////////////////////////////////////////////////////////////
         // Member
         ////////////////////////////////////////////////////////////////////////
 
         /// store node type of Boolean function
-        const u16 type;
+        u16 type;
         /// stores bit-size of Boolean function node
-        const u16 size;
+        u16 size;
+        /// stores constant value
+        std::vector<BooleanFunction::Value> constant{};
+        /// stores index value
+        u16 index{};
+        /// stores variable name 
+        std::string variable{};
 
         ////////////////////////////////////////////////////////////////////////
         // Constructors, Destructors, Operators
         ////////////////////////////////////////////////////////////////////////
 
-        /// constructor to initialize fields
-        Node(u16 _type, u16 _size);
-        /// default destructor to allow sub-class override
-        virtual ~Node() = default;
+        /// constructor to generate an operation node
+        static Node Operation(u16 _type, u16 _size);
+        /// constructor to generate a constant node
+        static Node Constant(const std::vector<BooleanFunction::Value> constant);
+        /// constructor to generate an index node
+        static Node Index(u16 _index, u16 _size);
+        /// constructor to generate a constant node
+        static Node Variable(const std::string variable, u16 _size);
 
         /// comparison operators
         bool operator==(const Node& other) const;
@@ -458,25 +457,11 @@ namespace hal
         // Interface
         ////////////////////////////////////////////////////////////////////////
 
-        /**
-         * Safe-downcast to return a node as operation / operand sub-class.
-         *
-         * @tparam T Sub-class of Node, i.e. OperationNode or OperandNode.
-         * @returns Pointer to sub-class.
-         */
-        template<typename T>
-        const T* get_as() const {
-            if ((this->is_operation() && std::is_same_v<T, BooleanFunction::OperationNode>)
-                || (this->is_operand() && std::is_same_v<T, BooleanFunction::OperandNode>)) {
-                return static_cast<const T*>(this);
-            }
-            return nullptr;
-        }
+        /// Clones the Boolean function node
+        Node clone() const;
 
-        /// Clones an node instance.
-        virtual std::shared_ptr<Node> clone() const = 0;
         /// Human-readable description of node for debugging / logging
-        virtual std::string to_string() const = 0;
+        std::string to_string() const;
 
         /// Returns arity of node, see Node::get_arity(u16 type) for details.
         u16 get_arity() const;
@@ -507,7 +492,7 @@ namespace hal
         /// Checks whether node is of type 'Variable'.
         bool is_variable() const;
         /// Checks whether node is of type 'Variable' and has specific value.
-        bool is_variable(const std::string& variable) const;
+        bool is_variable(const std::string& value) const;
 
         /// Checks whether node is an operation.
         bool is_operation() const;
@@ -516,6 +501,14 @@ namespace hal
 
         /// Short-hand check whether the node is a commutative operator.
         bool is_commutative() const;
+
+     private:
+        ////////////////////////////////////////////////////////////////////////
+        // Constructors, Destructors, Operators
+        ////////////////////////////////////////////////////////////////////////
+
+        /// constructor to initialize all Node fields
+        Node(u16 _type, u16 _size, std::vector<BooleanFunction::Value> _constant, u16 _index, std::string variable);
     };
 
     /**
@@ -538,109 +531,5 @@ namespace hal
         static constexpr u16 Constant = 0x1000;
         static constexpr u16 Index    = 0x1001;
         static constexpr u16 Variable = 0x1002;
-    };
-
-    /**
-     * OperationNode refers to an operation node.
-     *
-     * @ingroup netlist
-     */
-    struct BooleanFunction::OperationNode final : public BooleanFunction::Node {
-        ////////////////////////////////////////////////////////////////////////
-        // Constructors, Destructors, Operators
-        ////////////////////////////////////////////////////////////////////////
-
-        /**
-         * Creates an 'OperationNode'.
-         *
-         * @param[in] type - Node type.
-         * @param[in] size - Node bit-size.
-         * @returns An initialized base-class node.
-         */
-        static std::shared_ptr<BooleanFunction::Node> make(u16 type, u16 size);
-
-        /// Comparison operators
-        bool operator==(const OperationNode& other) const;
-        bool operator!=(const OperationNode& other) const;
-        bool operator <(const OperationNode& other) const;
-
-        ////////////////////////////////////////////////////////////////////////
-        // Interface
-        ////////////////////////////////////////////////////////////////////////
-
-        /// Clones instance
-        std::shared_ptr<Node> clone() const override;
-        /// Human-readable description of node for debugging / logging
-        std::string to_string() const override;
-
-    private:
-        /// constructor to initialize an operation node.
-        OperationNode(u16 type, u16 size);
-    };
-
-    /**
-     * OperandNode refers to an operand node, i.e. Constant, Index or Variable.
-     *
-     * @ingroup netlist
-     */
-    struct BooleanFunction::OperandNode final : public BooleanFunction::Node {
-        ////////////////////////////////////////////////////////////////////////
-        // Member
-        ////////////////////////////////////////////////////////////////////////
-
-        /// stores constant value
-        const std::vector<BooleanFunction::Value> constant{};
-        /// stores index value
-        const u16 index{};
-        /// stores variable name 
-        const std::string variable{};
-        
-        ////////////////////////////////////////////////////////////////////////
-        // Constructors, Destructors, Operators
-        ////////////////////////////////////////////////////////////////////////
-
-        /**
-         * Creates a constant 'OperandNode'.
-         *
-         * @param[in] constant - Constant value.
-         * @returns An initialized base-class node.
-         */
-        static std::shared_ptr<BooleanFunction::Node> make(const std::vector<BooleanFunction::Value>& _constant);
-
-        /**
-         * Creates an index 'OperandNode'.
-         *
-         * @param[in] index - Index value.
-         * @param[in] size - Node bit-size.
-         * @returns An initialized base-class node.
-         */
-        static std::shared_ptr<BooleanFunction::Node> make(u16 _index, u16 _size);
-
-        /**
-         * Creates a variable 'OperandNode'.
-         *
-         * @param[in] name - Variable name.
-         * @param[in] size - Node bit-size.
-         * @returns An initialized base-class node.
-         */
-        static std::shared_ptr<BooleanFunction::Node> make(const std::string& _name, u16 _size);
-
-        /// Comparison operators
-        bool operator==(const OperandNode& other) const;
-        bool operator!=(const OperandNode& other) const;
-        bool operator <(const OperandNode& other) const;
-
-        ////////////////////////////////////////////////////////////////////////
-        // Interface
-        ////////////////////////////////////////////////////////////////////////
-
-        /// Clones instance
-        std::shared_ptr<Node> clone() const override;
-        /// Human-readable description of node for debugging / logging
-        std::string to_string() const override;
-
-    private:
-        /// Constructor to initialize an 'OperandNode'.
-        OperandNode(u16 _type, u16 _size, std::vector<BooleanFunction::Value> _constant, u16 _index, const std::string& _variable);
     };
 }    // namespace hal

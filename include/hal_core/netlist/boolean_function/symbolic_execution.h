@@ -98,7 +98,7 @@ private:
 	 * @param[in] p - List of node parameters.
 	 * @returns Boolean function on success, error message string otherwise.
 	 */
-	std::variant<BooleanFunction, std::string> simplify(const BooleanFunction::Node* node, std::vector<BooleanFunction>&& p) const;
+	std::variant<BooleanFunction, std::string> simplify(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p) const;
 
 	/**
 	 * Propagates constants in a sub-expression in the Boolean function abstract syntax tree.
@@ -107,7 +107,7 @@ private:
 	 * @param[in] p - List of node parameters.
 	 * @returns Boolean function on success, error message string otherwise.
 	 */
-	static std::variant<BooleanFunction, std::string> constant_propagation(const BooleanFunction::Node* node, std::vector<BooleanFunction>&& p);
+	static std::variant<BooleanFunction, std::string> constant_propagation(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p);
 };
 
 }  // namespace SMT

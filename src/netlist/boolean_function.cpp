@@ -31,24 +31,20 @@ namespace hal
 
     BooleanFunction::BooleanFunction() {}
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::build(std::shared_ptr<Node>&& node, std::vector<BooleanFunction>&& parameters) {
-        return BooleanFunction::validate(BooleanFunction(node->clone(), std::move(parameters)));
-    }
-
-    std::variant<BooleanFunction, std::string> BooleanFunction::build(std::vector<std::shared_ptr<BooleanFunction::Node>>&& nodes) {
+    std::variant<BooleanFunction, std::string> BooleanFunction::build(std::vector<BooleanFunction::Node>&& nodes) {
         return BooleanFunction::validate(BooleanFunction(std::move(nodes)));
     }
 
     BooleanFunction BooleanFunction::Var(const std::string& name, u16 size) {
-        return BooleanFunction(OperandNode::make(name, size));
+        return BooleanFunction(Node::Variable(name, size));
     }
 
     BooleanFunction BooleanFunction::Const(const BooleanFunction::Value& value) {
-        return BooleanFunction(OperandNode::make({value}));
+        return BooleanFunction(Node::Constant({value}));
     }
 
     BooleanFunction BooleanFunction::Const(const std::vector<BooleanFunction::Value>& values) {
-        return BooleanFunction(OperandNode::make(values));
+        return BooleanFunction(Node::Constant(values));
     }
 
     BooleanFunction BooleanFunction::Const(u64 value, u16 size) {
@@ -61,7 +57,7 @@ namespace hal
     }
 
     BooleanFunction BooleanFunction::Index(u16 index, u16 size) {
-        return BooleanFunction(OperationNode::make(index, size));
+        return BooleanFunction(Node::Index(index, size));
     }
 
     std::variant<BooleanFunction, std::string> BooleanFunction::And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size) {
@@ -69,7 +65,7 @@ namespace hal
             ERROR("Mismatching bit-sizes for AND operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", size = " << size << ").");
         }
 
-        return BooleanFunction(OperationNode::make(NodeType::And, size), std::move(p0), std::move(p1));
+        return BooleanFunction(Node::Operation(NodeType::And, size), std::move(p0), std::move(p1));
     }
 
     std::variant<BooleanFunction, std::string> BooleanFunction::Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size) {
@@ -77,7 +73,7 @@ namespace hal
             ERROR("Mismatching bit-sizes for Or operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", size = " << size << ").");
         }
 
-        return BooleanFunction(OperationNode::make(NodeType::Or, size), std::move(p0), std::move(p1));
+        return BooleanFunction(Node::Operation(NodeType::Or, size), std::move(p0), std::move(p1));
     }
 
     std::variant<BooleanFunction, std::string> BooleanFunction::Not(BooleanFunction&& p0, u16 size) {
@@ -85,7 +81,7 @@ namespace hal
             ERROR("Mismatching bit-sizes for Not operation (p0 = " << p0.size() << ", size = " << size << ").");
         }
 
-        return BooleanFunction(OperationNode::make(NodeType::Not, size), std::move(p0));
+        return BooleanFunction(Node::Operation(NodeType::Not, size), std::move(p0));
     }
 
     std::variant<BooleanFunction, std::string> BooleanFunction::Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size) {
@@ -93,7 +89,7 @@ namespace hal
             ERROR("Mismatching bit-sizes for Xor operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", size = " << size << ").");
         }
 
-       return BooleanFunction(OperationNode::make(NodeType::Xor, size), std::move(p0), std::move(p1));
+       return BooleanFunction(Node::Operation(NodeType::Xor, size), std::move(p0), std::move(p1));
     }
 
     std::ostream& operator<<(std::ostream& os, const BooleanFunction& function)
@@ -151,7 +147,7 @@ namespace hal
         }
 
         for (auto i = 0ul; i < this->m_nodes.size(); i++) {
-            if (*this->m_nodes[i] != *other.m_nodes[i]) {
+            if (this->m_nodes[i] != other.m_nodes[i]) {
                 return false;
             }
         }
@@ -172,10 +168,6 @@ namespace hal
             return false;
         }
 
-        if (*this == other) {
-            return false;
-        }
-
         return this->to_string_in_reverse_polish_notation() < other.to_string_in_reverse_polish_notation();
     }
  
@@ -189,7 +181,7 @@ namespace hal
         auto function = BooleanFunction(); function.m_nodes.reserve(this->m_nodes.size());
 
         for (const auto& node : this->m_nodes) {
-            function.append(node->clone());
+            function.m_nodes.emplace_back(node);
         }
 
         return function;
@@ -197,32 +189,32 @@ namespace hal
     
     u16 BooleanFunction::size() const 
     {
-        return this->m_nodes.back()->size;
+        return this->m_nodes.back().size;
     }
 
     bool BooleanFunction::is(u16 type) const 
     {
-        return (this->is_empty()) ? false : this->get_top_level_node()->is(type);
+        return (this->is_empty()) ? false : this->get_top_level_node().is(type);
     }
 
     bool BooleanFunction::is_variable() const 
     {
-        return (this->is_empty()) ? false : this->get_top_level_node()->is_variable();
+        return (this->is_empty()) ? false : this->get_top_level_node().is_variable();
     }
 
     bool BooleanFunction::is_constant() const 
     {
-        return (this->is_empty()) ? false : this->get_top_level_node()->is_constant();
+        return (this->is_empty()) ? false : this->get_top_level_node().is_constant();
     }
 
     bool BooleanFunction::is_constant(u64 value) const 
     {
-        return (this->is_empty()) ? false : this->get_top_level_node()->is_constant(value);
+        return (this->is_empty()) ? false : this->get_top_level_node().is_constant(value);
     }
 
-    const BooleanFunction::Node* BooleanFunction::get_top_level_node() const 
+    const BooleanFunction::Node& BooleanFunction::get_top_level_node() const 
     {
-        return (this->m_nodes.empty()) ? nullptr : this->m_nodes.back().get();
+        return this->m_nodes.back();
     }
 
     unsigned BooleanFunction::length() const
@@ -230,34 +222,48 @@ namespace hal
         return this->m_nodes.size();
     }
 
-    std::vector<const BooleanFunction::Node*> BooleanFunction::get_nodes() const 
+    const std::vector<BooleanFunction::Node>& BooleanFunction::get_nodes() const 
     {
-        auto nodes = std::vector<const BooleanFunction::Node*>(); nodes.reserve(this->m_nodes.size());
-        for (const auto& node : this->m_nodes) {
-            nodes.emplace_back(node.get());
-        }
-        return nodes;
+        return this->m_nodes;
     }
 
     std::vector<BooleanFunction> BooleanFunction::get_parameters() const {
-        std::vector<BooleanFunction> stack;
-        for (auto i = 0u; i < this->m_nodes.size() - 1; i++) {
-            auto node = this->m_nodes[i];
+        /// # Developer Note
+        /// Instead of iterating the whole Boolean function and decomposing the 
+        /// abstract syntax tree, we simple iterate the Boolean function once 
+        /// and compute the coverage, i.e. how many nodes are covered below the 
+        /// node in the tree, and based on these indices assemble the Boolean
+        /// function node vector.
 
-            std::vector<BooleanFunction> operands;
-            std::move(stack.end() - static_cast<u64>(node->get_arity()), stack.end(), std::back_inserter(operands));
-            stack.erase(stack.end() - static_cast<u64>(node->get_arity()), stack.end());
-            stack.emplace_back(BooleanFunction(node->clone(), std::move(operands)));
+        auto coverage = this->compute_node_coverage();
+        switch (this->get_top_level_node().get_arity()) {
+            case 0: {
+                return {};
+            }
+            case 1: {
+                return {
+                    BooleanFunction(std::vector<Node>({this->m_nodes.begin(), this->m_nodes.end() - 1}))
+                };
+            }
+            case 2: {
+                auto index = this->length() - coverage[this->length() - 2] - 1;
+
+                return {
+                    BooleanFunction(std::vector<Node>({this->m_nodes.begin(), this->m_nodes.begin() + index})),
+                    BooleanFunction(std::vector<Node>({this->m_nodes.begin() + index, this->m_nodes.end() - 1}))
+                };
+            }
+
+            default: assert(false && "not implemented reached.");
         }
-        return stack;
     }
 
     std::set<std::string> BooleanFunction::get_variable_names() const
     {
         auto variable_names = std::set<std::string>();
         for (const auto& node : this->m_nodes) {
-            if (node->is_variable()) {
-                variable_names.insert(node->get_as<BooleanFunction::OperandNode>()->variable);
+            if (node.is_variable()) {
+                variable_names.insert(node.variable);
             }
         }
         return variable_names;
@@ -271,17 +277,17 @@ namespace hal
         /// @param[in] p Node operands.
         /// @returns (0) status (true on success, false otherwise),
         ///          (1) human-readable string that represents the node
-        auto node2string = [] (auto node, auto&& o) -> std::tuple<bool, std::string>
+        auto node2string = [] (const auto& node, auto&& o) -> std::tuple<bool, std::string>
         {
-            if (node->get_arity() != o.size()) {
+            if (node.get_arity() != o.size()) {
                 return {false, ""};
             }
 
-            switch (node->type) {
+            switch (node.type) {
                 case BooleanFunction::NodeType::Constant:
                 case BooleanFunction::NodeType::Index:
                 case BooleanFunction::NodeType::Variable:
-                    return {true, node->to_string()};
+                    return {true, node.to_string()};
 
 
                 case BooleanFunction::NodeType::And: return {true, "(" + o[0] + " & " + o[1] + ")"};
@@ -309,15 +315,15 @@ namespace hal
         for (const auto& node: this->m_nodes) {
             std::vector<std::string> operands;
 
-            if (stack.size() < node->get_arity()) {
+            if (stack.size() < node.get_arity()) {
                 // log_error("netlist", "Cannot fetch {} nodes from the stack (= imbalanced stack with {} parts - {}).", node->get_arity(), stack.size(), this->to_string_in_reverse_polish_notation());
                 return "";
             }
 
-            std::move(stack.end() - static_cast<u64>(node->get_arity()), stack.end(), std::back_inserter(operands));
-            stack.erase(stack.end() - static_cast<u64>(node->get_arity()), stack.end());
+            std::move(stack.end() - static_cast<u64>(node.get_arity()), stack.end(), std::back_inserter(operands));
+            stack.erase(stack.end() - static_cast<u64>(node.get_arity()), stack.end());
 
-            if (auto [ok, reduction] = node2string(node.get(), std::move(operands)); ok) {
+            if (auto [ok, reduction] = node2string(node, std::move(operands)); ok) {
                 stack.emplace_back(reduction);
             } else {
                 // log_error("netlist", "Cannot translate BooleanFunction::Node '{}' to a string.", node->to_string());
@@ -334,7 +340,7 @@ namespace hal
         }
     }
 
-   std::variant<BooleanFunction, std::string> BooleanFunction::from(const std::string& expression) {
+    std::variant<BooleanFunction, std::string> BooleanFunction::from(const std::string& expression) {
         using BooleanFunctionParser::ParserType;
         using BooleanFunctionParser::Token;
 
@@ -405,7 +411,7 @@ namespace hal
             return this->clone();
         }
 
-        // TOOD: check whether we need a local simplifcation afterwards again to minimze the min-terms
+        // TODO: check whether we need a local simplifcation afterwards again to minimze the min-terms
 
         return std::get<BooleanFunction>(simplified);
     }
@@ -414,8 +420,8 @@ namespace hal
     {
         auto function = this->clone();
         for (auto i = 0u; i < this->m_nodes.size(); i++) {
-            if (this->m_nodes[i]->is_variable(old_variable_name)) {
-                function.m_nodes[i] = OperandNode::make(new_variable_name, this->m_nodes[i]->size);
+            if (this->m_nodes[i].is_variable(old_variable_name)) {
+                function.m_nodes[i] = Node::Variable(new_variable_name, this->m_nodes[i].size);
             }
         }
 
@@ -431,18 +437,18 @@ namespace hal
         /// @param[in] name - Variable name to check for replacement.
         /// @param[in] replacement - Replacement Boolean function.
         /// @returns AST replacement.
-        auto substitute_variable = [] (auto node, auto&& operands, auto name, auto replacement) -> std::variant<BooleanFunction, std::string> {
-            if (node->is_variable(name)) {
+        auto substitute_variable = [] (const auto& node, auto&& operands, auto name, auto replacement) -> std::variant<BooleanFunction, std::string> {
+            if (node.is_variable(name)) {
                 return replacement.clone();
             }
-            return BooleanFunction(std::move(node), std::move(operands));
+            return BooleanFunction(node.clone(), std::move(operands));
         };
 
         std::vector<BooleanFunction> stack;
 		for (const auto& node : this->m_nodes) {
 			std::vector<BooleanFunction> operands;
-			std::move(stack.end() - static_cast<i64>(node->get_arity()), stack.end(), std::back_inserter(operands));
-        	stack.erase(stack.end() - static_cast<i64>(node->get_arity()), stack.end());
+			std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(operands));
+        	stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
         	
             auto substituted = substitute_variable(node, std::move(operands), name, replacement);
             if (std::get_if<std::string>(&substituted) != nullptr) {
@@ -491,8 +497,8 @@ namespace hal
         // (1) validate whether the input sizes match the boolean function
         for (const auto& [name, value]: inputs) {
             for (const auto& node: this->m_nodes) {
-                if (node->is_variable(name) && node->size != value.size()) {
-                    return "Cannot use evaluate() on '" + this->to_string() + " as the '" + node->to_string() + " is " + std::to_string(node->size) + "-bit vs. " + std::to_string(value.size()) + "-bit in the input.";
+                if (node.is_variable(name) && node.size != value.size()) {
+                    return "Cannot use evaluate() on '" + this->to_string() + " as the '" + node.to_string() + " is " + std::to_string(node.size) + "-bit vs. " + std::to_string(value.size()) + "-bit in the input.";
                 }
             }
         }
@@ -509,7 +515,7 @@ namespace hal
         if (std::get_if<BooleanFunction>(&result) != nullptr) {
             auto value = std::get<BooleanFunction>(result);
             if (value.is_constant()) {
-                return value.get_top_level_node()->get_as<OperandNode>()->constant;
+                return value.get_top_level_node().constant;
             } else {
                 return std::vector<BooleanFunction::Value>(this->size(), BooleanFunction::Value::X);
             }
@@ -523,8 +529,8 @@ namespace hal
         // (1) check that each variable is just a single bit, otherwise we do 
         //     not generate a truth-table
         for (const auto& node : this->m_nodes) {
-            if (node->is_variable() && node->size != 1) {
-                return "Cannot generate a truth-table for a Boolean function with variables of > 1-bit (e.g., = '" + node->to_string() + "').";
+            if (node.is_variable() && node.size != 1) {
+                return "Cannot generate a truth-table for a Boolean function with variables of > 1-bit (e.g., = '" + node.to_string() + "').";
             }
         }
 
@@ -587,28 +593,26 @@ namespace hal
         /// @returns (1) status (true on success, false otherwise),
         ///          (2) SMT-LIB string representation of node and operands.
         auto reduce_to_z3 = [&context, &var2expr] (const auto& node, auto&& p) -> std::tuple<bool, z3::expr> {
-            if (node->get_arity() != p.size()) {
+            if (node.get_arity() != p.size()) {
                 return {false, z3::expr(context)};
             }
 
-            auto operand = node->template get_as<OperandNode>();
-
-            switch (node->type) {
-                case BooleanFunction::NodeType::Index: return {true, context.bv_val(operand->index, node->size)};
+            switch (node.type) {
+                case BooleanFunction::NodeType::Index: return {true, context.bv_val(node.index, node.size)};
                 case BooleanFunction::NodeType::Constant: {
                     // since our constants are defined as arbitrary bit-vectors,
                     // we have to concat each bit just to be on the safe side
                     auto constant = z3::expr(context);
-                    for (const auto& bit : operand->constant) {
+                    for (const auto& bit : node.constant) {
                         constant = z3::concat(context.bv_val(bit, 1), constant);
                     }
                     return {false, z3::expr(context)};
                 }
                 case BooleanFunction::NodeType::Variable: {
-                    if (auto it = var2expr.find(operand->variable); it != var2expr.end()) {
+                    if (auto it = var2expr.find(node.variable); it != var2expr.end()) {
                         return {true, it->second};
                     }
-                    return {true, context.bv_const(operand->variable.c_str(), node->size)};
+                    return {true, context.bv_const(node.variable.c_str(), node.size)};
                 }
 
                 case BooleanFunction::NodeType::And: return {true, p[0] & p[1]};
@@ -623,8 +627,8 @@ namespace hal
         std::vector<z3::expr> stack;
         for (const auto& node : this->m_nodes) {
             std::vector<z3::expr> operands;
-            std::move(stack.end() - static_cast<i64>(node->get_arity()), stack.end(), std::back_inserter(operands));
-            stack.erase(stack.end() - static_cast<i64>(node->get_arity()), stack.end());
+            std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(operands));
+            stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
             
             if (auto [ok, reduction] = reduce_to_z3(node, std::move(operands)); ok) {
                 stack.emplace_back(reduction);
@@ -639,89 +643,125 @@ namespace hal
         }
     }
 
-    BooleanFunction::BooleanFunction(std::vector<std::shared_ptr<BooleanFunction::Node>>&& nodes) : BooleanFunction() 
-    {
-        m_nodes = std::move(nodes);
-    }
+    BooleanFunction::BooleanFunction(std::vector<BooleanFunction::Node>&& nodes) : m_nodes(nodes) {}
 
-    BooleanFunction::BooleanFunction(std::shared_ptr<BooleanFunction::Node>&& node, std::vector<BooleanFunction>&& p) : BooleanFunction() 
+    BooleanFunction::BooleanFunction(BooleanFunction::Node&& node, std::vector<BooleanFunction>&& p) : BooleanFunction() 
     {
+        auto size = 1;
+        for (const auto& parameter : p) {
+            size += parameter.size();
+        }
+        this->m_nodes.reserve(size);
+
         for (auto&& parameter : p) {
             this->append(std::move(parameter.m_nodes));
         }
-        this->append(std::move(node));
-    }
-
-    void BooleanFunction::append(std::shared_ptr<BooleanFunction::Node>&& node) {
         this->m_nodes.emplace_back(node);
     }
 
-    void BooleanFunction::append(std::vector<std::shared_ptr<BooleanFunction::Node>>&& nodes) {
-        this->m_nodes.insert(m_nodes.end(), std::make_move_iterator(nodes.begin()), std::make_move_iterator(nodes.end()));
+    void BooleanFunction::append(std::vector<BooleanFunction::Node>&& nodes) {
+        this->m_nodes.insert(m_nodes.end(),
+            std::make_move_iterator(nodes.begin()),
+            std::make_move_iterator(nodes.end())
+        );
     }
 
     std::string BooleanFunction::to_string_in_reverse_polish_notation() const {
         std::string s;
         for (const auto& node : this->m_nodes) {
-            s += node->to_string() + " ";
+            s += node.to_string() + " ";
         }
         return s;
     }
 
     std::variant<BooleanFunction, std::string> BooleanFunction::validate(BooleanFunction&& function) {
-        /// Local function to validate a given BooleanFunction::Node.
-        ///
-        /// @param[in] node - BooleanFunction node.
-        /// @param[in] p - Parameters of Boolean function node.
-        /// @returns Boolean function on success, error message string otherwise.
-        auto validate = [] (auto&& node, auto&& p) -> std::variant<BooleanFunction, std::string>
-        {
-            if (node->get_arity() != p.size()) {
-                return "Arity '" + std::to_string(node->get_arity()) + "' does not match number of parameters (= " + std::to_string(p.size()) + ").";
-            }
-            return BooleanFunction(std::move(node), std::move(p));
-        };
-
-        // backup output string for error messages
-        auto str = function.to_string_in_reverse_polish_notation();
-
-        std::vector<BooleanFunction> stack;
-        for (auto&& node : function.m_nodes) {
-            std::vector<BooleanFunction> operands;
-            if (stack.size() < node->get_arity()) {
-                return "Cannot fetch " + std::to_string(node->get_arity()) + " nodes from the stack (= imbalanced stack for '" + str + ").";
-            }
-
-            std::move(stack.end() - static_cast<i64>(node->get_arity()), stack.end(), std::back_inserter(operands));
-            stack.erase(stack.end() - static_cast<i64>(node->get_arity()), stack.end());
-            
-            auto reduction = validate(std::move(node), std::move(operands));
-            if (std::get_if<BooleanFunction>(&reduction) != nullptr) {
-                stack.emplace_back(std::get<BooleanFunction>(reduction));
-            } else {
-                return "Cannot validate '" + str + "' (= " + std::get<std::string>(reduction) + ").";
-            }
+        /// # Note
+        /// In order to validate correctness of a Boolean function, we analyze 
+        /// the arity of each node and whether its value matches the number of 
+        /// parameters and covered nodes in the abstract syntax tree.
+        if (auto coverage = function.compute_node_coverage(); coverage.back() != function.length()) {
+            auto str = function.to_string_in_reverse_polish_notation();
+            return "Cannot validate '" + str + "' (= imbalanced function with coverage '" + std::to_string(coverage.back()) + " != " + std::to_string(function.length()) + ").";
         }
 
-        switch (stack.size()) {
-            case 1:  return stack.back();
-            default: return "Cannot validate '" + str + "' (= imbalanced stack with " + std::to_string(stack.size()) + " remaining parts).";
-        }
+        return std::move(function);
     }
 
-    BooleanFunction::Node::Node(u16 _type, u16 _size) : 
-        type(_type), size(_size) {}
+    std::vector<u32> BooleanFunction::compute_node_coverage() const {
+        auto coverage = std::vector<u32>(this->m_nodes.size(), (u32)-1);
+
+        /// Short-hand function to safely access a coverage value from a vector
+        ///
+        /// @param[in] coverage - Coverage vector.
+        /// @param[in] index - Index into coverage vector.
+        /// @returns Value at coverage[index] or -1 in case index is invalid.
+        auto get = [] (const auto& coverage, size_t index) -> u32 {
+            return (index < coverage.size()) ? coverage[index] : -1;
+        };
+
+        /// Short-hand function to safely set a coverage value at an index.
+        ///
+        /// @param[in,out] coverage - Coverage vector to be modified.
+        /// @param[in] index - Valid index into coverage vector.
+        /// @param[in] x - 1st part of coverage value (= 0 on default)
+        /// @param[in] y - 2nc part of coverage value (= 0 on default)
+        /// @param[in] z - 3rd part of coverage value (= 0 on default)
+        auto set = [] (auto& coverage, size_t index, u32 x = 0, u32 y = 0, u32 z = 0) {
+            coverage[index] = ((x != (u32)-1) && (y != (u32)-1) && (z != (u32)-1)) ? (x + y + z + 1) : (u32)-1;
+        };
+
+        for (auto i = 0ul; i < this->m_nodes.size(); i++) {
+            auto arity = this->m_nodes[i].get_arity();
+            
+            switch (arity) {
+                case 0: {
+                    set(coverage, i); 
+                    break;
+                }
+                case 1: {
+                    auto x = get(coverage, i - 1);
+                    set(coverage, i, x); 
+                    break;
+                }
+                case 2: {
+                    auto x = get(coverage, i - 1);
+                    auto y = get(coverage, i - 1 - x);                    
+                    set(coverage, i, x, y);
+                    break;
+                }
+                case 3: {
+                    auto x = get(coverage, i - 1);
+                    auto y = get(coverage, i - 1 - x);
+                    auto z = get(coverage, i - 1 - x - y);
+                    set(coverage, i, x, y, z);
+                    break;
+                }
+            }
+        }
+
+        return coverage;
+    }
+
+    BooleanFunction::Node BooleanFunction::Node::Operation(u16 _type, u16 _size) {
+        return Node(_type, _size, {}, {}, {});
+    }
+
+    BooleanFunction::Node BooleanFunction::Node::Constant(const std::vector<BooleanFunction::Value> _constant) {
+        return Node(NodeType::Constant, _constant.size(), _constant, {}, {});
+    }
+
+    BooleanFunction::Node BooleanFunction::Node::Index(u16 _index, u16 _size) {
+        return Node(NodeType::Index, _size, {}, _index, {});
+    }
+
+    BooleanFunction::Node BooleanFunction::Node::Variable(const std::string _variable, u16 _size) {
+        return Node(NodeType::Variable, _size, {}, {}, _variable);
+    }
 
     bool BooleanFunction::Node::operator==(const Node& other) const
     {
-        if (this->is_operation() && other.is_operation()) {
-        return static_cast<const OperationNode&>(*this) == static_cast<const OperationNode&>(other);
-        }
-        if (this->is_operand() && other.is_operand()) {
-            return static_cast<const OperandNode&>(*this) == static_cast<const OperandNode&>(other);
-        }
-
-        return false;
+        return std::tie(this->type, this->size, this->constant, this->index, this->variable) 
+            == std::tie(other.type, other.size, other.constant, other.index, other.variable);
     }
     
     bool BooleanFunction::Node::operator!=(const Node& other) const
@@ -731,13 +771,40 @@ namespace hal
 
     bool BooleanFunction::Node::operator <(const Node& other) const
     {
-        if (this->is_operation() && other.is_operation()) {
-            return static_cast<const OperationNode&>(*this) < static_cast<const OperationNode&>(other);
+        return std::tie(this->type, this->size, this->constant, this->index, this->variable) 
+             < std::tie(other.type, other.size, other.constant, other.index, other.variable);
+    }
+
+    BooleanFunction::Node BooleanFunction::Node::clone() const {
+        return Node(this->type, this->size, this->constant, this->index, this->variable);
+    }
+
+    std::string BooleanFunction::Node::to_string() const {
+        switch (this->type) {
+            case NodeType::Constant: {
+                std::string str;
+                for (const auto& value : this->constant) {
+                    str = enum_to_string(value) + str;
+                }
+                return "0b" + str;
+            }
+
+            case NodeType::Index:    return std::to_string(this->index);
+            case NodeType::Variable: return this->variable;
+
+            case NodeType::And: return "&";
+            case NodeType::Or:  return "|";
+            case NodeType::Not: return "~";
+            case NodeType::Xor: return "^";
+
+            case NodeType::Add: return "+";
+
+            case NodeType::Concat: return "++";
+            case NodeType::Slice:  return "Slice";
+            case NodeType::Zext:   return "Zext";
+
+            default: return "not implemented for node type '" + std::to_string(this->type) + "'.";
         }
-        if (this->is_operand() && other.is_operand()) {
-            return static_cast<const OperandNode&>(*this) < static_cast<const OperandNode&>(other);
-        }
-        return std::tie(type, size) < std::tie(other.type, other.size);
     }
 
     u16 BooleanFunction::Node::get_arity() const {
@@ -782,10 +849,10 @@ namespace hal
         }
 
         auto bv_value = std::vector<BooleanFunction::Value>({}); bv_value.reserve(this->size);
-        for (auto i = 0u; i < this->get_as<OperandNode>()->constant.size(); i++) {
+        for (auto i = 0u; i < this->constant.size(); i++) {
             bv_value.emplace_back((value << (1 << i)) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
         }
-        return this->get_as<OperandNode>()->constant == bv_value;
+        return this->constant == bv_value;
     }
 
     bool BooleanFunction::Node::is_index() const 
@@ -793,9 +860,9 @@ namespace hal
         return this->is(BooleanFunction::NodeType::Index);
     }
 
-    bool BooleanFunction::Node::is_index(u16 index) const 
+    bool BooleanFunction::Node::is_index(u16 value) const 
     {
-        return this->is_index() && (this->get_as<OperandNode>()->index == index);
+        return this->is_index() && (this->index == value);
     }
 
     bool BooleanFunction::Node::is_variable() const 
@@ -803,9 +870,9 @@ namespace hal
         return this->is(BooleanFunction::NodeType::Variable); 
     }
 
-    bool BooleanFunction::Node::is_variable(const std::string& variable) const 
+    bool BooleanFunction::Node::is_variable(const std::string& value) const 
     {
-        return this->is_variable() && (this->get_as<OperandNode>()->variable == variable);
+        return this->is_variable() && (this->variable == value);
     }
 
     bool BooleanFunction::Node::is_operation() const 
@@ -824,106 +891,8 @@ namespace hal
             || (this->type == NodeType::Add);
     }
 
-    std::shared_ptr<BooleanFunction::Node> BooleanFunction::OperationNode::make(u16 type, u16 size)
-    {
-        return std::shared_ptr<BooleanFunction::Node>(new OperationNode(type, size));
-    }
+    BooleanFunction::Node::Node(u16 _type, u16 _size, std::vector<BooleanFunction::Value> _constant, u16 _index, std::string _variable) :
+        type(_type), size(_size), constant(_constant), index(_index), variable(_variable) {}
 
-    bool BooleanFunction::OperationNode::operator==(const BooleanFunction::OperationNode& other) const 
-    {
-        return std::tie(this->type, this->size) == std::tie(other.type, other.size);
-    }
-
-    bool BooleanFunction::OperationNode::operator!=(const BooleanFunction::OperationNode& other) const 
-    {
-        return !(*this == other);
-    }
-
-    bool BooleanFunction::OperationNode::operator <(const BooleanFunction::OperationNode& other) const 
-    {
-        return std::tie(this->type, this->size) < std::tie(other.type, other.size);
-    }
-
-    std::shared_ptr<BooleanFunction::Node> BooleanFunction::OperationNode::clone() const 
-    {
-        return std::shared_ptr<BooleanFunction::Node>(new OperationNode(*this));
-    }
-
-    std::string BooleanFunction::OperationNode::to_string() const 
-    {
-        static const std::map<u16, std::string>& operation2name = {
-            {BooleanFunction::NodeType::And, "&"},
-            {BooleanFunction::NodeType::Or, "|"},
-            {BooleanFunction::NodeType::Not, "~"},
-            {BooleanFunction::NodeType::Xor, "^"},
-
-            {BooleanFunction::NodeType::Add, "+"},
-
-            {BooleanFunction::NodeType::Concat, "++"},
-            {BooleanFunction::NodeType::Slice, "Slice"},
-            {BooleanFunction::NodeType::Zext, "Zext"},
-        };
-
-        return operation2name.at(this->type);
-    }
-
-    BooleanFunction::OperationNode::OperationNode(u16 _type, u16 _size) :
-        BooleanFunction::Node(_type, _size) {}
-
-    std::shared_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(const std::vector<BooleanFunction::Value>& _constant)
-    {
-        return std::shared_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Constant, _constant.size(), _constant, 0, ""));
-    }
- 
-    std::shared_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(u16 _index, u16 _size) 
-    {
-        return std::shared_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Index, _size, {}, _index, ""));
-    }
-
-    std::shared_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::make(const std::string& _name, u16 _size) 
-    {
-        return std::shared_ptr<BooleanFunction::Node>(new OperandNode(NodeType::Variable, _size, {}, 0, _name));
-    }
-
-    bool BooleanFunction::OperandNode::operator==(const BooleanFunction::OperandNode& other) const 
-    {
-        return std::tie(this->type, this->size, this->constant, this->index, this->variable) == std::tie(other.type, other.size, other.constant, other.index, other.variable);
-    }
-
-    bool BooleanFunction::OperandNode::operator!=(const BooleanFunction::OperandNode& other) const 
-    {
-        return !(*this == other);
-    }
-
-    bool BooleanFunction::OperandNode::operator <(const BooleanFunction::OperandNode& other) const 
-    {
-        return std::tie(this->type, this->size, this->constant, this->index, this->variable) < std::tie(other.type, other.size, other.constant, other.index, other.variable);
-    }
-
-    std::shared_ptr<BooleanFunction::Node> BooleanFunction::OperandNode::clone() const 
-    {
-        return std::shared_ptr<BooleanFunction::Node>(new OperandNode(*this));
-    }
-
-    std::string BooleanFunction::OperandNode::to_string() const 
-    {
-        static const std::map<u16, std::function<std::string(const OperandNode*)>> operand2name = 
-        {
-            {BooleanFunction::NodeType::Constant, [] (const OperandNode* node) { 
-                std::string str;
-                for (const auto& value : node->constant) {
-                    str = enum_to_string(value) + str;
-                }
-                return "0b" + str;
-            }},
-            {BooleanFunction::NodeType::Index, [] (const OperandNode* node) { return std::to_string(node->index); }},
-            {BooleanFunction::NodeType::Variable, [] (const OperandNode* node) { return node->variable; }},
-        };
-
-        return operand2name.at(this->type)(this);
-    }
-
-    BooleanFunction::OperandNode::OperandNode(u16 _type, u16 _size, std::vector<BooleanFunction::Value> _constant, u16 _index, const std::string& _variable) :
-        BooleanFunction::Node(_type, _size), constant(_constant), index(_index), variable(_variable) {}
 }    // namespace hal
 

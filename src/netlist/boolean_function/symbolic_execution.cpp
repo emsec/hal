@@ -92,9 +92,22 @@ namespace ConstantPropagation {
 				simplified.emplace_back(BooleanFunction::Value::X);
 			}			
 		}
-		return BooleanFunction::Const(simplified);	}
+		return BooleanFunction::Const(simplified);	
+	}
 
 }  // namespace ConstantPropagation
+
+namespace {
+	/**
+	 * Helper function to generate an n-bit vector of all 1s.
+	 * 
+	 * @param[in] size - Bit-size of vector.
+	 * @returns Boolean function with all 1s constant.
+	 */
+	BooleanFunction One(u16 size) {
+		return BooleanFunction::Const(std::vector<BooleanFunction::Value>(size, BooleanFunction::Value::ONE));
+	}
+}  // namespace 
 
 	SymbolicExecution::SymbolicExecution(const std::vector<BooleanFunction>& variables)	:
 		state(SymbolicState(variables)) {}
@@ -104,8 +117,8 @@ namespace ConstantPropagation {
 		std::vector<BooleanFunction> stack;
 		for (const auto& node : function.get_nodes()) {
 	        std::vector<BooleanFunction> parameters;
-	        std::move(stack.end() - static_cast<i64>(node->get_arity()), stack.end(), std::back_inserter(parameters));
-	        stack.erase(stack.end() - static_cast<i64>(node->get_arity()), stack.end());
+	        std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(parameters));
+	        stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
 	        
 	        if (auto simplified = this->simplify(node, std::move(parameters)); std::get_if<BooleanFunction>(&simplified) != nullptr) {
 	        	stack.emplace_back(std::get<BooleanFunction>(simplified));
@@ -138,7 +151,7 @@ namespace ConstantPropagation {
 	    }
 
 	    std::sort(p.begin(), p.end(), [] (const auto& lhs, const auto& rhs) {
-	        if (lhs.get_top_level_node()->type == rhs.get_top_level_node()->type) {
+	        if (lhs.get_top_level_node().type == rhs.get_top_level_node().type) {
 	            return lhs < rhs;
 	        }
 	        return rhs.is_constant();
@@ -146,13 +159,13 @@ namespace ConstantPropagation {
 	    return std::move(p);
 	}
 
-	std::variant<BooleanFunction, std::string> SymbolicExecution::simplify(const BooleanFunction::Node* node, std::vector<BooleanFunction>&& p) const 
+	std::variant<BooleanFunction, std::string> SymbolicExecution::simplify(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p) const 
 	{
 		if (!p.empty() && std::all_of(p.begin(), p.end(), [] (const auto& function) { return function.is_constant(); })) {
     	    return SymbolicExecution::constant_propagation(node, std::move(p));
 	    }
 
-	    if (node->is_commutative()) {
+	    if (node.is_commutative()) {
 	    	p = SymbolicExecution::normalize(std::move(p));
 	    }
 
@@ -162,17 +175,23 @@ namespace ConstantPropagation {
 	    /// to the simplify() function of a sub-expression tree. Hence, use the
 	    /// simplify() function with care, as otherwise run-time may explode :)
 
-	   	switch (node->type) {
-			case BooleanFunction::NodeType::Variable: {
-				return this->state.get(BooleanFunction::Var(node->get_as<BooleanFunction::OperandNode>()->variable, node->size));
+	   	switch (node.type) {
+			case BooleanFunction::NodeType::Constant: {
+				return BooleanFunction::Const(node.constant);
 			}
+			case BooleanFunction::NodeType::Index: {
+				return BooleanFunction::Index(node.index, node.size);
+			}
+			case BooleanFunction::NodeType::Variable: {
+				return this->state.get(BooleanFunction::Var(node.variable, node.size));
+			}		
 	   		case BooleanFunction::NodeType::And: {
 	   			// X & 0   =>   0
 	   			if (p[1].is_constant(0)) {
-	   				return BooleanFunction::Const(0, node->size);
+	   				return BooleanFunction::Const(0, node.size);
 	   			}
 				// X & 1  =>   X 
-				if (p[1] == (~BooleanFunction::Const(0, node->size)).simplify()) {
+				if (p[1] == One(node.size)) {
 					return p[0];
 				}
 	   			// X & X   =>   X 
@@ -181,7 +200,7 @@ namespace ConstantPropagation {
 	   			}
 				// X & ~X   =>   0
 				if (~p[0] == p[1]) {
-					return BooleanFunction::Const(0, node->size);
+					return BooleanFunction::Const(0, node.size);
 				}
 
 				if (p[0].is(BooleanFunction::NodeType::Or) && p[1].is(BooleanFunction::NodeType::Or)) {
@@ -220,11 +239,11 @@ namespace ConstantPropagation {
 
 					// X & (~X & Y)   =>   0
 					if ((~p1_parameter[0] == p[0]) || (p1_parameter[0] == ~p[0])) {
-						return BooleanFunction::Const(0, node->size);
+						return BooleanFunction::Const(0, node.size);
 					}
 					// X & (Y & ~X)   =>   0
 					if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0])) {
-						return BooleanFunction::Const(0, node->size);
+						return BooleanFunction::Const(0, node.size);
 					}
 				}
 
@@ -263,11 +282,11 @@ namespace ConstantPropagation {
 					}
 					// (~X & Y) & X   =>   0
 					if ((~p0_parameter[0] == p[1]) || (p0_parameter[0] == ~p[1])) {
-						return BooleanFunction::Const(0, node->size);
+						return BooleanFunction::Const(0, node.size);
 					}
 					// (Y & ~X) & X   =>   0
 					if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1])) {
-						return BooleanFunction::Const(0, node->size);
+						return BooleanFunction::Const(0, node.size);
 					}
 				}
 
@@ -291,7 +310,8 @@ namespace ConstantPropagation {
 						return p[1] & p0_parameter[0];
 					}
 				}
-	   			return BooleanFunction::build(node->clone(), std::move(p));
+
+				return p[0] & p[1];
 	   		}
 			case BooleanFunction::NodeType::Not: {
 				// ~~X   =>   X
@@ -320,7 +340,8 @@ namespace ConstantPropagation {
 					auto p0_parameter = p[0].get_parameters();
 					return (~p0_parameter[0]) & (~p0_parameter[1]);
 				}
-				return BooleanFunction::build(node->clone(), std::move(p));
+
+				return ~p[0];
 			}
 
 	   		case BooleanFunction::NodeType::Or: {
@@ -330,7 +351,7 @@ namespace ConstantPropagation {
 				}
 
 	   			// X | 1   =>   1
-	   			if (p[1] == (~BooleanFunction::Const(0, node->size)).simplify()) {
+	   			if (p[1] == One(node.size)) {
 	   				return p[1];
 	   			}
 
@@ -341,7 +362,7 @@ namespace ConstantPropagation {
 
 				// X | ~X   =>   1
 				if ((~p[0] == p[1]) || (p[0] == ~p[1])) {
-					return ~BooleanFunction::Const(0, node->size).simplify();
+					return ~BooleanFunction::Const(0, node.size).simplify();
 				}
 
 				if (p[0].is(BooleanFunction::NodeType::And) && p[1].is(BooleanFunction::NodeType::And)) {
@@ -402,12 +423,12 @@ namespace ConstantPropagation {
 
 					// X | (~X | Y)   =>   1
 					if ((~p1_parameter[0] == p[0]) || (p1_parameter[0] == ~p[0])) {
-						return (~BooleanFunction::Const(0, node->size)).simplify();
+						return One(node.size);
 					}
 
 					// X | (Y | ~X)   =>   1
 					if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0])) {
-						return (~BooleanFunction::Const(0, node->size)).simplify();
+						return One(node.size);
 					}
 				}
 
@@ -425,12 +446,12 @@ namespace ConstantPropagation {
 
 					// (~X | Y) | X   =>   1
 					if ((~p0_parameter[0] == p[1]) || (p0_parameter[0] == ~p[1])) {
-						return (~BooleanFunction::Const(0, node->size)).simplify();
+						return One(node.size);
 					}
 
 					// (Y | ~X) | X =>   1
 					if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1])) {
-						return (~BooleanFunction::Const(0, node->size)).simplify();
+						return One(node.size);
 					}
 				}			
 
@@ -457,7 +478,7 @@ namespace ConstantPropagation {
 					}
 				}
 
-	   			return BooleanFunction::build(node->clone(), std::move(p));
+				return p[0] | p[1];
 	   		}
 	   		case BooleanFunction::NodeType::Xor: {
 				// X ^ 0   =>   x
@@ -465,42 +486,42 @@ namespace ConstantPropagation {
 	   				return p[0];
 	   			}
 				// X ^ 1  =>   ~X 
-				if (p[1] == (~BooleanFunction::Const(0, node->size)).simplify()) {
+				if (p[1] == One(node.size)) {
 					return ~p[0];
 				}
 	   			// X ^ X   =>   0
 	   			if (p[0] == p[1]) {
-	   				return BooleanFunction::Const(0, node->size);
+	   				return BooleanFunction::Const(0, node.size);
 	   			}
 				// X ^ ~X   =>   1
 				if (~p[0] == p[1]) {
-					return (~BooleanFunction::Const(0, node->size)).simplify();
+					return One(node.size);
 				}
 
-	   			return BooleanFunction::build(node->clone(), std::move(p));
+				return p[0] ^ p[1];
 	   		}
-	   		default: return BooleanFunction::build(node->clone(), std::move(p));
+	   		default: return "not implemented reached";
 	   	}
 	}
 
-	std::variant<BooleanFunction, std::string> SymbolicExecution::constant_propagation(const BooleanFunction::Node* node, std::vector<BooleanFunction>&& p)
+	std::variant<BooleanFunction, std::string> SymbolicExecution::constant_propagation(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p)
 	{
-		if (node->get_arity() != p.size()) {
-			ERROR("Arity " << node->get_arity() << " does not match number of parameters (= " << p.size() << ").");
+		if (node.get_arity() != p.size()) {
+			ERROR("Arity " << node.get_arity() << " does not match number of parameters (= " << p.size() << ").");
 		}
 
 		std::vector<std::vector<BooleanFunction::Value>> values;
 		for (const auto& parameter : p) {
-			values.emplace_back(parameter.get_top_level_node()->get_as<BooleanFunction::OperandNode>()->constant);
+			values.emplace_back(parameter.get_top_level_node().constant);
 		}
 
-		switch (node->type) {
+		switch (node.type) {
 			case BooleanFunction::NodeType::And: return ConstantPropagation::And(values[0], values[1]);
 			case BooleanFunction::NodeType:: Or: return ConstantPropagation::Or(values[0], values[1]);
 			case BooleanFunction::NodeType::Not: return ConstantPropagation::Not(values[0]);
 			case BooleanFunction::NodeType::Xor: return ConstantPropagation::Xor(values[0], values[1]);
 			
-			default: return BooleanFunction::build(node->clone(), std::move(p));
+			default: return "not implemented reached";
 		}
 	}
 }  // namespace SMT

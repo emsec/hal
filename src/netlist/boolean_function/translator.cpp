@@ -18,26 +18,26 @@ namespace Translator
 	 * @returns (1) status (true on success, false otherwise),
 	 *          (2) SMT-LIB string representation of node and operands.
 	 */
- 	std::tuple<bool, std::string> reduce_to_smt2(const BooleanFunction::Node* node, std::vector<std::string>&& p) 
+ 	std::tuple<bool, std::string> reduce_to_smt2(const BooleanFunction::Node& node, std::vector<std::string>&& p) 
  	{
- 		if (node->get_arity() != p.size()) {
+ 		if (node.get_arity() != p.size()) {
  			return std::make_tuple(false, "");
  		}
 
- 		switch (node->type) 
+ 		switch (node.type) 
  		{
  			case BooleanFunction::NodeType::Constant:
 			{
-				if (auto [ok, str] = utils::translate_to<u64>(node->to_string()); ok) 
+				if (auto [ok, str] = utils::translate_to<u64>(node.to_string()); ok) 
 				{
-					return {true, "(_ bv" + std::to_string(str) + " " + std::to_string(node->size) + ")"};
+					return {true, "(_ bv" + std::to_string(str) + " " + std::to_string(node.size) + ")"};
 				}
 				return {false, ""};
 			}
  			case BooleanFunction::NodeType::Index:
-				return {true, std::to_string(node->get_as<BooleanFunction::OperandNode>()->index)};
+				return {true, std::to_string(node.index)};
  			case BooleanFunction::NodeType::Variable: 
- 				return {true, node->get_as<BooleanFunction::OperandNode>()->variable};
+ 				return {true, node.variable};
 
  			case BooleanFunction::NodeType::And: 
  				return {true, "(bvand " + p[0] + " " + p[1] + ")"};
@@ -55,7 +55,7 @@ namespace Translator
 				return {true, "(concat " + p[0] + " " + p[1] + ")"};
 
  			default: {
- 				log_error("netlist", "cannot generate SMT-LIB for node-type '{}' (not implemented reached).", node->to_string());
+ 				log_error("netlist", "cannot generate SMT-LIB for node-type '{}' (not implemented reached).", node.to_string());
  				return {false, ""};
  			}
  		}
@@ -65,8 +65,8 @@ namespace Translator
 		std::vector<std::string> stack;
 		for (const auto& node : function.get_nodes()) {
 			std::vector<std::string> operands;
-			std::move(stack.end() - static_cast<i64>(node->get_arity()), stack.end(), std::back_inserter(operands));
-        	stack.erase(stack.end() - static_cast<i64>(node->get_arity()), stack.end());
+			std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(operands));
+        	stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
         	
 			if (auto [ok, reduction] = reduce_to_smt2(node, std::move(operands)); ok) {
         		stack.emplace_back(reduction);

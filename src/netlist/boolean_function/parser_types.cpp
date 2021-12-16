@@ -166,7 +166,7 @@ namespace BooleanFunctionParser {
     std::variant<BooleanFunction, std::string> translate(std::vector<Token>&& tokens, const std::string& expression) {
         using TokenType = BooleanFunctionParser::TokenType;
 
-        auto nodes = std::vector<std::shared_ptr<BooleanFunction::Node>>({}); nodes.reserve(tokens.size());
+        auto nodes = std::vector<BooleanFunction::Node>(); nodes.reserve(tokens.size());
 
         for (auto&& token : tokens) {
             if ((token.is(TokenType::And) || token.is(TokenType::Or) || token.is(TokenType::Not) || token.is(TokenType::Xor))
@@ -176,18 +176,18 @@ namespace BooleanFunctionParser {
 
             switch (token.type) {
                 case TokenType::And:
-                    nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::And, nodes.back()->size)); break;
+                    nodes.emplace_back(BooleanFunction::Node::Operation(BooleanFunction::NodeType::And, nodes.back().size)); break;
                 case TokenType::Or:
-                    nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Or, nodes.back()->size)); break;
+                    nodes.emplace_back(BooleanFunction::Node::Operation(BooleanFunction::NodeType::Or, nodes.back().size)); break;
                 case TokenType::Not:
-                    nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Not, nodes.back()->size)); break;
+                    nodes.emplace_back(BooleanFunction::Node::Operation(BooleanFunction::NodeType::Not, nodes.back().size)); break;
                 case TokenType::Xor:
-                    nodes.emplace_back(BooleanFunction::OperationNode::make(BooleanFunction::NodeType::Xor, nodes.back()->size)); break;
+                    nodes.emplace_back(BooleanFunction::Node::Operation(BooleanFunction::NodeType::Xor, nodes.back().size)); break;
 
                 case TokenType::Variable:
-                    nodes.emplace_back(BooleanFunction::OperandNode::make(std::get<0>(token.variable), std::get<1>(token.variable))); break;
+                    nodes.emplace_back(BooleanFunction::Node::Variable(std::get<0>(token.variable), std::get<1>(token.variable))); break;
                 case TokenType::Constant:
-                    nodes.emplace_back(BooleanFunction::OperandNode::make(token.constant)); break;
+                    nodes.emplace_back(BooleanFunction::Node::Constant(token.constant)); break;
 
                 default: return "Cannot handle '" + token.to_string() + "' in '" + expression + "'.";
             }

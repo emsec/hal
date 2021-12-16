@@ -339,7 +339,6 @@ namespace hal {
         const auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
     }
 
-
     TEST(BooleanFunction, Substitution) {
         const auto  a = BooleanFunction::Var("A"),
                     b = BooleanFunction::Var("B"),
@@ -578,7 +577,7 @@ namespace hal {
                 SMT::Constraint(b.clone(), _1.clone()),
             },
             {
-                SMT::Constraint(a & b, _1.clone()),
+                SMT::Constraint(a.clone() & b.clone(), _1.clone()),
                 SMT::Constraint(a.clone(), _1.clone()),
                 SMT::Constraint(b.clone(), _0.clone()),
             },
