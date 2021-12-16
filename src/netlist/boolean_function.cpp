@@ -647,23 +647,13 @@ namespace hal
 
     BooleanFunction::BooleanFunction(BooleanFunction::Node&& node, std::vector<BooleanFunction>&& p) : BooleanFunction() 
     {
-        auto size = 1;
-        for (const auto& parameter : p) {
-            size += parameter.size();
-        }
+        auto size = 1; for (const auto& parameter : p) { size += parameter.size(); }
         this->m_nodes.reserve(size);
 
         for (auto&& parameter : p) {
-            this->append(std::move(parameter.m_nodes));
+            this->m_nodes.insert(this->m_nodes.end(), parameter.m_nodes.begin(), parameter.m_nodes.end());
         }
         this->m_nodes.emplace_back(node);
-    }
-
-    void BooleanFunction::append(std::vector<BooleanFunction::Node>&& nodes) {
-        this->m_nodes.insert(m_nodes.end(),
-            std::make_move_iterator(nodes.begin()),
-            std::make_move_iterator(nodes.end())
-        );
     }
 
     std::string BooleanFunction::to_string_in_reverse_polish_notation() const {

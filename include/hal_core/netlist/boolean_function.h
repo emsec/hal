@@ -358,7 +358,7 @@ namespace hal
             auto size = 1; ((size += p.size()), ...);
             this->m_nodes.reserve(size);
 
-            (this->append(std::move(p.m_nodes)), ...);
+            (this->m_nodes.insert(this->m_nodes.end(), p.m_nodes.begin(), p.m_nodes.end()), ...);
             this->m_nodes.emplace_back(std::move(node));
         }
 
@@ -374,9 +374,6 @@ namespace hal
         ////////////////////////////////////////////////////////////////////////
         // Internal Interface
         ////////////////////////////////////////////////////////////////////////
-
-        /// Appends a list of Boolan function nodes to the instance.
-        inline void append(std::vector<BooleanFunction::Node>&& nodes);
 
         /// Returns the Boolean function in reverse-polish notation.
         std::string to_string_in_reverse_polish_notation() const;
