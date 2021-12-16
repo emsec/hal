@@ -256,6 +256,8 @@ namespace hal
 
             default: assert(false && "not implemented reached.");
         }
+
+        return {};
     }
 
     std::set<std::string> BooleanFunction::get_variable_names() const
