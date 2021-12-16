@@ -1,8 +1,8 @@
 #include "gui/selection_details_widget/net_details_widget/module_table_model.h"
 
 #include "gui/gui_globals.h"
-#include "hal_core/netlist/net.h"
 #include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
 
 #include <QDebug>
 
@@ -91,8 +91,6 @@ namespace hal
         if (net == nullptr)
             return;
 
-
-
         mNetId = net->get_id();
         mModIds.clear();
         QList<Entry> newEntryList;
@@ -170,27 +168,32 @@ namespace hal
         return mEntries[index.row()].used_port;
     }
 
-    void ModuleTableModel::handleModulePortsChanged(Module *m)
+    void ModuleTableModel::handleModulePortsChanged(Module* m)
     {
-        if(mModIds.find((int)m->get_id()) != mModIds.end())
+        if (mModIds.find((int)m->get_id()) != mModIds.end())
         {
-            auto net = gNetlist->get_net_by_id(mNetId);
-            auto inputNets = m->get_input_nets();
-            auto outputNets = m->get_output_nets();
-            if(std::find(inputNets.begin(), inputNets.end(), net) != inputNets.end() ||
-               std::find(outputNets.begin(), outputNets.end(), net) != outputNets.end())
-                setNet(net);
+            Net* net = gNetlist->get_net_by_id(mNetId);
+            if (net != nullptr)
+            {
+                std::unordered_set<Net*> inputNets  = m->get_input_nets();
+                std::unordered_set<Net*> outputNets = m->get_output_nets();
+                if (inputNets.find(net) != inputNets.end() || outputNets.find(net) != outputNets.end())
+                {
+                    setNet(net);
+                }
+            }
         }
     }
 
-    void ModuleTableModel::handleModuleRemoved(Module *m)
+    void ModuleTableModel::handleModuleRemoved(Module* m)
     {
-        if(mModIds.find((int)m->get_id()) != mModIds.end())
+        if (mModIds.find((int)m->get_id()) != mModIds.end())
         {
-            auto net = gNetlist->get_net_by_id(mNetId);
-            if(net)
+            Net* net = gNetlist->get_net_by_id(mNetId);
+            if (net != nullptr)
+            {
                 setNet(net);
+            }
         }
-
     }
 }    // namespace hal

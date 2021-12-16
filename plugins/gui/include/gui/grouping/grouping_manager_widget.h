@@ -24,18 +24,16 @@
 #pragma once
 
 #include "gui/content_widget/content_widget.h"
-
+#include "gui/grouping/grouping_table_model.h"
 #include "hal_core/defines.h"
 
-#include "gui/grouping/grouping_table_model.h"
-
-#include <QListWidget>
-#include <QPoint>
-#include <QTableView>
-#include <QPushButton>
-#include <QMenu>
-#include <QMap>
 #include <QColor>
+#include <QListWidget>
+#include <QMap>
+#include <QMenu>
+#include <QPoint>
+#include <QPushButton>
+#include <QTableView>
 
 namespace hal
 {
@@ -138,9 +136,9 @@ namespace hal
         void setColorSelectIconStyle(const QString& style);
         void setToSelectionIconPath(const QString& path);
         void setToSelectionIconStyle(const QString& style);
-        void setSearchIconPath(const QString &path);
-        void setSearchIconStyle(const QString &style);
-        void setSearchActiveIconStyle(const QString &style);
+        void setSearchIconPath(const QString& path);
+        void setSearchIconStyle(const QString& style);
+        void setSearchActiveIconStyle(const QString& style);
         ///@}
 
         /**
@@ -148,14 +146,20 @@ namespace hal
          *
          * @returns the GroupingTableModel of this GroupingManagerWidget
          */
-        GroupingTableModel* getModel() const { return mGroupingTableModel; }
+        GroupingTableModel* getModel() const
+        {
+            return mGroupingTableModel;
+        }
 
         /**
          * Get the underlying proxy model that is used to sort and filter the normal model.
          *
          * @return The proxy model.
          */
-        GroupingProxyModel* getProxyModel() const { return mProxyModel; }
+        GroupingProxyModel* getProxyModel() const
+        {
+            return mProxyModel;
+        }
 
         /**
          * Enable/Disable the toolbar buttons which require a valid selection
@@ -198,14 +202,13 @@ namespace hal
          */
         void handleNewEntryAdded(const QModelIndex& modelIndex);
 
-
         /**
          * Q_SLOT to handle that the current item of the table views selection model has been changed.
          *
          * @param current - The index of the newly current item.
          * @param previous - The index of the previous current item.
          */
-        void handleCurrentChanged(const QModelIndex &current = QModelIndex(), const QModelIndex &previous = QModelIndex());
+        void handleCurrentChanged(const QModelIndex& current = QModelIndex(), const QModelIndex& previous = QModelIndex());
 
         /**
          * Q_SLOT to handle the change of the graph selection.
@@ -300,13 +303,13 @@ namespace hal
          *
          * @param index - The sender that emitted the change.
          */
-        void handleDoubleClicked(const QModelIndex & index);
+        void handleDoubleClicked(const QModelIndex& index);
 
     private:
         class ToolboxModuleHash
         {
         public:
-            QHash<Gate*,Module*> mHash;
+            QHash<Gate*, Module*> mHash;
             ToolboxModuleHash(const Node& nd);
         };
 
@@ -360,4 +363,4 @@ namespace hal
 
         GroupingTableEntry getCurrentGrouping();
     };
-}
+}    // namespace hal

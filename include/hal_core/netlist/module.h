@@ -241,36 +241,40 @@ namespace hal
         bool contains_net(Net* net, bool recursive = false) const;
 
         /**
+         * TODO add pybind
          * Get all nets that have at least one source or one destination within the module.<br>
          * A filter can be applied to the result to only get nets matching the specified condition.<br>
          * If \p recursive is true, nets in submodules are considered as well.
          *
          * @param[in] filter - Filter to be applied to the nets.
          * @param[in] recursive - True to also consider nets in submodules, false otherwise.
-         * @returns A vector of nets.
+         * @returns An unordered set of nets.
          */
-        std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr, bool recursive = false) const;
+        std::unordered_set<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr, bool recursive = false) const;
 
         /**
+         * TODO add pybind
          * Get all nets that are either a global input to the netlist or have at least one source outside of the module.
          *
-         * @returns A vector of input nets.
+         * @returns An unordered set of input nets.
          */
-        std::vector<Net*> get_input_nets() const;
+        const std::unordered_set<Net*>& get_input_nets() const;
 
         /**
+         * TODO add pybind
          * Get all nets that are either a global output to the netlist or have at least one destination outside of the module.
          *
-         * @returns A vector of output nets.
+         * @returns An unordered set of output nets.
          */
-        std::vector<Net*> get_output_nets() const;
+        const std::unordered_set<Net*>& get_output_nets() const;
 
         /**
+         * TODO add pybind
          * Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
          *
-         * @returns A vector of internal nets.
+         * @returns An unordered set of internal nets.
          */
-        std::vector<Net*> get_internal_nets() const;
+        const std::unordered_set<Net*>& get_internal_nets() const;
 
         /** 
          * Check whether the given net is an input of the module, i.e., whether the net is a global input to the netlist or has at least one source outside of the module.
@@ -575,10 +579,10 @@ namespace hal
         std::unordered_map<u32, Gate*> m_gates_map;
         std::vector<Gate*> m_gates;
 
-        std::set<Net*> m_nets;
-        std::set<Net*> m_input_nets;
-        std::set<Net*> m_output_nets;
-        std::set<Net*> m_internal_nets;
+        std::unordered_set<Net*> m_nets;
+        std::unordered_set<Net*> m_input_nets;
+        std::unordered_set<Net*> m_output_nets;
+        std::unordered_set<Net*> m_internal_nets;
 
         EventHandler* m_event_handler;
     };
