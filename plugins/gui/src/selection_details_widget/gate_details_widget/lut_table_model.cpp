@@ -1,44 +1,50 @@
 
-#include <algorithm>
-
 #include "gui/selection_details_widget/gate_details_widget/lut_table_model.h"
+
 #include "hal_core/utilities/log.h"
 
+#include <algorithm>
+#include <variant>
 
 namespace hal
 {
 
-    LUTTableModel::LUTTableModel(QObject* parent) : QAbstractTableModel(parent){
+    LUTTableModel::LUTTableModel(QObject* parent) : QAbstractTableModel(parent)
+    {
         LutEntry emptyEntry;
         emptyEntry.output = "No LUT gate selected yet...";
         mLutEntries.append(emptyEntry);
         mOutputPin = "-";
     }
 
-    int LUTTableModel::columnCount(const QModelIndex &parent) const
+    int LUTTableModel::columnCount(const QModelIndex& parent) const
     {
         Q_UNUSED(parent)
         return (mInputPins.size() + 1);
     }
 
-    int LUTTableModel::rowCount(const QModelIndex &parent) const
+    int LUTTableModel::rowCount(const QModelIndex& parent) const
     {
         Q_UNUSED(parent)
         return mLutEntries.size();
     }
 
-    QVariant LUTTableModel::data(const QModelIndex &index, int role) const
+    QVariant LUTTableModel::data(const QModelIndex& index, int role) const
     {
-        if (role == Qt::DisplayRole){
-            if(index.column() < mInputPins.size()){
+        if (role == Qt::DisplayRole)
+        {
+            if (index.column() < mInputPins.size())
+            {
                 return mLutEntries[index.row()].inputBits[index.column()];
             }
-            else{
+            else
+            {
                 return mLutEntries[index.row()].output;
             }
         }
 
-        else if (role == Qt::TextAlignmentRole){
+        else if (role == Qt::TextAlignmentRole)
+        {
             return Qt::AlignCenter;
         }
 
@@ -47,8 +53,9 @@ namespace hal
 
     QVariant LUTTableModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
-        if (role != Qt::DisplayRole) return QVariant();
-        if(orientation == Qt::Horizontal)
+        if (role != Qt::DisplayRole)
+            return QVariant();
+        if (orientation == Qt::Horizontal)
         {
             if (section < mInputPins.size())
                 return mInputPins[section];
@@ -59,7 +66,7 @@ namespace hal
         return QVariant();
     }
 
-    bool LUTTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
+    bool LUTTableModel::setData(const QModelIndex& index, const QVariant& value, int role)
     {
         // TODO
         Q_UNUSED(index)
@@ -75,39 +82,44 @@ namespace hal
 
         // Collect the variables as headers
         mInputPins.clear();
-        for(std::string v : lutFunction.get_variables()){
+        std::vector<std::string> bfVariables = utils::to_vector(lutFunction.get_variable_names());
+        std::sort(bfVariables.begin(), bfVariables.end(), std::greater<>());
+        for (std::string v : bfVariables)
+        {
             mInputPins.append(QString::fromStdString(v));
         }
+        std::reverse(bfVariables.begin(), bfVariables.end());
 
-        // Collect the lut data
-        std::vector<std::string> bfVariables = lutFunction.get_variables();
-        std::reverse(bfVariables.begin(), bfVariables.end()); // To read the lut the variable list must be reversed
-
-        std::vector<BooleanFunction::Value> truthTable = lutFunction.get_truth_table(bfVariables, false);
-        mLutEntries.clear();
-        for(u32 truthTableIdx = 0; truthTableIdx < truthTable.size(); truthTableIdx++){
-            LutEntry entry;
-            // Get input bits
-            for(int i = 0; i < mInputPins.size(); i++){
-                u32 shift = mInputPins.size()-i-1;
-                u8 inputBit = u8((truthTableIdx >> shift) & 1);
-                entry.inputBits.append(inputBit);
+        auto ttVariant = lutFunction.compute_truth_table(bfVariables, false);
+        if (std::get_if<std::vector<std::vector<BooleanFunction::Value>>>(&ttVariant) != nullptr)
+        {
+            // can only deal with single-bit Boolean functions, but that should be the case for LUTs anyway
+            std::vector<BooleanFunction::Value> truthTable = std::get<std::vector<std::vector<BooleanFunction::Value>>>(ttVariant).at(0);
+            mLutEntries.clear();
+            for (u32 truthTableIdx = 0; truthTableIdx < truthTable.size(); truthTableIdx++)
+            {
+                LutEntry entry;
+                // Get input bits
+                for (int i = 0; i < mInputPins.size(); i++)
+                {
+                    u32 shift   = mInputPins.size() - i - 1;
+                    u8 inputBit = u8((truthTableIdx >> shift) & 1);
+                    entry.inputBits.append(inputBit);
+                }
+                // Get output bit
+                BooleanFunction::Value val = truthTable[truthTableIdx];
+                if (val == BooleanFunction::Value::ZERO)
+                    entry.output = "0";
+                else if (val == BooleanFunction::Value::ONE)
+                    entry.output = "1";
+                else if (val == BooleanFunction::Value::Z)
+                    entry.output = "Z";
+                else
+                    entry.output = "X";
+                mLutEntries.append(entry);
             }
-            // Get output bit
-            BooleanFunction::Value val = truthTable[truthTableIdx];
-            if(val == BooleanFunction::Value::ZERO)
-                entry.output = "0";
-            else if(val == BooleanFunction::Value::ONE)
-                entry.output = "1";
-            else if(val == BooleanFunction::Value::Z)
-                entry.output = "Z";
-            else
-                entry.output = "X";
-            mLutEntries.append(entry);
+            Q_EMIT layoutChanged();
         }
-        Q_EMIT layoutChanged();
     }
 
-} // namespace hal
-
-
+}    // namespace hal
