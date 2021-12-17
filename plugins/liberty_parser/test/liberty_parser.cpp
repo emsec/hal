@@ -51,12 +51,9 @@ namespace hal {
                 EXPECT_EQ(gt->get_pins_of_type(PinType::ground), std::unordered_set<std::string>({"GND"}));
                 // -- Check the boolean functions
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("O"),
-                          BooleanFunction::from_string("I", std::vector<std::string>({"I"})));
-                ASSERT_TRUE(
-                    gt->get_boolean_functions().find("O_undefined") != gt->get_boolean_functions().end()); // x_function
-                EXPECT_EQ(gt->get_boolean_functions().at("O_undefined"),
-                          BooleanFunction::from_string("!I", std::vector<std::string>({"I"})));
+                EXPECT_EQ(gt->get_boolean_functions().at("O"), BooleanFunction::Var("I"));
+                ASSERT_TRUE(gt->get_boolean_functions().find("O_undefined") != gt->get_boolean_functions().end()); // x_function
+                EXPECT_EQ(gt->get_boolean_functions().at("O_undefined"), std::get<BooleanFunction>(BooleanFunction::from("!I")));
 
                 // Components
                 ASSERT_EQ(gt->get_components().size(), 0);
@@ -93,8 +90,7 @@ namespace hal {
                 EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
                 EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("O"),
-                          BooleanFunction::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
+                EXPECT_EQ(gt->get_boolean_functions().at("O"), std::get<BooleanFunction>(BooleanFunction::from("S & R & D")));
                 
                 // Components
                 ASSERT_EQ(gt->get_components().size(), 2);
@@ -103,10 +99,10 @@ namespace hal {
                 const StateComponent* state_component = gt->get_component_as<StateComponent>([](const GateTypeComponent* c){ return StateComponent::is_class_of(c); });
                 ASSERT_NE(state_component, nullptr);
 
-                EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("D"));
-                EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK"));
-                EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("R"));
-                EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("S"));
+                EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::Var("D"));
+                EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::Var("CLK"));
+                EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::Var("R"));
+                EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::Var("S"));
                 EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H));
                 EXPECT_EQ(state_component->get_state_identifier(), "IQ");
                 EXPECT_EQ(state_component->get_neg_state_identifier(), "IQN");
@@ -142,8 +138,7 @@ namespace hal {
                 EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
                 EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("O"),
-                          BooleanFunction::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
+                EXPECT_EQ(gt->get_boolean_functions().at("O"), std::get<BooleanFunction>(BooleanFunction::from("S & R & D")));
 
                 // Components
                 ASSERT_EQ(gt->get_components().size(), 2);
@@ -152,10 +147,10 @@ namespace hal {
                 const StateComponent* state_component = gt->get_component_as<StateComponent>([](const GateTypeComponent* c){ return StateComponent::is_class_of(c); });
                 ASSERT_NE(state_component, nullptr);
 
-                EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::from_string("D"));
-                EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::from_string("G"));
-                EXPECT_EQ(latch_component->get_async_reset_function(), BooleanFunction::from_string("R"));
-                EXPECT_EQ(latch_component->get_async_set_function(), BooleanFunction::from_string("S"));
+                EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::Var("D"));
+                EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::Var("G"));
+                EXPECT_EQ(latch_component->get_async_reset_function(), BooleanFunction::Var("R"));
+                EXPECT_EQ(latch_component->get_async_set_function(), BooleanFunction::Var("S"));
                 EXPECT_EQ(latch_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::N, AsyncSetResetBehavior::T));
                 EXPECT_EQ(state_component->get_state_identifier(), "IQ");
                 EXPECT_EQ(state_component->get_neg_state_identifier(), "IQN");

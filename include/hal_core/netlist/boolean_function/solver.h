@@ -88,8 +88,10 @@ namespace SMT {
  		 *
  		 * Example:
 		 *		auto [ok, result] = SMT::Solver()
-		 *		.with_constraint(SMT::Constraint(BooleanFunction("A") & BooleanFunction("B"), BooleanFunction::ONE))
-		 *		.with_constraint(SMT::Constraint(BooleanFunction("A"), BooleanFunction::ONE))
+		 *      // A & B  ==  1 
+		 *		.with_constraint(SMT::Constraint(BooleanFunction::Var("A") & BooleanFunction::Var("B"), BooleanFunction::Const(1, 1)))
+		 *		// A  ==  1
+		 *      .with_constraint(SMT::Constraint(BooleanFunction::Var("A"), BooleanFunction::Const(1, 1)))
 		 *		.query(SMT::QueryConfig()
 		 *    		.with_solver(SMT::SolverType::Z3)
 		 *    		.with_model_generation()

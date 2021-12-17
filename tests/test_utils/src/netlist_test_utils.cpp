@@ -409,12 +409,12 @@ namespace hal
 
         gt = gl->create_gate_type("gnd");
         gt->add_output_pins({"O"});
-        gt->add_boolean_function("O", BooleanFunction::from_string("0"));
+        gt->add_boolean_function("O", BooleanFunction::Const(0, 1));
         gl->mark_gnd_gate_type(gt);
 
         gt = gl->create_gate_type("vcc");
         gt->add_output_pins({"O"});
-        gt->add_boolean_function("O", BooleanFunction::from_string("1"));
+        gt->add_boolean_function("O", BooleanFunction::Const(1, 1));
         gl->mark_vcc_gate_type(gt);
 
         // sequential types

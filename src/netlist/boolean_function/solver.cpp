@@ -132,18 +132,18 @@ namespace Boolector {
 }  // namespace Boolector
 
 	Solver::Solver(std::vector<Constraint>&& constraints) : 
-		m_constraints(constraints) {}
+		m_constraints(std::move(constraints)) {}
 
 	Solver& Solver::with_constraint(Constraint&& constraint) 
 	{
-		this->m_constraints.emplace_back(constraint);
+		this->m_constraints.emplace_back(std::move(constraint));
 		return *this;
 	}
 
 	Solver& Solver::with_constraints(std::vector<Constraint>&& constraints) 
 	{
 		for (auto&& constraint : constraints) {
-			this->m_constraints.emplace_back(constraint);
+			this->m_constraints.emplace_back(std::move(constraint));
 		}
 		return *this;
 	}
@@ -186,9 +186,10 @@ namespace Boolector {
 			return {false, Result::Unknown()};
 		}
 
-		switch (auto [output_ok, was_killed, output] = type2query.at(config.solver)(input, config); output_ok) {
-			case true: return Solver::translate_from_smt2(was_killed, output, config);
-			default:   return {false, Result::Unknown()};
+		if (auto [output_ok, was_killed, output] = type2query.at(config.solver)(input, config); output_ok) {
+			return Solver::translate_from_smt2(was_killed, output, config);
+		} else {
+			return {false, Result::Unknown()};
 		}
 	}
 
@@ -203,9 +204,9 @@ namespace Boolector {
 		auto translate_declarations = [] (const std::vector<Constraint>& _constraints) -> std::string {
 			std::set<std::tuple<std::string, u16>> inputs;
 			for (const auto& constraint : _constraints) {
-				for (const auto& node : constraint.lhs.get_reverse_polish_notation()) {
-					if (auto variable = node->get_as<BooleanFunction::OperandNode>(); node->is_variable()) {
-						inputs.insert(std::make_tuple(variable->variable, node->size));
+				for (const auto& node : constraint.lhs.get_nodes()) {
+					if (node.is_variable()) {
+						inputs.insert(std::make_tuple(node.variable, node.size));
 					}
 				}
 			}
@@ -218,16 +219,17 @@ namespace Boolector {
 		};
 
 		auto translate_constraints = [] (const std::vector<Constraint>& _constraints) -> std::tuple<bool, std::string> {				
-			return std::accumulate(_constraints.begin(), _constraints.end(), std::make_tuple(true, std::string()),
-				[] (auto state , auto constraint) -> std::tuple<bool, std::string> {
+			return std::accumulate(_constraints.cbegin(), _constraints.cend(), std::make_tuple(true, std::string()),
+				[] (auto state , const auto& constraint) -> std::tuple<bool, std::string> {
 					auto [ok, accumulator] = state;
 
 					auto [lhs_ok, lhs] = Translator::translate_to_smt2(constraint.lhs);
 					auto [rhs_ok, rhs] = Translator::translate_to_smt2(constraint.rhs);
 
-					switch (ok && lhs_ok && rhs_ok) {
-						case true: return {true, accumulator + "(assert (= " + lhs + " " + rhs + "))\n"};
-						default:   return {false, ""};
+					if (ok && lhs_ok && rhs_ok) {
+						return {true, accumulator + "(assert (= " + lhs + " " + rhs + "))\n"};
+					} else {
+						return {false, ""};
 					}
 				}
 			);
@@ -238,9 +240,10 @@ namespace Boolector {
 		auto [constraints_ok, constraints_str] = translate_constraints(constraints);
 		auto epilogue = std::string("(check-sat)") + ((config.generate_model) ? "\n(get-model)" : "");
 
-		switch (constraints_ok) {
-			case true: return {true, theory + "\n" + declarations + "\n" + constraints_str + "\n" + epilogue};
-			default:   return {false, ""};
+		if (constraints_ok) {
+			return {true, theory + "\n" + declarations + "\n" + constraints_str + "\n" + epilogue};
+		} else {
+			return {false, ""};
 		}		
 	}
 
@@ -260,12 +263,11 @@ namespace Boolector {
 
 		if (to_lowercase(result) == "sat")
 		{
-			switch (config.generate_model) {
-				case true: {
-					auto [ok, model] = Model::parse(model_str, config.solver);
-					return {ok, Result::Sat(model)};
-				}
-				default: return {true, Result::Sat()};
+			if (config.generate_model) {
+				auto [ok, model] = Model::parse(model_str, config.solver);
+				return {ok, Result::Sat(model)};
+			} else {
+				return {true, Result::Sat()};
 			}
 		}
 		if (to_lowercase(result) == "unsat")

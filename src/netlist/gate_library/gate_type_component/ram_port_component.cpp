@@ -8,7 +8,7 @@ namespace hal
                                        const BooleanFunction& clock_bf,
                                        const BooleanFunction& enable_bf,
                                        bool is_write)
-        : m_component(std::move(component)), m_data_group(data_group), m_addr_group(addr_group), m_clock_bf(clock_bf), m_enable_bf(enable_bf), m_is_write(is_write)
+        : m_component(std::move(component)), m_data_group(data_group), m_addr_group(addr_group), m_clock_bf(clock_bf.clone()), m_enable_bf(enable_bf.clone()), m_is_write(is_write)
     {
     }
 
@@ -72,7 +72,7 @@ namespace hal
 
     void RAMPortComponent::set_clock_function(const BooleanFunction& clock_bf)
     {
-        m_clock_bf = clock_bf;
+        m_clock_bf = clock_bf.clone();
     }
 
     const BooleanFunction& RAMPortComponent::get_enable_function() const
@@ -82,7 +82,7 @@ namespace hal
 
     void RAMPortComponent::set_enable_function(const BooleanFunction& enable_bf)
     {
-        m_enable_bf = enable_bf;
+        m_enable_bf = enable_bf.clone();
     }
 
     bool RAMPortComponent::is_write_port() const

@@ -69,7 +69,7 @@ namespace hal
                 {
                     BooleanFunction bf = gate->get_boolean_function();
 
-                    for (const std::string& input_pin : bf.get_variables())
+                    for (const auto& input_pin : bf.get_variable_names())
                     {
                         const Net* const input_net = gate->get_fan_in_net(input_pin);
                         if (input_net == nullptr)
@@ -79,7 +79,7 @@ namespace hal
                             return bf;
                         }
 
-                        bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));
+                        bf = bf.substitute(input_pin, "net_" + std::to_string(input_net->get_id()));
                     }
                     cache.emplace(gate->get_id(), bf);
                     return bf;
@@ -111,7 +111,9 @@ namespace hal
 
                 if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
                 {
-                    result = result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate, cache));
+                    if (auto substitution = result.substitute("net_" + std::to_string(n->get_id()), get_function_of_gate(src_gate, cache)); std::get_if<0>(&substitution) != nullptr) {
+                        result = std::get<0>(substitution);    
+                    }
 
                     for (Net* sn : src_gate->get_fan_in_nets())
                     {
@@ -629,15 +631,19 @@ namespace hal
 
                         if (sources.front()->get_gate()->is_gnd_gate())
                         {
-                            func = func.substitute(ep->get_pin(), BooleanFunction::Value::ZERO);
+                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(0, 1)); std::get_if<0>(&substitution) != nullptr) {
+                                func = std::get<0>(substitution);
+                            }
                         }
                         else if (sources.front()->get_gate()->is_vcc_gate())
                         {
-                            func = func.substitute(ep->get_pin(), BooleanFunction::Value::ONE);
+                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(1, 1)); std::get_if<0>(&substitution) != nullptr) {
+                                func = std::get<0>(substitution);
+                            }
                         }
                     }
 
-                    func = func.optimize_constants();
+                    func = func.simplify();
                 }
 
                 std::string func_str                    = func.to_string();
@@ -748,7 +754,7 @@ namespace hal
                     continue;
                 }
 
-                std::vector<std::string> active_pins = functions.begin()->second.get_variables();
+                auto active_pins = functions.begin()->second.get_variable_names();
 
                 // if there are more fan-in nets than there are active pins, we need to get rid of some nets
                 if (fan_in.size() > active_pins.size())

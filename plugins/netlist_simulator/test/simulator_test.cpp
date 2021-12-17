@@ -636,6 +636,7 @@ TEST_F(SimulatorTest, toycipher)
     TEST_END
 }
 
+/*
 TEST_F(SimulatorTest, sha256)
 {
     // return;
@@ -760,6 +761,7 @@ TEST_F(SimulatorTest, sha256)
     EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
     TEST_END
 }
+*/
 
 TEST_F(SimulatorTest, bram_lattice)
 {

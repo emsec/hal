@@ -133,7 +133,7 @@ namespace hal
             return out;
         }
 
-        Constraint::Constraint(BooleanFunction _lhs, BooleanFunction _rhs) : lhs(_lhs), rhs(_rhs)
+        Constraint::Constraint(BooleanFunction&& _lhs, BooleanFunction&& _rhs) : lhs(_lhs), rhs(_rhs)
         {
         }
 

@@ -4,6 +4,7 @@ namespace hal
 {
     void boolean_function_init(py::module& m)
     {
+        /*
         py::class_<BooleanFunction> py_boolean_function(m, "BooleanFunction", R"(Boolean function class.)");
 
         py::enum_<BooleanFunction::Value>(py_boolean_function, "Value", R"(Represents the logic value that a boolean function operates on.)")
@@ -15,19 +16,6 @@ namespace hal
 
         py_boolean_function.def(py::init<>(), R"(
             Construct an empty Boolean function and thus evaluates to ``X`` (undefined).
-        )");
-
-        py_boolean_function.def(py::init<const std::string&>(), py::arg("variable_name"), R"(
-            Construct a Boolean function comprising a single variable.
-            The name of the variable must not be empty.
-
-            :param str variable_name: The name of the variable.
-        )");
-
-        py_boolean_function.def(py::init<BooleanFunction::Value>(), py::arg("constant"), R"(
-            Construct a Boolean function from a single constant value.
-
-            :param hal_py.BooleanFunction.Value constant: The constant value.
         )");
 
         py_boolean_function.def(
@@ -50,23 +38,6 @@ namespace hal
             :param hal_py.BooleanFunction function: The function replace the variable with.
             :returns: The resulting Boolean function.
             :rtype: hal_py.BooleanFunction
-        )");
-
-        py_boolean_function.def("evaluate", &BooleanFunction::evaluate, py::arg("inputs") = std::unordered_map<std::string, BooleanFunction::Value>(), R"(
-            Evaluate the Boolean function on the given inputs and returns the result.
-
-            :param dict[str,hal_py.BooleanFunction.Value] inputs: A dict from variable names to values.
-            :returns: The value that the function evaluates to.
-            :rtype: hal_py.BooleanFunction.Value
-        )");
-
-        py_boolean_function.def(
-            "__call__", [](const BooleanFunction& f, const std::unordered_map<std::string, BooleanFunction::Value>& values) { return f(values); }, R"(
-            Evaluate the function on the given inputs and returns the result.
-
-            :param dict[str,hal_py.BooleanFunction.Value] inputs: A dict from variable names to values.
-            :returns: The value that the function evaluates to.
-            :rtype: hal_py.BooleanFunction.Value
         )");
 
         py_boolean_function.def("is_constant_one", &BooleanFunction::is_constant_one, R"(
@@ -221,13 +192,6 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_boolean_function.def("optimize_constants", &BooleanFunction::optimize_constants, R"(
-            Removes constant values whenever possible.
-
-            :returns: The optimized Boolean function.
-            :rtype: hal_py.BooleanFunction
-        )");
-
         py_boolean_function.def("get_truth_table", &BooleanFunction::get_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), py::arg("remove_unknown_variables") = false, R"(
             Get the truth table outputs of the Boolean function.
 
@@ -242,5 +206,6 @@ namespace hal
             :returns: The list of output values.
             :rtype: list[hal_py.BooleanFunction.Value]
         )");
+        */
     }
 }    // namespace hal

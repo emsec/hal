@@ -70,7 +70,7 @@ namespace hal
             }
 
             // determine clock net
-            for (const std::string& var : simulation_port.clock_func.get_variables())
+            for (const std::string& var : simulation_port.clock_func.get_variable_names())
             {
                 if (gate_type->get_pin_type(var) == PinType::clock)
                 {
@@ -177,9 +177,9 @@ namespace hal
         for (size_t i = 0; i < m_ports.size(); i++)
         {
             Port& port = m_ports.at(i);
-            if (event.affected_net == port.clock_net && port.clock_func.evaluate(m_input_values) == BooleanFunction::ONE)
+            if (event.affected_net == port.clock_net && std::get<0>(port.clock_func.evaluate(m_input_values)) == BooleanFunction::ONE)
             {
-                if (port.enable_func.evaluate(m_input_values) == BooleanFunction::Value::ONE)
+                if (std::get<0>(port.enable_func.evaluate(m_input_values)) == BooleanFunction::Value::ONE)
                 {
                     if (port.is_write)
                     {
@@ -250,7 +250,7 @@ namespace hal
                 const std::string& pin = port.data_pins.at(i);
 
                 // do not change memory content of masking function specified and not evaluating to 1
-                if (auto func_it = functions.find(pin); func_it != functions.end() && func_it->second.evaluate(m_input_values) != BooleanFunction::Value::ONE)
+                if (auto func_it = functions.find(pin); func_it != functions.end() && std::get<0>(func_it->second.evaluate(m_input_values)) != BooleanFunction::Value::ONE)
                 {
                     continue;
                 }

@@ -583,7 +583,7 @@ namespace hal
             GateType* gt = gl.create_gate_type("dummy1", {GateTypeProperty::combinational});
             ASSERT_NE(gt, nullptr);
 
-            BooleanFunction bf1 = BooleanFunction::ONE;
+            BooleanFunction bf1 = BooleanFunction::Const(BooleanFunction::Value::ONE);
             gt->add_boolean_function("bf1", bf1);
 
             std::unordered_map<std::string, BooleanFunction> ret_map = gt->get_boolean_functions();
@@ -598,8 +598,8 @@ namespace hal
             ASSERT_NE(gt, nullptr);
         
             std::unordered_map<std::string, BooleanFunction> func_map = {
-                {"bf1", BooleanFunction::ONE},
-                {"bf2", BooleanFunction::ONE}};
+                {"bf1",  BooleanFunction::Const(BooleanFunction::Value::ONE)},
+                {"bf2",  BooleanFunction::Const(BooleanFunction::Value::ONE)}};
             gt->add_boolean_functions(func_map);
 
             std::unordered_map<std::string, BooleanFunction> ret_map = gt->get_boolean_functions();
@@ -647,7 +647,7 @@ namespace hal
         {
             GateLibrary gl("no_path", "example_gl");
 
-            GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::from_string("D"), BooleanFunction::from_string("C")));
+            GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::Var("D"), BooleanFunction::Var("C")));
             ASSERT_NE(gt, nullptr);
             FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() ==  GateTypeComponent::ComponentType::ff; });
             ASSERT_NE(ff_component, nullptr);
@@ -656,26 +656,26 @@ namespace hal
             InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
             EXPECT_EQ(init_component, nullptr);
 
-            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("C"));
-            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("D"));
+            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::Var("C"));
+            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::Var("D"));
             EXPECT_TRUE(ff_component->get_async_reset_function().is_empty());
             EXPECT_TRUE(ff_component->get_async_set_function().is_empty());
             EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::undef, AsyncSetResetBehavior::undef));
             EXPECT_EQ(state_component->get_state_identifier(), "IQ");
             EXPECT_EQ(state_component->get_neg_state_identifier(), "IQN");
 
-            ff_component->set_clock_function(BooleanFunction::from_string("CLK"));
-            ff_component->set_next_state_function(BooleanFunction::from_string("DIN"));
-            ff_component->set_async_reset_function(BooleanFunction::from_string("RST"));
-            ff_component->set_async_set_function(BooleanFunction::from_string("SET"));
+            ff_component->set_clock_function(BooleanFunction::Var("CLK"));
+            ff_component->set_next_state_function(BooleanFunction::Var("DIN"));
+            ff_component->set_async_reset_function(BooleanFunction::Var("RST"));
+            ff_component->set_async_set_function(BooleanFunction::Var("SET"));
             ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L);
             state_component->set_state_identifier("IIQ");
             state_component->set_neg_state_identifier("IIQN");
 
-            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK"));
-            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("DIN"));
-            EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("RST"));
-            EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("SET"));
+            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::Var("CLK"));
+            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::Var("DIN"));
+            EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::Var("RST"));
+            EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::Var("SET"));
             EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L));
             EXPECT_EQ(state_component->get_state_identifier(), "IIQ");
             EXPECT_EQ(state_component->get_neg_state_identifier(), "IIQN");
@@ -683,7 +683,7 @@ namespace hal
         {
             GateLibrary gl("no_path", "example_gl");
 
-            GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("category1", {"identifier1"}), "IQ", "IQN"), BooleanFunction::from_string("D"), BooleanFunction::from_string("C")));
+            GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("category1", {"identifier1"}), "IQ", "IQN"), BooleanFunction::Var("D"), BooleanFunction::Var("C")));
             ASSERT_NE(gt, nullptr);
             FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c){ return FFComponent::is_class_of(c); });
             ASSERT_NE(ff_component, nullptr);
@@ -692,8 +692,8 @@ namespace hal
             InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c){ return InitComponent::is_class_of(c); });
             ASSERT_NE(init_component, nullptr);
 
-            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("C"));
-            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("D"));
+            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::Var("C"));
+            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::Var("D"));
             EXPECT_TRUE(ff_component->get_async_reset_function().is_empty());
             EXPECT_TRUE(ff_component->get_async_set_function().is_empty());
             EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::undef, AsyncSetResetBehavior::undef));
@@ -702,20 +702,20 @@ namespace hal
             EXPECT_EQ(init_component->get_init_category(), "category1");
             EXPECT_EQ(init_component->get_init_identifiers(), std::vector<std::string>({"identifier1"}));
 
-            ff_component->set_clock_function(BooleanFunction::from_string("CLK"));
-            ff_component->set_next_state_function(BooleanFunction::from_string("DIN"));
-            ff_component->set_async_reset_function(BooleanFunction::from_string("RST"));
-            ff_component->set_async_set_function(BooleanFunction::from_string("SET"));
+            ff_component->set_clock_function(BooleanFunction::Var("CLK"));
+            ff_component->set_next_state_function(BooleanFunction::Var("DIN"));
+            ff_component->set_async_reset_function(BooleanFunction::Var("RST"));
+            ff_component->set_async_set_function(BooleanFunction::Var("SET"));
             ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L);
             state_component->set_state_identifier("IIQ");
             state_component->set_neg_state_identifier("IIQN");
             init_component->set_init_category("category2");
             init_component->set_init_identifiers({"identifier2"});
 
-            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK"));
-            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("DIN"));
-            EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("RST"));
-            EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("SET"));
+            EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::Var("CLK"));
+            EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::Var("DIN"));
+            EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::Var("RST"));
+            EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::Var("SET"));
             EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L));
             EXPECT_EQ(state_component->get_state_identifier(), "IIQ");
             EXPECT_EQ(state_component->get_neg_state_identifier(), "IIQN");
@@ -749,18 +749,18 @@ namespace hal
         EXPECT_EQ(state_component->get_state_identifier(), "IQ");
         EXPECT_EQ(state_component->get_neg_state_identifier(), "IQN");
 
-        latch_component->set_enable_function(BooleanFunction::from_string("EN"));
-        latch_component->set_data_in_function(BooleanFunction::from_string("DIN"));
-        latch_component->set_async_reset_function(BooleanFunction::from_string("RST"));
-        latch_component->set_async_set_function(BooleanFunction::from_string("SET"));
+        latch_component->set_enable_function(BooleanFunction::Var("EN"));
+        latch_component->set_data_in_function(BooleanFunction::Var("DIN"));
+        latch_component->set_async_reset_function(BooleanFunction::Var("RST"));
+        latch_component->set_async_set_function(BooleanFunction::Var("SET"));
         latch_component->set_async_set_reset_behavior(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L);
         state_component->set_state_identifier("IIQ");
         state_component->set_neg_state_identifier("IIQN");
 
-        EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::from_string("EN"));
-        EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::from_string("DIN"));
-        EXPECT_EQ(latch_component->get_async_reset_function(), BooleanFunction::from_string("RST"));
-        EXPECT_EQ(latch_component->get_async_set_function(), BooleanFunction::from_string("SET"));
+        EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::Var("EN"));
+        EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::Var("DIN"));
+        EXPECT_EQ(latch_component->get_async_reset_function(), BooleanFunction::Var("RST"));
+        EXPECT_EQ(latch_component->get_async_set_function(), BooleanFunction::Var("SET"));
         EXPECT_EQ(latch_component->get_async_set_reset_behavior(), std::make_pair(AsyncSetResetBehavior::H, AsyncSetResetBehavior::L));
         EXPECT_EQ(state_component->get_state_identifier(), "IIQ");
         EXPECT_EQ(state_component->get_neg_state_identifier(), "IIQN");

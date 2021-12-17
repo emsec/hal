@@ -140,7 +140,7 @@ namespace hal
             ////////////////////////////////////////////////////////////////////////
 
             /// Creates a new 'Constraint'
-            Constraint(BooleanFunction _lhs, BooleanFunction _rhs);
+            Constraint(BooleanFunction&& _lhs, BooleanFunction&& _rhs);
 
             /**
              * Human-readable description of an SMT constraint.
