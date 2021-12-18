@@ -21,7 +21,9 @@ namespace hal
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        setSelectionMode(QAbstractItemView::NoSelection);
+        //setSelectionMode(QAbstractItemView::NoSelection);
+        setSelectionMode(QAbstractItemView::ExtendedSelection);
+        setSelectionBehavior(QAbstractItemView::SelectRows);
         setFocusPolicy(Qt::NoFocus);
         header()->setStretchLastSection(true);
         setModel(mPortModel);
@@ -123,6 +125,31 @@ namespace hal
                 gSelectionRelay->relaySelectionChanged(this);
             });
 
+        }
+        //multi-selection (part of misc)
+        if(selectionModel()->selectedRows().size() > 1)
+        {
+            QList<TreeItem*> selectedItems;
+            for(auto index : selectionModel()->selectedRows())
+            {
+                TreeItem* item = mPortModel->getItemFromIndex(index);
+                if(mPortModel->getTypeOfItem(item) != ModulePinsTreeModel::itemType::portMultiBit)
+                    selectedItems.append(item);
+            }
+            if(selectedItems.size() > 1)
+            {
+                menu.addAction("Add objects to new pin group", [selectedItems, modId](){
+                   InputDialog ipd("Pingroup name", "New pingroup name", "ExampleName");
+                   if(ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
+                   {
+                       std::vector<ModulePin*> pins;//must be fetched before creating new group
+                       auto mod = gNetlist->get_module_by_id(modId);
+                       for(auto item : selectedItems)
+                           pins.push_back(mod->get_pin(item->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString()));
+                       mod->create_pin_group(ipd.textValue().toStdString(), pins);
+                   }
+                });
+            }
         }
 
         menu.addSection("Python");
