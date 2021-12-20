@@ -53,10 +53,10 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_boolean_function.def_static("Const", py::overload_cast<const std::vector<BooleanFunction::Value>&>(&BooleanFunction::Const), py::arg("values"), R"(
-            Creates a constant multi-bit Boolean function from a vector of values.
+        py_boolean_function.def_static("Const", py::overload_cast<const std::vector<BooleanFunction::Value>&>(&BooleanFunction::Const), py::arg("value"), R"(
+            Creates a constant multi-bit Boolean function from a list of values.
         
-            :param list[hal_py.BooleanFunction.Value] values: The list of values.
+            :param list[hal_py.BooleanFunction.Value] value: The list of values.
             :returns: The Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
@@ -71,7 +71,7 @@ namespace hal
         )");
 
         py_boolean_function.def_static("Index", &BooleanFunction::Index, py::arg("index"), py::arg("size"), R"(
-            Creates a Boolean function index of the given bit-size from an integer value.
+            Creates an index for a Boolean function of the given bit-size from an integer value.
         
             :param int index: The integer value.
             :param int size: The bit-size.
@@ -207,7 +207,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_boolean_function.def(py::self != py::self, R"(
+        py_boolean_function.def(py::self < py::self, R"(
             Checks whether this Boolean function is 'smaller' than the `other` Boolean function.
 
             :returns: True if this Boolean function is 'smaller', False otherwise.
@@ -318,135 +318,180 @@ namespace hal
             :rtype: hal_py.BooleanFunction or str
         )");
 
-        // TODO lots of functions
+        py_boolean_function.def("simplify", &BooleanFunction::simplify, R"(
+            Simplifies the Boolean function.
+
+            :returns: The simplified Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def("substitute", py::overload_cast<const std::string&, const std::string&>(&BooleanFunction::substitute), py::arg("old_variable_name"), py::arg("new_variable_name"), R"(
+            Substitute a variable name with another one, i.e., renames the variable.
+            The operation is applied to all instances of the variable in the function.
+
+            :param str old_variable_name: The old variable name to substitute.
+            :param str new_variable_name: The new variable name.
+            :returns: The resulting Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def("substitute", py::overload_cast<const std::string&, const BooleanFunction&>(&BooleanFunction::substitute), py::arg("variable_name"), py::arg("function"), R"(
+            Substitute a variable with another Boolean function.
+            The operation is applied to all instances of the variable in the function.
+
+            :param str variable_name: The variable to substitute.
+            :param hal_py.BooleanFunction function: The function replace the variable with.
+            :returns: The resulting Boolean function on success, a string error message otherwise.
+            :rtype: hal_py.BooleanFunction or str
+        )");
+
+        py_boolean_function.def("evaluate", py::overload_cast<const std::unordered_map<std::string, Value>&>(&BooleanFunction::evaluate), py::arg("inputs"), R"(
+            Evaluates a Boolean function comprising only single-bit variables using the given input values.
+
+            :param dict[str,hal_pyBooleanFunction.Value] inputs: A dict from variable name to input value.
+            :returns: The resulting value on success, a string error message otherwise.
+            :rtype: hal_py.BooleanFunction.Value or str
+        )");
+
+        py_boolean_function.def("evaluate", py::overload_cast<const std::unordered_map<std::string, std::vector<Value>>&>(&BooleanFunction::evaluate), py::arg("inputs"), R"(
+            Evaluates a Boolean function comprising multi-bit variables using the given input values.
+
+            :param dict[str,list[hal_pyBooleanFunction.Value]] inputs:  A dict from variable name to a list of input values.
+            :returns: The resulting value on success, a string error message otherwise.
+            :rtype: hal_py.BooleanFunction.Value or str
+        )");
+
+        py_boolean_function.def(
+            "compute_truth_table", &BooleanFunction::compute_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), py::arg("remove_unknown_variables") = false, R"(
+            Computes the truth table outputs for a Boolean function that comprises <= 10 single-bit variables.
+         
+            WARNING: The generation of the truth table is exponential in the number of parameters.
+
+            :param list[str] ordered_variables: A list describing the order of input variables used to generate the truth table. Defaults to an empty list.
+            :param bool remove_unknown_variables: Set True to remove variables from the truth table that are not present within the Boolean function, False otherwise. Defaults to False.
+            :returns: A list of values representing the truth table output on success, a string error message otherwise.
+            :rtype: list[hal_py.BooleanFunction.Value] or str
+        )");
 
         py::class_<BooleanFunction::Node> py_boolean_function_node(py_boolean_function, "Node", R"(
             Node refers to an abstract syntax tree node of a Boolean function. A node is an abstract base class for either an operation (e.g., AND, XOR) or an operand (e.g., a signal name variable).
         )");
 
-        // TODO lots of functions
+        py_boolean_function_node.def_readwrite("type", &BooleanFunction::Node::type, R"(
+            The type of the node.
 
-        /*py_boolean_function.def(
-            "substitute", py::overload_cast<const std::string&, const std::string&>(&BooleanFunction::substitute, py::const_), py::arg("old_variable_name"), py::arg("new_variable_name"), R"(
-            Substitute a variable with another one and thus renames the variable.
-            The operation is applied to all instances of the variable in the function.
-
-            :param str old_variable_name: The old variable to substitute.
-            :param str new_variable_name: The new variable.
-            :returns: The resulting Boolean function.
-            :rtype: hal_py.BooleanFunction
+            :type: int
         )");
 
-        py_boolean_function.def(
-            "substitute", py::overload_cast<const std::string&, const BooleanFunction&>(&BooleanFunction::substitute, py::const_), py::arg("variable_name"), py::arg("function"), R"(
-            Substitute a variable with another function.
-            The operation is applied to all instances of the variable in the function.
+        py_boolean_function_node.def_readwrite("size", &BooleanFunction::Node::size, R"(
+            The bit-size of the node.
 
-            :param str variable_name: The variable to substitute.
-            :param hal_py.BooleanFunction function: The function replace the variable with.
-            :returns: The resulting Boolean function.
-            :rtype: hal_py.BooleanFunction
+            :type: int
         )");
 
-        py_boolean_function.def("is_constant_one", &BooleanFunction::is_constant_one, R"(
-            Check whether the Boolean function always evaluates to ``ONE``.
+        py_boolean_function_node.def_readwrite("constant", &BooleanFunction::Node::constant, R"(
+            The (optional) constant value of the node.
 
-            :returns: True if function is constant ``ONE``, false otherwise.
+            :type: list[hal_py.BooleanFunction.Value]
+        )");
+
+        py_boolean_function_node.def_readwrite("index", &BooleanFunction::Node::index, R"(
+            The (optional) index value of the node.
+
+            :type: int
+        )");
+
+        py_boolean_function_node.def_readwrite("variable", &BooleanFunction::Node::variable, R"(
+            The (optional) variable name of the node.
+
+            :type: str
+        )");
+
+        py_boolean_function_node.def_static("Operation", BooleanFunction::Node::Operation, py::arg("type"), py::arg("size"), R"(
+            Constructs an 'operation' node.
+
+            :param int type: The type of the operation.
+            :param int size: The bit-size of the operation.
+            :returns: The node.
+            :rtype: hal_py.BooleanFunction.Node
+        )");
+
+        py_boolean_function_node.def_static("Constant", BooleanFunction::Node::Constant, py::arg("value"), R"(
+            Constructs a 'constant' node.
+
+            :param list[hal_py.BooleanFunction.Value] value: The constant value of the node.
+            :returns: The node.
+            :rtype: hal_py.BooleanFunction.Node
+        )");
+
+        py_boolean_function_node.def_static("Index", BooleanFunction::Node::Index, py::arg("index"), py::arg("size"), R"(
+            Constructs an 'index' node.
+
+            :param int value: The index value of the node.
+            :param int size: The bit-size of the node.
+            :returns: The node.
+            :rtype: hal_py.BooleanFunction.Node
+        )");
+
+        py_boolean_function_node.def_static("Variable", BooleanFunction::Node::Variable, py::arg("variable"), py::arg("size"), R"(
+            Constructs a 'variable' node.
+
+            :param int value: The variable name of the node.
+            :param int size: The bit-size of the node.
+            :returns: The node.
+            :rtype: hal_py.BooleanFunction.Node
+        )");
+
+        py_boolean_function_node.def(py::self == py::self, R"(
+            Checks whether two Boolean function nodes are equal.
+
+            :returns: True if both Boolean function nodes are equal, False otherwise.
             :rtype: bool
         )");
 
-        py_boolean_function.def("is_constant_zero", &BooleanFunction::is_constant_zero, R"(
-            Check whether the Boolean function always evaluates to ``ZERO``.
+        py_boolean_function_node.def(py::self != py::self, R"(
+            Checks whether two Boolean function nodes are unequal.
 
-            :returns: True if function is constant ``ZERO``, false otherwise.
+            :returns: True if both Boolean function nodes are unequal, False otherwise.
             :rtype: bool
         )");
 
-        
+        py_boolean_function_node.def(py::self < py::self, R"(
+            Checks whether this Boolean function node is 'smaller' than the `other` Boolean function node.
 
-        py_boolean_function.def_property_readonly("variables", &BooleanFunction::get_variables, R"(
-            A list of all variable names utilized in this Boolean function.
-
-            :type: list[str]
+            :returns: True if this Boolean function node is 'smaller', False otherwise.
+            :rtype: bool
         )");
 
-        py_boolean_function.def("get_variables", &BooleanFunction::get_variables, R"(
-            Get all variable names utilized in this Boolean function.
+        py_boolean_function_node.def("clone", &BooleanFunction::Node::clone, R"(
+            Clones the Boolean function node.
 
-            :returns: A list of all variable names.
-            :rtype: list[str]
+            :returns: The cloned Boolean function node. 
+            :rtype: hal_py.BooleanFunction.Node
         )");
 
-        py_boolean_function.def_static("from_string", &BooleanFunction::from_string, py::arg("expression"), py::arg("variable_names") = std::vector<std::string>(), R"(
-            Parse a function from a string representation.
-            Supported operators are  NOT (``!``, ``'``), AND (``&``, ``*``, ``␣``), OR (``|``, ``+``), XOR (``^``) and brackets (``(``, ``)``).
-            Operator precedence is ``!`` > ``&`` > ``^`` > ``|``.
+        py_boolean_function_node.def(
+            "__str__", [](const BooleanFunction::Node& n) { return n.to_string(); }, R"(
+            Translates the Boolean function node into its string representation.
 
-            Since, for example, ``(`` is interpreted as a new term, but might also be an intended part of a variable, a vector of known variable names can be supplied, which are extracted before parsing.
-
-            If there is an error during bracket matching, ``X`` is returned for that part.
-
-            :param str expression: String containing a Boolean function.
-            :param list[str] variable_names: List of variable names.
-            :returns: The Boolean function extracted from the string.
-            :rtype: hal_py.BooleanFunction
-        )");
-
-        py_boolean_function.def(
-            "__str__", [](const BooleanFunction& f) { return f.to_string(); }, R"(
-            Get the boolean function as a string.
-
-            :returns: A string describing the Boolean function.
+            :returns: The Boolean function node as a string.
             :rtype: str
         )");
 
+        py_boolean_function_node.def("get_arity", py::overload_cast<>(&BooleanFunction::Node::get_arity, py::const_), R"(
+            Returns the arity of the Boolean function node, i.e., the number of parameters.
 
-        py_boolean_function.def("is_dnf", &BooleanFunction::is_dnf, R"(
-            Check whether the Boolean function is in disjunctive normal form (DNF).
-
-            :returns: True if in DNF, false otherwise.
-            :rtype: bool
+            :returns: The arity.
+            :rtype: int
         )");
 
-        py_boolean_function.def("to_dnf", &BooleanFunction::to_dnf, R"(
-            Get the plain disjunctive normal form (DNF) representation of the Boolean function.
+        py_boolean_function_node.def_static("get_arity", py::overload_cast<u16>(&BooleanFunction::Node::get_arity), py::arg("type"), R"(
+            Returns the arity for a Boolean function node of the given type, i.e., the number of parameters.
 
-            :returns: The DNF as a Boolean function.
-            :rtype: hal_py.BooleanFunction
+            :returns: The arity.
+            :rtype: int
         )");
 
-        py_boolean_function.def("get_dnf_clauses", &BooleanFunction::get_dnf_clauses, R"(
-            Get the disjunctive normal form (DNF) clauses of the function.
-            
-            Each clause is a vector of pairs (variable name, Boolean value).
-        
-            Returns an empty vector if the Boolean function is empty.
-        
-            :returns: The DNF clauses as a list of lists of pairs (string, bool).
-            :rtype: list[list[tuple(str,bool)]]
-        )");
-
-        py_boolean_function.def("optimize", &BooleanFunction::optimize, R"(
-            Optimize the Boolean function by first converting it to disjunctive normal form (DNF) and then applying the Quine-McCluskey algorithm.
-
-            :returns: The optimized Boolean function.
-            :rtype: hal_py.BooleanFunction
-        )");
-
-        py_boolean_function.def("get_truth_table", &BooleanFunction::get_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), py::arg("remove_unknown_variables") = false, R"(
-            Get the truth table outputs of the Boolean function.
-
-            WARNING: Exponential runtime in the number of variables!
-
-            Output is the vector of output values when walking the truth table from the least significant bit to the most significant one.
-
-            If ordered_variables is empty, all included variables are used and ordered alphabetically.
-
-            :param list[str] ordered_variables: Variables in the order of the inputs.
-            :param bool remove_unknown_variables: If true, all given variables that are not found in the function are removed from the truth table.
-            :returns: The list of output values.
-            :rtype: list[hal_py.BooleanFunction.Value]
-        )");
-        */
+        // TODO lots of functions
     }
 }    // namespace hal
