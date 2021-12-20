@@ -135,9 +135,9 @@ namespace hal {
             test_m_1->set_pin_name(test_m_1->get_pin(net_1_3), "test_m_1_net_1_3_out");
 
             // Store some boolean functions in some gates
-            gate_0->add_boolean_function("O_and", std::get<BooleanFunction>(BooleanFunction::from("I0 & I1")));
-            gate_0->add_boolean_function("O_or", std::get<BooleanFunction>(BooleanFunction::from("I0 & I1")));
-            gate_4->add_boolean_function("O_not", std::get<BooleanFunction>(BooleanFunction::from("!I")));
+            gate_0->add_boolean_function("O_and", std::get<BooleanFunction>(BooleanFunction::from_string("I0 & I1")));
+            gate_0->add_boolean_function("O_or", std::get<BooleanFunction>(BooleanFunction::from_string("I0 & I1")));
+            gate_4->add_boolean_function("O_not", std::get<BooleanFunction>(BooleanFunction::from_string("!I")));
 
             // create the groupings
             Grouping* grouping_0 = nl->create_grouping(1, "grouping_0");

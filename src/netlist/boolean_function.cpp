@@ -40,7 +40,7 @@ namespace hal
         return BooleanFunction::validate(BooleanFunction(std::move(nodes)));
     }
 
-    BooleanFunction BooleanFunction::Var(const std::string& name, u16 size)
+    BooleanFunction BooleanFunction::var(const std::string& name, u16 size)
     {
         return BooleanFunction(Node::Variable(name, size));
     }
@@ -387,7 +387,7 @@ namespace hal
         }
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::from(const std::string& expression)
+    std::variant<BooleanFunction, std::string> BooleanFunction::from_string(const std::string& expression)
     {
         using BooleanFunctionParser::ParserType;
         using BooleanFunctionParser::Token;
@@ -573,7 +573,7 @@ namespace hal
         auto symbolic_execution = SMT::SymbolicExecution();
         for (const auto& [name, value] : inputs)
         {
-            symbolic_execution.state.set(BooleanFunction::Var(name, value.size()), BooleanFunction::Const(value));
+            symbolic_execution.state.set(BooleanFunction::var(name, value.size()), BooleanFunction::Const(value));
         }
 
         // (3) analyze the evaluation result and check whether the result is a

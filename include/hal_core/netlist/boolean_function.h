@@ -25,7 +25,6 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/utilities/enums.h"
-
 #include "z3++.h"
 
 #include <algorithm>
@@ -42,7 +41,7 @@ namespace hal
     /**
      * A BooleanFunction represents a symbolic expression (e.g., "A & B") in 
      * order to abstract the (semantic) functionality of a single netlist gate 
-     * (or even a complex subcircuit consisting of multiple gates) in a formal 
+     * (or even a complex subcircuit comprising multiple gates) in a formal 
      * manner. To this end, the BooleanFunction class is able to construct and 
      * display arbitrarily-nested expressions, enable symbolic simplification
      * (e.g., simplify "A & 0" to "0"), and translate Boolean functions to the
@@ -63,10 +62,10 @@ namespace hal
          * and a namespace for its underlying node data structures.
          */
 
-        struct Node;     /// represents an abstract syntax tree node
-        struct NodeType; /// represents the type of the node
+        struct Node;        /// represents an abstract syntax tree node
+        struct NodeType;    /// represents the type of the node
 
-        /// Represents the logic value that a boolean function operates on.
+        /// Represents the logic value that a Boolean function operates on.
         enum Value
         {
             ZERO = 0, /**< Represents a logical 0. */
@@ -78,37 +77,46 @@ namespace hal
         /**
          * Get the value as a string.
          *
-         * @param[in] v - the value.
+         * @param[in] value - The value.
          * @returns A string describing the value.
          */
-        static std::string to_string(Value v);
+        static std::string to_string(Value value);
 
         /**
-         * ostream operator that forwards to_string of a value.
+         * Output stream operator that forwards to_string of a value.
          *
-         * @param[in] os - the stream to write to.
-         * @param[in] v - the value.
-         * @returns A reference to os.
+         * @param[in] os - The stream to write to.
+         * @param[in] value - The value.
+         * @returns A reference to output stream.
          */
-        friend std::ostream& operator<<(std::ostream& os, Value v);
+        friend std::ostream& operator<<(std::ostream& os, Value value);
 
         ////////////////////////////////////////////////////////////////////////
         // Constructors / Factories, Destructors, Operators
         ////////////////////////////////////////////////////////////////////////
 
-        /// Construct an empty / invalid Boolean function.
+        /**
+         * Construct an empty / invalid Boolean function.
+         */
         explicit BooleanFunction();
 
         /**
-         * Builds and validates a Boolean function from a list of nodes.
+         * Builds and validates a Boolean function from a vector of nodes.
          * 
-         * @param[in] nodes List of Boolean function nodes.
-         * @returns Boolean function on success, Err() otherwise.
+         * @param[in] nodes - Vector of Boolean function nodes.
+         * @returns The Boolean function on success, a string describing the error otherwise.
          */
         static std::variant<BooleanFunction, std::string> build(std::vector<Node>&& nodes);
 
         /// Creates a 'Variable' Boolean function.
-        static BooleanFunction Var(const std::string& name, u16 size = 1);
+        /**
+         * Creates a Boolean function comprising only a variable of the specified bit-size.
+         * 
+         * @param[in] name - The name of the variable.
+         * @param[in] size - The bit-size. Defaults to 1.
+         * @returns The BooleanFunction.
+         */
+        static BooleanFunction var(const std::string& name, u16 size = 1);
 
         /// Creates a 'Constant' Boolean function.
         static BooleanFunction Const(const BooleanFunction::Value& value);
@@ -171,7 +179,7 @@ namespace hal
         /// Short-hand Boolean function AND operation (may fail in case bit-sizes are not equal).
         BooleanFunction operator&(const BooleanFunction& other) const;
         /// Short-hand Boolean function AND operation assignment (may fail in case bit-sizes are not equal).
-        BooleanFunction& operator&=(const BooleanFunction& other); 
+        BooleanFunction& operator&=(const BooleanFunction& other);
 
         /**
          * \deprecated
@@ -188,19 +196,19 @@ namespace hal
         /// Short-hand Boolean function OR operation (may fail in case bit-sizes are not equal).
         BooleanFunction operator|(const BooleanFunction& other) const;
         /// Short-hand Boolean function OR operation assignment (may fail in case bit-sizes are not equal).
-        BooleanFunction& operator|=(const BooleanFunction& other); 
+        BooleanFunction& operator|=(const BooleanFunction& other);
 
         /// Short-hand Boolean function XOR operation (may fail in case bit-sizes are not equal).
         BooleanFunction operator^(const BooleanFunction& other) const;
         /// Short-hand Boolean function XOR operation assignment (may fail in case bit-sizes are not equal).
-        BooleanFunction& operator^=(const BooleanFunction& other); 
+        BooleanFunction& operator^=(const BooleanFunction& other);
 
         /// Short-hand equality operator to compare Boolean functions.
         bool operator==(const BooleanFunction& other) const;
         /// Short-hand in-equality operator to compare Boolean functions.
         bool operator!=(const BooleanFunction& other) const;
         /// Short-hand less-than operator to compare Boolean functions.
-        bool operator <(const BooleanFunction& other) const;
+        bool operator<(const BooleanFunction& other) const;
 
         /// Short-hand check to test whether the instance is empty.
         bool is_empty() const;
@@ -247,26 +255,26 @@ namespace hal
         std::vector<BooleanFunction> get_parameters() const;
 
         /**
-         *  Returns the set of variable names utilizes in the Boolean function.
+         * Returns the set of variable names utilizes in the Boolean function.
          *
          * @returns Set of variable names.
          */
         std::set<std::string> get_variable_names() const;
 
         ////////////////////////////////////////////////////////////////////////
-        // Interface: String Translation 
+        // Interface: String Translation
         ////////////////////////////////////////////////////////////////////////
 
         /// Transforms the BooleanFunction into a human-readable string.
         std::string to_string() const;
 
         /**
-         * Parses a boolean function from a string representation.
+         * Parses a Boolean function from a string expression.
          * 
          * @param[in] expression - Boolean function string.
-         * @returns The Boolean function or a string with the error message.
+         * @returns The Boolean function on success, a string describing the error otherwise.
          */
-        static std::variant<BooleanFunction, std::string> from(const std::string& expression);
+        static std::variant<BooleanFunction, std::string> from_string(const std::string& expression);
 
         ////////////////////////////////////////////////////////////////////////
         // Interface: Simplification / Substitution / Evaluation
@@ -353,9 +361,11 @@ namespace hal
          * @param[in] p - Boolean function node parameters.
          * @returns Initialized Boolean function.
          */
-        template<typename ...T, typename = std::enable_if_t<std::conjunction_v<std::is_same<T, BooleanFunction>...>>>
-        explicit BooleanFunction(BooleanFunction::Node&& node, T&&... p) {
-            auto size = 1; ((size += p.size()), ...);
+        template<typename... T, typename = std::enable_if_t<std::conjunction_v<std::is_same<T, BooleanFunction>...>>>
+        explicit BooleanFunction(BooleanFunction::Node&& node, T&&... p)
+        {
+            auto size = 1;
+            ((size += p.size()), ...);
             this->m_nodes.reserve(size);
 
             (this->m_nodes.insert(this->m_nodes.end(), p.m_nodes.begin(), p.m_nodes.end()), ...);
@@ -385,7 +395,7 @@ namespace hal
 
         /// Computes the coverage value of each node in the Boolean function.
         std::vector<u32> compute_node_coverage() const;
-        
+
         /// Implements the Quine-McCluskey algorithm to simplify Boolean functions.
         ///
         /// @param[in] function - Boolean function to simplify.
@@ -416,7 +426,8 @@ namespace hal
      *
      * @ingroup netlist
      */
-    struct BooleanFunction::Node final {
+    struct BooleanFunction::Node final
+    {
         ////////////////////////////////////////////////////////////////////////
         // Member
         ////////////////////////////////////////////////////////////////////////
@@ -429,7 +440,7 @@ namespace hal
         std::vector<BooleanFunction::Value> constant{};
         /// stores index value
         u16 index{};
-        /// stores variable name 
+        /// stores variable name
         std::string variable{};
 
         ////////////////////////////////////////////////////////////////////////
@@ -448,7 +459,7 @@ namespace hal
         /// comparison operators
         bool operator==(const Node& other) const;
         bool operator!=(const Node& other) const;
-        bool operator <(const Node& other) const;
+        bool operator<(const Node& other) const;
 
         ////////////////////////////////////////////////////////////////////////
         // Interface
@@ -470,7 +481,7 @@ namespace hal
          * 'Constant' or 'Variable' have an arity of 0.
          *
          * @returns Arity of node.
-         */  
+         */
         static u16 get_arity(u16 type);
 
         /// Checks whether node is of a specific type.
@@ -499,7 +510,7 @@ namespace hal
         /// Short-hand check whether the node is a commutative operator.
         bool is_commutative() const;
 
-     private:
+    private:
         ////////////////////////////////////////////////////////////////////////
         // Constructors, Destructors, Operators
         ////////////////////////////////////////////////////////////////////////
@@ -513,17 +524,18 @@ namespace hal
      *
      * @ingroup netlist
      */
-    struct BooleanFunction::NodeType final {
-        static constexpr u16 And      = 0x0000;
-        static constexpr u16 Or       = 0x0001;
-        static constexpr u16 Not      = 0x0002;
-        static constexpr u16 Xor      = 0x0003;
+    struct BooleanFunction::NodeType final
+    {
+        static constexpr u16 And = 0x0000;
+        static constexpr u16 Or  = 0x0001;
+        static constexpr u16 Not = 0x0002;
+        static constexpr u16 Xor = 0x0003;
 
-        static constexpr u16 Add      = 0x0010;
+        static constexpr u16 Add = 0x0010;
 
-        static constexpr u16 Concat   = 0x0100;
-        static constexpr u16 Slice    = 0x0101;
-        static constexpr u16 Zext     = 0x0102;
+        static constexpr u16 Concat = 0x0100;
+        static constexpr u16 Slice  = 0x0101;
+        static constexpr u16 Zext   = 0x0102;
 
         static constexpr u16 Constant = 0x1000;
         static constexpr u16 Index    = 0x1001;

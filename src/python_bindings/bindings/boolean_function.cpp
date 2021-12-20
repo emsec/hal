@@ -4,21 +4,57 @@ namespace hal
 {
     void boolean_function_init(py::module& m)
     {
-        /*
-        py::class_<BooleanFunction> py_boolean_function(m, "BooleanFunction", R"(Boolean function class.)");
+        py::class_<BooleanFunction> py_boolean_function(
+            m,
+            "BooleanFunction",
+            R"(A BooleanFunction represents a symbolic expression (e.g., "A & B") in order to abstract the (semantic) functionality of a single netlist gate (or even a complex subcircuit comprising multiple gates) in a formal manner. To this end, the BooleanFunction class is able to construct and display arbitrarily-nested expressions, enable symbolic simplification (e.g., simplify "A & 0" to "0"), and translate Boolean functions to the SAT / SMT solver domain to use the solve constraint formulas.)");
 
-        py::enum_<BooleanFunction::Value>(py_boolean_function, "Value", R"(Represents the logic value that a boolean function operates on.)")
+        py::enum_<BooleanFunction::Value>(py_boolean_function, "Value", R"(Represents the logic value that a Boolean function operates on.)")
             .value("ZERO", BooleanFunction::ZERO, R"(Represents a logical 0.)")
             .value("ONE", BooleanFunction::ONE, R"(Represents a logical 1.)")
             .value("Z", BooleanFunction::X, R"(Represents a high-impedance value.)")
             .value("X", BooleanFunction::X, R"(Represents an undefined value.)")
             .export_values();
 
-        py_boolean_function.def(py::init<>(), R"(
-            Construct an empty Boolean function and thus evaluates to ``X`` (undefined).
+        py_boolean_function.def_static("to_string", py::overload_cast<BooleanFunction::Value>(&BooleanFunction::to_string), py::arg("value"), R"(
+            Get the value as a string.
+
+            :param hal_py.BooleanFunction.Value value: The value.
+            :returns: A string describing the value.
+            :rtype: str
         )");
 
-        py_boolean_function.def(
+        py_boolean_function.def(py::init<>(), R"(
+            Construct an empty / invalid Boolean function.
+        )");
+
+        py_boolean_function.def_static("build", &BooleanFunction::build, py::arg("nodes"), R"(
+            Builds and validates a Boolean function from a list of nodes.
+        
+            :param list[hal_py.BooleanFunction.Node] nodes: List of Boolean function nodes.
+            :returns: The Boolean function on success, a string describing the error otherwise.
+            :rtype: hal_py.BooleanFunction or str
+        )");
+
+        // TODO lots of functions
+
+        py_boolean_function.def_static("from_string", &BooleanFunction::from_string, py::arg("expression"), R"(
+            Parses a Boolean function from a string expression.
+
+            :param str expression: Boolean function string.
+            :returns: The Boolean function on success, a string describing the error otherwise.
+            :rtype: hal_py.BooleanFunction or str
+        )");
+
+        // TODO lots of functions
+
+        py::class_<BooleanFunction::Node> py_boolean_function_node(py_boolean_function, "Node", R"(
+            Node refers to an abstract syntax tree node of a Boolean function. A node is an abstract base class for either an operation (e.g., AND, XOR) or an operand (e.g., a signal name variable).
+        )");
+
+        // TODO lots of functions
+
+        /*py_boolean_function.def(
             "substitute", py::overload_cast<const std::string&, const std::string&>(&BooleanFunction::substitute, py::const_), py::arg("old_variable_name"), py::arg("new_variable_name"), R"(
             Substitute a variable with another one and thus renames the variable.
             The operation is applied to all instances of the variable in the function.
