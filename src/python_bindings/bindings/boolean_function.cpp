@@ -325,7 +325,8 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_boolean_function.def("substitute", py::overload_cast<const std::string&, const std::string&>(&BooleanFunction::substitute), py::arg("old_variable_name"), py::arg("new_variable_name"), R"(
+        py_boolean_function.def(
+            "substitute", py::overload_cast<const std::string&, const std::string&>(&BooleanFunction::substitute, py::const_), py::arg("old_variable_name"), py::arg("new_variable_name"), R"(
             Substitute a variable name with another one, i.e., renames the variable.
             The operation is applied to all instances of the variable in the function.
 
@@ -335,7 +336,8 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_boolean_function.def("substitute", py::overload_cast<const std::string&, const BooleanFunction&>(&BooleanFunction::substitute), py::arg("variable_name"), py::arg("function"), R"(
+        py_boolean_function.def(
+            "substitute", py::overload_cast<const std::string&, const BooleanFunction&>(&BooleanFunction::substitute, py::const_), py::arg("variable_name"), py::arg("function"), R"(
             Substitute a variable with another Boolean function.
             The operation is applied to all instances of the variable in the function.
 
@@ -345,7 +347,7 @@ namespace hal
             :rtype: hal_py.BooleanFunction or str
         )");
 
-        py_boolean_function.def("evaluate", py::overload_cast<const std::unordered_map<std::string, Value>&>(&BooleanFunction::evaluate), py::arg("inputs"), R"(
+        py_boolean_function.def("evaluate", py::overload_cast<const std::unordered_map<std::string, BooleanFunction::Value>&>(&BooleanFunction::evaluate, py::const_), py::arg("inputs"), R"(
             Evaluates a Boolean function comprising only single-bit variables using the given input values.
 
             :param dict[str,hal_pyBooleanFunction.Value] inputs: A dict from variable name to input value.
@@ -353,7 +355,8 @@ namespace hal
             :rtype: hal_py.BooleanFunction.Value or str
         )");
 
-        py_boolean_function.def("evaluate", py::overload_cast<const std::unordered_map<std::string, std::vector<Value>>&>(&BooleanFunction::evaluate), py::arg("inputs"), R"(
+        py_boolean_function.def(
+            "evaluate", py::overload_cast<const std::unordered_map<std::string, std::vector<BooleanFunction::Value>>&>(&BooleanFunction::evaluate, py::const_), py::arg("inputs"), R"(
             Evaluates a Boolean function comprising multi-bit variables using the given input values.
 
             :param dict[str,list[hal_pyBooleanFunction.Value]] inputs:  A dict from variable name to a list of input values.
