@@ -122,7 +122,7 @@ namespace hal
             {
                 auto bf = it->second;
 
-                if (bf.is_constant(1))
+                if (bf.has_constant_value(1))
                 {
                     m_vcc_gate_types.emplace(gate_type->get_name(), gate_type);
                     return true;
@@ -150,7 +150,7 @@ namespace hal
             {
                 auto bf = it->second;
 
-                if (bf.is_constant(0))
+                if (bf.has_constant_value(0))
                 {
                     m_gnd_gate_types.emplace(gate_type->get_name(), gate_type);
                     return true;

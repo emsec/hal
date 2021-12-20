@@ -348,7 +348,7 @@ namespace hal
          * @param value - The value to check for.
          * @returns `true` if the Boolean function is of type `Constant` and holds the given value, `false` otherwise.
          */
-        bool is_constant(u64 value) const;
+        bool has_constant_value(u64 value) const;
 
         /**
          * Returns the top-level node of the Boolean function.
@@ -662,7 +662,7 @@ namespace hal
          *
          * @returns The arity.
          */
-        static u16 get_arity(u16 type);
+        static u16 get_arity_of_type(u16 type);
 
         /**
          *  Checks whether the Boolean function node is of a specific type.
@@ -685,7 +685,7 @@ namespace hal
          * @param value - The value to check for.
          * @returns `true` if the Boolean function node is of type `Constant` and holds the given value, `false` otherwise.
          */
-        bool is_constant(u64 value) const;
+        bool has_constant_value(u64 value) const;
 
         /**
          * Checks whether the Boolean function node is of type `Index`.
@@ -700,7 +700,7 @@ namespace hal
          * @param value - The value to check for.
          * @returns `true` if the Boolean function node is of type `Index` and holds the given value, `false` otherwise.
          */
-        bool is_index(u16 value) const;
+        bool has_index_value(u16 value) const;
 
         /**
          * Checks whether the Boolean function node is of type `Variable`.
@@ -715,7 +715,7 @@ namespace hal
          * @param variable_name - The variable name to check for.
          * @returns `true` if the Boolean function node is of type `Variable` and holds the given variable name, `false` otherwise.
          */
-        bool is_variable(const std::string& variable_name) const;
+        bool has_variable_name(const std::string& variable_name) const;
 
         /**
          * Checks whether the Boolean function node is an operation node.

@@ -146,28 +146,28 @@ namespace hal {
                    _1 = BooleanFunction::Const(1, 1),
                     a = BooleanFunction::Var("A");
 
-        EXPECT_TRUE(_0.is_constant(0));
-        EXPECT_TRUE(_1.is_constant(1));
-        EXPECT_FALSE(_0.is_constant(1));
-        EXPECT_FALSE(_1.is_constant(0));
+        EXPECT_TRUE(_0.has_constant_value(0));
+        EXPECT_TRUE(_1.has_constant_value(1));
+        EXPECT_FALSE(_0.has_constant_value(1));
+        EXPECT_FALSE(_1.has_constant_value(0));
 
         EXPECT_FALSE(a.is_constant());
 
-        EXPECT_TRUE((~_1.clone()).simplify().is_constant(0));
-        EXPECT_TRUE((~_0.clone()).simplify().is_constant(1));
-        EXPECT_TRUE((_0.clone() | _0.clone()).simplify().is_constant(0));
-        EXPECT_TRUE((_0.clone() | _1.clone()).simplify().is_constant(1));
-        EXPECT_TRUE((_1.clone() | _1.clone()).simplify().is_constant(1));
-        EXPECT_TRUE((_0.clone() & _0.clone()).simplify().is_constant(0));
-        EXPECT_TRUE((_0.clone() & _1.clone()).simplify().is_constant(0));
-        EXPECT_TRUE((_1.clone() & _1.clone()).simplify().is_constant(1));    
-        EXPECT_TRUE((_0.clone() ^ _0.clone()).simplify().is_constant(0));
-        EXPECT_TRUE((_0.clone() ^ _1.clone()).simplify().is_constant(1));
-        EXPECT_TRUE((_1.clone() ^ _1.clone()).simplify().is_constant(0));
+        EXPECT_TRUE((~_1.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((~_0.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_0.clone() | _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() | _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() | _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_0.clone() & _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() & _1.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_1.clone() & _1.clone()).simplify().has_constant_value(1));    
+        EXPECT_TRUE((_0.clone() ^ _0.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((_0.clone() ^ _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((_1.clone() ^ _1.clone()).simplify().has_constant_value(0));
 
-        EXPECT_TRUE((a.clone() | _1.clone()).simplify().is_constant(1));
-        EXPECT_TRUE((a.clone() ^ a.clone()).simplify().is_constant(0));
-        EXPECT_TRUE((a.clone() & _0.clone()).simplify().is_constant(0));
+        EXPECT_TRUE((a.clone() | _1.clone()).simplify().has_constant_value(1));
+        EXPECT_TRUE((a.clone() ^ a.clone()).simplify().has_constant_value(0));
+        EXPECT_TRUE((a.clone() & _0.clone()).simplify().has_constant_value(0));
     }
 
     TEST(BooleanFunction, SimplificationRules) {

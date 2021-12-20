@@ -30,7 +30,7 @@ namespace hal
 
         py_boolean_function.def_static("build", &BooleanFunction::build, py::arg("nodes"), R"(
             Builds and validates a Boolean function from a list of nodes.
-        
+
             :param list[hal_py.BooleanFunction.Node] nodes: List of Boolean function nodes.
             :returns: The Boolean function on success, a string error message otherwise.
             :rtype: hal_py.BooleanFunction or str
@@ -47,7 +47,7 @@ namespace hal
 
         py_boolean_function.def_static("Const", py::overload_cast<const BooleanFunction::Value&>(&BooleanFunction::Const), py::arg("value"), R"(
             Creates a constant single-bit Boolean function from a value.
-        
+
             :param hal_py.BooleanFunction.Value value: The value.
             :returns: The Boolean function.
             :rtype: hal_py.BooleanFunction
@@ -55,7 +55,7 @@ namespace hal
 
         py_boolean_function.def_static("Const", py::overload_cast<const std::vector<BooleanFunction::Value>&>(&BooleanFunction::Const), py::arg("value"), R"(
             Creates a constant multi-bit Boolean function from a list of values.
-        
+
             :param list[hal_py.BooleanFunction.Value] value: The list of values.
             :returns: The Boolean function.
             :rtype: hal_py.BooleanFunction
@@ -63,7 +63,7 @@ namespace hal
 
         py_boolean_function.def_static("Const", py::overload_cast<u64, u16>(&BooleanFunction::Const), py::arg("value"), py::arg("size"), R"(
             Creates a constant multi-bit Boolean function of the given bit-size from an integer value.
-        
+
             :param int value: The integer value.
             :param int size: The bit-size.
             :returns: The Boolean function.
@@ -72,7 +72,7 @@ namespace hal
 
         py_boolean_function.def_static("Index", &BooleanFunction::Index, py::arg("index"), py::arg("size"), R"(
             Creates an index for a Boolean function of the given bit-size from an integer value.
-        
+
             :param int index: The integer value.
             :param int size: The bit-size.
             :returns: The Boolean function.
@@ -81,7 +81,7 @@ namespace hal
 
         py_boolean_function.def_static(
             "And", [](BooleanFunction p0, BooleanFunction p1, u16 size) { return BooleanFunction::And(std::move(p0), std::move(p1), size); }, py::arg("p0"), py::arg("p1"), py::arg("size"), R"(
-            Joins two Boolean functions by an 'AND' operation. 
+            Joins two Boolean functions by an 'AND' operation.
             Requires both Boolean functions to be of the specified bit-size.
 
             :param hal_py.BooleanFunction p0: First Boolean function.
@@ -127,7 +127,7 @@ namespace hal
         )");
 
         py_boolean_function.def(py::self & py::self, R"(
-            Joins two Boolean functions by an 'AND' operation. 
+            Joins two Boolean functions by an 'AND' operation.
             Requires both Boolean functions to be of the same bit-size.
 
             WARNING: fails if the Boolean functions have different bit-sizes.
@@ -137,7 +137,7 @@ namespace hal
         )");
 
         py_boolean_function.def(py::self &= py::self, R"(
-            Joins two Boolean functions by an 'AND' operation in-place. 
+            Joins two Boolean functions by an 'AND' operation in-place.
             Requires both Boolean functions to be of the same bit-size.
 
             WARNING: fails if the Boolean functions have different bit-sizes.
@@ -147,7 +147,7 @@ namespace hal
         )");
 
         py_boolean_function.def(py::self | py::self, R"(
-            Joins two Boolean functions by an 'OR' operation. 
+            Joins two Boolean functions by an 'OR' operation.
             Requires both Boolean functions to be of the same bit-size.
 
             WARNING: fails if the Boolean functions have different bit-sizes.
@@ -157,7 +157,7 @@ namespace hal
         )");
 
         py_boolean_function.def(py::self |= py::self, R"(
-            Joins two Boolean functions by an 'OR' operation in-place. 
+            Joins two Boolean functions by an 'OR' operation in-place.
             Requires both Boolean functions to be of the same bit-size.
 
             WARNING: fails if the Boolean functions have different bit-sizes.
@@ -174,7 +174,7 @@ namespace hal
         )");
 
         py_boolean_function.def(py::self ^ py::self, R"(
-            Joins two Boolean functions by an 'XOR' operation. 
+            Joins two Boolean functions by an 'XOR' operation.
             Requires both Boolean functions to be of the same bit-size.
 
             WARNING: fails if the Boolean functions have different bit-sizes.
@@ -184,7 +184,7 @@ namespace hal
         )");
 
         py_boolean_function.def(py::self ^= py::self, R"(
-            Joins two Boolean functions by an 'OR' operation in-place. 
+            Joins two Boolean functions by an 'OR' operation in-place.
             Requires both Boolean functions to be of the same bit-size.
 
             WARNING: fails if the Boolean functions have different bit-sizes.
@@ -256,14 +256,14 @@ namespace hal
             :rtype: bool
         )");
 
-        py_boolean_function.def("is_constant", py::overload_cast<>(&BooleanFunction::is_constant, py::const_), R"(
+        py_boolean_function.def("is_constant", &BooleanFunction::is_constant, R"(
             Checks whether the top-level node of the Boolean function is of type Constant.
 
             :returns: True if the top-level node of the Boolean function is of type Constant, False otherwise.
             :rtype: bool
         )");
 
-        py_boolean_function.def("is_constant", py::overload_cast<u64>(&BooleanFunction::is_constant, py::const_), R"(
+        py_boolean_function.def("has_constant_value", &BooleanFunction::has_constant_value, R"(
             Checks whether the top-level node of the Boolean function is of type Constant and holds a specific value.
 
             :param int value: The value to check for.
@@ -297,7 +297,7 @@ namespace hal
         py_boolean_function.def("get_length", &BooleanFunction::length, R"(
             Returns the number of nodes in the Boolean function.
 
-            :returns: The number of nodes. 
+            :returns: The number of nodes.
             :rtype: int
         )");
 
@@ -405,7 +405,7 @@ namespace hal
         py_boolean_function.def(
             "compute_truth_table", &BooleanFunction::compute_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), py::arg("remove_unknown_variables") = false, R"(
             Computes the truth table outputs for a Boolean function that comprises <= 10 single-bit variables.
-         
+
             WARNING: The generation of the truth table is exponential in the number of parameters.
 
             :param list[str] ordered_variables: A list describing the order of input variables used to generate the truth table. Defaults to an empty list.
@@ -507,7 +507,7 @@ namespace hal
         py_boolean_function_node.def("clone", &BooleanFunction::Node::clone, R"(
             Clones the Boolean function node.
 
-            :returns: The cloned Boolean function node. 
+            :returns: The cloned Boolean function node.
             :rtype: hal_py.BooleanFunction.Node
         )");
 
@@ -519,20 +519,20 @@ namespace hal
             :rtype: str
         )");
 
-        py_boolean_function_node.def_property_readonly("arity", py::overload_cast<>(&BooleanFunction::Node::get_arity, py::const_), R"(
+        py_boolean_function_node.def_property_readonly("arity", &BooleanFunction::Node::get_arity, R"(
             The arity of the Boolean function node, i.e., the number of parameters.
 
             :type: int
         )");
 
-        py_boolean_function_node.def("get_arity", py::overload_cast<>(&BooleanFunction::Node::get_arity, py::const_), R"(
+        py_boolean_function_node.def("get_arity", &BooleanFunction::Node::get_arity, R"(
             Returns the arity of the Boolean function node, i.e., the number of parameters.
 
             :returns: The arity.
             :rtype: int
         )");
 
-        py_boolean_function_node.def_static("get_arity", py::overload_cast<u16>(&BooleanFunction::Node::get_arity), py::arg("type"), R"(
+        py_boolean_function_node.def_static("get_arity_of_type", &BooleanFunction::Node::get_arity_of_type, py::arg("type"), R"(
             Returns the arity for a Boolean function node of the given type, i.e., the number of parameters.
 
             :returns: The arity.
@@ -547,14 +547,14 @@ namespace hal
             :rtype: bool
         )");
 
-        py_boolean_function_node.def("is_constant", py::overload_cast<>(&BooleanFunction::Node::is_constant, py::const_), R"(
+        py_boolean_function_node.def("is_constant", &BooleanFunction::Node::is_constant, R"(
             Checks whether the Boolean function node is of type Constant.
 
             :returns: True if the Boolean function node is of type Constant, False otherwise.
             :rtype: bool
         )");
 
-        py_boolean_function_node.def("is_constant", py::overload_cast<u64>(&BooleanFunction::Node::is_constant, py::const_), py::arg("value"), R"(
+        py_boolean_function_node.def("has_constant_value", &BooleanFunction::Node::has_constant_value, py::arg("value"), R"(
             Checks whether the Boolean function node is of type Constant and holds a specific value.
 
             :param int value: The value to check for.
@@ -562,14 +562,14 @@ namespace hal
             :rtype: bool
         )");
 
-        py_boolean_function_node.def("is_index", py::overload_cast<>(&BooleanFunction::Node::is_index, py::const_), R"(
+        py_boolean_function_node.def("is_index", &BooleanFunction::Node::is_index, R"(
             Checks whether the Boolean function node is of type Index.
 
             :returns: True if the Boolean function node is of type Index, False otherwise.
             :rtype: bool
         )");
 
-        py_boolean_function_node.def("is_index", py::overload_cast<u16>(&BooleanFunction::Node::is_index, py::const_), py::arg("value"), R"(
+        py_boolean_function_node.def("has_index_value", &BooleanFunction::Node::has_index_value, py::arg("value"), R"(
             Checks whether the Boolean function node is of type Index and holds a specific value.
 
             :param int value: The value to check for.
@@ -577,14 +577,14 @@ namespace hal
             :rtype: bool
         )");
 
-        py_boolean_function_node.def("is_variable", py::overload_cast<>(&BooleanFunction::Node::is_variable, py::const_), R"(
+        py_boolean_function_node.def("is_variable", &BooleanFunction::Node::is_variable, R"(
             Checks whether the Boolean function node is of type Variable.
 
             :returns: True if the Boolean function node is of type Variable, False otherwise.
             :rtype: bool
         )");
 
-        py_boolean_function_node.def("is_variable", py::overload_cast<const std::string&>(&BooleanFunction::Node::is_variable, py::const_), py::arg("variable_name"), R"(
+        py_boolean_function_node.def("has_variable_name", &BooleanFunction::Node::has_variable_name, py::arg("variable_name"), R"(
             Checks whether the Boolean function node is of type Variable and holds a specific variable name.
 
             :param str variable_name: The variable name to check for.

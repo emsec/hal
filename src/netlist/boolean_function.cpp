@@ -229,9 +229,9 @@ namespace hal
         return (this->is_empty()) ? false : this->get_top_level_node().is_constant();
     }
 
-    bool BooleanFunction::is_constant(u64 value) const
+    bool BooleanFunction::has_constant_value(u64 value) const
     {
-        return (this->is_empty()) ? false : this->get_top_level_node().is_constant(value);
+        return (this->is_empty()) ? false : this->get_top_level_node().has_constant_value(value);
     }
 
     const BooleanFunction::Node& BooleanFunction::get_top_level_node() const
@@ -463,7 +463,7 @@ namespace hal
         auto function = this->clone();
         for (auto i = 0u; i < this->m_nodes.size(); i++)
         {
-            if (this->m_nodes[i].is_variable(old_variable_name))
+            if (this->m_nodes[i].has_variable_name(old_variable_name))
             {
                 function.m_nodes[i] = Node::Variable(new_variable_name, this->m_nodes[i].size);
             }
@@ -482,7 +482,7 @@ namespace hal
         /// @param[in] repl - Replacement Boolean function.
         /// @returns AST replacement.
         auto substitute_variable = [](const auto& node, auto&& operands, auto var_name, auto repl) -> std::variant<BooleanFunction, std::string> {
-            if (node.is_variable(var_name))
+            if (node.has_variable_name(var_name))
             {
                 return repl.clone();
             }
@@ -556,7 +556,7 @@ namespace hal
         {
             for (const auto& node : this->m_nodes)
             {
-                if (node.is_variable(name) && node.size != value.size())
+                if (node.has_variable_name(name) && node.size != value.size())
                 {
                     return "Cannot use evaluate() on '" + this->to_string() + " as the '" + node.to_string() + " is " + std::to_string(node.size) + "-bit vs. " + std::to_string(value.size())
                            + "-bit in the input.";
@@ -918,10 +918,10 @@ namespace hal
 
     u16 BooleanFunction::Node::get_arity() const
     {
-        return BooleanFunction::Node::get_arity(this->type);
+        return BooleanFunction::Node::get_arity_of_type(this->type);
     }
 
-    u16 BooleanFunction::Node::get_arity(u16 type)
+    u16 BooleanFunction::Node::get_arity_of_type(u16 type)
     {
         static const std::map<u16, u16> type2arity = {
             {BooleanFunction::NodeType::And, 2},
@@ -953,7 +953,7 @@ namespace hal
         return this->is(BooleanFunction::NodeType::Constant);
     }
 
-    bool BooleanFunction::Node::is_constant(u64 value) const
+    bool BooleanFunction::Node::has_constant_value(u64 value) const
     {
         if (!this->is_constant())
         {
@@ -974,7 +974,7 @@ namespace hal
         return this->is(BooleanFunction::NodeType::Index);
     }
 
-    bool BooleanFunction::Node::is_index(u16 value) const
+    bool BooleanFunction::Node::has_index_value(u16 value) const
     {
         return this->is_index() && (this->index == value);
     }
@@ -984,7 +984,7 @@ namespace hal
         return this->is(BooleanFunction::NodeType::Variable);
     }
 
-    bool BooleanFunction::Node::is_variable(const std::string& value) const
+    bool BooleanFunction::Node::has_variable_name(const std::string& value) const
     {
         return this->is_variable() && (this->variable == value);
     }

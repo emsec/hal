@@ -238,7 +238,7 @@ namespace hal
                 }
                 case BooleanFunction::NodeType::And: {
                     // X & 0   =>   0
-                    if (p[1].is_constant(0))
+                    if (p[1].has_constant_value(0))
                     {
                         return BooleanFunction::Const(0, node.size);
                     }
@@ -432,7 +432,7 @@ namespace hal
 
                 case BooleanFunction::NodeType::Or: {
                     // X | 0   =>   X
-                    if (p[1].is_constant(0))
+                    if (p[1].has_constant_value(0))
                     {
                         return p[0];
                     }
@@ -597,7 +597,7 @@ namespace hal
                 }
                 case BooleanFunction::NodeType::Xor: {
                     // X ^ 0   =>   x
-                    if (p[1].is_constant(0))
+                    if (p[1].has_constant_value(0))
                     {
                         return p[0];
                     }
