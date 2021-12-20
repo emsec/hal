@@ -329,24 +329,24 @@ namespace hal
         bool is(u16 type) const;
 
         /**
-         * Checks whether the Boolean function is a variable.
+         * Checks whether the top-level node of the Boolean function is of type `Variable`.
          * 
-         * @returns `true` if the Boolean function is a variable, `false` otherwise.
+         * @returns `true` if the top-level node of the Boolean function is of type `Variable`, `false` otherwise.
          */
         bool is_variable() const;
 
         /**
-         * Checks whether the Boolean function is a constant.
+         * Checks whether the top-level node of the Boolean function is of type `Constant`.
          * 
-         * @returns `true` if the Boolean function is a constant, `false` otherwise.
+         * @returns `true` if the top-level node of the Boolean function is of type `Constant`, `false` otherwise.
          */
         bool is_constant() const;
 
         /**
-         * Checks whether the Boolean function is a constant with a specific value.
+         * Checks whether the Boolean function is of type `Constant` and holds a specific value.
          * 
          * @param value - The value to check for.
-         * @returns `true` if the Boolean function is a constant with the given value, `false` otherwise.
+         * @returns `true` if the Boolean function is of type `Constant` and holds the given value, `false` otherwise.
          */
         bool is_constant(u64 value) const;
 
@@ -664,30 +664,78 @@ namespace hal
          */
         static u16 get_arity(u16 type);
 
-        /// Checks whether node is of a specific type.
-        bool is(u16 _type) const;
+        /**
+         *  Checks whether the Boolean function node is of a specific type.
+         * 
+         * @param type - The type to check for.
+         * @returns `true` if the node is of the given type, `false` otherwise.
+         */
+        bool is(u16 type) const;
 
-        /// Checks whether node is of type 'Constant'.
+        /**
+         * Checks whether the Boolean function node is of type `Constant`.
+         * 
+         * @returns `true` if the Boolean function node is of type `Constant`, `false` otherwise.
+         */
         bool is_constant() const;
-        /// Checks whether node is of type 'Constant' and has specific value.
+
+        /**
+         * Checks whether the Boolean function node is of type `Constant` and holds a specific value.
+         * 
+         * @param value - The value to check for.
+         * @returns `true` if the Boolean function node is of type `Constant` and holds the given value, `false` otherwise.
+         */
         bool is_constant(u64 value) const;
 
-        /// Checks whether node is of type 'Index'.
+        /**
+         * Checks whether the Boolean function node is of type `Index`.
+         * 
+         * @returns `true` if the Boolean function node is of type `Index`, `false` otherwise.
+         */
         bool is_index() const;
-        /// Checks whether node is of type 'Index' and has specifif value.
+
+        /**
+         * Checks whether the Boolean function node is of type `Index` and holds a specific value.
+         * 
+         * @param value - The value to check for.
+         * @returns `true` if the Boolean function node is of type `Index` and holds the given value, `false` otherwise.
+         */
         bool is_index(u16 value) const;
 
-        /// Checks whether node is of type 'Variable'.
+        /**
+         * Checks whether the Boolean function node is of type `Variable`.
+         * 
+         * @returns `true` if the Boolean function node is of type `Variable`, `false` otherwise.
+         */
         bool is_variable() const;
-        /// Checks whether node is of type 'Variable' and has specific value.
-        bool is_variable(const std::string& value) const;
 
-        /// Checks whether node is an operation.
+        /**
+         * Checks whether the Boolean function node is of type `Variable` and holds a specific variable name.
+         * 
+         * @param variable_name - The variable name to check for.
+         * @returns `true` if the Boolean function node is of type `Variable` and holds the given variable name, `false` otherwise.
+         */
+        bool is_variable(const std::string& variable_name) const;
+
+        /**
+         * Checks whether the Boolean function node is an operation node.
+         * 
+         * @returns `true` if the Boolean function node is an operation node, `false` otherwise.
+         */
         bool is_operation() const;
-        /// Checks whether node is an operand, i.e. 'Constant' or 'Variable'.
+
+        /**
+         * Checks whether the Boolean function node is an operand node.
+         * 
+         * @returns `true` if the Boolean function node is an operand node, `false` otherwise.
+         */
         bool is_operand() const;
 
-        /// Short-hand check whether the node is a commutative operator.
+        /**
+         * Checks whether the Boolean function node is commutative.
+         * 
+         * @returns `true` if the Boolean function node is commutative, `false` otherwise.
+         */
         bool is_commutative() const;
 
     private:
@@ -700,7 +748,7 @@ namespace hal
     };
 
     /**
-     * List of available node types in a Boolean function.
+     * Holds all node types available in a Boolean function.
      *
      * @ingroup netlist
      */

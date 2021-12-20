@@ -228,7 +228,13 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_boolean_function.def("size", &BooleanFunction::size, R"(
+        py_boolean_function.def_property_readonly("size", &BooleanFunction::size, R"(
+            The bit-size of the Boolean function.
+
+            :type: int
+        )");
+
+        py_boolean_function.def("get_size", &BooleanFunction::size, R"(
             Returns the bit-size of the Boolean function.
 
             :returns: The bit-size of the Boolean function.
@@ -244,25 +250,33 @@ namespace hal
         )");
 
         py_boolean_function.def("is_variable", &BooleanFunction::is_variable, R"(
-            Checks whether the Boolean function is a variable.
+            Checks whether the top-level node of the Boolean function is of type Variable.
 
-            :returns: True if the Boolean function is a variable, False otherwise.
+            :returns: True if the top-level node of the Boolean function is of type Variable, False otherwise.
             :rtype: bool
         )");
 
         py_boolean_function.def("is_constant", py::overload_cast<>(&BooleanFunction::is_constant, py::const_), R"(
-            Checks whether the Boolean function is a constant.
+            Checks whether the top-level node of the Boolean function is of type Constant.
 
-            :returns: True if the Boolean function is a constant, False otherwise.
+            :returns: True if the top-level node of the Boolean function is of type Constant, False otherwise.
             :rtype: bool
         )");
 
         py_boolean_function.def("is_constant", py::overload_cast<u64>(&BooleanFunction::is_constant, py::const_), R"(
-            Checks whether the Boolean function is a constant with a specific value.
+            Checks whether the top-level node of the Boolean function is of type Constant and holds a specific value.
 
             :param int value: The value to check for.
-            :returns: True if the Boolean function is a constant with the given value, False otherwise.
+            :returns: True if the top-level node of the Boolean function is of type Constant and holds the given value, False otherwise.
             :rtype: bool
+        )");
+
+        py_boolean_function.def_property_readonly("top_level_node", &BooleanFunction::get_top_level_node, R"(
+            The top-level node of the Boolean function.
+
+            WARNING: fails if the Boolean function is empty.
+
+            :type: hal_py.BooleanFunction.Node
         )");
 
         py_boolean_function.def("get_top_level_node", &BooleanFunction::get_top_level_node, R"(
@@ -274,11 +288,23 @@ namespace hal
             :rtype: hal_py.BooleanFunction.Node
         )");
 
-        py_boolean_function.def("length", &BooleanFunction::length, R"(
+        py_boolean_function.def_property_readonly("length", &BooleanFunction::length, R"(
+            The number of nodes in the Boolean function.
+
+            :type: int
+        )");
+
+        py_boolean_function.def("get_length", &BooleanFunction::length, R"(
             Returns the number of nodes in the Boolean function.
 
             :returns: The number of nodes. 
             :rtype: int
+        )");
+
+        py_boolean_function.def("nodes", &BooleanFunction::get_nodes, R"(
+            The reverse polish notation list of the Boolean function nodes.
+
+            :type: list[hal_py.BooleanFunction.Node]
         )");
 
         py_boolean_function.def("get_nodes", &BooleanFunction::get_nodes, R"(
@@ -288,11 +314,23 @@ namespace hal
             :rtype: list[hal_py.BooleanFunction.Node]
         )");
 
+        py_boolean_function.def_property_readonly("parameters", &BooleanFunction::get_parameters, R"(
+            The parameter list of the top-level node of the Boolean function.
+
+            :type: list[hal_py.BooleanFunction]
+        )");
+
         py_boolean_function.def("get_parameters", &BooleanFunction::get_parameters, R"(
             Returns the parameter list of the top-level node of the Boolean function.
 
             :returns: A vector of Boolean functions.
             :rtype: list[hal_py.BooleanFunction]
+        )");
+
+        py_boolean_function.def_property_readonly("variable_names", &BooleanFunction::get_variable_names, R"(
+            The set of variable names used by the Boolean function.
+
+            :type: list[str]
         )");
 
         py_boolean_function.def("get_variable_names", &BooleanFunction::get_variable_names, R"(
@@ -481,6 +519,12 @@ namespace hal
             :rtype: str
         )");
 
+        py_boolean_function_node.def_property_readonly("arity", py::overload_cast<>(&BooleanFunction::Node::get_arity, py::const_), R"(
+            The arity of the Boolean function node, i.e., the number of parameters.
+
+            :type: int
+        )");
+
         py_boolean_function_node.def("get_arity", py::overload_cast<>(&BooleanFunction::Node::get_arity, py::const_), R"(
             Returns the arity of the Boolean function node, i.e., the number of parameters.
 
@@ -495,6 +539,94 @@ namespace hal
             :rtype: int
         )");
 
-        // TODO lots of functions
+        py_boolean_function_node.def("is", &BooleanFunction::Node::is, py::arg("type"), R"(
+            Checks whether the Boolean function node is of a specific type.
+
+            :param int type: The type to check for.
+            :returns: True if the node is of the given type, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function_node.def("is_constant", py::overload_cast<>(&BooleanFunction::Node::is_constant, py::const_), R"(
+            Checks whether the Boolean function node is of type Constant.
+
+            :returns: True if the Boolean function node is of type Constant, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function_node.def("is_constant", py::overload_cast<u64>(&BooleanFunction::Node::is_constant, py::const_), py::arg("value"), R"(
+            Checks whether the Boolean function node is of type Constant and holds a specific value.
+
+            :param int value: The value to check for.
+            :returns: True if the Boolean function node is of type Constant and holds the given value, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function_node.def("is_index", py::overload_cast<>(&BooleanFunction::Node::is_index, py::const_), R"(
+            Checks whether the Boolean function node is of type Index.
+
+            :returns: True if the Boolean function node is of type Index, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function_node.def("is_index", py::overload_cast<u16>(&BooleanFunction::Node::is_index, py::const_), py::arg("value"), R"(
+            Checks whether the Boolean function node is of type Index and holds a specific value.
+
+            :param int value: The value to check for.
+            :returns: True if the Boolean function node is of type Index and holds the given value, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function_node.def("is_variable", py::overload_cast<>(&BooleanFunction::Node::is_variable, py::const_), R"(
+            Checks whether the Boolean function node is of type Variable.
+
+            :returns: True if the Boolean function node is of type Variable, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function_node.def("is_variable", py::overload_cast<const std::string&>(&BooleanFunction::Node::is_variable, py::const_), py::arg("variable_name"), R"(
+            Checks whether the Boolean function node is of type Variable and holds a specific variable name.
+
+            :param str variable_name: The variable name to check for.
+            :returns: True if the Boolean function node is of type Variable and holds the given variable name, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function_node.def("is_operation", &BooleanFunction::Node::is_operation, R"(
+            Checks whether the Boolean function node is an operation node.
+
+            :returns: True if the Boolean function node is an operation node, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function_node.def("is_operand", &BooleanFunction::Node::is_operand, R"(
+            Checks whether the Boolean function node is an operand node.
+
+            :returns: True if the Boolean function node is an operand node, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function_node.def("is_commutative", &BooleanFunction::Node::is_commutative, R"(
+            Checks whether the Boolean function node is commutative.
+
+            :returns: True if the Boolean function node is commutative, False otherwise.
+            :rtype: bool
+        )");
+
+        py::class_<BooleanFunction::NodeType> py_boolean_function_node_type(py_boolean_function, "NodeType", R"(
+            Holds all node types available in a Boolean function.
+        )");
+
+        py_boolean_function_node_type.def_readonly_static("And", &BooleanFunction::NodeType::And);
+        py_boolean_function_node_type.def_readonly_static("Or", &BooleanFunction::NodeType::Or);
+        py_boolean_function_node_type.def_readonly_static("Not", &BooleanFunction::NodeType::Not);
+        py_boolean_function_node_type.def_readonly_static("Xor", &BooleanFunction::NodeType::Xor);
+        py_boolean_function_node_type.def_readonly_static("Add", &BooleanFunction::NodeType::Add);
+        py_boolean_function_node_type.def_readonly_static("Concat", &BooleanFunction::NodeType::Concat);
+        py_boolean_function_node_type.def_readonly_static("Slice", &BooleanFunction::NodeType::Slice);
+        py_boolean_function_node_type.def_readonly_static("Zext", &BooleanFunction::NodeType::Zext);
+        py_boolean_function_node_type.def_readonly_static("Constant", &BooleanFunction::NodeType::Constant);
+        py_boolean_function_node_type.def_readonly_static("Index", &BooleanFunction::NodeType::Index);
+        py_boolean_function_node_type.def_readonly_static("Variable", &BooleanFunction::NodeType::Variable);
     }
 }    // namespace hal
