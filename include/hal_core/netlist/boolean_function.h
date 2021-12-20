@@ -96,7 +96,7 @@ namespace hal
         ////////////////////////////////////////////////////////////////////////
 
         /**
-         * Construct an empty / invalid Boolean function.
+         * Constructs an empty / invalid Boolean function.
          */
         explicit BooleanFunction();
 
@@ -104,66 +104,94 @@ namespace hal
          * Builds and validates a Boolean function from a vector of nodes.
          * 
          * @param[in] nodes - Vector of Boolean function nodes.
-         * @returns The Boolean function on success, a string describing the error otherwise.
+         * @returns The Boolean function on success, a string error message otherwise.
          */
         static std::variant<BooleanFunction, std::string> build(std::vector<Node>&& nodes);
 
-        /// Creates a 'Variable' Boolean function.
         /**
-         * Creates a Boolean function comprising only a variable of the specified bit-size.
+         * Creates a Boolean function of the given bit-size comprising only a variable of the specified name.
          * 
          * @param[in] name - The name of the variable.
          * @param[in] size - The bit-size. Defaults to 1.
-         * @returns The BooleanFunction.
+         * @returns The Boolean function.
          */
-        static BooleanFunction var(const std::string& name, u16 size = 1);
+        static BooleanFunction Var(const std::string& name, u16 size = 1);
 
-        /// Creates a 'Constant' Boolean function.
+        /**
+         * Creates a constant single-bit Boolean function from a value.
+         * 
+         * @param[in] value - The value.
+         * @returns The Boolean function.
+         */
         static BooleanFunction Const(const BooleanFunction::Value& value);
-        /// Creates a 'Constant' Boolean function.
-        static BooleanFunction Const(const std::vector<BooleanFunction::Value>& value);
-        /// Creates a 'Constant' Boolean function.
+
+        /**
+         * Creates a constant multi-bit  Boolean function from a vector of values.
+         * 
+         * @param[in] values - The vector of values.
+         * @returns The Boolean function.
+         */
+        static BooleanFunction Const(const std::vector<BooleanFunction::Value>& values);
+
+        /**
+         * Creates a constant multi-bit Boolean function of the given bit-size from an integer value.
+         * 
+         * @param[in] value - The integer value.
+         * @param[in] size - The bit-size.
+         * @returns The Boolean function.
+         */
         static BooleanFunction Const(u64 value, u16 size);
 
-        /// Creates an 'Index' Boolean function.
+        /**
+         * Creates a Boolean function index of the given bit-size from an integer value.
+         * 
+         * @param[in] index - The integer value.
+         * @param[in] size - The bit-size.
+         * @returns The Boolean function.
+         */
         static BooleanFunction Index(u16 index, u16 size);
 
         /**
-         * Creates an 'AND' Boolean function.
+         * Joins two Boolean functions by an 'AND' operation. 
+         * Requires both Boolean functions to be of the specified bit-size.
          * 
-         * @param[in] p0 - Parameter 0 of bit-size 'size'.
-         * @param[in] p1 - Parameter 1 of bit-size 'size'.
-         * @param[in] size - Bit-size of AND operation.
-         * @returns Boolean function on success, error message string otherwise.
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns The joined Boolean function on success, a string error message otherwise.
          */
         static std::variant<BooleanFunction, std::string> And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Creates an 'OR' Boolean function.
+         * Joins two Boolean functions by an 'OR' operation. 
+         * Requires both Boolean functions to be of the specified bit-size.
          * 
-         * @param[in] p0 - Parameter 0 of bit-size 'size'.
-         * @param[in] p1 - Parameter 1 of bit-size 'size'.
-         * @param[in] size - Bit-size of Or operation.
-         * @returns Boolean function on success, error message string otherwise.
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns The joined Boolean function on success, a string error message otherwise.
          */
         static std::variant<BooleanFunction, std::string> Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Creates an 'Not' Boolean function.
+         * Negates the given Boolean function. 
+         * Requires the Boolean function to be of the specified bit-size.
          * 
-         * @param[in] p0 - Parameter 0 of bit-size 'size'.
-         * @param[in] size - Bit-size of Not operation.
-         * @returns  Boolean function on success, error message string otherwise.
+         * @param[in] p0 - The Boolean function to negate.
+         * @param[in] size - Bit-size of the operation.
+         * @returns  The negated Boolean function on success, a string error message otherwise.
          */
         static std::variant<BooleanFunction, std::string> Not(BooleanFunction&& p0, u16 size);
 
         /**
-         * Creates an 'Xor' Boolean function.
+         * Joins two Boolean functions by an 'XOR' operation. 
+         * Requires both Boolean functions to be of the specified bit-size.
          * 
-         * @param[in] p0 - Parameter 0 of bit-size 'size'.
-         * @param[in] p1 - Parameter 1 of bit-size 'size'.
-         * @param[in] size - Bit-size of Xor operation.
-         * @returns Boolean function on success, error message string otherwise.
+         * 
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns The joined Boolean function on success, a string error message otherwise.
          */
         static std::variant<BooleanFunction, std::string> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
@@ -176,88 +204,185 @@ namespace hal
          */
         friend std::ostream& operator<<(std::ostream& os, const BooleanFunction& f);
 
-        /// Short-hand Boolean function AND operation (may fail in case bit-sizes are not equal).
+        /**
+         * Joins two Boolean functions by an 'AND' operation. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
         BooleanFunction operator&(const BooleanFunction& other) const;
-        /// Short-hand Boolean function AND operation assignment (may fail in case bit-sizes are not equal).
+
+        /**
+         * Joins two Boolean functions by an 'AND' operation in-place. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
         BooleanFunction& operator&=(const BooleanFunction& other);
 
         /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Negate the Boolean function.
-         *
+         * Negates the Boolean function. 
+         * 
          * @returns The negated Boolean function.
          */
-        [[deprecated("Use operator~() instead.")]] BooleanFunction operator!() const;
-
-        /// Short-hand Boolean function NOT operation.
         BooleanFunction operator~() const;
 
-        /// Short-hand Boolean function OR operation (may fail in case bit-sizes are not equal).
+        /**
+         * Joins two Boolean functions by an 'OR' operation. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
         BooleanFunction operator|(const BooleanFunction& other) const;
-        /// Short-hand Boolean function OR operation assignment (may fail in case bit-sizes are not equal).
+
+        /**
+         * Joins two Boolean functions by an 'OR' operation in-place. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
         BooleanFunction& operator|=(const BooleanFunction& other);
 
-        /// Short-hand Boolean function XOR operation (may fail in case bit-sizes are not equal).
+        /**
+         * Joins two Boolean functions by an 'XOR' operation. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
         BooleanFunction operator^(const BooleanFunction& other) const;
-        /// Short-hand Boolean function XOR operation assignment (may fail in case bit-sizes are not equal).
+
+        /**
+         * Joins two Boolean functions by an 'XOR' operation in-place. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
         BooleanFunction& operator^=(const BooleanFunction& other);
 
-        /// Short-hand equality operator to compare Boolean functions.
+        /**
+         * Checks whether two Boolean functions are equal.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns `true` if the Boolean functions are equal, `false` otherwise.
+         */
         bool operator==(const BooleanFunction& other) const;
-        /// Short-hand in-equality operator to compare Boolean functions.
+
+        /**
+         * Checks whether two Boolean functions are unequal.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns `true` if the Boolean functions are unequal, `false` otherwise.
+         */
         bool operator!=(const BooleanFunction& other) const;
-        /// Short-hand less-than operator to compare Boolean functions.
+
+        /**
+         * Checks whether this Boolean function is 'smaller' than the `other` Boolean function.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns `true` if this Boolean functions is 'smaller', `false` otherwise.
+         */
         bool operator<(const BooleanFunction& other) const;
 
-        /// Short-hand check to test whether the instance is empty.
+        /**
+         * Checks whether the Boolean function is empty.
+         * 
+         * @returns `true` if the Boolean function is empty, `false` otherwise.
+         */
         bool is_empty() const;
 
         ////////////////////////////////////////////////////////////////////////
         // Interface: Nodes, Sizes, and Checks
         ////////////////////////////////////////////////////////////////////////
 
-        /// Short-hand function to clone the instance.
+        /**
+         * Clones the Boolean function.
+         * 
+         * @returns The cloned Boolean function.
+         */
         BooleanFunction clone() const;
 
-        /// Short-hand function to get the bit-size of the instance.
+        /**
+         * Returns the bit-size of the Boolean function.
+         * 
+         * @returns The bit-size of the Boolean function. 
+         */
         u16 size() const;
 
-        /// Short-hand check whether the top-level node is a specific type.
+        /**
+         * Checks whether the top-level node of the Boolean function is of a specific type.
+         * 
+         * @param type - The type to check for.
+         * @returns `true` if the node is of the given type, `false` otherwise.
+         */
         bool is(u16 type) const;
 
-        /// Short-hand check whether the Boolean function is variable.
+        /**
+         * Checks whether the Boolean function is a variable.
+         * 
+         * @returns `true` if the Boolean function is a variable, `false` otherwise.
+         */
         bool is_variable() const;
 
-        /// Short-hand check whether the Boolean function is a constant.
+        /**
+         * Checks whether the Boolean function is a constant.
+         * 
+         * @returns `true` if the Boolean function is a constant, `false` otherwise.
+         */
         bool is_constant() const;
-        /// Short-hand check whether the Boolean function is a constant with a specific value.
-        bool is_constant(u64 value) const;
-
-        /// Short-hand function to query the top-level Boolean function node (may fail if Boolean function is empty).
-        const BooleanFunction::Node& get_top_level_node() const;
-
-        /// Short-hand function to get the number of nodes in the Boolean function.
-        unsigned length() const;
 
         /**
-         * Returns the reverse-polish notation list of Boolean function nodes.
+         * Checks whether the Boolean function is a constant with a specific value.
+         * 
+         * @param value - The value to check for.
+         * @returns `true` if the Boolean function is a constant with the given value, `false` otherwise.
+         */
+        bool is_constant(u64 value) const;
+
+        /**
+         * Returns the top-level node of the Boolean function.
+         * \warning Fails if the Boolean function is empty.
+         * 
+         * @returns The top-level node.
+         */
+        const BooleanFunction::Node& get_top_level_node() const;
+
+        /**
+         * Returns the number of nodes in the Boolean function.
+         * 
+         * @returns The number of nodes. 
+         */
+        u32 length() const;
+
+        /**
+         * Returns the reverse polish notation list of the Boolean function nodes.
          *
-         * @returns List of non-owning pointers to nodes.
+         * @returns A vector of nodes.
          */
         const std::vector<BooleanFunction::Node>& get_nodes() const;
 
         /**
-         * Returns the parameter list of the top-level node.
+         * Returns the parameter list of the top-level node of the Boolean function.
          * 
-         * @returns List of parameters.
+         * @returns A vector of Boolean functions.
          */
         std::vector<BooleanFunction> get_parameters() const;
 
         /**
-         * Returns the set of variable names utilizes in the Boolean function.
+         * Returns the set of variable names used by the Boolean function.
          *
-         * @returns Set of variable names.
+         * @returns A set of variable names.
          */
         std::set<std::string> get_variable_names() const;
 
@@ -265,14 +390,18 @@ namespace hal
         // Interface: String Translation
         ////////////////////////////////////////////////////////////////////////
 
-        /// Transforms the BooleanFunction into a human-readable string.
+        /**
+         * Translates the Boolean function into its string representation.
+         * 
+         * @returns The Boolean function as a string.
+         */
         std::string to_string() const;
 
         /**
          * Parses a Boolean function from a string expression.
          * 
          * @param[in] expression - Boolean function string.
-         * @returns The Boolean function on success, a string describing the error otherwise.
+         * @returns The Boolean function on success, a string error message otherwise.
          */
         static std::variant<BooleanFunction, std::string> from_string(const std::string& expression);
 

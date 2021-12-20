@@ -406,7 +406,7 @@ namespace hal
 
             Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g0");
             Gate* g1 = nl->create_gate(gl->get_gate_type_by_name("LUT2"), "g1");
-            g1->add_boolean_function("O", BooleanFunction::var("I1"));
+            g1->add_boolean_function("O", BooleanFunction::Var("I1"));
             Gate* g2 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g2");
 
             Net* n0 = nl->create_net("n0");
@@ -506,7 +506,7 @@ namespace hal
             Gate* l4 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l4");
             Gate* l5 = nl->create_gate(gl->get_gate_type_by_name("LUT4"), "l5");
             l4->add_boolean_function("O", std::get<BooleanFunction>(BooleanFunction::from_string("I0 & I1 & I2 & I3")));
-            l5->add_boolean_function("O", BooleanFunction::var("I2"));
+            l5->add_boolean_function("O", BooleanFunction::Var("I2"));
 
             test_utils::connect(nl.get(), l0, "O", l4, "I0");
             test_utils::connect(nl.get(), l1, "O", l4, "I1");

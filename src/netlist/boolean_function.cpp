@@ -40,7 +40,7 @@ namespace hal
         return BooleanFunction::validate(BooleanFunction(std::move(nodes)));
     }
 
-    BooleanFunction BooleanFunction::var(const std::string& name, u16 size)
+    BooleanFunction BooleanFunction::Var(const std::string& name, u16 size)
     {
         return BooleanFunction(Node::Variable(name, size));
     }
@@ -126,11 +126,6 @@ namespace hal
     {
         *this = std::get<BooleanFunction>(BooleanFunction::And(this->clone(), other.clone(), this->size()));
         return *this;
-    }
-
-    BooleanFunction BooleanFunction::operator!() const
-    {
-        return this->operator~();
     }
 
     BooleanFunction BooleanFunction::operator~() const
@@ -244,7 +239,7 @@ namespace hal
         return this->m_nodes.back();
     }
 
-    unsigned BooleanFunction::length() const
+    u32 BooleanFunction::length() const
     {
         return this->m_nodes.size();
     }
@@ -573,7 +568,7 @@ namespace hal
         auto symbolic_execution = SMT::SymbolicExecution();
         for (const auto& [name, value] : inputs)
         {
-            symbolic_execution.state.set(BooleanFunction::var(name, value.size()), BooleanFunction::Const(value));
+            symbolic_execution.state.set(BooleanFunction::Var(name, value.size()), BooleanFunction::Const(value));
         }
 
         // (3) analyze the evaluation result and check whether the result is a

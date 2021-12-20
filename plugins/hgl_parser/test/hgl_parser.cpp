@@ -332,10 +332,10 @@ namespace hal
                     ASSERT_NE(state_component, nullptr);
 
                     EXPECT_EQ(latch_component->get_async_set_reset_behavior(), std::pair(AsyncSetResetBehavior::N, AsyncSetResetBehavior::T));
-                    EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::var("D"));
-                    EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::var("EN"));
-                    EXPECT_EQ(latch_component->get_async_reset_function(), BooleanFunction::var("R"));
-                    EXPECT_EQ(latch_component->get_async_set_function(), BooleanFunction::var("S"));
+                    EXPECT_EQ(latch_component->get_data_in_function(), BooleanFunction::Var("D"));
+                    EXPECT_EQ(latch_component->get_enable_function(), BooleanFunction::Var("EN"));
+                    EXPECT_EQ(latch_component->get_async_reset_function(), BooleanFunction::Var("R"));
+                    EXPECT_EQ(latch_component->get_async_set_function(), BooleanFunction::Var("S"));
                     EXPECT_EQ(state_component->get_state_identifier(), "IQ");
                     EXPECT_EQ(state_component->get_neg_state_identifier(), "IQN");
                 }

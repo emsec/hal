@@ -9,40 +9,312 @@ namespace hal
             "BooleanFunction",
             R"(A BooleanFunction represents a symbolic expression (e.g., "A & B") in order to abstract the (semantic) functionality of a single netlist gate (or even a complex subcircuit comprising multiple gates) in a formal manner. To this end, the BooleanFunction class is able to construct and display arbitrarily-nested expressions, enable symbolic simplification (e.g., simplify "A & 0" to "0"), and translate Boolean functions to the SAT / SMT solver domain to use the solve constraint formulas.)");
 
-        py::enum_<BooleanFunction::Value>(py_boolean_function, "Value", R"(Represents the logic value that a Boolean function operates on.)")
-            .value("ZERO", BooleanFunction::ZERO, R"(Represents a logical 0.)")
+        py::enum_<BooleanFunction::Value> py_boolean_function_value(py_boolean_function, "Value", R"(Represents the logic value that a Boolean function operates on.)");
+        py_boolean_function_value.value("ZERO", BooleanFunction::ZERO, R"(Represents a logical 0.)")
             .value("ONE", BooleanFunction::ONE, R"(Represents a logical 1.)")
             .value("Z", BooleanFunction::X, R"(Represents a high-impedance value.)")
             .value("X", BooleanFunction::X, R"(Represents an undefined value.)")
             .export_values();
 
-        py_boolean_function.def_static("to_string", py::overload_cast<BooleanFunction::Value>(&BooleanFunction::to_string), py::arg("value"), R"(
-            Get the value as a string.
+        py_boolean_function_value.def(
+            "__str__", [](const BooleanFunction::Value& v) { return BooleanFunction::to_string(v); }, R"(
+            Translates the Boolean function value into its string representation.
 
-            :param hal_py.BooleanFunction.Value value: The value.
-            :returns: A string describing the value.
+            :returns: The value as a string.
             :rtype: str
         )");
 
         py_boolean_function.def(py::init<>(), R"(
-            Construct an empty / invalid Boolean function.
+            Constructs an empty / invalid Boolean function.
         )");
 
         py_boolean_function.def_static("build", &BooleanFunction::build, py::arg("nodes"), R"(
             Builds and validates a Boolean function from a list of nodes.
         
             :param list[hal_py.BooleanFunction.Node] nodes: List of Boolean function nodes.
-            :returns: The Boolean function on success, a string describing the error otherwise.
+            :returns: The Boolean function on success, a string error message otherwise.
             :rtype: hal_py.BooleanFunction or str
         )");
 
-        // TODO lots of functions
+        py_boolean_function.def_static("Var", &BooleanFunction::Var, py::arg("name"), py::arg("size") = 1, R"(
+            Creates a multi-bit Boolean function of the given bit-size comprising only a variable of the specified name.
+
+            :param str name: The name of the variable.
+            :param int size: The bit-size. Defaults to 1.
+            :returns: The BooleanFunction.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def_static("Const", py::overload_cast<const BooleanFunction::Value&>(&BooleanFunction::Const), py::arg("value"), R"(
+            Creates a constant single-bit Boolean function from a value.
+        
+            :param hal_py.BooleanFunction.Value value: The value.
+            :returns: The Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def_static("Const", py::overload_cast<const std::vector<BooleanFunction::Value>&>(&BooleanFunction::Const), py::arg("values"), R"(
+            Creates a constant multi-bit Boolean function from a vector of values.
+        
+            :param list[hal_py.BooleanFunction.Value] values: The list of values.
+            :returns: The Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def_static("Const", py::overload_cast<u64, u16>(&BooleanFunction::Const), py::arg("value"), py::arg("size"), R"(
+            Creates a constant multi-bit Boolean function of the given bit-size from an integer value.
+        
+            :param int value: The integer value.
+            :param int size: The bit-size.
+            :returns: The Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def_static("Index", &BooleanFunction::Index, py::arg("index"), py::arg("size"), R"(
+            Creates a Boolean function index of the given bit-size from an integer value.
+        
+            :param int index: The integer value.
+            :param int size: The bit-size.
+            :returns: The Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def_static(
+            "And", [](BooleanFunction p0, BooleanFunction p1, u16 size) { return BooleanFunction::And(std::move(p0), std::move(p1), size); }, py::arg("p0"), py::arg("p1"), py::arg("size"), R"(
+            Joins two Boolean functions by an 'AND' operation. 
+            Requires both Boolean functions to be of the specified bit-size.
+
+            :param hal_py.BooleanFunction p0: First Boolean function.
+            :param hal_py.BooleanFunction p1: Second Boolean function.
+            :param int size: Bit-size of the operation.
+            :returns: The joined Boolean function on success, a string error message otherwise.
+            :rtype: hal_py.BooleanFunction or str
+        )");
+
+        py_boolean_function.def_static(
+            "Or", [](BooleanFunction p0, BooleanFunction p1, u16 size) { return BooleanFunction::Or(std::move(p0), std::move(p1), size); }, py::arg("p0"), py::arg("p1"), py::arg("size"), R"(
+            Joins two Boolean functions by an 'OR' operation.
+            Requires both Boolean functions to be of the specified bit-size.
+
+            :param hal_py.BooleanFunction p0: First Boolean function.
+            :param hal_py.BooleanFunction p1: Second Boolean function.
+            :param int size: Bit-size of the operation.
+            :returns: The joined Boolean function on success, a string error message otherwise.
+            :rtype: hal_py.BooleanFunction or str
+        )");
+
+        py_boolean_function.def_static(
+            "Not", [](BooleanFunction p0, u16 size) { return BooleanFunction::Not(std::move(p0), size); }, py::arg("p0"), py::arg("size"), R"(
+            Negates the given Boolean function.
+            Requires the Boolean function to be of the specified bit-size.
+
+            :param hal_py.BooleanFunction p0: The Boolean function to negate.
+            :param int size: Bit-size of the operation.
+            :returns: The negated Boolean function on success, a string error message otherwise.
+            :rtype: hal_py.BooleanFunction or str
+        )");
+
+        py_boolean_function.def_static(
+            "Xor", [](BooleanFunction p0, BooleanFunction p1, u16 size) { return BooleanFunction::Xor(std::move(p0), std::move(p1), size); }, py::arg("p0"), py::arg("p1"), py::arg("size"), R"(
+            Joins two Boolean functions by an 'XOR' operation.
+            Requires both Boolean functions to be of the specified bit-size.
+
+            :param hal_py.BooleanFunction p0: First Boolean function.
+            :param hal_py.BooleanFunction p1: Second Boolean function.
+            :param int size: Bit-size of the operation.
+            :returns: The joined Boolean function on success, a string error message otherwise.
+            :rtype: hal_py.BooleanFunction or str
+        )");
+
+        py_boolean_function.def(py::self & py::self, R"(
+            Joins two Boolean functions by an 'AND' operation. 
+            Requires both Boolean functions to be of the same bit-size.
+
+            WARNING: fails if the Boolean functions have different bit-sizes.
+
+            :returns: The joined Boolean Bunction.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def(py::self &= py::self, R"(
+            Joins two Boolean functions by an 'AND' operation in-place. 
+            Requires both Boolean functions to be of the same bit-size.
+
+            WARNING: fails if the Boolean functions have different bit-sizes.
+
+            :returns: The joined Boolean Bunction.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def(py::self | py::self, R"(
+            Joins two Boolean functions by an 'OR' operation. 
+            Requires both Boolean functions to be of the same bit-size.
+
+            WARNING: fails if the Boolean functions have different bit-sizes.
+
+            :returns: The joined Boolean Bunction.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def(py::self |= py::self, R"(
+            Joins two Boolean functions by an 'OR' operation in-place. 
+            Requires both Boolean functions to be of the same bit-size.
+
+            WARNING: fails if the Boolean functions have different bit-sizes.
+
+            :returns: The joined Boolean Bunction.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def(~py::self, R"(
+            Negates the Boolean function.
+
+            :returns: The negated Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def(py::self ^ py::self, R"(
+            Joins two Boolean functions by an 'XOR' operation. 
+            Requires both Boolean functions to be of the same bit-size.
+
+            WARNING: fails if the Boolean functions have different bit-sizes.
+
+            :returns: The joined Boolean Bunction.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def(py::self ^= py::self, R"(
+            Joins two Boolean functions by an 'OR' operation in-place. 
+            Requires both Boolean functions to be of the same bit-size.
+
+            WARNING: fails if the Boolean functions have different bit-sizes.
+
+            :returns: The joined Boolean Bunction.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def(py::self == py::self, R"(
+            Checks whether two Boolean functions are equal.
+
+            :returns: True if both Boolean functions are equal, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function.def(py::self != py::self, R"(
+            Checks whether two Boolean functions are unequal.
+
+            :returns: True if both Boolean functions are unequal, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function.def(py::self != py::self, R"(
+            Checks whether this Boolean function is 'smaller' than the `other` Boolean function.
+
+            :returns: True if this Boolean function is 'smaller', False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function.def("is_empty", &BooleanFunction::is_empty, R"(
+            Checks whether the Boolean function is empty.
+
+            :returns: True if the Boolean function is empty, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function.def("clone", &BooleanFunction::clone, R"(
+            Clones the Boolean function.
+
+            :returns: The cloned Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def("size", &BooleanFunction::size, R"(
+            Returns the bit-size of the Boolean function.
+
+            :returns: The bit-size of the Boolean function.
+            :rtype: int
+        )");
+
+        py_boolean_function.def("is", &BooleanFunction::is, py::arg("type"), R"(
+            Checks whether the top-level node of the Boolean function is of a specific type.
+
+            :param int type: The type to check for.
+            :returns: True if the node is of the given type, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function.def("is_variable", &BooleanFunction::is_variable, R"(
+            Checks whether the Boolean function is a variable.
+
+            :returns: True if the Boolean function is a variable, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function.def("is_constant", py::overload_cast<>(&BooleanFunction::is_constant, py::const_), R"(
+            Checks whether the Boolean function is a constant.
+
+            :returns: True if the Boolean function is a constant, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function.def("is_constant", py::overload_cast<u64>(&BooleanFunction::is_constant, py::const_), R"(
+            Checks whether the Boolean function is a constant with a specific value.
+
+            :param int value: The value to check for.
+            :returns: True if the Boolean function is a constant with the given value, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function.def("get_top_level_node", &BooleanFunction::get_top_level_node, R"(
+            Returns the top-level node of the Boolean function.
+
+            WARNING: fails if the Boolean function is empty.
+
+            :returns: The top-level node.
+            :rtype: hal_py.BooleanFunction.Node
+        )");
+
+        py_boolean_function.def("length", &BooleanFunction::length, R"(
+            Returns the number of nodes in the Boolean function.
+
+            :returns: The number of nodes. 
+            :rtype: int
+        )");
+
+        py_boolean_function.def("get_nodes", &BooleanFunction::get_nodes, R"(
+            Returns the reverse polish notation list of the Boolean function nodes.
+
+            :returns: A list of nodes.
+            :rtype: list[hal_py.BooleanFunction.Node]
+        )");
+
+        py_boolean_function.def("get_parameters", &BooleanFunction::get_parameters, R"(
+            Returns the parameter list of the top-level node of the Boolean function.
+
+            :returns: A vector of Boolean functions.
+            :rtype: list[hal_py.BooleanFunction]
+        )");
+
+        py_boolean_function.def("get_variable_names", &BooleanFunction::get_variable_names, R"(
+            Returns the set of variable names used by the Boolean function.
+
+            :returns: A set of variable names.
+            :rtype: list[str]
+        )");
+
+        py_boolean_function.def(
+            "__str__", [](const BooleanFunction& f) { return f.to_string(); }, R"(
+            Translates the Boolean function into its string representation.
+
+            :returns: The Boolean function as a string.
+            :rtype: str
+        )");
 
         py_boolean_function.def_static("from_string", &BooleanFunction::from_string, py::arg("expression"), R"(
             Parses a Boolean function from a string expression.
 
             :param str expression: Boolean function string.
-            :returns: The Boolean function on success, a string describing the error otherwise.
+            :returns: The Boolean function on success, a string error message otherwise.
             :rtype: hal_py.BooleanFunction or str
         )");
 
@@ -90,12 +362,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_boolean_function.def("is_empty", &BooleanFunction::is_empty, R"(
-            Check whether the function is empty.
-
-            :returns: True if function is empty, false otherwise.
-            :rtype: bool
-        )");
+        
 
         py_boolean_function.def_property_readonly("variables", &BooleanFunction::get_variables, R"(
             A list of all variable names utilized in this Boolean function.
@@ -133,68 +400,6 @@ namespace hal
             :rtype: str
         )");
 
-        py_boolean_function.def(py::self & py::self, R"(
-            Combine two Boolean functions using an AND operator.
-
-            :returns: The combined Boolean Bunction.
-            :rtype: hal_py.BooleanFunction
-        )");
-
-        py_boolean_function.def(py::self | py::self, R"(
-            Combine two Boolean functions using an OR operator.
-
-            :returns: The combined Boolean function.
-            :rtype: hal_py.BooleanFunction
-        )");
-
-        py_boolean_function.def(py::self ^ py::self, R"(
-            Combine two Boolean functions using an XOR operator.
-
-            :returns: The combined Boolean function.
-            :rtype: hal_py.BooleanFunction
-        )");
-
-        py_boolean_function.def(py::self &= py::self, R"(
-            Combine two Boolean functions using an AND operator in-place.
-
-            :returns: The combined Boolean function.
-            :rtype: hal_py.BooleanFunction
-        )");
-
-        py_boolean_function.def(py::self |= py::self, R"(
-            Combine two Boolean functions using an OR operator in-place.
-
-            :returns: The combined Boolean function.
-            :rtype: hal_py.BooleanFunction
-        )");
-
-        py_boolean_function.def(py::self ^= py::self, R"(
-            Combine two Boolean functions using an XOR operator in-place.
-
-            :returns: The combined Boolean function.
-            :rtype: hal_py.BooleanFunction
-        )");
-
-        py_boolean_function.def(~py::self, R"(
-            Negate the Boolean function.
-
-            :returns: The negated Boolean function.
-            :rtype: hal_py.BooleanFunction
-        )");
-
-        py_boolean_function.def(py::self == py::self, R"(
-            Check whether two Boolean functions are equal.
-
-            :returns: True if both Boolean functions are equal, false otherwise.
-            :rtype: bool
-        )");
-
-        py_boolean_function.def(py::self != py::self, R"(
-            Check whether two Boolean functions are unequal.
-
-            :returns: True if both Boolean functions are unequal, false otherwise.
-            :rtype: bool
-        )");
 
         py_boolean_function.def("is_dnf", &BooleanFunction::is_dnf, R"(
             Check whether the Boolean function is in disjunctive normal form (DNF).

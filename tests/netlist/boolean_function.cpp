@@ -15,14 +15,14 @@ namespace hal {
 
     TEST(BooleanFunction, IsEmpty) {
         EXPECT_TRUE(BooleanFunction().is_empty());
-        EXPECT_FALSE(BooleanFunction::var("A").is_empty());
+        EXPECT_FALSE(BooleanFunction::Var("A").is_empty());
         EXPECT_FALSE(BooleanFunction::Const(0, 1).is_empty());
     }
 
     TEST(BooleanFunction, GetVariableNames) {
-        auto a = BooleanFunction::var("A"),
-             b = BooleanFunction::var("B"),
-             c = BooleanFunction::var("C"),
+        auto a = BooleanFunction::Var("A"),
+             b = BooleanFunction::Var("B"),
+             c = BooleanFunction::Var("C"),
             _0 = BooleanFunction::Const(0, 1),
             _1 = BooleanFunction::Const(1, 1);
 
@@ -41,8 +41,8 @@ namespace hal {
     }
 
     TEST(BooleanFunction, Operator) {
-        const auto a = BooleanFunction::var("A"),
-                   b = BooleanFunction::var("B"),
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
                   _0 = BooleanFunction::Const(0, 1),
                   _1 = BooleanFunction::Const(1, 1);
 
@@ -56,9 +56,9 @@ namespace hal {
     }
 
     TEST(BooleanFunction, ToString) {
-        const auto a = BooleanFunction::var("A"),
-                   b = BooleanFunction::var("B"),
-                   c = BooleanFunction::var("C"),
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C"),
                   _0 = BooleanFunction::Const(0, 1),
                 _1 = BooleanFunction::Const(1, 1);
 
@@ -95,28 +95,28 @@ namespace hal {
                 BooleanFunction::Const(1, 1)
             },
             {"A & B", 
-                BooleanFunction::var("A") & BooleanFunction::var("B")
+                BooleanFunction::Var("A") & BooleanFunction::Var("B")
             },
             {"(a & bb) | (ccc & dddd)", 
-                (BooleanFunction::var("a") & BooleanFunction::var("bb")) | (BooleanFunction::var("ccc") & BooleanFunction::var("dddd"))
+                (BooleanFunction::Var("a") & BooleanFunction::Var("bb")) | (BooleanFunction::Var("ccc") & BooleanFunction::Var("dddd"))
             },
             {"A(1) ^ B(1)", 
-                BooleanFunction::var("A(1)") ^ BooleanFunction::var("B(1)")
+                BooleanFunction::Var("A(1)") ^ BooleanFunction::Var("B(1)")
             },
             {"!(a ^ a) ^ !(!(b ^ b))", 
-                ~(BooleanFunction::var("a") ^ BooleanFunction::var("a")) ^ (~(~(BooleanFunction::var("b") ^ BooleanFunction::var("b"))))
+                ~(BooleanFunction::Var("a") ^ BooleanFunction::Var("a")) ^ (~(~(BooleanFunction::Var("b") ^ BooleanFunction::Var("b"))))
             },
             {"(!I0 & I1 & I2) | (I0 & I1 & I2)", 
-                (~BooleanFunction::var("I0") & (BooleanFunction::var("I1") & BooleanFunction::var("I2"))) | (BooleanFunction::var("I0") & (BooleanFunction::var("I1") & BooleanFunction::var("I2")))
+                (~BooleanFunction::Var("I0") & (BooleanFunction::Var("I1") & BooleanFunction::Var("I2"))) | (BooleanFunction::Var("I0") & (BooleanFunction::Var("I1") & BooleanFunction::Var("I2")))
             },
             ////////////////////////////////////////////////////////////////////
             // LIBERTY PARSER
             ////////////////////////////////////////////////////////////////////
             {"A B C D(1)",
-                BooleanFunction::var("A") & (BooleanFunction::var("B") & (BooleanFunction::var("C") & BooleanFunction::var("D(1)")))
+                BooleanFunction::Var("A") & (BooleanFunction::Var("B") & (BooleanFunction::Var("C") & BooleanFunction::Var("D(1)")))
             },
             {"A'", 
-                ~BooleanFunction::var("A")
+                ~BooleanFunction::Var("A")
             },
         };
 
@@ -133,9 +133,9 @@ namespace hal {
     }
 
     TEST(BooleanFunction, Parameters) {
-        const auto a = BooleanFunction::var("A"),
-                   b = BooleanFunction::var("B"),
-                   c = BooleanFunction::var("C");
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C");
 
         EXPECT_EQ((a.clone() & b.clone()).get_parameters(), std::vector<BooleanFunction>({a.clone(), b.clone()}));
         EXPECT_EQ(((a.clone() & b.clone()) | c.clone()).get_parameters(), std::vector<BooleanFunction>({(a.clone() & b.clone()), c.clone()}));
@@ -144,7 +144,7 @@ namespace hal {
     TEST(BooleanFunction, ConstantSimplification) {
         const auto _0 = BooleanFunction::Const(0, 1),
                    _1 = BooleanFunction::Const(1, 1),
-                    a = BooleanFunction::var("A");
+                    a = BooleanFunction::Var("A");
 
         EXPECT_TRUE(_0.is_constant(0));
         EXPECT_TRUE(_1.is_constant(1));
@@ -171,9 +171,9 @@ namespace hal {
     }
 
     TEST(BooleanFunction, SimplificationRules) {
-        const auto a = BooleanFunction::var("A"),
-                   b = BooleanFunction::var("B"),
-                   c = BooleanFunction::var("C"),
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C"),
                   _0 = BooleanFunction::Const(0, 1),
                   _1 = BooleanFunction::Const(1, 1);
 
@@ -313,9 +313,9 @@ namespace hal {
 
     TEST(BooleanFunction, SimplificationQuineMcCluskey) 
     {
-        const auto a = BooleanFunction::var("A"),
-                   b = BooleanFunction::var("B"),
-                   c = BooleanFunction::var("C"),
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C"),
                   _0 = BooleanFunction::Const(0, 1),
                   _1 = BooleanFunction::Const(1, 1);
 
@@ -340,10 +340,10 @@ namespace hal {
     }
 
     TEST(BooleanFunction, Substitution) {
-        const auto  a = BooleanFunction::var("A"),
-                    b = BooleanFunction::var("B"),
-                    c = BooleanFunction::var("C"),
-                    d = BooleanFunction::var("D"),
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                    c = BooleanFunction::Var("C"),
+                    d = BooleanFunction::Var("D"),
                    _0 = BooleanFunction::Const(0, 1);
 
         EXPECT_EQ((a & b & c).substitute("C", "D"), a & b & d);
@@ -355,8 +355,8 @@ namespace hal {
     }
 
     TEST(BooleanFunction, EvaluateSingleBit) {
-        const auto a = BooleanFunction::var("A"),
-                   b = BooleanFunction::var("B"),
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
                   _0 = BooleanFunction::Const(0, 1),
                   _1 = BooleanFunction::Const(1, 1);
 
@@ -392,8 +392,8 @@ namespace hal {
     }
 
     TEST(BooleanFunction, EvaluateMultiBit) {
-        const auto a = BooleanFunction::var("A", 2),
-                   b = BooleanFunction::var("B", 2),
+        const auto a = BooleanFunction::Var("A", 2),
+                   b = BooleanFunction::Var("B", 2),
                   _0 = BooleanFunction::Const(0, 2),
                   _1 = BooleanFunction::Const(1, 2);
 
@@ -434,9 +434,9 @@ namespace hal {
     }
 
     TEST(BooleanFunction, TruthTable) {
-        const auto a = BooleanFunction::var("A"),
-                   b = BooleanFunction::var("B"),
-                   c = BooleanFunction::var("C");
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B"),
+                   c = BooleanFunction::Var("C");
 
         using Value = BooleanFunction::Value;
 
@@ -465,9 +465,9 @@ namespace hal {
     }
 
     TEST(BooleanFunction, SimplificationVsTruthTable) {
-        const auto  a = BooleanFunction::var("A"),
-                    b = BooleanFunction::var("B"),
-                    c = BooleanFunction::var("C"),
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
+                    c = BooleanFunction::Var("C"),
                    _1 = BooleanFunction::Const(1, 1);
         
         const std::vector<BooleanFunction> data = {
@@ -506,8 +506,8 @@ namespace hal {
     }
 
     TEST(BooleanFunction, SatisfiableConstraint) {
-        const auto  a = BooleanFunction::var("A"),
-                    b = BooleanFunction::var("B"),
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
                    _0 = BooleanFunction::Const(0, 1),
                    _1 = BooleanFunction::Const(1, 1);
 
@@ -555,8 +555,8 @@ namespace hal {
     }
 
     TEST(BooleanFunction, UnSatisfiableConstraint) {
-        const auto  a = BooleanFunction::var("A"),
-                    b = BooleanFunction::var("B"),
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
                    _0 = BooleanFunction::Const(0, 1),
                    _1 = BooleanFunction::Const(1, 1);
 
@@ -611,8 +611,8 @@ namespace hal {
     }
 
     TEST(BooleanFunction, Model) {
-        const auto  a = BooleanFunction::var("A"),
-                    b = BooleanFunction::var("B"),
+        const auto  a = BooleanFunction::Var("A"),
+                    b = BooleanFunction::Var("B"),
                    _0 = BooleanFunction::Const(0, 1),
                    _1 = BooleanFunction::Const(1, 1);
 

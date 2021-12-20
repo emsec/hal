@@ -91,9 +91,9 @@ namespace hal
 			 * Example:
 			 *		auto [ok, result] = SMT::Solver()
 			 *      // A & B  ==  1 
-			 *		.with_constraint(SMT::Constraint(BooleanFunction::var("A") & BooleanFunction::var("B"), BooleanFunction::Const(1, 1)))
+			 *		.with_constraint(SMT::Constraint(BooleanFunction::Var("A") & BooleanFunction::Var("B"), BooleanFunction::Const(1, 1)))
 			 *		// A  ==  1
-			 *      .with_constraint(SMT::Constraint(BooleanFunction::var("A"), BooleanFunction::Const(1, 1)))
+			 *      .with_constraint(SMT::Constraint(BooleanFunction::Var("A"), BooleanFunction::Const(1, 1)))
 			 *		.query(SMT::QueryConfig()
 			 *    		.with_solver(SMT::SolverType::Z3)
 			 *    		.with_model_generation()

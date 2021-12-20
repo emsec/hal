@@ -67,7 +67,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_ff", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::var("D"), std::get<BooleanFunction>(BooleanFunction::from_string("CLK & EN"))));
+                GateType* gt = gl->create_gate_type("gt_ff", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::Var("D"), std::get<BooleanFunction>(BooleanFunction::from_string("CLK & EN"))));
                 FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
 
@@ -82,13 +82,13 @@ namespace hal
                 gt->assign_pin_type("Q", PinType::state);
                 gt->assign_pin_type("QN", PinType::neg_state);
 
-                ff_component->set_async_reset_function(BooleanFunction::var("R"));
-                ff_component->set_async_set_function(BooleanFunction::var("S"));
+                ff_component->set_async_reset_function(BooleanFunction::Var("R"));
+                ff_component->set_async_set_function(BooleanFunction::Var("S"));
                 ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H);
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_ff_init", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"), BooleanFunction::var("D"), std::get<BooleanFunction>(BooleanFunction::from_string("CLK & EN"))));
+                GateType* gt = gl->create_gate_type("gt_ff_init", {GateTypeProperty::ff}, GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"), BooleanFunction::Var("D"), std::get<BooleanFunction>(BooleanFunction::from_string("CLK & EN"))));
                 FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::ff; });
                 assert(ff_component != nullptr);
 
@@ -103,8 +103,8 @@ namespace hal
                 gt->assign_pin_type("Q", PinType::state);
                 gt->assign_pin_type("QN", PinType::neg_state);
 
-                ff_component->set_async_reset_function(BooleanFunction::var("R"));
-                ff_component->set_async_set_function(BooleanFunction::var("S"));
+                ff_component->set_async_reset_function(BooleanFunction::Var("R"));
+                ff_component->set_async_set_function(BooleanFunction::Var("S"));
                 ff_component->set_async_set_reset_behavior(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H);
             }
 
@@ -123,10 +123,10 @@ namespace hal
                 gt->assign_pin_type("Q", PinType::state);
                 gt->assign_pin_type("QN", PinType::neg_state);
 
-                latch_component->set_data_in_function(BooleanFunction::var("D"));
-                latch_component->set_enable_function(BooleanFunction::var("EN"));
-                latch_component->set_async_reset_function(BooleanFunction::var("R"));
-                latch_component->set_async_set_function(BooleanFunction::var("S"));
+                latch_component->set_data_in_function(BooleanFunction::Var("D"));
+                latch_component->set_enable_function(BooleanFunction::Var("EN"));
+                latch_component->set_async_reset_function(BooleanFunction::Var("R"));
+                latch_component->set_async_set_function(BooleanFunction::Var("S"));
                 latch_component->set_async_set_reset_behavior(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H);
             }
 

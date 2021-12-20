@@ -234,7 +234,7 @@ namespace hal
                     return BooleanFunction::Index(node.index, node.size);
                 }
                 case BooleanFunction::NodeType::Variable: {
-                    return this->state.get(BooleanFunction::var(node.variable, node.size));
+                    return this->state.get(BooleanFunction::Var(node.variable, node.size));
                 }
                 case BooleanFunction::NodeType::And: {
                     // X & 0   =>   0

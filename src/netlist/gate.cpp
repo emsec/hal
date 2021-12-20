@@ -343,11 +343,11 @@ namespace hal
                 {
                     if ((input_values & 1) == 1)
                     {
-                        conjunction &= BooleanFunction::var(input);
+                        conjunction &= BooleanFunction::Var(input);
                     }
                     else
                     {
-                        conjunction &= ~BooleanFunction::var(input);
+                        conjunction &= ~BooleanFunction::Var(input);
                     }
                     input_values >>= 1;
                 }

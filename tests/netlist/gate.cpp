@@ -952,17 +952,17 @@ namespace hal
             std::unordered_map<std::string, BooleanFunction> functions = test_gate->get_boolean_functions();
             EXPECT_EQ(functions, (std::unordered_map<std::string, BooleanFunction>({{"O", std::get<BooleanFunction>(BooleanFunction::from_string("!I"))}})));
 
-            test_gate->add_boolean_function("new_bf", BooleanFunction::var("I"));
+            test_gate->add_boolean_function("new_bf", BooleanFunction::Var("I"));
 
             functions = test_gate->get_boolean_functions();
-            EXPECT_EQ(functions, (std::unordered_map<std::string, BooleanFunction>({{"O", ~BooleanFunction::var("I")}, {"new_bf", BooleanFunction::var("I")}})));
+            EXPECT_EQ(functions, (std::unordered_map<std::string, BooleanFunction>({{"O", ~BooleanFunction::Var("I")}, {"new_bf", BooleanFunction::Var("I")}})));
 
-            EXPECT_EQ(test_gate->get_boolean_function("O"), ~BooleanFunction::var("I"));
+            EXPECT_EQ(test_gate->get_boolean_function("O"), ~BooleanFunction::Var("I"));
 
-            EXPECT_EQ(test_gate->get_boolean_function("new_bf"), BooleanFunction::var("I"));
+            EXPECT_EQ(test_gate->get_boolean_function("new_bf"), BooleanFunction::Var("I"));
 
             // should be function of first output pin
-            EXPECT_EQ(test_gate->get_boolean_function(), ~BooleanFunction::var("I"));
+            EXPECT_EQ(test_gate->get_boolean_function(), ~BooleanFunction::Var("I"));
         }
         // NEGATIVE
         {
