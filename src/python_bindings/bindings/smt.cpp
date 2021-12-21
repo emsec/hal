@@ -143,13 +143,13 @@ namespace hal
         py_smt_result.def_readwrite("model", &SMT::Result::model, R"(
             The (optional) model that is only available if type == SMT.ResultType.Sat and model generation is enabled.
 
-            :type: Optional[hal_py.SMT.Model]
+            :type: hal_py.SMT.Model
         )");
 
         py_smt_result.def_static("Sat", &SMT::Result::Sat, py::arg("model") = std::optional<SMT::Model>(), R"(
             Creates a satisfiable result with an optional model.
 
-            :param Optional[hal_py.SMT.Model] model: Optional model for satisfiable formula.
+            :param hal_py.SMT.Model model: Optional model for satisfiable formula.
             :returns: The result.
             :rtype: hal_py.SMT.Result
         )");
@@ -275,11 +275,56 @@ namespace hal
         )");
 
         py_smt_symbolic_state.def(py::init<const std::vector<BooleanFunction>&>(), py::arg("variables") = std::vector<BooleanFunction>(), R"(
-            Constructs a symbolic state and initializes the variables.
+            Constructs a symbolic state and (optionally) initializes the variables.
 
-            :param list[hal_py.BooleanFunction] variables: The list of variables.
+            :param list[hal_py.BooleanFunction] variables: The (optional) list of variables.
         )");
 
-        // TODO symbolic state functions
+        py_smt_symbolic_state.def("get", &SMT::SymbolicState::get, py::arg("key"), R"(
+            Looks up the Boolean function equivalent in the symbolic state.
+
+            :param hal_py.BooleanFunction key: The Boolean function to look up.
+            :returns: The Boolean function equivalent from the symbolic state or the key itself if it is not contained in the symbolic state.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_smt_symbolic_state.def("set", &SMT::SymbolicState::set, py::arg("key"), py::arg("value"), R"(
+            Sets a Boolean function equivalent in the symbolic state.
+
+            :param hal_py.BooleanFunction key: The Boolean function.
+            :param hal_py.BooleanFunction value: The equivalent Boolean function.
+        )");
+
+        py::class_<SMT::SymbolicExecution> py_smt_symbolic_execution(py_smt, "SymbolicExecution", R"(
+           Represents the symbolic execution engine that handles the evaluation and simplification of Boolean function abstract syntax trees.
+        )");
+
+        py_smt_symbolic_execution.def_readwrite("state", &SMT::SymbolicExecution::state, R"(
+            The current symbolic state.
+
+            :type: hal_py.SMT.SymbolicState
+        )");
+
+        py_smt_symbolic_execution.def(py::init<const std::vector<BooleanFunction>&>(), py::arg("variables") = std::vector<BooleanFunction>(), R"(
+            Creates a symbolic execution engine and (optionally) initializes the variables.
+
+            :param list[hal_py.BooleanFunction] variables: The (optional) list of variables.
+        )");
+
+        py_smt_symbolic_execution.def("evaluate", py::overload_cast<const BooleanFunction&>(&SMT::SymbolicExecution::evaluate, py::const_), py::arg("function"), R"(
+            Evaluates a Boolean function within the symbolic state of the symbolic execution.
+
+            :param hal_py.BooleanFunction function: The Boolean function to evaluate.
+            :returns: The evaluated Boolean function on success, a string error message otherwise.
+            :rtype: hal_py.BooleanFunction or str
+        )");
+
+        py_smt_symbolic_execution.def("evaluate", py::overload_cast<const SMT::Constraint&>(&SMT::SymbolicExecution::evaluate), py::arg("constraint"), R"(
+            Evaluates an equality constraint and applies it to the symbolic state of the symbolic execution.
+
+            :param hal_py.SMT.Constraint constraint: The equality constraint to evaluate.
+            :returns: None on success, a string error message otherwise.
+            :rtype: None or str
+        )");
     }
 }    // namespace hal

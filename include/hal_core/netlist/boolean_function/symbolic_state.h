@@ -54,20 +54,20 @@ namespace hal
             ////////////////////////////////////////////////////////////////////////////
 
             /**
-             * Gets a Boolean function from the symbolic state.
+             * Looks up a Boolean function in the symbolic state.
              * 
-             * @param[in] key - The Boolean function.
-             * @returns Boolean function from state or key in case key is not in state.
+             * @param[in] key - The Boolean function to look up.
+             * @returns The Boolean function from the symbolic state or the key itself if it is not contained in the symbolic state.
              */
             const BooleanFunction& get(const BooleanFunction& key) const;
 
             /**
-             * Set a Boolean function in the symbolic state.
+             * Sets a Boolean function equivalent in the symbolic state.
              * 
-             * @param[in] key - Boolean function variable key.
-             * @param[in] value - Boolean function variable value.
+             * @param[in] key - The Boolean function.
+             * @param[in] value - The equivalent Boolean function.
              */
-            void set(BooleanFunction&& key, BooleanFunction&& value);
+            void set(const BooleanFunction& key, const BooleanFunction& value);
 
             ////////////////////////////////////////////////////////////////////////////
             // Members
