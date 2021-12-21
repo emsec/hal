@@ -9,7 +9,10 @@ namespace hal
             "BooleanFunction",
             R"(A BooleanFunction represents a symbolic expression (e.g., "A & B") in order to abstract the (semantic) functionality of a single netlist gate (or even a complex subcircuit comprising multiple gates) in a formal manner. To this end, the BooleanFunction class is able to construct and display arbitrarily-nested expressions, enable symbolic simplification (e.g., simplify "A & 0" to "0"), and translate Boolean functions to the SAT / SMT solver domain to use the solve constraint formulas.)");
 
-        py::enum_<BooleanFunction::Value> py_boolean_function_value(py_boolean_function, "Value", R"(Represents the logic value that a Boolean function operates on.)");
+        py::enum_<BooleanFunction::Value> py_boolean_function_value(py_boolean_function, "Value", R"(
+            Represents the logic value that a Boolean function operates on.
+        )");
+
         py_boolean_function_value.value("ZERO", BooleanFunction::ZERO, R"(Represents a logical 0.)")
             .value("ONE", BooleanFunction::ONE, R"(Represents a logical 1.)")
             .value("Z", BooleanFunction::X, R"(Represents a high-impedance value.)")
@@ -31,7 +34,7 @@ namespace hal
         py_boolean_function.def_static("build", &BooleanFunction::build, py::arg("nodes"), R"(
             Builds and validates a Boolean function from a list of nodes.
 
-            :param list[hal_py.BooleanFunction.Node] nodes: List of Boolean function nodes.
+            :param list[hal_py.BooleanFunction.Node] nodes: list of Boolean function nodes.
             :returns: The Boolean function on success, a string error message otherwise.
             :rtype: hal_py.BooleanFunction or str
         )");
@@ -330,14 +333,14 @@ namespace hal
         py_boolean_function.def_property_readonly("variable_names", &BooleanFunction::get_variable_names, R"(
             The set of variable names used by the Boolean function.
 
-            :type: list[str]
+            :type: set[str]
         )");
 
         py_boolean_function.def("get_variable_names", &BooleanFunction::get_variable_names, R"(
             Returns the set of variable names used by the Boolean function.
 
             :returns: A set of variable names.
-            :rtype: list[str]
+            :rtype: set[str]
         )");
 
         py_boolean_function.def(

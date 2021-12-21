@@ -82,8 +82,7 @@ namespace hal
             // Z3 grammar to parse a model for a satisfiable formula.
             //
             // Example: "((define-fun A () (_ BitVec 1) #b0))"
-            const auto Z3_MODEL_GRAMMAR = (x3::lit("(") >> (+SignalAssignmentRule) >> x3::lit(")"))
-                | +(x3::lit("(model") >> +SignalAssignmentRule >> x3::lit(")"));
+            const auto Z3_MODEL_GRAMMAR = (x3::lit("(") >> (+SignalAssignmentRule) >> x3::lit(")")) | +(x3::lit("(model") >> +SignalAssignmentRule >> x3::lit(")"));
         }    // namespace ModelParser
 
         QueryConfig& QueryConfig::with_solver(SolverType _solver)
@@ -133,7 +132,7 @@ namespace hal
             return out;
         }
 
-        Constraint::Constraint(BooleanFunction&& _lhs, BooleanFunction&& _rhs) : lhs(_lhs), rhs(_rhs)
+        Constraint::Constraint(const BooleanFunction& _lhs, const BooleanFunction& _rhs) : lhs(_lhs), rhs(_rhs)
         {
         }
 
@@ -143,7 +142,7 @@ namespace hal
             return out;
         }
 
-        Model::Model(std::map<std::string, std::tuple<u64, u16>> _model) : model(_model)
+        Model::Model(const std::map<std::string, std::tuple<u64, u16>>& _model) : model(_model)
         {
         }
 
@@ -167,7 +166,7 @@ namespace hal
             return out;
         }
 
-        std::tuple<bool, Model> Model::parse(std::string s, const SolverType& type)
+        std::variant<Model, std::string> Model::parse(const std::string& s, const SolverType& type)
         {
             // TODO:
             // check how to attach a local parser context variable to the x3 parser
@@ -193,14 +192,17 @@ namespace hal
                     case SolverType::Boolector:
                         return boost::spirit::x3::phrase_parse(iter, s.end(), ModelParser::BOOLECTOR_MODEL_GRAMMAR, boost::spirit::x3::space);
 
-                    default: return false;
+                    default:
+                        return false;
                 }
             }();
 
             switch (ok && (iter == s.end()))
             {
-                case true: return {true, Model(ModelParser::parser_context.model)};
-                default:   return {false, Model()};
+                case true:
+                    return Model(ModelParser::parser_context.model);
+                default:
+                    return "Cannot parse SMT-Lib model.";
             }
         }
 

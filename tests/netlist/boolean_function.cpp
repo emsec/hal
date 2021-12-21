@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <type_traits>
+#include <variant>
 
 namespace hal {
     TEST(BooleanFunction, EnumConstruction) {
@@ -539,7 +540,7 @@ namespace hal {
                     continue;
                 }
 
-                auto [status, result] = solver.query(
+                std::variant<SMT::Result, std::string> result_var = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -547,7 +548,8 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                EXPECT_TRUE(status);
+                ASSERT_TRUE(std::get_if<SMT::Result>(&result_var) != nullptr);
+                SMT::Result result = std::get<SMT::Result>(result_var);
                 EXPECT_EQ(result.type, SMT::ResultType::Sat);
                 EXPECT_TRUE(result.model.has_value());
             }
@@ -595,7 +597,7 @@ namespace hal {
                     continue;
                 }
 
-                auto [status, result] = solver.query(
+                std::variant<SMT::Result, std::string> result_var = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -603,7 +605,8 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                EXPECT_TRUE(status);
+                ASSERT_TRUE(std::get_if<SMT::Result>(&result_var) != nullptr);
+                SMT::Result result = std::get<SMT::Result>(result_var);
                 EXPECT_EQ(result.type, SMT::ResultType::UnSat);
                 EXPECT_FALSE(result.model.has_value());
             }
@@ -654,7 +657,7 @@ namespace hal {
                     continue;
                 }
 
-                auto [status, result] = solver.query(
+                std::variant<SMT::Result, std::string> result_var = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -662,7 +665,8 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                EXPECT_EQ(status, true);
+                ASSERT_TRUE(std::get_if<SMT::Result>(&result_var) != nullptr);
+                SMT::Result result = std::get<SMT::Result>(result_var);
                 EXPECT_EQ(result.type, SMT::ResultType::Sat);
                 EXPECT_EQ(*result.model, model);
             }

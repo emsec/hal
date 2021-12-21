@@ -30,10 +30,10 @@ namespace hal
     namespace SMT
     {
         /**
-		 * SMT::Solver is used to query SMT solvers for a list of constraints, i.e. 
+		 * Provides an interface to query SMT solvers for a list of constraints, i.e. 
 		 * statements that have to be equal. To this end, we translate constraints
 		 * to a SMT-LIB v2 string representation and query solvers with a defined 
-		 * configuration, i.e. chosen solver, model generation etc.
+		 * configuration, i.e., chosen solver, model generation etc.
 		 */
         class Solver final
         {
@@ -43,91 +43,73 @@ namespace hal
             ////////////////////////////////////////////////////////////////////////
 
             /**
-			 * Creates an 'Solver' instance with an optional list of constraints.
+			 * Constructs an solver with an optional list of constraints.
 			 *
-			 * @param[in] constraints - List of constraints.
-			 * @returns An initialized SMT solver instance.
+			 * @param[in] constraints - The (optional) list of constraints.
 			 */
-            Solver(std::vector<Constraint>&& constraints = {});
+            Solver(const std::vector<Constraint>& constraints = {});
 
             ////////////////////////////////////////////////////////////////////////
             // Interface
             ////////////////////////////////////////////////////////////////////////
 
             /**
-			 * Returns list of available constraints.
+			 * Returns the vector of constraints.
 			 *
-			 * @returns List of available constraints.
+			 * @returns The vector of constraints.
 			 */
             const std::vector<Constraint>& get_constraints() const;
 
             /**
-			 * Appends a constraint to an SMT solver.
+			 * Adds a constraint to the SMT solver.
 			 *
-			 * @param[in] constraint - SMT solver constraint.
-			 * @returns Self reference.
+			 * @param[in] constraint - The constraint.
+			 * @returns The updated SMT solver.
 			 */
-            Solver& with_constraint(Constraint&& constraint);
+            Solver& with_constraint(const Constraint& constraint);
 
             /**
-			 * Appends a list of constraints to an SMT solver.
+			 * Adds a vector of constraints to the SMT solver.
 			 *
-			 * @param[in] constraints - SMT solver constraints.
-			 * @returns Self reference.
+			 * @param[in] constraints - the constraints.
+			 * @returns The updated SMT solver.
 			 */
-            Solver& with_constraints(std::vector<Constraint>&& constraints);
+            Solver& with_constraints(const std::vector<Constraint>& constraints);
 
             /**
-			 * Checks whether a SMT solver is available on the local machine.
+			 * Checks whether a SMT solver of the given type is available on the local machine.
 			 *
-			 * @param[in] type - SMT solver identifier.
-			 * @returns true in case SMT solver is available, false otherwise.
+			 * @param[in] type - The SMT solver type.
+			 * @returns `true` if an SMT solver of the requested type is available, `false` otherwise.
 			 */
             static bool has_local_solver_for(SolverType type);
 
             /**
-			 * Queries an SMT solver with a specified configuration.
+			 * Queries an SMT solver with the specified query configuration.
 			 *
-			 * Example:
-			 *		auto [ok, result] = SMT::Solver()
-			 *      // A & B  ==  1 
-			 *		.with_constraint(SMT::Constraint(BooleanFunction::Var("A") & BooleanFunction::Var("B"), BooleanFunction::Const(1, 1)))
-			 *		// A  ==  1
-			 *      .with_constraint(SMT::Constraint(BooleanFunction::Var("A"), BooleanFunction::Const(1, 1)))
-			 *		.query(SMT::QueryConfig()
-			 *    		.with_solver(SMT::SolverType::Z3)
-			 *    		.with_model_generation()
-			 *    		.with_timeout(5) // seconds
-			 *		);
-			 *
-			 *		if (ok && result.is(SMT::ResultType::Sat)) {}
-			 *
-			 * @param[in] config - SMT solver configuration.
-			 * @returns (1) status (true on success, false otherwise), and 
-			 *          (2) SMT solver result.
+			 * @param[in] config - The SMT solver query configuration.
+			 * @returns The result on success, a string error message otherwise.
 			 */
-            std::tuple<bool, Result> query(const QueryConfig& config) const;
+            std::variant<Result, std::string> query(const QueryConfig& config) const;
 
             /**
-			 * Queries a local SMT solver instance with a specified configuration.
+			 * Queries a local SMT solver with the specified query configuration.
 			 *
-			 * @param[in] config - SMT solver configuration.
-			 * @returns (1) status (true on success, false otherwise), and 
-			 *          (2) SMT solver result.
+			 * @param[in] config - The SMT solver query configuration.
+			 * @returns The result on success, a string error message otherwise.
 			 */
-            std::tuple<bool, Result> query_local(const QueryConfig& config) const;
+            std::variant<Result, std::string> query_local(const QueryConfig& config) const;
 
             /**
-			 * Queries a local SMT solver instance with a specified configuration.
+			 * Queries a remote SMT solver with the specified query configuration.
 			 *
-			 * WARNING: This function is not implemented and always returns with a 
-			 *          status == false, currently.
+			 * \warning This function is not yet implemented.
 			 *
 			 * @param[in] config - SMT solver configuration.
-			 * @returns (1) status (true on success, false otherwise), and 
-			 *          (2) SMT solver result.
+			 * @param[in] config - The SMT solver query configuration.
+			 * @returns The result on success, a string error message otherwise.
 			 */
-            std::tuple<bool, Result> query_remote(const QueryConfig& config) const;
+            std::variant<Result, std::string> query_remote(const QueryConfig& config) const;
 
         private:
             ////////////////////////////////////////////////////////////////////////
@@ -166,7 +148,7 @@ namespace hal
 			 * @returns (1) status (true on success, false otherwise), and
 			 *          (2) SMT solver result
 			 */
-            static std::tuple<bool, Result> translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config);
+            static std::variant<Result, std::string> translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config);
         };
     }    // namespace SMT
 }    // namespace hal

@@ -65,7 +65,9 @@ namespace hal
         struct Node;        /// represents an abstract syntax tree node
         struct NodeType;    /// represents the type of the node
 
-        /// Represents the logic value that a Boolean function operates on.
+        /**
+         * Represents the logic value that a Boolean function operates on.
+         */
         enum Value
         {
             ZERO = 0, /**< Represents a logical 0. */

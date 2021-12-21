@@ -27,54 +27,55 @@
 
 #include <map>
 
-namespace hal {
-namespace SMT {
+namespace hal
+{
+    namespace SMT
+    {
 
-/**
- * SymbolicState represents the data structure that keeps track of symbolic
- * variable values (e.g., required for symbolic simplification).
- */
-class SymbolicState final {
- public:
-    ////////////////////////////////////////////////////////////////////////////
-    // Constructors, Destructors, Operators
-    ////////////////////////////////////////////////////////////////////////////
+        /**
+         * Represents the data structure that keeps track of symbolic variable values (e.g., required for symbolic simplification).
+         */
+        class SymbolicState final
+        {
+        public:
+            ////////////////////////////////////////////////////////////////////////////
+            // Constructors, Destructors, Operators
+            ////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Creates a SymbolicState instance and initializes the available variables.
-     * 
-     * @param[in] variables - List of variables.
-     * @returns Initialized symbolic state.
-     */ 
-    explicit SymbolicState(const std::vector<BooleanFunction>& variables = {});
+            /**
+             * Constructs a symbolic state and initializes the variables.
+             * 
+             * @param[in] variables - The list of variables.
+             */
+            explicit SymbolicState(const std::vector<BooleanFunction>& variables = {});
 
-    ////////////////////////////////////////////////////////////////////////////
-    // Interface
-    ////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////
+            // Interface
+            ////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Look-up a Boolean function in the symbolic state.
-     * 
-     * @param[in] key - Boolean function.
-     * @returns Boolean function from state or key in case key is not in state.
-     */
-    const BooleanFunction& get(const BooleanFunction& key) const;
+            /**
+             * Gets a Boolean function from the symbolic state.
+             * 
+             * @param[in] key - The Boolean function.
+             * @returns Boolean function from state or key in case key is not in state.
+             */
+            const BooleanFunction& get(const BooleanFunction& key) const;
 
-    /**
-     * Set a Boolean function in the symbolic state.
-     * 
-     * @param[in] key - Boolean function variable key.
-     * @param[in] value - Boolean function variable value.
-     */
-    void set(BooleanFunction&& key, BooleanFunction&& value);
+            /**
+             * Set a Boolean function in the symbolic state.
+             * 
+             * @param[in] key - Boolean function variable key.
+             * @param[in] value - Boolean function variable value.
+             */
+            void set(BooleanFunction&& key, BooleanFunction&& value);
 
-    ////////////////////////////////////////////////////////////////////////////
-    // Members
-    ////////////////////////////////////////////////////////////////////////////
- private:
-    /// refers to the symbolic state map
-    std::map<BooleanFunction, BooleanFunction> variable;
-};
+            ////////////////////////////////////////////////////////////////////////////
+            // Members
+            ////////////////////////////////////////////////////////////////////////////
+        private:
+            /// refers to the symbolic state map
+            std::map<BooleanFunction, BooleanFunction> variable;
+        };
 
-}  // namespace SMT
-}  // namespace hal
+    }    // namespace SMT
+}    // namespace hal
