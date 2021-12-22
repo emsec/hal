@@ -67,6 +67,8 @@ namespace hal
 
         bool VerilatorEngine::setSimulationInput(SimulationInput* simInput)
         {
+            mSimulationInput = simInput;
+
             //server_execution = false;
             const std::vector<const Gate*> simulation_gates(simInput->get_gates().begin(), simInput->get_gates().end());
             m_partial_netlist = netlist_utils::get_partial_netlist(simulation_gates.at(0)->get_netlist(), simulation_gates);
@@ -309,7 +311,8 @@ namespace hal
             return std::vector<std::string>();
         }
 
-        VerilatorEngine::VerilatorEngine(const std::string& nam) : SimulationEngineScripted(nam)
+        VerilatorEngine::VerilatorEngine(const std::string& nam)
+            : SimulationEngineScripted(nam)
         {
             mRequireClockEvents = true;
         }

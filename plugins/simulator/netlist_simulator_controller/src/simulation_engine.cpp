@@ -11,7 +11,8 @@
 
 namespace hal
 {
-    SimulationEngine::SimulationEngine(const std::string& nam) : mName(nam), mRequireClockEvents(false), mCanShareMemory(false), mState(Preparing)
+    SimulationEngine::SimulationEngine(const std::string& nam)
+        : mName(nam), mRequireClockEvents(false), mCanShareMemory(false), mState(Preparing), mSimulationInput(nullptr)
     {
         QString templatePath = QDir::tempPath();
         if (!templatePath.isEmpty())
@@ -56,7 +57,7 @@ namespace hal
         return std::string();
     }
 
-    SimulationEngineEventDriven::SimulationEngineEventDriven(const std::string& nam) : SimulationEngine(nam), mSimulationInput(nullptr)
+    SimulationEngineEventDriven::SimulationEngineEventDriven(const std::string& nam) : SimulationEngine(nam)
     {
         mCanShareMemory = true;
     }

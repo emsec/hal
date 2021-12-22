@@ -254,7 +254,14 @@ namespace hal
 
                 :param str filename: filename of CSV file to be parsed.
                 :param hal_py.FilterInputFlag filter: filter to select waveform data from file.
-                :param int timescale: multiplicator for values in time column
+                :param int timescale: multiplicator for values in time column.
+            )")
+
+            .def("set_saleae_input", &NetlistSimulatorController::set_saleae_input, py::arg("filename"), py::arg("timescale") = 1000000000, R"(
+                Set input for simulation to saleae file bundle.
+
+                :param str filename: filename of CSV file to be parsed.
+                :param int timescale: multiplicator for values in time column.
             )")
 
             .def("generate_vcd", &NetlistSimulatorController::generate_vcd, py::arg("path"), py::arg("start_time") = 0, py::arg("end_time") = 0, py::arg("nets") = std::set<u32>(), R"(
