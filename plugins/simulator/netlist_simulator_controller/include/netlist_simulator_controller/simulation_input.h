@@ -38,6 +38,9 @@ namespace hal {
         std::vector<const Net*> m_partial_nets;
 
         std::vector<SimulationInputNetEvent> mSimulationInputNetEvents;
+        std::string mSaleaeInput;
+        u64 mSaleaeTimeScale;
+
         bool mNoClockUsed;
 
         void compute_input_nets();
@@ -45,7 +48,7 @@ namespace hal {
         void compute_partial_nets();
 
     public:
-        SimulationInput() : mNoClockUsed(false) {;}
+        SimulationInput() : mSaleaeTimeScale(1000000000), mNoClockUsed(false) {;}
 
         /**
          * Checks whether essential data for simulation has been provided (gates, clock, input_nets)
@@ -89,6 +92,13 @@ namespace hal {
          * Prepare simulation where no net is defined as clock input
          */
         void set_no_clock_used();
+
+        /**
+         * Set input for simulation to saleae file bundle
+         * @param[in] filename the filename for CSV file with net <-> binary assignment
+         * @param[in] timescale multiplication factor for time value
+         */
+        void set_saleae_input(const std::string& filename, u64 timescale = 1000000000);
 
         /**
          * Tests whether net is an input net
@@ -153,5 +163,17 @@ namespace hal {
          * @param filename name of file to be created
          */
         void dump(std::string filename = std::string()) const;
+
+        /**
+         * Get SALEAE input file
+         * @return Absolute path to CSV file with data <-> net mapping
+         */
+        std::string get_saleae_input_file() const { return mSaleaeInput; }
+
+        /**
+         * Get SALEAE time scale factor
+         * @return Scale factor to convert (double) time value stored in file to long integer value
+         */
+        u64 get_saleae_time_scalefactor() const { return mSaleaeTimeScale; }
     };
 }
