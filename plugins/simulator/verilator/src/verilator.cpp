@@ -190,7 +190,7 @@ namespace hal
             switch (lineIndex)
             {
                 case 0: {
-                    const char* cl[]                = {"verilator",
+                    const char* cl[] = {"verilator",
                                         "-I.",
                                         "-Wall",
                                         "-Wno-fatal",
@@ -217,6 +217,7 @@ namespace hal
                                         "saleae_parser.cpp",
                                         "saleae_file.cpp",
                                         nullptr};
+
                     std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
                     retval.push_back(m_design_name + ".v");
                     return retval;
