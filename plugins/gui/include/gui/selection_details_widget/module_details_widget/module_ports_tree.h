@@ -91,6 +91,8 @@ namespace hal
         int mModuleID;
 
         void handleNumberOfPortsChanged(int newNumberPorts);
+        //helper function to add entries belonging to multiselection
+        void appendMultiSelectionEntries(QMenu &menu, int modId);
 
     };
 }

@@ -13,6 +13,8 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QQueue>
+#include <QList>
+#include <QSet>
 #include <QDebug>
 
 namespace hal
@@ -97,6 +99,8 @@ namespace hal
                     act->exec();
                 }
             });
+            if(selectionModel()->selectedRows().size() > 1)
+                appendMultiSelectionEntries(menu, modId);
             menu.addSection("Python");
             menu.addAction(QIcon(":/icons/python"), "Extract pin group", [name, modId](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroup(modId, name));});
             menu.addAction(QIcon(":/icons/python"), "Extract pin group name", [name, modId](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroupName(modId, name));});
@@ -128,29 +132,7 @@ namespace hal
         }
         //multi-selection (part of misc)
         if(selectionModel()->selectedRows().size() > 1)
-        {
-            QList<TreeItem*> selectedItems;
-            for(auto index : selectionModel()->selectedRows())
-            {
-                TreeItem* item = mPortModel->getItemFromIndex(index);
-                if(mPortModel->getTypeOfItem(item) != ModulePinsTreeModel::itemType::portMultiBit)
-                    selectedItems.append(item);
-            }
-            if(selectedItems.size() > 1)
-            {
-                menu.addAction("Add objects to new pin group", [selectedItems, modId](){
-                   InputDialog ipd("Pingroup name", "New pingroup name", "ExampleName");
-                   if(ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
-                   {
-                       std::vector<ModulePin*> pins;//must be fetched before creating new group
-                       auto mod = gNetlist->get_module_by_id(modId);
-                       for(auto item : selectedItems)
-                           pins.push_back(mod->get_pin(item->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString()));
-                       mod->create_pin_group(ipd.textValue().toStdString(), pins);
-                   }
-                });
-            }
-        }
+            appendMultiSelectionEntries(menu, modId);
 
         menu.addSection("Python");
         menu.addAction(QIcon(":/icons/python"), "Extract pin object", [modId, name](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinByName(modId, name));});
@@ -166,6 +148,50 @@ namespace hal
     {
         adjustSizeToContents();
         Q_EMIT updateText(QString("Pins (%1)").arg(newNumberPorts));
+    }
+
+    void ModulePinsTree::appendMultiSelectionEntries(QMenu &menu, int modId)
+    {
+        QList<TreeItem*> selectedPins;//ordered
+        QSet<TreeItem*> alreadyProcessedPins;//only for performance purposes
+        for(auto index : selectionModel()->selectedRows())
+        {
+            TreeItem* item = mPortModel->getItemFromIndex(index);
+            auto itemType = mPortModel->getTypeOfItem(item);
+            if(itemType == ModulePinsTreeModel::itemType::pin)
+            {
+                if(!alreadyProcessedPins.contains(item))
+                {
+                    selectedPins.append(item);
+                    alreadyProcessedPins.insert(item);
+                }
+            }
+            else if(itemType == ModulePinsTreeModel::itemType::portMultiBit)
+            {
+                for(auto pinItem : item->getChildren())
+                {
+                    if(!alreadyProcessedPins.contains(pinItem))
+                    {
+                        selectedPins.append(pinItem);
+                        alreadyProcessedPins.insert(pinItem);
+                    }
+                }
+            }
+        }
+        if(selectedPins.size() > 1)
+        {
+            menu.addAction("Add objects to new pin group", [selectedPins, modId](){
+               InputDialog ipd("Pingroup name", "New pingroup name", "ExampleName");
+               if(ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
+               {
+                   std::vector<ModulePin*> pins;//must be fetched before creating new group
+                   auto mod = gNetlist->get_module_by_id(modId);
+                   for(auto item : selectedPins)
+                       pins.push_back(mod->get_pin(item->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString()));
+                   mod->create_pin_group(ipd.textValue().toStdString(), pins);
+               }
+            });
+        }
     }
 
 }    // namespace hal

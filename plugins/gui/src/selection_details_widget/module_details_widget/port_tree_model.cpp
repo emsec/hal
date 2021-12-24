@@ -63,7 +63,7 @@ namespace hal
             if (pinGroup->size() == 1)
             {
                 pinGroupItem->setDataAtIndex(sNetColumn, QString::fromStdString(firstPin->get_net()->get_name()));
-                pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::portSingleBit));
+                pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
             }
             else
             {
