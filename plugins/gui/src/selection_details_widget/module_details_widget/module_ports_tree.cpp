@@ -2,6 +2,7 @@
 
 #include "gui/gui_globals.h"
 #include "gui/input_dialog/input_dialog.h"
+#include "gui/input_dialog/combobox_dialog.h"
 #include "gui/python/py_code_provider.h"
 #include "gui/selection_details_widget/module_details_widget/port_tree_model.h"
 #include "gui/user_action/action_rename_object.h"
@@ -189,6 +190,22 @@ namespace hal
                    for(auto item : selectedPins)
                        pins.push_back(mod->get_pin(item->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString()));
                    mod->create_pin_group(ipd.textValue().toStdString(), pins);
+               }
+            });
+            menu.addAction("Add objects to existing pin group", [selectedPins, modId](){
+               QStringList sl;
+               auto mod = gNetlist->get_module_by_id(modId);
+               for(auto pingroup : mod->get_pin_groups())
+                   sl.append(QString::fromStdString(pingroup->get_name()));//check if size >= 2?
+               ComboboxDialog cpd("Pingroup", "Select Pingroup", sl);
+               if(cpd.exec() == QDialog::Accepted && !cpd.textValue().isEmpty())
+               {
+                   std::vector<ModulePin*> pins;//must be fetched before creating new group
+                   auto pingroup = mod->get_pin_group(cpd.textValue().toStdString());
+                   for(auto item : selectedPins)
+                       pins.push_back(mod->get_pin(item->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString()));
+                   for(auto pin : pins)
+                       mod->assign_pin_to_group(pingroup, pin);
                }
             });
         }
