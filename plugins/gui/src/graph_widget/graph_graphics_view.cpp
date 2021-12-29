@@ -352,10 +352,6 @@ namespace hal
             // we still need the normal mouse logic for single clicks
             QGraphicsView::mousePressEvent(event);
         }
-        else if (event->button() == Qt::RightButton)
-        {
-            qDebug() << "RightButtonPressed";
-        }
         else
             QGraphicsView::mousePressEvent(event);
     }
@@ -602,9 +598,10 @@ namespace hal
 
         bool isMultiGates = gSelectionRelay->selectedGates().size() > 1 &&
                 gSelectionRelay->selectedModules().isEmpty();
-
+        qDebug() << "above item";
         if (item)
         {
+            qDebug() << "is item";
             mItem   = static_cast<GraphicsItem*>(item);
             isGate   = mItem->itemType() == ItemType::Gate;
             isModule = mItem->itemType() == ItemType::Module;
@@ -777,6 +774,11 @@ namespace hal
                 }
             }
         }
+        else
+        {
+            context_menu.addAction("empty space")->setEnabled(false);
+        }
+
 
         // if (!item || isNet)
         // {
