@@ -288,6 +288,7 @@ namespace hal
 
     void GraphGraphicsView::mouseDoubleClickEvent(QMouseEvent* event)
     {
+        qDebug() << "mouseDoubleClickEvent";
         if (event->button() != Qt::LeftButton)
             return;
 
@@ -350,6 +351,10 @@ namespace hal
 
             // we still need the normal mouse logic for single clicks
             QGraphicsView::mousePressEvent(event);
+        }
+        else if (event->button() == Qt::RightButton)
+        {
+            qDebug() << "RightButtonPressed";
         }
         else
             QGraphicsView::mousePressEvent(event);

@@ -80,7 +80,7 @@ namespace hal
         {
             mView->setScene(mContext->scene());
             mView->centerOn(0, 0);
-        } 
+        }
     }
 
     GraphContext* GraphWidget::getContext() const
