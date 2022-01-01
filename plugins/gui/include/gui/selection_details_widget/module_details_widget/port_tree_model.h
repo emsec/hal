@@ -129,6 +129,10 @@ namespace hal
         int mModuleId;
         //name is (hopefully) enough to identify
         QMap<QString, TreeItem*> mNameToTreeItem;
+        bool mIgnoreNextPinsChanged;
+
+        void insertItem(TreeItem* item, TreeItem* parent, int index);
+        void removeItem(TreeItem* item);
     };
 }
 

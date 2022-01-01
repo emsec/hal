@@ -14,7 +14,7 @@
 
 namespace hal
 {
-    ModulePinsTreeModel::ModulePinsTreeModel(QObject* parent) : BaseTreeModel(parent)
+    ModulePinsTreeModel::ModulePinsTreeModel(QObject* parent) : BaseTreeModel(parent), mIgnoreNextPinsChanged(false)
     {
         setHeaderLabels(QList<QVariant>() << "Name"
                                           << "Direction"
@@ -83,20 +83,42 @@ namespace hal
         if(row != -1)//inserted between items
         {
             auto droppedItem = mNameToTreeItem.value(data->text());
+            auto parentItem = droppedItem->getParent();
             auto mod = gNetlist->get_module_by_id(mModuleId);
-            //check if dropped on same position, if yes, ignore it
-            if(droppedItem->getOwnRow() == row)
+            auto ownRow = droppedItem->getOwnRow();
+            //check if dropped on adjacent positions, if yes, ignore it
+            if(ownRow == row || ownRow+1 == row)
                 return false;
 
-            //EDGE-CASE: DROPPED AT THE END!
-            auto onDroppedItem = droppedItem->getParent()->getChild(row);//"old" item (to get the old index)
-            auto onDroppedPin = mod->get_pin(onDroppedItem->getData(sNameColumn).toString().toStdString());
-            auto droppedPin = mod->get_pin(droppedItem->getData(sNameColumn).toString().toStdString());
-            auto desiredIndex = onDroppedPin->get_group().second;
-            mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
-            return true;
-//            if(droppedItem)
-//                qDebug() << "got item";
+            //edge case (literally bottom edge)
+            if(row == droppedItem->getParent()->getChildCount()+1)
+            {
+
+            }
+            else
+            {
+                auto onDroppedItem = droppedItem->getParent()->getChild(row);//"old" item (to get the old index)
+                auto onDroppedPin = mod->get_pin(onDroppedItem->getData(sNameColumn).toString().toStdString());
+                auto droppedPin = mod->get_pin(droppedItem->getData(sNameColumn).toString().toStdString());
+                auto desiredIndex = onDroppedPin->get_group().second;
+                TreeItem* newItem = new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn)
+                                                 << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
+                newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
+
+                //remove old item:
+                removeItem(droppedItem);
+                //insert new item based in the oldIndex
+                if(ownRow < row){
+                    insertItem(newItem, parentItem, row-1);
+                    desiredIndex--;
+                }
+                else
+                    insertItem(newItem, parentItem, row);
+
+                mIgnoreNextPinsChanged = true;
+                mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
+                return true;
+            }
 
         }
 
@@ -197,6 +219,28 @@ namespace hal
     void ModulePinsTreeModel::handleModulePortsChanged(Module *m)
     {
         if ((int)m->get_id() == mModuleId)
-            setModule(m);
+        {
+            if(mIgnoreNextPinsChanged)
+                mIgnoreNextPinsChanged = false;
+            else
+                setModule(m);
+        }
+    }
+
+    void ModulePinsTreeModel::removeItem(TreeItem *item)
+    {
+        beginRemoveRows(parent(getIndexFromItem(item)), item->getOwnRow(), item->getOwnRow());
+        item->getParent()->removeChild(item);
+        endRemoveRows();
+        mNameToTreeItem.remove(item->getData(sNameColumn).toString());
+        delete item;
+    }
+
+    void ModulePinsTreeModel::insertItem(TreeItem *item, TreeItem* parent, int index)
+    {
+        beginInsertRows(getIndexFromItem(parent), index, index);
+        parent->insertChild(index, item);
+        endInsertRows();
+        mNameToTreeItem.insert(item->getData(sNameColumn).toString(), item);
     }
 }    // namespace hal
