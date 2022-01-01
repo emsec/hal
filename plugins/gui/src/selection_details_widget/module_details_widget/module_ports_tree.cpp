@@ -26,10 +26,18 @@ namespace hal
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         //setSelectionMode(QAbstractItemView::NoSelection);
         setSelectionMode(QAbstractItemView::ExtendedSelection);
+        //setSelectionMode(QAbstractItemView::SingleSelection);
         setSelectionBehavior(QAbstractItemView::SelectRows);
         setFocusPolicy(Qt::NoFocus);
         header()->setStretchLastSection(true);
         setModel(mPortModel);
+
+        setDragDropMode(DragDropMode::DragDrop);
+        setDragEnabled(true);
+        setAcceptDrops(true);
+        viewport()->setAcceptDrops(true);
+        setDropIndicatorShown(true);
+
 
         //connections
         connect(this, &QTreeView::customContextMenuRequested, this, &ModulePinsTree::handleContextMenuRequested);

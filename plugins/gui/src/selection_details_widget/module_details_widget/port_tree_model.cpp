@@ -10,6 +10,7 @@
 #include "hal_core/utilities/enums.h"
 
 #include <QDebug>
+#include <QMimeData>
 
 namespace hal
 {
@@ -30,11 +31,88 @@ namespace hal
         delete mRootItem;
     }
 
+    Qt::ItemFlags ModulePinsTreeModel::flags(const QModelIndex &index) const
+    {
+        Qt::ItemFlags defaultFlags = BaseTreeModel::flags(index);
+        TreeItem* item = index.isValid() ? getItemFromIndex(index) : nullptr;
+        if(item)
+        {
+            //get parent, must be a pingroup item and not the root (not allowed to drag from external group, but maybe later)
+            TreeItem* parentItem = item->getParent();
+            itemType type = getTypeOfItem(item);
+            if(type == itemType::portMultiBit)
+                return defaultFlags | Qt::ItemIsDropEnabled;
+            else if(type == itemType::pin && parentItem != mRootItem)//only case that should be possible
+                return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+            if(parentItem == mRootItem && type == itemType::pin)
+                return defaultFlags;
+        }
+        return defaultFlags;
+    }
+
+    QStringList ModulePinsTreeModel::mimeTypes() const
+    {
+        QStringList types;
+        types << "pintreemodel/pin";
+        return  types;
+    }
+
+    QMimeData *ModulePinsTreeModel::mimeData(const QModelIndexList &indexes) const
+    {
+        if(indexes.size() != 4) //columncount, only 1 item is allowed
+            return new QMimeData();
+
+        qDebug() << "started dragging";
+        QMimeData* data = new QMimeData();
+        auto item = getItemFromIndex(indexes.at(0));
+        qDebug() << item->getData(sNameColumn).toString();
+        data->setText(item->getData(sNameColumn).toString());
+        data->setData("pintreemodel/pin", QByteArray());
+        return data;
+    }
+
+    bool ModulePinsTreeModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+    {
+        //ROW IS USED FOR BETWEEN ITEMS,YES!!!
+        qDebug() << "DROPPED A BOI with info:";
+        qDebug() << "Row: " << row;
+        qDebug() << "Column: " << column;
+
+        //move_pin_within_group
+        //index through get_group of the pin class
+        if(row != -1)//inserted between items
+        {
+            auto droppedItem = mNameToTreeItem.value(data->text());
+            auto mod = gNetlist->get_module_by_id(mModuleId);
+            //check if dropped on same position, if yes, ignore it
+            if(droppedItem->getOwnRow() == row)
+                return false;
+
+            //EDGE-CASE: DROPPED AT THE END!
+            auto onDroppedItem = droppedItem->getParent()->getChild(row);//"old" item (to get the old index)
+            auto onDroppedPin = mod->get_pin(onDroppedItem->getData(sNameColumn).toString().toStdString());
+            auto droppedPin = mod->get_pin(droppedItem->getData(sNameColumn).toString().toStdString());
+            auto desiredIndex = onDroppedPin->get_group().second;
+            mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
+            return true;
+//            if(droppedItem)
+//                qDebug() << "got item";
+
+        }
+
+        if(parent.isValid())
+        {
+            auto item = getItemFromIndex(parent);
+            qDebug() << "parent-name: " << item->getData(sNameColumn).toString();
+        }
+        return false;
+    }
+
     void ModulePinsTreeModel::clear()
     {
         BaseTreeModel::clear();
         mModuleId = -1;
-        mPortGroupingToTreeItem.clear();
+        mNameToTreeItem.clear();
     }
 
     void ModulePinsTreeModel::setModule(Module* m)
@@ -73,9 +151,11 @@ namespace hal
                     TreeItem* pinItem = new TreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name()) << pinGroupDirection << pinGroupType << QString::fromStdString(pin->get_net()->get_name()));
                     pinItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
                     pinGroupItem->appendChild(pinItem);
+                    mNameToTreeItem.insert(QString::fromStdString(pin->get_name()), pinItem);
                 }
             }
             mRootItem->appendChild(pinGroupItem);
+            mNameToTreeItem.insert(pinGroupName, pinGroupItem);
         }
         endResetModel();
 
@@ -109,7 +189,7 @@ namespace hal
         return mModuleId;
     }
 
-    ModulePinsTreeModel::itemType ModulePinsTreeModel::getTypeOfItem(TreeItem* item)
+    ModulePinsTreeModel::itemType ModulePinsTreeModel::getTypeOfItem(TreeItem* item) const
     {
         return item->getAdditionalData(keyType).value<itemType>();
     }
