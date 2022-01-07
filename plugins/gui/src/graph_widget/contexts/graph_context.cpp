@@ -9,6 +9,7 @@
 #include "gui/gui_def.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/user_action/user_action_manager.h"
+#include "gui/user_action/action_rename_object.h"
 #include <QVector>
 #include <QJsonArray>
 #include "gui/main_window/main_window.h"
@@ -36,7 +37,8 @@ namespace hal
         mTimestamp = QDateTime::currentDateTime();
         UserActionManager::instance()->clearWaitCount();
         connect(MainWindow::sSettingStyle,&SettingsItemDropdown::intChanged,this,&GraphContext::handleStyleChanged);
-        connect(this, &GraphContext::test, this, &GraphContext::handleExclusiveModuleCheck);
+        connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &GraphContext::handleModuleNameChanged);
+        connect(this, &GraphContext::exclusiveModuleLost, this, &GraphContext::handleExclusiveModuleLost);
     }
 
     GraphContext::~GraphContext()
@@ -165,6 +167,7 @@ namespace hal
         remove(mods, gats);
         add({m->get_id()}, {}, plc);
         endChange();
+        // setDirty(false);
         return true;
     }
 
@@ -215,7 +218,7 @@ namespace hal
             add(modules, gates, plc);
             endChange();
         }
-        setDirty(false);
+        // setDirty(false);
     }
 
     bool GraphContext::empty() const
@@ -296,7 +299,7 @@ namespace hal
         auto containedGates = mGates + mAddedGates - mRemovedGates;
 
         // folded module
-        if (containedGates.empty() && containedModules.size() == 1 && mExclusiveModuleId)
+        if (containedGates.empty() && containedModules.size() == 1 && *containedModules.begin() == mExclusiveModuleId)
             return true;
         // unfolded module
         if (isShowingModule(mExclusiveModuleId))
@@ -386,6 +389,11 @@ namespace hal
     }
 
     QString GraphContext::name() const
+    {
+        return mName;
+    }
+
+    QString GraphContext::getNameWithDirtyState() const
     {
         if (mDirty) return mName + "*";
         return mName;
@@ -567,7 +575,8 @@ namespace hal
 
         mUnappliedChanges     = false;
         mSceneUpdateRequired = true;
-        Q_EMIT(test());
+
+        handleExclusiveModuleCheck();
     }
 
     void GraphContext::requireSceneUpdate()
@@ -621,7 +630,19 @@ namespace hal
     {
         // add functionality for restoring the connection?
         if (!isShowingModuleExclusively())
-            mExclusiveModuleId = 0;
+            setExclusiveModuleId(0);
+    }
+    
+    void GraphContext::handleModuleNameChanged(Module* m)
+    {
+        // Only rename tab if the context is still connected to the module
+        if (mExclusiveModuleId)
+        {
+            QString name = QString::fromStdString(m->get_name()) + " (ID: " + QString::number(m->get_id()) + ")";
+            ActionRenameObject* act = new ActionRenameObject(name);
+            act->setObject(UserActionObject(this->id(), UserActionObjectType::Context));
+            act->exec();
+        }
     }
 
     QDateTime GraphContext::getTimestamp() const
@@ -751,5 +772,48 @@ namespace hal
     void GraphContext::setSpecialUpdate(bool state)
     {
         mSpecialUpdate = state;
+    }
+
+    void GraphContext::setExclusiveModuleId(u32 id)
+    {
+        u32 old_id = mExclusiveModuleId;
+        mExclusiveModuleId = id;
+
+        // Emit signal if context is not showing an exclusive module anymore
+        if (id == 0 && old_id != 0) Q_EMIT(exclusiveModuleLost(old_id));
+    }
+
+    void GraphContext::handleExclusiveModuleLost(u32 old_id)
+    {
+        Module* m = gNetlist->get_module_by_id(old_id);
+        assert(m);
+
+        u32 cnt = 0;
+        while (true)
+        {
+            ++cnt;
+            QString new_name = QString::fromStdString(m->get_name()) + " modified";
+            if (cnt > 1)
+            {
+                new_name += " (" + QString::number(cnt) + ")";
+            }
+            bool found = false;
+            for (const auto& ctx : gGraphContextManager->getContexts())
+            {
+                if (ctx->name() == new_name)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                ActionRenameObject* act = new ActionRenameObject(new_name);
+                act->setObject(UserActionObject(this->id(),UserActionObjectType::Context));
+                act->exec();
+                break;
+            }
+        }
+        Q_EMIT(dataChanged());
     }
 }

@@ -39,7 +39,7 @@ namespace hal
         {
             switch(index.column())
             {
-                case 0: return context->name(); break;
+                case 0: return context->getNameWithDirtyState(); break;
                 case 1: return context->getTimestamp().toString(Qt::SystemLocaleShortDate); break;
                 default: return QVariant();
             }
@@ -49,7 +49,7 @@ namespace hal
         {
             switch(index.column())
             {
-                case 0: return context->name(); break;
+                case 0: return context->getNameWithDirtyState(); break;
                 case 1: return context->getTimestamp(); break;
                 default: return QVariant();
             }

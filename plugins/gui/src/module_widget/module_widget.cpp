@@ -236,7 +236,7 @@ namespace hal
             return;
 
         GraphContext* moduleContext =
-                gGraphContextManager->getCleanContext(QString::fromStdString(module->get_name()));
+                gGraphContextManager->getContextByExclusiveModuleId(moduleId);
         if (moduleContext)
         {
             gContentManager->getContextManagerWidget()->selectViewContext(moduleContext);
@@ -246,8 +246,8 @@ namespace hal
         {
             UserActionCompound* act = new UserActionCompound;
             act->setUseCreatedObject();
-            act->addAction(new ActionCreateObject(UserActionObjectType::Context,
-                                                  QString::fromStdString(module->get_name())));
+            QString name = QString::fromStdString(module->get_name()) + " (ID: " + QString::number(moduleId) + ")";
+            act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
             act->addAction(new ActionAddItemsToObject({module->get_id()}, {}));
             if (unfold) act->addAction(new ActionUnfoldModule(module->get_id()));
             act->exec();

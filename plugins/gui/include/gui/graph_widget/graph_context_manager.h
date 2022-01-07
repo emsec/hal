@@ -92,11 +92,18 @@ namespace hal
         /**
          * Gets a list of all current GraphContext%s.
          *
-         * @returns a list of all GrapgContext%s.
+         * @returns a list of all GraphContext%s.
          */
         QVector<GraphContext*> getContexts() const;
         GraphContext* getCleanContext(const QString& name) const;
         GraphContext* getContextById(u32 id) const;
+
+        /**
+         * Gets the context which is exclusively showing the module with the id module_id.
+         *
+         * @returns a context exclusively showing the module with id module_id or <i>nullptr</i>.%s.
+         */
+        GraphContext* getContextByExclusiveModuleId(u32 module_id) const;
 
         /**
          * Checks if a context with the given name exists.

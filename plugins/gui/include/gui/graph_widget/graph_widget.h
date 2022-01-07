@@ -133,7 +133,6 @@ namespace hal
 
         void substituteByVisibleModules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& insert_gates, QSet<u32>& insert_modules,
                                            QSet<u32>& remove_gates, QSet<u32>& remove_modules) const;
-        void setModifiedIfModule();
 
         void handleEnterModuleRequested(const u32 id);
 

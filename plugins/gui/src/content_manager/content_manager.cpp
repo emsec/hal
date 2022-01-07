@@ -216,8 +216,10 @@ namespace hal
         sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
 
         GraphContext* new_context = nullptr;
-        new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
+        QString context_name = QString::fromStdString(gNetlist->get_top_module()->get_name()) + " (ID: " + QString::number(gNetlist->get_top_module()->get_id()) + ")";
+        new_context = gGraphContextManager->createNewContext(context_name);
         new_context->add({gNetlist->get_top_module()->get_id()}, {});
+        new_context->setExclusiveModuleId(gNetlist->get_top_module()->get_id());
 
         mContextManagerWidget->selectViewContext(new_context);
         gGraphContextManager->restoreFromFile();

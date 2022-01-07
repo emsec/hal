@@ -127,6 +127,16 @@ namespace hal
         return nullptr;
     }
 
+    GraphContext* GraphContextManager::getContextByExclusiveModuleId(u32 module_id) const
+    {
+        for (GraphContext* ctx : mContextTableModel->list())
+        {
+            if (ctx->getExclusiveModuleId() == module_id)
+                return ctx;
+        }
+        return nullptr;
+    }
+
     bool GraphContextManager::contextWithNameExists(const QString& name) const
     {
         for (GraphContext* ctx : mContextTableModel->list())
@@ -271,7 +281,7 @@ namespace hal
                     if (modules.contains(id))
                     {
                         context->remove({},{inserted_gate});
-                        return;
+                        break;
                     }
             }
 

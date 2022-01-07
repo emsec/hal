@@ -181,7 +181,7 @@ namespace hal
          */
         void layoutProgress(int percent) const;
 
-	void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
+        void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
 
         /**
          * Given a net, this function checks if any of the Net's source Gate%s appear in the context.
@@ -249,6 +249,13 @@ namespace hal
          * @returns the context's name.
          */
         QString name() const;
+
+        /**
+         * Get the name of the context with dirty state.
+         *
+         * @returns the context's name with an asterisk if the dirty is set to true.
+         */
+        QString getNameWithDirtyState() const;
 
         /**
          * Get the id of the context.
@@ -343,7 +350,7 @@ namespace hal
          *
          * @return The dirty state.
          */
-        bool isDirty() const {return mDirty; }
+        bool isDirty() const { return mDirty; }
 
         /**
          * Set the special update state.
@@ -355,7 +362,7 @@ namespace hal
          *
          * @return The special update state.
          */
-        bool getSpecialUpdate() const {return mSpecialUpdate; }
+        bool getSpecialUpdate() const { return mSpecialUpdate; }
 
         /**
          * Set pointer to parent graph widget
@@ -373,11 +380,11 @@ namespace hal
         /**
          * Sets the exclusive module id.
          */
-        void setExclusiveModuleId(u32 id) { mExclusiveModuleId = id; }
+        void setExclusiveModuleId(u32 id);
 
     Q_SIGNALS:
         void dataChanged();
-        void test();
+        void exclusiveModuleLost(u32 old_id);
 
     public Q_SLOTS:
         void abortLayout();
@@ -386,6 +393,8 @@ namespace hal
         void handleLayouterFinished();
         void handleStyleChanged(int istyle);
         void handleExclusiveModuleCheck();
+        void handleExclusiveModuleLost(u32 old_id);
+        void handleModuleNameChanged(Module* m);
 
     private:
         void evaluateChanges();
