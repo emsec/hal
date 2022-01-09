@@ -91,9 +91,21 @@ namespace hal
                 return false;
 
             //edge case (literally bottom edge)
-            if(row == droppedItem->getParent()->getChildCount()+1)
+            if(row == droppedItem->getParent()->getChildCount())
             {
+                auto onDroppedItem = droppedItem->getParent()->getChild(row-1);
+                auto onDroppedPin = mod->get_pin(onDroppedItem->getData(sNameColumn).toString().toStdString());
+                auto droppedPin = mod->get_pin(droppedItem->getData(sNameColumn).toString().toStdString());
+                auto desiredIndex = onDroppedPin->get_group().second;
+                TreeItem* newItem = new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn)
+                                                 << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
+                newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
 
+                removeItem(droppedItem);
+                insertItem(newItem, parentItem, row-1);
+                mIgnoreNextPinsChanged = true;
+                mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
+                return true;
             }
             else
             {
