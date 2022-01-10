@@ -144,20 +144,20 @@ endif()
 #####   Python support
 ################################
 
-set(Python_ADDITIONAL_VERSIONS 3.5 3.6 3.8)
-find_package(PythonInterp 3.5 REQUIRED)
-if(PythonInterp_FOUND)
+#set(Python_ADDITIONAL_VERSIONS 3.5 3.6 3.8)
+find_package (Python3 COMPONENTS Interpreter Development)
+if(Python3_Interpreter_FOUND)
     message(VERBOSE "PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")
     message(VERBOSE "PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
     message(VERBOSE "PYTHON_MODULE_PREFIX: ${PYTHON_MODULE_PREFIX}")
     message(VERBOSE "PYTHON_MODULE_EXTENSION: ${PYTHON_MODULE_EXTENSION}")
-elseif(NOT PythonInterp_FOUND)
+elseif(NOT Python3_Interpreter_FOUND)
     set(Missing_package "TRUE")
     if(APPLE AND CMAKE_HOST_APPLE)
         message(STATUS "To install python3 on MacOS using homebrew run following command:")
         message(STATUS "    brew install python3")
     endif(APPLE AND CMAKE_HOST_APPLE)
-endif(PythonInterp_FOUND)
+endif(Python3_Interpreter_FOUND)
 
 ################################
 #####   Graphviz
