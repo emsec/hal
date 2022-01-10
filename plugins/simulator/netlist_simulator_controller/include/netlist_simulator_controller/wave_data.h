@@ -25,8 +25,8 @@ namespace hal {
         QString mName;
         NetType mNetType;
         int mBits;
-        int mValueBase;
     protected:
+        int mValueBase;
         QMap<u64,int> mData;
         bool mDirty;
 

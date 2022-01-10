@@ -330,6 +330,8 @@ namespace hal
     void NetlistSimulatorController::set_saleae_input(const std::string &filename, u64 timescale)
     {
         mSimulationInput->set_saleae_input(filename,timescale);
+        mWaveDataList->incrementSimulTime(mSimulationInput->get_saleae_max_time());
+        checkReadyState();
     }
 
     void NetlistSimulatorController::handleRunFinished(bool success)

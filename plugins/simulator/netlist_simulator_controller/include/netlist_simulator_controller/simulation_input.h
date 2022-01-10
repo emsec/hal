@@ -37,7 +37,7 @@ namespace hal {
         std::vector<const Net*> m_output_nets;
         std::vector<const Net*> m_partial_nets;
 
-        std::vector<SimulationInputNetEvent> mSimulationInputNetEvents;
+        std::vector<SimulationInputNetEvent> mSimulationInputNetEvents; // TODO: remove
         std::string mSaleaeInput;
         u64 mSaleaeTimeScale;
 
@@ -175,5 +175,11 @@ namespace hal {
          * @return Scale factor to convert (double) time value stored in file to long integer value
          */
         u64 get_saleae_time_scalefactor() const { return mSaleaeTimeScale; }
+
+        /**
+         * Get maximum time value from SALEAE files
+         * @return The maximum time value
+         */
+        u64 get_saleae_max_time() const;
     };
 }

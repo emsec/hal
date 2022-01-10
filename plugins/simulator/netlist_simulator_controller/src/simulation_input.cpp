@@ -1,4 +1,5 @@
 #include "netlist_simulator_controller/simulation_input.h"
+#include "netlist_simulator_controller/saleae_parser.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
@@ -85,6 +86,12 @@ namespace hal {
     {
         mSaleaeInput     = filename;
         mSaleaeTimeScale = timescale;
+    }
+
+    u64 SimulationInput::get_saleae_max_time() const
+    {
+        SaleaeParser sp(mSaleaeInput);
+        return sp.get_max_time();
     }
 
     void SimulationInput::dump(std::string filename) const
