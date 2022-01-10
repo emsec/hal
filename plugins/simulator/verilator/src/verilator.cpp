@@ -73,7 +73,7 @@ namespace hal
 
             remove_unwanted_parameters_from_netlist(m_partial_netlist.get());
 
-            m_simulator_dir = directory();
+            m_simulator_dir = "/mnt/scratch/nils.albartus/simulation_100s_spi/";
             m_design_name   = m_partial_netlist->get_design_name();
             if (m_design_name.empty())
             {
@@ -121,7 +121,7 @@ namespace hal
             log_info("verilator", "simulating {} net events", simInput->get_simulation_net_events().size());
 
             u64 sim_counter                      = 0;
-            u64 max_events_per_partial_testbench = 20000;
+            u64 max_events_per_partial_testbench = 100000;
             bool initial_event                   = true;
 
             for (const auto& sim_event : simInput->get_simulation_net_events())
@@ -198,6 +198,7 @@ namespace hal
             for (u64 i = 0; i < m_partial_testbenches; i++)
             {
                 partial_testbenches_cpp << "\tpart_" << i << "(dut, m_trace, sim_time);" << std::endl;
+                partial_testbenches_cpp << "\tprintf(\"part_" << i << "\\n\");" << std::endl;
                 partial_testbenches_h << "void part_" << i << "(Vchip* dut, VerilatedFstC* m_trace, vluint64_t& sim_time);" << std::endl;
             }
 
@@ -219,8 +220,8 @@ namespace hal
             std::string makefile = get_makefile_template();
 
             makefile = utils::replace(makefile, std::string("<design_name>"), m_partial_netlist->get_design_name());
-            makefile = utils::replace(makefile, std::string("<num_of_trace_threads>"), std::string("--trace-threads 8"));     // TODO: add parameter...
-            makefile = utils::replace(makefile, std::string("<num_of_binary_trace_threads>"), std::string("--threads 8"));    // TODO: add parameter...
+            makefile = utils::replace(makefile, std::string("<num_of_trace_threads>"), std::string("--trace-threads 28"));     // TODO: add parameter...
+            makefile = utils::replace(makefile, std::string("<num_of_binary_trace_threads>"), std::string("--threads 28"));    // TODO: add parameter...
             makefile = utils::replace(makefile, std::string("<verilated_threads.o>"), std::string("verilated_threads.o"));    // TODO: add parameter...
             makefile = utils::replace(makefile, std::string("<num_of_build_threads>"), std::to_string(m_num_of_threads));
 
