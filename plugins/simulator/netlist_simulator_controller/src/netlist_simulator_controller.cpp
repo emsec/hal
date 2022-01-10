@@ -327,6 +327,11 @@ namespace hal
         Q_EMIT parseComplete();
     }
 
+    void NetlistSimulatorController::set_saleae_input(const std::string &filename, u64 timescale)
+    {
+        mSimulationInput->set_saleae_input(filename,timescale);
+    }
+
     void NetlistSimulatorController::handleRunFinished(bool success)
     {
         if (!success)

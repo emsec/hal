@@ -63,10 +63,12 @@ namespace hal
             return new_net_name;
         }
 
-        const int VerilatorEngine::s_command_lines = 1;
+        const int VerilatorEngine::s_command_lines = 3;
 
         bool VerilatorEngine::setSimulationInput(SimulationInput* simInput)
         {
+            mSimulationInput = simInput;
+
             //server_execution = false;
             const std::vector<const Gate*> simulation_gates(simInput->get_gates().begin(), simInput->get_gates().end());
             m_partial_netlist = netlist_utils::get_partial_netlist(simulation_gates.at(0)->get_netlist(), simulation_gates);
@@ -81,7 +83,9 @@ namespace hal
                 log_warning("verilator", "no design name for partial metlist, set to '{}'.", m_design_name);
             }
             else
+            {
                 std::cerr << "m_design_name = <" << m_design_name << ">" << std::endl;
+            }
 
             std::filesystem::path netlist_verilog = m_simulator_dir / std::string(m_partial_netlist->get_design_name() + ".v");
 
@@ -92,11 +96,13 @@ namespace hal
                 log_info("verilator", "the property 'provided_models' has not been set (use set_engine_property method to assign).");
             }
 
+            // get engine properties
             if (!get_engine_property("num_of_threads").empty())
             {
                 m_num_of_threads = std::stoi(get_engine_property("num_of_threads"));
             }
 
+            // prepare folder
             if (!write_testbench_files(simInput))
             {
                 log_error("verilator", "error, testbench files for verilog could not be written");
@@ -115,121 +121,60 @@ namespace hal
 
         bool VerilatorEngine::write_testbench_files(SimulationInput* simInput)
         {
-            // set inputs in testbench
-            std::stringstream simulation_data;
+            // write necessary parser files
+            std::ofstream saleae_parser_h_file(m_simulator_dir / "saleae_parser.h");
+            saleae_parser_h_file << get_saleae_parser_h();
+            saleae_parser_h_file.close();
 
-            log_info("verilator", "simulating {} net events", simInput->get_simulation_net_events().size());
+            std::ofstream saleae_parser_cpp_file(m_simulator_dir / "saleae_parser.cpp");
+            saleae_parser_cpp_file << get_saleae_parser_cpp();
+            saleae_parser_cpp_file.close();
 
-            u64 sim_counter                      = 0;
-            u64 max_events_per_partial_testbench = 100000;
-            bool initial_event                   = true;
+            std::ofstream saleae_file_h_file(m_simulator_dir / "saleae_file.h");
+            saleae_file_h_file << get_saleae_file_h();
+            saleae_file_h_file.close();
 
-            for (const auto& sim_event : simInput->get_simulation_net_events())
-            {
-                u32 duration = sim_event.get_simulation_duration();
+            std::ofstream saleae_file_cpp_file(m_simulator_dir / "saleae_file.cpp");
+            saleae_file_cpp_file << get_saleae_file_cpp();
+            saleae_file_cpp_file.close();
 
-                for (const auto& [net, boolean_value] : sim_event)
-                {
-                    switch (boolean_value)
-                    {
-                        case BooleanFunction::Value::ONE:
-                            simulation_data << "\tdut->" << escape_net_name(net->get_name()) << " = 0x1;";
-                            break;
-
-                        case BooleanFunction::Value::ZERO:
-                            simulation_data << "\tdut->" << escape_net_name(net->get_name()) << " = 0x0;";
-                            break;
-
-                        case BooleanFunction::Value::X:
-                            // do nothing for initial event
-                            if (!initial_event)
-                            {
-                                log_error("verilator",
-                                          "cannot assign value '{}' to net '{}' at {}ps, only supporting 1, 0 aborting...",
-                                          BooleanFunction::to_string(boolean_value),
-                                          net->get_name(),
-                                          duration);
-                                return false;
-                            }
-
-                            break;
-
-                        default:
-                            log_error(
-                                "verilator", "cannot assign value '{}' to net '{}' at {}ps, only supporting 1, 0 aborting...", BooleanFunction::to_string(boolean_value), net->get_name(), duration);
-                            return false;
-                            break;
-                    }
-                }
-                simulation_data << "\tdut->eval();" << std::endl;
-                simulation_data << "\tm_trace->dump(sim_time);" << std::endl;
-                simulation_data << "\tsim_time += " << duration << ";" << std::endl;
-                simulation_data << std::endl;
-                initial_event = false;
-
-                // split testbench or write the rest to the last file
-                if ((sim_counter % max_events_per_partial_testbench) == (max_events_per_partial_testbench - 1) || sim_counter == simInput->get_simulation_net_events().size() - 1)
-                {
-                    log_debug("verilator", "creating new partial testbench {}", m_partial_testbenches);
-                    std::string partial_testbench_cpp = get_partial_testbench_cpp_template();
-
-                    partial_testbench_cpp = utils::replace(partial_testbench_cpp, std::string("<top_system>"), m_partial_netlist->get_design_name());
-                    partial_testbench_cpp = utils::replace(partial_testbench_cpp, std::string("<insert_trace_here>"), simulation_data.str());
-                    partial_testbench_cpp = utils::replace(partial_testbench_cpp, std::string("<part_xy>"), "part_" + std::to_string(m_partial_testbenches));
-
-                    // write partial test bench
-                    std::ofstream partial_testbench_cpp_file(m_simulator_dir / std::string("part_" + std::to_string(m_partial_testbenches) + ".cpp"));
-                    partial_testbench_cpp_file << partial_testbench_cpp;
-                    partial_testbench_cpp_file.close();
-
-                    simulation_data.str(std::string());
-                    m_partial_testbenches++;
-                }
-                sim_counter++;
-            }
-
-            // write testbench.cpp & testbench.h
-            std::stringstream partial_testbenches_cpp;
-            std::stringstream partial_testbenches_h;
-
+            // write / copy saleae binaries
             std::string testbench_cpp = get_testbench_cpp_template();
-            std::string testbench_h   = get_testbench_h_template();
+            testbench_cpp             = utils::replace(testbench_cpp, std::string("<design_name>"), m_partial_netlist->get_design_name());
 
-            for (u64 i = 0; i < m_partial_testbenches; i++)
+            // TODO: workaround set gnd vcd, because we cannot generate saleae binaries just yet
+            bool set_gnd = true;    // TODO
+            if (set_gnd)
+                testbench_cpp = utils::replace(testbench_cpp, std::string("<set_gnd>"), std::string("dut->__0270__027 = 0x0;"));
+            else
+                testbench_cpp = utils::replace(testbench_cpp, std::string("<set_gnd>"), std::string(""));
+
+            bool set_vcc = true;    // TODO
+            if (set_vcc)
+                testbench_cpp = utils::replace(testbench_cpp, std::string("<set_vcc>"), std::string("dut->__0271__027 = 0x1;"));
+            else
+                testbench_cpp = utils::replace(testbench_cpp, std::string("<set_vcc>"), std::string(""));
+
+            // set callbacks in parser
+            std::stringstream callbacks;
+            for (const auto& input_net : simInput->get_input_nets())
             {
-                partial_testbenches_cpp << "\tpart_" << i << "(dut, m_trace, sim_time);" << std::endl;
-                partial_testbenches_cpp << "\tprintf(\"part_" << i << "\\n\");" << std::endl;
-                partial_testbenches_h << "void part_" << i << "(Vchip* dut, VerilatedFstC* m_trace, vluint64_t& sim_time);" << std::endl;
+                std::string net_name = input_net->get_name();
+                std::stringstream callback;
+                callback << "  std::string " << net_name << " = \"" << net_name << "\";" << std::endl;
+                callback << "  if (!sp.registerCallback(" << net_name << "_str, set_simulation_value, &dut->" << escape_net_name(net_name) << ")) {" << std::endl;
+                callback << "    std::cerr << \"cannot initialize callback for net <\" << " << net_name << "n1467_str << \">\" << std::endl;" << std::endl;
+                callback << "  }" << std::endl;
+                callback << std::endl;
+
+                callbacks << callback.str() << std::endl;
             }
 
-            testbench_cpp = utils::replace(testbench_cpp, std::string("<insert_trace_here>"), partial_testbenches_cpp.str());
-            testbench_cpp = utils::replace(testbench_cpp, std::string("<top_system>"), m_partial_netlist->get_design_name());
+            testbench_cpp = utils::replace(testbench_cpp, std::string("<set_callbacks>"), callbacks.str());
 
-            testbench_h = utils::replace(testbench_h, std::string("<top_system>"), m_partial_netlist->get_design_name());
-            testbench_h = utils::replace(testbench_h, std::string("<insert_partial_testbench_here>"), partial_testbenches_h.str());
-
-            std::ofstream testbench_cpp_file(m_simulator_dir / "testbench.cpp");
+            std::ofstream testbench_cpp_file(m_simulator_dir / "saleae_parser.cpp");
             testbench_cpp_file << testbench_cpp;
             testbench_cpp_file.close();
-
-            std::ofstream testbench_h_file(m_simulator_dir / "testbench.h");
-            testbench_h_file << testbench_h;
-            testbench_h_file.close();
-
-            // write execute.sh
-            std::string makefile = get_makefile_template();
-
-            makefile = utils::replace(makefile, std::string("<design_name>"), m_partial_netlist->get_design_name());
-            makefile = utils::replace(makefile, std::string("<num_of_trace_threads>"), std::string("--trace-threads 28"));     // TODO: add parameter...
-            makefile = utils::replace(makefile, std::string("<num_of_binary_trace_threads>"), std::string("--threads 28"));    // TODO: add parameter...
-            makefile = utils::replace(makefile, std::string("<verilated_threads.o>"), std::string("verilated_threads.o"));    // TODO: add parameter...
-            makefile = utils::replace(makefile, std::string("<num_of_build_threads>"), std::to_string(m_num_of_threads));
-
-            std::ofstream makefile_file(m_simulator_dir / "execute.sh");
-            makefile_file << makefile;
-            makefile_file.close();
-
-            std::filesystem::permissions(m_simulator_dir / "execute.sh", std::filesystem::perms::owner_all | std::filesystem::perms::group_all);
 
             return true;
         }
@@ -242,67 +187,60 @@ namespace hal
         std::vector<std::string> VerilatorEngine::commandLine(int lineIndex) const
         {
             // returns commands to be executed
-
             switch (lineIndex)
             {
                 case 0: {
-                    const char* cl[]                = {"./execute.sh", nullptr};
+                    const char* cl[] = {"verilator",
+                                        "-I.",
+                                        "-Wall",
+                                        "-Wno-fatal",
+                                        "--MMD",
+                                        "-trace",
+                                        "--trace_threads 1",
+                                        "--threads 1",
+                                        "-y",
+                                        "gate_definitions/",
+                                        "--Mdir",
+                                        "obj_dir",
+                                        "-O3",
+                                        "--noassert",
+                                        "-CFLAGS",
+                                        "-O3",
+                                        "-LDFLAGS",
+                                        "-lstdc++fs",
+                                        "--exe",
+                                        "-cc",
+                                        "-DSIM_VERILATOR",
+                                        "--trace-depth",
+                                        "2",
+                                        "testbench.cpp",
+                                        "saleae_parser.cpp",
+                                        "saleae_file.cpp",
+                                        nullptr};
+
                     std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
+                    retval.push_back(m_design_name + ".v");
+                    return retval;
+                }
+                break;
+                case 1: {
+                    const char* cl[]                = {"make", "-j4", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr};
+                    std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
+                    retval.push_back("V" + m_design_name + ".mk");
+
+                    retval[1] = "-j" + std::to_string(m_num_of_threads);
+                    return retval;
+                }
+                break;
+                case 2: {
+                    std::vector<std::string> retval;
+                    retval.push_back("obj_dir/V" + m_design_name);
                     return retval;
                 }
                 break;
                 default:
                     break;
             }
-            // switch (lineIndex)
-            // {
-            //     case 0: {
-            //         const char* cl[]                = {"verilator",
-            //                             "-I.",
-            //                             "-Wall",
-            //                             "-Wno-fatal",
-            //                             "--MMD",
-            //                             "-trace",
-            //                             "-y",
-            //                             "gate_definitions/",
-            //                             "--Mdir",
-            //                             "obj_dir",
-            //                             "--exe",
-            //                             "-cc",
-            //                             "-DSIM_VERILATOR",
-            //                             "--trace-depth",
-            //                             "2",
-            //                             "-CFLAGS",
-            //                             "-mcmodel=large",
-            //                             "testbench.cpp",
-            //                             nullptr};
-            //         std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
-            //         for (u64 i = 0; i < m_partial_testbenches; i++)
-            //         {
-            //             retval.push_back("part_" + std::to_string(i) + ".cpp");
-            //         }
-            //         retval.push_back(m_design_name + ".v");
-            //         return retval;
-            //     }
-            //     break;
-            //     case 1: {
-            //         const char* cl[]                = {"make", "-j4", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr};
-            //         std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
-            //         retval.push_back("V" + m_design_name + ".mk");
-
-            //         retval[1] = "-j" + std::to_string(m_num_of_threads);
-            //         return retval;
-            //     }
-            //     break;
-            //     case 2: {
-            //         std::vector<std::string> retval;
-            //         retval.push_back("obj_dir/V" + m_design_name);
-            //         return retval;
-            //     }
-            //     break;
-            //     default:
-            //         break;
-            // }
             return std::vector<std::string>();
         }
 
@@ -313,7 +251,7 @@ namespace hal
 
         bool VerilatorEngine::finalize()
         {
-            mResultFilename = std::string(m_simulator_dir / "waveform.fst");
+            mResultFilename = std::string(m_simulator_dir / "waveform.vcd");
             mState          = Done;
             return true;
         }

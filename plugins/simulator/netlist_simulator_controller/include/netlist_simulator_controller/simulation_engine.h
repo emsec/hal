@@ -34,6 +34,7 @@ namespace hal
         State mState;
         std::unordered_map<std::string, std::string> mProperties;
         QTemporaryDir* mTempDir;
+        SimulationInput* mSimulationInput;
 
     public:
         SimulationEngine(const std::string& nam);
@@ -166,15 +167,18 @@ namespace hal
          * @param value property value
          */
         virtual std::string get_engine_property(const std::string& key);
+
+        /**
+         * Get simulation input
+         * @return Pointer to input instance
+         */
+        virtual SimulationInput* get_simulation_input() const { return mSimulationInput; }
     };
 
     class SimulationEngineEventDriven : public SimulationEngine
     {
         bool run(NetlistSimulatorController* controller) override;
         bool setSimulationInput(SimulationInput* simInput) override;
-
-    protected:
-        SimulationInput* mSimulationInput;
 
     public:
         SimulationEngineEventDriven(const std::string& nam);

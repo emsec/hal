@@ -81,6 +81,12 @@ namespace hal {
         mNoClockUsed = true;
     }
 
+    void SimulationInput::set_saleae_input(const std::string &filename, u64 timescale)
+    {
+        mSaleaeInput     = filename;
+        mSaleaeTimeScale = timescale;
+    }
+
     void SimulationInput::dump(std::string filename) const
     {
         FILE* of = stderr;
