@@ -51,7 +51,7 @@ namespace hal
          * @param[inout] cache - Cache to speed up computations. The cache is filled by this function.
          * @returns The combined Boolean function of the subgraph.
          */
-        CORE_API BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::unordered_map<u32, BooleanFunction>& cache);
+        CORE_API BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, std::string>, BooleanFunction>& cache);
 
         /**
          * Get the combined Boolean function of a specific net, considering an entire subgraph.<br>
@@ -90,7 +90,7 @@ namespace hal
          * @param[in] subgraph_gates - The gates the subgraph is supposed to consist of.
          * @returns The deep copy of the netlist.
          */
-        CORE_API std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<Gate*>& subgraph_gates);
+        CORE_API std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates);
 
         /**
          * TODO test

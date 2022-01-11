@@ -909,6 +909,7 @@ namespace hal
     bool VerilogParser::construct_netlist(VerilogModule& top_module)
     {
         m_netlist->set_design_name(top_module.m_name);
+        m_netlist->enable_automatic_net_checks(false);
 
         std::unordered_map<std::string, u32> instantiation_count;
 
@@ -1183,14 +1184,35 @@ namespace hal
             }
         }
 
-        // assign module ports
-        for (const auto& [net, port_info] : m_module_ports)
+        // update module nets, internal nets, input nets, and output nets
+        for (Module* module : m_netlist->get_modules())
         {
-            const std::string& port_name = std::get<1>(port_info);
-            Module* module               = std::get<2>(port_info);
-            module->set_pin_name(module->get_pin(net), port_name);
+            module->update_nets();
         }
 
+        // assign module pins
+        for (const auto& [net, port_info] : m_module_ports)
+        {
+            std::get<2>(port_info)->assign_pin(std::get<1>(port_info), net);
+        }
+
+        for (Module* module : m_netlist->get_modules())
+        {
+            std::unordered_set<Net*> input_nets  = module->get_input_nets();
+            std::unordered_set<Net*> output_nets = module->get_input_nets();
+
+            if (module->get_pin(m_one_net) == nullptr && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
+            {
+                module->assign_pin("'1'", m_one_net);
+            }
+
+            if (module->get_pin(m_zero_net) == nullptr && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
+            {
+                module->assign_pin("'0'", m_one_net);
+            }
+        }
+
+        m_netlist->enable_automatic_net_checks(true);
         return true;
     }
 

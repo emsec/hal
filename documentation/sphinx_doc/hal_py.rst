@@ -29,3 +29,4 @@ HAL Core Documentation
    pin_direction
    pin_type
    plugin_manager
+   smt

@@ -69,13 +69,19 @@ namespace hal
                     Net* net_6_7 = test_utils::connect(nl.get(), gate_6, "O", gate_7, "I0");
 
                     Net* net_4_out = test_utils::connect_global_out(nl.get(), gate_4, "O", "net_4_out");
-                    top_module->set_pin_name(top_module->get_pin(net_4_out), net_4_out->get_name());
+                    ModulePin* pin_1 = top_module->get_pin(net_4_out);
+                    top_module->set_pin_name(pin_1, net_4_out->get_name());
+                    top_module->set_pin_group_name(pin_1->get_group().first, net_4_out->get_name());
 
                     Net* net_5_out = test_utils::connect_global_out(nl.get(), gate_5, "O", "net_5_out");
-                    top_module->set_pin_name(top_module->get_pin(net_5_out), net_5_out->get_name());
+                    ModulePin* pin_2 = top_module->get_pin(net_5_out);
+                    top_module->set_pin_name(pin_2, net_5_out->get_name());
+                    top_module->set_pin_group_name(pin_2->get_group().first, net_5_out->get_name());
 
                     Net* net_7_out = test_utils::connect_global_out(nl.get(), gate_7, "O", "net_7_out");
-                    top_module->set_pin_name(top_module->get_pin(net_7_out), net_7_out->get_name());
+                    ModulePin* pin_3 = top_module->get_pin(net_7_out);
+                    top_module->set_pin_name(pin_3, net_7_out->get_name());
+                    top_module->set_pin_group_name(pin_3->get_group().first, net_7_out->get_name());
                 }
 
                 VerilogWriter verilog_writer;

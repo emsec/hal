@@ -25,6 +25,10 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/boolean_function/solver.h"
+#include "hal_core/netlist/boolean_function/symbolic_execution.h"
+#include "hal_core/netlist/boolean_function/symbolic_state.h"
+#include "hal_core/netlist/boolean_function/types.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
@@ -265,6 +269,13 @@ namespace hal
      * @param[in] m - the python module
      */
     void boolean_function_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL SMT solver system in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void smt_init(py::module& m);
 
     /**
      * @}

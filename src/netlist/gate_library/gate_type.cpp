@@ -5,7 +5,7 @@
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry"};
+    std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry", "pll"};
 
     GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
         : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(component))
@@ -334,19 +334,21 @@ namespace hal
 
     void GateType::add_boolean_function(const std::string& pin_name, const BooleanFunction& bf)
     {
-        m_functions.emplace(pin_name, bf);
+        m_functions.emplace(pin_name, bf.clone());
     }
 
     void GateType::add_boolean_functions(const std::unordered_map<std::string, BooleanFunction>& functions)
     {
-        m_functions.insert(functions.begin(), functions.end());
+        for (const auto& [name, function]: functions) {
+            m_functions.insert({name, function.clone()});
+        }
     }
 
     const BooleanFunction GateType::get_boolean_function(const std::string& function_name) const
     {
         if (const auto it = m_functions.find(function_name); it != m_functions.end())
         {
-            return std::get<1>(*it);
+            return std::get<1>(*it).clone();
         }
 
         return BooleanFunction();

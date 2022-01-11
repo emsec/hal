@@ -781,8 +781,8 @@ namespace hal {
             }
             {
                 // Get input nets of the test Module
-                std::vector<Net*> exp_result = {net_g_0, net_4_1_2};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_input_nets(), exp_result));
+                std::unordered_set<Net*> exp_result = {net_g_0, net_4_1_2};
+                EXPECT_EQ(test_module->get_input_nets(), exp_result);
                 EXPECT_TRUE(test_module->is_input_net(net_g_0));
                 EXPECT_TRUE(test_module->is_input_net(net_4_1_2));
                 EXPECT_FALSE(test_module->is_input_net(net_0_g));
@@ -791,8 +791,8 @@ namespace hal {
             }
             {
                 // Get output nets of the test Module
-                std::vector<Net*> exp_result = {net_0_g, net_2_3_5};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_output_nets(), exp_result));
+                std::unordered_set<Net*> exp_result = {net_0_g, net_2_3_5};
+                EXPECT_EQ(test_module->get_output_nets(), exp_result);
                 EXPECT_TRUE(test_module->is_output_net(net_0_g));
                 EXPECT_TRUE(test_module->is_output_net(net_2_3_5));
                 EXPECT_FALSE(test_module->is_output_net(net_g_0));
@@ -801,8 +801,8 @@ namespace hal {
             }
             {
                 // Get internal nets of the test Module
-                std::vector<Net*> exp_result = {net_1_2, net_2_3_5};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_internal_nets(), exp_result));
+                std::unordered_set<Net*> exp_result = {net_1_2, net_2_3_5};
+                EXPECT_EQ(test_module->get_internal_nets(), exp_result);
                 EXPECT_TRUE(test_module->is_internal_net(net_1_2));
                 EXPECT_TRUE(test_module->is_internal_net(net_2_3_5));
                 EXPECT_FALSE(test_module->is_internal_net(net_g_0));
@@ -811,8 +811,8 @@ namespace hal {
             }
             {
                 // Get nets of the test Module
-                std::vector<Net*> exp_result = {net_g_0, net_0_g, net_4_1_2, net_1_2, net_2_3_5};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_nets(), exp_result));
+                std::unordered_set<Net*> exp_result = {net_g_0, net_0_g, net_4_1_2, net_1_2, net_2_3_5};
+                EXPECT_EQ(test_module->get_nets(), exp_result);
                 EXPECT_TRUE(test_module->contains_net(net_1_2));
                 EXPECT_TRUE(test_module->contains_net(net_2_3_5));
                 EXPECT_TRUE(test_module->contains_net(net_g_0));

@@ -488,12 +488,12 @@ namespace hal
         return success;
     }
 
-    std::vector<Net*> Module::get_nets(const std::function<bool(Net*)>& filter, bool recursive) const
+    std::unordered_set<Net*> Module::get_nets(const std::function<bool(Net*)>& filter, bool recursive) const
     {
-        std::vector<Net*> res;
+        std::unordered_set<Net*> res;
         if (!filter)
         {
-            res = std::vector<Net*>(m_nets.begin(), m_nets.end());
+            return m_nets;
         }
         else
         {
@@ -503,7 +503,7 @@ namespace hal
                 {
                     continue;
                 }
-                res.push_back(n);
+                res.insert(n);
             }
         }
 
@@ -513,26 +513,26 @@ namespace hal
             {
                 auto more = sm->get_nets(filter, true);
                 res.reserve(res.size() + more.size());
-                res.insert(res.end(), more.begin(), more.end());
+                res.insert(more.begin(), more.end());
             }
         }
 
         return res;
     }
 
-    std::vector<Net*> Module::get_input_nets() const
+    const std::unordered_set<Net*>& Module::get_input_nets() const
     {
-        return std::vector<Net*>(m_input_nets.begin(), m_input_nets.end());
+        return m_input_nets;
     }
 
-    std::vector<Net*> Module::get_output_nets() const
+    const std::unordered_set<Net*>& Module::get_output_nets() const
     {
-        return std::vector<Net*>(m_output_nets.begin(), m_output_nets.end());
+        return m_output_nets;
     }
 
-    std::vector<Net*> Module::get_internal_nets() const
+    const std::unordered_set<Net*>& Module::get_internal_nets() const
     {
-        return std::vector<Net*>(m_internal_nets.begin(), m_internal_nets.end());
+        return m_internal_nets;
     }
 
     bool Module::is_input_net(Net* net) const

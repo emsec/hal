@@ -218,7 +218,7 @@ namespace hal
                 hal::error_code ec1;
                 if (std::filesystem::exists(std::filesystem::path(path), ec1))
                 {
-                    std::filesystem::path file_path = std::filesystem::path(path).string() + "/" + std::filesystem::path(file_name).string();
+                    std::filesystem::path file_path = std::filesystem::path(path) / std::filesystem::path(file_name).string();
                     hal::error_code ec2;
                     if (std::filesystem::exists(file_path, ec2))
                     {

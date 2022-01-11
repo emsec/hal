@@ -31,18 +31,25 @@
 #include <cassert>
 #include <map>
 #include <ostream>
+#include <set>
 #include <unordered_map>
-#include <unordered_set>
+#include <variant>
 #include <vector>
 
 namespace hal
 {
     /**
-     * Boolean function class.
+     * A BooleanFunction represents a symbolic expression (e.g., "A & B") in 
+     * order to abstract the (semantic) functionality of a single netlist gate 
+     * (or even a complex subcircuit comprising multiple gates) in a formal 
+     * manner. To this end, the BooleanFunction class is able to construct and 
+     * display arbitrarily-nested expressions, enable symbolic simplification
+     * (e.g., simplify "A & 0" to "0"), and translate Boolean functions to the
+     * SAT / SMT solver domain to use the solve constraint formulas.
      *
      * @ingroup netlist
      */
-    class BooleanFunction
+    class BooleanFunction final
     {
     public:
         ////////////////////////////////////////////////////////////////////////
@@ -55,14 +62,11 @@ namespace hal
          * and a namespace for its underlying node data structures.
          */
 
-        struct Node;     /// represents an abstract syntax tree node
-        struct NodeType; /// represents the type of the node
-
-        struct OperationNode; /// represents an operation node (e.g., AND)
-        struct OperandNode;   /// reprsents an operand node (e.g., a variable)
+        struct Node;        /// represents an abstract syntax tree node
+        struct NodeType;    /// represents the type of the node
 
         /**
-         * Represents the logic value that a boolean function operates on.
+         * Represents the logic value that a Boolean function operates on.
          */
         enum Value
         {
@@ -72,170 +76,126 @@ namespace hal
             X         /**< Represents an undefined value. */
         };
 
-        enum class content_type
-        {
-            VARIABLE,
-            CONSTANT,
-            TERMS
-        };
-        
-        enum class operation
-        {
-            AND,
-            OR,
-            XOR
-        };
-
         /**
          * Get the value as a string.
          *
-         * @param[in] v - the value.
+         * @param[in] value - The value.
          * @returns A string describing the value.
          */
-        static std::string to_string(Value v);
+        static std::string to_string(Value value);
 
         /**
-         * ostream operator that forwards to_string of a value.
+         * Output stream operator that forwards to_string of a value.
          *
-         * @param[in] os - the stream to write to.
-         * @param[in] v - the value.
-         * @returns A reference to os.
+         * @param[in] os - The stream to write to.
+         * @param[in] value - The value.
+         * @returns A reference to output stream.
          */
-        friend std::ostream& operator<<(std::ostream& os, Value v);
+        friend std::ostream& operator<<(std::ostream& os, Value value);
+
+        ////////////////////////////////////////////////////////////////////////
+        // Constructors / Factories, Destructors, Operators
+        ////////////////////////////////////////////////////////////////////////
 
         /**
-         * Construct an empty Boolean function and thus evaluates to X (undefined).
+         * Constructs an empty / invalid Boolean function.
          */
-        BooleanFunction();
+        explicit BooleanFunction();
 
         /**
-         * Construct a Boolean function comprising a single variable.
-         * The name of the variable must not be empty.
-         *
-         * @param[in] variable_name - The name of the variable.
+         * Builds and validates a Boolean function from a vector of nodes.
+         * 
+         * @param[in] nodes - Vector of Boolean function nodes.
+         * @returns The Boolean function on success, a string error message otherwise.
          */
-        BooleanFunction(const std::string& variable_name);
+        static std::variant<BooleanFunction, std::string> build(std::vector<Node>&& nodes);
 
         /**
-         * Construct a Boolean function from a single constant value.
-         *
-         * @param[in] constant - The constant value.
+         * Creates a Boolean function of the given bit-size comprising only a variable of the specified name.
+         * 
+         * @param[in] name - The name of the variable.
+         * @param[in] size - The bit-size. Defaults to 1.
+         * @returns The Boolean function.
          */
-        BooleanFunction(Value constant);
+        static BooleanFunction Var(const std::string& name, u16 size = 1);
 
         /**
-         * Substitute a variable with another one and thus renames the variable.
-         * The operation is applied to all instances of the variable in the function.
-         *
-         * @param[in] old_variable_name - The old variable to substitute.
-         * @param[in] new_variable_name - The new variable.
-         * @returns The resulting Boolean function.
+         * Creates a constant single-bit Boolean function from a value.
+         * 
+         * @param[in] value - The value.
+         * @returns The Boolean function.
          */
-        BooleanFunction substitute(const std::string& old_variable_name, const std::string& new_variable_name) const;
+        static BooleanFunction Const(const BooleanFunction::Value& value);
 
         /**
-         * Substitute a variable with another function.
-         * The operation is applied to all instances of the variable in the function.
-         *
-         * @param[in] variable_name - The variable to substitute.
-         * @param[in] function - The function replace the variable with.
-         * @returns The resulting Boolean function.
+         * Creates a constant multi-bit  Boolean function from a vector of values.
+         * 
+         * @param[in] value - The vector of values.
+         * @returns The Boolean function.
          */
-        BooleanFunction substitute(const std::string& variable_name, const BooleanFunction& function) const;
+        static BooleanFunction Const(const std::vector<BooleanFunction::Value>& value);
 
         /**
-         * Evaluate the Boolean function on the given inputs and returns the result.
-         *
-         * @param[in] inputs - A map from variable names to values.
-         * @returns The value that the function evaluates to.
+         * Creates a constant multi-bit Boolean function of the given bit-size from an integer value.
+         * 
+         * @param[in] value - The integer value.
+         * @param[in] size - The bit-size.
+         * @returns The Boolean function.
          */
-        Value evaluate(const std::unordered_map<std::string, Value>& inputs = {}) const;
+        static BooleanFunction Const(u64 value, u16 size);
 
         /**
-         * Evaluate the function on the given inputs and returns the result.
-         *
-         * @param[in] inputs - A map from variable names to values.
-         * @returns The value that the function evaluates to.
+         * Creates an index for a Boolean function of the given bit-size from an integer value.
+         * 
+         * @param[in] index - The integer value.
+         * @param[in] size - The bit-size.
+         * @returns The Boolean function.
          */
-        Value operator()(const std::unordered_map<std::string, Value>& inputs = {}) const;
+        static BooleanFunction Index(u16 index, u16 size);
 
         /**
-         * Returns content type of Boolean function.
-         *
-         * @returns Content type.
+         * Joins two Boolean functions by an 'AND' operation. 
+         * Requires both Boolean functions to be of the specified bit-size.
+         * 
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns The joined Boolean function on success, a string error message otherwise.
          */
-        content_type get_type() const;
+        static std::variant<BooleanFunction, std::string> And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Returns operation identifier of Boolean function.
-         *
-         * @returns Operation.
+         * Joins two Boolean functions by an 'OR' operation. 
+         * Requires both Boolean functions to be of the specified bit-size.
+         * 
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns The joined Boolean function on success, a string error message otherwise.
          */
-        operation get_operation() const;
-
-        /** 
-         * Checks whether Boolean function is negated.
-         *
-         * @returns True in case Boolean function is negated, false otherwise.
-         */
-        bool is_neg() const;
+        static std::variant<BooleanFunction, std::string> Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Returns list of operands as Boolean function.
-         *
-         * @returns List of operands.
+         * Negates the given Boolean function. 
+         * Requires the Boolean function to be of the specified bit-size.
+         * 
+         * @param[in] p0 - The Boolean function to negate.
+         * @param[in] size - Bit-size of the operation.
+         * @returns  The negated Boolean function on success, a string error message otherwise.
          */
-        const std::vector<BooleanFunction>& get_operands() const;
+        static std::variant<BooleanFunction, std::string> Not(BooleanFunction&& p0, u16 size);
 
         /**
-         * Check whether the Boolean function always evaluates to ONE.
-         *
-         * @returns True if function is constant ONE, false otherwise.
+         * Joins two Boolean functions by an 'XOR' operation. 
+         * Requires both Boolean functions to be of the specified bit-size.
+         * 
+         * 
+         * @param[in] p0 - First Boolean function.
+         * @param[in] p1 - Second Boolean function.
+         * @param[in] size - Bit-size of the operation.
+         * @returns The joined Boolean function on success, a string error message otherwise.
          */
-        bool is_constant_one() const;
-
-        /**
-         * Check whether the Boolean function always evaluates to ZERO.
-         *
-         * @returns True if function is constant ZERO, false otherwise.
-         */
-        bool is_constant_zero() const;
-
-        /**
-         * Check whether the function is empty.
-         *
-         * @returns True if function is empty, false otherwise.
-         */
-        bool is_empty() const;
-
-        /**
-         * Get all variable names utilized in this Boolean function.
-         *
-         * @returns A vector of all variable names.
-         */
-        std::vector<std::string> get_variables() const;
-
-        /**
-         * Parse a function from a string representation.
-         * Supported operators are  NOT ("!", "'"), AND ("&", "*", " "), OR ("|", "+"), XOR ("^") and brackets ("(", ")").
-         * Operator precedence is ! > & > ^ > |.
-         *
-         * Since, for example, '(' is interpreted as a new term, but might also be an intended part of a variable, a vector of known variable names can be supplied, which are extracted before parsing.
-         *
-         * If there is an error during bracket matching, X is returned for that part.
-         *
-         * @param[in] expression - String containing a Boolean function.
-         * @param[in] variable_names - List of variable names.
-         * @returns The Boolean function extracted from the string.
-         */
-        static BooleanFunction from_string(std::string expression, const std::vector<std::string>& variable_names = {});
-
-        /**
-         * Get the boolean function as a string.
-         *
-         * @returns A string describing the boolean function.
-         */
-        std::string to_string() const;
+        static std::variant<BooleanFunction, std::string> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
          * The ostream operator that forwards to_string of a boolean function.
@@ -247,208 +207,335 @@ namespace hal
         friend std::ostream& operator<<(std::ostream& os, const BooleanFunction& f);
 
         /**
-         * Combine two Boolean functions using an AND operator.
-         *
-         * @param[in] other - The other Boolean function to combine with.
-         * @returns The combined Boolean function.
+         * Joins two Boolean functions by an 'AND' operation. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
          */
         BooleanFunction operator&(const BooleanFunction& other) const;
 
         /**
-         * Combine two Boolean functions using an OR operator.
-         *
-         * @param[in] other - The other Boolean function to combine with.
-         * @returns The combined Boolean function.
-         */
-        BooleanFunction operator|(const BooleanFunction& other) const;
-
-        /**
-         * Combine two Boolean functions using an XOR operator.
-         *
-         * @param[in] other - The other Boolean function to combine with.
-         * @returns The combined Boolean function.
-         */
-        BooleanFunction operator^(const BooleanFunction& other) const;
-
-        /**
-         * Combine two Boolean functions using an AND operator in-place.
-         *
-         * @param[in] other - The other Boolean function to combine with.
-         * @returns The combined Boolean function.
+         * Joins two Boolean functions by an 'AND' operation in-place. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
          */
         BooleanFunction& operator&=(const BooleanFunction& other);
 
         /**
-         * Combine two boolean functions using an OR operator in-place.
-         *
-         * @param[in] other - The other Boolean function to combine with.
-         * @returns The combined Boolean function.
-         */
-        BooleanFunction& operator|=(const BooleanFunction& other);
-
-        /**
-         * Combine two Boolean functions using an XOR operator in-place.
-         *
-         * @param[in] other - The other Boolean function to combine with.
-         * @returns The combined Boolean function.
-         */
-        BooleanFunction& operator^=(const BooleanFunction& other);
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Negate the Boolean function.
-         *
-         * @returns The negated Boolean function.
-         */
-        [[deprecated("Use operator~() instead.")]] BooleanFunction operator!() const;
-
-        /**
-         * Negate the Boolean function.
-         *
+         * Negates the Boolean function. 
+         * 
          * @returns The negated Boolean function.
          */
         BooleanFunction operator~() const;
 
         /**
-         * Check whether two Boolean functions are equal.
-         *
-         * @param[in] other - The Boolean function to compare against.
-         * @returns True if both Boolean functions are equal, false otherwise.
+         * Joins two Boolean functions by an 'OR' operation. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
+        BooleanFunction operator|(const BooleanFunction& other) const;
+
+        /**
+         * Joins two Boolean functions by an 'OR' operation in-place. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
+        BooleanFunction& operator|=(const BooleanFunction& other);
+
+        /**
+         * Joins two Boolean functions by an 'XOR' operation. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
+        BooleanFunction operator^(const BooleanFunction& other) const;
+
+        /**
+         * Joins two Boolean functions by an 'XOR' operation in-place. 
+         * Requires both Boolean functions to be of the same bit-size.
+         * \warning Fails if the Boolean functions have different bit-sizes.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns The joined Boolean function.
+         */
+        BooleanFunction& operator^=(const BooleanFunction& other);
+
+        /**
+         * Checks whether two Boolean functions are equal.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns `true` if the Boolean functions are equal, `false` otherwise.
          */
         bool operator==(const BooleanFunction& other) const;
 
         /**
-         * Check whether two Boolean functions are unequal.
-         *
-         * @param[in] other - The Boolean function to compare to.
-         * @returns True if both Boolean functions are unequal, false otherwise.
+         * Checks whether two Boolean functions are unequal.
+         * 
+         * @param[in] other - The other Boolean function.
+         * @returns `true` if the Boolean functions are unequal, `false` otherwise.
          */
         bool operator!=(const BooleanFunction& other) const;
 
         /**
-         * Check whether the Boolean function is in disjunctive normal form (DNF).
-         *
-         * @returns True if in DNF, false otherwise.
-         */
-        bool is_dnf() const;
-
-        /**
-         * Get the plain disjunctive normal form (DNF) representation of the Boolean function.
-         *
-         * @returns The DNF as a Boolean function.
-         */
-        BooleanFunction to_dnf() const;
-
-        /**
-         * Get the disjunctive normal form (DNF) clauses of the function.
-         *
-         * Each clause is a vector of pairs (variable name, Boolean value).
-         *
-         * Returns an empty vector if the Boolean function is empty.
-         *
-         * @returns The DNF clauses as a vector of vectors of pairs (string, bool).
-         */
-        std::vector<std::vector<std::pair<std::string, bool>>> get_dnf_clauses() const;
-
-        /**
-         * Optimizes the Boolean function by first converting it to disjunctive normal form (DNF) and then applying the Quine-McCluskey algorithm.
-         *
-         * @returns The optimized Boolean function.
-         */
-        BooleanFunction optimize() const;
-
-        /**
-         * Removes constant values whenever possible.
+         * Checks whether this Boolean function is 'smaller' than the `other` Boolean function.
          * 
-         * @return The optimized Boolean function.
+         * @param[in] other - The other Boolean function.
+         * @returns `true` if this Boolean function is 'smaller', `false` otherwise.
          */
-        BooleanFunction optimize_constants() const;
+        bool operator<(const BooleanFunction& other) const;
 
         /**
-         * Get the truth table outputs of the function.
-         *
-         * WARNING: Exponential runtime in the number of variables!
-         *
-         * Output is the vector of output values when walking the truth table from the least significant bit to the most significant one.
-         *
-         * If ordered_variables is empty, all included variables are used and ordered alphabetically.
-         *
-         * @param[in] ordered_variables - Variables in the order of the inputs.
-         * @param[in] remove_unknown_variables - If true, all given variables that are not found in the function are removed from the truth table.
-         * @returns The vector of output values.
+         * Checks whether the Boolean function is empty.
+         * 
+         * @returns `true` if the Boolean function is empty, `false` otherwise.
          */
-        std::vector<Value> get_truth_table(std::vector<std::string> ordered_variables = {}, bool remove_unknown_variables = false) const;
+        bool is_empty() const;
 
-        // TODO figure out how to test this
-        /**
-         * Get the z3 representation of the Boolean function.
-         * The variables can be efficiently substituted by passing in the var_to_expr map. 
-         *
-         * @param[in] var_to_expr - A mapping from input variable to expression that this variable is substituted with.
-         * @param[in,out] context - The z3 context.
-         * @returns The z3 representation of the Boolean function.
-         */
-        z3::expr to_z3(z3::context& context, const std::map<std::string, z3::expr>& var_to_expr = {}) const;
+        ////////////////////////////////////////////////////////////////////////
+        // Interface: Nodes, Sizes, and Checks
+        ////////////////////////////////////////////////////////////////////////
 
         /**
-         * Returns the list of nodes of the Boolean function in reverse-polish
-         * notation, i.e. top-level node is at last vector.
-         *
-         * WARNING: This is a temporary function as long as the underlying 
-         *          BooleanFunction is using the recursive data structure.
-         *
-         * @returns The vector of abstract syntax tree nodes.
+         * Clones the Boolean function.
+         * 
+         * @returns The cloned Boolean function.
          */
-        std::vector<std::unique_ptr<Node>> get_reverse_polish_notation() const;
+        BooleanFunction clone() const;
 
-    protected:
-        static std::string to_string(const operation& op);
-        friend std::ostream& operator<<(std::ostream& os, const operation& op);
+        /**
+         * Returns the bit-size of the Boolean function.
+         * 
+         * @returns The bit-size of the Boolean function. 
+         */
+        u16 size() const;
 
-        static BooleanFunction from_string_internal(std::string expression, const std::vector<std::string>& variable_names);
+        /**
+         * Checks whether the top-level node of the Boolean function is of a specific type.
+         * 
+         * @param type - The type to check for.
+         * @returns `true` if the node is of the given type, `false` otherwise.
+         */
+        bool is(u16 type) const;
 
-        /*
-        * Constructor for a function of the form "term1 op term2 op term3 op ..."
-        * Empty terms behaves like constant X.
-        * If there is only a single term, this constructor simply copies said term.
-        */
-        BooleanFunction(operation op, const std::vector<BooleanFunction>& operands, bool invert_result = false);
+        /**
+         * Checks whether the top-level node of the Boolean function is of type `Variable`.
+         * 
+         * @returns `true` if the top-level node of the Boolean function is of type `Variable`, `false` otherwise.
+         */
+        bool is_variable() const;
 
-        BooleanFunction combine(operation op, const BooleanFunction& other) const;
+        /**
+         * Checks whether the top-level node of the Boolean function is of type `Constant`.
+         * 
+         * @returns `true` if the top-level node of the Boolean function is of type `Constant`, `false` otherwise.
+         */
+        bool is_constant() const;
 
-        std::string to_string_internal() const;
+        /**
+         * Checks whether the Boolean function is of type `Constant` and holds a specific value.
+         * 
+         * @param value - The value to check for.
+         * @returns `true` if the Boolean function is of type `Constant` and holds the given value, `false` otherwise.
+         */
+        bool has_constant_value(u64 value) const;
 
-        // replaces a^b with (a & !b | (!a & b)
-        BooleanFunction replace_xors() const;
+        /**
+         * Returns the top-level node of the Boolean function.
+         * \warning Fails if the Boolean function is empty.
+         * 
+         * @returns The top-level node.
+         */
+        const BooleanFunction::Node& get_top_level_node() const;
 
-        // propagates negations down to the variables
-        BooleanFunction propagate_negations(bool negate_term = false) const;
+        /**
+         * Returns the number of nodes in the Boolean function.
+         * 
+         * @returns The number of nodes. 
+         */
+        u32 length() const;
 
-        // expands ands, i.e., a & (b | c) -> a&b | a&c
-        BooleanFunction expand_ands() const;
-        // helper function 1
-        std::vector<BooleanFunction> expand_AND_of_functions(const std::vector<std::vector<BooleanFunction>>& AND_terms_to_expand) const;
-        // helper function 2
-        std::vector<BooleanFunction> get_AND_terms() const;
+        /**
+         * Returns the reverse polish notation list of the Boolean function nodes.
+         *
+         * @returns A vector of nodes.
+         */
+        const std::vector<BooleanFunction::Node>& get_nodes() const;
 
-        // merges nested expressions of the same operands
-        static std::vector<std::vector<Value>> qmc(std::vector<std::vector<Value>> terms);
+        /**
+         * Returns the parameter list of the top-level node of the Boolean function.
+         * 
+         * @returns A vector of Boolean functions.
+         */
+        std::vector<BooleanFunction> get_parameters() const;
 
-        // helper to allow for substitution with reduced amount of copies
-        static void substitute_helper(BooleanFunction& f, const std::string& v, const BooleanFunction& s);
+        /**
+         * Returns the set of variable names used by the Boolean function.
+         *
+         * @returns A set of variable names.
+         */
+        std::set<std::string> get_variable_names() const;
 
-        z3::expr to_z3_internal(z3::context& context, const std::unordered_map<std::string, z3::expr>& input2expr) const;
+        ////////////////////////////////////////////////////////////////////////
+        // Interface: String Translation
+        ////////////////////////////////////////////////////////////////////////
 
-        bool m_invert;
+        /**
+         * Translates the Boolean function into its string representation.
+         * 
+         * @returns The Boolean function as a string.
+         */
+        std::string to_string() const;
 
-        std::string m_variable;
+        /**
+         * Parses a Boolean function from a string expression.
+         * 
+         * @param[in] expression - Boolean function string.
+         * @returns The Boolean function on success, a string error message otherwise.
+         */
+        static std::variant<BooleanFunction, std::string> from_string(const std::string& expression);
 
-        Value m_constant;
+        ////////////////////////////////////////////////////////////////////////
+        // Interface: Simplification / Substitution / Evaluation
+        ////////////////////////////////////////////////////////////////////////
 
-        content_type m_content;
-        operation m_op;
-        std::vector<BooleanFunction> m_operands;
+        /**
+         * Simplifies the Boolean function.
+         * 
+         * @returns The simplified Boolean function.
+         */
+        BooleanFunction simplify() const;
+
+        /**
+         * Substitute a variable name with another one, i.e., renames the variable.
+         * The operation is applied to all instances of the variable in the function.
+         *
+         * @param[in] old_variable_name - The old variable name to substitute.
+         * @param[in] new_variable_name - The new variable name.
+         * @returns The resulting Boolean function.
+         */
+        BooleanFunction substitute(const std::string& old_variable_name, const std::string& new_variable_name) const;
+
+        /**
+         * Substitute a variable with another Boolean function.
+         * The operation is applied to all instances of the variable in the function.
+         *
+         * @param[in] variable_name - The variable to substitute.
+         * @param[in] function - The function replace the variable with.
+         * @returns The resulting Boolean function on success, a string error message otherwise.
+         */
+        std::variant<BooleanFunction, std::string> substitute(const std::string& variable_name, const BooleanFunction& function) const;
+
+        /**
+         * Evaluates a Boolean function comprising only single-bit variables using the given input values.
+         * 
+         * @param[in] inputs - A map from variable name to input value.
+         * @returns The resulting value on success, a string error message otherwise.
+         */
+        std::variant<Value, std::string> evaluate(const std::unordered_map<std::string, Value>& inputs) const;
+
+        /**
+         * Evaluates a Boolean function comprising multi-bit variables using the given input values.
+         * 
+         * @param[in] inputs - A map from variable name to a vector of input values.
+         * @returns The resulting value on success, a string error message otherwise.
+         */
+        std::variant<std::vector<Value>, std::string> evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const;
+
+        /**
+         * Computes the truth table outputs for a Boolean function that comprises <= 10 single-bit variables.
+         * \warning The generation of the truth table is exponential in the number of parameters.
+         * 
+         * @param[in] ordered_variables - A vector describing the order of input variables used to generate the truth table. Defaults to an empty vector.
+         * @param[in] remove_unknown_variables - Set `true` to remove variables from the truth table that are not present within the Boolean function, `false` otherwise. Defaults to `false`.
+         * @returns A vector of values representing the truth table output on success, a string error message otherwise.
+         */
+        std::variant<std::vector<std::vector<Value>>, std::string> compute_truth_table(const std::vector<std::string>& ordered_variables = {}, bool remove_unknown_variables = false) const;
+
+        /**
+         * Translates the Boolean function into the z3 expression representation.
+         *
+         * @param[in,out] context - Z3 context to generate expressions.
+         * @param[in] var2expr - Maps input variables to expression.
+         * @returns Z3 representation of the Boolean function.
+         */
+        z3::expr to_z3(z3::context& context, const std::map<std::string, z3::expr>& var2expr = {}) const;
+
+    private:
+        ////////////////////////////////////////////////////////////////////////
+        // Constructors, Destructors, Operators
+        ////////////////////////////////////////////////////////////////////////
+
+        /// Constructs a Boolean function with a reverse-polish notation node list.
+        explicit BooleanFunction(std::vector<BooleanFunction::Node>&& nodes);
+
+        /** 
+         * Constructs a Boolean function from a single node and an arbitrary list
+         * of Boolean function parameters.
+         * 
+         * @param[in] node - Boolean function node.
+         * @param[in] p - Boolean function node parameters.
+         * @returns Initialized Boolean function.
+         */
+        template<typename... T, typename = std::enable_if_t<std::conjunction_v<std::is_same<T, BooleanFunction>...>>>
+        explicit BooleanFunction(BooleanFunction::Node&& node, T&&... p)
+        {
+            auto size = 1;
+            ((size += p.size()), ...);
+            this->m_nodes.reserve(size);
+
+            (this->m_nodes.insert(this->m_nodes.end(), p.m_nodes.begin(), p.m_nodes.end()), ...);
+            this->m_nodes.emplace_back(std::move(node));
+        }
+
+        /** 
+         * Constructs a Boolean function from a single node and a list of parameters.
+         * 
+         * @param[in] node - Boolean function node.
+         * @param[in] p - Boolean function node parameters.
+         * @returns Initialized Boolean function.
+         */
+        explicit BooleanFunction(BooleanFunction::Node&& node, std::vector<BooleanFunction>&& p);
+
+        ////////////////////////////////////////////////////////////////////////
+        // Internal Interface
+        ////////////////////////////////////////////////////////////////////////
+
+        /// Returns the Boolean function in reverse-polish notation.
+        std::string to_string_in_reverse_polish_notation() const;
+
+        /// Checks whether the Boolean function is valid.
+        ///
+        /// @returns Validated Boolean function on success, error message string otherwise.
+        static std::variant<BooleanFunction, std::string> validate(BooleanFunction&& function);
+
+        /// Computes the coverage value of each node in the Boolean function.
+        std::vector<u32> compute_node_coverage() const;
+
+        /// Implements the Quine-McCluskey algorithm to simplify Boolean functions.
+        ///
+        /// @param[in] function - Boolean function to simplify.
+        /// @returns Simplified boolean function on success, error message string otherwise.
+        static std::variant<BooleanFunction, std::string> quine_mccluskey(const BooleanFunction& function);
+
+        ////////////////////////////////////////////////////////////////////////
+        // Member
+        ////////////////////////////////////////////////////////////////////////
+
+        /// refers to the list of nodes in reverse polish notation
+        std::vector<BooleanFunction::Node> m_nodes{};
     };
 
     template<>
@@ -459,207 +546,229 @@ namespace hal
      * is an abstract base class for either an operation (e.g., AND, XOR) or an 
      * operand (e.g., a signal name variable).
      *
+     * # Developer Note
+     * We deliberately opted to have a single (littered) memory space for a node
+     * i.e. no separation from operation / operand nodes via inheritance, due to 
+     * optimization reasons to keep node data closely together and prevent the 
+     * use of smart pointers to manage memory safely.
+     *
      * @ingroup netlist
      */
-    struct BooleanFunction::Node {
+    struct BooleanFunction::Node final
+    {
         ////////////////////////////////////////////////////////////////////////
         // Member
         ////////////////////////////////////////////////////////////////////////
 
-        /// store node type of Boolean function
-        const u16 type;
-        /// stores bit-size of Boolean function node
-        const u16 size;
+        /// The type of the node.
+        u16 type;
+        /// The bit-size of the node.
+        u16 size;
+        /// The (optional) constant value of the node.
+        std::vector<BooleanFunction::Value> constant{};
+        /// The (optional) index value of the node.
+        u16 index{};
+        /// The (optional) variable name of the node.
+        std::string variable{};
 
         ////////////////////////////////////////////////////////////////////////
         // Constructors, Destructors, Operators
         ////////////////////////////////////////////////////////////////////////
 
-        /// constructor to initialize fields
-        Node(u16 _type, u16 _size);
-        /// default destructor to allow sub-class override
-        virtual ~Node() = default;
+        /**
+         * Constructs an 'operation' node.
+         * 
+         * @param type - The type of the operation.
+         * @param size - The bit-size of the operation.
+         * @returns The node.
+         */
+        static Node Operation(u16 type, u16 size);
 
-        /// comparison operators
+        /**
+         * Constructs a 'constant' node.
+         * 
+         * @param value - The constant value of the node.
+         * @returns The node.
+         */
+        static Node Constant(const std::vector<BooleanFunction::Value> value);
+
+        /**
+         * Constructs an 'index' node.
+         * 
+         * @param index - The index value of the node.
+         * @param size - The bit-size of the node.
+         * @returns The node.
+         */
+        static Node Index(u16 index, u16 size);
+
+        /**
+         * Constructs a 'variable' node.
+         * 
+         * @param variable - The variable name of the node.
+         * @param size - The bit-size of the node.
+         * @returns The node.
+         */
+        static Node Variable(const std::string variable, u16 size);
+
+        /**
+         * Checks whether two Boolean function nodes are equal.
+         * 
+         * @param[in] other - The other Boolean function node.
+         * @returns `true` if the Boolean function nodes are equal, `false` otherwise.
+         */
         bool operator==(const Node& other) const;
+
+        /**
+         * Checks whether two Boolean function nodes are unequal.
+         * 
+         * @param[in] other - The other Boolean function node.
+         * @returns `true` if the Boolean function nodes are unequal, `false` otherwise.
+         */
         bool operator!=(const Node& other) const;
-        bool operator <(const Node& other) const;
+
+        /**
+         * Checks whether this Boolean function node is 'smaller' than the `other` Boolean function node.
+         * 
+         * @param[in] other - The other Boolean function node.
+         * @returns `true` if this Boolean function node is 'smaller', `false` otherwise.
+         */
+        bool operator<(const Node& other) const;
 
         ////////////////////////////////////////////////////////////////////////
         // Interface
         ////////////////////////////////////////////////////////////////////////
 
         /**
-         * Safe-downcast to return a node as operation / operand sub-class.
-         *
-         * @tparam T Sub-class of Node, i.e. OperationNode or OperandNode.
-         * @returns Pointer to sub-class.
+         * Clones the Boolean function node.
+         * 
+         * @returns The cloned Boolean function node. 
          */
-        template<typename T>
-        const T* get_as() const {
-            if ((this->is_operation() && std::is_same_v<T, BooleanFunction::OperationNode>)
-                || (this->is_operand() && std::is_same_v<T, BooleanFunction::OperandNode>)) {
-                return static_cast<const T*>(this);
-            }
-            return nullptr;
-        }
+        Node clone() const;
 
-        /// Clones an node instance.
-        virtual std::unique_ptr<Node> clone() const = 0;
-        /// Human-readable description of node for debugging / logging
-        virtual std::string to_string() const = 0;
+        /**
+         * Translates the Boolean function node into its string representation.
+         * 
+         * @returns The Boolean function node as a string.
+         */
+        std::string to_string() const;
 
-        /// Returns arity of node, see Node::get_arity(u16 type) for details.
+        /**
+         * Returns the arity of the Boolean function node, i.e., the number of parameters.
+         * 
+         * @return The arity. 
+         */
         u16 get_arity() const;
 
         /**
-         * Returns arity of node, i.e how many operand nodes does the node have.
-         * For example, an 'And' node has an arity of 2 as it has 2 operands, a 
-         * 'Not' node has an arity of 1 respectively. Operand nodes such as a 
-         * 'Constant' or 'Variable' have an arity of 0.
+         * Returns the arity for a Boolean function node of the given type, i.e., the number of parameters.
          *
-         * @returns Arity of node.
-         */  
-        static u16 get_arity(u16 type);
+         * @returns The arity.
+         */
+        static u16 get_arity_of_type(u16 type);
 
-        /// Checks whether node is of a specific type.
-        bool is(u16 _type) const;
-        /// Checks whether node is of type 'Constant'.
+        /**
+         *  Checks whether the Boolean function node is of a specific type.
+         * 
+         * @param type - The type to check for.
+         * @returns `true` if the node is of the given type, `false` otherwise.
+         */
+        bool is(u16 type) const;
+
+        /**
+         * Checks whether the Boolean function node is of type `Constant`.
+         * 
+         * @returns `true` if the Boolean function node is of type `Constant`, `false` otherwise.
+         */
         bool is_constant() const;
-        /// Checks whether node is of type 'Index'.
+
+        /**
+         * Checks whether the Boolean function node is of type `Constant` and holds a specific value.
+         * 
+         * @param value - The value to check for.
+         * @returns `true` if the Boolean function node is of type `Constant` and holds the given value, `false` otherwise.
+         */
+        bool has_constant_value(u64 value) const;
+
+        /**
+         * Checks whether the Boolean function node is of type `Index`.
+         * 
+         * @returns `true` if the Boolean function node is of type `Index`, `false` otherwise.
+         */
         bool is_index() const;
-        /// Checks whether node is of type 'Variable'.
+
+        /**
+         * Checks whether the Boolean function node is of type `Index` and holds a specific value.
+         * 
+         * @param value - The value to check for.
+         * @returns `true` if the Boolean function node is of type `Index` and holds the given value, `false` otherwise.
+         */
+        bool has_index_value(u16 value) const;
+
+        /**
+         * Checks whether the Boolean function node is of type `Variable`.
+         * 
+         * @returns `true` if the Boolean function node is of type `Variable`, `false` otherwise.
+         */
         bool is_variable() const;
-        /// Checks whether node is an operation.
+
+        /**
+         * Checks whether the Boolean function node is of type `Variable` and holds a specific variable name.
+         * 
+         * @param variable_name - The variable name to check for.
+         * @returns `true` if the Boolean function node is of type `Variable` and holds the given variable name, `false` otherwise.
+         */
+        bool has_variable_name(const std::string& variable_name) const;
+
+        /**
+         * Checks whether the Boolean function node is an operation node.
+         * 
+         * @returns `true` if the Boolean function node is an operation node, `false` otherwise.
+         */
         bool is_operation() const;
-        /// Checks whether node is an operand, i.e. 'Constant' or 'Variable'.
+
+        /**
+         * Checks whether the Boolean function node is an operand node.
+         * 
+         * @returns `true` if the Boolean function node is an operand node, `false` otherwise.
+         */
         bool is_operand() const;
+
+        /**
+         * Checks whether the Boolean function node is commutative.
+         * 
+         * @returns `true` if the Boolean function node is commutative, `false` otherwise.
+         */
+        bool is_commutative() const;
+
+    private:
+        ////////////////////////////////////////////////////////////////////////
+        // Constructors, Destructors, Operators
+        ////////////////////////////////////////////////////////////////////////
+
+        /// constructor to initialize all Node fields
+        Node(u16 _type, u16 _size, std::vector<BooleanFunction::Value> _constant, u16 _index, std::string variable);
     };
 
     /**
-     * List of node types that are available in a Boolean function.
+     * Holds all node types available in a Boolean function.
      *
      * @ingroup netlist
      */
-    struct BooleanFunction::NodeType final {
-        static constexpr u16 And      = 0x0000;
-        static constexpr u16 Or       = 0x0001;
-        static constexpr u16 Not      = 0x0002;
-        static constexpr u16 Xor      = 0x0003;
+    struct BooleanFunction::NodeType final
+    {
+        static constexpr u16 And = 0x0000;
+        static constexpr u16 Or  = 0x0001;
+        static constexpr u16 Not = 0x0002;
+        static constexpr u16 Xor = 0x0003;
 
-        static constexpr u16 Add      = 0x0010;
+        static constexpr u16 Add = 0x0010;
 
-        static constexpr u16 Concat   = 0x0100;
-        static constexpr u16 Slice    = 0x0101;
-        static constexpr u16 Zext     = 0x0102;
+        static constexpr u16 Concat = 0x0100;
+        static constexpr u16 Slice  = 0x0101;
+        static constexpr u16 Zext   = 0x0102;
 
         static constexpr u16 Constant = 0x1000;
         static constexpr u16 Index    = 0x1001;
         static constexpr u16 Variable = 0x1002;
-    };
-
-    /**
-     * OperationNode refers to an operation node.
-     *
-     * @ingroup netlist
-     */
-    struct BooleanFunction::OperationNode final : public BooleanFunction::Node {
-        ////////////////////////////////////////////////////////////////////////
-        // Constructors, Destructors, Operators
-        ////////////////////////////////////////////////////////////////////////
-
-        /**
-         * Creates an 'OperationNode'.
-         *
-         * @param[in] type - Node type.
-         * @param[in] size - Node bit-size.
-         * @returns An initialized base-class node.
-         */
-        static std::unique_ptr<BooleanFunction::Node> make(u16 type, u16 size);
-
-        /// Comparison operators
-        bool operator==(const OperationNode& other) const;
-        bool operator!=(const OperationNode& other) const;
-        bool operator <(const OperationNode& other) const;
-
-        ////////////////////////////////////////////////////////////////////////
-        // Interface
-        ////////////////////////////////////////////////////////////////////////
-
-        /// Clones instance
-        std::unique_ptr<Node> clone() const override;
-        /// Human-readable description of AST node for debugging / logging
-        std::string to_string() const override;
-
-    private:
-        /// constructor to initialize an operation node.
-        OperationNode(u16 type, u16 size);
-    };
-
-    /**
-     * OperandNode refers to an operand node, i.e. Constant, Index or Variable.
-     *
-     * @ingroup netlist
-     */
-    struct BooleanFunction::OperandNode final : public BooleanFunction::Node {
-        ////////////////////////////////////////////////////////////////////////
-        // Member
-        ////////////////////////////////////////////////////////////////////////
-
-        /// stores constant value
-        const BooleanFunction::Value constant{};
-        /// stores index value
-        const u16 index{};
-        /// stores variable name 
-        const std::string variable{};
-        
-        ////////////////////////////////////////////////////////////////////////
-        // Constructors, Destructors, Operators
-        ////////////////////////////////////////////////////////////////////////
-
-        /**
-         * Creates a constant 'OperandNode'.
-         *
-         * @param[in] constant - Constant value.
-         * @param[in] size - Node bit-size.
-         * @returns An initialized base-class node.
-         */
-        static std::unique_ptr<BooleanFunction::Node> make(BooleanFunction::Value _constant, u16 _size);
-
-        /**
-         * Creates an index 'OperandNode'.
-         *
-         * @param[in] index - Index value.
-         * @param[in] size - Node bit-size.
-         * @returns An initialized base-class node.
-         */
-        static std::unique_ptr<BooleanFunction::Node> make(u16 _index, u16 _size);
-
-        /**
-         * Creates a variable 'OperandNode'.
-         *
-         * @param[in] name - Variable name.
-         * @param[in] size - Node bit-size.
-         * @returns An initialized base-class node.
-         */
-        static std::unique_ptr<BooleanFunction::Node> make(const std::string& _name, u16 _size);
-
-        /// Comparison operators
-        bool operator==(const OperandNode& other) const;
-        bool operator!=(const OperandNode& other) const;
-        bool operator <(const OperandNode& other) const;
-
-        ////////////////////////////////////////////////////////////////////////
-        // Interface
-        ////////////////////////////////////////////////////////////////////////
-
-        /// Clones instance
-        std::unique_ptr<Node> clone() const override;
-        /// Human-readable description of AST node for debugging / logging
-        std::string to_string() const override;
-
-    private:
-        /// Constructor to initialize an 'OperandNode'.
-        OperandNode(u16 _type, u16 _size, BooleanFunction::Value _constant, u16 _index, const std::string& _variable);
     };
 }    // namespace hal

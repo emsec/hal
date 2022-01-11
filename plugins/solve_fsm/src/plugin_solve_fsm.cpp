@@ -67,17 +67,17 @@ namespace hal
             // Special case if a flip-flop has another flip-flop as a direct predecessor
             if (bf.is_empty())
             {
-                bf = BooleanFunction::from_string(std::to_string(input_net->get_id()));
+                bf = std::get<BooleanFunction>(BooleanFunction::from_string(std::to_string(input_net->get_id())));
             }
 
             // find all external inputs. We define external inputs as nets that are inputs to the transition logic but are not bits from the previous state.
-            for (const auto& id_str : bf.get_variables())
+            for (const auto& id_str : bf.get_variable_names())
             {
                 u32 id        = std::stoi(id_str);
                 hal::Net* net = nl->get_net_by_id(id);
                 if (output_net_to_input_net.find(net) == output_net_to_input_net.end())
                 {
-                    external_ids_to_func.insert({id, BooleanFunction::from_string(id_str)});
+                    external_ids_to_func.insert({id, std::get<BooleanFunction>(BooleanFunction::from_string(id_str))});
                     if (std::find(external_ids.begin(), external_ids.end(), id) == external_ids.end())
                     {
                         external_ids.push_back(id);
@@ -89,14 +89,14 @@ namespace hal
             for (const auto& [out, in] : output_net_to_input_net)
             {
                 // check wether output net is part of the expression
-                std::vector<std::string> vars = bf.get_variables();
+                auto vars = bf.get_variable_names();
                 if (std::find(vars.begin(), vars.end(), std::to_string(out->get_id())) == vars.end())
                 {
                     continue;
                 }
 
-                BooleanFunction from = BooleanFunction::from_string(std::to_string(out->get_id()));
-                BooleanFunction to   = BooleanFunction::from_string(std::to_string(in->get_id()));
+                BooleanFunction from = std::get<BooleanFunction>(BooleanFunction::from_string(std::to_string(out->get_id())));
+                BooleanFunction to   = std::get<BooleanFunction>(BooleanFunction::from_string(std::to_string(in->get_id())));
 
                 // check for multidriven nets
                 if (out->get_sources().size() != 1)
@@ -113,7 +113,7 @@ namespace hal
                     to = ~to;
                 }
 
-                bf = bf.substitute(from.to_string(), to);
+                bf = std::get<BooleanFunction>(bf.substitute(from.to_string(), to));
             }
 
             state_net_to_func.insert({input_net->get_id(), bf});
@@ -173,7 +173,7 @@ namespace hal
                 u64 next_state = 0;
                 for (u32 next_state_index = 0; next_state_index < state_size; next_state_index++)
                 {
-                    BooleanFunction::Value new_val = state_net_to_func.at(state_input_net_ids.at(next_state_index)).evaluate(id_str_to_val);
+                    BooleanFunction::Value new_val = std::get<BooleanFunction::Value>(state_net_to_func.at(state_input_net_ids.at(next_state_index)).evaluate(id_str_to_val));
                     if (new_val == BooleanFunction::Value::ONE)
                     {
                         next_state += (1 << next_state_index);

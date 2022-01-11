@@ -59,34 +59,69 @@ namespace hal
                 return std::vector<Gate*>();
             }
 
-            static BooleanFunction get_function_of_gate(const Gate* const gate, std::unordered_map<u32, BooleanFunction>& cache)
+            static BooleanFunction get_function_of_gate(const Gate* const gate, const std::string& output_pin, std::map<std::pair<u32, std::string>, BooleanFunction>& cache)
             {
-                if (auto it = cache.find(gate->get_id()); it != cache.end())
+                if (auto it = cache.find({gate->get_id(), output_pin}); it != cache.end())
                 {
                     return it->second;
                 }
                 else
                 {
-                    BooleanFunction bf = gate->get_boolean_function();
+                    BooleanFunction bf = gate->get_boolean_function(output_pin);
 
-                    for (const std::string& input_pin : bf.get_variables())
+                    std::vector<std::string> input_vars = utils::to_vector(bf.get_variable_names());
+                    while (!input_vars.empty())
                     {
-                        const Net* const input_net = gate->get_fan_in_net(input_pin);
-                        if (input_net == nullptr)
-                        {
-                            // if no net is connected, the input pin name cannot be replaced
-                            log_warning("netlist_utils", "not net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", input_pin, gate->get_id());
-                            return bf;
-                        }
+                        const std::string var = input_vars.back();
+                        input_vars.pop_back();
 
-                        bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));
+                        const PinDirection pin_dir = gate->get_type()->get_pin_direction(var);
+
+                        if (pin_dir == PinDirection::input)
+                        {
+                            const Net* const input_net = gate->get_fan_in_net(var);
+                            if (input_net == nullptr)
+                            {
+                                // if no net is connected, the input pin name cannot be replaced
+                                log_warning("netlist_utils", "no net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", var, gate->get_id());
+                                return bf;
+                            }
+
+                            bf = bf.substitute(var, "net_" + std::to_string(input_net->get_id()));
+                        }
+                        else if ((pin_dir == PinDirection::internal) || (pin_dir == PinDirection::output))
+                        {
+                            BooleanFunction bf_interal = gate->get_boolean_function(var);
+                            if (bf_interal.is_empty())
+                            {
+                                log_warning(
+                                    "netlist_utils", "trying to replace {} in function {} for gate {} and pin {} but cannot find boolean fucntion.", var, bf.to_string(), gate->get_id(), output_pin);
+                                return bf;
+                            }
+
+                            const std::vector<std::string> internal_input_vars = utils::to_vector(bf_interal.get_variable_names());
+                            input_vars.insert(input_vars.end(), internal_input_vars.begin(), internal_input_vars.end());
+
+                            auto substituted = bf.substitute(var, bf_interal);
+                            if (std::get_if<std::string>(&substituted) != nullptr)
+                            {
+                                log_error("netlist", "{}", std::get<std::string>(substituted));
+                                return BooleanFunction();
+                            }
+                            bf = std::get<BooleanFunction>(substituted);
+                        }
                     }
-                    cache.emplace(gate->get_id(), bf);
+
+                    cache.insert({{gate->get_id(), output_pin}, bf});
                     return bf;
                 }
             }
 
-            void subgraph_function_bfs(Net* n, BooleanFunction& result, std::vector<Net*> stack, const std::vector<const Gate*>& subgraph_gates, std::unordered_map<u32, BooleanFunction>& cache)
+            void subgraph_function_bfs(Net* n,
+                                       BooleanFunction& result,
+                                       std::vector<Net*> stack,
+                                       const std::vector<const Gate*>& subgraph_gates,
+                                       std::map<std::pair<u32, std::string>, BooleanFunction>& cache)
             {
                 if (n->get_num_of_sources() > 1)
                 {
@@ -107,11 +142,15 @@ namespace hal
 
                 stack.push_back(n);
 
-                Gate* src_gate = n->get_sources()[0]->get_gate();
+                Gate* src_gate            = n->get_sources()[0]->get_gate();
+                const std::string src_pin = n->get_sources()[0]->get_pin();
 
                 if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
                 {
-                    result = result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate, cache));
+                    if (auto substitution = result.substitute("net_" + std::to_string(n->get_id()), get_function_of_gate(src_gate, src_pin, cache)); std::get_if<0>(&substitution) != nullptr)
+                    {
+                        result = std::get<0>(substitution);
+                    }
 
                     for (Net* sn : src_gate->get_fan_in_nets())
                     {
@@ -121,7 +160,7 @@ namespace hal
             }
         }    // namespace
 
-        BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::unordered_map<u32, BooleanFunction>& cache)
+        BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, std::string>, BooleanFunction>& cache)
         {
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
@@ -150,8 +189,9 @@ namespace hal
                 return BooleanFunction();
             }
 
-            const Gate* start_gate = net->get_sources()[0]->get_gate();
-            BooleanFunction result = get_function_of_gate(start_gate, cache);
+            const Gate* start_gate    = net->get_sources()[0]->get_gate();
+            const std::string src_pin = net->get_sources()[0]->get_pin();
+            BooleanFunction result    = get_function_of_gate(start_gate, src_pin, cache);
 
             for (Net* n : start_gate->get_fan_in_nets())
             {
@@ -163,7 +203,7 @@ namespace hal
 
         BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates)
         {
-            std::unordered_map<u32, BooleanFunction> cache;
+            std::map<std::pair<u32, std::string>, BooleanFunction> cache;
             return get_subgraph_function(net, subgraph_gates, cache);
         }
 
@@ -217,7 +257,7 @@ namespace hal
             return std::make_pair(matrix_id_to_gate, matrix);
         }
 
-        std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<Gate*>& subgraph_gates)
+        std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates)
         {
             std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->get_gate_library());
 
@@ -290,9 +330,22 @@ namespace hal
                 {
                     u32 id = c_net->get_id();
 
-                    if (nl->get_net_by_id(id)->get_num_of_sources() != 0)
+                    if (nl->get_net_by_id(id)->get_num_of_sources() != 0 || nl->get_net_by_id(id)->is_global_input_net())
                     {
                         c_netlist->mark_global_input_net(c_net);
+
+                        // if net had a name annotated at the top module port take that one, otherwise use regular net name
+                        ModulePin* pin   = nl->get_top_module()->get_pin(nl->get_net_by_id(id));
+                        ModulePin* c_pin = c_netlist->get_top_module()->get_pin(nl->get_net_by_id(id));
+                        assert(c_pin != nullptr);
+                        if (pin != nullptr)
+                        {
+                            c_netlist->get_top_module()->set_pin_name(c_pin, pin->get_name());
+                        }
+                        else
+                        {
+                            c_netlist->get_top_module()->set_pin_name(c_pin, c_net->get_name());
+                        }
                     }
                 }
 
@@ -301,9 +354,22 @@ namespace hal
                 {
                     u32 id = c_net->get_id();
 
-                    if (nl->get_net_by_id(id)->get_num_of_destinations() != 0)
+                    if (nl->get_net_by_id(id)->get_num_of_destinations() != 0 || nl->get_net_by_id(id)->is_global_output_net())
                     {
                         c_netlist->mark_global_output_net(c_net);
+
+                        // if net had a name annotated at the top module port take that one, otherwise use regular net name
+                        ModulePin* pin   = nl->get_top_module()->get_pin(nl->get_net_by_id(id));
+                        ModulePin* c_pin = c_netlist->get_top_module()->get_pin(nl->get_net_by_id(id));
+                        assert(c_pin != nullptr);
+                        if (pin != nullptr)
+                        {
+                            c_netlist->get_top_module()->set_pin_name(c_pin, pin->get_name());
+                        }
+                        else
+                        {
+                            c_netlist->get_top_module()->set_pin_name(c_pin, c_net->get_name());
+                        }
                     }
                 }
             }
@@ -629,15 +695,21 @@ namespace hal
 
                         if (sources.front()->get_gate()->is_gnd_gate())
                         {
-                            func = func.substitute(ep->get_pin(), BooleanFunction::Value::ZERO);
+                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(0, 1)); std::get_if<0>(&substitution) != nullptr)
+                            {
+                                func = std::get<0>(substitution);
+                            }
                         }
                         else if (sources.front()->get_gate()->is_vcc_gate())
                         {
-                            func = func.substitute(ep->get_pin(), BooleanFunction::Value::ONE);
+                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(1, 1)); std::get_if<0>(&substitution) != nullptr)
+                            {
+                                func = std::get<0>(substitution);
+                            }
                         }
                     }
 
-                    func = func.optimize_constants();
+                    func = func.simplify();
                 }
 
                 std::string func_str                    = func.to_string();
@@ -748,7 +820,7 @@ namespace hal
                     continue;
                 }
 
-                std::vector<std::string> active_pins = functions.begin()->second.get_variables();
+                auto active_pins = functions.begin()->second.get_variable_names();
 
                 // if there are more fan-in nets than there are active pins, we need to get rid of some nets
                 if (fan_in.size() > active_pins.size())

@@ -339,6 +339,8 @@ namespace hal
         {
             return QString("view %1").arg(mMaxContextId + 1);
         }
+
+        static SettingsItemCheckbox* sSettingNetGroupingToPins;
     Q_SIGNALS:
         /**
          * Q_SIGNAL that notifies about the creation of a new context by the context manager.

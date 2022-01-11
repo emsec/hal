@@ -63,6 +63,8 @@ namespace hal
 
         boolean_function_init(m);
 
+        smt_init(m);
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE

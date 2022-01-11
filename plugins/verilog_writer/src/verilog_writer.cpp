@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    const std::set<std::string> VerilogWriter::valid_types = {"string", "integer", "floating_point", "bit_value", "bit_vector"};
+    const std::set<std::string> VerilogWriter::valid_types = {"string", "integer", "floating_point", "bit_value", "bit_vector", "bit_string"};
 
     bool VerilogWriter::write(Netlist* netlist, const std::filesystem::path& file_path)
     {
@@ -63,6 +63,7 @@ namespace hal
             log_error("verilog_writer", "unable to open '{}'.", file_path.string());
             return false;
         }
+        file << "`timescale 1 ps/1 ps" << std::endl;
         file << res_stream.str();
         file.close();
 
@@ -91,7 +92,15 @@ namespace hal
             }
         }
         module_type_aliases[module] = get_unique_alias(module_type_occurrences, module_type);
-        res_stream << "module " << escape(module_type_aliases.at(module));
+
+        if (const std::string& design_name = module->get_netlist()->get_design_name(); module_type_aliases.at(module) == "top_module" && !design_name.empty())
+        {
+            res_stream << "module " << escape(design_name);
+        }
+        else
+        {
+            res_stream << "module " << escape(module_type_aliases.at(module));
+        }
 
         std::unordered_map<const DataContainer*, std::string> aliases;
         std::unordered_map<std::string, u32> identifier_occurrences;
@@ -144,15 +153,14 @@ namespace hal
             }
         }
 
-        std::vector<Net*> input_nets_tmp = module->get_input_nets();
-        std::unordered_set<Net*> port_nets(input_nets_tmp.begin(), input_nets_tmp.end());
-        std::vector<Net*> output_nets_tmp = module->get_output_nets();
+        std::unordered_set<Net*> port_nets       = module->get_input_nets();
+        std::unordered_set<Net*> output_nets_tmp = module->get_output_nets();
+        port_nets.reserve(output_nets_tmp.size());
         port_nets.insert(output_nets_tmp.begin(), output_nets_tmp.end());
-
 
         for (Net* net : module->get_internal_nets())
         {
-            if (port_nets.find(net) != port_nets.end()) 
+            if (port_nets.find(net) != port_nets.end())
             {
                 continue;
             }
@@ -432,19 +440,36 @@ namespace hal
         else if (type == "bit_vector")
         {
             u32 len = value.size() * 4;
-            if (value.at(0) == '0' || value.at(0) == '1')
-            {
-                len -= 3;
-            }
-            else if (value.at(0) == '2' || value.at(0) == '3')
-            {
-                len -= 2;
-            }
-            else if (value.at(0) >= '4' && value.at(0) <= '7')
-            {
-                len -= 1;
-            }
+            // if (value.at(0) == '0' || value.at(0) == '1')
+            // {
+            //     len -= 3;
+            // }
+            // else if (value.at(0) == '2' || value.at(0) == '3')
+            // {
+            //     len -= 2;
+            // }
+            // else if (value.at(0) >= '4' && value.at(0) <= '7')
+            // {
+            //     len -= 1;
+            // }
             res_stream << len << "'h" << value;
+        }
+        else if (type == "bit_string")
+        {
+            u32 len = value.size();
+            // if (value.at(0) == '0' || value.at(0) == '1')
+            // {
+            //     len -= 3;
+            // }
+            // else if (value.at(0) == '2' || value.at(0) == '3')
+            // {
+            //     len -= 2;
+            // }
+            // else if (value.at(0) >= '4' && value.at(0) <= '7')
+            // {
+            //     len -= 1;
+            // }
+            res_stream << len << "'b" << value;
         }
         else
         {
