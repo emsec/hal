@@ -75,8 +75,11 @@ namespace hal
 
             remove_unwanted_parameters_from_netlist(m_partial_netlist.get());
 
-            m_simulator_dir = "/mnt/scratch/nils.albartus/simulation_100s_spi/";
+            //m_simulator_dir = "/mnt/scratch/nils.albartus/simulation_100s_spi/";
+            m_simulator_dir = directory();
             m_design_name   = m_partial_netlist->get_design_name();
+            m_compiler      = get_engine_property("compiler");
+
             if (m_design_name.empty())
             {
                 m_design_name = "dummy";
@@ -159,11 +162,12 @@ namespace hal
             std::stringstream callbacks;
             for (const auto& input_net : simInput->get_input_nets())
             {
-                std::string net_name = input_net->get_name();
+                std::string net_name = escape_net_name(input_net->get_name());
                 std::stringstream callback;
-                callback << "  std::string " << net_name << " = \"" << net_name << "\";" << std::endl;
-                callback << "  if (!sp.registerCallback(" << net_name << "_str, set_simulation_value, &dut->" << escape_net_name(net_name) << ")) {" << std::endl;
-                callback << "    std::cerr << \"cannot initialize callback for net <\" << " << net_name << "n1467_str << \">\" << std::endl;" << std::endl;
+                callback << std::endl;
+                callback << "  std::string " << net_name << "_str = \"" << input_net->get_name() << "\";" << std::endl;
+                callback << "  if (!sp.registerCallback(" << net_name << "_str, set_simulation_value, &dut->" << net_name << ")) {" << std::endl;
+                callback << "    std::cerr << \"cannot initialize callback for net " << net_name << "\" << std::endl;" << std::endl;
                 callback << "  }" << std::endl;
                 callback << std::endl;
 
@@ -172,7 +176,7 @@ namespace hal
 
             testbench_cpp = utils::replace(testbench_cpp, std::string("<set_callbacks>"), callbacks.str());
 
-            std::ofstream testbench_cpp_file(m_simulator_dir / "saleae_parser.cpp");
+            std::ofstream testbench_cpp_file(m_simulator_dir / "testbench.cpp");
             testbench_cpp_file << testbench_cpp;
             testbench_cpp_file.close();
 
@@ -196,8 +200,10 @@ namespace hal
                                         "-Wno-fatal",
                                         "--MMD",
                                         "-trace",
-                                        "--trace_threads 1",
-                                        "--threads 1",
+                                        "--trace-threads",
+                                        "1",
+                                        "--threads",
+                                        "1",
                                         "-y",
                                         "gate_definitions/",
                                         "--Mdir",
@@ -220,6 +226,11 @@ namespace hal
 
                     std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
                     retval.push_back(m_design_name + ".v");
+                    if (!m_compiler.empty())
+                    {
+                        retval.push_back("--compiler");
+                        retval.push_back(m_compiler);
+                    }
                     return retval;
                 }
                 break;
