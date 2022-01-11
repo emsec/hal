@@ -125,7 +125,7 @@ namespace hal
                 auto pinGroup = mod->get_pin_group(onDroppedParentItem->getData(sNameColumn).toString().toStdString());
                 bool ret = mod->assign_pin_to_group(pinGroup, droppedPin);
                 if(ret){
-                    ret = mod->move_pin_within_group(pinGroup, droppedPin, desiredIndex);
+                    ret = mod->move_pin_within_group(pinGroup, droppedPin, bottomEdge ? desiredIndex+1 : desiredIndex);
                     if(ret)
                         return true;
                     return false;
