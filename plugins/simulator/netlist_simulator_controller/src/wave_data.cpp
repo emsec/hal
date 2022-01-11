@@ -112,7 +112,7 @@ namespace hal {
 
     int WaveData::get_value_at(u64 t) const
     {
-        return intValue(t);
+        return t;
     }
 
     std::vector<std::pair<u64,int>> WaveData::get_events() const
