@@ -101,7 +101,7 @@ namespace hal
         }
     }
 
-    std::string Netlist::get_design_name() const
+    const std::string& Netlist::get_design_name() const
     {
         return m_design_name;
     }
@@ -115,7 +115,7 @@ namespace hal
         }
     }
 
-    std::string Netlist::get_device_name() const
+    const std::string& Netlist::get_device_name() const
     {
         return m_device_name;
     }

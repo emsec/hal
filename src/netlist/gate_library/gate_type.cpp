@@ -5,7 +5,7 @@
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry"};
+    std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry", "pll"};
 
     GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
         : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(component))

@@ -17,10 +17,9 @@
 !hgl_parser/**/*
 !hgl_writer*
 !hgl_writer/**/*
-!netlist_simulator*
-!netlist_simulator/**/*
 !python_shell*
 !python_shell/**/*
+!simulator
 !solve_fsm*
 !solve_fsm/**/*
 !verilog_parser*

@@ -117,7 +117,7 @@ namespace hal
          *
          * @returns The name of the design.
          */
-        std::string get_design_name() const;
+        const std::string& get_design_name() const;
 
         /**
          * Set the name of the design.
@@ -131,7 +131,7 @@ namespace hal
          *
          * @return The name of the target device.
          */
-        std::string get_device_name() const;
+        const std::string& get_device_name() const;
 
         /**
          * Set the name of the target device.
