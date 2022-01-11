@@ -37,12 +37,12 @@ namespace hal {
         QFileInfo finfo(QString::fromStdString(mEngine->get_simulation_input()->get_saleae_input_file()));
         QFile fsaleae(finfo.absoluteFilePath());
         if (!fsaleae.open(QIODevice::ReadOnly)) return;
-        QString filesToCopy = finfo.fileName();
+        QString saleaeFilesToCopy = finfo.fileName();
         for (QByteArray line : fsaleae.readAll().split('\n'))
         {
-            QList<QByteArray> words = line.split(',');
-            if (words.size()>=2)
-                filesToCopy += " digital_" + words.at(0).trimmed() + ".bin";
+            QList<QByteArray> abbrev = line.split(',');
+            if (abbrev.size()>=2)
+                saleaeFilesToCopy += " digital_" + abbrev.at(0).trimmed() + ".bin";
         }
 
         QDir localDir(QString::fromStdString(mEngine->directory()));
@@ -57,19 +57,21 @@ namespace hal {
             return abortOnError();
         }
         ff.write("set -x\n");  // echo commands
-        ff.write(QString("if ssh %1 mkdir -p /tmp/%2; then\n").arg(hostname).arg(remoteDir).toUtf8());
-        ff.write(QString("   RDIR=/tmp/%1\n").arg(remoteDir).toUtf8());
+        ff.write("HOSTNAME=" + hostname.toUtf8() + "\n");
+        ff.write("LOCALDIR=" + localDir.absolutePath().toUtf8() + "\n");
+        ff.write(QString("if ssh ${HOSTNAME} mkdir -p /tmp/%1; then\n").arg(remoteDir).toUtf8());
+        ff.write(QString("   REMOTEDIR=/tmp/%1\n").arg(remoteDir).toUtf8());
         ff.write("else\n");
-        ff.write(QString("   ssh %1 mkdir %2\n").arg(hostname).arg(remoteDir).toUtf8());
-        ff.write(QString("   RDIR=%1\n").arg(remoteDir).toUtf8());
+        ff.write(QString("   ssh ${HOSTNAME} mkdir %1\n").arg(remoteDir).toUtf8());
+        ff.write(QString("   REMOTEDIR=%1\n").arg(remoteDir).toUtf8());
         ff.write("fi\n");
         ff.write("set -e\n");  // bailout on error
-        ff.write(QString("cd %1; tar -czf - %2 | ssh %3 \"cd ${RDIR} ; tar -xzf -\"\n").arg(finfo.absolutePath()).arg(filesToCopy).arg(hostname).toUtf8());
-        ff.write(QString("tar -czf - %1 | ssh %2 \"cd ${RDIR} ; tar -xzf -\"\n").arg(localDir.absolutePath()).arg(hostname).toUtf8());
+        ff.write("tar -czf - ${LOCALDIR} | ssh ${HOSTNAME} \"cd ${REMOTEDIR} ; tar -xzf -\"\n");
+        ff.write(QString("cd %1; tar -czf - %2 | ssh ${HOSTNAME} \"cd ${REMOTEDIR}${LOCALDIR} ; tar -xzf -\"\n").arg(finfo.absolutePath()).arg(saleaeFilesToCopy).toUtf8());
         mNumberLines = mEngine->numberCommandLines();
         for (int i=0; i<mNumberLines; i++)
         {
-            QString remoteCmd = QString("ssh %1 \"cd ${RDIR}%2 ;").arg(hostname).arg(localDir.absolutePath());
+            QString remoteCmd("ssh ${HOSTNAME} \"cd ${REMOTEDIR}${LOCALDIR} ;");
             for (const std::string s : mEngine->commandLine(i))
             {
                 remoteCmd += " " + QString::fromStdString(s);
@@ -77,11 +79,11 @@ namespace hal {
             remoteCmd +=  QString("\"\n");
             ff.write(remoteCmd.toUtf8());
         }
-        ff.write(QString("ssh %1 \"cd ${RDIR}%2 ; gzip -c %3\" | gzip -dc > %4\n")
+        ff.write(QString("ssh %1 \"cd ${REMOTEDIR}%2 ; gzip -c %3\" | gzip -dc > %4\n")
                  .arg(hostname)
                  .arg(localDir.absolutePath())
                  .arg(resultFile).arg(localDir.absoluteFilePath(resultFile)).toUtf8());
-//        ff.write(QString("ssh %1 \"rm -rf ${RDIR}\"\n").arg(hostname).toUtf8());
+//        ff.write(QString("ssh %1 \"rm -rf ${REMOTEDIR}\"\n").arg(hostname).toUtf8());
         ff.close();
         ff.setPermissions(QFileDevice::ReadOwner|QFileDevice::WriteOwner|QFileDevice::ExeOwner);
 
