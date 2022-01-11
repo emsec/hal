@@ -42,8 +42,8 @@ namespace hal
             itemType type = getTypeOfItem(item);
             if(type == itemType::portMultiBit)
                 return defaultFlags | Qt::ItemIsDropEnabled;
-            else if(type == itemType::pin && parentItem != mRootItem)//only case that should be possible
-                return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+            else if(type == itemType::pin)// && parentItem != mRootItem)//only case that should be possible
+                return defaultFlags | Qt::ItemIsDragEnabled;// | Qt::ItemIsDropEnabled;
             if(parentItem == mRootItem && type == itemType::pin)
                 return defaultFlags;
         }
@@ -73,71 +73,78 @@ namespace hal
 
     bool ModulePinsTreeModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
     {
-        //ROW IS USED FOR BETWEEN ITEMS,YES!!!
-        qDebug() << "DROPPED A BOI with info:";
-        qDebug() << "Row: " << row;
-        qDebug() << "Column: " << column;
+        Q_UNUSED(action)
+        Q_UNUSED(column)
 
-        //move_pin_within_group
-        //index through get_group of the pin class
-        if(row != -1)//inserted between items
+        auto droppedItem = mNameToTreeItem.value(data->text());
+        auto droppedParentItem = droppedItem->getParent();
+        auto mod = gNetlist->get_module_by_id(mModuleId);
+        auto droppedPin = mod->get_pin(droppedItem->getData(sNameColumn).toString().toStdString());
+        auto ownRow = droppedItem->getOwnRow();
+
+        if(row != -1)//between items
         {
-            auto droppedItem = mNameToTreeItem.value(data->text());
-            auto parentItem = droppedItem->getParent();
-            auto mod = gNetlist->get_module_by_id(mModuleId);
-            auto ownRow = droppedItem->getOwnRow();
-            //check if dropped on adjacent positions, if yes, ignore it
-            if(ownRow == row || ownRow+1 == row)
-                return false;
+            auto onDroppedParentItem = parent.isValid() ? getItemFromIndex(parent) : mRootItem;
+            bool bottomEdge = row == onDroppedParentItem->getChildCount();
+            auto onDroppedItem = bottomEdge ? onDroppedParentItem->getChild(row-1) : onDroppedParentItem->getChild(row);
+            auto onDroppedPin = mod->get_pin(onDroppedItem->getData(sNameColumn).toString().toStdString());
+            auto desiredIndex = onDroppedPin->get_group().second;
+            TreeItem* newItem = new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn)
+                                             << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
+            newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
 
-            //edge case (literally bottom edge)
-            if(row == droppedItem->getParent()->getChildCount())
+            //same-parent (parent != root): move withing same group
+            if(onDroppedParentItem == droppedParentItem && onDroppedParentItem != mRootItem)
             {
-                auto onDroppedItem = droppedItem->getParent()->getChild(row-1);
-                auto onDroppedPin = mod->get_pin(onDroppedItem->getData(sNameColumn).toString().toStdString());
-                auto droppedPin = mod->get_pin(droppedItem->getData(sNameColumn).toString().toStdString());
-                auto desiredIndex = onDroppedPin->get_group().second;
-                TreeItem* newItem = new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn)
-                                                 << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
-                newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
+                if(ownRow == row || ownRow+1 == row)
+                    return false;
 
                 removeItem(droppedItem);
-                insertItem(newItem, parentItem, row-1);
                 mIgnoreNextPinsChanged = true;
-                mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
-                return true;
-            }
-            else
-            {
-                auto onDroppedItem = droppedItem->getParent()->getChild(row);//"old" item (to get the old index)
-                auto onDroppedPin = mod->get_pin(onDroppedItem->getData(sNameColumn).toString().toStdString());
-                auto droppedPin = mod->get_pin(droppedItem->getData(sNameColumn).toString().toStdString());
-                auto desiredIndex = onDroppedPin->get_group().second;
-                TreeItem* newItem = new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn)
-                                                 << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
-                newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
-
-                //remove old item:
-                removeItem(droppedItem);
-                //insert new item based in the oldIndex
-                if(ownRow < row){
-                    insertItem(newItem, parentItem, row-1);
-                    desiredIndex--;
+                if(bottomEdge)
+                {
+                    insertItem(newItem, droppedParentItem, row-1);
+                    mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
                 }
                 else
-                    insertItem(newItem, parentItem, row);
-
-                mIgnoreNextPinsChanged = true;
-                mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
+                {
+                    if(ownRow < row){
+                        insertItem(newItem, droppedParentItem, row-1);
+                        desiredIndex--;
+                    }
+                    else
+                        insertItem(newItem, droppedParentItem, row);
+                    mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
+                }
                 return true;
             }
 
-        }
+            //different parents v1 (dropped's parent = mRoot, onDropped's parent=group)
+            if(droppedParentItem == mRootItem && onDroppedParentItem != mRootItem)
+            {
+                auto pinGroup = mod->get_pin_group(onDroppedParentItem->getData(sNameColumn).toString().toStdString());
+                bool ret = mod->assign_pin_to_group(pinGroup, droppedPin);
+                if(ret){
+                    ret = mod->move_pin_within_group(pinGroup, droppedPin, desiredIndex);
+                    if(ret)
+                        return true;
+                    return false;
+                }
+                return false;
+            }
+            //different parents v2(droppedItem's parent != root, ondropped's != root)
 
-        if(parent.isValid())
+        }
+        else// on item
         {
-            auto item = getItemFromIndex(parent);
-            qDebug() << "parent-name: " << item->getData(sNameColumn).toString();
+            auto onDroppedItem = getItemFromIndex(parent);
+            auto onDroppedGroup = mod->get_pin_group(onDroppedItem->getData(sNameColumn).toString().toStdString());
+            //on group (dropped parent = mRoot)
+            if(droppedParentItem == mRootItem)
+            {
+                mod->assign_pin_to_group(onDroppedGroup, droppedPin);
+                return true;
+            }
         }
         return false;
     }
