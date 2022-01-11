@@ -24,40 +24,42 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
+
 #include <memory>
 #include <unordered_map>
 
-namespace hal {
+namespace hal
+{
 
-class Netlist;
+    class Netlist;
 
-class PLUGIN_API VerilatorSimulatorPlugin : public BasePluginInterface {
-    static std::string s_engine_name;
+    class PLUGIN_API VerilatorSimulatorPlugin : public BasePluginInterface
+    {
+        static std::string s_engine_name;
 
-public:
-    /**
+    public:
+        /**
          * Get the name of the plugin.
          *
          * @returns The name of the plugin.
          */
-    std::string get_name() const override;
+        std::string get_name() const override;
 
-    /**
+        /**
          * Get the version of the plugin.
          *
          * @returns The version of the plugin.
          */
-    std::string get_version() const override;
+        std::string get_version() const override;
 
-    /**
-     * Creates instance and registers with NetlistSimulatorController
-     */
-    void on_load() override;
+        /**
+         * Creates instance and registers with NetlistSimulatorController
+         */
+        void on_load() override;
 
-    /**
-     * Unregisters and delete instance
-     */
-    void on_unload() override;
-
-};
-} // namespace hal
+        /**
+         * Unregisters and delete instance
+         */
+        void on_unload() override;
+    };
+}    // namespace hal

@@ -25,19 +25,6 @@ namespace hal
 {
     namespace verilator
     {
-        namespace converter
-        {
-            std::vector<std::string> get_vector_for_const_char(const char** txt)
-            {
-                std::vector<std::string> retval;
-                for (int i = 0; txt[i]; i++)
-                {
-                    retval.push_back(std::string(txt[i]));
-                }
-                return retval;
-            }
-        }    // namespace converter
-
         void remove_unwanted_parameters_from_netlist(Netlist* nl)
         {
             for (const auto& gate : nl->get_gates())
@@ -194,65 +181,56 @@ namespace hal
             switch (lineIndex)
             {
                 case 0: {
-                    const char* cl[] = {"verilator",
-                                        "-I.",
-                                        "-Wall",
-                                        "-Wno-fatal",
-                                        "--MMD",
-                                        "-trace",
-                                        "--trace-threads",
-                                        "1",
-                                        "--threads",
-                                        "1",
-                                        "-y",
-                                        "gate_definitions/",
-                                        "--Mdir",
-                                        "obj_dir",
-                                        "-O3",
-                                        "--noassert",
-                                        "-CFLAGS",
-                                        "-O3",
-                                        "-LDFLAGS",
-                                        "-lstdc++fs",
-                                        "--exe",
-                                        "-cc",
-                                        "-DSIM_VERILATOR",
-                                        "--trace-depth",
-                                        "2",
-                                        "testbench.cpp",
-                                        "saleae_parser.cpp",
-                                        "saleae_file.cpp",
-                                        nullptr};
+                    std::vector<std::string> retval = {"verilator",
+                                                       "-I.",
+                                                       "-Wall",
+                                                       "-Wno-fatal",
+                                                       "--MMD",
+                                                       "-trace",
+                                                       "--trace-threads",
+                                                       "1",
+                                                       "--threads",
+                                                       "1",
+                                                       "-y",
+                                                       "gate_definitions/",
+                                                       "--Mdir",
+                                                       "obj_dir",
+                                                       "-O3",
+                                                       "--noassert",
+                                                       "-CFLAGS",
+                                                       "-O3",
+                                                       "-LDFLAGS",
+                                                       "-lstdc++fs",
+                                                       "--exe",
+                                                       "-cc",
+                                                       "-DSIM_VERILATOR",
+                                                       "--trace-depth",
+                                                       "2",
+                                                       "testbench.cpp",
+                                                       "saleae_parser.cpp",
+                                                       "saleae_file.cpp",
+                                                       m_design_name + ".v"};
 
-                    std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
-                    retval.push_back(m_design_name + ".v");
                     if (!m_compiler.empty())
                     {
                         retval.push_back("--compiler");
                         retval.push_back(m_compiler);
                     }
                     return retval;
+                    break;
                 }
-                break;
                 case 1: {
-                    const char* cl[]                = {"make", "-j4", "--no-print-directory", "-C", "obj_dir/", "-f", nullptr};
-                    std::vector<std::string> retval = converter::get_vector_for_const_char(cl);
-                    retval.push_back("V" + m_design_name + ".mk");
-
-                    retval[1] = "-j" + std::to_string(m_num_of_threads);
-                    return retval;
+                    return {"make", "-j" + std::to_string(m_num_of_threads), "--no-print-directory", "-C", "obj_dir/", "-f", "V" + m_design_name + ".mk"};
+                    break;
                 }
-                break;
                 case 2: {
-                    std::vector<std::string> retval;
-                    retval.push_back("obj_dir/V" + m_design_name);
-                    return retval;
+                    return {"obj_dir/V" + m_design_name};
+                    break;
                 }
-                break;
                 default:
                     break;
             }
-            return std::vector<std::string>();
+            return {};
         }
 
         VerilatorEngine::VerilatorEngine(const std::string& nam) : SimulationEngineScripted(nam)
