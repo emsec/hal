@@ -256,7 +256,7 @@ namespace hal
         return std::vector<const Net*>();
     }
 
-    void NetlistSimulatorController::parse_vcd(const std::string& filename, FilterInputFlag filter, bool silent)
+    bool NetlistSimulatorController::parse_vcd(const std::string& filename, FilterInputFlag filter, bool silent)
     {
         VcdSerializer reader;
 
@@ -291,8 +291,14 @@ namespace hal
 
             if (waveFound) mWaveDataList->incrementSimulTime(reader.maxTime());
         }
+        else
+        {
+            return false;
+        }
+        
         checkReadyState();
         Q_EMIT parseComplete();
+        return true;
     }
 
     void NetlistSimulatorController::parse_csv(const std::string& filename, FilterInputFlag filter, u64 timescale)

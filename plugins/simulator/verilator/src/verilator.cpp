@@ -72,10 +72,6 @@ namespace hal
                 m_design_name = "dummy";
                 log_warning("verilator", "no design name for partial metlist, set to '{}'.", m_design_name);
             }
-            else
-            {
-                std::cerr << "m_design_name = <" << m_design_name << ">" << std::endl;
-            }
 
             std::filesystem::path netlist_verilog = m_simulator_dir / std::string(m_partial_netlist->get_design_name() + ".v");
 

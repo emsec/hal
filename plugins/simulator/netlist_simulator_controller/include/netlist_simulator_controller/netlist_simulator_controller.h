@@ -231,7 +231,7 @@ public:
      * @param[in] filename the filename to read
      * @param[in] filter filter to select waveform data from file
      */
-    void parse_vcd(const std::string& filename, FilterInputFlag filter, bool silent=false);
+    bool parse_vcd(const std::string& filename, FilterInputFlag filter, bool silent=false);
 
     /**
      * Parse CSV file and set wave data

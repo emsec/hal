@@ -133,7 +133,6 @@ namespace hal
 
         private:
             bool write_testbench_files(SimulationInput* simInput);
-            u64 m_partial_testbenches = 0;
             int m_num_of_threads      = 4;
             std::string m_compiler;
         };

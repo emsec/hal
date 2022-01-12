@@ -13,7 +13,7 @@ if(PL_NETLIST_SIMULATOR OR PL_SIMULATOR OR BUILD_ALL_PLUGINS)
                    PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/netlist_simulator.rst
                    LINK_LIBRARIES PUBLIC netlist_simulator_controller)
 
-    add_subdirectory(test)
+    #add_subdirectory(test)
 
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         add_sanitizers(netlist_simulator)
