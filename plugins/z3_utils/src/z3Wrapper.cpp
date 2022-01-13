@@ -58,8 +58,11 @@ namespace hal
                     auto start_index = line.find_first_of('|') + 1;    // variable name starts after the '|'
                     auto end_index   = line.find_first_of('|', start_index);
 
-                    if (start_index == std::string::npos + 1 || end_index == std::string::npos) {
-                        log_debug("z3_utils", "Some variables seem to be of other format than net ids. Some wrapper functions are specifically desigend for net ids. Be careful when using the wrapper with this expression.");
+                    if (start_index == std::string::npos + 1 || end_index == std::string::npos)
+                    {
+                        log_debug("z3_utils",
+                                  "Some variables seem to be of other format than net ids. Some wrapper functions are specifically desigend for net ids. Be careful when using the wrapper with this "
+                                  "expression.");
                         continue;
                     }
 
@@ -69,11 +72,11 @@ namespace hal
                 }
             }
 
-            std::sort(m_inputs_net_ids.begin(), m_inputs_net_ids.end()); 
+            std::sort(m_inputs_net_ids.begin(), m_inputs_net_ids.end());
 
-            for (const u32 net_id : m_inputs_net_ids) 
+            for (const u32 net_id : m_inputs_net_ids)
             {
-                z3::expr z3_expr  = m_ctx->bv_const(std::to_string(net_id).c_str(), 1);
+                z3::expr z3_expr = m_ctx->bv_const(std::to_string(net_id).c_str(), 1);
                 m_inputs_z3_expr.push_back(z3_expr);
                 m_input_mapping_hal_to_z3.insert({net_id, z3_expr});
             }
@@ -152,7 +155,7 @@ namespace hal
 
             const std::string program_name    = filename.substr(0, filename.size() - 2);
             const std::string compile_command = "g++ -o " + program_name + " " + filename + " -O3";
-            int res = system(compile_command.c_str());
+            int res                           = system(compile_command.c_str());
             UNUSED(res);
 
             log_debug("z3_utils", "{}", compile_command);
@@ -180,7 +183,7 @@ namespace hal
                 pclose(pipe);
 
                 const u32 count = std::stoi(result);
-                double cv       =  (double)(count) / (double)(num_evaluations);
+                double cv       = (double)(count) / (double)(num_evaluations);
 
                 log_debug("z3_utils", "calculation done");
 
@@ -208,7 +211,7 @@ namespace hal
         bool z3Wrapper::write_verilog_file(const std::filesystem::path& path, const std::map<u32, bool>& control_mapping) const
         {
             // Convert z3 expr to boolean function in verilog
-            auto converter    = VerilogConverter();
+            auto converter = VerilogConverter();
             converter.set_control_mapping(control_mapping);
             auto verilog_file = converter.convert_z3_expr_to_func(*this);
 
@@ -282,12 +285,14 @@ namespace hal
             m_expr = std::make_unique<z3::expr>(m_expr->simplify());
             extract_function_inputs();
         }
-        */ 
+        */
 
-        void z3Wrapper::remove_static_inputs(const Netlist* nl) {
+        void z3Wrapper::remove_static_inputs(const Netlist* nl)
+        {
             auto new_expr = *m_expr;
-            for (const auto& v : nl->get_vcc_gates()) {
-                auto id = v->get_fan_out_nets().front()->get_id();
+            for (const auto& v : nl->get_vcc_gates())
+            {
+                auto id       = v->get_fan_out_nets().front()->get_id();
                 z3::expr v_ex = m_ctx->bv_const(std::to_string(id).c_str(), 1);
 
                 z3::expr_vector from_vec(*m_ctx);
@@ -299,8 +304,9 @@ namespace hal
                 new_expr = new_expr.substitute(to_vec, from_vec);
             }
 
-            for (const auto& g : nl->get_gnd_gates()) {
-                auto id = g->get_fan_out_nets().front()->get_id();
+            for (const auto& g : nl->get_gnd_gates())
+            {
+                auto id       = g->get_fan_out_nets().front()->get_id();
                 z3::expr g_ex = m_ctx->bv_const(std::to_string(id).c_str(), 1);
 
                 z3::expr_vector from_vec(*m_ctx);
@@ -320,7 +326,7 @@ namespace hal
         {
             std::vector<BooleanFunction::Value> tt(1 << m_inputs_net_ids.size());
 
-            for (u32 input = 0; input < (1 << m_inputs_net_ids.size()); input++)
+            for (u32 input = 0; input < (u32)(1 << m_inputs_net_ids.size()); input++)
             {
                 z3::expr eval_expr = *m_expr;
 
@@ -330,7 +336,7 @@ namespace hal
                 for (u32 index = 0; index < m_inputs_net_ids.size(); index++)
                 {
                     z3::expr val = ((input >> index) & 1) ? m_ctx->bv_val(1, 1) : m_ctx->bv_val(0, 1);
-                    z3::expr var = m_input_mapping_hal_to_z3.at(m_inputs_net_ids.at(index)); 
+                    z3::expr var = m_input_mapping_hal_to_z3.at(m_inputs_net_ids.at(index));
 
                     from_vec.push_back(val);
                     to_vec.push_back(var);
@@ -344,11 +350,11 @@ namespace hal
                 }
 
                 BooleanFunction::Value eval = (eval_expr.get_numeral_uint() == 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO;
-                tt.at(input) = eval;
+                tt.at(input)                = eval;
             }
 
             return tt;
-        }   
+        }
 
         z3::expr z3Wrapper::get_expr() const
         {
