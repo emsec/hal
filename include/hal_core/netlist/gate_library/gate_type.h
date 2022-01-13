@@ -61,7 +61,7 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<GateTypeProperty>::data;
+    std::map<GateTypeProperty,std::string> EnumStrings<GateTypeProperty>::data;
 
     /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.

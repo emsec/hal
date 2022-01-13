@@ -41,5 +41,5 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<AsyncSetResetBehavior>::data;
+    std::map<AsyncSetResetBehavior, std::string> EnumStrings<AsyncSetResetBehavior>::data;
 }    // namespace hal

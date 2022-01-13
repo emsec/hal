@@ -15,7 +15,7 @@ namespace hal
 
         py_boolean_function_value.value("ZERO", BooleanFunction::ZERO, R"(Represents a logical 0.)")
             .value("ONE", BooleanFunction::ONE, R"(Represents a logical 1.)")
-            .value("Z", BooleanFunction::X, R"(Represents a high-impedance value.)")
+            .value("Z", BooleanFunction::Z, R"(Represents a high-impedance value.)")
             .value("X", BooleanFunction::X, R"(Represents an undefined value.)")
             .export_values();
 
@@ -24,6 +24,22 @@ namespace hal
             Translates the Boolean function value into its string representation.
 
             :returns: The value as a string.
+            :rtype: str
+        )");
+
+        py_boolean_function.def_static("to_bin", &BooleanFunction::to_bin, py::arg("values"), R"(
+            Get the vector of values as a binary string.
+
+            :param list[hal_py.BooleanFunction.Value] values: The vector of values.
+            :returns: A binary string representing the concatenated values.
+            :rtype: str
+        )");
+
+        py_boolean_function.def_static("to_hex", &BooleanFunction::to_hex, py::arg("values"), R"(
+            Get the vector of values as a hexadecimal string.
+
+            :param list[hal_py.BooleanFunction.Value] values: The vector of values.
+            :returns: A hexadecimal string representing the concatenated values.
             :rtype: str
         )");
 

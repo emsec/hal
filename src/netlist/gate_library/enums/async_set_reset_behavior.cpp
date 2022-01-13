@@ -3,5 +3,10 @@
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<AsyncSetResetBehavior>::data = {"L", "H", "N", "T", "X", "undef"};
+    std::map<AsyncSetResetBehavior, std::string> EnumStrings<AsyncSetResetBehavior>::data = {{AsyncSetResetBehavior::L, "L"},
+                                                                                             {AsyncSetResetBehavior::H, "H"},
+                                                                                             {AsyncSetResetBehavior::N, "N"},
+                                                                                             {AsyncSetResetBehavior::T, "T"},
+                                                                                             {AsyncSetResetBehavior::X, "X"},
+                                                                                             {AsyncSetResetBehavior::undef, "undef"}};
 }

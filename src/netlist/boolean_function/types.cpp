@@ -264,8 +264,8 @@ namespace hal
     }    // namespace SMT
 
     template<>
-    std::vector<std::string> EnumStrings<SMT::SolverType>::data = {"Z3", "Boolector", "Unknown"};
+    std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data = {{SMT::SolverType::Z3, "Z3"}, {SMT::SolverType::Boolector, "Boolector"}, {SMT::SolverType::Unknown, "Unknown"}};
 
     template<>
-    std::vector<std::string> EnumStrings<SMT::ResultType>::data = {"sat", "unsat", "unknown"};
+    std::map<SMT::ResultType, std::string> EnumStrings<SMT::ResultType>::data = {{SMT::ResultType::Sat, "sat"}, {SMT::ResultType::UnSat, "unsat"}, {SMT::ResultType::Unknown, "unknown"}};
 }    // namespace hal

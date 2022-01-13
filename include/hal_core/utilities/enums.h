@@ -26,7 +26,7 @@
 #include "hal_core/defines.h"
 
 #include <iostream>
-#include <vector>
+#include <map>
 
 namespace hal
 {
@@ -37,7 +37,7 @@ namespace hal
     template<typename T, typename = typename std::enable_if<std::is_enum<T>::value, T>::type>
     struct EnumStrings
     {
-        static std::vector<std::string> data;
+        static std::map<T, std::string> data;
     };
 
     /**
@@ -49,12 +49,14 @@ namespace hal
     template<typename T, typename = typename std::enable_if<std::is_enum<T>::value, T>::type>
     std::string enum_to_string(T e)
     {
-        auto index = static_cast<size_t>(e);
-        if (index >= EnumStrings<T>::data.size())
+        if (auto it = EnumStrings<T>::data.find(e); it == EnumStrings<T>::data.end())
         {
-            throw std::runtime_error("no string for enum with value '" + std::to_string(index) + "'.");
+            throw std::runtime_error("no string for enum with value '" + std::to_string(static_cast<size_t>(e)) + "'.");
         }
-        return EnumStrings<T>::data.at(index);
+        else
+        {
+            return it->second;
+        }
     }
 
     /**
@@ -67,11 +69,11 @@ namespace hal
     template<typename T, typename = typename std::enable_if<std::is_enum<T>::value, T>::type>
     T enum_from_string(const std::string& str)
     {
-        for (size_t i = 0; i < EnumStrings<T>::data.size(); i++)
+        for (const auto& [e, s] : EnumStrings<T>::data)
         {
-            if (EnumStrings<T>::data.at(i) == str)
+            if (s == str)
             {
-                return static_cast<T>(i);
+                return e;
             }
         }
 
@@ -89,11 +91,11 @@ namespace hal
     template<typename T, typename = typename std::enable_if<std::is_enum<T>::value, T>::type>
     T enum_from_string(const std::string& str, const T default_val) noexcept
     {
-        for (size_t i = 0; i < EnumStrings<T>::data.size(); i++)
+        for (const auto& [e, s] : EnumStrings<T>::data)
         {
-            if (EnumStrings<T>::data.at(i) == str)
+            if (s == str)
             {
-                return static_cast<T>(i);
+                return e;
             }
         }
 

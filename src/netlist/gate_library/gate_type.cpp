@@ -5,7 +5,20 @@
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry", "pll"};
+    std::map<GateTypeProperty, std::string> EnumStrings<GateTypeProperty>::data = {{GateTypeProperty::combinational, "combinational"},
+                                                                                   {GateTypeProperty::sequential, "sequential"},
+                                                                                   {GateTypeProperty::power, "power"},
+                                                                                   {GateTypeProperty::ground, "ground"},
+                                                                                   {GateTypeProperty::lut, "lut"},
+                                                                                   {GateTypeProperty::ff, "ff"},
+                                                                                   {GateTypeProperty::latch, "latch"},
+                                                                                   {GateTypeProperty::ram, "ram"},
+                                                                                   {GateTypeProperty::io, "io"},
+                                                                                   {GateTypeProperty::dsp, "dsp"},
+                                                                                   {GateTypeProperty::mux, "mux"},
+                                                                                   {GateTypeProperty::buffer, "buffer"},
+                                                                                   {GateTypeProperty::carry, "carry"},
+                                                                                   {GateTypeProperty::pll, "pll"}};
 
     GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
         : m_gate_library(gate_library), m_id(id), m_name(name), m_properties(properties), m_component(std::move(component))
@@ -339,7 +352,8 @@ namespace hal
 
     void GateType::add_boolean_functions(const std::unordered_map<std::string, BooleanFunction>& functions)
     {
-        for (const auto& [name, function]: functions) {
+        for (const auto& [name, function] : functions)
+        {
             m_functions.insert({name, function.clone()});
         }
     }

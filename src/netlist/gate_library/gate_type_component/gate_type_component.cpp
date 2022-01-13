@@ -12,7 +12,14 @@
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<GateTypeComponent::ComponentType>::data = {"lut", "ff", "latch", "ram", "mac", "init", "state", "ram_port"};
+    std::map<GateTypeComponent::ComponentType, std::string> EnumStrings<GateTypeComponent::ComponentType>::data = {{GateTypeComponent::ComponentType::lut, "lut"},
+                                                                                                                   {GateTypeComponent::ComponentType::ff, "ff"},
+                                                                                                                   {GateTypeComponent::ComponentType::latch, "latch"},
+                                                                                                                   {GateTypeComponent::ComponentType::ram, "ram"},
+                                                                                                                   {GateTypeComponent::ComponentType::mac, "mac"},
+                                                                                                                   {GateTypeComponent::ComponentType::init, "init"},
+                                                                                                                   {GateTypeComponent::ComponentType::state, "state"},
+                                                                                                                   {GateTypeComponent::ComponentType::ram_port, "ram_port"}};
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_lut_component(std::unique_ptr<GateTypeComponent> component, bool init_ascending)
     {

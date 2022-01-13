@@ -19,7 +19,10 @@
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<BooleanFunction::Value>::data = {"0", "1", "Z", "X"};
+    std::map<BooleanFunction::Value, std::string> EnumStrings<BooleanFunction::Value>::data = {{BooleanFunction::Value::ZERO, "0"},
+                                                                                               {BooleanFunction::Value::ONE, "1"},
+                                                                                               {BooleanFunction::Value::X, "X"},
+                                                                                               {BooleanFunction::Value::Z, "Z"}};
 
     std::string BooleanFunction::to_string(Value v)
     {

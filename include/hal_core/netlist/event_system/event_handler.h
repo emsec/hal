@@ -58,7 +58,7 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<NetlistEvent::event>::data;
+    std::map<NetlistEvent::event, std::string> EnumStrings<NetlistEvent::event>::data;
 
     class GateEvent
     {
@@ -74,7 +74,7 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<GateEvent::event>::data;
+    std::map<GateEvent::event, std::string> EnumStrings<GateEvent::event>::data;
 
     class NetEvent
     {
@@ -92,7 +92,7 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<NetEvent::event>::data;
+    std::map<NetEvent::event, std::string> EnumStrings<NetEvent::event>::data;
 
     class ModuleEvent
     {
@@ -117,7 +117,7 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<ModuleEvent::event>::data;
+    std::map<ModuleEvent::event, std::string> EnumStrings<ModuleEvent::event>::data;
 
     class GroupingEvent
     {
@@ -138,7 +138,7 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<GroupingEvent::event>::data;
+    std::map<GroupingEvent::event, std::string> EnumStrings<GroupingEvent::event>::data;
 
     class EventHandler
     {
