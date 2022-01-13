@@ -1,0 +1,14 @@
+-- How to generate a vcd file for a new test netlist --
+
+1. Synthesize netlist in your favorite tool, e.g., Vivado
+2. Load netlist in HAL and use the hdl_writer_manager to output a fully-flattened netlist.
+3. Put this netlist into your favorite simulator
+4. Simulate, note the time you simulated, and export the VCD simulation
+
+Hint: In Vivado, VCD dumps of simulations can be created via
+    open_vcd
+    log_vcd
+    restart
+    run all (or run X ns)
+    close_vcd
+The resulting vcd dump.vcd is located in the simulation files.

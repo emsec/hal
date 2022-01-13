@@ -17,6 +17,7 @@ target_include_directories(netlist
                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+                           ${Z3_INCLUDE_DIRS}
                            )
 target_compile_options(netlist
                        PUBLIC ${COMPILE_OPTIONS_PUBLIC}

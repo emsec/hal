@@ -1,0 +1,7 @@
+[12.01.2022 17:28:15] [gui] [info] Searching for (other) compatible netlists.
+[12.01.2022 17:28:15] [netlist_parser] [info] selected parser: Default VHDL Parser
+[12.01.2022 17:28:15] [netlist_parser] [info] parsing '/Users/eve/Uni/Projekte/hal/plugins/simulator/netlist_simulator_controller/test/netlists/counter/counter_TB.vhd'...
+[12.01.2022 17:28:15] [vhdl_parser] [error] [/Users/eve/Uni/Projekte/hal/plugins/vhdl_parser/src/vhdl_parser.cpp:53] expected Token ';' but got 'BEGIN' near line 72.
+[12.01.2022 17:28:15] [netlist_parser] [error] [/Users/eve/Uni/Projekte/hal/src/netlist/netlist_parser/netlist_parser_manager.cpp:47] could not parse file '/Users/eve/Uni/Projekte/hal/plugins/simulator/netlist_simulator_controller/test/netlists/counter/counter_TB.vhd'.
+[12.01.2022 17:28:15] [gui] [error] [/Users/eve/Uni/Projekte/hal/plugins/gui/src/file_manager/file_manager.cpp:301] Unable to find a compatible gate library. Deserialization failed!
+[12.01.2022 17:28:24] [core] [info] setting log file to '/Users/eve/Uni/Projekte/hal/plugins/simulator/netlist_simulator_controller/test/netlists/counter/counternetlist_flattened_by_hal.log'.
