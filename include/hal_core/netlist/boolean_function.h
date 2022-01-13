@@ -85,6 +85,30 @@ namespace hal
         static std::string to_string(Value value);
 
         /**
+         * Get the vector of values as a binary string.
+         * 
+         * @param[in] values - The vector of values.
+         * @returns A binary string representing the concatenated values.
+         */
+        static std::string to_bin(std::vector<Value> values);
+
+        /**
+         * Get the vector of values as a octal string.
+         * 
+         * @param[in] values - The vector of values.
+         * @returns A octal string representing the concatenated values.
+         */
+        static std::string to_oct(std::vector<Value> values);
+
+        /**
+         * Get the vector of values as a hexadecimal string.
+         * 
+         * @param[in] values - The vector of values.
+         * @returns A hexadecimal string representing the concatenated values.
+         */
+        static std::string to_hex(std::vector<Value> values);
+
+        /**
          * Output stream operator that forwards to_string of a value.
          *
          * @param[in] os - The stream to write to.

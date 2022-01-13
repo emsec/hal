@@ -35,6 +35,14 @@ namespace hal
             :rtype: str
         )");
 
+        py_boolean_function.def_static("to_oct", &BooleanFunction::to_oct, py::arg("values"), R"(
+            Get the vector of values as a octal string.
+
+            :param list[hal_py.BooleanFunction.Value] values: The vector of values.
+            :returns: A octal string representing the concatenated values.
+            :rtype: str
+        )");
+
         py_boolean_function.def_static("to_hex", &BooleanFunction::to_hex, py::arg("values"), R"(
             Get the vector of values as a hexadecimal string.
 

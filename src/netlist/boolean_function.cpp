@@ -29,6 +29,99 @@ namespace hal
         return enum_to_string<Value>(v);
     }
 
+    namespace
+    {
+        std::vector<char> char_map = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    }
+
+    std::string BooleanFunction::to_bin(std::vector<Value> values)
+    {
+        std::string res = "";
+        for (auto v : values)
+        {
+            res += enum_to_string<Value>(v);
+        }
+        return res;
+    }
+
+    std::string BooleanFunction::to_oct(std::vector<Value> values)
+    {
+        std::string res = "";
+
+        u8 index = 0;
+        bool skipped_last;
+        u32 bitsize = values.size();
+        res.reserve((bitsize + 2) / 3);
+
+        for (u32 i = 0; i < bitsize; i++)
+        {
+            auto v = values.at(bitsize - i - 1);
+            if (v == Value::X || v == Value::Z)
+            {
+                res = "X" + res;
+                i += 2 - (i % 3);
+                index        = 0;
+                skipped_last = true;
+            }
+            else
+            {
+                skipped_last = false;
+                index |= v << (i % 3);
+
+                if ((i % 3) == 2)
+                {
+                    res   = char_map.at(index) + res;
+                    index = 0;
+                }
+            }
+        }
+
+        if ((bitsize % 3) != 0 && !skipped_last)
+        {
+            res = char_map.at(index) + res;
+        }
+        return res;
+    }
+
+    std::string BooleanFunction::to_hex(std::vector<Value> values)
+    {
+        std::string res = "";
+
+        u8 index = 0;
+        bool skipped_last;
+        u32 bitsize = values.size();
+        res.reserve((bitsize + 3) >> 2);
+
+        for (u32 i = 0; i < bitsize; i++)
+        {
+            auto v = values.at(bitsize - i - 1);
+            if (v == Value::X || v == Value::Z)
+            {
+                res = "X" + res;
+                i += 3 - (i & 0x3);
+                index        = 0;
+                skipped_last = true;
+            }
+            else
+            {
+                skipped_last = false;
+                index |= v << (i & 0x3);
+
+                if ((i & 0x3) == 3)
+                {
+                    res   = char_map.at(index) + res;
+                    index = 0;
+                }
+            }
+        }
+
+        if ((bitsize & 0x3) != 0 && !skipped_last)
+        {
+            res = char_map.at(index) + res;
+        }
+        return res;
+    }
+
     std::ostream& operator<<(std::ostream& os, BooleanFunction::Value v)
     {
         return os << BooleanFunction::to_string(v);
