@@ -27,7 +27,7 @@ namespace hal
                 if (FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); }); ff_component != nullptr)
                 {
                     StateComponent* state_component;
-                    if (state_component = ff_component->get_component_as<StateComponent>([](const GateTypeComponent* c) { return StateComponent::is_class_of(c); }); state_component != nullptr)
+                    if (state_component = ff_component->get_component_as<StateComponent>([](const GateTypeComponent* c) { return StateComponent::is_class_of(c); }); state_component == nullptr)
                     {
                         log_error("verilator", "gate: {} has no state information in gate_library. you need to set one! aborting...", gt->get_name());
                         return std::string();
