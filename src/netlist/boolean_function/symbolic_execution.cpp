@@ -15,12 +15,12 @@ namespace hal
         namespace ConstantPropagation
         {
             /**
-	 * Helper function to simplify a constant AND operation.
-	 * 
-	 * @param[in] p0 - Boolean function parameter 0.
-	 * @param[in] p1 - Boolean function parameter 1.
-	 * @returns Boolean function with a simplified constant value.
-	 */
+             * Helper function to simplify a constant AND operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
             BooleanFunction And(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 std::vector<BooleanFunction::Value> simplified;
@@ -44,12 +44,12 @@ namespace hal
             }
 
             /**
-	 * Helper function to simplify a constant OR operation.
-	 * 
-	 * @param[in] p0 - Boolean function parameter 0.
-	 * @param[in] p1 - Boolean function parameter 1.
-	 * @returns Boolean function with a simplified constant value.
-	 */
+             * Helper function to simplify a constant OR operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
             BooleanFunction Or(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 std::vector<BooleanFunction::Value> simplified;
@@ -73,11 +73,11 @@ namespace hal
             }
 
             /**
-	 * Helper function to simplify a constant NOT operation.
-	 * 
-	 * @param[in] p - Boolean function parameter.
-	 * @returns Boolean function with a simplified constant value.
-	 */
+             * Helper function to simplify a constant NOT operation.
+             * 
+             * @param[in] p - Boolean function parameter.
+             * @returns Boolean function with a simplified constant value.
+             */
             BooleanFunction Not(const std::vector<BooleanFunction::Value>& p)
             {
                 std::vector<BooleanFunction::Value> simplified;
@@ -101,12 +101,12 @@ namespace hal
             }
 
             /**
-	 * Helper function to simplify a constant XOR operation.
-	 * 
-	 * @param[in] p0 - Boolean function parameter 0.
-	 * @param[in] p1 - Boolean function parameter 1.
-	 * @returns Boolean function with a simplified constant value.
-	 */
+             * Helper function to simplify a constant XOR operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
             BooleanFunction Xor(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 std::vector<BooleanFunction::Value> simplified;
@@ -134,11 +134,11 @@ namespace hal
         namespace
         {
             /**
-	 * Helper function to generate an n-bit vector of all 1s.
-	 * 
-	 * @param[in] size - Bit-size of vector.
-	 * @returns Boolean function with all 1s constant.
-	 */
+             * Helper function to generate an n-bit vector of all 1s.
+             * 
+             * @param[in] size - Bit-size of vector.
+             * @returns Boolean function with all 1s constant.
+             */
             BooleanFunction One(u16 size)
             {
                 return BooleanFunction::Const(std::vector<BooleanFunction::Value>(size, BooleanFunction::Value::ONE));
