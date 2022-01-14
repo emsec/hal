@@ -90,7 +90,7 @@ namespace hal
          * @param[in] values - The vector of values.
          * @returns A binary string representing the concatenated values.
          */
-        static std::string to_bin(std::vector<Value> values);
+        static std::string to_bin(const std::vector<Value>& values);
 
         /**
          * Get the vector of values as a octal string.
@@ -98,7 +98,7 @@ namespace hal
          * @param[in] values - The vector of values.
          * @returns A octal string representing the concatenated values.
          */
-        static std::string to_oct(std::vector<Value> values);
+        static std::string to_oct(const std::vector<Value>& values);
 
         /**
          * Get the vector of values as a hexadecimal string.
@@ -106,7 +106,7 @@ namespace hal
          * @param[in] values - The vector of values.
          * @returns A hexadecimal string representing the concatenated values.
          */
-        static std::string to_hex(std::vector<Value> values);
+        static std::string to_hex(const std::vector<Value>& values);
 
         /**
          * Output stream operator that forwards to_string of a value.

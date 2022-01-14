@@ -31,20 +31,38 @@ namespace hal
 
     namespace
     {
-        std::vector<char> char_map = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-    }
+        std::map<BooleanFunction::Value, char> bin_map = {{BooleanFunction::Value::ZERO, '0'}, {BooleanFunction::Value::ONE, '1'}, {BooleanFunction::Value::X, 'X'}, {BooleanFunction::Value::Z, 'Z'}};
+        const std::map<u8, char> hex_map = {{((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ZERO), '0'},
+                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ONE), '1'},
+                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ZERO), '2'},
+                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ONE), '3'},
+                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ZERO), '4'},
+                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ONE), '5'},
+                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ZERO), '6'},
+                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ONE), '7'},
+                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ZERO), '8'},
+                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ONE), '9'},
+                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ZERO), 'A'},
+                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ONE), 'B'},
+                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ZERO), 'C'},
+                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ONE), 'D'},
+                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ZERO), 'E'},
+                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ONE), 'F'}};
+        std::vector<char> char_map       = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    std::string BooleanFunction::to_bin(std::vector<Value> values)
+    }    // namespace
+
+    std::string BooleanFunction::to_bin(const std::vector<Value>& values)
     {
         std::string res = "";
         for (auto v : values)
         {
-            res += enum_to_string<Value>(v);
+            res += bin_map.at(v);
         }
         return res;
     }
 
-    std::string BooleanFunction::to_oct(std::vector<Value> values)
+    std::string BooleanFunction::to_oct(const std::vector<Value>& values)
     {
         std::string res = "";
 
@@ -83,41 +101,44 @@ namespace hal
         return res;
     }
 
-    std::string BooleanFunction::to_hex(std::vector<Value> values)
+    std::string BooleanFunction::to_hex(const std::vector<Value>& values)
     {
+        int bitsize = values.size();
+
+        // result string prep
         std::string res = "";
+        res.reserve((bitsize + 3) / 4);
 
+        // deal with 0-3 leading bits
         u8 index = 0;
-        bool skipped_last;
-        u32 bitsize = values.size();
-        res.reserve((bitsize + 3) >> 2);
-
-        for (u32 i = 0; i < bitsize; i++)
+        if (int first_bits = bitsize & 0x3; first_bits != 0)
         {
-            auto v = values.at(bitsize - i - 1);
-            if (v == Value::X || v == Value::Z)
+            for (int i = 0; i < first_bits; i++)
             {
-                res = "X" + res;
-                i += 3 - (i & 0x3);
-                index        = 0;
-                skipped_last = true;
+                index = (index << 2) | values.at(i);
+            }
+            if (!(index & 0xAA))
+            {
+                res = hex_map.at(index);
             }
             else
             {
-                skipped_last = false;
-                index |= v << (i & 0x3);
-
-                if ((i & 0x3) == 3)
-                {
-                    res   = char_map.at(index) + res;
-                    index = 0;
-                }
+                res = "X";
             }
         }
 
-        if ((bitsize & 0x3) != 0 && !skipped_last)
+        // deal with 4-bit blocks (left to right)
+        for (int i = bitsize & 0x3; i < bitsize; i += 4)
         {
-            res = char_map.at(index) + res;
+            index = (values.at(i) << 6) | (values.at(i + 1) << 4) | (values.at(i + 2) << 2) | values.at(i + 3);
+            if (!(index & 0xAA))
+            {
+                res += hex_map.at(index);
+            }
+            else
+            {
+                res += "X";
+            }
         }
         return res;
     }
