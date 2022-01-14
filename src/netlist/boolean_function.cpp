@@ -32,25 +32,7 @@ namespace hal
 
     namespace
     {
-        std::map<BooleanFunction::Value, char> bin_map = {{BooleanFunction::Value::ZERO, '0'}, {BooleanFunction::Value::ONE, '1'}, {BooleanFunction::Value::X, 'X'}, {BooleanFunction::Value::Z, 'Z'}};
-        const std::map<u8, char> hex_map = {{((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ZERO), '0'},
-                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ONE), '1'},
-                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ZERO), '2'},
-                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ONE), '3'},
-                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ZERO), '4'},
-                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ONE), '5'},
-                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ZERO), '6'},
-                                            {((BooleanFunction::Value::ZERO << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ONE), '7'},
-                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ZERO), '8'},
-                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ONE), '9'},
-                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ZERO), 'A'},
-                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ZERO << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ONE), 'B'},
-                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ZERO), 'C'},
-                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ZERO << 2) | BooleanFunction::Value::ONE), 'D'},
-                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ZERO), 'E'},
-                                            {((BooleanFunction::Value::ONE << 6) | (BooleanFunction::Value::ONE << 4) | (BooleanFunction::Value::ONE << 2) | BooleanFunction::Value::ONE), 'F'}};
-        std::vector<char> char_map       = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-
+        std::vector<char> char_map = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
     }    // namespace
 
     std::string BooleanFunction::to_bin(const std::vector<Value>& values)
