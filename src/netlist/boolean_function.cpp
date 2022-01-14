@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <bitset>
 #include <boost/spirit/home/x3.hpp>
+#include <chrono>
 #include <map>
 #include <variant>
 
@@ -55,91 +56,101 @@ namespace hal
     std::string BooleanFunction::to_bin(const std::vector<Value>& values)
     {
         std::string res = "";
+        res.reserve(values.size());
+
         for (auto v : values)
         {
-            res += bin_map.at(v);
+            u8 mask = -((v >> 1) & 0x1);
+            res += (char_map[v & 0x1] & ~mask) | ('X' & mask);
         }
+
         return res;
     }
 
     std::string BooleanFunction::to_oct(const std::vector<Value>& values)
     {
-        std::string res = "";
+        int bitsize   = values.size();
+        u8 first_bits = bitsize % 3;
 
         u8 index = 0;
-        bool skipped_last;
-        u32 bitsize = values.size();
+        u8 mask  = 0;
+
+        u8 v1, v2, v3;
+
+        // result string prep
+        std::string res = "";
         res.reserve((bitsize + 2) / 3);
 
-        for (u32 i = 0; i < bitsize; i++)
+        // deal with 0-3 leading bits
+        for (u8 i = 0; i < first_bits; i++)
         {
-            auto v = values.at(bitsize - i - 1);
-            if (v == Value::X || v == Value::Z)
-            {
-                res = "X" + res;
-                i += 2 - (i % 3);
-                index        = 0;
-                skipped_last = true;
-            }
-            else
-            {
-                skipped_last = false;
-                index |= v << (i % 3);
-
-                if ((i % 3) == 2)
-                {
-                    res   = char_map.at(index) + res;
-                    index = 0;
-                }
-            }
+            v1    = values.at(i);
+            index = (index << 1) | v1;
+            mask |= v1;
+        }
+        mask = -((mask >> 1) & 0x1);
+        if (first_bits)
+        {
+            res += (char_map[index] & ~mask) | ('X' & mask);
         }
 
-        if ((bitsize % 3) != 0 && !skipped_last)
+        // deal with 4-bit blocks (left to right)
+        for (int i = bitsize % 3; i < bitsize; i += 3)
         {
-            res = char_map.at(index) + res;
+            v1 = values[i];
+            v2 = values[i + 1];
+            v3 = values[i + 2];
+
+            index = ((v1 << 2) | (v2 << 1) | v3) & 0x7;
+            mask  = -(((v1 | v2 | v3) >> 1) & 0x1);
+
+            res += (char_map[index] & ~mask) | ('X' & mask);
         }
+
         return res;
     }
 
     std::string BooleanFunction::to_hex(const std::vector<Value>& values)
     {
-        int bitsize = values.size();
+        int bitsize   = values.size();
+        u8 first_bits = bitsize & 0x3;
+
+        u8 index = 0;
+        u8 mask  = 0;
+
+        u8 v1, v2, v3, v4;
 
         // result string prep
         std::string res = "";
         res.reserve((bitsize + 3) / 4);
 
         // deal with 0-3 leading bits
-        u8 index = 0;
-        if (int first_bits = bitsize & 0x3; first_bits != 0)
+        for (u8 i = 0; i < first_bits; i++)
         {
-            for (int i = 0; i < first_bits; i++)
-            {
-                index = (index << 2) | values.at(i);
-            }
-            if (!(index & 0xAA))
-            {
-                res = hex_map.at(index);
-            }
-            else
-            {
-                res = "X";
-            }
+            v1    = values.at(i);
+            index = (index << 1) | v1;
+            mask |= v1;
+        }
+        mask = -((mask >> 1) & 0x1);
+        if (first_bits)
+        {
+            res += (char_map[index] & ~mask) | ('X' & mask);
         }
 
         // deal with 4-bit blocks (left to right)
         for (int i = bitsize & 0x3; i < bitsize; i += 4)
         {
-            index = (values.at(i) << 6) | (values.at(i + 1) << 4) | (values.at(i + 2) << 2) | values.at(i + 3);
-            if (!(index & 0xAA))
-            {
-                res += hex_map.at(index);
-            }
-            else
-            {
-                res += "X";
-            }
+            v1 = values[i];
+            v2 = values[i + 1];
+            v3 = values[i + 2];
+            v4 = values[i + 3];
+
+            index = ((v1 << 3) | (v2 << 2) | (v3 << 1) | v4) & 0xF;
+            mask  = -(((v1 | v2 | v3 | v4) >> 1) & 0x1);
+
+            res += (char_map[index] & ~mask) | ('X' & mask);
         }
+
         return res;
     }
 
