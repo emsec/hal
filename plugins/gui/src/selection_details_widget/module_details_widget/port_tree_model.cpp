@@ -9,7 +9,6 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/enums.h"
 
-#include <QDebug>
 #include <QMimeData>
 
 namespace hal
@@ -62,10 +61,8 @@ namespace hal
         if(indexes.size() != 4) //columncount, only 1 item is allowed
             return new QMimeData();
 
-        qDebug() << "started dragging";
         QMimeData* data = new QMimeData();
         auto item = getItemFromIndex(indexes.at(0));
-        qDebug() << item->getData(sNameColumn).toString();
         data->setText(item->getData(sNameColumn).toString());
         data->setData("pintreemodel/pin", QByteArray());
         return data;
@@ -81,6 +78,8 @@ namespace hal
         auto mod = gNetlist->get_module_by_id(mModuleId);
         auto droppedPin = mod->get_pin(droppedItem->getData(sNameColumn).toString().toStdString());
         auto ownRow = droppedItem->getOwnRow();
+        TreeItem* newItem = new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn)
+                                         << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
 
         if(row != -1)//between items
         {
@@ -89,8 +88,6 @@ namespace hal
             auto onDroppedItem = bottomEdge ? onDroppedParentItem->getChild(row-1) : onDroppedParentItem->getChild(row);
             auto onDroppedPin = mod->get_pin(onDroppedItem->getData(sNameColumn).toString().toStdString());
             auto desiredIndex = onDroppedPin->get_group().second;
-            TreeItem* newItem = new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn)
-                                             << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
             newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
 
             //same-parent (parent != root): move withing same group
@@ -123,11 +120,22 @@ namespace hal
             if(droppedParentItem == mRootItem && onDroppedParentItem != mRootItem)
             {
                 auto pinGroup = mod->get_pin_group(onDroppedParentItem->getData(sNameColumn).toString().toStdString());
+                mIgnoreNextPinsChanged = true;
                 bool ret = mod->assign_pin_to_group(pinGroup, droppedPin);
-                if(ret){
+                mIgnoreNextPinsChanged = false;//if action above failed
+                if(ret)
+                {
+                    mIgnoreNextPinsChanged = true;
                     ret = mod->move_pin_within_group(pinGroup, droppedPin, bottomEdge ? desiredIndex+1 : desiredIndex);
                     if(ret)
+                    {
+                        removeItem(droppedItem);
+                        insertItem(newItem, onDroppedParentItem, row);
                         return true;
+                    }
+                    mIgnoreNextPinsChanged = false;
+                    removeItem(droppedItem);
+                    insertItem(newItem, onDroppedParentItem, onDroppedParentItem->getChildCount());
                     return false;
                 }
                 return false;
@@ -142,8 +150,16 @@ namespace hal
             //on group (dropped parent = mRoot)
             if(droppedParentItem == mRootItem)
             {
-                mod->assign_pin_to_group(onDroppedGroup, droppedPin);
-                return true;
+                mIgnoreNextPinsChanged = true;
+                int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin);
+                if(ret)
+                {
+                    removeItem(droppedItem);
+                    insertItem(newItem, onDroppedItem, onDroppedItem->getChildCount());
+                    return true;
+                }
+                mIgnoreNextPinsChanged = false;
+                return false;
             }
         }
         return false;
