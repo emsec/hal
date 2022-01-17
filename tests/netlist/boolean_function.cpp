@@ -78,6 +78,87 @@ namespace hal {
         }
     }
 
+    TEST(BooleanFunction, ValuesToBin) {
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"", {}},
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"Z", {BooleanFunction::Value::Z}},
+            {"10101", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"101X1", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"101Z1", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"101ZX", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"101XZ", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+            {std::string(10000, '1'), std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE)},
+        };
+
+        for (auto&& [expected, values]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_bin(values));
+        }
+    }
+
+    TEST(BooleanFunction, ValuesToOct) {
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"", {}},
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::Z}},
+            {"25", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+            {std::string(3334, '7'), std::vector<BooleanFunction::Value>(10002, BooleanFunction::Value::ONE)},
+        };
+
+        for (auto&& [expected, values]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_oct(values));
+        }
+    }
+
+    TEST(BooleanFunction, ValuesToDec) {
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"", {}},
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::Z}},
+            {"21", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"117", {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+            {"", std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE)},
+        };
+
+        for (auto&& [expected, values]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_dec(values));
+        }
+    }
+
+    TEST(BooleanFunction, ValuesToHex) {
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"", {}},
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::Z}},
+            {"15", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+            {std::string(2500, 'F'), std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE)},
+        };
+
+        for (auto&& [expected, values]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_hex(values));
+        }
+    }
+
     TEST(BooleanFunction, Parser) {
         const std::vector<std::tuple<std::string, BooleanFunction>> data = {
             ////////////////////////////////////////////////////////////////////
