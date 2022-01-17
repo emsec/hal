@@ -8,7 +8,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/enums.h"
-
+#include "gui/user_action/action_reorder_object.h"
 #include <QMimeData>
 
 namespace hal
