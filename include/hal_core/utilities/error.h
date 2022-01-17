@@ -31,10 +31,10 @@ namespace hal
     {
     public:
         explicit Error() = default;
-        
+
         explicit Error(const std::string& message) : m_message(message){};
 
-        const std::string get() const
+        const std::string& get() const
         {
             return m_message;
         }

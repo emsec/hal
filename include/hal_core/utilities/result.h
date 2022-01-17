@@ -31,16 +31,21 @@
 namespace hal
 {
     template<typename T>
-    class Result final : private std::variant<Error, T>
+    class Result final
     {
     public:
-        Result(const T& value) : std::variant<Error, T>(value)
+        Result(const T& value)
         {
+            m_has_value = true;
+            m_content   = value;
         }
 
         Result(const Error& error) : std::variant<Error, T>(error)
         {
+            m_content = error;
         }
+
+        static const auto Success = Result(std::monostate);
 
         bool is_valid() const
         {
@@ -52,9 +57,14 @@ namespace hal
             return !is_valid();
         }
 
+        bool has_value() const
+        {
+            return m_has_value;
+        }
+
         T get() const
         {
-            return (is_valid() ? std::get<T>(*this) : T());
+            return (has_value() ? std::get<T>(*this) : T());
         }
 
         Error get_error() const
@@ -63,6 +73,9 @@ namespace hal
         }
 
     private:
-        explicit Result() = default;
+        bool m_has_value = false;
+        std::variant<Error, T> m_content;
+
+        Result() = default;
     };
 }    // namespace hal

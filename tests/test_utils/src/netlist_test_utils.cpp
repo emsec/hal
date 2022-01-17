@@ -832,7 +832,7 @@ namespace hal
                 
                 for (const ModulePin* p_0 : pg_0->get_pins())
                 {
-                    if(const ModulePin* p_1 = pg_1->get_pin(p_0->get_name()); p_1 != nullptr) 
+                    if(const ModulePin* p_1 = pg_1->get_pin(p_0->get_name()).get(); p_1 != nullptr) 
                     {
                         if(p_0->get_name() != p_1->get_name() || p_0->get_type() != p_1->get_type() || p_0->get_direction() != p_1->get_direction() || !nets_are_equal(p_0->get_net(), p_1->get_net(), ignore_id, ignore_name)) 
                         {

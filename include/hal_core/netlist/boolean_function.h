@@ -88,7 +88,6 @@ namespace hal
         /**
          * Convert the given bit-vector to its string representation in the given base.
          * 
-         * 
          * @param[in] value - The value as a bit-vector.
          * @param[in] base - The base that the values should be converted to. Valid values are 2 (default), 8, 10, and 16.
          * @returns A string representing the values in the given base or an error.
