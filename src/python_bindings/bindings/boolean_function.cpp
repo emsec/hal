@@ -31,7 +31,7 @@ namespace hal
             "to_string",
             [](const std::vector<BooleanFunction::Value>& value, u8 base = 2) {
                 auto res = BooleanFunction::to_string(value, base);
-                if (res.is_valid())
+                if (res.is_ok())
                 {
                     return res.get();
                 }

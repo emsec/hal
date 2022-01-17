@@ -43,16 +43,19 @@ namespace hal
         {
         }
 
-        // static const auto success = Result<std::monostate>();
-
-        bool is_valid() const
+        static Result<std::monostate> Ok()
         {
-            return std::holds_alternative<T>(*this);
+            return Result<std::monostate>();
+        }
+
+        bool is_ok() const
+        {
+            return !is_error();
         }
 
         bool is_error() const
         {
-            return !is_valid();
+            return std::holds_alternative<Error>(*this);
         }
 
         bool has_value() const
@@ -72,6 +75,7 @@ namespace hal
 
     private:
         bool m_has_value = false;
-        Result() = default;
+        Result()         = default;
+        
     };
 }    // namespace hal

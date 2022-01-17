@@ -58,7 +58,7 @@ namespace hal
             "get_pin",
             [](const PinGroup<ModulePin>& self, u32 index) -> ModulePin* {
                 auto res = self.get_pin(index);
-                if (res.is_valid())
+                if (res.is_ok())
                 {
                     return res.get();
                 }
@@ -81,7 +81,7 @@ namespace hal
             "get_pin",
             [](const PinGroup<ModulePin>& self, const std::string& name) -> ModulePin* {
                 auto res = self.get_pin(name);
-                if (res.is_valid())
+                if (res.is_ok())
                 {
                     return res.get();
                 }
@@ -104,9 +104,9 @@ namespace hal
             "get_index",
             [](const PinGroup<ModulePin>& self, const ModulePin* pin) -> i32 {
                 auto res = self.get_index(pin);
-                if (res.is_valid())
+                if (res.is_ok())
                 {
-                    return (i32) res.get();
+                    return (i32)res.get();
                 }
                 else
                 {
@@ -127,9 +127,9 @@ namespace hal
             "get_index",
             [](const PinGroup<ModulePin>& self, const std::string& name) -> i32 {
                 auto res = self.get_index(name);
-                if (res.is_valid())
+                if (res.is_ok())
                 {
-                    return (i32) res.get();
+                    return (i32)res.get();
                 }
                 else
                 {
