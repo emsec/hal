@@ -10,7 +10,7 @@ ExternalProject_Add(abc
                     PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/cmake/abc.patch
                     CONFIGURE_COMMAND ""
                     BUILD_IN_SOURCE 1
-                    #BUILD_COMMAND make -s ABC_USE_PIC=1 libabc.so
-                    INSTALL_COMMAND cmake -E echo "Skipping install step."
-                    #TEST_COMMAND ""
+                    BUILD_COMMAND make -s ABC_USE_PIC=1 libabc.so -j$(nproc)
+                    INSTALL_COMMAND ""
+                    TEST_COMMAND ""
                     )
