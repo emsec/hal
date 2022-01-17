@@ -256,7 +256,7 @@ namespace hal
         return std::vector<const Net*>();
     }
 
-    bool NetlistSimulatorController::parse_vcd(const std::string& filename, FilterInputFlag filter, bool silent)
+    bool NetlistSimulatorController::import_vcd(const std::string& filename, FilterInputFlag filter, bool silent)
     {
         VcdSerializer reader;
 
@@ -301,7 +301,7 @@ namespace hal
         return true;
     }
 
-    void NetlistSimulatorController::parse_csv(const std::string& filename, FilterInputFlag filter, u64 timescale)
+    void NetlistSimulatorController::import_csv(const std::string& filename, FilterInputFlag filter, u64 timescale)
     {
         VcdSerializer reader;
         if (reader.deserializeCsv(QString::fromStdString(filename),timescale))

@@ -227,19 +227,19 @@ public:
     void request_generate_vcd(const std::string& filename);
 
     /**
-     * Parse VCD file and set wave data
+     * Import VCD file and convert content into SALEAE format
      * @param[in] filename the filename to read
      * @param[in] filter filter to select waveform data from file
      */
-    bool parse_vcd(const std::string& filename, FilterInputFlag filter, bool silent=false);
+    bool import_vcd(const std::string& filename, FilterInputFlag filter, bool silent=false);
 
     /**
-     * Parse CSV file and set wave data
+     * Parse CSV file and convert content into SALEAE format
      * @param[in] filename the filename to read
      * @param[in] filter filter to select waveform data from file
      * @param[in] timescale multiplication factor for time value in first column
      */
-    void parse_csv(const std::string& filename, FilterInputFlag filter, u64 timescale = 1000000000);
+    void import_csv(const std::string& filename, FilterInputFlag filter, u64 timescale = 1000000000);
 
     /**
      * Set input for simulation to saleae file bundle
