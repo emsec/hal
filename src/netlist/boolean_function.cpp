@@ -43,7 +43,7 @@ namespace hal
         for (auto v : values)
         {
             u8 mask = -((v >> 1) & 0x1);
-            res += (char_map[v & 0x1] & ~mask) | ('X' & mask);
+            res += (char_map[v] & ~mask) | ('X' & mask);
         }
 
         return res;
@@ -83,13 +83,36 @@ namespace hal
             v2 = values[i + 1];
             v3 = values[i + 2];
 
-            index = ((v1 << 2) | (v2 << 1) | v3) & 0x7;
+            index = (v1 << 2) | (v2 << 1) | v3;    // cannot exceed char_map range as index always < 16, no further check required
             mask  = -(((v1 | v2 | v3) >> 1) & 0x1);
 
             res += (char_map[index] & ~mask) | ('X' & mask);
         }
 
         return res;
+    }
+
+    std::string BooleanFunction::to_dec(const std::vector<Value>& values)
+    {
+        int bitsize = values.size();
+        if (bitsize > 64)
+        {
+            return "";
+        }
+
+        u64 tmp   = 0;
+        u8 x_flag = 0;
+        for (auto v : values)
+        {
+            x_flag |= v >> 1;
+            tmp = (tmp << 1) | v;
+        }
+
+        if (x_flag)
+        {
+            return "X";
+        }
+        return std::to_string(tmp);
     }
 
     std::string BooleanFunction::to_hex(const std::vector<Value>& values)

@@ -101,6 +101,16 @@ namespace hal
         static std::string to_oct(const std::vector<Value>& values);
 
         /**
+         * Get the vector of values as a decimal string.
+         * @warning{\b WARNING: Currently, decimal conversion is limited to 64 bits. If the provided vector exceeds this threshold, an empty string is returned.}
+         * 
+         * 
+         * @param[in] values - The vector of values.
+         * @returns A decimal string representing the concatenated values.
+         */
+        static std::string to_dec(const std::vector<Value>& values);
+
+        /**
          * Get the vector of values as a hexadecimal string.
          * 
          * @param[in] values - The vector of values.

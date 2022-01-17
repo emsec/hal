@@ -36,10 +36,19 @@ namespace hal
         )");
 
         py_boolean_function.def_static("to_oct", &BooleanFunction::to_oct, py::arg("values"), R"(
-            Get the vector of values as a octal string.
+            Get the vector of values as an octal string.
 
             :param list[hal_py.BooleanFunction.Value] values: The vector of values.
-            :returns: A octal string representing the concatenated values.
+            :returns: An octal string representing the concatenated values.
+            :rtype: str
+        )");
+
+        py_boolean_function.def_static("to_dec", &BooleanFunction::to_dec, py::arg("values"), R"(
+            Get the vector of values as a decimal string.
+            WARNING: Currently, decimal conversion is limited to 64 bits. If the provided vector exceeds this threshold, an empty string is returned.
+
+            :param list[hal_py.BooleanFunction.Value] values: The vector of values.
+            :returns: A decimal string representing the concatenated values.
             :rtype: str
         )");
 
