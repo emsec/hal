@@ -42,8 +42,7 @@ namespace hal
 
         for (auto v : values)
         {
-            u8 mask = -((v >> 1) & 0x1);
-            res += (char_map[v] & ~mask) | ('X' & mask);
+            res += enum_to_string<Value>(v);
         }
 
         return res;
@@ -95,7 +94,7 @@ namespace hal
     std::string BooleanFunction::to_dec(const std::vector<Value>& values)
     {
         int bitsize = values.size();
-        if (bitsize > 64)
+        if (bitsize == 0 || bitsize > 64)
         {
             return "";
         }
