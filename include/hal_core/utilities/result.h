@@ -34,35 +34,35 @@ namespace hal
     class Result final : private std::variant<Error, T>
     {
     public:
-        Result(const T& value) noexcept : std::variant<Error, T>(value)
+        Result(const T& value) : std::variant<Error, T>(value)
         {
         }
 
-        Result(const Error& error) noexcept : std::variant<Error, T>(error)
+        Result(const Error& error) : std::variant<Error, T>(error)
         {
         }
 
-        bool is_valid() const noexcept
+        bool is_valid() const
         {
             return std::holds_alternative<T>(*this);
         }
 
-        bool is_error() const noexcept
+        bool is_error() const
         {
             return !is_valid();
         }
 
-        const T get() const noexcept
+        T get() const
         {
             return (is_valid() ? std::get<T>(*this) : T());
         }
 
-        const Error get_error() const noexcept
+        Error get_error() const
         {
             return (is_error() ? std::get<Error>(*this) : Error());
         }
 
     private:
-        explicit Result() noexcept = default;
+        explicit Result() = default;
     };
 }    // namespace hal

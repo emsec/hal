@@ -30,11 +30,11 @@ namespace hal
     class Error final
     {
     public:
-        explicit Error() noexcept = default;
+        explicit Error() = default;
         
-        explicit Error(const std::string& message) noexcept : m_message(message){};
+        explicit Error(const std::string& message) : m_message(message){};
 
-        const std::string get() const noexcept
+        const std::string get() const
         {
             return m_message;
         }

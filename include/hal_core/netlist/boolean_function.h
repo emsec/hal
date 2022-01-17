@@ -25,6 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/utilities/enums.h"
+#include "hal_core/utilities/result.h"
 #include "z3++.h"
 
 #include <algorithm>
@@ -85,38 +86,14 @@ namespace hal
         static std::string to_string(Value value);
 
         /**
-         * Get the vector of values as a binary string.
+         * Convert the given bit-vector to its string representation in the given base.
          * 
-         * @param[in] values - The vector of values.
-         * @returns A binary string representing the concatenated values.
+         * 
+         * @param[in] value - The value as a bit-vector.
+         * @param[in] base - The base that the values should be converted to. Valid values are 2 (default), 8, 10, and 16.
+         * @returns A string representing the values in the given base or an error.
          */
-        static std::string to_bin(const std::vector<Value>& values);
-
-        /**
-         * Get the vector of values as an octal string.
-         * 
-         * @param[in] values - The vector of values.
-         * @returns An octal string representing the concatenated values.
-         */
-        static std::string to_oct(const std::vector<Value>& values);
-
-        /**
-         * Get the vector of values as a decimal string.
-         * @warning{\b WARNING: Currently, decimal conversion is limited to 64 bits. If the provided vector exceeds this threshold, an empty string is returned.}
-         * 
-         * 
-         * @param[in] values - The vector of values.
-         * @returns A decimal string representing the concatenated values.
-         */
-        static std::string to_dec(const std::vector<Value>& values);
-
-        /**
-         * Get the vector of values as a hexadecimal string.
-         * 
-         * @param[in] values - The vector of values.
-         * @returns A hexadecimal string representing the concatenated values.
-         */
-        static std::string to_hex(const std::vector<Value>& values);
+        static Result<std::string> to_string(const std::vector<BooleanFunction::Value>& value, u8 base = 2);
 
         /**
          * Output stream operator that forwards to_string of a value.
