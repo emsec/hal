@@ -1,5 +1,6 @@
 #include "netlist_simulator_controller/saleae_parser.h"
 #include "netlist_simulator_controller/saleae_file.h"
+#include "hal_core/netlist/net.h"
 #include <fstream>
 #include <sstream>
 #include <stdio.h>
@@ -12,36 +13,8 @@ namespace hal
     uint64_t SaleaeParser::sTimeScaleFactor = 1000000000;
 
         SaleaeParser::SaleaeParser(const std::string& filename)
-        : mCsvFilename(filename)
-    {
-        std::ifstream ff(mCsvFilename);
-        std::string line;
-        bool isKeyword = true;
-        while (std::getline(ff, line))
-        {
-            if (isKeyword)
-            {
-                if (line != "<SALEAE>") return;
-                isKeyword = false;
-            }
-
-            std::istringstream iss(line);
-            std::string token;
-            bool isName = false;
-
-            std::string abbrev;
-            std::string name;
-            while (std::getline(iss, token, ','))
-            {
-                if (isName)
-                    name = strim(token);
-                else
-                    abbrev = strim(token);
-                isName = true;
-            }
-            mSaleaeAbbrevMap[name] = abbrev;
-        }
-    }
+        : mSaleaeDirectory(filename)
+    {;}
 
     std::string SaleaeParser::strim(std::string s)
     {
@@ -62,14 +35,15 @@ namespace hal
     {
         auto it = mNextValueMap.begin();
         if (it == mNextValueMap.end()) return false;
-        WaveFormFile wff = it->second;
+        DataFileHandle wff = it->second;
         mNextValueMap.erase(it);
         wff.callback(wff.obj,it->first,wff.value);
-        wff.value = wff.value ? 0 : 1;
         if (wff.file->good())
         {
-            uint64_t nextT = wff.file->nextTimeValue();
-            mNextValueMap.insert(std::pair<uint64_t,WaveFormFile>(nextT,wff));
+            SaleaeDataTuple sdt = wff.file->nextValue(wff.value);
+            wff.value = sdt.mValue;
+            uint64_t nextT = sdt.mTime;
+            mNextValueMap.insert(std::pair<uint64_t,DataFileHandle>(nextT,wff));
         }
         else
             delete wff.file;
@@ -78,40 +52,30 @@ namespace hal
 
     u64 SaleaeParser::get_max_time() const
     {
-        u64 retval = 0;
-        for (auto it = mSaleaeAbbrevMap.begin(); it != mSaleaeAbbrevMap.end(); ++it)
-        {
-            SaleaeInputFile* sif = inputFileFactory(it->second);
-            if (sif->good())
-            {
-                if (sif->header()->endTime() > retval)
-                    retval = sif->header()->endTime();
-            }
-            delete sif;
-        }
-        return retval;
+        return mSaleaeDirectory.get_max_time();
     }
 
-    SaleaeInputFile* SaleaeParser::inputFileFactory(const std::string& abbrev) const
+    SaleaeDataBuffer SaleaeParser::get_waveform_by_net(const Net* net) const
     {
-        std::filesystem::path path(mCsvFilename);
-        path.replace_filename(std::string("digital_") + abbrev + ".bin");
-        return new SaleaeInputFile(path.string());
+        std::filesystem::path path = mSaleaeDirectory.get_datafile(net->get_name(),net->get_id());
+        if (path.empty()) return SaleaeDataBuffer();
+        SaleaeInputFile sif(path.string());
+        if (!sif.good()) return SaleaeDataBuffer();
+        return sif.get_data();
     }
 
-    bool SaleaeParser::registerCallback(std::string& name, std::function<void(const void*,uint64_t,int)> callback, const void *obj)
+    bool SaleaeParser::registerCallback(const Net *net, std::function<void(const void*,uint64_t,int)> callback, const void *obj)
     {
-        auto it = mSaleaeAbbrevMap.find(name);
-        if (it == mSaleaeAbbrevMap.end()) return false;
-        std::filesystem::path path(mCsvFilename);
-        SaleaeInputFile* datafile = inputFileFactory(it->second);
+        std::filesystem::path path = mSaleaeDirectory.get_datafile(net->get_name(),net->get_id());
+        if (path.empty()) return false;
+        SaleaeInputFile* datafile = new SaleaeInputFile(path.string());
         if (!datafile->good())
         {
             std::cerr << "Error loading SALEAE datafile <" << datafile->get_last_error() << ">" << std::endl;
             delete datafile;
             return false;
         }
-        mNextValueMap.insert(std::pair<uint64_t,WaveFormFile>(0,{callback, name, datafile, datafile->startValue(), obj}));
+        mNextValueMap.insert(std::pair<uint64_t,DataFileHandle>(0,{callback, datafile, datafile->startValue(), obj}));
         return true;
     }
 }

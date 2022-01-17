@@ -31,6 +31,12 @@ namespace hal
         return mTempDir->path().toStdString();
     }
 
+    std::filesystem::path SimulationEngine::get_saleae_directory_filename() const
+    {
+        std::filesystem::path retval(directory());
+        return retval / "saleae" / "saleae.json";
+    }
+
     bool SimulationEngine::finalize()
     {
         mState = Done;

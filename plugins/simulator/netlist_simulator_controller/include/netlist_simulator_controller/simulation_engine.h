@@ -7,6 +7,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <filesystem>
 
 class QTemporaryDir;
 
@@ -72,6 +73,12 @@ namespace hal
          * @return directory path
          */
         std::string directory() const;
+
+        /**
+         * Get the filename of SALEAE directory file (JSON format).
+         * @return filename as std path
+         */
+        std::filesystem::path get_saleae_directory_filename() const;
 
         /**
          * Request clock change as regular net input event

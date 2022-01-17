@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <functional>
+#include "netlist_simulator_controller/saleae_directory.h"
 
 namespace hal
 {
@@ -17,10 +18,11 @@ namespace hal
 
     class SaleaeHeader
     {
-
+    public:
+        enum StorageFormat { Double = 0, Uint64 = 0x206c6168, Coded = 0x786c6168 };
         char mIdent[9];
         int32_t mVersion;
-        int32_t mType;
+        StorageFormat mStorageFormat;
         uint32_t mValue;
         uint64_t mBeginTime;
         uint64_t mEndTime;
@@ -33,7 +35,8 @@ namespace hal
         SaleaeStatus::ErrorCode read(std::ifstream& ff);
         SaleaeStatus::ErrorCode write(std::ofstream& of) const;
 
-        bool hasIntValues() const;
+        StorageFormat storageFormat() const { return mStorageFormat; }
+        void setStorageFormat(StorageFormat sf) { mStorageFormat = sf; }
 
         uint32_t value() const { return mValue; }
         void setValue(uint32_t v) { mValue = v; }
@@ -48,6 +51,26 @@ namespace hal
         void incrementTransitions() { ++mNumTransitions; }
     };
 
+    class SaleaeDataBuffer
+    {
+    public:
+        uint64_t mCount;
+        uint64_t* mTimeArray;
+        int* mValueArray;
+        bool isNull() const { return mCount == 0; }
+        SaleaeDataBuffer() : mCount(0), mTimeArray(nullptr), mValueArray(nullptr) {;}
+        ~SaleaeDataBuffer();
+        void convertCoded();
+        void dump() const;
+    };
+
+    class SaleaeDataTuple
+    {
+    public:
+        uint64_t mTime;
+        int mValue;
+    };
+
     class SaleaeInputFile : public std::ifstream
     {
         SaleaeHeader mHeader;
@@ -60,8 +83,9 @@ namespace hal
         SaleaeInputFile(const std::string& filename);
         int startValue() const { return mHeader.value(); }
 
-        uint64_t nextTimeValue();
+        SaleaeDataTuple nextValue(int lastValue);
         std::string get_last_error() const;
+        SaleaeDataBuffer get_data();
 
         const SaleaeHeader* header() const { return &mHeader; }
     };
@@ -70,14 +94,21 @@ namespace hal
     class SaleaeOutputFile : public std::ofstream
     {
         int mIndex;
+        std::string mFilename;
         SaleaeHeader mHeader;
         SaleaeStatus::ErrorCode mStatus;
         bool mFirstValue;
+
+        void convertToCoded();
     public:
         SaleaeOutputFile(const std::string& filename, int index_);
         ~SaleaeOutputFile();
         void writeTimeValue(uint64_t t, int32_t val);
         void close();
         int index() const { return mIndex; }
+
+        void put_data(SaleaeDataBuffer& buf);
+
+        SaleaeDirectoryFileIndex fileIndex() const;
     };
 }

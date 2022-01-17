@@ -231,7 +231,7 @@ public:
      * @param[in] filename the filename to read
      * @param[in] filter filter to select waveform data from file
      */
-    bool import_vcd(const std::string& filename, FilterInputFlag filter, bool silent=false);
+    bool import_vcd(const std::string& filename, FilterInputFlag filter);
 
     /**
      * Parse CSV file and convert content into SALEAE format

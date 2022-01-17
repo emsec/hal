@@ -241,12 +241,11 @@ namespace hal
                 Does not remove gates/nets from the simulation set.
             )")
 
-            .def("import_vcd", &NetlistSimulatorController::import_vcd, py::arg("filename"), py::arg("filter"), py::arg("silent") = false, R"(
+            .def("import_vcd", &NetlistSimulatorController::import_vcd, py::arg("filename"), py::arg("filter"), R"(
                 Import VCD file and convert content into SALEAE format.
 
                 :param str filename: filename of VCD file to be parsed.
                 :param hal_py.FilterInputFlag filter: filter to select waveform data from file.
-                :param bool silent: if true other applications (e.g. viewer) are not notified about waveform data loaded, thus they are not visible in the beginning.
             )")
 
             .def("import_csv", &NetlistSimulatorController::import_csv, py::arg("filename"), py::arg("filter"), py::arg("timescale") = 1000000000, R"(

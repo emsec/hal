@@ -2,6 +2,8 @@
 #include "netlist_simulator_controller/simulation_input.h"
 #include "netlist_simulator_controller/simulation_engine.h"
 #include "netlist_simulator_controller/dummy_engine.h"
+#include "netlist_simulator_controller/saleae_directory.h"
+#include "netlist_simulator_controller/saleae_file.h"
 
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/vcd_serializer.h"
@@ -110,11 +112,25 @@ namespace hal
     void NetlistSimulatorController::handleOpenInputFile(const QString &filename)
     {
         if (filename.isEmpty()) return;
-        VcdSerializer reader;
-        if (reader.deserializeVcd(filename))
+        if (!mSimulationEngine)
         {
-            for (WaveData* wd : reader.waveList())
+            log_warning(get_name(), "No engine selected, cannot import simulation data.");
+            return;
+        }
+        VcdSerializer reader;
+        QList<const Net*> onlyNets;
+        for (const Net* n : mSimulationInput->get_input_nets()) onlyNets.append(n);
+        if (reader.importVcd(filename,QString::fromStdString(mSimulationEngine->directory()),onlyNets))
+        {
+            SaleaeDirectory sd(mSimulationEngine->get_saleae_directory_filename());
+            for (const Net* n : onlyNets)
+            {
+                WaveData* wd = new WaveData(n);
+                std::filesystem::path path = sd.get_datafile(n->get_name(),n->get_id());
+                SaleaeInputFile sif(path);
+                wd->loadSaleae(sif);
                 mWaveDataList->addOrReplace(wd);
+            }
         }
         checkReadyState();
     }
@@ -233,7 +249,16 @@ namespace hal
 
     WaveData* NetlistSimulatorController::get_waveform_by_net(Net* n) const
     {
-        return mWaveDataList->waveDataByNetId(n->get_id());
+        WaveData* wd = mWaveDataList->waveDataByNetId(n->get_id());
+        if (wd) return wd;
+        if (!mSimulationEngine) return nullptr;
+        SaleaeDirectory sd(mSimulationEngine->get_saleae_directory_filename());
+        std::filesystem::path path = sd.get_datafile(n->get_name(),n->get_id());
+        if (path.empty()) return nullptr;
+        SaleaeInputFile sif(path);
+        wd = new WaveData(n);
+        wd->loadSaleae(sif);
+        return wd;
     }
 
     std::vector<const Net *> NetlistSimulatorController::getFilterNets(FilterInputFlag filter) const
@@ -256,40 +281,27 @@ namespace hal
         return std::vector<const Net*>();
     }
 
-    bool NetlistSimulatorController::import_vcd(const std::string& filename, FilterInputFlag filter, bool silent)
+    bool NetlistSimulatorController::import_vcd(const std::string& filename, FilterInputFlag filter)
     {
-        VcdSerializer reader;
-
-        QStringList netNames;
-        if (filter != NoFilter)
+        if (!mSimulationEngine)
         {
-            for (const Net* n: getFilterNets(filter))
-                netNames << QString::fromStdString(n->get_name());
+            log_warning(get_name(), "No engine selected, cannot import simulation data.");
+            return false;
         }
 
-        if (reader.deserializeVcd(QString::fromStdString(filename),netNames))
+        VcdSerializer reader;
+
+        QList<const Net*> inputNets;
+        if (filter != NoFilter)
         {
-            bool waveFound = false;
+            for (const Net* n: getFilterNets(filter)) inputNets.append(n);
+        }
 
-            if (filter == NoFilter)
-            {
-                for (WaveData* wd : reader.waveList())
-                    mWaveDataList->addOrReplace(wd,silent);
-            }
-            else
-            {
-                for (const Net* n: getFilterNets(filter))
-                {
-                    WaveData* wd = reader.waveByName(QString::fromStdString(n->get_name()));
-                    if (!wd) continue;
-                    wd->setId(n->get_id());
-                    wd->setName(QString::fromStdString(n->get_name()));
-                    mWaveDataList->addOrReplace(wd,silent);
-                    waveFound = true;
-                }
-            }
-
-            if (waveFound) mWaveDataList->incrementSimulTime(reader.maxTime());
+        if (reader.importVcd(QString::fromStdString(filename),QString::fromStdString(mSimulationEngine->directory()),inputNets))
+        {
+            SaleaeDirectory sd(mSimulationEngine->get_saleae_directory_filename());
+            u64 maxTime = sd.get_max_time();
+            if (maxTime) mWaveDataList->incrementSimulTime(maxTime);
         }
         else
         {
@@ -303,31 +315,17 @@ namespace hal
 
     void NetlistSimulatorController::import_csv(const std::string& filename, FilterInputFlag filter, u64 timescale)
     {
-        VcdSerializer reader;
-        if (reader.deserializeCsv(QString::fromStdString(filename),timescale))
+        if (!mSimulationEngine)
         {
-            bool waveFound = false;
-
-            if (filter == NoFilter)
-            {
-                for (WaveData* wd : reader.waveList())
-                    mWaveDataList->addOrReplace(wd);
-            }
-            else
-            {
-                for (const Net* n: getFilterNets(filter))
-                {
-                    WaveData* wd = reader.waveByName(QString::fromStdString(n->get_name()));
-                    if (!wd)  wd = reader.waveById(n->get_id());
-                    if (!wd) continue;
-                    wd->setId(n->get_id());
-                    wd->setName(QString::fromStdString(n->get_name()));
-                    mWaveDataList->addOrReplace(wd);
-                    waveFound = true;
-                }
-            }
-
-            if (waveFound) mWaveDataList->incrementSimulTime(reader.maxTime());
+            log_warning(get_name(), "No engine selected, cannot import simulation data.");
+            return;
+        }
+        VcdSerializer reader;
+        if (reader.importCsv(QString::fromStdString(filename),QString::fromStdString(mSimulationEngine->directory()),timescale))
+        {
+            SaleaeDirectory sd(mSimulationEngine->get_saleae_directory_filename());
+            u64 maxTime = sd.get_max_time();
+            if (maxTime) mWaveDataList->incrementSimulTime(maxTime);
         }
         checkReadyState();
         Q_EMIT parseComplete();
@@ -394,22 +392,11 @@ namespace hal
             QFileInfo info(QString::fromStdString(resultFile.string()));
             if (!info.exists() || !info.isReadable()) return false;
 
-            QStringList netNames;
+            QList<const Net*> partialNets;
             for (const Net* n : get_partial_netlist_nets())
-                netNames << QString::fromStdString(n->get_name());
-            if (!reader.deserializeVcd(QString::fromStdString(resultFile),netNames)) return false;
+                partialNets.append(n);
 
-            QHash<QString,u32> netIds;
-//            int wcount = 0;
-            for (const Net* n : get_partial_netlist_nets())
-            {
-                WaveData* wd = reader.waveByName(QString::fromStdString(n->get_name()));
-                if (!wd) continue;
-//                if (++wcount > 10) break;
-                wd->setId(n->get_id());
-                if (wd->data().isEmpty() || wd->data().firstKey() > 0) wd->insert(0,-1);
-                mWaveDataList->addOrReplace(wd);
-            }
+            if (!reader.importVcd(QString::fromStdString(resultFile),QString::fromStdString(mSimulationEngine->directory()),partialNets)) return false;
         }
         return true;
     }

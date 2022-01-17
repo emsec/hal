@@ -5,6 +5,8 @@
 #include "vcd_viewer/wave_scene.h"
 #include "vcd_viewer/vcd_viewer.h"
 #include "netlist_simulator_controller/wave_data.h"
+#include "netlist_simulator_controller/saleae_directory.h"
+#include "netlist_simulator_controller/saleae_file.h"
 #include "vcd_viewer/wave_edit_dialog.h"
 #include "vcd_viewer/wave_selection_dialog.h"
 #include "math.h"
@@ -207,20 +209,56 @@ namespace hal {
     void WaveWidget::addResults()
     {
         if (!canImportWires()) return;
-        QSet<int> alreadyShown = mTreeModel->waveDataIndexSet();
+        QSet<int> alreadyShownInx = mTreeModel->waveDataIndexSet();
+        QSet<QString> alreadyShownNames;
         int n = mWaveDataList->size();
-        QMap<const WaveData*,int> wdMap;
+        QMap<WaveSelectionEntry,int> wseMap;
         for (int i=0; i<n; i++)
         {
-            if (alreadyShown.contains(i)) continue;
-            wdMap.insert(mWaveDataList->at(i),i);
+            if (alreadyShownInx.contains(i))
+                alreadyShownNames.insert(mWaveDataList->at(i)->name());
+            else
+            {
+                WaveData* wd = mWaveDataList->at(i);
+                wseMap.insert(WaveSelectionEntry(wd->id(),wd->name(),wd->data().size()),i);
+            }
         }
-        WaveSelectionDialog wsd(wdMap,this);
-        if (wsd.exec() != QDialog::Accepted) return;
-        for (int i : wsd.selectedWaveIndices())
+        const SimulationEngine* eng = mController->get_simulation_engine();
+        SaleaeDirectory* sd = eng ? new SaleaeDirectory(eng->get_saleae_directory_filename()) : nullptr;
+        if (sd)
         {
-            mTreeModel->handleWaveAdded(i);
+            for (const SaleaeDirectory::ListEntry& sdle : sd->get_net_list())
+            {
+                QString netName = QString::fromStdString(sdle.name);
+                if (alreadyShownNames.contains(netName)) continue;
+                wseMap.insert(WaveSelectionEntry(sdle.id,netName,sdle.size),-1);
+            }
         }
+        WaveSelectionDialog wsd(wseMap,this);
+        if (wsd.exec() == QDialog::Accepted)
+        {
+            wseMap = wsd.selectedWaves();
+
+            for (auto it = wseMap.constBegin(); it!=wseMap.constEnd(); ++it)
+            {
+                int iwave = it.value();
+                if (iwave<0 && sd)
+                {
+                    iwave = mWaveDataList->size();
+                    WaveData* wd = new WaveData(it.key().id(),it.key().name());
+                    std::filesystem::path path = sd->get_datafile(it.key().name().toStdString(),it.key().id());
+                    if (!path.empty())
+                    {
+                        SaleaeInputFile sif(path);
+                        wd->loadSaleae(sif);
+                        mWaveDataList->add(wd,false);
+                    }
+                }
+                if (iwave >= 0)
+                    mTreeModel->handleWaveAdded(iwave);
+            }
+        }
+        if (sd) delete sd;
     }
 
     void WaveWidget::setGates(const std::vector<Gate*>& gats)

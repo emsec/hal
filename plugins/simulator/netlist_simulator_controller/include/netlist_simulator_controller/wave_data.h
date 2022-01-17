@@ -15,6 +15,7 @@ namespace hal {
     class WaveData;
     class NetlistSimulator;
     class Net;
+    class SaleaeInputFile;
 
     class WaveData
     {
@@ -47,6 +48,7 @@ namespace hal {
         void setName(const QString& nam);
         void setBits(int bts);
         void setDirty(bool dty)                     { mDirty = dty; }
+        void loadSaleae(SaleaeInputFile& sif);
         void setData(const QMap<u64,int>& dat);
         int  intValue(float t) const;
         int get_value_at(u64 t) const;

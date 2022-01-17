@@ -1,4 +1,5 @@
 #include "netlist_simulator_controller/wave_data.h"
+#include "netlist_simulator_controller/saleae_file.h"
 #include "netlist_simulator_controller/wave_event.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
@@ -140,6 +141,16 @@ namespace hal {
             *nextIt = val;
         }
         return true;
+    }
+
+    void WaveData::loadSaleae(SaleaeInputFile& sif)
+    {
+        mData.clear();
+        SaleaeDataBuffer sdb = sif.get_data();
+        for (u64 i=0; i<sdb.mCount; i++)
+        {
+            mData.insert(sdb.mTimeArray[i],sdb.mValueArray[i]);
+        }
     }
 
     QMap<u64,int>::const_iterator WaveData::timeIterator(float t) const
