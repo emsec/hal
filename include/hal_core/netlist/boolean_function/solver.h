@@ -105,7 +105,6 @@ namespace hal
 			 *
 			 * \warning This function is not yet implemented.
 			 *
-			 * @param[in] config - SMT solver configuration.
 			 * @param[in] config - The SMT solver query configuration.
 			 * @returns The result on success, a string error message otherwise.
 			 */

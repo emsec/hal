@@ -93,10 +93,10 @@ namespace hal
         static std::string to_bin(const std::vector<Value>& values);
 
         /**
-         * Get the vector of values as a octal string.
+         * Get the vector of values as an octal string.
          * 
          * @param[in] values - The vector of values.
-         * @returns A octal string representing the concatenated values.
+         * @returns An octal string representing the concatenated values.
          */
         static std::string to_oct(const std::vector<Value>& values);
 
@@ -349,7 +349,7 @@ namespace hal
         /**
          * Checks whether the top-level node of the Boolean function is of a specific type.
          * 
-         * @param type - The type to check for.
+         * @param[in] type - The type to check for.
          * @returns `true` if the node is of the given type, `false` otherwise.
          */
         bool is(u16 type) const;
@@ -371,7 +371,7 @@ namespace hal
         /**
          * Checks whether the Boolean function is of type `Constant` and holds a specific value.
          * 
-         * @param value - The value to check for.
+         * @param[in] value - The value to check for.
          * @returns `true` if the Boolean function is of type `Constant` and holds the given value, `false` otherwise.
          */
         bool has_constant_value(u64 value) const;
