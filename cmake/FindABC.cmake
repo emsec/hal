@@ -26,7 +26,9 @@ else()
     execute_process(COMMAND "${CMAKE_COMMAND}" --build .
                     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/abc-download" )
 
-    find_library(ABC_LIBRARY NAMES libabc.so PATHS ${CMAKE_BINARY_DIR}/abc-src)
+    add_subdirectory("${CMAKE_BINARY_DIR}/abc-src")
+
+    set(ABC_LIBRARY ${CMAKE_BINARY_DIR}/abc-src/libabc.so)
   endif()
 endif()
 
