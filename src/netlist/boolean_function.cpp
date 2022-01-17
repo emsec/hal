@@ -32,131 +32,168 @@ namespace hal
 
     namespace
     {
-        std::vector<char> char_map = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        static std::vector<char> char_map = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        // namespace
+
+        static Result<std::string> to_bin(const std::vector<BooleanFunction::Value>& value)
+        {
+            if (value.size() == 0)
+            {
+                return Error("bit-vector is empty");
+            }
+
+            std::string res = "";
+            res.reserve(value.size());
+
+            for (auto v : value)
+            {
+                res += enum_to_string<BooleanFunction::Value>(v);
+            }
+
+            return res;
+        }
+
+        static Result<std::string> to_oct(const std::vector<BooleanFunction::Value>& value)
+        {
+            int bitsize = value.size();
+            if (bitsize == 0)
+            {
+                return Error("bit-vector is empty");
+            }
+
+            u8 first_bits = bitsize % 3;
+
+            u8 index = 0;
+            u8 mask  = 0;
+
+            u8 v1, v2, v3;
+
+            // result string prep
+            std::string res = "";
+            res.reserve((bitsize + 2) / 3);
+
+            // deal with 0-3 leading bits
+            for (u8 i = 0; i < first_bits; i++)
+            {
+                v1    = value.at(i);
+                index = (index << 1) | v1;
+                mask |= v1;
+            }
+            mask = -((mask >> 1) & 0x1);
+            if (first_bits)
+            {
+                res += (char_map[index] & ~mask) | ('X' & mask);
+            }
+
+            // deal with 4-bit blocks (left to right)
+            for (int i = bitsize % 3; i < bitsize; i += 3)
+            {
+                v1 = value[i];
+                v2 = value[i + 1];
+                v3 = value[i + 2];
+
+                index = (v1 << 2) | (v2 << 1) | v3;    // cannot exceed char_map range as index always < 16, no further check required
+                mask  = -(((v1 | v2 | v3) >> 1) & 0x1);
+
+                res += (char_map[index] & ~mask) | ('X' & mask);
+            }
+
+            return res;
+        }
+
+        static Result<std::string> to_dec(const std::vector<BooleanFunction::Value>& value)
+        {
+            int bitsize = value.size();
+            if (bitsize == 0)
+            {
+                return Error("bit-vector is empty");
+            }
+
+            if (bitsize > 64)
+            {
+                return Error("bit-vector has length " + std::to_string(bitsize) + ", but only up to 64 bits are supported for decimal conversion");
+            }
+
+            u64 tmp   = 0;
+            u8 x_flag = 0;
+            for (auto v : value)
+            {
+                x_flag |= v >> 1;
+                tmp = (tmp << 1) | v;
+            }
+
+            if (x_flag)
+            {
+                return std::string("X");
+            }
+            return std::to_string(tmp);
+        }
+
+        static Result<std::string> to_hex(const std::vector<BooleanFunction::Value>& value)
+        {
+            int bitsize = value.size();
+            if (bitsize == 0)
+            {
+                return Error("bit-vector is empty");
+            }
+
+            u8 first_bits = bitsize & 0x3;
+
+            u8 index = 0;
+            u8 mask  = 0;
+
+            u8 v1, v2, v3, v4;
+
+            // result string prep
+            std::string res = "";
+            res.reserve((bitsize + 3) / 4);
+
+            // deal with 0-3 leading bits
+            for (u8 i = 0; i < first_bits; i++)
+            {
+                v1    = value.at(i);
+                index = (index << 1) | v1;
+                mask |= v1;
+            }
+            mask = -((mask >> 1) & 0x1);
+            if (first_bits)
+            {
+                res += (char_map[index] & ~mask) | ('X' & mask);
+            }
+
+            // deal with 4-bit blocks (left to right)
+            for (int i = bitsize & 0x3; i < bitsize; i += 4)
+            {
+                v1 = value[i];
+                v2 = value[i + 1];
+                v3 = value[i + 2];
+                v4 = value[i + 3];
+
+                index = ((v1 << 3) | (v2 << 2) | (v3 << 1) | v4) & 0xF;
+                mask  = -(((v1 | v2 | v3 | v4) >> 1) & 0x1);
+
+                res += (char_map[index] & ~mask) | ('X' & mask);
+            }
+
+            return res;
+        }
     }    // namespace
 
-    std::string BooleanFunction::to_bin(const std::vector<Value>& values)
+    Result<std::string> BooleanFunction::to_string(const std::vector<BooleanFunction::Value>& value, u8 base)
     {
-        std::string res = "";
-        res.reserve(values.size());
-
-        for (auto v : values)
+        switch (base)
         {
-            u8 mask = -((v >> 1) & 0x1);
-            res += (char_map[v] & ~mask) | ('X' & mask);
+            case 2:
+                return to_bin(value);
+            case 8:
+                return to_oct(value);
+            case 10:
+                return to_dec(value);
+            case 16:
+                return to_hex(value);
+            default:
+                return Error("invalid value '" + std::to_string(base) + "' provided for base");
         }
-
-        return res;
-    }
-
-    std::string BooleanFunction::to_oct(const std::vector<Value>& values)
-    {
-        int bitsize   = values.size();
-        u8 first_bits = bitsize % 3;
-
-        u8 index = 0;
-        u8 mask  = 0;
-
-        u8 v1, v2, v3;
-
-        // result string prep
-        std::string res = "";
-        res.reserve((bitsize + 2) / 3);
-
-        // deal with 0-3 leading bits
-        for (u8 i = 0; i < first_bits; i++)
-        {
-            v1    = values.at(i);
-            index = (index << 1) | v1;
-            mask |= v1;
-        }
-        mask = -((mask >> 1) & 0x1);
-        if (first_bits)
-        {
-            res += (char_map[index] & ~mask) | ('X' & mask);
-        }
-
-        // deal with 4-bit blocks (left to right)
-        for (int i = bitsize % 3; i < bitsize; i += 3)
-        {
-            v1 = values[i];
-            v2 = values[i + 1];
-            v3 = values[i + 2];
-
-            index = (v1 << 2) | (v2 << 1) | v3;    // cannot exceed char_map range as index always < 16, no further check required
-            mask  = -(((v1 | v2 | v3) >> 1) & 0x1);
-
-            res += (char_map[index] & ~mask) | ('X' & mask);
-        }
-
-        return res;
-    }
-
-    std::string BooleanFunction::to_dec(const std::vector<Value>& values)
-    {
-        int bitsize = values.size();
-        if (bitsize > 64)
-        {
-            return "";
-        }
-
-        u64 tmp   = 0;
-        u8 x_flag = 0;
-        for (auto v : values)
-        {
-            x_flag |= v >> 1;
-            tmp = (tmp << 1) | v;
-        }
-
-        if (x_flag)
-        {
-            return "X";
-        }
-        return std::to_string(tmp);
-    }
-
-    std::string BooleanFunction::to_hex(const std::vector<Value>& values)
-    {
-        int bitsize   = values.size();
-        u8 first_bits = bitsize & 0x3;
-
-        u8 index = 0;
-        u8 mask  = 0;
-
-        u8 v1, v2, v3, v4;
-
-        // result string prep
-        std::string res = "";
-        res.reserve((bitsize + 3) / 4);
-
-        // deal with 0-3 leading bits
-        for (u8 i = 0; i < first_bits; i++)
-        {
-            v1    = values.at(i);
-            index = (index << 1) | v1;
-            mask |= v1;
-        }
-        mask = -((mask >> 1) & 0x1);
-        if (first_bits)
-        {
-            res += (char_map[index] & ~mask) | ('X' & mask);
-        }
-
-        // deal with 4-bit blocks (left to right)
-        for (int i = bitsize & 0x3; i < bitsize; i += 4)
-        {
-            v1 = values[i];
-            v2 = values[i + 1];
-            v3 = values[i + 2];
-            v4 = values[i + 3];
-
-            index = ((v1 << 3) | (v2 << 2) | (v3 << 1) | v4) & 0xF;
-            mask  = -(((v1 | v2 | v3 | v4) >> 1) & 0x1);
-
-            res += (char_map[index] & ~mask) | ('X' & mask);
-        }
-
-        return res;
     }
 
     std::ostream& operator<<(std::ostream& os, BooleanFunction::Value v)

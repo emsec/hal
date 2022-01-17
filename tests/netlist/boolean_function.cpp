@@ -78,9 +78,10 @@ namespace hal {
         }
     }
 
-    TEST(BooleanFunction, ValuesToBin) {
+    TEST(BooleanFunction, ValueToBin) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 2).is_error());
+
         const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
-            {"", {}},
             {"1", {BooleanFunction::Value::ONE}},
             {"X", {BooleanFunction::Value::X}},
             {"Z", {BooleanFunction::Value::Z}},
@@ -92,15 +93,16 @@ namespace hal {
             {std::string(10000, '1'), std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE)},
         };
 
-        for (auto&& [expected, values]: data) 
+        for (auto&& [expected, value]: data) 
         {
-            EXPECT_EQ(expected, BooleanFunction::to_bin(values));
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 2).get());
         }
     }
 
-    TEST(BooleanFunction, ValuesToOct) {
+    TEST(BooleanFunction, ValueToOct) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 8).is_error());
+
         const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
-            {"", {}},
             {"1", {BooleanFunction::Value::ONE}},
             {"X", {BooleanFunction::Value::X}},
             {"X", {BooleanFunction::Value::Z}},
@@ -112,15 +114,17 @@ namespace hal {
             {std::string(3334, '7'), std::vector<BooleanFunction::Value>(10002, BooleanFunction::Value::ONE)},
         };
 
-        for (auto&& [expected, values]: data) 
+        for (auto&& [expected, value]: data) 
         {
-            EXPECT_EQ(expected, BooleanFunction::to_oct(values));
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 8).get());
         }
     }
 
-    TEST(BooleanFunction, ValuesToDec) {
+    TEST(BooleanFunction, ValueToDec) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 10).is_error());
+        EXPECT_TRUE(BooleanFunction::to_string(std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE), 10).is_error());
+
         const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
-            {"", {}},
             {"1", {BooleanFunction::Value::ONE}},
             {"X", {BooleanFunction::Value::X}},
             {"X", {BooleanFunction::Value::Z}},
@@ -130,18 +134,18 @@ namespace hal {
             {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
             {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
             {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
-            {"", std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE)},
         };
 
-        for (auto&& [expected, values]: data) 
+        for (auto&& [expected, value]: data) 
         {
-            EXPECT_EQ(expected, BooleanFunction::to_dec(values));
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 10).get());
         }
     }
 
-    TEST(BooleanFunction, ValuesToHex) {
+    TEST(BooleanFunction, ValueToHex) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 10).is_error());
+
         const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
-            {"", {}},
             {"1", {BooleanFunction::Value::ONE}},
             {"X", {BooleanFunction::Value::X}},
             {"X", {BooleanFunction::Value::Z}},
@@ -153,9 +157,9 @@ namespace hal {
             {std::string(2500, 'F'), std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE)},
         };
 
-        for (auto&& [expected, values]: data) 
+        for (auto&& [expected, value]: data) 
         {
-            EXPECT_EQ(expected, BooleanFunction::to_hex(values));
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 16).get());
         }
     }
 
