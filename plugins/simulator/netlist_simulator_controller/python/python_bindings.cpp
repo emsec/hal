@@ -256,8 +256,8 @@ namespace hal
                 :param int timescale: multiplicator for values in time column.
             )")
 
-            .def("set_saleae_input", &NetlistSimulatorController::set_saleae_input, py::arg("filename"), py::arg("timescale") = 1000000000, R"(
-                Set input for simulation to saleae file bundle.
+            .def("set_saleae_timescale", &NetlistSimulatorController::set_saleae_timescale, py::arg("timescale") = 1000000000, R"(
+                Set timescale when parsing SALEAE float values.
 
                 :param str filename: filename of CSV file to be parsed.
                 :param int timescale: multiplicator for values in time column.

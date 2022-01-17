@@ -4,6 +4,7 @@
 #include "netlist_simulator_controller/dummy_engine.h"
 #include "netlist_simulator_controller/saleae_directory.h"
 #include "netlist_simulator_controller/saleae_file.h"
+#include "netlist_simulator_controller/saleae_parser.h"
 
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/vcd_serializer.h"
@@ -164,14 +165,8 @@ namespace hal
 
         QMultiMap<u64,WaveIterator> nextInTimeLine;
 
-        for (const Net* n : mSimulationInput->get_input_nets())
-        {
-            const WaveData* wd = mWaveDataList->waveDataByNetId(n->get_id());
 
-            if (mSimulationInput->is_clock(n))
-            {
-                if (!mSimulationEngine->clock_events_required()) continue;
-
+                /*** generate clock data
                 if (!wd)
                 {
                     SimulationInput::Clock clk;
@@ -186,49 +181,8 @@ namespace hal
                     mWaveDataList->addOrReplace(wdc);
                     wd = wdc;
                 }
-            }
-            else
-            {
-                if (!wd)
-                {
-                    log_warning(get_name(), "no input data for net[{}] '{}'.", n->get_id(), n->get_name());
-                }
-            }
-            if (!wd || wd->data().isEmpty()) continue;
+                ***/
 
-            nextInTimeLine.insert(wd->data().firstKey(), {n, wd, wd->data().constBegin()});
-        }
-
-        u64 t=0;
-        SimulationInputNetEvent netEv;
-        while (!nextInTimeLine.isEmpty())
-        {
-            auto jt = nextInTimeLine.begin();
-            u64 tt = jt.key();
-            WaveIterator wit = jt.value();
-            Q_ASSERT(tt == wit.it.key());
-            nextInTimeLine.erase(jt);
-            if (tt != t)
-            {
-                netEv.set_simulation_duration(tt - t);
-                mSimulationInput->add_simulation_net_event(netEv);
-                netEv.clear();
-                t = tt;
-            }
-            BooleanFunction::Value sv;
-            switch (wit.it.value())
-            {
-            case -2: sv = BooleanFunction::Value::Z; break;
-            case -1: sv = BooleanFunction::Value::X; break;
-            case  0: sv = BooleanFunction::Value::ZERO; break;
-            case  1: sv = BooleanFunction::Value::ONE; break;
-            default: continue;
-            }
-            netEv[wit.n] = sv;
-
-            if (++wit.it != wit.wd->data().constEnd())
-                nextInTimeLine.insert(wit.it.key(),wit);
-        }
 
         if (!mSimulationEngine->setSimulationInput(mSimulationInput))
         {
@@ -331,11 +285,9 @@ namespace hal
         Q_EMIT parseComplete();
     }
 
-    void NetlistSimulatorController::set_saleae_input(const std::string &filename, u64 timescale)
+    void NetlistSimulatorController::set_saleae_timescale(u64 timescale)
     {
-        mSimulationInput->set_saleae_input(filename,timescale);
-        mWaveDataList->incrementSimulTime(mSimulationInput->get_saleae_max_time());
-        checkReadyState();
+        SaleaeParser::sTimeScaleFactor = timescale;
     }
 
     void NetlistSimulatorController::handleRunFinished(bool success)

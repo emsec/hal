@@ -68,8 +68,8 @@ namespace hal
         {
             ZERO = 0, /**< Represents a logical 0. */
             ONE  = 1, /**< Represents a logical 1 */
-            Z,        /**< Represents a high-impedance value. */
-            X         /**< Represents an undefined value. */
+            X    = -1, /**< Represents an undefined value. */
+            Z    = -2  /**< Represents a high-impedance value. */
         };
 
         enum class content_type

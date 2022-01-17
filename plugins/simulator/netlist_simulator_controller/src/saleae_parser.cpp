@@ -31,7 +31,7 @@ namespace hal
         return s.substr(p0,p1-p0+1);
     }
 
-    bool SaleaeParser::nextEvent()
+    bool SaleaeParser::next_event()
     {
         auto it = mNextValueMap.begin();
         if (it == mNextValueMap.end()) return false;
@@ -64,7 +64,7 @@ namespace hal
         return sif.get_data();
     }
 
-    bool SaleaeParser::registerCallback(const Net *net, std::function<void(const void*,uint64_t,int)> callback, const void *obj)
+    bool SaleaeParser::register_callback(const Net *net, std::function<void(const void*,uint64_t,int)> callback, const void *obj)
     {
         std::filesystem::path path = mSaleaeDirectory.get_datafile(net->get_name(),net->get_id());
         if (path.empty()) return false;

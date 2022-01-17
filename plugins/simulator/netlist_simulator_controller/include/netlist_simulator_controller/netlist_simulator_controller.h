@@ -242,11 +242,10 @@ public:
     void import_csv(const std::string& filename, FilterInputFlag filter, u64 timescale = 1000000000);
 
     /**
-     * Set input for simulation to saleae file bundle
-     * @param[in] filename the filename for CSV file with net <-> binary assignment
+     * Set timescale when parsing SALEAE float values
      * @param[in] timescale multiplication factor for time value
      */
-    void set_saleae_input(const std::string& filename, u64 timescale = 1000000000);
+    void set_saleae_timescale(u64 timescale = 1000000000);
 
     /**
      * Generates the a partial VCD file for parts the simulated netlist.

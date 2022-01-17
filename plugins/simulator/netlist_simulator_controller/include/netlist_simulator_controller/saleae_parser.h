@@ -24,11 +24,12 @@ namespace hal
         std::multimap<uint64_t,DataFileHandle> mNextValueMap;
 
     public:
-        static uint64_t sTimeScaleFactor;
-        u64 get_max_time() const;
         SaleaeParser(const std::string& filename);
-        bool registerCallback(const Net* net, std::function<void(const void*,uint64_t, int)> callback, const void* obj);
-        bool nextEvent();
+        u64 get_max_time() const;
+        bool register_callback(const Net* net, std::function<void(const void*,uint64_t, int)> callback, const void* obj);
+        bool next_event();
         SaleaeDataBuffer get_waveform_by_net(const Net* net) const;
+
+        static uint64_t sTimeScaleFactor;
     };
 }

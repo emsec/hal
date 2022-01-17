@@ -37,10 +37,6 @@ namespace hal {
         std::vector<const Net*> m_output_nets;
         std::vector<const Net*> m_partial_nets;
 
-        std::vector<SimulationInputNetEvent> mSimulationInputNetEvents; // TODO: remove
-        std::string mSaleaeInput;
-        u64 mSaleaeTimeScale;
-
         bool mNoClockUsed;
 
         void compute_input_nets();
@@ -48,7 +44,7 @@ namespace hal {
         void compute_partial_nets();
 
     public:
-        SimulationInput() : mSaleaeTimeScale(1000000000), mNoClockUsed(false) {;}
+        SimulationInput() : mNoClockUsed(false) {;}
 
         /**
          * Checks whether essential data for simulation has been provided (gates, clock, input_nets)
@@ -92,13 +88,6 @@ namespace hal {
          * Prepare simulation where no net is defined as clock input
          */
         void set_no_clock_used();
-
-        /**
-         * Set input for simulation to saleae file bundle
-         * @param[in] filename the filename for CSV file with net <-> binary assignment
-         * @param[in] timescale multiplication factor for time value
-         */
-        void set_saleae_input(const std::string& filename, u64 timescale = 1000000000);
 
         /**
          * Tests whether net is an input net
@@ -145,41 +134,9 @@ namespace hal {
         const std::vector<const Net*>& get_partial_netlist_nets() const;
 
         /**
-         * Add single event to simulation input net event vector. This method will be used by controller to setup
-         * all events to be simulated prior to call the engines setSimulationInput method.
-         *
-         * @param[in] ev the simulation input net event
-         */
-        void add_simulation_net_event(const SimulationInputNetEvent& ev) { mSimulationInputNetEvents.push_back(ev); }
-
-        /**
-         * Get all net events setup for simulation
-         * @return reference to vector of simulation input net events
-         */
-        const std::vector<SimulationInputNetEvent>& get_simulation_net_events() const { return mSimulationInputNetEvents; }
-
-        /**
          * Dump content of simulation input instance to file or stderr if no filename given
          * @param filename name of file to be created
          */
         void dump(std::string filename = std::string()) const;
-
-        /**
-         * Get SALEAE input file
-         * @return Absolute path to CSV file with data <-> net mapping
-         */
-        std::string get_saleae_input_file() const { return mSaleaeInput; }
-
-        /**
-         * Get SALEAE time scale factor
-         * @return Scale factor to convert (double) time value stored in file to long integer value
-         */
-        u64 get_saleae_time_scalefactor() const { return mSaleaeTimeScale; }
-
-        /**
-         * Get maximum time value from SALEAE files
-         * @return The maximum time value
-         */
-        u64 get_saleae_max_time() const;
     };
 }

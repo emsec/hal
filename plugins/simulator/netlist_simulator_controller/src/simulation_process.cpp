@@ -1,5 +1,6 @@
 #include "netlist_simulator_controller/simulation_process.h"
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
+#include "netlist_simulator_controller/saleae_directory.h"
 #include <QProcess>
 #include <QThread>
 #include <vector>
@@ -34,15 +35,12 @@ namespace hal {
 
     void SimulationProcess::runRemote()
     {
-        QFileInfo finfo(QString::fromStdString(mEngine->get_simulation_input()->get_saleae_input_file()));
-        QFile fsaleae(finfo.absoluteFilePath());
-        if (!fsaleae.open(QIODevice::ReadOnly)) return;
+        SaleaeDirectory sd(mEngine->get_saleae_directory_filename());
+        QFileInfo finfo(QString::fromStdString(mEngine->get_saleae_directory_filename()));
         QString saleaeFilesToCopy = finfo.fileName();
-        for (QByteArray line : fsaleae.readAll().split('\n'))
+        for (int inx=0; inx < sd.get_next_available_index(); inx++)
         {
-            QList<QByteArray> abbrev = line.split(',');
-            if (abbrev.size()>=2)
-                saleaeFilesToCopy += " digital_" + abbrev.at(0).trimmed() + ".bin";
+            saleaeFilesToCopy += QString(" digital_%1.bin").arg(inx);
         }
 
         QDir localDir(QString::fromStdString(mEngine->directory()));
@@ -67,7 +65,8 @@ namespace hal {
         ff.write("fi\n");
         ff.write("set -e\n");  // bailout on error
         ff.write("tar -czf - ${LOCALDIR} | ssh ${HOSTNAME} \"cd ${REMOTEDIR} ; tar -xzf -\"\n");
-        ff.write(QString("cd %1; tar -czf - %2 | ssh ${HOSTNAME} \"cd ${REMOTEDIR}${LOCALDIR} ; tar -xzf -\"\n").arg(finfo.absolutePath()).arg(saleaeFilesToCopy).toUtf8());
+        ff.write("ssh ${HOSTNAME} \"mkdir -p ${REMOTEDIR}${LOCALDIR}/saleae\"\n");
+        ff.write(QString("cd %1; tar -czf - %2 | ssh ${HOSTNAME} \"cd ${REMOTEDIR}${LOCALDIR}/saleae ; tar -xzf -\"\n").arg(finfo.absolutePath()).arg(saleaeFilesToCopy).toUtf8());
         mNumberLines = mEngine->numberCommandLines();
         for (int i=0; i<mNumberLines; i++)
         {
