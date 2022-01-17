@@ -123,9 +123,11 @@ Installation instructions:
 ```bash
 cd /opt/
 git clone https://github.com/berkeley-abc/abc
+cd abc
 APPLY PATCH
 make ABC_USE_PIC=1 libabc.so
 ```
+(See abc troubleshooting if fails)
 
 <a name="quickstart"></a>
 # Quickstart Guide 

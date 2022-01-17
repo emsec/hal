@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 2.8.2)
+
+project(abc-download NONE)
+
+include(ExternalProject)
+ExternalProject_Add(abc
+                    GIT_REPOSITORY https://github.com/berkeley-abc/abc.git
+                    GIT_TAG 48498af8189ef321ee876065d8947875cf711294
+                    SOURCE_DIR "${CMAKE_BINARY_DIR}/abc-src"
+                    PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/cmake/abc.patch
+                    CONFIGURE_COMMAND ""
+                    BUILD_IN_SOURCE 1
+                    BUILD_COMMAND make -s ABC_USE_PIC=1 libabc.so
+                    #INSTALL_COMMAND cmake -E echo "Skipping install step."
+                    #TEST_COMMAND ""
+                    )
