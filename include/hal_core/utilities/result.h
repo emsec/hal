@@ -36,11 +36,14 @@ namespace hal
     public:
         Result(const T& value) : std::variant<Error, T>(value)
         {
+            m_has_value = true;
         }
 
         Result(const Error& error) : std::variant<Error, T>(error)
         {
         }
+
+        // static const auto success = Result<std::monostate>();
 
         bool is_valid() const
         {
@@ -52,9 +55,14 @@ namespace hal
             return !is_valid();
         }
 
+        bool has_value() const
+        {
+            return m_has_value;
+        }
+
         T get() const
         {
-            return (is_valid() ? std::get<T>(*this) : T());
+            return (has_value() ? std::get<T>(*this) : T());
         }
 
         Error get_error() const
@@ -63,6 +71,7 @@ namespace hal
         }
 
     private:
-        explicit Result() = default;
+        bool m_has_value = false;
+        Result() = default;
     };
 }    // namespace hal

@@ -856,9 +856,9 @@ namespace hal {
                 EXPECT_EQ(group->get_pins().front(), pin_by_net);
                 EXPECT_EQ(group->get_direction(), PinDirection::input);
                 EXPECT_EQ(group->get_type(), PinType::none);
-                EXPECT_EQ(group->get_index(pin_by_net), 0);
-                EXPECT_EQ(group->get_pin(pin_by_net->get_name()), pin_by_net);
-                EXPECT_EQ(group->get_pin(0), pin_by_net);
+                EXPECT_EQ(group->get_index(pin_by_net).get(), 0);
+                EXPECT_EQ(group->get_pin(pin_by_net->get_name()).get(), pin_by_net);
+                EXPECT_EQ(group->get_pin(0).get(), pin_by_net);
                 EXPECT_EQ(group->get_start_index(), 0);
                 EXPECT_EQ(group->is_ascending(), false);
                 EXPECT_EQ(pin_by_net->get_group(), std::pair(group, u32(0)));
@@ -904,9 +904,9 @@ namespace hal {
                 EXPECT_EQ(group->get_pins().front(), pin_by_net);
                 EXPECT_EQ(group->get_direction(), PinDirection::output);
                 EXPECT_EQ(group->get_type(), PinType::none);
-                EXPECT_EQ(group->get_index(pin_by_net), 0);
-                EXPECT_EQ(group->get_pin("O(0)"), pin_by_net);
-                EXPECT_EQ(group->get_pin(0), pin_by_net);
+                EXPECT_EQ(group->get_index(pin_by_net).get(), 0);
+                EXPECT_EQ(group->get_pin("O(0)").get(), pin_by_net);
+                EXPECT_EQ(group->get_pin(0).get(), pin_by_net);
                 EXPECT_EQ(group->get_start_index(), 0);
                 EXPECT_EQ(group->is_ascending(), false);
                 EXPECT_EQ(pin_by_net->get_group(), std::pair(group, u32(0)));
@@ -962,10 +962,10 @@ namespace hal {
                 EXPECT_EQ(in_group->get_start_index(), 3);
                 EXPECT_EQ(in_group->get_direction(), PinDirection::input);
                 EXPECT_EQ(in_group->get_pins(), std::vector<ModulePin*>({in_pin_0, in_pin_1}));
-                EXPECT_EQ(in_group->get_index(in_pin_0), 3);
-                EXPECT_EQ(in_group->get_index(in_pin_1), 4);
-                EXPECT_EQ(in_group->get_pin(3), in_pin_0);
-                EXPECT_EQ(in_group->get_pin(4), in_pin_1);
+                EXPECT_EQ(in_group->get_index(in_pin_0).get(), 3);
+                EXPECT_EQ(in_group->get_index(in_pin_1).get(), 4);
+                EXPECT_EQ(in_group->get_pin(3).get(), in_pin_0);
+                EXPECT_EQ(in_group->get_pin(4).get(), in_pin_1);
                 EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group, u32(3)));
                 EXPECT_EQ(in_pin_1->get_group(), std::pair(in_group, u32(4)));
                 EXPECT_EQ(m_1->get_pin_group(old_in_pin_0_group_name), nullptr);
@@ -993,42 +993,42 @@ namespace hal {
                 EXPECT_EQ(in_group_0->get_start_index(), 0);
                 EXPECT_EQ(in_group_0->is_ascending(), false);
                 EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group_0, u32(0)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_0), 0);
+                EXPECT_EQ(in_group_0->get_index(in_pin_0).get(), 0);
 
                 // assign pin to group
                 EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, in_pin_1));
                 EXPECT_EQ(m_1->get_pin_groups().size(), 3);
                 EXPECT_EQ(in_group_0->size(), 2);
                 EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group_0, u32(0)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_0), 0);
+                EXPECT_EQ(in_group_0->get_index(in_pin_0).get(), 0);
                 EXPECT_EQ(in_pin_1->get_group(), std::pair(in_group_0, u32(1)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_1), 1);
-                EXPECT_EQ(in_group_0->get_pin(0), in_pin_0);
-                EXPECT_EQ(in_group_0->get_pin(1), in_pin_1);
+                EXPECT_EQ(in_group_0->get_index(in_pin_1).get(), 1);
+                EXPECT_EQ(in_group_0->get_pin(0).get(), in_pin_0);
+                EXPECT_EQ(in_group_0->get_pin(1).get(), in_pin_1);
 
                 // move pins within group
                 EXPECT_TRUE(m_1->move_pin_within_group(in_group_0, in_pin_1, 0));
                 EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group_0, u32(1)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_0), 1);
+                EXPECT_EQ(in_group_0->get_index(in_pin_0).get(), 1);
                 EXPECT_EQ(in_pin_1->get_group(), std::pair(in_group_0, u32(0)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_1), 0);
-                EXPECT_EQ(in_group_0->get_pin(1), in_pin_0);
-                EXPECT_EQ(in_group_0->get_pin(0), in_pin_1);
+                EXPECT_EQ(in_group_0->get_index(in_pin_1).get(), 0);
+                EXPECT_EQ(in_group_0->get_pin(1).get(), in_pin_0);
+                EXPECT_EQ(in_group_0->get_pin(0).get(), in_pin_1);
 
                 EXPECT_TRUE(m_1->move_pin_within_group(in_group_0, in_pin_1, 1));
                 EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group_0, u32(0)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_0), 0);
+                EXPECT_EQ(in_group_0->get_index(in_pin_0).get(), 0);
                 EXPECT_EQ(in_pin_1->get_group(), std::pair(in_group_0, u32(1)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_1), 1);
-                EXPECT_EQ(in_group_0->get_pin(0), in_pin_0);
-                EXPECT_EQ(in_group_0->get_pin(1), in_pin_1);
+                EXPECT_EQ(in_group_0->get_index(in_pin_1).get(), 1);
+                EXPECT_EQ(in_group_0->get_pin(0).get(), in_pin_0);
+                EXPECT_EQ(in_group_0->get_pin(1).get(), in_pin_1);
 
                 // remove pin from group
                 EXPECT_TRUE(m_1->set_pin_group_name(in_group_0, "I_tmp"));
                 EXPECT_TRUE(m_1->remove_pin_from_group(in_group_0, in_pin_0));
                 EXPECT_EQ(in_pin_1->get_group(), std::pair(in_group_0, u32(0)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_1), 0);
-                EXPECT_EQ(in_group_0->get_pin(0), in_pin_1);
+                EXPECT_EQ(in_group_0->get_index(in_pin_1).get(), 0);
+                EXPECT_EQ(in_group_0->get_pin(0).get(), in_pin_1);
                 EXPECT_EQ(in_pin_0->get_group().first->get_name(), in_pin_0->get_name());
                 EXPECT_EQ(in_pin_0->get_group().second, 0);
                 EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, in_pin_0));

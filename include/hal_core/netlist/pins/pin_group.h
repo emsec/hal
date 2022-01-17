@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/utilities/result.h"
 
 #include <list>
 #include <string>
@@ -92,7 +93,7 @@ namespace hal
          * @param[in] index - The index of the pin within the pin group.
          * @returns The pin on success, a nullptr otherwise.
          */
-        T* get_pin(u32 index) const
+        Result<T*> get_pin(u32 index) const
         {
             if (index >= m_start_index && index < m_next_index)
             {
@@ -100,7 +101,7 @@ namespace hal
                 std::advance(it, index - m_start_index);
                 return *it;
             }
-            return nullptr;
+            return Error("no pin exists at index " + std::to_string(index) + " within pin group '" + m_name + "'");
         }
 
         /**
@@ -109,13 +110,13 @@ namespace hal
          * @param[in] name - The name of the pin.
          * @returns The pin on success, a nullptr otherwise.
          */
-        T* get_pin(const std::string& name) const
+        Result<T*> get_pin(const std::string& name) const
         {
             if (const auto it = m_pin_name_map.find(name); it != m_pin_name_map.end())
             {
                 return it->second;
             }
-            return nullptr;
+            return Error("no pin with name '" + name + "' exists within pin group '" + m_name + "'");
         }
 
         /**
@@ -124,13 +125,19 @@ namespace hal
          * @param[in] pin - The pin.
          * @returns The index of the pin on success, -1 otherwise.
          */
-        i32 get_index(const T* pin) const
+        Result<u32> get_index(const T* pin) const
         {
-            if (pin != nullptr && pin->m_group.first == this)
+            if (pin == nullptr)
             {
-                return pin->m_group.second;
+                return Error("'nullptr' provided as pin");
             }
-            return -1;
+
+            if (pin->m_group.first != this)
+            {
+                return Error("provided pin '" + pin->get_name() + "' does not belong to pin group '" + m_name + "'");
+            }
+
+            return pin->m_group.second;
         }
 
         /**
@@ -139,13 +146,15 @@ namespace hal
          * @param[in] name - The name of the pin.
          * @returns The index of the pin on success, -1 otherwise.
          */
-        i32 get_index(const std::string& name) const
+        Result<u32> get_index(const std::string& name) const
         {
-            if (const T* pin = get_pin(name); pin != nullptr)
+            const auto pin = get_pin(name);
+            if (pin.is_error())
             {
-                return get_index(pin);
+                return pin.get_error();
             }
-            return -1;
+
+            return get_index(pin.get());
         }
 
         /**

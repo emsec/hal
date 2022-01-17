@@ -54,7 +54,22 @@ namespace hal
             :rtype: list[hal_py.ModulePin]
         )");
 
-        py_module_pin_group.def("get_pin", py::overload_cast<u32>(&PinGroup<ModulePin>::get_pin, py::const_), py::arg("index"), R"(
+        py_module_pin_group.def(
+            "get_pin",
+            [](const PinGroup<ModulePin>& self, u32 index) -> ModulePin* {
+                auto res = self.get_pin(index);
+                if (res.is_valid())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("index"),
+            R"(
             Get the pin specified by the given index.
 
             :param int index: The index of the pin within the pin group.
@@ -62,7 +77,22 @@ namespace hal
             :rtype: hal_py.ModulePin or None
         )");
 
-        py_module_pin_group.def("get_pin", py::overload_cast<const std::string&>(&PinGroup<ModulePin>::get_pin, py::const_), py::arg("name"), R"(
+        py_module_pin_group.def(
+            "get_pin",
+            [](const PinGroup<ModulePin>& self, const std::string& name) -> ModulePin* {
+                auto res = self.get_pin(name);
+                if (res.is_valid())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("name"),
+            R"(
             Get the pin specified by the given name.
 
             :param str name: The name of the pin.
@@ -70,7 +100,22 @@ namespace hal
             :rtype: hal_py.ModulePin or None
         )");
 
-        py_module_pin_group.def("get_index", py::overload_cast<const ModulePin*>(&PinGroup<ModulePin>::get_index, py::const_), py::arg("pin"), R"(
+        py_module_pin_group.def(
+            "get_index",
+            [](const PinGroup<ModulePin>& self, const ModulePin* pin) -> i32 {
+                auto res = self.get_index(pin);
+                if (res.is_valid())
+                {
+                    return (i32) res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return -1;
+                }
+            },
+            py::arg("pin"),
+            R"(
             Get the index within the pin group of the given pin.
 
             :param hal_py.ModulePin pin: The pin
@@ -78,7 +123,22 @@ namespace hal
             :rtype: int
         )");
 
-        py_module_pin_group.def("get_index", py::overload_cast<const std::string&>(&PinGroup<ModulePin>::get_index, py::const_), py::arg("name"), R"(
+        py_module_pin_group.def(
+            "get_index",
+            [](const PinGroup<ModulePin>& self, const std::string& name) -> i32 {
+                auto res = self.get_index(name);
+                if (res.is_valid())
+                {
+                    return (i32) res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return -1;
+                }
+            },
+            py::arg("name"),
+            R"(
             Get the index within the pin group of the pin specified by the given name.
 
             :param str name: The name of the pin.
