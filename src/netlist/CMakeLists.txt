@@ -30,6 +30,7 @@ target_link_libraries(netlist
                         ${CMAKE_DL_LIBS}
                         RapidJSON::RapidJSON
                         ${Z3_LIBRARIES}
+                        ${ABC_LIBRARY}
                       )
 install(TARGETS netlist
         EXPORT hal
