@@ -9,11 +9,19 @@ add_library(core SHARED ${CMAKE_BINARY_DIR}/hal_version.h)
 set_target_properties(core PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(core PROPERTIES OUTPUT_NAME "hal_core")
 add_library(hal::core ALIAS core)
+
+find_package(Z3 REQUIRED)
+if(NOT Z3_FOUND)
+    message(STATUS "Could not find z3")
+endif(NOT Z3_FOUND)
+
+
 target_include_directories(core
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+                           ${Z3_INCLUDE_DIRS}
                            )
 target_compile_options(core
                        PUBLIC ${COMPILE_OPTIONS_PUBLIC}
@@ -33,12 +41,14 @@ elseif(NOT Boost_FOUND)
     endif(APPLE AND CMAKE_HOST_APPLE)
 endif(Boost_FOUND)
 
+
 target_link_libraries(core
                       PUBLIC
                       hal::utilities
                       hal::netlist
                       hal::plugin_system
                       hal::py
+                      ${Z3_LIBRARIES}
                       )
 install(TARGETS core
         EXPORT hal

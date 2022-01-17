@@ -120,7 +120,7 @@ if(${pybind11_FOUND})
     message(VERBOSE "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
     message(VERBOSE "Found pybind11 >= 2.4.3")
 else()
-    message(STATUS "pybind11 >= 2.4.3 not found")
+    message(STATUS "pybind11 >= 2.4.3 not found, will build our provided version")
     add_subdirectory(deps/pybind11)
 endif()
 
@@ -132,7 +132,7 @@ find_package(spdlog 1.5.0 CONFIG)
 if(${spdlog_FOUND})
     message(VERBOSE "Found spdlog >= 1.5.0")
 else()
-    message(STATUS "spdlog >= 1.5.0 not found")
+    message(STATUS "spdlog >= 1.5.0 not found, will build our provided version")
     set(spdlog_VERSION 1.5.0)
     add_library(spdlog::spdlog INTERFACE IMPORTED)
     set_target_properties(spdlog::spdlog PROPERTIES
@@ -178,3 +178,20 @@ if(${graphviz_FOUND})
     #   add_custom_target( ...
     #                      LINK_LIBRARIES ... graphviz::graphviz)
 endif()
+
+################################
+#####   Berkeley ABC
+################################
+
+# abc stuff
+# Download and unpack abc at configure time
+find_package(ABC REQUIRED)
+if(${ABC_FOUND})
+    message(STATUS "Found ABC:")
+    message(STATUS "    ABC_LIBRARY: ${ABC_LIBRARY}")
+else()
+    message(STATUS "ABC not found")
+endif()
+
+
+
