@@ -32,15 +32,25 @@ namespace hal
     SaleaeOutputFile* SaleaeWriter::add_or_replace_waveform(const std::string& name, uint32_t id)
     {
         std::filesystem::path path;
+        SaleaeOutputFile* sof = nullptr;
         int fileIndex = -1;
         if ( (fileIndex = mSaleaeDirectory.get_datafile_index(name,id)) >= 0)
         {
             // replace existing
             path = mSaleaeDirectory.get_datafile(name, id);
+            mDataFiles.at(fileIndex)->close();
+            delete mDataFiles.at(fileIndex);
+            sof = new SaleaeOutputFile(path.string(), fileIndex);
+            if (!sof->good())
+            {
+                delete sof;
+                return nullptr;
+            }
+            mDataFiles[fileIndex] = sof;
         }
         else
         {
-            // add new waveform
+            // add new waveform, might need to increase ulimit
             struct rlimit rlim;
             getrlimit(RLIMIT_NOFILE, &rlim);
 
@@ -56,21 +66,22 @@ namespace hal
             std::ostringstream fname;
             fname << "digital_" << fileIndex << ".bin";
             path = mDir / fname.str();
+
+            sof = new SaleaeOutputFile(path.string(), fileIndex);
+            if (!sof->good())
+            {
+                delete sof;
+                return nullptr;
+            }
+
+            // create directory entry
+            SaleaeDirectoryNetEntry sdne(name,id);
+            sdne.addIndex(SaleaeDirectoryFileIndex(fileIndex));
+            mSaleaeDirectory.add_net(sdne);
+
+            mDataFiles.push_back(sof);
+
         }
-
-        SaleaeOutputFile* sof = new SaleaeOutputFile(path.string(), fileIndex);
-        if (!sof->good())
-        {
-            delete sof;
-            return nullptr;
-        }
-
-        SaleaeDirectoryNetEntry sdne(name,id);
-        sdne.addIndex(SaleaeDirectoryFileIndex(fileIndex));
-        mSaleaeDirectory.add_net(sdne);
-
-        mDataFiles.push_back(sof);
-
         return sof;
     }
 
