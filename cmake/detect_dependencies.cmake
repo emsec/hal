@@ -185,11 +185,12 @@ endif()
 
 # abc stuff
 # Download and unpack abc at configure time
-add_library(ABC INTERFACE)
+add_library(ABC INTERFACE IMPORTED)
 find_package(ABC)
 if(${ABC_FOUND})
     message(STATUS "Found ABC:")
     message(STATUS "    ABC_LIBRARY: ${ABC_LIBRARY}")
+    message(STATUS "    ABC_INCLUDE_DIR: ${ABC_INCLUDE_DIR}")
 else()
     message(STATUS "ABC not found")
     message(STATUS "Downloading and building abc. This will take a while, check README.md to see how to speed up the process...")
@@ -211,4 +212,14 @@ else()
 endif()
 
 
+################################
+#####   z3
+################################
 
+find_package(Z3 REQUIRED)
+if(Z3_FOUND)
+    message(STATUS "Found z3")
+else()
+    set(Missing_package "TRUE")
+    message(STATUS "Could not find z3")
+endif(Z3_FOUND)

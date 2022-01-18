@@ -5,10 +5,6 @@ add_library(netlist SHARED ${NETLIST_LIB_INCLUDE} ${NETLIST_LIB_SOURCE} ${CMAKE_
 set_target_properties(netlist PROPERTIES OUTPUT_NAME "hal_netlist")
 add_library(hal::netlist ALIAS netlist)
 
-find_package(Z3 REQUIRED)
-if(NOT Z3_FOUND)
-    message(STATUS "Could not find z3")
-endif(NOT Z3_FOUND)
 
 target_include_directories(netlist
                            PUBLIC
@@ -16,7 +12,9 @@ target_include_directories(netlist
                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            ${Z3_INCLUDE_DIRS}
+                           ${ABC_INCLUDE_DIR}
                            )
+
 target_compile_options(netlist
                        PUBLIC ${COMPILE_OPTIONS_PUBLIC}
                        PRIVATE ${COMPILE_OPTIONS_PRIVATE}

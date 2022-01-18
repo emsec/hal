@@ -10,11 +10,6 @@ set_target_properties(core PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(core PROPERTIES OUTPUT_NAME "hal_core")
 add_library(hal::core ALIAS core)
 
-find_package(Z3 REQUIRED)
-if(NOT Z3_FOUND)
-    message(STATUS "Could not find z3")
-endif(NOT Z3_FOUND)
-
 
 target_include_directories(core
                            PUBLIC
