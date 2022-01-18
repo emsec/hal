@@ -190,25 +190,14 @@ find_package(ABC)
 if(${ABC_FOUND})
     message(STATUS "Found ABC:")
     message(STATUS "    ABC_LIBRARY: ${ABC_LIBRARY}")
-    message(STATUS "    ABC_INCLUDE_DIR: ${ABC_INCLUDE_DIR}")
 else()
     message(STATUS "ABC not found")
-    message(STATUS "Downloading and building abc. This will take a while, check README.md to see how to speed up the process...")
+    message(STATUS "Will build abc ourselves, check README.md to see how to speed up the process...")
     
-    configure_file(cmake/abc-CMakeLists.txt.in "${CMAKE_BINARY_DIR}/abc-download/CMakeLists.txt")
-
-    execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
-                    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/abc-download" )
-    execute_process(COMMAND "${CMAKE_COMMAND}" --build .
-                WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/abc-download" )
-
-    # Add abc directly to our build.
-    add_subdirectory("${CMAKE_BINARY_DIR}/abc-src"
-                     "${CMAKE_BINARY_DIR}/abc-build")
-    
-    add_dependencies(ABC ABC_EXTERNAL)
-    set(ABC_LIBRARY ${CMAKE_BINARY_DIR}/abc-build/libabc.so)
-    target_link_libraries(ABC INTERFACE ${ABC_LIBRARY})
+    add_subdirectory(deps/abc)
+    add_library(abc::libabc-pic INTERFACE IMPORTED)
+    set_target_properties(abc::libabc-pic PROPERTIES INTERFACE_LINK_LIBRARIES libabc-pic)
+    set(ABC_LIBRARY abc::libabc-pic)
 endif()
 
 
@@ -219,6 +208,8 @@ endif()
 find_package(Z3 REQUIRED)
 if(Z3_FOUND)
     message(STATUS "Found z3")
+    message(STATUS "    Z3_LIBRARIES: ${Z3_LIBRARIES}")
+    message(STATUS "    Z3_INCLUDE_DIRS: ${Z3_INCLUDE_DIRS}")
 else()
     set(Missing_package "TRUE")
     message(STATUS "Could not find z3")
