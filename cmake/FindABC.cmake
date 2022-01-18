@@ -17,7 +17,7 @@ else()
   find_library(ABC_LIBRARY NAMES libabc.so PATHS ${CMAKE_EXTRA_LIBRARIES} PATH_SUFFIXES abc/ NO_DEFAULT_PATH)
   # try some additional paths
   if(NOT ABC_LIBRARY)
-    find_library (ABC_LIBRARY NAMES libabc.so PATHS /usr/local/lib /usr/lib /lib /sw/lib  ${CMAKE_EXTRA_LIBRARIES} PATH_SUFFIXES abc/)
+    find_library (ABC_LIBRARY NAMES libabc.so PATHS /usr/local/lib /usr/lib /lib /sw/lib /opt/ ${CMAKE_EXTRA_LIBRARIES} PATH_SUFFIXES abc/)
   endif(NOT ABC_LIBRARY)
 endif()
 

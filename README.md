@@ -105,8 +105,8 @@ This also builds all tests of plugins that are built.
 If you do not specify `CMAKE_BUILD_TYPE`, it defaults to `Release`.
 
 #### Speed up the building process - Notes on ABC (Mandatory on M1 Macs)
-To speed up the building process of a clean build, you have the option to install ABC at a path of your choice and provide the path to CMake or put in a standard path like (`/opt/abc/`).
-**Important:** To ensure a problem free execution of abc, you need to modify the buffer size, since boolean functions generated in HAL, can be quite large. Check the `src/base/ver/verStream.c` file in abc and set the following values (this is automatically done if you don't use your own ABC):
+To speed up the building process of a clean build, you have the option to install ABC at a path of your choice and provide the path to CMake or put in a standard path like (`/usr/local/lib/`).
+**Important:** To ensure a problem free execution of abc, we had to modify the buffer size, since boolean functions generated in HAL, can be quite large. Check the `abc/src/base/ver/verStream.c` file, where we changed the following values:
 
 
 ```git
@@ -121,13 +121,11 @@ To speed up the building process of a clean build, you have the option to instal
 Installation instructions:
 
 ```bash
-cd /opt/
-git clone https://github.com/berkeley-abc/abc
-cd abc
-APPLY PATCH
+cd deps/abc
 make ABC_USE_PIC=1 libabc.so
+sudo cp libabc.so /usr/local/lib/
 ```
-(See abc troubleshooting if fails)
+(See [abc troubleshooting](https://github.com/berkeley-abc/abc#troubleshooting) if fails)
 
 <a name="quickstart"></a>
 # Quickstart Guide 
