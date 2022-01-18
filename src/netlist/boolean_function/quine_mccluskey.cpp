@@ -1,8 +1,31 @@
 #include "hal_core/netlist/boolean_function/parser.h"
 
 namespace hal {
+    extern "C" {
+        void Abc_Start();
+        void Abc_Stop();
+
+        typedef struct Wlc_Ntk_t Wlc_Ntk_t;
+        Wlc_Ntk_t * Wlc_ReadSmt(char * pFileName, int fOldParser, int fPrintTree);
+        Wlc_Ntk_t* Wlc_ReadSmtBuffer(char * pFileName, char * pBuffer, char * pLimit, int fOldParser, int fPrintTree);
+
+        typedef struct Abc_Frame_t_ Abc_Frame_t;
+        Abc_Frame_t* Abc_FrameGetGlobalFrame();
+        int Cmd_CommandExecute(Abc_Frame_t* pAbc, const char* sCommand);
+    }
+
 	std::variant<BooleanFunction, std::string> BooleanFunction::quine_mccluskey(const BooleanFunction& function) 
 	{
+        Abc_Start();
+        auto abc = Abc_FrameGetGlobalFrame();
+
+        auto result = Wlc_ReadSmt("~/test/test.smt", 0, 0);
+        
+        // auto r = Cmd_CommandExecute(abc, "show");
+        // printf("result after command : %d\n", r);
+
+        Abc_Stop();
+
 		/// TODO: implement me based on the old implementation for single-bit Boolean functions, see below.
 		return function;
 	}
