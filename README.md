@@ -106,7 +106,7 @@ If you do not specify `CMAKE_BUILD_TYPE`, it defaults to `Release`.
 
 #### Speed up the building process - Notes on ABC (Mandatory on M1 Macs)
 To speed up the building process of a clean build, you have the option to install ABC at a path of your choice and provide the path to CMake or put in a standard path like (`/opt/abc/`).
-**Important:** To ensure a problem free execution of abc, you need to modify the buffer size, since boolean functions generated in HAL, can be quite large. Check the `src/base/ver/verStream.c` file in abc and set the following values (this is automatically done if you choose the `HAL` download option):
+**Important:** To ensure a problem free execution of abc, you need to modify the buffer size, since boolean functions generated in HAL, can be quite large. Check the `src/base/ver/verStream.c` file in abc and set the following values (this is automatically done if you don't use your own ABC):
 
 
 ```git
