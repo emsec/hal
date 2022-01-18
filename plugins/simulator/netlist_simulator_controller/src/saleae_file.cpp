@@ -12,6 +12,17 @@ namespace hal
 {
 
     const char* SaleaeHeader::sIdent = "<SALEAE>";
+
+    SaleaeDataBuffer::SaleaeDataBuffer(uint64_t cnt)
+        : mCount(cnt), mTimeArray(nullptr), mValueArray(nullptr)
+    {
+        if (mCount)
+        {
+            mTimeArray = new uint64_t[mCount];
+            mValueArray = new int[mCount];
+        }
+    }
+
     SaleaeDataBuffer::~SaleaeDataBuffer()
     {
         if (mTimeArray)  delete [] mTimeArray;
@@ -230,10 +241,6 @@ namespace hal
 
     void SaleaeOutputFile::writeTimeValue(uint64_t t, int32_t val)
     {
-        if (mIndex == 2)
-        {
-            qDebug() << "writeTimeValue" << t << val;
-        }
         if (mFirstValue)
         {
             mHeader.setValue(val);

@@ -143,14 +143,45 @@ namespace hal {
         return true;
     }
 
-    void WaveData::loadSaleae(SaleaeInputFile& sif)
+    bool WaveData::loadSaleae(const SaleaeDirectory& sd)
     {
         mData.clear();
+        std::filesystem::path path = sd.get_datafile(mName.toStdString(),mId);
+        if (path.empty()) return false;
+
+        SaleaeInputFile sif(path);
         SaleaeDataBuffer sdb = sif.get_data();
         for (u64 i=0; i<sdb.mCount; i++)
         {
             mData.insert(sdb.mTimeArray[i],sdb.mValueArray[i]);
         }
+        mDirty = true;
+        return true;
+    }
+
+    void WaveData::saveSaleae(SaleaeDirectory& sd) const
+    {
+        int inx = sd.get_datafile_index(mName.toStdString(),mId);
+        if (inx < 0)
+        {
+            inx = sd.get_next_available_index();
+            SaleaeDirectoryNetEntry sdne(mName.toStdString(),mId);
+            sdne.addIndex(SaleaeDirectoryFileIndex(inx,0,mData.lastKey(),mData.size()));
+            sd.add_net(sdne);
+            sd.write_json();
+        }
+        std::filesystem::path path = sd.get_datafile(mName.toStdString(),mId);
+
+        SaleaeDataBuffer sdb(mData.size());
+        int j = 0;
+        for (auto it = mData.constBegin(); it != mData.constEnd(); ++it)
+        {
+            sdb.mTimeArray[j] = it.key();
+            sdb.mValueArray[j] = it.value();
+            ++j;
+        }
+        SaleaeOutputFile sof(path.string(),inx);
+        sof.put_data(sdb);
     }
 
     QMap<u64,int>::const_iterator WaveData::timeIterator(float t) const
@@ -689,6 +720,21 @@ namespace hal {
         triggerEndResetModel();
     }
 
+    void WaveDataList::updateFromSaleae(const SaleaeDirectory &sd)
+    {
+        u64 sdMaxTime = sd.get_max_time();
+        if (sdMaxTime > mSimulTime) incrementSimulTime(sdMaxTime-mSimulTime);
+        QSet<QString> loadedNets;
+        for (const SaleaeDirectory::ListEntry& sdle : sd.get_net_list())
+            loadedNets.insert(QString::fromStdString(sdle.name));
+        for (int i=0; i<size(); i++)
+        {
+            WaveData* wd = at(i);
+            if (!loadedNets.contains(wd->name())) continue;
+            if (wd->loadSaleae(sd))
+                emitWaveUpdated(i);
+        }
+    }
 
     void WaveDataList::addOrReplace(WaveData* wd, bool silent)
     {

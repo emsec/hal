@@ -58,7 +58,7 @@ namespace hal
         uint64_t* mTimeArray;
         int* mValueArray;
         bool isNull() const { return mCount == 0; }
-        SaleaeDataBuffer() : mCount(0), mTimeArray(nullptr), mValueArray(nullptr) {;}
+        SaleaeDataBuffer(uint64_t cnt = 0);
         ~SaleaeDataBuffer();
         void convertCoded();
         void dump() const;

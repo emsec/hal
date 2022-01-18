@@ -314,7 +314,7 @@ QMap<int,int>::const_iterator mIterator;
         return true;
     }
 
-    bool VcdSerializer::importCsv(const QString& csvFilename, const QString& workdir, u64 timeScale)
+    bool VcdSerializer::importCsv(const QString& csvFilename, const QString& workdir, const QList<const Net*>& onlyNets, u64 timeScale)
     {
         mWorkdir = workdir.isEmpty() ? QDir::currentPath() : workdir;
         mLastValue.clear();
@@ -335,7 +335,7 @@ QMap<int,int>::const_iterator mIterator;
         createSaleaeDirectory();
         mSaleaeWriter =  new SaleaeWriter(mSaleaeDirectoryFilename.toStdString());
 
-        bool retval = parseCsvInternal(ff);
+        bool retval = parseCsvInternal(ff, onlyNets);
 
         delete mSaleaeWriter;
         mSaleaeWriter = nullptr;
@@ -352,8 +352,12 @@ QMap<int,int>::const_iterator mIterator;
         mSaleaeDirectoryFilename = saleaeDir.absoluteFilePath("saleae.json");
     }
 
-    bool VcdSerializer::parseCsvInternal(QFile& ff)
+    bool VcdSerializer::parseCsvInternal(QFile& ff, const QList<const Net *>& onlyNets)
     {
+        QMap<QString, const Net*> netNames;
+        for (const Net* n : onlyNets)
+            netNames.insert(QString::fromStdString(n->get_name()),n);
+
         static const int bufsize = 4095;
         char buf[bufsize+1];
 
@@ -399,7 +403,7 @@ QMap<int,int>::const_iterator mIterator;
         return true;
     }
 
-    bool VcdSerializer::importVcd(const QString& vcdFilename, const QString& workdir, const QList<const hal::Net *> onlyNets)
+    bool VcdSerializer::importVcd(const QString& vcdFilename, const QString& workdir, const QList<const Net*>& onlyNets)
     {
         mWorkdir = workdir.isEmpty() ? QDir::currentPath() : workdir;
         mErrorCount = 0;

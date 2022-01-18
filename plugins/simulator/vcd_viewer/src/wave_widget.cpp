@@ -246,13 +246,8 @@ namespace hal {
                 {
                     iwave = mWaveDataList->size();
                     WaveData* wd = new WaveData(it.key().id(),it.key().name());
-                    std::filesystem::path path = sd->get_datafile(it.key().name().toStdString(),it.key().id());
-                    if (!path.empty())
-                    {
-                        SaleaeInputFile sif(path);
-                        wd->loadSaleae(sif);
+                    if (wd->loadSaleae(*sd))
                         mWaveDataList->add(wd,false);
-                    }
                 }
                 if (iwave >= 0)
                     mTreeModel->handleWaveAdded(iwave);

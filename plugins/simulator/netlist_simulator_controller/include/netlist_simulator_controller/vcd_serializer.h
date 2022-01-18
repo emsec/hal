@@ -52,8 +52,8 @@ namespace hal {
         void storeValue(int val, const QByteArray& abrev);
         bool parseCsvHeader(char* buf);
         bool parseCsvDataline(char* buf, int dataLineIndex);
-        bool parseVcdInternal(QFile& ff, const QList<const Net *> &onlyNets);
-        bool parseCsvInternal(QFile& ff);
+        bool parseVcdInternal(QFile& ff, const QList<const Net *>& onlyNets);
+        bool parseCsvInternal(QFile& ff, const QList<const Net *>& onlyNets);
 
         void deleteFiles();
         void createSaleaeDirectory();
@@ -62,8 +62,8 @@ namespace hal {
         std::string get_saleae_directory_filename() const { return mSaleaeDirectoryFilename.toStdString(); }
         VcdSerializer(QObject* parent = nullptr);
         bool serialize(const QString& filename, const QList<const WaveData*>& waves) const;
-        bool importVcd(const QString& vcdFilename, const QString& workdir=QString(), const QList<const Net *> onlyNets = QList<const Net*>());
-        bool importCsv(const QString& csvFilename, const QString& workdir=QString(), u64 timeScale = 1000000000);
+        bool importVcd(const QString& vcdFilename, const QString& workdir=QString(), const QList<const Net*>& onlyNets = QList<const Net*>());
+        bool importCsv(const QString& csvFilename, const QString& workdir=QString(), const QList<const Net*>& onlyNets = QList<const Net*>(), u64 timeScale = 1000000000);
         bool importSaleae(const QString& saleaeDirecotry, const std::unordered_map<Net*,int>& lookupTable, const QString& workdir=QString(),  u64 timeScale = 1000000000);
 //        QList<WaveData*> waveList() const { return mWaves.values(); }
         u64 maxTime() const { return mTime; }

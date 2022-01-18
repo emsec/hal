@@ -43,8 +43,8 @@ namespace hal {
                     }
                     mSimulTime = t;
                     mSimulationInputNetEvent.clear();
-                    mSimulationInputNetEvent.insert(std::make_pair(static_cast<const Net*>(obj),static_cast<BooleanFunction::Value>(val)));
                 }
+                mSimulationInputNetEvent.insert(std::make_pair(static_cast<const Net*>(obj),static_cast<BooleanFunction::Value>(val)));
             }, net);
         }
 

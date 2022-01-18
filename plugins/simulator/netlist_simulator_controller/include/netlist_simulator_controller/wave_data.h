@@ -15,7 +15,7 @@ namespace hal {
     class WaveData;
     class NetlistSimulator;
     class Net;
-    class SaleaeInputFile;
+    class SaleaeDirectory;
 
     class WaveData
     {
@@ -48,7 +48,8 @@ namespace hal {
         void setName(const QString& nam);
         void setBits(int bts);
         void setDirty(bool dty)                     { mDirty = dty; }
-        void loadSaleae(SaleaeInputFile& sif);
+        bool loadSaleae(const SaleaeDirectory& sd);
+        void saveSaleae(SaleaeDirectory& sd) const;
         void setData(const QMap<u64,int>& dat);
         int  intValue(float t) const;
         int get_value_at(u64 t) const;
@@ -123,6 +124,7 @@ namespace hal {
         QList<const WaveData*> partialList(u64 start_time, u64 end_time, std::set<const Net*>& nets) const;
         void emitWaveUpdated(int inx);
         void emitGroupUpdated(int grpId);
+        void updateFromSaleae(const SaleaeDirectory& sd);
     Q_SIGNALS:
         void waveAdded(int inx);
         void groupAdded(int grpId);
