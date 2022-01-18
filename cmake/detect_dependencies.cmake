@@ -185,12 +185,29 @@ endif()
 
 # abc stuff
 # Download and unpack abc at configure time
-find_package(ABC REQUIRED)
-if(${ABC_FOUND})
+add_library(ABC INTERFACE)
+find_package(ABC)
+if(NOT ${ABC_FOUND})
     message(STATUS "Found ABC:")
     message(STATUS "    ABC_LIBRARY: ${ABC_LIBRARY}")
 else()
     message(STATUS "ABC not found")
+    message(STATUS "Downloading and building abc. This will take a while, check README.md to see how to speed up the process...")
+    
+    configure_file(cmake/abc-CMakeLists.txt.in "${CMAKE_BINARY_DIR}/abc-download/CMakeLists.txt")
+
+    execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+                    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/abc-download" )
+    execute_process(COMMAND "${CMAKE_COMMAND}" --build .
+                WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/abc-download" )
+
+    # Add abc directly to our build.
+    add_subdirectory("${CMAKE_BINARY_DIR}/abc-src"
+                     "${CMAKE_BINARY_DIR}/abc-build")
+    
+    add_dependencies(ABC ABC_EXTERNAL)
+    set(ABC_LIBRARY ${CMAKE_BINARY_DIR}/abc-build/libabc.so)
+    target_link_libraries(ABC INTERFACE ${ABC_LIBRARY})
 endif()
 
 

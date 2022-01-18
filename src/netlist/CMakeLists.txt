@@ -22,6 +22,7 @@ target_compile_options(netlist
                        PRIVATE ${COMPILE_OPTIONS_PRIVATE}
                        INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 set_target_properties(PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
+
 target_link_libraries(netlist
                       PUBLIC
                         hal::utilities
@@ -30,7 +31,6 @@ target_link_libraries(netlist
                         ${CMAKE_DL_LIBS}
                         RapidJSON::RapidJSON
                         ${Z3_LIBRARIES}
-                        ${ABC_LIBRARY}
                       )
 install(TARGETS netlist
         EXPORT hal

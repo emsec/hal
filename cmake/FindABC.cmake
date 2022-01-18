@@ -2,6 +2,7 @@
 # ABC_FOUND - system has ABC lib
 # ABC_LIBRARY - Libraries needed to use ABC
 
+project(abc)
 # check the path provided to cmake
 if (ABC_PATH)
     find_library(ABC_LIBRARY NAMES libabc.so PATHS ${ABC_PATH})
@@ -17,17 +18,6 @@ else()
   if(NOT ABC_LIBRARY)
     find_library (ABC_LIBRARY NAMES libabc.so PATHS /usr/local/lib /usr/lib /lib /sw/lib  ${CMAKE_EXTRA_LIBRARIES} PATH_SUFFIXES abc/)
   endif(NOT ABC_LIBRARY)
-  # lets download abc ourselves
-  if(NOT ABC_LIBRARY)
-    message(STATUS "Downloading and building abc. This will take a while, check README.md to see how to speed up the process...")
-    configure_file(cmake/abc-CMakeLists.txt.in "${CMAKE_BINARY_DIR}/abc-download/CMakeLists.txt")
-    execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
-                    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/abc-download" )
-    execute_process(COMMAND "${CMAKE_COMMAND}" --build .
-                    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/abc-download" )
-
-    find_library(ABC_LIBRARY NAMES libabc.so PATHS ${CMAKE_BINARY_DIR}/abc-src)
-  endif()
 endif()
 
 
