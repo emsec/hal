@@ -12,7 +12,6 @@ target_include_directories(netlist
                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            ${Z3_INCLUDE_DIRS}
-                           ${ABC_INCLUDE_DIR}
                            )
 
 target_compile_options(netlist
@@ -21,7 +20,6 @@ target_compile_options(netlist
                        INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 set_target_properties(PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
 
-add_dependencies(netlist ABC)
 target_link_libraries(netlist
                       PUBLIC
                         hal::utilities
