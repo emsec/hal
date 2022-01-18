@@ -187,7 +187,7 @@ endif()
 # Download and unpack abc at configure time
 add_library(ABC INTERFACE)
 find_package(ABC)
-if(NOT ${ABC_FOUND})
+if(${ABC_FOUND})
     message(STATUS "Found ABC:")
     message(STATUS "    ABC_LIBRARY: ${ABC_LIBRARY}")
 else()

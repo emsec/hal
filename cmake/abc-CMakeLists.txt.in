@@ -6,7 +6,7 @@ ExternalProject_Add(ABC_EXTERNAL
                     GIT_REPOSITORY https://github.com/berkeley-abc/abc.git
                     SOURCE_DIR "${CMAKE_BINARY_DIR}/abc-src"
                     BINARY_DIR "${CMAKE_BINARY_DIR}/abc-build"
-                    PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/abc.patch
+                    PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/cmake/abc.patch
                     CONFIGURE_COMMAND ""
                     BUILD_COMMAND ""
                     INSTALL_COMMAND cmake -E echo "Skipping install step."
