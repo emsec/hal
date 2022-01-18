@@ -30,6 +30,7 @@ target_link_libraries(netlist
                         ${Z3_LIBRARIES}
                         ${ABC_LIBRARY}
                       )
+
 install(TARGETS netlist
         EXPORT hal
         LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY}
