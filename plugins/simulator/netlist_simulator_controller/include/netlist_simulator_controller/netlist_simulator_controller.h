@@ -234,12 +234,20 @@ public:
     bool import_vcd(const std::string& filename, FilterInputFlag filter);
 
     /**
-     * Parse CSV file and convert content into SALEAE format
+     * Import CSV file and convert content into SALEAE format
      * @param[in] filename the filename to read
      * @param[in] filter filter to select waveform data from file
      * @param[in] timescale multiplication factor for time value in first column
      */
     void import_csv(const std::string& filename, FilterInputFlag filter, u64 timescale = 1000000000);
+
+    /**
+     * Import nets given by lookup table from SALEAE directory
+     * @param dirname[in] the directory to import files from
+     * @param lookupTable[in] mapping nets to be imported with saleae file index
+     * @param timescale multiplication factor for time value if SALEAE data in float format
+     */
+    void import_saleae(const std::string& dirname, std::unordered_map<Net*,int> lookupTable, u64 timescale = 1000000000);
 
     /**
      * Set timescale when parsing SALEAE float values

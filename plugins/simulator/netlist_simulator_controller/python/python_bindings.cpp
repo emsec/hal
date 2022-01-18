@@ -256,6 +256,14 @@ namespace hal
                 :param int timescale: multiplicator for values in time column.
             )")
 
+            .def("import_saleae", &NetlistSimulatorController::import_saleae, py::arg("dirname"), py::arg("lookupTable"), py::arg("timescale") = 1000000000, R"(
+                Import nets given by lookup table from SALEAE directory.
+
+                :param str dirname: directory to import files from.
+                :param dict[hal_py.Net,int] lookupTable: mapping nets to be imported with saleae file index.
+                :param int timescale: multiplication factor for time value if SALEAE data in float format.
+            )")
+
             .def("set_saleae_timescale", &NetlistSimulatorController::set_saleae_timescale, py::arg("timescale") = 1000000000, R"(
                 Set timescale when parsing SALEAE float values.
 

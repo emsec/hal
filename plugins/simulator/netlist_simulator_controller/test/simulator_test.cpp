@@ -92,14 +92,14 @@ namespace hal
             };
 
             // get all reference simulation net ids
-            std::set<const u32> reference_simulation_nets;
+            std::set<u32> reference_simulation_nets;
             for (auto it : *reference_simulation)
             {
                 reference_simulation_nets.insert(it->id());
             }
 
             // get all  simulation net ids
-            std::set<const u32> engine_simulation_nets;
+            std::set<u32> engine_simulation_nets;
             for (auto it : *engine_simulation)
             {
                 engine_simulation_nets.insert(it->id());
@@ -358,9 +358,10 @@ namespace hal
         sim_ctrl_reference->add_gates(nl->get_gates());
         sim_ctrl_reference->set_no_clock_used();
         sim_ctrl_reference->initialize();
+        sim_ctrl_reference->create_simulation_engine("verilator");
 
         //read vcd
-        EXPECT_TRUE(sim_ctrl_reference->parse_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist, true));
+        EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         // get nets
         Net* A = *(nl->get_nets([](auto net) { return net->get_name() == "A"; }).begin());
@@ -465,7 +466,7 @@ namespace hal
         sim_ctrl_reference->initialize();
 
         //read vcd
-        EXPECT_TRUE(sim_ctrl_reference->parse_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist, true));
+        EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         // retrieve nets
         Net* reset          = *(nl->get_nets([](const Net* net) { return net->get_name() == "Reset"; }).begin());
@@ -573,7 +574,7 @@ namespace hal
 
         sim_ctrl_reference->add_gates(nl->get_gates());
         sim_ctrl_reference->initialize();
-        EXPECT_TRUE(sim_ctrl_reference->parse_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist, true));
+        EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         //prepare simulation
         sim_ctrl_verilator->add_gates(nl->get_gates());
@@ -745,7 +746,7 @@ namespace hal
         //read vcd
         sim_ctrl_reference->initialize();
         sim_ctrl_reference->add_gates(nl->get_gates());
-        EXPECT_TRUE(sim_ctrl_reference->parse_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist, true));
+        EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         //prepare simulation
         sim_ctrl_verilator->add_gates(nl->get_gates());
@@ -898,7 +899,7 @@ namespace hal
 
         sim_ctrl_reference->add_gates(nl->get_gates());
         sim_ctrl_reference->initialize();
-        EXPECT_TRUE(sim_ctrl_reference->parse_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist, true));
+        EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         std::cout << "read simulation file" << std::endl;
 

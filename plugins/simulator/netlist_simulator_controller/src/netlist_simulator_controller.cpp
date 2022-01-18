@@ -283,6 +283,23 @@ namespace hal
         Q_EMIT parseComplete();
     }
 
+    void NetlistSimulatorController::import_saleae(const std::string& dirname, std::unordered_map<Net*,int> lookupTable, u64 timescale)
+    {
+        if (!mSimulationEngine)
+        {
+            log_warning(get_name(), "No engine selected, cannot import simulation data.");
+            return;
+        }
+        VcdSerializer reader;
+        if (reader.importSaleae(QString::fromStdString(dirname),lookupTable,QString::fromStdString(mSimulationEngine->directory()),timescale))
+        {
+            SaleaeDirectory sd(mSimulationEngine->get_saleae_directory_filename());
+            mWaveDataList->updateFromSaleae(sd);
+        }
+        checkReadyState();
+        Q_EMIT parseComplete();
+    }
+
     void NetlistSimulatorController::set_saleae_timescale(u64 timescale)
     {
         SaleaeParser::sTimeScaleFactor = timescale;
