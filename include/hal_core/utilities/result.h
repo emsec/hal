@@ -26,26 +26,36 @@
 #include "hal_core/defines.h"
 #include "hal_core/utilities/error.h"
 
+#include <functional>
+#include <type_traits>
 #include <variant>
 
 namespace hal
 {
+
+#define Ok(...) Result::Result(__VA_ARGS__)
+#define Err(message) Result::Result(Error(message))
+
     template<typename T>
-    class Result final : private std::variant<Error, T>
+    class Result final
     {
     public:
-        Result(const T& value) : std::variant<Error, T>(value)
-        {
-            m_has_value = true;
-        }
+        static_assert(!std::is_same<T, Error>(), "Cannot initialize a Result<Error>.");
 
-        Result(const Error& error) : std::variant<Error, T>(error)
+        Result() : m_result(())
         {
         }
 
-        static Result<std::monostate> Ok()
+        Result(const T& value) : m_result(value)
         {
-            return Result<std::monostate>();
+        }
+
+        Result(T&& value) : m_result(std::move(value))
+        {
+        }
+
+        Result(const Error& error) : m_result(error)
+        {
         }
 
         bool is_ok() const
@@ -55,27 +65,33 @@ namespace hal
 
         bool is_error() const
         {
-            return std::holds_alternative<Error>(*this);
+            return std::holds_alternative<Error>(m_result);
         }
 
-        bool has_value() const
+        const T& get() const
         {
-            return m_has_value;
-        }
-
-        T get() const
-        {
-            return (has_value() ? std::get<T>(*this) : T());
+            return std::get<T>(m_result);
         }
 
         Error get_error() const
         {
-            return (is_error() ? std::get<Error>(*this) : Error());
+            return std::get<Error>(m_result);
+        }
+
+        template<typename U>
+        Result<U> map(const std::function<U(const T&)>& f) const
+        {
+            if (this->is_ok())
+            {
+                return Ok(f(this->get()));
+            }
+            else
+            {
+                return Err(this->get_error());
+            }
         }
 
     private:
-        bool m_has_value = false;
-        Result()         = default;
-        
+        std::variant<T, Error> m_result;
     };
 }    // namespace hal

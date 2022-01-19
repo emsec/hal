@@ -30,9 +30,9 @@ namespace hal
     class Error final
     {
     public:
-        explicit Error() = default;
-
         explicit Error(const std::string& message) : m_message(message){};
+
+        explicit Error(const Error& error) : m_message(error.get()){};
 
         const std::string& get() const
         {
