@@ -5,6 +5,7 @@
 #include <sstream>
 #include <QDebug>
 #include <sys/resource.h>
+#include <iostream>
 
 namespace hal
 {
@@ -18,10 +19,11 @@ namespace hal
 
     SaleaeWriter::~SaleaeWriter()
     {
-        std::vector<SaleaeDirectoryFileIndex> fileIndexes;
-        for (SaleaeOutputFile* sof : mDataFiles)
+        std::unordered_map<int,SaleaeDirectoryFileIndex> fileIndexes;
+        for (auto it = mDataFiles.begin(); it != mDataFiles.end(); ++it)
         {
-            fileIndexes.push_back(sof->fileIndex());
+            SaleaeOutputFile* sof = it->second;
+            fileIndexes.insert(std::make_pair(it->first,sof->fileIndex()));
             sof->close();
             delete sof;
         }
@@ -33,20 +35,19 @@ namespace hal
     {
         std::filesystem::path path;
         SaleaeOutputFile* sof = nullptr;
+        bool updateDirectory = false;
         int fileIndex = -1;
         if ( (fileIndex = mSaleaeDirectory.get_datafile_index(name,id)) >= 0)
         {
             // replace existing
             path = mSaleaeDirectory.get_datafile(name, id);
-            mDataFiles.at(fileIndex)->close();
-            delete mDataFiles.at(fileIndex);
-            sof = new SaleaeOutputFile(path.string(), fileIndex);
-            if (!sof->good())
+            auto it = mDataFiles.find(fileIndex);
+            if (it != mDataFiles.end())
             {
-                delete sof;
-                return nullptr;
+                it->second->close();
+                delete it->second;
+                mDataFiles.erase(it);
             }
-            mDataFiles[fileIndex] = sof;
         }
         else
         {
@@ -54,7 +55,7 @@ namespace hal
             struct rlimit rlim;
             getrlimit(RLIMIT_NOFILE, &rlim);
 
-            fileIndex = mDataFiles.size();
+            fileIndex = mSaleaeDirectory.get_next_available_index();
             unsigned int required = fileIndex + 256;
             if (rlim.rlim_max < required) return nullptr;
             if (rlim.rlim_cur < required)
@@ -67,20 +68,23 @@ namespace hal
             fname << "digital_" << fileIndex << ".bin";
             path = mDir / fname.str();
 
-            sof = new SaleaeOutputFile(path.string(), fileIndex);
-            if (!sof->good())
-            {
-                delete sof;
-                return nullptr;
-            }
+            updateDirectory = true;
+        }
+        sof = new SaleaeOutputFile(path.string(), fileIndex);
+        if (!sof->good())
+        {
+            delete sof;
+            return nullptr;
+        }
 
+        mDataFiles.insert(std::make_pair(fileIndex,sof));
+
+        if (updateDirectory)
+        {
             // create directory entry
             SaleaeDirectoryNetEntry sdne(name,id);
             sdne.addIndex(SaleaeDirectoryFileIndex(fileIndex));
             mSaleaeDirectory.add_net(sdne);
-
-            mDataFiles.push_back(sof);
-
         }
         return sof;
     }

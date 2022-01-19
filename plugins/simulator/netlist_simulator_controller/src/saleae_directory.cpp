@@ -1,5 +1,10 @@
+#ifdef STANDALONE_PARSER
+#include "saleae_directory.h"
+#else
 #include "netlist_simulator_controller/saleae_directory.h"
 #include "hal_core/utilities/json_write_document.h"
+#endif
+#include "rapidjson/document.h"
 #include "rapidjson/reader.h"
 #include "rapidjson/filereadstream.h"
 #include <iostream>
@@ -8,7 +13,7 @@
 namespace hal
 {
 
-    SaleaeDirectory::SaleaeDirectory(const std::filesystem::__cxx11::path &path, bool create)
+    SaleaeDirectory::SaleaeDirectory(const std::string &path, bool create)
         : mDirectoryFile(path), mNextAvailableIndex(0)
     {
         if (create) return;
@@ -26,7 +31,7 @@ namespace hal
 
     bool SaleaeDirectory::parse_json()
     {
-        FILE* ff = fopen(mDirectoryFile.string().c_str(), "rb");
+        FILE* ff = fopen(mDirectoryFile.c_str(), "rb");
         if (!ff) return false;
         char buffer[65536];
         rapidjson::FileReadStream frs(ff, buffer, sizeof(buffer));
@@ -64,6 +69,7 @@ namespace hal
         return true;
     }
 
+#ifndef STANDALONE_PARSER
     bool SaleaeDirectory::write_json() const
     {
         JsonWriteDocument jwd;
@@ -89,12 +95,13 @@ namespace hal
         }
         jnets.close();
         jsaleae.close();
-        return jwd.serialize(mDirectoryFile.string());
+        return jwd.serialize(mDirectoryFile);
     }
-
+#endif
+  
     void SaleaeDirectory::dump() const
     {
-        std::cout << "<" << mDirectoryFile.string() << ">" << std::endl;
+        std::cout << "<" << mDirectoryFile << ">" << std::endl;
         for (const SaleaeDirectoryNetEntry& sdne : mNetEntries)
         {
             std::cout << sdne.name() << "[" << sdne.id() << "] :";
@@ -105,14 +112,18 @@ namespace hal
         std::cout << "---------------------" << std::endl;
     }
 
-    void SaleaeDirectory::update_file_indexes(std::vector<SaleaeDirectoryFileIndex>& fileIndexes)
+    void SaleaeDirectory::update_file_indexes(std::unordered_map<int,SaleaeDirectoryFileIndex>& fileIndexes)
     {
         for (SaleaeDirectoryNetEntry& sdne : mNetEntries)
         {
             if (sdne.mFileIndexes.empty()) continue;
             int inx = sdne.mFileIndexes.back().index();
-            sdne.mFileIndexes.pop_back();
-            sdne.mFileIndexes.push_back(fileIndexes.at(inx));
+            auto it = fileIndexes.find(inx);
+            if (it != fileIndexes.end())
+            {
+                sdne.mFileIndexes.pop_back();
+                sdne.mFileIndexes.push_back(it->second);
+            }
         }
     }
 
@@ -126,9 +137,9 @@ namespace hal
             if (sdfi.index() >= mNextAvailableIndex) mNextAvailableIndex = sdfi.index() + 1;
     }
 
-    std::filesystem::path SaleaeDirectory::dataFilename(const SaleaeDirectoryNetEntry& sdnep) const
+    std::string SaleaeDirectory::dataFilename(const SaleaeDirectoryNetEntry& sdnep) const
     {
-        return get_directory() / sdnep.dataFilename();
+        return get_directory() + folderSeparator + sdnep.dataFilename();
     }
 
     int SaleaeDirectory::getIndex(const SaleaeDirectoryNetEntry& sdnep) const
@@ -136,7 +147,7 @@ namespace hal
         return sdnep.dataFileIndex();
     }
 
-    std::filesystem::path SaleaeDirectory::get_datafile(const std::string& nam, uint32_t id) const
+    std::string SaleaeDirectory::get_datafile(const std::string& nam, uint32_t id) const
     {
         if (id)
         {
@@ -145,7 +156,7 @@ namespace hal
         }
 
         auto jt = mByName.find(nam);
-        if (jt == mByName.end()) return std::filesystem::path();
+        if (jt == mByName.end()) return std::string();
         return dataFilename(mNetEntries.at(jt->second));
     }
 
@@ -199,5 +210,12 @@ namespace hal
         std::ostringstream fname;
         fname << "digital_" << mFileIndexes.back().index() << ".bin";
         return fname.str();
-    }    
+    }
+
+    std::string SaleaeDirectory::get_directory() const
+    {
+        size_t pos = mDirectoryFile.find_last_of(folderSeparator);
+	if (pos==std::string::npos) return std::string();
+        return mDirectoryFile.substr(0,pos);
+    }
 }

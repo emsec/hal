@@ -1,12 +1,15 @@
+#ifdef STANDALONE_PARSER
+#include "saleae_file.h"
+#include "saleae_parser.h"
+#else
 #include "netlist_simulator_controller/saleae_file.h"
 #include "netlist_simulator_controller/saleae_parser.h"
+#endif
 
 #include <stdio.h>
 #include <iostream>
 #include <math.h>
 #include <string.h>
-
-#include <QDebug>
 
 namespace hal
 {
@@ -233,10 +236,24 @@ namespace hal
     void SaleaeOutputFile::put_data(SaleaeDataBuffer& buf)
     {
         if (!buf.mCount) return;
-        if (mHeader.storageFormat() == SaleaeHeader::Coded)
-            buf.convertCoded();
+        SaleaeHeader::StorageFormat sf = SaleaeHeader::Uint64;
+        for (uint64_t i = 0; i<buf.mCount; i++)
+        {
+            if (buf.mValueArray[i] < 0)
+            {
+                sf = SaleaeHeader::Coded;
+                break;
+            }
+        }
         uint64_t n = buf.mCount - 1;
+        mHeader.setStorageFormat(sf);
+        mHeader.setValue(buf.mValueArray[0]);
+        mHeader.setEndTime(buf.mTimeArray[n]);
+        mHeader.setNumTransitions(n);
+        if (sf == SaleaeHeader::Coded)
+            buf.convertCoded();
         this->write((char*) (buf.mTimeArray+1), n * sizeof(uint64_t));
+        // close will write header info
     }
 
     void SaleaeOutputFile::writeTimeValue(uint64_t t, int32_t val)

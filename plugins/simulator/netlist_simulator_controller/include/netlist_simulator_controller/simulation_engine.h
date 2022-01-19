@@ -100,6 +100,13 @@ namespace hal
         }
 
         /**
+         * Copy header and source files so that saleae parser can be compiled into project
+         * @param dirname[in] Target directory to copy files into
+         * @return true if files copied successfully, false otherwise
+         */
+        bool install_saleae_parser(std::string dirname) const;
+
+        /**
          * Must be implemented by derived class
          *
          * Will be called by controller to pass all relevant information to setup the simulation

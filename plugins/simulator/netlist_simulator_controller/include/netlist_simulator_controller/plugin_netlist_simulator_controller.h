@@ -55,6 +55,11 @@ namespace hal
         void on_unload() override;
 
         /**
+         * Register resources upon load
+         */
+        void on_load() override;
+
+        /**
          * Create a netlist simulator controller instance.
          *
          * @returns The simulator instance.

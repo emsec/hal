@@ -41,6 +41,7 @@ namespace hal {
         SaleaeWriter* mSaleaeWriter;
         QString mWorkdir;
         QString mSaleaeDirectoryFilename;
+        QMap<QString,QString> mAbbrevByName;
         QMap<QString,int> mIndexByName;
         QMap<u32,int> mIndexById;
         QVector<int> mLastValue;

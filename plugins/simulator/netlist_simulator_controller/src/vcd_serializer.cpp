@@ -79,6 +79,7 @@ QMap<int,int>::const_iterator mIterator;
         mSaleaeFiles.clear();
         mIndexById.clear();
         mIndexByName.clear();
+        mAbbrevByName.clear();
     }
 
     bool VcdSerializer::serialize(const QString& filename, const QList<const WaveData*>& waves) const
@@ -424,6 +425,7 @@ QMap<int,int>::const_iterator mIterator;
         delete mSaleaeWriter;
         mSaleaeWriter = nullptr;
         mSaleaeFiles.clear();
+        mAbbrevByName.clear();
 
         return retval;
     }
@@ -454,7 +456,13 @@ QMap<int,int>::const_iterator mIterator;
                         bool ok;
                         QString wireName   = mWire.captured(3);
                         if (!netNames.isEmpty() && !netNames.contains(wireName)) continue;
+                        if (mAbbrevByName.contains(wireName))
+                        {
+                            log_warning("vcd_viewer", "Waveform duplicate for '{}' in VCD file '{}'.", wireName.toStdString(), ff.fileName().toStdString());
+                            continue;
+                        }
                         QString wireAbbrev = mWire.captured(2);
+                        mAbbrevByName.insert(wireName,wireAbbrev);
                         int     wireBits   = mWire.captured(1).toUInt(&ok);
                         if (!ok) wireBits = 1;
                         QRegularExpressionMatch mWiid = reWiid.match(wireName);

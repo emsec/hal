@@ -2,7 +2,11 @@
 
 #include <fstream>
 #include <functional>
+#ifdef STANDALONE_PARSER
+#include "saleae_directory.h"
+#else
 #include "netlist_simulator_controller/saleae_directory.h"
+#endif
 
 namespace hal
 {
@@ -48,6 +52,7 @@ namespace hal
         void setEndTime(uint64_t t) { mEndTime = t; }
 
         uint64_t numTransitions() const { return mNumTransitions; }
+        void setNumTransitions(uint64_t n) { mNumTransitions = n; }
         void incrementTransitions() { ++mNumTransitions; }
     };
 

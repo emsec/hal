@@ -1,11 +1,15 @@
+#ifdef STANDALONE_PARSER
+#include "saleae_parser.h"
+#include "saleae_file.h"
+#else
 #include "netlist_simulator_controller/saleae_parser.h"
 #include "netlist_simulator_controller/saleae_file.h"
 #include "hal_core/netlist/net.h"
+#endif
 #include <fstream>
 #include <sstream>
 #include <stdio.h>
 #include <cctype>
-#include <filesystem>
 #include <iostream>
 
 namespace hal
@@ -36,6 +40,7 @@ namespace hal
         auto it = mNextValueMap.begin();
         if (it == mNextValueMap.end()) return false;
         DataFileHandle wff = it->second;
+        // std::cerr << "SaleaeParser::nextEvent v=" << std::dec << wff.value << " size=" << mNextValueMap.size() << std::endl;
         mNextValueMap.erase(it);
         wff.callback(wff.obj,it->first,wff.value);
         if (wff.file->good())
@@ -50,25 +55,26 @@ namespace hal
         return true;
     }
 
-    u64 SaleaeParser::get_max_time() const
+    uint64_t SaleaeParser::get_max_time() const
     {
         return mSaleaeDirectory.get_max_time();
     }
 
     SaleaeDataBuffer SaleaeParser::get_waveform_by_net(const Net* net) const
     {
-        std::filesystem::path path = mSaleaeDirectory.get_datafile(net->get_name(),net->get_id());
+        std::string path = mSaleaeDirectory.get_datafile(net->get_name(),net->get_id());
         if (path.empty()) return SaleaeDataBuffer();
-        SaleaeInputFile sif(path.string());
+        SaleaeInputFile sif(path);
         if (!sif.good()) return SaleaeDataBuffer();
         return sif.get_data();
     }
 
-    bool SaleaeParser::register_callback(const Net *net, std::function<void(const void*,uint64_t,int)> callback, const void *obj)
+    bool SaleaeParser::register_callback(const Net *net, std::function<void(void*,uint64_t, int)> callback, void *obj)
     {
-        std::filesystem::path path = mSaleaeDirectory.get_datafile(net->get_name(),net->get_id());
+        // std::cerr << "SaleaeParser::register_callback <" << net->get_name() << "> " << std::hex << (uintptr_t) obj << std::endl;
+        std::string path = mSaleaeDirectory.get_datafile(net->get_name(),net->get_id());
         if (path.empty()) return false;
-        SaleaeInputFile* datafile = new SaleaeInputFile(path.string());
+        SaleaeInputFile* datafile = new SaleaeInputFile(path);
         if (!datafile->good())
         {
             std::cerr << "Error loading SALEAE datafile <" << datafile->get_last_error() << ">" << std::endl;

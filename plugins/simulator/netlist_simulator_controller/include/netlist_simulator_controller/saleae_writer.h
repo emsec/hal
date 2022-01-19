@@ -13,7 +13,7 @@ namespace hal
     {
         std::filesystem::path mDir;
         SaleaeDirectory mSaleaeDirectory;
-        std::vector<SaleaeOutputFile*> mDataFiles;
+        std::unordered_map<int,SaleaeOutputFile*> mDataFiles;
     public:
         SaleaeWriter(const std::string& filename);
         ~SaleaeWriter();

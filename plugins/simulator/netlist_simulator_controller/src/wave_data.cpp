@@ -8,6 +8,7 @@
 #include <QString>
 #include <QVector>
 #include <QSet>
+#include <QDir>
 #include <stdio.h>
 #include <QDebug>
 
@@ -84,13 +85,15 @@ namespace hal {
 
     void WaveData::insertBooleanValue(u64 t, BooleanFunction::Value bval)
     {
-        int val = -1;
-        switch (bval)
+        int val = (int) bval;
+        if (!mData.isEmpty())
         {
-        case BooleanFunction::Value::Z:    val = -2; break;
-        case BooleanFunction::Value::X:    val = -1; break;
-        case BooleanFunction::Value::ZERO: val =  0; break;
-        case BooleanFunction::Value::ONE:  val =  1; break;
+            auto it = mData.upperBound(t);
+            if (it != mData.constBegin())
+            {
+                --it;
+                if (it.value() == bval) return; // Nothing to do, previous value matches
+            }
         }
         mData.insert(t,val);
         mDirty = true;
@@ -168,6 +171,8 @@ namespace hal {
             SaleaeDirectoryNetEntry sdne(mName.toStdString(),mId);
             sdne.addIndex(SaleaeDirectoryFileIndex(inx,0,mData.lastKey(),mData.size()));
             sd.add_net(sdne);
+            QDir saleaeDir(QString::fromStdString(sd.get_directory()));
+            if (!saleaeDir.exists()) saleaeDir.mkpath(saleaeDir.absolutePath());
             sd.write_json();
         }
         std::filesystem::path path = sd.get_datafile(mName.toStdString(),mId);

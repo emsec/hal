@@ -32,6 +32,7 @@ namespace hal {
 
         for (const Net* net : mSimulationInput->get_input_nets())
         {
+            void* registerObj = (void*) net;
             sp.register_callback(net,[this](const void* obj, uint64_t t, int val) {
                 if (t != mSimulTime)
                 {
@@ -45,7 +46,7 @@ namespace hal {
                     mSimulationInputNetEvent.clear();
                 }
                 mSimulationInputNetEvent.insert(std::make_pair(static_cast<const Net*>(obj),static_cast<BooleanFunction::Value>(val)));
-            }, net);
+            }, registerObj);
         }
 
         while (sp.next_event())

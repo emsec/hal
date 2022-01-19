@@ -108,38 +108,15 @@ namespace hal
         bool VerilatorEngine::write_testbench_files(SimulationInput* simInput)
         {
             // write necessary parser files
-            std::ofstream saleae_parser_h_file(m_simulator_dir / "saleae_parser.h");
-            saleae_parser_h_file << get_saleae_parser_h();
-            saleae_parser_h_file.close();
-
-            std::ofstream saleae_parser_cpp_file(m_simulator_dir / "saleae_parser.cpp");
-            saleae_parser_cpp_file << get_saleae_parser_cpp();
-            saleae_parser_cpp_file.close();
-
-            std::ofstream saleae_file_h_file(m_simulator_dir / "saleae_file.h");
-            saleae_file_h_file << get_saleae_file_h();
-            saleae_file_h_file.close();
-
-            std::ofstream saleae_file_cpp_file(m_simulator_dir / "saleae_file.cpp");
-            saleae_file_cpp_file << get_saleae_file_cpp();
-            saleae_file_cpp_file.close();
+            if (!install_saleae_parser(m_simulator_dir.string()))
+            {
+                log_error("verilator", "could not install saleae parser in directory '{}'.", m_simulator_dir.string());
+                return false;
+            }
 
             // write / copy saleae binaries
             std::string testbench_cpp = get_testbench_cpp_template();
             testbench_cpp             = utils::replace(testbench_cpp, std::string("<design_name>"), m_partial_netlist->get_design_name());
-
-            // TODO: workaround set gnd vcd, because we cannot generate saleae binaries just yet
-            bool set_gnd = true;    // TODO
-            if (set_gnd)
-                testbench_cpp = utils::replace(testbench_cpp, std::string("<set_gnd>"), std::string("dut->__0270__027 = 0x0;"));
-            else
-                testbench_cpp = utils::replace(testbench_cpp, std::string("<set_gnd>"), std::string(""));
-
-            bool set_vcc = true;    // TODO
-            if (set_vcc)
-                testbench_cpp = utils::replace(testbench_cpp, std::string("<set_vcc>"), std::string("dut->__0271__027 = 0x1;"));
-            else
-                testbench_cpp = utils::replace(testbench_cpp, std::string("<set_vcc>"), std::string(""));
 
             // set callbacks in parser
             std::stringstream callbacks;
@@ -147,12 +124,17 @@ namespace hal
             {
                 std::string net_name = escape_net_name(input_net->get_name());
                 std::stringstream callback;
-                callback << std::endl;
-                callback << "  std::string " << net_name << "_str = \"" << input_net->get_name() << "\";" << std::endl;
-                callback << "  if (!sp.registerCallback(" << net_name << "_str, set_simulation_value, &dut->" << net_name << ")) {" << std::endl;
-                callback << "    std::cerr << \"cannot initialize callback for net " << net_name << "\" << std::endl;" << std::endl;
-                callback << "  }" << std::endl;
-                callback << std::endl;
+                callback
+                        << "\n"
+                        << "  auto " << net_name << "_net = netMap.find(std::string(\"" << input_net->get_name() << "\"));\n"
+                        << "  if (" << net_name << "_net == netMap.end()) {\n"
+                        << "     std::cerr << \"no SALEAE input data found for net " << net_name << "\" << std::endl;\n"
+                        << "  }\n"
+                        << "  else {\n"
+                        << "     if (!sp.register_callback(" << net_name << "_net->second, set_simulation_value, &dut->" << net_name << ")) {\n"
+                        << "         std::cerr << \"cannot initialize callback for net " << net_name << "\" << std::endl;\n"
+                        << "     }\n"
+                        << "  }\n" << std::endl;
 
                 callbacks << callback.str() << std::endl;
             }
@@ -203,6 +185,7 @@ namespace hal
                                                        "--trace-depth",
                                                        "2",
                                                        "testbench.cpp",
+                                                       "saleae_directory.cpp",
                                                        "saleae_parser.cpp",
                                                        "saleae_file.cpp",
                                                        m_design_name + ".v"};

@@ -2,8 +2,14 @@
 
 #include <string>
 #include <vector>
-#include <filesystem>
 #include <unordered_map>
+
+// unfortunately std::filesystem::path is not available for all platforms
+#ifdef _WIN32
+const char folderSeparator = '\\';
+#else
+const char folderSeparator = '/';
+#endif
 
 namespace hal
 {
@@ -49,30 +55,31 @@ namespace hal
             uint64_t size;
         };
     private:
-        std::filesystem::path mDirectoryFile;
+        std::string mDirectoryFile;
         std::vector<SaleaeDirectoryNetEntry> mNetEntries;
 
         std::unordered_map<uint32_t,int> mById;
         std::unordered_map<std::string, int> mByName;
 
-        std::filesystem::path dataFilename(const SaleaeDirectoryNetEntry& sdnep) const;
+        std::string dataFilename(const SaleaeDirectoryNetEntry& sdnep) const;
         int getIndex(const SaleaeDirectoryNetEntry& sdnep) const;
         int mNextAvailableIndex;
     public:
-        SaleaeDirectory(const std::filesystem::path& path, bool create=false);
+        SaleaeDirectory(const std::string& path, bool create=false);
         bool parse_json();
+#ifndef STANDALONE_PARSER
         bool write_json() const;
+#endif
         void add_net(SaleaeDirectoryNetEntry& sdne);
         void dump() const;
-        void update_file_indexes(std::vector<SaleaeDirectoryFileIndex>& fileIndexes);
+        void update_file_indexes(std::unordered_map<int, SaleaeDirectoryFileIndex>& fileIndexes);
 
-        std::filesystem::path get_datafile(const std::string& nam, uint32_t id) const;
+        std::string get_datafile(const std::string& nam, uint32_t id) const;
         int get_datafile_index(const std::string& nam, uint32_t id) const;
 
         int get_next_available_index() const { return mNextAvailableIndex; }
         uint64_t get_max_time() const;
-        std::filesystem::path get_directory() const { return mDirectoryFile.parent_path(); }
-
+        std::string get_directory() const;
         std::vector<ListEntry> get_net_list() const;
     };
 }
