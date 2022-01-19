@@ -80,6 +80,7 @@ namespace hal
         auto ownRow = droppedItem->getOwnRow();
         TreeItem* newItem = new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn)
                                          << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
+        newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));//currently only pins can be dragged, so its a pin
 
         if(row != -1)//between items
         {
@@ -88,7 +89,6 @@ namespace hal
             auto onDroppedItem = bottomEdge ? onDroppedParentItem->getChild(row-1) : onDroppedParentItem->getChild(row);
             auto onDroppedPin = mod->get_pin(onDroppedItem->getData(sNameColumn).toString().toStdString());
             auto desiredIndex = onDroppedPin->get_group().second;
-            newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
 
             //same-parent (parent != root): move withing same group
             if(onDroppedParentItem == droppedParentItem && onDroppedParentItem != mRootItem)
