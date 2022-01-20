@@ -464,6 +464,7 @@ namespace hal
         sim_ctrl_verilator->add_clock_period(clock, 10000);
 
         sim_ctrl_reference->initialize();
+        sim_ctrl_reference->create_simulation_engine("verilator"); // we need an engine here to manage temp directory, otherwise import will fail!
 
         //read vcd
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
@@ -574,6 +575,7 @@ namespace hal
 
         sim_ctrl_reference->add_gates(nl->get_gates());
         sim_ctrl_reference->initialize();
+        sim_ctrl_reference->create_simulation_engine("verilator"); // we need an engine here to manage temp directory, otherwise import will fail!
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         //prepare simulation
@@ -746,6 +748,7 @@ namespace hal
         //read vcd
         sim_ctrl_reference->initialize();
         sim_ctrl_reference->add_gates(nl->get_gates());
+        sim_ctrl_reference->create_simulation_engine("verilator"); // we need an engine here to manage temp directory, otherwise import will fail!
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         //prepare simulation
@@ -899,6 +902,7 @@ namespace hal
 
         sim_ctrl_reference->add_gates(nl->get_gates());
         sim_ctrl_reference->initialize();
+        sim_ctrl_reference->create_simulation_engine("verilator"); // we need an engine here to manage temp directory, otherwise import will fail!
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         std::cout << "read simulation file" << std::endl;

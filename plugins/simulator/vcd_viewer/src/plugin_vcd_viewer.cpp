@@ -40,6 +40,5 @@ namespace hal
     void VcdViewerPlugin::on_unload()
     {
         // TODO: ExternalContent unregister
-        mVcdViewer->deleteLater();
     }
 }    // namespace hal
