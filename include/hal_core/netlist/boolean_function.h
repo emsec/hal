@@ -208,6 +208,17 @@ namespace hal
         static std::variant<BooleanFunction, std::string> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
+         * Slices a Boolean function based on a start and end index (inclusive) starting from 0.
+         * 
+         * @param[in] p0 - Boolean function to slice.
+         * @param[in] p1 - Boolean function start index at which p0 is sliced.
+         * @param[in] p2 - Boolean function end index at which p0 is sliced (inclusive).
+         * @param[in] size - Size of the sliced Boolean function, i.e. p0 + p1 + 1.
+         * @returns The sliced Boolean function on success, a string error message otherwise.
+         */
+        static std::variant<BooleanFunction, std::string> Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
+
+        /**
          * The ostream operator that forwards to_string of a boolean function.
          *
          * @param[in] os - the stream to write to.
@@ -361,6 +372,21 @@ namespace hal
          * @returns `true` if the Boolean function is of type `Constant` and holds the given value, `false` otherwise.
          */
         bool has_constant_value(u64 value) const;
+
+        /** 
+         * Checks whether the tpo-level node of the Boolean function is of type `Index`. 
+         * 
+         * @returns `true` if the top-level node of the Boolean function is of type `Index`, `false` otherwise.
+         */
+        bool is_index() const;
+
+        /**
+         * Checks whether the Boolean function is of type `Index` and holds a specific value.
+         * 
+         * @param[in] value - The value to check for.
+         * @returns `true` if the Boolean function is of type `Index` and holds the given value, `false` otherwise.
+         */
+        bool has_index_value(u16 index) const;
 
         /**
          * Returns the top-level node of the Boolean function.
@@ -533,12 +559,6 @@ namespace hal
 
         /// Computes the coverage value of each node in the Boolean function.
         std::vector<u32> compute_node_coverage() const;
-
-        /// Implements the Quine-McCluskey algorithm to simplify Boolean functions.
-        ///
-        /// @param[in] function - Boolean function to simplify.
-        /// @returns Simplified boolean function on success, error message string otherwise.
-        static std::variant<BooleanFunction, std::string> quine_mccluskey(const BooleanFunction& function);
 
         ////////////////////////////////////////////////////////////////////////
         // Member

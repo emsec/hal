@@ -619,6 +619,13 @@ namespace hal
 
                     return p[0] ^ p[1];
                 }
+                case BooleanFunction::NodeType::Slice: {
+                    // SLICE(p, 0, 0)   =>   p (if p is 1-bit wide)
+                    if ((p[0].size() == 1) && p[1].has_index_value(0) && p[2].has_index_value(0) && (node.size == 1)) {
+                        return p[0];
+                    }
+                    return BooleanFunction::Slice(p[0].clone(), p[1].clone(), p[2].clone(), node.size);
+                }
                 default:
                     return "not implemented reached";
             }

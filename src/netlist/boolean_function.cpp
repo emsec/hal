@@ -1,6 +1,7 @@
 #include "hal_core/netlist/boolean_function.h"
 
 #include "hal_core/netlist/boolean_function/parser.h"
+#include "hal_core/netlist/boolean_function/simplification.h"
 #include "hal_core/netlist/boolean_function/symbolic_execution.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
@@ -282,6 +283,25 @@ namespace hal
         return BooleanFunction(Node::Operation(NodeType::Xor, size), std::move(p0), std::move(p1));
     }
 
+    std::variant<BooleanFunction, std::string> BooleanFunction::Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
+    {
+        if (!p1.is_index() || !p2.is_index()) {
+            ERROR("Mismatching function types for Slice operation (= p1 and p2 must be an 'BooleanFunctino::Index').");
+        }
+        if ((p0.size() != p1.size()) || (p1.size() != p2.size())) {
+            ERROR("Mismatching bit-sizes for Slice operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", p2 = " << p2.size() << " - sizes must be equal).");
+        }
+        
+        auto start = p1.get_top_level_node().index,
+               end = p2.get_top_level_node().index;
+
+        if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size) {
+            ERROR("Mismatching bit-sizes for Slice operation (p0 = " << p0.size() << ", p1 = " << start << ", p2 = " << end << ").");
+        }
+
+        return BooleanFunction(Node::Operation(NodeType::Slice, size), std::move(p0), std::move(p1), std::move(p2));
+    }
+
     std::ostream& operator<<(std::ostream& os, const BooleanFunction& function)
     {
         return os << function.to_string();
@@ -403,6 +423,17 @@ namespace hal
     {
         return (this->is_empty()) ? false : this->get_top_level_node().has_constant_value(value);
     }
+
+    bool BooleanFunction::is_index() const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().is_index();
+    }
+
+    bool BooleanFunction::has_index_value(u16 value) const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().has_index_value(value);
+    }
+
 
     const BooleanFunction::Node& BooleanFunction::get_top_level_node() const
     {
@@ -590,33 +621,16 @@ namespace hal
 
     BooleanFunction BooleanFunction::simplify() const
     {
-        auto local_simplification = [](auto&& function) -> std::variant<BooleanFunction, std::string> {
-            auto current = function, before = BooleanFunction();
-
-            do
-            {
-                before          = current.clone();
-                auto simplified = SMT::SymbolicExecution().evaluate(current);
-                if (std::get_if<std::string>(&simplified) != nullptr)
-                {
-                    return std::get<std::string>(simplified);
-                }
-                current = std::get<BooleanFunction>(simplified);
-            } while (before != current);
-
-            return current;
-        };
-
         // (1) perform local simplification to minimize the Boolean function
-        auto simplified = local_simplification(this->clone());
+        auto simplified = Simplification::local_simplification(*this);
         if (std::get_if<std::string>(&simplified) != nullptr)
         {
             log_error("netlist", "{}", std::get<std::string>(simplified));
             return this->clone();
         }
 
-        // (2) perform a global simplification based on the QuineMcClusky algorithm
-        simplified = quine_mccluskey(std::get<BooleanFunction>(simplified));
+        // (2) perform a global simplification based on ABC
+        simplified = Simplification::abc_simplification(std::get<BooleanFunction>(simplified));
         if (std::get_if<std::string>(&simplified) != nullptr)
         {
             log_error("netlist", "{}", std::get<std::string>(simplified));
