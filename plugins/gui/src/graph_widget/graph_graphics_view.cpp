@@ -773,12 +773,12 @@ namespace hal
         }
         else
         {
-            context_menu.addAction("empty space")->setEnabled(false);
+            context_menu.addAction("This view:")->setEnabled(false);
 
-            action = context_menu.addAction("add Module");
+            action = context_menu.addAction("Add module to view");
             QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddModuleToView);
 
-            action = context_menu.addAction("add Gate");
+            action = context_menu.addAction("Add gate to view");
             QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddGateToView);
         }
 
