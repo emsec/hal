@@ -598,10 +598,8 @@ namespace hal
 
         bool isMultiGates = gSelectionRelay->selectedGates().size() > 1 &&
                 gSelectionRelay->selectedModules().isEmpty();
-        qDebug() << "above item";
         if (item)
         {
-            qDebug() << "is item";
             mItem   = static_cast<GraphicsItem*>(item);
             isGate   = mItem->itemType() == ItemType::Gate;
             isModule = mItem->itemType() == ItemType::Module;
@@ -777,6 +775,12 @@ namespace hal
         else
         {
             context_menu.addAction("empty space")->setEnabled(false);
+
+            action = context_menu.addAction("add Module");
+            QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddModuleToView);
+
+            action = context_menu.addAction("add Gate");
+            QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddGateToView);
         }
 
 
@@ -863,6 +867,32 @@ namespace hal
         }
 
     }
+
+
+    void GraphGraphicsView::handleAddModuleToView()
+    {
+        QString prompt;
+        bool confirm;
+        int id =  QInputDialog::getInt(this, prompt, "Module ID:", 0, 0, 100, 1, &confirm);
+
+        //QSet<u32> modulesToAdd;
+        //modulesToAdd.insert(id);
+        //ActionAddItemsToObject* act = new ActionAddItemsToObject(modulesToAdd,{});
+        //act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+        //act->setPlacementHint(plc);
+        //act->exec();
+
+        qDebug() << id;
+    }
+
+    void GraphGraphicsView::handleAddGateToView()
+    {
+        QString prompt;
+        bool confirm;
+        int id =  QInputDialog::getInt(this, prompt, "Gate ID:", 0, 0, 100, 1, &confirm);
+        qDebug() << id;
+    }
+
 
     void GraphGraphicsView::handleAddSuccessorToView()
     {
