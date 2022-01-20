@@ -1,4 +1,5 @@
 #include "gui/user_action/action_reorder_object.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {
@@ -27,7 +28,34 @@ namespace hal
 
     bool ActionReorderObject::exec()
     {
-        return false;
+        switch (mObject.type())
+        {
+            case UserActionObjectType::Pin:
+            {
+                auto mod = gNetlist->get_module_by_id(mObject.id());
+                auto pin = mod ? mod->get_pin(mPinOrPingroupIdentifier.toStdString()) : nullptr;
+                auto pinGroup = pin ? pin->get_group().first : nullptr;
+                if(pinGroup && pinGroup->size() > 1)
+                {
+                    auto oldIndex = pin->get_group().second;
+                    bool ret = mod->move_pin_within_group(pinGroup, pin, mNewIndex);
+                    if(!ret)
+                        return false;
+
+                    ActionReorderObject* undo = new ActionReorderObject(oldIndex);
+                    undo->setObject(mObject);
+                    undo->setPinOrPingroupIdentifier(mPinOrPingroupIdentifier);
+                    mUndoAction = undo;
+                }
+                else
+                    return false;
+                break;
+            }
+            default:
+                return false;
+        }
+
+        return UserAction::exec();
     }
 
     QString ActionReorderObject::tagname() const
