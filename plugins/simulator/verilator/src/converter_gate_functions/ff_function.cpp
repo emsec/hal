@@ -187,7 +187,7 @@ namespace hal
                     function << (if_used ? "\telse begin\n" : "");
                     function << (if_used ? "\t" : "") << "\t" << internal_state << " <= " << ff_component->get_next_state_function() << ";" << std::endl;
                     function << (if_used ? "\t" : "") << "\t" << internal_negated_state << " <= !(" << ff_component->get_next_state_function() << ");" << std::endl;
-                    function << "\tend" << std::endl;
+                    function << (if_used ? "\tend\n" : "");
                     function << "end" << std::endl;
 
                     // set output wires
