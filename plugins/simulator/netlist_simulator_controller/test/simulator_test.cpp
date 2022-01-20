@@ -846,6 +846,7 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
+
     TEST_F(SimulatorTest, bram_lattice)
     {
         // return;
