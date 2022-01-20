@@ -288,7 +288,6 @@ namespace hal
 
     void GraphGraphicsView::mouseDoubleClickEvent(QMouseEvent* event)
     {
-        qDebug() << "mouseDoubleClickEvent";
         if (event->button() != Qt::LeftButton)
             return;
 
@@ -873,16 +872,24 @@ namespace hal
     {
         QString prompt;
         bool confirm;
-        int id =  QInputDialog::getInt(this, prompt, "Module ID:", 0, 0, 100, 1, &confirm);
+        u32 id =  QInputDialog::getInt(this, prompt, "Module ID:", 0, 0, 100, 1, &confirm);
 
-        //QSet<u32> modulesToAdd;
-        //modulesToAdd.insert(id);
-        //ActionAddItemsToObject* act = new ActionAddItemsToObject(modulesToAdd,{});
-        //act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
-        //act->setPlacementHint(plc);
-        //act->exec();
 
-        qDebug() << id;
+        if (confirm)
+        {
+            Module *module = gNetlist->get_module_by_id(id);
+            if (module != nullptr)
+            {
+                if (gNetlist->is_module_in_netlist(module))
+                {
+                    QSet<u32> module_to_add;
+                    module_to_add.insert(id);
+                    ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add,{});
+                    act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+                    act->exec();
+                }
+            }
+        }
     }
 
     void GraphGraphicsView::handleAddGateToView()
@@ -890,7 +897,21 @@ namespace hal
         QString prompt;
         bool confirm;
         int id =  QInputDialog::getInt(this, prompt, "Gate ID:", 0, 0, 100, 1, &confirm);
-        qDebug() << id;
+        if (confirm)
+        {
+            Gate *gate = gNetlist->get_gate_by_id(id);
+            if (gate != nullptr)
+            {
+                if (gNetlist->is_gate_in_netlist(gate))
+                {
+                    QSet<u32> gate_to_add;
+                    gate_to_add.insert(id);
+                    ActionAddItemsToObject* act = new ActionAddItemsToObject(gate_to_add,{});
+                    act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+                    act->exec();
+                }
+            }
+        }
     }
 
 
