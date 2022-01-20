@@ -151,6 +151,9 @@ QMap<int,int>::const_iterator mIterator;
         case 'b': return parseVcdDataNonDecimal(line.mid(1),2);
         case 'o': return parseVcdDataNonDecimal(line.mid(1),8);
         case 'h': return parseVcdDataNonDecimal(line.mid(1),16);
+        case '$':
+            if (line.startsWith("$dumpvars") || line.startsWith("$end"))
+                return true;
         }
 
         for (QByteArray word : line.split(' '))
