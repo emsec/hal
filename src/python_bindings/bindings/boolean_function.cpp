@@ -27,30 +27,30 @@ namespace hal
             :rtype: str
         )");
 
-        py_boolean_function.def_static(
-            "to_string",
-            [](const std::vector<BooleanFunction::Value>& value, u8 base = 2) {
-                auto res = BooleanFunction::to_string(value, base);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::string("");
-                }
-            },
-            py::arg("value"),
-            py::arg("base") = 2,
-            R"(
-            Convert the given bit-vector to its string representation in the given base.
+        // py_boolean_function.def_static(
+        //     "to_string",
+        //     [](const std::vector<BooleanFunction::Value>& value, u8 base = 2) {
+        //         auto res = BooleanFunction::to_string(value, base);
+        //         if (res.is_ok())
+        //         {
+        //             return res.get();
+        //         }
+        //         else
+        //         {
+        //             log_error("python_context", "{}", res.get_error().get());
+        //             return std::string("");
+        //         }
+        //     },
+        //     py::arg("value"),
+        //     py::arg("base") = 2,
+        //     R"(
+        //     Convert the given bit-vector to its string representation in the given base.
 
-            :param list[hal_py.BooleanFunction.Value] value: The value as a bit-vector.
-            :param int base: The base that the values should be converted to. Valid values are 2 (default), 8, 10, and 16.
-            :returns: A string representing the values in the given base or an empty string on error.
-            :rtype: str
-        )");
+        //     :param list[hal_py.BooleanFunction.Value] value: The value as a bit-vector.
+        //     :param int base: The base that the values should be converted to. Valid values are 2 (default), 8, 10, and 16.
+        //     :returns: A string representing the values in the given base or an empty string on error.
+        //     :rtype: str
+        // )");
 
         py_boolean_function.def(py::init<>(), R"(
             Constructs an empty / invalid Boolean function.
