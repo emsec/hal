@@ -99,9 +99,9 @@ namespace hal
             {
                 auto it = m_pins.begin();
                 std::advance(it, index - m_start_index);
-                return *it;
+                return OK(*it);
             }
-            return Error("no pin exists at index " + std::to_string(index) + " within pin group '" + m_name + "'");
+            return ERR("no pin exists at index " + std::to_string(index) + " within pin group '" + m_name + "'");
         }
 
         /**
@@ -114,9 +114,9 @@ namespace hal
         {
             if (const auto it = m_pin_name_map.find(name); it != m_pin_name_map.end())
             {
-                return it->second;
+                return OK(it->second);
             }
-            return Error("no pin with name '" + name + "' exists within pin group '" + m_name + "'");
+            return ERR("no pin with name '" + name + "' exists within pin group '" + m_name + "'");
         }
 
         /**
@@ -129,15 +129,15 @@ namespace hal
         {
             if (pin == nullptr)
             {
-                return Error("'nullptr' provided as pin");
+                return ERR("'nullptr' provided as pin");
             }
 
             if (pin->m_group.first != this)
             {
-                return Error("provided pin '" + pin->get_name() + "' does not belong to pin group '" + m_name + "'");
+                return ERR("provided pin '" + pin->get_name() + "' does not belong to pin group '" + m_name + "'");
             }
 
-            return pin->m_group.second;
+            return OK(pin->m_group.second);
         }
 
         /**
@@ -151,7 +151,7 @@ namespace hal
             const auto pin = get_pin(name);
             if (pin.is_error())
             {
-                return pin.get_error();
+                return ERR(pin.get_error().get());
             }
 
             return get_index(pin.get());

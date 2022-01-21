@@ -26,26 +26,57 @@
 #include "hal_core/defines.h"
 #include "hal_core/utilities/error.h"
 
+#include <functional>
+#include <type_traits>
 #include <variant>
 
 namespace hal
 {
+    namespace result_constructor_type
+    {
+        // Constructor type for macro: OK()
+        class OK
+        {
+        };
+        // Constructor type for macro: ERROR()
+        class ERR
+        {
+        };
+    }    // namespace result_constructor_type
+
+#define OK(...)                                    \
+    {                                              \
+        result_constructor_type::OK(), __VA_ARGS__ \
+    }
+#define ERR(message)                                     \
+    {                                                    \
+        result_constructor_type::ERR(), Error(message) \
+    }
+
     template<typename T>
-    class Result final : private std::variant<Error, T>
+    class [[nodiscard]] Result final
     {
     public:
-        Result(const T& value) : std::variant<Error, T>(value)
+        static_assert(!std::is_same<T, Error>(), "Cannot initialize a Result<Error>.");
+
+        template<typename... Args, typename U = T, typename std::enable_if_t<std::is_same_v<U, void>, int> = 0>
+        Result(result_constructor_type::OK) : m_result()
         {
-            m_has_value = true;
         }
 
-        Result(const Error& error) : std::variant<Error, T>(error)
+        template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        Result(result_constructor_type::OK, const T& value) : m_result(value)
         {
         }
 
-        static Result<std::monostate> Ok()
+        template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        Result(result_constructor_type::OK, T&& value) : m_result(std::move(value))
         {
-            return Result<std::monostate>();
+        }
+
+        Result(result_constructor_type::ERR, const Error& error)
+        {
+            m_result = error;
         }
 
         bool is_ok() const
@@ -55,27 +86,33 @@ namespace hal
 
         bool is_error() const
         {
-            return std::holds_alternative<Error>(*this);
+            return std::holds_alternative<Error>(m_result);
         }
 
-        bool has_value() const
+        const T& get() const
         {
-            return m_has_value;
-        }
-
-        T get() const
-        {
-            return (has_value() ? std::get<T>(*this) : T());
+            return std::get<T>(m_result);
         }
 
         Error get_error() const
         {
-            return (is_error() ? std::get<Error>(*this) : Error());
+            return std::get<Error>(m_result);
+        }
+
+        template<typename U>
+        Result<U> map(const std::function<Result<U>(const T&)>& f) const
+        {
+            if (this->is_ok())
+            {
+                return f(this->get());
+            }
+            else
+            {
+                return ERR(this->get_error());
+            }
         }
 
     private:
-        bool m_has_value = false;
-        Result()         = default;
-        
+        std::variant<T, Error> m_result;
     };
 }    // namespace hal
