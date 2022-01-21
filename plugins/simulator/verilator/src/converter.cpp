@@ -181,9 +181,6 @@ namespace hal
             {
                 std::stringstream prologue;
 
-                std::vector<std::string> input_pins  = gt->get_input_pins();
-                std::vector<std::string> output_pins = gt->get_output_pins();
-
                 prologue << "`timescale 1 ps/1 ps" << std::endl;
 
                 prologue << "module " << gt->get_name() << std::endl;
@@ -209,13 +206,34 @@ namespace hal
                 // in and outputs of module
                 prologue << "(" << std::endl;
 
-                for (const auto& input_pin : input_pins)
+                std::unordered_set<std::string> visited_pins;
+                for (const std::string& pin : gt->get_pins())
                 {
-                    prologue << "\tinput " << input_pin << "," << std::endl;
-                }
-                for (const auto& output_pin : output_pins)
-                {
-                    prologue << "\toutput " << output_pin << "," << std::endl;
+                    // check if pin was contained in a group that has already been dealt with
+                    if (visited_pins.find(pin) != visited_pins.end())
+                    {
+                        continue;
+                    }
+
+                    PinDirection direction = gt->get_pin_direction(pin);
+                    prologue << "\t" << enum_to_string(direction) << " ";
+
+                    if (std::string pin_group = gt->get_pin_group(pin); !pin_group.empty())
+                    {
+                        PinDirection direction                              = gt->get_pin_direction(pin);
+                        std::vector<std::pair<u32, std::string>> group_pins = gt->get_pins_of_group(pin_group);
+                        prologue << pin_group << "[" << std::to_string(group_pins.back().first) << ":" << std::to_string(group_pins.front().first) << "]," << std::endl;
+
+                        for (const auto& [index, group_pin] : gt->get_pins_of_group(pin_group))
+                        {
+                            visited_pins.insert(group_pin);
+                        }
+                    }
+                    else
+                    {
+                        // append all connected pins
+                        prologue << pin << "," << std::endl;
+                    }
                 }
 
                 prologue.seekp(-2, prologue.cur);    // remove the additional colon and space
