@@ -6,6 +6,8 @@
 #include <QMap>
 #include <QFile>
 #include <QDir>
+
+#include <unordered_map>
 #include "hal_core/defines.h"
 
 namespace hal {
