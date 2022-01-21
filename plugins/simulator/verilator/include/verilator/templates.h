@@ -75,7 +75,6 @@ namespace hal
                     "  \n"
                     "  dut->eval();\n"
                     "  m_trace->dump(sim_time + to_simulate);\n"
-                    "  dut->final();\n"
                     "\n"
                     "  m_trace->close();\n"
                     "  delete dut;\n"
