@@ -170,7 +170,7 @@ namespace hal {
             inx = sd.get_next_available_index();
             SaleaeDirectoryNetEntry sdne(mName.toStdString(),mId);
             sdne.addIndex(SaleaeDirectoryFileIndex(inx,0,mData.lastKey(),mData.size()));
-            sd.add_net(sdne);
+            sd.add_or_replace_net(sdne);
             QDir saleaeDir(QString::fromStdString(sd.get_directory()));
             if (!saleaeDir.exists()) saleaeDir.mkpath(saleaeDir.absolutePath());
             sd.write_json();

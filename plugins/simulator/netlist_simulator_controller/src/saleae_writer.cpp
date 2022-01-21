@@ -84,7 +84,7 @@ namespace hal
             // create directory entry
             SaleaeDirectoryNetEntry sdne(name,id);
             sdne.addIndex(SaleaeDirectoryFileIndex(fileIndex));
-            mSaleaeDirectory.add_net(sdne);
+            mSaleaeDirectory.add_or_replace_net(sdne);
         }
         return sof;
     }

@@ -70,7 +70,7 @@ namespace hal
 #ifndef STANDALONE_PARSER
         bool write_json() const;
 #endif
-        void add_net(SaleaeDirectoryNetEntry& sdne);
+        void add_or_replace_net(SaleaeDirectoryNetEntry& sdne);
         void dump() const;
         void update_file_indexes(std::unordered_map<int, SaleaeDirectoryFileIndex>& fileIndexes);
 

@@ -523,14 +523,14 @@ QMap<int,int>::const_iterator mIterator;
                 removeOldFile = true;
             QString source = sourceDir.absoluteFilePath(QString("digital_%1.bin").arg(it->second));
             QString target = targetDir.absoluteFilePath(QString("digital_%1.bin").arg(inx));
-            if (removeOldFile) QFile::remove(target);
-            qDebug() << "copy" << source << target;
+            if (removeOldFile)
+                QFile::remove(target);
             if (!QFile::copy(source,target)) return false;
             SaleaeInputFile sif(target.toStdString());
             if (!sif.header()) return false;
             SaleaeDirectoryNetEntry sdne(it->first->get_name(), it->first->get_id());
             sdne.addIndex(SaleaeDirectoryFileIndex(inx,sif.header()->beginTime(),sif.header()->endTime(),sif.header()->numTransitions()));
-            sd.add_net(sdne);
+            sd.add_or_replace_net(sdne);
         }
         sd.write_json();
         return true;
