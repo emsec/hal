@@ -32,30 +32,51 @@
 
 namespace hal
 {
+    namespace result_constructor_type
+    {
+        // Constructor type for macro: OK()
+        class OK
+        {
+        };
+        // Constructor type for macro: ERROR()
+        class ERR
+        {
+        };
+    }    // namespace result_constructor_type
 
-#define Ok(...) Result::Result(__VA_ARGS__)
-#define Err(message) Result::Result(Error(message))
+#define OK(...)                                    \
+    {                                              \
+        result_constructor_type::OK(), __VA_ARGS__ \
+    }
+#define ERR(message)                                     \
+    {                                                    \
+        result_constructor_type::ERR(), Error(message) \
+    }
 
     template<typename T>
-    class Result final
+    class [[nodiscard]] Result final
     {
     public:
         static_assert(!std::is_same<T, Error>(), "Cannot initialize a Result<Error>.");
 
-        Result() : m_result(())
+        template<typename... Args, typename U = T, typename std::enable_if_t<std::is_same_v<U, void>, int> = 0>
+        Result(result_constructor_type::OK) : m_result()
         {
         }
 
-        Result(const T& value) : m_result(value)
+        template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        Result(result_constructor_type::OK, const T& value) : m_result(value)
         {
         }
 
-        Result(T&& value) : m_result(std::move(value))
+        template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        Result(result_constructor_type::OK, T&& value) : m_result(std::move(value))
         {
         }
 
-        Result(const Error& error) : m_result(error)
+        Result(result_constructor_type::ERR, const Error& error)
         {
+            m_result = error;
         }
 
         bool is_ok() const
@@ -79,15 +100,15 @@ namespace hal
         }
 
         template<typename U>
-        Result<U> map(const std::function<U(const T&)>& f) const
+        Result<U> map(const std::function<Result<U>(const T&)>& f) const
         {
             if (this->is_ok())
             {
-                return Ok(f(this->get()));
+                return f(this->get());
             }
             else
             {
-                return Err(this->get_error());
+                return ERR(this->get_error());
             }
         }
 
