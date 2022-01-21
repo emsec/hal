@@ -54,97 +54,97 @@ namespace hal
             :rtype: list[hal_py.ModulePin]
         )");
 
-        // py_module_pin_group.def(
-        //     "get_pin",
-        //     [](const PinGroup<ModulePin>& self, u32 index) -> ModulePin* {
-        //         auto res = self.get_pin(index);
-        //         if (res.is_ok())
-        //         {
-        //             return res.get();
-        //         }
-        //         else
-        //         {
-        //             log_error("python_context", "{}", res.get_error().get());
-        //             return nullptr;
-        //         }
-        //     },
-        //     py::arg("index"),
-        //     R"(
-        //     Get the pin specified by the given index.
+        py_module_pin_group.def(
+            "get_pin",
+            [](const PinGroup<ModulePin>& self, u32 index) -> ModulePin* {
+                auto res = self.get_pin(index);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("index"),
+            R"(
+            Get the pin specified by the given index.
 
-        //     :param int index: The index of the pin within the pin group.
-        //     :returns: The pin on success, None otherwise.
-        //     :rtype: hal_py.ModulePin or None
-        // )");
+            :param int index: The index of the pin within the pin group.
+            :returns: The pin on success, None otherwise.
+            :rtype: hal_py.ModulePin or None
+        )");
 
-        // py_module_pin_group.def(
-        //     "get_pin",
-        //     [](const PinGroup<ModulePin>& self, const std::string& name) -> ModulePin* {
-        //         auto res = self.get_pin(name);
-        //         if (res.is_ok())
-        //         {
-        //             return res.get();
-        //         }
-        //         else
-        //         {
-        //             log_error("python_context", "{}", res.get_error().get());
-        //             return nullptr;
-        //         }
-        //     },
-        //     py::arg("name"),
-        //     R"(
-        //     Get the pin specified by the given name.
+        py_module_pin_group.def(
+            "get_pin",
+            [](const PinGroup<ModulePin>& self, const std::string& name) -> ModulePin* {
+                auto res = self.get_pin(name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("name"),
+            R"(
+            Get the pin specified by the given name.
 
-        //     :param str name: The name of the pin.
-        //     :returns: The pin on success, None otherwise.
-        //     :rtype: hal_py.ModulePin or None
-        // )");
+            :param str name: The name of the pin.
+            :returns: The pin on success, None otherwise.
+            :rtype: hal_py.ModulePin or None
+        )");
 
-        // py_module_pin_group.def(
-        //     "get_index",
-        //     [](const PinGroup<ModulePin>& self, const ModulePin* pin) -> i32 {
-        //         auto res = self.get_index(pin);
-        //         if (res.is_ok())
-        //         {
-        //             return (i32)res.get();
-        //         }
-        //         else
-        //         {
-        //             log_error("python_context", "{}", res.get_error().get());
-        //             return -1;
-        //         }
-        //     },
-        //     py::arg("pin"),
-        //     R"(
-        //     Get the index within the pin group of the given pin.
+        py_module_pin_group.def(
+            "get_index",
+            [](const PinGroup<ModulePin>& self, const ModulePin* pin) -> i32 {
+                auto res = self.get_index(pin);
+                if (res.is_ok())
+                {
+                    return (i32)res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return -1;
+                }
+            },
+            py::arg("pin"),
+            R"(
+            Get the index within the pin group of the given pin.
 
-        //     :param hal_py.ModulePin pin: The pin
-        //     :returns: The index of the pin on success, -1 otherwise.
-        //     :rtype: int
-        // )");
+            :param hal_py.ModulePin pin: The pin
+            :returns: The index of the pin on success, -1 otherwise.
+            :rtype: int
+        )");
 
-        // py_module_pin_group.def(
-        //     "get_index",
-        //     [](const PinGroup<ModulePin>& self, const std::string& name) -> i32 {
-        //         auto res = self.get_index(name);
-        //         if (res.is_ok())
-        //         {
-        //             return (i32)res.get();
-        //         }
-        //         else
-        //         {
-        //             log_error("python_context", "{}", res.get_error().get());
-        //             return -1;
-        //         }
-        //     },
-        //     py::arg("name"),
-        //     R"(
-        //     Get the index within the pin group of the pin specified by the given name.
+        py_module_pin_group.def(
+            "get_index",
+            [](const PinGroup<ModulePin>& self, const std::string& name) -> i32 {
+                auto res = self.get_index(name);
+                if (res.is_ok())
+                {
+                    return (i32)res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return -1;
+                }
+            },
+            py::arg("name"),
+            R"(
+            Get the index within the pin group of the pin specified by the given name.
 
-        //     :param str name: The name of the pin.
-        //     :returns: The index of the pin on success, -1 otherwise.
-        //     :rtype: int
-        // )");
+            :param str name: The name of the pin.
+            :returns: The index of the pin on success, -1 otherwise.
+            :rtype: int
+        )");
 
         py_module_pin_group.def_property_readonly("ascending", &PinGroup<ModulePin>::is_ascending, R"(
             True if the pin order of a pin group comprising n pins is ascending (from 0 to n-1), False if it is descending (from n-1 to 0).

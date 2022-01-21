@@ -35,12 +35,11 @@ namespace hal
         static std::vector<char> char_map = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
         // namespace
 
-        static std::string to_bin(const std::vector<BooleanFunction::Value>& value)
+        static Result<std::string> to_bin(const std::vector<BooleanFunction::Value>& value)
         {
             if (value.size() == 0)
             {
-                return "";
-                // return Err("bit-vector is empty");
+                return ERR("bit-vector is empty");
             }
 
             std::string res = "";
@@ -51,17 +50,15 @@ namespace hal
                 res += enum_to_string<BooleanFunction::Value>(v);
             }
 
-            return res;
-            // return Ok(res);
+            return OK(res);
         }
 
-        static std::string to_oct(const std::vector<BooleanFunction::Value>& value)
+        static Result<std::string> to_oct(const std::vector<BooleanFunction::Value>& value)
         {
             int bitsize = value.size();
             if (bitsize == 0)
             {
-                return "";
-                // return Err("bit-vector is empty");
+                return ERR("bit-vector is empty");
             }
 
             u8 first_bits = bitsize % 3;
@@ -100,23 +97,20 @@ namespace hal
 
                 res += (char_map[index] & ~mask) | ('X' & mask);
             }
-            return res;
-            // return Ok(res);
+            return OK(res);
         }
 
-        static std::string to_dec(const std::vector<BooleanFunction::Value>& value)
+        static Result<std::string> to_dec(const std::vector<BooleanFunction::Value>& value)
         {
             int bitsize = value.size();
             if (bitsize == 0)
             {
-                return "";
-                // return Err("bit-vector is empty");
+                return ERR("bit-vector is empty");
             }
 
             if (bitsize > 64)
             {
-                return "";
-                // return Err("bit-vector has length " + std::to_string(bitsize) + ", but only up to 64 bits are supported for decimal conversion");
+                return ERR("bit-vector has length " + std::to_string(bitsize) + ", but only up to 64 bits are supported for decimal conversion");
             }
 
             u64 tmp   = 0;
@@ -129,19 +123,17 @@ namespace hal
 
             if (x_flag)
             {
-                return std::string("X");
+                return OK(std::string("X"));
             }
-            return std::to_string(tmp);
-            // return Ok(std::to_string(tmp));
+            return OK(std::to_string(tmp));
         }
 
-        static std::string to_hex(const std::vector<BooleanFunction::Value>& value)
+        static Result<std::string> to_hex(const std::vector<BooleanFunction::Value>& value)
         {
             int bitsize = value.size();
             if (bitsize == 0)
             {
-                return "";
-                // return Err("bit-vector is empty");
+                return ERR("bit-vector is empty");
             }
 
             u8 first_bits = bitsize & 0x3;
@@ -182,12 +174,11 @@ namespace hal
                 res += (char_map[index] & ~mask) | ('X' & mask);
             }
 
-            return res;
-            // return Ok(res);
+            return OK(res);
         }
     }    // namespace
 
-    std::string BooleanFunction::to_string(const std::vector<BooleanFunction::Value>& value, u8 base)
+    Result<std::string> BooleanFunction::to_string(const std::vector<BooleanFunction::Value>& value, u8 base)
     {
         switch (base)
         {
@@ -200,8 +191,7 @@ namespace hal
             case 16:
                 return to_hex(value);
             default:
-                return "";
-                // return Err("invalid value '" + std::to_string(base) + "' provided for base");
+                return ERR("invalid value '" + std::to_string(base) + "' provided for base");
         }
     }
 

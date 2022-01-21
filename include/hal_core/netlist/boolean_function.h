@@ -92,7 +92,7 @@ namespace hal
          * @param[in] base - The base that the values should be converted to. Valid values are 2 (default), 8, 10, and 16.
          * @returns A string representing the values in the given base or an error.
          */
-        static std::string to_string(const std::vector<BooleanFunction::Value>& value, u8 base = 2);
+        static Result<std::string> to_string(const std::vector<BooleanFunction::Value>& value, u8 base = 2);
 
         /**
          * Output stream operator that forwards to_string of a value.
