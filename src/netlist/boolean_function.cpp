@@ -302,6 +302,15 @@ namespace hal
         return BooleanFunction(Node::Operation(NodeType::Slice, size), std::move(p0), std::move(p1), std::move(p2));
     }
 
+    std::variant<BooleanFunction, std::string> BooleanFunction::Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if ((p0.size() + p1.size()) != size) {
+            ERROR("Mismatch function input width (p0 = " << p0.size() << "-bit, p1 = " << p1.size() << "-bit, size = " << size << ").");
+        }
+
+        return BooleanFunction(Node::Operation(NodeType::Concat, size), std::move(p0), std::move(p1));
+    }
+
     std::ostream& operator<<(std::ostream& os, const BooleanFunction& function)
     {
         return os << function.to_string();
@@ -621,25 +630,36 @@ namespace hal
 
     BooleanFunction BooleanFunction::simplify() const
     {
-        // (1) perform local simplification to minimize the Boolean function
-        auto simplified = Simplification::local_simplification(*this);
-        if (std::get_if<std::string>(&simplified) != nullptr)
-        {
-            log_error("netlist", "{}", std::get<std::string>(simplified));
-            return this->clone();
+        // in order to optimize a Boolean function (by means of fewest nodes in 
+        // the abstract syntax tree), we use a fix-point iteration to automate 
+        // the search of an optimized combination of different strategies.
+        static const std::vector<std::function<std::variant<BooleanFunction, std::string>(const BooleanFunction&)>> simplifications = {
+            Simplification::local_simplification,
+            Simplification::abc_simplification,
+        };
+
+        auto state = this->clone();
+        while (true) {
+            const auto before = state.clone();
+            for (const auto& simplification : simplifications) {
+                const auto status = simplification(state);
+                if (std::get_if<std::string>(&status) != nullptr) {
+                    return this->clone();
+                }
+
+                const auto simplified = std::get<0>(status);
+                if ((state.length() >= simplified.length()) && (state != simplified)) {
+                    state = simplified;
+                    break;
+                }
+            }
+
+            if (before == state) {
+                break;
+            }
         }
 
-        // (2) perform a global simplification based on ABC
-        simplified = Simplification::abc_simplification(std::get<BooleanFunction>(simplified));
-        if (std::get_if<std::string>(&simplified) != nullptr)
-        {
-            log_error("netlist", "{}", std::get<std::string>(simplified));
-            return this->clone();
-        }
-
-        // TODO: check whether we need a local simplifcation afterwards again to minimze the min-terms
-
-        return std::get<BooleanFunction>(simplified);
+        return state;
     }
 
     BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const

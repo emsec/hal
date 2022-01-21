@@ -395,24 +395,13 @@ namespace hal {
         EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone())).simplify(), b.clone());
         // (a & ~b) | (~a & ~b)  =>  ~b
         EXPECT_EQ(((a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), ~b.clone());
-    }
-
-    TEST(BooleanFunction, SimplificationQuineMcCluskey) 
-    {
-        const auto a = BooleanFunction::Var("A"),
-                   b = BooleanFunction::Var("B"),
-                   c = BooleanFunction::Var("C"),
-                  _0 = BooleanFunction::Const(0, 1),
-                  _1 = BooleanFunction::Const(1, 1);
 
         // (a & b) | (~a & b) | (a & ~b) | (~a & ~b)   =>   1
-        // EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone()) | (a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), _1.clone());
-    
+        EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone()) | (a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), _1.clone());
         // (a | b) | (b & c)   => a | b
-        // EXPECT_EQ(((a.clone() | b.clone()) | (b.clone() & c.clone())).simplify(), a.clone() | b.clone());    
-    
+        EXPECT_EQ(((a.clone() | b.clone()) | (b.clone() & c.clone())).simplify(), a.clone() | b.clone());    
         // (a & c) | (b & ~c) | (a & b)   =>   (a & c) | (b & ~c)
-        // EXPECT_EQ(((a.clone() & c.clone()) | (b.clone() & ~c.clone()) | (a.clone() & b.clone())).simplify(), (a.clone() & c.clone()) | (b.clone() & ~c.clone()));
+        EXPECT_EQ(((a.clone() & c.clone()) | (b.clone() & ~c.clone()) | (a.clone() & b.clone())).simplify(), (a.clone() & c.clone()) | (b.clone() & ~c.clone()));
     }
 
     TEST(BooleanFunction, SimplificationPerformance)
@@ -553,11 +542,10 @@ namespace hal {
     TEST(BooleanFunction, SimplificationVsTruthTable) {
         const auto  a = BooleanFunction::Var("A"),
                     b = BooleanFunction::Var("B"),
-                    c = BooleanFunction::Var("C"),
-                   _1 = BooleanFunction::Const(1, 1);
+                    c = BooleanFunction::Var("C");
         
         const std::vector<BooleanFunction> data = {
-            (~(a ^ b & c) | (b | c & _1)) ^ ((a & b) | (a | b | c)),
+            (a & b & c),
             (a | b | c),
         };
 

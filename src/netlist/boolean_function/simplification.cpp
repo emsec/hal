@@ -3,12 +3,33 @@
 #include "hal_core/netlist/boolean_function/symbolic_execution.h"
 #include "hal_core/utilities/log.h"
 
+#include <cstdio>
 #include <filesystem>
+#include <fstream>
+#include <iostream>
 #include <numeric>
 
+#include <boost/fusion/include/at_c.hpp>
+#include <boost/fusion/sequence/intrinsic/at_c.hpp>
+#include <boost/spirit/home/x3.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
+
+extern "C" {
+    /// # Developer Note
+    /// Since ABC is implemented in C (and we link towards the libabc.so within
+    /// the HAL core), we have to forward declare the extern data types and 
+    /// functions we use from ABC.
+
+    void Abc_Start();
+    void Abc_Stop();
+
+    typedef struct Abc_Frame_t_ Abc_Frame_t;
+
+    Abc_Frame_t* Abc_FrameGetGlobalFrame();
+    int Cmd_CommandExecute(Abc_Frame_t*, const char*);
+}
 
 namespace hal {
 namespace {
@@ -80,9 +101,9 @@ namespace {
      * Translates a given Boolean function into structured Verilog.
      * 
      * @param[in] function - Boolean function to translate.
-     * @returns `true` and Verilog string on success, `false` otherwise.
+     * @returns `true` and Verilog string with output variables on success, `false` otherwise.
      */
-    std::tuple<bool, std::string> translate_to_verilog(const BooleanFunction& function) {
+    std::tuple<bool, std::string, std::vector<std::string>> translate_to_verilog(const BooleanFunction& function) {
         const auto inputs = function.get_variable_names();
         const auto output_prefix = std::string("out_");
 
@@ -90,7 +111,7 @@ namespace {
         for (const auto& input: inputs) {
             if (std::mismatch(output_prefix.begin(), output_prefix.end(), input.begin()).first
                 == output_prefix.end()) {
-                return {false, "Cannot translate to Verilog as \"out\" is an input variable."};
+                return {false, "Cannot translate to Verilog as \"out\" is an input variable.", {}};
             }
         }
 
@@ -101,10 +122,13 @@ namespace {
             [] (auto acc, auto input) { return acc + "\tinput " + input + ";\n"; });
 
         std::string interface_output_variables, interface_output_declaration;
+        std::vector<std::string> output_variables; output_variables.reserve(function.size());
         for (auto i = 0u; i < function.size(); i++) {
             auto variable = output_prefix + std::to_string(i);
             interface_output_variables += variable;
             interface_output_declaration += "\toutput " + variable + ";\n";
+
+            output_variables.emplace_back(variable);
         }
 
         // (3) assemble the Verilog textual representation
@@ -155,13 +179,13 @@ namespace {
         for (auto index = 0u; index < function.size(); index++) {
             auto [ok, expr] = translate(function, index);
             if (!ok) {
-                return {false, "Cannot translate " + function.to_string() + " at index " + std::to_string(index) + " to Verilog."};
+                return {false, "Cannot translate " + function.to_string() + " at index " + std::to_string(index) + " to Verilog.", {}};
             }
             ss << "\tassign " << output_prefix << index << " = " << expr << ";\n";
         }
         ss << "endmodule" << std::endl;
 
-        return {true, ss.str()};
+        return {true, ss.str(), output_variables};
     }
 
     /**
@@ -176,9 +200,180 @@ namespace {
     	boost::uuids::random_generator gen;
 
     	std::stringstream ss;
-    	ss << std::filesystem::temp_directory_path() << "/" << gen();
+    	ss << std::filesystem::temp_directory_path().u8string() << "/" << gen();
 
     	return ss.str();
+    }
+
+    /**
+     * Performs a call to ABC based on a path to structured Verilog.
+     * 
+     * @param[in] filename Filename.
+     * @returns `true` on success, `false` and error message otherwise.
+     */
+    std::tuple<bool, std::string> call_abc(const std::string& filename)
+    {
+        std::stringstream command;
+        command << "read " << filename << ";";
+        // TODO(@nalbartus) Specify why the various parameter combinations are 
+        //                  there and why this command selection works best
+        command << "fraig; balance; rewrite -l; refactor -l; balance; rewrite -l; rewrite -lz; balance; refactor -lz; rewrite -lz; balance; rewrite -lz;";
+        command << "write_verilog " << filename << ";";
+
+        Abc_Start();
+
+        if (auto context = Abc_FrameGetGlobalFrame(); Cmd_CommandExecute(context, command.str().c_str())) 
+        {
+            return {false, "Cannot execute command '" + command.str() + "'."};
+        }
+
+        Abc_Stop();
+
+        return {true, ""};
+    }
+
+    /** 
+     * Translates a structured Verilog file to a Boolean function.
+     * 
+     * @param[in] verilog Verilog data that represents a simplified Boolean function.
+     * @param[in] function Input Boolean function (not simplified).
+     * @param[in] output_variables Output Boolean function variables.
+     * @returns Simplified Boolean function on success, error message string otherwise.
+     */
+    std::variant<BooleanFunction, std::string> translate_from_verilog(const std::string& verilog, const BooleanFunction& function, const std::vector<std::string>& output_variables) 
+    {
+        /**
+         * Translates an Verilog statement such as "assign new_n8_ = ~I1 & ~I3;"
+         * into the respective left-hand and right-hand side Boolean functions.
+         * 
+         * @param[in] assignment - Verilog assignment statement.
+         * @returns Left-hand and right-hand Boolean functions on success, error message string otherwise.
+         */
+        auto parse_assignment = [] (const auto& assignment) -> std::variant<std::tuple<BooleanFunction, BooleanFunction>, std::string>
+        {
+            std::variant<BooleanFunction, std::string> lhs, rhs;
+            
+            namespace x3 = boost::spirit::x3;
+
+            ////////////////////////////////////////////////////////////////////////
+            // Actions
+            ////////////////////////////////////////////////////////////////////////
+
+            const auto LHSAction = [&lhs] (auto& ctx) {
+                lhs = BooleanFunction::from_string(_attr(ctx));
+            };
+            const auto RHSAction = [&rhs] (auto& ctx) {
+                rhs = BooleanFunction::from_string(_attr(ctx));
+            };
+
+            ////////////////////////////////////////////////////////////////////////
+            // Rules
+            ////////////////////////////////////////////////////////////////////////
+
+            const auto EndOfLineRule = x3::lit(";") >> *x3::space;
+            const auto RHSRule = x3::lexeme[*x3::char_("a-zA-Z0-9_+*~|&!' ")] [RHSAction]; 
+            const auto EqualSignRule = *x3::space >> x3::lit("=");
+            const auto LHSRule = x3::lexeme[*x3::char_("a-zA-Z0-9_")] [LHSAction]; 
+            const auto AssignRule = *x3::space >> x3::lit("assign") >> *x3::space;
+
+            // (1) parse the assignment to left-hand and right-hand side
+            auto iter = assignment.begin();
+            const auto ok = x3::phrase_parse(iter, assignment.end(), 
+                ////////////////////////////////////////////////////////////////////
+                // Parsing Expression Grammar
+                ////////////////////////////////////////////////////////////////////
+                AssignRule >> LHSRule >> EqualSignRule >> RHSRule >> EndOfLineRule,
+                // we use an invalid a.k.a. non-printable ASCII character in order
+                // to prevent the skipping of space characters as they are defined
+                // as skipper within a Boolean function and operation
+                x3::char_(0x00)
+            );
+
+            if (!ok || (iter != assignment.end())) {
+                return "Unable to parse assignment '" + assignment + "'.";
+            }
+
+            if (std::get_if<std::string>(&lhs) != nullptr) {
+                return "Cannot translate left-hand side of '" + assignment + "' into a Boolean function (= " + std::get<std::string>(lhs) + ".";
+            }
+            if (std::get_if<std::string>(&rhs) != nullptr) {
+                return "Cannot translate right-hand side of '" + assignment + "' into a Boolean function (= " + std::get<std::string>(rhs) + ".";
+            }
+
+            return std::make_tuple(std::get<0>(lhs), std::get<0>(rhs));
+        };
+
+        std::map<BooleanFunction, BooleanFunction> assignments;
+
+        // (1) translate each Verilog assignment of the form "assign ... = ...;"
+        std::istringstream data(verilog);
+        std::string line;
+        while (std::getline(data, line)) {
+            if (auto assignment = parse_assignment(line); std::get_if<0>(&assignment) != nullptr) {
+                auto [lhs, rhs] = std::get<0>(assignment);
+                assignments[lhs] = rhs;
+            }
+        }
+
+        // (2) check that each output variable is defined within the assignments
+        for (const auto& output_variable: output_variables) {
+            if (assignments.find(BooleanFunction::Var(output_variable)) == assignments.end()) {
+                return "Cannot simplify '" + function.to_string() + "' as output variable is not defined in Verilog.";
+            }
+        }
+
+        // (3) recursively replace the variables for each output Boolean function
+        //     until only input variables of the original function are present in
+        //     the function
+        const auto inputs = function.get_variable_names();
+        for (const auto& output_variable: output_variables) {
+            auto output = BooleanFunction::Var(output_variable);
+              
+            // in order to prevent infinite-loops by unsupported inputs such as 
+            // cyclic replacement dependencies, we only replace |assignments| times
+            auto counter = 0u;
+            while ((assignments[output].get_variable_names() != inputs)
+                && (counter++ < assignments.size())) {
+                for (const auto& tmp : assignments[output].get_variable_names()) 
+                {
+                    if (inputs.find(tmp) != inputs.end()) {
+                        continue;
+                    }
+                    auto simplified = assignments[output].substitute(tmp, assignments[BooleanFunction::Var(tmp)]);
+                    if (std::get_if<std::string>(&simplified) != nullptr) {
+                        return std::get<std::string>(simplified);
+                    }
+
+                    assignments[output] = std::get<0>(simplified);
+                }
+            }
+        }
+
+        // (4) validate the all outputs only contain input variables 
+        for (const auto& output_variable: output_variables) {
+            for (const auto& input: assignments[BooleanFunction::Var(output_variable)].get_variable_names()) {
+                if (inputs.find(input) == inputs.end()) {
+                    return "Cannot replace '" + output_variable + "' as it contains a temporary variable '" + input + "'.";
+                }
+            }
+        }
+
+        // (5) concatenate all output Boolean functions into a single function
+        auto state = assignments[BooleanFunction::Var(output_variables[0])];
+        for (auto i = 1u; i < function.size(); i++) {
+            auto concat = BooleanFunction::Concat(
+                assignments[BooleanFunction::Var(output_variables[i])].clone(),
+                state.clone(),
+                state.size() + 1
+            );
+
+            if (std::get_if<std::string>(&concat) != nullptr) {
+                return std::get<std::string>(concat);
+            } else {
+                state = std::get<0>(concat);
+            }
+        }
+        return state;
     }
 }  // namespace
 
@@ -202,52 +397,7 @@ namespace Simplification {
         return current;
     }
 
-
-
-    extern "C" {
-// procedures to start and stop the ABC framework
-        // (should be called before and after the ABC procedures are called)
-        void Abc_Start();
-        void Abc_Stop();
-
-        // procedures to get the ABC framework and execute commands in it
-        typedef struct Abc_Frame_t_ Abc_Frame_t;
-
-        Abc_Frame_t* Abc_FrameGetGlobalFrame();
-        int Cmd_CommandExecute(Abc_Frame_t* pAbc, const char* sCommand);
-    }
-
- bool call_abc(const char* file_name)
-            {
-                    // variables
-                char Command[1000];
-
-                // start the ABC framework
-                Abc_Start();
-                auto pAbc = Abc_FrameGetGlobalFrame();
-
-                // read the file
-                sprintf(Command, "read %s; fraig; balance; rewrite -l; refactor -l; balance; rewrite -l; rewrite -lz; balance; refactor -lz; rewrite -lz; balance;", file_name);
-                if (Cmd_CommandExecute(pAbc, Command))
-                {
-                    log_info("verification", "Cannot execute command \"{}\".\n", Command);
-                    return 1;
-                }
-
-                // write the result in eqn
-                sprintf(Command, "write_verilog %s.eqn", file_name);
-                if (Cmd_CommandExecute(pAbc, Command))
-                {
-                    log_info("verification", "Cannot execute command \"{}\".\n", Command);
-                    return 1;
-                }
-
-                Abc_Stop();
-
-                return 0;
-            }
-
-	std::variant<BooleanFunction, std::string> abc_simplification(const BooleanFunction& function) 
+    std::variant<BooleanFunction, std::string> abc_simplification(const BooleanFunction& function) 
 	{
         // # Developer Note
         // In order to apply a global optimization to the Boolean function, we 
@@ -277,13 +427,30 @@ namespace Simplification {
         
         // (2) translate the Boolean function to structured Verilog and write
         //     it to a random temporary file on the filesystem
+        auto [ok, verilog, output_variables] = translate_to_verilog(function);
+        if (!ok) {
+            return "Cannot translate " + function.to_string() + " to Verilog (= " + verilog + ").";
+        }
+
+        auto filename = get_random_filename() + ".v";
+
+        std::ofstream file(filename);
+        file << verilog;
+        file.close();
 
         // (3) call ABC on the structured Verilog file to optimize the function
+        if (auto [ok, message] = call_abc(filename); !ok) {
+            std::remove(filename.c_str());
+            return message;
+        }
 
         // (4) read-back the optimized structured Verilog file and translate the
         //     optimized Verilog back into a Boolean function
+        std::ifstream input_stream(filename);
+        std::string input((std::istreambuf_iterator<char>(input_stream)), std::istreambuf_iterator<char>());
+        std::remove(filename.c_str());
 
-		return function;
+        return translate_from_verilog(input, function, output_variables);
 	}
 }  // namespace Simplification
 }  // namespace hal

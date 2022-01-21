@@ -219,6 +219,16 @@ namespace hal
         static std::variant<BooleanFunction, std::string> Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
 
         /**
+         * Concatenates two Boolean functions.
+         * 
+         * @param[in] p0 - Boolean function (higher-bit part)
+         * @param[in] p1 - Boolean function (lower-bit part)
+         * @param[in] size - Size of concatenated Boolean function.
+         * @returns The concatenated Boolean function on success, a string error message otherwise.
+         */
+        static std::variant<BooleanFunction, std::string> Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+ 
+        /**
          * The ostream operator that forwards to_string of a boolean function.
          *
          * @param[in] os - the stream to write to.
