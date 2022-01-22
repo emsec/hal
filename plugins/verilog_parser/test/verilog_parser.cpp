@@ -2205,38 +2205,6 @@ namespace hal {
                 EXPECT_NE(nl, nullptr);
             }
             {
-                // Assign one Net to another, but booth are connected to different source gates
-                NO_COUT_TEST_BLOCK;
-                std::string netlist_input("module top ("
-                                        "  global_in,"
-                                        "  global_out"
-                                        " ) ;"
-                                        "  input global_in ;"
-                                        "  output global_out ;"
-                                        "  wire net_0 ;"
-                                        "  wire net_1 ;"
-                                        "  assign net_0 = net_1 ;"
-                                        "gate_1_to_1 gate_0 ("
-                                        "  .I (global_in ),"
-                                        "  .O (net_0 )"
-                                        " ) ;"
-                                        "gate_1_to_1 gate_1 ("
-                                        "  .I (global_in ),"
-                                        "  .O (net_1 )"
-                                        " ) ;"
-                                        "gate_2_to_1 gate_1 ("
-                                        "  .I0 (net_0 ),"
-                                        "  .I1 (net_1 ),"
-                                        "  .O (global_out )"
-                                        " ) ;"
-                                        "endmodule");
-                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(verilog_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
-            }
-            {
                 // Use an undeclared signal (should only throw a warning or return a nullptr)
                 NO_COUT_TEST_BLOCK;
                 std::string netlist_input("module top ("
