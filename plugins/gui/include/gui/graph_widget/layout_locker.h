@@ -42,6 +42,7 @@ namespace hal
         void addLock();
         void removeLock();
         bool canUpdate(GraphContext* ctx);
+        void removeWaitingContext(GraphContext* ctx);
     };
 
     class LayoutLocker
