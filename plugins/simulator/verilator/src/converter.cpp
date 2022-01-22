@@ -222,7 +222,7 @@ namespace hal
                     {
                         PinDirection direction                              = gt->get_pin_direction(pin);
                         std::vector<std::pair<u32, std::string>> group_pins = gt->get_pins_of_group(pin_group);
-                        prologue << pin_group << "[" << std::to_string(group_pins.back().first) << ":" << std::to_string(group_pins.front().first) << "]," << std::endl;
+                        prologue << " [" << std::to_string(group_pins.back().first) << ":" << std::to_string(group_pins.front().first) << "] " << pin_group << "," << std::endl;
 
                         for (const auto& [index, group_pin] : gt->get_pins_of_group(pin_group))
                         {
