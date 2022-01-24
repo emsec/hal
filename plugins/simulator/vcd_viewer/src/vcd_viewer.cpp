@@ -356,6 +356,7 @@ namespace hal
     {
         if (!mCurrentWaveWidget) return;
         mCurrentWaveWidget->addResults();
+        mAddResultWaveAction->setEnabled(mCurrentWaveWidget->canImportWires());
     }
 
     void VcdViewer::handleClockSet()

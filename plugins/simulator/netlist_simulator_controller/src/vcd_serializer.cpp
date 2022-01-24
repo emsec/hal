@@ -360,6 +360,7 @@ QMap<int,int>::const_iterator mIterator;
         mSaleaeWriter = nullptr;
         mSaleaeFiles.clear();
 
+        if (retval) Q_EMIT importDone();
         return retval;
     }
 
@@ -445,6 +446,7 @@ QMap<int,int>::const_iterator mIterator;
         mSaleaeFiles.clear();
         mAbbrevByName.clear();
 
+        if (retval) Q_EMIT importDone();
         return retval;
     }
 
@@ -572,6 +574,7 @@ QMap<int,int>::const_iterator mIterator;
             sd.add_or_replace_net(sdne);
         }
         sd.write_json();
+        Q_EMIT importDone();
         return true;
     }
 

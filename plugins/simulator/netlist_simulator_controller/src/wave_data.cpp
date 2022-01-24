@@ -168,13 +168,15 @@ namespace hal {
         if (inx < 0)
         {
             inx = sd.get_next_available_index();
-            SaleaeDirectoryNetEntry sdne(mName.toStdString(),mId);
-            sdne.addIndex(SaleaeDirectoryFileIndex(inx,0,mData.lastKey(),mData.size()));
-            sd.add_or_replace_net(sdne);
             QDir saleaeDir(QString::fromStdString(sd.get_directory()));
             if (!saleaeDir.exists()) saleaeDir.mkpath(saleaeDir.absolutePath());
-            sd.write_json();
         }
+
+        SaleaeDirectoryNetEntry sdne(mName.toStdString(),mId);
+        sdne.addIndex(SaleaeDirectoryFileIndex(inx,0,mData.lastKey(),mData.size()));
+        sd.add_or_replace_net(sdne);
+        sd.write_json();
+
         std::filesystem::path path = sd.get_datafile(mName.toStdString(),mId);
 
         SaleaeDataBuffer sdb(mData.size());
@@ -376,7 +378,7 @@ namespace hal {
         if (!mWaveDataList->hasNet(netId))
             mWaveDataList->add((wd = new WaveData(n)),false);
         else
-            wd = mWaveDataList->waveDataByNetId(netId);
+            wd = mWaveDataList->waveDataByNet(n,nullptr);
         int inx = mGroupList.size();
         mGroupList.append(wd);
         mIndex.insert(WaveDataGroupIndex(wd),inx);
@@ -748,11 +750,20 @@ namespace hal {
             add(wd,silent);
     }
 
-    WaveData* WaveDataList::waveDataByNetId(u32 id) const
+    WaveData* WaveDataList::waveDataByNet(const Net *n, const SaleaeDirectory *sd)
     {
-        int inx = mIds.value(id,-1);
-        if (inx < 0) return nullptr;
-        return at(inx);
+        if (!n) return nullptr;
+        int inx = mIds.value(n->get_id(),-1);
+        if (inx >= 0) return at(inx);
+        if (!sd) return nullptr;
+        WaveData* wd = new WaveData(n);
+        if (wd->loadSaleae(*sd))
+        {
+            add(wd,false);
+            return wd;
+        }
+        delete wd;
+        return nullptr;
     }
 
     void WaveDataList::testDoubleCount()

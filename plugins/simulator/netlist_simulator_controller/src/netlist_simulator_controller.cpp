@@ -213,11 +213,9 @@ namespace hal
 
     WaveData* NetlistSimulatorController::get_waveform_by_net(Net* n) const
     {
-        WaveData* wd = mWaveDataList->waveDataByNetId(n->get_id());
-        if (wd) return wd;
-        if (!mSimulationEngine) return nullptr;
-        SaleaeDirectory sd(mSimulationEngine->get_saleae_directory_filename());
-        if (!wd->loadSaleae(sd)) return nullptr;
+        SaleaeDirectory* sd = mSimulationEngine ? new SaleaeDirectory(mSimulationEngine->get_saleae_directory_filename()) : nullptr;
+        WaveData* wd = mWaveDataList->waveDataByNet(n,sd);
+        if (sd) delete sd;
         return wd;
     }
 
@@ -462,7 +460,8 @@ namespace hal
                 log_warning(get_name(), "net[{}] '{}' is not an input net, value not assigned.", net->get_id(), net->get_name());
             return;
         }
-        WaveData* wd = mWaveDataList->waveDataByNetId(net->get_id());
+        SaleaeDirectory* sd = new SaleaeDirectory(mSimulationEngine->get_saleae_directory_filename());
+        WaveData* wd = mWaveDataList->waveDataByNet(net,sd);
         if (!wd)
         {
             wd = new WaveData(net);
@@ -470,8 +469,8 @@ namespace hal
         }
         u64 t = mWaveDataList->simulTime();
         wd->insertBooleanValue(t,value);
-        SaleaeDirectory sd(mSimulationEngine->get_saleae_directory_filename());
-        wd->saveSaleae(sd);
+        wd->saveSaleae(*sd);
+        delete sd;
     }
 
     void NetlistSimulatorController::initialize()
