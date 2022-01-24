@@ -239,6 +239,11 @@ namespace hal
         {
             std::vector<TokenStream<std::string>> parts;
 
+            if (stream.size() == 0)
+            {
+                return {empty_t()};
+            }
+
             if (stream.peek() == "{")
             {
                 stream.consume("{", true);
@@ -348,6 +353,7 @@ namespace hal
     bool VerilogParser::parse(const std::filesystem::path& file_path)
     {
         m_modules.clear();
+        m_modules_by_name.clear();
 
         {
             std::ifstream ifs;
@@ -474,7 +480,7 @@ namespace hal
             {
                 if (auto module_it = m_modules_by_name.find(instance->m_type); module_it != m_modules_by_name.end())
                 {
-                    for (const auto& port_assignment : instance->m_assignments)
+                    for (const auto& port_assignment : instance->m_port_assignments)
                     {
                         if (!port_assignment.m_port_name.has_value())
                         {
@@ -513,14 +519,14 @@ namespace hal
 
                             for (u32 i = 0; i < max_size; i++)
                             {
-                                instance->m_expanded_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
                             }
                         }
                         else
                         {
                             for (const auto& expanded_port_name : left_port)
                             {
-                                instance->m_expanded_assignments.push_back(std::make_pair(expanded_port_name, ""));
+                                instance->m_expanded_port_assignments.push_back(std::make_pair(expanded_port_name, ""));
                             }
                         }
                     }
@@ -557,6 +563,13 @@ namespace hal
         m_net_by_name.clear();
         m_nets_to_merge.clear();
         m_module_ports.clear();
+        for (const auto& module : m_modules)
+        {
+            for (const auto& instance : module->m_instances)
+            {
+                instance->m_expanded_port_assignments.clear();
+            }
+        }
 
         // buffer gate types
         m_gate_types     = gate_library->get_gate_types();
@@ -1175,7 +1188,7 @@ namespace hal
                 m_token_stream.consume("(", true);
                 port_assignment.m_assignment = parse_assignment_expression(m_token_stream.extract_until(")"));
                 m_token_stream.consume(")", true);
-                instance->m_assignments.push_back(std::move(port_assignment));
+                instance->m_port_assignments.push_back(std::move(port_assignment));
             }
         } while (m_token_stream.consume(",", false));
 
@@ -1326,7 +1339,7 @@ namespace hal
                         }
                     }
 
-                    for (const auto port_assignment : instance->m_assignments)
+                    for (const auto port_assignment : instance->m_port_assignments)
                     {
                         std::vector<std::string> left_port;
                         if (!port_assignment.m_port_name.has_value())
@@ -1361,7 +1374,7 @@ namespace hal
 
                             for (u32 i = 0; i < max_size; i++)
                             {
-                                instance->m_expanded_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                                instance->m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));
                             }
                         }
                     }
@@ -1697,7 +1710,7 @@ namespace hal
             if (auto module_it = m_modules_by_name.find(instance->m_type); module_it != m_modules_by_name.end())
             {
                 // expand port assignments
-                for (const auto& [port, assignment] : instance->m_expanded_assignments)
+                for (const auto& [port, assignment] : instance->m_expanded_port_assignments)
                 {
                     if (const auto it = parent_module_assignments.find(assignment); it != parent_module_assignments.end())
                     {
@@ -1713,7 +1726,7 @@ namespace hal
                         {
                             instance_assignments[port] = assignment;
                         }
-                        else if (assignment != "'Z'" && assignment != "'X'")
+                        else if (assignment != "'Z'" && assignment != "'X'" && assignment != "")
                         {
                             log_error("verilog_parser", "port assignment \"{} = {}\" is invalid for instance '{}' of type '{}'.", port, assignment, instance->m_name, instance->m_type);
                             return nullptr;
@@ -1761,7 +1774,7 @@ namespace hal
                 std::unordered_map<std::string, PinDirection> pin_to_direction = gate_type_it->second->get_pin_directions();
 
                 // expand pin assignments
-                for (const auto& [pin, assignment] : instance->m_expanded_assignments)
+                for (const auto& [pin, assignment] : instance->m_expanded_port_assignments)
                 {
                     std::string signal;
 
