@@ -157,13 +157,14 @@ namespace hal {
 
     void WaveWidget::handleStateChanged(NetlistSimulatorController::SimulationState state)
     {
+        /*
         if (mAutoAddWaves && state >= NetlistSimulatorController::SimulationRun)
         {
             qDebug() << "disconnect WaveDataList::waveAdded" << hex << (quintptr) mWaveDataList << (quintptr) mTreeModel;
             disconnect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
             mAutoAddWaves = false;
         }
-
+*/
         Q_EMIT stateChanged(state);
         qApp->processEvents();
     }
@@ -259,7 +260,7 @@ namespace hal {
                     if (wd->loadSaleae(*sd))
                         mWaveDataList->add(wd,false);
                 }
-                if (iwave >= 0)
+                else if (iwave >= 0)
                     mTreeModel->handleWaveAdded(iwave);
             }
         }

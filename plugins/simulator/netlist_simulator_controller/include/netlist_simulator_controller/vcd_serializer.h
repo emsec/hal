@@ -61,7 +61,7 @@ namespace hal {
         void deleteFiles();
         void createSaleaeDirectory();
 
-    public Q_SIGNALS:
+    Q_SIGNALS:
         void importDone();
 
     public:
