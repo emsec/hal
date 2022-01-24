@@ -135,7 +135,17 @@ namespace hal {
 
     bool WaveWidget::canImportWires() const
     {
-        return mWaveDataList->size() > mWaveItemHash->importedWires();
+        if (mWaveDataList->size() > mWaveItemHash->importedWires()) return true;
+        if (mController)
+        {
+            const SimulationEngine* eng = mController->get_simulation_engine();
+            if (eng)
+            {
+                SaleaeDirectory sd(eng->get_saleae_directory_filename());
+                if (sd.get_next_available_index() > mWaveItemHash->importedWires()) return true;
+            }
+        }
+        return false;
     }
 
     bool WaveWidget::triggerClose()

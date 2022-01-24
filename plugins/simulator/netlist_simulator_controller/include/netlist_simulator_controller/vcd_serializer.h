@@ -61,6 +61,9 @@ namespace hal {
         void deleteFiles();
         void createSaleaeDirectory();
 
+    public Q_SIGNALS:
+        void importDone();
+
     public:
         std::string get_saleae_directory_filename() const { return mSaleaeDirectoryFilename.toStdString(); }
         VcdSerializer(QObject* parent = nullptr);

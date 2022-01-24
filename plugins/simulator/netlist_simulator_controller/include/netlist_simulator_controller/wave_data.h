@@ -106,7 +106,7 @@ namespace hal {
         void removeGroup(u32 grpId);
         void addOrReplace(WaveData* wd, bool silent=false);
         void replaceWaveData(int inx, WaveData *wdNew);
-        WaveData* waveDataByNetId(u32 id) const;
+        WaveData* waveDataByNet(const Net* n, const SaleaeDirectory* sd);
         int waveIndexByNetId(u32 id) const { return mIds.value(id,-1); }
         bool hasNet(u32 id) const { return mIds.contains(id); }
         QSet<u32> toSet() const;
