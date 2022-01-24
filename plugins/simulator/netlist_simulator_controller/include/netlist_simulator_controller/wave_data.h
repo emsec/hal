@@ -102,7 +102,7 @@ namespace hal {
         void add(WaveData* wd, bool silent);
         void registerGroup(WaveDataGroup* grp);
         u32  createGroup(QString grpName);
-        void addNetsToGroup(u32 grpId, const QVector<u32>& netIds);
+        void addWavesToGroup(u32 grpId, const QVector<WaveData*>& wds);
         void removeGroup(u32 grpId);
         void addOrReplace(WaveData* wd, bool silent=false);
         void replaceWaveData(int inx, WaveData *wdNew);
