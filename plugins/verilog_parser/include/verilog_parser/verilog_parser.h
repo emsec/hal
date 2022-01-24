@@ -114,12 +114,7 @@ namespace hal
 
         // helper functions
         void remove_comments(std::string& line, bool& multi_line_comment) const;
-        std::vector<u32> parse_range(TokenStream<std::string>& range_str) const;
-        std::vector<std::string> get_bin_from_literal(const Token<std::string>& value_token) const;
         std::string get_hex_from_literal(const Token<std::string>& value_token) const;
-        std::vector<std::string> expand_assignment_signal(VerilogModule* module, TokenStream<std::string>& signal_str, bool allow_numerics);
-        std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const;
-        void expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;
         std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
     };
 }    // namespace hal
