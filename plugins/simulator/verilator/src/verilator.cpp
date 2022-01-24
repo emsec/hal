@@ -177,8 +177,6 @@ namespace hal
                                                        "--noassert",
                                                        "-CFLAGS",
                                                        "-O3",
-                                                       "-LDFLAGS",
-                                                       "-lstdc++fs",
                                                        "--exe",
                                                        "-cc",
                                                        "-DSIM_VERILATOR",

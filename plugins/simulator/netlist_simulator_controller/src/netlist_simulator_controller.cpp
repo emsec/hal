@@ -97,11 +97,20 @@ namespace hal
     u32 NetlistSimulatorController::add_waveform_group(const std::string& name, const std::vector<Net*> nets)
     {
         if (name.empty()) return 0;
-        QVector<u32> netVector;
-        netVector.reserve(nets.size());
-        for (Net* n : nets) netVector.append(n->get_id());
+        QVector<WaveData*> waveVector;
+        waveVector.reserve(nets.size());
+        for (Net* n : nets)
+        {
+            WaveData* wd = get_waveform_by_net(n);
+            if (!wd)
+            {
+                log_warning(get_name(), "Cannot add unkown waveform for net '{}(id={})' to group '{}'.", n->get_name(), n->get_id(), name);
+                continue;
+            }
+
+        }
         u32 grpId = mWaveDataList->createGroup(QString::fromStdString(name));
-        mWaveDataList->addNetsToGroup(grpId, netVector);
+        mWaveDataList->addWavesToGroup(grpId, waveVector);
         return grpId;
     }
 

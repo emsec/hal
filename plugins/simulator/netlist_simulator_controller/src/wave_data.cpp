@@ -679,19 +679,16 @@ namespace hal {
         return grp->id();
     }
 
-    void WaveDataList::addNetsToGroup(u32 grpId, const QVector<u32>& netIds)
+    void WaveDataList::addWavesToGroup(u32 grpId, const QVector<WaveData*>& wds)
     {
         WaveDataGroup* grp = mDataGroups.value(grpId);
+        QVector<u32> netIds;
+        netIds.reserve(wds.size());
         if (!grp) return;
         int inx = grp->size();
-        for (u32 netId : netIds)
+        for (WaveData* wd : wds)
         {
-            WaveData* wd = waveDataByNetId(netId);
-            if (!wd)
-            {
-                log_warning("waveform_data", "Cannot add unkown waveform Id {} to group '{}'.", netId, grp->name().toStdString());
-                continue;
-            }
+            netIds.append(wd->id());
             grp->insert(inx++,wd);
         }
         grp->recalcData();

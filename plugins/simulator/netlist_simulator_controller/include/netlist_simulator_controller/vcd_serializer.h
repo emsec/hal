@@ -50,7 +50,7 @@ namespace hal {
         int mErrorCount;
         bool mSaleae;
 
-        bool parseVcdDataline(const QByteArray& line);
+        bool parseVcdDataline(char* buf, int len);
         bool parseVcdDataNonDecimal(const QByteArray& line, int base);
         void storeValue(int val, const QByteArray& abrev);
         bool parseCsvHeader(char* buf);

@@ -143,35 +143,37 @@ QMap<int,int>::const_iterator mIterator;
         return true; // ignore parse errors
     }
 
-    bool VcdSerializer::parseVcdDataline(const QByteArray &line)
+    bool VcdSerializer::parseVcdDataline(char *buf, int len)
     {
-        if (line.isEmpty()) return true;
-        switch(line.at(0))
+        int pos = 0;
+        while (len)
         {
-        case 'b': return parseVcdDataNonDecimal(line.mid(1),2);
-        case 'o': return parseVcdDataNonDecimal(line.mid(1),8);
-        case 'h': return parseVcdDataNonDecimal(line.mid(1),16);
-        case '$':
-            if (line.startsWith("$dumpvars") || line.startsWith("$end"))
-                return true;
-        }
-
-        for (QByteArray word : line.split(' '))
-        {
-            bool ok;
-            if (word.isEmpty()) continue;
-            switch (word.at(0))
+            int val = -1;
+            switch(*(buf+pos))
             {
+            case 'b': return parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),2);
+            case 'o': return parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),8);
+            case 'h': return parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),16);
+            case '$':
+            {
+                QByteArray testKeyword = QByteArray(buf+pos+1,len-1);
+                if (testKeyword.startsWith("dumpvars") || testKeyword.startsWith("end"))
+                    return true;
+                return false;
+            }
             case '#':
-                mTime = word.mid(1).toUInt(&ok);
+            {
+                bool ok;
+                mTime = QByteArray(buf+pos+1,len-1).toULongLong(&ok);
                 Q_ASSERT(ok);
-                continue;
+                return true;
+            }
             case 'x':
-                storeValue(-1, word.mid(1));
-                continue;
+                val = -1;
+                break;
             case 'z':
-                storeValue(-2, word.mid(1));
-                continue;
+                val = -2;
+                break;
             case '0':
             case '1':
             case '2':
@@ -180,11 +182,24 @@ QMap<int,int>::const_iterator mIterator;
             case '5':
             case '6':
             case '7':
-                storeValue(word.at(0)-'0', word.mid(1));
-                continue;
+                val = *(buf+pos)-'0';
+                break;
+            default:
+                qDebug() << "cannot parse dataline entries starting with" << *(buf+pos) << buf;
+                return false;
             }
-            qDebug() << "cannot parse words starting with" << word.at(0) << line;
-            return false;
+            int p = pos+1;
+            while (p<len && buf[p]>' ') ++p;
+            Q_ASSERT(p > pos+1);
+            int abbrevLen = p - pos - 1;
+            storeValue(val,QByteArray(buf+pos+1,abbrevLen));
+            pos = p;
+            len -= (abbrevLen+1) ;
+            while (buf[pos]==' ' && len > 0)
+            {
+                pos++;
+                len--;
+            }
         }
         return true;
     }
@@ -444,10 +459,34 @@ QMap<int,int>::const_iterator mIterator;
         QRegularExpression reHead("\\$(\\w*) (.*)\\$end");
         QRegularExpression reWire("wire\\s+(\\d+) ([^ ]+) (.*) $");
         QRegularExpression reWiid("\\[(\\d+)\\]$");
-        for (QByteArray line : ff.readAll().split('\n'))
+
+        static const int bufsize = 4095;
+        char buf[bufsize+1];
+
+        int iline = 0;
+        while(!ff.atEnd())
         {
+            int sizeRead = ff.readLine(buf,bufsize);
+            ++iline;
+            if (sizeRead >= bufsize)
+            {
+                log_warning("vcd_viewer", "VCD line {} exceeds buffer size {}.", iline, bufsize);
+                return false;
+            }
+
+            if (sizeRead < 0)
+            {
+                log_warning("vcd_viewer", "VCD parse error reading line {} from file '{}'.", iline, ff.fileName().toStdString());
+                return false;
+            }
+            if (sizeRead > 0 && buf[sizeRead-1]=='\n') --sizeRead;
+            if (sizeRead > 0 && buf[sizeRead-1]=='\r') --sizeRead;
+            if (!sizeRead) continue;
+
+
             if (parseHeader)
             {
+                QByteArray line(buf,sizeRead);
                 QRegularExpressionMatch mHead = reHead.match(line);
                 if (mHead.hasMatch())
                 {
@@ -487,10 +526,10 @@ QMap<int,int>::const_iterator mIterator;
             }
             else
             {
-                if (!parseVcdDataline(line))
+                if (!parseVcdDataline(buf,sizeRead))
                 {
                     if (mErrorCount++ < 5)
-                        log_warning("vcd_viewer", "Cannot parse VCD data line '{}'.", std::string(line.data()));
+                        log_warning("vcd_viewer", "Cannot parse VCD data line '{}'.", QByteArray(buf,sizeRead));
                     return false;
                 }
             }
