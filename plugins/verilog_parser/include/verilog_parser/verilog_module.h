@@ -26,8 +26,16 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 
+#include <variant>
+
 namespace hal
 {
+    using identifier_t        = std::string;
+    using ranged_identifier_t = std::pair<std::string, std::vector<std::vector<u32>>>;
+    using numeral_t           = std::vector<BooleanFunction::Value>;
+    using empty_t             = std::monostate;
+    using assignment_t        = std::variant<identifier_t, ranged_identifier_t, numeral_t, empty_t>;
+
     struct VerilogDataEntry
     {
         std::string m_name;
@@ -53,11 +61,23 @@ namespace hal
         std::vector<std::string> m_expanded_identifiers;
     };
 
+    struct VerilogPortAssignment
+    {
+        std::optional<std::string> m_port_name;
+        std::vector<assignment_t> m_assignment;
+    };
+
+    struct VerilogAssignment
+    {
+        std::vector<assignment_t> m_variable;
+        std::vector<assignment_t> m_assignment;
+    };
+
     struct VerilogInstance
     {
         std::string m_name;
         std::string m_type;
-        std::vector<std::pair<Token<std::string>, TokenStream<std::string>>> m_assignments;
+        std::vector<VerilogPortAssignment> m_assignments;
         std::vector<VerilogDataEntry> m_parameters;
         std::vector<VerilogDataEntry> m_attributes;
         std::vector<std::pair<std::string, std::string>> m_expanded_assignments;
@@ -95,7 +115,7 @@ namespace hal
         std::map<std::string, VerilogSignal*> m_signals_by_name;
 
         // assignments
-        std::vector<std::pair<TokenStream<std::string>, TokenStream<std::string>>> m_assignments;    // signal assignments
+        std::vector<VerilogAssignment> m_assignments;
         std::vector<std::pair<std::string, std::string>> m_expanded_assignments;
 
         // instances
