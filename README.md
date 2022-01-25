@@ -106,6 +106,7 @@ If you do not specify `CMAKE_BUILD_TYPE`, it defaults to `Release`.
 ### Troubleshooting
 
 #### pybind11 Trouble
+
 ```
 CMake Error in src/python_bindings/CMakeLists.txt:
   Imported target "pybind11::module" includes non-existent path
@@ -115,7 +116,8 @@ CMake Error in src/python_bindings/CMakeLists.txt:
   * An install or uninstall procedure did not complete successfully.
   * The installation package was faulty and references files it does not
   provide.
- 
+```
+
  
 Tip 1: Make sure you have the most recent `pybind11-dev` version installed.
 Tip 2: `-DCMAKE_PREFIX_PATH=<root_of_pybind>` can be provided as additional flag to `cmake`. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.
