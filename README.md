@@ -119,8 +119,8 @@ CMake Error in src/python_bindings/CMakeLists.txt:
 ```
 
  
-Tip 1: Make sure you have the most recent `pybind11-dev` version installed.
-Tip 2: `-DCMAKE_PREFIX_PATH=<root_of_pybind>` can be provided as additional flag to `cmake`. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.
+- Tip 1: Make sure you have the most recent `pybind11-dev` version installed.
+- Tip 2: `-DCMAKE_PREFIX_PATH=<root_of_pybind>` can be provided as additional flag to `cmake`. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.
 
 
 <a name="quickstart"></a>
