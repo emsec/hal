@@ -34,16 +34,19 @@ var NAVTREE =
       [ "Ubuntu 20.04", "index.html#autotoc_md16", null ],
       [ "macOS", "index.html#autotoc_md17", null ],
       [ "Windows", "index.html#autotoc_md18", null ],
-      [ "CMake Options", "index.html#autotoc_md19", null ]
+      [ "CMake Options", "index.html#autotoc_md19", [
+        [ "Troubleshooting", "index.html#autotoc_md20", [
+          [ "pybind11 Trouble", "index.html#autotoc_md21", null ]
+        ] ]
+      ] ]
     ] ],
-    [ "Quickstart Guide", "index.html#autotoc_md20", null ],
-    [ "Contributing", "index.html#autotoc_md21", [
-      [ "Run static checks and clang format locally", "index.html#autotoc_md22", null ],
-      [ "Generate Changelog", "index.html#autotoc_md23", null ]
+    [ "Contributing", "index.html#autotoc_md22", [
+      [ "Run static checks and clang format locally", "index.html#autotoc_md23", null ],
+      [ "Generate Changelog", "index.html#autotoc_md24", null ]
     ] ],
-    [ "Academic Context", "index.html#autotoc_md24", null ],
-    [ "Licensing", "index.html#autotoc_md25", null ],
-    [ "Disclaimer", "index.html#autotoc_md26", null ],
+    [ "Academic Context", "index.html#autotoc_md25", null ],
+    [ "Licensing", "index.html#autotoc_md26", null ],
+    [ "Disclaimer", "index.html#autotoc_md27", null ],
     [ "LICENSE", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html", [
       [ "SIL Open Font License v1.1", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md4", [
         [ "Preamble", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md5", null ],
@@ -114,11 +117,11 @@ var NAVTREEINDEX =
 "enums_8h.html#abfc41a824ec2e2d67ef693316ffca725",
 "graph__context_8h.html",
 "index.html#autotoc_md11",
-"net__layout__point_8h.html#a9175d5334a493e018757aac18ed79fa2",
-"plugin__manager_8h_source.html",
-"separated__graphics__net_8h_source.html",
-"structhal_1_1_s_m_t_1_1_model.html#a8dd3b8b41cd351ad0f1765d0dac13157",
-"utils_8h.html#a90b1bccb0d75d10c94b959cdebf2ce36"
+"net__layout__point_8h.html#a7feb466e42a0d4e1c5601fe9a6169154",
+"plugin__manager_8h.html#af13862a2a5565fb995d7cc93c0bfd980",
+"separated__graphics__net_8h.html",
+"structhal_1_1_s_m_t_1_1_model.html#a67d2af2431b357a27f78b421b3bd0797",
+"utils_8h.html#a7de316388e4d4baf69a170c67a6efd57"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
