@@ -405,6 +405,12 @@ namespace hal
 
         sim_ctrl_verilator->get_results();
 
+
+        // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == nl->get_nets().size());
+
+
         //Test if maps are equal
         EXPECT_TRUE(cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get()));
         TEST_END
@@ -524,6 +530,11 @@ namespace hal
         EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
 
         sim_ctrl_verilator->get_results();
+
+        // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == nl->get_nets().size());
+
 
         //Test if maps are equal
         bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
@@ -685,6 +696,11 @@ namespace hal
 
         sim_ctrl_verilator->get_results();
 
+        // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == nl->get_nets().size());
+
+
         //Test if maps are equal
         bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
         EXPECT_TRUE(equal);
@@ -840,6 +856,12 @@ namespace hal
         EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
 
         sim_ctrl_verilator->get_results();
+
+
+        // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == nl->get_nets().size());
+
 
         //Test if maps are equal
         bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
@@ -1299,6 +1321,12 @@ namespace hal
         EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
 
         sim_ctrl_verilator->get_results();
+
+
+        // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == nl->get_nets().size());
+
 
         //Test if maps are equal
         bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
