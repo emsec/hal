@@ -400,8 +400,8 @@ namespace hal {
         EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone()) | (a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), _1.clone());
         // (a | b) | (b & c)   => a | b
         EXPECT_EQ(((a.clone() | b.clone()) | (b.clone() & c.clone())).simplify(), a.clone() | b.clone());    
-        // (a & c) | (b & ~c) | (a & b)   =>   (a & c) | (b & ~c)
-        EXPECT_EQ(((a.clone() & c.clone()) | (b.clone() & ~c.clone()) | (a.clone() & b.clone())).simplify(), (a.clone() & c.clone()) | (b.clone() & ~c.clone()));
+        // (a & c) | (b & ~c) | (a & b)   =>   (b | c) & (a | ~c)
+        EXPECT_EQ(((a.clone() & c.clone()) | (b.clone() & ~c.clone()) | (a.clone() & b.clone())).simplify(), (b.clone() | c.clone()) & (a.clone() | ~c.clone()));
     }
 
     TEST(BooleanFunction, SimplificationPerformance)

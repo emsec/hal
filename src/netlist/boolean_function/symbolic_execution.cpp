@@ -427,6 +427,13 @@ namespace hal
                         return (~p0_parameter[0]) & (~p0_parameter[1]);
                     }
 
+                    // ~(X & Y)   =>   ~X | ~Y
+                    if (p[0].is(BooleanFunction::NodeType::And))
+                    {
+                        auto p0_parameter = p[0].get_parameters();
+                        return (~p0_parameter[0]) | (~p0_parameter[1]);
+                    }
+ 
                     return ~p[0];
                 }
 

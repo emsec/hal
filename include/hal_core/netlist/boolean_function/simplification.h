@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/utilities/result.h"
 
 #include <string>
 #include <variant>
@@ -35,16 +36,16 @@ namespace Simplification {
 	 * Implements the interface to apply local algebraic simplification rules.
 	 * 
 	 * @param[in] function - Boolean function to simplify.
-	 * @returns Simplified boolean function on success, error message string otherwise.
+	 * @returns Simplified boolean function on success, error otherwise.
 	 * */
-	std::variant<BooleanFunction, std::string> local_simplification(const BooleanFunction& function);
+	Result<BooleanFunction> local_simplification(const BooleanFunction& function);
 
 	/**
 	 * Implements the interface to simplify a Boolean function using ABC.
 	 *
 	 * @param[in] function - Boolean function to simplify.
-	 * @returns Simplified boolean function on success, error message string otherwise.
+	 * @returns Simplified boolean function on success, error otherwise.
 	 * */
-	std::variant<BooleanFunction, std::string> abc_simplification(const BooleanFunction& function);
+	Result<BooleanFunction> abc_simplification(const BooleanFunction& function);
 }  // namespace Simplification
 }  // namespace hal

@@ -38,9 +38,9 @@ namespace {
 	 * 
 	 * @param[in] function - Boolean function.
 	 * @param[in] index - Bit index of the Boolean function.
-	 * @returns Sliced and simplified Boolean function on success, std::string otherwise.
+	 * @returns Sliced and simplified Boolean function on success, error otherwise.
 	 */
-	std::variant<BooleanFunction, std::string> slice_at(const BooleanFunction& function, const u16 index)
+	Result<BooleanFunction> slice_at(const BooleanFunction& function, const u16 index)
 	{
 		// (1) setup the sliced Boolean function
 		auto status = BooleanFunction::Slice(
@@ -51,18 +51,11 @@ namespace {
 		);
     
     	if (std::get_if<std::string>(&status) != nullptr) {
-            return "Cannot slice " + function.to_string() + " at bit " + std::to_string(index) + "(= " + std::get<std::string>(status) + ").";
+            return ERR("Cannot slice " + function.to_string() + " at bit " + std::to_string(index) + "(= " + std::get<std::string>(status) + ").");
         }
-         
-        auto slice = std::get<0>(status);
 
         // (2) perform a local simplification in order to remove unnecessary slices
-        status = Simplification::local_simplification(slice);
-        if (std::get_if<std::string>(&status) != nullptr) {
-            return "Cannot simplify " + slice.to_string() + ".";
-        }
-
-        return std::get<0>(status);
+        return Simplification::local_simplification(std::get<0>(status));
 	}
 
 	/**
@@ -70,30 +63,30 @@ namespace {
 	 * 
 	 * @param[in] node - Boolean function node.
 	 * @param[in] p - Boolean function node parameters in Verilog representation.
-	 * @returns `true` and Verilog string on success, `false` and error message otherwise.
+	 * @returns Verilog string on success, error otherwise.
 	 */
-	std::tuple<bool, std::string> node2verilog(const BooleanFunction::Node& node, std::vector<std::string>&& p)
+	Result<std::string> node2verilog(const BooleanFunction::Node& node, std::vector<std::string>&& p)
 	{
         if (node.get_arity() != p.size())
         {
-            return {false, "Cannot translate " + node.to_string() + " as arity does not match inputs."};
+            return ERR("Cannot translate " + node.to_string() + " as arity does not match inputs.");
         }
 
         switch (node.type)
         {
             case BooleanFunction::NodeType::Variable:
-                return {true, node.to_string()};
+                return OK(node.to_string());
             case BooleanFunction::NodeType::And:
-                return {true, "(" + p[0] + " & " + p[1] + ")"};
+                return OK("(" + p[0] + " & " + p[1] + ")");
             case BooleanFunction::NodeType::Not:
-                return {true, "(~ " + p[0] + ")"};
+                return OK("(~ " + p[0] + ")");
             case BooleanFunction::NodeType::Or:
-                return {true, "(" + p[0] + " | " + p[1] + ")"};
+                return OK("(" + p[0] + " | " + p[1] + ")");
             case BooleanFunction::NodeType::Xor:
-                return {true, "(" + p[0] + " ^ " + p[1] + ")"};
+                return OK("(" + p[0] + " ^ " + p[1] + ")");
 
             default:
-                return {false, "Cannot translate " + node.to_string() + " to Verilog."};
+                return ERR("Cannot translate " + node.to_string() + " to Verilog.");
         }
     }
 
@@ -101,9 +94,9 @@ namespace {
      * Translates a given Boolean function into structured Verilog.
      * 
      * @param[in] function - Boolean function to translate.
-     * @returns `true` and Verilog string with output variables on success, `false` otherwise.
+     * @returns Verilog string with output variables on success, error otherwise.
      */
-    std::tuple<bool, std::string, std::vector<std::string>> translate_to_verilog(const BooleanFunction& function) {
+    Result<std::tuple<std::string, std::vector<std::string>>> translate_to_verilog(const BooleanFunction& function) {
         const auto inputs = function.get_variable_names();
         const auto output_prefix = std::string("out_");
 
@@ -111,7 +104,7 @@ namespace {
         for (const auto& input: inputs) {
             if (std::mismatch(output_prefix.begin(), output_prefix.end(), input.begin()).first
                 == output_prefix.end()) {
-                return {false, "Cannot translate to Verilog as \"out\" is an input variable.", {}};
+                return ERR("Cannot translate to Verilog as \"out\" is an input variable.");
             }
         }
 
@@ -132,41 +125,40 @@ namespace {
         }
 
         // (3) assemble the Verilog textual representation
-        auto translate = [] (const auto& function, const auto index) -> std::tuple<bool, std::string> {
+        auto translate = [] (const auto& function, const auto index) -> Result<std::string> {
            	auto simplified = slice_at(function, index);
-           	if (std::get_if<std::string>(&simplified) != nullptr) {
-                return {false, "Cannot compute simplified slice of " + function.to_string() + " at bit " + std::to_string(index) + "(= " + std::get<std::string>(simplified) + ")."};
+           	if (simplified.is_error()) {
+                return ERR("Cannot compute simplified slice of " + function.to_string() + " at bit " + std::to_string(index) + "(= " + simplified.get_error().get() + ").");
            	}
 
             std::vector<std::string> stack;
-	        for (const auto& node : std::get<0>(simplified).get_nodes())
+	        for (const auto& node : simplified.get().get_nodes())
 	        {
 	            std::vector<std::string> operands;
 	            if (stack.size() < node.get_arity())
 	            {
-	                return {false, "Cannot fetch " + std::to_string(node.get_arity()) + " nodes from the stack (= imbalanced stack with " + std::to_string(stack.size()) + " parts)."};
+	                return ERR("Cannot fetch " + std::to_string(node.get_arity()) + " nodes from the stack (= imbalanced stack with " + std::to_string(stack.size()) + " parts).");
 	            }
 
 	            std::move(stack.end() - static_cast<u64>(node.get_arity()), stack.end(), std::back_inserter(operands));
 	            stack.erase(stack.end() - static_cast<u64>(node.get_arity()), stack.end());
 
-	            if (auto [ok, reduction] = node2verilog(node, std::move(operands)); ok)
+	            if (auto reduction = node2verilog(node, std::move(operands)); reduction.is_ok())
 	            {
-	                stack.emplace_back(reduction);
+	                stack.emplace_back(reduction.get());
 	            }
 	            else
 	            {
-	            	return {false, "Cannot translate BooleanFunction::Node '" + node.to_string() + "' to a Verilog string."};
+	            	return ERR("Cannot translate BooleanFunction::Node '" + node.to_string() + "' to a Verilog string.");
 	            }
 	        }
 
 	        switch (stack.size())
 	        {
 	            case 1:
-	                return {true, stack.back()};
-	            default: {
-	            	return {false, "Cannot translate BooleanFunction (= imbalanced stack with " + std::to_string(stack.size()) + " remaining parts)."};
-	            }
+	                return OK(stack.back());
+	            default:
+	            	return ERR("Cannot translate BooleanFunction (= imbalanced stack with " + std::to_string(stack.size()) + " remaining parts).");
 	        }
         };
 
@@ -177,15 +169,15 @@ namespace {
         ss << interface_output_declaration;
         ss << std::endl;
         for (auto index = 0u; index < function.size(); index++) {
-            auto [ok, expr] = translate(function, index);
-            if (!ok) {
-                return {false, "Cannot translate " + function.to_string() + " at index " + std::to_string(index) + " to Verilog.", {}};
+            auto expr = translate(function, index);
+            if (expr.is_error()) {
+                return ERR("Cannot translate " + function.to_string() + " at index " + std::to_string(index) + " to Verilog.");
             }
-            ss << "\tassign " << output_prefix << index << " = " << expr << ";\n";
+            ss << "\tassign " << output_prefix << index << " = " << expr.get() << ";\n";
         }
         ss << "endmodule" << std::endl;
 
-        return {true, ss.str(), output_variables};
+        return OK({ss.str(), output_variables});
     }
 
     /**
@@ -209,10 +201,16 @@ namespace {
      * Performs a call to ABC based on a path to structured Verilog.
      * 
      * @param[in] filename Filename.
-     * @returns `true` on success, `false` and error message otherwise.
+     * @returns OK on success, error otherwise.
      */
-    std::tuple<bool, std::string> call_abc(const std::string& filename)
+    Result<std::monostate> call_abc(const std::string& filename)
     {
+        static bool initialized_abc = false;
+        if (!initialized_abc) {
+            Abc_Start();
+            initialized_abc = true;
+        }
+
         std::stringstream command;
         command << "read " << filename << ";";
         // TODO(@nalbartus) Specify why the various parameter combinations are 
@@ -220,16 +218,12 @@ namespace {
         command << "fraig; balance; rewrite -l; refactor -l; balance; rewrite -l; rewrite -lz; balance; refactor -lz; rewrite -lz; balance; rewrite -lz;";
         command << "write_verilog " << filename << ";";
 
-        Abc_Start();
-
         if (auto context = Abc_FrameGetGlobalFrame(); Cmd_CommandExecute(context, command.str().c_str())) 
         {
-            return {false, "Cannot execute command '" + command.str() + "'."};
+            return ERR("Cannot execute command '" + command.str() + "'.");
         }
 
-        Abc_Stop();
-
-        return {true, ""};
+        return OK({});
     }
 
     /** 
@@ -238,18 +232,18 @@ namespace {
      * @param[in] verilog Verilog data that represents a simplified Boolean function.
      * @param[in] function Input Boolean function (not simplified).
      * @param[in] output_variables Output Boolean function variables.
-     * @returns Simplified Boolean function on success, error message string otherwise.
+     * @returns Simplified Boolean function on success, error otherwise.
      */
-    std::variant<BooleanFunction, std::string> translate_from_verilog(const std::string& verilog, const BooleanFunction& function, const std::vector<std::string>& output_variables) 
+    Result<BooleanFunction> translate_from_verilog(const std::string& verilog, const BooleanFunction& function, const std::vector<std::string>& output_variables) 
     {
         /**
          * Translates an Verilog statement such as "assign new_n8_ = ~I1 & ~I3;"
          * into the respective left-hand and right-hand side Boolean functions.
          * 
          * @param[in] assignment - Verilog assignment statement.
-         * @returns Left-hand and right-hand Boolean functions on success, error message string otherwise.
+         * @returns Left-hand and right-hand Boolean functions on success, error otherwise.
          */
-        auto parse_assignment = [] (const auto& assignment) -> std::variant<std::tuple<BooleanFunction, BooleanFunction>, std::string>
+        auto parse_assignment = [] (const auto& assignment) -> Result<std::tuple<BooleanFunction, BooleanFunction>>
         {
             std::variant<BooleanFunction, std::string> lhs, rhs;
             
@@ -290,17 +284,17 @@ namespace {
             );
 
             if (!ok || (iter != assignment.end())) {
-                return "Unable to parse assignment '" + assignment + "'.";
+                return ERR("Unable to parse assignment '" + assignment + "'.");
             }
 
             if (std::get_if<std::string>(&lhs) != nullptr) {
-                return "Cannot translate left-hand side of '" + assignment + "' into a Boolean function (= " + std::get<std::string>(lhs) + ".";
+                return ERR("Cannot translate left-hand side of '" + assignment + "' into a Boolean function (= " + std::get<std::string>(lhs) + ".");
             }
             if (std::get_if<std::string>(&rhs) != nullptr) {
-                return "Cannot translate right-hand side of '" + assignment + "' into a Boolean function (= " + std::get<std::string>(rhs) + ".";
+                return ERR("Cannot translate right-hand side of '" + assignment + "' into a Boolean function (= " + std::get<std::string>(rhs) + ".");
             }
 
-            return std::make_tuple(std::get<0>(lhs), std::get<0>(rhs));
+            return OK(std::make_tuple(std::get<0>(lhs), std::get<0>(rhs)));
         };
 
         std::map<BooleanFunction, BooleanFunction> assignments;
@@ -309,8 +303,8 @@ namespace {
         std::istringstream data(verilog);
         std::string line;
         while (std::getline(data, line)) {
-            if (auto assignment = parse_assignment(line); std::get_if<0>(&assignment) != nullptr) {
-                auto [lhs, rhs] = std::get<0>(assignment);
+            if (auto assignment = parse_assignment(line); assignment.is_ok()) {
+                auto [lhs, rhs] = assignment.get();
                 assignments[lhs] = rhs;
             }
         }
@@ -318,7 +312,7 @@ namespace {
         // (2) check that each output variable is defined within the assignments
         for (const auto& output_variable: output_variables) {
             if (assignments.find(BooleanFunction::Var(output_variable)) == assignments.end()) {
-                return "Cannot simplify '" + function.to_string() + "' as output variable is not defined in Verilog.";
+                return ERR("Cannot simplify '" + function.to_string() + "' as output variable is not defined in Verilog.");
             }
         }
 
@@ -341,7 +335,7 @@ namespace {
                     }
                     auto simplified = assignments[output].substitute(tmp, assignments[BooleanFunction::Var(tmp)]);
                     if (std::get_if<std::string>(&simplified) != nullptr) {
-                        return std::get<std::string>(simplified);
+                        return ERR(std::get<std::string>(simplified));
                     }
 
                     assignments[output] = std::get<0>(simplified);
@@ -353,7 +347,7 @@ namespace {
         for (const auto& output_variable: output_variables) {
             for (const auto& input: assignments[BooleanFunction::Var(output_variable)].get_variable_names()) {
                 if (inputs.find(input) == inputs.end()) {
-                    return "Cannot replace '" + output_variable + "' as it contains a temporary variable '" + input + "'.";
+                    return ERR("Cannot replace '" + output_variable + "' as it contains a temporary variable '" + input + "'.");
                 }
             }
         }
@@ -368,17 +362,17 @@ namespace {
             );
 
             if (std::get_if<std::string>(&concat) != nullptr) {
-                return std::get<std::string>(concat);
+                return ERR(std::get<std::string>(concat));
             } else {
                 state = std::get<0>(concat);
             }
         }
-        return state;
+        return OK(state);
     }
 }  // namespace
 
 namespace Simplification {
-    std::variant<BooleanFunction, std::string> local_simplification(const BooleanFunction& function)
+    Result<BooleanFunction> local_simplification(const BooleanFunction& function)
     {
        	auto current = function.clone(),
              before = BooleanFunction();
@@ -389,15 +383,15 @@ namespace Simplification {
             auto simplified = SMT::SymbolicExecution().evaluate(current);
             if (std::get_if<std::string>(&simplified) != nullptr)
             {
-                return std::get<std::string>(simplified);
+                return ERR(std::get<std::string>(simplified));
             }
             current = std::get<BooleanFunction>(simplified);
         } while (before != current);
 
-        return current;
+        return OK(current);
     }
 
-    std::variant<BooleanFunction, std::string> abc_simplification(const BooleanFunction& function) 
+    Result<BooleanFunction> abc_simplification(const BooleanFunction& function) 
 	{
         // # Developer Note
         // In order to apply a global optimization to the Boolean function, we 
@@ -422,15 +416,16 @@ namespace Simplification {
         if (auto nodes = function.get_nodes(); std::any_of(nodes.begin(), nodes.end(), 
                 [] (auto node) { return valid_abc_node_types.find(node.type) == valid_abc_node_types.end(); })
             || function.get_variable_names().empty()) {
-            return function.clone();
+            return OK(function.clone());
         }
-        
+
         // (2) translate the Boolean function to structured Verilog and write
         //     it to a random temporary file on the filesystem
-        auto [ok, verilog, output_variables] = translate_to_verilog(function);
-        if (!ok) {
-            return "Cannot translate " + function.to_string() + " to Verilog (= " + verilog + ").";
+        auto translation = translate_to_verilog(function);
+        if (translation.is_error()) {
+            return ERR("Cannot translate " + function.to_string() + " to Verilog (= " + translation.get_error().get() + ").");
         }
+        auto [verilog, output_variables] = translation.get();
 
         auto filename = get_random_filename() + ".v";
 
@@ -439,9 +434,9 @@ namespace Simplification {
         file.close();
 
         // (3) call ABC on the structured Verilog file to optimize the function
-        if (auto [ok, message] = call_abc(filename); !ok) {
+        if (auto abc = call_abc(filename); abc.is_error()) {
             std::remove(filename.c_str());
-            return message;
+            return ERR(abc.get_error());
         }
 
         // (4) read-back the optimized structured Verilog file and translate the

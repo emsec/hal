@@ -597,8 +597,8 @@ namespace hal
         using BooleanFunctionParser::Token;
 
         static const std::vector<std::tuple<ParserType, std::function<std::variant<std::vector<Token>, std::string>(const std::string&)>>> parsers = {
-            {ParserType::Liberty, BooleanFunctionParser::parse_with_liberty_grammar},
             {ParserType::Standard, BooleanFunctionParser::parse_with_standard_grammar},
+            {ParserType::Liberty, BooleanFunctionParser::parse_with_liberty_grammar},
         };
 
         for (const auto& [parser_type, parser] : parsers)
@@ -629,36 +629,11 @@ namespace hal
 
     BooleanFunction BooleanFunction::simplify() const
     {
-        // in order to optimize a Boolean function (by means of fewest nodes in 
-        // the abstract syntax tree), we use a fix-point iteration to automate 
-        // the search of an optimized combination of different strategies.
-        static const std::vector<std::function<std::variant<BooleanFunction, std::string>(const BooleanFunction&)>> simplifications = {
-            Simplification::local_simplification,
-            Simplification::abc_simplification,
-        };
+        auto simplified = Simplification::local_simplification(*this)
+            .map<BooleanFunction>([] (const auto& simplified) { return Simplification::abc_simplification(simplified); })
+            .map<BooleanFunction>([] (const auto& simplified) { return Simplification::local_simplification(simplified); });
 
-        auto state = this->clone();
-        while (true) {
-            const auto before = state.clone();
-            for (const auto& simplification : simplifications) {
-                const auto status = simplification(state);
-                if (std::get_if<std::string>(&status) != nullptr) {
-                    return this->clone();
-                }
-
-                const auto simplified = std::get<0>(status);
-                if ((state.length() >= simplified.length()) && (state != simplified)) {
-                    state = simplified;
-                    break;
-                }
-            }
-
-            if (before == state) {
-                break;
-            }
-        }
-
-        return state;
+        return (simplified.is_ok()) ? simplified.get() : this->clone();    
     }
 
     BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
