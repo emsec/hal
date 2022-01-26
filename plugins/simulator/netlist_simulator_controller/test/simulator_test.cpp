@@ -309,14 +309,14 @@ namespace hal
         TEST_START
         auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
 
-        auto sim_ctrl_verilator = plugin->create_simulator_controller();
+        auto sim_ctrl_verilator = plugin->create_simulator_controller("half_adder_simulator");
         auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
         //verilator_engine->set_engine_property("ssh_server", "mpi");
 
         EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
         EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
 
-        auto sim_ctrl_reference = plugin->create_simulator_controller();
+        auto sim_ctrl_reference = plugin->create_simulator_controller("half_adder_reference");
 
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/halfaddernetlist_flattened_by_hal.v";
         if (!utils::file_exists(path_netlist))
@@ -419,7 +419,6 @@ namespace hal
         TEST_END
     }
 
-    /*
     TEST_F(SimulatorTest, counter)
     {
         // return;
@@ -427,12 +426,12 @@ namespace hal
 
         auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
 
-        auto sim_ctrl_verilator = plugin->create_simulator_controller();
+        auto sim_ctrl_verilator = plugin->create_simulator_controller("counter_simulator");
         auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
         EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
         EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
 
-        auto sim_ctrl_reference = plugin->create_simulator_controller();
+        auto sim_ctrl_reference = plugin->create_simulator_controller("counter_reference");
 
         //path to netlist
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/counternetlist_flattened_by_hal.vhd";
@@ -557,12 +556,12 @@ namespace hal
 
         auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
 
-        auto sim_ctrl_verilator = plugin->create_simulator_controller();
+        auto sim_ctrl_verilator = plugin->create_simulator_controller("tocipher_simulator");
         auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
         EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
         EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
 
-        auto sim_ctrl_reference = plugin->create_simulator_controller();
+        auto sim_ctrl_reference = plugin->create_simulator_controller("tocipher_reference");
 
         //path to netlist
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/cipher_flat.vhd";
@@ -726,12 +725,12 @@ namespace hal
 
         auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
 
-        auto sim_ctrl_verilator = plugin->create_simulator_controller();
+        auto sim_ctrl_verilator = plugin->create_simulator_controller("sha256_simulator");
         auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
         EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
         EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
 
-        auto sim_ctrl_reference = plugin->create_simulator_controller();
+        auto sim_ctrl_reference = plugin->create_simulator_controller("sha256_reference");
 
         //path to netlist
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.vhd";
@@ -890,14 +889,14 @@ namespace hal
         TEST_START
         auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
 
-        auto sim_ctrl_verilator = plugin->create_simulator_controller();
+        auto sim_ctrl_verilator = plugin->create_simulator_controller("bram_lattice_simulator");
         auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
         verilator_engine->set_engine_property("provided_models", utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/provided_models");
 
         EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
         EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
 
-        auto sim_ctrl_reference = plugin->create_simulator_controller();
+        auto sim_ctrl_reference = plugin->create_simulator_controller("bram_lattice_reference");
 
         //path to netlist
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/bram_netlist.v";
@@ -1351,5 +1350,4 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
-    */
 }    // namespace hal
