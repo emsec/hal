@@ -22,6 +22,7 @@
 #include <QVector>
 #include <QTemporaryDir>
 #include <QDebug>
+#include <QDir>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/netlist/netlist_utils.h"
@@ -42,6 +43,9 @@ namespace hal
             templatePath += '/';
         templatePath += "hal_simulation_" + mName + "_XXXXXX";
         mTempDir = new QTemporaryDir(templatePath);
+        QDir saleaeDir(QDir(mTempDir->path()).absoluteFilePath("saleae"));
+        saleaeDir.mkpath(saleaeDir.absolutePath());
+        mSaleaeDirectory = new SaleaeDirectory(saleaeDir.absoluteFilePath("saleae.json").toStdString(),true);
     }
 
     NetlistSimulatorController::~NetlistSimulatorController()
@@ -49,6 +53,7 @@ namespace hal
         NetlistSimulatorControllerMap::instance()->removeController(mId);
         mWaveDataList->deleteLater();
         delete mSimulationInput;
+        delete mSaleaeDirectory;
       //  delete mTempDir;
     }
 
@@ -78,8 +83,7 @@ namespace hal
 
     std::filesystem::path NetlistSimulatorController::get_saleae_directory_filename() const
     {
-        std::filesystem::path retval(get_working_directory());
-        return retval / "saleae" / "saleae.json";
+        return std::filesystem::path(mSaleaeDirectory->get_filename());
     }
 
     SimulationEngine* NetlistSimulatorController::create_simulation_engine(const std::string& name)
@@ -147,11 +151,10 @@ namespace hal
         for (const Net* n : mSimulationInput->get_input_nets()) onlyNets.append(n);
         if (reader.importVcd(filename,mTempDir->path(),onlyNets))
         {
-            SaleaeDirectory sd(get_saleae_directory_filename());
             for (const Net* n : onlyNets)
             {
                 WaveData* wd = new WaveData(n);
-                wd->loadSaleae(sd);
+                wd->loadSaleae(*mSaleaeDirectory);
                 mWaveDataList->addOrReplace(wd);
             }
         }
@@ -204,8 +207,7 @@ namespace hal
                 }
                 WaveDataClock* wdc = new WaveDataClock(n, clk, mWaveDataList->simulTime());
                 mWaveDataList->addOrReplace(wdc);
-                SaleaeDirectory sd(get_saleae_directory_filename());
-                wdc->saveSaleae(sd);
+                wdc->saveSaleae(*mSaleaeDirectory);
             }
         }
 
@@ -228,8 +230,7 @@ namespace hal
 
     WaveData* NetlistSimulatorController::get_waveform_by_net(Net* n) const
     {
-        SaleaeDirectory sd(get_saleae_directory_filename());
-        return mWaveDataList->waveDataByNet(n,&sd);
+        return mWaveDataList->waveDataByNet(n,mSaleaeDirectory);
     }
 
     std::vector<const Net *> NetlistSimulatorController::getFilterNets(FilterInputFlag filter) const
@@ -262,8 +263,8 @@ namespace hal
 
         if (reader.importVcd(QString::fromStdString(filename),mTempDir->path(),inputNets))
         {
-            SaleaeDirectory sd(get_saleae_directory_filename());
-            mWaveDataList->updateFromSaleae(sd);
+            mSaleaeDirectory->parse_json();
+            mWaveDataList->updateFromSaleae(*mSaleaeDirectory);
         }
         else
         {
@@ -285,8 +286,8 @@ namespace hal
 
         if (reader.importCsv(QString::fromStdString(filename),mTempDir->path(),inputNets,timescale))
         {
-            SaleaeDirectory sd(get_saleae_directory_filename());
-            mWaveDataList->updateFromSaleae(sd);
+            mSaleaeDirectory->parse_json();
+            mWaveDataList->updateFromSaleae(*mSaleaeDirectory);
         }
         checkReadyState();
         Q_EMIT parseComplete();
@@ -297,8 +298,8 @@ namespace hal
         VcdSerializer reader;
         if (reader.importSaleae(QString::fromStdString(dirname),lookupTable,mTempDir->path(),timescale))
         {
-            SaleaeDirectory sd(get_saleae_directory_filename());
-            mWaveDataList->updateFromSaleae(sd);
+            mSaleaeDirectory->parse_json();
+            mWaveDataList->updateFromSaleae(*mSaleaeDirectory);
         }
         checkReadyState();
         Q_EMIT parseComplete();
@@ -452,8 +453,7 @@ namespace hal
                 log_warning(get_name(), "net[{}] '{}' is not an input net, value not assigned.", net->get_id(), net->get_name());
             return;
         }
-        SaleaeDirectory sd(get_saleae_directory_filename());
-        WaveData* wd = mWaveDataList->waveDataByNet(net,&sd);
+        WaveData* wd = mWaveDataList->waveDataByNet(net,mSaleaeDirectory);
         if (!wd)
         {
             wd = new WaveData(net);
@@ -461,7 +461,7 @@ namespace hal
         }
         u64 t = mWaveDataList->simulTime();
         wd->insertBooleanValue(t,value);
-        wd->saveSaleae(sd);
+        wd->saveSaleae(*mSaleaeDirectory);
     }
 
     void NetlistSimulatorController::initialize()

@@ -326,6 +326,7 @@ private:
     SimulationEngine* mSimulationEngine;
 
     QTemporaryDir* mTempDir;
+    SaleaeDirectory* mSaleaeDirectory;
     WaveDataList* mWaveDataList;
 
     SimulationInput* mSimulationInput;

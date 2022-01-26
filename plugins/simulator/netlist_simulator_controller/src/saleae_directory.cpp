@@ -238,7 +238,12 @@ namespace hal
     std::string SaleaeDirectory::get_directory() const
     {
         size_t pos = mDirectoryFile.find_last_of(folderSeparator);
-	if (pos==std::string::npos) return std::string();
+        if (pos==std::string::npos) return std::string();
         return mDirectoryFile.substr(0,pos);
+    }
+
+    std::string SaleaeDirectory::get_filename() const
+    {
+        return mDirectoryFile;
     }
 }
