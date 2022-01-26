@@ -63,7 +63,7 @@ namespace hal
             remove_unwanted_parameters_from_netlist(m_partial_netlist.get());
 
             //m_simulator_dir = "/mnt/scratch/nils.albartus/simulation_100s_spi/";
-            m_simulator_dir = directory();
+            m_simulator_dir = get_working_directory();
             m_design_name   = m_partial_netlist->get_design_name();
             m_compiler      = get_engine_property("compiler");
 

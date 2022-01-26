@@ -317,7 +317,6 @@ namespace hal
         EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
 
         auto sim_ctrl_reference = plugin->create_simulator_controller();
-        //sim_ctrl_reference->create_simulation_engine("verilator");
 
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/halfaddernetlist_flattened_by_hal.v";
         if (!utils::file_exists(path_netlist))
@@ -358,7 +357,6 @@ namespace hal
         sim_ctrl_reference->add_gates(nl->get_gates());
         sim_ctrl_reference->set_no_clock_used();
         sim_ctrl_reference->initialize();
-        sim_ctrl_reference->create_simulation_engine("verilator");
 
         //read vcd
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
@@ -405,10 +403,15 @@ namespace hal
 
         sim_ctrl_verilator->get_results();
 
+        for (Net* n : nl->get_nets())
+        {
+            sim_ctrl_verilator->get_waveform_by_net(n);
+            sim_ctrl_reference->get_waveform_by_net(n);
+        }
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
-        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
 
 
         //Test if maps are equal
@@ -416,6 +419,7 @@ namespace hal
         TEST_END
     }
 
+    /*
     TEST_F(SimulatorTest, counter)
     {
         // return;
@@ -429,7 +433,6 @@ namespace hal
         EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
 
         auto sim_ctrl_reference = plugin->create_simulator_controller();
-        //sim_ctrl_reference->create_simulation_engine("verilator");
 
         //path to netlist
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/counternetlist_flattened_by_hal.vhd";
@@ -470,7 +473,6 @@ namespace hal
         sim_ctrl_verilator->add_clock_period(clock, 10000);
 
         sim_ctrl_reference->initialize();
-        sim_ctrl_reference->create_simulation_engine("verilator"); // we need an engine here to manage temp directory, otherwise import will fail!
 
         //read vcd
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
@@ -531,9 +533,15 @@ namespace hal
 
         sim_ctrl_verilator->get_results();
 
+        for (Net* n : nl->get_nets())
+        {
+            sim_ctrl_verilator->get_waveform_by_net(n);
+            sim_ctrl_reference->get_waveform_by_net(n);
+        }
+
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
-        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
 
 
         //Test if maps are equal
@@ -555,7 +563,6 @@ namespace hal
         EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
 
         auto sim_ctrl_reference = plugin->create_simulator_controller();
-        //sim_ctrl_reference->create_simulation_engine("verilator");
 
         //path to netlist
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/cipher_flat.vhd";
@@ -586,7 +593,6 @@ namespace hal
 
         sim_ctrl_reference->add_gates(nl->get_gates());
         sim_ctrl_reference->initialize();
-        sim_ctrl_reference->create_simulation_engine("verilator"); // we need an engine here to manage temp directory, otherwise import will fail!
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         //prepare simulation
@@ -696,9 +702,15 @@ namespace hal
 
         sim_ctrl_verilator->get_results();
 
+        for (Net* n : nl->get_nets())
+        {
+            sim_ctrl_verilator->get_waveform_by_net(n);
+            sim_ctrl_reference->get_waveform_by_net(n);
+        }
+
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
-        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
 
 
         //Test if maps are equal
@@ -720,7 +732,6 @@ namespace hal
         EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
 
         auto sim_ctrl_reference = plugin->create_simulator_controller();
-        //sim_ctrl_reference->create_simulation_engine("verilator");
 
         //path to netlist
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.vhd";
@@ -764,7 +775,6 @@ namespace hal
         //read vcd
         sim_ctrl_reference->initialize();
         sim_ctrl_reference->add_gates(nl->get_gates());
-        sim_ctrl_reference->create_simulation_engine("verilator"); // we need an engine here to manage temp directory, otherwise import will fail!
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         //prepare simulation
@@ -857,10 +867,15 @@ namespace hal
 
         sim_ctrl_verilator->get_results();
 
+        for (Net* n : nl->get_nets())
+        {
+            sim_ctrl_verilator->get_waveform_by_net(n);
+            sim_ctrl_reference->get_waveform_by_net(n);
+        }
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
-        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
 
 
         //Test if maps are equal
@@ -883,7 +898,6 @@ namespace hal
         EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
 
         auto sim_ctrl_reference = plugin->create_simulator_controller();
-        sim_ctrl_reference->create_simulation_engine("verilator");
 
         //path to netlist
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/bram_netlist.v";
@@ -925,7 +939,6 @@ namespace hal
 
         sim_ctrl_reference->add_gates(nl->get_gates());
         sim_ctrl_reference->initialize();
-        sim_ctrl_reference->create_simulation_engine("verilator"); // we need an engine here to manage temp directory, otherwise import will fail!
         EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
         std::cout << "read simulation file" << std::endl;
@@ -1322,10 +1335,15 @@ namespace hal
 
         sim_ctrl_verilator->get_results();
 
+        for (Net* n : nl->get_nets())
+        {
+            sim_ctrl_verilator->get_waveform_by_net(n);
+            sim_ctrl_reference->get_waveform_by_net(n);
+        }
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
-        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
 
 
         //Test if maps are equal
@@ -1333,4 +1351,5 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
+    */
 }    // namespace hal

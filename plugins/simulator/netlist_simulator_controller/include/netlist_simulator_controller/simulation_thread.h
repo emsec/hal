@@ -18,6 +18,7 @@ namespace hal {
 
         u64 mSimulTime;
         SimulationInputNetEvent mSimulationInputNetEvent;
+        std::string mSaleaeDirectoryFilename;
 
         void terminateThread(bool success, const char* failedStep = nullptr);
     Q_SIGNALS:

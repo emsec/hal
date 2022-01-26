@@ -9,7 +9,8 @@
 namespace hal {
 
     SimulationThread::SimulationThread(NetlistSimulatorController* controller, const SimulationInput* simInput, SimulationEngineEventDriven *engine)
-        : QThread(controller), mSimulationInput(simInput), mEngine(engine), mLogChannel(controller->get_name()), mSimulTime(0)
+        : QThread(controller), mSimulationInput(simInput), mEngine(engine), mLogChannel(controller->get_name()), mSimulTime(0),
+          mSaleaeDirectoryFilename(controller->get_saleae_directory_filename())
     {
         connect(this, &SimulationThread::threadFinished, controller, &NetlistSimulatorController::handleRunFinished);
     }
@@ -28,7 +29,7 @@ namespace hal {
     void SimulationThread::run()
     {
         mSimulTime = 0;
-        SaleaeParser sp(mEngine->get_saleae_directory_filename());
+        SaleaeParser sp(mSaleaeDirectoryFilename);
 
         for (const Net* net : mSimulationInput->get_input_nets())
         {

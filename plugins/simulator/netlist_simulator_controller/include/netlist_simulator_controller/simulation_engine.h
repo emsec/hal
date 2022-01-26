@@ -9,8 +9,6 @@
 #include <vector>
 #include <filesystem>
 
-class QTemporaryDir;
-
 namespace hal
 {
     class NetlistSimulatorController;
@@ -34,12 +32,12 @@ namespace hal
         std::string mResultFilename;
         State mState;
         std::unordered_map<std::string, std::string> mProperties;
-        QTemporaryDir* mTempDir;
         SimulationInput* mSimulationInput;
+        std::string mWorkDir;
 
     public:
         SimulationEngine(const std::string& nam);
-        virtual ~SimulationEngine();
+        virtual ~SimulationEngine() {;}
 
         /**
          * Getter for enging name
@@ -69,16 +67,16 @@ namespace hal
         }
 
         /**
-         * The working directory. Directory is temporary and will be removed when engine gets deleted
+         * The working directory. Directory is temporary and will be removed when controller gets deleted
          * @return directory path
          */
-        std::string directory() const;
+        std::string get_working_directory() const;
 
         /**
-         * Get the filename of SALEAE directory file (JSON format).
-         * @return filename as std path
+         * Set the working directory. Method should be called by controller only after creating engine instance.
+         * @param[in] workDir The working directory (should be controller tmp directory)
          */
-        std::filesystem::path get_saleae_directory_filename() const;
+        void set_working_directory(const std::string& workDir);
 
         /**
          * Request clock change as regular net input event

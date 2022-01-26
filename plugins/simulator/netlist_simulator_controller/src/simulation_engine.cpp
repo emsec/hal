@@ -6,7 +6,6 @@
 
 #include <QDir>
 #include <QProcess>
-#include <QTemporaryDir>
 #include <QThread>
 #include <QFile>
 #include <QFileInfo>
@@ -15,29 +14,18 @@
 namespace hal
 {
     SimulationEngine::SimulationEngine(const std::string& nam)
-        : mName(nam), mRequireClockEvents(false), mCanShareMemory(false), mState(Preparing), mSimulationInput(nullptr)
+        : mName(nam), mRequireClockEvents(false), mCanShareMemory(false), mState(Preparing),
+          mSimulationInput(nullptr)
+    {;}
+
+    std::string SimulationEngine::get_working_directory() const
     {
-        QString templatePath = QDir::tempPath();
-        if (!templatePath.isEmpty())
-            templatePath += '/';
-        templatePath += "hal_simulation_" + QString::fromStdString(mName) + "_XXXXXX";
-        mTempDir = new QTemporaryDir(templatePath);
+        return mWorkDir;
     }
 
-    SimulationEngine::~SimulationEngine()
+    void SimulationEngine::set_working_directory(const std::string& workDir)
     {
-        delete mTempDir;
-    }
-
-    std::string SimulationEngine::directory() const
-    {
-        return mTempDir->path().toStdString();
-    }
-
-    std::filesystem::path SimulationEngine::get_saleae_directory_filename() const
-    {
-        std::filesystem::path retval(directory());
-        return retval / "saleae" / "saleae.json";
+        mWorkDir = workDir;
     }
 
     bool SimulationEngine::finalize()

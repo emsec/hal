@@ -20,5 +20,6 @@ namespace hal
         SaleaeOutputFile* get_file_by_name(const std::string& name);
         SaleaeOutputFile* get_file_by_id(uint32_t id);
         SaleaeOutputFile* add_or_replace_waveform(const std::string& name, uint32_t id);
+        void add_directory_entry(int inx, const std::string& name, uint32_t id);
     };
 }

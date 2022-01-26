@@ -16,6 +16,7 @@ namespace hal {
 
         int mLineIndex;
         int mNumberLines;
+        std::string mSaleaeDirectoryFilename;
 
         void abortOnError();
         bool runProcess(const QString& prog, const QStringList& args);

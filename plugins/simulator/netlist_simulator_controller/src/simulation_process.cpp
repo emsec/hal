@@ -14,7 +14,8 @@
 namespace hal {
 
     SimulationProcess::SimulationProcess(NetlistSimulatorController *controller, SimulationEngineScripted *engine)
-        : mEngine(engine), mLineIndex(0), mNumberLines(0)
+        : mEngine(engine), mLineIndex(0), mNumberLines(0),
+          mSaleaeDirectoryFilename(controller->get_saleae_directory_filename())
     {
         connect(this, &SimulationProcess::processFinished, controller, &NetlistSimulatorController::handleRunFinished);
     }
@@ -35,15 +36,15 @@ namespace hal {
 
     void SimulationProcess::runRemote()
     {
-        SaleaeDirectory sd(mEngine->get_saleae_directory_filename());
-        QFileInfo finfo(QString::fromStdString(mEngine->get_saleae_directory_filename()));
+        SaleaeDirectory sd(mSaleaeDirectoryFilename);
+        QFileInfo finfo(QString::fromStdString(mSaleaeDirectoryFilename));
         QString saleaeFilesToCopy = finfo.fileName();
         for (int inx=0; inx < sd.get_next_available_index(); inx++)
         {
             saleaeFilesToCopy += QString(" digital_%1.bin").arg(inx);
         }
 
-        QDir localDir(QString::fromStdString(mEngine->directory()));
+        QDir localDir(QString::fromStdString(mEngine->get_working_directory()));
         QString remoteDir = "hal_simul_" + QUuid::createUuid().toString(QUuid::Id128);
         QString shellScriptName(localDir.absoluteFilePath("remote.sh"));
         QString hostname = QString::fromStdString(mEngine->get_engine_property("ssh_server"));
@@ -139,7 +140,7 @@ namespace hal {
         for (const QString& arg : args) xout << " [" << arg << "]";
         xout << "\n";
         QProcess* process = new QProcess;
-        process->setWorkingDirectory(QString::fromStdString(mEngine->directory()));
+        process->setWorkingDirectory(QString::fromStdString(mEngine->get_working_directory()));
         process->start(prog, args);
 
         if (!process->waitForStarted())

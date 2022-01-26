@@ -79,7 +79,7 @@ namespace hal
                                                  "  }\n"
                                                  "  \n"
                                                  "  dut->eval();\n"
-                                                 "  m_trace->dump(sim_time + to_simulate);\n"
+                                                 "  m_trace->dump(sim_time); // to_simulate already added in event loop\n"
                                                  "\n"
                                                  "  m_trace->close();\n"
                                                  "  delete dut;\n"

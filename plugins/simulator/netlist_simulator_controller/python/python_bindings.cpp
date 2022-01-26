@@ -264,6 +264,13 @@ namespace hal
                 :param int timescale: multiplication factor for time value if SALEAE data in float format.
             )")
 
+            .def("get_working_directory", &NetlistSimulatorController::get_working_directory, R"(
+                Get the working directory.
+
+                :returns: The working directory of the controller.
+                :rtype: str
+            )")
+
             .def("set_saleae_timescale", &NetlistSimulatorController::set_saleae_timescale, py::arg("timescale") = 1000000000, R"(
                 Set timescale when parsing SALEAE float values.
 
@@ -389,8 +396,8 @@ namespace hal
                 :type: int
         )");
 
-        py_simulation_engine.def("directory", &SimulationEngine::directory, R"(
-                Get the working directory of the engine.
+        py_simulation_engine.def("get_working_directory", &SimulationEngine::get_working_directory, R"(
+                Get the working directory.
 
                 :returns: The working directory of the engine.
                 :rtype: str

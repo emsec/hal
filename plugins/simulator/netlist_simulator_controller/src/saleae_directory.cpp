@@ -129,23 +129,23 @@ namespace hal
 
     void SaleaeDirectory::add_or_replace_net(SaleaeDirectoryNetEntry& sdne)
     {
-        int inx = -1;
+        int inetentry = -1;
         if (sdne.id())
         {
             auto it = mById.find(sdne.id());
-            if (it != mById.end()) inx = it->second;
+            if (it != mById.end()) inetentry = it->second;
         }
-        if (inx<0)
+        if (inetentry<0)
         {
             auto it = mByName.find(sdne.name());
             if (it != mByName.end())
             {
-                inx = it->second;
+                inetentry = it->second;
                 if (sdne.id() > 0)
-                    mById.insert(std::make_pair(sdne.id(),inx));
+                    mById.insert(std::make_pair(sdne.id(),inetentry));
             }
         }
-        if (inx<0)
+        if (inetentry<0)
         {
             int n = mNetEntries.size();
             mByName.insert(std::make_pair(sdne.name(),n));
@@ -154,7 +154,7 @@ namespace hal
         }
         else
         {
-            mNetEntries[inx] = sdne;
+            mNetEntries[inetentry] = sdne;
         }
         for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes())
             if (sdfi.index() >= mNextAvailableIndex) mNextAvailableIndex = sdfi.index() + 1;

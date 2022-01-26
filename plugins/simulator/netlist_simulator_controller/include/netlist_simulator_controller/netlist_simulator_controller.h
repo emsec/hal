@@ -42,6 +42,8 @@
 #include "netlist_simulator_controller/simulation_input.h"
 #include "netlist_simulator_controller/wave_data.h"
 
+class QTemporaryDir;
+
 namespace hal {
 /* forward declaration */
 class Netlist;
@@ -267,6 +269,18 @@ public:
     bool generate_vcd(const std::filesystem::path& path, u32 start_time=0, u32 end_time=0, std::set<const Net*> nets = {}) const;
 
     /**
+     * The working directory. Directory is temporary and will be removed when controller gets deleted
+     * @return directory path
+     */
+    std::string get_working_directory() const;
+
+    /**
+     * Get the filename of SALEAE directory file (JSON format).
+     * @return filename as std path
+     */
+    std::filesystem::path get_saleae_directory_filename() const;
+
+    /**
      * Getter for wave data list - simulation input as well as output
      * @return const pointer to wave data list
      */
@@ -311,6 +325,7 @@ private:
     SimulationState mState;
     SimulationEngine* mSimulationEngine;
 
+    QTemporaryDir* mTempDir;
     WaveDataList* mWaveDataList;
 
     SimulationInput* mSimulationInput;

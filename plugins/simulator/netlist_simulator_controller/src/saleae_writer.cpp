@@ -31,6 +31,13 @@ namespace hal
         mSaleaeDirectory.write_json();
     }
 
+    void SaleaeWriter::add_directory_entry(int inx, const std::string &name, uint32_t id)
+    {
+        SaleaeDirectoryNetEntry sdne(name,id);
+        sdne.addIndex(SaleaeDirectoryFileIndex(inx));
+        mSaleaeDirectory.add_or_replace_net(sdne);
+    }
+
     SaleaeOutputFile* SaleaeWriter::add_or_replace_waveform(const std::string& name, uint32_t id)
     {
         std::filesystem::path path;
@@ -80,12 +87,8 @@ namespace hal
         mDataFiles.insert(std::make_pair(fileIndex,sof));
 
         if (updateDirectory)
-        {
             // create directory entry
-            SaleaeDirectoryNetEntry sdne(name,id);
-            sdne.addIndex(SaleaeDirectoryFileIndex(fileIndex));
-            mSaleaeDirectory.add_or_replace_net(sdne);
-        }
+            add_directory_entry(fileIndex,name,id);
         return sof;
     }
 

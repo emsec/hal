@@ -77,8 +77,6 @@ QMap<int,int>::const_iterator mIterator;
     void VcdSerializer::deleteFiles()
     {
         mSaleaeFiles.clear();
-        mIndexById.clear();
-        mIndexByName.clear();
         mAbbrevByName.clear();
     }
 
@@ -248,8 +246,6 @@ QMap<int,int>::const_iterator mIterator;
                     SaleaeOutputFile* sof = mSaleaeWriter->add_or_replace_waveform(name.toStdString(),0);
                     if (!sof) return false;
                     mSaleaeFiles.insert(abbrev,sof);
-                    if (id) mIndexById.insert(id, sof->index());
-                    mIndexByName.insert(name, sof->index());
                 }
                 else
                     return false;
@@ -460,7 +456,6 @@ QMap<int,int>::const_iterator mIterator;
 
         QRegularExpression reHead("\\$(\\w*) (.*)\\$end");
         QRegularExpression reWire("wire\\s+(\\d+) ([^ ]+) (.*) $");
-        QRegularExpression reWiid("\\[(\\d+)\\]$");
 
         static const int bufsize = 4095;
         char buf[bufsize+1];
@@ -499,7 +494,8 @@ QMap<int,int>::const_iterator mIterator;
                         QRegularExpressionMatch mWire = reWire.match(mHead.captured(2));
                         bool ok;
                         QString wireName   = mWire.captured(3);
-                        if (!netNames.isEmpty() && !netNames.contains(wireName)) continue;
+                        const Net* net = netNames.value(wireName);
+                        if (!netNames.isEmpty() && !net) continue; // net not found in given name list
                         if (mAbbrevByName.contains(wireName))
                         {
                             log_warning("vcd_viewer", "Waveform duplicate for '{}' in VCD file '{}'.", wireName.toStdString(), ff.fileName().toStdString());
@@ -509,19 +505,21 @@ QMap<int,int>::const_iterator mIterator;
                         mAbbrevByName.insert(wireName,wireAbbrev);
                         int     wireBits   = mWire.captured(1).toUInt(&ok);
                         if (!ok) wireBits = 1;
-                        QRegularExpressionMatch mWiid = reWiid.match(wireName);
                         if (wireBits > 1) continue; // TODO : decision whether we will be able to handle VCD with more bits
-                        if (!mSaleaeFiles.contains(wireAbbrev))
+
+                        u32 netId = net ? net->get_id() : 0;
+
+                        SaleaeOutputFile* sof = nullptr;
+                        if (mSaleaeFiles.contains(wireAbbrev))
                         {
-                            const Net* net = netNames.value(wireName);
-                            SaleaeOutputFile* sof = mSaleaeWriter->add_or_replace_waveform(wireName.toStdString(), net ? net->get_id() :0);
-                            if (sof)
-                            {
-                                mSaleaeFiles.insert(mWire.captured(2),sof);
-                                u32 id = mWiid.captured(1).toUInt();
-                                if (id) mIndexById.insert(id,sof->index());
-                                mIndexByName.insert(wireName,sof->index());
-                            }
+                            // output file already exists, need name entry
+                            sof = mSaleaeFiles.value(wireAbbrev);
+                            if (sof) mSaleaeWriter->add_directory_entry(sof->index(), wireName.toStdString(), netId);
+                        }
+                        else
+                        {
+                            sof = mSaleaeWriter->add_or_replace_waveform(wireName.toStdString(), netId);
+                            if (sof) mSaleaeFiles.insert(wireAbbrev,sof);
                         }
                     }
                 }

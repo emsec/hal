@@ -141,7 +141,7 @@ namespace hal {
             const SimulationEngine* eng = mController->get_simulation_engine();
             if (eng)
             {
-                SaleaeDirectory sd(eng->get_saleae_directory_filename());
+                SaleaeDirectory sd(mController->get_saleae_directory_filename());
                 if (sd.get_next_available_index() > mWaveItemHash->importedWires()) return true;
             }
         }
@@ -234,8 +234,7 @@ namespace hal {
                 wseMap.insert(WaveSelectionEntry(wd->id(),wd->name(),wd->data().size()),i);
             }
         }
-        const SimulationEngine* eng = mController->get_simulation_engine();
-        SaleaeDirectory* sd = eng ? new SaleaeDirectory(eng->get_saleae_directory_filename()) : nullptr;
+        SaleaeDirectory* sd = mController ? new SaleaeDirectory(mController->get_saleae_directory_filename()) : nullptr;
         if (sd)
         {
             for (const SaleaeDirectory::ListEntry& sdle : sd->get_net_list())
