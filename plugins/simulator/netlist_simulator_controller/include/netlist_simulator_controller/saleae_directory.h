@@ -80,6 +80,7 @@ namespace hal
         int get_next_available_index() const { return mNextAvailableIndex; }
         uint64_t get_max_time() const;
         std::string get_directory() const;
+        std::string get_filename() const;
         std::vector<ListEntry> get_net_list() const;
     };
 }
