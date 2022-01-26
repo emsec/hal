@@ -118,6 +118,13 @@ namespace hal
         bool isGateUnfolded(u32 gateId) const;
 
         /**
+         * Checks whether the module with id moduleId is unfolded or not.
+         *
+         * @param moduleId - The id of the module
+         */
+        bool isModuleUnfolded(u32 moduleId) const;
+
+        /**
          * Folds a given module with a given placement hint.
          *
          * @param moduleId - The module to fold.
@@ -168,6 +175,9 @@ namespace hal
          */
         bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
+        /**
+         * Checks wether the context shows an module exclusively or not.
+         */
         bool isShowingModuleExclusively();
 
         /**

@@ -179,6 +179,25 @@ namespace hal
         return containedGates.contains(gateId);
     }
 
+    bool GraphContext::isModuleUnfolded(u32 moduleId) const
+    {
+        QSet<u32> containedGates = mGates + mAddedGates - mRemovedGates;
+        QSet<u32> containedModules = mModules + mAddedModules - mRemovedModules;
+
+        auto m = gNetlist->get_module_by_id(moduleId);
+
+        for (const Gate* g : m->get_gates())
+        {
+            if (!containedGates.contains(g->get_id())) return false;
+        }
+        for (const Module* sm : m->get_submodules())
+        {
+            if (!isModuleUnfolded(sm->get_id()) && !containedModules.contains(sm->get_id()))
+                return false;
+        }
+        return true;
+    }
+
     void GraphContext::unfoldModule(const u32 id)
     {
         auto contained_modules = mModules + mAddedModules - mRemovedModules;
@@ -277,9 +296,11 @@ namespace hal
         }
 
         Module* m = gNetlist->get_module_by_id(id);
+
         // TODO deduplicate
         QSet<u32> gates;
         QSet<u32> modules;
+
         for (const Gate* g : m->get_gates())
         {
             gates.insert(g->get_id());
@@ -288,13 +309,13 @@ namespace hal
         {
             modules.insert(sm->get_id());
         }
+
         return (mGates - mRemovedGates) + mAddedGates == (gates - minus_gates) + plus_gates
                 && (mModules - mRemovedModules) + mAddedModules == (modules - minus_modules) + plus_modules;
     }
 
     bool GraphContext::isShowingModuleExclusively()
     {
-        // This function checks if a context only shows the module (or its contents) with the id mExclusiveModuleId
         if (!mExclusiveModuleId) return false;
 
         auto containedModules = mModules + mAddedModules - mRemovedModules;
@@ -304,7 +325,7 @@ namespace hal
         if (containedGates.empty() && containedModules.size() == 1 && *containedModules.begin() == mExclusiveModuleId)
             return true;
         // unfolded module
-        if (isShowingModule(mExclusiveModuleId))
+        if (isModuleUnfolded(mExclusiveModuleId))
             return true;
         return false;
     }
@@ -630,7 +651,6 @@ namespace hal
 
     void GraphContext::handleExclusiveModuleCheck()
     {
-        // add functionality for restoring the connection?
         if (!isShowingModuleExclusively())
             setExclusiveModuleId(0);
     }

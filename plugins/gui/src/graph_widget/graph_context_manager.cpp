@@ -240,7 +240,8 @@ namespace hal
         // and collides with handleModuleRemoved
 //        dump("ModuleSubmoduleRemoved", m->get_id(), removed_module);
         for (GraphContext* context : mContextTableModel->list())
-            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}))
+            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {})
+                && !m->contains_module(gNetlist->get_module_by_id(removed_module), false))
             {
                 context->remove({removed_module}, {});
                 if (context->empty())
@@ -293,7 +294,8 @@ namespace hal
 //        dump("ModuleGateRemoved", m->get_id(), removed_gate);
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}))
+            if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate})
+                && !m->contains_gate(gNetlist->get_gate_by_id(removed_gate), true))
             {
                 context->remove({}, {removed_gate});
                 if (context->empty())
