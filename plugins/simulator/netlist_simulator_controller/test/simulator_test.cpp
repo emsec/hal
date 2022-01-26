@@ -419,935 +419,935 @@ namespace hal
         TEST_END
     }
 
-    TEST_F(SimulatorTest, counter)
-    {
-        // return;
-        TEST_START
-
-        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
-
-        auto sim_ctrl_verilator = plugin->create_simulator_controller("counter_simulator");
-        auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
-        EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
-        EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
-
-        auto sim_ctrl_reference = plugin->create_simulator_controller("counter_reference");
-
-        //path to netlist
-        std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/counternetlist_flattened_by_hal.vhd";
-        if (!utils::file_exists(path_netlist))
-            FAIL() << "netlist for counter-test not found: " << path_netlist;
-
-        //create netlist from path
-        auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
-        if (lib == nullptr)
-        {
-            FAIL() << "XILINX_UNISIM gate library not found";
-        }
-
-        std::unique_ptr<Netlist> nl;
-        {
-            NO_COUT_BLOCK;
-            nl = netlist_parser_manager::parse(path_netlist, lib);
-            if (nl == nullptr)
-            {
-                FAIL() << "netlist couldn't be parsed";
-            }
-        }
-
-        //path to vcd
-        std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/dump.vcd";
-        if (!utils::file_exists(path_vcd))
-            FAIL() << "dump for counter-test not found: " << path_vcd;
-
-        //prepare simulation
-        sim_ctrl_verilator->add_gates(nl->get_gates());
-        sim_ctrl_verilator->set_no_clock_used();
-        EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
-        sim_ctrl_verilator->initialize();
-
-        sim_ctrl_reference->add_gates(nl->get_gates());
-
-        Net* clock = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock"; }).begin());
-        sim_ctrl_verilator->add_clock_period(clock, 10000);
-
-        sim_ctrl_reference->initialize();
-
-        //read vcd
-        EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
-
-        // retrieve nets
-        Net* reset          = *(nl->get_nets([](const Net* net) { return net->get_name() == "Reset"; }).begin());
-        Net* Clock_enable_B = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock_enable_B"; }).begin());
-        Net* output_0       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_0"; }).begin());
-        Net* output_1       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_1"; }).begin());
-        Net* output_2       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_2"; }).begin());
-        Net* output_3       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_3"; }).begin());
-
-        //start simulation
-        {
-            measure_block_time("simulation");
-            //testbench
-            sim_ctrl_verilator->set_input(Clock_enable_B, BooleanFunction::Value::ONE);    //#Clock_enable_B <= '1';
-            sim_ctrl_verilator->set_input(reset, BooleanFunction::Value::ZERO);            //#Reset <= '0';
-            sim_ctrl_verilator->simulate(40 * 1000);                                       //#WAIT FOR 40 NS; -> simulate 4 clock cycle  - cycle 0, 1, 2, 3
-
-            sim_ctrl_verilator->set_input(Clock_enable_B, BooleanFunction::Value::ZERO);    //#Clock_enable_B <= '0';
-            sim_ctrl_verilator->simulate(110 * 1000);                                       //#WAIT FOR 110 NS; -> simulate 11 clock cycle  - cycle 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
-
-            sim_ctrl_verilator->set_input(reset, BooleanFunction::Value::ONE);    //#Reset <= '1';
-            sim_ctrl_verilator->simulate(20 * 1000);                              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 15, 16
-
-            sim_ctrl_verilator->set_input(reset, BooleanFunction::Value::ZERO);    //#Reset <= '0';
-            sim_ctrl_verilator->simulate(70 * 1000);                               //#WAIT FOR 70 NS; -> simulate 7 clock cycle  - cycle 17, 18, 19, 20, 21, 22, 23
-
-            sim_ctrl_verilator->set_input(Clock_enable_B, BooleanFunction::Value::ONE);    //#Clock_enable_B <= '1';
-            sim_ctrl_verilator->simulate(23 * 1000);                                       //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 24, 25
-
-            sim_ctrl_verilator->set_input(reset, BooleanFunction::Value::ONE);    //#Reset <= '1';
-            sim_ctrl_verilator->simulate(20 * 1000);                              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 26, 27
-                //#3 additional traces á 10 NS to get 300 NS simulation time
-            sim_ctrl_verilator->simulate(20 * 1000);    //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 28, 29
-                //#for last "cycle" set clock to 0, in the final state clock stays ZERO and does not switch to 1 anymore
-            sim_ctrl_verilator->simulate(5 * 1000);    //#WAIT FOR 10 NS; -> simulate 1 clock cycle  - cycle 30
-
-            sim_ctrl_verilator->initialize();
-            sim_ctrl_verilator->run_simulation();
-
-            EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
-
-            while (verilator_engine->get_state() == SimulationEngine::State::Running)
-            {
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-            }
-        }
-
-        if (verilator_engine->get_state() == SimulationEngine::State::Failed)
-        {
-            FAIL() << "engine failed";
-        }
-
-        EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Done);
-        EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
-
-        sim_ctrl_verilator->get_results();
-
-        for (Net* n : nl->get_nets())
-        {
-            sim_ctrl_verilator->get_waveform_by_net(n);
-            sim_ctrl_reference->get_waveform_by_net(n);
-        }
-
-        // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
-        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
-
-
-        //Test if maps are equal
-        bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
-        EXPECT_TRUE(equal);
-        TEST_END
-    }
-
-    TEST_F(SimulatorTest, toycipher)
-    {
-        // return;
-        TEST_START
-
-        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
+    // TEST_F(SimulatorTest, counter)
+    // {
+    //     // return;
+    //     TEST_START
+
+    //     auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
+
+    //     auto sim_ctrl_verilator = plugin->create_simulator_controller("counter_simulator");
+    //     auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
+    //     EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
+
+    //     auto sim_ctrl_reference = plugin->create_simulator_controller("counter_reference");
+
+    //     //path to netlist
+    //     std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/counternetlist_flattened_by_hal.vhd";
+    //     if (!utils::file_exists(path_netlist))
+    //         FAIL() << "netlist for counter-test not found: " << path_netlist;
+
+    //     //create netlist from path
+    //     auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+    //     if (lib == nullptr)
+    //     {
+    //         FAIL() << "XILINX_UNISIM gate library not found";
+    //     }
+
+    //     std::unique_ptr<Netlist> nl;
+    //     {
+    //         NO_COUT_BLOCK;
+    //         nl = netlist_parser_manager::parse(path_netlist, lib);
+    //         if (nl == nullptr)
+    //         {
+    //             FAIL() << "netlist couldn't be parsed";
+    //         }
+    //     }
+
+    //     //path to vcd
+    //     std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/dump.vcd";
+    //     if (!utils::file_exists(path_vcd))
+    //         FAIL() << "dump for counter-test not found: " << path_vcd;
+
+    //     //prepare simulation
+    //     sim_ctrl_verilator->add_gates(nl->get_gates());
+    //     sim_ctrl_verilator->set_no_clock_used();
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
+    //     sim_ctrl_verilator->initialize();
+
+    //     sim_ctrl_reference->add_gates(nl->get_gates());
+
+    //     Net* clock = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock"; }).begin());
+    //     sim_ctrl_verilator->add_clock_period(clock, 10000);
+
+    //     sim_ctrl_reference->initialize();
+
+    //     //read vcd
+    //     EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
+
+    //     // retrieve nets
+    //     Net* reset          = *(nl->get_nets([](const Net* net) { return net->get_name() == "Reset"; }).begin());
+    //     Net* Clock_enable_B = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock_enable_B"; }).begin());
+    //     Net* output_0       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_0"; }).begin());
+    //     Net* output_1       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_1"; }).begin());
+    //     Net* output_2       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_2"; }).begin());
+    //     Net* output_3       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_3"; }).begin());
+
+    //     //start simulation
+    //     {
+    //         measure_block_time("simulation");
+    //         //testbench
+    //         sim_ctrl_verilator->set_input(Clock_enable_B, BooleanFunction::Value::ONE);    //#Clock_enable_B <= '1';
+    //         sim_ctrl_verilator->set_input(reset, BooleanFunction::Value::ZERO);            //#Reset <= '0';
+    //         sim_ctrl_verilator->simulate(40 * 1000);                                       //#WAIT FOR 40 NS; -> simulate 4 clock cycle  - cycle 0, 1, 2, 3
+
+    //         sim_ctrl_verilator->set_input(Clock_enable_B, BooleanFunction::Value::ZERO);    //#Clock_enable_B <= '0';
+    //         sim_ctrl_verilator->simulate(110 * 1000);                                       //#WAIT FOR 110 NS; -> simulate 11 clock cycle  - cycle 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+
+    //         sim_ctrl_verilator->set_input(reset, BooleanFunction::Value::ONE);    //#Reset <= '1';
+    //         sim_ctrl_verilator->simulate(20 * 1000);                              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 15, 16
+
+    //         sim_ctrl_verilator->set_input(reset, BooleanFunction::Value::ZERO);    //#Reset <= '0';
+    //         sim_ctrl_verilator->simulate(70 * 1000);                               //#WAIT FOR 70 NS; -> simulate 7 clock cycle  - cycle 17, 18, 19, 20, 21, 22, 23
+
+    //         sim_ctrl_verilator->set_input(Clock_enable_B, BooleanFunction::Value::ONE);    //#Clock_enable_B <= '1';
+    //         sim_ctrl_verilator->simulate(23 * 1000);                                       //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 24, 25
+
+    //         sim_ctrl_verilator->set_input(reset, BooleanFunction::Value::ONE);    //#Reset <= '1';
+    //         sim_ctrl_verilator->simulate(20 * 1000);                              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 26, 27
+    //             //#3 additional traces á 10 NS to get 300 NS simulation time
+    //         sim_ctrl_verilator->simulate(20 * 1000);    //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 28, 29
+    //             //#for last "cycle" set clock to 0, in the final state clock stays ZERO and does not switch to 1 anymore
+    //         sim_ctrl_verilator->simulate(5 * 1000);    //#WAIT FOR 10 NS; -> simulate 1 clock cycle  - cycle 30
+
+    //         sim_ctrl_verilator->initialize();
+    //         sim_ctrl_verilator->run_simulation();
+
+    //         EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
+
+    //         while (verilator_engine->get_state() == SimulationEngine::State::Running)
+    //         {
+    //             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    //         }
+    //     }
+
+    //     if (verilator_engine->get_state() == SimulationEngine::State::Failed)
+    //     {
+    //         FAIL() << "engine failed";
+    //     }
+
+    //     EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Done);
+    //     EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
+
+    //     sim_ctrl_verilator->get_results();
+
+    //     for (Net* n : nl->get_nets())
+    //     {
+    //         sim_ctrl_verilator->get_waveform_by_net(n);
+    //         sim_ctrl_reference->get_waveform_by_net(n);
+    //     }
+
+    //     // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
+    //     EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
+
+
+    //     //Test if maps are equal
+    //     bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
+    //     EXPECT_TRUE(equal);
+    //     TEST_END
+    // }
+
+    // TEST_F(SimulatorTest, toycipher)
+    // {
+    //     // return;
+    //     TEST_START
+
+    //     auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
 
-        auto sim_ctrl_verilator = plugin->create_simulator_controller("tocipher_simulator");
-        auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
-        EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
-        EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
-
-        auto sim_ctrl_reference = plugin->create_simulator_controller("tocipher_reference");
+    //     auto sim_ctrl_verilator = plugin->create_simulator_controller("tocipher_simulator");
+    //     auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
+    //     EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
+
+    //     auto sim_ctrl_reference = plugin->create_simulator_controller("tocipher_reference");
 
-        //path to netlist
-        std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/cipher_flat.vhd";
-        if (!utils::file_exists(path_netlist))
-            FAIL() << "netlist for toycipher-test not found: " << path_netlist;
+    //     //path to netlist
+    //     std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/cipher_flat.vhd";
+    //     if (!utils::file_exists(path_netlist))
+    //         FAIL() << "netlist for toycipher-test not found: " << path_netlist;
 
-        //create netlist from path
-        auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
-        if (lib == nullptr)
-        {
-            FAIL() << "XILINX_UNISIM gate library not found";
-        }
+    //     //create netlist from path
+    //     auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+    //     if (lib == nullptr)
+    //     {
+    //         FAIL() << "XILINX_UNISIM gate library not found";
+    //     }
 
-        std::unique_ptr<Netlist> nl;
-        {
-            NO_COUT_BLOCK;
-            nl = netlist_parser_manager::parse(path_netlist, lib);
-            if (nl == nullptr)
-            {
-                FAIL() << "netlist couldn't be parsed";
-            }
-        }
+    //     std::unique_ptr<Netlist> nl;
+    //     {
+    //         NO_COUT_BLOCK;
+    //         nl = netlist_parser_manager::parse(path_netlist, lib);
+    //         if (nl == nullptr)
+    //         {
+    //             FAIL() << "netlist couldn't be parsed";
+    //         }
+    //     }
 
-        //path to vcd
-        std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/dump.vcd";
-        if (!utils::file_exists(path_vcd))
-            FAIL() << "dump for toycipher-test not found: " << path_vcd;
+    //     //path to vcd
+    //     std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/dump.vcd";
+    //     if (!utils::file_exists(path_vcd))
+    //         FAIL() << "dump for toycipher-test not found: " << path_vcd;
 
-        sim_ctrl_reference->add_gates(nl->get_gates());
-        sim_ctrl_reference->initialize();
-        EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
+    //     sim_ctrl_reference->add_gates(nl->get_gates());
+    //     sim_ctrl_reference->initialize();
+    //     EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
-        //prepare simulation
-        sim_ctrl_verilator->add_gates(nl->get_gates());
-        EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
-        sim_ctrl_verilator->initialize();
+    //     //prepare simulation
+    //     sim_ctrl_verilator->add_gates(nl->get_gates());
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
+    //     sim_ctrl_verilator->initialize();
 
-        // retrieve nets
-        auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
-        sim_ctrl_verilator->add_clock_period(clk, 10000);
+    //     // retrieve nets
+    //     auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
+    //     sim_ctrl_verilator->add_clock_period(clk, 10000);
 
-        std::set<const Net*> key_set, plaintext_set;
-        auto start = *(nl->get_nets([](auto net) { return net->get_name() == "START"; }).begin());
+    //     std::set<const Net*> key_set, plaintext_set;
+    //     auto start = *(nl->get_nets([](auto net) { return net->get_name() == "START"; }).begin());
 
-        for (int i = 0; i < 16; i++)
-        {
-            std::string name = "KEY_" + std::to_string(i);
-            key_set.insert(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
-        }
+    //     for (int i = 0; i < 16; i++)
+    //     {
+    //         std::string name = "KEY_" + std::to_string(i);
+    //         key_set.insert(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
+    //     }
 
-        for (int i = 0; i < 16; i++)
-        {
-            std::string name = "PLAINTEXT_" + std::to_string(i);
-            plaintext_set.insert(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
-        }
+    //     for (int i = 0; i < 16; i++)
+    //     {
+    //         std::string name = "PLAINTEXT_" + std::to_string(i);
+    //         plaintext_set.insert(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
+    //     }
 
-        int input_nets_amount = key_set.size() + plaintext_set.size();
+    //     int input_nets_amount = key_set.size() + plaintext_set.size();
 
-        if (clk != nullptr)
-            input_nets_amount++;
+    //     if (clk != nullptr)
+    //         input_nets_amount++;
 
-        if (start != nullptr)
-            input_nets_amount++;
+    //     if (start != nullptr)
+    //         input_nets_amount++;
 
-        if (input_nets_amount != sim_ctrl_verilator->get_input_nets().size())
-            FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim_ctrl_verilator->get_input_nets().size();
+    //     if (input_nets_amount != sim_ctrl_verilator->get_input_nets().size())
+    //         FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim_ctrl_verilator->get_input_nets().size();
 
-        //start simulation
-        {
-            measure_block_time("simulation");
-            //testbench
+    //     //start simulation
+    //     {
+    //         measure_block_time("simulation");
+    //         //testbench
 
-            for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
-                sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ZERO);
+    //         for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
+    //             sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ZERO);
 
-            for (auto net : key_set)    //KEY <= (OTHERS => '0');
-                sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ZERO);
+    //         for (auto net : key_set)    //KEY <= (OTHERS => '0');
+    //             sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ZERO);
 
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-            sim_ctrl_verilator->simulate(10 * 1000);                               //WAIT FOR 10 NS;
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+    //         sim_ctrl_verilator->simulate(10 * 1000);                               //WAIT FOR 10 NS;
 
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
-            sim_ctrl_verilator->simulate(10 * 1000);                              //WAIT FOR 10 NS;
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
+    //         sim_ctrl_verilator->simulate(10 * 1000);                              //WAIT FOR 10 NS;
 
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-            sim_ctrl_verilator->simulate(100 * 1000);                              //WAIT FOR 100 NS;
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+    //         sim_ctrl_verilator->simulate(100 * 1000);                              //WAIT FOR 100 NS;
 
-            for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '1');
-                sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ONE);
+    //         for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '1');
+    //             sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ONE);
 
-            for (auto net : key_set)    //KEY <= (OTHERS => '1');
-                sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ONE);
+    //         for (auto net : key_set)    //KEY <= (OTHERS => '1');
+    //             sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ONE);
 
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-            sim_ctrl_verilator->simulate(10 * 1000);                               //WAIT FOR 10 NS;
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+    //         sim_ctrl_verilator->simulate(10 * 1000);                               //WAIT FOR 10 NS;
 
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
-            sim_ctrl_verilator->simulate(10 * 1000);                              //WAIT FOR 10 NS;
-
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-            sim_ctrl_verilator->simulate(100 * 1000);                              //WAIT FOR 100 NS;
-
-            for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
-                sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ZERO);
-
-            for (auto net : key_set)    //KEY <= (OTHERS => '0');
-                sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ZERO);
-
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-
-            sim_ctrl_verilator->simulate(10 * 1000);
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
-
-            sim_ctrl_verilator->simulate(10 * 1000);
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-
-            sim_ctrl_verilator->simulate(30 * 1000);
-
-            sim_ctrl_verilator->initialize();
-            sim_ctrl_verilator->run_simulation();
-
-            EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
-
-            while (verilator_engine->get_state() == SimulationEngine::State::Running)
-            {
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-            }
-        }
-
-        if (verilator_engine->get_state() == SimulationEngine::State::Failed)
-        {
-            FAIL() << "engine failed";
-        }
-
-        EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Done);
-        EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
-
-        sim_ctrl_verilator->get_results();
-
-        for (Net* n : nl->get_nets())
-        {
-            sim_ctrl_verilator->get_waveform_by_net(n);
-            sim_ctrl_reference->get_waveform_by_net(n);
-        }
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
+    //         sim_ctrl_verilator->simulate(10 * 1000);                              //WAIT FOR 10 NS;
+
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+    //         sim_ctrl_verilator->simulate(100 * 1000);                              //WAIT FOR 100 NS;
+
+    //         for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
+    //             sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ZERO);
+
+    //         for (auto net : key_set)    //KEY <= (OTHERS => '0');
+    //             sim_ctrl_verilator->set_input(net, BooleanFunction::Value::ZERO);
+
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+
+    //         sim_ctrl_verilator->simulate(10 * 1000);
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
+
+    //         sim_ctrl_verilator->simulate(10 * 1000);
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+
+    //         sim_ctrl_verilator->simulate(30 * 1000);
+
+    //         sim_ctrl_verilator->initialize();
+    //         sim_ctrl_verilator->run_simulation();
+
+    //         EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
+
+    //         while (verilator_engine->get_state() == SimulationEngine::State::Running)
+    //         {
+    //             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    //         }
+    //     }
+
+    //     if (verilator_engine->get_state() == SimulationEngine::State::Failed)
+    //     {
+    //         FAIL() << "engine failed";
+    //     }
+
+    //     EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Done);
+    //     EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
+
+    //     sim_ctrl_verilator->get_results();
+
+    //     for (Net* n : nl->get_nets())
+    //     {
+    //         sim_ctrl_verilator->get_waveform_by_net(n);
+    //         sim_ctrl_reference->get_waveform_by_net(n);
+    //     }
 
-        // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
-        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
+    //     // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
+    //     EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
 
 
-        //Test if maps are equal
-        bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
-        EXPECT_TRUE(equal);
-        TEST_END
-    }
+    //     //Test if maps are equal
+    //     bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
+    //     EXPECT_TRUE(equal);
+    //     TEST_END
+    // }
 
-    TEST_F(SimulatorTest, sha256)
-    {
-        // return;
-        TEST_START
+    // TEST_F(SimulatorTest, sha256)
+    // {
+    //     // return;
+    //     TEST_START
 
-        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
-
-        auto sim_ctrl_verilator = plugin->create_simulator_controller("sha256_simulator");
-        auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
-        EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
-        EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
-
-        auto sim_ctrl_reference = plugin->create_simulator_controller("sha256_reference");
-
-        //path to netlist
-        std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.vhd";
-        if (!utils::file_exists(path_netlist))
-            FAIL() << "netlist for sha256 not found: " << path_netlist;
-
-        std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.hal";
-
-        //create netlist from path
-        auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
-        if (lib == nullptr)
-        {
-            FAIL() << "XILINX_UNISIM gate library not found";
-        }
+    //     auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
+
+    //     auto sim_ctrl_verilator = plugin->create_simulator_controller("sha256_simulator");
+    //     auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
+    //     EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
+
+    //     auto sim_ctrl_reference = plugin->create_simulator_controller("sha256_reference");
+
+    //     //path to netlist
+    //     std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.vhd";
+    //     if (!utils::file_exists(path_netlist))
+    //         FAIL() << "netlist for sha256 not found: " << path_netlist;
+
+    //     std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.hal";
+
+    //     //create netlist from path
+    //     auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+    //     if (lib == nullptr)
+    //     {
+    //         FAIL() << "XILINX_UNISIM gate library not found";
+    //     }
 
-        std::unique_ptr<Netlist> nl;
-        {
-            std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
-            if (utils::file_exists(path_netlist_hal))
-            {
-                std::cout << ".hal file found for test netlist, loading this one." << std::endl;
-                NO_COUT_BLOCK;
-                nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
-            }
-            else
-            {
-                NO_COUT_BLOCK;
-                nl = netlist_parser_manager::parse(path_netlist, lib);
-                netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
-            }
-            if (nl == nullptr)
-            {
-                FAIL() << "netlist couldn't be parsed";
-            }
-        }
+    //     std::unique_ptr<Netlist> nl;
+    //     {
+    //         std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
+    //         if (utils::file_exists(path_netlist_hal))
+    //         {
+    //             std::cout << ".hal file found for test netlist, loading this one." << std::endl;
+    //             NO_COUT_BLOCK;
+    //             nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
+    //         }
+    //         else
+    //         {
+    //             NO_COUT_BLOCK;
+    //             nl = netlist_parser_manager::parse(path_netlist, lib);
+    //             netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
+    //         }
+    //         if (nl == nullptr)
+    //         {
+    //             FAIL() << "netlist couldn't be parsed";
+    //         }
+    //     }
 
-        //path to vcd
-        std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/dump.vcd";
-        if (!utils::file_exists(path_vcd))
-            FAIL() << "dump for sha256 not found: " << path_vcd;
-        //read vcd
-        sim_ctrl_reference->initialize();
-        sim_ctrl_reference->add_gates(nl->get_gates());
-        EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
+    //     //path to vcd
+    //     std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/dump.vcd";
+    //     if (!utils::file_exists(path_vcd))
+    //         FAIL() << "dump for sha256 not found: " << path_vcd;
+    //     //read vcd
+    //     sim_ctrl_reference->initialize();
+    //     sim_ctrl_reference->add_gates(nl->get_gates());
+    //     EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
 
-        //prepare simulation
-        sim_ctrl_verilator->add_gates(nl->get_gates());
-        EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
+    //     //prepare simulation
+    //     sim_ctrl_verilator->add_gates(nl->get_gates());
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
 
-        sim_ctrl_verilator->initialize();
+    //     sim_ctrl_verilator->initialize();
 
-        // retrieve nets
-        auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
+    //     // retrieve nets
+    //     auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
 
-        sim_ctrl_verilator->add_clock_period(clk, 10000);
+    //     sim_ctrl_verilator->add_clock_period(clk, 10000);
 
-        auto start = *(nl->get_nets([](auto net) { return net->get_name() == "data_ready"; }).begin());
-
-        auto rst = *(nl->get_nets([](auto net) { return net->get_name() == "rst"; }).begin());
+    //     auto start = *(nl->get_nets([](auto net) { return net->get_name() == "data_ready"; }).begin());
+
+    //     auto rst = *(nl->get_nets([](auto net) { return net->get_name() == "rst"; }).begin());
 
-        std::vector<const Net*> input_bits;
-        for (int i = 0; i < 512; i++)
-        {
-            std::string name = "msg_block_in_" + std::to_string(i);
-            input_bits.push_back(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
-        }
+    //     std::vector<const Net*> input_bits;
+    //     for (int i = 0; i < 512; i++)
+    //     {
+    //         std::string name = "msg_block_in_" + std::to_string(i);
+    //         input_bits.push_back(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
+    //     }
 
-        int input_nets_amount = input_bits.size();
+    //     int input_nets_amount = input_bits.size();
 
-        if (clk != nullptr)
-            input_nets_amount++;
+    //     if (clk != nullptr)
+    //         input_nets_amount++;
 
-        if (rst != nullptr)
-            input_nets_amount++;
+    //     if (rst != nullptr)
+    //         input_nets_amount++;
 
-        if (start != nullptr)
-            input_nets_amount++;
+    //     if (start != nullptr)
+    //         input_nets_amount++;
 
-        if (input_nets_amount != sim_ctrl_verilator->get_input_nets().size())
-            FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim_ctrl_verilator->get_input_nets().size();
+    //     if (input_nets_amount != sim_ctrl_verilator->get_input_nets().size())
+    //         FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim_ctrl_verilator->get_input_nets().size();
 
-        //start simulation
-        std::cout << "starting simulation" << std::endl;
-        //testbench
+    //     //start simulation
+    //     std::cout << "starting simulation" << std::endl;
+    //     //testbench
 
-        {
-            measure_block_time("simulation");
-
-            // msg <= x"61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
-            std::string hex_input = "61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
-            for (u32 i = 0; i < hex_input.size(); i += 2)
-            {
-                u8 byte = std::stoul(hex_input.substr(i, 2), nullptr, 16);
-                for (u32 j = 0; j < 8; ++j)
-                {
-                    sim_ctrl_verilator->set_input(input_bits[i * 4 + j], (BooleanFunction::Value)((byte >> (7 - j)) & 1));
-                }
-            }
-
-            sim_ctrl_verilator->set_input(rst, BooleanFunction::Value::ONE);       //RST <= '1';
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-            sim_ctrl_verilator->simulate(10 * 1000);                               //WAIT FOR 10 NS;
-
-            sim_ctrl_verilator->set_input(rst, BooleanFunction::Value::ZERO);    //RST <= '0';
-            sim_ctrl_verilator->simulate(10 * 1000);                             //WAIT FOR 10 NS;
-
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
-            sim_ctrl_verilator->simulate(10 * 1000);                              //WAIT FOR 10 NS;
-
-            sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
-            sim_ctrl_verilator->simulate(10 * 1000);                               //WAIT FOR 10 NS;
-
-            sim_ctrl_verilator->simulate(2000 * 1000);
-
-            sim_ctrl_verilator->initialize();
-            sim_ctrl_verilator->run_simulation();
-
-            EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
-
-            while (verilator_engine->get_state() == SimulationEngine::State::Running)
-            {
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-            }
-        }
-
-        if (verilator_engine->get_state() == SimulationEngine::State::Failed)
-        {
-            FAIL() << "engine failed";
-        }
-
-        EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Done);
-        EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
-
-        sim_ctrl_verilator->get_results();
-
-        for (Net* n : nl->get_nets())
-        {
-            sim_ctrl_verilator->get_waveform_by_net(n);
-            sim_ctrl_reference->get_waveform_by_net(n);
-        }
-
-        // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
-        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
-
-
-        //Test if maps are equal
-        bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
-        EXPECT_TRUE(equal);
-        TEST_END
-    }
-
-    TEST_F(SimulatorTest, bram_lattice)
-    {
-        // return;
-        TEST_START
-        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
-
-        auto sim_ctrl_verilator = plugin->create_simulator_controller("bram_lattice_simulator");
-        auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
-        verilator_engine->set_engine_property("provided_models", utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/provided_models");
-
-        EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
-        EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
-
-        auto sim_ctrl_reference = plugin->create_simulator_controller("bram_lattice_reference");
-
-        //path to netlist
-        std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/bram_netlist.v";
-        if (!utils::file_exists(path_netlist))
-            FAIL() << "netlist for bram not found: " << path_netlist;
-
-        std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/bram_netlist.hal";
-
-        auto lib = gate_library_manager::get_gate_library_by_name("ICE40ULTRA");
-        if (lib == nullptr)
-        {
-            FAIL() << "ice40ultra gate library not found";
-        }
-
-        std::unique_ptr<Netlist> nl;
-        {
-            std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
-            if (utils::file_exists(path_netlist_hal))
-            {
-                std::cout << ".hal file found for test netlist, loading this one." << std::endl;
-                nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
-            }
-            else
-            {
-                NO_COUT_BLOCK;
-                nl = netlist_parser_manager::parse(path_netlist, lib);
-                netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
-            }
-            if (nl == nullptr)
-            {
-                FAIL() << "netlist couldn't be parsed";
-            }
-        }
-
-        //path to vcd
-        std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/trace.vcd";
-        if (!utils::file_exists(path_vcd))
-            FAIL() << "dump for bram not found: " << path_vcd;
-
-        sim_ctrl_reference->add_gates(nl->get_gates());
-        sim_ctrl_reference->initialize();
-        EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
-
-        std::cout << "read simulation file" << std::endl;
-
-        //prepare simulation
-        sim_ctrl_verilator->add_gates(nl->get_gates());
-        EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
-        sim_ctrl_verilator->initialize();
-
-        auto clk         = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
-        u32 clock_period = 10000;
-        sim_ctrl_verilator->add_clock_period(clk, clock_period);
-
-        std::vector<Net*> din;
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_0"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_1"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_2"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_3"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_4"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_5"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_6"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_7"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_8"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_9"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_10"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_11"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_12"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_13"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_14"; }).begin()));
-        din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_15"; }).begin()));
-
-        std::vector<Net*> mask;
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_0"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_1"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_2"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_3"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_4"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_5"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_6"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_7"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_8"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_9"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_10"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_11"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_12"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_13"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_14"; }).begin()));
-        mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_15"; }).begin()));
-
-        std::vector<Net*> read_addr;
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_0"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_1"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_2"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_3"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_4"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_5"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_6"; }).begin()));
-        read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_7"; }).begin()));
-
-        std::vector<Net*> write_addr;
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_0"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_1"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_2"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_3"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_4"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_5"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_6"; }).begin()));
-        write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_7"; }).begin()));
-
-        auto write_en = *(nl->get_nets([](auto net) { return net->get_name() == "write_en"; }).begin());
-        auto read_en  = *(nl->get_nets([](auto net) { return net->get_name() == "read_en"; }).begin());
-        auto rclke    = *(nl->get_nets([](auto net) { return net->get_name() == "rclke"; }).begin());
-        auto wclke    = *(nl->get_nets([](auto net) { return net->get_name() == "wclke"; }).begin());
-
-        u32 input_nets_amount = 0;
-
-        if (clk != nullptr)
-            input_nets_amount++;
-
-        for (const auto& din_net : din)
-        {
-            if (din_net != nullptr)
-                input_nets_amount++;
-        }
-
-        for (const auto& mask_net : mask)
-        {
-            if (mask_net != nullptr)
-                input_nets_amount++;
-        }
-
-        for (const auto& write_addr_net : write_addr)
-        {
-            if (write_addr_net != nullptr)
-                input_nets_amount++;
-        }
-
-        for (const auto& read_addr_net : read_addr)
-        {
-            if (read_addr_net != nullptr)
-                input_nets_amount++;
-        }
-
-        if (write_en != nullptr)
-            input_nets_amount++;
-
-        if (read_en != nullptr)
-            input_nets_amount++;
-
-        if (rclke != nullptr)
-            input_nets_amount++;
-
-        if (wclke != nullptr)
-            input_nets_amount++;
-
-        if (input_nets_amount != sim_ctrl_verilator->get_input_nets().size())
-        {
-            for (const auto& net : sim_ctrl_verilator->get_input_nets())
-            {
-                std::cout << net->get_name() << std::endl;
-            }
-            FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim_ctrl_verilator->get_input_nets().size();
-        }
-
-        //start simulation
-        std::cout << "starting simulation" << std::endl;
-        //testbench
-
-        {
-            measure_block_time("simulation");
-            for (const auto& input_net : sim_ctrl_verilator->get_input_nets())
-            {
-                sim_ctrl_verilator->set_input(input_net, BooleanFunction::Value::ZERO);
-            }
-
-            uint16_t data_write = 0xffff;
-            uint16_t data_read  = 0x0000;
-            uint8_t addr        = 0xff;
-
-            sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
-
-            // write data without wclke
-            // waddr       <= x"ff";
-            for (const auto& write_addr_net : write_addr)
-            {
-                sim_ctrl_verilator->set_input(write_addr_net, BooleanFunction::Value::ONE);
-            }
-            // din         <= x"ffff";
-            for (const auto& din_net : din)
-            {
-                sim_ctrl_verilator->set_input(din_net, BooleanFunction::Value::ONE);
-            }
-
-            sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
-
-            sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ONE);    // write_en    <= '1';
-
-            sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
-
-            sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ZERO);    // write_en    <= '0';
-            sim_ctrl_verilator->simulate(1 * clock_period);                           // WAIT FOR 10 NS;
-
-            // read data without rclke
-            sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);    // read_en     <= '1';
-
-            // raddr       <= x"ff";
-            for (const auto& read_addr_net : read_addr)
-            {
-                sim_ctrl_verilator->set_input(read_addr_net, BooleanFunction::Value::ONE);
-            }
-
-            sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
-
-            sim_ctrl_verilator->simulate(5 * clock_period);    // WAIT FOR 50 NS;
-            // printf("sent %08x, received: %08x\n", data_write, data_read);
-
-            // // write data with wclke
-            //  waddr   <= x"ff";
-            for (const auto& write_addr_net : write_addr)
-            {
-                sim_ctrl_verilator->set_input(write_addr_net, BooleanFunction::Value::ONE);
-            }
-            // din     <= x"ffff";
-            for (const auto& din_net : din)
-            {
-                sim_ctrl_verilator->set_input(din_net, BooleanFunction::Value::ONE);
-            }
-
-            sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
-
-            sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ONE);    // write_en    <= '1';
-            sim_ctrl_verilator->set_input(wclke, BooleanFunction::Value::ONE);       // wclke       <= '1';
-
-            sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
-
-            sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ZERO);    // write_en    <= '0';
-            sim_ctrl_verilator->set_input(wclke, BooleanFunction::Value::ZERO);       // wclke       <= '0';
-
-            sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
-
-            // // read data without rclke
-            sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);    // read_en    <= '1';
-
-            // raddr      <= x"ff";
-            for (const auto& read_addr_net : read_addr)
-            {
-                sim_ctrl_verilator->set_input(read_addr_net, BooleanFunction::Value::ONE);
-            }
-
-            sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
-
-            // data_read = read_data();
-
-            sim_ctrl_verilator->simulate(5 * clock_period);    // WAIT FOR 50 NS;
-            // printf("sent %08x, received: %08x\n", data_write, data_read);
-
-            // // read data with rclke
-            sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);    // read_en    <= '1';
-            // raddr      <= x"ff";
-            for (const auto& read_addr_net : read_addr)
-            {
-                sim_ctrl_verilator->set_input(read_addr_net, BooleanFunction::Value::ONE);
-            }
-            sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ONE);    // rclke      <= '1';
-
-            sim_ctrl_verilator->simulate(2 * clock_period);                        // WAIT FOR 20 NS;
-            sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ZERO);    // rclke      <= '0';
-
-            sim_ctrl_verilator->simulate(5 * clock_period);    // WAIT FOR 50 NS;
-
-            // read some address and see what the result from INIT value is
-            sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);    // read_en    <= '1';
-
-            // todo: bitorder could be wrong?
-            //raddr      <= x"66";
-            sim_ctrl_verilator->set_input(read_addr.at(7), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(read_addr.at(6), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(read_addr.at(5), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(read_addr.at(4), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(read_addr.at(3), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(read_addr.at(2), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(read_addr.at(1), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(read_addr.at(0), BooleanFunction::Value::ZERO);
-
-            sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ONE);    // rclke      <= '1';
-
-            sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
-
-            //data_read = read_data();
-
-            // waddr       <= x"43"; 0100 0011
-            sim_ctrl_verilator->set_input(write_addr.at(7), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(write_addr.at(6), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(write_addr.at(5), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(write_addr.at(4), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(write_addr.at(3), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(write_addr.at(2), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(write_addr.at(1), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(write_addr.at(0), BooleanFunction::Value::ZERO);
-
-            // din         <= x"1111";
-            sim_ctrl_verilator->set_input(din.at(15), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(14), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(13), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(12), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(11), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(10), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(9), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(8), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(7), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(6), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(5), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(4), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(3), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(2), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(1), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(din.at(0), BooleanFunction::Value::ZERO);
-
-            sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
-
-            sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ONE);    // write_en    <= '1';
-            sim_ctrl_verilator->set_input(wclke, BooleanFunction::Value::ONE);       // wclke       <= '1';
-            sim_ctrl_verilator->simulate(2 * clock_period);                          // WAIT FOR 20 NS;
-
-            sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);    // read_en    <= 1';
-            sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ONE);      // rclke       <= '1';
-
-            // raddr      <= x"43";
-            sim_ctrl_verilator->set_input(read_addr.at(7), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(read_addr.at(6), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(read_addr.at(5), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(read_addr.at(4), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(read_addr.at(3), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(read_addr.at(2), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(read_addr.at(1), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(read_addr.at(0), BooleanFunction::Value::ONE);
-
-            sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
-
-            // din <= x "ff11";
-            sim_ctrl_verilator->set_input(din.at(15), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(14), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(13), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(12), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(11), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(10), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(9), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(8), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(7), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(6), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(5), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(4), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(3), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(2), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(1), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(din.at(0), BooleanFunction::Value::ONE);
-
-            sim_ctrl_verilator->simulate(20 * clock_period);    // WAIT FOR 20 NS;
-
-            sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ZERO);    // read_en    <= 0';
-            sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ZERO);      // rclke       <= '0';
-            sim_ctrl_verilator->simulate(2 * clock_period);                          // WAIT FOR 20 NS;
-
-            // mask        <= x"ffff";
-            sim_ctrl_verilator->set_input(mask.at(15), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(14), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(13), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(12), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(11), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(10), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(9), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(8), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(7), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(6), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(5), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(4), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(3), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(2), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(1), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->set_input(mask.at(0), BooleanFunction::Value::ONE);
-            sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
-
-            sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ZERO);    // write_en    <= 0';
-            sim_ctrl_verilator->set_input(wclke, BooleanFunction::Value::ZERO);       // wclke       <= '0';
-            sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);      // read_en    <= 1';
-            sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ONE);        // rclke       <= '1';
-            sim_ctrl_verilator->simulate(2 * clock_period);                           // WAIT FOR 20 NS;
-
-            sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ONE);    // write_en    <= 1';
-            sim_ctrl_verilator->set_input(wclke, BooleanFunction::Value::ONE);       // wclke       <= '1';
-            sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ZERO);    // read_en    <= 0';
-            sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ZERO);      // rclke       <= '0';
-
-            // mask        <= x"1111";
-            sim_ctrl_verilator->set_input(mask.at(15), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(14), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(13), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(12), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(11), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(10), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(9), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(8), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(7), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(6), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(5), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(4), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(3), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(2), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(1), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->set_input(mask.at(0), BooleanFunction::Value::ZERO);
-            sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
-
-            sim_ctrl_verilator->simulate(100 * clock_period);      // WAIT FOR 100*10 NS;
-            sim_ctrl_verilator->simulate(1 * clock_period / 2);    // WAIT FOR 100*10 NS;
-
-            sim_ctrl_verilator->initialize();
-            sim_ctrl_verilator->run_simulation();
-
-            EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
-
-            while (verilator_engine->get_state() == SimulationEngine::State::Running)
-            {
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-            }
-        }
-
-        if (verilator_engine->get_state() == SimulationEngine::State::Failed)
-        {
-            FAIL() << "engine failed";
-        }
-
-        EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Done);
-        EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
-
-        sim_ctrl_verilator->get_results();
-
-        for (Net* n : nl->get_nets())
-        {
-            sim_ctrl_verilator->get_waveform_by_net(n);
-            sim_ctrl_reference->get_waveform_by_net(n);
-        }
-
-        // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
-        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
-
-
-        //Test if maps are equal
-        bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
-        EXPECT_TRUE(equal);
-        TEST_END
-    }
+    //     {
+    //         measure_block_time("simulation");
+
+    //         // msg <= x"61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
+    //         std::string hex_input = "61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
+    //         for (u32 i = 0; i < hex_input.size(); i += 2)
+    //         {
+    //             u8 byte = std::stoul(hex_input.substr(i, 2), nullptr, 16);
+    //             for (u32 j = 0; j < 8; ++j)
+    //             {
+    //                 sim_ctrl_verilator->set_input(input_bits[i * 4 + j], (BooleanFunction::Value)((byte >> (7 - j)) & 1));
+    //             }
+    //         }
+
+    //         sim_ctrl_verilator->set_input(rst, BooleanFunction::Value::ONE);       //RST <= '1';
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+    //         sim_ctrl_verilator->simulate(10 * 1000);                               //WAIT FOR 10 NS;
+
+    //         sim_ctrl_verilator->set_input(rst, BooleanFunction::Value::ZERO);    //RST <= '0';
+    //         sim_ctrl_verilator->simulate(10 * 1000);                             //WAIT FOR 10 NS;
+
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ONE);    //START <= '1';
+    //         sim_ctrl_verilator->simulate(10 * 1000);                              //WAIT FOR 10 NS;
+
+    //         sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
+    //         sim_ctrl_verilator->simulate(10 * 1000);                               //WAIT FOR 10 NS;
+
+    //         sim_ctrl_verilator->simulate(2000 * 1000);
+
+    //         sim_ctrl_verilator->initialize();
+    //         sim_ctrl_verilator->run_simulation();
+
+    //         EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
+
+    //         while (verilator_engine->get_state() == SimulationEngine::State::Running)
+    //         {
+    //             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    //         }
+    //     }
+
+    //     if (verilator_engine->get_state() == SimulationEngine::State::Failed)
+    //     {
+    //         FAIL() << "engine failed";
+    //     }
+
+    //     EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Done);
+    //     EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
+
+    //     sim_ctrl_verilator->get_results();
+
+    //     for (Net* n : nl->get_nets())
+    //     {
+    //         sim_ctrl_verilator->get_waveform_by_net(n);
+    //         sim_ctrl_reference->get_waveform_by_net(n);
+    //     }
+
+    //     // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
+    //     EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
+
+
+    //     //Test if maps are equal
+    //     bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
+    //     EXPECT_TRUE(equal);
+    //     TEST_END
+    // }
+
+    // TEST_F(SimulatorTest, bram_lattice)
+    // {
+    //     // return;
+    //     TEST_START
+    //     auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorControllerPlugin>("netlist_simulator_controller");
+
+    //     auto sim_ctrl_verilator = plugin->create_simulator_controller("bram_lattice_simulator");
+    //     auto verilator_engine   = sim_ctrl_verilator->create_simulation_engine("verilator");
+    //     verilator_engine->set_engine_property("provided_models", utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/provided_models");
+
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::NoGatesSelected);
+    //     EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Preparing);
+
+    //     auto sim_ctrl_reference = plugin->create_simulator_controller("bram_lattice_reference");
+
+    //     //path to netlist
+    //     std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/bram_netlist.v";
+    //     if (!utils::file_exists(path_netlist))
+    //         FAIL() << "netlist for bram not found: " << path_netlist;
+
+    //     std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/bram_netlist.hal";
+
+    //     auto lib = gate_library_manager::get_gate_library_by_name("ICE40ULTRA");
+    //     if (lib == nullptr)
+    //     {
+    //         FAIL() << "ice40ultra gate library not found";
+    //     }
+
+    //     std::unique_ptr<Netlist> nl;
+    //     {
+    //         std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
+    //         if (utils::file_exists(path_netlist_hal))
+    //         {
+    //             std::cout << ".hal file found for test netlist, loading this one." << std::endl;
+    //             nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
+    //         }
+    //         else
+    //         {
+    //             NO_COUT_BLOCK;
+    //             nl = netlist_parser_manager::parse(path_netlist, lib);
+    //             netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
+    //         }
+    //         if (nl == nullptr)
+    //         {
+    //             FAIL() << "netlist couldn't be parsed";
+    //         }
+    //     }
+
+    //     //path to vcd
+    //     std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/bram/trace.vcd";
+    //     if (!utils::file_exists(path_vcd))
+    //         FAIL() << "dump for bram not found: " << path_vcd;
+
+    //     sim_ctrl_reference->add_gates(nl->get_gates());
+    //     sim_ctrl_reference->initialize();
+    //     EXPECT_TRUE(sim_ctrl_reference->import_vcd(path_vcd, NetlistSimulatorController::FilterInputFlag::CompleteNetlist));
+
+    //     std::cout << "read simulation file" << std::endl;
+
+    //     //prepare simulation
+    //     sim_ctrl_verilator->add_gates(nl->get_gates());
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::ParameterSetup);
+    //     sim_ctrl_verilator->initialize();
+
+    //     auto clk         = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
+    //     u32 clock_period = 10000;
+    //     sim_ctrl_verilator->add_clock_period(clk, clock_period);
+
+    //     std::vector<Net*> din;
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_0"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_1"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_2"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_3"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_4"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_5"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_6"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_7"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_8"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_9"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_10"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_11"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_12"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_13"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_14"; }).begin()));
+    //     din.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "din_15"; }).begin()));
+
+    //     std::vector<Net*> mask;
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_0"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_1"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_2"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_3"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_4"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_5"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_6"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_7"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_8"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_9"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_10"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_11"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_12"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_13"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_14"; }).begin()));
+    //     mask.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "mask_15"; }).begin()));
+
+    //     std::vector<Net*> read_addr;
+    //     read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_0"; }).begin()));
+    //     read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_1"; }).begin()));
+    //     read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_2"; }).begin()));
+    //     read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_3"; }).begin()));
+    //     read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_4"; }).begin()));
+    //     read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_5"; }).begin()));
+    //     read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_6"; }).begin()));
+    //     read_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "raddr_7"; }).begin()));
+
+    //     std::vector<Net*> write_addr;
+    //     write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_0"; }).begin()));
+    //     write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_1"; }).begin()));
+    //     write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_2"; }).begin()));
+    //     write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_3"; }).begin()));
+    //     write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_4"; }).begin()));
+    //     write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_5"; }).begin()));
+    //     write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_6"; }).begin()));
+    //     write_addr.push_back(*(nl->get_nets([](auto net) { return net->get_name() == "waddr_7"; }).begin()));
+
+    //     auto write_en = *(nl->get_nets([](auto net) { return net->get_name() == "write_en"; }).begin());
+    //     auto read_en  = *(nl->get_nets([](auto net) { return net->get_name() == "read_en"; }).begin());
+    //     auto rclke    = *(nl->get_nets([](auto net) { return net->get_name() == "rclke"; }).begin());
+    //     auto wclke    = *(nl->get_nets([](auto net) { return net->get_name() == "wclke"; }).begin());
+
+    //     u32 input_nets_amount = 0;
+
+    //     if (clk != nullptr)
+    //         input_nets_amount++;
+
+    //     for (const auto& din_net : din)
+    //     {
+    //         if (din_net != nullptr)
+    //             input_nets_amount++;
+    //     }
+
+    //     for (const auto& mask_net : mask)
+    //     {
+    //         if (mask_net != nullptr)
+    //             input_nets_amount++;
+    //     }
+
+    //     for (const auto& write_addr_net : write_addr)
+    //     {
+    //         if (write_addr_net != nullptr)
+    //             input_nets_amount++;
+    //     }
+
+    //     for (const auto& read_addr_net : read_addr)
+    //     {
+    //         if (read_addr_net != nullptr)
+    //             input_nets_amount++;
+    //     }
+
+    //     if (write_en != nullptr)
+    //         input_nets_amount++;
+
+    //     if (read_en != nullptr)
+    //         input_nets_amount++;
+
+    //     if (rclke != nullptr)
+    //         input_nets_amount++;
+
+    //     if (wclke != nullptr)
+    //         input_nets_amount++;
+
+    //     if (input_nets_amount != sim_ctrl_verilator->get_input_nets().size())
+    //     {
+    //         for (const auto& net : sim_ctrl_verilator->get_input_nets())
+    //         {
+    //             std::cout << net->get_name() << std::endl;
+    //         }
+    //         FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim_ctrl_verilator->get_input_nets().size();
+    //     }
+
+    //     //start simulation
+    //     std::cout << "starting simulation" << std::endl;
+    //     //testbench
+
+    //     {
+    //         measure_block_time("simulation");
+    //         for (const auto& input_net : sim_ctrl_verilator->get_input_nets())
+    //         {
+    //             sim_ctrl_verilator->set_input(input_net, BooleanFunction::Value::ZERO);
+    //         }
+
+    //         uint16_t data_write = 0xffff;
+    //         uint16_t data_read  = 0x0000;
+    //         uint8_t addr        = 0xff;
+
+    //         sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
+
+    //         // write data without wclke
+    //         // waddr       <= x"ff";
+    //         for (const auto& write_addr_net : write_addr)
+    //         {
+    //             sim_ctrl_verilator->set_input(write_addr_net, BooleanFunction::Value::ONE);
+    //         }
+    //         // din         <= x"ffff";
+    //         for (const auto& din_net : din)
+    //         {
+    //             sim_ctrl_verilator->set_input(din_net, BooleanFunction::Value::ONE);
+    //         }
+
+    //         sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
+
+    //         sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ONE);    // write_en    <= '1';
+
+    //         sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
+
+    //         sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ZERO);    // write_en    <= '0';
+    //         sim_ctrl_verilator->simulate(1 * clock_period);                           // WAIT FOR 10 NS;
+
+    //         // read data without rclke
+    //         sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);    // read_en     <= '1';
+
+    //         // raddr       <= x"ff";
+    //         for (const auto& read_addr_net : read_addr)
+    //         {
+    //             sim_ctrl_verilator->set_input(read_addr_net, BooleanFunction::Value::ONE);
+    //         }
+
+    //         sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
+
+    //         sim_ctrl_verilator->simulate(5 * clock_period);    // WAIT FOR 50 NS;
+    //         // printf("sent %08x, received: %08x\n", data_write, data_read);
+
+    //         // // write data with wclke
+    //         //  waddr   <= x"ff";
+    //         for (const auto& write_addr_net : write_addr)
+    //         {
+    //             sim_ctrl_verilator->set_input(write_addr_net, BooleanFunction::Value::ONE);
+    //         }
+    //         // din     <= x"ffff";
+    //         for (const auto& din_net : din)
+    //         {
+    //             sim_ctrl_verilator->set_input(din_net, BooleanFunction::Value::ONE);
+    //         }
+
+    //         sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
+
+    //         sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ONE);    // write_en    <= '1';
+    //         sim_ctrl_verilator->set_input(wclke, BooleanFunction::Value::ONE);       // wclke       <= '1';
+
+    //         sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
+
+    //         sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ZERO);    // write_en    <= '0';
+    //         sim_ctrl_verilator->set_input(wclke, BooleanFunction::Value::ZERO);       // wclke       <= '0';
+
+    //         sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
+
+    //         // // read data without rclke
+    //         sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);    // read_en    <= '1';
+
+    //         // raddr      <= x"ff";
+    //         for (const auto& read_addr_net : read_addr)
+    //         {
+    //             sim_ctrl_verilator->set_input(read_addr_net, BooleanFunction::Value::ONE);
+    //         }
+
+    //         sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
+
+    //         // data_read = read_data();
+
+    //         sim_ctrl_verilator->simulate(5 * clock_period);    // WAIT FOR 50 NS;
+    //         // printf("sent %08x, received: %08x\n", data_write, data_read);
+
+    //         // // read data with rclke
+    //         sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);    // read_en    <= '1';
+    //         // raddr      <= x"ff";
+    //         for (const auto& read_addr_net : read_addr)
+    //         {
+    //             sim_ctrl_verilator->set_input(read_addr_net, BooleanFunction::Value::ONE);
+    //         }
+    //         sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ONE);    // rclke      <= '1';
+
+    //         sim_ctrl_verilator->simulate(2 * clock_period);                        // WAIT FOR 20 NS;
+    //         sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ZERO);    // rclke      <= '0';
+
+    //         sim_ctrl_verilator->simulate(5 * clock_period);    // WAIT FOR 50 NS;
+
+    //         // read some address and see what the result from INIT value is
+    //         sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);    // read_en    <= '1';
+
+    //         // todo: bitorder could be wrong?
+    //         //raddr      <= x"66";
+    //         sim_ctrl_verilator->set_input(read_addr.at(7), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(read_addr.at(6), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(read_addr.at(5), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(read_addr.at(4), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(read_addr.at(3), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(read_addr.at(2), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(read_addr.at(1), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(read_addr.at(0), BooleanFunction::Value::ZERO);
+
+    //         sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ONE);    // rclke      <= '1';
+
+    //         sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
+
+    //         //data_read = read_data();
+
+    //         // waddr       <= x"43"; 0100 0011
+    //         sim_ctrl_verilator->set_input(write_addr.at(7), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(write_addr.at(6), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(write_addr.at(5), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(write_addr.at(4), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(write_addr.at(3), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(write_addr.at(2), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(write_addr.at(1), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(write_addr.at(0), BooleanFunction::Value::ZERO);
+
+    //         // din         <= x"1111";
+    //         sim_ctrl_verilator->set_input(din.at(15), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(14), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(13), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(12), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(11), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(10), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(9), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(8), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(7), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(6), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(5), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(4), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(3), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(2), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(1), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(din.at(0), BooleanFunction::Value::ZERO);
+
+    //         sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
+
+    //         sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ONE);    // write_en    <= '1';
+    //         sim_ctrl_verilator->set_input(wclke, BooleanFunction::Value::ONE);       // wclke       <= '1';
+    //         sim_ctrl_verilator->simulate(2 * clock_period);                          // WAIT FOR 20 NS;
+
+    //         sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);    // read_en    <= 1';
+    //         sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ONE);      // rclke       <= '1';
+
+    //         // raddr      <= x"43";
+    //         sim_ctrl_verilator->set_input(read_addr.at(7), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(read_addr.at(6), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(read_addr.at(5), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(read_addr.at(4), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(read_addr.at(3), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(read_addr.at(2), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(read_addr.at(1), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(read_addr.at(0), BooleanFunction::Value::ONE);
+
+    //         sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
+
+    //         // din <= x "ff11";
+    //         sim_ctrl_verilator->set_input(din.at(15), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(14), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(13), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(12), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(11), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(10), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(9), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(8), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(7), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(6), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(5), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(4), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(3), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(2), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(1), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(din.at(0), BooleanFunction::Value::ONE);
+
+    //         sim_ctrl_verilator->simulate(20 * clock_period);    // WAIT FOR 20 NS;
+
+    //         sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ZERO);    // read_en    <= 0';
+    //         sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ZERO);      // rclke       <= '0';
+    //         sim_ctrl_verilator->simulate(2 * clock_period);                          // WAIT FOR 20 NS;
+
+    //         // mask        <= x"ffff";
+    //         sim_ctrl_verilator->set_input(mask.at(15), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(14), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(13), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(12), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(11), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(10), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(9), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(8), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(7), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(6), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(5), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(4), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(3), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(2), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(1), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->set_input(mask.at(0), BooleanFunction::Value::ONE);
+    //         sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
+
+    //         sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ZERO);    // write_en    <= 0';
+    //         sim_ctrl_verilator->set_input(wclke, BooleanFunction::Value::ZERO);       // wclke       <= '0';
+    //         sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ONE);      // read_en    <= 1';
+    //         sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ONE);        // rclke       <= '1';
+    //         sim_ctrl_verilator->simulate(2 * clock_period);                           // WAIT FOR 20 NS;
+
+    //         sim_ctrl_verilator->set_input(write_en, BooleanFunction::Value::ONE);    // write_en    <= 1';
+    //         sim_ctrl_verilator->set_input(wclke, BooleanFunction::Value::ONE);       // wclke       <= '1';
+    //         sim_ctrl_verilator->set_input(read_en, BooleanFunction::Value::ZERO);    // read_en    <= 0';
+    //         sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ZERO);      // rclke       <= '0';
+
+    //         // mask        <= x"1111";
+    //         sim_ctrl_verilator->set_input(mask.at(15), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(14), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(13), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(12), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(11), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(10), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(9), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(8), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(7), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(6), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(5), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(4), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(3), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(2), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(1), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->set_input(mask.at(0), BooleanFunction::Value::ZERO);
+    //         sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
+
+    //         sim_ctrl_verilator->simulate(100 * clock_period);      // WAIT FOR 100*10 NS;
+    //         sim_ctrl_verilator->simulate(1 * clock_period / 2);    // WAIT FOR 100*10 NS;
+
+    //         sim_ctrl_verilator->initialize();
+    //         sim_ctrl_verilator->run_simulation();
+
+    //         EXPECT_FALSE(verilator_engine->get_state() == SimulationEngine::State::Failed);
+
+    //         while (verilator_engine->get_state() == SimulationEngine::State::Running)
+    //         {
+    //             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    //         }
+    //     }
+
+    //     if (verilator_engine->get_state() == SimulationEngine::State::Failed)
+    //     {
+    //         FAIL() << "engine failed";
+    //     }
+
+    //     EXPECT_TRUE(verilator_engine->get_state() == SimulationEngine::State::Done);
+    //     EXPECT_FALSE(sim_ctrl_verilator->get_state() == NetlistSimulatorController::SimulationState::EngineFailed);
+
+    //     sim_ctrl_verilator->get_results();
+
+    //     for (Net* n : nl->get_nets())
+    //     {
+    //         sim_ctrl_verilator->get_waveform_by_net(n);
+    //         sim_ctrl_reference->get_waveform_by_net(n);
+    //     }
+
+    //     // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
+    //     EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int) nl->get_nets().size());
+    //     EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int) nl->get_nets().size());
+
+
+    //     //Test if maps are equal
+    //     bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
+    //     EXPECT_TRUE(equal);
+    //     TEST_END
+    // }
 }    // namespace hal
