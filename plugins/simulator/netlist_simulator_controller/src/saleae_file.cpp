@@ -210,7 +210,8 @@ namespace hal
     }
 
     SaleaeOutputFile::SaleaeOutputFile(const std::string &filename, int index_)
-        : std::ofstream(filename, std::ios::binary), mIndex(index_), mFilename(filename), mStatus(SaleaeStatus::Ok), mFirstValue(true)
+        : std::ofstream(filename, std::ios::binary), mIndex(index_), mFilename(filename), mStatus(SaleaeStatus::Ok),
+          mFirstValue(true), mLastWrittenValue(0), mLastWrittenTime(0)
     {
         if (!good())
             mStatus = SaleaeStatus::ErrorOpenFile;
@@ -264,11 +265,17 @@ namespace hal
             mHeader.setBeginTime(t);
             mHeader.setEndTime(t);
             mFirstValue = false;
+            mLastWrittenValue = val;
+            mLastWrittenTime = t;
         }
         else
         {
             if (val < 0 && mHeader.storageFormat() == SaleaeHeader::Uint64)
                 convertToCoded();
+
+            if(t < mLastWrittenTime || val == mLastWrittenValue) return;
+            mLastWrittenValue = val;
+            mLastWrittenTime  = t;
 
             if (mHeader.storageFormat() == SaleaeHeader::Coded)
             {

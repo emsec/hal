@@ -103,6 +103,8 @@ namespace hal
         SaleaeHeader mHeader;
         SaleaeStatus::ErrorCode mStatus;
         bool mFirstValue;
+        int mLastWrittenValue;
+        uint64_t mLastWrittenTime;
 
         void convertToCoded();
     public:
