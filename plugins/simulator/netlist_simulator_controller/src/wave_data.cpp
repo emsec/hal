@@ -119,6 +119,19 @@ namespace hal {
         return intValue(t);
     }
 
+    bool WaveData::isEqual(const WaveData& other, int tolerance) const
+    {
+        if (mData.size() != other.mData.size()) return false;
+        auto jt = other.mData.constBegin();
+        for (auto it = mData.begin(); it != mData.end(); ++it)
+        {
+            if (it.value() != jt.value()) return false;
+            if (abs((int)(it.key()-jt.key())) > tolerance) return false;
+            ++jt;
+        }
+        return true;
+    }
+
     std::vector<std::pair<u64,int>> WaveData::get_events() const
     {
         std::vector<std::pair<u64,int>> retval;

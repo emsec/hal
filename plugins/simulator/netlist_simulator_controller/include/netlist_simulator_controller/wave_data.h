@@ -65,6 +65,7 @@ namespace hal {
         QString strValue(float t) const;
         QString strValue(const QMap<u64,int>::const_iterator& it) const;
         void setValueBase(int bas) { mValueBase = bas; }
+        bool isEqual(const WaveData& other, int tolerance=0) const;
     };
 
     class WaveDataClock : public WaveData

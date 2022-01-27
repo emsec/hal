@@ -151,6 +151,7 @@ namespace hal
         for (const Net* n : mSimulationInput->get_input_nets()) onlyNets.append(n);
         if (reader.importVcd(filename,mTempDir->path(),onlyNets))
         {
+            mSaleaeDirectory->parse_json();
             for (const Net* n : onlyNets)
             {
                 WaveData* wd = new WaveData(n);
@@ -369,7 +370,10 @@ namespace hal
                 partialNets.append(n);
 
             if (reader.importVcd(QString::fromStdString(resultFile),mTempDir->path(),partialNets))
+            {
                 mSaleaeDirectory->parse_json();
+        //        mWaveDataList->updateFromSaleae(*mSaleaeDirectory);
+            }
             else
                 return false;
         }
