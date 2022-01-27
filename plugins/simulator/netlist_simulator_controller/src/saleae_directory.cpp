@@ -33,6 +33,11 @@ namespace hal
     {
         FILE* ff = fopen(mDirectoryFile.c_str(), "rb");
         if (!ff) return false;
+
+        mNetEntries.clear();
+        mById.clear();
+        mByName.clear();
+
         char buffer[65536];
         rapidjson::FileReadStream frs(ff, buffer, sizeof(buffer));
         rapidjson::Document document;
@@ -62,7 +67,10 @@ namespace hal
                         if (inx >= mNextAvailableIndex) mNextAvailableIndex = inx + 1;
                     }
                 }
+                int n = mNetEntries.size();
                 mNetEntries.push_back(sdne);
+                if (id) mById.insert(std::make_pair(id,n));
+                mByName.insert(std::make_pair(name,n));
             }
         }
 

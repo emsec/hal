@@ -86,7 +86,7 @@ namespace hal
                                                  "  //printf(\"dut->eval()\\n\");\n"
                                                  "  m_trace->dump(sim_time); // to_simulate already added in event loop\n"
                                                  "  //printf(\"m_trace->dump(sim_time = %d);\\n\", sim_time);\n"
-                                                 "  m_trace->final();\n"
+                                                 "  // m_trace->final();\n"
                                                  "\n"
                                                  "  m_trace->close();\n"
                                                  "  delete dut;\n"

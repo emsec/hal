@@ -368,7 +368,10 @@ namespace hal
             for (const Net* n : get_partial_netlist_nets())
                 partialNets.append(n);
 
-            if (!reader.importVcd(QString::fromStdString(resultFile),mTempDir->path(),partialNets)) return false;
+            if (reader.importVcd(QString::fromStdString(resultFile),mTempDir->path(),partialNets))
+                mSaleaeDirectory->parse_json();
+            else
+                return false;
         }
         return true;
     }
