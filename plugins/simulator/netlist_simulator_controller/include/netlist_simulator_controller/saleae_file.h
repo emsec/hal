@@ -13,6 +13,9 @@ namespace hal
     class SaleaeStatus
     {
     public:
+        /**
+         * Error return code for SALEAE file operations
+         */
         enum ErrorCode { ErrorOpenFile = -4,
                          BadIndentifier = -3,
                          UnsupportedType = -2,
@@ -23,7 +26,10 @@ namespace hal
     class SaleaeHeader
     {
     public:
-        enum StorageFormat { Double = 0, Uint64 = 0x206c6168, Coded = 0x786c6168 };
+        /// SALEAE storage format for transition time values
+        enum StorageFormat { Double = 0,          /// Double values,
+                             Uint64 = 0x206c6168,
+                             Coded = 0x786c6168 };
         char mIdent[9];
         int32_t mVersion;
         StorageFormat mStorageFormat;
@@ -36,9 +42,24 @@ namespace hal
     public:
         SaleaeHeader();
 
+        /**
+         * Read SALEAE header from open input stream
+         * @param ff The file stream to read header from
+         * @return Ok=0 on success, negative error code otherwise
+         */
         SaleaeStatus::ErrorCode read(std::ifstream& ff);
+
+        /**
+         * Write SALEAE header into open output stream
+         * @param of The file stream to write header into
+         * @return currently always Ok=0
+         */
         SaleaeStatus::ErrorCode write(std::ofstream& of) const;
 
+        /**
+         * @brief storageFormat
+         * @return
+         */
         StorageFormat storageFormat() const { return mStorageFormat; }
         void setStorageFormat(StorageFormat sf) { mStorageFormat = sf; }
 

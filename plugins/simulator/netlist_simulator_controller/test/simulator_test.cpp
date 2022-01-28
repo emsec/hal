@@ -298,7 +298,7 @@ namespace hal
         }
 
     };    // namespace hal
-
+/*
     TEST_F(SimulatorTest, half_adder)
     {
         // return;
@@ -890,7 +890,7 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
-
+*/
     TEST_F(SimulatorTest, bram_lattice)
     {
         // return;
@@ -1068,19 +1068,6 @@ namespace hal
                 std::cout << net->get_name() << std::endl;
             }
             FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim_ctrl_verilator->get_input_nets().size();
-        }
-
-        // set GND and VCC
-        Net* GND = *(nl->get_nets([](auto net) { return net->is_gnd_net(); }).begin());
-        if (GND != nullptr)
-        {
-            sim_ctrl_verilator->set_input(GND, BooleanFunction::Value::ZERO);    // set GND to zero
-        }
-
-        Net* VCC = *(nl->get_nets([](auto net) { return net->is_vcc_net(); }).begin());
-        if (VCC != nullptr)
-        {
-            sim_ctrl_verilator->set_input(VCC, BooleanFunction::Value::ONE);    // set VCC to zero
         }
 
         //start simulation
