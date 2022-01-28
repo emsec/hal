@@ -586,13 +586,13 @@ namespace hal {
     void WaveDataList::clearAll()
     {
         bool notEmpty = ! isEmpty();
-        clear();
         mIds.clear();
         if (notEmpty)
             Q_EMIT waveRemoved(-1);
         setMaxTime(0);
         for (auto it=begin(); it!=end(); ++it)
             delete *it;
+        clear();
     }
 
     void WaveDataList::dump() const

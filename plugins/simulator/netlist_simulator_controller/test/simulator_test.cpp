@@ -315,7 +315,7 @@ namespace hal
         }
 
     };    // namespace hal
-
+/*
     TEST_F(SimulatorTest, half_adder)
     {
         // return;
@@ -741,7 +741,7 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
-
+*/
     TEST_F(SimulatorTest, sha256)
     {
         // return;
@@ -892,22 +892,43 @@ namespace hal
 
         sim_ctrl_verilator->get_results();
 
+        int netCount = 0;
         for (Net* n : nl->get_nets())
         {
+            if (netCount % 1000 == 0)
+            {
+                if (netCount)
+                {
+                    std::cerr << "load in memory done for " << netCount << " nets" << std::endl;
+                    bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
+                    EXPECT_TRUE(equal);
+                }
+                sim_ctrl_reference->get_waves()->clearAll();
+                sim_ctrl_verilator->get_waves()->clearAll();
+            }
+//            std::cerr << ++netCount << " import net " << n->get_id() << " [" << n->get_name() << "]" << std::endl;
             sim_ctrl_verilator->get_waveform_by_net(n);
             sim_ctrl_reference->get_waveform_by_net(n);
+            ++netCount;
         }
+        std::cerr << "load in memory done for " << netCount << " nets" << std::endl;
+
+        /*
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
         EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
         EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int)nl->get_nets().size());
+*/
 
         //Test if maps are equal
-        bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
-        EXPECT_TRUE(equal);
+        if (!sim_ctrl_reference->get_waves()->isEmpty())
+        {
+            bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
+            EXPECT_TRUE(equal);
+        }
         TEST_END
     }
-
+/*
     TEST_F(SimulatorTest, bram_lattice)
     {
         // return;
@@ -1373,4 +1394,5 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
+    */
 }    // namespace hal
