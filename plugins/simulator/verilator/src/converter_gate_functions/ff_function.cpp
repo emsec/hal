@@ -34,8 +34,8 @@ namespace hal
                     }
 
                     std::vector<std::string> output_pins = gt->get_output_pins();
-                    std::string internal_state           = state_component->get_state_identifier() + "_reg";
-                    std::string internal_negated_state   = state_component->get_neg_state_identifier() + "_reg";
+                    std::string internal_state           = state_component->get_state_identifier();
+                    std::string internal_negated_state   = state_component->get_neg_state_identifier();
 
                     function << "reg " << internal_state << ";" << std::endl;
                     function << "reg " << internal_negated_state << ";" << std::endl;
