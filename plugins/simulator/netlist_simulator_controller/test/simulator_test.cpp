@@ -256,16 +256,17 @@ namespace hal
 
             if (reference_simulation->size() != engine_simulation->size())
             {
-                no_errors = false;
                 std::cout << "WARNING SIZE MISMATCH" << std::endl;
                 if (reference_simulation->size() > engine_simulation->size())
                 {
+                    no_errors = false;
                     std::cout << "more nets are captured in the reference vcd file:" << std::endl;
                     std::vector<u32> mismatch;
                     std::set_difference(reference_simulation_nets.begin(), reference_simulation_nets.end(), engine_simulation_nets.begin(), engine_simulation_nets.end(), std::back_inserter(mismatch));
                     for (auto x : mismatch)
                     {
-                        std::cout << "  " << x << std::endl;
+                        int iwave = reference_simulation->waveIndexByNetId(x);
+                        std::cout << "  " << x << " " << (iwave<0?"":reference_simulation->at(iwave)->name().toUtf8().data()) << std::endl;
                     }
                 }
                 else
@@ -273,9 +274,25 @@ namespace hal
                     std::cout << "more nets are captured in the engine_simulation output:" << std::endl;
                     std::vector<u32> mismatch;
                     std::set_difference(engine_simulation_nets.begin(), engine_simulation_nets.end(), reference_simulation_nets.begin(), reference_simulation_nets.end(), std::back_inserter(mismatch));
+                    const char* artifical_added[] = {"'0'", "'1'", nullptr};
                     for (auto x : mismatch)
                     {
-                        std::cout << "  " << x << std::endl;
+                        int iwave = engine_simulation->waveIndexByNetId(x);
+                        std::string waveName(iwave<0?"":engine_simulation->at(iwave)->name().toUtf8().data());
+                        if (!waveName.empty())
+                        {
+                            bool take_it_easy = false;
+                            for (int i=0; artifical_added[i]; i++)
+                            {
+                                if (waveName == artifical_added[i])
+                                {
+                                    take_it_easy = true;
+                                    break;
+                                }
+                            }
+                            if (!take_it_easy) no_errors = false;
+                        }
+                        std::cout << "  " << x << " " << (iwave<0?"":engine_simulation->at(iwave)->name().toUtf8().data()) << std::endl;
                     }
                 }
 
@@ -298,7 +315,7 @@ namespace hal
         }
 
     };    // namespace hal
-/*
+
     TEST_F(SimulatorTest, half_adder)
     {
         // return;
@@ -686,7 +703,7 @@ namespace hal
             sim_ctrl_verilator->simulate(10 * 1000);
             sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
 
-            sim_ctrl_verilator->simulate(30 * 1000);
+            sim_ctrl_verilator->simulate(25 * 1000);
 
             sim_ctrl_verilator->initialize();
             sim_ctrl_verilator->run_simulation();
@@ -717,7 +734,7 @@ namespace hal
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
         EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int)nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() <= (int)nl->get_nets().size());  // net might have additional '0' and '1'
 
         //Test if maps are equal
         bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
@@ -890,7 +907,7 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
-*/
+
     TEST_F(SimulatorTest, bram_lattice)
     {
         // return;

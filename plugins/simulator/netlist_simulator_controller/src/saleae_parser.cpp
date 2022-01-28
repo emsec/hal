@@ -41,14 +41,13 @@ namespace hal
         if (it == mNextValueMap.end()) return false;
         DataFileHandle wff = it->second;
         mNextValueMap.erase(it);
-        std::cerr << "SaleaeParser::callback o=" << std::hex << (uintptr_t)wff.obj << " t=" << std::dec << it->first << " v=" << wff.value << " size=" << mNextValueMap.size() << std::endl;
+//        std::cerr << "SaleaeParser::callback o=" << std::hex << (uintptr_t)wff.obj << " t=" << std::dec << it->first << " v=" << wff.value << " size=" << mNextValueMap.size() << std::endl;
         wff.callback(wff.obj,it->first,wff.value);
         if (wff.file->good())
         {
             SaleaeDataTuple sdt = wff.file->nextValue(wff.value);
             wff.value = sdt.mValue;
             uint64_t nextT = sdt.mTime;
-            std::cerr << "SaleaeParser::nextEvent o=" << std::hex << (uintptr_t)wff.obj << "  t=" << std::dec  << nextT << " v=" << wff.value << " size=" << mNextValueMap.size() << std::endl;
             mNextValueMap.insert(std::pair<uint64_t,DataFileHandle>(nextT,wff));
         }
         else
@@ -72,7 +71,7 @@ namespace hal
 
     bool SaleaeParser::register_callback(const Net *net, std::function<void(void*,uint64_t, int)> callback, void *obj)
     {
-        std::cerr << "SaleaeParser::register_callback <" << net->get_name() << "> " << std::hex << (uintptr_t) obj << std::endl;
+//        std::cerr << "SaleaeParser::register_callback <" << net->get_name() << "> " << std::hex << (uintptr_t) obj << std::endl;
         std::string path = mSaleaeDirectory.get_datafile(net->get_name(),net->get_id());
         if (path.empty()) return false;
         SaleaeInputFile* datafile = new SaleaeInputFile(path);
