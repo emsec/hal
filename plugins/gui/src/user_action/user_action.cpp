@@ -9,9 +9,9 @@ namespace hal
     }
 
     UserAction::UserAction()
-        : mWaitForReady(false), mCompoundOrder(-1),
-          mUndoAction(nullptr), mTimeStamp(0),
-          mObjectLock(false)
+        : mParentObject(UserActionObject(0, UserActionObjectType::None)),
+          mWaitForReady(false), mCompoundOrder(-1), mUndoAction(nullptr),
+          mTimeStamp(0), mObjectLock(false)
     {;}
 
     UserAction::~UserAction()
@@ -31,6 +31,11 @@ namespace hal
     {
         if (mObjectLock) return;
         mObject = obj;
+    }
+
+    void UserAction::setParentObject(const UserActionObject &obj)
+    {
+        mParentObject = obj;
     }
 
     QString UserAction::cryptographicHash(int recordNo) const

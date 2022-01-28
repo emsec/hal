@@ -40,7 +40,9 @@ namespace hal
      * supposed to take the ownership of an user action object.
      *
      * While derived classes might contain additional arguments the member variable
-     * mObject holds a standard argument like a single gate or module.
+     * mObject holds a standard argument like a single gate or module. Aditionally a parent
+     * object can be given so that special types like pingroups can be associated and/or
+     * identified with the corresponding module.
      *
      * If pointer to mUndoAction is set the interaction might be reversed using
      * Ctrl-Z in a future version of hal
@@ -109,6 +111,22 @@ namespace hal
         virtual void setObject(const UserActionObject& obj);
 
         /**
+         * Setter for parent object argument. Used to identify pins and
+         * pingroups in which case the parent obj must be the corresponding
+         * module.
+         *
+         * @param obj - The parent object.
+         */
+        virtual void setParentObject(const UserActionObject& obj);
+
+        /**
+         * Getter for parent object argument.
+         *
+         * @return The parent object argument.
+         */
+        virtual UserActionObject parentObject() const {return mParentObject;}
+
+        /**
          * Pause macro execution until flag gets cleared by handler.
          *
          * @return The WaitForReady flag.
@@ -175,6 +193,7 @@ namespace hal
     protected:
         UserAction();
         UserActionObject mObject;
+        UserActionObject mParentObject;
         bool mWaitForReady;
         int mCompoundOrder;
         UserAction *mUndoAction;
