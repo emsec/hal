@@ -93,8 +93,10 @@ namespace hal
     class SaleaeDataTuple
     {
     public:
+        static const int sReadError = -99;
         uint64_t mTime;
         int mValue;
+        bool readError() const { return mValue == sReadError; }
     };
 
     class SaleaeInputFile : public std::ifstream
@@ -103,7 +105,7 @@ namespace hal
         uint64_t mNumRead;
         SaleaeStatus::ErrorCode mStatus;
 
-        std::function<uint64_t()> mReader;
+        std::function<uint64_t(bool*)> mReader;
 
     public:
         SaleaeInputFile(const std::string& filename);

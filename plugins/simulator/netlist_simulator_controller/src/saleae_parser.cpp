@@ -46,9 +46,14 @@ namespace hal
         if (wff.file->good())
         {
             SaleaeDataTuple sdt = wff.file->nextValue(wff.value);
-            wff.value = sdt.mValue;
-            uint64_t nextT = sdt.mTime;
-            mNextValueMap.insert(std::pair<uint64_t,DataFileHandle>(nextT,wff));
+            if (!sdt.readError())
+            {
+                wff.value = sdt.mValue;
+                uint64_t nextT = sdt.mTime;
+                mNextValueMap.insert(std::pair<uint64_t,DataFileHandle>(nextT,wff));
+            }
+            else
+                delete wff.file;
         }
         else
             delete wff.file;
