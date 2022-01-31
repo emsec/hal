@@ -62,6 +62,7 @@ namespace hal {
 
     WaveData::~WaveData()
     {
+    //    qDebug() << "~WaveData" << mId << mName;
     }
 
     void WaveData::setId(u32 id_)
@@ -83,7 +84,7 @@ namespace hal {
     }
 
 
-    void WaveData::insertBooleanValue(u64 t, BooleanFunction::Value bval)
+    void WaveData::insertBooleanValueWithoutSync(u64 t, BooleanFunction::Value bval)
     {
         int val = (int) bval;
         if (!mData.isEmpty())
@@ -186,7 +187,7 @@ namespace hal {
         }
 
         SaleaeDirectoryNetEntry sdne(mName.toStdString(),mId);
-        sdne.addIndex(SaleaeDirectoryFileIndex(inx,0,mData.lastKey(),mData.size()));
+        sdne.addIndex(SaleaeDirectoryFileIndex(inx,0,maxTime(),mData.size()));
         sd.add_or_replace_net(sdne);
         sd.write_json();
 
@@ -391,7 +392,7 @@ namespace hal {
         if (!mWaveDataList->hasNet(netId))
             mWaveDataList->add((wd = new WaveData(n)),false);
         else
-            wd = mWaveDataList->waveDataByNet(n,nullptr);
+            wd = mWaveDataList->waveDataByNet(n);
         int inx = mGroupList.size();
         mGroupList.append(wd);
         mIndex.insert(WaveDataGroupIndex(wd),inx);
@@ -510,6 +511,11 @@ namespace hal {
     }
 
 //--------------------------------------------
+    WaveDataList::WaveDataList(const QString& sdFilename, QObject* parent)
+        : QObject(parent), mSimulTime(0), mMaxTime(0),
+          mSaleaeDirectory(sdFilename.toStdString())
+    {;}
+
     WaveDataList::~WaveDataList()
     {
         clearAll();
@@ -633,7 +639,9 @@ namespace hal {
 
     void WaveDataList::updateWaveData(int inx)
     {
-        u32 netId = at(inx)->id();
+        WaveData* wd = at(inx);
+        wd->saveSaleae(mSaleaeDirectory);
+        u32 netId = wd->id();
         for (auto it = mDataGroups.begin(); it != mDataGroups.end(); ++it)
             if (it.value()->hasNetId(netId))
             {
@@ -672,6 +680,7 @@ namespace hal {
         mIds[wd->id()] = n;
         append(wd);
         updateMaxTime();
+        wd->saveSaleae(mSaleaeDirectory);
         if (!silent) Q_EMIT waveAdded(n);
         testDoubleCount();
     }
@@ -710,6 +719,12 @@ namespace hal {
         Q_EMIT waveAddedToGroup(netIds,grpId);
     }
 
+    void WaveDataList::insertBooleanValue(WaveData *wd, u64 t, BooleanFunction::Value bval)
+    {
+        wd->insertBooleanValueWithoutSync(t, bval);
+        wd->saveSaleae(mSaleaeDirectory);
+    }
+
     void WaveDataList::removeGroup(u32 grpId)
     {
         WaveDataGroup* grp = mDataGroups.value(grpId);
@@ -724,6 +739,7 @@ namespace hal {
         triggerBeginResetModel();
         WaveData* wdOld = at(inx);
         Q_ASSERT(wdOld);
+        Q_ASSERT(wdOld != wdNew);
         wdNew->setName(wdOld->name());
         operator[](inx) = wdNew;
         for (WaveDataGroup* grp : mDataGroups.values())
@@ -732,23 +748,27 @@ namespace hal {
         if (wdNew->maxTime() > mMaxTime)
             updateMaxTime();
 
+        wdNew->saveSaleae(mSaleaeDirectory);
+
+
         emitWaveUpdated(inx);
         delete wdOld;
         triggerEndResetModel();
     }
 
-    void WaveDataList::updateFromSaleae(const SaleaeDirectory &sd)
+    void WaveDataList::updateFromSaleae()
     {
-        u64 sdMaxTime = sd.get_max_time();
+        mSaleaeDirectory.parse_json();
+        u64 sdMaxTime = mSaleaeDirectory.get_max_time();
         if (sdMaxTime > mSimulTime) incrementSimulTime(sdMaxTime-mSimulTime);
         QSet<QString> loadedNets;
-        for (const SaleaeDirectory::ListEntry& sdle : sd.get_net_list())
+        for (const SaleaeDirectory::ListEntry& sdle : mSaleaeDirectory.get_net_list())
             loadedNets.insert(QString::fromStdString(sdle.name));
         for (int i=0; i<size(); i++)
         {
             WaveData* wd = at(i);
             if (!loadedNets.contains(wd->name())) continue;
-            if (wd->loadSaleae(sd))
+            if (wd->loadSaleae(mSaleaeDirectory))
                 emitWaveUpdated(i);
         }
     }
@@ -763,14 +783,13 @@ namespace hal {
             add(wd,silent);
     }
 
-    WaveData* WaveDataList::waveDataByNet(const Net *n, const SaleaeDirectory *sd)
+    WaveData* WaveDataList::waveDataByNet(const Net *n)
     {
         if (!n) return nullptr;
         int inx = mIds.value(n->get_id(),-1);
         if (inx >= 0) return at(inx);
-        if (!sd) return nullptr;
         WaveData* wd = new WaveData(n);
-        if (wd->loadSaleae(*sd))
+        if (wd->loadSaleae(mSaleaeDirectory))
         {
             add(wd,false);
             return wd;

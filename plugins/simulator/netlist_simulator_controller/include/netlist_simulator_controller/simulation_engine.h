@@ -181,6 +181,12 @@ namespace hal
         virtual std::string get_engine_property(const std::string& key);
 
         /**
+         * Get all propertiess
+         * @return
+         */
+        virtual const std::unordered_map<std::string,std::string>& get_engine_properties() const { return mProperties; }
+
+        /**
          * Get simulation input
          * @return Pointer to input instance
          */

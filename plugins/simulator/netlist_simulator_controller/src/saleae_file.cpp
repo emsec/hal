@@ -34,7 +34,7 @@ namespace hal
 
     SaleaeHeader::SaleaeHeader()
         : mVersion(0), mStorageFormat(Uint64),
-          mValue(0), mBeginTime(0), mEndTime(0), mNumTransitions(0)
+          mValue(-1), mBeginTime(0), mEndTime(0), mNumTransitions(0)
     {
         strcpy(mIdent,sIdent);
     }

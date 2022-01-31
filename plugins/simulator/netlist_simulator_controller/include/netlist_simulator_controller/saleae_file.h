@@ -33,7 +33,7 @@ namespace hal
         char mIdent[9];
         int32_t mVersion;
         StorageFormat mStorageFormat;
-        uint32_t mValue;
+        int32_t mValue;
         uint64_t mBeginTime;
         uint64_t mEndTime;
         uint64_t mNumTransitions;
@@ -63,8 +63,8 @@ namespace hal
         StorageFormat storageFormat() const { return mStorageFormat; }
         void setStorageFormat(StorageFormat sf) { mStorageFormat = sf; }
 
-        uint32_t value() const { return mValue; }
-        void setValue(uint32_t v) { mValue = v; }
+        int32_t value() const { return mValue; }
+        void setValue(int32_t v) { mValue = v; }
 
         uint64_t beginTime() const { return mBeginTime; }
         void setBeginTime(uint64_t t) { mBeginTime = t; }
