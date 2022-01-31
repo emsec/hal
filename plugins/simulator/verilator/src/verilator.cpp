@@ -136,7 +136,7 @@ namespace hal
                         << "     }\n"
                         << "  }\n" << std::endl;
             
-                callback << "printf(\"dut->" << net_name << ": %x\\n\", &dut->" << net_name << ");" << std::endl;
+                //callback << "printf(\"dut->" << net_name << ": %x\\n\", &dut->" << net_name << ");" << std::endl;
 
                 callbacks << callback.str() << std::endl;
             }
