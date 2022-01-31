@@ -557,6 +557,7 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
+
     TEST_F(SimulatorTest, toycipher)
     {
         // return;
@@ -737,6 +738,7 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
+
     TEST_F(SimulatorTest, sha256)
     {
         // return;
@@ -909,8 +911,8 @@ namespace hal
         std::cerr << "load in memory done for " << netCount << " nets" << std::endl;
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
-        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() <= (int)nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size() % 1000 );
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int)nl->get_nets().size() % 1000 );
 
         //Test if maps are equal
         if (!sim_ctrl_reference->get_waves()->isEmpty())
