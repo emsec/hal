@@ -9,6 +9,12 @@ if(PL_NETLIST_SIMULATOR_CONTROLLER OR PL_SIMULATOR OR BUILD_ALL_PLUGINS)
         message(STATUS "Qt5Core not found for netlist_simulator_controller")
     endif(Qt5Core_FOUND)
 
+    enable_cxx_compile_option_if_supported("-O1" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-g" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-fno-inline-functions" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-fno-inline-functions-called-once" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-fno-optimize-sibling-calls" "Perf" "PUBLIC")
+
 
     file(GLOB_RECURSE NETLIST_SIMULATOR_CONTROLLER_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
     file(GLOB_RECURSE NETLIST_SIMULATOR_CONTROLLER_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)

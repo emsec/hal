@@ -50,7 +50,7 @@ namespace hal
 
     bool PerfTestPlugin::cmp_sim_data(NetlistSimulatorController* reference_simulation_ctrl, NetlistSimulatorController* simulation_ctrl, int tolerance)
     {
-        bool no_errors                     = true;
+        bool no_errors                          = true;
         WaveDataList* reference_simulation = reference_simulation_ctrl->get_waves();
         WaveDataList* engine_simulation    = simulation_ctrl->get_waves();
         std::cout << "comparing outputs..." << std::endl;
@@ -482,4 +482,5 @@ namespace hal
         bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
         return true;
     }
+
 }    // namespace hal
