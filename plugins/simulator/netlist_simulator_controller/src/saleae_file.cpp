@@ -110,17 +110,23 @@ namespace hal
         switch (mHeader.storageFormat())
         {
         case SaleaeHeader::Double:
-            mReader = [this]() {
+            mReader = [this](bool* ok) {
                 double timeVal;
-                this->read((char*)&timeVal,sizeof(timeVal));
+                if (this->read((char*)&timeVal,sizeof(timeVal)))
+                    *ok = true;
+                else
+                    *ok = false;
                 return (uint64_t) floor(timeVal * SaleaeParser::sTimeScaleFactor + 0.5) - this->mHeader.beginTime();
             };
             break;
         case SaleaeHeader::Uint64:
         case SaleaeHeader::Coded:
-            mReader = [this]() {
+            mReader = [this](bool* ok) {
                 uint64_t timeVal;
-                this->read((char*)&timeVal,sizeof(timeVal));
+                if (this->read((char*)&timeVal,sizeof(timeVal)))
+                    *ok = true;
+                else
+                    *ok = false;
                 return timeVal;
             };
             break;
@@ -195,7 +201,13 @@ namespace hal
     SaleaeDataTuple SaleaeInputFile::nextValue(int lastValue)
     {
         SaleaeDataTuple retval;
-        retval.mTime = mReader();
+        bool ok;
+        retval.mTime = mReader(&ok);
+        if (!ok)
+        {
+            retval.mValue = SaleaeDataTuple::sReadError;
+            return retval;
+        }
         ++mNumRead;
         if (mNumRead >= mHeader.numTransitions()) setstate(eofbit);
 

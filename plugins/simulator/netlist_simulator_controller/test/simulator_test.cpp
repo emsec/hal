@@ -106,7 +106,7 @@ namespace hal
             }
 
             // identify missmatches
-            std::cout << "finding mismatches..." << std::endl;
+            std::cout << "searching for mismatches..." << std::endl;
 
             std::set<u32> unmatching_nets;
 
@@ -134,7 +134,7 @@ namespace hal
                 std::cout << "error: found " << unmatching_nets.size() << " unmatching nets..." << std::endl;
             }
 
-            std::cout << "printing mismatches..." << std::endl;
+            std::cout << "printing mismatches (if any)..." << std::endl;
 
             u64 earliest_mismatch = -1;
             std::vector<u32> earliest_mismatch_nets;
@@ -492,10 +492,10 @@ namespace hal
         // retrieve nets
         Net* reset          = *(nl->get_nets([](const Net* net) { return net->get_name() == "Reset"; }).begin());
         Net* Clock_enable_B = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock_enable_B"; }).begin());
-        Net* output_0       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_0"; }).begin());
-        Net* output_1       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_1"; }).begin());
-        Net* output_2       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_2"; }).begin());
-        Net* output_3       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_3"; }).begin());
+//        Net* output_0       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_0"; }).begin());
+//        Net* output_1       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_1"; }).begin());
+//        Net* output_2       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_2"; }).begin());
+//        Net* output_3       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_3"; }).begin());
 
 
 
@@ -638,7 +638,7 @@ namespace hal
         if (start != nullptr)
             input_nets_amount++;
 
-        if (input_nets_amount != sim_ctrl_verilator->get_input_nets().size())
+        if (input_nets_amount != (int) sim_ctrl_verilator->get_input_nets().size())
             FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim_ctrl_verilator->get_input_nets().size();
 
         // set GND and VCC
@@ -835,7 +835,7 @@ namespace hal
         if (start != nullptr)
             input_nets_amount++;
 
-        if (input_nets_amount != sim_ctrl_verilator->get_input_nets().size())
+        if (input_nets_amount != (int) sim_ctrl_verilator->get_input_nets().size())
             FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim_ctrl_verilator->get_input_nets().size();
 
         //start simulation
@@ -869,7 +869,7 @@ namespace hal
             sim_ctrl_verilator->set_input(start, BooleanFunction::Value::ZERO);    //START <= '0';
             sim_ctrl_verilator->simulate(10 * 1000);                               //WAIT FOR 10 NS;
 
-            sim_ctrl_verilator->simulate(2000 * 1000);
+            sim_ctrl_verilator->simulate(1995 * 1000);
 
             sim_ctrl_verilator->initialize();
             sim_ctrl_verilator->run_simulation();
@@ -892,19 +892,40 @@ namespace hal
 
         sim_ctrl_verilator->get_results();
 
+        int netCount = 0;
         for (Net* n : nl->get_nets())
         {
+            if (netCount % 1000 == 0)
+            {
+                if (netCount)
+                {
+                    std::cerr << "load in memory done for " << netCount << " nets" << std::endl;
+                    bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
+                    EXPECT_TRUE(equal);
+                }
+                sim_ctrl_reference->get_waves()->clearAll();
+                sim_ctrl_verilator->get_waves()->clearAll();
+            }
+//            std::cerr << ++netCount << " import net " << n->get_id() << " [" << n->get_name() << "]" << std::endl;
             sim_ctrl_verilator->get_waveform_by_net(n);
             sim_ctrl_reference->get_waveform_by_net(n);
+            ++netCount;
         }
+        std::cerr << "load in memory done for " << netCount << " nets" << std::endl;
+
+        /*
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
         EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
         EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int)nl->get_nets().size());
+*/
 
         //Test if maps are equal
-        bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
-        EXPECT_TRUE(equal);
+        if (!sim_ctrl_reference->get_waves()->isEmpty())
+        {
+            bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
+            EXPECT_TRUE(equal);
+        }
         TEST_END
     }
 */
@@ -1098,9 +1119,9 @@ namespace hal
                 sim_ctrl_verilator->set_input(input_net, BooleanFunction::Value::ZERO);
             }
 
-            uint16_t data_write = 0xffff;
-            uint16_t data_read  = 0x0000;
-            uint8_t addr        = 0xff;
+//            uint16_t data_write = 0xffff;
+//            uint16_t data_read  = 0x0000;
+//            uint8_t addr        = 0xff;
 
             sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
 
