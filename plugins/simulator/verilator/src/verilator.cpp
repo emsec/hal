@@ -135,6 +135,8 @@ namespace hal
                         << "         std::cerr << \"cannot initialize callback for net " << net_name << "\" << std::endl;\n"
                         << "     }\n"
                         << "  }\n" << std::endl;
+            
+                callback << "printf(\"dut->" << net_name << ": %x\\n\", &dut->" << net_name << ");" << std::endl;
 
                 callbacks << callback.str() << std::endl;
             }

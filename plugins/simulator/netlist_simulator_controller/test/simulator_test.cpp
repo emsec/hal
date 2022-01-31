@@ -266,7 +266,7 @@ namespace hal
                     for (auto x : mismatch)
                     {
                         int iwave = reference_simulation->waveIndexByNetId(x);
-                        std::cout << "  " << x << " " << (iwave<0?"":reference_simulation->at(iwave)->name().toUtf8().data()) << std::endl;
+                        std::cout << "  " << x << " " << (iwave < 0 ? "" : reference_simulation->at(iwave)->name().toUtf8().data()) << std::endl;
                     }
                 }
                 else
@@ -278,11 +278,11 @@ namespace hal
                     for (auto x : mismatch)
                     {
                         int iwave = engine_simulation->waveIndexByNetId(x);
-                        std::string waveName(iwave<0?"":engine_simulation->at(iwave)->name().toUtf8().data());
+                        std::string waveName(iwave < 0 ? "" : engine_simulation->at(iwave)->name().toUtf8().data());
                         if (!waveName.empty())
                         {
                             bool take_it_easy = false;
-                            for (int i=0; artifical_added[i]; i++)
+                            for (int i = 0; artifical_added[i]; i++)
                             {
                                 if (waveName == artifical_added[i])
                                 {
@@ -290,9 +290,10 @@ namespace hal
                                     break;
                                 }
                             }
-                            if (!take_it_easy) no_errors = false;
+                            if (!take_it_easy)
+                                no_errors = false;
                         }
-                        std::cout << "  " << x << " " << (iwave<0?"":engine_simulation->at(iwave)->name().toUtf8().data()) << std::endl;
+                        std::cout << "  " << x << " " << (iwave < 0 ? "" : engine_simulation->at(iwave)->name().toUtf8().data()) << std::endl;
                     }
                 }
 
@@ -315,7 +316,7 @@ namespace hal
         }
 
     };    // namespace hal
-/*
+
     TEST_F(SimulatorTest, half_adder)
     {
         // return;
@@ -377,7 +378,6 @@ namespace hal
         // get nets
         Net* A = *(nl->get_nets([](auto net) { return net->get_name() == "A"; }).begin());
         Net* B = *(nl->get_nets([](auto net) { return net->get_name() == "B"; }).begin());
-
 
         //start simulation
         {
@@ -492,12 +492,10 @@ namespace hal
         // retrieve nets
         Net* reset          = *(nl->get_nets([](const Net* net) { return net->get_name() == "Reset"; }).begin());
         Net* Clock_enable_B = *(nl->get_nets([](const Net* net) { return net->get_name() == "Clock_enable_B"; }).begin());
-//        Net* output_0       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_0"; }).begin());
-//        Net* output_1       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_1"; }).begin());
-//        Net* output_2       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_2"; }).begin());
-//        Net* output_3       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_3"; }).begin());
-
-
+        //        Net* output_0       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_0"; }).begin());
+        //        Net* output_1       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_1"; }).begin());
+        //        Net* output_2       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_2"; }).begin());
+        //        Net* output_3       = *(nl->get_nets([](const Net* net) { return net->get_name() == "Output_3"; }).begin());
 
         //start simulation
         {
@@ -638,7 +636,7 @@ namespace hal
         if (start != nullptr)
             input_nets_amount++;
 
-        if (input_nets_amount != (int) sim_ctrl_verilator->get_input_nets().size())
+        if (input_nets_amount != (int)sim_ctrl_verilator->get_input_nets().size())
             FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim_ctrl_verilator->get_input_nets().size();
 
         // set GND and VCC
@@ -734,7 +732,7 @@ namespace hal
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
         EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() <= (int)nl->get_nets().size());  // net might have additional '0' and '1'
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() <= (int)nl->get_nets().size());    // net might have additional '0' and '1'
 
         //Test if maps are equal
         bool equal = cmp_sim_data(sim_ctrl_reference.get(), sim_ctrl_verilator.get());
@@ -835,7 +833,7 @@ namespace hal
         if (start != nullptr)
             input_nets_amount++;
 
-        if (input_nets_amount != (int) sim_ctrl_verilator->get_input_nets().size())
+        if (input_nets_amount != (int)sim_ctrl_verilator->get_input_nets().size())
             FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim_ctrl_verilator->get_input_nets().size();
 
         //start simulation
@@ -906,7 +904,7 @@ namespace hal
                 sim_ctrl_reference->get_waves()->clearAll();
                 sim_ctrl_verilator->get_waves()->clearAll();
             }
-//            std::cerr << ++netCount << " import net " << n->get_id() << " [" << n->get_name() << "]" << std::endl;
+            //            std::cerr << ++netCount << " import net " << n->get_id() << " [" << n->get_name() << "]" << std::endl;
             sim_ctrl_verilator->get_waveform_by_net(n);
             sim_ctrl_reference->get_waveform_by_net(n);
             ++netCount;
@@ -918,7 +916,6 @@ namespace hal
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
         EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
         EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int)nl->get_nets().size());
-*/
 
         //Test if maps are equal
         if (!sim_ctrl_reference->get_waves()->isEmpty())
@@ -928,7 +925,8 @@ namespace hal
         }
         TEST_END
     }
-*/
+
+
     TEST_F(SimulatorTest, bram_lattice)
     {
         // return;

@@ -47,7 +47,7 @@ wire			   	WCLK_g, RCLK_g;
 reg 				WCLKE_sync, RCLKE_sync; 
 reg	Memory	[BUS_WIDTH*ADDRESSABLE_SPACE-1:0];
 // 
-event Read_e, Write_e;
+//event Read_e, Write_e;
 
 //////////////////// Collision detect begins here ///////////////////////////////
 localparam 	TRUE = 1'b1;
@@ -55,7 +55,7 @@ localparam	FALSE = 1'b0;
 reg 		Time_Collision_Detected = 1'b0;
 wire		Address_Collision_Detected;
 
-event Collision_e;
+//event Collision_e;
 
 time COLLISION_TIME_WINDOW = (CLOCK_PERIOD/8); // This is an arbitray value, but is better than using an absolute 
 						    // value, because the actual time window depends on the actual silicon 
