@@ -911,7 +911,6 @@ namespace hal
         }
         std::cerr << "load in memory done for " << netCount << " nets" << std::endl;
 
-        /*
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
         EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
