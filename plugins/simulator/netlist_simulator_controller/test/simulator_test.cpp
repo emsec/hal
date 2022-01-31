@@ -910,7 +910,7 @@ namespace hal
 
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
         EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
-        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int)nl->get_nets().size());
+        EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() <= (int)nl->get_nets().size());
 
         //Test if maps are equal
         if (!sim_ctrl_reference->get_waves()->isEmpty())
