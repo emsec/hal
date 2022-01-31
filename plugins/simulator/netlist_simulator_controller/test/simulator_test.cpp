@@ -316,7 +316,6 @@ namespace hal
         }
 
     };    // namespace hal
-
     TEST_F(SimulatorTest, half_adder)
     {
         // return;
@@ -558,7 +557,6 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
-
     TEST_F(SimulatorTest, toycipher)
     {
         // return;
@@ -739,7 +737,6 @@ namespace hal
         EXPECT_TRUE(equal);
         TEST_END
     }
-
     TEST_F(SimulatorTest, sha256)
     {
         // return;
@@ -911,7 +908,6 @@ namespace hal
         }
         std::cerr << "load in memory done for " << netCount << " nets" << std::endl;
 
-
         // TODO @ Jörn: LOAD ALL WAVES TO MEMORY
         EXPECT_TRUE(sim_ctrl_verilator->get_waves()->size() == (int)nl->get_nets().size());
         EXPECT_TRUE(sim_ctrl_reference->get_waves()->size() == (int)nl->get_nets().size());
@@ -924,7 +920,6 @@ namespace hal
         }
         TEST_END
     }
-
 
     TEST_F(SimulatorTest, bram_lattice)
     {
@@ -1116,9 +1111,9 @@ namespace hal
                 sim_ctrl_verilator->set_input(input_net, BooleanFunction::Value::ZERO);
             }
 
-//            uint16_t data_write = 0xffff;
-//            uint16_t data_read  = 0x0000;
-//            uint8_t addr        = 0xff;
+            //            uint16_t data_write = 0xffff;
+            //            uint16_t data_read  = 0x0000;
+            //            uint8_t addr        = 0xff;
 
             sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
 
@@ -1217,12 +1212,12 @@ namespace hal
             // todo: bitorder could be wrong?
             //raddr      <= x"66";
             sim_ctrl_verilator->set_input(read_addr.at(7), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(read_addr.at(6), BooleanFunction::Value::ONE);
-//            sim_ctrl_verilator->set_input(read_addr.at(5), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(read_addr.at(6), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(read_addr.at(5), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(read_addr.at(4), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(read_addr.at(3), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(read_addr.at(2), BooleanFunction::Value::ONE);
-//            sim_ctrl_verilator->set_input(read_addr.at(1), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(read_addr.at(2), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(read_addr.at(1), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(read_addr.at(0), BooleanFunction::Value::ZERO);
 
             sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ONE);    // rclke      <= '1';
@@ -1233,31 +1228,31 @@ namespace hal
 
             // waddr       <= x"43"; 0100 0011
             sim_ctrl_verilator->set_input(write_addr.at(7), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(write_addr.at(6), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(write_addr.at(6), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(write_addr.at(5), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(write_addr.at(4), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(write_addr.at(3), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(write_addr.at(2), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(write_addr.at(1), BooleanFunction::Value::ONE);
-//            sim_ctrl_verilator->set_input(write_addr.at(0), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(write_addr.at(1), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(write_addr.at(0), BooleanFunction::Value::ONE);
 
             // din         <= x"1111";
             sim_ctrl_verilator->set_input(din.at(15), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(din.at(14), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(din.at(13), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(din.at(12), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(din.at(12), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(din.at(11), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(din.at(10), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(din.at(9), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(din.at(8), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(din.at(8), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(din.at(7), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(din.at(6), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(din.at(5), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(din.at(4), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(din.at(4), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(din.at(3), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(din.at(2), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(din.at(1), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(din.at(0), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(din.at(0), BooleanFunction::Value::ONE);
 
             sim_ctrl_verilator->simulate(1 * clock_period);    // WAIT FOR 10 NS;
 
@@ -1269,11 +1264,11 @@ namespace hal
             sim_ctrl_verilator->set_input(rclke, BooleanFunction::Value::ONE);      // rclke       <= '1';
 
             // raddr      <= x"43";
-//            sim_ctrl_verilator->set_input(read_addr.at(7), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(read_addr.at(6), BooleanFunction::Value::ZERO);
+            //            sim_ctrl_verilator->set_input(read_addr.at(7), BooleanFunction::Value::ZERO);
+            //            sim_ctrl_verilator->set_input(read_addr.at(6), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(read_addr.at(5), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(read_addr.at(4), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(read_addr.at(3), BooleanFunction::Value::ZERO);
+            //            sim_ctrl_verilator->set_input(read_addr.at(4), BooleanFunction::Value::ZERO);
+            //            sim_ctrl_verilator->set_input(read_addr.at(3), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(read_addr.at(2), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(read_addr.at(1), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(read_addr.at(0), BooleanFunction::Value::ONE);
@@ -1284,19 +1279,19 @@ namespace hal
             sim_ctrl_verilator->set_input(din.at(15), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(din.at(14), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(din.at(13), BooleanFunction::Value::ONE);
-//            sim_ctrl_verilator->set_input(din.at(12), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(din.at(12), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(din.at(11), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(din.at(10), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(din.at(9), BooleanFunction::Value::ONE);
-//            sim_ctrl_verilator->set_input(din.at(8), BooleanFunction::Value::ONE);
-//            sim_ctrl_verilator->set_input(din.at(7), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(din.at(6), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(din.at(5), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(din.at(4), BooleanFunction::Value::ONE);
-//            sim_ctrl_verilator->set_input(din.at(3), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(din.at(2), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(din.at(1), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(din.at(0), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(din.at(8), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(din.at(7), BooleanFunction::Value::ZERO);
+            //            sim_ctrl_verilator->set_input(din.at(6), BooleanFunction::Value::ZERO);
+            //            sim_ctrl_verilator->set_input(din.at(5), BooleanFunction::Value::ZERO);
+            //            sim_ctrl_verilator->set_input(din.at(4), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(din.at(3), BooleanFunction::Value::ZERO);
+            //            sim_ctrl_verilator->set_input(din.at(2), BooleanFunction::Value::ZERO);
+            //            sim_ctrl_verilator->set_input(din.at(1), BooleanFunction::Value::ZERO);
+            //            sim_ctrl_verilator->set_input(din.at(0), BooleanFunction::Value::ONE);
 
             sim_ctrl_verilator->simulate(20 * clock_period);    // WAIT FOR 20 NS;
 
@@ -1338,22 +1333,22 @@ namespace hal
             sim_ctrl_verilator->set_input(mask.at(15), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(mask.at(14), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(mask.at(13), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(mask.at(12), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(mask.at(12), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(mask.at(11), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(mask.at(10), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(mask.at(9), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(mask.at(8), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(mask.at(8), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(mask.at(7), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(mask.at(6), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(mask.at(5), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(mask.at(4), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(mask.at(4), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->set_input(mask.at(3), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(mask.at(2), BooleanFunction::Value::ZERO);
             sim_ctrl_verilator->set_input(mask.at(1), BooleanFunction::Value::ZERO);
-//            sim_ctrl_verilator->set_input(mask.at(0), BooleanFunction::Value::ONE);
+            //            sim_ctrl_verilator->set_input(mask.at(0), BooleanFunction::Value::ONE);
             sim_ctrl_verilator->simulate(2 * clock_period);    // WAIT FOR 20 NS;
 
-            sim_ctrl_verilator->simulate(100 * clock_period);      // WAIT FOR 100*10 NS;
+            sim_ctrl_verilator->simulate(100 * clock_period);    // WAIT FOR 100*10 NS;
 
             sim_ctrl_verilator->initialize();
             sim_ctrl_verilator->run_simulation();
