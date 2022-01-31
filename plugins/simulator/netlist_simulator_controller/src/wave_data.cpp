@@ -348,11 +348,12 @@ namespace hal {
         }
         for (int i=0; i<n; i++)
         {
+            // Create Fake Wave Entries
             WaveData* wd = new WaveData(id()*10000+i, QString("%1_bit%2").arg(name()).arg(i), WaveData::RegularNet, *bitValue[i]);
             wd->setBits(1);
             mGroupList.append(wd);
             mIndex.insert(WaveDataGroupIndex(wd),i);
-            mWaveDataList->add(wd,true);
+            mWaveDataList->add(wd,true,false);
             delete bitValue[i];
         }
         delete [] bitValue;
@@ -390,7 +391,7 @@ namespace hal {
         u32 netId = n->get_id();
         WaveData* wd = nullptr;
         if (!mWaveDataList->hasNet(netId))
-            mWaveDataList->add((wd = new WaveData(n)),false);
+            mWaveDataList->add((wd = new WaveData(n)),false,false);
         else
             wd = mWaveDataList->waveDataByNet(n);
         int inx = mGroupList.size();
@@ -673,14 +674,14 @@ namespace hal {
     }
 
     int ddd = 0;
-    void WaveDataList::add(WaveData* wd, bool silent)
+    void WaveDataList::add(WaveData* wd, bool silent, bool updateSaleae)
     {
         int n = size();
 
         mIds[wd->id()] = n;
         append(wd);
         updateMaxTime();
-        wd->saveSaleae(mSaleaeDirectory);
+        if (updateSaleae) wd->saveSaleae(mSaleaeDirectory);
         if (!silent) Q_EMIT waveAdded(n);
         testDoubleCount();
     }
@@ -780,7 +781,7 @@ namespace hal {
         if (inx >= 0)
             replaceWaveData(inx, wd);
         else
-            add(wd,silent);
+            add(wd,silent,true);
     }
 
     WaveData* WaveDataList::waveDataByNet(const Net *n)
@@ -791,7 +792,7 @@ namespace hal {
         WaveData* wd = new WaveData(n);
         if (wd->loadSaleae(mSaleaeDirectory))
         {
-            add(wd,false);
+            add(wd,false,false);
             return wd;
         }
         delete wd;

@@ -257,7 +257,7 @@ namespace hal {
                     iwave = mWaveDataList->size();
                     WaveData* wd = new WaveData(it.key().id(),it.key().name());
                     if (wd->loadSaleae(*sd))
-                        mWaveDataList->add(wd,false);
+                        mWaveDataList->add(wd,false,false);
                 }
                 else if (iwave >= 0)
                     mTreeModel->handleWaveAdded(iwave);

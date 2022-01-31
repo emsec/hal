@@ -114,7 +114,7 @@ namespace hal {
         void removeGroup(u32 grpId);
 
         void addOrReplace(WaveData* wd, bool silent=false);
-        void add(WaveData* wd, bool silent);
+        void add(WaveData* wd, bool silent, bool updateSaleae);
         void remove(u32 id);
         void incrementSimulTime(u64 deltaT);
         void clearAll();
