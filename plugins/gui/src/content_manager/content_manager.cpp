@@ -215,16 +215,21 @@ namespace hal
 
         sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
 
-        GraphContext* new_context = nullptr;
-        QString context_name = QString::fromStdString(gNetlist->get_top_module()->get_name()) + " (ID: " + QString::number(gNetlist->get_top_module()->get_id()) + ")";
-        new_context = gGraphContextManager->createNewContext(context_name);
-        new_context->add({gNetlist->get_top_module()->get_id()}, {});
-        new_context->setExclusiveModuleId(gNetlist->get_top_module()->get_id());
-
-        mContextManagerWidget->selectViewContext(new_context);
         gGraphContextManager->restoreFromFile();
-        new_context->setDirty(false);
 
+        Module* top_module = gNetlist->get_top_module();
+        GraphContext* top_module_context = gGraphContextManager->getContextByExclusiveModuleId(top_module->get_id());
+
+        if (!top_module)
+        {
+            QString context_name = QString::fromStdString(top_module->get_name()) + " (ID: " + QString::number(top_module->get_id()) + ")";
+            top_module_context = gGraphContextManager->createNewContext(context_name);
+            top_module_context->add({top_module->get_id()}, {});
+            top_module_context->setExclusiveModuleId(top_module->get_id());
+            top_module_context->setDirty(false);
+        }
+        mContextManagerWidget->selectViewContext(top_module_context);
+        mContextManagerWidget->handleOpenContextClicked();
     }
 
     void ContentManager::setWindowTitle(const QString &filename)

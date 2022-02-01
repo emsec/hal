@@ -554,9 +554,11 @@ namespace hal
                 QString viewName = jsonView["name"].toString();
                 if (viewId > mMaxContextId)
                     mMaxContextId = viewId;
+                u32 exclusiveModuleId = jsonView["exclusiveModuleId"].toInt();
                 GraphContext* context = new GraphContext(viewId, viewName);
                 context->setLayouter(getDefaultLayouter(context));
                 context->setShader(getDefaultShader(context));
+                context->setExclusiveModuleId(exclusiveModuleId);
                 context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
                 connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
 

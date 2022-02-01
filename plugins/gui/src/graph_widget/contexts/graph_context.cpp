@@ -741,6 +741,7 @@ namespace hal
         json["id"] = (int) mId;
         json["name"] = mName;
         json["timestamp"] = mTimestamp.toString();
+        json["exclusiveModuleId"] = (int) mExclusiveModuleId;
 
         /// modules
         QJsonArray jsonMods;
