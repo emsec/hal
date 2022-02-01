@@ -264,6 +264,14 @@ namespace hal
                 :param int timescale: multiplication factor for time value if SALEAE data in float format.
             )")
 
+            .def("import_simulation", &NetlistSimulatorController::import_simulation, py::arg("dirname"), py::arg("filter"), py::arg("timescale") = 1000000000, R"(
+                Imports nets from simulation working directory. Existing saleae directory required to nets with binary data.
+
+                :param str dirname: directory to import files from.
+                :param hal_py.FilterInputFlag filter: filter to select waveform data for import.
+                :param int timescale: multiplication factor for time value if SALEAE data in float format.
+            )")
+
             .def("get_working_directory", &NetlistSimulatorController::get_working_directory, R"(
                 Get the working directory.
 

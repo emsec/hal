@@ -45,7 +45,7 @@ namespace hal {
         QString mSaleaeDirectoryFilename;
         QMap<QString,QString> mAbbrevByName;
         QVector<int> mLastValue;
-        int mErrorCount;
+        int mErrorCount[9];
         bool mSaleae;
 
         bool parseVcdDataline(char* buf, int len);

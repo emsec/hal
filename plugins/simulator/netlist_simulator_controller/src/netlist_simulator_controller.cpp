@@ -296,6 +296,51 @@ namespace hal
         Q_EMIT parseComplete();
     }
 
+    void NetlistSimulatorController::import_simulation(const std::string& dirname, FilterInputFlag filter, u64 timescale)
+    {
+        QDir sourceDir(QString::fromStdString(dirname));
+        QString sourceSaleaeLookup = sourceDir.absoluteFilePath("saleae.json");
+        if (!QFileInfo(sourceSaleaeLookup).isReadable())
+        {
+            log_warning(get_name(), "cannot import SALEAE data from '{}', cannot read lookup table.", dirname);
+            return;
+        }
+        if (filter == NoFilter)
+        {
+            QDir targetDir(QString::fromStdString(mWaveDataList->saleaeDirectory().get_directory()));
+            QString targetSaleaeLookup = targetDir.absoluteFilePath("saleae.json");
+            QFile::remove(targetSaleaeLookup);
+            QFile::copy(sourceSaleaeLookup,targetSaleaeLookup);
+            QStringList nameFilters;
+            nameFilters << "digital_*.bin";
+            for (QFileInfo sourceFileInfo : sourceDir.entryInfoList(nameFilters))
+            {
+                QString targetFile = targetDir.absoluteFilePath(sourceFileInfo.fileName());
+                QFile::remove(targetFile);
+                QFile::copy(sourceFileInfo.absoluteFilePath(),targetFile);
+            }
+            mWaveDataList->updateFromSaleae();
+        }
+        else
+        {
+            SaleaeDirectory sd(sourceSaleaeLookup.toStdString());
+            std::unordered_map<Net*,int> lookupTable;
+            for (const Net* n: getFilterNets(filter))
+            {
+                int inx = sd.get_datafile_index(n->get_name(),n->get_id());
+                if (inx < 0) continue;
+                lookupTable.insert(std::make_pair((Net*)n,inx));
+            }
+            VcdSerializer reader;
+            if (reader.importSaleae(QString::fromStdString(dirname),lookupTable,mTempDir->path(),timescale))
+            {
+                mWaveDataList->updateFromSaleae();
+            }
+        }
+        checkReadyState();
+        Q_EMIT parseComplete();
+    }
+
     void NetlistSimulatorController::set_saleae_timescale(u64 timescale)
     {
         SaleaeParser::sTimeScaleFactor = timescale;

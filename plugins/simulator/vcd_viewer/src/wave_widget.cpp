@@ -138,12 +138,8 @@ namespace hal {
         if (mWaveDataList->size() > mWaveItemHash->importedWires()) return true;
         if (mController)
         {
-            const SimulationEngine* eng = mController->get_simulation_engine();
-            if (eng)
-            {
-                SaleaeDirectory sd(mController->get_saleae_directory_filename());
-                if (sd.get_next_available_index() > mWaveItemHash->importedWires()) return true;
-            }
+            SaleaeDirectory sd(mController->get_saleae_directory_filename());
+            if (sd.get_next_available_index() > mWaveItemHash->importedWires()) return true;
         }
         return false;
     }

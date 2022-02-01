@@ -245,11 +245,19 @@ public:
 
     /**
      * Import nets given by lookup table from SALEAE directory
-     * @param dirname[in] the directory to import files from
-     * @param lookupTable[in] mapping nets to be imported with saleae file index
-     * @param timescale multiplication factor for time value if SALEAE data in float format
+     * @param[in] dirname the directory to import files from
+     * @param[in] lookupTable mapping nets to be imported with saleae file index
+     * @param[in] timescale multiplication factor for time value if SALEAE data in float format
      */
     void import_saleae(const std::string& dirname, std::unordered_map<Net*,int> lookupTable, u64 timescale = 1000000000);
+
+    /**
+     * Imports nets from simulation working directory. Existing saleae directory required to nets with binary data
+     * @param[in] dirname the directory to import files from
+     * @param[in] filter filter to select waveform data for import
+     * @param[in] timescale multiplication factor for time value if SALEAE data in float format
+     */
+    void import_simulation(const std::string& dirname, FilterInputFlag filter, u64 timescale = 1000000000);
 
     /**
      * Set timescale when parsing SALEAE float values

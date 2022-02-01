@@ -14,8 +14,7 @@
 
 namespace hal {
 
-const WaveData* mData;
-QMap<int,int>::const_iterator mIterator;
+    const int maxErrorMessages = 3;
 
     VcdSerializerElement::VcdSerializerElement(int inx, const WaveData* wd)
         : mIndex(inx), mData(wd)
@@ -78,6 +77,7 @@ QMap<int,int>::const_iterator mIterator;
     {
         mSaleaeFiles.clear();
         mAbbrevByName.clear();
+        memset(mErrorCount, 0, sizeof(mErrorCount));
     }
 
     bool VcdSerializer::serialize(const QString& filename, const QList<const WaveData*>& waves) const
@@ -132,7 +132,7 @@ QMap<int,int>::const_iterator mIterator;
         int val = sl.at(0).toUInt(&ok,base);
         if (!ok)
         {
-            if (mErrorCount++ < 5)
+            if (mErrorCount[0]++ < maxErrorMessages)
                 log_warning("vcd_viewer", "Cannot parse VCD data value '{}'", std::string(sl.at(0).data()));
             val = 0;
         }
@@ -333,7 +333,6 @@ QMap<int,int>::const_iterator mIterator;
     {
         mWorkdir = workdir.isEmpty() ? QDir::currentPath() : workdir;
         mLastValue.clear();
-        mErrorCount = 0;
         deleteFiles();
         mTime = 0;
         mSaleae = false;
@@ -384,13 +383,15 @@ QMap<int,int>::const_iterator mIterator;
             int sizeRead = ff.readLine(buf,bufsize);
             if (sizeRead >= bufsize)
             {
-                log_warning("vcd_viewer", "CSV line {} exceeds buffer size {}.", dataLineIndex, bufsize);
+                if (mErrorCount[1]++ < maxErrorMessages)
+                    log_warning("vcd_viewer", "CSV line {} exceeds buffer size {}.", dataLineIndex, bufsize);
                 return false;
             }
 
             if (sizeRead < 0)
             {
-                log_warning("vcd_viewer", "CSV parse error reading line {} from file '{}'.", dataLineIndex, ff.fileName().toStdString());
+                if (mErrorCount[2]++ < maxErrorMessages)
+                    log_warning("vcd_viewer", "CSV parse error reading line {} from file '{}'.", dataLineIndex, ff.fileName().toStdString());
                 return false;
             }
             if (!sizeRead) continue;
@@ -399,7 +400,7 @@ QMap<int,int>::const_iterator mIterator;
             {
                 if (!parseCsvHeader(buf))
                 {
-                    if (mErrorCount++ < 5)
+                    if (mErrorCount[3]++ < maxErrorMessages)
                         log_warning("vcd_viewer", "Cannot parse CSV header line '{}'.", buf);
                     return false;
                 }
@@ -409,7 +410,7 @@ QMap<int,int>::const_iterator mIterator;
             {
                 if (!parseCsvDataline(buf,dataLineIndex++))
                 {
-                    if (mErrorCount++ < 5)
+                    if (mErrorCount[4]++ < maxErrorMessages)
                         log_warning("vcd_viewer", "Cannot parse CSV data line '{}'.", buf);
                     return false;
                 }
@@ -422,7 +423,6 @@ QMap<int,int>::const_iterator mIterator;
     bool VcdSerializer::importVcd(const QString& vcdFilename, const QString& workdir, const QList<const Net*>& onlyNets)
     {
         mWorkdir = workdir.isEmpty() ? QDir::currentPath() : workdir;
-        mErrorCount = 0;
         deleteFiles();
         mTime = 0;
         QFile ff(vcdFilename);
@@ -467,13 +467,15 @@ QMap<int,int>::const_iterator mIterator;
             ++iline;
             if (sizeRead >= bufsize)
             {
-                log_warning("vcd_viewer", "VCD line {} exceeds buffer size {}.", iline, bufsize);
+                if (mErrorCount[5]++ < maxErrorMessages)
+                    log_warning("vcd_viewer", "VCD line {} exceeds buffer size {}.", iline, bufsize);
                 return false;
             }
 
             if (sizeRead < 0)
             {
-                log_warning("vcd_viewer", "VCD parse error reading line {} from file '{}'.", iline, ff.fileName().toStdString());
+                if (mErrorCount[6]++ < maxErrorMessages)
+                    log_warning("vcd_viewer", "VCD parse error reading line {} from file '{}'.", iline, ff.fileName().toStdString());
                 return false;
             }
             if (sizeRead > 0 && buf[sizeRead-1]=='\n') --sizeRead;
@@ -498,7 +500,8 @@ QMap<int,int>::const_iterator mIterator;
                         if (!netNames.isEmpty() && !net) continue; // net not found in given name list
                         if (mAbbrevByName.contains(wireName))
                         {
-                            log_warning("vcd_viewer", "Waveform duplicate for '{}' in VCD file '{}'.", wireName.toStdString(), ff.fileName().toStdString());
+                            if (mErrorCount[7]++ < maxErrorMessages)
+                                log_warning("vcd_viewer", "Waveform duplicate for '{}' in VCD file '{}'.", wireName.toStdString(), ff.fileName().toStdString());
                             continue;
                         }
                         QString wireAbbrev = mWire.captured(2);
@@ -528,7 +531,7 @@ QMap<int,int>::const_iterator mIterator;
             {
                 if (!parseVcdDataline(buf,sizeRead))
                 {
-                    if (mErrorCount++ < 5)
+                    if (mErrorCount[8]++ < maxErrorMessages)
                         log_warning("vcd_viewer", "Cannot parse VCD data line '{}'.", QByteArray(buf,sizeRead));
                     return false;
                 }
@@ -541,7 +544,6 @@ QMap<int,int>::const_iterator mIterator;
     {
         mWorkdir = workdir.isEmpty() ? QDir::currentPath() : workdir;
         qDebug() << "workdir" << mWorkdir;
-        mErrorCount = 0;
         deleteFiles();
         mTime = 0;
         SaleaeParser::sTimeScaleFactor = timeScale;
@@ -575,22 +577,4 @@ QMap<int,int>::const_iterator mIterator;
         Q_EMIT importDone();
         return true;
     }
-
-    /*
-    SaleaeOutputFile* SaleaeWriter::get_file_by_name(const std::string& name)
-    {
-        auto it = mFileByName.find(name);
-        if (it == mFileByName.end()) return nullptr;
-        return it->second;
-    }
-
-    SaleaeOutputFile* SaleaeWriter::get_file_by_id(uint32_t id)
-    {
-        if (!id) return nullptr;
-        auto it = mFileById.find(id);
-        if (it == mFileById.end()) return nullptr;
-        return it->second;
-    }
-*/
-
 }
