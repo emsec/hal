@@ -210,27 +210,27 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}))
+            if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}, false) && !context->isShowingModule(added_module, {}, {}, {}, {}, false))
                 context->add({added_module}, {});
             else
                 context->testIfAffected(m->get_id(), &added_module, nullptr);
 
-            if (context->modules().contains(added_module))
-            {
-                QSet<u32> modules = context->modules();
-                modules.remove(added_module);
+//            if (context->modules().contains(added_module))
+//            {
+//                QSet<u32> modules = context->modules();
+//                modules.remove(added_module);
 
-                // modules    : all modules visible in graph context view except recently added
-                // module_ids : all anchestors of recently added module
-                // algorithm  : remove 'recently added' module from view if it was moved to
-                //              (child or grandchild of) another module visible in view
-                for (u32 id : module_ids)
-                    if (modules.contains(id))
-                    {
-                        context->remove({added_module},{});
-                        return;
-                    }
-            }
+//                // modules    : all modules visible in graph context view except recently added
+//                // module_ids : all anchestors of recently added module
+//                // algorithm  : remove 'recently added' module from view if it was moved to
+//                //              (child or grandchild of) another module visible in view
+//                for (u32 id : module_ids)
+//                    if (modules.contains(id))
+//                    {
+//                        context->remove({added_module},{});
+//                        return;
+//                    }
+//            }
         }
     }
 
@@ -239,9 +239,9 @@ namespace hal
         // FIXME this also triggers on module deletion (not only moving)
         // and collides with handleModuleRemoved
 //        dump("ModuleSubmoduleRemoved", m->get_id(), removed_module);
+
         for (GraphContext* context : mContextTableModel->list())
-            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {})
-                && !m->contains_module(gNetlist->get_module_by_id(removed_module), false))
+            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}, false) && !context->isShowingModule(removed_module, {}, {}, {}, {}, false))
             {
                 context->remove({removed_module}, {});
                 if (context->empty())
@@ -269,7 +269,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
+            if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}, false))
                 context->add({}, {inserted_gate});
             else
                 context->testIfAffected(m->get_id(), nullptr, &inserted_gate);
@@ -285,7 +285,6 @@ namespace hal
                         break;
                     }
             }
-
         }
     }
 
@@ -294,13 +293,17 @@ namespace hal
 //        dump("ModuleGateRemoved", m->get_id(), removed_gate);
         for (GraphContext* context : mContextTableModel->list())
         {
-            if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate})
-                && !m->contains_gate(gNetlist->get_gate_by_id(removed_gate), true))
+            if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}, false))
             {
                 context->remove({}, {removed_gate});
                 if (context->empty())
                 {
                     deleteGraphContext(context);
+                }
+                // when the module is empty, add the empty folded module to the view
+                else if (m->get_gates().empty() && m->get_submodules().empty())
+                {
+                    context->add({m->get_id()}, {});
                 }
             }
             // if a module is unfolded, then the gate is not deleted from the view

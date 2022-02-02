@@ -179,7 +179,7 @@ namespace hal
         return containedGates.contains(gateId);
     }
 
-    bool GraphContext::isModuleUnfolded(u32 moduleId) const
+    bool GraphContext::isModuleUnfolded(const u32 moduleId) const
     {
         QSet<u32> containedGates = mGates + mAddedGates - mRemovedGates;
         QSet<u32> containedModules = mModules + mAddedModules - mRemovedModules;
@@ -282,7 +282,7 @@ namespace hal
         return isShowingModule(id, {}, {}, {}, {});
     }
 
-    bool GraphContext::isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const
+    bool GraphContext::isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates, bool exclusively) const
     {
         // There are all sorts of problems when we allow this, since now any empty
         // module thinks that it is every other empty module. Blocking this,
@@ -295,23 +295,47 @@ namespace hal
             return false;
         }
 
-        Module* m = gNetlist->get_module_by_id(id);
-
         // TODO deduplicate
         QSet<u32> gates;
         QSet<u32> modules;
 
+        getModuleChildrenRecursively(id, &gates, &modules);
+
+        auto contextGates = (mGates - mRemovedGates) + mAddedGates;
+        auto contextModules = (mModules - mRemovedModules) + mAddedModules;
+        auto moduleGates = (gates - minus_gates) + plus_gates;
+        auto moduleModules = (modules - minus_modules) + plus_modules;
+
+        if (exclusively)
+            return contextGates == moduleGates && contextModules == moduleModules;
+        else if (contextGates.contains(moduleGates) && contextModules.contains(moduleModules) && (!moduleGates.empty() && !moduleModules.empty()))
+            return true;
+        else if (contextGates.contains(moduleGates) && !moduleGates.empty() && moduleModules.empty())
+            return true;
+        else if (contextModules.contains(moduleModules) && moduleGates.empty() && !moduleModules.empty())
+            return true;
+        else
+            return false;
+    }
+
+    void GraphContext::getModuleChildrenRecursively(const u32 id, QSet<u32>* gates, QSet<u32>* modules) const
+    {
+
+        auto containedModules = mModules + mAddedModules - mRemovedModules;
+
+        Module* m = gNetlist->get_module_by_id(id);
+
         for (const Gate* g : m->get_gates())
         {
-            gates.insert(g->get_id());
+            gates->insert(g->get_id());
         }
         for (const Module* sm : m->get_submodules())
         {
-            modules.insert(sm->get_id());
+            if (!containedModules.contains(sm->get_id()) && isModuleUnfolded(sm->get_id()))
+                getModuleChildrenRecursively(sm->get_id(), gates, modules);
+            else
+                modules->insert(sm->get_id());
         }
-
-        return (mGates - mRemovedGates) + mAddedGates == (gates - minus_gates) + plus_gates
-                && (mModules - mRemovedModules) + mAddedModules == (modules - minus_modules) + plus_modules;
     }
 
     bool GraphContext::isShowingModuleExclusively()
@@ -325,7 +349,7 @@ namespace hal
         if (containedGates.empty() && containedModules.size() == 1 && *containedModules.begin() == mExclusiveModuleId)
             return true;
         // unfolded module
-        if (isModuleUnfolded(mExclusiveModuleId))
+        if (isShowingModule(mExclusiveModuleId, {}, {}, {}, {}, true))
             return true;
         return false;
     }
@@ -598,8 +622,6 @@ namespace hal
 
         mUnappliedChanges     = false;
         mSceneUpdateRequired = true;
-
-        handleExclusiveModuleCheck();
     }
 
     void GraphContext::requireSceneUpdate()
@@ -619,6 +641,8 @@ namespace hal
     //    LayouterTask* task = new LayouterTask(mLayouter);
     //    connect(task, &LayouterTask::finished, this, &GraphContext::handleLayouterFinished, Qt::ConnectionType::QueuedConnection);
     //    gThreadPool->queueTask(task);
+
+        exclusiveModuleCheck();
 
         mLayouter->layout();
         handleLayouterFinished();
@@ -649,7 +673,7 @@ namespace hal
         handleLayouterFinished();
     }
 
-    void GraphContext::handleExclusiveModuleCheck()
+    void GraphContext::exclusiveModuleCheck()
     {
         if (!isShowingModuleExclusively())
             setExclusiveModuleId(0);
@@ -657,14 +681,14 @@ namespace hal
     
     void GraphContext::handleModuleNameChanged(Module* m)
     {
-        // Only rename tab if the context is still connected to the module
-        if (mExclusiveModuleId)
+        if (mExclusiveModuleId == m->get_id())
         {
             QString name = QString::fromStdString(m->get_name()) + " (ID: " + QString::number(m->get_id()) + ")";
             ActionRenameObject* act = new ActionRenameObject(name);
             act->setObject(UserActionObject(this->id(), UserActionObjectType::Context));
             act->exec();
         }
+        Q_EMIT(dataChanged());
     }
 
     QDateTime GraphContext::getTimestamp() const
@@ -797,13 +821,14 @@ namespace hal
         mSpecialUpdate = state;
     }
 
-    void GraphContext::setExclusiveModuleId(u32 id)
+    void GraphContext::setExclusiveModuleId(u32 id, bool emitSignal)
     {
         u32 old_id = mExclusiveModuleId;
         mExclusiveModuleId = id;
 
         // Emit signal if context is not showing an exclusive module anymore
-        if (id == 0 && old_id != 0) Q_EMIT(exclusiveModuleLost(old_id));
+        if ((id == 0 && old_id != 0) && emitSignal)
+            Q_EMIT(exclusiveModuleLost(old_id));
     }
 
     void GraphContext::handleExclusiveModuleLost(u32 old_id)

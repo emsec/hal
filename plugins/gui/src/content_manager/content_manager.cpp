@@ -220,7 +220,7 @@ namespace hal
         Module* top_module = gNetlist->get_top_module();
         GraphContext* top_module_context = gGraphContextManager->getContextByExclusiveModuleId(top_module->get_id());
 
-        if (!top_module)
+        if (!top_module_context)
         {
             QString context_name = QString::fromStdString(top_module->get_name()) + " (ID: " + QString::number(top_module->get_id()) + ")";
             top_module_context = gGraphContextManager->createNewContext(context_name);
