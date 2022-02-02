@@ -34,7 +34,7 @@ namespace hal
                         function << output_pin;
                     }
 
-                    for (const std::string& var : bf_copy.get_variables())
+                    for (const std::string& var : bf_copy.get_variable_names())
                     {
                         if (std::string group = gt->get_pin_group(var); !group.empty())
                         {
