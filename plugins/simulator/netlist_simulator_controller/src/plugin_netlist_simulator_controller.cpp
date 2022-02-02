@@ -3,6 +3,8 @@
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include <QDebug>
+#include <QResource>
+#include <QFile>
 
 namespace hal
 {
@@ -38,6 +40,11 @@ namespace hal
     void NetlistSimulatorControllerPlugin::on_unload()
     {
         NetlistSimulatorControllerMap::instance()->shutdown();
+        QResource::unregisterResource("simulator_resources.rcc");
     }
 
+    void NetlistSimulatorControllerPlugin::on_load()
+    {
+        QResource::registerResource("simulator_resources.rcc");
+    }
 }    // namespace hal

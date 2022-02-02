@@ -27,15 +27,15 @@ namespace hal
                 if (FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); }); ff_component != nullptr)
                 {
                     StateComponent* state_component;
-                    if (state_component = ff_component->get_component_as<StateComponent>([](const GateTypeComponent* c) { return StateComponent::is_class_of(c); }); state_component != nullptr)
+                    if (state_component = ff_component->get_component_as<StateComponent>([](const GateTypeComponent* c) { return StateComponent::is_class_of(c); }); state_component == nullptr)
                     {
                         log_error("verilator", "gate: {} has no state information in gate_library. you need to set one! aborting...", gt->get_name());
                         return std::string();
                     }
 
                     std::vector<std::string> output_pins = gt->get_output_pins();
-                    std::string internal_state           = state_component->get_state_identifier() + "_reg";
-                    std::string internal_negated_state   = state_component->get_neg_state_identifier() + "_reg";
+                    std::string internal_state           = state_component->get_state_identifier();
+                    std::string internal_negated_state   = state_component->get_neg_state_identifier();
 
                     function << "reg " << internal_state << ";" << std::endl;
                     function << "reg " << internal_negated_state << ";" << std::endl;
@@ -187,7 +187,7 @@ namespace hal
                     function << (if_used ? "\telse begin\n" : "");
                     function << (if_used ? "\t" : "") << "\t" << internal_state << " <= " << ff_component->get_next_state_function() << ";" << std::endl;
                     function << (if_used ? "\t" : "") << "\t" << internal_negated_state << " <= !(" << ff_component->get_next_state_function() << ");" << std::endl;
-                    function << "\tend" << std::endl;
+                    function << (if_used ? "\tend\n" : "");
                     function << "end" << std::endl;
 
                     // set output wires

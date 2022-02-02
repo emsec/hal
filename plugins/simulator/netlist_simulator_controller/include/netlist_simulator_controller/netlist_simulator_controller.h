@@ -42,6 +42,8 @@
 #include "netlist_simulator_controller/simulation_input.h"
 #include "netlist_simulator_controller/wave_data.h"
 
+class QTemporaryDir;
+
 namespace hal {
 /* forward declaration */
 class Netlist;
@@ -227,26 +229,41 @@ public:
     void request_generate_vcd(const std::string& filename);
 
     /**
-     * Parse VCD file and set wave data
+     * Import VCD file and convert content into SALEAE format
      * @param[in] filename the filename to read
      * @param[in] filter filter to select waveform data from file
      */
-    void parse_vcd(const std::string& filename, FilterInputFlag filter, bool silent=false);
+    bool import_vcd(const std::string& filename, FilterInputFlag filter);
 
     /**
-     * Parse CSV file and set wave data
+     * Import CSV file and convert content into SALEAE format
      * @param[in] filename the filename to read
      * @param[in] filter filter to select waveform data from file
      * @param[in] timescale multiplication factor for time value in first column
      */
-    void parse_csv(const std::string& filename, FilterInputFlag filter, u64 timescale = 1000000000);
+    void import_csv(const std::string& filename, FilterInputFlag filter, u64 timescale = 1000000000);
 
     /**
-     * Set input for simulation to saleae file bundle
-     * @param[in] filename the filename for CSV file with net <-> binary assignment
+     * Import nets given by lookup table from SALEAE directory
+     * @param[in] dirname the directory to import files from
+     * @param[in] lookupTable mapping nets to be imported with saleae file index
+     * @param[in] timescale multiplication factor for time value if SALEAE data in float format
+     */
+    void import_saleae(const std::string& dirname, std::unordered_map<Net*,int> lookupTable, u64 timescale = 1000000000);
+
+    /**
+     * Imports nets from simulation working directory. Existing saleae directory required to nets with binary data
+     * @param[in] dirname the directory to import files from
+     * @param[in] filter filter to select waveform data for import
+     * @param[in] timescale multiplication factor for time value if SALEAE data in float format
+     */
+    void import_simulation(const std::string& dirname, FilterInputFlag filter, u64 timescale = 1000000000);
+
+    /**
+     * Set timescale when parsing SALEAE float values
      * @param[in] timescale multiplication factor for time value
      */
-    void set_saleae_input(const std::string& filename, u64 timescale = 1000000000);
+    void set_saleae_timescale(u64 timescale = 1000000000);
 
     /**
      * Generates the a partial VCD file for parts the simulated netlist.
@@ -258,6 +275,18 @@ public:
      * @returns True if the file gerneration was successful, false otherwise.
      */
     bool generate_vcd(const std::filesystem::path& path, u32 start_time=0, u32 end_time=0, std::set<const Net*> nets = {}) const;
+
+    /**
+     * The working directory. Directory is temporary and will be removed when controller gets deleted
+     * @return directory path
+     */
+    std::string get_working_directory() const;
+
+    /**
+     * Get the filename of SALEAE directory file (JSON format).
+     * @return filename as std path
+     */
+    std::filesystem::path get_saleae_directory_filename() const;
 
     /**
      * Getter for wave data list - simulation input as well as output
@@ -304,6 +333,7 @@ private:
     SimulationState mState;
     SimulationEngine* mSimulationEngine;
 
+    QTemporaryDir* mTempDir;
     WaveDataList* mWaveDataList;
 
     SimulationInput* mSimulationInput;

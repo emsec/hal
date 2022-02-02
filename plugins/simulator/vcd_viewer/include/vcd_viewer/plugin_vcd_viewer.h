@@ -32,7 +32,7 @@ namespace hal
 
     class PLUGIN_API VcdViewerPlugin : public BasePluginInterface
     {
-        VcdViewer* mVcdViewer;
+   //     VcdViewer* mVcdViewer;
     public:
         std::string get_name() const override;
         std::string get_version() const override;

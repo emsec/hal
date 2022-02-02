@@ -364,6 +364,15 @@ namespace hal
         std::string get_pin_of_group_at_index(const std::string& group, const u32 index) const;
 
         /**
+         * Get the index of the given pin within the specified group.
+         * 
+         * @param[in] group - The name of the pin group. 
+         * @param[in] pin - The name of the pin.
+         * @return u32 
+         */
+        i32 get_index_in_group_of_pin(const std::string& group, const std::string& pin) const;
+
+        /**
          * Add a Boolean function with the specified name to the gate type.
          *
          * @param[in] name - The name of the Boolean function.

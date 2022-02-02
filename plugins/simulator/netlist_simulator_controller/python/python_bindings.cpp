@@ -241,15 +241,14 @@ namespace hal
                 Does not remove gates/nets from the simulation set.
             )")
 
-            .def("parse_vcd", &NetlistSimulatorController::parse_vcd, py::arg("filename"), py::arg("filter"), py::arg("silent") = false, R"(
-                Parse VCD data (e.g. simulation input).
+            .def("import_vcd", &NetlistSimulatorController::import_vcd, py::arg("filename"), py::arg("filter"), R"(
+                Import VCD file and convert content into SALEAE format.
 
                 :param str filename: filename of VCD file to be parsed.
                 :param hal_py.FilterInputFlag filter: filter to select waveform data from file.
-                :param bool silent: if true other applications (e.g. viewer) are not notified about waveform data loaded, thus they are not visible in the beginning.
             )")
 
-            .def("parse_csv", &NetlistSimulatorController::parse_csv, py::arg("filename"), py::arg("filter"), py::arg("timescale") = 1000000000, R"(
+            .def("import_csv", &NetlistSimulatorController::import_csv, py::arg("filename"), py::arg("filter"), py::arg("timescale") = 1000000000, R"(
                 Parse CVS data as simulation input.
 
                 :param str filename: filename of CSV file to be parsed.
@@ -257,8 +256,31 @@ namespace hal
                 :param int timescale: multiplicator for values in time column.
             )")
 
-            .def("set_saleae_input", &NetlistSimulatorController::set_saleae_input, py::arg("filename"), py::arg("timescale") = 1000000000, R"(
-                Set input for simulation to saleae file bundle.
+            .def("import_saleae", &NetlistSimulatorController::import_saleae, py::arg("dirname"), py::arg("lookupTable"), py::arg("timescale") = 1000000000, R"(
+                Import nets given by lookup table from SALEAE directory.
+
+                :param str dirname: directory to import files from.
+                :param dict[hal_py.Net,int] lookupTable: mapping nets to be imported with saleae file index.
+                :param int timescale: multiplication factor for time value if SALEAE data in float format.
+            )")
+
+            .def("import_simulation", &NetlistSimulatorController::import_simulation, py::arg("dirname"), py::arg("filter"), py::arg("timescale") = 1000000000, R"(
+                Imports nets from simulation working directory. Existing saleae directory required to nets with binary data.
+
+                :param str dirname: directory to import files from.
+                :param hal_py.FilterInputFlag filter: filter to select waveform data for import.
+                :param int timescale: multiplication factor for time value if SALEAE data in float format.
+            )")
+
+            .def("get_working_directory", &NetlistSimulatorController::get_working_directory, R"(
+                Get the working directory.
+
+                :returns: The working directory of the controller.
+                :rtype: str
+            )")
+
+            .def("set_saleae_timescale", &NetlistSimulatorController::set_saleae_timescale, py::arg("timescale") = 1000000000, R"(
+                Set timescale when parsing SALEAE float values.
 
                 :param str filename: filename of CSV file to be parsed.
                 :param int timescale: multiplicator for values in time column.
@@ -382,8 +404,8 @@ namespace hal
                 :type: int
         )");
 
-        py_simulation_engine.def("directory", &SimulationEngine::directory, R"(
-                Get the working directory of the engine.
+        py_simulation_engine.def("get_working_directory", &SimulationEngine::get_working_directory, R"(
+                Get the working directory.
 
                 :returns: The working directory of the engine.
                 :rtype: str

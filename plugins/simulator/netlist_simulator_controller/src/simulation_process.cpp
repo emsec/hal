@@ -1,10 +1,10 @@
 #include "netlist_simulator_controller/simulation_process.h"
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
+#include "netlist_simulator_controller/saleae_directory.h"
 #include <QProcess>
 #include <QThread>
 #include <vector>
 #include <QStringList>
-#include <QTextStream>
 #include <QDir>
 #include <QDebug>
 #include <QFileInfo>
@@ -12,8 +12,46 @@
 
 namespace hal {
 
+    QString SimulationProcessLog::sLogFilename = "engine_log.html";
+
+    SimulationProcessLog::SimulationProcessLog(const QString& filename)
+        : mStream(nullptr)
+    {
+        mFile.setFileName(filename);
+        if (mFile.open(QIODevice::WriteOnly))
+            mStream = new QTextStream(&mFile);
+    }
+
+    SimulationProcessLog::SimulationProcessLog(bool toStdErr)
+    {
+        mStream = new QTextStream(toStdErr ? stderr : stdout, QIODevice::WriteOnly);
+    }
+
+    SimulationProcessLog::~SimulationProcessLog()
+    {
+        if (mStream)
+        {
+            mStream->flush();
+            delete mStream;
+        }
+        if (mFile.isOpen()) mFile.close();
+    }
+
+    SimulationProcessLog* SimulationProcessLog::logFactory(const std::string& workdirName)
+    {
+        QDir workDir(QString::fromStdString(workdirName));
+        QString filename(workDir.absoluteFilePath(sLogFilename));
+
+        SimulationProcessLog* retval = new SimulationProcessLog(filename);
+        if (retval->good()) return retval;
+        delete retval;
+        return new SimulationProcessLog(true);
+    }
+
+
     SimulationProcess::SimulationProcess(NetlistSimulatorController *controller, SimulationEngineScripted *engine)
-        : mEngine(engine), mLineIndex(0), mNumberLines(0)
+        : mEngine(engine), mLineIndex(0), mNumberLines(0),
+          mSaleaeDirectoryFilename(controller->get_saleae_directory_filename()), mProcessLog(nullptr)
     {
         connect(this, &SimulationProcess::processFinished, controller, &NetlistSimulatorController::handleRunFinished);
     }
@@ -24,28 +62,32 @@ namespace hal {
         Q_EMIT processFinished(false);
     }
 
+    void SimulationProcess::openHtmlLog()
+    {
+
+    }
+
     void SimulationProcess::run()
     {
+        mProcessLog = SimulationProcessLog::logFactory(mEngine->get_working_directory());
         if (mEngine->get_engine_property("ssh_server").empty())
             runLocal();
         else
             runRemote();
+        if (mProcessLog) delete mProcessLog;
     }
 
     void SimulationProcess::runRemote()
     {
-        QFileInfo finfo(QString::fromStdString(mEngine->get_simulation_input()->get_saleae_input_file()));
-        QFile fsaleae(finfo.absoluteFilePath());
-        if (!fsaleae.open(QIODevice::ReadOnly)) return;
+        SaleaeDirectory sd(mSaleaeDirectoryFilename);
+        QFileInfo finfo(QString::fromStdString(mSaleaeDirectoryFilename));
         QString saleaeFilesToCopy = finfo.fileName();
-        for (QByteArray line : fsaleae.readAll().split('\n'))
+        for (int inx=0; inx < sd.get_next_available_index(); inx++)
         {
-            QList<QByteArray> abbrev = line.split(',');
-            if (abbrev.size()>=2)
-                saleaeFilesToCopy += " digital_" + abbrev.at(0).trimmed() + ".bin";
+            saleaeFilesToCopy += QString(" digital_%1.bin").arg(inx);
         }
 
-        QDir localDir(QString::fromStdString(mEngine->directory()));
+        QDir localDir(QString::fromStdString(mEngine->get_working_directory()));
         QString remoteDir = "hal_simul_" + QUuid::createUuid().toString(QUuid::Id128);
         QString shellScriptName(localDir.absoluteFilePath("remote.sh"));
         QString hostname = QString::fromStdString(mEngine->get_engine_property("ssh_server"));
@@ -67,7 +109,8 @@ namespace hal {
         ff.write("fi\n");
         ff.write("set -e\n");  // bailout on error
         ff.write("tar -czf - ${LOCALDIR} | ssh ${HOSTNAME} \"cd ${REMOTEDIR} ; tar -xzf -\"\n");
-        ff.write(QString("cd %1; tar -czf - %2 | ssh ${HOSTNAME} \"cd ${REMOTEDIR}${LOCALDIR} ; tar -xzf -\"\n").arg(finfo.absolutePath()).arg(saleaeFilesToCopy).toUtf8());
+        ff.write("ssh ${HOSTNAME} \"mkdir -p ${REMOTEDIR}${LOCALDIR}/saleae\"\n");
+        ff.write(QString("cd %1; tar -czf - %2 | ssh ${HOSTNAME} \"cd ${REMOTEDIR}${LOCALDIR}/saleae ; tar -xzf -\"\n").arg(finfo.absolutePath()).arg(saleaeFilesToCopy).toUtf8());
         mNumberLines = mEngine->numberCommandLines();
         for (int i=0; i<mNumberLines; i++)
         {
@@ -133,28 +176,57 @@ namespace hal {
         Q_EMIT processFinished(true);
     }
 
+    QByteArray SimulationProcess::toHtml(const QByteArray& txt)
+    {
+        QByteArray retval;
+        for (char cc : txt)
+        {
+            switch (cc) {
+            case '<': retval += "&lt;"; break;
+            case '>': retval += "&gt;"; break;
+            case '&': retval += "&amp;"; break;
+            default: retval += cc; break;
+            }
+        }
+        return retval;
+    }
+
     bool SimulationProcess::runProcess(const QString& prog, const QStringList& args)
     {
-        QTextStream xout(stdout, QIODevice::WriteOnly);
-        xout << "executing <" << prog << ">";
-        for (const QString& arg : args) xout << " [" << arg << "]";
-        xout << "\n";
+        (*mProcessLog->log()) << "<html><body bgcolor=\"#000000\">\n";
+
+        (*mProcessLog->log()) << "<h1><font color=\"#ffffff\">" << prog;
+        for (const QString& arg : args) (*mProcessLog->log()) << " " << arg;
+        (*mProcessLog->log()) << "</font></h1>\n";
         QProcess* process = new QProcess;
-        process->setWorkingDirectory(QString::fromStdString(mEngine->directory()));
+        process->setWorkingDirectory(QString::fromStdString(mEngine->get_working_directory()));
         process->start(prog, args);
 
         if (!process->waitForStarted())
+        {
+            qDebug() << "process wont start" << prog;
             return false;
+        }
 
         bool success = process->waitForFinished(-1);
 
-        xout << "process stdout........\n";
-        xout << process->readAllStandardOutput();
-        xout << "\n--------------------\n";
-        xout << "process stderr......\n";
-        xout << process->readAllStandardError();
-        xout << "\n====================\n";
+        for (const QByteArray& line : process->readAllStandardError().split('\n'))
+        {
+            if (line.startsWith("%Error"))
+                (*mProcessLog->log()) << "<p><font color=\"#ff4040\">";
+            else if (line.startsWith("%Warning"))
+                (*mProcessLog->log()) << "<p><font color=\"#ffe050\">";
+            else
+                (*mProcessLog->log()) << "<p><font color=\"#ffffff\">";
+            (*mProcessLog->log()) << toHtml(line) << "</font></p>\n";
+        }
 
+        for (const QByteArray& line : process->readAllStandardOutput().split('\n'))
+        {
+            (*mProcessLog->log()) <<  "<p><font color=\"#e0e0e0\">" << toHtml(line) << "</font></p>\n";
+        }
+
+        (*mProcessLog->log()) << "</body></html>\n";
         if (!success) return false;
 
         if (process->exitStatus() != QProcess::NormalExit || process->exitCode() != 0)

@@ -380,7 +380,9 @@ namespace hal
             EXPECT_EQ(gt->get_pin_groups(), groups_ab);
             EXPECT_EQ(gt->get_pins_of_group("A"), index_to_pin_a);
             EXPECT_EQ(gt->get_pin_of_group_at_index("A", 0), "A(0)");
+            EXPECT_EQ(gt->get_index_in_group_of_pin("A", "A(0)"), 0);
             EXPECT_EQ(gt->get_pin_of_group_at_index("B", 1), "B(1)");
+            EXPECT_EQ(gt->get_index_in_group_of_pin("B", "B(1)"), 1);
         }
 
         // add already existing pin group
@@ -413,7 +415,9 @@ namespace hal
             EXPECT_TRUE(gt->assign_pin_group("A", index_to_pin_a));
             EXPECT_TRUE(gt->get_pins_of_group("B").empty());
             EXPECT_EQ(gt->get_pin_of_group_at_index("B", 0), "");
+            EXPECT_EQ(gt->get_index_in_group_of_pin("B", "B(0)"), -1);
             EXPECT_EQ(gt->get_pin_of_group_at_index("A", 2), "");
+            EXPECT_EQ(gt->get_index_in_group_of_pin("A", "A(2)"), -1);
         }
 
         TEST_END

@@ -1,4 +1,4 @@
-if(CHANGE_THIS_WHEN_SIMULATOR_IS_DONE)
+if(BUILD_TESTS)
     if(HAL_PLUGINS_MASTER_PROJECT)
         project(tests)
 
@@ -29,6 +29,9 @@ if(CHANGE_THIS_WHEN_SIMULATOR_IS_DONE)
     endif()
 
     #copy files to cmake binary dir
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/bram/trace.vcd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/bram/trace.vcd COPYONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/bram/bram_netlist.v ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/bram/bram_netlist.v COPYONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/bram/SB_RAM256x16.v ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/bram/provided_models/SB_RAM256x16.v COPYONLY)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/counter/dump.vcd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/counter/dump.vcd COPYONLY)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/counter/counternetlist_flattened_by_hal.vhd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/counter/counternetlist_flattened_by_hal.vhd COPYONLY)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/half_adder/dump.vcd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/half_adder/dump.vcd COPYONLY)
@@ -37,18 +40,16 @@ if(CHANGE_THIS_WHEN_SIMULATOR_IS_DONE)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/toycipher/cipher_flat.vhd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/toycipher/cipher_flat.vhd COPYONLY)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/sha256/dump.vcd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/sha256/dump.vcd COPYONLY)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/sha256/sha256_flat.vhd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/sha256/sha256_flat.vhd COPYONLY)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/bram/trace.vcd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/bram/trace.vcd COPYONLY)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/bram/bram_netlist.v ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/bram/bram_netlist.v COPYONLY)
+    
+    include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/plugins/netlist_simulator_controller/include)
 
-    include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/plugins/netlist_simulator/include)
+    add_executable(runTest-netlist_simulator_controller simulator_test.cpp)
 
-    add_executable(runTest-netlist_simulator simulator_test.cpp)
+    target_link_libraries(runTest-netlist_simulator_controller netlist_simulator_controller test_utils gtest ${LINK_LIBS})
 
-    target_link_libraries(runTest-netlist_simulator netlist_simulator test_utils gtest ${LINK_LIBS})
-
-    add_test(runTest-netlist_simulator ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-netlist_simulator --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runTest-netlist_simulator.xml)
+    add_test(runTest-netlist_simulator_controller ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-netlist_simulator_controller --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runTest-netlist_simulator_controller.xml)
 
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-        add_sanitizers(runTest-netlist_simulator)
+        add_sanitizers(runTest-netlist_simulator_controller)
     endif()
 endif()

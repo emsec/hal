@@ -40,7 +40,6 @@ $upscope $end
 $upscope $end
 $enddefinitions $end
 #0
-$dumpvars
 0!
 1"
 0#
@@ -61,7 +60,6 @@ $dumpvars
 02
 03
 14
-$end
 #5000
 1!
 1(

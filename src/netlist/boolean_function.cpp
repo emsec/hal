@@ -28,7 +28,15 @@ namespace hal
 
     std::string BooleanFunction::to_string(Value v)
     {
-        return enum_to_string<Value>(v);
+        switch(v)
+        {
+        case ZERO: return std::string("0");
+        case ONE:  return std::string("1");
+        case X:    return std::string("X");
+        case Z:    return std::string("Z");
+        }
+
+        return std::string("X");
     }
 
     namespace

@@ -227,7 +227,7 @@ namespace hal
          * @returns The concatenated Boolean function on success, a string error message otherwise.
          */
         static std::variant<BooleanFunction, std::string> Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
- 
+
         /**
          * The ostream operator that forwards to_string of a boolean function.
          *

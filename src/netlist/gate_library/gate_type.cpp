@@ -345,6 +345,25 @@ namespace hal
         return "";
     }
 
+    i32 GateType::get_index_in_group_of_pin(const std::string& group, const std::string& pin) const
+    {
+        if (const auto group_it = m_pin_groups.find(group); group_it != m_pin_groups.end())
+        {
+            const std::vector<std::pair<u32, std::string>>& pin_indices = group_it->second;
+            if (const auto index_it = std::find_if(pin_indices.begin(), pin_indices.end(), [pin](const std::pair<u32, std::string>& pin_index) { return pin == pin_index.second; });
+                index_it != pin_indices.end())
+            {
+                return index_it->first;
+            }
+
+            log_error("gate_library", "pin group with name '{}' does not have a pin with name {}.", group, pin);
+            return -1;
+        }
+
+        log_error("gate_library", "pin group with name '{}' does not exist.", group);
+        return -1;
+    }
+
     void GateType::add_boolean_function(const std::string& pin_name, const BooleanFunction& bf)
     {
         m_functions.emplace(pin_name, bf.clone());

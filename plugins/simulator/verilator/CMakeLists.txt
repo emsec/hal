@@ -6,6 +6,13 @@ if(PL_VERILATOR OR PL_SIMULATOR OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE VERILATOR_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
     file(GLOB_RECURSE VERILATOR_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
 
+
+    enable_cxx_compile_option_if_supported("-O1" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-g" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-fno-inline-functions" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-fno-inline-functions-called-once" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-fno-optimize-sibling-calls" "Perf" "PUBLIC")
+
     hal_add_plugin(verilator
                    SHARED
                    HEADER ${VERILATOR_INC}

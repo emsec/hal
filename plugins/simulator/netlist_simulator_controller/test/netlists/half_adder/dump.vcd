@@ -25,7 +25,6 @@ $upscope $end
 $upscope $end
 $enddefinitions $end
 #0
-$dumpvars
 0!
 0"
 0#
@@ -38,7 +37,6 @@ $dumpvars
 0*
 0+
 0,
-$end
 #10000
 1#
 1$

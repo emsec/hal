@@ -6,29 +6,26 @@
 
 #include <QDir>
 #include <QProcess>
-#include <QTemporaryDir>
 #include <QThread>
+#include <QFile>
+#include <QFileInfo>
+#include <QDir>
 
 namespace hal
 {
     SimulationEngine::SimulationEngine(const std::string& nam)
-        : mName(nam), mRequireClockEvents(false), mCanShareMemory(false), mState(Preparing), mSimulationInput(nullptr)
+        : mName(nam), mRequireClockEvents(false), mCanShareMemory(false), mState(Preparing),
+          mSimulationInput(nullptr)
+    {;}
+
+    std::string SimulationEngine::get_working_directory() const
     {
-        QString templatePath = QDir::tempPath();
-        if (!templatePath.isEmpty())
-            templatePath += '/';
-        templatePath += "hal_simulation_" + QString::fromStdString(mName) + "_XXXXXX";
-        mTempDir = new QTemporaryDir(templatePath);
+        return mWorkDir;
     }
 
-    SimulationEngine::~SimulationEngine()
+    void SimulationEngine::set_working_directory(const std::string& workDir)
     {
-        delete mTempDir;
-    }
-
-    std::string SimulationEngine::directory() const
-    {
-        return mTempDir->path().toStdString();
+        mWorkDir = workDir;
     }
 
     bool SimulationEngine::finalize()
@@ -40,6 +37,28 @@ namespace hal
     void SimulationEngine::failed()
     {
         mState = Failed;
+    }
+
+    bool SimulationEngine::install_saleae_parser(std::string dirname) const
+    {
+        QDir dir(QString::fromStdString(dirname));
+        if (!dir.exists()) return false;
+        const char* filenames[] = {":/include/saleae_parser.h", ":/src/saleae_parser.cpp",
+                                   ":/include/saleae_file.h", ":/src/saleae_file.cpp",
+                                   ":/include/saleae_directory.h", ":/src/saleae_directory.cpp", nullptr};
+        for (int i=0; filenames[i]; i++)
+        {
+            // add STAMDALONE_PARSER preprocessor directive to all source files
+            QFileInfo finfo(filenames[i]);
+            QString targetFile = dir.absoluteFilePath(finfo.fileName());
+            QFile ff(filenames[i]);
+            if (!ff.open(QIODevice::ReadOnly)) return false;
+            QFile of(targetFile);
+            if (!of.open(QIODevice::WriteOnly)) return false;
+            of.write("#define STANDALONE_PARSER 1\n");
+            of.write(ff.readAll());
+        }
+        return true;
     }
 
     void SimulationEngine::set_engine_property(const std::string& key, const std::string& value)

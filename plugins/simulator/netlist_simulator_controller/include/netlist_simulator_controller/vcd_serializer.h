@@ -4,11 +4,19 @@
 #include <QList>
 #include <QVector>
 #include <QMap>
+#include <QFile>
+#include <QDir>
+
+#include <unordered_map>
 #include "hal_core/defines.h"
 
 namespace hal {
 
+    class Net;
     class WaveData;
+    class WaveSaleaeData;
+    class SaleaeOutputFile;
+    class SaleaeWriter;
 
     class VcdSerializerElement
     {
@@ -31,27 +39,37 @@ namespace hal {
         Q_OBJECT
         u64 mTime;
         u64 mFirstTimestamp;
-        QMap<QString,QString> mDictionary;
-        QMap<QString,WaveData*> mWaves;
+        QMap<QString,SaleaeOutputFile*> mSaleaeFiles;
+        SaleaeWriter* mSaleaeWriter;
+        QString mWorkdir;
+        QString mSaleaeDirectoryFilename;
+        QMap<QString,QString> mAbbrevByName;
         QVector<int> mLastValue;
-        int mErrorCount;
+        int mErrorCount[9];
         bool mSaleae;
 
-        bool parseDataline(const QByteArray& line);
-        bool parseDataNonDecimal(const QByteArray& line, int base);
+        bool parseVcdDataline(char* buf, int len);
+        bool parseVcdDataNonDecimal(const QByteArray& line, int base);
         void storeValue(int val, const QByteArray& abrev);
         bool parseCsvHeader(char* buf);
-        bool parseCsvDataline(char* buf, int dataLineIndex, u64 timeScale);
-        bool parseSalea(const QString& filenameStub, const QString& abbrev, u64 timeScale);
+        bool parseCsvDataline(char* buf, int dataLineIndex);
+        bool parseVcdInternal(QFile& ff, const QList<const Net *>& onlyNets);
+        bool parseCsvInternal(QFile& ff, const QList<const Net *>& onlyNets);
+
+        void deleteFiles();
+        void createSaleaeDirectory();
+
+    Q_SIGNALS:
+        void importDone();
+
     public:
+        std::string get_saleae_directory_filename() const { return mSaleaeDirectoryFilename.toStdString(); }
         VcdSerializer(QObject* parent = nullptr);
-        ~VcdSerializer();
         bool serialize(const QString& filename, const QList<const WaveData*>& waves) const;
-        bool deserializeVcd(const QString& filename, const QStringList& netNames = QStringList());
-        bool deserializeCsv(const QString& filename, u64 timeScale = 1000000000);
-        QList<WaveData*> waveList() const { return mWaves.values(); }
-        WaveData* waveByName(const QString& name);
-        WaveData* waveById(u32 id);
+        bool importVcd(const QString& vcdFilename, const QString& workdir=QString(), const QList<const Net*>& onlyNets = QList<const Net*>());
+        bool importCsv(const QString& csvFilename, const QString& workdir=QString(), const QList<const Net*>& onlyNets = QList<const Net*>(), u64 timeScale = 1000000000);
+        bool importSaleae(const QString& saleaeDirecotry, const std::unordered_map<Net*,int>& lookupTable, const QString& workdir=QString(),  u64 timeScale = 1000000000);
+//        QList<WaveData*> waveList() const { return mWaves.values(); }
         u64 maxTime() const { return mTime; }
     };
 
