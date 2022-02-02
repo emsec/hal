@@ -476,10 +476,11 @@ namespace hal
         // expand module port assignments
         for (auto& [module_name, verilog_module] : m_modules_by_name)
         {
-            for (const auto& instance : verilog_module->m_instances)
+            for (auto& instance : verilog_module->m_instances)
             {
                 if (auto module_it = m_modules_by_name.find(instance->m_type); module_it != m_modules_by_name.end())
                 {
+                    instance->m_is_module = true;
                     for (const auto& port_assignment : instance->m_port_assignments)
                     {
                         if (!port_assignment.m_port_name.has_value())
@@ -567,7 +568,10 @@ namespace hal
         {
             for (const auto& instance : module->m_instances)
             {
-                instance->m_expanded_port_assignments.clear();
+                if (!instance->m_is_module)
+                {
+                    instance->m_expanded_port_assignments.clear();
+                }
             }
         }
 

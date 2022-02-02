@@ -77,6 +77,7 @@ namespace hal
     {
         std::string m_name;
         std::string m_type;
+        bool m_is_module = false;
         std::vector<VerilogPortAssignment> m_port_assignments;
         std::vector<VerilogDataEntry> m_parameters;
         std::vector<VerilogDataEntry> m_attributes;
