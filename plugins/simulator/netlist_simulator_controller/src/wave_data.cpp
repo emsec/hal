@@ -168,9 +168,20 @@ namespace hal {
 
         SaleaeInputFile sif(path);
         SaleaeDataBuffer sdb = sif.get_data();
-        for (u64 i=0; i<sdb.mCount; i++)
+        u64 n = sdb.mCount;
+        bool truncated = false;
+        if (n > 1000000)
+        {
+            n = 1000000; // TODO : temporary truncate hack to avoid exhausted memory when loading extremly large waves
+            truncated = true;
+        }
+        for (u64 i=0; i<n; i++)
         {
             mData.insert(sdb.mTimeArray[i],sdb.mValueArray[i]);
+        }
+        if (truncated)
+        {
+            mData.insert(sdb.mTimeArray[n],BooleanFunction::X);
         }
         mDirty = true;
         return true;

@@ -149,9 +149,9 @@ namespace hal {
             int val = -1;
             switch(*(buf+pos))
             {
-            case 'b': return parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),2);
-            case 'o': return parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),8);
-            case 'h': return parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),16);
+            case 'b': return true; // parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),2);
+            case 'o': return true; //parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),8);
+            case 'h': return true; // parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),16);
             case '$':
             {
                 QByteArray testKeyword = QByteArray(buf+pos+1,len-1);
