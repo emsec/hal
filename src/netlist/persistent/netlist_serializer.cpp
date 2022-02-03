@@ -58,6 +58,8 @@ namespace hal
                     };
 
                     std::string name;
+                    PinDirection direction = PinDirection::none;
+                    PinType type           = PinType::none;
                     std::vector<PinInformation> pins;
                     bool ascending  = false;
                     u32 start_index = 0;
@@ -284,6 +286,8 @@ namespace hal
                     {
                         rapidjson::Value json_pin_group(rapidjson::kObjectType);
                         json_pin_group.AddMember("name", pin_group->get_name(), allocator);
+                        json_pin_group.AddMember("direction", enum_to_string(pin_group->get_direction()), allocator);
+                        json_pin_group.AddMember("type", enum_to_string(pin_group->get_type()), allocator);
                         json_pin_group.AddMember("ascending", pin_group->is_ascending(), allocator);
                         json_pin_group.AddMember("start_index", pin_group->get_start_index(), allocator);
                         rapidjson::Value json_pins(rapidjson::kArrayType);
@@ -369,6 +373,8 @@ namespace hal
                     {
                         PinGroupInformation pin_group;
                         pin_group.name        = json_pin_group["name"].GetString();
+                        pin_group.direction   = enum_from_string<PinDirection>(json_pin_group["direction"].GetString());
+                        pin_group.type        = enum_from_string<PinType>(json_pin_group["type"].GetString());
                         pin_group.ascending   = json_pin_group["ascending"].GetBool();
                         pin_group.start_index = json_pin_group["start_index"].GetUint();
 
@@ -426,15 +432,19 @@ namespace hal
                         std::vector<ModulePin*> pins;
                         for (const PinGroupInformation::PinInformation& p : pg.pins)
                         {
-                            ModulePin* pin = sm->assign_pin(p.name, p.net, p.type, false);
-                            if (pin == nullptr)
+                            if (auto res = sm->assign_pin(p.name, p.net, p.type, false); res.is_error())
                             {
+                                log_error("netlist_persistent", "{}", res.get_error().get());
                                 return false;
                             }
-                            pins.push_back(pin);
+                            else
+                            {
+                                pins.push_back(res.get());
+                            }
                         }
-                        if (sm->create_pin_group(pg.name, pins, pg.ascending, pg.start_index) == nullptr)
+                        if (auto res = sm->create_pin_group(pg.name, pins, pg.direction, pg.type, pg.ascending, pg.start_index); res.is_error())
                         {
+                            log_error("netlist_persistent", "{}", res.get_error().get());
                             return false;
                         }
                     }

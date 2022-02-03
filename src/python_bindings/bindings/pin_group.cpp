@@ -41,15 +41,43 @@ namespace hal
             :rtype: str
         )");
 
+        py_module_pin_group.def_property_readonly("direction", &PinGroup<ModulePin>::get_direction, R"(
+            The direction of the pin group.
+
+            :type: hal_py.PinDirection
+        )");
+
+        py_module_pin_group.def("get_direction", &PinGroup<ModulePin>::get_direction, R"(
+            Get the direction of the pin group.
+
+            :returns: The direction of the pin.
+            :rtype: hal_py.PinDirection
+        )");
+
+        py_module_pin_group.def_property_readonly("type", &PinGroup<ModulePin>::get_type, R"(
+            The type of the pin group.
+
+            :type: hal_py.PinType
+        )");
+
+        py_module_pin_group.def("get_type", &PinGroup<ModulePin>::get_type, R"(
+            Get the type of the pin group.
+
+            :returns: The type of the pin.
+            :rtype: hal_py.PinType
+        )");
+
         py_module_pin_group.def_property_readonly("pins", &PinGroup<ModulePin>::get_pins, R"(
             The (ordered) pins of the pin groups.
 
             :type: list[hal_py.ModulePin]
         )");
 
-        py_module_pin_group.def("get_pins", &PinGroup<ModulePin>::get_pins, R"(
+        py_module_pin_group.def("get_pins", &PinGroup<ModulePin>::get_pins, py::arg("filter") = nullptr, R"(
             Get the (ordered) pins of the pin groups.
+            The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
 
+            :param lambda filter: Filter function to be evaluated on each pin.
             :returns: The ordered pins.
             :rtype: list[hal_py.ModulePin]
         )");
@@ -78,29 +106,6 @@ namespace hal
         )");
 
         py_module_pin_group.def(
-            "get_pin",
-            [](const PinGroup<ModulePin>& self, const std::string& name) -> ModulePin* {
-                auto res = self.get_pin(name);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return nullptr;
-                }
-            },
-            py::arg("name"),
-            R"(
-            Get the pin specified by the given name.
-
-            :param str name: The name of the pin.
-            :returns: The pin on success, None otherwise.
-            :rtype: hal_py.ModulePin or None
-        )");
-
-        py_module_pin_group.def(
             "get_index",
             [](const PinGroup<ModulePin>& self, const ModulePin* pin) -> i32 {
                 auto res = self.get_index(pin);
@@ -119,29 +124,6 @@ namespace hal
             Get the index within the pin group of the given pin.
 
             :param hal_py.ModulePin pin: The pin
-            :returns: The index of the pin on success, -1 otherwise.
-            :rtype: int
-        )");
-
-        py_module_pin_group.def(
-            "get_index",
-            [](const PinGroup<ModulePin>& self, const std::string& name) -> i32 {
-                auto res = self.get_index(name);
-                if (res.is_ok())
-                {
-                    return (i32)res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return -1;
-                }
-            },
-            py::arg("name"),
-            R"(
-            Get the index within the pin group of the pin specified by the given name.
-
-            :param str name: The name of the pin.
             :returns: The index of the pin on success, -1 otherwise.
             :rtype: int
         )");
@@ -174,32 +156,6 @@ namespace hal
 
             :returns: The start index. 
             :rtype: int
-        )");
-
-        py_module_pin_group.def_property_readonly("direction", &PinGroup<ModulePin>::get_direction, R"(
-            The direction of the pin group.
-
-            :type: hal_py.PinDirection
-        )");
-
-        py_module_pin_group.def("get_direction", &PinGroup<ModulePin>::get_direction, R"(
-            Get the direction of the pin group.
-
-            :returns: The direction of the pin.
-            :rtype: hal_py.PinDirection
-        )");
-
-        py_module_pin_group.def_property_readonly("type", &PinGroup<ModulePin>::get_type, R"(
-            The type of the pin group.
-
-            :type: hal_py.PinType
-        )");
-
-        py_module_pin_group.def("get_type", &PinGroup<ModulePin>::get_type, R"(
-            Get the type of the pin group.
-
-            :returns: The type of the pin.
-            :rtype: hal_py.PinType
         )");
 
         py_module_pin_group.def("empty", &PinGroup<ModulePin>::empty, R"(

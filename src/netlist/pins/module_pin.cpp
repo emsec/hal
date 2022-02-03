@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    ModulePin::ModulePin(const std::string& name, Net* net, PinDirection direction, PinType type) : BasePin(name, direction, type), m_net(net)
+    ModulePin::ModulePin(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type) : BasePin(id, name, direction, type), m_net(net)
     {
     }
 

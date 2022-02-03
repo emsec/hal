@@ -190,15 +190,18 @@ namespace hal
                 std::vector<ModulePin*> c_pins;
                 for (ModulePin* pin : pin_group->get_pins())
                 {
-                    ModulePin* c_pin = c_module->assign_pin(pin->get_name(), c_netlist->get_net_by_id(pin->get_net()->m_id), PinType::none, false);
-                    if (c_pin == nullptr)
+                    if (const auto res = c_module->assign_pin(pin->get_name(), c_netlist->get_net_by_id(pin->get_net()->m_id), PinType::none, false); res.is_error())
                     {
+                        log_error("netlist", "{}", res.get_error().get());
                         return nullptr;
                     }
-                    c_pins.push_back(c_pin);
+                    else
+                    {
+                        c_pins.push_back(res.get());
+                    }
                 }
 
-                c_module->create_pin_group(pin_group->get_name(), c_pins, pin_group->is_ascending(), pin_group->get_start_index());
+                c_module->create_pin_group(pin_group->get_name(), c_pins, pin_group->get_direction(), pin_group->get_type(), pin_group->is_ascending(), pin_group->get_start_index());
             }
 
             c_module->m_next_input_index  = module->m_next_input_index;
@@ -481,7 +484,11 @@ namespace hal
             gate->get_module()->check_net(net, true);
             for (Endpoint* ep : net->get_destinations())
             {
-                ep->get_gate()->get_module()->check_net(net, true);
+                if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
+                {
+                    log_error("net", "{}", res.get_error().get());
+                    return nullptr;
+                }
             }
         }
 
@@ -535,7 +542,11 @@ namespace hal
                 gate->get_module()->check_net(net, true);
                 for (Endpoint* dst : net->get_destinations())
                 {
-                    dst->get_gate()->get_module()->check_net(net, true);
+                    if (const auto res = dst->get_gate()->get_module()->check_net(net, true); res.is_error())
+                    {
+                        log_error("net", "{}", res.get_error().get());
+                        false;
+                    }
                 }
             }
         }
@@ -601,7 +612,11 @@ namespace hal
             gate->get_module()->check_net(net, true);
             for (Endpoint* ep : net->get_sources())
             {
-                ep->get_gate()->get_module()->check_net(net, true);
+                if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
+                {
+                    log_error("net", "{}", res.get_error().get());
+                    return nullptr;
+                }
             }
         }
 
@@ -653,7 +668,11 @@ namespace hal
                 gate->get_module()->check_net(net, true);
                 for (Endpoint* src : net->get_sources())
                 {
-                    src->get_gate()->get_module()->check_net(net, true);
+                    if (const auto res = src->get_gate()->get_module()->check_net(net, true); res.is_error())
+                    {
+                        log_error("net", "{}", res.get_error().get());
+                        return false;
+                    }
                 }
             }
         }
@@ -879,7 +898,11 @@ namespace hal
             {
                 for (Net* net : nets)
                 {
-                    affected_module->check_net(net, true);
+                    if (const auto res = affected_module->check_net(net, true); res.is_error())
+                    {
+                        log_error("module", "{}", res.get_error().get());
+                        return false;
+                    }
                 }
             }
         }
