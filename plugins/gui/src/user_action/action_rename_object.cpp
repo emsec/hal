@@ -116,9 +116,19 @@ namespace hal
                             return false;
                         case Input:
                         case Output:
-                            pin     = mod->get_pin(net);
+                            if (auto res = mod->get_pin_by_net(net); res.is_ok())
+                            {
+                                pin = res.get();
+                            }
+                            else
+                            {
+                                return false;
+                            }
                             oldName = QString::fromStdString(pin->get_name());
-                            mod->set_pin_name(pin, mNewName.toStdString());
+                            if (mod->set_pin_name(pin, mNewName.toStdString()).is_error())
+                            {
+                                return false;
+                            }
                             break;
                     }
                 }
