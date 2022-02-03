@@ -103,14 +103,14 @@ namespace hal
         //1.variant
         for (auto const& m : gNetlist->get_modules())
         {
-            if (ModulePin* pin = m->get_pin(net); pin != nullptr)
+            if (const auto res = m->get_pin_by_net(net); res.is_ok())
             {
                 Entry newEntry;
 
                 newEntry.name      = QString::fromStdString(m->get_name());
                 newEntry.id        = m->get_id();
                 newEntry.type      = QString::fromStdString(m->get_type());
-                newEntry.used_port = QString::fromStdString(pin->get_name());
+                newEntry.used_port = QString::fromStdString(res.get()->get_name());
 
                 newEntryList.append(newEntry);
                 mModIds.insert((int)m->get_id());
