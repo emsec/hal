@@ -15,8 +15,9 @@ namespace hal {
     bool WaveItem::sValuesAsText = false;
 
     WaveItem::WaveItem(WaveData *dat)
-        : mData(dat), mYposition(-1), mRequest(0),
-          mMaxTime(WaveScene::sMinSceneWidth), mVisibile(true), mSelected(false)
+        : mData(dat), mYposition(-1), mRequest(0), mMinTime(0),
+          mMaxTime(WaveScene::sMinSceneWidth), mMaxTransition(0),
+          mVisibile(true), mSelected(false)
     {
         construct();
     }
@@ -64,6 +65,7 @@ namespace hal {
         mSolidLines.clear();
         mDotLines.clear();
         mGrpRects.clear();
+        mMaxTransition = 0;
 
         clearRequest(DataChanged);
         clearRequest(SelectionChanged);
@@ -92,7 +94,8 @@ namespace hal {
         for (auto nextIt = mData->data().constBegin(); nextIt != mData->data().constEnd(); ++nextIt)
         {
             u64 t1 = nextIt.key();
-            if (t1 > mMaxTime) mMaxTime = t1;
+            if (t1 > mMaxTime) t1 = mMaxTime;
+            if (t1 > mMaxTransition) mMaxTransition = t1;
             if (lastIt != mData->data().constEnd())
             {
                 u64 t0 = lastIt.key();
@@ -125,6 +128,7 @@ namespace hal {
             int v0 = it.value();
             ++it;
             u64 t1 = it == mData->data().constEnd() ? mMaxTime : it.key();
+            if (t1 > mMaxTransition) mMaxTransition = t1;
             float w = (t1 < t0+10 ? 10 : t1-t0);
             if (sValuesAsText)
             {
@@ -136,12 +140,23 @@ namespace hal {
         }
     }
 
-    float WaveItem::maxTime() const
+    bool WaveItem::setTimeframe()
     {
-        float retval = WaveScene::sMinSceneWidth;
-        if (wavedata()->maxTime() > retval) retval = wavedata()->maxTime();
-        if (scene() && scene()->sceneRect().width() > retval) retval = scene()->sceneRect().width();
-        return retval;
+        float tmin, tmax;
+        if (scene() && scene()->sceneRect().width() > 1)
+        {
+            tmin = scene()->sceneRect().left();
+            tmax = scene()->sceneRect().right();
+        }
+        else
+        {
+            tmin = 0;
+            tmax = 1000;
+        }
+        if (tmin == mMinTime && tmax == mMaxTime) return false;
+        mMinTime = tmin;
+        mMaxTime = tmax;
+        return true;
     }
 
     void WaveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -163,19 +178,19 @@ namespace hal {
             painter->setBrush(Qt::NoBrush);
         }
 
-        float x1 = maxTime();
-        if (hasRequest(DataChanged) || hasRequest(SelectionChanged))
+        bool bboxChanged = setTimeframe();
+
+        if (hasRequest(DataChanged) || hasRequest(SelectionChanged) || bboxChanged)
         {
-            mMaxTime = x1;
             construct();
             clearRequest(DataChanged);
             clearRequest(SelectionChanged);
         }
         else
         {
-            if (x1 != mMaxTime)
+            /*
+            if (false)  // TODO
             {
-                mMaxTime = x1;
                 if (mData->netType() == WaveData::ClockNet)
                     construct();
                 else
@@ -183,6 +198,7 @@ namespace hal {
             }
             else if (mData && mData->bits() > 1)
             {
+            */
                 if (sValuesAsText)
                 {
                     if (!mGrpRects.isEmpty()) construct();
@@ -191,7 +207,7 @@ namespace hal {
                 {
                     if (!childItems().isEmpty()) construct();
                 }
-            }
+            // }
         }
 
         painter->setRenderHint(QPainter::Antialiasing,true);
@@ -207,7 +223,7 @@ namespace hal {
         {
             painter->setPen(QPen(QBrush(QColor(sLineColor[Dotted])),0.,Qt::DotLine));
             y -= 0.5;
-            painter->drawLine(QLineF(0,y,x1,y));
+            painter->drawLine(QLineF(mMinTime,y,mMaxTime,y));
             return;
         }
 
@@ -224,8 +240,7 @@ namespace hal {
             }
         }
 
-        float x0 = mData->maxTime();
-        if (x0 < x1)
+        if (mMaxTransition < mMaxTime)
         {
             if (mData->data().last() < 0)
             {
@@ -234,7 +249,7 @@ namespace hal {
             }
             else
                 y -= mData->data().last();
-            painter->drawLine(QLineF(x0,y,x1,y));
+            painter->drawLine(QLineF(mMaxTransition,y,mMaxTime,y));
         }
 
         if (!sValuesAsText && !mGrpRects.isEmpty())
@@ -247,7 +262,7 @@ namespace hal {
 
     QRectF WaveItem::boundingRect() const
     {
-        return QRectF(0,-0.2,mMaxTime,1.4);
+        return QRectF(mMinTime,-0.2,mMaxTime-mMinTime,1.4);
     }
 
     bool WaveItem::hasRequest(Request rq) const
@@ -288,10 +303,11 @@ namespace hal {
         const WaveScene*sc = static_cast<const WaveScene*>(scene());
         if (sc) m11 = sc->xScaleFactor();
         float w = m11 * boundingRect().width();
+        float dx = sc->sceneRect().left();
         if (w<10) return;
         const WaveItem* pItem = static_cast<const WaveItem*>(parentItem());
         QString txt = pItem->wavedata()->strValue(mValue);
-        painter->setTransform(QTransform(1/m11,0,0,1/14.,0,0),true);
+        painter->setTransform(QTransform(1/m11,0,0,1/14.,dx,0),true);
         QRectF rTrans(0,0,w,boundingRect().height()*14);
         QFont font = painter->font();
         font.setPixelSize(11);

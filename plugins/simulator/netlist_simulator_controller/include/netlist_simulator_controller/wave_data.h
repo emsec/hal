@@ -14,6 +14,7 @@
 namespace hal {
 
     class WaveData;
+    class WaveDataTimeframe;
     class NetlistSimulator;
     class Net;
 
@@ -48,7 +49,7 @@ namespace hal {
         void setName(const QString& nam);
         void setBits(int bts);
         void setDirty(bool dty)                     { mDirty = dty; }
-        bool loadSaleae(const SaleaeDirectory& sd);
+        bool loadSaleae(const SaleaeDirectory& sd, const WaveDataTimeframe& tframe);
         void saveSaleae(SaleaeDirectory& sd) const;
         void setData(const QMap<u64,int>& dat);
         int  intValue(float t) const;
@@ -82,14 +83,32 @@ namespace hal {
 
     class WaveDataGroup;
 
+    class WaveDataTimeframe
+    {
+        friend class WaveDataList;
+        u64 mSceneMaxTime;
+        u64 mSimulateMaxTime;
+        u64 mUserdefMaxTime;
+        u64 mUserdefMinTime;
+    public:
+        WaveDataTimeframe();
+        u64 sceneMaxTime() const;
+        u64 simulateMaxTime() const;
+        u64 sceneMinTime() const;
+        u64 sceneWidth() const;
+        bool hasUserTimeframe() const;
+        void setUserTimeframe(u64 t0=0, u64 t1=0);
+        void setSceneMaxTime(u64 t) { mSceneMaxTime = t; }
+        void setSimulateMaxTime(u64 t) { mSimulateMaxTime = t; }
+    };
+
     class WaveDataList : public QObject, public QList<WaveData*>
     {
         friend class WaveDataGroup;
         Q_OBJECT
 
         QMap<u32,int>     mIds;
-        u64               mSimulTime;
-        u64               mMaxTime;
+        WaveDataTimeframe mTimeframe;
         SaleaeDirectory   mSaleaeDirectory;
         void testDoubleCount();
         void restoreIndex();
@@ -123,11 +142,11 @@ namespace hal {
 
         WaveData* waveDataByNet(const Net* n);
         int waveIndexByNetId(u32 id) const { return mIds.value(id,-1); }
+        void triggerAddToView(u32 id) const;
         bool hasNet(u32 id) const { return mIds.contains(id); }
         QSet<u32> toSet() const;
         void updateWaveName(int inx, const QString& nam);
-        u64 simulTime() const { return mSimulTime; }
-        u64 maxTime()   const { return mMaxTime; }
+        const WaveDataTimeframe& timeFrame() const { return mTimeframe; }
         void setValueForEmpty(int val);
         void dump() const;
         QList<const WaveData*> toList() const;
@@ -137,8 +156,9 @@ namespace hal {
         void updateFromSaleae();
         const SaleaeDirectory& saleaeDirectory() const { return mSaleaeDirectory; }
         void insertBooleanValue(WaveData* wd, u64 t, BooleanFunction::Value bval);
+        void setUserTimeframe(u64 t0=0, u64 t1=0);
     Q_SIGNALS:
-        void waveAdded(int inx);
+        void waveAdded(int inx) const;
         void groupAdded(int grpId);
         void groupAboutToBeRemoved(WaveDataGroup* grp);
         void waveDataAboutToBeChanged(int inx);
@@ -147,7 +167,7 @@ namespace hal {
         void nameUpdated(int inx);
         void waveRemoved(int inx);
         void waveAddedToGroup(const QVector<u32>& netIds, int grpId);
-        void maxTimeChanged(u64 tmax);
+        void timeframeChanged(const WaveDataTimeframe* tframe);
         void triggerBeginResetModel();
         void triggerEndResetModel();
     };

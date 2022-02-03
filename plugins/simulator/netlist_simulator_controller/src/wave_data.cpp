@@ -160,7 +160,7 @@ namespace hal {
         return true;
     }
 
-    bool WaveData::loadSaleae(const SaleaeDirectory& sd)
+    bool WaveData::loadSaleae(const SaleaeDirectory& sd, const WaveDataTimeframe &tframe)
     {
         mData.clear();
         std::filesystem::path path = sd.get_datafile(mName.toStdString(),mId);
@@ -169,19 +169,41 @@ namespace hal {
         SaleaeInputFile sif(path);
         SaleaeDataBuffer sdb = sif.get_data();
         u64 n = sdb.mCount;
-        bool truncated = false;
-        if (n > 1000000)
+        if (!n)
         {
-            n = 1000000; // TODO : temporary truncate hack to avoid exhausted memory when loading extremly large waves
-            truncated = true;
+            mDirty = true;
+            return true;
         }
+        u64 t0 = tframe.hasUserTimeframe() ? tframe.sceneMinTime() : 0;
+        u64 t1 = tframe.hasUserTimeframe() ? tframe.sceneMaxTime() : sdb.mTimeArray[n-1];
+        Q_ASSERT(t0 <= t1);
+        int lastVal = BooleanFunction::X;
+        bool valuePending = false;
         for (u64 i=0; i<n; i++)
         {
-            mData.insert(sdb.mTimeArray[i],sdb.mValueArray[i]);
-        }
-        if (truncated)
-        {
-            mData.insert(sdb.mTimeArray[n],BooleanFunction::X);
+            u64 t = sdb.mTimeArray[i];
+            if (t < t0)
+            {
+                lastVal = sdb.mValueArray[i];
+                valuePending = true;
+            }
+            else if (t == t0)
+            {
+                mData.insert(t,sdb.mValueArray[i]);
+                valuePending = false;
+            }
+            else if (t <= t1)
+            {
+                if (valuePending) mData.insert(t0,lastVal);
+                mData.insert(t,sdb.mValueArray[i]);
+                valuePending = false;
+            }
+            else
+            {
+                if (valuePending) mData.insert(t0,lastVal);
+                valuePending = false;
+                break;
+            }
         }
         mDirty = true;
         return true;
@@ -523,8 +545,48 @@ namespace hal {
     }
 
 //--------------------------------------------
+    WaveDataTimeframe::WaveDataTimeframe()
+            : mSceneMaxTime(1000), mSimulateMaxTime(0), mUserdefMaxTime(0), mUserdefMinTime(0) {;}
+
+    u64 WaveDataTimeframe::simulateMaxTime() const
+    {
+        return mSimulateMaxTime;
+    }
+
+    u64 WaveDataTimeframe::sceneMaxTime() const
+    {
+        if (hasUserTimeframe()) return mUserdefMaxTime;
+        return mSceneMaxTime;
+    }
+
+    u64 WaveDataTimeframe::sceneMinTime() const
+    {
+        if (hasUserTimeframe()) return mUserdefMinTime;
+        return 0;
+    }
+
+    u64 WaveDataTimeframe::sceneWidth() const
+    {
+        u64 x0 = sceneMinTime();
+        u64 x1 = sceneMaxTime();
+        if (x1 <= x0) return 1;
+        return (x1-x0);
+    }
+
+    bool WaveDataTimeframe::hasUserTimeframe() const
+    {
+        return mUserdefMaxTime > 0;
+    }
+
+    void WaveDataTimeframe::setUserTimeframe(u64 t0, u64 t1)
+    {
+        mUserdefMinTime = t0;
+        mUserdefMaxTime = t1;
+    }
+
+//--------------------------------------------
     WaveDataList::WaveDataList(const QString& sdFilename, QObject* parent)
-        : QObject(parent), mSimulTime(0), mMaxTime(0),
+        : QObject(parent),
           mSaleaeDirectory(sdFilename.toStdString())
     {;}
 
@@ -535,21 +597,21 @@ namespace hal {
 
     void WaveDataList::setMaxTime(u64 tmax)
     {
-        if (mMaxTime == tmax) return;
+        if (mTimeframe.mSceneMaxTime == tmax) return;
 
         // adjust clock settings
-        bool mustUpdateClocks = (tmax > mMaxTime);
+        bool mustUpdateClocks = (tmax > mTimeframe.mSceneMaxTime);
 
-        mMaxTime = tmax;
+        mTimeframe.mSceneMaxTime = tmax;
         if (mustUpdateClocks) updateClocks();
-        Q_EMIT maxTimeChanged(mMaxTime);
+        Q_EMIT timeframeChanged(&mTimeframe);
     }
 
     void WaveDataList::incrementSimulTime(u64 deltaT)
     {
-        mSimulTime += deltaT;
-        if (mSimulTime > mMaxTime)
-        setMaxTime(mSimulTime);
+        mTimeframe.mSimulateMaxTime += deltaT;
+        if (mTimeframe.mSimulateMaxTime > mTimeframe.mSceneMaxTime)
+            setMaxTime(mTimeframe.mSimulateMaxTime);
     }
     
     QList<const WaveData*> WaveDataList::toList() const
@@ -601,6 +663,13 @@ namespace hal {
         return retval;
     }
 
+    void WaveDataList::setUserTimeframe(u64 t0, u64 t1)
+    {
+        if (t0 == mTimeframe.mUserdefMinTime && t1 == mTimeframe.mUserdefMaxTime) return;
+        mTimeframe.setUserTimeframe(t0,t1);
+        Q_EMIT timeframeChanged(&mTimeframe);
+    }
+
     void WaveDataList::clearAll()
     {
         bool notEmpty = ! isEmpty();
@@ -615,7 +684,7 @@ namespace hal {
 
     void WaveDataList::dump() const
     {
-        fprintf(stderr, "WaveDataList:_________%8u______________\n", (unsigned int) mMaxTime);
+        fprintf(stderr, "WaveDataList:_________%8u______________\n", (unsigned int) mTimeframe.mSimulateMaxTime);
         for (auto it = constBegin(); it!= constEnd(); ++it)
         {
             fprintf(stderr, "  %4d <%s>:", (*it)->id(), (*it)->name().toStdString().c_str());
@@ -669,7 +738,7 @@ namespace hal {
             if ((*it)->netType() == WaveData::ClockNet)
             {
                 WaveDataClock* wdc = static_cast<WaveDataClock*>(*it);
-                wdc->setMaxTime(mMaxTime);
+                wdc->setMaxTime(mTimeframe.mSceneMaxTime);
             }
     }
 
@@ -684,7 +753,6 @@ namespace hal {
         setMaxTime(tmax);
     }
 
-    int ddd = 0;
     void WaveDataList::add(WaveData* wd, bool silent, bool updateSaleae)
     {
         int n = size();
@@ -693,8 +761,15 @@ namespace hal {
         append(wd);
         updateMaxTime();
         if (updateSaleae) wd->saveSaleae(mSaleaeDirectory);
-        if (!silent) Q_EMIT waveAdded(n);
+//        if (!silent) Q_EMIT waveAdded(n);
         testDoubleCount();
+    }
+
+    void WaveDataList::triggerAddToView(u32 id) const
+    {
+        int iwave = waveIndexByNetId(id);
+        if (iwave<0) return;
+        Q_EMIT waveAdded(iwave);
     }
 
     void WaveDataList::registerGroup(WaveDataGroup *grp)
@@ -757,7 +832,7 @@ namespace hal {
         for (WaveDataGroup* grp : mDataGroups.values())
             if (grp->hasNetId(wdNew->id()))
                 grp->replaceChild(wdNew);
-        if (wdNew->maxTime() > mMaxTime)
+        if (wdNew->maxTime() > mTimeframe.mSceneMaxTime)
             updateMaxTime();
 
         wdNew->saveSaleae(mSaleaeDirectory);
@@ -772,7 +847,7 @@ namespace hal {
     {
         mSaleaeDirectory.parse_json();
         u64 sdMaxTime = mSaleaeDirectory.get_max_time();
-        if (sdMaxTime > mSimulTime) incrementSimulTime(sdMaxTime-mSimulTime);
+        if (sdMaxTime > mTimeframe.mSimulateMaxTime) incrementSimulTime(sdMaxTime-mTimeframe.mSimulateMaxTime);
         QSet<QString> loadedNets;
         for (const SaleaeDirectory::ListEntry& sdle : mSaleaeDirectory.get_net_list())
             loadedNets.insert(QString::fromStdString(sdle.name));
@@ -780,7 +855,7 @@ namespace hal {
         {
             WaveData* wd = at(i);
             if (!loadedNets.contains(wd->name())) continue;
-            if (wd->loadSaleae(mSaleaeDirectory))
+            if (wd->loadSaleae(mSaleaeDirectory,mTimeframe))
                 emitWaveUpdated(i);
         }
     }
@@ -801,7 +876,7 @@ namespace hal {
         int inx = mIds.value(n->get_id(),-1);
         if (inx >= 0) return at(inx);
         WaveData* wd = new WaveData(n);
-        if (wd->loadSaleae(mSaleaeDirectory))
+        if (wd->loadSaleae(mSaleaeDirectory,mTimeframe))
         {
             add(wd,false,false);
             return wd;

@@ -66,6 +66,8 @@ namespace hal {
             {
                 addItem(wi);
                 wi->clearRequest(WaveItem::AddRequest);
+                wi->setTimeframe();
+                wi->setRequest(WaveItem::DataChanged);
             }
 
             if (wi->hasRequest(WaveItem::DeleteRequest))
@@ -109,14 +111,14 @@ namespace hal {
         return mWaveItemHash->size();
     }
 
-    void WaveScene::handleMaxTimeChanged(u64 tmax)
+    void WaveScene::handleTimeframeChanged(const WaveDataTimeframe *tframe)
     {
-        if (tmax > sceneRect().width())
-            adjustSceneRect(tmax);
+        if (tframe->sceneMinTime() != sceneRect().left() || tframe->sceneWidth() != sceneRect().width())
+            adjustSceneRect(tframe);
     }
 
 
-    float WaveScene::adjustSceneRect(u64 tmax)
+    float WaveScene::adjustSceneRect(const WaveDataTimeframe *tframe)
     {
         // height
         int n = nextWavePosition();
@@ -124,21 +126,25 @@ namespace hal {
         float h = yPosition(n)+2;
 
         // width
-        float maxw = sceneRect().width();
-        if (maxw < sMinSceneWidth) maxw = sMinSceneWidth;
-        if (maxw < tmax)           maxw = tmax;
-        for (WaveItem* itm : mWaveItemHash->values())
-            if (itm->boundingRect().width() > maxw)
-                maxw = itm->boundingRect().width();
+        u64 w = tframe->sceneWidth();
+        if (w < sMinSceneWidth) w = sMinSceneWidth;
 
         // tell items that scene width changed
 
-        if (maxw != sceneRect().width() || h != sceneRect().height())
+        QRectF updatedRect(tframe->sceneMinTime(),0,w,h);
+        if (sceneRect() != updatedRect)
         {
-            setSceneRect(QRectF(0,0,maxw,h));
+            setSceneRect(updatedRect);
 //            mSceneRect->setRect(sceneRect());
         }
-        return maxw;
+
+        for (WaveItem* wi : mWaveItemHash->values())
+        {
+            wi->setTimeframe();
+            wi->setRequest(WaveItem::DataChanged);
+        }
+
+        return w;
     }
 
     void WaveScene::handleWaveUpdated(int iwave, int groupId)
@@ -148,7 +154,7 @@ namespace hal {
         if (!wi) return;
         wi->setWaveData(mWaveDataList->at(iwave));
         wi->update();
-        adjustSceneRect();
+      //TODO  adjustSceneRect();
     }
 
     void WaveScene::updateWaveItemValues()

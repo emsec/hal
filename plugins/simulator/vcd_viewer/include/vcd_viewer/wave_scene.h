@@ -9,6 +9,7 @@
 namespace hal {
     class WaveItem;
     class WaveDataList;
+    class WaveDataTimeframe;
     class WaveCursor;
 
     class WaveScene : public QGraphicsScene
@@ -23,7 +24,7 @@ namespace hal {
         float   mXmag;
 //        QGraphicsRectItem* mSceneRect;
 
-        float adjustSceneRect(u64 tmax = 0);
+        float adjustSceneRect(const WaveDataTimeframe* tframe);
         int nextWavePosition() const;
 
         static const int sMinItemHeight;
@@ -34,7 +35,7 @@ namespace hal {
         void xScaleChanged(float m11);
         void updateWaveItemValues();
         void handleWaveUpdated(int iwave, int groupId);
-        void handleMaxTimeChanged(u64 tmax);
+        void handleTimeframeChanged(const WaveDataTimeframe* tframe);
         void updateWaveItems();
 
     public:

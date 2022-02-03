@@ -151,6 +151,13 @@ namespace hal
                 :param hal_py.BooleanFunction.Value value: The value to set.
             )")
 
+            .def("set_timeframe", &NetlistSimulatorController::set_timeframe, py::arg("tmin")=0, py::arg("tmax")=0, R"(
+                Set timeframe for viewer.
+
+                :param int tmin: Lower limit for time scale in wave viewer.
+                :param int tmax: Upper limit for time scale in wave viewer.
+            )")
+
             .def("get_engine_names", &NetlistSimulatorController::get_engine_names, R"(
                 Get a list of registered simulation engines.
 

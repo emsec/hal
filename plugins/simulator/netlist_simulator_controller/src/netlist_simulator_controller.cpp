@@ -200,7 +200,7 @@ namespace hal
                         break;
                     }
                 }
-                WaveDataClock* wdc = new WaveDataClock(n, clk, mWaveDataList->simulTime());
+                WaveDataClock* wdc = new WaveDataClock(n, clk, mWaveDataList->timeFrame().sceneMaxTime());
                 mWaveDataList->addOrReplace(wdc);
             }
         }
@@ -224,6 +224,7 @@ namespace hal
 
     WaveData* NetlistSimulatorController::get_waveform_by_net(Net* n) const
     {
+        mWaveDataList->triggerAddToView(n->get_id());
         return mWaveDataList->waveDataByNet(n);
     }
 
@@ -423,7 +424,7 @@ namespace hal
     {
         if (mState >= ParameterReady) return; // nothing to do
 
-        if (mSimulationInput->is_ready() && mSimulationEngine && mWaveDataList->simulTime() > 0)
+        if (mSimulationInput->is_ready() && mSimulationEngine && mWaveDataList->timeFrame().simulateMaxTime() > 0)
             setState(ParameterReady);
     }
 
@@ -493,7 +494,7 @@ namespace hal
                 log_warning(get_name(), "net[{}] '{}' is not an input net, value not assigned.", net->get_id(), net->get_name());
             return;
         }
-        u64 t = mWaveDataList->simulTime();
+        u64 t = mWaveDataList->timeFrame().simulateMaxTime();
         WaveData* wd = mWaveDataList->waveDataByNet(net);
         if (!wd)
         {
@@ -503,6 +504,11 @@ namespace hal
         }
         else
             mWaveDataList->insertBooleanValue(wd,t,value);
+    }
+
+    void NetlistSimulatorController::set_timeframe(u64 tmin, u64 tmax)
+    {
+        mWaveDataList->setUserTimeframe(tmin, tmax);
     }
 
     void NetlistSimulatorController::initialize()
