@@ -435,6 +435,7 @@ namespace hal
         void requireSceneUpdate();
         void startSceneUpdate();
         bool testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId);
+        void removeModuleContents(const u32 moduleId);
 
 
         u32 mId;

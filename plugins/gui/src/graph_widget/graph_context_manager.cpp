@@ -215,22 +215,24 @@ namespace hal
             else
                 context->testIfAffected(m->get_id(), &added_module, nullptr);
 
-//            if (context->modules().contains(added_module))
-//            {
-//                QSet<u32> modules = context->modules();
-//                modules.remove(added_module);
+            // When the module is unfolded and was moved to another folded module visible in view,
+            // remove all gates and submodules of added_module from view
+            if (context->isShowingModule(added_module, {}, {}, {}, {}, false))
+            {
+                QSet<u32> modules = context->modules();
+                modules.remove(added_module);
 
-//                // modules    : all modules visible in graph context view except recently added
-//                // module_ids : all anchestors of recently added module
-//                // algorithm  : remove 'recently added' module from view if it was moved to
-//                //              (child or grandchild of) another module visible in view
-//                for (u32 id : module_ids)
-//                    if (modules.contains(id))
-//                    {
-//                        context->remove({added_module},{});
-//                        return;
-//                    }
-//            }
+                // modules    : all modules visible in graph context view except recently added
+                // module_ids : all anchestors of recently added module
+                // algorithm  : remove 'recently added' module from view if it was moved to
+                //              (child or grandchild of) another module visible in view
+                for (u32 id : module_ids)
+                    if (modules.contains(id))
+                    {
+                        context->removeModuleContents(added_module);
+                        return;
+                    }
+            }
         }
     }
 
@@ -241,6 +243,7 @@ namespace hal
 //        dump("ModuleSubmoduleRemoved", m->get_id(), removed_module);
 
         for (GraphContext* context : mContextTableModel->list())
+            // Remove folded module
             if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}, false) && !context->isShowingModule(removed_module, {}, {}, {}, {}, false))
             {
                 context->remove({removed_module}, {});
@@ -248,6 +251,11 @@ namespace hal
                 {
                     deleteGraphContext(context);
                 }
+            }
+            // Remove unfolded module
+            else if (context->isShowingModule(removed_module, {}, {}, {}, {}, false))
+            {
+                context->removeModuleContents(removed_module);
             }
             else
                 context->testIfAffected(m->get_id(), &removed_module, nullptr);

@@ -277,6 +277,22 @@ namespace hal
         return false;
     }
 
+    void GraphContext::removeModuleContents(const u32 moduleId)
+    {
+        QSet<u32> childGates;
+        QSet<u32> childModules;
+
+        for (const Gate* g : gNetlist->get_module_by_id(moduleId)->get_gates(nullptr, true))
+        {
+            childGates.insert(g->get_id());
+        }
+        for (const Module* sm : gNetlist->get_module_by_id(moduleId)->get_submodules(nullptr, true))
+        {
+            childModules.insert(sm->get_id());
+        }
+        remove(childModules, childGates);
+    }
+
     bool GraphContext::isShowingModule(const u32 id) const
     {
         return isShowingModule(id, {}, {}, {}, {});
@@ -307,8 +323,8 @@ namespace hal
         auto moduleModules = (modules - minus_modules) + plus_modules;
 
         if (exclusively)
-            return contextGates == moduleGates && contextModules == moduleModules;
-        else if (contextGates.contains(moduleGates) && contextModules.contains(moduleModules) && (!moduleGates.empty() && !moduleModules.empty()))
+            return contextGates == moduleGates && contextModules == moduleModules;   
+        else if (contextGates.contains(moduleGates) && contextModules.contains(moduleModules) && !moduleGates.empty() && !moduleModules.empty())
             return true;
         else if (contextGates.contains(moduleGates) && !moduleGates.empty() && moduleModules.empty())
             return true;
