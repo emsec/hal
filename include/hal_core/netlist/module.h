@@ -618,8 +618,12 @@ namespace hal
 
         NetConnectivity check_net_endpoints(const Net* net) const;
         Result<std::monostate> check_net(Net* net, bool recursive = false);
-        Result<ModulePin*> assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none, bool create_group = true);
+        Result<ModulePin*> assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none);
         Result<std::monostate> remove_pin_net(Net* net);
+        Result<ModulePin*> create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type);
+        Result<std::monostate> delete_pin_internal(ModulePin* pin);
+        Result<PinGroup<ModulePin>*> create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index);
+        Result<std::monostate> delete_pin_group_internal(PinGroup<ModulePin>* pin_group);
 
         std::string m_name;
         std::string m_type;
