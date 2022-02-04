@@ -190,7 +190,7 @@ namespace hal
                 std::vector<ModulePin*> c_pins;
                 for (ModulePin* pin : pin_group->get_pins())
                 {
-                    if (const auto res = c_module->assign_pin(pin->get_name(), c_netlist->get_net_by_id(pin->get_net()->m_id), PinType::none, false); res.is_error())
+                    if (const auto res = c_module->create_pin(pin->get_id(), pin->get_name(), c_netlist->get_net_by_id(pin->get_net()->m_id), PinType::none, false); res.is_error())
                     {
                         log_error("netlist", "{}", res.get_error().get());
                         return nullptr;
@@ -201,7 +201,13 @@ namespace hal
                     }
                 }
 
-                c_module->create_pin_group(pin_group->get_name(), c_pins, pin_group->get_direction(), pin_group->get_type(), pin_group->is_ascending(), pin_group->get_start_index());
+                if (const auto res = c_module->create_pin_group(
+                        pin_group->get_id(), pin_group->get_name(), c_pins, pin_group->get_direction(), pin_group->get_type(), pin_group->is_ascending(), pin_group->get_start_index());
+                    res.is_error())
+                {
+                    log_error("netlist", "{}", res.get_error().get());
+                    return nullptr;
+                }
             }
 
             c_module->m_next_input_index  = module->m_next_input_index;
@@ -481,7 +487,12 @@ namespace hal
         // update internal nets and port nets
         if (m_net_checks_enabled)
         {
-            gate->get_module()->check_net(net, true);
+            if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+            {
+                log_error("net", "{}", res.get_error().get());
+                return nullptr;
+            }
+
             for (Endpoint* ep : net->get_destinations())
             {
                 if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
@@ -539,13 +550,18 @@ namespace hal
             // update internal nets and port nets
             if (m_net_checks_enabled)
             {
-                gate->get_module()->check_net(net, true);
+                if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+                {
+                    log_error("net", "{}", res.get_error().get());
+                    return false;
+                }
+
                 for (Endpoint* dst : net->get_destinations())
                 {
                     if (const auto res = dst->get_gate()->get_module()->check_net(net, true); res.is_error())
                     {
                         log_error("net", "{}", res.get_error().get());
-                        false;
+                        return false;
                     }
                 }
             }
@@ -609,7 +625,12 @@ namespace hal
         // update internal nets and port nets
         if (m_net_checks_enabled)
         {
-            gate->get_module()->check_net(net, true);
+            if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+            {
+                log_error("net", "{}", res.get_error().get());
+                return nullptr;
+            }
+
             for (Endpoint* ep : net->get_sources())
             {
                 if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
@@ -665,7 +686,12 @@ namespace hal
         {    // update internal nets and port nets
             if (m_net_checks_enabled)
             {
-                gate->get_module()->check_net(net, true);
+                if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+                {
+                    log_error("net", "{}", res.get_error().get());
+                    return false;
+                }
+
                 for (Endpoint* src : net->get_sources())
                 {
                     if (const auto res = src->get_gate()->get_module()->check_net(net, true); res.is_error())
@@ -918,7 +944,10 @@ namespace hal
 
     bool NetlistInternalManager::module_check_net(Module* module, Net* net, bool recursive)
     {
-        module->check_net(net, recursive);
+        if (const auto res = module->check_net(net, recursive); res.is_error())
+        {
+            return false;
+        }
         return true;
     }
 

@@ -84,7 +84,6 @@ namespace hal
         }
 
         /**
-         * TODO test, pybind
          * Get the ID of the pin group. The ID is unique within an entity, e.g., a module or a gate type.
          * 
          * @return The ID of the pin group.
@@ -95,7 +94,6 @@ namespace hal
         }
 
         /**
-         * TODO test, pybind
          * Set the name of the pin group.
          * 
          * @param[in] name - The name of the pin group.
@@ -116,7 +114,6 @@ namespace hal
         }
 
         /**
-         * TODO pybind, test
          * Set the type of the pin group.
          * 
          * @param[in] type - The pin group type.

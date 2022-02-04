@@ -656,7 +656,7 @@ namespace hal
                 }
                 else
                 {
-                    if (auto res = assign_pin_net(net, PinDirection::inout); res.is_error())
+                    if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::inout); res.is_error())
                     {
                         return ERR(res.get_error());
                     }
@@ -677,7 +677,7 @@ namespace hal
                     }
                     else
                     {
-                        if (auto res = assign_pin_net(net, PinDirection::input); res.is_error())
+                        if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::input); res.is_error())
                         {
                             return ERR(res.get_error());
                         }
@@ -708,7 +708,7 @@ namespace hal
                     }
                     else
                     {
-                        if (auto res = assign_pin_net(net, PinDirection::output); res.is_error())
+                        if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::output); res.is_error())
                         {
                             return ERR(res.get_error());
                         }
@@ -771,7 +771,7 @@ namespace hal
         return m_next_pin_group_id;
     }
 
-    Result<ModulePin*> Module::assign_pin(const std::string& name, Net* net, PinType type, bool create_group)
+    Result<ModulePin*> Module::create_pin(const u32 id, const std::string& name, Net* net, PinType type, bool create_group)
     {
         if (m_internal_manager->m_net_checks_enabled)
         {
@@ -811,7 +811,12 @@ namespace hal
                        + ", could not assign pin with name '" + name + "'");
         }
 
-        return assign_pin_net(net, direction, name, type, create_group);
+        return assign_pin_net(id, net, direction, name, type, create_group);
+    }
+
+    Result<ModulePin*> Module::create_pin(const std::string& name, Net* net, PinType type, bool create_group)
+    {
+        return create_pin(get_unique_pin_id(), name, net, type, create_group);
     }
 
     std::vector<ModulePin*> Module::get_pins(const std::function<bool(ModulePin*)>& filter) const
@@ -1022,15 +1027,20 @@ namespace hal
         return OK({});
     }
 
-    Result<PinGroup<ModulePin>*>
-        Module::create_pin_group(const std::string& name, const std::vector<ModulePin*> pins, PinDirection direction, PinType type, bool ascending, u32 start_index, bool delete_empty_groups)
+    Result<PinGroup<ModulePin>*> Module::create_pin_group(const u32 id,
+                                                          const std::string& name,
+                                                          const std::vector<ModulePin*> pins,
+                                                          PinDirection direction,
+                                                          PinType type,
+                                                          bool ascending,
+                                                          u32 start_index,
+                                                          bool delete_empty_groups)
     {
         if (name.empty())
         {
             return ERR("empty string provided when trying to create new pin group for module '" + m_name + "' with ID " + std::to_string(m_id));
         }
 
-        u32 id = get_unique_pin_group_id();
         std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(id, name, direction, type, ascending, start_index));
         PinGroup<ModulePin>* pin_group = pin_group_owner.get();
 
@@ -1062,6 +1072,12 @@ namespace hal
 
         m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         return OK(pin_group);
+    }
+
+    Result<PinGroup<ModulePin>*>
+        Module::create_pin_group(const std::string& name, const std::vector<ModulePin*> pins, PinDirection direction, PinType type, bool ascending, u32 start_index, bool delete_empty_groups)
+    {
+        return create_pin_group(get_unique_pin_group_id(), name, pins, direction, type, ascending, start_index, delete_empty_groups);
     }
 
     Result<std::monostate> Module::delete_pin_group(PinGroup<ModulePin>* pin_group)
@@ -1203,7 +1219,7 @@ namespace hal
         return OK({});
     }
 
-    Result<ModulePin*> Module::assign_pin_net(Net* net, PinDirection direction, const std::string& name, PinType type, bool create_group)
+    Result<ModulePin*> Module::assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name, PinType type, bool create_group)
     {
         std::string name_internal;
 
@@ -1241,7 +1257,6 @@ namespace hal
         }
 
         // create pin
-        u32 pin_id = get_unique_pin_id();
         std::unique_ptr<ModulePin> pin_owner(new ModulePin(pin_id, name_internal, net, direction, type));
         ModulePin* pin = pin_owner.get();
         m_pins.push_back(std::move(pin_owner));

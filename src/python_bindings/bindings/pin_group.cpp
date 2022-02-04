@@ -28,6 +28,19 @@ namespace hal
             :rtype: bool
         )");
 
+        py_module_pin_group.def_property_readonly("id", &PinGroup<ModulePin>::get_id, R"(
+            The ID of the module pin group. The ID is unique within a module.
+
+            :type: int
+        )");
+
+        py_module_pin_group.def("get_id", &PinGroup<ModulePin>::get_id, R"(
+            Get the ID of the module pin group. The ID is unique within a module.
+
+            :returns: The ID of the pin.
+            :rtype: int
+        )");
+
         py_module_pin_group.def_property_readonly("name", &PinGroup<ModulePin>::get_name, R"(
             The name of the pin group.
 

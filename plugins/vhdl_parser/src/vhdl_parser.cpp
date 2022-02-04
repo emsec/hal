@@ -1334,7 +1334,7 @@ namespace hal
         // assign module pins
         for (const auto& [net, port_info] : m_module_ports)
         {
-            std::get<2>(port_info)->assign_pin(std::get<1>(port_info), net);
+            std::get<2>(port_info)->create_pin(std::get<1>(port_info), net);
         }
 
         for (Module* module : m_netlist->get_modules())
@@ -1344,12 +1344,12 @@ namespace hal
 
             if (module->get_pin_by_net(m_one_net).is_error() && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
             {
-                module->assign_pin("'1'", m_one_net);
+                module->create_pin("'1'", m_one_net);
             }
 
             if (module->get_pin_by_net(m_zero_net).is_error() && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
             {
-                module->assign_pin("'0'", m_one_net);
+                module->create_pin("'0'", m_one_net);
             }
         }
 

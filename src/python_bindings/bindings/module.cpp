@@ -399,9 +399,9 @@ namespace hal
         )");
 
         py_module.def(
-            "assign_pin",
+            "create_pin",
             [](Module& self, const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true) -> ModulePin* {
-                auto res = self.assign_pin(name, net, type, create_group);
+                auto res = self.create_pin(name, net, type, create_group);
                 if (res.is_ok())
                 {
                     return res.get();
