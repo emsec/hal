@@ -307,6 +307,13 @@ public:
      */
     WaveData* get_waveform_by_net(Net* n) const;
 
+    /**
+     * Set timeframe for viewer
+     * @param[in] tmin Lower limit for time scale in wave viewer
+     * @param[in] tmax Upper limit for time scale in wave viewer
+     */
+    void set_timeframe(u64 tmin=0, u64 tmax=0);
+
 public Q_SLOTS:
     void handleOpenInputFile(const QString& filename);
     void handleSelectGates();

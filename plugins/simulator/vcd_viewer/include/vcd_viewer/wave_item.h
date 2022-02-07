@@ -52,7 +52,9 @@ namespace hal {
         QVector<QLineF> mDotLines;
         QVector<QRectF> mGrpRects;
 
+        float mMinTime;
         float mMaxTime;
+        float mMaxTransition;
         bool mVisibile;
         bool mSelected;
 
@@ -77,12 +79,11 @@ namespace hal {
         void setWaveVisible(bool vis);
         void setWaveSelected(bool sel);
         QRectF boundingRect() const override;
-        float maxTime() const;
+        bool setTimeframe();
         bool hasRequest(Request rq) const;
         void setRequest(Request rq);
         void clearRequest(Request rq);
         bool isDeleted() const;
-
         static bool sValuesAsText;
     };
 
