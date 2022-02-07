@@ -1113,7 +1113,7 @@ namespace hal
         for (ModulePin* pin : pins_copy)
         {
             removed_pins = true;
-            if (auto res = create_pin_group(pin->get_name(), {pin}); res.is_error())
+            if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type()); res.is_error())
             {
                 return ERR(res.get_error());
             }
@@ -1158,7 +1158,10 @@ namespace hal
 
             if (delete_empty_groups && pg->empty())
             {
-                delete_pin_group_internal(pg);
+                if (auto res = delete_pin_group_internal(pg); res.is_error()) 
+                {
+                    return res;
+                }
             }
         }
 
@@ -1386,7 +1389,7 @@ namespace hal
         // erase pin
         u32 id = pin->get_id();
         m_pins_map.erase(id);
-        m_pins.erase(std::find_if(m_pins.begin(), m_pins.end(), [pin](const std::unique_ptr<ModulePin>& p) { return p.get() == pin; }));
+        m_pins.erase(std::find_if(m_pins.begin(), m_pins.end(), [pin](const auto& p) { return p.get() == pin; }));
 
         // free pin ID
         m_free_pin_ids.insert(id);
@@ -1409,10 +1412,6 @@ namespace hal
         if (name.empty())
         {
             return ERR("empty string provided when trying to create new pin group for module '" + m_name + "' with ID " + std::to_string(m_id));
-        }
-        if (direction == PinDirection::internal || direction == PinDirection::none)
-        {
-            return ERR("pin direction '" + enum_to_string(direction) + "' is invalid, cannot create pin group '" + name + " within module '" + m_name + "' with ID " + std::to_string(m_id));
         }
 
         // create pin group
@@ -1448,7 +1447,8 @@ namespace hal
         // erase pin group
         u32 id = pin_group->get_id();
         m_pin_groups_map.erase(id);
-        m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pin_group](const std::unique_ptr<PinGroup<ModulePin>>& pg) { return pg.get() == pin_group; }));
+        m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group));
+        m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pin_group](const auto& pg) { return pg.get() == pin_group; }));
 
         // free pin group ID
         m_free_pin_group_ids.insert(id);
