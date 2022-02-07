@@ -890,7 +890,7 @@ namespace hal {
                 // set pin type
                 EXPECT_TRUE(m_0->set_pin_type(pin_by_net, PinType::address).is_ok());
                 EXPECT_EQ(pin_by_net->get_type(), PinType::address);
-                EXPECT_EQ(group->get_type(), PinType::address);
+                EXPECT_EQ(group->get_type(), PinType::none);
             }
             {
                 // get output pin and check name, net, direction, and type
@@ -933,7 +933,9 @@ namespace hal {
                 // set pin type
                 EXPECT_TRUE(m_0->set_pin_type(pin_by_net, PinType::data).is_ok());
                 EXPECT_EQ(pin_by_net->get_type(), PinType::data);
-                EXPECT_EQ(group->get_type(), PinType::data);
+                EXPECT_EQ(group->get_type(), PinType::none);
+                EXPECT_TRUE(m_0->set_pin_group_type(group, PinType::address).is_ok());
+                EXPECT_EQ(group->get_type(), PinType::address);
             }
 
             // add another module, m_0 now dead
@@ -1042,15 +1044,17 @@ namespace hal {
                 EXPECT_EQ(in_pin_0->get_group().first->get_name(), in_pin_0->get_name());
                 EXPECT_EQ(in_pin_0->get_group().second, 0);
                 EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, in_pin_0).is_ok());
+                EXPECT_EQ(in_group_0->size(), 2);
 
-                // try invalid inputs
+                // try mixed directions and types
                 EXPECT_TRUE(m_1->set_pin_type(out_pin_0, PinType::address).is_ok());
                 EXPECT_TRUE(m_1->set_pin_type(out_pin_1, PinType::data).is_ok());
                 EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, out_pin_0).is_ok()); // wrong direction
                 EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, out_pin_1).is_ok()); // wrong type
+                EXPECT_EQ(in_group_0->size(), 4);
                 EXPECT_TRUE(m_1->create_pin_group("O1", {out_pin_0, out_pin_1}).is_ok()); // different types
-                EXPECT_TRUE(m_1->create_pin_group("O2", {out_pin_0, in_pin_0}).is_ok()); // different directions
-                EXPECT_EQ(in_group_0->size(), 2);
+                EXPECT_TRUE(m_1->create_pin_group("O2", {out_pin_0, in_pin_0}).is_ok());  // different directions
+                EXPECT_EQ(in_group_0->size(), 1);
                 EXPECT_EQ(m_1->get_pin_groups().size(), 3);
             }
             // Create a new Module with more modules (with 2 input and ouput nets)
