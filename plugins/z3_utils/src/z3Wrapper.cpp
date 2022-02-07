@@ -134,7 +134,7 @@ namespace hal
 
             log_debug("z3_utils", "directory created");
 
-            std::string filename = directory + "boolean_func_" + std::to_string(omp_get_thread_num()) + "_" + std::to_string(m_z3_wrapper_id) + ".c";
+            std::string filename = directory + "boolean_func_" + std::to_string(omp_get_thread_num()) + "_" + std::to_string(m_z3_wrapper_id) + ".cpp";
 
             log_debug("z3_utils", "creating file: {}", filename);
 
