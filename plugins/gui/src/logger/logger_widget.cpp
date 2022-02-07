@@ -71,13 +71,13 @@ namespace hal
         Toolbar->addWidget(mChannelLabel);
 
         // ChannelSelector
-        selector = new ChannelSelector(this);
-        selector->setEditable(true);
-        connect(selector->lineEdit(), SIGNAL(editingFinished()), this, SLOT(handleCustomChannel()));
-        connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
-        selector->setStyleSheet("QCombobox {background-color : rgb(32, 43, 63); border-radius: 2px;}");
-        selector->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
-        Toolbar->addWidget(selector);
+        mSelector = new ChannelSelector(this);
+        mSelector->setEditable(true);
+        connect(mSelector->lineEdit(), SIGNAL(editingFinished()), this, SLOT(handleCustomChannel()));
+        connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
+        mSelector->setStyleSheet("QCombobox {background-color : rgb(32, 43, 63); border-radius: 2px;}");
+        mSelector->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
+        Toolbar->addWidget(mSelector);
 
         // Severity buttons
         mDebugButton = new QPushButton("Debug", this);
@@ -173,7 +173,7 @@ namespace hal
         ChannelModel* model = ChannelModel::instance();
 
         // Channel has been changed or initially set
-        if ((sender() == selector) || p == 0) {
+        if ((sender() == mSelector) || p == 0) {
             mCurrentChannelIndex = p;
         }
 
@@ -185,13 +185,13 @@ namespace hal
         ChannelItem* item   = static_cast<ChannelItem*>((model->index(mCurrentChannelIndex, 0, QModelIndex())).internalPointer());
         mCurrentChannel = item->name().toStdString();
         mChannelLabel->setText(QString::fromStdString(mCurrentChannel));
-        selector->setCurrentText(QString::fromStdString(mCurrentChannel));
+        mSelector->setCurrentText(QString::fromStdString(mCurrentChannel));
 
         mPlainTextEdit->clear();
         QWriteLocker item_locker(item->getLock());
 
         // Iterate through every log entry
-        for (ChannelEntry* entry : *(item->getList()))
+        for (ChannelEntry* entry : *(item->getEntries()))
         {
             bool filter = false;
             std::cout << entry->mMsg << std::endl;
@@ -199,7 +199,6 @@ namespace hal
             QRegularExpression re(mSearchFilter);
             if (re.match(QString::fromStdString(entry->mMsg)).hasMatch())
             {
-                std::cout << "match" << std::endl;
                 // If entry severity matches the choosen severitys
                 if ((entry->mMsgType == spdlog::level::level_enum::info) && mInfoSeverity) {
                     filter = true;
@@ -287,7 +286,7 @@ namespace hal
 
     void LoggerWidget::handleCustomChannel()
     {
-        QString txt = selector->lineEdit()->text();
+        QString txt = mSelector->lineEdit()->text();
         if (txt.isEmpty()) return;
         std::string channel_name = txt.toStdString();
         ChannelModel* model = ChannelModel::instance();

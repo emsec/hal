@@ -188,7 +188,7 @@ namespace hal
 
         QPlainTextEdit* mPlainTextEdit;
 
-        ChannelSelector* selector;
+        ChannelSelector* mSelector;
         QLabel* mChannelLabel;
 
         QPushButton* mMuteButton;

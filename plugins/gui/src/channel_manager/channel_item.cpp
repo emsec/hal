@@ -14,7 +14,7 @@ namespace hal
         return mName;
     }
 
-    const QList<ChannelEntry*>* ChannelItem::getList() const
+    const QList<ChannelEntry*>* ChannelItem::getEntries() const
     {
         return &mLogEntries;
     }

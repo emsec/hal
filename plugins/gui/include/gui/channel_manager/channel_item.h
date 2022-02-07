@@ -82,7 +82,7 @@ namespace hal
          *
          * @return The List that contains the channel entries.
          */
-        const QList<ChannelEntry*>* getList() const;
+        const QList<ChannelEntry*>* getEntries() const;
 
         /**
          * Get the lock of the channel.
