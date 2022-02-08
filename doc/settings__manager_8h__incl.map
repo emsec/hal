@@ -1,11 +1,12 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/settings/settings_manager.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/settings/settings_manager.h">
-<area shape="rect" id="node1" title=" " alt="" coords="106,5,341,61"/>
+<area shape="rect" id="node1" title=" " alt="" coords="182,5,417,61"/>
 <area shape="rect" id="node2" title=" " alt="" coords="58,199,133,225"/>
-<area shape="rect" id="node3" title=" " alt="" coords="25,117,80,143"/>
+<area shape="rect" id="node3" title=" " alt="" coords="26,117,80,143"/>
 <area shape="rect" id="node4" title=" " alt="" coords="105,117,190,143"/>
 <area shape="rect" id="node5" href="$settings__item_8h.html" title=" " alt="" coords="214,109,385,151"/>
-<area shape="rect" id="node8" title=" " alt="" coords="409,117,475,143"/>
-<area shape="rect" id="node9" title=" " alt="" coords="499,117,558,143"/>
-<area shape="rect" id="node6" title=" " alt="" coords="215,199,285,225"/>
-<area shape="rect" id="node7" title=" " alt="" coords="309,199,388,225"/>
+<area shape="rect" id="node8" href="$logger__settings_8h.html" title=" " alt="" coords="409,117,612,143"/>
+<area shape="rect" id="node9" title=" " alt="" coords="636,117,702,143"/>
+<area shape="rect" id="node10" title=" " alt="" coords="726,117,785,143"/>
+<area shape="rect" id="node6" title=" " alt="" coords="215,199,286,225"/>
+<area shape="rect" id="node7" title=" " alt="" coords="310,199,388,225"/>
 </map>

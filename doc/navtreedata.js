@@ -40,13 +40,14 @@ var NAVTREE =
         ] ]
       ] ]
     ] ],
-    [ "Contributing", "index.html#autotoc_md22", [
-      [ "Run static checks and clang format locally", "index.html#autotoc_md23", null ],
-      [ "Generate Changelog", "index.html#autotoc_md24", null ]
+    [ "Quickstart Guide", "index.html#autotoc_md22", null ],
+    [ "Contributing", "index.html#autotoc_md23", [
+      [ "Run static checks and clang format locally", "index.html#autotoc_md24", null ],
+      [ "Generate Changelog", "index.html#autotoc_md25", null ]
     ] ],
-    [ "Academic Context", "index.html#autotoc_md25", null ],
-    [ "Licensing", "index.html#autotoc_md26", null ],
-    [ "Disclaimer", "index.html#autotoc_md27", null ],
+    [ "Academic Context", "index.html#autotoc_md26", null ],
+    [ "Licensing", "index.html#autotoc_md27", null ],
+    [ "Disclaimer", "index.html#autotoc_md28", null ],
     [ "LICENSE", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html", [
       [ "SIL Open Font License v1.1", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md4", [
         [ "Preamble", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md5", null ],
@@ -106,22 +107,22 @@ var NAVTREEINDEX =
 "classhal_1_1_graph_layouter.html#a957fa4c5303f49e601a7906ae653b65d",
 "classhal_1_1_grouping_dialog.html#a1ff2fca06615e414f8b0391c844cd5a0",
 "classhal_1_1_latch_component.html#ac3f21d6a0e0de9e4ee65ae94a1cf0ccb",
-"classhal_1_1_module.html#ab9f7d9f579a4db49ac8044514765449f",
-"classhal_1_1_net_layout_direction.html#a6e2e31de259a1d03b6ddd31b9ef700b4",
-"classhal_1_1_netlist_relay.html#a49f8f9a0322f1f1e0231f02b4fceb79b",
-"classhal_1_1_python_editor.html",
-"classhal_1_1_selection_details_widget.html#a1869e13594d994732d4c105f9e751c59",
-"classhal_1_1_settings_item_keybind.html#ac792d58bc14017b48f4c303d6148ed09",
-"classhal_1_1_user_action.html#abc1fb9965ce68186b8422114b58e2cc4",
-"context__table__proxy__model_8cpp_source.html",
-"enums_8h.html#abfc41a824ec2e2d67ef693316ffca725",
-"graph__context_8h.html",
-"index.html#autotoc_md11",
-"net__layout__point_8h.html#a7feb466e42a0d4e1c5601fe9a6169154",
-"plugin__manager_8h.html#af13862a2a5565fb995d7cc93c0bfd980",
-"separated__graphics__net_8h.html",
-"structhal_1_1_s_m_t_1_1_model.html#a67d2af2431b357a27f78b421b3bd0797",
-"utils_8h.html#a7de316388e4d4baf69a170c67a6efd57"
+"classhal_1_1_module.html#a71851ef81c1a491be6395f4c883218de",
+"classhal_1_1_net_layout_direction.html",
+"classhal_1_1_netlist_relay.html#a2abd5096dc41a41ecb571ce8f5269951",
+"classhal_1_1_python_console_qss_adapter.html#ae9ca08ffb6c70225544710950c601387",
+"classhal_1_1_searchbar.html#adbb989a291176c3e65e20988d1ea797f",
+"classhal_1_1_settings_item_dropdown.html#a8759ce38f6166d7e4a8342e6b919883f",
+"classhal_1_1_user_action.html",
+"content__manager_8h_source.html",
+"dock__button_8h.html#gga96c899c45d7192341d04caf575c7f02cae2a44fa65a0cf99e723e1887fc5eda0a",
+"get__in__touch__item_8cpp.html",
+"hal__file__manager_8h.html#a21e15d2eb9ddbc3e429a5df8bafda532",
+"net_8h_source.html",
+"plugin__interface__gui_8h_source.html",
+"selection__tree__item_8cpp.html",
+"structhal_1_1_graphics_node_1_1_visuals.html",
+"utils_8cpp.html#afbfe0cd7b2ec80643d4c16e4ffb7a7d3"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

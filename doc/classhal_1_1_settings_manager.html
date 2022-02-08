@@ -102,7 +102,7 @@ Inheritance diagram for hal::SettingsManager:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_settings_manager__inherit__graph.png" border="0" usemap="#hal_1_1_settings_manager_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_settings_manager_inherit__map" id="hal_1_1_settings_manager_inherit__map">
-<area shape="rect" title="Manages and persists the settings on the lowest level." alt="" coords="5,395,235,589"/>
+<area shape="rect" title="Manages and persists the settings on the lowest level." alt="" coords="5,395,235,575"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qobject.html" title=" " alt="" coords="37,5,203,347"/>
 </map>
 </div>
@@ -111,7 +111,7 @@ Collaboration diagram for hal::SettingsManager:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_settings_manager__coll__graph.png" border="0" usemap="#hal_1_1_settings_manager_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_settings_manager_coll__map" id="hal_1_1_settings_manager_coll__map">
-<area shape="rect" title="Manages and persists the settings on the lowest level." alt="" coords="79,409,309,604"/>
+<area shape="rect" title="Manages and persists the settings on the lowest level." alt="" coords="79,409,309,589"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qobject.html" title=" " alt="" coords="5,5,172,347"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qlist.html" title=" " alt="" coords="196,42,403,310"/>
 </map>
@@ -138,6 +138,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a99531e4a11c3726aaf0f9b03a007b619"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a373e5ab19699d11afc0612acef4333af"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_settings_manager.html#a373e5ab19699d11afc0612acef4333af">defaultValue</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;tag) const</td></tr>
 <tr class="separator:a373e5ab19699d11afc0612acef4333af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafaafc8d6f57304c92350dc4b779bca7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1_logger_settings.html">LoggerSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_settings_manager.html#aafaafc8d6f57304c92350dc4b779bca7">loggerSettings</a> () const</td></tr>
+<tr class="separator:aafaafc8d6f57304c92350dc4b779bca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a011128656408a12f7264d16d490f735f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_settings_manager.html#a011128656408a12f7264d16d490f735f">saveLoggerSettings</a> (const <a class="el" href="structhal_1_1_logger_settings.html">LoggerSettings</a> &amp;settings)</td></tr>
+<tr class="separator:a011128656408a12f7264d16d490f735f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qobject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qobject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qobject.html">QObject</a></td></tr>
 <tr class="memitem:metaObject inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject.html">QMetaObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#metaObject">metaObject</a> () const const</td></tr>
 <tr class="separator:metaObject inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -343,7 +347,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>Manages and persists the settings on the lowest level. </p>
 <p>This class is the connection between the actual settings file that is saved on the disk and the logical <a class="el" href="classhal_1_1_settings_item.html" title="The interface for the logical part of a setting.">SettingsItem</a>s.There exist two different settings files, one for the default values and on for the actual user specified values. This class is implemented as a singleton pattern. </p>
 
-<p class="definition">Definition at line <a class="el" href="settings__manager_8h_source.html#l00044">44</a> of file <a class="el" href="settings__manager_8h_source.html">settings_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="settings__manager_8h_source.html#l00045">45</a> of file <a class="el" href="settings__manager_8h_source.html">settings_manager.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a373e5ab19699d11afc0612acef4333af"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a373e5ab19699d11afc0612acef4333af">&#9670;&nbsp;</a></span>defaultValue()</h2>
@@ -408,7 +412,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="settings__manager_8cpp_source.html#l00046">46</a> of file <a class="el" href="settings__manager_8cpp_source.html">settings_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="settings__manager_8h_source.html#l00063">mSettingsList</a>.</p>
+<p class="reference">References <a class="el" href="settings__manager_8h_source.html#l00064">mSettingsList</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="settings__manager_8cpp_source.html#l00030">registerSetting()</a>.</p>
 
@@ -442,6 +446,27 @@ Additional Inherited Members</h2></td></tr>
 <p class="definition">Definition at line <a class="el" href="settings__manager_8cpp_source.html#l00012">12</a> of file <a class="el" href="settings__manager_8cpp_source.html">settings_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="settings__item__checkbox_8cpp_source.html#l00007">hal::SettingsItemCheckbox::SettingsItemCheckbox()</a>, <a class="el" href="settings__item__dropdown_8cpp_source.html#l00008">hal::SettingsItemDropdown::SettingsItemDropdown()</a>, <a class="el" href="settings__item__keybind_8cpp_source.html#l00009">hal::SettingsItemKeybind::SettingsItemKeybind()</a>, <a class="el" href="settings__item__slider_8cpp_source.html#l00009">hal::SettingsItemSlider::SettingsItemSlider()</a>, <a class="el" href="settings__item__spinbox_8cpp_source.html#l00009">hal::SettingsItemSpinbox::SettingsItemSpinbox()</a>, and <a class="el" href="settings__item__text_8cpp_source.html#l00008">hal::SettingsItemText::SettingsItemText()</a>.</p>
+
+</div>
+</div>
+<a id="aafaafc8d6f57304c92350dc4b779bca7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafaafc8d6f57304c92350dc4b779bca7">&#9670;&nbsp;</a></span>loggerSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1_logger_settings.html">LoggerSettings</a> hal::SettingsManager::loggerSettings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="settings__manager_8cpp_source.html#l00091">91</a> of file <a class="el" href="settings__manager_8cpp_source.html">settings_manager.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="logger__settings_8h_source.html#l00007">hal::LoggerSettings::debugSeverity</a>, <a class="el" href="logger__settings_8h_source.html#l00010">hal::LoggerSettings::errorSeverity</a>, <a class="el" href="logger__settings_8h_source.html#l00008">hal::LoggerSettings::infoSeverity</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toBool">QVariant::toBool()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#value">QSettings::value()</a>, and <a class="el" href="logger__settings_8h_source.html#l00009">hal::LoggerSettings::warningSeverity</a>.</p>
 
 </div>
 </div>
@@ -548,7 +573,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="settings__manager_8cpp_source.html#l00052">52</a> of file <a class="el" href="settings__manager_8cpp_source.html">settings_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="settings__manager_8h_source.html#l00063">mSettingsList</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#remove">QSettings::remove()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#setValue">QSettings::setValue()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#sync">QSettings::sync()</a>.</p>
+<p class="reference">References <a class="el" href="settings__manager_8h_source.html#l00064">mSettingsList</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#remove">QSettings::remove()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#setValue">QSettings::setValue()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#sync">QSettings::sync()</a>.</p>
 
 </div>
 </div>
@@ -577,9 +602,31 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="settings__manager_8cpp_source.html#l00030">30</a> of file <a class="el" href="settings__manager_8cpp_source.html">settings_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#contains">QSettings::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#destroyed">QObject::destroyed()</a>, <a class="el" href="settings__manager_8cpp_source.html#l00046">handleItemDestroyed()</a>, <a class="el" href="settings__manager_8h_source.html#l00063">mSettingsList</a>, <a class="el" href="settings__item_8h_source.html#l00122">hal::SettingsItem::restoreFromSettings()</a>, <a class="el" href="classhal_1_1_settings_item.html#ac88ba3a41c405bffaf8d35657b88c7f8">hal::SettingsItem::setDefaultValue()</a>, <a class="el" href="settings__item_8h_source.html#l00162">hal::SettingsItem::tag()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#value">QSettings::value()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#contains">QSettings::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#destroyed">QObject::destroyed()</a>, <a class="el" href="settings__manager_8cpp_source.html#l00046">handleItemDestroyed()</a>, <a class="el" href="settings__manager_8h_source.html#l00064">mSettingsList</a>, <a class="el" href="settings__item_8h_source.html#l00122">hal::SettingsItem::restoreFromSettings()</a>, <a class="el" href="classhal_1_1_settings_item.html#ac88ba3a41c405bffaf8d35657b88c7f8">hal::SettingsItem::setDefaultValue()</a>, <a class="el" href="settings__item_8h_source.html#l00162">hal::SettingsItem::tag()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#value">QSettings::value()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="settings__item__checkbox_8cpp_source.html#l00007">hal::SettingsItemCheckbox::SettingsItemCheckbox()</a>, <a class="el" href="settings__item__dropdown_8cpp_source.html#l00008">hal::SettingsItemDropdown::SettingsItemDropdown()</a>, <a class="el" href="settings__item__keybind_8cpp_source.html#l00009">hal::SettingsItemKeybind::SettingsItemKeybind()</a>, <a class="el" href="settings__item__slider_8cpp_source.html#l00009">hal::SettingsItemSlider::SettingsItemSlider()</a>, <a class="el" href="settings__item__spinbox_8cpp_source.html#l00009">hal::SettingsItemSpinbox::SettingsItemSpinbox()</a>, and <a class="el" href="settings__item__text_8cpp_source.html#l00008">hal::SettingsItemText::SettingsItemText()</a>.</p>
+
+</div>
+</div>
+<a id="a011128656408a12f7264d16d490f735f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a011128656408a12f7264d16d490f735f">&#9670;&nbsp;</a></span>saveLoggerSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::SettingsManager::saveLoggerSettings </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhal_1_1_logger_settings.html">LoggerSettings</a> &amp;&#160;</td>
+          <td class="paramname"><em>settings</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="settings__manager_8cpp_source.html#l00102">102</a> of file <a class="el" href="settings__manager_8cpp_source.html">settings_manager.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="logger__settings_8h_source.html#l00007">hal::LoggerSettings::debugSeverity</a>, <a class="el" href="logger__settings_8h_source.html#l00010">hal::LoggerSettings::errorSeverity</a>, <a class="el" href="logger__settings_8h_source.html#l00008">hal::LoggerSettings::infoSeverity</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#setValue">QSettings::setValue()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#sync">QSettings::sync()</a>, and <a class="el" href="logger__settings_8h_source.html#l00009">hal::LoggerSettings::warningSeverity</a>.</p>
 
 </div>
 </div>
@@ -626,7 +673,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="settings__manager_8h_source.html#l00063">63</a> of file <a class="el" href="settings__manager_8h_source.html">settings_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="settings__manager_8h_source.html#l00064">64</a> of file <a class="el" href="settings__manager_8h_source.html">settings_manager.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="settings__manager_8cpp_source.html#l00046">handleItemDestroyed()</a>, <a class="el" href="settings__manager_8cpp_source.html#l00052">persistUserSettings()</a>, and <a class="el" href="settings__manager_8cpp_source.html#l00030">registerSetting()</a>.</p>
 
@@ -642,7 +689,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_settings_manager.html">SettingsManager</a></li>
-    <li class="footer">Generated on Tue Jan 25 2022 20:41:29 for HAL by
+    <li class="footer">Generated on Tue Feb 8 2022 14:01:42 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

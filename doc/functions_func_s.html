@@ -113,6 +113,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classhal_1_1_main_window.html#a6f9b5258b8d759769ab47b41e4460ecb">hal::MainWindow</a>
 , <a class="el" href="classhal_1_1_python_editor.html#ad66ff4c1e9e81fb40c5bd8402a525602">hal::PythonEditor</a>
 </li>
+<li>saveLoggerSettings()
+: <a class="el" href="classhal_1_1_settings_manager.html#a011128656408a12f7264d16d490f735f">hal::SettingsManager</a>
+</li>
 <li>saveTriggered()
 : <a class="el" href="classhal_1_1_main_window.html#a338814c1fc8db8b66affc36f7492ea4b">hal::MainWindow</a>
 </li>
@@ -148,6 +151,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>searchIconPath()
 : <a class="el" href="classhal_1_1_context_manager_widget.html#a0ee66cc16f45e98379f83d7945b88d13">hal::ContextManagerWidget</a>
 , <a class="el" href="classhal_1_1_grouping_manager_widget.html#a6c8cdb43b881d21f0790ca458ef99444">hal::GroupingManagerWidget</a>
+, <a class="el" href="classhal_1_1_logger_widget.html#a5fed39267c6e2ae316e85caa51616e5a">hal::LoggerWidget</a>
 , <a class="el" href="classhal_1_1_module_widget.html#a4bb7c2bc6df245b885d5586f8e5ffafb">hal::ModuleWidget</a>
 , <a class="el" href="classhal_1_1_python_editor.html#a5dacaedaf65af35196e570a3816cbf83">hal::PythonEditor</a>
 , <a class="el" href="classhal_1_1_selection_details_widget.html#ae8e71a4860e44e6093ccd7ae359b52c3">hal::SelectionDetailsWidget</a>
@@ -155,6 +159,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>searchIconStyle()
 : <a class="el" href="classhal_1_1_context_manager_widget.html#ade979819a43b9e51d41aa0286495cca7">hal::ContextManagerWidget</a>
 , <a class="el" href="classhal_1_1_grouping_manager_widget.html#a7d6db916e0e8398c849e05f1d5467536">hal::GroupingManagerWidget</a>
+, <a class="el" href="classhal_1_1_logger_widget.html#af7b0fdc5f504ba568435d98c9ea8c335">hal::LoggerWidget</a>
 , <a class="el" href="classhal_1_1_module_widget.html#a7c5ad27c1ec57d1ffabaca8793b04181">hal::ModuleWidget</a>
 , <a class="el" href="classhal_1_1_python_editor.html#a8b3df58d6af4128a4b7e8db578fe9635">hal::PythonEditor</a>
 , <a class="el" href="classhal_1_1_searchbar.html#a82238d96b4797c9310c43205b1425657">hal::Searchbar</a>
@@ -1047,6 +1052,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setSearchIconPath()
 : <a class="el" href="classhal_1_1_context_manager_widget.html#abfcaa5b5894c47e93512cadc39b4aed0">hal::ContextManagerWidget</a>
 , <a class="el" href="classhal_1_1_grouping_manager_widget.html#a7be436575e2463f169284eaf6f0e2a2e">hal::GroupingManagerWidget</a>
+, <a class="el" href="classhal_1_1_logger_widget.html#a8e30d1734296b809a7f5a1f83b3c9b22">hal::LoggerWidget</a>
 , <a class="el" href="classhal_1_1_module_widget.html#a09577ad8185ddbd4c96d6978f1ca907c">hal::ModuleWidget</a>
 , <a class="el" href="classhal_1_1_python_editor.html#a7deba0a04d363676b250047edeed7db1">hal::PythonEditor</a>
 , <a class="el" href="classhal_1_1_selection_details_widget.html#a1fbe8596d07fab1aeb5e84b9c9468461">hal::SelectionDetailsWidget</a>
@@ -1054,6 +1060,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setSearchIconStyle()
 : <a class="el" href="classhal_1_1_context_manager_widget.html#a102cc40249df51849fcd0417a0d26389">hal::ContextManagerWidget</a>
 , <a class="el" href="classhal_1_1_grouping_manager_widget.html#a940234c14e7b03c3910c9662eed3c7ef">hal::GroupingManagerWidget</a>
+, <a class="el" href="classhal_1_1_logger_widget.html#a7bfe34c98c5961099d51f9482d603998">hal::LoggerWidget</a>
 , <a class="el" href="classhal_1_1_module_widget.html#a28d2cd590758db039aa0de5f82f44a04">hal::ModuleWidget</a>
 , <a class="el" href="classhal_1_1_python_editor.html#aae605a33db42b83f5cd7b23de8d72c93">hal::PythonEditor</a>
 , <a class="el" href="classhal_1_1_searchbar.html#a7b801c20f3bc6eeeb7886ba89512eaf3">hal::Searchbar</a>
@@ -1299,6 +1306,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setWindowTitle()
 : <a class="el" href="classhal_1_1_content_manager.html#ac04ba8d4a380b15550acd61c4a6f2e04">hal::ContentManager</a>
 </li>
+<li>SeveritySelector()
+: <a class="el" href="classhal_1_1_severity_selector.html#aa38cec47e968f9e8ca6cc05a25c7dc25">hal::SeveritySelector</a>
+</li>
 <li>ShadowEffect()
 : <a class="el" href="classhal_1_1_shadow_effect.html#ac4cf429d5a94626282d6a7600ffa68c8">hal::ShadowEffect</a>
 </li>
@@ -1443,7 +1453,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classsubprocess_1_1detail_1_1_streams.html#a9aa54f747386b4b0086e8172fbc9cd60">subprocess::detail::Streams</a>
 </li>
 <li>string_arg()
-: <a class="el" href="structsubprocess_1_1string__arg.html#aab3342d4e80e3b64eee25018b9bc2e21">subprocess::string_arg</a>
+: <a class="el" href="structsubprocess_1_1string__arg.html#a44b8d3fc7dd216c733c1a2456afa77af">subprocess::string_arg</a>
 </li>
 <li>stringChanged()
 : <a class="el" href="classhal_1_1_settings_item_text.html#aa1fadc402d9a20d0d663bb6ebabd3585">hal::SettingsItemText</a>
@@ -1485,7 +1495,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Jan 25 2022 20:41:30 for HAL by
+    <li class="footer">Generated on Tue Feb 8 2022 14:01:43 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

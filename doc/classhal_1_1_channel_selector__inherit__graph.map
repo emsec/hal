@@ -1,5 +1,5 @@
 <map id="hal::ChannelSelector" name="hal::ChannelSelector">
-<area shape="rect" id="node1" title="A combobox for selecting a logger channel." alt="" coords="31,945,187,1023"/>
+<area shape="rect" id="node1" title="A combobox for selecting a logger channel." alt="" coords="31,945,187,1037"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qcombobox.html" title=" " alt="" coords="21,497,197,897"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="5,5,212,449"/>
 </map>

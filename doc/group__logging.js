@@ -8,14 +8,13 @@ var group__logging =
     [ "ChannelItem", "classhal_1_1_channel_item.html", [
       [ "ChannelItem", "classhal_1_1_channel_item.html#ae89187d3ebf35a91d89a9603e8e0a63d", null ],
       [ "appendEntry", "classhal_1_1_channel_item.html#a5c1c7e078c845d07242f59f3f555da61", null ],
-      [ "data", "classhal_1_1_channel_item.html#aaefb2fddd5d9b5fbed6c814769914778", null ],
-      [ "getList", "classhal_1_1_channel_item.html#a91d2f8d833707611babdc4acabb9ec8b", null ],
+      [ "getEntries", "classhal_1_1_channel_item.html#ac5ba4527154dd5110ae1362aa9b4d7d2", null ],
       [ "getLock", "classhal_1_1_channel_item.html#ad136a068d1914595ab5347f7df12f2b5", null ],
       [ "name", "classhal_1_1_channel_item.html#aa59eb69d0a7c4bba2740c2b3c4553403", null ]
     ] ],
     [ "ChannelModel", "classhal_1_1_channel_model.html", [
       [ "~ChannelModel", "classhal_1_1_channel_model.html#a6a525cbcf49f7c119f770874f7b037f4", null ],
-      [ "add_channel", "classhal_1_1_channel_model.html#adbbd12aa8d7519f3eef57b90bcdaec46", null ],
+      [ "addChannel", "classhal_1_1_channel_model.html#ad610ef7d2e0733e4393b57f32c713d66", null ],
       [ "columnCount", "classhal_1_1_channel_model.html#a4db973eb65c061afb55a5d2b2c2fd4c5", null ],
       [ "data", "classhal_1_1_channel_model.html#a66b5bc857f732ddb6e2a149876a4eaf2", null ],
       [ "flags", "classhal_1_1_channel_model.html#a4ee146f10f45b40f6ec60a31dafd8aae", null ],
@@ -26,7 +25,8 @@ var group__logging =
       [ "updated", "classhal_1_1_channel_model.html#a2330d569ecf851a78bcba4dfe91399a1", null ]
     ] ],
     [ "ChannelSelector", "classhal_1_1_channel_selector.html", [
-      [ "ChannelSelector", "classhal_1_1_channel_selector.html#a0e46dd6bf7ef752924b23a023b8c5db4", null ]
+      [ "ChannelSelector", "classhal_1_1_channel_selector.html#a0e46dd6bf7ef752924b23a023b8c5db4", null ],
+      [ "keyPressEvent", "classhal_1_1_channel_selector.html#aa38f981ff15d91430f8b19b6f61d8c78", null ]
     ] ],
     [ "LoggerMarshall", "classhal_1_1_logger_marshall.html", [
       [ "LoggerMarshall", "classhal_1_1_logger_marshall.html#a5622fedae3848291dc2048e36d145cf8", null ],
@@ -84,10 +84,20 @@ var group__logging =
       [ "~LoggerWidget", "classhal_1_1_logger_widget.html#a46eb7512717f914b5f9f2ae359b4cdc6", null ],
       [ "getPlainTextEdit", "classhal_1_1_logger_widget.html#a9c58d57a85fb7ebe315229168671a934", null ],
       [ "handleChannelUpdated", "classhal_1_1_logger_widget.html#aea26d6d226f1fcf811a7c0280639ab98", null ],
-      [ "handleCurrentChannelChanged", "classhal_1_1_logger_widget.html#a285b1c41d112de5f72aedc957748ce8f", null ],
       [ "handleCurrentChannelUpdated", "classhal_1_1_logger_widget.html#ae1a3a5082d7def61bc5460c028fd5fc9", null ],
+      [ "handleCurrentFilterChanged", "classhal_1_1_logger_widget.html#a2789a2c8783b3cd4400c7e1be55fab18", null ],
+      [ "handleCustomChannel", "classhal_1_1_logger_widget.html#abb839a9a480878b1e19a91ec255b67d8", null ],
       [ "handleFirstUserInteraction", "classhal_1_1_logger_widget.html#aaa5fdc8d77116eb9e852ca961beb1b1f", null ],
+      [ "handleSearchChanged", "classhal_1_1_logger_widget.html#a3fadfe78fa64cf31b3f9291b3728510e", null ],
+      [ "handleSeverityChanged", "classhal_1_1_logger_widget.html#ae67dd1675ad13565b2e6f742fd02f0b9", null ],
       [ "resizeEvent", "classhal_1_1_logger_widget.html#a079944cd6d858c44f11bc6589a87622c", null ],
-      [ "setupToolbar", "classhal_1_1_logger_widget.html#abb7b62784a10e4a496e12834aff7ce91", null ]
+      [ "searchIconPath", "classhal_1_1_logger_widget.html#a5fed39267c6e2ae316e85caa51616e5a", null ],
+      [ "searchIconStyle", "classhal_1_1_logger_widget.html#af7b0fdc5f504ba568435d98c9ea8c335", null ],
+      [ "setSearchIconPath", "classhal_1_1_logger_widget.html#a8e30d1734296b809a7f5a1f83b3c9b22", null ],
+      [ "setSearchIconStyle", "classhal_1_1_logger_widget.html#a7bfe34c98c5961099d51f9482d603998", null ],
+      [ "setupToolbar", "classhal_1_1_logger_widget.html#abb7b62784a10e4a496e12834aff7ce91", null ],
+      [ "toggleSearchbar", "classhal_1_1_logger_widget.html#ad5ea16846a7d99ae3fd7fdca9bca1901", null ],
+      [ "searchIconPath", "classhal_1_1_logger_widget.html#a827b605ec4fd86613524ffa4b5d03836", null ],
+      [ "searchIconStyle", "classhal_1_1_logger_widget.html#a5d80ab99a06b9cf52308589c0c014f18", null ]
     ] ]
 ];

@@ -1,5 +1,5 @@
 <map id="hal::LoggerWidget" name="hal::LoggerWidget">
-<area shape="rect" id="node1" title="Displays the logs in the gui." alt="" coords="279,815,528,1009"/>
+<area shape="rect" id="node1" title="Displays the logs in the gui." alt="" coords="280,815,527,1068"/>
 <area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="264,395,543,765"/>
 <area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="5,108,113,229"/>
 <area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qvboxlayout.html" title=" " alt="" coords="138,115,285,222"/>

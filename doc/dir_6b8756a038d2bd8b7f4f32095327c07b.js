@@ -41,6 +41,7 @@ var dir_6b8756a038d2bd8b7f4f32095327c07b =
     [ "selection_details_widget", "dir_a35da49c385fb45d333860c108c1de8d.html", "dir_a35da49c385fb45d333860c108c1de8d" ],
     [ "selection_relay", "dir_6439801f7d9f89455a7567afbc8aead5.html", "dir_6439801f7d9f89455a7567afbc8aead5" ],
     [ "settings", "dir_ae31024ca3bf9085b405ec0cfca8203c.html", "dir_ae31024ca3bf9085b405ec0cfca8203c" ],
+    [ "severity_manager", "dir_05d71a7ae6c431e0e5d6e18f64fb12df.html", "dir_05d71a7ae6c431e0e5d6e18f64fb12df" ],
     [ "spinner_widget", "dir_6ec53da96bc9819a27f713f461fdeffb.html", "dir_6ec53da96bc9819a27f713f461fdeffb" ],
     [ "splitter", "dir_0bf049cd94ac260548969029b883bea8.html", "dir_0bf049cd94ac260548969029b883bea8" ],
     [ "style", "dir_3b4fc4cb2c370e12795505ac4f51c672.html", "dir_3b4fc4cb2c370e12795505ac4f51c672" ],

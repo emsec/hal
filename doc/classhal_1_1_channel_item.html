@@ -99,7 +99,7 @@ Collaboration diagram for hal::ChannelItem:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_channel_item__coll__graph.png" border="0" usemap="#hal_1_1_channel_item_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_channel_item_coll__map" id="hal_1_1_channel_item_coll__map">
-<area shape="rect" title="This class represents a channel in the channel model. It primarily holds the channel name and its ent..." alt="" coords="5,5,139,156"/>
+<area shape="rect" title="This class represents a channel in the channel model. It primarily holds the channel name and its ent..." alt="" coords="5,5,139,141"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -107,12 +107,10 @@ Collaboration diagram for hal::ChannelItem:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae89187d3ebf35a91d89a9603e8e0a63d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_channel_item.html#ae89187d3ebf35a91d89a9603e8e0a63d">ChannelItem</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="el" href="classhal_1_1_channel_item.html#aa59eb69d0a7c4bba2740c2b3c4553403">name</a>)</td></tr>
 <tr class="separator:ae89187d3ebf35a91d89a9603e8e0a63d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaefb2fddd5d9b5fbed6c814769914778"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_channel_item.html#aaefb2fddd5d9b5fbed6c814769914778">data</a> (int column) const</td></tr>
-<tr class="separator:aaefb2fddd5d9b5fbed6c814769914778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa59eb69d0a7c4bba2740c2b3c4553403"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_channel_item.html#aa59eb69d0a7c4bba2740c2b3c4553403">name</a> () const</td></tr>
 <tr class="separator:aa59eb69d0a7c4bba2740c2b3c4553403"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91d2f8d833707611babdc4acabb9ec8b"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="structhal_1_1_channel_entry.html">ChannelEntry</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_channel_item.html#a91d2f8d833707611babdc4acabb9ec8b">getList</a> () const</td></tr>
-<tr class="separator:a91d2f8d833707611babdc4acabb9ec8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5ba4527154dd5110ae1362aa9b4d7d2"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="structhal_1_1_channel_entry.html">ChannelEntry</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_channel_item.html#ac5ba4527154dd5110ae1362aa9b4d7d2">getEntries</a> () const</td></tr>
+<tr class="separator:ac5ba4527154dd5110ae1362aa9b4d7d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad136a068d1914595ab5347f7df12f2b5"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qreadwritelock.html">QReadWriteLock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_channel_item.html#ad136a068d1914595ab5347f7df12f2b5">getLock</a> ()</td></tr>
 <tr class="separator:ad136a068d1914595ab5347f7df12f2b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c1c7e078c845d07242f59f3f555da61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_channel_item.html#a5c1c7e078c845d07242f59f3f555da61">appendEntry</a> (<a class="el" href="structhal_1_1_channel_entry.html">ChannelEntry</a> *entry)</td></tr>
@@ -173,52 +171,22 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="channel__item_8cpp_source.html#l00038">38</a> of file <a class="el" href="channel__item_8cpp_source.html">channel_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="channel__item_8cpp_source.html#l00027">27</a> of file <a class="el" href="channel__item_8cpp_source.html">channel_item.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="channel__item_8cpp_source.html#l00003">MAX_CHANNEL_ENTIRES</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="channel__model_8cpp_source.html#l00121">hal::ChannelModel::handleLogmanagerCallback()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="channel__model_8cpp_source.html#l00131">hal::ChannelModel::handleLogmanagerCallback()</a>.</p>
 
 </div>
 </div>
-<a id="aaefb2fddd5d9b5fbed6c814769914778"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaefb2fddd5d9b5fbed6c814769914778">&#9670;&nbsp;</a></span>data()</h2>
+<a id="ac5ba4527154dd5110ae1362aa9b4d7d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5ba4527154dd5110ae1362aa9b4d7d2">&#9670;&nbsp;</a></span>getEntries()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> hal::ChannelItem::data </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>column</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get the column specific data of the item. The channel logically consists of only one column that holds the name. This function is the same as <a class="el" href="classhal_1_1_channel_item.html#aa59eb69d0a7c4bba2740c2b3c4553403">name()</a> for column = 0.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">column</td><td>- The column for which data is requested. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The data of the column. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="channel__item_8cpp_source.html#l00012">12</a> of file <a class="el" href="channel__item_8cpp_source.html">channel_item.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="channel__model_8cpp_source.html#l00030">hal::ChannelModel::data()</a>.</p>
-
-</div>
-</div>
-<a id="a91d2f8d833707611babdc4acabb9ec8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91d2f8d833707611babdc4acabb9ec8b">&#9670;&nbsp;</a></span>getList()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="structhal_1_1_channel_entry.html">ChannelEntry</a> * &gt; * hal::ChannelItem::getList </td>
+          <td class="memname">const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="structhal_1_1_channel_entry.html">ChannelEntry</a> * &gt; * hal::ChannelItem::getEntries </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -228,9 +196,9 @@ Public Member Functions</h2></td></tr>
 <p>Get the List of all buffered messages.</p>
 <dl class="section return"><dt>Returns</dt><dd>The List that contains the channel entries. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="channel__item_8cpp_source.html#l00028">28</a> of file <a class="el" href="channel__item_8cpp_source.html">channel_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="channel__item_8cpp_source.html#l00017">17</a> of file <a class="el" href="channel__item_8cpp_source.html">channel_item.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00074">hal::LoggerWidget::handleCurrentChannelChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00171">hal::LoggerWidget::handleCurrentFilterChanged()</a>.</p>
 
 </div>
 </div>
@@ -251,9 +219,9 @@ Public Member Functions</h2></td></tr>
 <p>Get the lock of the channel.</p>
 <dl class="section return"><dt>Returns</dt><dd>The channel's lock. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="channel__item_8cpp_source.html#l00033">33</a> of file <a class="el" href="channel__item_8cpp_source.html">channel_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="channel__item_8cpp_source.html#l00022">22</a> of file <a class="el" href="channel__item_8cpp_source.html">channel_item.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00074">hal::LoggerWidget::handleCurrentChannelChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00171">hal::LoggerWidget::handleCurrentFilterChanged()</a>.</p>
 
 </div>
 </div>
@@ -274,9 +242,9 @@ Public Member Functions</h2></td></tr>
 <p>Get the channel's name.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name of the channel. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="channel__item_8cpp_source.html#l00023">23</a> of file <a class="el" href="channel__item_8cpp_source.html">channel_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="channel__item_8cpp_source.html#l00012">12</a> of file <a class="el" href="channel__item_8cpp_source.html">channel_item.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00074">hal::LoggerWidget::handleCurrentChannelChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="channel__model_8cpp_source.html#l00030">hal::ChannelModel::data()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00171">hal::LoggerWidget::handleCurrentFilterChanged()</a>.</p>
 
 </div>
 </div>
@@ -290,7 +258,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_channel_item.html">ChannelItem</a></li>
-    <li class="footer">Generated on Tue Jan 25 2022 20:41:27 for HAL by
+    <li class="footer">Generated on Tue Feb 8 2022 14:01:40 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,7 +1,7 @@
 var classhal_1_1_channel_model =
 [
     [ "~ChannelModel", "classhal_1_1_channel_model.html#a6a525cbcf49f7c119f770874f7b037f4", null ],
-    [ "add_channel", "classhal_1_1_channel_model.html#adbbd12aa8d7519f3eef57b90bcdaec46", null ],
+    [ "addChannel", "classhal_1_1_channel_model.html#ad610ef7d2e0733e4393b57f32c713d66", null ],
     [ "columnCount", "classhal_1_1_channel_model.html#a4db973eb65c061afb55a5d2b2c2fd4c5", null ],
     [ "data", "classhal_1_1_channel_model.html#a66b5bc857f732ddb6e2a149876a4eaf2", null ],
     [ "flags", "classhal_1_1_channel_model.html#a4ee146f10f45b40f6ec60a31dafd8aae", null ],

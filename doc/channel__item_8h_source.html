@@ -137,53 +137,49 @@ $(document).ready(function(){initNavTree('channel__item_8h_source.html',''); ini
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="classhal_1_1_channel_item.html#ae89187d3ebf35a91d89a9603e8e0a63d">ChannelItem</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="classhal_1_1_channel_item.html#aa59eb69d0a7c4bba2740c2b3c4553403">name</a>);</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_channel_item.html#aaefb2fddd5d9b5fbed6c814769914778">data</a>(<span class="keywordtype">int</span> column) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="classhal_1_1_channel_item.html#aa59eb69d0a7c4bba2740c2b3c4553403">name</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;ChannelEntry*&gt;</a>* <a class="code" href="classhal_1_1_channel_item.html#a91d2f8d833707611babdc4acabb9ec8b">getList</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qreadwritelock.html">QReadWriteLock</a>* <a class="code" href="classhal_1_1_channel_item.html#ad136a068d1914595ab5347f7df12f2b5">getLock</a>();</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_channel_item.html#a5c1c7e078c845d07242f59f3f555da61">appendEntry</a>(<a class="code" href="structhal_1_1_channel_entry.html">ChannelEntry</a>* entry);</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mName;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;ChannelEntry*&gt;</a> mLogEntries;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qreadwritelock.html">QReadWriteLock</a> mLock;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordtype">int</span> mObserver;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordtype">int</span> mUnread;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordtype">int</span> mUnreadWarnings;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keywordtype">int</span> mUnreadErrors;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keywordtype">int</span> mUnreadSuccesses;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    };</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;}</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="classhal_1_1_channel_item.html#aa59eb69d0a7c4bba2740c2b3c4553403">name</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;ChannelEntry*&gt;</a>* <a class="code" href="classhal_1_1_channel_item.html#ac5ba4527154dd5110ae1362aa9b4d7d2">getEntries</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qreadwritelock.html">QReadWriteLock</a>* <a class="code" href="classhal_1_1_channel_item.html#ad136a068d1914595ab5347f7df12f2b5">getLock</a>();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_channel_item.html#a5c1c7e078c845d07242f59f3f555da61">appendEntry</a>(<a class="code" href="structhal_1_1_channel_entry.html">ChannelEntry</a>* entry);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mName;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;ChannelEntry*&gt;</a> mLogEntries;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qreadwritelock.html">QReadWriteLock</a> mLock;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">int</span> mObserver;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordtype">int</span> mUnread;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keywordtype">int</span> mUnreadWarnings;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordtype">int</span> mUnreadErrors;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordtype">int</span> mUnreadSuccesses;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    };</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aclasshal_1_1_channel_item_html_ac5ba4527154dd5110ae1362aa9b4d7d2"><div class="ttname"><a href="classhal_1_1_channel_item.html#ac5ba4527154dd5110ae1362aa9b4d7d2">hal::ChannelItem::getEntries</a></div><div class="ttdeci">const QList&lt; ChannelEntry * &gt; * getEntries() const</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8cpp_source.html#l00017">channel_item.cpp:17</a></div></div>
 <div class="ttc" id="astructhal_1_1_channel_entry_html_a78e54adf62bd436b5a3d371af7284bc6"><div class="ttname"><a href="structhal_1_1_channel_entry.html#a78e54adf62bd436b5a3d371af7284bc6">hal::ChannelEntry::ChannelEntry</a></div><div class="ttdeci">ChannelEntry(std::string msg, spdlog::level::level_enum msg_type)</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8h_source.html#l00049">channel_item.h:49</a></div></div>
-<div class="ttc" id="aclasshal_1_1_channel_item_html_aaefb2fddd5d9b5fbed6c814769914778"><div class="ttname"><a href="classhal_1_1_channel_item.html#aaefb2fddd5d9b5fbed6c814769914778">hal::ChannelItem::data</a></div><div class="ttdeci">QVariant data(int column) const</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8cpp_source.html#l00012">channel_item.cpp:12</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8cpp_source.html#l00009">solver.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_channel_item_html_a91d2f8d833707611babdc4acabb9ec8b"><div class="ttname"><a href="classhal_1_1_channel_item.html#a91d2f8d833707611babdc4acabb9ec8b">hal::ChannelItem::getList</a></div><div class="ttdeci">const QList&lt; ChannelEntry * &gt; * getList() const</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8cpp_source.html#l00028">channel_item.cpp:28</a></div></div>
 <div class="ttc" id="astructhal_1_1_channel_entry_html_a09fdea02a9e0d38eb57f1464701581a0"><div class="ttname"><a href="structhal_1_1_channel_entry.html#a09fdea02a9e0d38eb57f1464701581a0">hal::ChannelEntry::mMsgType</a></div><div class="ttdeci">const spdlog::level::level_enum mMsgType</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8h_source.html#l00054">channel_item.h:54</a></div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
-<div class="ttc" id="aclasshal_1_1_channel_item_html_aa59eb69d0a7c4bba2740c2b3c4553403"><div class="ttname"><a href="classhal_1_1_channel_item.html#aa59eb69d0a7c4bba2740c2b3c4553403">hal::ChannelItem::name</a></div><div class="ttdeci">const QString name() const</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8cpp_source.html#l00023">channel_item.cpp:23</a></div></div>
+<div class="ttc" id="aclasshal_1_1_channel_item_html_aa59eb69d0a7c4bba2740c2b3c4553403"><div class="ttname"><a href="classhal_1_1_channel_item.html#aa59eb69d0a7c4bba2740c2b3c4553403">hal::ChannelItem::name</a></div><div class="ttdeci">const QString name() const</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8cpp_source.html#l00012">channel_item.cpp:12</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
 <div class="ttc" id="astructhal_1_1_channel_entry_html"><div class="ttname"><a href="structhal_1_1_channel_entry.html">hal::ChannelEntry</a></div><div class="ttdoc">The ChannelEntry struct is used by the ChannelItem class to store a single entry.</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8h_source.html#l00041">channel_item.h:41</a></div></div>
-<div class="ttc" id="aclasshal_1_1_channel_item_html_ad136a068d1914595ab5347f7df12f2b5"><div class="ttname"><a href="classhal_1_1_channel_item.html#ad136a068d1914595ab5347f7df12f2b5">hal::ChannelItem::getLock</a></div><div class="ttdeci">QReadWriteLock * getLock()</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8cpp_source.html#l00033">channel_item.cpp:33</a></div></div>
+<div class="ttc" id="aclasshal_1_1_channel_item_html_ad136a068d1914595ab5347f7df12f2b5"><div class="ttname"><a href="classhal_1_1_channel_item.html#ad136a068d1914595ab5347f7df12f2b5">hal::ChannelItem::getLock</a></div><div class="ttdeci">QReadWriteLock * getLock()</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8cpp_source.html#l00022">channel_item.cpp:22</a></div></div>
 <div class="ttc" id="aclasshal_1_1_channel_item_html_ae89187d3ebf35a91d89a9603e8e0a63d"><div class="ttname"><a href="classhal_1_1_channel_item.html#ae89187d3ebf35a91d89a9603e8e0a63d">hal::ChannelItem::ChannelItem</a></div><div class="ttdeci">ChannelItem(QString name)</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8cpp_source.html#l00007">channel_item.cpp:7</a></div></div>
 <div class="ttc" id="astructhal_1_1_channel_entry_html_a9ee12094c5a5f748c9f35579089f32a9"><div class="ttname"><a href="structhal_1_1_channel_entry.html#a9ee12094c5a5f748c9f35579089f32a9">hal::ChannelEntry::mMsg</a></div><div class="ttdeci">const std::string mMsg</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8h_source.html#l00053">channel_item.h:53</a></div></div>
-<div class="ttc" id="aqvariant_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a></div></div>
 <div class="ttc" id="aqreadwritelock_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qreadwritelock.html">QReadWriteLock</a></div></div>
-<div class="ttc" id="aclasshal_1_1_channel_item_html_a5c1c7e078c845d07242f59f3f555da61"><div class="ttname"><a href="classhal_1_1_channel_item.html#a5c1c7e078c845d07242f59f3f555da61">hal::ChannelItem::appendEntry</a></div><div class="ttdeci">void appendEntry(ChannelEntry *entry)</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8cpp_source.html#l00038">channel_item.cpp:38</a></div></div>
+<div class="ttc" id="aclasshal_1_1_channel_item_html_a5c1c7e078c845d07242f59f3f555da61"><div class="ttname"><a href="classhal_1_1_channel_item.html#a5c1c7e078c845d07242f59f3f555da61">hal::ChannelItem::appendEntry</a></div><div class="ttdeci">void appendEntry(ChannelEntry *entry)</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8cpp_source.html#l00027">channel_item.cpp:27</a></div></div>
 <div class="ttc" id="aclasshal_1_1_channel_item_html"><div class="ttname"><a href="classhal_1_1_channel_item.html">hal::ChannelItem</a></div><div class="ttdoc">This class represents a channel in the channel model. It primarily holds the channel name and its ent...</div><div class="ttdef"><b>Definition:</b> <a href="channel__item_8h_source.html#l00064">channel_item.h:64</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_594a98e1743b93d37981ce1884e7f583.html">channel_manager</a></li><li class="navelem"><a class="el" href="channel__item_8h.html">channel_item.h</a></li>
-    <li class="footer">Generated on Tue Jan 25 2022 20:41:24 for HAL by
+    <li class="footer">Generated on Tue Feb 8 2022 14:01:38 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

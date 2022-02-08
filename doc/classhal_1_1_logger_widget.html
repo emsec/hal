@@ -85,6 +85,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_logger_widget.html',''); 
   <div class="summary">
 <a href="#pub-slots">Public Slots</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#properties">Properties</a> &#124;
 <a href="classhal_1_1_logger_widget-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hal::LoggerWidget Class Reference<div class="ingroups"><a class="el" href="group__gui.html">HAL Gui</a> &raquo; <a class="el" href="group__logging.html">Logging System</a></div></div>  </div>
@@ -100,7 +101,7 @@ Inheritance diagram for hal::LoggerWidget:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_logger_widget__inherit__graph.png" border="0" usemap="#hal_1_1_logger_widget_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_logger_widget_inherit__map" id="hal_1_1_logger_widget_inherit__map">
-<area shape="rect" title="Displays the logs in the gui." alt="" coords="20,652,269,847"/>
+<area shape="rect" title="Displays the logs in the gui." alt="" coords="21,652,268,905"/>
 <area shape="rect" href="classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="5,175,284,604"/>
 <area shape="rect" href="classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="91,5,199,127"/>
 </map>
@@ -110,7 +111,7 @@ Collaboration diagram for hal::LoggerWidget:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_logger_widget__coll__graph.png" border="0" usemap="#hal_1_1_logger_widget_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_logger_widget_coll__map" id="hal_1_1_logger_widget_coll__map">
-<area shape="rect" title="Displays the logs in the gui." alt="" coords="279,815,528,1009"/>
+<area shape="rect" title="Displays the logs in the gui." alt="" coords="280,815,527,1068"/>
 <area shape="rect" href="classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="264,395,543,765"/>
 <area shape="rect" href="classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="5,108,113,229"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qvboxlayout.html" title=" " alt="" coords="138,115,285,222"/>
@@ -126,10 +127,18 @@ Public Slots</h2></td></tr>
 <tr class="separator:ae1a3a5082d7def61bc5460c028fd5fc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea26d6d226f1fcf811a7c0280639ab98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#aea26d6d226f1fcf811a7c0280639ab98">handleChannelUpdated</a> (spdlog::level::level_enum t, const std::string &amp;logger_name, std::string const &amp;msg)</td></tr>
 <tr class="separator:aea26d6d226f1fcf811a7c0280639ab98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a285b1c41d112de5f72aedc957748ce8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#a285b1c41d112de5f72aedc957748ce8f">handleCurrentChannelChanged</a> (int index)</td></tr>
-<tr class="separator:a285b1c41d112de5f72aedc957748ce8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2789a2c8783b3cd4400c7e1be55fab18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#a2789a2c8783b3cd4400c7e1be55fab18">handleCurrentFilterChanged</a> (int p)</td></tr>
+<tr class="separator:a2789a2c8783b3cd4400c7e1be55fab18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae67dd1675ad13565b2e6f742fd02f0b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#ae67dd1675ad13565b2e6f742fd02f0b9">handleSeverityChanged</a> (bool state)</td></tr>
+<tr class="separator:ae67dd1675ad13565b2e6f742fd02f0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fadfe78fa64cf31b3f9291b3728510e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#a3fadfe78fa64cf31b3f9291b3728510e">handleSearchChanged</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> filter)</td></tr>
+<tr class="separator:a3fadfe78fa64cf31b3f9291b3728510e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa5fdc8d77116eb9e852ca961beb1b1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#aaa5fdc8d77116eb9e852ca961beb1b1f">handleFirstUserInteraction</a> (int value)</td></tr>
 <tr class="separator:aaa5fdc8d77116eb9e852ca961beb1b1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb839a9a480878b1e19a91ec255b67d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#abb839a9a480878b1e19a91ec255b67d8">handleCustomChannel</a> ()</td></tr>
+<tr class="separator:abb839a9a480878b1e19a91ec255b67d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5ea16846a7d99ae3fd7fdca9bca1901"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#ad5ea16846a7d99ae3fd7fdca9bca1901">toggleSearchbar</a> ()</td></tr>
+<tr class="separator:ad5ea16846a7d99ae3fd7fdca9bca1901"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_slots_classhal_1_1_content_widget"><td colspan="2" onclick="javascript:toggleInherit('pub_slots_classhal_1_1_content_widget')"><img src="closed.png" alt="-"/>&#160;Public Slots inherited from <a class="el" href="classhal_1_1_content_widget.html">hal::ContentWidget</a></td></tr>
 <tr class="memitem:a710c4f22b31bec0e46b1183fbd8b5778 inherit pub_slots_classhal_1_1_content_widget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a710c4f22b31bec0e46b1183fbd8b5778">remove</a> ()</td></tr>
 <tr class="separator:a710c4f22b31bec0e46b1183fbd8b5778 inherit pub_slots_classhal_1_1_content_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,6 +170,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9c58d57a85fb7ebe315229168671a934"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a079944cd6d858c44f11bc6589a87622c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#a079944cd6d858c44f11bc6589a87622c">resizeEvent</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qresizeevent.html">QResizeEvent</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>) override</td></tr>
 <tr class="separator:a079944cd6d858c44f11bc6589a87622c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fed39267c6e2ae316e85caa51616e5a"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#a5fed39267c6e2ae316e85caa51616e5a">searchIconPath</a> () const</td></tr>
+<tr class="separator:a5fed39267c6e2ae316e85caa51616e5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7b0fdc5f504ba568435d98c9ea8c335"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#af7b0fdc5f504ba568435d98c9ea8c335">searchIconStyle</a> () const</td></tr>
+<tr class="separator:af7b0fdc5f504ba568435d98c9ea8c335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e30d1734296b809a7f5a1f83b3c9b22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#a8e30d1734296b809a7f5a1f83b3c9b22">setSearchIconPath</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;path)</td></tr>
+<tr class="separator:a8e30d1734296b809a7f5a1f83b3c9b22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bfe34c98c5961099d51f9482d603998"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#a7bfe34c98c5961099d51f9482d603998">setSearchIconStyle</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">style</a>)</td></tr>
+<tr class="separator:a7bfe34c98c5961099d51f9482d603998"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhal_1_1_content_widget"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhal_1_1_content_widget')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhal_1_1_content_widget.html">hal::ContentWidget</a></td></tr>
 <tr class="memitem:af68367a14bc24cff90ccc5d55dfd213b inherit pub_methods_classhal_1_1_content_widget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#af68367a14bc24cff90ccc5d55dfd213b">ContentWidget</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="el" href="classhal_1_1_content_widget.html#ac99228c611d75a8b5f459f77254258f6">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>=nullptr)</td></tr>
 <tr class="separator:af68367a14bc24cff90ccc5d55dfd213b inherit pub_methods_classhal_1_1_content_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -851,6 +868,142 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:depth inherit pub_methods_qpaintdevice"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qpaintdevice.html#depth">depth</a> () const const</td></tr>
 <tr class="separator:depth inherit pub_methods_qpaintdevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
+Properties</h2></td></tr>
+<tr class="memitem:a827b605ec4fd86613524ffa4b5d03836"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#a827b605ec4fd86613524ffa4b5d03836">searchIconPath</a></td></tr>
+<tr class="separator:a827b605ec4fd86613524ffa4b5d03836"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d80ab99a06b9cf52308589c0c014f18"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#a5d80ab99a06b9cf52308589c0c014f18">searchIconStyle</a></td></tr>
+<tr class="separator:a5d80ab99a06b9cf52308589c0c014f18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header properties_classhal_1_1_content_widget"><td colspan="2" onclick="javascript:toggleInherit('properties_classhal_1_1_content_widget')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el" href="classhal_1_1_content_widget.html">hal::ContentWidget</a></td></tr>
+<tr class="memitem:ae9d83cafdfaf9cb855db2eca66d767a9 inherit properties_classhal_1_1_content_widget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#ae9d83cafdfaf9cb855db2eca66d767a9">iconStyle</a></td></tr>
+<tr class="separator:ae9d83cafdfaf9cb855db2eca66d767a9 inherit properties_classhal_1_1_content_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c08c7f76d96fcb6837d296e4fcf785e inherit properties_classhal_1_1_content_widget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a0c08c7f76d96fcb6837d296e4fcf785e">iconPath</a></td></tr>
+<tr class="separator:a0c08c7f76d96fcb6837d296e4fcf785e inherit properties_classhal_1_1_content_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header properties_qwidget"><td colspan="2" onclick="javascript:toggleInherit('properties_qwidget')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el"  href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></td></tr>
+<tr class="memitem:modal-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#modal-prop">modal</a></td></tr>
+<tr class="separator:modal-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:windowModality-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowModality-prop">windowModality</a></td></tr>
+<tr class="separator:windowModality-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:enabled-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#enabled-prop">enabled</a></td></tr>
+<tr class="separator:enabled-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:geometry-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#geometry-prop">geometry</a></td></tr>
+<tr class="separator:geometry-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:frameGeometry-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#frameGeometry-prop">frameGeometry</a></td></tr>
+<tr class="separator:frameGeometry-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:normalGeometry-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#normalGeometry-prop">normalGeometry</a></td></tr>
+<tr class="separator:normalGeometry-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:x-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#x-prop">x</a></td></tr>
+<tr class="separator:x-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:y-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#y-prop">y</a></td></tr>
+<tr class="separator:y-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:pos-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a></td></tr>
+<tr class="separator:pos-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:frameSize-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#frameSize-prop">frameSize</a></td></tr>
+<tr class="separator:frameSize-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:size-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#size-prop">size</a></td></tr>
+<tr class="separator:size-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:width-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#width-prop">width</a></td></tr>
+<tr class="separator:width-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:height-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#height-prop">height</a></td></tr>
+<tr class="separator:height-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:rect-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#rect-prop">rect</a></td></tr>
+<tr class="separator:rect-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:childrenRect-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#childrenRect-prop">childrenRect</a></td></tr>
+<tr class="separator:childrenRect-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:childrenRegion-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#childrenRegion-prop">childrenRegion</a></td></tr>
+<tr class="separator:childrenRegion-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:sizePolicy-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">sizePolicy</a></td></tr>
+<tr class="separator:sizePolicy-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:minimumSize-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimumSize-prop">minimumSize</a></td></tr>
+<tr class="separator:minimumSize-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:maximumSize-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#maximumSize-prop">maximumSize</a></td></tr>
+<tr class="separator:maximumSize-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:minimumWidth-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimumWidth-prop">minimumWidth</a></td></tr>
+<tr class="separator:minimumWidth-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:minimumHeight-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimumHeight-prop">minimumHeight</a></td></tr>
+<tr class="separator:minimumHeight-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:maximumWidth-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#maximumWidth-prop">maximumWidth</a></td></tr>
+<tr class="separator:maximumWidth-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:maximumHeight-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#maximumHeight-prop">maximumHeight</a></td></tr>
+<tr class="separator:maximumHeight-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:sizeIncrement-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizeIncrement-prop">sizeIncrement</a></td></tr>
+<tr class="separator:sizeIncrement-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:baseSize-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#baseSize-prop">baseSize</a></td></tr>
+<tr class="separator:baseSize-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:palette-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#palette-prop">palette</a></td></tr>
+<tr class="separator:palette-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:font-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#font-prop">font</a></td></tr>
+<tr class="separator:font-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:cursor-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">cursor</a></td></tr>
+<tr class="separator:cursor-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:mouseTracking-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#mouseTracking-prop">mouseTracking</a></td></tr>
+<tr class="separator:mouseTracking-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:tabletTracking-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#tabletTracking-prop">tabletTracking</a></td></tr>
+<tr class="separator:tabletTracking-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:isActiveWindow-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#isActiveWindow-prop">isActiveWindow</a></td></tr>
+<tr class="separator:isActiveWindow-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:focusPolicy-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#focusPolicy-prop">focusPolicy</a></td></tr>
+<tr class="separator:focusPolicy-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:focus-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#focus-prop">focus</a></td></tr>
+<tr class="separator:focus-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:contextMenuPolicy-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#contextMenuPolicy-prop">contextMenuPolicy</a></td></tr>
+<tr class="separator:contextMenuPolicy-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:updatesEnabled-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#updatesEnabled-prop">updatesEnabled</a></td></tr>
+<tr class="separator:updatesEnabled-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:visible-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#visible-prop">visible</a></td></tr>
+<tr class="separator:visible-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:minimized-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimized-prop">minimized</a></td></tr>
+<tr class="separator:minimized-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:maximized-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#maximized-prop">maximized</a></td></tr>
+<tr class="separator:maximized-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:fullScreen-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#fullScreen-prop">fullScreen</a></td></tr>
+<tr class="separator:fullScreen-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:sizeHint-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizeHint-prop">sizeHint</a></td></tr>
+<tr class="separator:sizeHint-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:minimumSizeHint-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimumSizeHint-prop">minimumSizeHint</a></td></tr>
+<tr class="separator:minimumSizeHint-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acceptDrops-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#acceptDrops-prop">acceptDrops</a></td></tr>
+<tr class="separator:acceptDrops-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:windowTitle-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowTitle-prop">windowTitle</a></td></tr>
+<tr class="separator:windowTitle-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:windowIcon-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowIcon-prop">windowIcon</a></td></tr>
+<tr class="separator:windowIcon-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:windowIconText-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget-obsolete.html#windowIconText-prop">windowIconText</a></td></tr>
+<tr class="separator:windowIconText-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:windowOpacity-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowOpacity-prop">windowOpacity</a></td></tr>
+<tr class="separator:windowOpacity-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:windowModified-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowModified-prop">windowModified</a></td></tr>
+<tr class="separator:windowModified-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:toolTip-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#toolTip-prop">toolTip</a></td></tr>
+<tr class="separator:toolTip-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:toolTipDuration-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#toolTipDuration-prop">toolTipDuration</a></td></tr>
+<tr class="separator:toolTipDuration-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:statusTip-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#statusTip-prop">statusTip</a></td></tr>
+<tr class="separator:statusTip-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:whatsThis-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#whatsThis-prop">whatsThis</a></td></tr>
+<tr class="separator:whatsThis-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accessibleName-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#accessibleName-prop">accessibleName</a></td></tr>
+<tr class="separator:accessibleName-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accessibleDescription-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#accessibleDescription-prop">accessibleDescription</a></td></tr>
+<tr class="separator:accessibleDescription-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:layoutDirection-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#layoutDirection-prop">layoutDirection</a></td></tr>
+<tr class="separator:layoutDirection-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:windowFlags-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowFlags-prop">windowFlags</a></td></tr>
+<tr class="separator:windowFlags-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:autoFillBackground-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#autoFillBackground-prop">autoFillBackground</a></td></tr>
+<tr class="separator:autoFillBackground-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:styleSheet-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#styleSheet-prop">styleSheet</a></td></tr>
+<tr class="separator:styleSheet-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:locale-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#locale-prop">locale</a></td></tr>
+<tr class="separator:locale-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:windowFilePath-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowFilePath-prop">windowFilePath</a></td></tr>
+<tr class="separator:windowFilePath-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:inputMethodHints-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#inputMethodHints-prop">inputMethodHints</a></td></tr>
+<tr class="separator:inputMethodHints-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header properties_qobject"><td colspan="2" onclick="javascript:toggleInherit('properties_qobject')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el"  href="https://doc.qt.io/qt-5/qobject.html">QObject</a></td></tr>
+<tr class="memitem:objectName-prop inherit properties_qobject"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">objectName</a></td></tr>
+<tr class="separator:objectName-prop inherit properties_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_types_qwidget"><td colspan="2" onclick="javascript:toggleInherit('pub_types_qwidget')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el"  href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></td></tr>
@@ -1050,141 +1203,12 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a967488363abaed7b1509455c8bd4be21 inherit pro_attribs_classhal_1_1_content_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fe07a490c09775afe6b10a4476f6c07 inherit pro_attribs_classhal_1_1_content_widget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qkeysequence.html">QKeySequence</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a0fe07a490c09775afe6b10a4476f6c07">mSearchKeysequence</a></td></tr>
 <tr class="separator:a0fe07a490c09775afe6b10a4476f6c07 inherit pro_attribs_classhal_1_1_content_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header properties_classhal_1_1_content_widget"><td colspan="2" onclick="javascript:toggleInherit('properties_classhal_1_1_content_widget')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el" href="classhal_1_1_content_widget.html">hal::ContentWidget</a></td></tr>
-<tr class="memitem:ae9d83cafdfaf9cb855db2eca66d767a9 inherit properties_classhal_1_1_content_widget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#ae9d83cafdfaf9cb855db2eca66d767a9">iconStyle</a></td></tr>
-<tr class="separator:ae9d83cafdfaf9cb855db2eca66d767a9 inherit properties_classhal_1_1_content_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c08c7f76d96fcb6837d296e4fcf785e inherit properties_classhal_1_1_content_widget"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a0c08c7f76d96fcb6837d296e4fcf785e">iconPath</a></td></tr>
-<tr class="separator:a0c08c7f76d96fcb6837d296e4fcf785e inherit properties_classhal_1_1_content_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header properties_qwidget"><td colspan="2" onclick="javascript:toggleInherit('properties_qwidget')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el"  href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></td></tr>
-<tr class="memitem:modal-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#modal-prop">modal</a></td></tr>
-<tr class="separator:modal-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:windowModality-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowModality-prop">windowModality</a></td></tr>
-<tr class="separator:windowModality-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:enabled-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#enabled-prop">enabled</a></td></tr>
-<tr class="separator:enabled-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:geometry-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#geometry-prop">geometry</a></td></tr>
-<tr class="separator:geometry-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:frameGeometry-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#frameGeometry-prop">frameGeometry</a></td></tr>
-<tr class="separator:frameGeometry-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:normalGeometry-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#normalGeometry-prop">normalGeometry</a></td></tr>
-<tr class="separator:normalGeometry-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:x-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#x-prop">x</a></td></tr>
-<tr class="separator:x-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:y-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#y-prop">y</a></td></tr>
-<tr class="separator:y-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:pos-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a></td></tr>
-<tr class="separator:pos-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:frameSize-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#frameSize-prop">frameSize</a></td></tr>
-<tr class="separator:frameSize-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:size-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#size-prop">size</a></td></tr>
-<tr class="separator:size-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:width-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#width-prop">width</a></td></tr>
-<tr class="separator:width-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:height-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#height-prop">height</a></td></tr>
-<tr class="separator:height-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:rect-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#rect-prop">rect</a></td></tr>
-<tr class="separator:rect-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:childrenRect-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#childrenRect-prop">childrenRect</a></td></tr>
-<tr class="separator:childrenRect-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:childrenRegion-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#childrenRegion-prop">childrenRegion</a></td></tr>
-<tr class="separator:childrenRegion-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:sizePolicy-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">sizePolicy</a></td></tr>
-<tr class="separator:sizePolicy-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:minimumSize-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimumSize-prop">minimumSize</a></td></tr>
-<tr class="separator:minimumSize-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:maximumSize-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#maximumSize-prop">maximumSize</a></td></tr>
-<tr class="separator:maximumSize-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:minimumWidth-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimumWidth-prop">minimumWidth</a></td></tr>
-<tr class="separator:minimumWidth-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:minimumHeight-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimumHeight-prop">minimumHeight</a></td></tr>
-<tr class="separator:minimumHeight-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:maximumWidth-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#maximumWidth-prop">maximumWidth</a></td></tr>
-<tr class="separator:maximumWidth-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:maximumHeight-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#maximumHeight-prop">maximumHeight</a></td></tr>
-<tr class="separator:maximumHeight-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:sizeIncrement-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizeIncrement-prop">sizeIncrement</a></td></tr>
-<tr class="separator:sizeIncrement-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:baseSize-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#baseSize-prop">baseSize</a></td></tr>
-<tr class="separator:baseSize-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:palette-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#palette-prop">palette</a></td></tr>
-<tr class="separator:palette-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:font-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#font-prop">font</a></td></tr>
-<tr class="separator:font-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:cursor-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">cursor</a></td></tr>
-<tr class="separator:cursor-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:mouseTracking-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#mouseTracking-prop">mouseTracking</a></td></tr>
-<tr class="separator:mouseTracking-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:tabletTracking-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#tabletTracking-prop">tabletTracking</a></td></tr>
-<tr class="separator:tabletTracking-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:isActiveWindow-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#isActiveWindow-prop">isActiveWindow</a></td></tr>
-<tr class="separator:isActiveWindow-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:focusPolicy-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#focusPolicy-prop">focusPolicy</a></td></tr>
-<tr class="separator:focusPolicy-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:focus-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#focus-prop">focus</a></td></tr>
-<tr class="separator:focus-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:contextMenuPolicy-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#contextMenuPolicy-prop">contextMenuPolicy</a></td></tr>
-<tr class="separator:contextMenuPolicy-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:updatesEnabled-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#updatesEnabled-prop">updatesEnabled</a></td></tr>
-<tr class="separator:updatesEnabled-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:visible-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#visible-prop">visible</a></td></tr>
-<tr class="separator:visible-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:minimized-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimized-prop">minimized</a></td></tr>
-<tr class="separator:minimized-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:maximized-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#maximized-prop">maximized</a></td></tr>
-<tr class="separator:maximized-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:fullScreen-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#fullScreen-prop">fullScreen</a></td></tr>
-<tr class="separator:fullScreen-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:sizeHint-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizeHint-prop">sizeHint</a></td></tr>
-<tr class="separator:sizeHint-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:minimumSizeHint-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimumSizeHint-prop">minimumSizeHint</a></td></tr>
-<tr class="separator:minimumSizeHint-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acceptDrops-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#acceptDrops-prop">acceptDrops</a></td></tr>
-<tr class="separator:acceptDrops-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:windowTitle-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowTitle-prop">windowTitle</a></td></tr>
-<tr class="separator:windowTitle-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:windowIcon-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowIcon-prop">windowIcon</a></td></tr>
-<tr class="separator:windowIcon-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:windowIconText-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget-obsolete.html#windowIconText-prop">windowIconText</a></td></tr>
-<tr class="separator:windowIconText-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:windowOpacity-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowOpacity-prop">windowOpacity</a></td></tr>
-<tr class="separator:windowOpacity-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:windowModified-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowModified-prop">windowModified</a></td></tr>
-<tr class="separator:windowModified-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:toolTip-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#toolTip-prop">toolTip</a></td></tr>
-<tr class="separator:toolTip-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:toolTipDuration-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#toolTipDuration-prop">toolTipDuration</a></td></tr>
-<tr class="separator:toolTipDuration-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:statusTip-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#statusTip-prop">statusTip</a></td></tr>
-<tr class="separator:statusTip-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:whatsThis-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#whatsThis-prop">whatsThis</a></td></tr>
-<tr class="separator:whatsThis-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accessibleName-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#accessibleName-prop">accessibleName</a></td></tr>
-<tr class="separator:accessibleName-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accessibleDescription-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#accessibleDescription-prop">accessibleDescription</a></td></tr>
-<tr class="separator:accessibleDescription-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:layoutDirection-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#layoutDirection-prop">layoutDirection</a></td></tr>
-<tr class="separator:layoutDirection-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:windowFlags-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowFlags-prop">windowFlags</a></td></tr>
-<tr class="separator:windowFlags-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:autoFillBackground-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#autoFillBackground-prop">autoFillBackground</a></td></tr>
-<tr class="separator:autoFillBackground-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:styleSheet-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#styleSheet-prop">styleSheet</a></td></tr>
-<tr class="separator:styleSheet-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:locale-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#locale-prop">locale</a></td></tr>
-<tr class="separator:locale-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:windowFilePath-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowFilePath-prop">windowFilePath</a></td></tr>
-<tr class="separator:windowFilePath-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:inputMethodHints-prop inherit properties_qwidget"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#inputMethodHints-prop">inputMethodHints</a></td></tr>
-<tr class="separator:inputMethodHints-prop inherit properties_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header properties_qobject"><td colspan="2" onclick="javascript:toggleInherit('properties_qobject')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el"  href="https://doc.qt.io/qt-5/qobject.html">QObject</a></td></tr>
-<tr class="memitem:objectName-prop inherit properties_qobject"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">objectName</a></td></tr>
-<tr class="separator:objectName-prop inherit properties_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Displays the logs in the gui. </p>
 <p>The <a class="el" href="classhal_1_1_logger_widget.html" title="Displays the logs in the gui.">LoggerWidget</a> is the content widget that displays the current hal log. </p>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8h_source.html#l00051">51</a> of file <a class="el" href="logger__widget_8h_source.html">logger_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8h_source.html#l00053">53</a> of file <a class="el" href="logger__widget_8h_source.html">logger_widget.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aec19d96bb1c86b27de6a0b7cfc745f18"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aec19d96bb1c86b27de6a0b7cfc745f18">&#9670;&nbsp;</a></span>LoggerWidget()</h2>
@@ -1209,9 +1233,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00012">12</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00025">25</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractslider.html#actionTriggered">QAbstractSlider::actionTriggered()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">QBoxLayout::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ContextMenuPolicy-enum">Qt::CustomContextMenu</a>, <a class="el" href="channel__model_8cpp_source.html#l00024">hal::ChannelModel::get_instance()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00062">handleChannelUpdated()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00074">handleCurrentChannelChanged()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00089">handleFirstUserInteraction()</a>, <a class="el" href="content__widget_8h_source.html#l00240">hal::ContentWidget::mContentLayout</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#Shape-enum">QFrame::NoFrame</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#contextMenuPolicy-prop">QWidget::setContextMenuPolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#setFrameStyle">QFrame::setFrameStyle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#readOnly-prop">QPlainTextEdit::setReadOnly()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#verticalScrollBar">QAbstractScrollArea::verticalScrollBar()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractslider.html#actionTriggered">QAbstractSlider::actionTriggered()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">QBoxLayout::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ContextMenuPolicy-enum">Qt::CustomContextMenu</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#ensurePolished">QWidget::ensurePolished()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00138">handleChannelUpdated()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00279">handleFirstUserInteraction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="el" href="channel__model_8cpp_source.html#l00024">hal::ChannelModel::instance()</a>, <a class="el" href="content__widget_8h_source.html#l00240">hal::ContentWidget::mContentLayout</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#Shape-enum">QFrame::NoFrame</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#contextMenuPolicy-prop">QWidget::setContextMenuPolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#setFrameStyle">QFrame::setFrameStyle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#readOnly-prop">QPlainTextEdit::setReadOnly()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#verticalScrollBar">QAbstractScrollArea::verticalScrollBar()</a>.</p>
 
 </div>
 </div>
@@ -1238,7 +1262,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00036">36</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00056">56</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 </div>
 </div>
@@ -1260,7 +1284,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets the underlying (read only) <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html">QPlainTextEdit</a> object this <a class="el" href="classhal_1_1_logger_widget.html" title="Displays the logs in the gui.">LoggerWidget</a> uses to display the log.</p>
 <dl class="section return"><dt>Returns</dt><dd>the underlying <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html">QPlainTextEdit</a> object </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00052">52</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00128">128</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 </div>
 </div>
@@ -1313,50 +1337,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00062">62</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00138">138</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="logger__marshall_8cpp_source.html#l00018">hal::LoggerMarshall::appendLog()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00074">handleCurrentChannelChanged()</a>.</p>
+<p class="reference">References <a class="el" href="logger__marshall_8cpp_source.html#l00018">hal::LoggerMarshall::appendLog()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00171">handleCurrentFilterChanged()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00012">LoggerWidget()</a>.</p>
-
-</div>
-</div>
-<a id="a285b1c41d112de5f72aedc957748ce8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a285b1c41d112de5f72aedc957748ce8f">&#9670;&nbsp;</a></span>handleCurrentChannelChanged</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::LoggerWidget::handleCurrentChannelChanged </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>index</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Q_SLOT to handle that the currently selected logger channel has been changed (e.g. by choosing another one in the <a class="el" href="classhal_1_1_channel_selector.html" title="A combobox for selecting a logger channel.">ChannelSelector</a> combobox).</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">index</td><td>- The new channel index </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00074">74</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="logger__marshall_8cpp_source.html#l00018">hal::LoggerMarshall::appendLog()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#clear">QPlainTextEdit::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="channel__model_8cpp_source.html#l00024">hal::ChannelModel::get_instance()</a>, <a class="el" href="channel__item_8cpp_source.html#l00028">hal::ChannelItem::getList()</a>, <a class="el" href="channel__item_8cpp_source.html#l00033">hal::ChannelItem::getLock()</a>, <a class="el" href="channel__model_8cpp_source.html#l00063">hal::ChannelModel::index()</a>, <a class="el" href="channel__item_8cpp_source.html#l00023">hal::ChannelItem::name()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00062">handleChannelUpdated()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00012">LoggerWidget()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00042">setupToolbar()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00025">LoggerWidget()</a>.</p>
 
 </div>
 </div>
@@ -1402,9 +1387,80 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00057">57</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00133">133</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="logger__marshall_8cpp_source.html#l00018">hal::LoggerMarshall::appendLog()</a>.</p>
+
+</div>
+</div>
+<a id="a2789a2c8783b3cd4400c7e1be55fab18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2789a2c8783b3cd4400c7e1be55fab18">&#9670;&nbsp;</a></span>handleCurrentFilterChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::LoggerWidget::handleCurrentFilterChanged </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SLOT to handle that the currently selected filter has been changed (e.g. by choosing another one in the the <a class="el" href="classhal_1_1_channel_selector.html" title="A combobox for selecting a logger channel.">ChannelSelector</a> combobox or by toggling a severity button).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>- New channel index or new state of a severity button </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00171">171</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="logger__marshall_8cpp_source.html#l00018">hal::LoggerMarshall::appendLog()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#clear">QPlainTextEdit::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="channel__item_8cpp_source.html#l00017">hal::ChannelItem::getEntries()</a>, <a class="el" href="channel__item_8cpp_source.html#l00022">hal::ChannelItem::getLock()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qregularexpressionmatch.html#hasMatch">QRegularExpressionMatch::hasMatch()</a>, <a class="el" href="channel__model_8cpp_source.html#l00063">hal::ChannelModel::index()</a>, <a class="el" href="channel__model_8cpp_source.html#l00024">hal::ChannelModel::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qregularexpression.html#match">QRegularExpression::match()</a>, <a class="el" href="channel__item_8cpp_source.html#l00012">hal::ChannelItem::name()</a>, <a class="el" href="channel__model_8cpp_source.html#l00086">hal::ChannelModel::rowCount()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">QObject::sender()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#currentText-prop">QComboBox::setCurrentText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlabel.html#text-prop">QLabel::setText()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00138">handleChannelUpdated()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00272">handleSearchChanged()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00228">handleSeverityChanged()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00061">setupToolbar()</a>.</p>
+
+</div>
+</div>
+<a id="abb839a9a480878b1e19a91ec255b67d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb839a9a480878b1e19a91ec255b67d8">&#9670;&nbsp;</a></span>handleCustomChannel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::LoggerWidget::handleCustomChannel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SLOT to handle that a new channel has been added to the <a class="el" href="classhal_1_1_channel_selector.html" title="A combobox for selecting a logger channel.">ChannelSelector</a> combobox. </p>
+
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00287">287</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="channel__model_8cpp_source.html#l00131">hal::ChannelModel::handleLogmanagerCallback()</a>, <a class="el" href="channel__model_8cpp_source.html#l00024">hal::ChannelModel::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#lineEdit">QComboBox::lineEdit()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#text-prop">QLineEdit::text</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00061">setupToolbar()</a>.</p>
 
 </div>
 </div>
@@ -1439,9 +1495,87 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00089">89</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00279">279</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00012">LoggerWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00025">LoggerWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a3fadfe78fa64cf31b3f9291b3728510e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fadfe78fa64cf31b3f9291b3728510e">&#9670;&nbsp;</a></span>handleSearchChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::LoggerWidget::handleSearchChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td>
+          <td class="paramname"><em>filter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SLOT to handle that a new search filter has been set.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filter</td><td>- Search string to filter </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00272">272</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="logger__widget_8cpp_source.html#l00171">handleCurrentFilterChanged()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00061">setupToolbar()</a>.</p>
+
+</div>
+</div>
+<a id="ae67dd1675ad13565b2e6f742fd02f0b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae67dd1675ad13565b2e6f742fd02f0b9">&#9670;&nbsp;</a></span>handleSeverityChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::LoggerWidget::handleSeverityChanged </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SLOT to handle that the severity filter has been changed (e.g. by toggling a severity).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>- New state of a severity button </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00228">228</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="logger__widget_8cpp_source.html#l00171">handleCurrentFilterChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">QObject::sender()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">QAbstractButton::setChecked()</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00061">setupToolbar()</a>.</p>
 
 </div>
 </div>
@@ -1478,9 +1612,103 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#resizeEvent">QWidget</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00097">97</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00296">296</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">QWidget::event()</a>.</p>
+
+</div>
+</div>
+<a id="a5fed39267c6e2ae316e85caa51616e5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fed39267c6e2ae316e85caa51616e5a">&#9670;&nbsp;</a></span>searchIconPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::LoggerWidget::searchIconPath </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Q_PROPERTY READ function for the "search"-icon path.</p>
+<dl class="section return"><dt>Returns</dt><dd>The "search" icon path. </dd></dl>
+
+</div>
+</div>
+<a id="af7b0fdc5f504ba568435d98c9ea8c335"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7b0fdc5f504ba568435d98c9ea8c335">&#9670;&nbsp;</a></span>searchIconStyle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::LoggerWidget::searchIconStyle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Q_PROPERTY READ function for the "search active"-icon style.</p>
+<dl class="section return"><dt>Returns</dt><dd>The "search activate" icon style. </dd></dl>
+
+</div>
+</div>
+<a id="a8e30d1734296b809a7f5a1f83b3c9b22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e30d1734296b809a7f5a1f83b3c9b22">&#9670;&nbsp;</a></span>setSearchIconPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::LoggerWidget::setSearchIconPath </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Q_PROPERTY WRITE function for the "search"-icon path.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>- The new path. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00348">348</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a7bfe34c98c5961099d51f9482d603998"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bfe34c98c5961099d51f9482d603998">&#9670;&nbsp;</a></span>setSearchIconStyle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::LoggerWidget::setSearchIconStyle </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
+          <td class="paramname"><em>style</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Q_PROPERTY WRITE function for the "search"-icon style.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">style</td><td>- The new style. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00353">353</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">QWidget::style()</a>.</p>
 
 </div>
 </div>
@@ -1517,9 +1745,90 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classhal_1_1_content_widget.html#a08d76ceb8080776f6b87af4a3bd6e6d8">hal::ContentWidget</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00042">42</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00061">61</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtoolbar.html#addWidget">QToolBar::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00074">handleCurrentChannelChanged()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtoolbar.html#addAction">QToolBar::addAction()</a>, <a class="el" href="toolbar_8cpp_source.html#l00011">hal::Toolbar::addSpacer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtoolbar.html#addWidget">QToolBar::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#SizeAdjustPolicy-enum">QComboBox::AdjustToContentsOnFirstShow</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="graphics_8cpp_source.html#l00037">hal::gui_utility::getStyledSvgIcon()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00171">handleCurrentFilterChanged()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00287">handleCustomChannel()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00272">handleSearchChanged()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00228">handleSeverityChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#lineEdit">QComboBox::lineEdit()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checkable-prop">QAbstractButton::setCheckable()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">QAbstractButton::setChecked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#editable-prop">QComboBox::setEditable()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qaction.html#icon-prop">QAction::setIcon()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#sizeAdjustPolicy-prop">QComboBox::setSizeAdjustPolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#styleSheet-prop">QWidget::setStyleSheet()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlabel.html#text-prop">QLabel::setText()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00324">toggleSearchbar()</a>.</p>
+
+</div>
+</div>
+<a id="ad5ea16846a7d99ae3fd7fdca9bca1901"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5ea16846a7d99ae3fd7fdca9bca1901">&#9670;&nbsp;</a></span>toggleSearchbar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::LoggerWidget::toggleSearchbar </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Toggles the visibiliy of the searchbar. </p>
+
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00324">324</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#isHidden">QWidget::isHidden()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setFocus-1">QWidget::setFocus()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#show">QWidget::show()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00061">setupToolbar()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Property Documentation</h2>
+<a id="a827b605ec4fd86613524ffa4b5d03836"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a827b605ec4fd86613524ffa4b5d03836">&#9670;&nbsp;</a></span>searchIconPath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::LoggerWidget::searchIconPath</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="logger__widget_8h_source.html#l00056">56</a> of file <a class="el" href="logger__widget_8h_source.html">logger_widget.h</a>.</p>
+
+</div>
+</div>
+<a id="a5d80ab99a06b9cf52308589c0c014f18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d80ab99a06b9cf52308589c0c014f18">&#9670;&nbsp;</a></span>searchIconStyle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::LoggerWidget::searchIconStyle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="logger__widget_8h_source.html#l00057">57</a> of file <a class="el" href="logger__widget_8h_source.html">logger_widget.h</a>.</p>
 
 </div>
 </div>
@@ -1533,7 +1842,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_logger_widget.html">LoggerWidget</a></li>
-    <li class="footer">Generated on Tue Jan 25 2022 20:41:28 for HAL by
+    <li class="footer">Generated on Tue Feb 8 2022 14:01:42 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,5 +1,5 @@
 <map id="hal::SettingsManager" name="hal::SettingsManager">
-<area shape="rect" id="node1" title="Manages and persists the settings on the lowest level." alt="" coords="79,409,309,604"/>
+<area shape="rect" id="node1" title="Manages and persists the settings on the lowest level." alt="" coords="79,409,309,589"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="5,5,172,347"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="196,42,403,310"/>
 </map>

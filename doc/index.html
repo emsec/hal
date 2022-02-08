@@ -185,25 +185,16 @@ pybind11 Trouble</h4>
 <div class="line">  * An install or uninstall procedure did not complete successfully.</div>
 <div class="line">  * The installation package was faulty and references files it does not</div>
 <div class="line">  provide.</div>
-<div class="line"> </div>
-<div class="line"> </div>
-<div class="line">Tip 1: Make sure you have the most recent `pybind11-dev` version installed.</div>
-<div class="line">Tip 2: `-DCMAKE_PREFIX_PATH=&lt;root_of_pybind&gt;` can be provided as additional flag to `cmake`. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.</div>
-<div class="line"> </div>
-<div class="line"> </div>
-<div class="line">&lt;a name=&quot;quickstart&quot;&gt;&lt;/a&gt;</div>
-<div class="line"># Quickstart Guide </div>
-<div class="line"> </div>
-<div class="line">Install HAL or build HAL and start the GUI via `hal -g`. You can list all available options via `hal [--help|-h]`.</div>
-<div class="line">We included some example netlists in `examples` together with the implementation of the respective example gate library in `plugins/example_gate_library`.</div>
-<div class="line">For instructions to create your own gate library and other useful tutorials, take a look at the [wiki](https://github.com/emsec/hal/wiki).</div>
-<div class="line"> </div>
-<div class="line">Load a library from the `examples` directory and start exploring the graphical representation.</div>
-<div class="line">Use the integrated Python shell or the Python script window to interact. Both feature (limited) autocomplete functionality.</div>
-<div class="line"> </div>
-<div class="line">Let&#39;s list all lookup tables and print their Boolean functions:</div>
-<div class="line">```python</div>
-<div class="line">for gate in netlist.get_gates():</div>
+</div><!-- fragment --><ul>
+<li>Tip 1: Make sure you have the most recent <code>pybind11-dev</code> version installed.</li>
+<li>Tip 2: <code>-DCMAKE_PREFIX_PATH=&lt;root_of_pybind&gt;</code> can be provided as additional flag to <code>cmake</code>. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.</li>
+</ul>
+<p><a class="anchor" id="quickstart"></a> </p>
+<h1><a class="anchor" id="autotoc_md22"></a>
+Quickstart Guide</h1>
+<p>Install HAL or build HAL and start the GUI via <code>hal -g</code>. You can list all available options via <code>hal [--help|-h]</code>. We included some example netlists in <code>examples</code> together with the implementation of the respective example gate library in <code>plugins/example_gate_library</code>. For instructions to create your own gate library and other useful tutorials, take a look at the <a href="https://github.com/emsec/hal/wiki">wiki</a>.</p>
+<p>Load a library from the <code>examples</code> directory and start exploring the graphical representation. Use the integrated Python shell or the Python script window to interact. Both feature (limited) autocomplete functionality.</p>
+<p>Let's list all lookup tables and print their Boolean functions: </p><div class="fragment"><div class="line">for gate in netlist.get_gates():</div>
 <div class="line">    if &quot;LUT&quot; in gate.type.name:</div>
 <div class="line">        print(&quot;{} (id {}, type {})&quot;.format(gate.name, gate.id, gate.type.name))</div>
 <div class="line">        print(&quot;  {}-to-{} LUT&quot;.format(len(gate.type.input_pins), len(gate.type.output_pins)))</div>
@@ -234,19 +225,19 @@ pybind11 Trouble</h4>
 <div class="line">OUTPUT_BUF_1_inst_i_1_inst (id 20, type LUT2)</div>
 <div class="line">  2-to-1 LUT</div>
 <div class="line">  O: (I0 &amp; !I1) | (!I0 &amp; I1)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md22"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md23"></a>
 Contributing</h1>
 <p>You are welcome to contribute to the development of HAL. Feel free to submit a new pull request via github. Please consider running the static checks + <code>clang format</code> before that. You can also install these checks as git hooks before any commit.</p>
-<h2><a class="anchor" id="autotoc_md23"></a>
+<h2><a class="anchor" id="autotoc_md24"></a>
 Run static checks and clang format locally</h2>
 <p>To install clang-format hook install <a href="https://github.com/icefox/git-hooks">git-hooks</a> and run:</p>
 <p><code>git hooks --install</code></p>
 <p>Start Docker build via: <code>docker-compose run --rm hal-build</code></p>
-<h2><a class="anchor" id="autotoc_md24"></a>
+<h2><a class="anchor" id="autotoc_md25"></a>
 Generate Changelog</h2>
 <p><code>git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges</code></p>
 <p><a class="anchor" id="academic-context"></a> </p>
-<h1><a class="anchor" id="autotoc_md25"></a>
+<h1><a class="anchor" id="autotoc_md26"></a>
 Academic Context</h1>
 <p>If you use HAL in an academic context, please cite the framework using the reference below: </p><div class="fragment"><div class="line">@misc{hal,</div>
 <div class="line">    author = {{Embedded Security Group}},</div>
@@ -264,10 +255,10 @@ Academic Context</h1>
 <div class="line">    howpublished = {\url{https://github.com/emsec/hal}}</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>To get an overview on the challenges we set out to solve with HAL, feel free to watch our <a href="https://media.ccc.de/v/36c3-10879-hal_-_the_open-source_hardware_analyzer">talk</a> at 36C3.</p>
-<h1><a class="anchor" id="autotoc_md26"></a>
+<h1><a class="anchor" id="autotoc_md27"></a>
 Licensing</h1>
 <p>HAL is licensed under MIT License to encourage collaboration with other research groups and contributions from the industry. Please refer to the license file for further information.</p>
-<h1><a class="anchor" id="autotoc_md27"></a>
+<h1><a class="anchor" id="autotoc_md28"></a>
 Disclaimer</h1>
 <p>HAL is at most alpha-quality software. Use at your own risk. We do not encourage any malicious use of our toolkit. </p>
 </div></div><!-- PageDoc -->
@@ -276,7 +267,7 @@ Disclaimer</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Jan 25 2022 20:41:30 for HAL by
+    <li class="footer">Generated on Tue Feb 8 2022 14:01:43 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

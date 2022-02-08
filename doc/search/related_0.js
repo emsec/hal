@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['argumentdeducer_36141',['ArgumentDeducer',['../classsubprocess_1_1_popen.html#a5be687d0a7fae803059e799139a44868',1,'subprocess::Popen']]],
-  ['child_36142',['Child',['../classsubprocess_1_1_popen.html#a4b6e6e3c262ff49cedf0a1e5a1159f9c',1,'subprocess::Popen']]]
+  ['argumentdeducer_36169',['ArgumentDeducer',['../classsubprocess_1_1_popen.html#a5be687d0a7fae803059e799139a44868',1,'subprocess::Popen']]],
+  ['child_36170',['Child',['../classsubprocess_1_1_popen.html#a4b6e6e3c262ff49cedf0a1e5a1159f9c',1,'subprocess::Popen']]]
 ];

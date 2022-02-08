@@ -91,6 +91,7 @@ var hierarchy =
     [ "hal::LayoutLockerManager", "classhal_1_1_layout_locker_manager.html", null ],
     [ "hal::StandardGraphicsNet::Lines", "structhal_1_1_standard_graphics_net_1_1_lines.html", null ],
     [ "hal::LogManager::log_sink", "structhal_1_1_log_manager_1_1log__sink.html", null ],
+    [ "hal::LoggerSettings", "structhal_1_1_logger_settings.html", null ],
     [ "hal::LogManager", "classhal_1_1_log_manager.html", null ],
     [ "hal::SMT::Model", "structhal_1_1_s_m_t_1_1_model.html", null ],
     [ "hal::ModuleEvent", "classhal_1_1_module_event.html", null ],
@@ -305,6 +306,9 @@ var hierarchy =
           [ "hal::TabWidget", "classhal_1_1_tab_widget.html", null ]
         ] ],
         [ "QAbstractButton", "https://doc.qt.io/qt-5/qabstractbutton.html", [
+          [ "QCheckBox", "https://doc.qt.io/qt-5/qcheckbox.html", [
+            [ "hal::SeveritySelector", "classhal_1_1_severity_selector.html", null ]
+          ] ],
           [ "QToolButton", "https://doc.qt.io/qt-5/qtoolbutton.html", [
             [ "hal::DockButton", "classhal_1_1_dock_button.html", null ]
           ] ]
