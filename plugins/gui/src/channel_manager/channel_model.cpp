@@ -21,7 +21,7 @@ namespace hal
         LogManager::get_instance().get_gui_callback().remove_callback("gui");
     }
 
-    ChannelModel* ChannelModel::get_instance()
+    ChannelModel* ChannelModel::instance()
     {
         static ChannelModel s_model;
         return &s_model;
@@ -36,7 +36,7 @@ namespace hal
             return QVariant();
 
         ChannelItem* item = static_cast<ChannelItem*>(index.internalPointer());
-        return item->data(index.column());
+        return item->name();
     }
 
     Qt::ItemFlags ChannelModel::flags(const QModelIndex& index) const
@@ -99,7 +99,7 @@ namespace hal
             return 2;
     }
 
-    ChannelItem* ChannelModel::add_channel(const QString name)
+    ChannelItem* ChannelModel::addChannel(const QString name)
     {
         int offset = mPermanentItems.size() + mTemporaryItems.size();
 
@@ -118,10 +118,27 @@ namespace hal
         return item;
     }
 
+    bool ChannelModel::channelExists(const QString& name) const
+    {
+        for (const ChannelItem* item : mPermanentItems)
+            if (item->name() == name) return true;
+        for (const ChannelItem* item : mTemporaryItems)
+            if (item->name() == name) return true;
+        return false;
+    }
+
+
     void ChannelModel::handleLogmanagerCallback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text)
     {
         if(mChannelToIgnore.contains(QString::fromStdString(channel_name)))
             return;
+        if(msg_text == channel_name + " has manually been added to channellist")
+        {
+            if(channelExists(QString::fromStdString(channel_name)))
+            {
+                return;
+            }
+        }
 
         ChannelItem* all_channel = nullptr;
         ChannelItem* item        = nullptr;
@@ -152,11 +169,11 @@ namespace hal
         }
         if (all_channel == nullptr)
         {
-            all_channel = add_channel(QString::fromStdString(ALL_CHANNEL));
+            all_channel = addChannel(QString::fromStdString(ALL_CHANNEL));
         }
         if (item == nullptr)
         {
-            item = add_channel(QString::fromStdString(channel_name));
+            item = addChannel(QString::fromStdString(channel_name));
         }
 
         all_channel->appendEntry(new ChannelEntry(msg_text, t));
@@ -165,3 +182,4 @@ namespace hal
         Q_EMIT updated(t, channel_name, msg_text);
     }
 }    // namespace hal
+

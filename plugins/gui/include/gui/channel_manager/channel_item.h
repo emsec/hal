@@ -71,15 +71,6 @@ namespace hal
         ChannelItem(QString name);
 
         /**
-         * Get the column specific data of the item. The channel logically consists of only one column that holds the name.
-         * This function is the same as name() for column = 0.
-         *
-         * @param column - The column for which data is requested.
-         * @return The data of the column.
-         */
-        QVariant data(int column) const;
-
-        /**
          * Get the channel's name.
          *
          * @return The name of the channel.
@@ -91,7 +82,7 @@ namespace hal
          *
          * @return The List that contains the channel entries.
          */
-        const QList<ChannelEntry*>* getList() const;
+        const QList<ChannelEntry*>* getEntries() const;
 
         /**
          * Get the lock of the channel.
