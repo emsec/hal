@@ -28,12 +28,16 @@ namespace hal
 
     std::string BooleanFunction::to_string(Value v)
     {
-        switch(v)
+        switch (v)
         {
-        case ZERO: return std::string("0");
-        case ONE:  return std::string("1");
-        case X:    return std::string("X");
-        case Z:    return std::string("Z");
+            case ZERO:
+                return std::string("0");
+            case ONE:
+                return std::string("1");
+            case X:
+                return std::string("X");
+            case Z:
+                return std::string("Z");
         }
 
         return std::string("X");
@@ -292,17 +296,19 @@ namespace hal
 
     std::variant<BooleanFunction, std::string> BooleanFunction::Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
     {
-        if (!p1.is_index() || !p2.is_index()) {
+        if (!p1.is_index() || !p2.is_index())
+        {
             ERROR("Mismatching function types for Slice operation (= p1 and p2 must be an 'BooleanFunctino::Index').");
         }
-        if ((p0.size() != p1.size()) || (p1.size() != p2.size())) {
+        if ((p0.size() != p1.size()) || (p1.size() != p2.size()))
+        {
             ERROR("Mismatching bit-sizes for Slice operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", p2 = " << p2.size() << " - sizes must be equal).");
         }
-        
-        auto start = p1.get_top_level_node().index,
-               end = p2.get_top_level_node().index;
 
-        if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size) {
+        auto start = p1.get_top_level_node().index, end = p2.get_top_level_node().index;
+
+        if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size)
+        {
             ERROR("Mismatching bit-sizes for Slice operation (p0 = " << p0.size() << ", p1 = " << start << ", p2 = " << end << ").");
         }
 
@@ -311,7 +317,8 @@ namespace hal
 
     std::variant<BooleanFunction, std::string> BooleanFunction::Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        if ((p0.size() + p1.size()) != size) {
+        if ((p0.size() + p1.size()) != size)
+        {
             ERROR("Mismatch function input width (p0 = " << p0.size() << "-bit, p1 = " << p1.size() << "-bit, size = " << size << ").");
         }
 
@@ -450,7 +457,6 @@ namespace hal
         return (this->is_empty()) ? false : this->get_top_level_node().has_index_value(value);
     }
 
-
     const BooleanFunction::Node& BooleanFunction::get_top_level_node() const
     {
         return this->m_nodes.back();
@@ -511,51 +517,46 @@ namespace hal
         return variable_names;
     }
 
-    std::string BooleanFunction::to_string() const
+    Result<std::string> BooleanFunction::default_printer(const BooleanFunction::Node& node, std::vector<std::string>&& operands)
     {
-        /// Local function to translate a given BooleanFunction::Node to a string
-        ///
-        /// @param[in] node Node of BooleanFunction.
-        /// @param[in] p Node operands.
-        /// @returns (0) status (true on success, false otherwise),
-        ///          (1) human-readable string that represents the node
-        auto node2string = [](const auto& node, auto&& o) -> std::tuple<bool, std::string> {
-            if (node.get_arity() != o.size())
-            {
-                return {false, ""};
-            }
+        if (node.get_arity() != operands.size())
+        {
+            return ERR("node arity of " + std::to_string(node.get_arity()) + " does not match number of operands of " + std::to_string(operands.size()));
+        }
 
-            switch (node.type)
-            {
-                case BooleanFunction::NodeType::Constant:
-                case BooleanFunction::NodeType::Index:
-                case BooleanFunction::NodeType::Variable:
-                    return {true, node.to_string()};
+        switch (node.type)
+        {
+            case BooleanFunction::NodeType::Constant:
+            case BooleanFunction::NodeType::Index:
+            case BooleanFunction::NodeType::Variable:
+                return OK(node.to_string());
 
-                case BooleanFunction::NodeType::And:
-                    return {true, "(" + o[0] + " & " + o[1] + ")"};
-                case BooleanFunction::NodeType::Not:
-                    return {true, "(! " + o[0] + ")"};
-                case BooleanFunction::NodeType::Or:
-                    return {true, "(" + o[0] + " | " + o[1] + ")"};
-                case BooleanFunction::NodeType::Xor:
-                    return {true, "(" + o[0] + " ^ " + o[1] + ")"};
+            case BooleanFunction::NodeType::And:
+                return OK("(" + operands[0] + " & " + operands[1] + ")");
+            case BooleanFunction::NodeType::Not:
+                return OK("(! " + operands[0] + ")");
+            case BooleanFunction::NodeType::Or:
+                return OK("(" + operands[0] + " | " + operands[1] + ")");
+            case BooleanFunction::NodeType::Xor:
+                return OK("(" + operands[0] + " ^ " + operands[1] + ")");
 
-                case BooleanFunction::NodeType::Add:
-                    return {true, "(" + o[0] + " + " + o[1] + ")"};
+            case BooleanFunction::NodeType::Add:
+                return OK("(" + operands[0] + " + " + operands[1] + ")");
 
-                case BooleanFunction::NodeType::Concat:
-                    return {true, "(" + o[0] + " ++ " + o[1] + ")"};
-                case BooleanFunction::NodeType::Slice:
-                    return {true, "Slice(" + o[0] + ", " + o[1] + ", " + o[2] + ")"};
-                case BooleanFunction::NodeType::Zext:
-                    return {true, "Zext(" + o[0] + ", " + o[1] + ")"};
+            case BooleanFunction::NodeType::Concat:
+                return OK("(" + operands[0] + " ++ " + operands[1] + ")");
+            case BooleanFunction::NodeType::Slice:
+                return OK("Slice(" + operands[0] + ", " + operands[1] + ", " + operands[2] + ")");
+            case BooleanFunction::NodeType::Zext:
+                return OK("Zext(" + operands[0] + ", " + operands[1] + ")");
 
-                default:
-                    return {false, ""};
-            }
-        };
+            default:
+                return ERR("unsupported node type '" + std::to_string(node.type) + "'");
+        }
+    }
 
+    std::string BooleanFunction::to_string(std::function<Result<std::string>(const BooleanFunction::Node& node, std::vector<std::string>&& operands)>&& printer) const
+    {
         // (1) early termination in case the Boolean function is empty
         if (this->m_nodes.empty())
         {
@@ -577,13 +578,13 @@ namespace hal
             std::move(stack.end() - static_cast<u64>(node.get_arity()), stack.end(), std::back_inserter(operands));
             stack.erase(stack.end() - static_cast<u64>(node.get_arity()), stack.end());
 
-            if (auto [ok, reduction] = node2string(node, std::move(operands)); ok)
+            if (auto res = printer(node, std::move(operands)); res.is_ok())
             {
-                stack.emplace_back(reduction);
+                stack.emplace_back(res.get());
             }
             else
             {
-                // log_error("netlist", "Cannot translate BooleanFunction::Node '{}' to a string.", node->to_string());
+                log_error("netlist", "Cannot translate BooleanFunction::Node '{}' to a string: {}.", node.to_string(), res.get_error().get());
                 return "";
             }
         }
@@ -638,10 +639,10 @@ namespace hal
     BooleanFunction BooleanFunction::simplify() const
     {
         auto simplified = Simplification::local_simplification(*this)
-            .map<BooleanFunction>([] (const auto& simplified) { return Simplification::abc_simplification(simplified); })
-            .map<BooleanFunction>([] (const auto& simplified) { return Simplification::local_simplification(simplified); });
+                              .map<BooleanFunction>([](const auto& simplified) { return Simplification::abc_simplification(simplified); })
+                              .map<BooleanFunction>([](const auto& simplified) { return Simplification::local_simplification(simplified); });
 
-        return (simplified.is_ok()) ? simplified.get() : this->clone();    
+        return (simplified.is_ok()) ? simplified.get() : this->clone();
     }
 
     BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
@@ -1098,7 +1099,7 @@ namespace hal
                 return "Zext";
 
             default:
-                return "not implemented for node type '" + std::to_string(this->type) + "'.";
+                return "unsupported node type '" + std::to_string(this->type) + "'.";
         }
     }
 
