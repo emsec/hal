@@ -11,7 +11,7 @@ namespace hal
     UserAction::UserAction()
         : mParentObject(UserActionObject(0, UserActionObjectType::None)),
           mWaitForReady(false), mCompoundOrder(-1), mUndoAction(nullptr),
-          mTimeStamp(0), mObjectLock(false)
+          mTimeStamp(0), mObjectLock(false), mParentObjectLock(false)
     {;}
 
     UserAction::~UserAction()
@@ -35,6 +35,7 @@ namespace hal
 
     void UserAction::setParentObject(const UserActionObject &obj)
     {
+        if (mParentObjectLock) return;
         mParentObject = obj;
     }
 
@@ -44,6 +45,7 @@ namespace hal
         cryptoHash.addData((char*) (&recordNo), sizeof(int));
         cryptoHash.addData(tagname().toUtf8());
         cryptoHash.addData((char*) (&mObject), sizeof(mObject));
+        cryptoHash.addData((char*) (&mParentObject), sizeof (mParentObject));
         cryptoHash.addData((char*) (&mTimeStamp), sizeof(mTimeStamp));
         addToHash(cryptoHash);
         return QString::fromUtf8(cryptoHash.result().toHex(0));

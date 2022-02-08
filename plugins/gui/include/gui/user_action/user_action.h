@@ -190,6 +190,13 @@ namespace hal
          */
         void setObjectLock(bool lock) { mObjectLock = lock; }
 
+        /**
+         * Refuse set parent object requests (in case if needed)
+         *
+         * @param lock - Param to set parent lock.
+         */
+        void setParentObjectLock(bool lock) {mParentObjectLock = lock;}
+
     protected:
         UserAction();
         UserActionObject mObject;
@@ -199,6 +206,7 @@ namespace hal
         UserAction *mUndoAction;
         qint64 mTimeStamp;
         bool mObjectLock;
+        bool mParentObjectLock;
 
         static QString setToText(const QSet<u32>& set);
         static QSet<u32> setFromText(const QString& s);
