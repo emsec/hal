@@ -4,7 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
-* finished RAM simulation within HAL netlist simulator
+* **WARNING:** this release partially breaks the `BooleanFunction` and `Module` API, please make sure to adjust your code accordingly.
+* netlist simulation
+  * added interactive waveform viewer to the HAL GUI
+  * added new netlist simulation backend with out-of-the-box support for Verilator
+  * added easy integration of additional simulation engines by writing respective wrapper functionality
+  * added support for reading Saleae traces as simulation input to allow simulation on real-world inputs
+  * deprecated custom HAL simulator, which is now only available for debugging purposes
+* Boolean functions
+  * added entirely new Boolean function architecture based on reverse Polish notation
+  * added new SMT solver interface with out-of-the-box support for both z3 and Boolector
+  * added custom symbolic execution engine
+  * added improved Boolean function optimization based on ABC
+* modules
+  * added `ModulePin` class to keep properties of module pins
+  * added `PinGroup` class to collect related pins in a dedicated container
+  * removed cache system used to keep internal, input, and output nets and replaced it with on-the-fly computations
+* selection details widget
+  * added tabs to unclutter the presented information
+  * added more details on gate/module pins
+  * added more details on LUT functionality
+  * added options to edit properties such as names, types etc. whereever applicable
 * fixed gate locations not being properly loaded from a gate's data fields
 * fixed multiple memory leaks
 * fixed rare segfault when adding gates to a module
