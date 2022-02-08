@@ -260,6 +260,7 @@ namespace hal
         std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates)
         {
             std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->get_gate_library());
+            c_netlist->enable_automatic_net_checks(false);
 
             // manager, netlist_id, and top_module are set in the constructor
 
@@ -323,54 +324,64 @@ namespace hal
                 }
             }
 
+            Module* top_module   = nl->get_top_module();
+            Module* c_top_module = c_netlist->get_top_module();
+
             for (Net* c_net : c_netlist->get_nets())
             {
-                // mark nets that had a sourc previously but now dont as global inputs
+                Net* net = nl->get_net_by_id(c_net->get_id());
+
+                // mark new global inputs
                 if (c_net->get_num_of_sources() == 0)
                 {
-                    u32 id = c_net->get_id();
-
-                    if (nl->get_net_by_id(id)->get_num_of_sources() != 0 || nl->get_net_by_id(id)->is_global_input_net())
+                    if (net->get_num_of_sources() != 0 || net->is_global_input_net())
                     {
                         c_netlist->mark_global_input_net(c_net);
-
-                        // if net had a name annotated at the top module port take that one, otherwise use regular net name
-                        ModulePin* pin   = nl->get_top_module()->get_pin(nl->get_net_by_id(id));
-                        ModulePin* c_pin = c_netlist->get_top_module()->get_pin(nl->get_net_by_id(id));
-                        assert(c_pin != nullptr);
-                        if (pin != nullptr)
-                        {
-                            c_netlist->get_top_module()->set_pin_name(c_pin, pin->get_name());
-                        }
-                        else
-                        {
-                            c_netlist->get_top_module()->set_pin_name(c_pin, c_net->get_name());
-                        }
                     }
                 }
 
                 // mark nets that had a destination previously but now dont as global outputs
                 if (c_net->get_num_of_destinations() == 0)
                 {
-                    u32 id = c_net->get_id();
-
-                    if (nl->get_net_by_id(id)->get_num_of_destinations() != 0 || nl->get_net_by_id(id)->is_global_output_net())
+                    if (net->get_num_of_destinations() != 0 || net->is_global_output_net())
                     {
                         c_netlist->mark_global_output_net(c_net);
-
-                        // if net had a name annotated at the top module port take that one, otherwise use regular net name
-                        ModulePin* pin   = nl->get_top_module()->get_pin(nl->get_net_by_id(id));
-                        ModulePin* c_pin = c_netlist->get_top_module()->get_pin(nl->get_net_by_id(id));
-                        assert(c_pin != nullptr);
-                        if (pin != nullptr)
-                        {
-                            c_netlist->get_top_module()->set_pin_name(c_pin, pin->get_name());
-                        }
-                        else
-                        {
-                            c_netlist->get_top_module()->set_pin_name(c_pin, c_net->get_name());
-                        }
                     }
+                }
+            }
+
+            // update input and output nets
+            c_top_module->update_nets();
+
+            // create module pins for top module
+            for (Net* input_net : c_top_module->get_input_nets())
+            {
+                Net* net = nl->get_net_by_id(input_net->get_id());
+
+                // either use existing name of pin or generate new one
+                ModulePin* pin = top_module->get_pin(net);
+                if (pin != nullptr)
+                {
+                    c_top_module->assign_pin(pin->get_name(), input_net);
+                }
+                else
+                {
+                    c_top_module->assign_pin(input_net->get_name(), input_net);
+                }
+            }
+            for (Net* output_net : c_top_module->get_output_nets())
+            {
+                Net* net = nl->get_net_by_id(output_net->get_id());
+
+                // either use existing name of pin or generate new one
+                ModulePin* pin = top_module->get_pin(net);
+                if (pin != nullptr)
+                {
+                    c_top_module->assign_pin(pin->get_name(), output_net);
+                }
+                else
+                {
+                    c_top_module->assign_pin(output_net->get_name(), output_net);
                 }
             }
 
@@ -395,6 +406,8 @@ namespace hal
             c_netlist->set_next_grouping_id(nl->get_next_grouping_id());
             c_netlist->set_used_grouping_ids(nl->get_used_grouping_ids());
             c_netlist->set_free_grouping_ids(nl->get_free_grouping_ids());
+
+            c_netlist->enable_automatic_net_checks(true);
 
             return c_netlist;
         }
