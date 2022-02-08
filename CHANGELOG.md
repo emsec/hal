@@ -28,6 +28,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 * fixed gate locations not being properly loaded from a gate's data fields
 * fixed multiple memory leaks
 * fixed rare segfault when adding gates to a module
+* fixed segfault when removing the last item from a view
+* fixed parsing of Liberty gate library attribute `clock`
+* fixed description of flip-flops and latches in all FPGA gate libraries
 
 ## [3.3.0] - 2021-10-13 16:20:00+02:00 (urgency: medium)
 * **WARNING:** this release partially breaks the `GateType` API, please make sure to adjust your code accordingly.
