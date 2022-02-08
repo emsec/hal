@@ -443,7 +443,7 @@ namespace hal
          * 
          * @returns The Boolean function as a string.
          */
-        std::string to_string() const;
+        std::string to_string(std::function<Result<std::string>(const BooleanFunction::Node& node, std::vector<std::string>&& operands)>&& printer = default_printer) const;
 
         /**
          * Parses a Boolean function from a string expression.
@@ -561,6 +561,15 @@ namespace hal
 
         /// Returns the Boolean function in reverse-polish notation.
         std::string to_string_in_reverse_polish_notation() const;
+
+        /**
+         * Translate a given Boolean function node into a human-readable string.
+         *
+         * @param[in] node The node of a Boolean function.
+         * @param[in] operands The operands of the node .
+         * @returns A string on success or an error message otherwise.
+         */
+        static Result<std::string> default_printer(const BooleanFunction::Node& node, std::vector<std::string>&& operands);
 
         /// Checks whether the Boolean function is valid.
         ///

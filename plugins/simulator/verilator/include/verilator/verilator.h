@@ -18,7 +18,6 @@ namespace hal
     {
         namespace converter
         {
-
             /**
              * Generate verilog simulation models based on gate library provided in HAL.
              * 
@@ -62,6 +61,15 @@ namespace hal
              * @returns The prologue for the simulation model.
              */
             std::string get_prologue_for_gate_type(const GateType* gt);
+
+            /**
+             * Translate a given Boolean function node into a human-readable string in Verilog format.
+             *
+             * @param[in] node The node of a Boolean function.
+             * @param[in] operands The operands of the node .
+             * @returns A string in Verilog format on success or an error message otherwise.
+             */
+            Result<std::string> verilog_function_printer(const BooleanFunction::Node& node, std::vector<std::string>&& operands);
 
             // gate functionality
             /**
@@ -133,7 +141,7 @@ namespace hal
 
         private:
             bool write_testbench_files(SimulationInput* simInput);
-            int m_num_of_threads      = 4;
+            int m_num_of_threads = 4;
             std::string m_compiler;
         };
 

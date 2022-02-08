@@ -29,7 +29,7 @@ namespace hal
                     // TODO: JULIAN
                     // std::string internal_state           = latch_component->get_state_identifier();
                     // std::string internal_negated_state   = latch_component->get_neg_state_identifier();
-                    std::string internal_state = "IQ";
+                    std::string internal_state         = "IQ";
                     std::string internal_negated_state = "IQN";
 
                     function << "reg " << internal_state << ";" << std::endl;
@@ -60,21 +60,21 @@ namespace hal
                     {
                         enable = true;
                         function << "wire new_enable;" << std::endl;
-                        function << "assign new_enable = " << enable_function.to_string() << ";" << std::endl;
+                        function << "assign new_enable = " << enable_function.to_string(verilog_function_printer) << ";" << std::endl;
                         function << std::endl;
                     }
                     if (!async_reset_function.is_empty())
                     {
                         reset_async = true;
                         function << "wire new_async_reset;" << std::endl;
-                        function << "assign new_async_reset = " << async_reset_function.to_string() << ";" << std::endl;
+                        function << "assign new_async_reset = " << async_reset_function.to_string(verilog_function_printer) << ";" << std::endl;
                         function << std::endl;
                     }
                     if (!async_set_function.is_empty())
                     {
                         set_async = true;
                         function << "wire new_async_set;" << std::endl;
-                        function << "assign new_async_set = " << async_set_function.to_string() << ";" << std::endl;
+                        function << "assign new_async_set = " << async_set_function.to_string(verilog_function_printer) << ";" << std::endl;
                         function << std::endl;
                     }
 
@@ -123,7 +123,7 @@ namespace hal
                     {
                         auto [behav_state, behave_neg_state] = latch_component->get_async_set_reset_behavior();
 
-                        function << (if_used ? "\telse if (" : "\tif (") << async_reset_function.to_string() << " & " << async_set_function << ") begin" << std::endl;
+                        function << (if_used ? "\telse if (" : "\tif (") << async_reset_function.to_string(verilog_function_printer) << " & " << async_set_function << ") begin" << std::endl;
 
                         switch (behav_state)
                         {
@@ -178,7 +178,7 @@ namespace hal
                     }
                     if (reset_async)
                     {
-                        function << (if_used ? "\telse if (" : "\tif (") << async_reset_function.to_string() << ") begin" << std::endl;
+                        function << (if_used ? "\telse if (" : "\tif (") << async_reset_function.to_string(verilog_function_printer) << ") begin" << std::endl;
                         function << "\t\t" << internal_state << " <= 1'b0;" << std::endl;
                         function << "\t\t" << internal_negated_state << " <= 1'b1;" << std::endl;
                         function << "\tend" << std::endl;
@@ -186,7 +186,7 @@ namespace hal
                     }
                     if (set_async)
                     {
-                        function << (if_used ? "\telse if (" : "\tif (") << async_set_function.to_string() << ") begin" << std::endl;
+                        function << (if_used ? "\telse if (" : "\tif (") << async_set_function.to_string(verilog_function_printer) << ") begin" << std::endl;
                         function << "\t\t" << internal_state << " <= 1'b1;" << std::endl;
                         function << "\t\t" << internal_negated_state << " <= 1'b0;" << std::endl;
                         function << "\tend" << std::endl;
@@ -196,7 +196,7 @@ namespace hal
 
                     if (enable)
                     {
-                        function << (if_used ? "\telse if (" : "\tif (") << enable_function.to_string() << ") begin" << std::endl;
+                        function << (if_used ? "\telse if (" : "\tif (") << enable_function.to_string(verilog_function_printer) << ") begin" << std::endl;
                         function << (if_used ? "\t" : "") << "\t" << internal_state << " <= " << data_function << ";" << std::endl;
                         function << (if_used ? "\t" : "") << "\t" << internal_negated_state << " <= !(" << data_function << ");" << std::endl;
                         function << "\tend" << std::endl;
