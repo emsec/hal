@@ -867,9 +867,10 @@ namespace hal
                 case BooleanFunction::NodeType::Constant: {
                     // since our constants are defined as arbitrary bit-vectors,
                     // we have to concat each bit just to be on the safe side
-                    auto constant = z3::expr(context);
-                    for (const auto& bit : node.constant)
+                    auto constant = context.bv_val(node.constant.front(), 1);
+                    for (u32 i = 1; i < node.constant.size(); i++)
                     {
+                        const auto bit = node.constant.at(i);
                         constant = z3::concat(context.bv_val(bit, 1), constant);
                     }
                     return {false, z3::expr(context)};
