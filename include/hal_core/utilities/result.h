@@ -89,6 +89,7 @@ namespace hal
             return std::holds_alternative<Error>(m_result);
         }
 
+        template<typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
         const T& get() const
         {
             return std::get<T>(m_result);
@@ -99,7 +100,7 @@ namespace hal
             return std::get<Error>(m_result);
         }
 
-        template<typename U>
+        template<typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
         Result<U> map(const std::function<Result<U>(const T&)>& f) const
         {
             if (this->is_ok())
