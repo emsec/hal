@@ -243,22 +243,19 @@ namespace hal
 //        dump("ModuleSubmoduleRemoved", m->get_id(), removed_module);
 
         for (GraphContext* context : mContextTableModel->list())
-            // Remove folded module
-            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}, false) && !context->isShowingModule(removed_module, {}, {}, {}, {}, false))
-            {
+        {
+            // Folded module
+            if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}, false))\
                 context->remove({removed_module}, {});
-                if (context->empty())
-                {
-                    deleteGraphContext(context);
-                }
-            }
-            // Remove unfolded module
-            else if (context->isShowingModule(removed_module, {}, {}, {}, {}, false))
-            {
+            // Unfolded module
+            else if (context->isShowingModule(removed_module, {}, {}, {}, {}, false) && !context->isShowingModule(removed_module, {}, {}, {}, {}, true))
                 context->removeModuleContents(removed_module);
-            }
             else
                 context->testIfAffected(m->get_id(), &removed_module, nullptr);
+
+            if (context->empty())
+                deleteGraphContext(context);
+        }
     }
 
     void GraphContextManager::handleModuleGateAssigned(Module* m, const u32 inserted_gate) const
