@@ -873,7 +873,7 @@ namespace hal
                         const auto bit = node.constant.at(i);
                         constant = z3::concat(context.bv_val(bit, 1), constant);
                     }
-                    return {false, z3::expr(context)};
+                    return {true, constant};
                 }
                 case BooleanFunction::NodeType::Variable: {
                     if (auto it = var2expr.find(node.variable); it != var2expr.end())
