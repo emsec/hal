@@ -115,6 +115,7 @@ extern "C" {
     typedef struct st__table st__table;
     typedef struct Gia_Man_t_ Gia_Man_t;
     typedef struct Abc_Nam_t_ Abc_Nam_t;
+    typedef struct Dsd_Manager_t_ DdManager;
     typedef void (*Abc_Frame_Callback_BmcFrameDone_Func)(int, int, int);
     typedef struct Vec_Wec_t_ Vec_Wec_t;
     typedef int64_t abctime;
