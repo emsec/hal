@@ -224,12 +224,12 @@ namespace hal
                 return std::accumulate(_constraints.cbegin(), _constraints.cend(), std::make_tuple(true, std::string()), [](auto state, const auto& constraint) -> std::tuple<bool, std::string> {
                     auto [ok, accumulator] = state;
 
-                    auto [lhs_ok, lhs] = Translator::translate_to_smt2(constraint.lhs);
-                    auto [rhs_ok, rhs] = Translator::translate_to_smt2(constraint.rhs);
+                    auto lhs = Translator::translate_to_smt2(constraint.lhs),
+                         rhs = Translator::translate_to_smt2(constraint.rhs);
 
-                    if (ok && lhs_ok && rhs_ok)
+                    if (ok && lhs.is_ok() && rhs.is_ok())
                     {
-                        return {true, accumulator + "(assert (= " + lhs + " " + rhs + "))\n"};
+                        return {true, accumulator + "(assert (= " + lhs.get() + " " + rhs.get() + "))\n"};
                     }
                     else
                     {
