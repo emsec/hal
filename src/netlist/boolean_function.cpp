@@ -294,25 +294,25 @@ namespace hal
         return BooleanFunction(Node::Operation(NodeType::Xor, size), std::move(p0), std::move(p1));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
+    Result<BooleanFunction> BooleanFunction::Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
     {
         if (!p1.is_index() || !p2.is_index())
         {
-            ERROR("Mismatching function types for Slice operation (= p1 and p2 must be an 'BooleanFunctino::Index').");
+            return ERR("Mismatching function types for Slice operation (= p1 and p2 must be an 'BooleanFunctino::Index').");
         }
         if ((p0.size() != p1.size()) || (p1.size() != p2.size()))
         {
-            ERROR("Mismatching bit-sizes for Slice operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", p2 = " << p2.size() << " - sizes must be equal).");
+            return ERR("Mismatching bit-sizes for Slice operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", p2 = " + std::to_string(p2.size()) + " - sizes must be equal).");
         }
 
         auto start = p1.get_top_level_node().index, end = p2.get_top_level_node().index;
 
         if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size)
         {
-            ERROR("Mismatching bit-sizes for Slice operation (p0 = " << p0.size() << ", p1 = " << start << ", p2 = " << end << ").");
+            return ERR("Mismatching bit-sizes for Slice operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(start) + ", p2 = " + std::to_string(end) + ").");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::Slice, size), std::move(p0), std::move(p1), std::move(p2));
+        return OK(BooleanFunction(Node::Operation(NodeType::Slice, size), std::move(p0), std::move(p1), std::move(p2)));
     }
 
     std::variant<BooleanFunction, std::string> BooleanFunction::Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
@@ -761,9 +761,9 @@ namespace hal
         // (3) analyze the evaluation result and check whether the result is a
         //     constant boolean function
         auto result = symbolic_execution.evaluate(*this);
-        if (std::get_if<BooleanFunction>(&result) != nullptr)
+        if (result.is_ok())
         {
-            auto value = std::get<BooleanFunction>(result);
+            auto value = result.get();
             if (value.is_constant())
             {
                 return value.get_top_level_node().constant;
@@ -773,7 +773,7 @@ namespace hal
                 return std::vector<BooleanFunction::Value>(this->size(), BooleanFunction::Value::X);
             }
         }
-        return std::get<std::string>(result);
+        return result.get_error().get();
     }
 
     std::variant<std::vector<std::vector<BooleanFunction::Value>>, std::string> BooleanFunction::compute_truth_table(const std::vector<std::string>& ordered_variables,

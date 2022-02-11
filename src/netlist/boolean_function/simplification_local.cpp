@@ -13,11 +13,11 @@ namespace hal
         {
             before          = current.clone();
             auto simplified = SMT::SymbolicExecution().evaluate(current);
-            if (std::get_if<std::string>(&simplified) != nullptr)
+            if (simplified.is_error())
             {
-                return ERR(std::get<std::string>(simplified));
+                return simplified;
             }
-            current = std::get<BooleanFunction>(simplified);
+            current = simplified.get();
         } while (before != current);
 
         return OK(current);

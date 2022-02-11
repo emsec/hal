@@ -214,9 +214,9 @@ namespace hal
          * @param[in] p1 - Boolean function start index at which p0 is sliced.
          * @param[in] p2 - Boolean function end index at which p0 is sliced (inclusive).
          * @param[in] size - Size of the sliced Boolean function, i.e. p0 + p1 + 1.
-         * @returns The sliced Boolean function on success, a string error message otherwise.
+         * @returns OK() and the sliced Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
+        static Result<BooleanFunction> Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
 
         /**
          * Concatenates two Boolean functions.

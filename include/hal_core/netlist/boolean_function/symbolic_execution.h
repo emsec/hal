@@ -66,17 +66,17 @@ namespace hal
              * Evaluates a Boolean function within the symbolic state of the symbolic execution.
              * 
              * @param[in] function - The Boolean function to evaluate.
-             * @returns The evaluated Boolean function on success, a string error message otherwise.
+             * @returns Ok() and the evaluated Boolean function on success, Err() otherwise.
              */
-            std::variant<BooleanFunction, std::string> evaluate(const BooleanFunction& function) const;
+            Result<BooleanFunction> evaluate(const BooleanFunction& function) const;
 
             /**
              * Evaluates an equality constraint and applies it to the symbolic state of the symbolic execution.
              * 
              * @param[in] constraint - The equality constraint to evaluate.
-             * @returns `std::nullopt` on success, a string error message otherwise.
+             * @returns Ok() on success, Err() otherwise.
              */
-            std::optional<std::string> evaluate(const Constraint& constraint);
+            Result<std::monostate> evaluate(const Constraint& constraint);
 
         private:
             ////////////////////////////////////////////////////////////////////////////
@@ -97,18 +97,18 @@ namespace hal
              * 
              * @param[in] node - Boolean function node.
              * @param[in] p - List of node parameters.
-             * @returns Boolean function on success, error message string otherwise.
+             * @returns Ok() and Boolean function on success, Err() otherwise.
              */
-            std::variant<BooleanFunction, std::string> simplify(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p) const;
+            Result<BooleanFunction> simplify(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p) const;
 
             /**
              * Propagates constants in a sub-expression in the Boolean function abstract syntax tree.
              * 
              * @param[in] node - Boolean function node.
              * @param[in] p - List of node parameters.
-             * @returns Boolean function on success, error message string otherwise.
+             * @returns Ok() and Boolean function on success, Err() otherwise.
              */
-            static std::variant<BooleanFunction, std::string> constant_propagation(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p);
+            static Result<BooleanFunction> constant_propagation(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p);
         };
 
     }    // namespace SMT

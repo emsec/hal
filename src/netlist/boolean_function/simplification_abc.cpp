@@ -542,19 +542,15 @@ namespace {
     Result<BooleanFunction> slice_at(const BooleanFunction& function, const u16 index)
     {
         // (1) setup the sliced Boolean function
-        auto status = BooleanFunction::Slice(
+        return BooleanFunction::Slice(
             function.clone(),
             BooleanFunction::Index(index, function.size()),
             BooleanFunction::Index(index, function.size()),
             1
-        );
-    
-        if (std::get_if<std::string>(&status) != nullptr) {
-            return ERR("Cannot slice " + function.to_string() + " at bit " + std::to_string(index) + "(= " + std::get<std::string>(status) + ").");
-        }
-
-        // (2) perform a local simplification in order to remove unnecessary slices
-        return Simplification::local_simplification(std::get<0>(status));
+        ).map<BooleanFunction>([] (auto function) {
+            // (2) perform a local simplification in order to remove unnecessary slices
+            return Simplification::local_simplification(function); 
+        });
     }
 
     /**
