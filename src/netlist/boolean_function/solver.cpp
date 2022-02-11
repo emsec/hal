@@ -273,14 +273,14 @@ namespace hal
             {
                 if (config.generate_model)
                 {
-                    std::variant<SMT::Model, std::string> model = Model::parse(model_str, config.solver);
-                    if (std::get_if<SMT::Model>(&model) == nullptr)
+                    auto model = Model::parse(model_str, config.solver);
+                    if (model.is_error())
                     {
-                        return std::get<std::string>(model);
+                        return model.get_error().get();
                     }
                     else
                     {
-                        return SolverResult::Sat(std::get<SMT::Model>(model));
+                        return SolverResult::Sat(model.get());
                     }
                 }
                 else

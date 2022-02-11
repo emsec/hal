@@ -224,9 +224,9 @@ namespace hal
 			 *
 			 * @param[in] model_str - The SMT-Lib model string.
 			 * @param[in] solver - The solver that computed the model.
-			 * @returns The model on success, a string error message otherwise.
+			 * @returns Ok() and the model on success, Err() otherwise.
 			 */
-            static std::variant<Model, std::string> parse(const std::string& model_str, const SolverType& solver);
+            static Result<Model> parse(const std::string& model_str, const SolverType& solver);
         };
 
         /**

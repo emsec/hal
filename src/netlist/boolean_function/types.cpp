@@ -166,7 +166,7 @@ namespace hal
             return out;
         }
 
-        std::variant<Model, std::string> Model::parse(const std::string& s, const SolverType& type)
+        Result<Model> Model::parse(const std::string& s, const SolverType& type)
         {
             // TODO:
             // check how to attach a local parser context variable to the x3 parser
@@ -197,13 +197,11 @@ namespace hal
                 }
             }();
 
-            switch (ok && (iter == s.end()))
+            if (ok && (iter == s.end()))
             {
-                case true:
-                    return Model(ModelParser::parser_context.model);
-                default:
-                    return "Cannot parse SMT-Lib model.";
+                return OK(Model(ModelParser::parser_context.model));
             }
+            return ERR("Cannot parse SMT-Lib model.");
         }
 
         SolverResult::SolverResult(SolverResultType _type, std::optional<Model> _model) : type(_type), model(_model)
