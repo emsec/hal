@@ -165,6 +165,7 @@ namespace hal
                         return;
                     ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
                     act->setObject(UserActionObject(modId, UserActionObjectType::Pin));
+                    act->setParentObject(UserActionObject(modId, UserActionObjectType::Module));
                     act->setPinOrPingroupIdentifier(name);
                     act->exec();
                 }

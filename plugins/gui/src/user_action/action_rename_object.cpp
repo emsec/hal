@@ -4,6 +4,7 @@
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_globals.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -30,15 +31,21 @@ namespace hal
 
     void ActionRenameObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
+        writeParentObjectToXml(xmlOut);
         xmlOut.writeTextElement("name", mNewName);
+        if(mObject.type() == UserActionObjectType::Pin || mObject.type() == UserActionObjectType::PinGroup)
+            xmlOut.writeTextElement("identifier", mPinOrPingroupIdentifier);
     }
 
     void ActionRenameObject::readFromXml(QXmlStreamReader& xmlIn)
     {
         while (xmlIn.readNextStartElement())
         {
+            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "name")
                 mNewName = xmlIn.readElementText();
+            if (xmlIn.name() == "identifier")
+                mPinOrPingroupIdentifier = xmlIn.readElementText();
         }
     }
 

@@ -70,6 +70,25 @@ namespace hal
         return retval;
     }
 
+    void UserAction::writeParentObjectToXml(QXmlStreamWriter &xmlOut) const
+    {
+        if(mParentObject.type() != UserActionObjectType::None)
+        {
+            xmlOut.writeStartElement("parentObj");
+            mParentObject.writeToXml(xmlOut);
+            xmlOut.writeEndElement();
+        }
+    }
+
+    void UserAction::readParentObjectFromXml(QXmlStreamReader &xmlIn)
+    {
+        if(xmlIn.name() == "parentObj")
+        {
+            mParentObject.readFromXml(xmlIn);
+            xmlIn.readNext();//to read the corresponding EndElement
+        }
+    }
+
     void UserAction::writeToXml(QXmlStreamWriter& xmlOut) const
     {
         Q_UNUSED(xmlOut);
