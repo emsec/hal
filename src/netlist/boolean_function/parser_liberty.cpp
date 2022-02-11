@@ -10,7 +10,7 @@ namespace hal
 {
     namespace BooleanFunctionParser
     {
-        std::variant<std::vector<Token>, std::string> parse_with_liberty_grammar(const std::string& expression)
+        Result<std::vector<Token>> parse_with_liberty_grammar(const std::string& expression)
         {
             // stores the list of tokens that are generated and filled during the
             // parsing process adn the different semantic actions
@@ -102,10 +102,10 @@ namespace hal
 
             if (!ok || (iter != expression.end()))
             {
-                return "Unable to parse Boolean function '" + expression + "' (= " + std::string(iter, expression.end()) + ").";
+                return ERR("Unable to parse Boolean function '" + expression + "' (= " + std::string(iter, expression.end()) + ").");
             }
 
-            return tokens;
+            return OK(tokens);
         }
     }    // namespace BooleanFunctionParser
 }    // namespace hal

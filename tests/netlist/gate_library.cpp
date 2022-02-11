@@ -51,14 +51,14 @@ namespace hal
             ASSERT_TRUE(gt_and != nullptr);
             gt_and->add_input_pins(std::vector<std::string>({"I0", "I1"}));
             gt_and->add_output_pins(std::vector<std::string>({"O"}));
-            gt_and->add_boolean_function("O", std::get<BooleanFunction>(BooleanFunction::from_string("I0 & I1")));
+            gt_and->add_boolean_function("O", BooleanFunction::from_string("I0 & I1").get());
 
             // OR gate type
             auto gt_or = gl->create_gate_type("gt_or", {GateTypeProperty::combinational});
             ASSERT_TRUE(gt_or != nullptr);
             gt_or->add_input_pins(std::vector<std::string>({"I0", "I1"}));
             gt_or->add_output_pins(std::vector<std::string>({"O"}));
-            gt_or->add_boolean_function("O", std::get<BooleanFunction>(BooleanFunction::from_string("I0 | I1")));
+            gt_or->add_boolean_function("O", BooleanFunction::from_string("I0 | I1").get());
 
             // GND gate type
             auto gt_gnd = gl->create_gate_type("gt_gnd");

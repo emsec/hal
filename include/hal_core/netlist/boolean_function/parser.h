@@ -185,18 +185,18 @@ namespace hal
          * Parses a Boolean function from a string representation into its tokens.
          * 
          * @param[in] expression - Boolean function string.
-         * @returns The list of tokens on success, error message string otherwise.
+         * @returns Ok() and the list of tokens on success, Err() otherwise.
          */
-        std::variant<std::vector<Token>, std::string> parse_with_standard_grammar(const std::string& expression);
+        Result<std::vector<Token>> parse_with_standard_grammar(const std::string& expression);
 
         /**
          * Parses a Boolean function from a string representation into its tokens
          * based on the data format defined for Liberty, see Liberty user guide.
          * 
          * @param[in] expression - Boolean function string.
-         * @returns The list of tokens on success, error message string otherwise.
+         * @returns Ok() and the list of tokens on success, Err() otherwise.
          */
-        std::variant<std::vector<Token>, std::string> parse_with_liberty_grammar(const std::string& expression);
+        Result<std::vector<Token>> parse_with_liberty_grammar(const std::string& expression);
 
         /**
          * Transforms a list of tokens in infix notation (e.g., "A & B") into the
@@ -210,9 +210,9 @@ namespace hal
          * @param[in] tokens - List of tokens in infix notation.
          * @param[in] expression - Expression string.
          * @param[in] parser - Parser identifier
-         * @returns List of tokens in reverse-polish notation on success, error message string otherwise.
+         * @returns Ok() and list of tokens in reverse-polish notation on success, Err() otherwise.
          */
-        std::variant<std::vector<Token>, std::string> reverse_polish_notation(std::vector<Token>&& tokens, const std::string& expression, const ParserType& parser);
+        Result<std::vector<Token>> reverse_polish_notation(std::vector<Token>&& tokens, const std::string& expression, const ParserType& parser);
 
         /**
          * Translates a list of tokens (in reverse-polish notation form) into a list
@@ -220,9 +220,9 @@ namespace hal
          * 
          * @param[in] tokens - List of tokens.
          * @param[in] expression - Expression string.
-         * @returns The Boolean function on success, error message string otherwise.
+         * @returns Ok() and the Boolean function on success, Err() otherwise.
          */
-        std::variant<BooleanFunction, std::string> translate(std::vector<Token>&& tokens, const std::string& expression);
+        Result<BooleanFunction> translate(std::vector<Token>&& tokens, const std::string& expression);
 
     }    // namespace BooleanFunctionParser
 }    // namespace hal

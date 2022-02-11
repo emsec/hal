@@ -783,7 +783,7 @@ namespace {
          */
         auto parse_assignment = [] (const auto& assignment) -> Result<std::tuple<BooleanFunction, BooleanFunction>>
         {
-            std::variant<BooleanFunction, std::string> lhs, rhs;
+            Result<BooleanFunction> lhs = ERR(""), rhs = ERR("");
             
             namespace x3 = boost::spirit::x3;
 
@@ -825,14 +825,14 @@ namespace {
                 return ERR("Unable to parse assignment '" + assignment + "'.");
             }
 
-            if (std::get_if<std::string>(&lhs) != nullptr) {
-                return ERR("Cannot translate left-hand side of '" + assignment + "' into a Boolean function (= " + std::get<std::string>(lhs) + ".");
+            if (lhs.is_error()) {
+                return ERR("Cannot translate left-hand side of '" + assignment + "' into a Boolean function (= " + lhs.get_error().get() + ".");
             }
-            if (std::get_if<std::string>(&rhs) != nullptr) {
-                return ERR("Cannot translate right-hand side of '" + assignment + "' into a Boolean function (= " + std::get<std::string>(rhs) + ".");
+            if (rhs.is_error()) {
+                return ERR("Cannot translate right-hand side of '" + assignment + "' into a Boolean function (= " + rhs.get_error().get() + ".");
             }
 
-            return OK(std::make_tuple(std::get<0>(lhs), std::get<0>(rhs)));
+            return OK({lhs.get(), rhs.get()});
         };
 
         std::map<BooleanFunction, BooleanFunction> assignments;
@@ -900,10 +900,10 @@ namespace {
                 state.size() + 1
             );
 
-            if (std::get_if<std::string>(&concat) != nullptr) {
-                return ERR(std::get<std::string>(concat));
+            if (concat.is_ok()) {
+                state = concat.get();
             } else {
-                state = std::get<0>(concat);
+                return concat;
             }
         }
         return OK(state);

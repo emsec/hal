@@ -67,7 +67,7 @@ namespace hal
             // Special case if a flip-flop has another flip-flop as a direct predecessor
             if (bf.is_empty())
             {
-                bf = std::get<BooleanFunction>(BooleanFunction::from_string(std::to_string(input_net->get_id())));
+                bf = BooleanFunction::from_string(std::to_string(input_net->get_id())).get();
             }
 
             // find all external inputs. We define external inputs as nets that are inputs to the transition logic but are not bits from the previous state.
@@ -77,7 +77,7 @@ namespace hal
                 hal::Net* net = nl->get_net_by_id(id);
                 if (output_net_to_input_net.find(net) == output_net_to_input_net.end())
                 {
-                    external_ids_to_func.insert({id, std::get<BooleanFunction>(BooleanFunction::from_string(id_str))});
+                    external_ids_to_func.insert({id, BooleanFunction::from_string(id_str).get()});
                     if (std::find(external_ids.begin(), external_ids.end(), id) == external_ids.end())
                     {
                         external_ids.push_back(id);
@@ -95,8 +95,8 @@ namespace hal
                     continue;
                 }
 
-                BooleanFunction from = std::get<BooleanFunction>(BooleanFunction::from_string(std::to_string(out->get_id())));
-                BooleanFunction to   = std::get<BooleanFunction>(BooleanFunction::from_string(std::to_string(in->get_id())));
+                BooleanFunction from = BooleanFunction::from_string(std::to_string(out->get_id())).get();
+                BooleanFunction to   = BooleanFunction::from_string(std::to_string(in->get_id())).get();
 
                 // check for multidriven nets
                 if (out->get_sources().size() != 1)

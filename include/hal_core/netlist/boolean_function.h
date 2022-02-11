@@ -116,9 +116,9 @@ namespace hal
          * Builds and validates a Boolean function from a vector of nodes.
          * 
          * @param[in] nodes - Vector of Boolean function nodes.
-         * @returns The Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> build(std::vector<Node>&& nodes);
+        static Result<BooleanFunction> build(std::vector<Node>&& nodes);
 
         /**
          * Creates a Boolean function of the given bit-size comprising only a variable of the specified name.
@@ -170,9 +170,9 @@ namespace hal
          * @param[in] p0 - First Boolean function.
          * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation.
-         * @returns The joined Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the joined Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+        static Result<BooleanFunction> And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
          * Joins two Boolean functions by an 'OR' operation. 
@@ -181,9 +181,9 @@ namespace hal
          * @param[in] p0 - First Boolean function.
          * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation.
-         * @returns The joined Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the joined Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+        static Result<BooleanFunction> Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
          * Negates the given Boolean function. 
@@ -191,9 +191,9 @@ namespace hal
          * 
          * @param[in] p0 - The Boolean function to negate.
          * @param[in] size - Bit-size of the operation.
-         * @returns  The negated Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the negated Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> Not(BooleanFunction&& p0, u16 size);
+        static Result<BooleanFunction> Not(BooleanFunction&& p0, u16 size);
 
         /**
          * Joins two Boolean functions by an 'XOR' operation. 
@@ -203,9 +203,9 @@ namespace hal
          * @param[in] p0 - First Boolean function.
          * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation.
-         * @returns The joined Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the joined Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+        static Result<BooleanFunction> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
          * Slices a Boolean function based on a start and end index (inclusive) starting from 0.
@@ -224,9 +224,9 @@ namespace hal
          * @param[in] p0 - Boolean function (higher-bit part)
          * @param[in] p1 - Boolean function (lower-bit part)
          * @param[in] size - Size of concatenated Boolean function.
-         * @returns The concatenated Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the concatenated Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+        static Result<BooleanFunction> Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
          * The ostream operator that forwards to_string of a boolean function.
@@ -449,9 +449,9 @@ namespace hal
          * Parses a Boolean function from a string expression.
          * 
          * @param[in] expression - Boolean function string.
-         * @returns The Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> from_string(const std::string& expression);
+        static Result<BooleanFunction> from_string(const std::string& expression);
 
         ////////////////////////////////////////////////////////////////////////
         // Interface: Simplification / Substitution / Evaluation
@@ -574,7 +574,7 @@ namespace hal
         /// Checks whether the Boolean function is valid.
         ///
         /// @returns Validated Boolean function on success, error message string otherwise.
-        static std::variant<BooleanFunction, std::string> validate(BooleanFunction&& function);
+        static Result<BooleanFunction> validate(BooleanFunction&& function);
 
         /// Computes the coverage value of each node in the Boolean function.
         std::vector<u32> compute_node_coverage() const;

@@ -107,6 +107,12 @@ namespace hal
             return std::get<T>(m_result);
         }
 
+        template<typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        T&& get() 
+        {
+            return std::get<T>(std::move(m_result));
+        }
+
         Error get_error() const
         {
             return std::get<Error>(m_result);

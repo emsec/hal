@@ -217,7 +217,7 @@ namespace hal
     {
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::build(std::vector<BooleanFunction::Node>&& nodes)
+    Result<BooleanFunction> BooleanFunction::build(std::vector<BooleanFunction::Node>&& nodes)
     {
         return BooleanFunction::validate(BooleanFunction(std::move(nodes)));
     }
@@ -254,44 +254,44 @@ namespace hal
         return BooleanFunction(Node::Index(index, size));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    Result<BooleanFunction> BooleanFunction::And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
         if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            ERROR("Mismatching bit-sizes for AND operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", size = " << size << ").");
+            return ERR("Mismatching bit-sizes for AND operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", size = " + std::to_string(size) + ").");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::And, size), std::move(p0), std::move(p1));
+        return OK(BooleanFunction(Node::Operation(NodeType::And, size), std::move(p0), std::move(p1)));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    Result<BooleanFunction> BooleanFunction::Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
         if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            ERROR("Mismatching bit-sizes for Or operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", size = " << size << ").");
+            return ERR("Mismatching bit-sizes for Or operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", size = " + std::to_string(size) + ").");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::Or, size), std::move(p0), std::move(p1));
+        return OK(BooleanFunction(Node::Operation(NodeType::Or, size), std::move(p0), std::move(p1)));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::Not(BooleanFunction&& p0, u16 size)
+    Result<BooleanFunction> BooleanFunction::Not(BooleanFunction&& p0, u16 size)
     {
         if (p0.size() != size)
         {
-            ERROR("Mismatching bit-sizes for Not operation (p0 = " << p0.size() << ", size = " << size << ").");
+            return ERR("Mismatching bit-sizes for Not operation (p0 = " + std::to_string(p0.size()) + ", size = " + std::to_string(size) + ").");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::Not, size), std::move(p0));
+        return OK(BooleanFunction(Node::Operation(NodeType::Not, size), std::move(p0)));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    Result<BooleanFunction> BooleanFunction::Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
         if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            ERROR("Mismatching bit-sizes for Xor operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", size = " << size << ").");
+            return ERR("Mismatching bit-sizes for Xor operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", size = " + std::to_string(size) + ").");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::Xor, size), std::move(p0), std::move(p1));
+        return OK(BooleanFunction(Node::Operation(NodeType::Xor, size), std::move(p0), std::move(p1)));
     }
 
     Result<BooleanFunction> BooleanFunction::Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
@@ -315,14 +315,14 @@ namespace hal
         return OK(BooleanFunction(Node::Operation(NodeType::Slice, size), std::move(p0), std::move(p1), std::move(p2)));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    Result<BooleanFunction> BooleanFunction::Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
         if ((p0.size() + p1.size()) != size)
         {
-            ERROR("Mismatch function input width (p0 = " << p0.size() << "-bit, p1 = " << p1.size() << "-bit, size = " << size << ").");
+            return ERR("Mismatch function input width (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size()) + "-bit, size = " + std::to_string(size) + ").");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::Concat, size), std::move(p0), std::move(p1));
+        return OK(BooleanFunction(Node::Operation(NodeType::Concat, size), std::move(p0), std::move(p1)));
     }
 
     std::ostream& operator<<(std::ostream& os, const BooleanFunction& function)
@@ -332,39 +332,39 @@ namespace hal
 
     BooleanFunction BooleanFunction::operator&(const BooleanFunction& other) const
     {
-        return std::get<BooleanFunction>(BooleanFunction::And(this->clone(), other.clone(), this->size()));
+        return BooleanFunction::And(this->clone(), other.clone(), this->size()).get();
     }
 
     BooleanFunction& BooleanFunction::operator&=(const BooleanFunction& other)
     {
-        *this = std::get<BooleanFunction>(BooleanFunction::And(this->clone(), other.clone(), this->size()));
+        *this = BooleanFunction::And(this->clone(), other.clone(), this->size()).get();
         return *this;
     }
 
     BooleanFunction BooleanFunction::operator~() const
     {
-        return std::get<BooleanFunction>(BooleanFunction::Not(this->clone(), this->size()));
+        return BooleanFunction::Not(this->clone(), this->size()).get();
     }
 
     BooleanFunction BooleanFunction::operator|(const BooleanFunction& other) const
     {
-        return std::get<BooleanFunction>(BooleanFunction::Or(this->clone(), other.clone(), this->size()));
+        return BooleanFunction::Or(this->clone(), other.clone(), this->size()).get();
     }
 
     BooleanFunction& BooleanFunction::operator|=(const BooleanFunction& other)
     {
-        *this = std::get<BooleanFunction>(BooleanFunction::Or(this->clone(), other.clone(), this->size()));
+        *this = BooleanFunction::Or(this->clone(), other.clone(), this->size()).get();
         return *this;
     }
 
     BooleanFunction BooleanFunction::operator^(const BooleanFunction& other) const
     {
-        return std::get<BooleanFunction>(BooleanFunction::Xor(this->clone(), other.clone(), this->size()));
+        return BooleanFunction::Xor(this->clone(), other.clone(), this->size()).get();
     }
 
     BooleanFunction& BooleanFunction::operator^=(const BooleanFunction& other)
     {
-        *this = std::get<BooleanFunction>(BooleanFunction::Xor(this->clone(), other.clone(), this->size()));
+        *this = BooleanFunction::Xor(this->clone(), other.clone(), this->size()).get();
         return *this;
     }
 
@@ -600,12 +600,12 @@ namespace hal
         }
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::from_string(const std::string& expression)
+    Result<BooleanFunction> BooleanFunction::from_string(const std::string& expression)
     {
         using BooleanFunctionParser::ParserType;
         using BooleanFunctionParser::Token;
 
-        static const std::vector<std::tuple<ParserType, std::function<std::variant<std::vector<Token>, std::string>(const std::string&)>>> parsers = {
+        static const std::vector<std::tuple<ParserType, std::function<Result<std::vector<Token>>(const std::string&)>>> parsers = {
             {ParserType::Standard, BooleanFunctionParser::parse_with_standard_grammar},
             {ParserType::Liberty, BooleanFunctionParser::parse_with_liberty_grammar},
         };
@@ -614,26 +614,26 @@ namespace hal
         {
             auto tokens = parser(expression);
             // (1) skip if parser cannot translate to tokens
-            if (std::get_if<std::vector<Token>>(&tokens) == nullptr)
+            if (tokens.is_error())
             {
                 continue;
             }
 
             // (2) skip if cannot translate to valid reverse-polish notation
-            tokens = BooleanFunctionParser::reverse_polish_notation(std::move(std::get<std::vector<Token>>(tokens)), expression, parser_type);
-            if (std::get_if<std::vector<Token>>(&tokens) == nullptr)
+            tokens = BooleanFunctionParser::reverse_polish_notation(tokens.get(), expression, parser_type);
+            if (tokens.is_error())
             {
                 continue;
             }
             // (3) skip if reverse-polish notation tokens are no valid Boolean function
-            auto function = BooleanFunctionParser::translate(std::move(std::get<std::vector<Token>>(tokens)), expression);
-            if (std::get_if<BooleanFunction>(&function) == nullptr)
+            auto function = BooleanFunctionParser::translate(tokens.get(), expression);
+            if (function.is_error())
             {
                 continue;
             }
-            return std::get<BooleanFunction>(function);
+            return function;
         }
-        return "No parser available to parser '" + expression + "'.";
+        return ERR("No parser available to parser '" + expression + "'.");
     }
 
     BooleanFunction BooleanFunction::simplify() const
@@ -953,7 +953,7 @@ namespace hal
         return s;
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::validate(BooleanFunction&& function)
+    Result<BooleanFunction> BooleanFunction::validate(BooleanFunction&& function)
     {
         /// # Note
         /// In order to validate correctness of a Boolean function, we analyze
@@ -962,10 +962,10 @@ namespace hal
         if (auto coverage = function.compute_node_coverage(); coverage.back() != function.length())
         {
             auto str = function.to_string_in_reverse_polish_notation();
-            return "Cannot validate '" + str + "' (= imbalanced function with coverage '" + std::to_string(coverage.back()) + " != " + std::to_string(function.length()) + ").";
+            return ERR("Cannot validate '" + str + "' (= imbalanced function with coverage '" + std::to_string(coverage.back()) + " != " + std::to_string(function.length()) + ").");
         }
 
-        return std::move(function);
+        return OK(std::move(function));
     }
 
     std::vector<u32> BooleanFunction::compute_node_coverage() const
