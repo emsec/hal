@@ -94,6 +94,15 @@ namespace hal
          */
         itemType getTypeOfItem(TreeItem* item);
 
+        /**
+         * Returns the pin-id if the item represents a pin or the pingroup-id
+         * if the item represents a pingroup.
+         *
+         * @param item - The item.
+         * @return The pin- or pingroup-id.
+         */
+        int getIdOfItem(TreeItem* item);
+
         /** @name Event Handler Functions
          */
         ///@{
@@ -108,6 +117,7 @@ namespace hal
 
         //additional data keys
         const QString keyType = "type";
+        const QString keyId = "id";
 
     Q_SIGNALS:
         /**

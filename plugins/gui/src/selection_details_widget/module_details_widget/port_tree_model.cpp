@@ -45,6 +45,10 @@ namespace hal
 
         for (PinGroup<ModulePin>* pinGroup : m->get_pin_groups())
         {
+            //ignore empty pingroups
+            if(pinGroup->empty())
+                continue;
+
             ModulePin* firstPin = pinGroup->get_pins().front();
             QString pinGroupName;
             QString pinGroupDirection = QString::fromStdString(enum_to_string(firstPin->get_direction()));
@@ -64,14 +68,18 @@ namespace hal
             {
                 pinGroupItem->setDataAtIndex(sNetColumn, QString::fromStdString(firstPin->get_net()->get_name()));
                 pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::portSingleBit));
+                //since a single-pin pingroup represents the pin itself, take the pinid
+                pinGroupItem->setAdditionalData(keyId, firstPin->get_id());
             }
             else
             {
                 pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::portMultiBit));
+                pinGroupItem->setAdditionalData(keyId, pinGroup->get_id());
                 for (ModulePin* pin : pinGroup->get_pins())
                 {
                     TreeItem* pinItem = new TreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name()) << pinGroupDirection << pinGroupType << QString::fromStdString(pin->get_net()->get_name()));
                     pinItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
+                    pinItem->setAdditionalData(keyId, pin->get_id());
                     pinGroupItem->appendChild(pinItem);
                 }
             }
@@ -95,10 +103,10 @@ namespace hal
         if (!m)
             return nullptr;
 
-        std::string name = item->getData(sNameColumn).toString().toStdString();
-        if (ModulePin* pin = m->get_pin(name); pin != nullptr)
+        //std::string name = item->getData(sNameColumn).toString().toStdString();
+        if (auto pinResult = m->get_pin_by_id(getIdOfItem(item)); pinResult.is_ok())
         {
-            return pin->get_net();
+            return pinResult.get()->get_net();
         }
 
         return nullptr;
@@ -112,6 +120,11 @@ namespace hal
     ModulePinsTreeModel::itemType ModulePinsTreeModel::getTypeOfItem(TreeItem* item)
     {
         return item->getAdditionalData(keyType).value<itemType>();
+    }
+
+    int ModulePinsTreeModel::getIdOfItem(TreeItem *item)
+    {
+        return item->getAdditionalData(keyId).toInt();
     }
 
     void ModulePinsTreeModel::handleModulePortsChanged(Module *m)

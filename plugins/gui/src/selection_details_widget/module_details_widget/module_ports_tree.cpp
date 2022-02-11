@@ -73,6 +73,7 @@ namespace hal
         Net* n                       = mPortModel->getNetFromItem(clickedItem);
         QString name                 = clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString();
         u32 modId                    = mPortModel->getRepresentedModuleId();
+        int itemId                   = mPortModel->getIdOfItem(clickedItem);
         QMenu menu;
 
         //PLAINTEXT: NAME, DIRECTION, TYPE (shared with pins and groups
@@ -83,12 +84,13 @@ namespace hal
         if(type == ModulePinsTreeModel::itemType::portMultiBit)//group specific context
         {
             menu.addSection("Misc");
-            menu.addAction("Change group name", [name, modId](){
+            menu.addAction("Change group name", [name, modId, itemId](){
                 InputDialog ipd("Change group name", "New group name", name);
                 if(ipd.exec() == QDialog::Accepted)
                 {
-                    auto group = gNetlist->get_module_by_id(modId)->get_pin_group(name.toStdString());
-                    gNetlist->get_module_by_id(modId)->set_pin_group_name(group, ipd.textValue().toStdString());
+                    auto groupResult = gNetlist->get_module_by_id(modId)->get_pin_group_by_id(itemId);
+                    if (groupResult.is_ok())
+                        gNetlist->get_module_by_id(modId)->set_pin_group_name(groupResult.get(), ipd.textValue().toStdString());
                 }
             });
             menu.addSection("Python");
@@ -102,12 +104,13 @@ namespace hal
         menu.addSection("Misc");
         if(n)//should never be nullptr, but you never know
         {
-            menu.addAction("Rename pin", [modId, name](){
+            menu.addAction("Rename pin", [modId, name, itemId](){
                 InputDialog ipd("Change pin name", "New pin name", name);
                 if(ipd.exec() == QDialog::Accepted)
                 {
-                    auto pin = gNetlist->get_module_by_id(modId)->get_pin(name.toStdString());
-                    gNetlist->get_module_by_id(modId)->set_pin_name(pin, ipd.textValue().toStdString());
+                    auto pinResult = gNetlist->get_module_by_id(modId)->get_pin_by_id(itemId);
+                    if(pinResult.is_ok())
+                        gNetlist->get_module_by_id(modId)->set_pin_name(pinResult.get(), ipd.textValue().toStdString());
                 }
             });
             menu.addAction("Add net to current selection", [this, n](){
