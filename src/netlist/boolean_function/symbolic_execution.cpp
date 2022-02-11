@@ -171,13 +171,12 @@ namespace hal
 
         Result<std::monostate> SymbolicExecution::evaluate(const Constraint& constraint)
         {
-            auto rhs = this->evaluate(constraint.rhs);
-            if (rhs.is_ok())
-            {
-                this->state.set(constraint.lhs.clone(), rhs.get());
-                return OK({});
-            }
-            return ERR(rhs.get_error());
+            return this->evaluate(constraint.rhs).map<std::monostate>(
+                [&] (auto&& rhs) -> Result<std::monostate> {
+                    this->state.set(constraint.lhs.clone(), std::move(rhs));
+                    return OK({});
+                }
+            );
         }
 
         std::vector<BooleanFunction> SymbolicExecution::normalize(std::vector<BooleanFunction>&& p)

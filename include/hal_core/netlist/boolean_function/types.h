@@ -38,9 +38,9 @@ namespace hal
         /**
          * Identifier for the SMT solver type.
          */
-        enum class SolverType
+        enum class SolverType : int
         {
-            Z3,        /**< Z3 SMT solver. */
+            Z3 = 0,    /**< Z3 SMT solver. */
             Boolector, /**< Boolector SMT solver. */
             Unknown,   /**< Unknown (unsupported) SMT solver. */
         };
@@ -155,6 +155,9 @@ namespace hal
              * @returns A reference to the output stream.
              */
             friend std::ostream& operator<<(std::ostream& out, const Constraint& constraint);
+
+            /// Short-hand helper to translate the SMT constraint to a string.
+            std::string to_string() const;
         };
 
         /**
@@ -246,6 +249,9 @@ namespace hal
             ////////////////////////////////////////////////////////////////////////
             // Constructors, Destructors, Operators
             ////////////////////////////////////////////////////////////////////////
+
+            /// Default constructor (required for Result<T> initialization)
+            SolverResult() : type(SolverResultType::Unknown), model({}) {}
 
             /**
              * Creates a satisfiable result with an optional model.

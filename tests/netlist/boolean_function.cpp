@@ -613,7 +613,7 @@ namespace hal {
                     continue;
                 }
 
-                auto result_var = solver.query(
+                auto result = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -621,10 +621,10 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                ASSERT_TRUE(std::get_if<SMT::SolverResult>(&result_var) != nullptr);
-                auto result = std::get<SMT::SolverResult>(result_var);
-                EXPECT_EQ(result.type, SMT::SolverResultType::Sat);
-                EXPECT_TRUE(result.model.has_value());
+                ASSERT_TRUE(result.is_ok());
+                auto solver_result = result.get();
+                EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
+                EXPECT_TRUE(solver_result.model.has_value());
             }
         }
     }
@@ -670,7 +670,7 @@ namespace hal {
                     continue;
                 }
 
-                auto result_var = solver.query(
+                auto result = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -678,10 +678,10 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                ASSERT_TRUE(std::get_if<SMT::SolverResult>(&result_var) != nullptr);
-                auto result = std::get<SMT::SolverResult>(result_var);
-                EXPECT_EQ(result.type, SMT::SolverResultType::UnSat);
-                EXPECT_FALSE(result.model.has_value());
+                ASSERT_TRUE(result.is_ok());
+                auto solver_result = result.get();
+                EXPECT_EQ(solver_result.type, SMT::SolverResultType::UnSat);
+                EXPECT_FALSE(solver_result.model.has_value());
             }
         }
     }
@@ -730,7 +730,7 @@ namespace hal {
                     continue;
                 }
 
-                auto result_var = solver.query(
+                auto result = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -738,10 +738,10 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                ASSERT_TRUE(std::get_if<SMT::SolverResult>(&result_var) != nullptr);
-                auto result = std::get<SMT::SolverResult>(result_var);
-                EXPECT_EQ(result.type, SMT::SolverResultType::Sat);
-                EXPECT_EQ(*result.model, model);
+                ASSERT_TRUE(result.is_ok());
+                auto solver_result = result.get();
+                EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
+                EXPECT_EQ(*solver_result.model, model);
             }
         }
     }

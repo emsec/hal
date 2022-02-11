@@ -79,6 +79,18 @@ namespace hal
             m_result = error;
         }
 
+        template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        static Result<T> Ok(const T& value)
+        {
+            return OK(value);
+        }
+
+        template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        static Result<T> Ok(T&& value)
+        {
+            return OK(std::move(value));
+        }
+
         bool is_ok() const
         {
             return !is_error();

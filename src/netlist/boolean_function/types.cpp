@@ -142,6 +142,12 @@ namespace hal
             return out;
         }
 
+        std::string Constraint::to_string() const {
+            std::stringstream ss;
+            ss << *this;
+            return ss.str();
+        }
+
         Model::Model(const std::map<std::string, std::tuple<u64, u16>>& _model) : model(_model)
         {
         }

@@ -88,17 +88,17 @@ namespace hal
 			 * Queries an SMT solver with the specified query configuration.
 			 *
 			 * @param[in] config - The SMT solver query configuration.
-			 * @returns The result on success, a string error message otherwise.
+			 * @returns OK() and the result on success, Err() otherwise.
 			 */
-            std::variant<SolverResult, std::string> query(const QueryConfig& config) const;
+            Result<SolverResult> query(const QueryConfig& config) const;
 
             /**
 			 * Queries a local SMT solver with the specified query configuration.
 			 *
 			 * @param[in] config - The SMT solver query configuration.
-			 * @returns The result on success, a string error message otherwise.
+			 * @returns OK() and the result on success, Err() otherwise.
 			 */
-            std::variant<SolverResult, std::string> query_local(const QueryConfig& config) const;
+            Result<SolverResult> query_local(const QueryConfig& config) const;
 
             /**
 			 * Queries a remote SMT solver with the specified query configuration.
@@ -106,9 +106,9 @@ namespace hal
 			 * \warning This function is not yet implemented.
 			 *
 			 * @param[in] config - The SMT solver query configuration.
-			 * @returns The result on success, a string error message otherwise.
+			 * @returns Ok() and the result on success, Err() otherwise.
 			 */
-            std::variant<SolverResult, std::string> query_remote(const QueryConfig& config) const;
+            Result<SolverResult> query_remote(const QueryConfig& config) const;
 
         private:
             ////////////////////////////////////////////////////////////////////////
@@ -130,10 +130,9 @@ namespace hal
 			 *
 			 * @param[in] constraints - List of constraints.
 			 * @param[in] config - SMT solver configuration.
-			 * @returns (1) status (true on success, false otherwise), and
-			 *          (2) SMT-LIB compatible string representation
+			 * @returns Ok() and SMT-LIB compatible string representation on success, Err() otherwise.
 			 */
-            static std::tuple<bool, std::string> translate_to_smt2(const std::vector<Constraint>& constraints, const QueryConfig& config);
+            static Result<std::string> translate_to_smt2(const std::vector<Constraint>& constraints, const QueryConfig& config);
 
             /**
 			 * Translate a SMT solver result from SMT-LIB v2.
@@ -144,10 +143,9 @@ namespace hal
 			 * @param[in] was_killed - Indicates whether solver process was killed.
 			 * @param[in] stdout - Stdout of solver process.
 			 * @param[in] config - SMT solver configuration.
-			 * @returns (1) status (true on success, false otherwise), and
-			 *          (2) SMT solver result
+			 * @returns Ok() and SMT solver result on success, Err() otherwise.
 			 */
-            static std::variant<SolverResult, std::string> translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config);
+            static Result<SolverResult> translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config);
         };
     }    // namespace SMT
 }    // namespace hal
