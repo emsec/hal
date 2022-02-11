@@ -90,7 +90,7 @@ namespace hal
 			 * @param[in] config - The SMT solver query configuration.
 			 * @returns The result on success, a string error message otherwise.
 			 */
-            std::variant<Result, std::string> query(const QueryConfig& config) const;
+            std::variant<SolverResult, std::string> query(const QueryConfig& config) const;
 
             /**
 			 * Queries a local SMT solver with the specified query configuration.
@@ -98,7 +98,7 @@ namespace hal
 			 * @param[in] config - The SMT solver query configuration.
 			 * @returns The result on success, a string error message otherwise.
 			 */
-            std::variant<Result, std::string> query_local(const QueryConfig& config) const;
+            std::variant<SolverResult, std::string> query_local(const QueryConfig& config) const;
 
             /**
 			 * Queries a remote SMT solver with the specified query configuration.
@@ -108,7 +108,7 @@ namespace hal
 			 * @param[in] config - The SMT solver query configuration.
 			 * @returns The result on success, a string error message otherwise.
 			 */
-            std::variant<Result, std::string> query_remote(const QueryConfig& config) const;
+            std::variant<SolverResult, std::string> query_remote(const QueryConfig& config) const;
 
         private:
             ////////////////////////////////////////////////////////////////////////
@@ -147,7 +147,7 @@ namespace hal
 			 * @returns (1) status (true on success, false otherwise), and
 			 *          (2) SMT solver result
 			 */
-            static std::variant<Result, std::string> translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config);
+            static std::variant<SolverResult, std::string> translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config);
         };
     }    // namespace SMT
 }    // namespace hal

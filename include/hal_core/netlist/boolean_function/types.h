@@ -160,7 +160,7 @@ namespace hal
         /**
          * Result type of an SMT solver query.
          */
-        enum class ResultType
+        enum class SolverResultType
         {
             Sat,     /**< The list of constraints is satisfiable. */
             UnSat,   /**< The list of constraints is not satisfiable. */
@@ -232,14 +232,14 @@ namespace hal
         /**
 		 * Represents the result of an SMT query.
 		 */
-        struct Result final
+        struct SolverResult final
         {
             ////////////////////////////////////////////////////////////////////////
             // Member
             ////////////////////////////////////////////////////////////////////////
 
             /// Result type of the SMT query.
-            ResultType type;
+            SolverResultType type;
             /// The (optional) model that is only available if `type == SMT::ResultType::Sat` and model generation is enabled.
             std::optional<Model> model;
 
@@ -253,21 +253,21 @@ namespace hal
              * @param[in] model - Optional model for satisfiable formula.
              * @returns The result.
              */
-            static Result Sat(const std::optional<Model>& model = {});
+            static SolverResult Sat(const std::optional<Model>& model = {});
 
             /**
              * Creates an unsatisfiable result.
              *
-             * @returns Result.
+             * @returns The result.
              */
-            static Result UnSat();
+            static SolverResult UnSat();
 
             /**
              * Creates an unknown result.
              *
-             * @returns Result.
+             * @returns The result.
              */
-            static Result Unknown();
+            static SolverResult Unknown();
 
             /**
              * Checks whether the result is of a specific type.
@@ -275,7 +275,7 @@ namespace hal
              * @param[in] type - The type to check.
              * @returns `true` in case result matches the given type, `false` otherwise.
              */
-            bool is(const ResultType& type) const;
+            bool is(const SolverResultType& type) const;
 
             /**
              * Checks whether the result is satisfiable.
@@ -305,11 +305,11 @@ namespace hal
              * @param[in] result - SMT result.
              * @returns A reference to output stream.
              */
-            friend std::ostream& operator<<(std::ostream& out, const Result& result);
+            friend std::ostream& operator<<(std::ostream& out, const SolverResult& result);
 
         private:
             /// Constructor to initialize a 'Result.
-            Result(ResultType _type, std::optional<Model> _model);
+            SolverResult(SolverResultType _type, std::optional<Model> _model);
         };
 
     }    // namespace SMT
@@ -318,5 +318,5 @@ namespace hal
     std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data;
 
     template<>
-    std::map<SMT::ResultType, std::string> EnumStrings<SMT::ResultType>::data;
+    std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data;
 }    // namespace hal

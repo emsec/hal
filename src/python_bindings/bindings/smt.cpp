@@ -88,13 +88,13 @@ namespace hal
             :param hal_py.BooleanFunction rhs: The right-hand side of the equality constraint.
         )");
 
-        py::enum_<SMT::ResultType> py_smt_result_type(py_smt, "ResultType", R"(
+        py::enum_<SMT::SolverResultType> py_smt_result_type(py_smt, "SolverResultType", R"(
             Result type of an SMT solver query.
         )");
 
-        py_smt_result_type.value("Sat", SMT::ResultType::Sat, R"(The list of constraints is satisfiable.)")
-            .value("UnSat", SMT::ResultType::UnSat, R"(The list of constraints is not satisfiable.)")
-            .value("Unknown", SMT::ResultType::Unknown, R"(A result could not be obtained, e.g., due to a time-out.)")
+        py_smt_result_type.value("Sat", SMT::SolverResultType::Sat, R"(The list of constraints is satisfiable.)")
+            .value("UnSat", SMT::SolverResultType::UnSat, R"(The list of constraints is not satisfiable.)")
+            .value("Unknown", SMT::SolverResultType::Unknown, R"(A result could not be obtained, e.g., due to a time-out.)")
             .export_values();
 
         py::class_<SMT::Model> py_smt_model(py_smt, "Model", R"(
@@ -130,45 +130,45 @@ namespace hal
             :rtype: hal_py.SMT.Model or str
         )");
 
-        py::class_<SMT::Result> py_smt_result(py_smt, "Result", R"(
+        py::class_<SMT::SolverResult> py_smt_result(py_smt, "SolverResult", R"(
             Represents the result of an SMT query.
         )");
 
-        py_smt_result.def_readwrite("type", &SMT::Result::type, R"(
+        py_smt_result.def_readwrite("type", &SMT::SolverResult::type, R"(
             Result type of the SMT query.
 
             :type: hal_py.SMT.ResultType
         )");
 
-        py_smt_result.def_readwrite("model", &SMT::Result::model, R"(
+        py_smt_result.def_readwrite("model", &SMT::SolverResult::model, R"(
             The (optional) model that is only available if type == SMT.ResultType.Sat and model generation is enabled.
 
             :type: hal_py.SMT.Model
         )");
 
-        py_smt_result.def_static("Sat", &SMT::Result::Sat, py::arg("model") = std::optional<SMT::Model>(), R"(
+        py_smt_result.def_static("Sat", &SMT::SolverResult::Sat, py::arg("model") = std::optional<SMT::Model>(), R"(
             Creates a satisfiable result with an optional model.
 
             :param hal_py.SMT.Model model: Optional model for satisfiable formula.
             :returns: The result.
-            :rtype: hal_py.SMT.Result
+            :rtype: hal_py.SMT.SolverResult
         )");
 
-        py_smt_result.def_static("UnSat", &SMT::Result::UnSat, R"(
+        py_smt_result.def_static("UnSat", &SMT::SolverResult::UnSat, R"(
             Creates an unsatisfiable result.
 
             :returns: The result.
-            :rtype: hal_py.SMT.Result
+            :rtype: hal_py.SMT.SolverResult
         )");
 
-        py_smt_result.def_static("Unknown", &SMT::Result::Unknown, R"(
+        py_smt_result.def_static("Unknown", &SMT::SolverResult::Unknown, R"(
             Creates an unknown result.
 
             :returns: The result.
-            :rtype: hal_py.SMT.Result
+            :rtype: hal_py.SMT.SolverResult
         )");
 
-        py_smt_result.def("is", &SMT::Result::is, py::arg("type"), R"(
+        py_smt_result.def("is", &SMT::SolverResult::is, py::arg("type"), R"(
             Checks whether the result is of a specific type.
 
             :param hal_py.SMT.ResultType type: The type to check.
@@ -176,21 +176,21 @@ namespace hal
             :rtype: bool
         )");
 
-        py_smt_result.def("is_sat", &SMT::Result::is_sat, R"(
+        py_smt_result.def("is_sat", &SMT::SolverResult::is_sat, R"(
             Checks whether the result is satisfiable.
 
             :returns: True in case result is satisfiable, False otherwise.
             :rtype: bool
         )");
 
-        py_smt_result.def("is_unsat", &SMT::Result::is_unsat, R"(
+        py_smt_result.def("is_unsat", &SMT::SolverResult::is_unsat, R"(
             Checks whether the result is unsatisfiable.
 
             :returns: True in case result is unsatisfiable, False otherwise.
             :rtype: bool
         )");
 
-        py_smt_result.def("is_unknown", &SMT::Result::is_unknown, R"(
+        py_smt_result.def("is_unknown", &SMT::SolverResult::is_unknown, R"(
             Checks whether the result is unknown.
 
             :returns: True in case result is unknown, False otherwise.

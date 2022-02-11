@@ -166,12 +166,12 @@ namespace hal
             }
         }
 
-        std::variant<Result, std::string> Solver::query(const QueryConfig& config) const
+        std::variant<SolverResult, std::string> Solver::query(const QueryConfig& config) const
         {
             return (config.local) ? this->query_local(config) : this->query_remote(config);
         }
 
-        std::variant<Result, std::string> Solver::query_local(const QueryConfig& config) const
+        std::variant<SolverResult, std::string> Solver::query_local(const QueryConfig& config) const
         {
             static const std::map<SolverType, std::function<std::tuple<bool, bool, std::string>(std::string, const QueryConfig&)>> type2query = {
                 {SolverType::Z3, Z3::query},
@@ -194,7 +194,7 @@ namespace hal
             }
         }
 
-        std::variant<Result, std::string> Solver::query_remote(const QueryConfig& /* config */) const
+        std::variant<SolverResult, std::string> Solver::query_remote(const QueryConfig& /* config */) const
         {
             // unimplemented as this is feature not required at the moment
             return "This feature is not currently supported.";
@@ -253,7 +253,7 @@ namespace hal
             }
         }
 
-        std::variant<Result, std::string> Solver::translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config)
+        std::variant<SolverResult, std::string> Solver::translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config)
         {
             if (was_killed)
             {
@@ -280,22 +280,22 @@ namespace hal
                     }
                     else
                     {
-                        return Result::Sat(std::get<SMT::Model>(model));
+                        return SolverResult::Sat(std::get<SMT::Model>(model));
                     }
                 }
                 else
                 {
-                    return Result::Sat();
+                    return SolverResult::Sat();
                 }
             }
             if (to_lowercase(result) == "unsat")
             {
-                return Result::UnSat();
+                return SolverResult::UnSat();
             }
 
             if ((to_lowercase(result) == "unknown") || result.rfind("[btor>main] ALARM TRIGGERED: time limit", 0))
             {
-                return Result::Unknown();
+                return SolverResult::Unknown();
             }
 
             return "Cannot translate SMT result from string.";
