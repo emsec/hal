@@ -1,0 +1,114 @@
+[*]
+[*] GTKWave Analyzer v3.3.107 (w)1999-2020 BSI
+[*] Fri Jan 28 13:49:52 2022
+[*]
+[dumpfile] "/Users/eve/Uni/Projekte/hal/plugins/simulator/netlist_simulator_controller/test/netlists/bram/trace.vcd"
+[dumpfile_mtime] "Wed Jan 26 14:31:51 2022"
+[dumpfile_size] 6457
+[savefile] "/Users/eve/Uni/Projekte/hal/plugins/simulator/netlist_simulator_controller/test/netlists/bram/waveform.gtkw"
+[timestart] 0
+[size] 1676 600
+[pos] 1515 76
+*-16.960625 424000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] BRAM_TB.
+[sst_width] 193
+[signals_width] 260
+[sst_expanded] 1
+[sst_vpaned_height] 167
+@c00022
+#{BRAM_TB.UUT.din_[15:0]} BRAM_TB.UUT.din_15 BRAM_TB.UUT.din_14 BRAM_TB.UUT.din_13 BRAM_TB.UUT.din_12 BRAM_TB.UUT.din_11 BRAM_TB.UUT.din_10 BRAM_TB.UUT.din_9 BRAM_TB.UUT.din_8 BRAM_TB.UUT.din_7 BRAM_TB.UUT.din_6 BRAM_TB.UUT.din_5 BRAM_TB.UUT.din_4 BRAM_TB.UUT.din_3 BRAM_TB.UUT.din_2 BRAM_TB.UUT.din_1 BRAM_TB.UUT.din_0
+@28
+BRAM_TB.UUT.din_0
+BRAM_TB.UUT.din_1
+BRAM_TB.UUT.din_2
+BRAM_TB.UUT.din_3
+BRAM_TB.UUT.din_4
+BRAM_TB.UUT.din_5
+BRAM_TB.UUT.din_6
+BRAM_TB.UUT.din_7
+BRAM_TB.UUT.din_8
+BRAM_TB.UUT.din_9
+BRAM_TB.UUT.din_10
+BRAM_TB.UUT.din_11
+BRAM_TB.UUT.din_12
+BRAM_TB.UUT.din_13
+BRAM_TB.UUT.din_14
+BRAM_TB.UUT.din_15
+@1401200
+-group_end
+@c00022
+#{BRAM_TB.UUT.dout_[15:0]} BRAM_TB.UUT.dout_15 BRAM_TB.UUT.dout_14 BRAM_TB.UUT.dout_13 BRAM_TB.UUT.dout_12 BRAM_TB.UUT.dout_11 BRAM_TB.UUT.dout_10 BRAM_TB.UUT.dout_9 BRAM_TB.UUT.dout_8 BRAM_TB.UUT.dout_7 BRAM_TB.UUT.dout_6 BRAM_TB.UUT.dout_5 BRAM_TB.UUT.dout_4 BRAM_TB.UUT.dout_3 BRAM_TB.UUT.dout_2 BRAM_TB.UUT.dout_1 BRAM_TB.UUT.dout_0
+@28
+BRAM_TB.UUT.dout_0
+BRAM_TB.UUT.dout_1
+BRAM_TB.UUT.dout_2
+BRAM_TB.UUT.dout_3
+BRAM_TB.UUT.dout_4
+BRAM_TB.UUT.dout_5
+BRAM_TB.UUT.dout_6
+BRAM_TB.UUT.dout_7
+BRAM_TB.UUT.dout_8
+BRAM_TB.UUT.dout_9
+BRAM_TB.UUT.dout_10
+BRAM_TB.UUT.dout_11
+BRAM_TB.UUT.dout_12
+BRAM_TB.UUT.dout_13
+BRAM_TB.UUT.dout_14
+BRAM_TB.UUT.dout_15
+@1401200
+-group_end
+@c00022
+#{BRAM_TB.UUT.mask_[15:0]} BRAM_TB.UUT.mask_15 BRAM_TB.UUT.mask_14 BRAM_TB.UUT.mask_13 BRAM_TB.UUT.mask_12 BRAM_TB.UUT.mask_11 BRAM_TB.UUT.mask_10 BRAM_TB.UUT.mask_9 BRAM_TB.UUT.mask_8 BRAM_TB.UUT.mask_7 BRAM_TB.UUT.mask_6 BRAM_TB.UUT.mask_5 BRAM_TB.UUT.mask_4 BRAM_TB.UUT.mask_3 BRAM_TB.UUT.mask_2 BRAM_TB.UUT.mask_1 BRAM_TB.UUT.mask_0
+@28
+BRAM_TB.UUT.mask_0
+BRAM_TB.UUT.mask_1
+BRAM_TB.UUT.mask_2
+BRAM_TB.UUT.mask_3
+BRAM_TB.UUT.mask_4
+BRAM_TB.UUT.mask_5
+BRAM_TB.UUT.mask_6
+BRAM_TB.UUT.mask_7
+BRAM_TB.UUT.mask_8
+BRAM_TB.UUT.mask_9
+BRAM_TB.UUT.mask_10
+BRAM_TB.UUT.mask_11
+BRAM_TB.UUT.mask_12
+BRAM_TB.UUT.mask_13
+BRAM_TB.UUT.mask_14
+BRAM_TB.UUT.mask_15
+@1401200
+-group_end
+@c00022
+#{BRAM_TB.UUT.raddr_[7:0]} BRAM_TB.UUT.raddr_7 BRAM_TB.UUT.raddr_6 BRAM_TB.UUT.raddr_5 BRAM_TB.UUT.raddr_4 BRAM_TB.UUT.raddr_3 BRAM_TB.UUT.raddr_2 BRAM_TB.UUT.raddr_1 BRAM_TB.UUT.raddr_0
+@28
+BRAM_TB.UUT.raddr_0
+BRAM_TB.UUT.raddr_1
+BRAM_TB.UUT.raddr_2
+BRAM_TB.UUT.raddr_3
+BRAM_TB.UUT.raddr_4
+BRAM_TB.UUT.raddr_5
+BRAM_TB.UUT.raddr_6
+BRAM_TB.UUT.raddr_7
+@1401200
+-group_end
+@28
+BRAM_TB.UUT.rclke
+BRAM_TB.UUT.read_en
+@c00023
+#{BRAM_TB.UUT.waddr_[7:0]} BRAM_TB.UUT.waddr_7 BRAM_TB.UUT.waddr_6 BRAM_TB.UUT.waddr_5 BRAM_TB.UUT.waddr_4 BRAM_TB.UUT.waddr_3 BRAM_TB.UUT.waddr_2 BRAM_TB.UUT.waddr_1 BRAM_TB.UUT.waddr_0
+@28
+BRAM_TB.UUT.waddr_0
+BRAM_TB.UUT.waddr_1
+BRAM_TB.UUT.waddr_2
+BRAM_TB.UUT.waddr_3
+BRAM_TB.UUT.waddr_4
+BRAM_TB.UUT.waddr_5
+BRAM_TB.UUT.waddr_6
+BRAM_TB.UUT.waddr_7
+@1401201
+-group_end
+@28
+BRAM_TB.UUT.wclke
+BRAM_TB.UUT.write_en
+[pattern_trace] 1
+[pattern_trace] 0

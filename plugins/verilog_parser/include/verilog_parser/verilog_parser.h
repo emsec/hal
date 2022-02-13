@@ -71,7 +71,8 @@ namespace hal
         Netlist* m_netlist = nullptr;
 
         // all modules of the netlist
-        std::unordered_map<std::string, VerilogModule> m_modules;
+        std::vector<std::unique_ptr<VerilogModule>> m_modules;
+        std::unordered_map<std::string, VerilogModule*> m_modules_by_name;
         std::string m_last_module;
 
         // token stream of entire input file
@@ -96,29 +97,24 @@ namespace hal
         // parse HDL into intermediate format
         bool tokenize();
         bool parse_tokens();
-        bool parse_module(std::map<std::string, std::string>& attributes);
-        bool parse_port_list(VerilogModule& module);
-        bool parse_port_declaration_list(VerilogModule& module);
-        bool parse_port_definition(VerilogModule& module, std::map<std::string, std::string>& attributes);
-        bool parse_signal_definition(VerilogModule& module, std::map<std::string, std::string>& attributes);
-        bool parse_assignment(VerilogModule& module);
-        bool parse_attribute(std::map<std::string, std::string>& attributes);
-        bool parse_instance(VerilogModule& module, std::map<std::string, std::string>& attributes);
-        bool parse_port_assign(VerilogModule& module, const std::string& instance_name);
-        std::vector<std::tuple<std::string, std::string, std::string>> parse_generic_assign();
+        bool parse_module(std::vector<VerilogDataEntry>& attributes);
+        bool parse_port_list(VerilogModule* module);
+        bool parse_port_declaration_list(VerilogModule* module);
+        bool parse_port_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
+        bool parse_signal_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
+        bool parse_assignment(VerilogModule* module);
+        bool parse_attribute(std::vector<VerilogDataEntry>& attributes);
+        bool parse_instance(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
+        bool parse_port_assign(VerilogInstance* instance);
+        std::vector<VerilogDataEntry> parse_generic_assign();
 
         // construct netlist from intermediate format
-        bool construct_netlist(VerilogModule& top_module);
-        Module* instantiate_module(const std::string& instance_name, VerilogModule& verilog_module, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
+        bool construct_netlist(VerilogModule* top_module);
+        Module* instantiate_module(const std::string& instance_name, VerilogModule* verilog_module, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
 
         // helper functions
         void remove_comments(std::string& line, bool& multi_line_comment) const;
-        std::vector<u32> parse_range(TokenStream<std::string>& range_str) const;
-        std::vector<std::string> get_bin_from_literal(const Token<std::string>& value_token) const;
         std::string get_hex_from_literal(const Token<std::string>& value_token) const;
-        std::vector<std::string> expand_assignment_signal(VerilogModule& module, TokenStream<std::string>& signal_str, bool allow_numerics);
-        std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const;
-        void expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;
         std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
     };
 }    // namespace hal

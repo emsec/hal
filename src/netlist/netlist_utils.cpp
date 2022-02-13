@@ -335,16 +335,24 @@ namespace hal
                         c_netlist->mark_global_input_net(c_net);
 
                         // if net had a name annotated at the top module port take that one, otherwise use regular net name
-                        ModulePin* pin   = nl->get_top_module()->get_pin(nl->get_net_by_id(id));
-                        ModulePin* c_pin = c_netlist->get_top_module()->get_pin(nl->get_net_by_id(id));
-                        assert(c_pin != nullptr);
-                        if (pin != nullptr)
+                        ModulePin* c_pin;
+                        if (auto res = c_netlist->get_top_module()->get_pin_by_net(c_netlist->get_net_by_id(id)); res.is_error())
                         {
-                            c_netlist->get_top_module()->set_pin_name(c_pin, pin->get_name());
+                            log_error("netlist_utils", "{}", res.get_error().get());
+                            return nullptr;
                         }
                         else
                         {
+                            c_pin = res.get();
+                        }
+                        ModulePin* pin;
+                        if (auto res = nl->get_top_module()->get_pin_by_net(nl->get_net_by_id(id)); res.is_error())
+                        {
                             c_netlist->get_top_module()->set_pin_name(c_pin, c_net->get_name());
+                        }
+                        else
+                        {
+                            c_netlist->get_top_module()->set_pin_name(c_pin, res.get()->get_name());
                         }
                     }
                 }
@@ -359,16 +367,24 @@ namespace hal
                         c_netlist->mark_global_output_net(c_net);
 
                         // if net had a name annotated at the top module port take that one, otherwise use regular net name
-                        ModulePin* pin   = nl->get_top_module()->get_pin(nl->get_net_by_id(id));
-                        ModulePin* c_pin = c_netlist->get_top_module()->get_pin(nl->get_net_by_id(id));
-                        assert(c_pin != nullptr);
-                        if (pin != nullptr)
+                        ModulePin* c_pin;
+                        if (auto res = c_netlist->get_top_module()->get_pin_by_net(c_netlist->get_net_by_id(id)); res.is_error())
                         {
-                            c_netlist->get_top_module()->set_pin_name(c_pin, pin->get_name());
+                            log_error("netlist_utils", "{}", res.get_error().get());
+                            return nullptr;
                         }
                         else
                         {
+                            c_pin = res.get();
+                        }
+                        ModulePin* pin;
+                        if (auto res = nl->get_top_module()->get_pin_by_net(nl->get_net_by_id(id)); res.is_error())
+                        {
                             c_netlist->get_top_module()->set_pin_name(c_pin, c_net->get_name());
+                        }
+                        else
+                        {
+                            c_netlist->get_top_module()->set_pin_name(c_pin, res.get()->get_name());
                         }
                     }
                 }

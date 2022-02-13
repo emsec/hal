@@ -7,7 +7,7 @@ namespace hal {
     bool DummyEngine::setSimulationInput(SimulationInput* simInput)
     {
         mSimulationInput = simInput;
-        simInput->dump( (directory() + "/simulation_input.txt").c_str() );
+        simInput->dump( (get_working_directory() + "/simulation_input.txt").c_str() );
         return true;
     }
 

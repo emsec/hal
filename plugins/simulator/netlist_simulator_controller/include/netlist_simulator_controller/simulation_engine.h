@@ -7,8 +7,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-
-class QTemporaryDir;
+#include <filesystem>
 
 namespace hal
 {
@@ -33,12 +32,12 @@ namespace hal
         std::string mResultFilename;
         State mState;
         std::unordered_map<std::string, std::string> mProperties;
-        QTemporaryDir* mTempDir;
         SimulationInput* mSimulationInput;
+        std::string mWorkDir;
 
     public:
         SimulationEngine(const std::string& nam);
-        virtual ~SimulationEngine();
+        virtual ~SimulationEngine() {;}
 
         /**
          * Getter for enging name
@@ -68,10 +67,16 @@ namespace hal
         }
 
         /**
-         * The working directory. Directory is temporary and will be removed when engine gets deleted
+         * The working directory. Directory is temporary and will be removed when controller gets deleted
          * @return directory path
          */
-        std::string directory() const;
+        std::string get_working_directory() const;
+
+        /**
+         * Set the working directory. Method should be called by controller only after creating engine instance.
+         * @param[in] workDir The working directory (should be controller tmp directory)
+         */
+        void set_working_directory(const std::string& workDir);
 
         /**
          * Request clock change as regular net input event
@@ -91,6 +96,13 @@ namespace hal
         {
             return mCanShareMemory;
         }
+
+        /**
+         * Copy header and source files so that saleae parser can be compiled into project
+         * @param dirname[in] Target directory to copy files into
+         * @return true if files copied successfully, false otherwise
+         */
+        bool install_saleae_parser(std::string dirname) const;
 
         /**
          * Must be implemented by derived class
@@ -167,6 +179,12 @@ namespace hal
          * @param value property value
          */
         virtual std::string get_engine_property(const std::string& key);
+
+        /**
+         * Get all propertiess
+         * @return
+         */
+        virtual const std::unordered_map<std::string,std::string>& get_engine_properties() const { return mProperties; }
 
         /**
          * Get simulation input

@@ -8,6 +8,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "netlist_simulator_controller/simulation_input.h"
+#include "netlist_simulator_controller/saleae_directory.h"
 #include <set>
 
 namespace hal {
@@ -47,6 +48,8 @@ namespace hal {
         void setName(const QString& nam);
         void setBits(int bts);
         void setDirty(bool dty)                     { mDirty = dty; }
+        bool loadSaleae(const SaleaeDirectory& sd);
+        void saveSaleae(SaleaeDirectory& sd) const;
         void setData(const QMap<u64,int>& dat);
         int  intValue(float t) const;
         int get_value_at(u64 t) const;
@@ -55,13 +58,14 @@ namespace hal {
         void clear() { mData.clear(); }
         void insert(u64 t, int val) { mData.insert(t,val); }
         void setStartvalue(int val);
-        void insertBooleanValue(u64 t, BooleanFunction::Value bval);
+        void insertBooleanValueWithoutSync(u64 t, BooleanFunction::Value bval);
         void eraseAtTime(u64 t);
         bool insertToggleTime(u64 t);
         QString strValue(int val) const;
         QString strValue(float t) const;
         QString strValue(const QMap<u64,int>::const_iterator& it) const;
         void setValueBase(int bas) { mValueBase = bas; }
+        bool isEqual(const WaveData& other, int tolerance=0) const;
     };
 
     class WaveDataClock : public WaveData
@@ -80,11 +84,13 @@ namespace hal {
 
     class WaveDataList : public QObject, public QList<WaveData*>
     {
+        friend class WaveDataGroup;
         Q_OBJECT
 
         QMap<u32,int>     mIds;
         u64               mSimulTime;
         u64               mMaxTime;
+        SaleaeDirectory   mSaleaeDirectory;
         void testDoubleCount();
         void restoreIndex();
         void updateMaxTime();
@@ -92,26 +98,33 @@ namespace hal {
 
         using QList<WaveData*>::append;
         using QList<WaveData*>::insert;
-    public:
-        QMap<u32,WaveDataGroup*> mDataGroups;
-        WaveDataList(QObject* parent = nullptr) : QObject(parent), mSimulTime(0), mMaxTime(0) {;}
-        ~WaveDataList();
-        void add(WaveData* wd, bool silent);
-        void registerGroup(WaveDataGroup* grp);
-        u32  createGroup(QString grpName);
-        void addNetsToGroup(u32 grpId, const QVector<u32>& netIds);
-        void removeGroup(u32 grpId);
-        void addOrReplace(WaveData* wd, bool silent=false);
+
         void replaceWaveData(int inx, WaveData *wdNew);
-        WaveData* waveDataByNetId(u32 id) const;
-        int waveIndexByNetId(u32 id) const { return mIds.value(id,-1); }
-        bool hasNet(u32 id) const { return mIds.contains(id); }
-        QSet<u32> toSet() const;
+        void registerGroup(WaveDataGroup* grp);
+    public:
+        /**
+         * Map of groups indexed by non-zero group id
+         */
+        QMap<u32,WaveDataGroup*> mDataGroups;
+        WaveDataList(const QString& sdFilename, QObject* parent = nullptr);
+        ~WaveDataList();
+
+        u32  createGroup(QString grpName);
+        void addWavesToGroup(u32 grpId, const QVector<WaveData*>& wds);
+        void removeGroup(u32 grpId);
+
+        void addOrReplace(WaveData* wd, bool silent=false);
+        void add(WaveData* wd, bool silent, bool updateSaleae);
         void remove(u32 id);
         void incrementSimulTime(u64 deltaT);
         void clearAll();
         void updateClocks();
         void updateWaveData(int inx);
+
+        WaveData* waveDataByNet(const Net* n);
+        int waveIndexByNetId(u32 id) const { return mIds.value(id,-1); }
+        bool hasNet(u32 id) const { return mIds.contains(id); }
+        QSet<u32> toSet() const;
         void updateWaveName(int inx, const QString& nam);
         u64 simulTime() const { return mSimulTime; }
         u64 maxTime()   const { return mMaxTime; }
@@ -121,6 +134,9 @@ namespace hal {
         QList<const WaveData*> partialList(u64 start_time, u64 end_time, std::set<const Net*>& nets) const;
         void emitWaveUpdated(int inx);
         void emitGroupUpdated(int grpId);
+        void updateFromSaleae();
+        const SaleaeDirectory& saleaeDirectory() const { return mSaleaeDirectory; }
+        void insertBooleanValue(WaveData* wd, u64 t, BooleanFunction::Value bval);
     Q_SIGNALS:
         void waveAdded(int inx);
         void groupAdded(int grpId);

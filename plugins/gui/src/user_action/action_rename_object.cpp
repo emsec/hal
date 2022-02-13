@@ -33,8 +33,6 @@ namespace hal
     {
         writeParentObjectToXml(xmlOut);
         xmlOut.writeTextElement("name", mNewName);
-        if(mObject.type() == UserActionObjectType::Pin || mObject.type() == UserActionObjectType::PinGroup)
-            xmlOut.writeTextElement("identifier", mPinOrPingroupIdentifier);
     }
 
     void ActionRenameObject::readFromXml(QXmlStreamReader& xmlIn)
@@ -44,8 +42,6 @@ namespace hal
             readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "name")
                 mNewName = xmlIn.readElementText();
-            if (xmlIn.name() == "identifier")
-                mPinOrPingroupIdentifier = xmlIn.readElementText();
         }
     }
 
@@ -101,25 +97,29 @@ namespace hal
                 else
                     return false;
                 break;
-            case UserActionObjectType::Pin:
-                mod = gNetlist->get_module_by_id(mObject.id());
-                if(mod && mod->get_pin(mPinOrPingroupIdentifier.toStdString()))
-                {
-                    oldName = mPinOrPingroupIdentifier;
-                    mod->set_pin_name(mod->get_pin(mPinOrPingroupIdentifier.toStdString()), mNewName.toStdString());
-                }
-                else
-                    return false;
+            case UserActionObjectType::Pin:{
+                mod = gNetlist->get_module_by_id(mParentObject.id());
+                if(!mod) return false;
+
+                auto pinResult = mod->get_pin_by_id(mObject.id());
+                if(pinResult.is_error()) return false;
+
+                oldName = QString::fromStdString(pinResult.get()->get_name());
+                auto ret = mod->set_pin_name(pinResult.get(), mNewName.toStdString());
+                if(ret.is_error()) return false;
+            }
                 break;
-            case UserActionObjectType::PinGroup:
-                mod = gNetlist->get_module_by_id(mObject.id());
-                if(mod && mod->get_pin_group(mPinOrPingroupIdentifier.toStdString()))
-                {
-                    oldName = mPinOrPingroupIdentifier;
-                    mod->set_pin_group_name(mod->get_pin_group(mPinOrPingroupIdentifier.toStdString()), mNewName.toStdString());
-                }
-                else
-                    return false;
+        case UserActionObjectType::PinGroup:{
+                mod = gNetlist->get_module_by_id(mParentObject.id());
+                if(!mod) return false;
+
+                auto pinGroupResult = mod->get_pin_group_by_id(mObject.id());
+                if(pinGroupResult.is_error()) return false;
+
+                oldName = QString::fromStdString(pinGroupResult.get()->get_name());
+                auto ret = mod->set_pin_group_name(pinGroupResult.get(), mNewName.toStdString());
+                if(ret.is_error()) return false;
+            }
                 break;
             default:
                 return false;
@@ -128,7 +128,7 @@ namespace hal
         undo->setObject(mObject);
         if (mObject.type() == UserActionObjectType::Pin || mObject.type() == UserActionObjectType::PinGroup)
         {
-            undo->mPinOrPingroupIdentifier = mNewName;
+            undo->setParentObject(mParentObject);
         }
         mUndoAction = undo;
         return UserAction::exec();

@@ -120,7 +120,7 @@ if(${pybind11_FOUND})
     message(VERBOSE "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
     message(VERBOSE "Found pybind11 >= 2.4.3")
 else()
-    message(STATUS "pybind11 >= 2.4.3 not found")
+    message(STATUS "pybind11 >= 2.4.3 not found, will build our provided version")
     add_subdirectory(deps/pybind11)
 endif()
 
@@ -132,7 +132,7 @@ find_package(spdlog 1.5.0 CONFIG)
 if(${spdlog_FOUND})
     message(VERBOSE "Found spdlog >= 1.5.0")
 else()
-    message(STATUS "spdlog >= 1.5.0 not found")
+    message(STATUS "spdlog >= 1.5.0 not found, will build our provided version")
     set(spdlog_VERSION 1.5.0)
     add_library(spdlog::spdlog INTERFACE IMPORTED)
     set_target_properties(spdlog::spdlog PROPERTIES
@@ -178,3 +178,39 @@ if(${graphviz_FOUND})
     #   add_custom_target( ...
     #                      LINK_LIBRARIES ... graphviz::graphviz)
 endif()
+
+################################
+#####   Berkeley ABC
+################################
+
+# abc stuff
+# Download and unpack abc at configure time
+add_library(ABC INTERFACE IMPORTED)
+find_package(ABC)
+if(${ABC_FOUND})
+    message(STATUS "Found ABC:")
+    message(STATUS "    ABC_LIBRARY: ${ABC_LIBRARY}")
+else()
+    message(STATUS "ABC not found")
+    message(STATUS "Will build abc ourselves, check README.md to see how to speed up the process...")
+    
+    add_subdirectory(deps/abc)
+    add_library(abc::libabc-pic INTERFACE IMPORTED)
+    set_target_properties(abc::libabc-pic PROPERTIES INTERFACE_LINK_LIBRARIES libabc-pic)
+    set(ABC_LIBRARY abc::libabc-pic)
+endif()
+
+
+################################
+#####   z3
+################################
+
+find_package(Z3 REQUIRED)
+if(Z3_FOUND)
+    message(STATUS "Found z3")
+    message(STATUS "    Z3_LIBRARIES: ${Z3_LIBRARIES}")
+    message(STATUS "    Z3_INCLUDE_DIRS: ${Z3_INCLUDE_DIRS}")
+else()
+    set(Missing_package "TRUE")
+    message(STATUS "Could not find z3")
+endif(Z3_FOUND)

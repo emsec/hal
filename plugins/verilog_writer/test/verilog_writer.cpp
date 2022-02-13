@@ -69,19 +69,25 @@ namespace hal
                     Net* net_6_7 = test_utils::connect(nl.get(), gate_6, "O", gate_7, "I0");
 
                     Net* net_4_out = test_utils::connect_global_out(nl.get(), gate_4, "O", "net_4_out");
-                    ModulePin* pin_1 = top_module->get_pin(net_4_out);
-                    top_module->set_pin_name(pin_1, net_4_out->get_name());
-                    top_module->set_pin_group_name(pin_1->get_group().first, net_4_out->get_name());
+                    auto res_1 = top_module->get_pin_by_net(net_4_out);
+                    ASSERT_TRUE(res_1.is_ok());
+                    ModulePin* pin_1 = res_1.get();
+                    ASSERT_TRUE(top_module->set_pin_name(pin_1, net_4_out->get_name()).is_ok());
+                    ASSERT_TRUE(top_module->set_pin_group_name(pin_1->get_group().first, net_4_out->get_name()).is_ok());
 
                     Net* net_5_out = test_utils::connect_global_out(nl.get(), gate_5, "O", "net_5_out");
-                    ModulePin* pin_2 = top_module->get_pin(net_5_out);
-                    top_module->set_pin_name(pin_2, net_5_out->get_name());
-                    top_module->set_pin_group_name(pin_2->get_group().first, net_5_out->get_name());
+                    auto res_2 = top_module->get_pin_by_net(net_5_out);
+                    ASSERT_TRUE(res_2.is_ok());
+                    ModulePin* pin_2 = res_2.get();
+                    ASSERT_TRUE(top_module->set_pin_name(pin_2, net_5_out->get_name()).is_ok());
+                    ASSERT_TRUE(top_module->set_pin_group_name(pin_2->get_group().first, net_5_out->get_name()).is_ok());
 
                     Net* net_7_out = test_utils::connect_global_out(nl.get(), gate_7, "O", "net_7_out");
-                    ModulePin* pin_3 = top_module->get_pin(net_7_out);
-                    top_module->set_pin_name(pin_3, net_7_out->get_name());
-                    top_module->set_pin_group_name(pin_3->get_group().first, net_7_out->get_name());
+                    auto res_3 = top_module->get_pin_by_net(net_7_out);
+                    ASSERT_TRUE(res_3.is_ok());
+                    ModulePin* pin_3 = res_3.get();
+                    ASSERT_TRUE(top_module->set_pin_name(pin_3, net_7_out->get_name()).is_ok());
+                    ASSERT_TRUE(top_module->set_pin_group_name(pin_3->get_group().first, net_7_out->get_name()).is_ok());
                 }
 
                 VerilogWriter verilog_writer;
@@ -116,19 +122,31 @@ namespace hal
 
                     Gate* gate_0 = nl->create_gate(m_gl->get_gate_type_by_name("BUF"), "gate_0");
                     Net* global_in_0 = test_utils::connect_global_in(nl.get(), gate_0, "I", "global_in_0");
-                    top_module->set_pin_name(top_module->get_pin(global_in_0), global_in_0->get_name());
+                    auto res_1 = top_module->get_pin_by_net(global_in_0);
+                    ASSERT_TRUE(res_1.is_ok());
+                    ModulePin* pin_1 = res_1.get();
+                    ASSERT_TRUE(top_module->set_pin_name(pin_1, global_in_0->get_name()).is_ok());
 
                     Gate* gate_1 = nl->create_gate(m_gl->get_gate_type_by_name("BUF"), "gate_1");
                     Net* global_in_1 = test_utils::connect_global_in(nl.get(), gate_1, "I", "global_in_1");
-                    top_module->set_pin_name(top_module->get_pin(global_in_1), global_in_1->get_name());
+                    auto res_2 = top_module->get_pin_by_net(global_in_1);
+                    ASSERT_TRUE(res_2.is_ok());
+                    ModulePin* pin_2 = res_2.get();
+                    ASSERT_TRUE(top_module->set_pin_name(pin_2, global_in_1->get_name()).is_ok());
 
                     Gate* gate_2 = nl->create_gate(m_gl->get_gate_type_by_name("BUF"), "gate_2");
                     Net* global_out_0 = test_utils::connect_global_out(nl.get(), gate_2, "O", "global_out_0");
-                    top_module->set_pin_name(top_module->get_pin(global_out_0), global_out_0->get_name());
+                    auto res_3 = top_module->get_pin_by_net(global_out_0);
+                    ASSERT_TRUE(res_3.is_ok());
+                    ModulePin* pin_3 = res_3.get();
+                    ASSERT_TRUE(top_module->set_pin_name(pin_3, global_out_0->get_name()).is_ok());
 
                     Gate* gate_3 = nl->create_gate(m_gl->get_gate_type_by_name("BUF"), "gate_3");
                     Net* global_out_1 = test_utils::connect_global_out(nl.get(), gate_3, "O", "global_out_1");
-                    top_module->set_pin_name(top_module->get_pin(global_out_1), global_out_1->get_name());
+                    auto res_4 = top_module->get_pin_by_net(global_out_1);
+                    ASSERT_TRUE(res_4.is_ok());
+                    ModulePin* pin_4 = res_4.get();
+                    ASSERT_TRUE(top_module->set_pin_name(pin_4, global_out_1->get_name()).is_ok());
                 }
 
 
@@ -355,13 +373,22 @@ namespace hal
                 for (u32 i = 0; i < 4; i++)
                 {
                     Net* n = test_utils::connect_global_in(nl.get(), gate, "DATA_IN(" + std::to_string(i) + ")", "DATA_IN(" + std::to_string(i) + ")");
-                    top_module->set_pin_name(top_module->get_pin(n), "DATA_IN(" + std::to_string(i) + ")");
+                    auto res_1 = top_module->get_pin_by_net(n);
+                    ASSERT_TRUE(res_1.is_ok());
+                    ModulePin* pin_1 = res_1.get();
+                    ASSERT_TRUE(top_module->set_pin_name(pin_1, "DATA_IN(" + std::to_string(i) + ")").is_ok());
 
                     n = test_utils::connect_global_out(nl.get(), gate, "DATA_OUT(" + std::to_string(i) + ")", "DATA_OUT(" + std::to_string(i) + ")");
-                    top_module->set_pin_name(top_module->get_pin(n), "DATA_OUT(" + std::to_string(i) + ")");
+                    auto res_2 = top_module->get_pin_by_net(n);
+                    ASSERT_TRUE(res_2.is_ok());
+                    ModulePin* pin_2 = res_2.get();
+                    ASSERT_TRUE(top_module->set_pin_name(pin_2, "DATA_OUT(" + std::to_string(i) + ")").is_ok());
 
                     n = test_utils::connect_global_in(nl.get(), gate, "ADDR(" + std::to_string(i) + ")", "ADDR(" + std::to_string(i) + ")");
-                    top_module->set_pin_name(top_module->get_pin(n), "ADDR(" + std::to_string(i) + ")");
+                    auto res_3 = top_module->get_pin_by_net(n);
+                    ASSERT_TRUE(res_3.is_ok());
+                    ModulePin* pin_3 = res_3.get();
+                    ASSERT_TRUE(top_module->set_pin_name(pin_3, "ADDR(" + std::to_string(i) + ")").is_ok());
                 }
 
                 std::vector<Endpoint*> fan_in = gate->get_fan_in_endpoints();

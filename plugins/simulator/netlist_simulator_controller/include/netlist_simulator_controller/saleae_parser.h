@@ -1,33 +1,54 @@
 #pragma once
-#include "hal_core/defines.h"
 #include <map>
 #include <unordered_map>
 #include <functional>
+#include <string>
+#ifdef STANDALONE_PARSER
+#include "saleae_directory.h"
+#include "saleae_file.h"
+#else
+#include "netlist_simulator_controller/saleae_directory.h"
+#include "netlist_simulator_controller/saleae_file.h"
+#endif
 
 namespace hal
 {
     class SaleaeInputFile;
 
+#ifdef STANDALONE_PARSER
+    class Net
+    {
+      uint32_t mId;
+      std::string mName;
+    public:
+      Net(const std::string n, uint32_t i=0) : mId(i), mName(n) {;}
+      uint32_t get_id() const { return mId; }
+      std::string get_name() const { return mName; }
+    };
+#else
+    class Net;
+#endif
+  
     class SaleaeParser
     {
+        SaleaeDirectory mSaleaeDirectory;
         static std::string strim(std::string s);
-        struct WaveFormFile {
-            std::function<void(const void*obj, uint64_t, int)> callback;
-            std::string name;
+        struct DataFileHandle {
+            std::function<void(void*obj, uint64_t, int)> callback;
             SaleaeInputFile* file;
             int value;
-            const void* obj;
+            void* obj;
         };
-        std::multimap<uint64_t,WaveFormFile> mNextValueMap;
-        std::unordered_map<std::string,std::string> mSaleaeAbbrevMap;
-        std::string mCsvFilename;
+        std::multimap<uint64_t,DataFileHandle> mNextValueMap;
 
-        SaleaeInputFile* inputFileFactory(const std::string& abbrev) const;
     public:
-        static uint64_t sTimeScaleFactor;
-        u64 get_max_time() const;
         SaleaeParser(const std::string& filename);
-        bool registerCallback(std::string& name, std::function<void(const void*,uint64_t, int)> callback, const void* obj);
-        bool nextEvent();
+        uint64_t get_max_time() const;
+        bool register_callback(const Net* net, std::function<void(void*,uint64_t, int)> callback, void* obj);
+        bool next_event();
+        SaleaeDataBuffer get_waveform_by_net(const Net* net) const;
+
+        SaleaeDirectory get_directory() const { return mSaleaeDirectory; }
+        static uint64_t sTimeScaleFactor;
     };
 }

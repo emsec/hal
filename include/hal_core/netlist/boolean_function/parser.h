@@ -79,54 +79,112 @@ namespace hal
             // Constructors, Destructors, Operators
             ////////////////////////////////////////////////////////////////////////////
 
-            /// Constructor to initialize all Token members.
+            /**
+             * @brief Construct a new initialized Token.
+             * 
+             * 
+             * @param[in] _type - The type of the token.
+             * @param[in] variable - A variable name and bit-size in case the token type is `Variable`.
+             * @param[in] constant - A constant value in case the token type is `Constant`.
+             */
             Token(TokenType _type, std::tuple<std::string, u16> variable, std::vector<BooleanFunction::Value> constant);
 
-            /// Creates an "AND" token.
+            /**
+             * Creates an `AND` token.
+             * 
+             * @returns The `AND` token.
+             */
             static Token And();
-            /// Creates an "Not" token.
+
+            /**
+             * Creates an `NOT` token.
+             * 
+             * @returns The `NOT` token.
+             */
             static Token Not();
-            /// Creates an "Or" token.
+
+            /**
+             * Creates an `OR` token.
+             * 
+             * @returns The `OR` token.
+             */
             static Token Or();
-            /// Creates an "Xor" token.
+
+            /**
+             * Creates an `XOR` token.
+             * 
+             * @returns The `XOR` token.
+             */
             static Token Xor();
 
-            /// Creates a variable token.
+            /**
+             * Creates an `Variable` token.
+             * 
+             * @returns The `Variable` token.
+             */
             static Token Variable(std::string name, u16 size);
-            /// Creates a constant token.
+
+            /**
+             * Creates an `Constant` token.
+             * 
+             * @returns The `Constant` token.
+             */
             static Token Constant(std::vector<BooleanFunction::Value> value);
 
-            /// Creates and "BracketOpen" token.
+            /**
+             * Creates an `BracketOpen` token.
+             * 
+             * @returns The `BracketOpen` token.
+             */
             static Token BracketOpen();
-            /// Creates and "BrackentClose" token.
+
+            /**
+             * Creates an `BracketClose` token.
+             * 
+             * @returns The `BracketClose` token.
+             */
             static Token BracketClose();
 
             ////////////////////////////////////////////////////////////////////////////
             // Interface
             ////////////////////////////////////////////////////////////////////////////
 
-            /// Returns the precedence of a token.
-            ///
-            /// @param[in] type Parser type identifier.
-            /// @returns unsigned Predecene value in between 2..4
+            /** 
+             * Returns the precedence of a token.
+             *
+             * @param[in] type The parser type identifier.
+             * @returns An unsigned predecene value between 2 and 4.
+             */
             unsigned precedence(const ParserType& type) const;
 
-            /// Short-hand implementation to check for a token type.
-            ///
-            /// @param[in] type Token type.
-            /// @returns bool - `true` in case instance has the same token type, `false` otherwise.
+            /**
+             * Short-hand implementation to check for a token type.
+             * 
+             * @param[in] type Token type.
+             * @returns `true` in case instance has the same token type, `false` otherwise.
+             */
             bool is(TokenType type) const;
 
-            /// Human-readable debug string representation of the token.
+            /**
+             * Outputs a token to the given output stream.
+             * 
+             * @param[in] os - The output stream.
+             * @returns The output stream.
+             */
             friend std::ostream& operator<<(std::ostream& os, const Token& token);
-            /// Human-readable debug string representation of the token.
+
+            /**
+             * Convert the token to its string representation.
+             * 
+             * @returns The string representation of the token.
+             */
             std::string to_string() const;
         };
 
         /**
          * Parses a Boolean function from a string representation into its tokens.
          * 
-         * @param[in] expression Boolean function string.
+         * @param[in] expression - Boolean function string.
          * @returns The list of tokens on success, error message string otherwise.
          */
         std::variant<std::vector<Token>, std::string> parse_with_standard_grammar(const std::string& expression);
@@ -135,7 +193,7 @@ namespace hal
          * Parses a Boolean function from a string representation into its tokens
          * based on the data format defined for Liberty, see Liberty user guide.
          * 
-         * @param[in] expression Boolean function string.
+         * @param[in] expression - Boolean function string.
          * @returns The list of tokens on success, error message string otherwise.
          */
         std::variant<std::vector<Token>, std::string> parse_with_liberty_grammar(const std::string& expression);
@@ -149,10 +207,10 @@ namespace hal
          * well-known Shunting Yard algorithm, see wikipedia for an example:
          *  https://en.wikipedia.org/wiki/Shunting-yard_algorithm
          * 
-         * @param[in] tokens List of tokens in infix notation.
-         * @param[in] expression Expression string.
-         * @param[in] parser Parser identifier
-         * @returns[out] List of tokens in reverse-polish notation on success, error message string otherwise.
+         * @param[in] tokens - List of tokens in infix notation.
+         * @param[in] expression - Expression string.
+         * @param[in] parser - Parser identifier
+         * @returns List of tokens in reverse-polish notation on success, error message string otherwise.
          */
         std::variant<std::vector<Token>, std::string> reverse_polish_notation(std::vector<Token>&& tokens, const std::string& expression, const ParserType& parser);
 
@@ -160,8 +218,8 @@ namespace hal
          * Translates a list of tokens (in reverse-polish notation form) into a list
          * of BooleanFunction nodes that are then assembled into a Boolean function.
          * 
-         * @param[in] tokens List of tokens.
-         * @param[in] expression Expression string.
+         * @param[in] tokens - List of tokens.
+         * @param[in] expression - Expression string.
          * @returns The Boolean function on success, error message string otherwise.
          */
         std::variant<BooleanFunction, std::string> translate(std::vector<Token>&& tokens, const std::string& expression);

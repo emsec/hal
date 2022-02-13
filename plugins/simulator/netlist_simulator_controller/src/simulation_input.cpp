@@ -1,5 +1,4 @@
 #include "netlist_simulator_controller/simulation_input.h"
-#include "netlist_simulator_controller/saleae_parser.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
@@ -82,18 +81,6 @@ namespace hal {
         mNoClockUsed = true;
     }
 
-    void SimulationInput::set_saleae_input(const std::string &filename, u64 timescale)
-    {
-        mSaleaeInput     = filename;
-        mSaleaeTimeScale = timescale;
-    }
-
-    u64 SimulationInput::get_saleae_max_time() const
-    {
-        SaleaeParser sp(mSaleaeInput);
-        return sp.get_max_time();
-    }
-
     void SimulationInput::dump(std::string filename) const
     {
         FILE* of = stderr;
@@ -128,14 +115,6 @@ namespace hal {
         for (const Net* n: m_partial_nets)
         {
             fprintf(of, "  %4d <%s>\n", n->get_id(), n->get_name().c_str());
-        }
-        fprintf(of, "Events:_____________________________________\n");
-        for (const SimulationInputNetEvent& ev : mSimulationInputNetEvents)
-        {
-            fprintf(of, "  %8u:", (unsigned int) ev.get_simulation_duration());
-            for (auto it = ev.begin(); it != ev.end(); ++it)
-                fprintf(of, " <%u,%d>", it->first->get_id(), it->second);
-            fprintf(of, "\n");
         }
         if (filename.empty())
             fflush(of);

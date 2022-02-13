@@ -89,8 +89,9 @@ namespace hal
         u32 modId                    = mPortModel->getRepresentedModuleId();
         auto mod = gNetlist->get_module_by_id(modId);
         QList<TreeItem*> selectedPins;
-        std::pair<bool, std::string> sameGroup; bool onlyPins;
+        std::pair<bool, int> sameGroup; bool onlyPins;
         std::tie(selectedPins, sameGroup, onlyPins) = getSelectedPins();
+        int itemId                   = mPortModel->getIdOfItem(clickedItem);
         QMenu menu;
 
         //shared plaintext entries: NAME, DIRECTION, TYPE (shared with pins and groups
@@ -107,32 +108,40 @@ namespace hal
                 sl.append(QString::fromStdString(pingroup->get_name()));//check if size >= 2?
         if(!sl.isEmpty())
         {
-            menu.addAction("Add selection to existing pin group", [selectedPins, mod, sl](){
+            menu.addAction("Add selection to existing pin group", [this, selectedPins, mod, sl](){
                ComboboxDialog cpd("Pingroup", "Select Pingroup", sl);
                if(cpd.exec() == QDialog::Accepted && !cpd.textValue().isEmpty())
                {
                    std::vector<ModulePin*> pins;//must be fetched before creating new group
-                   auto pingroup = mod->get_pin_group(cpd.textValue().toStdString());
-                   for(auto item : selectedPins)
-                       pins.push_back(mod->get_pin(item->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString()));
-                   for(auto pin : pins)
-                       mod->assign_pin_to_group(pingroup, pin);
+//                   auto pingroup = mod->get_pin_group(cpd.textValue().toStdString());
+//                   for(auto item : selectedPins)
+//                       pins.push_back(mod->get_pin(item->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString()));
+//                   for(auto pin : pins)
+//                       mod->assign_pin_to_group(pingroup, pin);
                }
             });
         }
 
         if(type == ModulePinsTreeModel::itemType::portMultiBit)//group specific context
         {
-            menu.addAction("Change group name", [name, modId](){
+//            menu.addAction("Change group name", [name, modId](){
+//                InputDialog ipd("Change group name", "New group name", name);
+//                if(ipd.exec() == QDialog::Accepted)
+//                {
+//                    if(ipd.textValue().isEmpty())
+//                        return;
+//                    ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
+//                    act->setObject(UserActionObject(modId, UserActionObjectType::PinGroup));
+//                    act->setPinOrPingroupIdentifier(name);
+//                    act->exec();
+//            menu.addSection("Misc");
+            menu.addAction("Change group name", [name, modId, itemId](){
                 InputDialog ipd("Change group name", "New group name", name);
                 if(ipd.exec() == QDialog::Accepted)
                 {
-                    if(ipd.textValue().isEmpty())
-                        return;
-                    ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
-                    act->setObject(UserActionObject(modId, UserActionObjectType::PinGroup));
-                    act->setPinOrPingroupIdentifier(name);
-                    act->exec();
+                    auto groupResult = gNetlist->get_module_by_id(modId)->get_pin_group_by_id(itemId);
+                    if (groupResult.is_ok())
+                        gNetlist->get_module_by_id(modId)->set_pin_group_name(groupResult.get(), ipd.textValue().toStdString());
                 }
             });
             menu.addAction("Delete group", [this, name, modId](){
@@ -142,10 +151,12 @@ namespace hal
                 if(reply == QMessageBox::No)
                     return;
                 auto mod = gNetlist->get_module_by_id(modId);
-                mod->delete_pin_group(mod->get_pin_group(name.toStdString()));
+                //mod->delete_pin_group(mod->get_pin_group(name.toStdString()));
             });
+
             if(selectionModel()->selectedRows().size() > 1)
                 appendMultiSelectionEntries(menu, modId);
+
             menu.addSection("Python");
             menu.addAction(QIcon(":/icons/python"), "Extract pin group", [name, modId](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroup(modId, name));});
             menu.addAction(QIcon(":/icons/python"), "Extract pin group name", [name, modId](){QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroupName(modId, name));});
@@ -157,17 +168,20 @@ namespace hal
         //menu.addSection("Misc");
         if(n)//should never be nullptr, but you never know
         {
-            menu.addAction("Rename pin", [modId, name](){
+            menu.addAction("Rename pin", [modId, name, itemId](){
                 InputDialog ipd("Change pin name", "New pin name", name);
                 if(ipd.exec() == QDialog::Accepted)
                 {
                     if(ipd.textValue().isEmpty())
                         return;
-                    ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
-                    act->setObject(UserActionObject(modId, UserActionObjectType::Pin));
-                    act->setParentObject(UserActionObject(modId, UserActionObjectType::Module));
-                    act->setPinOrPingroupIdentifier(name);
-                    act->exec();
+//                    ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
+//                    act->setObject(UserActionObject(modId, UserActionObjectType::Pin));
+//                    act->setParentObject(UserActionObject(modId, UserActionObjectType::Module));
+//                    act->setPinOrPingroupIdentifier(name);
+//                    act->exec();
+                    auto pinResult = gNetlist->get_module_by_id(modId)->get_pin_by_id(itemId);
+                    if(pinResult.is_ok())
+                        gNetlist->get_module_by_id(modId)->set_pin_name(pinResult.get(), ipd.textValue().toStdString());
                 }
             });
             menu.addAction("Add net to current selection", [this, n](){
@@ -176,14 +190,18 @@ namespace hal
             });
 
         }
-        //can be both single(simple right-click, no real selection and multi-selection
+        //can be both single(simple right-click, no real selection and multi-selection)
         //remove pin or pins from group
-        if(sameGroup.first && mod->get_pin_group(sameGroup.second)->size() > 1)
+        if(sameGroup.first && mod->get_pin_group_by_id(sameGroup.second).get()->size() > 1)
         {
-            menu.addAction("Remove selection from group", [selectedPins, mod](){
+            menu.addAction("Remove selection from group", [this, selectedPins, mod](){
                 std::vector<ModulePin*> pins;//must be fetched before creating new group
                 for(auto item : selectedPins)
-                    pins.push_back(mod->get_pin(item->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString()));
+                {
+                    auto pinRes = mod->get_pin_by_id(mPortModel->getIdOfItem(item));
+                    if(pinRes.is_error()) return;
+                    pins.push_back(mod->get_pin_by_id(mPortModel->getIdOfItem(item)).get());
+                }
                 for(auto pin : pins)
                     mod->remove_pin_from_group(pin->get_group().first, pin);
             });
@@ -217,27 +235,32 @@ namespace hal
         std::tie(selectedPins, sameGroup, onlyPins) = getSelectedPins();
         if(selectedPins.size() > 1)
         {
-            menu.addAction("Add objects to new pin group", [selectedPins, modId](){
+            menu.addAction("Add objects to new pin group", [this, selectedPins, modId](){
                InputDialog ipd("Pingroup name", "New pingroup name", "ExampleName");
                if(ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
                {
                    std::vector<ModulePin*> pins;//must be fetched before creating new group
                    auto mod = gNetlist->get_module_by_id(modId);
                    for(auto item : selectedPins)
-                       pins.push_back(mod->get_pin(item->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString()));
+                   {
+                       auto pinRes = mod->get_pin_by_id(mPortModel->getIdOfItem(item));
+                       if(pinRes.is_error())
+                           return;
+                       pins.push_back(pinRes.get());
+                   }
                    mod->create_pin_group(ipd.textValue().toStdString(), pins);
                }
             });
         }
     }
 
-    std::tuple<QList<TreeItem *>, std::pair<bool, std::string>, bool> ModulePinsTree::getSelectedPins()
+    std::tuple<QList<TreeItem *>, std::pair<bool, int>, bool> ModulePinsTree::getSelectedPins()
     {
         QList<TreeItem*> selectedPins;//ordered
         QSet<TreeItem*> alreadyProcessedPins;//only for performance purposes
         bool sameGroup = true;
         bool onlyPins = true;
-        std::string groupName = "";
+        int groupId = -1;
         for(auto index : selectionModel()->selectedRows())
         {
             TreeItem* item = mPortModel->getItemFromIndex(index);
@@ -267,20 +290,23 @@ namespace hal
         if(!selectedPins.isEmpty())
         {
             auto mod = gNetlist->get_module_by_id(mModuleID);
-            auto firstPin = mod->get_pin(selectedPins.at(0)->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString());
-            groupName = firstPin->get_group().first->get_name();
+            //auto firstPin = mod->get_pin(selectedPins.at(0)->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString());
+            auto firstPinRes = mod->get_pin_by_id(mPortModel->getIdOfItem(selectedPins.front()));
+            auto firstPin = firstPinRes.get();
+            groupId = firstPin->get_group().first->get_id();
             for(auto pinTreeItem : selectedPins)
             {
-                auto pin = mod->get_pin(pinTreeItem->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString());
-                if(groupName != pin->get_group().first->get_name())
+                //auto pin = mod->get_pin(pinTreeItem->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString());
+                auto pin = mod->get_pin_by_id(mPortModel->getIdOfItem(pinTreeItem)).get();
+                if(groupId != (int)pin->get_group().first->get_id())
                 {
                     sameGroup = false;
                     break;
                 }
             }
-            groupName = sameGroup ? groupName : "";
+            groupId = sameGroup ? groupId : -1;
         }
-        return std::make_tuple(selectedPins, std::make_pair(sameGroup, groupName), onlyPins);
+        return std::make_tuple(selectedPins, std::make_pair(sameGroup, groupId), onlyPins);
     }
 
 }    // namespace hal

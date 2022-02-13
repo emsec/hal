@@ -6,7 +6,7 @@ def print_usage():
     print("Doxygen Comment Checker")
     print("  (custom script, may contain errors)")
     print("")
-    print("  Usage: python check_docu.py inputpath1 [inputpath2 ...] [-i/-ignore ignorepath1 [ignorepath2]]")
+    print("  Usage: python check_documentation.py inputpath1 [inputpath2 ...] [-i/-ignore ignorepath1 [ignorepath2]]")
     print("")
     print("  You can always provide directories or single files.")
     print("  All files/directories will be ignored which start with any of the ignorepaths.")

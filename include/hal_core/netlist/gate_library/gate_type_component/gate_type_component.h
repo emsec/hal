@@ -213,5 +213,5 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<GateTypeComponent::ComponentType>::data;
+    std::map<GateTypeComponent::ComponentType, std::string> EnumStrings<GateTypeComponent::ComponentType>::data;
 }    // namespace hal

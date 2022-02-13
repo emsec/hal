@@ -99,10 +99,10 @@ namespace hal
          * utility function to get all selected pins (as treeitems).
          *
          * @return The selected pins, first boolean = true if they belonged to the same group
-         * (and if yes it returns the group name, otherwise empty string),
+         * (and if yes it returns the group id, otherwise -1),
          * second boolean = true if only pins (and no groups) were selected.
          */
-        std::tuple<QList<TreeItem*>, std::pair<bool, std::string>, bool> getSelectedPins();
+        std::tuple<QList<TreeItem*>, std::pair<bool, int>, bool> getSelectedPins();
 
     };
 }

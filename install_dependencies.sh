@@ -56,7 +56,7 @@ elif [[ "$platform" == 'linux' ]]; then
         sudo apt-get update && sudo apt-get install -y build-essential lsb-release git cmake pkgconf qt5-default libboost-all-dev \
         libpython3-dev ccache autoconf autotools-dev libsodium-dev libigraph0-dev \
         libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx doxygen python3-sphinx-rtd-theme python3-jedi python3-pip pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev\
-        graphviz libomp-dev libsuitesparse-dev # For documentation
+        graphviz libomp-dev libsuitesparse-dev libreadline-dev # For documentation
         sudo pip3 install -r requirements.txt
     elif [[ "$distribution" == "Arch" ]]; then
         yay -S --needed base-devel lsb-release git cmake boost-libs pkgconf \

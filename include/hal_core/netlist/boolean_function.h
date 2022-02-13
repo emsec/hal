@@ -25,6 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/utilities/enums.h"
+#include "hal_core/utilities/result.h"
 #include "z3++.h"
 
 #include <algorithm>
@@ -70,10 +71,10 @@ namespace hal
          */
         enum Value
         {
-            ZERO = 0, /**< Represents a logical 0. */
-            ONE  = 1, /**< Represents a logical 1 */
-            Z,        /**< Represents a high-impedance value. */
-            X         /**< Represents an undefined value. */
+            ZERO = 0,  /**< Represents a logical 0. */
+            ONE  = 1,  /**< Represents a logical 1 */
+            X    = -1, /**< Represents an undefined value. */
+            Z    = -2  /**< Represents a high-impedance value. */
         };
 
         /**
@@ -83,6 +84,15 @@ namespace hal
          * @returns A string describing the value.
          */
         static std::string to_string(Value value);
+
+        /**
+         * Convert the given bit-vector to its string representation in the given base.
+         * 
+         * @param[in] value - The value as a bit-vector.
+         * @param[in] base - The base that the values should be converted to. Valid values are 2 (default), 8, 10, and 16.
+         * @returns A string representing the values in the given base or an error.
+         */
+        static Result<std::string> to_string(const std::vector<BooleanFunction::Value>& value, u8 base = 2);
 
         /**
          * Output stream operator that forwards to_string of a value.
@@ -196,6 +206,27 @@ namespace hal
          * @returns The joined Boolean function on success, a string error message otherwise.
          */
         static std::variant<BooleanFunction, std::string> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Slices a Boolean function based on a start and end index (inclusive) starting from 0.
+         * 
+         * @param[in] p0 - Boolean function to slice.
+         * @param[in] p1 - Boolean function start index at which p0 is sliced.
+         * @param[in] p2 - Boolean function end index at which p0 is sliced (inclusive).
+         * @param[in] size - Size of the sliced Boolean function, i.e. p0 + p1 + 1.
+         * @returns The sliced Boolean function on success, a string error message otherwise.
+         */
+        static std::variant<BooleanFunction, std::string> Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
+
+        /**
+         * Concatenates two Boolean functions.
+         * 
+         * @param[in] p0 - Boolean function (higher-bit part)
+         * @param[in] p1 - Boolean function (lower-bit part)
+         * @param[in] size - Size of concatenated Boolean function.
+         * @returns The concatenated Boolean function on success, a string error message otherwise.
+         */
+        static std::variant<BooleanFunction, std::string> Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
          * The ostream operator that forwards to_string of a boolean function.
@@ -325,7 +356,7 @@ namespace hal
         /**
          * Checks whether the top-level node of the Boolean function is of a specific type.
          * 
-         * @param type - The type to check for.
+         * @param[in] type - The type to check for.
          * @returns `true` if the node is of the given type, `false` otherwise.
          */
         bool is(u16 type) const;
@@ -347,10 +378,25 @@ namespace hal
         /**
          * Checks whether the Boolean function is of type `Constant` and holds a specific value.
          * 
-         * @param value - The value to check for.
+         * @param[in] value - The value to check for.
          * @returns `true` if the Boolean function is of type `Constant` and holds the given value, `false` otherwise.
          */
         bool has_constant_value(u64 value) const;
+
+        /** 
+         * Checks whether the tpo-level node of the Boolean function is of type `Index`. 
+         * 
+         * @returns `true` if the top-level node of the Boolean function is of type `Index`, `false` otherwise.
+         */
+        bool is_index() const;
+
+        /**
+         * Checks whether the Boolean function is of type `Index` and holds a specific value.
+         * 
+         * @param[in] value - The value to check for.
+         * @returns `true` if the Boolean function is of type `Index` and holds the given value, `false` otherwise.
+         */
+        bool has_index_value(u16 index) const;
 
         /**
          * Returns the top-level node of the Boolean function.
@@ -524,12 +570,6 @@ namespace hal
         /// Computes the coverage value of each node in the Boolean function.
         std::vector<u32> compute_node_coverage() const;
 
-        /// Implements the Quine-McCluskey algorithm to simplify Boolean functions.
-        ///
-        /// @param[in] function - Boolean function to simplify.
-        /// @returns Simplified boolean function on success, error message string otherwise.
-        static std::variant<BooleanFunction, std::string> quine_mccluskey(const BooleanFunction& function);
-
         ////////////////////////////////////////////////////////////////////////
         // Member
         ////////////////////////////////////////////////////////////////////////
@@ -539,7 +579,7 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<BooleanFunction::Value>::data;
+    std::map<BooleanFunction::Value, std::string> EnumStrings<BooleanFunction::Value>::data;
 
     /**
      * Node refers to an abstract syntax tree node of a Boolean function. A node

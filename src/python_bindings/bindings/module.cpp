@@ -382,10 +382,44 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_module.def("assign_pin", &Module::assign_pin, py::arg("name"), py::arg("net"), py::arg("type") = PinType::none, py::arg("create_group") = true, R"(
+        py_module.def("get_unique_pin_id", &Module::get_unique_pin_id, R"(
+            Get a spare pin ID.
+            The value of 0 is reserved and represents an invalid ID.
+
+            :returns: The pin ID.
+            :rtype: int
+        )");
+
+        py_module.def("get_unique_pin_group_id", &Module::get_unique_pin_group_id, R"(
+            Get a spare pin group ID.
+            The value of 0 is reserved and represents an invalid ID.
+
+            :returns: The pin group ID.
+            :rtype: int
+        )");
+
+        py_module.def(
+            "create_pin",
+            [](Module& self, const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true) -> ModulePin* {
+                auto res = self.create_pin(name, net, type, create_group);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("name"),
+            py::arg("net"),
+            py::arg("type")         = PinType::none,
+            py::arg("create_group") = true,
+            R"(
             Manually assign a module pin to a net.
             Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-            Hence, update the module nets beforehand using hal_py.Module.update_net.
+            Hence, make sure to update the module nets beforehand using hal_py.Module.update_net.
             If create_group is set to False, the pin will not be added to a pin group.
             
             WARNING: can only be used when automatic net checks have been disabled using hal_py.Netlist.enable_automatic_net_checks.
@@ -399,13 +433,13 @@ namespace hal
         )");
 
         py_module.def_property_readonly("pins", &Module::get_pins, R"(
-            All pins of the module.
+            The (ordered) pins of the module.
 
             :type: list[hal_py.ModulePin]
         )");
 
         py_module.def("get_pins", &Module::get_pins, py::arg("filter") = nullptr, R"(
-            Get all pins of the module.
+            Get the (ordered) pins of the module.
             The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
 
             :param lambda filter: Filter function to be evaluated on each pin.
@@ -428,15 +462,45 @@ namespace hal
             :rtype: list[hal_py.ModulePinGroup]
         )");
 
-        py_module.def("get_pin", py::overload_cast<const std::string&>(&Module::get_pin, py::const_), py::arg("name"), R"(
-            Get the pin specified by the given name.
+        py_module.def(
+            "get_pin_by_id",
+            [](const Module& self, const u32 id) -> ModulePin* {
+                auto res = self.get_pin_by_id(id);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("id"),
+            R"(
+            Get the pin corresponding to the given ID.
 
-            :param str name: The name of the pin.
+            :param int id: The ID of the pin.
             :returns: The pin on success, None otherwise.
             :rtype: hal_py.ModulePin or None
         )");
 
-        py_module.def("get_pin", py::overload_cast<Net*>(&Module::get_pin, py::const_), py::arg("net"), R"(
+        py_module.def(
+            "get_pin_by_net",
+            [](const Module& self, Net* net) -> ModulePin* {
+                auto res = self.get_pin_by_net(net);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("net"),
+            R"(
             Get the pin that passes through the specified net.
 
             :param hal_py.Net net: The net.
@@ -444,15 +508,46 @@ namespace hal
             :rtype: hal_py.ModulePin or None
         )");
 
-        py_module.def("get_pin_group", &Module::get_pin_group, py::arg("name"), R"(
-            Get the pin group specified by the given name.
+        py_module.def(
+            "get_pin_group_by_id",
+            [](const Module& self, const u32 id) -> PinGroup<ModulePin>* {
+                auto res = self.get_pin_group_by_id(id);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("id"),
+            R"(
+            Get the pin group corresponding to the given ID.
 
-            :param str name: The name of the pin group.
+            :param int id: The ID of the pin group.
             :returns: The pin group on success, None otherwise.
             :rtype: hal_py.ModulePinGroup or None
         )");
 
-        py_module.def("set_pin_name", &Module::set_pin_name, py::arg("pin"), py::arg("new_name"), R"(
+        py_module.def(
+            "set_pin_name",
+            [](Module& self, ModulePin* pin, const std::string& new_name) {
+                auto res = self.set_pin_name(pin, new_name);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin"),
+            py::arg("new_name"),
+            R"(
             Set the name of the given pin.
 
             :param hal_py.ModulePin pin: The pin.
@@ -461,7 +556,23 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def("set_pin_group_name", &Module::set_pin_group_name, py::arg("pin_group"), py::arg("new_name"), R"(
+        py_module.def(
+            "set_pin_group_name",
+            [](Module& self, PinGroup<ModulePin>* pin_group, const std::string& new_name) {
+                auto res = self.set_pin_group_name(pin_group, new_name);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin_group"),
+            py::arg("new_name"),
+            R"(
             Set the name of the given pin group.
 
             :param hal_py.ModulePinGroup pin_group: The pin group.
@@ -470,10 +581,24 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def("set_pin_type", &Module::set_pin_type, py::arg("pin"), py::arg("new_type"), R"(
+        py_module.def(
+            "set_pin_type",
+            [](Module& self, ModulePin* pin, PinType new_type) {
+                auto res = self.set_pin_type(pin, new_type);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin"),
+            py::arg("new_type"),
+            R"(
             Set the type of the given pin.
-            The pin type can only be changed this way if the pin is in a pin group of size 1.
-            The new type will also be assigned to the pin group.
 
             :param hal_py.ModulePin pin: The pin.
             :param hal_py.PinType new_type: The type to be assigned to the pin.
@@ -481,9 +606,24 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def("set_pin_group_type", &Module::set_pin_group_type, py::arg("pin_group"), py::arg("new_type"), R"(
+        py_module.def(
+            "set_pin_group_type",
+            [](Module& self, PinGroup<ModulePin>* pin_group, PinType new_type) {
+                auto res = self.set_pin_group_type(pin_group, new_type);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin_group"),
+            py::arg("new_type"),
+            R"(
             Set the type of the given pin group.
-            The new type will also be assigned to all pins of the group.
 
             :param hal_py.ModulePinGroup pin_group: The pin group.
             :param hal_py.PinType new_type: The type to be assigned to the pin group.
@@ -491,17 +631,90 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def("create_pin_group", &Module::create_pin_group, py::arg("name"), py::arg("pins"), py::arg("ascending") = false, py::arg("start_index") = 0, R"(
+        py_module.def(
+            "set_pin_group_direction",
+            [](Module& self, PinGroup<ModulePin>* pin_group, PinDirection new_direction) {
+                auto res = self.set_pin_group_direction(pin_group, new_direction);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin_group"),
+            py::arg("new_direction"),
+            R"(
+            Set the direction of the given pin group.
+
+            :param hal_py.ModulePinGroup pin_group: The pin group.
+            :param hal_py.PinDirection new_direction: The direction to be assigned to the pin group.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
+
+        py_module.def(
+            "create_pin_group",
+            [](Module& self,
+               const std::string& name,
+               const std::vector<ModulePin*> pins = {},
+               PinDirection direction             = PinDirection::none,
+               PinType type                       = PinType::none,
+               bool ascending                     = false,
+               u32 start_index                    = 0,
+               bool delete_empty_groups           = true) -> PinGroup<ModulePin>* {
+                auto res = self.create_pin_group(name, pins, direction, type, ascending, start_index, delete_empty_groups);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("name"),
+            py::arg("pins"),
+            py::arg("direction")           = PinDirection::none,
+            py::arg("type")                = PinType::none,
+            py::arg("ascending")           = false,
+            py::arg("start_index")         = 0,
+            py::arg("delete_empty_groups") = true,
+            R"(
             Create a new pin group with the given name.
             All pins to be added to the pin group must have the same direction and type.
 
             :param str name: The name of the pin group.
-            :param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group.
-            :returns: The pin group on success, a nullptr otherwise.
-            :rtype: hal_py.ModulePinGroup
+            :param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.
+            :param hal_py.PinDirection direction: The direction of the pin group, if any. Defaults to hal_py.PinDirection.none.
+            :param hal_py.PinType type: The type of the pin group, if any. Defaults to hal_py.PinType.none.
+            :param bool ascending: Set True for ascending pin order (from 0 to n-1), False otherwise (from n-1 to 0). Defaults to False.
+            :param int start_index: The start index of the pin group. Defaults to 0.
+            :param bool delete_empty_groups: Set True to delete groups that are empty after the pins have been assigned to the new group, False to keep empty groups. Defaults to True.
+            :returns: The pin group on success, None otherwise.
+            :rtype: hal_py.ModulePinGroup or None
         )");
 
-        py_module.def("delete_pin_group", &Module::delete_pin_group, py::arg("pin_group"), R"(
+        py_module.def(
+            "delete_pin_group",
+            [](Module& self, PinGroup<ModulePin>* pin_group) {
+                auto res = self.delete_pin_group(pin_group);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin_group"),
+            R"(
             Delete the given pin group.
 
             :param hal_py.ModulePinGroup pin_group: The pin group to be deleted.
@@ -509,17 +722,52 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def("assign_pin_to_group", &Module::assign_pin_to_group, py::arg("pin_group"), py::arg("pin"), R"(
+        py_module.def(
+            "assign_pin_to_group",
+            [](Module& self, PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true) {
+                auto res = self.assign_pin_to_group(pin_group, pin, delete_empty_groups);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin_group"),
+            py::arg("pin"),
+            py::arg("delete_empty_groups") = true,
+            R"(
             Assign a pin to a pin group.
             Only pins with matching direction and type can be assigned to an existing pin group.
 
             :param hal_py.ModulePinGroup pin_group: The new pin group.
             :param hal_py.ModulePin pin: The pin to be added.
+            :param bool delete_empty_groups: Set True to delete groups that are empty after the pin has been assigned to the new group, False to keep empty groups. Defaults to True.
             :returns: True on success, False otherwise.
             :rtype: bool
         )");
 
-        py_module.def("move_pin_within_group", &Module::move_pin_within_group, py::arg("pin_group"), py::arg("pin"), py::arg("new_index"), R"(
+        py_module.def(
+            "move_pin_within_group",
+            [](Module& self, PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index) {
+                auto res = self.move_pin_within_group(pin_group, pin, new_index);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin_group"),
+            py::arg("pin"),
+            py::arg("new_index"),
+            R"(
             Move a pin to another index within the given pin group.
             The indices of some other pins within the group will be incremented or decremented to make room for the moved pin to be inserted at the desired position.
 
@@ -530,12 +778,30 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def("remove_pin_from_group", &Module::remove_pin_from_group, py::arg("pin_group"), py::arg("pin"), R"(
+        py_module.def(
+            "remove_pin_from_group",
+            [](Module& self, PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true) {
+                auto res = self.remove_pin_from_group(pin_group, pin, delete_empty_groups);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin_group"),
+            py::arg("pin"),
+            py::arg("delete_empty_groups") = true,
+            R"(
             Remove a pin from a pin group.
             The pin will be moved to a new group that goes by the pin's name.
 
             :param hal_py.ModulePinGroup pin_group: The old pin group.
             :param hal_py.ModulePin pin: The pin to be removed.
+            :param bool delete_empty_groups: Set True to delete the group of it is empty after the pin has been removed, False to keep the empty group. Defaults to True.
             :returns: True on success, False otherwise.
             :rtype: bool
         )");

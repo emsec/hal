@@ -93,6 +93,8 @@ namespace hal
         void handleSelectGates();
         void handleClockSet();
         void handleEngineSelected(bool checked);
+        void handleSetEngineProperties();
+        void handleShowEngineOutput();
 
         void handleSelectionChanged(void* sender);
         void handleRefreshNetNames();

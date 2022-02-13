@@ -116,8 +116,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 #####################################################################
 #####   Find depending packages (See cmake/detect_dependencies.cmake)
 #####################################################################
-
 include(detect_dependencies)
+
 
 ################################
 #####   Manage Compiler Flags

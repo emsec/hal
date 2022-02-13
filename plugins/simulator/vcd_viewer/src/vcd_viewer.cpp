@@ -1,6 +1,7 @@
 #include "vcd_viewer/vcd_viewer.h"
 
 #include "vcd_viewer/wave_widget.h"
+#include "netlist_simulator_controller/simulation_process.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_engine.h"
@@ -28,6 +29,8 @@
 #include <QStatusBar>
 #include <QAction>
 #include <QMenu>
+#include <QApplication>
+#include <QScreen>
 #include <QVBoxLayout>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "netlist_simulator/plugin_netlist_simulator.h"
@@ -240,6 +243,15 @@ namespace hal
              engineMenu->addAction(act);
              engineGroup->addAction(act);
          }
+
+         act = new QAction("Set engine properties");
+         connect(act, &QAction::triggered, this, &VcdViewer::handleSetEngineProperties);
+         settingMenu->addAction(act);
+
+         act = new QAction("Show output of engine");
+         connect(act, &QAction::triggered, this, &VcdViewer::handleShowEngineOutput);
+         settingMenu->addAction(act);
+
          settingMenu->addSeparator();
          act = new QAction("Refresh net names", settingMenu);
          connect(act, &QAction::triggered, this, &VcdViewer::handleRefreshNetNames);
@@ -258,6 +270,29 @@ namespace hal
          settingMenu->addAction(act);
 
          settingMenu->exec(mapToGlobal(QPoint(10,3)));
+    }
+
+    void VcdViewer::handleSetEngineProperties()
+    {
+        if (!mCurrentWaveWidget) return;
+        SimulationEngine* eng = mCurrentWaveWidget->controller()->get_simulation_engine();
+        if (!eng) return;
+
+    }
+
+    void VcdViewer::handleShowEngineOutput()
+    {
+        if (!mCurrentWaveWidget) return;
+        QString fname = QDir(QString::fromStdString(mCurrentWaveWidget->controller()->get_working_directory())).absoluteFilePath(SimulationProcessLog::sLogFilename);
+        QFile log(fname);
+        if (!log.open(QIODevice::ReadOnly)) return;
+        QTextEdit* browser = new QTextEdit;
+        browser->setReadOnly(true);
+        browser->setHtml(QString::fromUtf8(log.readAll()));
+        QSize scrSize = QGuiApplication::primaryScreen()->size();
+        browser->setGeometry(scrSize.width()/10,scrSize.height()/10,scrSize.width()*4/5,scrSize.height()*4/5);
+        browser->setWindowTitle("Simulation engine log <" + fname + ">");
+        browser->show();
     }
 
     void VcdViewer::handleEngineSelected(bool checked)
@@ -328,9 +363,9 @@ namespace hal
                 QFileDialog::getOpenFileName(this, "Load input wave file", ".", ("VCD files (*.vcd);; CSV files (*.csv)") );
         if (filename.isEmpty()) return;
         if (filename.toLower().endsWith(".vcd"))
-            mCurrentWaveWidget->controller()->parse_vcd(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
+            mCurrentWaveWidget->controller()->import_vcd(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
         else if (filename.toLower().endsWith(".csv"))
-            mCurrentWaveWidget->controller()->parse_csv(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
+            mCurrentWaveWidget->controller()->import_csv(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
         else
             log_warning(mCurrentWaveWidget->controller()->get_name(), "Unknown extension, cannot parse file '{}'.", filename.toStdString());
     }
@@ -356,6 +391,7 @@ namespace hal
     {
         if (!mCurrentWaveWidget) return;
         mCurrentWaveWidget->addResults();
+        mAddResultWaveAction->setEnabled(mCurrentWaveWidget->canImportWires());
     }
 
     void VcdViewer::handleClockSet()

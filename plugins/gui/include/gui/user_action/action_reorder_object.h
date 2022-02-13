@@ -47,15 +47,6 @@ namespace hal
             ActionReorderObject(const int newIndex = -1);
 
             /**
-             * Constructor that can be used when the object's type is a pin
-             * or pingroup.
-             *
-             * @param newIndex - The new index.
-             * @param pinOrPingroupId - The current name of the pin/pingroup.
-             */
-            ActionReorderObject(const int newIndex, QString pinOrPingroupId);
-
-            /**
              * Overwritten user_action function.
              *
              * @return True on success, False otherwise.
@@ -68,17 +59,8 @@ namespace hal
              */
             QString tagname() const override;
 
-            /**
-             * Sets the pin/pingroup identifier to the given name. It is also
-             * possible to use the special constructor.
-             *
-             * @param currName - The current name of the pin/pingroup.
-             */
-            void setPinOrPingroupIdentifier(QString currName);
-
         private:
             int mNewIndex;
-            QString mPinOrPingroupIdentifier;
     };
 
     /**

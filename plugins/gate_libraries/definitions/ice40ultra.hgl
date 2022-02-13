@@ -268,7 +268,7 @@
 				"data_identifier": "INIT",
 				"state": "IQ",
 				"neg_state": "IQN",
-				"next_state": "((E & D) | (!E & IQ)) & !R",
+				"next_state": "((!R & E & D) | (!R & !E & IQ))",
 				"clocked_on": "C"
 			},
 			"pins": [
@@ -667,7 +667,7 @@
 				"data_identifier": "INIT",
 				"state": "IQ",
 				"neg_state": "IQN",
-				"next_state": "((E & D) | (!E & IQ)) & !R",
+				"next_state": "((!R & E & D) | (!R & !E & IQ))",
 				"clocked_on": "!C"
 			},
 			"pins": [

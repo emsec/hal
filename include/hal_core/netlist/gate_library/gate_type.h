@@ -61,7 +61,7 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<GateTypeProperty>::data;
+    std::map<GateTypeProperty,std::string> EnumStrings<GateTypeProperty>::data;
 
     /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
@@ -362,6 +362,15 @@ namespace hal
          * @returns The pin.
          */
         std::string get_pin_of_group_at_index(const std::string& group, const u32 index) const;
+
+        /**
+         * Get the index of the given pin within the specified group.
+         * 
+         * @param[in] group - The name of the pin group. 
+         * @param[in] pin - The name of the pin.
+         * @return u32 
+         */
+        i32 get_index_in_group_of_pin(const std::string& group, const std::string& pin) const;
 
         /**
          * Add a Boolean function with the specified name to the gate type.

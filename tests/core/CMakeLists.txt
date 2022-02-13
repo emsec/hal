@@ -18,12 +18,16 @@ add_executable(runTest-utils
 add_executable(runTest-plugin_manager
         plugin_manager.cpp)
 
+        add_executable(runTest-result
+        result.cpp)
+
 target_link_libraries(runTest-callback_hook   pthread  gtest hal::core hal::netlist test_utils)
 target_link_libraries(runTest-log   pthread  gtest hal::core hal::netlist test_utils)
 target_link_libraries(runTest-program_arguments   pthread  gtest hal::core hal::netlist test_utils)
 target_link_libraries(runTest-program_options   pthread  gtest hal::core hal::netlist test_utils)
 target_link_libraries(runTest-utils pthread   gtest hal::core hal::netlist test_utils)
 target_link_libraries(runTest-plugin_manager   pthread  gtest hal::core hal::netlist test_utils)
+target_link_libraries(runTest-result pthread   gtest hal::core hal::netlist test_utils)
 
 
 add_test(runTest-callback_hook_test ${CMAKE_BINARY_DIR}/bin/runTest-callback_hook --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
@@ -32,6 +36,7 @@ add_test(runTest-program_arguments_test ${CMAKE_BINARY_DIR}/bin/runTest-program_
 add_test(runTest-program_options_test ${CMAKE_BINARY_DIR}/bin/runTest-program_options --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-utils_test ${CMAKE_BINARY_DIR}/bin/runTest-utils --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-plugin_manager_test ${CMAKE_BINARY_DIR}/bin/runTest-plugin_manager --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
+add_test(runTest-result_test ${CMAKE_BINARY_DIR}/bin/runTest-result --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 
 # Test plugin:
 foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
@@ -65,4 +70,5 @@ add_sanitizers(runTest-program_arguments)
 add_sanitizers(runTest-program_options)
 add_sanitizers(runTest-utils)
 add_sanitizers(runTest-plugin_manager)
+add_sanitizers(runTest-result)
 endif()

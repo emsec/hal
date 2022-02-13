@@ -1056,7 +1056,7 @@ namespace hal
             const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
             ASSERT_NE(init_component, nullptr);
 
-            BooleanFunction lut_bf = std::get<BooleanFunction>(BooleanFunction::from_string("(I0 & I1) & I2"));
+            BooleanFunction lut_bf = std::get<BooleanFunction>(BooleanFunction::from_string("(I2 & (I0 & I1))"));
             lut_gate->add_boolean_function("O", lut_bf);
             EXPECT_EQ(lut_gate->get_boolean_functions().size(), 1);
             EXPECT_EQ(lut_gate->get_boolean_function("O"), lut_bf);

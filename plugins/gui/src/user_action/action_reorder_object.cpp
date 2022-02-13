@@ -20,37 +20,33 @@ namespace hal
     {
     }
 
-    ActionReorderObject::ActionReorderObject(const int newIndex, QString pinOrPingroupId)
-        : mNewIndex(newIndex), mPinOrPingroupIdentifier(pinOrPingroupId)
-    {
-
-    }
-
     bool ActionReorderObject::exec()
     {
         switch (mObject.type())
         {
             case UserActionObjectType::Pin:
             {
-                auto mod = gNetlist->get_module_by_id(mObject.id());
-                auto pin = mod ? mod->get_pin(mPinOrPingroupIdentifier.toStdString()) : nullptr;
-                auto pinGroup = pin ? pin->get_group().first : nullptr;
+                auto mod = gNetlist->get_module_by_id(mParentObject.id());
+                if(!mod) return false;
+                auto pinResult = mod->get_pin_by_id(mObject.id());
+                if(pinResult.is_error()) return false;
+                auto pinGroup = pinResult.get()->get_group().first;
                 if(pinGroup && pinGroup->size() > 1)
                 {
-                    auto oldIndex = pin->get_group().second;
-                    bool ret = mod->move_pin_within_group(pinGroup, pin, mNewIndex);
-                    if(!ret)
+                    auto oldIndex = pinResult.get()->get_group().second;
+                    auto result = mod->move_pin_within_group(pinGroup, pinResult.get(), mNewIndex);
+                    if(result.is_error())
                         return false;
 
                     ActionReorderObject* undo = new ActionReorderObject(oldIndex);
                     undo->setObject(mObject);
-                    undo->setPinOrPingroupIdentifier(mPinOrPingroupIdentifier);
+                    undo->setParentObject(mParentObject);
+                    //undo->setPinOrPingroupIdentifier(mPinOrPingroupIdentifier);
                     mUndoAction = undo;
                 }
                 else
                     return false;
-                break;
-            }
+            } break;
             default:
                 return false;
         }
@@ -61,11 +57,6 @@ namespace hal
     QString ActionReorderObject::tagname() const
     {
         return ActionReorderObjectFactory::sFactory->tagname();
-    }
-
-    void ActionReorderObject::setPinOrPingroupIdentifier(QString currName)
-    {
-        mPinOrPingroupIdentifier = currName;
     }
 
 }

@@ -1,17 +1,20 @@
 #include "netlist_simulator_controller/vcd_serializer.h"
+#include "netlist_simulator_controller/saleae_writer.h"
+#include "netlist_simulator_controller/saleae_parser.h"
+#include "netlist_simulator_controller/saleae_file.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "hal_core/utilities/log.h"
-#include <QFile>
+#include "hal_core/netlist/net.h"
 #include <QRegularExpression>
 #include <QDebug>
 #include <QDataStream>
 #include <QFileInfo>
 #include <QDir>
+#include <math.h>
 
 namespace hal {
 
-const WaveData* mData;
-QMap<int,int>::const_iterator mIterator;
+    const int maxErrorMessages = 3;
 
     VcdSerializerElement::VcdSerializerElement(int inx, const WaveData* wd)
         : mIndex(inx), mData(wd)
@@ -66,13 +69,15 @@ QMap<int,int>::const_iterator mIterator;
 
 //----------------------------------
     VcdSerializer::VcdSerializer(QObject *parent)
-        : QObject(parent)
+        : QObject(parent), mSaleaeWriter(nullptr)
     {;}
 
-    VcdSerializer::~VcdSerializer()
+
+    void VcdSerializer::deleteFiles()
     {
-        for (WaveData* wd : mWaves.values())
-            delete wd;
+        mSaleaeFiles.clear();
+        mAbbrevByName.clear();
+        memset(mErrorCount, 0, sizeof(mErrorCount));
     }
 
     bool VcdSerializer::serialize(const QString& filename, const QList<const WaveData*>& waves) const
@@ -119,7 +124,7 @@ QMap<int,int>::const_iterator mIterator;
         return true;
     }
 
-    bool VcdSerializer::parseDataNonDecimal(const QByteArray &line, int base)
+    bool VcdSerializer::parseVcdDataNonDecimal(const QByteArray &line, int base)
     {
         QList<QByteArray> sl = line.split(' ');
         if (sl.size()!=2) return false;
@@ -127,7 +132,7 @@ QMap<int,int>::const_iterator mIterator;
         int val = sl.at(0).toUInt(&ok,base);
         if (!ok)
         {
-            if (mErrorCount++ < 5)
+            if (mErrorCount[0]++ < maxErrorMessages)
                 log_warning("vcd_viewer", "Cannot parse VCD data value '{}'", std::string(sl.at(0).data()));
             val = 0;
         }
@@ -136,32 +141,37 @@ QMap<int,int>::const_iterator mIterator;
         return true; // ignore parse errors
     }
 
-    bool VcdSerializer::parseDataline(const QByteArray &line)
+    bool VcdSerializer::parseVcdDataline(char *buf, int len)
     {
-        if (line.isEmpty()) return true;
-        switch(line.at(0))
+        int pos = 0;
+        while (len)
         {
-        case 'b': return parseDataNonDecimal(line.mid(1),2);
-        case 'o': return parseDataNonDecimal(line.mid(1),8);
-        case 'x': return parseDataNonDecimal(line.mid(1),16);
-        }
-
-        for (QByteArray word : line.split(' '))
-        {
-            bool ok;
-            if (word.isEmpty()) continue;
-            switch (word.at(0))
+            int val = -1;
+            switch(*(buf+pos))
             {
+            case 'b': return parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),2);
+            case 'o': return parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),8);
+            case 'h': return parseVcdDataNonDecimal(QByteArray(buf+pos+1,len-1),16);
+            case '$':
+            {
+                QByteArray testKeyword = QByteArray(buf+pos+1,len-1);
+                if (testKeyword.startsWith("dumpvars") || testKeyword.startsWith("end"))
+                    return true;
+                return false;
+            }
             case '#':
-                mTime = word.mid(1).toUInt(&ok);
+            {
+                bool ok;
+                mTime = QByteArray(buf+pos+1,len-1).toULongLong(&ok);
                 Q_ASSERT(ok);
-                continue;
+                return true;
+            }
             case 'x':
-                storeValue(-1, word.mid(1));
-                continue;
+                val = -1;
+                break;
             case 'z':
-                storeValue(-2, word.mid(1));
-                continue;
+                val = -2;
+                break;
             case '0':
             case '1':
             case '2':
@@ -170,21 +180,34 @@ QMap<int,int>::const_iterator mIterator;
             case '5':
             case '6':
             case '7':
-                storeValue(word.at(0)-'0', word.mid(1));
-                continue;
+                val = *(buf+pos)-'0';
+                break;
+            default:
+                qDebug() << "cannot parse dataline entries starting with" << *(buf+pos) << buf;
+                return false;
             }
-            qDebug() << "cannot parse words starting with" << word.at(0) << line;
-            return false;
+            int p = pos+1;
+            while (p<len && buf[p]>' ') ++p;
+            Q_ASSERT(p > pos+1);
+            int abbrevLen = p - pos - 1;
+            storeValue(val,QByteArray(buf+pos+1,abbrevLen));
+            pos = p;
+            len -= (abbrevLen+1) ;
+            while (buf[pos]==' ' && len > 0)
+            {
+                pos++;
+                len--;
+            }
         }
         return true;
     }
 
     void VcdSerializer::storeValue(int val, const QByteArray& abrev)
     {
-        WaveData* wd = mWaves.value(abrev);
-        if (!wd) return;
+        SaleaeOutputFile* sof = mSaleaeFiles.value(abrev);
+        if (!sof) return;
     //    Q_ASSERT(wd);
-        wd->insert(mTime,val);
+        sof->writeTimeValue(mTime,val);
     }
 
     bool VcdSerializer::parseCsvHeader(char *buf)
@@ -206,21 +229,23 @@ QMap<int,int>::const_iterator mIterator;
             {
                 bool ok;
                 if (!mSaleae) abbrev = QString::number(icol);
+                QString name;
                 u32 id = header.trimmed().toUInt(&ok);
-                WaveData* wd = nullptr;
-                if (ok)
-                    wd = new WaveData(id, QString("net[%1]").arg(id));
+                if (ok && id)
+                    name = QString("net[%1]").arg(id);
                 else
                 {
-                    QString name = QString::fromUtf8(header.trimmed());
+                    name = QString::fromUtf8(header.trimmed());
                     int n = name.size() - 1;
                     if (n<2 || name.at(0) != '"' || name.at(n) != '"') return false;
-                    wd = new WaveData(0,name.mid(1,n-1));
+                    name = name.mid(1,n-1);
+                    id = 0;
                 }
-                if (wd)
+                if (!name.isEmpty() || id)
                 {
-                    mDictionary.insert(wd->name(),abbrev);
-                    mWaves.insert(abbrev,wd);
+                    SaleaeOutputFile* sof = mSaleaeWriter->add_or_replace_waveform(name.toStdString(),0);
+                    if (!sof) return false;
+                    mSaleaeFiles.insert(abbrev,sof);
                 }
                 else
                     return false;
@@ -231,55 +256,8 @@ QMap<int,int>::const_iterator mIterator;
         return true;
     }
 
-    bool VcdSerializer::parseSalea(const QString& filenameStub, const QString& abbrev, u64 timeScale)
-    {
-        WaveData *wd = mWaves.value(abbrev);
-        Q_ASSERT(wd);
 
-        QString filename = filenameStub.arg(abbrev);
-        QFile ff(filename);
-        if (!ff.open(QIODevice::ReadOnly))
-        {
-            qDebug() << "TODO : hell";
-            return false;
-        }
-
-        QDataStream bin(&ff);
-        bin.setByteOrder(QDataStream::LittleEndian);
-
-        char ident[9];
-        qint32 version;
-        qint32 type;
-        quint32 value;
-        double beginTime;
-        double endTime;
-        quint64 numTransitions;
-        if (bin.readRawData(ident,8) < 8) return false;
-        ident[8] = 0;
-        bin >> version >> type;
-        if (type != 0) return false; // read only digital data
-        bin >> value >> beginTime >> endTime >> numTransitions;
-
-//        qDebug() << ident << version << type << value << beginTime << endTime << numTransitions;
-
-        double tDouble;
-
-         wd->insert(0,value);
-
-        for (quint64 i=0; i<numTransitions; i++)
-        {
-            bin >> tDouble;
-            u64 tInt = (u64) floor ( (tDouble-beginTime) * timeScale + 0.5);
-            value = value ? 0 : 1;
-            wd->insert(tInt,value);
-            if (tInt > mTime) mTime = tInt;
-            if (bin.atEnd()) break;
-        }
-
-        return true;
-    }
-
-    bool VcdSerializer::parseCsvDataline(char* buf, int dataLineIndex, u64 timeScale)
+    bool VcdSerializer::parseCsvDataline(char* buf, int dataLineIndex)
     {
         int icol = 0;
         bool ok;
@@ -326,9 +304,9 @@ QMap<int,int>::const_iterator mIterator;
 
                     if (wdInsert)
                     {
-                        WaveData* wd = mWaves.value(QString::number(icol));
-                        if (!wd) return false;
-                        wd->insert(mTime,ival);
+                        SaleaeOutputFile* sof = mSaleaeFiles.value(QString::number(icol));
+                        if (!sof) return false;
+                        sof->writeTimeValue(mTime,ival);
                     }
                 }
                 else
@@ -336,7 +314,7 @@ QMap<int,int>::const_iterator mIterator;
                     // time
                     double tDouble = value.toDouble(&ok);
                     if (!ok) return false;
-                    u64 tInt = (u64) floor ( tDouble * timeScale + 0.5);
+                    u64 tInt = (u64) floor ( tDouble * SaleaeParser::sTimeScaleFactor + 0.5);
                     if (!dataLineIndex)
                     {
                         mFirstTimestamp = tInt;
@@ -351,23 +329,52 @@ QMap<int,int>::const_iterator mIterator;
         return true;
     }
 
-    bool VcdSerializer::deserializeCsv(const QString& filename, u64 timeScale)
+    bool VcdSerializer::importCsv(const QString& csvFilename, const QString& workdir, const QList<const Net*>& onlyNets, u64 timeScale)
     {
+        mWorkdir = workdir.isEmpty() ? QDir::currentPath() : workdir;
         mLastValue.clear();
-        mErrorCount = 0;
-        mWaves.clear();
+        deleteFiles();
         mTime = 0;
         mSaleae = false;
 
-        static const int bufsize = 4095;
-        char buf[bufsize+1];
+        SaleaeParser::sTimeScaleFactor = timeScale;
 
-        QFile ff(filename);
+        QFile ff(csvFilename);
         if (!ff.open(QIODevice::ReadOnly))
         {
-            log_warning("vcd_viewer", "Cannot open CSV input file '{}'.", filename.toStdString());
+            log_warning("vcd_viewer", "Cannot open CSV input file '{}'.", csvFilename.toStdString());
             return false;
         }
+
+        createSaleaeDirectory();
+        mSaleaeWriter =  new SaleaeWriter(mSaleaeDirectoryFilename.toStdString());
+
+        bool retval = parseCsvInternal(ff, onlyNets);
+
+        delete mSaleaeWriter;
+        mSaleaeWriter = nullptr;
+        mSaleaeFiles.clear();
+
+        if (retval) Q_EMIT importDone();
+        return retval;
+    }
+
+
+    void VcdSerializer::createSaleaeDirectory()
+    {
+        QDir saleaeDir(QDir(mWorkdir).absoluteFilePath("saleae"));
+        saleaeDir.mkpath(saleaeDir.absolutePath());
+        mSaleaeDirectoryFilename = saleaeDir.absoluteFilePath("saleae.json");
+    }
+
+    bool VcdSerializer::parseCsvInternal(QFile& ff, const QList<const Net *>& onlyNets)
+    {
+        QMap<QString, const Net*> netNames;
+        for (const Net* n : onlyNets)
+            netNames.insert(QString::fromStdString(n->get_name()),n);
+
+        static const int bufsize = 4095;
+        char buf[bufsize+1];
 
         bool parseHeader = true;
         int dataLineIndex = 0;
@@ -376,45 +383,24 @@ QMap<int,int>::const_iterator mIterator;
             int sizeRead = ff.readLine(buf,bufsize);
             if (sizeRead >= bufsize)
             {
-                log_warning("vcd_viewer", "CSV line {} exceeds buffer size {}.", dataLineIndex, bufsize);
+                if (mErrorCount[1]++ < maxErrorMessages)
+                    log_warning("vcd_viewer", "CSV line {} exceeds buffer size {}.", dataLineIndex, bufsize);
                 return false;
             }
 
             if (sizeRead < 0)
             {
-                log_warning("vcd_viewer", "CSV parse error reading line {} from file '{}'.", dataLineIndex, filename.toStdString());
+                if (mErrorCount[2]++ < maxErrorMessages)
+                    log_warning("vcd_viewer", "CSV parse error reading line {} from file '{}'.", dataLineIndex, ff.fileName().toStdString());
                 return false;
             }
             if (!sizeRead) continue;
 
             if (parseHeader)
             {
-                if (sizeRead >= 8 && QByteArray(buf,8) == "<SALEAE>")
-                {
-                    mSaleae = true;
-                    while (!ff.atEnd())
-                    {
-                        sizeRead = ff.readLine(buf,bufsize);
-                        if (!parseCsvHeader(buf))
-                        {
-                           log_warning("vcd_viewer", "Cannot parse <SALEAEA> index line '{}'.", buf);
-                           return false;
-                        }
-                    }
-                    QFileInfo finfo(ff.fileName());
-                    QString fstub = finfo.absoluteDir().absoluteFilePath("digital_%1.bin");
-                    for (auto it= mWaves.begin(); it !=mWaves.end(); ++it)
-                        if (!parseSalea(fstub,it.key(),timeScale))
-                        {
-                            log_warning("vcd_viewer", "Cannot parse <SALEAEA> binaray file '{}' '{}'.", fstub.toStdString(), it.key().toStdString());
-                            return false;
-                        }
-                    return true;
-                }
-
                 if (!parseCsvHeader(buf))
                 {
-                    if (mErrorCount++ < 5)
+                    if (mErrorCount[3]++ < maxErrorMessages)
                         log_warning("vcd_viewer", "Cannot parse CSV header line '{}'.", buf);
                     return false;
                 }
@@ -422,38 +408,84 @@ QMap<int,int>::const_iterator mIterator;
             }
             else
             {
-                if (!parseCsvDataline(buf,dataLineIndex++,timeScale))
+                if (!parseCsvDataline(buf,dataLineIndex++))
                 {
-                    if (mErrorCount++ < 5)
+                    if (mErrorCount[4]++ < maxErrorMessages)
                         log_warning("vcd_viewer", "Cannot parse CSV data line '{}'.", buf);
                     return false;
                 }
             }
         }
+
         return true;
     }
 
-    bool VcdSerializer::deserializeVcd(const QString& filename, const QStringList &netNames)
+    bool VcdSerializer::importVcd(const QString& vcdFilename, const QString& workdir, const QList<const Net*>& onlyNets)
     {
-        mErrorCount = 0;
-        mWaves.clear();
+        mWorkdir = workdir.isEmpty() ? QDir::currentPath() : workdir;
+        deleteFiles();
         mTime = 0;
-        QFile ff(filename);
+        QFile ff(vcdFilename);
         if (!ff.open(QIODevice::ReadOnly))
         {
-            log_warning("vcd_viewer", "Cannot open VCD input file '{}'.", filename.toStdString());
+            log_warning("vcd_viewer", "Cannot open VCD input file '{}'.", vcdFilename.toStdString());
             return false;
         }
 
+        createSaleaeDirectory();
+        mSaleaeWriter =  new SaleaeWriter(mSaleaeDirectoryFilename.toStdString());
+
+        bool retval = parseVcdInternal(ff,onlyNets);
+
+        delete mSaleaeWriter;
+        mSaleaeWriter = nullptr;
+        mSaleaeFiles.clear();
+        mAbbrevByName.clear();
+
+        if (retval) Q_EMIT importDone();
+        return retval;
+    }
+
+    bool VcdSerializer::parseVcdInternal(QFile& ff, const QList<const Net*>& onlyNets)
+    {
         bool parseHeader = true;
+
+        QMap<QString, const Net*> netNames;
+        for (const Net* n : onlyNets)
+            netNames.insert(QString::fromStdString(n->get_name()),n);
 
         QRegularExpression reHead("\\$(\\w*) (.*)\\$end");
         QRegularExpression reWire("wire\\s+(\\d+) ([^ ]+) (.*) $");
-        QRegularExpression reWiid("\\[(\\d+)\\]$");
-        for (QByteArray line : ff.readAll().split('\n'))
+
+        static const int bufsize = 4095;
+        char buf[bufsize+1];
+
+        int iline = 0;
+        while(!ff.atEnd())
         {
+            int sizeRead = ff.readLine(buf,bufsize);
+            ++iline;
+            if (sizeRead >= bufsize)
+            {
+                if (mErrorCount[5]++ < maxErrorMessages)
+                    log_warning("vcd_viewer", "VCD line {} exceeds buffer size {}.", iline, bufsize);
+                return false;
+            }
+
+            if (sizeRead < 0)
+            {
+                if (mErrorCount[6]++ < maxErrorMessages)
+                    log_warning("vcd_viewer", "VCD parse error reading line {} from file '{}'.", iline, ff.fileName().toStdString());
+                return false;
+            }
+            if (sizeRead > 0 && buf[sizeRead-1]=='\n') --sizeRead;
+            if (sizeRead > 0 && buf[sizeRead-1]=='\r') --sizeRead;
+            if (!sizeRead) continue;
+
+
             if (parseHeader)
             {
+                QByteArray line(buf,sizeRead);
                 QRegularExpressionMatch mHead = reHead.match(line);
                 if (mHead.hasMatch())
                 {
@@ -464,27 +496,43 @@ QMap<int,int>::const_iterator mIterator;
                         QRegularExpressionMatch mWire = reWire.match(mHead.captured(2));
                         bool ok;
                         QString wireName   = mWire.captured(3);
-                        if (!netNames.isEmpty() && !netNames.contains(wireName)) continue;
+                        const Net* net = netNames.value(wireName);
+                        if (!netNames.isEmpty() && !net) continue; // net not found in given name list
+                        if (mAbbrevByName.contains(wireName))
+                        {
+                            if (mErrorCount[7]++ < maxErrorMessages)
+                                log_warning("vcd_viewer", "Waveform duplicate for '{}' in VCD file '{}'.", wireName.toStdString(), ff.fileName().toStdString());
+                            continue;
+                        }
                         QString wireAbbrev = mWire.captured(2);
+                        mAbbrevByName.insert(wireName,wireAbbrev);
                         int     wireBits   = mWire.captured(1).toUInt(&ok);
                         if (!ok) wireBits = 1;
-                        mDictionary.insert(wireName,wireAbbrev);
-                        QRegularExpressionMatch mWiid = reWiid.match(wireName);
-                        if (!mWaves.contains(wireAbbrev))
+                        if (wireBits > 1) continue; // TODO : decision whether we will be able to handle VCD with more bits
+
+                        u32 netId = net ? net->get_id() : 0;
+
+                        SaleaeOutputFile* sof = nullptr;
+                        if (mSaleaeFiles.contains(wireAbbrev))
                         {
-                            WaveData* wd = new WaveData(mWiid.captured(1).toUInt(),wireName);
-                            wd->setBits(wireBits);
-                            mWaves.insert(mWire.captured(2),wd);
+                            // output file already exists, need name entry
+                            sof = mSaleaeFiles.value(wireAbbrev);
+                            if (sof) mSaleaeWriter->add_directory_entry(sof->index(), wireName.toStdString(), netId);
+                        }
+                        else
+                        {
+                            sof = mSaleaeWriter->add_or_replace_waveform(wireName.toStdString(), netId);
+                            if (sof) mSaleaeFiles.insert(wireAbbrev,sof);
                         }
                     }
                 }
             }
             else
             {
-                if (!parseDataline(line))
+                if (!parseVcdDataline(buf,sizeRead))
                 {
-                    if (mErrorCount++ < 5)
-                        log_warning("vcd_viewer", "Cannot parse VCD data line '{}'.", std::string(line.data()));
+                    if (mErrorCount[8]++ < maxErrorMessages)
+                        log_warning("vcd_viewer", "Cannot parse VCD data line '{}'.", QByteArray(buf,sizeRead));
                     return false;
                 }
             }
@@ -492,26 +540,41 @@ QMap<int,int>::const_iterator mIterator;
         return true;
     }
 
-    WaveData* VcdSerializer::waveByName(const QString& name)
+    bool VcdSerializer::importSaleae(const QString& saleaeDirecotry, const std::unordered_map<hal::Net*, int> &lookupTable, const QString& workdir, u64 timeScale)
     {
-        auto it = mDictionary.find(name);
-        if (it == mDictionary.constEnd()) return nullptr;
-        auto jt = mWaves.find(it.value());
-        Q_ASSERT(jt != mWaves.end());
-        return new WaveData(*jt.value());
-    }
+        mWorkdir = workdir.isEmpty() ? QDir::currentPath() : workdir;
+        qDebug() << "workdir" << mWorkdir;
+        deleteFiles();
+        mTime = 0;
+        SaleaeParser::sTimeScaleFactor = timeScale;
 
-    WaveData* VcdSerializer::waveById(u32 id)
-    {
-        if (!id) return nullptr;
-        for (auto jt = mWaves.begin(); jt != mWaves.end(); ++jt)
+        createSaleaeDirectory();
+        SaleaeDirectory sd(get_saleae_directory_filename());
+        QDir sourceDir(saleaeDirecotry);
+        QDir targetDir(QFileInfo(mSaleaeDirectoryFilename).path());
+        for (auto it = lookupTable.begin(); it != lookupTable.end(); ++it)
         {
-            if (jt.value()->id() == id)
-            {
-                return new WaveData(*jt.value());
-                break;
-            }
+            Q_ASSERT(it->first);
+            bool removeOldFile = false;
+            int inx = sd.get_datafile_index(it->first->get_name(),it->first->get_id());
+            if (inx < 0)
+                // create new file in import direcotry
+                inx = sd.get_next_available_index();
+            else
+                removeOldFile = true;
+            QString source = sourceDir.absoluteFilePath(QString("digital_%1.bin").arg(it->second));
+            QString target = targetDir.absoluteFilePath(QString("digital_%1.bin").arg(inx));
+            if (removeOldFile)
+                QFile::remove(target);
+            if (!QFile::copy(source,target)) return false;
+            SaleaeInputFile sif(target.toStdString());
+            if (!sif.header()) return false;
+            SaleaeDirectoryNetEntry sdne(it->first->get_name(), it->first->get_id());
+            sdne.addIndex(SaleaeDirectoryFileIndex(inx,sif.header()->beginTime(),sif.header()->endTime(),sif.header()->numTransitions()));
+            sd.add_or_replace_net(sdne);
         }
-        return nullptr;
+        sd.write_json();
+        Q_EMIT importDone();
+        return true;
     }
 }

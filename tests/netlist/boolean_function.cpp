@@ -78,6 +78,91 @@ namespace hal {
         }
     }
 
+    TEST(BooleanFunction, ValueToBin) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 2).is_error());
+
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"Z", {BooleanFunction::Value::Z}},
+            {"10101", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"101X1", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"101Z1", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"101ZX", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"101XZ", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+            {std::string(10000, '1'), std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE)},
+        };
+
+        for (auto&& [expected, value]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 2).get());
+        }
+    }
+
+    TEST(BooleanFunction, ValueToOct) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 8).is_error());
+
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::Z}},
+            {"25", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"2X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+            {std::string(3334, '7'), std::vector<BooleanFunction::Value>(10002, BooleanFunction::Value::ONE)},
+        };
+
+        for (auto&& [expected, value]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 8).get());
+        }
+    }
+
+    TEST(BooleanFunction, ValueToDec) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 10).is_error());
+        EXPECT_TRUE(BooleanFunction::to_string(std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE), 10).is_error());
+
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::Z}},
+            {"21", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"117", {BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+        };
+
+        for (auto&& [expected, value]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 10).get());
+        }
+    }
+
+    TEST(BooleanFunction, ValueToHex) {
+        EXPECT_TRUE(BooleanFunction::to_string({}, 10).is_error());
+
+        const auto data = std::vector<std::pair<std::string, std::vector<BooleanFunction::Value>>>{
+            {"1", {BooleanFunction::Value::ONE}},
+            {"X", {BooleanFunction::Value::X}},
+            {"X", {BooleanFunction::Value::Z}},
+            {"15", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::ONE}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::ONE}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::Z, BooleanFunction::Value::X}},
+            {"1X", {BooleanFunction::Value::ONE, BooleanFunction::Value::ZERO, BooleanFunction::Value::ONE, BooleanFunction::Value::X, BooleanFunction::Value::Z}},
+            {std::string(2500, 'F'), std::vector<BooleanFunction::Value>(10000, BooleanFunction::Value::ONE)},
+        };
+
+        for (auto&& [expected, value]: data) 
+        {
+            EXPECT_EQ(expected, BooleanFunction::to_string(value, 16).get());
+        }
+    }
+
     TEST(BooleanFunction, Parser) {
         const std::vector<std::tuple<std::string, BooleanFunction>> data = {
             ////////////////////////////////////////////////////////////////////
@@ -310,24 +395,13 @@ namespace hal {
         EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone())).simplify(), b.clone());
         // (a & ~b) | (~a & ~b)  =>  ~b
         EXPECT_EQ(((a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), ~b.clone());
-    }
-
-    TEST(BooleanFunction, SimplificationQuineMcCluskey) 
-    {
-        const auto a = BooleanFunction::Var("A"),
-                   b = BooleanFunction::Var("B"),
-                   c = BooleanFunction::Var("C"),
-                  _0 = BooleanFunction::Const(0, 1),
-                  _1 = BooleanFunction::Const(1, 1);
 
         // (a & b) | (~a & b) | (a & ~b) | (~a & ~b)   =>   1
-        // EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone()) | (a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), _1.clone());
-    
+        EXPECT_EQ(((a.clone() & b.clone()) | (~a.clone() & b.clone()) | (a.clone() & ~b.clone()) | (~a.clone() & ~b.clone())).simplify(), _1.clone());
         // (a | b) | (b & c)   => a | b
-        // EXPECT_EQ(((a.clone() | b.clone()) | (b.clone() & c.clone())).simplify(), a.clone() | b.clone());    
-    
-        // (a & c) | (b & ~c) | (a & b)   =>   (a & c) | (b & ~c)
-        // EXPECT_EQ(((a.clone() & c.clone()) | (b.clone() & ~c.clone()) | (a.clone() & b.clone())).simplify(), (a.clone() & c.clone()) | (b.clone() & ~c.clone()));
+        EXPECT_EQ(((a.clone() | b.clone()) | (b.clone() & c.clone())).simplify(), a.clone() | b.clone());    
+        // (a & c) | (b & ~c) | (a & b)   =>   (b | c) & (a | ~c)
+        EXPECT_EQ(((a.clone() & c.clone()) | (b.clone() & ~c.clone()) | (a.clone() & b.clone())).simplify(), (b.clone() | c.clone()) & (a.clone() | ~c.clone()));
     }
 
     TEST(BooleanFunction, SimplificationPerformance)
@@ -468,11 +542,10 @@ namespace hal {
     TEST(BooleanFunction, SimplificationVsTruthTable) {
         const auto  a = BooleanFunction::Var("A"),
                     b = BooleanFunction::Var("B"),
-                    c = BooleanFunction::Var("C"),
-                   _1 = BooleanFunction::Const(1, 1);
+                    c = BooleanFunction::Var("C");
         
         const std::vector<BooleanFunction> data = {
-            (~(a ^ b & c) | (b | c & _1)) ^ ((a & b) | (a | b | c)),
+            (a & b & c),
             (a | b | c),
         };
 

@@ -315,8 +315,8 @@ namespace hal
     }    // namespace SMT
 
     template<>
-    std::vector<std::string> EnumStrings<SMT::SolverType>::data;
+    std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data;
 
     template<>
-    std::vector<std::string> EnumStrings<SMT::ResultType>::data;
+    std::map<SMT::ResultType, std::string> EnumStrings<SMT::ResultType>::data;
 }    // namespace hal

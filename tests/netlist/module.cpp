@@ -169,8 +169,14 @@ namespace hal {
             EXPECT_TRUE(*nl2_m8 == *nl1_m8);
             EXPECT_FALSE(*nl1_m8 != *nl2_m8);
             EXPECT_FALSE(*nl2_m8 != *nl1_m8);
-            nl1_m8->set_pin_name(nl1_m8->get_pin(nl1_net_in), "in_a");
-            nl2_m8->set_pin_name(nl2_m8->get_pin(nl2_net_in), "in_b");
+            auto res_1 = nl1_m8->get_pin_by_net(nl1_net_in);
+            ASSERT_TRUE(res_1.is_ok());
+            ModulePin* pin_1 = res_1.get();
+            ASSERT_TRUE(nl1_m8->set_pin_name(pin_1, "in_a").is_ok());
+            auto res_2 = nl2_m8->get_pin_by_net(nl2_net_in);
+            ASSERT_TRUE(res_2.is_ok());
+            ModulePin* pin_2 = res_2.get();
+            ASSERT_TRUE(nl2_m8->set_pin_name(pin_2, "in_b").is_ok());
             EXPECT_FALSE(*nl1_m8 == *nl2_m8);       // different input port names
             EXPECT_FALSE(*nl2_m8 == *nl1_m8);
             EXPECT_TRUE(*nl1_m8 != *nl2_m8);
@@ -190,8 +196,14 @@ namespace hal {
             EXPECT_TRUE(*nl2_m9 == *nl1_m9);
             EXPECT_FALSE(*nl1_m9 != *nl2_m9);
             EXPECT_FALSE(*nl2_m9 != *nl1_m9);
-            nl1_m9->set_pin_name(nl1_m9->get_pin(nl1_net_out), "out_a");
-            nl2_m9->set_pin_name(nl2_m9->get_pin(nl2_net_out), "out_b");
+            auto res_3 = nl1_m9->get_pin_by_net(nl1_net_out);
+            ASSERT_TRUE(res_3.is_ok());
+            ModulePin* pin_3 = res_3.get();
+            ASSERT_TRUE(nl1_m9->set_pin_name(pin_3, "out_a").is_ok());
+            auto res_4 = nl2_m9->get_pin_by_net(nl2_net_out);
+            ASSERT_TRUE(res_4.is_ok());
+            ModulePin* pin_4 = res_4.get();
+            ASSERT_TRUE(nl2_m9->set_pin_name(pin_4, "out_b").is_ok());
             EXPECT_FALSE(*nl1_m9 == *nl2_m9);       // different input port names
             EXPECT_FALSE(*nl2_m9 == *nl1_m9);
             EXPECT_TRUE(*nl1_m9 != *nl2_m9);
@@ -838,65 +850,65 @@ namespace hal {
                 // get input pin and check name, net, direction, and type
                 Net* net = nl->get_net_by_id(MIN_NET_ID + 13);
                 ASSERT_NE(net, nullptr);
-                ModulePin* pin_by_net = m_0->get_pin(net);
-                ASSERT_NE(pin_by_net, nullptr);
-                ModulePin* pin_by_name = m_0->get_pin(pin_by_net->get_name());
-                ASSERT_NE(pin_by_name, nullptr);
+                auto res_1 = m_0->get_pin_by_net(net);
+                ASSERT_TRUE(res_1.is_ok());
+                ModulePin* pin_by_net = res_1.get();
+                auto res_2 = m_0->get_pin_by_id(pin_by_net->get_id());
+                ASSERT_TRUE(res_2.is_ok());
+                ModulePin* pin_by_id = res_2.get();
                 EXPECT_EQ(pin_by_net->get_direction(), PinDirection::input);
                 EXPECT_EQ(pin_by_net->get_type(), PinType::none);
                 EXPECT_EQ(pin_by_net->get_net(), net);
-                EXPECT_EQ(pin_by_net->get_name(), pin_by_name->get_name());
+                EXPECT_TRUE(pin_by_net == pin_by_id);
 
                 // get input pin groups
-                PinGroup<ModulePin>* group = m_0->get_pin_group(pin_by_net->get_name());
-                ASSERT_NE(group, nullptr);
+                auto res_3 = m_0->get_pin_group_by_id(pin_by_net->get_group().first->get_id());
+                ASSERT_TRUE(res_3.is_ok());
+                PinGroup<ModulePin>* group = res_3.get();
                 EXPECT_FALSE(group->empty());
                 EXPECT_EQ(group->size(), 1);
                 EXPECT_EQ(group->get_name(), pin_by_net->get_name());
                 EXPECT_EQ(group->get_pins().front(), pin_by_net);
                 EXPECT_EQ(group->get_direction(), PinDirection::input);
                 EXPECT_EQ(group->get_type(), PinType::none);
-                EXPECT_EQ(group->get_index(pin_by_net), 0);
-                EXPECT_EQ(group->get_pin(pin_by_net->get_name()), pin_by_net);
-                EXPECT_EQ(group->get_pin(0), pin_by_net);
+                EXPECT_EQ(group->get_index(pin_by_net).get(), 0);
+                EXPECT_EQ(group->get_pin(0).get(), pin_by_net);
                 EXPECT_EQ(group->get_start_index(), 0);
                 EXPECT_EQ(group->is_ascending(), false);
                 EXPECT_EQ(pin_by_net->get_group(), std::pair(group, u32(0)));
 
                 // set pin name
                 std::string old_name = pin_by_net->get_name();
-                EXPECT_TRUE(m_0->set_pin_name(pin_by_net, "toller_pin"));
-                EXPECT_EQ(m_0->get_pin(old_name), nullptr);
-                EXPECT_EQ(m_0->get_pin("toller_pin"), pin_by_net);
+                EXPECT_TRUE(m_0->set_pin_name(pin_by_net, "toller_pin").is_ok());
                 EXPECT_EQ(pin_by_net->get_name(), "toller_pin");
 
                 // set group name
                 old_name = group->get_name();
-                EXPECT_TRUE(m_0->set_pin_group_name(group, "tolle_gruppe"));
-                EXPECT_EQ(m_0->get_pin_group(old_name), nullptr);
-                EXPECT_EQ(m_0->get_pin_group("tolle_gruppe"), group);
+                EXPECT_TRUE(m_0->set_pin_group_name(group, "tolle_gruppe").is_ok());
                 EXPECT_EQ(group->get_name(), "tolle_gruppe");
 
                 // set pin type
-                EXPECT_TRUE(m_0->set_pin_type(pin_by_net, PinType::address));
+                EXPECT_TRUE(m_0->set_pin_type(pin_by_net, PinType::address).is_ok());
                 EXPECT_EQ(pin_by_net->get_type(), PinType::address);
-                EXPECT_EQ(group->get_type(), PinType::address);
+                EXPECT_EQ(group->get_type(), PinType::none);
             }
             {
                 // get output pin and check name, net, direction, and type
                 Net* net = nl->get_net_by_id(MIN_NET_ID + 045);
                 ASSERT_NE(net, nullptr);
-                ModulePin* pin_by_net = m_0->get_pin(net);
+                auto res_1 = m_0->get_pin_by_net(net);
+                ASSERT_TRUE(res_1.is_ok());
+                ModulePin* pin_by_net = res_1.get();
                 ASSERT_NE(pin_by_net, nullptr);
-                ModulePin* pin_by_name = m_0->get_pin("O(0)");
-                ASSERT_NE(pin_by_name, nullptr);
                 EXPECT_EQ(pin_by_net->get_direction(), PinDirection::output);
                 EXPECT_EQ(pin_by_net->get_type(), PinType::none);
                 EXPECT_EQ(pin_by_net->get_net(), net);
                 EXPECT_EQ(pin_by_net->get_name(), "O(0)");
 
                 // get input pin groups
-                PinGroup<ModulePin>* group = m_0->get_pin_group("O(0)");
+                auto res_2 = m_0->get_pin_group_by_id(pin_by_net->get_group().first->get_id());
+                ASSERT_TRUE(res_2.is_ok());
+                PinGroup<ModulePin>* group = res_2.get();
                 ASSERT_NE(group, nullptr);
                 EXPECT_FALSE(group->empty());
                 EXPECT_EQ(group->size(), 1);
@@ -904,29 +916,26 @@ namespace hal {
                 EXPECT_EQ(group->get_pins().front(), pin_by_net);
                 EXPECT_EQ(group->get_direction(), PinDirection::output);
                 EXPECT_EQ(group->get_type(), PinType::none);
-                EXPECT_EQ(group->get_index(pin_by_net), 0);
-                EXPECT_EQ(group->get_pin("O(0)"), pin_by_net);
-                EXPECT_EQ(group->get_pin(0), pin_by_net);
+                EXPECT_EQ(group->get_index(pin_by_net).get(), 0);
+                EXPECT_EQ(group->get_pin(0).get(), pin_by_net);
                 EXPECT_EQ(group->get_start_index(), 0);
                 EXPECT_EQ(group->is_ascending(), false);
                 EXPECT_EQ(pin_by_net->get_group(), std::pair(group, u32(0)));
 
                 // set pin name
-                EXPECT_TRUE(m_0->set_pin_name(pin_by_net, "bester_pin"));
-                EXPECT_EQ(m_0->get_pin("O(0)"), nullptr);
-                EXPECT_EQ(m_0->get_pin("bester_pin"), pin_by_net);
+                EXPECT_TRUE(m_0->set_pin_name(pin_by_net, "bester_pin").is_ok());
                 EXPECT_EQ(pin_by_net->get_name(), "bester_pin");
 
                 // set group name
-                EXPECT_TRUE(m_0->set_pin_group_name(group, "beste_gruppe"));
-                EXPECT_EQ(m_0->get_pin_group("O(0)"), nullptr);
-                EXPECT_EQ(m_0->get_pin_group("beste_gruppe"), group);
+                EXPECT_TRUE(m_0->set_pin_group_name(group, "beste_gruppe").is_ok());
                 EXPECT_EQ(group->get_name(), "beste_gruppe");
 
                 // set pin type
-                EXPECT_TRUE(m_0->set_pin_type(pin_by_net, PinType::data));
+                EXPECT_TRUE(m_0->set_pin_type(pin_by_net, PinType::data).is_ok());
                 EXPECT_EQ(pin_by_net->get_type(), PinType::data);
-                EXPECT_EQ(group->get_type(), PinType::data);
+                EXPECT_EQ(group->get_type(), PinType::none);
+                EXPECT_TRUE(m_0->set_pin_group_type(group, PinType::address).is_ok());
+                EXPECT_EQ(group->get_type(), PinType::address);
             }
 
             // add another module, m_0 now dead
@@ -934,14 +943,18 @@ namespace hal {
             ASSERT_NE(m_1, nullptr);
             {
                 // get all pins
-                ModulePin* in_pin_0 = m_1->get_pin(nl->get_net_by_id(MIN_NET_ID + 13));
-                ModulePin* in_pin_1 = m_1->get_pin(nl->get_net_by_id(MIN_NET_ID + 20));
-                ModulePin* out_pin_0 = m_1->get_pin(nl->get_net_by_id(MIN_NET_ID + 045));
-                ModulePin* out_pin_1 = m_1->get_pin(nl->get_net_by_id(MIN_NET_ID + 78));
-                ASSERT_NE(in_pin_0, nullptr);
-                ASSERT_NE(in_pin_1, nullptr);
-                ASSERT_NE(out_pin_0, nullptr);
-                ASSERT_NE(out_pin_1, nullptr);
+                auto res_1 = m_1->get_pin_by_net(nl->get_net_by_id(MIN_NET_ID + 13));
+                ASSERT_TRUE(res_1.is_ok());
+                ModulePin* in_pin_0 = res_1.get();
+                auto res_2 = m_1->get_pin_by_net(nl->get_net_by_id(MIN_NET_ID + 20));
+                ASSERT_TRUE(res_2.is_ok());
+                ModulePin* in_pin_1 = res_2.get();
+                auto res_3 = m_1->get_pin_by_net(nl->get_net_by_id(MIN_NET_ID + 045));
+                ASSERT_TRUE(res_3.is_ok());
+                ModulePin* out_pin_0 = res_3.get();
+                auto res_4 = m_1->get_pin_by_net(nl->get_net_by_id(MIN_NET_ID + 78));
+                ASSERT_TRUE(res_4.is_ok());
+                ModulePin* out_pin_1 = res_4.get();
                 std::string old_in_pin_0_group_name = in_pin_0->get_group().first->get_name();
                 std::string old_in_pin_1_group_name = in_pin_1->get_group().first->get_name();
 
@@ -951,8 +964,9 @@ namespace hal {
                 EXPECT_TRUE(m_0->get_pin_groups().empty());
 
                 // create input pin group
-                PinGroup<ModulePin>* in_group = m_1->create_pin_group("I", {in_pin_0, in_pin_1}, true, 3);
-                ASSERT_NE(in_group, nullptr);
+                auto res_5 = m_1->create_pin_group("I", {in_pin_0, in_pin_1}, PinDirection::input, PinType::none, true, 3);
+                ASSERT_TRUE(res_5.is_ok());
+                PinGroup<ModulePin>* in_group = res_5.get();
                 EXPECT_EQ(m_1->get_pin_groups().size(), 3);
                 EXPECT_EQ(in_group->size(), 2);
                 EXPECT_FALSE(in_group->empty());
@@ -962,29 +976,27 @@ namespace hal {
                 EXPECT_EQ(in_group->get_start_index(), 3);
                 EXPECT_EQ(in_group->get_direction(), PinDirection::input);
                 EXPECT_EQ(in_group->get_pins(), std::vector<ModulePin*>({in_pin_0, in_pin_1}));
-                EXPECT_EQ(in_group->get_index(in_pin_0), 3);
-                EXPECT_EQ(in_group->get_index(in_pin_1), 4);
-                EXPECT_EQ(in_group->get_pin(3), in_pin_0);
-                EXPECT_EQ(in_group->get_pin(4), in_pin_1);
+                EXPECT_EQ(in_group->get_index(in_pin_0).get(), 3);
+                EXPECT_EQ(in_group->get_index(in_pin_1).get(), 4);
+                EXPECT_EQ(in_group->get_pin(3).get(), in_pin_0);
+                EXPECT_EQ(in_group->get_pin(4).get(), in_pin_1);
                 EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group, u32(3)));
                 EXPECT_EQ(in_pin_1->get_group(), std::pair(in_group, u32(4)));
-                EXPECT_EQ(m_1->get_pin_group(old_in_pin_0_group_name), nullptr);
-                EXPECT_EQ(m_1->get_pin_group(old_in_pin_1_group_name), nullptr);
-                EXPECT_EQ(m_1->get_pin_group("I"), in_group);
 
                 // set group type
-                EXPECT_FALSE(m_1->set_pin_type(in_pin_0, PinType::address));
-                EXPECT_FALSE(m_1->set_pin_type(in_pin_1, PinType::address));
-                EXPECT_TRUE(m_1->set_pin_group_type(in_group, PinType::address));
+                EXPECT_TRUE(m_1->set_pin_type(in_pin_0, PinType::address).is_ok());
+                EXPECT_TRUE(m_1->set_pin_type(in_pin_1, PinType::address).is_ok());
+                EXPECT_TRUE(m_1->set_pin_group_type(in_group, PinType::address).is_ok());
                 EXPECT_EQ(in_group->get_type(), PinType::address);
                 EXPECT_EQ(in_pin_0->get_type(), PinType::address);
                 EXPECT_EQ(in_pin_1->get_type(), PinType::address);
 
                 // delete pin group
-                EXPECT_TRUE(m_1->delete_pin_group(in_group));
-                EXPECT_EQ(m_1->get_pin_group("I"), nullptr);
+                u32 group_id = in_group->get_id();
+                EXPECT_TRUE(m_1->delete_pin_group(in_group).is_ok());
+                EXPECT_TRUE(m_1->get_pin_group_by_id(group_id).is_error());
                 EXPECT_EQ(m_1->get_pin_groups().size(), 4);
-                PinGroup<ModulePin>* in_group_0 = m_1->get_pin_group(in_pin_0->get_name());
+                PinGroup<ModulePin>* in_group_0 = in_pin_0->get_group().first;
                 ASSERT_NE(in_group_0, nullptr);
                 EXPECT_EQ(in_group_0->size(), 1);
                 EXPECT_FALSE(in_group_0->empty());
@@ -993,100 +1005,98 @@ namespace hal {
                 EXPECT_EQ(in_group_0->get_start_index(), 0);
                 EXPECT_EQ(in_group_0->is_ascending(), false);
                 EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group_0, u32(0)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_0), 0);
+                EXPECT_EQ(in_group_0->get_index(in_pin_0).get(), 0);
 
                 // assign pin to group
-                EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, in_pin_1));
+                EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, in_pin_1).is_ok());
                 EXPECT_EQ(m_1->get_pin_groups().size(), 3);
                 EXPECT_EQ(in_group_0->size(), 2);
                 EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group_0, u32(0)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_0), 0);
+                EXPECT_EQ(in_group_0->get_index(in_pin_0).get(), 0);
                 EXPECT_EQ(in_pin_1->get_group(), std::pair(in_group_0, u32(1)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_1), 1);
-                EXPECT_EQ(in_group_0->get_pin(0), in_pin_0);
-                EXPECT_EQ(in_group_0->get_pin(1), in_pin_1);
+                EXPECT_EQ(in_group_0->get_index(in_pin_1).get(), 1);
+                EXPECT_EQ(in_group_0->get_pin(0).get(), in_pin_0);
+                EXPECT_EQ(in_group_0->get_pin(1).get(), in_pin_1);
 
                 // move pins within group
-                EXPECT_TRUE(m_1->move_pin_within_group(in_group_0, in_pin_1, 0));
+                EXPECT_TRUE(m_1->move_pin_within_group(in_group_0, in_pin_1, 0).is_ok());
                 EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group_0, u32(1)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_0), 1);
+                EXPECT_EQ(in_group_0->get_index(in_pin_0).get(), 1);
                 EXPECT_EQ(in_pin_1->get_group(), std::pair(in_group_0, u32(0)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_1), 0);
-                EXPECT_EQ(in_group_0->get_pin(1), in_pin_0);
-                EXPECT_EQ(in_group_0->get_pin(0), in_pin_1);
+                EXPECT_EQ(in_group_0->get_index(in_pin_1).get(), 0);
+                EXPECT_EQ(in_group_0->get_pin(1).get(), in_pin_0);
+                EXPECT_EQ(in_group_0->get_pin(0).get(), in_pin_1);
 
-                EXPECT_TRUE(m_1->move_pin_within_group(in_group_0, in_pin_1, 1));
+                EXPECT_TRUE(m_1->move_pin_within_group(in_group_0, in_pin_1, 1).is_ok());
                 EXPECT_EQ(in_pin_0->get_group(), std::pair(in_group_0, u32(0)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_0), 0);
+                EXPECT_EQ(in_group_0->get_index(in_pin_0).get(), 0);
                 EXPECT_EQ(in_pin_1->get_group(), std::pair(in_group_0, u32(1)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_1), 1);
-                EXPECT_EQ(in_group_0->get_pin(0), in_pin_0);
-                EXPECT_EQ(in_group_0->get_pin(1), in_pin_1);
+                EXPECT_EQ(in_group_0->get_index(in_pin_1).get(), 1);
+                EXPECT_EQ(in_group_0->get_pin(0).get(), in_pin_0);
+                EXPECT_EQ(in_group_0->get_pin(1).get(), in_pin_1);
 
                 // remove pin from group
-                EXPECT_TRUE(m_1->set_pin_group_name(in_group_0, "I_tmp"));
-                EXPECT_TRUE(m_1->remove_pin_from_group(in_group_0, in_pin_0));
+                EXPECT_TRUE(m_1->set_pin_group_name(in_group_0, "I_tmp").is_ok());
+                EXPECT_TRUE(m_1->remove_pin_from_group(in_group_0, in_pin_0).is_ok());
                 EXPECT_EQ(in_pin_1->get_group(), std::pair(in_group_0, u32(0)));
-                EXPECT_EQ(in_group_0->get_index(in_pin_1), 0);
-                EXPECT_EQ(in_group_0->get_pin(0), in_pin_1);
+                EXPECT_EQ(in_group_0->get_index(in_pin_1).get(), 0);
+                EXPECT_EQ(in_group_0->get_pin(0).get(), in_pin_1);
                 EXPECT_EQ(in_pin_0->get_group().first->get_name(), in_pin_0->get_name());
                 EXPECT_EQ(in_pin_0->get_group().second, 0);
-                EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, in_pin_0));
-
-                // try invalid inputs
-                EXPECT_TRUE(m_1->set_pin_type(out_pin_0, PinType::address));
-                EXPECT_TRUE(m_1->set_pin_type(out_pin_1, PinType::data));
-                EXPECT_FALSE(m_1->assign_pin_to_group(in_group_0, out_pin_0)); // wrong direction
-                EXPECT_FALSE(m_1->assign_pin_to_group(in_group_0, out_pin_1)); // wrong type
-                EXPECT_FALSE(m_1->create_pin_group("O1", {out_pin_0, out_pin_1})); // different types
-                EXPECT_EQ(m_1->get_pin_group("O1"), nullptr);
-                EXPECT_FALSE(m_1->create_pin_group("O2", {out_pin_0, in_pin_0})); // different directions
-                EXPECT_EQ(m_1->get_pin_group("O2"), nullptr);
+                EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, in_pin_0).is_ok());
                 EXPECT_EQ(in_group_0->size(), 2);
+
+                // try mixed directions and types
+                EXPECT_TRUE(m_1->set_pin_type(out_pin_0, PinType::address).is_ok());
+                EXPECT_TRUE(m_1->set_pin_type(out_pin_1, PinType::data).is_ok());
+                EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, out_pin_0).is_ok()); // wrong direction
+                EXPECT_TRUE(m_1->assign_pin_to_group(in_group_0, out_pin_1).is_ok()); // wrong type
+                EXPECT_EQ(in_group_0->size(), 4);
+                EXPECT_TRUE(m_1->create_pin_group("O1", {out_pin_0, out_pin_1}).is_ok()); // different types
+                EXPECT_TRUE(m_1->create_pin_group("O2", {out_pin_0, in_pin_0}).is_ok());  // different directions
+                EXPECT_EQ(in_group_0->size(), 1);
                 EXPECT_EQ(m_1->get_pin_groups().size(), 3);
             }
             // Create a new Module with more modules (with 2 input and ouput nets)
             Module* m_2 = nl->create_module("mod_2", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 3)});
             ASSERT_NE(m_2, nullptr);
             // Add an input and an output port name
-            EXPECT_TRUE(m_2->set_pin_name(m_2->get_pin(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3"));
-            EXPECT_TRUE(m_2->set_pin_name(m_2->get_pin(nl->get_net_by_id(MIN_NET_ID + 30)), "port_name_net_3_0"));
+            auto res_1 = m_2->get_pin_by_net(nl->get_net_by_id(MIN_NET_ID + 13));
+            ASSERT_TRUE(res_1.is_ok());
+            EXPECT_TRUE(m_2->set_pin_name(res_1.get(), "port_name_net_1_3").is_ok());
+            auto res_2 = m_2->get_pin_by_net(nl->get_net_by_id(MIN_NET_ID + 30));
+            ASSERT_TRUE(res_2.is_ok());
+            EXPECT_TRUE(m_2->set_pin_name(res_2.get(), "port_name_net_3_0").is_ok());
             // Add additional gates to the Module so that the port name nets are no longer input/output nets of the Module
             ASSERT_TRUE(m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 1)));
             ASSERT_TRUE(m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0)));
             {
                 // Get all input port names. The old ports shouldn't be contained.
-                std::vector<ModulePin*> expected_input_ports = {m_2->get_pin(nl->get_net_by_id(MIN_NET_ID + 20))};
+                auto res_3 = m_2->get_pin_by_net(nl->get_net_by_id(MIN_NET_ID + 20));
+                ASSERT_TRUE(res_3.is_ok());
+                std::vector<ModulePin*> expected_input_ports = {res_3.get()};
                 std::vector<ModulePin*> actual_input_ports = m_2->get_pins([](ModulePin* p){ return p->get_direction() == PinDirection::input; });
                 EXPECT_EQ(actual_input_ports, expected_input_ports);
             }
             {
                 // Get all output port names. The old ports shouldn't be contained.
-                std::vector<ModulePin*> expected_input_ports = {m_2->get_pin(nl->get_net_by_id(MIN_NET_ID + 37))};
+                auto res_4 = m_2->get_pin_by_net(nl->get_net_by_id(MIN_NET_ID + 37));
+                ASSERT_TRUE(res_4.is_ok());
+                std::vector<ModulePin*> expected_input_ports = {res_4.get()};
                 std::vector<ModulePin*> actual_input_ports = m_2->get_pins([](ModulePin* p){ return p->get_direction() == PinDirection::output; });
                 EXPECT_EQ(actual_input_ports, expected_input_ports);
             }
 
             // NEGATIVE
             {
-                // empty port name
                 NO_COUT_TEST_BLOCK;
-                ModulePin* pin = m_2->get_pin(nl->get_net_by_id(MIN_NET_ID + 20));
-                ASSERT_NE(pin, nullptr);
-                EXPECT_FALSE(m_2->set_pin_name(pin, ""));
-                EXPECT_EQ(m_2->get_pin(""), nullptr);
-            }
-            {
-                // wrong module
-                ModulePin* pin = m_2->get_pin(nl->get_net_by_id(MIN_NET_ID + 13));
-                EXPECT_FALSE(m_0->set_pin_name(pin, "test"));
-            }
-            {
-                // nullptr net
-                NO_COUT_TEST_BLOCK;
-                EXPECT_FALSE(m_0->set_pin_name(nullptr, "port_name"));
-                EXPECT_EQ(m_0->get_pin(nullptr), nullptr);
-                EXPECT_EQ(m_0->get_pin("port_name"), nullptr);
+                auto res_5 = m_2->get_pin_by_net(nl->get_net_by_id(MIN_NET_ID + 20));
+                ASSERT_TRUE(res_5.is_ok());
+                ModulePin* pin = res_5.get();
+                EXPECT_TRUE(m_2->set_pin_name(pin, "").is_error());                 // empty name
+                EXPECT_TRUE(m_2->get_pin_by_id(0).is_error());                      // invalid ID
+                EXPECT_TRUE(m_0->set_pin_name(pin, "test").is_error());             // wrong module
+                EXPECT_TRUE(m_2->set_pin_name(nullptr, "port_name").is_error());    // nullptr net
             }
         TEST_END
     }
@@ -1145,10 +1155,10 @@ namespace hal {
             std::function<void(void)> trigger_gate_assigned = [=](){test_mod->assign_gate(test_gate);};
             std::function<void(void)> trigger_gate_removed = [=](){test_mod->remove_gate(test_gate);};
             std::function<void(void)> trigger_input_port_name_changed = [=](){
-                test_mod->set_pin_name(test_mod->get_pin(test_gate->get_fan_in_net("I0")), "mod_in_0");
+                test_mod->set_pin_name(test_mod->get_pin_by_net(test_gate->get_fan_in_net("I0")).get(), "mod_in_0").is_ok();
             };
             std::function<void(void)> trigger_output_port_name_changed = [=](){
-                test_mod->set_pin_name(test_mod->get_pin(test_gate->get_fan_out_net("O")), "mod_out");
+                test_mod->set_pin_name(test_mod->get_pin_by_net(test_gate->get_fan_out_net("O")).get(), "mod_out").is_ok();
             };
 
             // The events that are tested

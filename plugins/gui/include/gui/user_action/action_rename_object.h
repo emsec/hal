@@ -40,8 +40,6 @@ namespace hal
     {
         QString mNewName;
 
-        //perhaps pin or pingroup itslef?
-        QString mPinOrPingroupIdentifier;
     public:
         /**
          * Action constructor.
@@ -49,20 +47,13 @@ namespace hal
          * @param name - The new name
          */
         ActionRenameObject(const QString& name=QString())
-            : mNewName(name), mPinOrPingroupIdentifier("") {;}
+            : mNewName(name) {;}
         bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
 
-        /**
-         * Sets the current identifier of the pin or pingroup
-         * (the current name).
-         *
-         * @param identifier - The 'old' pin or pingroup name.
-         */
-        void setPinOrPingroupIdentifier(QString identifier){mPinOrPingroupIdentifier = identifier;}
     };
 
     /**

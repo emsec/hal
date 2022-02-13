@@ -12,8 +12,8 @@
 
 namespace hal {
 
-    WaveSelectionDialog::WaveSelectionDialog(const QMap<const WaveData *, int> &wdMap, QWidget *parent)
-        : QDialog(parent), mWaveDataMap(wdMap)
+    WaveSelectionDialog::WaveSelectionDialog(const QMap<WaveSelectionEntry, int> &wseMap, QWidget *parent)
+        : QDialog(parent), mWaveSelectionMap(wseMap)
     {
         QGridLayout* layout = new QGridLayout(this);
         mButAll = new QPushButton("All waveform items", this);
@@ -28,7 +28,7 @@ namespace hal {
 
         mTableView = new QTableView(this);
         mProxyModel = new QSortFilterProxyModel(this);
-        mWaveModel = new WaveSelectionTable(mWaveDataMap.keys(),mTableView);
+        mWaveModel = new WaveSelectionTable(mWaveSelectionMap.keys(),mTableView);
         mProxyModel->setSourceModel(mWaveModel);
         mTableView->setModel(mProxyModel);
         mTableView->setSortingEnabled(true);
@@ -79,30 +79,30 @@ namespace hal {
         mTableView->clearSelection();
     }
 
-    QList<int> WaveSelectionDialog::selectedWaveIndices() const
+    QMap<WaveSelectionEntry,int> WaveSelectionDialog::selectedWaves() const
     {
-        QSet<int> retval;
+        QMap<WaveSelectionEntry,int> retval;
         for (QModelIndex proxyInx : mTableView->selectionModel()->selectedIndexes())
         {
             QModelIndex modelInx = mProxyModel->mapToSource(proxyInx);
-            const WaveData* wd = mWaveModel->waveData(modelInx.row());
-            auto it = mWaveDataMap.find(wd);
-            if (it != mWaveDataMap.constEnd())
-                retval.insert(it.value());
+            const WaveSelectionEntry& wse = mWaveModel->waveSelectionEntry(modelInx.row());
+            auto it = mWaveSelectionMap.find(wse);
+            if (it != mWaveSelectionMap.constEnd())
+                retval.insert(it.key(),it.value());
         }
-        return retval.toList();
+        return retval;
     }
 
     //-------------------------------------------
 
-    WaveSelectionTable::WaveSelectionTable(const QList<const WaveData *> &wdList, QObject* parent)
-        : QAbstractTableModel(parent), mWaveDataList(wdList)
+    WaveSelectionTable::WaveSelectionTable(const QList<WaveSelectionEntry> &wseList, QObject* parent)
+        : QAbstractTableModel(parent), mWaveSelectionEntry(wseList)
     {;}
 
     int WaveSelectionTable::rowCount(const QModelIndex &parent) const
     {
         Q_UNUSED(parent);
-        return mWaveDataList.size();
+        return mWaveSelectionEntry.size();
     }
 
     int WaveSelectionTable::columnCount(const QModelIndex &parent) const
@@ -114,13 +114,13 @@ namespace hal {
     QVariant WaveSelectionTable::data(const QModelIndex &index, int role) const
     {
         if (role != Qt::DisplayRole) return QVariant();
-        if (index.row() >= mWaveDataList.size()) return QVariant();
-        const WaveData* wd =  mWaveDataList.at(index.row());
+        if (index.row() >= mWaveSelectionEntry.size()) return QVariant();
+        const WaveSelectionEntry& wse =  mWaveSelectionEntry.at(index.row());
         switch (index.column())
         {
-        case 0: return wd->id();
-        case 1: return wd->name();
-        case 2: return wd->data().size();
+        case 0: return wse.id();
+        case 1: return wse.name();
+        case 2: return QVariant((qulonglong)wse.size());
         }
         return QVariant();
     }
@@ -143,4 +143,7 @@ namespace hal {
         Q_UNUSED(index);
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     }
+
+    uint qHash(const WaveSelectionEntry& wse) { return qHash(wse.name()); }
+
 }

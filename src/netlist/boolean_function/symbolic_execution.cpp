@@ -15,12 +15,12 @@ namespace hal
         namespace ConstantPropagation
         {
             /**
-	 * Helper function to simplify a constant AND operation.
-	 * 
-	 * @param[in] p0 - Boolean function parameter 0.
-	 * @param[in] p1 - Boolean function parameter 1.
-	 * @returns Boolean function with a simplified constant value.
-	 */
+             * Helper function to simplify a constant AND operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
             BooleanFunction And(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 std::vector<BooleanFunction::Value> simplified;
@@ -44,12 +44,12 @@ namespace hal
             }
 
             /**
-	 * Helper function to simplify a constant OR operation.
-	 * 
-	 * @param[in] p0 - Boolean function parameter 0.
-	 * @param[in] p1 - Boolean function parameter 1.
-	 * @returns Boolean function with a simplified constant value.
-	 */
+             * Helper function to simplify a constant OR operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
             BooleanFunction Or(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 std::vector<BooleanFunction::Value> simplified;
@@ -73,11 +73,11 @@ namespace hal
             }
 
             /**
-	 * Helper function to simplify a constant NOT operation.
-	 * 
-	 * @param[in] p - Boolean function parameter.
-	 * @returns Boolean function with a simplified constant value.
-	 */
+             * Helper function to simplify a constant NOT operation.
+             * 
+             * @param[in] p - Boolean function parameter.
+             * @returns Boolean function with a simplified constant value.
+             */
             BooleanFunction Not(const std::vector<BooleanFunction::Value>& p)
             {
                 std::vector<BooleanFunction::Value> simplified;
@@ -101,12 +101,12 @@ namespace hal
             }
 
             /**
-	 * Helper function to simplify a constant XOR operation.
-	 * 
-	 * @param[in] p0 - Boolean function parameter 0.
-	 * @param[in] p1 - Boolean function parameter 1.
-	 * @returns Boolean function with a simplified constant value.
-	 */
+             * Helper function to simplify a constant XOR operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
             BooleanFunction Xor(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 std::vector<BooleanFunction::Value> simplified;
@@ -134,11 +134,11 @@ namespace hal
         namespace
         {
             /**
-	 * Helper function to generate an n-bit vector of all 1s.
-	 * 
-	 * @param[in] size - Bit-size of vector.
-	 * @returns Boolean function with all 1s constant.
-	 */
+             * Helper function to generate an n-bit vector of all 1s.
+             * 
+             * @param[in] size - Bit-size of vector.
+             * @returns Boolean function with all 1s constant.
+             */
             BooleanFunction One(u16 size)
             {
                 return BooleanFunction::Const(std::vector<BooleanFunction::Value>(size, BooleanFunction::Value::ONE));
@@ -427,6 +427,13 @@ namespace hal
                         return (~p0_parameter[0]) & (~p0_parameter[1]);
                     }
 
+                    // ~(X & Y)   =>   ~X | ~Y
+                    if (p[0].is(BooleanFunction::NodeType::And))
+                    {
+                        auto p0_parameter = p[0].get_parameters();
+                        return (~p0_parameter[0]) | (~p0_parameter[1]);
+                    }
+ 
                     return ~p[0];
                 }
 
@@ -618,6 +625,13 @@ namespace hal
                     }
 
                     return p[0] ^ p[1];
+                }
+                case BooleanFunction::NodeType::Slice: {
+                    // SLICE(p, 0, 0)   =>   p (if p is 1-bit wide)
+                    if ((p[0].size() == 1) && p[1].has_index_value(0) && p[2].has_index_value(0) && (node.size == 1)) {
+                        return p[0];
+                    }
+                    return BooleanFunction::Slice(p[0].clone(), p[1].clone(), p[2].clone(), node.size);
                 }
                 default:
                     return "not implemented reached";
