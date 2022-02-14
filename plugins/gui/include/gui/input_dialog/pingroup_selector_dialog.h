@@ -21,42 +21,23 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+
 #pragma once
 
-#include <QDialog>
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QComboBox>
-
-class QStringList;
+#include "gui/input_dialog/combobox_dialog.h"
+#include "hal_core/netlist/module.h"
 
 namespace hal
 {
-    class ComboboxDialog : public QDialog
+    class PingroupSelectorDialog : public ComboboxDialog
     {
     public:
-        ComboboxDialog(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
-        ComboboxDialog(const QString windowTitle, const QString infoText, const QStringList entries, const QString defaultSelected = "", QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+        PingroupSelectorDialog(const QString windowTitle, const QString infoText, Module* m, bool showOnlyMultiPinGroups = true, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
-
-        virtual void setItems(const QStringList entries);
-        void setInfoText(const QString text);
-
-        QString textValue() const;
-        int selectedIndex() const;
-
-    protected:
-        QVBoxLayout* mLayout;
-        QLabel* mInfoLabel;
-        QComboBox* mCombobox;
-        QPushButton* mOkButton;
-
-        void init();
-
-        void handleOkClicked();
-        void handleCancelClicked();
-
+        int getSelectedGroupId() const;
+    private:
+        Module* mMod;
+        QList<int> mIdList;
     };
 
 }

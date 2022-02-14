@@ -2,7 +2,7 @@
 
 #include "gui/gui_globals.h"
 #include "gui/input_dialog/input_dialog.h"
-#include "gui/input_dialog/combobox_dialog.h"
+#include "gui/input_dialog/pingroup_selector_dialog.h"
 #include "gui/python/py_code_provider.h"
 #include "gui/selection_details_widget/module_details_widget/port_tree_model.h"
 #include "gui/user_action/action_rename_object.h"
@@ -38,7 +38,6 @@ namespace hal
         setAcceptDrops(true);
         viewport()->setAcceptDrops(true);
         setDropIndicatorShown(true);
-
 
         //connections
         connect(this, &QTreeView::customContextMenuRequested, this, &ModulePinsTree::handleContextMenuRequested);
@@ -102,56 +101,60 @@ namespace hal
         menu.addSection("Misc");
 
         //shared context menu entry to add to existing groups
-        QStringList sl;
+        bool addToExistingActionPossible = false;
         for(auto pingroup : mod->get_pin_groups())
-            if(pingroup->size() > 1)
-                sl.append(QString::fromStdString(pingroup->get_name()));//check if size >= 2?
-        if(!sl.isEmpty())
         {
-            menu.addAction("Add selection to existing pin group", [this, selectedPins, mod, sl](){
-               ComboboxDialog cpd("Pingroup", "Select Pingroup", sl);
-               if(cpd.exec() == QDialog::Accepted && !cpd.textValue().isEmpty())
+            if(pingroup->size() > 1)//at least one pingroup should have at least 2 items
+            {
+                addToExistingActionPossible = true;
+                break;
+            }
+        }
+        if(addToExistingActionPossible)
+        {
+            menu.addAction("Add selection to existing pin group", [this, selectedPins, mod](){
+               PingroupSelectorDialog psd("Pingroup selector", "Select pingroup", mod);
+               if(psd.exec() == QDialog::Accepted)
                {
                    std::vector<ModulePin*> pins;//must be fetched before creating new group
-//                   auto pingroup = mod->get_pin_group(cpd.textValue().toStdString());
-//                   for(auto item : selectedPins)
-//                       pins.push_back(mod->get_pin(item->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString()));
-//                   for(auto pin : pins)
-//                       mod->assign_pin_to_group(pingroup, pin);
+                   auto pinGroupRes = mod->get_pin_group_by_id(psd.getSelectedGroupId());
+                   if(pinGroupRes.is_error()) return;
+                   for(auto item : selectedPins)
+                   {
+                       auto pinRes = mod->get_pin_by_id(mPortModel->getIdOfItem(item));
+                       if(pinRes.is_error()) return;
+                       pins.push_back(pinRes.get());
+                   }
+                   for(auto pin : pins)
+                       mod->assign_pin_to_group(pinGroupRes.get(), pin);
                }
             });
         }
 
         if(type == ModulePinsTreeModel::itemType::portMultiBit)//group specific context
         {
-//            menu.addAction("Change group name", [name, modId](){
-//                InputDialog ipd("Change group name", "New group name", name);
-//                if(ipd.exec() == QDialog::Accepted)
-//                {
-//                    if(ipd.textValue().isEmpty())
-//                        return;
-//                    ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
-//                    act->setObject(UserActionObject(modId, UserActionObjectType::PinGroup));
-//                    act->setPinOrPingroupIdentifier(name);
-//                    act->exec();
-//            menu.addSection("Misc");
-            menu.addAction("Change group name", [name, modId, itemId](){
+            menu.addAction("Rename pingroup", [name, modId, itemId](){
                 InputDialog ipd("Change group name", "New group name", name);
                 if(ipd.exec() == QDialog::Accepted)
                 {
+                    if(ipd.textValue().isEmpty())
+                        return;
                     auto groupResult = gNetlist->get_module_by_id(modId)->get_pin_group_by_id(itemId);
                     if (groupResult.is_ok())
                         gNetlist->get_module_by_id(modId)->set_pin_group_name(groupResult.get(), ipd.textValue().toStdString());
                 }
             });
-            menu.addAction("Delete group", [this, name, modId](){
+            menu.addAction("Delete group", [this, itemId, modId](){
                 //add "are you sure?" dialog
                 QMessageBox::StandardButton reply = QMessageBox::question(this,
                                                                           "Group deletion", "Are you sure you want to delete that group?", QMessageBox::Yes | QMessageBox::No);
                 if(reply == QMessageBox::No)
                     return;
                 auto mod = gNetlist->get_module_by_id(modId);
-                //mod->delete_pin_group(mod->get_pin_group(name.toStdString()));
+                if(!mod) return;
+                auto pinGroupRes = mod->get_pin_group_by_id(itemId);
+                if(pinGroupRes.is_ok())
+                    mod->delete_pin_group(pinGroupRes.get());
             });
 
             if(selectionModel()->selectedRows().size() > 1)
@@ -174,11 +177,6 @@ namespace hal
                 {
                     if(ipd.textValue().isEmpty())
                         return;
-//                    ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
-//                    act->setObject(UserActionObject(modId, UserActionObjectType::Pin));
-//                    act->setParentObject(UserActionObject(modId, UserActionObjectType::Module));
-//                    act->setPinOrPingroupIdentifier(name);
-//                    act->exec();
                     auto pinResult = gNetlist->get_module_by_id(modId)->get_pin_by_id(itemId);
                     if(pinResult.is_ok())
                         gNetlist->get_module_by_id(modId)->set_pin_name(pinResult.get(), ipd.textValue().toStdString());
@@ -230,7 +228,7 @@ namespace hal
     void ModulePinsTree::appendMultiSelectionEntries(QMenu &menu, int modId)
     {
         QList<TreeItem*> selectedPins;
-        std::pair<bool, std::string> sameGroup;
+        std::pair<bool, int> sameGroup;
         bool onlyPins;
         std::tie(selectedPins, sameGroup, onlyPins) = getSelectedPins();
         if(selectedPins.size() > 1)
@@ -290,13 +288,11 @@ namespace hal
         if(!selectedPins.isEmpty())
         {
             auto mod = gNetlist->get_module_by_id(mModuleID);
-            //auto firstPin = mod->get_pin(selectedPins.at(0)->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString());
             auto firstPinRes = mod->get_pin_by_id(mPortModel->getIdOfItem(selectedPins.front()));
             auto firstPin = firstPinRes.get();
             groupId = firstPin->get_group().first->get_id();
             for(auto pinTreeItem : selectedPins)
             {
-                //auto pin = mod->get_pin(pinTreeItem->getData(ModulePinsTreeModel::sNameColumn).toString().toStdString());
                 auto pin = mod->get_pin_by_id(mPortModel->getIdOfItem(pinTreeItem)).get();
                 if(groupId != (int)pin->get_group().first->get_id())
                 {
