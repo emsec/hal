@@ -201,7 +201,7 @@ namespace hal
 
         if (m_internal_manager->m_net_checks_enabled)
         {
-            for (Net* net : m_parent->get_nets(nullptr, true))
+            for (Net* net : get_nets(nullptr, true))
             {
                 m_parent->check_net(net, true);
             }
@@ -216,7 +216,7 @@ namespace hal
 
         if (m_internal_manager->m_net_checks_enabled)
         {
-            for (Net* net : m_parent->get_nets(nullptr, true))
+            for (Net* net : get_nets(nullptr, true))
             {
                 m_parent->check_net(net, true);
             }
