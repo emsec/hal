@@ -906,7 +906,7 @@ namespace hal
                 {
                     QSet<u32> gate_to_add;
                     gate_to_add.insert(id);
-                    ActionAddItemsToObject* act = new ActionAddItemsToObject(gate_to_add,{});
+                    ActionAddItemsToObject* act = new ActionAddItemsToObject({},gate_to_add);
                     act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
                     act->exec();
                 }
