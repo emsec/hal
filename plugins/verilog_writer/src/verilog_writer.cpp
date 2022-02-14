@@ -158,7 +158,7 @@ namespace hal
         port_nets.reserve(output_nets_tmp.size());
         port_nets.insert(output_nets_tmp.begin(), output_nets_tmp.end());
 
-        for (Net* net : module->get_internal_nets())
+        for (Net* net : module->get_nets())
         {
             if (port_nets.find(net) != port_nets.end())
             {
