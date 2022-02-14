@@ -52,13 +52,13 @@ namespace hal
                 {
                     struct PinInformation
                     {
-                        u32 id;
+                        i32 id = -1;
                         Net* net;
                         std::string name;
                         PinType type = PinType::none;
                     };
 
-                    u32 id;
+                    i32 id = -1;
                     std::string name;
                     PinDirection direction = PinDirection::none;
                     PinType type           = PinType::none;
@@ -438,7 +438,8 @@ namespace hal
                         std::vector<ModulePin*> pins;
                         for (const PinGroupInformation::PinInformation& p : pg.pins)
                         {
-                            if (auto res = sm->create_pin(p.id, p.name, p.net, p.type, false); res.is_error())
+                            u32 pid = (p.id > 0) ? (u32)p.id : sm->get_unique_pin_id();
+                            if (auto res = sm->create_pin(pid, p.name, p.net, p.type, false); res.is_error())
                             {
                                 log_error("netlist_persistent", "{}", res.get_error().get());
                                 return false;
@@ -448,7 +449,8 @@ namespace hal
                                 pins.push_back(res.get());
                             }
                         }
-                        if (auto res = sm->create_pin_group(pg.id, pg.name, pins, pg.direction, pg.type, pg.ascending, pg.start_index); res.is_error())
+                        u32 pgid = (pg.id > 0) ? (u32)pg.id : sm->get_unique_pin_group_id();
+                        if (auto res = sm->create_pin_group(pgid, pg.name, pins, pg.direction, pg.type, pg.ascending, pg.start_index); res.is_error())
                         {
                             log_error("netlist_persistent", "{}", res.get_error().get());
                             return false;
