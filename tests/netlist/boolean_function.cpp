@@ -423,10 +423,10 @@ namespace hal {
 
         EXPECT_EQ((a & b & c).substitute("C", "D"), a & b & d);
 
-        EXPECT_EQ(std::get<BooleanFunction>((a & b).substitute("B", _0)), a & _0);
-        EXPECT_EQ(std::get<BooleanFunction>((a & b).substitute("B", ~c)), a & ~c);
-        EXPECT_EQ(std::get<BooleanFunction>((a & b).substitute("B", ~c)), a & ~c);
-        EXPECT_EQ(std::get<BooleanFunction>((a & b).substitute("B", b | c | d)),  a & (b | c | d));
+        EXPECT_EQ((a & b).substitute("B", _0).get(), a & _0);
+        EXPECT_EQ((a & b).substitute("B", ~c).get(), a & ~c);
+        EXPECT_EQ((a & b).substitute("B", ~c).get(), a & ~c);
+        EXPECT_EQ((a & b).substitute("B", b | c | d).get(),  a & (b | c | d));
     }
 
     TEST(BooleanFunction, EvaluateSingleBit) {
@@ -459,10 +459,10 @@ namespace hal {
         
         for (const auto& [function, input, expected]: data) {
             auto value = function.evaluate(input);
-            if (std::get_if<std::string>(&value) != nullptr) {
-                log_error("netlist", "{}", std::get<std::string>(value));
+            if (value.is_error()) {
+                log_error("netlist", "{}", value.get_error().get());
             }
-            EXPECT_EQ(expected, std::get<Value>(value));
+            EXPECT_EQ(expected, value.get());
         }
     }
 
@@ -501,10 +501,10 @@ namespace hal {
         
         for (const auto& [function, input, expected]: data) {
             auto value = function.evaluate(input);
-            if (std::get_if<std::string>(&value) != nullptr) {
-                log_error("netlist", "{}", std::get<std::string>(value));
+            if (value.is_error()) {
+                log_error("netlist", "{}", value.get_error().get());
             }
-            EXPECT_EQ(expected, std::get<std::vector<Value>>(value));
+            EXPECT_EQ(expected, value.get());
         }
     }
 
@@ -534,8 +534,7 @@ namespace hal {
         };
 
         for (const auto& [function, expected, variable_order] : data) {
-            auto truth_table = function.compute_truth_table(variable_order);
-            ASSERT_EQ(expected, std::get<std::vector<std::vector<Value>>>(truth_table));
+            ASSERT_EQ(expected, function.compute_truth_table(variable_order).get());
         }
     }
 
@@ -550,7 +549,7 @@ namespace hal {
         };
 
         for (const auto& function: data) {
-            ASSERT_EQ(function.compute_truth_table(), function.simplify().compute_truth_table());
+            ASSERT_EQ(function.compute_truth_table().get(), function.simplify().compute_truth_table().get());
         }
     }
 

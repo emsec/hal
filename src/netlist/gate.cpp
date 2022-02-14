@@ -373,11 +373,11 @@ namespace hal
                 if (!output_pins.empty() && name == output_pins[0])
                 {
                     auto tt = func.compute_truth_table(m_type->get_input_pins());
-                    if (std::get_if<std::string>(&tt) != nullptr) {
+                    if (tt.is_error()) {
                         log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' wiht ID {}.", name, func.to_string(), m_name, m_id);
                         return;
                     }
-                    auto truth_table = std::get<std::vector<std::vector<BooleanFunction::Value>>>(tt);
+                    auto truth_table = tt.get();
                     if (truth_table.size() > 1) {
                         log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {} (= function is > 1-bit in output size). ", name, func.to_string(), m_name, m_id);
                         return;

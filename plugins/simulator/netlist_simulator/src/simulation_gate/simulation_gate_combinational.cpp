@@ -23,7 +23,7 @@ namespace hal
                 {
                     if (std::find(vars.begin(), vars.end(), other_pin) != vars.end())
                     {
-                        func = std::get<0>(func.substitute(other_pin, functions.at(other_pin)));
+                        func = func.substitute(other_pin, functions.at(other_pin)).get();
                         exit = false;
                     }
                 }
@@ -45,7 +45,7 @@ namespace hal
 
         for (auto out_net : m_output_nets)
         {
-            BooleanFunction::Value result = std::get<0>(m_functions[out_net].evaluate(m_input_values));
+            BooleanFunction::Value result = m_functions[out_net].evaluate(m_input_values).get();
 
             new_events[std::make_pair(out_net, event.time + delay)] = result;
         }

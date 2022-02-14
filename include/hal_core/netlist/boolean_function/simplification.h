@@ -27,7 +27,6 @@
 #include "hal_core/utilities/result.h"
 
 #include <string>
-#include <variant>
 
 namespace hal
 {

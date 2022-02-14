@@ -873,11 +873,11 @@ namespace {
                         continue;
                     }
                     auto simplified = assignments[output].substitute(tmp, assignments[BooleanFunction::Var(tmp)]);
-                    if (std::get_if<std::string>(&simplified) != nullptr) {
-                        return ERR(std::get<std::string>(simplified));
+                    if (simplified.is_error()) {
+                        return ERR(simplified.get_error());
                     }
 
-                    assignments[output] = std::get<0>(simplified);
+                    assignments[output] = simplified.get();
                 }
             }
         }

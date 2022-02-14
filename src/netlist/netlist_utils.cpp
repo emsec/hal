@@ -103,12 +103,12 @@ namespace hal
                             input_vars.insert(input_vars.end(), internal_input_vars.begin(), internal_input_vars.end());
 
                             auto substituted = bf.substitute(var, bf_interal);
-                            if (std::get_if<std::string>(&substituted) != nullptr)
+                            if (substituted.is_error())
                             {
-                                log_error("netlist", "{}", std::get<std::string>(substituted));
+                                log_error("netlist", "{}", substituted.get_error().get());
                                 return BooleanFunction();
                             }
-                            bf = std::get<BooleanFunction>(substituted);
+                            bf = substituted.get();
                         }
                     }
 
@@ -147,9 +147,9 @@ namespace hal
 
                 if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
                 {
-                    if (auto substitution = result.substitute("net_" + std::to_string(n->get_id()), get_function_of_gate(src_gate, src_pin, cache)); std::get_if<0>(&substitution) != nullptr)
+                    if (auto substitution = result.substitute("net_" + std::to_string(n->get_id()), get_function_of_gate(src_gate, src_pin, cache)); substitution.is_ok())
                     {
-                        result = std::get<0>(substitution);
+                        result = substitution.get();
                     }
 
                     for (Net* sn : src_gate->get_fan_in_nets())
@@ -708,16 +708,16 @@ namespace hal
 
                         if (sources.front()->get_gate()->is_gnd_gate())
                         {
-                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(0, 1)); std::get_if<0>(&substitution) != nullptr)
+                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(0, 1)); substitution.is_ok())
                             {
-                                func = std::get<0>(substitution);
+                                func = substitution.get();
                             }
                         }
                         else if (sources.front()->get_gate()->is_vcc_gate())
                         {
-                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(1, 1)); std::get_if<0>(&substitution) != nullptr)
+                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(1, 1)); substitution.is_ok())
                             {
-                                func = std::get<0>(substitution);
+                                func = substitution.get();
                             }
                         }
                     }

@@ -34,7 +34,6 @@
 #include <ostream>
 #include <set>
 #include <unordered_map>
-#include <variant>
 #include <vector>
 
 namespace hal
@@ -480,25 +479,25 @@ namespace hal
          *
          * @param[in] variable_name - The variable to substitute.
          * @param[in] function - The function replace the variable with.
-         * @returns The resulting Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the resulting Boolean function on success, Err() otherwise.
          */
-        std::variant<BooleanFunction, std::string> substitute(const std::string& variable_name, const BooleanFunction& function) const;
+        Result<BooleanFunction> substitute(const std::string& variable_name, const BooleanFunction& function) const;
 
         /**
          * Evaluates a Boolean function comprising only single-bit variables using the given input values.
          * 
          * @param[in] inputs - A map from variable name to input value.
-         * @returns The resulting value on success, a string error message otherwise.
+         * @returns Ok() and the resulting value on success, Err() otherwise.
          */
-        std::variant<Value, std::string> evaluate(const std::unordered_map<std::string, Value>& inputs) const;
+        Result<Value> evaluate(const std::unordered_map<std::string, Value>& inputs) const;
 
         /**
          * Evaluates a Boolean function comprising multi-bit variables using the given input values.
          * 
          * @param[in] inputs - A map from variable name to a vector of input values.
-         * @returns The resulting value on success, a string error message otherwise.
+         * @returns Ok() and the resulting value on success, Err() otherwise.
          */
-        std::variant<std::vector<Value>, std::string> evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const;
+        Result<std::vector<Value>> evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const;
 
         /**
          * Computes the truth table outputs for a Boolean function that comprises <= 10 single-bit variables.
@@ -506,9 +505,9 @@ namespace hal
          * 
          * @param[in] ordered_variables - A vector describing the order of input variables used to generate the truth table. Defaults to an empty vector.
          * @param[in] remove_unknown_variables - Set `true` to remove variables from the truth table that are not present within the Boolean function, `false` otherwise. Defaults to `false`.
-         * @returns A vector of values representing the truth table output on success, a string error message otherwise.
+         * @returns Ok() and a vector of values representing the truth table output on success, Err() otherwise.
          */
-        std::variant<std::vector<std::vector<Value>>, std::string> compute_truth_table(const std::vector<std::string>& ordered_variables = {}, bool remove_unknown_variables = false) const;
+        Result<std::vector<std::vector<Value>>> compute_truth_table(const std::vector<std::string>& ordered_variables = {}, bool remove_unknown_variables = false) const;
 
         /**
          * Translates the Boolean function into the z3 expression representation.

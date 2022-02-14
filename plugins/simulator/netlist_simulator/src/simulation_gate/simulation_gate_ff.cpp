@@ -95,8 +95,8 @@ namespace hal
         // compute delay, currently just a placeholder
         u64 delay = 0;
 
-        auto async_set   = std::get<0>(m_preset_func.evaluate(m_input_values));
-        auto async_reset = std::get<0>(m_clear_func.evaluate(m_input_values));
+        auto async_set   = m_preset_func.evaluate(m_input_values).get();
+        auto async_reset = m_clear_func.evaluate(m_input_values).get();
 
         // check whether an asynchronous set or reset ist triggered
         if (async_set == BooleanFunction::ONE || async_reset == BooleanFunction::ONE)
@@ -156,7 +156,7 @@ namespace hal
         else if (std::find(m_clock_nets.begin(), m_clock_nets.end(), event.affected_net) != m_clock_nets.end())
         {
             // return true if the event was completely handled -> true if the gate is NOT clocked at this point
-            return (std::get<0>(m_clock_func.evaluate(m_input_values)) != BooleanFunction::ONE);
+            return (m_clock_func.evaluate(m_input_values).get() != BooleanFunction::ONE);
         }
 
         return true;
@@ -168,7 +168,7 @@ namespace hal
         u64 delay = 0;
 
         // compute output
-        BooleanFunction::Value result     = std::get<0>(m_next_state_func.evaluate(m_input_values));
+        BooleanFunction::Value result     = m_next_state_func.evaluate(m_input_values).get();
         BooleanFunction::Value inv_result = simulation_utils::toggle(result);
 
         // generate events

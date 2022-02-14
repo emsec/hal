@@ -11,12 +11,6 @@
 #include <boost/spirit/home/x3.hpp>
 #include <chrono>
 #include <map>
-#include <variant>
-
-#define ERROR(MESSAGE)       \
-    std::stringstream error; \
-    error << MESSAGE;        \
-    return error.str();
 
 namespace hal
 {
@@ -659,7 +653,7 @@ namespace hal
         return function;
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::substitute(const std::string& name, const BooleanFunction& replacement) const
+    Result<BooleanFunction> BooleanFunction::substitute(const std::string& name, const BooleanFunction& replacement) const
     {
         /// Helper function to substitute a variable with a Boolean function.
         ///
@@ -668,7 +662,7 @@ namespace hal
         /// @param[in] var_name - Variable name to check for replacement.
         /// @param[in] repl - Replacement Boolean function.
         /// @returns AST replacement.
-        auto substitute_variable = [](const auto& node, auto&& operands, auto var_name, auto repl) -> std::variant<BooleanFunction, std::string> {
+        auto substitute_variable = [](const auto& node, auto&& operands, auto var_name, auto repl) -> BooleanFunction {
             if (node.has_variable_name(var_name))
             {
                 return repl.clone();
@@ -683,35 +677,28 @@ namespace hal
             std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(operands));
             stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
 
-            auto substituted = substitute_variable(node, std::move(operands), name, replacement);
-            if (std::get_if<std::string>(&substituted) != nullptr)
-            {
-                return substituted;
-            }
-            stack.emplace_back(std::get<BooleanFunction>(substituted));
+            stack.emplace_back(substitute_variable(node, std::move(operands), name, replacement));
         }
 
         switch (stack.size())
         {
-            case 1:
-                return stack.back();
-            default:
-                return "Cannot replace '" + name + "' with '" + replacement.to_string() + "' (= validation failed, so the operations may be imbalanced).";
+            case 1:  return OK(stack.back());
+            default: return ERR("Cannot replace '" + name + "' with '" + replacement.to_string() + "' (= validation failed, so the operations may be imbalanced).");
         }
     }
 
-    std::variant<BooleanFunction::Value, std::string> BooleanFunction::evaluate(const std::unordered_map<std::string, Value>& inputs) const
+    Result<BooleanFunction::Value> BooleanFunction::evaluate(const std::unordered_map<std::string, Value>& inputs) const
     {
         // (0) workaround to preserve the API functionality
         if (this->m_nodes.empty())
         {
-            return BooleanFunction::Value::X;
+            return OK(BooleanFunction::Value::X);
         }
 
         // (1) validate whether the input sizes match the boolean function
         if (this->size() != 1)
         {
-            return "Cannot use the single-bit evaluate() on '" + this->to_string() + "' (= " + std::to_string(this->size()) + "-bit).";
+            return ERR("Cannot use the single-bit evaluate() on '" + this->to_string() + "' (= " + std::to_string(this->size()) + "-bit).");
         }
 
         // (2) translate the input to n-bit to use the generic function
@@ -722,20 +709,20 @@ namespace hal
         }
 
         auto value = this->evaluate(generic_inputs);
-        if (std::get_if<std::vector<Value>>(&value) != nullptr)
+        if (value.is_ok())
         {
-            return std::get<std::vector<Value>>(value)[0];
+            return OK(value.get()[0]);
         }
 
-        return std::get<std::string>(value);
+        return ERR(value.get_error());
     }
 
-    std::variant<std::vector<BooleanFunction::Value>, std::string> BooleanFunction::evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const
+    Result<std::vector<BooleanFunction::Value>> BooleanFunction::evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const
     {
         // (0) workaround to preserve the API functionality
         if (this->m_nodes.empty())
         {
-            return std::vector<BooleanFunction::Value>({BooleanFunction::Value::X});
+            return OK(std::vector<BooleanFunction::Value>({BooleanFunction::Value::X}));
         }
 
         // (1) validate whether the input sizes match the boolean function
@@ -745,8 +732,7 @@ namespace hal
             {
                 if (node.has_variable_name(name) && node.size != value.size())
                 {
-                    return "Cannot use evaluate() on '" + this->to_string() + " as the '" + node.to_string() + " is " + std::to_string(node.size) + "-bit vs. " + std::to_string(value.size())
-                           + "-bit in the input.";
+                    return ERR("Cannot use evaluate() on '" + this->to_string() + " as the '" + node.to_string() + " is " + std::to_string(node.size) + "-bit vs. " + std::to_string(value.size()) + "-bit in the input.");
                 }
             }
         }
@@ -763,20 +749,16 @@ namespace hal
         auto result = symbolic_execution.evaluate(*this);
         if (result.is_ok())
         {
-            auto value = result.get();
-            if (value.is_constant())
+            if (auto value = result.get(); value.is_constant())
             {
-                return value.get_top_level_node().constant;
+                return OK(value.get_top_level_node().constant);
             }
-            else
-            {
-                return std::vector<BooleanFunction::Value>(this->size(), BooleanFunction::Value::X);
-            }
+            return OK(std::vector<BooleanFunction::Value>(this->size(), BooleanFunction::Value::X));
         }
-        return result.get_error().get();
+        return ERR(result.get_error());
     }
 
-    std::variant<std::vector<std::vector<BooleanFunction::Value>>, std::string> BooleanFunction::compute_truth_table(const std::vector<std::string>& ordered_variables,
+    Result<std::vector<std::vector<BooleanFunction::Value>>> BooleanFunction::compute_truth_table(const std::vector<std::string>& ordered_variables,
                                                                                                                      bool remove_unknown_variables) const
     {
         auto variable_names_in_function = this->get_variable_names();
@@ -787,7 +769,7 @@ namespace hal
         {
             if (node.is_variable() && node.size != 1)
             {
-                return "Cannot generate a truth-table for a Boolean function with variables of > 1-bit (e.g., = '" + node.to_string() + "').";
+                return ERR("Cannot generate a truth-table for a Boolean function with variables of > 1-bit (e.g., = '" + node.to_string() + "').");
             }
         }
 
@@ -810,13 +792,13 @@ namespace hal
         //       Boolean function with a truth-table with 'X' values
         if (this->m_nodes.empty())
         {
-            return std::vector<std::vector<Value>>(1, std::vector<Value>(1 << variables.size(), Value::X));
+            return OK(std::vector<std::vector<Value>>(1, std::vector<Value>(1 << variables.size(), Value::X)));
         }
 
         // (4.2) safety-check in case the number of variables is too large to process
         if (variables.size() > 10)
         {
-            return "Cannot generate a truth-table with > 10 variables (increase threshold or simplify expression beforehand).";
+            return ERR("Cannot generate a truth-table with > 10 variables (increase threshold or simplify expression beforehand).");
         }
 
         std::vector<std::vector<Value>> truth_table(this->size(), std::vector<Value>(1 << variables.size(), Value::ZERO));
@@ -832,18 +814,18 @@ namespace hal
                 tmp >>= 1;
             }
             auto result = this->evaluate(input);
-            if (std::get_if<std::string>(&result) != nullptr)
+            if (result.is_error())
             {
-                return std::get<std::string>(result);
+                return ERR(result.get_error());
             }
-            auto output = std::get<std::vector<Value>>(result);
+            auto output = result.get();
             for (auto index = 0u; index < truth_table.size(); index++)
             {
                 truth_table[index][value] = output[index];
             }
         }
 
-        return truth_table;
+        return OK(truth_table);
     }
 
     z3::expr BooleanFunction::to_z3(z3::context& context, const std::map<std::string, z3::expr>& var2expr) const

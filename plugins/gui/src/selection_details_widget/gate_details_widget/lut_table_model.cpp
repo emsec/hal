@@ -91,10 +91,10 @@ namespace hal
         std::reverse(bfVariables.begin(), bfVariables.end());
 
         auto ttVariant = lutFunction.compute_truth_table(bfVariables, false);
-        if (std::get_if<std::vector<std::vector<BooleanFunction::Value>>>(&ttVariant) != nullptr)
+        if (ttVariant.is_ok())
         {
             // can only deal with single-bit Boolean functions, but that should be the case for LUTs anyway
-            std::vector<BooleanFunction::Value> truthTable = std::get<std::vector<std::vector<BooleanFunction::Value>>>(ttVariant).at(0);
+            std::vector<BooleanFunction::Value> truthTable = ttVariant.get().at(0);
             mLutEntries.clear();
             for (u32 truthTableIdx = 0; truthTableIdx < truthTable.size(); truthTableIdx++)
             {

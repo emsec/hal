@@ -113,7 +113,7 @@ namespace hal
                     to = ~to;
                 }
 
-                bf = std::get<BooleanFunction>(bf.substitute(from.to_string(), to));
+                bf = bf.substitute(from.to_string(), to).get();
             }
 
             state_net_to_func.insert({input_net->get_id(), bf});
@@ -173,7 +173,7 @@ namespace hal
                 u64 next_state = 0;
                 for (u32 next_state_index = 0; next_state_index < state_size; next_state_index++)
                 {
-                    BooleanFunction::Value new_val = std::get<BooleanFunction::Value>(state_net_to_func.at(state_input_net_ids.at(next_state_index)).evaluate(id_str_to_val));
+                    BooleanFunction::Value new_val = state_net_to_func.at(state_input_net_ids.at(next_state_index)).evaluate(id_str_to_val).get();
                     if (new_val == BooleanFunction::Value::ONE)
                     {
                         next_state += (1 << next_state_index);

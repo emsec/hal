@@ -91,6 +91,16 @@ namespace hal
             return OK(std::move(value));
         }
 
+        bool operator==(const Result<T>& other) 
+        {
+            return this->m_result == other.m_result;
+        }
+
+        bool operator!=(const Result<T>& other) 
+        {
+            return !(*this == other);
+        }
+
         bool is_ok() const
         {
             return !is_error();
