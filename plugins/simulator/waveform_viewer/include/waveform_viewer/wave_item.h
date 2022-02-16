@@ -1,13 +1,17 @@
 #pragma once
 
-#include <QGraphicsItem>
 #include <QLine>
 #include <QHash>
+#include <QMutex>
+#include <QTextStream>
 #include "netlist_simulator_controller/wave_data.h"
+#include "waveform_viewer/wave_form_painted.h"
 
 class QScrollBar;
 
 namespace hal {
+
+    class WaveLoaderThread;
 
     class WaveItemIndex
     {
@@ -30,28 +34,34 @@ namespace hal {
 
     uint qHash(const WaveItemIndex &wii);
 
-    class WaveValueAsTextItem : public QGraphicsItem
-    {
-        int mValue;
-        float mWidth;
-    public:
-        WaveValueAsTextItem(int val, float w, QGraphicsItem* parentItem = nullptr);
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-        QRectF boundingRect() const override;
-    };
 
-    class WaveItem : public QGraphicsItem
+    class WaveItem : public QObject
     {
+        Q_OBJECT
     public:
         enum Request { AddRequest, DataChanged, SetVisible, SetPosition, SelectionChanged, DeleteRequest, DeleteAcknowledged };
+        enum State { Null, Loading, Aborted, Finished, Painted, Failed };
     private:
         WaveData* mData;
-        int       mYposition;
-        int       mRequest;
-        QVector<QLine> mSolidLines;
-        QVector<QLineF> mDotLines;
-        QVector<QRectF> mGrpRects;
+        WaveLoaderThread* mLoader;
+        State mState;
 
+
+    public:
+
+        WaveFormPainted mPainted;
+        int mLoadProgress;
+        WaveFormPaintValidity mLoadValidity;
+        QMutex mMutex;
+        bool mVisibleRange;
+        bool mLoop;
+
+        enum ColorIndex { Solid, HiLight, Dotted, Background };
+
+
+    private:
+        int   mYposition;
+        int   mRequest;
         float mMinTime;
         float mMaxTime;
         float mMaxTransition;
@@ -63,14 +73,35 @@ namespace hal {
         void constructGroup();
 
         void enforceYposition();
-        static const char* sLineColor[];
-        enum ColorIndex { Solid, HiLight, Dotted, Background };
+    public Q_SLOTS:
+        void handleLoaderFinished();
+
+    Q_SIGNALS:
+        void doneLoading();
+
     public:
-        WaveItem(WaveData* dat);
+        WaveItem(WaveData* dat, QObject* parent = nullptr);
         ~WaveItem();
 
+        bool isNull() const { return mState==Null; }
+        bool isLoading() const { return mState==Loading; }
+        bool isPainted() const { return mState==Painted; }
+        bool isFinished() const { return mState==Finished; }
+        bool isAborted() const { return mState==Aborted; }
+        bool isSelected() const { return mSelected; }
+        bool isThreadBusy() const { return isFinished() || isAborted(); }
+        void deletePainted();
+        void startGeneratePainted(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar);
+        void startLoader(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar);
+        void abortLoader();
+        bool loadToMemory() const { return mData->data().size() < 100000; }
+        void setState(State stat);
+        void dump(QTextStream& xout) const;
+        bool hasLoader() const { return mLoader != nullptr; }
+        void loadSaleae(SaleaeInputFile& sif);
+        State state() const { return mState; }
+
    //     int waveIndex() const { return mWaveIndex; }
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
         const WaveData* wavedata() const { return mData; }
         int yPosition() const { return mYposition; }
         bool waveVisibile() const { return mVisibile; }
@@ -78,13 +109,13 @@ namespace hal {
         void setWaveData(WaveData* wd);
         void setWaveVisible(bool vis);
         void setWaveSelected(bool sel);
-        QRectF boundingRect() const override;
         bool setTimeframe();
         bool hasRequest(Request rq) const;
         void setRequest(Request rq);
         void clearRequest(Request rq);
         bool isDeleted() const;
         static bool sValuesAsText;
+        static const char* sLineColor[];
     };
 
     class WaveItemHash : public QHash<WaveItemIndex,WaveItem*>

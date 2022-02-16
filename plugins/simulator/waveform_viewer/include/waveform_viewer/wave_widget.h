@@ -8,13 +8,12 @@
 #include <QSplitter>
 #include <QFrame>
 #include <hal_core/defines.h>
-#include "vcd_viewer/wave_item.h"
+#include "waveform_viewer/wave_item.h"
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 
 namespace hal {
 
-    class WaveGraphicsView;
-    class WaveScene;
+    class WaveGraphicsCanvas;
     class WaveTreeModel;
     class WaveTreeView;
     class SelectionTreeItem;
@@ -66,8 +65,7 @@ namespace hal {
 
         WaveTreeView*     mTreeView;
         WaveTreeModel*    mTreeModel;
-        WaveGraphicsView* mGraphicsView;
-        WaveScene*        mScene;
+        WaveGraphicsCanvas*   mScrollArea;
         bool              mOngoingYscroll;
         WaveDataList*     mWaveDataList;
         WaveItemHash*     mWaveItemHash;

@@ -5,7 +5,7 @@
 #include <QResizeEvent>
 #include <QStyledItemDelegate>
 #include "hal_core/defines.h"
-#include "vcd_viewer/wave_item.h"
+#include "waveform_viewer/wave_item.h"
 
 namespace hal {
     class WaveDataList;

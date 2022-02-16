@@ -1,7 +1,7 @@
-#include "vcd_viewer/wave_tree_view.h"
-#include "vcd_viewer/wave_tree_model.h"
-#include "vcd_viewer/wave_widget.h"
-#include "vcd_viewer/wave_edit_dialog.h"
+#include "waveform_viewer/wave_tree_view.h"
+#include "waveform_viewer/wave_tree_model.h"
+#include "waveform_viewer/wave_widget.h"
+#include "waveform_viewer/wave_edit_dialog.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include <QScrollBar>
 #include <QDragMoveEvent>
@@ -314,7 +314,6 @@ namespace hal {
                         qDebug() << "group wii not found" << groupId;
                     }
                     Q_ASSERT(wi);
-                    if (!wi->scene()) wi->setRequest(WaveItem::AddRequest);
                     wi->setYposition(i);
                     wi->setWaveVisible(true);
                     wi->setWaveSelected(sel.contains(currentIndex));
@@ -334,7 +333,6 @@ namespace hal {
                     qDebug() << "wire wii not found" << iwave << groupId;
                 }
                 Q_ASSERT(wi);
-                if (!wi->scene()) wi->setRequest(WaveItem::AddRequest);
                 wi->setYposition(i);
                 wi->setWaveVisible(true);
                 wi->setWaveSelected(sel.contains(currentIndex));
@@ -370,7 +368,7 @@ namespace hal {
             if (wi)
             {
                 wi->setWaveSelected(false);
-                wi->update();
+                // TODO scrollarea->update();
             }
         }
         if (current.isValid())
@@ -379,7 +377,7 @@ namespace hal {
             if (wi)
             {
                 if (wi) wi->setWaveSelected(true);
-                wi->update();
+                // TODO scrollarea->update();
             }
         }
     }

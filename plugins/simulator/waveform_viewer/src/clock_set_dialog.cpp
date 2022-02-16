@@ -1,4 +1,4 @@
-#include "vcd_viewer/clock_set_dialog.h"
+#include "waveform_viewer/clock_set_dialog.h"
 #include "hal_core/netlist/net.h"
 #include <QGridLayout>
 #include <QLabel>

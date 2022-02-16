@@ -1,14 +1,13 @@
-#include "vcd_viewer/wave_widget.h"
-#include "vcd_viewer/wave_tree_view.h"
-#include "vcd_viewer/wave_tree_model.h"
-#include "vcd_viewer/wave_graphics_view.h"
-#include "vcd_viewer/wave_scene.h"
-#include "vcd_viewer/vcd_viewer.h"
+#include "waveform_viewer/wave_widget.h"
+#include "waveform_viewer/wave_tree_view.h"
+#include "waveform_viewer/wave_tree_model.h"
+#include "waveform_viewer/wave_graphics_canvas.h"
+#include "waveform_viewer/waveform_viewer.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include "netlist_simulator_controller/saleae_directory.h"
 #include "netlist_simulator_controller/saleae_file.h"
-#include "vcd_viewer/wave_edit_dialog.h"
-#include "vcd_viewer/wave_selection_dialog.h"
+#include "waveform_viewer/wave_edit_dialog.h"
+#include "waveform_viewer/wave_selection_dialog.h"
 #include "math.h"
 
 #include <QResizeEvent>
@@ -46,11 +45,8 @@ namespace hal {
         mTreeView->header()->setStretchLastSection(true);
         addWidget(mTreeView);
 
-        mGraphicsView = new WaveGraphicsView(this);
-        mScene = new WaveScene(mWaveDataList, mWaveItemHash, this);
-        mGraphicsView->setScene(mScene);
-        mGraphicsView->setDefaultTransform();
-        addWidget(mGraphicsView);
+        mScrollArea = new WaveGraphicsCanvas(mWaveDataList,  mWaveItemHash, this);
+        addWidget(mScrollArea);
 
         connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
         connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded);
@@ -58,18 +54,18 @@ namespace hal {
         connect(mWaveDataList,&WaveDataList::groupAboutToBeRemoved,mTreeModel,&WaveTreeModel::handleGroupAboutToBeRemoved);
         connect(mWaveDataList,&WaveDataList::nameUpdated,mTreeModel,&WaveTreeModel::handleNameUpdated);
         connect(mWaveDataList,&WaveDataList::groupUpdated,mTreeModel,&WaveTreeModel::handleGroupUpdated);
-        connect(mWaveDataList,&WaveDataList::waveUpdated,mScene,&WaveScene::handleWaveUpdated);
+//        connect(mWaveDataList,&WaveDataList::waveUpdated,mScene,&WaveScene::handleWaveUpdated);
         connect(mTreeModel,&WaveTreeModel::inserted,mTreeView,&WaveTreeView::handleInserted);
         connect(mTreeModel,&WaveTreeModel::triggerReorder,mTreeView,&WaveTreeView::reorder);
-        connect(mTreeView,&WaveTreeView::viewportHeightChanged,mGraphicsView,&WaveGraphicsView::handleViewportHeightChanged);
-        connect(mTreeView,&WaveTreeView::sizeChanged,mGraphicsView,&WaveGraphicsView::handleSizeChanged);
-        connect(mTreeView,&WaveTreeView::triggerUpdateWaveItems,mScene,&WaveScene::updateWaveItems);
-        connect(mTreeView,&WaveTreeView::numberVisibleChanged,mGraphicsView,&WaveGraphicsView::handleNumberVisibileChanged);
-        connect(mTreeView,&WaveTreeView::valueBaseChanged,mScene,&WaveScene::updateWaveItemValues);
-        connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);
-        connect(mScene,&WaveScene::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
-        connect(mWaveDataList,&WaveDataList::timeframeChanged,mScene,&WaveScene::handleTimeframeChanged);
-        connect(mWaveDataList,&WaveDataList::timeframeChanged,mGraphicsView,&WaveGraphicsView::handelTimeframeChanged);
+//        connect(mTreeView,&WaveTreeView::viewportHeightChanged,mGraphicsView,&WaveGraphicsView::handleViewportHeightChanged);
+//        connect(mTreeView,&WaveTreeView::sizeChanged,mGraphicsView,&WaveGraphicsView::handleSizeChanged);
+//        connect(mTreeView,&WaveTreeView::triggerUpdateWaveItems,mScene,&WaveScene::updateWaveItems);
+//        connect(mTreeView,&WaveTreeView::numberVisibleChanged,mGraphicsView,&WaveGraphicsView::handleNumberVisibileChanged);
+//        connect(mTreeView,&WaveTreeView::valueBaseChanged,mScene,&WaveScene::updateWaveItemValues);
+//        connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);
+//        connect(mScene,&WaveScene::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
+//        connect(mWaveDataList,&WaveDataList::timeframeChanged,mScene,&WaveScene::handleTimeframeChanged);
+//        connect(mWaveDataList,&WaveDataList::timeframeChanged,mGraphicsView,&WaveGraphicsView::handelTimeframeChanged);
         connect(mWaveDataList,&WaveDataList::triggerBeginResetModel,mTreeModel,&WaveTreeModel::forwardBeginResetModel);
         connect(mWaveDataList,&WaveDataList::triggerEndResetModel,mTreeModel,&WaveTreeModel::forwardEndResetModel);
 
@@ -173,6 +169,7 @@ namespace hal {
 
     void WaveWidget::setVisualizeNetState(bool state, bool activeTab)
     {
+        /* TODO visualize net state
         GroupingTableModel* gtm = gContentManager->getGroupingManagerWidget()->getModel();
         static const char* grpNames[3] = {"x state", "0 state", "1 state"};
         mVisualizeNetState = state;
@@ -202,6 +199,7 @@ namespace hal {
                 mGroupIds[i] = 0;
             }
         }
+        */
     }
 
     void WaveWidget::addResults()
@@ -209,6 +207,8 @@ namespace hal {
         if (!canImportWires()) return;
         QSet<int> alreadyShownInx = mTreeModel->waveDataIndexSet();
         QSet<QString> alreadyShownNames;
+
+        // Which wavedata container entries are not shown yet
         int n = mWaveDataList->size();
         QMap<WaveSelectionEntry,int> wseMap;
         for (int i=0; i<n; i++)
@@ -221,16 +221,20 @@ namespace hal {
                 wseMap.insert(WaveSelectionEntry(wd->id(),wd->name(),wd->data().size()),i);
             }
         }
+
+        // Which salea directory entries are not shown yet
         SaleaeDirectory* sd = mController ? new SaleaeDirectory(mController->get_saleae_directory_filename()) : nullptr;
         if (sd)
         {
             for (const SaleaeDirectory::ListEntry& sdle : sd->get_net_list())
             {
                 QString netName = QString::fromStdString(sdle.name);
-                if (alreadyShownNames.contains(netName)) continue;
+                if (alreadyShownNames.contains(netName)) continue; // already shown
+                if (mWaveDataList->waveIndexByNetId(sdle.id)>=0) continue; // already added to selection list by previous loop
                 wseMap.insert(WaveSelectionEntry(sdle.id,netName,sdle.size),-1);
             }
         }
+
         WaveSelectionDialog wsd(wseMap,this);
         if (wsd.exec() == QDialog::Accepted)
         {
@@ -245,7 +249,7 @@ namespace hal {
                     WaveData* wd = new WaveData(it.key().id(),it.key().name());
                     if (wd->loadSaleae(*sd, mWaveDataList->timeFrame()))
                     {
-                        mWaveDataList->add(wd,false,false);
+                        mWaveDataList->add(wd,false);
                         mTreeModel->handleWaveAdded(iwave);
                     }
                 }
@@ -273,10 +277,8 @@ namespace hal {
     {
         QSplitter::resizeEvent(event);
         int w = event->size().width() - 320;
-        int h = event->size().height();
         if (w < 100) return;
         setSizes({320,w});
-        mGraphicsView->setCursorPos(QPoint(w/3,3*h/4));
     }
 
     void WaveWidget::handleEngineFinished(bool success)
@@ -323,12 +325,17 @@ namespace hal {
         mOngoingYscroll = true;
         if (mTreeView->verticalScrollBar()->value() != ypos)
             mTreeView->verticalScrollBar()->setValue(ypos);
+
+
+        // TODO scroll to ypos
+        /*
         if (mGraphicsView->verticalScrollBar()->value() != ypos)
         {
             mGraphicsView->verticalScrollBar()->setMaximum(
                         mTreeView->verticalScrollBar()->maximum());
             mGraphicsView->verticalScrollBar()->setValue(ypos);
         }
+        */
         mOngoingYscroll = false;
     }
 

@@ -1,4 +1,4 @@
-#include "vcd_viewer/wave_tree_model.h"
+#include "waveform_viewer/wave_tree_model.h"
 #include "netlist_simulator_controller/wave_data.h"
 #include <QApplication>
 #include <QFont>

@@ -1,7 +1,7 @@
 #pragma once
 #include "hal_core/defines.h"
 #include "netlist_simulator_controller/wave_data.h"
-#include "vcd_viewer/wave_item.h"
+#include "waveform_viewer/wave_item.h"
 #include <QAbstractItemModel>
 #include <QList>
 

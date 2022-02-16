@@ -1,4 +1,4 @@
-#include "vcd_viewer/wave_selection_dialog.h"
+#include "waveform_viewer/wave_selection_dialog.h"
 #include <QTableView>
 #include <QGridLayout>
 #include <QDialogButtonBox>

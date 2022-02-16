@@ -1,4 +1,4 @@
-#include "vcd_viewer/gate_selection_dialog.h"
+#include "waveform_viewer/gate_selection_dialog.h"
 
 #include "gui/module_dialog/gate_select_model.h"
 #include <QGridLayout>

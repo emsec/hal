@@ -568,19 +568,4 @@ namespace hal
         Q_EMIT controllerRemoved(id);
     }
 
-    /* show results
-    void NetlistSimulatorController::handleSelectionChanged(void* sender)
-    {
-        Q_UNUSED(sender);
-        for (u32 nid : gSelectionRelay->selectedNetsList())
-        {
-            Net* n = gNetlist->get_net_by_id(nid);
-            if (!n) continue;
-            const WaveData* wd = mResultMap.value(n->get_id());
-            if (!wd) continue;
-            WaveData* wdCopy = new WaveData(*wd);
-  //          mWaveDataList->addOrReplace(wdCopy);
-        }
-    }
-        */
 }    // namespace hal

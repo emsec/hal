@@ -1,7 +1,7 @@
-#include "vcd_viewer/plugin_vcd_viewer.h"
+#include "waveform_viewer/plugin_waveform_viewer.h"
 
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
-#include "vcd_viewer/vcd_viewer.h"
+#include "waveform_viewer/waveform_viewer.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/gui_globals.h"
 #include <QDebug>
