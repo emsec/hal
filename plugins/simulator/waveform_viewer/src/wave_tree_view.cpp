@@ -368,7 +368,7 @@ namespace hal {
             if (wi)
             {
                 wi->setWaveSelected(false);
-                // TODO scrollarea->update();
+                Q_EMIT triggerUpdateWaveItems();
             }
         }
         if (current.isValid())
@@ -377,7 +377,7 @@ namespace hal {
             if (wi)
             {
                 if (wi) wi->setWaveSelected(true);
-                // TODO scrollarea->update();
+                Q_EMIT triggerUpdateWaveItems();
             }
         }
     }

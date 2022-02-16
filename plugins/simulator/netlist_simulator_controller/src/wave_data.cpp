@@ -877,6 +877,8 @@ namespace hal {
             WaveData* wd = at(i);
             auto it = saleaeWaves.find(wd->name());
             if (it == saleaeWaves.end()) continue;
+            wd->setFileSize(it.value()->fileSize());
+            wd->setFileIndex(it.value()->fileIndex());
             if (wd->loadSaleae(mSaleaeDirectory,mTimeframe))
                 emitWaveUpdated(i);
             delete it.value();

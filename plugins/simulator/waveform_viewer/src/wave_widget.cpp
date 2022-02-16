@@ -45,8 +45,8 @@ namespace hal {
         mTreeView->header()->setStretchLastSection(true);
         addWidget(mTreeView);
 
-        mScrollArea = new WaveGraphicsCanvas(mWaveDataList,  mWaveItemHash, this);
-        addWidget(mScrollArea);
+        mGraphicsCanvas = new WaveGraphicsCanvas(mWaveDataList,  mWaveItemHash, this);
+        addWidget(mGraphicsCanvas);
 
         connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
         connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded);
@@ -59,7 +59,7 @@ namespace hal {
         connect(mTreeModel,&WaveTreeModel::triggerReorder,mTreeView,&WaveTreeView::reorder);
 //        connect(mTreeView,&WaveTreeView::viewportHeightChanged,mGraphicsView,&WaveGraphicsView::handleViewportHeightChanged);
 //        connect(mTreeView,&WaveTreeView::sizeChanged,mGraphicsView,&WaveGraphicsView::handleSizeChanged);
-//        connect(mTreeView,&WaveTreeView::triggerUpdateWaveItems,mScene,&WaveScene::updateWaveItems);
+        connect(mTreeView,&WaveTreeView::triggerUpdateWaveItems,mGraphicsCanvas,&WaveGraphicsCanvas::updateRequest);
 //        connect(mTreeView,&WaveTreeView::numberVisibleChanged,mGraphicsView,&WaveGraphicsView::handleNumberVisibileChanged);
 //        connect(mTreeView,&WaveTreeView::valueBaseChanged,mScene,&WaveScene::updateWaveItemValues);
 //        connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);

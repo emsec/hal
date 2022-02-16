@@ -63,12 +63,12 @@ namespace hal {
         std::unique_ptr<NetlistSimulatorController> mControllerOwner;
 
 
-        WaveTreeView*     mTreeView;
-        WaveTreeModel*    mTreeModel;
-        WaveGraphicsCanvas*   mScrollArea;
-        bool              mOngoingYscroll;
-        WaveDataList*     mWaveDataList;
-        WaveItemHash*     mWaveItemHash;
+        WaveTreeView*        mTreeView;
+        WaveTreeModel*       mTreeModel;
+        WaveGraphicsCanvas*  mGraphicsCanvas;
+        bool                 mOngoingYscroll;
+        WaveDataList*        mWaveDataList;
+        WaveItemHash*        mWaveItemHash;
 
         bool mVisualizeNetState;
         bool mAutoAddWaves;

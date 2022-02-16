@@ -1,10 +1,10 @@
 *
-!netlist_simulator*
-!netlist_simulator/**/*
+!hal_simulator*
+!hal_simulator/**/*
 !netlist_simulator_controller*
 !netlist_simulator_controller/**/*
-!vcd_viewer*
-!vcd_viewer/**/*
+!waveform_viewer*
+!waveform_viewer/**/*
 !verilator*
 !verilator/**/*
 !.gitignore

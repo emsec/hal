@@ -1,0 +1,282 @@
+#include "waveform_viewer/wave_render_engine.h"
+#include "waveform_viewer/wave_graphics_canvas.h"
+#include "waveform_viewer/wave_transform.h"
+#include "waveform_viewer/wave_scrollbar.h"
+#include "waveform_viewer/wave_form_painted.h"
+#include <QDebug>
+#include <QDir>
+#include <QPaintEvent>
+#include "netlist_simulator_controller/saleae_file.h"
+#include "waveform_viewer/wave_data_provider.h"
+#include "waveform_viewer/wave_item.h"
+
+namespace hal {
+
+
+    WaveLoaderThread::WaveLoaderThread(WaveItem* parentEntry, const QString &workdir,
+                                       const WaveTransform* trans, const WaveScrollbar* sbar)
+        : QThread(parentEntry), mEntry(parentEntry), mWorkDir(workdir), mTransform(trans), mScrollbar(sbar)
+    {
+//        qDebug() << mEntry->mFileIndex << "construct thread" << Qt::hex << (quintptr) this << Qt::dec;
+    }
+
+    WaveLoaderThread::~WaveLoaderThread()
+    {
+//        qDebug() << mEntry->mFileIndex << "delete thread" << Qt::hex << (quintptr) this << Qt::dec;
+    }
+
+    void WaveLoaderThread::run()
+    {
+        mEntry->setState(WaveItem::Loading);
+        SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mEntry->wavedata()->fileIndex())).toStdString());
+        if (sif.good())
+        {
+            if (mEntry->loadToMemory())
+            {
+                try {
+                    const WaveData* wd = mEntry->wavedata();
+                    if ((u64)wd->data().size() < wd->fileSize())
+                        mEntry->loadSaleae(sif);
+                    mEntry->mPainted.clearPrimitives();
+                    if (mEntry->isAborted()) return;
+                    WaveDataProviderMap wdpMap(wd->data());
+                    mEntry->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mEntry->mLoop);
+                    mEntry->setState(WaveItem::Finished);
+                } catch (...) {
+                    mEntry->setState(WaveItem::Failed);
+                }
+            }
+            else
+            {
+                try {
+                    WaveDataProviderFile wdpFile(sif);
+                    mEntry->mPainted.generate(&wdpFile,mTransform,mScrollbar,&mEntry->mLoop);
+                    mEntry->setState(WaveItem::Finished);
+                } catch (...) {
+                    mEntry->setState(WaveItem::Failed);
+                }
+            }
+        }
+        else
+            mEntry->setState(WaveItem::Failed);
+    }
+
+    //------------------------
+
+    void WaveLoaderBackbone::run()
+    {
+        while (mLoop)
+        {
+            int needStillWork = 0;
+            for (WaveItem* wree : mTodoList)
+            {
+                if (!wree->isNull()) continue;
+                ++ needStillWork;
+                if (!wree->mMutex.tryLock()) continue;
+                if (wree->isNull())
+                {
+                    wree->setState(WaveItem::Loading);
+                    wree->mMutex.unlock();
+                    SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(wree->wavedata()->fileIndex())).toStdString());
+                    if (wree->loadToMemory())
+                    {
+                        try {
+                            const WaveData* wd = wree->wavedata();
+                            if ((u64)wd->data().size() < wd->fileSize())
+                                wree->loadSaleae(sif);
+                            wree->mPainted.clearPrimitives();
+                            WaveDataProviderMap wdpMap(wd->data());
+                            wree->mPainted.generate(&wdpMap,mTransform,mScrollbar,&wree->mLoop);
+                            wree->setState(WaveItem::Painted);
+                        } catch (...) {
+                            wree->setState(WaveItem::Failed);
+                        }
+                    }
+                    else
+                    {
+                        try {
+                            WaveDataProviderFile wdpFile(sif);
+                            wree->mPainted.generate(&wdpFile,mTransform,mScrollbar,&wree->mLoop);
+                            wree->setState(WaveItem::Painted);
+                        } catch (...) {
+                            wree->setState(WaveItem::Failed);
+                        }
+                    }
+                }
+                else
+                    wree->mMutex.unlock();
+                if (!mLoop) break;;
+            }
+            if (!needStillWork) break;
+        }
+    }
+
+    //------------------------
+    WaveRenderEngine::WaveRenderEngine(WaveGraphicsCanvas *wsa, WaveDataList *wdlist, WaveItemHash *wHash, QWidget *parent)
+        : QWidget(parent), mWaveGraphicsCanvas(wsa), mWaveDataList(wdlist), mWaveItemHash(wHash),
+          mY0(0), mHeight(0), mTimerTick(0), mBackbone(nullptr)
+    {
+        mTimer = new QTimer(this);
+        connect(mTimer,&QTimer::timeout,this,&WaveRenderEngine::handleTimeout);
+        mTimer->start(50);
+    }
+
+    void WaveRenderEngine::handleTimeout()
+    {
+        bool needUpdate = false;
+        for (WaveItem* wree : mWaveItemHash->values())
+        {
+            if ((wree->isLoading() || wree->isThreadBusy()) && wree->mVisibleRange)
+            {
+                ++wree->mLoadProgress;
+                if (wree->mLoadProgress*5 > wree->mLoadValidity.width())
+                    wree->mLoadProgress = 1;
+                needUpdate = true;
+            }
+        }
+        if (!needUpdate) return;
+        if (++mTimerTick > 2)
+        {
+            update();
+        }
+    }
+
+    void WaveRenderEngine::handleBackboneFinished()
+    {
+        WaveLoaderBackbone* toDelete = mBackbone;
+        mBackbone = nullptr;
+        toDelete->deleteLater();
+    }
+
+    void WaveRenderEngine::callUpdate()
+    {
+        update();
+    }
+
+    void WaveRenderEngine::paintEvent(QPaintEvent *event)
+    {
+        Q_UNUSED(event);
+        QPainter painter(this);
+
+        int top = mWaveGraphicsCanvas->verticalScrollBar()->value();
+        const WaveTransform* trans = mWaveGraphicsCanvas->transform();
+        const WaveScrollbar* sbar  = static_cast<const WaveScrollbar*>(mWaveGraphicsCanvas->horizontalScrollBar());
+        mTimerTick = 0;
+
+        WaveFormPaintValidity testValid(trans,sbar);
+
+        if (testValid != mValidity)
+        {
+            if (mBackbone)
+                mBackbone->mLoop = false;
+            mValidity = testValid;
+        }
+
+        mY0 = top;
+        mHeight = height();
+
+        QString workdir = QString::fromStdString(mWaveDataList->saleaeDirectory().get_directory());
+
+        for (WaveItem* wree : mWaveItemHash->values())
+        {
+            if (wree->hasRequest(WaveItem::AddRequest))
+            {
+                wree->setParent(this);
+                connect(wree,&WaveItem::doneLoading,this,&WaveRenderEngine::callUpdate);
+                wree->clearRequest(WaveItem::AddRequest);
+            }
+
+            int y0 = y0Entry(wree->yPosition());
+
+            if (y0 < 0 || y0 > mHeight)
+            {
+                wree->mVisibleRange = false;
+                // not in painted range
+                if (wree->isThreadBusy()) continue;
+
+                if (wree->isLoading() && wree->hasLoader())
+                {
+                    if (!wree->mMutex.tryLock())
+                        continue;
+                    else
+                    {
+                        wree->abortLoader();
+                        wree->mMutex.unlock();
+                    }
+                }
+                continue;
+            }
+
+            wree->mVisibleRange = true;
+            if (!wree->mMutex.tryLock()) continue;
+            else
+                {
+                if (wree->isNull())
+                {
+                    wree->startGeneratePainted(workdir,trans, sbar);
+                }
+                else if (wree->isLoading() || wree->isThreadBusy())
+                {
+                    QColor barColor = QColor::fromRgb(255,80,66,40);
+                    if (wree->isLoading())
+                    {
+                        if (wree->mLoadValidity == mValidity)
+                            barColor = QColor::fromRgb(50,255,66,40);
+                        else
+                            wree->abortLoader();
+                    }
+                    painter.fillRect(QRectF(0,y0,wree->mLoadProgress*5,14),
+                                     QBrush(barColor));
+                }
+                else if (wree->isPainted())
+                {
+                    if (mValidity == wree->mPainted.validity())
+                    {
+                        wree->mLoadProgress = 0;
+                        if (wree->isSelected())
+                        {
+                            painter.fillRect(QRectF(0,y0-4,width(),24), QBrush(QColor(WaveItem::sLineColor[WaveItem::Background])));
+                            painter.setPen(QPen(QColor(WaveItem::sLineColor[WaveItem::HiLight]),0));
+                        }
+                        else
+                            painter.setPen(QPen(QColor(WaveItem::sLineColor[WaveItem::Solid]),0));
+                        wree->mPainted.paint(y0,painter);
+                    }
+                    else
+                    {
+                        wree->deletePainted();
+                        wree->startGeneratePainted(workdir,trans,sbar);
+                    }
+                }
+                wree->mMutex.unlock();
+            }
+        }
+
+        QList<WaveItem*> todoList;
+
+        for (WaveItem* wree : mWaveItemHash->values())
+        {
+            if (wree->isNull()) todoList.append(wree);
+        }
+
+        if (!todoList.isEmpty() && !mBackbone)
+        {
+            mBackbone = new WaveLoaderBackbone(todoList, QString::fromStdString(mWaveDataList->saleaeDirectory().get_directory()), trans, sbar, this);
+            connect(mBackbone, &QThread::finished, this, &WaveRenderEngine::handleBackboneFinished);
+            mBackbone->start();
+        }
+
+//        qDebug() << "render" << y0 << mScale << mTleft << mWidth;
+    }
+
+    int WaveRenderEngine::y0Entry(int irow) const
+    {
+        return 35 + irow*28 - mY0;
+    }
+
+    int WaveRenderEngine::maxHeight() const
+    {
+        return (mWaveItemHash->size()+2) * 28;
+    }
+}
+
