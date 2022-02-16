@@ -52,7 +52,7 @@ namespace hal
     QStringList ModulePinsTreeModel::mimeTypes() const
     {
         QStringList types;
-        types << "pintreemodel/pin";
+        types << "pintreemodel/item";
         return  types;
     }
 
@@ -63,8 +63,11 @@ namespace hal
 
         QMimeData* data = new QMimeData();
         auto item = getItemFromIndex(indexes.at(0));
+        QByteArray encodedData;
+        QDataStream stream(&encodedData, QIODevice::WriteOnly);
+        stream << QString("pin") << getIdOfItem(item);
         data->setText(item->getData(sNameColumn).toString());
-        data->setData("pintreemodel/pin", QByteArray());
+        data->setData("pintreemodel/item", encodedData);
         return data;
     }
 
@@ -73,103 +76,109 @@ namespace hal
         Q_UNUSED(action)
         Q_UNUSED(column)
 
-//        auto droppedItem = mNameToTreeItem.value(data->text());
-//        auto droppedParentItem = droppedItem->getParent();
-//        auto mod = gNetlist->get_module_by_id(mModuleId);
-//        auto droppedPin = mod->get_pin(droppedItem->getData(sNameColumn).toString().toStdString());
-//        auto ownRow = droppedItem->getOwnRow();
-//        TreeItem* newItem = new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn)
-//                                         << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
-//        newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));//currently only pins can be dragged, so its a pin
+        QString type;
+        int id;
+        QByteArray encItem = data->data("pintreemodel/item");
+        QDataStream dataStream(&encItem, QIODevice::ReadOnly);
+        dataStream >> type;
+        dataStream >> id;
 
-//        if(row != -1)//between items
-//        {
-//            auto onDroppedParentItem = parent.isValid() ? getItemFromIndex(parent) : mRootItem;
-//            bool bottomEdge = row == onDroppedParentItem->getChildCount();
-//            auto onDroppedItem = bottomEdge ? onDroppedParentItem->getChild(row-1) : onDroppedParentItem->getChild(row);
-//            auto onDroppedPin = mod->get_pin(onDroppedItem->getData(sNameColumn).toString().toStdString());
-//            auto desiredIndex = onDroppedPin->get_group().second;
+        auto droppedItem = mIdToPinItem.value(id);
+        auto droppedParentItem = droppedItem->getParent();
+        auto mod = gNetlist->get_module_by_id(mModuleId);
+        auto droppedPinRes = mod->get_pin_by_id(id);
+        if(droppedPinRes.is_error()) return false;
+        auto droppedPin = droppedPinRes.get();
+        auto ownRow = droppedItem->getOwnRow();
+        TreeItem* newItem = new TreeItem(QList<QVariant>() << droppedItem->getData(sNameColumn) << droppedItem->getData(sDirectionColumn)
+                                         << droppedItem->getData(sTypeColumn) << droppedItem->getData(sNetColumn));
+        newItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));//currently only pins can be dragged, so its a pin
+        newItem->setAdditionalData(keyId, id);
 
-//            //same-parent (parent != root): move withing same group
-//            if(onDroppedParentItem == droppedParentItem && onDroppedParentItem != mRootItem)
-//            {
-//                if(ownRow == row || ownRow+1 == row)
-//                    return false;
+        if(row != -1)//between items
+        {
+            auto onDroppedParentItem = parent.isValid() ? getItemFromIndex(parent) : mRootItem;
+            bool bottomEdge = row == onDroppedParentItem->getChildCount();
+            auto onDroppedItem = bottomEdge ? onDroppedParentItem->getChild(row-1) : onDroppedParentItem->getChild(row);
+            auto onDroppedPinRes = mod->get_pin_by_id(getIdOfItem(onDroppedItem));
+            auto onDroppedPin = onDroppedPinRes.get();
+            auto desiredIndex = onDroppedPin->get_group().second;
 
-//                removeItem(droppedItem);
-//                mIgnoreNextPinsChanged = true;
-//                if(bottomEdge)
-//                {
-//                    insertItem(newItem, droppedParentItem, row-1);
-////                    ActionReorderObject* act = new ActionReorderObject(desiredIndex);
-////                    act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Pin));
-////                    act->setPinOrPingroupIdentifier(QString::fromStdString(droppedPin->get_name()));
-////                    act->exec();
-//                    //mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
-//                }
-//                else
-//                {
-//                    if(ownRow < row){
-//                        insertItem(newItem, droppedParentItem, row-1);
-//                        desiredIndex--;
-//                    }
-//                    else
-//                        insertItem(newItem, droppedParentItem, row);
-////                    ActionReorderObject* act = new ActionReorderObject(desiredIndex);
-////                    act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Pin));
-////                    act->setPinOrPingroupIdentifier(QString::fromStdString(droppedPin->get_name()));
-////                    act->exec();
-//                    //mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
-//                }
-//                return true;
-//            }
+            //same-parent (parent != root): move withing same group
+            if(onDroppedParentItem == droppedParentItem && onDroppedParentItem != mRootItem)
+            {
+                if(ownRow == row || ownRow+1 == row)
+                    return false;
 
-//            //different parents v1 (dropped's parent = mRoot, onDropped's parent=group)
-//            if(droppedParentItem == mRootItem && onDroppedParentItem != mRootItem)
-//            {
-//                auto pinGroup = mod->get_pin_group(onDroppedParentItem->getData(sNameColumn).toString().toStdString());
-//                mIgnoreNextPinsChanged = true;
-//                bool ret = mod->assign_pin_to_group(pinGroup, droppedPin);
-//                mIgnoreNextPinsChanged = false;//if action above failed
-//                if(ret)
-//                {
-//                    mIgnoreNextPinsChanged = true;
-//                    ret = mod->move_pin_within_group(pinGroup, droppedPin, bottomEdge ? desiredIndex+1 : desiredIndex);
-//                    if(ret)
-//                    {
-//                        removeItem(droppedItem);
-//                        insertItem(newItem, onDroppedParentItem, row);
-//                        return true;
-//                    }
-//                    mIgnoreNextPinsChanged = false;
-//                    removeItem(droppedItem);
-//                    insertItem(newItem, onDroppedParentItem, onDroppedParentItem->getChildCount());
-//                    return false;
-//                }
-//                return false;
-//            }
-//            //different parents v2(droppedItem's parent != root, ondropped's != root)
+                removeItem(droppedItem);
+                mIgnoreNextPinsChanged = true;
+                if(bottomEdge)
+                {
+                    insertItem(newItem, droppedParentItem, row-1);
+                    mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
+                }
+                else
+                {
+                    if(ownRow < row){
+                        insertItem(newItem, droppedParentItem, row-1);
+                        desiredIndex--;
+                    }
+                    else
+                        insertItem(newItem, droppedParentItem, row);
+                    mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
+                }
+                return true;
+            }
 
-//        }
-//        else// on item
-//        {
-//            auto onDroppedItem = getItemFromIndex(parent);
-//            auto onDroppedGroup = mod->get_pin_group(onDroppedItem->getData(sNameColumn).toString().toStdString());
-//            //on group (dropped parent = mRoot)
-//            if(droppedParentItem == mRootItem)
-//            {
-//                mIgnoreNextPinsChanged = true;
-//                int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin);
-//                if(ret)
-//                {
-//                    removeItem(droppedItem);
-//                    insertItem(newItem, onDroppedItem, onDroppedItem->getChildCount());
-//                    return true;
-//                }
-//                mIgnoreNextPinsChanged = false;
-//                return false;
-//            }
-//        }
+            //different parents v1 (dropped's parent = mRoot, onDropped's parent=group)
+            if(droppedParentItem == mRootItem && onDroppedParentItem != mRootItem)
+            {
+                auto pinGroupRes = mod->get_pin_group_by_id(getIdOfItem(onDroppedParentItem));
+                if(pinGroupRes.is_error()) return false;
+                auto pinGroup = pinGroupRes.get();
+                mIgnoreNextPinsChanged = true;
+                bool ret = mod->assign_pin_to_group(pinGroup, droppedPin).is_ok();
+                mIgnoreNextPinsChanged = false;//if action above failed
+                if(ret)
+                {
+                    mIgnoreNextPinsChanged = true;
+                    ret = mod->move_pin_within_group(pinGroup, droppedPin, bottomEdge ? desiredIndex+1 : desiredIndex).is_ok();
+                    if(ret)
+                    {
+                        removeItem(droppedItem);
+                        insertItem(newItem, onDroppedParentItem, row);
+                        return true;
+                    }
+                    mIgnoreNextPinsChanged = false;
+                    removeItem(droppedItem);
+                    insertItem(newItem, onDroppedParentItem, onDroppedParentItem->getChildCount());
+                    return false;
+                }
+                return false;
+            }
+            //different parents v2(droppedItem's parent != root, ondropped's != root)
+        }
+        else// on item
+        {
+            auto onDroppedItem = getItemFromIndex(parent);
+            auto onDroppedGroupRes = mod->get_pin_group_by_id(getIdOfItem(onDroppedItem));
+            if(onDroppedGroupRes.is_error()) return false;
+            auto onDroppedGroup = onDroppedGroupRes.get();
+            //on group (dropped parent = mRoot)
+            if(droppedParentItem == mRootItem)
+            {
+                mIgnoreNextPinsChanged = true;
+                int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin).is_ok();
+                if(ret)
+                {
+                    removeItem(droppedItem);
+                    insertItem(newItem, onDroppedItem, onDroppedItem->getChildCount());
+                    return true;
+                }
+                mIgnoreNextPinsChanged = false;
+                return false;
+            }
+        }
         return false;
     }
 
@@ -270,7 +279,7 @@ namespace hal
         return item->getAdditionalData(keyType).value<itemType>();
     }
 
-    int ModulePinsTreeModel::getIdOfItem(TreeItem *item)
+    int ModulePinsTreeModel::getIdOfItem(TreeItem *item) const
     {
         return item->getAdditionalData(keyId).toInt();
     }
@@ -291,7 +300,9 @@ namespace hal
         beginRemoveRows(parent(getIndexFromItem(item)), item->getOwnRow(), item->getOwnRow());
         item->getParent()->removeChild(item);
         endRemoveRows();
-        mNameToTreeItem.remove(item->getData(sNameColumn).toString());
+        //mNameToTreeItem.remove(item->getData(sNameColumn).toString());
+        //for now, only ids of pin-items (since these functions are only relevant for dnd)
+        mIdToPinItem.remove(getIdOfItem(item));
         delete item;
     }
 
@@ -300,6 +311,7 @@ namespace hal
         beginInsertRows(getIndexFromItem(parent), index, index);
         parent->insertChild(index, item);
         endInsertRows();
-        mNameToTreeItem.insert(item->getData(sNameColumn).toString(), item);
+        //mNameToTreeItem.insert(item->getData(sNameColumn).toString(), item);
+        mIdToPinItem.insert(getIdOfItem(item), item);
     }
 }    // namespace hal

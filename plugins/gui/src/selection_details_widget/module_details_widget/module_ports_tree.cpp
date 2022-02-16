@@ -133,8 +133,8 @@ namespace hal
 
         if(type == ModulePinsTreeModel::itemType::portMultiBit)//group specific context
         {
-            menu.addAction("Rename pingroup", [name, modId, itemId](){
-                InputDialog ipd("Change group name", "New group name", name);
+            menu.addAction("Rename pin group", [name, modId, itemId](){
+                InputDialog ipd("Change pin group name", "New group name", name);
                 if(ipd.exec() == QDialog::Accepted)
                 {
                     if(ipd.textValue().isEmpty())
@@ -144,7 +144,7 @@ namespace hal
                         gNetlist->get_module_by_id(modId)->set_pin_group_name(groupResult.get(), ipd.textValue().toStdString());
                 }
             });
-            menu.addAction("Delete group", [this, itemId, modId](){
+            menu.addAction("Delete pin group", [this, itemId, modId](){
                 //add "are you sure?" dialog
                 QMessageBox::StandardButton reply = QMessageBox::question(this,
                                                                           "Group deletion", "Are you sure you want to delete that group?", QMessageBox::Yes | QMessageBox::No);

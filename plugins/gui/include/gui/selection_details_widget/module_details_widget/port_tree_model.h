@@ -108,7 +108,7 @@ namespace hal
          * @param item - The item.
          * @return The pin- or pingroup-id.
          */
-        int getIdOfItem(TreeItem* item);
+        int getIdOfItem(TreeItem* item) const;
 
         /** @name Event Handler Functions
          */
