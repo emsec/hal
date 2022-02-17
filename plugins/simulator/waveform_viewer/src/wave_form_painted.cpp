@@ -100,6 +100,8 @@ namespace hal {
                 }
                 if (valLast < 0)
                     mPrimitives.append(new WaveFormPrimitiveUndefined(xLast,xNext));
+                else if (wdp->isGroup())
+                    mPrimitives.append(new WaveFormPrimitiveValue(xLast,xNext,valLast));
                 else
                     mPrimitives.append(new WaveFormPrimitiveHline(xLast,xNext,valLast));
             }
@@ -113,7 +115,7 @@ namespace hal {
                 }
                 pendingTransition = new WaveFormPrimitiveFilled(xOld,xNext);
             }
-            if (loop && valLast >= 0 && valNext >= 0 && valLast != valNext && !pendingTransition)
+            if (loop && valLast >= 0 && valNext >= 0 && valLast != valNext && !pendingTransition && !wdp->isGroup())
                 pendingTransition = new WaveFormPrimitiveTransition(xNext);
         }
         if (pendingTransition)

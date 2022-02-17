@@ -27,6 +27,7 @@ namespace hal {
         QWidget* mDragZoom;
     public Q_SLOTS:
         void updateRequest();
+        void handleWaveUpdated(int iwave, int groupId);
     protected:
         void resizeEvent(QResizeEvent *) override;
         void wheelEvent(QWheelEvent *) override;

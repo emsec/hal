@@ -28,37 +28,54 @@ namespace hal {
     void WaveLoaderThread::run()
     {
         mEntry->setState(WaveItem::Loading);
-        SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mEntry->wavedata()->fileIndex())).toStdString());
-        if (sif.good())
+        const WaveData* wd = mEntry->wavedata();
+        if (wd->netType() == WaveData::ClockNet)
         {
-            if (mEntry->loadToMemory())
+            try {
+               SimulationInput::Clock clk = static_cast<const WaveDataClock*>(wd)->clock();
+               WaveDataProviderClock wdpClk(clk);
+               mEntry->mPainted.generate(&wdpClk,mTransform,mScrollbar,&mEntry->mLoop);
+               mEntry->setState(WaveItem::Finished);
+               } catch (...) {
+                   mEntry->setState(WaveItem::Failed);
+               }
+        }
+        else
+        {
+            SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mEntry->wavedata()->fileIndex())).toStdString());
+            if (sif.good())
             {
-                try {
-                    const WaveData* wd = mEntry->wavedata();
-                    if ((u64)wd->data().size() < wd->fileSize())
-                        mEntry->loadSaleae(sif);
-                    mEntry->mPainted.clearPrimitives();
-                    if (mEntry->isAborted()) return;
-                    WaveDataProviderMap wdpMap(wd->data());
-                    mEntry->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mEntry->mLoop);
-                    mEntry->setState(WaveItem::Finished);
-                } catch (...) {
-                    mEntry->setState(WaveItem::Failed);
+                if (mEntry->loadToMemory())
+                {
+                    try {
+
+                        if ((u64)wd->data().size() < wd->fileSize())
+                            mEntry->loadSaleae(sif);
+                        mEntry->mPainted.clearPrimitives();
+                        if (mEntry->isAborted()) return;
+                        WaveDataProviderMap wdpMap(wd->data());
+                        wdpMap.setGroup(wd->netType()==WaveData::NetGroup);
+                        mEntry->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mEntry->mLoop);
+                        mEntry->setState(WaveItem::Finished);
+                    } catch (...) {
+                        mEntry->setState(WaveItem::Failed);
+                    }
+                }
+                else
+                {
+                    try {
+                        WaveDataProviderFile wdpFile(sif);
+                        // TODO : test group
+                        mEntry->mPainted.generate(&wdpFile,mTransform,mScrollbar,&mEntry->mLoop);
+                        mEntry->setState(WaveItem::Finished);
+                    } catch (...) {
+                        mEntry->setState(WaveItem::Failed);
+                    }
                 }
             }
             else
-            {
-                try {
-                    WaveDataProviderFile wdpFile(sif);
-                    mEntry->mPainted.generate(&wdpFile,mTransform,mScrollbar,&mEntry->mLoop);
-                    mEntry->setState(WaveItem::Finished);
-                } catch (...) {
-                    mEntry->setState(WaveItem::Failed);
-                }
-            }
+                mEntry->setState(WaveItem::Failed);
         }
-        else
-            mEntry->setState(WaveItem::Failed);
     }
 
     //------------------------
@@ -77,29 +94,45 @@ namespace hal {
                 {
                     wree->setState(WaveItem::Loading);
                     wree->mMutex.unlock();
-                    SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(wree->wavedata()->fileIndex())).toStdString());
-                    if (wree->loadToMemory())
+                    const WaveData* wd = wree->wavedata();
+                    if (wd->netType() == WaveData::ClockNet)
                     {
                         try {
-                            const WaveData* wd = wree->wavedata();
-                            if ((u64)wd->data().size() < wd->fileSize())
-                                wree->loadSaleae(sif);
-                            wree->mPainted.clearPrimitives();
-                            WaveDataProviderMap wdpMap(wd->data());
-                            wree->mPainted.generate(&wdpMap,mTransform,mScrollbar,&wree->mLoop);
-                            wree->setState(WaveItem::Painted);
+                            SimulationInput::Clock clk = static_cast<const WaveDataClock*>(wd)->clock();
+                            WaveDataProviderClock wdpClk(clk);
+                            wree->mPainted.generate(&wdpClk,mTransform,mScrollbar,&wree->mLoop);
+                            wree->setState(WaveItem::Finished);
                         } catch (...) {
                             wree->setState(WaveItem::Failed);
                         }
                     }
                     else
                     {
-                        try {
-                            WaveDataProviderFile wdpFile(sif);
-                            wree->mPainted.generate(&wdpFile,mTransform,mScrollbar,&wree->mLoop);
-                            wree->setState(WaveItem::Painted);
-                        } catch (...) {
-                            wree->setState(WaveItem::Failed);
+                        SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(wree->wavedata()->fileIndex())).toStdString());
+                        if (wree->loadToMemory())
+                        {
+                            try {
+                                if ((u64)wd->data().size() < wd->fileSize())
+                                    wree->loadSaleae(sif);
+                                wree->mPainted.clearPrimitives();
+                                WaveDataProviderMap wdpMap(wd->data());
+                                wdpMap.setGroup(wd->netType()==WaveData::NetGroup);
+                                wree->mPainted.generate(&wdpMap,mTransform,mScrollbar,&wree->mLoop);
+                                wree->setState(WaveItem::Painted);
+                            } catch (...) {
+                                wree->setState(WaveItem::Failed);
+                            }
+                        }
+                        else
+                        {
+                            try {
+                                WaveDataProviderFile wdpFile(sif);
+                                // TODO : test group
+                                wree->mPainted.generate(&wdpFile,mTransform,mScrollbar,&wree->mLoop);
+                                wree->setState(WaveItem::Painted);
+                            } catch (...) {
+                                wree->setState(WaveItem::Failed);
+                            }
                         }
                     }
                 }
@@ -230,22 +263,26 @@ namespace hal {
                 }
                 else if (wree->isPainted())
                 {
-                    if (mValidity == wree->mPainted.validity())
+                    if (mValidity == wree->mPainted.validity() && !wree->wavedata()->isDirty() &&!wree->hasRequest(WaveItem::DataChanged))
                     {
                         wree->mLoadProgress = 0;
-                        if (wree->isSelected())
+                        if (wree->isVisibile())
                         {
-                            painter.fillRect(QRectF(0,y0-4,width(),24), QBrush(QColor(WaveItem::sLineColor[WaveItem::Background])));
-                            painter.setPen(QPen(QColor(WaveItem::sLineColor[WaveItem::HiLight]),0));
+                            if (wree->isSelected())
+                            {
+                                painter.fillRect(QRectF(0,y0-4,width(),28), QBrush(QColor(WaveItem::sLineColor[WaveItem::Background])));
+                                painter.setPen(QPen(QColor(WaveItem::sLineColor[WaveItem::HiLight]),0));
+                            }
+                            else
+                                painter.setPen(QPen(QColor(WaveItem::sLineColor[WaveItem::Solid]),0));
+                            wree->mPainted.paint(y0,painter);
                         }
-                        else
-                            painter.setPen(QPen(QColor(WaveItem::sLineColor[WaveItem::Solid]),0));
-                        wree->mPainted.paint(y0,painter);
                     }
                     else
                     {
                         wree->deletePainted();
                         wree->startGeneratePainted(workdir,trans,sbar);
+                        wree->clearRequest(WaveItem::DataChanged);
                     }
                 }
                 wree->mMutex.unlock();
@@ -271,7 +308,7 @@ namespace hal {
 
     int WaveRenderEngine::y0Entry(int irow) const
     {
-        return 35 + irow*28 - mY0;
+        return 32 + irow*28 - mY0;
     }
 
     int WaveRenderEngine::maxHeight() const

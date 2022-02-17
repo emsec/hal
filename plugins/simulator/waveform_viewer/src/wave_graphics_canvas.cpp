@@ -3,6 +3,7 @@
 #include "waveform_viewer/wave_render_engine.h"
 #include "waveform_viewer/wave_timescale.h"
 #include "waveform_viewer/wave_cursor.h"
+#include "waveform_viewer/wave_item.h"
 #include <QScrollBar>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -116,6 +117,15 @@ namespace hal {
         mRenderEngine->update();
     }
 
+    void WaveGraphicsCanvas::handleWaveUpdated(int iwave, int groupId)
+    {
+        WaveItemIndex wii(iwave, WaveItemIndex::Wire, groupId);
+        WaveItem* wi = mWaveItemHash->value(wii);
+        if (!wi) return;
+        wi->setWaveData(mWaveDataList->at(iwave));
+        mRenderEngine->update();
+    }
+
     void WaveGraphicsCanvas::mouseDoubleClickEvent(QMouseEvent* evt)
     {
         mTimescale->update();
@@ -135,7 +145,7 @@ namespace hal {
         else
             return;
         if (newScale >= 100) return;
-        if (newScale*mTranform.deltaT()*1.2<viewport()->width()) return;
+        if (newScale*mTranform.deltaT()*1.2<viewport()->width() && newScale < oldScale) return;
         int xEvent = evt->pos().x();
         double tEvent = mScrollbar->tPos(xEvent);
 

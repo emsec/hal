@@ -54,7 +54,7 @@ namespace hal {
         connect(mWaveDataList,&WaveDataList::groupAboutToBeRemoved,mTreeModel,&WaveTreeModel::handleGroupAboutToBeRemoved);
         connect(mWaveDataList,&WaveDataList::nameUpdated,mTreeModel,&WaveTreeModel::handleNameUpdated);
         connect(mWaveDataList,&WaveDataList::groupUpdated,mTreeModel,&WaveTreeModel::handleGroupUpdated);
-//        connect(mWaveDataList,&WaveDataList::waveUpdated,mScene,&WaveScene::handleWaveUpdated);
+        connect(mWaveDataList,&WaveDataList::waveUpdated,mGraphicsCanvas,&WaveGraphicsCanvas::handleWaveUpdated);
         connect(mTreeModel,&WaveTreeModel::inserted,mTreeView,&WaveTreeView::handleInserted);
         connect(mTreeModel,&WaveTreeModel::triggerReorder,mTreeView,&WaveTreeView::reorder);
 //        connect(mTreeView,&WaveTreeView::viewportHeightChanged,mGraphicsView,&WaveGraphicsView::handleViewportHeightChanged);

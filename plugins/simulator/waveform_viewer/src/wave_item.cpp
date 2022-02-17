@@ -23,12 +23,11 @@ namespace hal {
           mYposition(-1), mRequest(0), mMinTime(0),
           mMaxTime(1000), mMaxTransition(0),
           mVisibile(true), mSelected(false)
-    {
-        construct();
-    }
+    {;}
 
     WaveItem::~WaveItem()
     {
+        qDebug() << "delete wave item" << mData->name();
     }
 
     void WaveItem::setYposition(int pos)
@@ -56,21 +55,6 @@ namespace hal {
         if (mSelected==sel) return;
         mSelected = sel;
         setRequest(SelectionChanged);
-    }
-
-    void WaveItem::enforceYposition()
-    {
-        // TODO
-    }
-
-    void WaveItem::construct()
-    {
-        // TODO
-    }
-
-    void WaveItem::constructGroup()
-    {
-        // TODO
     }
 
     bool WaveItem::setTimeframe()
@@ -153,6 +137,11 @@ namespace hal {
         if (mState == stat) return;
  //       qDebug() << mFileIndex << "state change" << mState << "->" << stat;
         mState = stat;
+        if (mState == Painted)
+        {
+            mLoadProgress = 0;
+            mData->setDirty(false);
+        }
     }
 
     void WaveItem::dump(QTextStream &xout) const
@@ -168,7 +157,6 @@ namespace hal {
     {
         setState(Aborted);
         mLoop = false;
-        // mLoader->terminate();
     }
 
     void WaveItem::handleLoaderFinished()
@@ -206,8 +194,6 @@ namespace hal {
         if (hasRequest(DeleteAcknowledged))
             return;
 
-        if (hasRequest(SetPosition))
-            enforceYposition();
 
         if (mSelected)
         {

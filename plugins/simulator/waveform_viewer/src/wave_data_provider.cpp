@@ -80,4 +80,24 @@ namespace hal {
         ++mIndex;
         return retval;
     }
+
+    int WaveDataProviderClock::valueForTransition() const
+    {
+        return mClock.start_at_zero ? (mTransition%2) : 1 - (mTransition%2);
+    }
+
+    int WaveDataProviderClock::startValue(u64 t)
+    {
+        mTransition = t / mClock.switch_time;
+        int retval = valueForTransition();
+        ++mTransition;
+        return retval;
+    }
+
+    SaleaeDataTuple WaveDataProviderClock::nextPoint()
+    {
+        SaleaeDataTuple retval(mTransition * mClock.switch_time, valueForTransition());
+        ++mTransition;
+        return retval;
+    }
 }

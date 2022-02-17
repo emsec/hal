@@ -68,11 +68,6 @@ namespace hal {
         bool mVisibile;
         bool mSelected;
 
-        void construct();
-        void constructWire();
-        void constructGroup();
-
-        void enforceYposition();
     public Q_SLOTS:
         void handleLoaderFinished();
 
@@ -104,7 +99,7 @@ namespace hal {
    //     int waveIndex() const { return mWaveIndex; }
         const WaveData* wavedata() const { return mData; }
         int yPosition() const { return mYposition; }
-        bool waveVisibile() const { return mVisibile; }
+        bool isVisibile() const { return mVisibile; }
         void setYposition(int pos);
         void setWaveData(WaveData* wd);
         void setWaveVisible(bool vis);
