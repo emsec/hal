@@ -45,7 +45,7 @@ namespace hal {
             SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mEntry->wavedata()->fileIndex())).toStdString());
             if (sif.good())
             {
-                if (mEntry->loadToMemory())
+                if (mEntry->wavedata()->loadToMemory())
                 {
                     try {
 
@@ -109,7 +109,7 @@ namespace hal {
                     else
                     {
                         SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(wree->wavedata()->fileIndex())).toStdString());
-                        if (wree->loadToMemory())
+                        if (wree->wavedata()->loadToMemory())
                         {
                             try {
                                 if ((u64)wd->data().size() < wd->fileSize())
@@ -212,6 +212,8 @@ namespace hal {
 
         for (WaveItem* wree : mWaveItemHash->values())
         {
+//            if (wree->yPosition() < 3)
+//                qDebug() << "paint" << wree->yPosition() << wree->wavedata()->name() << wree->wavedata()->fileSize() << wree->wavedata()->data().size();
             if (wree->hasRequest(WaveItem::AddRequest))
             {
                 wree->setParent(this);

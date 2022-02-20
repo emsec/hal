@@ -10,20 +10,20 @@ namespace hal
 {
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
-        return std::make_unique<VcdViewerPlugin>();
+        return std::make_unique<WaveformViewerPlugin>();
     }
 
-    std::string VcdViewerPlugin::get_name() const
+    std::string WaveformViewerPlugin::get_name() const
     {
-        return std::string("vcd_viewer");
+        return std::string("waveform_viewer");
     }
 
-    std::string VcdViewerPlugin::get_version() const
+    std::string WaveformViewerPlugin::get_version() const
     {
         return std::string("0.7");
     }
 
-    std::set<std::string> VcdViewerPlugin::get_dependencies() const
+    std::set<std::string> WaveformViewerPlugin::get_dependencies() const
     {
         std::set<std::string> retval;
         retval.insert("netlist_simulator_controller");
@@ -32,12 +32,12 @@ namespace hal
         return retval;
     }
 
-    void VcdViewerPlugin::on_load()
+    void WaveformViewerPlugin::on_load()
     {
         ExternalContent::instance()->append(new VcdViewerFactory);
     }
 
-    void VcdViewerPlugin::on_unload()
+    void WaveformViewerPlugin::on_unload()
     {
         // TODO: ExternalContent unregister
     }

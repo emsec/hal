@@ -18,7 +18,7 @@ namespace hal {
         setContentsMargins(0,0,0,0);
         mTranform = WaveTransform(0, 3000, 1.);
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         mRenderEngine = new WaveRenderEngine(this,mWaveDataList,mWaveItemHash,viewport());
         mScrollbar = new WaveScrollbar(&mTranform,this);
         setHorizontalScrollBar(mScrollbar);
@@ -110,6 +110,14 @@ namespace hal {
                 mRenderEngine->update();
             }
         }
+    }
+
+    void WaveGraphicsCanvas::handleTimeframeChanged(const WaveDataTimeframe* tframe)
+    {
+        if (mTranform.tMin() == tframe->sceneMinTime() && mTranform.tMax() == tframe->sceneMaxTime()) return;
+        mTranform.setTmin(tframe->sceneMinTime());
+        mTranform.setTmax(tframe->sceneMaxTime());
+        mRenderEngine->update();
     }
 
     void WaveGraphicsCanvas::updateRequest()

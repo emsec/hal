@@ -879,8 +879,9 @@ namespace hal {
             if (it == saleaeWaves.end()) continue;
             wd->setFileSize(it.value()->fileSize());
             wd->setFileIndex(it.value()->fileIndex());
-            if (wd->loadSaleae(mSaleaeDirectory,mTimeframe))
-                emitWaveUpdated(i);
+            if (wd->loadToMemory())
+                wd->loadSaleae(mSaleaeDirectory,mTimeframe);
+            emitWaveUpdated(i);
             delete it.value();
             saleaeWaves.erase(it);
         }
@@ -889,6 +890,7 @@ namespace hal {
         {
             add(it.value(),false);
         }
+        setMaxTime(mSaleaeDirectory.get_max_time());
     }
 
     void WaveDataList::addOrReplace(WaveData* wd)

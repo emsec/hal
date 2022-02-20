@@ -12,6 +12,7 @@ namespace hal {
     class WaveCursor;
     class WaveDataList;
     class WaveItemHash;
+    class WaveDataTimeframe;
 
     class WaveGraphicsCanvas : public QAbstractScrollArea
     {
@@ -28,6 +29,7 @@ namespace hal {
     public Q_SLOTS:
         void updateRequest();
         void handleWaveUpdated(int iwave, int groupId);
+        void handleTimeframeChanged(const WaveDataTimeframe* tframe);
     protected:
         void resizeEvent(QResizeEvent *) override;
         void wheelEvent(QWheelEvent *) override;

@@ -314,6 +314,12 @@ public:
      */
     void set_timeframe(u64 tmin=0, u64 tmax=0);
 
+    /**
+     * Emit load progress when importing VCD, CSV, or SALEAE waveform
+     * @param[in] percent load progress, negative values to hide progess bar
+     */
+    void emitLoadProgress(int percent);
+
 public Q_SLOTS:
     void handleOpenInputFile(const QString& filename);
     void handleSelectGates();
@@ -323,6 +329,7 @@ Q_SIGNALS:
     void stateChanged(SimulationState state);
     void engineFinished(bool success);
     void parseComplete();
+    void loadProgress(int percent);
 
 private:
     std::vector<const Net*> getFilterNets(FilterInputFlag filter) const;

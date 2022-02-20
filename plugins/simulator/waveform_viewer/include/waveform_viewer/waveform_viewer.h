@@ -45,6 +45,7 @@
 #include <unordered_set>
 
 class QStatusBar;
+class QProgressBar;
 class QCloseEvent;
 
 namespace hal
@@ -66,14 +67,14 @@ namespace hal
     /**
      * @ingroup netlist_writer
      */
-    class NETLIST_API VcdViewer : public ContentWidget
+    class NETLIST_API WaveformViewer : public ContentWidget
     {
         Q_OBJECT
 
     public:
 
-        VcdViewer(QWidget* parent = nullptr);
-        ~VcdViewer();
+        WaveformViewer(QWidget* parent = nullptr);
+        ~WaveformViewer();
 
         /**
          * Setups the toolbar with the actions that are supported by the vcd-viewer.
@@ -110,6 +111,7 @@ namespace hal
         void closeEvent(QCloseEvent *event) override;
         void currentTabChanged(int inx);
         void currentStateChanged(NetlistSimulatorController::SimulationState state);
+        void showProgress(int percent);
 
     private:
         bool mVisualizeNetState;
@@ -123,6 +125,7 @@ namespace hal
 
         QTabWidget* mTabWidget;
         QStatusBar* mStatusBar;
+        QProgressBar* mProgress;
         WaveWidget* mCurrentWaveWidget;
 
     };

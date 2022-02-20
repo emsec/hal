@@ -64,16 +64,19 @@ namespace hal {
 //        connect(mTreeView,&WaveTreeView::valueBaseChanged,mScene,&WaveScene::updateWaveItemValues);
 //        connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);
 //        connect(mScene,&WaveScene::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
-//        connect(mWaveDataList,&WaveDataList::timeframeChanged,mScene,&WaveScene::handleTimeframeChanged);
-//        connect(mWaveDataList,&WaveDataList::timeframeChanged,mGraphicsView,&WaveGraphicsView::handelTimeframeChanged);
+        connect(mWaveDataList,&WaveDataList::timeframeChanged,mGraphicsCanvas,&WaveGraphicsCanvas::handleTimeframeChanged);
         connect(mWaveDataList,&WaveDataList::triggerBeginResetModel,mTreeModel,&WaveTreeModel::forwardBeginResetModel);
         connect(mWaveDataList,&WaveDataList::triggerEndResetModel,mTreeModel,&WaveTreeModel::forwardEndResetModel);
 
 
         if (parent && parent->parent())   // VcdViewer -> QTabWidget -> WaveWidget
         {
-            VcdViewer* vv = static_cast<VcdViewer*>(parent->parent());
-            if (vv) connect(mController,&NetlistSimulatorController::parseComplete,vv,&VcdViewer::handleParseComplete);
+            WaveformViewer* vv = static_cast<WaveformViewer*>(parent->parent());
+            if (vv)
+            {
+                connect(mController,&NetlistSimulatorController::parseComplete,vv,&WaveformViewer::handleParseComplete);
+                connect(mController,&NetlistSimulatorController::loadProgress,vv,&WaveformViewer::showProgress);
+            }
         }
 
         connect(gContentManager->getSelectionDetailsWidget(),&SelectionDetailsWidget::triggerHighlight,this,&WaveWidget::handleSelectionHighlight);
@@ -327,15 +330,12 @@ namespace hal {
             mTreeView->verticalScrollBar()->setValue(ypos);
 
 
-        // TODO scroll to ypos
-        /*
-        if (mGraphicsView->verticalScrollBar()->value() != ypos)
+        if (mGraphicsCanvas->verticalScrollBar()->value() != ypos)
         {
-            mGraphicsView->verticalScrollBar()->setMaximum(
+            mGraphicsCanvas->verticalScrollBar()->setMaximum(
                         mTreeView->verticalScrollBar()->maximum());
-            mGraphicsView->verticalScrollBar()->setValue(ypos);
+            mGraphicsCanvas->verticalScrollBar()->setValue(ypos);
         }
-        */
         mOngoingYscroll = false;
     }
 

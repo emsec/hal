@@ -74,6 +74,8 @@ namespace hal {
         void setDirty(bool dty)                     { mDirty = dty; }
         void setFileIndex(int inx)                  { mFileIndex = inx; }
         void setFileSize(u64 siz)                   { mFileSize = siz; }
+        bool loadToMemory() const { return mFileSize < 100000; }
+
         void loadSaleae(SaleaeInputFile& sif, const WaveDataTimeframe& tframe = WaveDataTimeframe());
         bool loadSaleae(const SaleaeDirectory& sd, const WaveDataTimeframe& tframe);
         void saveSaleae(SaleaeDirectory& sd);

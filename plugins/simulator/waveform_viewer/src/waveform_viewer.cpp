@@ -32,6 +32,7 @@
 #include <QApplication>
 #include <QScreen>
 #include <QVBoxLayout>
+#include <QProgressBar>
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "netlist_simulator/plugin_netlist_simulator.h"
 #include "netlist_simulator/netlist_simulator.h"
@@ -42,14 +43,14 @@ namespace hal
 
     ContentWidget* VcdViewerFactory::contentFactory() const
     {
-        return new VcdViewer;
+        return new WaveformViewer;
     }
 
-    VcdViewer::VcdViewer(QWidget *parent)
+    WaveformViewer::WaveformViewer(QWidget *parent)
         : ContentWidget("VcdViewer",parent),
           mVisualizeNetState(false), mCurrentWaveWidget(nullptr)
     {
-        LogManager::get_instance().add_channel(std::string("vcd_viewer"), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+        LogManager::get_instance().add_channel(std::string("waveform_viewer"), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         mCreateControlAction = new QAction(this);
         mSimulSettingsAction = new QAction(this);
         mOpenInputfileAction = new QAction(this);
@@ -67,53 +68,74 @@ namespace hal
         mRunSimulationAction->setToolTip("Run simulation");
         mAddResultWaveAction->setToolTip("Add waveform net");
 
-        connect(mCreateControlAction, &QAction::triggered, this, &VcdViewer::handleCreateControl);
-        connect(mSimulSettingsAction, &QAction::triggered, this, &VcdViewer::handleSimulSettings);
-        connect(mOpenInputfileAction, &QAction::triggered, this, &VcdViewer::handleOpenInputFile);
-        connect(mSaveWaveformsAction, &QAction::triggered, this, &VcdViewer::handleSaveWaveforms);
-        connect(mRunSimulationAction, &QAction::triggered, this, &VcdViewer::handleRunSimulation);
-        connect(mAddResultWaveAction, &QAction::triggered, this, &VcdViewer::handleAddResultWave);
+        connect(mCreateControlAction, &QAction::triggered, this, &WaveformViewer::handleCreateControl);
+        connect(mSimulSettingsAction, &QAction::triggered, this, &WaveformViewer::handleSimulSettings);
+        connect(mOpenInputfileAction, &QAction::triggered, this, &WaveformViewer::handleOpenInputFile);
+        connect(mSaveWaveformsAction, &QAction::triggered, this, &WaveformViewer::handleSaveWaveforms);
+        connect(mRunSimulationAction, &QAction::triggered, this, &WaveformViewer::handleRunSimulation);
+        connect(mAddResultWaveAction, &QAction::triggered, this, &WaveformViewer::handleAddResultWave);
 
         mTabWidget = new QTabWidget(this);
         mTabWidget->setTabsClosable(true);
         mTabWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        connect(mTabWidget,&QTabWidget::tabCloseRequested,this,&VcdViewer::handleTabClosed);
-        connect(mTabWidget,&QTabWidget::currentChanged,this,&VcdViewer::currentTabChanged);
+        connect(mTabWidget,&QTabWidget::tabCloseRequested,this,&WaveformViewer::handleTabClosed);
+        connect(mTabWidget,&QTabWidget::currentChanged,this,&WaveformViewer::currentTabChanged);
         mContentLayout->addWidget(mTabWidget);
 //        mWaveWidget = new WaveWidget(this);
 //        mWaveWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 //        mContentLayout->addWidget(mWaveWidget);
         mStatusBar = new QStatusBar(this);
+        mProgress = new QProgressBar(mStatusBar);
+        mProgress->setFormat("Import waveform data : %p%");
+        mProgress->setTextVisible(true);
+        mProgress->setRange(0,100);
+        mStatusBar->addWidget(mProgress,100);
+        mProgress->hide();
         mStatusBar->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
         mContentLayout->addWidget(mStatusBar);
         if (gSelectionRelay)
-            connect(gSelectionRelay,&SelectionRelay::selectionChanged,this,&VcdViewer::handleSelectionChanged);
+            connect(gSelectionRelay,&SelectionRelay::selectionChanged,this,&WaveformViewer::handleSelectionChanged);
 
         NetlistSimulatorControllerMap* nscm = NetlistSimulatorControllerMap::instance();
-        connect(nscm, &NetlistSimulatorControllerMap::controllerAdded, this, &VcdViewer::handleControllerAdded);
-        connect(nscm, &NetlistSimulatorControllerMap::controllerRemoved, this, &VcdViewer::handleControllerRemoved);
+        connect(nscm, &NetlistSimulatorControllerMap::controllerAdded, this, &WaveformViewer::handleControllerAdded);
+        connect(nscm, &NetlistSimulatorControllerMap::controllerRemoved, this, &WaveformViewer::handleControllerRemoved);
         currentStateChanged(NetlistSimulatorController::NoGatesSelected);
     }
 
-    VcdViewer::~VcdViewer()
+    WaveformViewer::~WaveformViewer()
     {
         closeEvent(nullptr);
     }
 
-    void VcdViewer::closeEvent(QCloseEvent*event)
+    void WaveformViewer::closeEvent(QCloseEvent*event)
     {
         Q_UNUSED(event);
         NetlistSimulatorControllerMap* nscm = NetlistSimulatorControllerMap::instance();
-        disconnect(nscm, &NetlistSimulatorControllerMap::controllerAdded, this, &VcdViewer::handleControllerAdded);
-        disconnect(nscm, &NetlistSimulatorControllerMap::controllerRemoved, this, &VcdViewer::handleControllerRemoved);
+        disconnect(nscm, &NetlistSimulatorControllerMap::controllerAdded, this, &WaveformViewer::handleControllerAdded);
+        disconnect(nscm, &NetlistSimulatorControllerMap::controllerRemoved, this, &WaveformViewer::handleControllerRemoved);
     }
 
+    void WaveformViewer::showProgress(int percent)
+    {
+        if (percent < 0)
+        {
+            mProgress->setValue(0);
+            mProgress->hide();
+            currentStateChanged(mCurrentWaveWidget->state());
+        }
+        else if (percent != mProgress->value())
+        {
+            mStatusBar->clearMessage();
+            mProgress->show();
+            mProgress->setValue(percent);
+        }
+    }
 
-    void VcdViewer::currentTabChanged(int inx)
+    void WaveformViewer::currentTabChanged(int inx)
     {
         if (inx >= 0 && mCurrentWaveWidget == mTabWidget->widget(inx)) return;
         if (mCurrentWaveWidget)
-            disconnect(mCurrentWaveWidget,&WaveWidget::stateChanged,this,&VcdViewer::currentStateChanged);
+            disconnect(mCurrentWaveWidget,&WaveWidget::stateChanged,this,&WaveformViewer::currentStateChanged);
         if (inx < 0)
         {
             mCurrentWaveWidget = nullptr;
@@ -122,16 +144,16 @@ namespace hal
         }
         mCurrentWaveWidget =  static_cast<WaveWidget*>(mTabWidget->widget(inx));
         currentStateChanged(mCurrentWaveWidget->state());
-        connect(mCurrentWaveWidget,&WaveWidget::stateChanged,this,&VcdViewer::currentStateChanged);
+        connect(mCurrentWaveWidget,&WaveWidget::stateChanged,this,&WaveformViewer::currentStateChanged);
     }
 
-    void VcdViewer::handleParseComplete()
+    void WaveformViewer::handleParseComplete()
     {
         if (!mCurrentWaveWidget) return;
         mAddResultWaveAction->setEnabled(mCurrentWaveWidget->canImportWires());
     }
 
-    void VcdViewer::currentStateChanged(NetlistSimulatorController::SimulationState state)
+    void WaveformViewer::currentStateChanged(NetlistSimulatorController::SimulationState state)
     {
         if (!mCurrentWaveWidget || state == NetlistSimulatorController::SimulationRun)
         {
@@ -170,7 +192,7 @@ namespace hal
         }
     }
 
-    void VcdViewer::displayStatusMessage(const QString& msg)
+    void WaveformViewer::displayStatusMessage(const QString& msg)
     {
         if (msg.isEmpty())
         {
@@ -180,7 +202,7 @@ namespace hal
             mStatusBar->showMessage(msg);
     }
 
-    void VcdViewer::setupToolbar(Toolbar* toolbar)
+    void WaveformViewer::setupToolbar(Toolbar* toolbar)
     {
         toolbar->addAction(mCreateControlAction);
         toolbar->addAction(mSimulSettingsAction);
@@ -190,19 +212,19 @@ namespace hal
         toolbar->addAction(mAddResultWaveAction);
     }
 
-    void VcdViewer::handleTabClosed(int inx)
+    void WaveformViewer::handleTabClosed(int inx)
     {
         WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
         if (!ww->triggerClose())
             log_warning(ww->controller()->get_name(), "Cannot close tab for externally owned controller.");
     }
 
-    void VcdViewer::handleCreateControl()
+    void WaveformViewer::handleCreateControl()
     {
         NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
         if (!ctrlPlug)
         {
-            log_warning("vcd_viewer", "Plugin 'netlist_simulator_controller' not found");
+            log_warning("waveform_viewer", "Plugin 'netlist_simulator_controller' not found");
             return;
         }
         std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->create_simulator_controller();
@@ -218,16 +240,16 @@ namespace hal
         }
     }
 
-    void VcdViewer::handleSimulSettings()
+    void WaveformViewer::handleSimulSettings()
     {
          QMenu* settingMenu = new QMenu(this);
          QAction* act;
          act = new QAction("Select gates for simulation", settingMenu);
-         connect(act, &QAction::triggered, this, &VcdViewer::handleSelectGates);
+         connect(act, &QAction::triggered, this, &WaveformViewer::handleSelectGates);
          settingMenu->addAction(act);
 
          act = new QAction("Select clock net", settingMenu);
-         connect(act, &QAction::triggered, this, &VcdViewer::handleClockSet);
+         connect(act, &QAction::triggered, this, &WaveformViewer::handleClockSet);
          // TODO : enable/disable according to state of current WaveWidget/Controller
          settingMenu->addAction(act);
 
@@ -239,40 +261,40 @@ namespace hal
          {
              act = new QAction(QString::fromStdString(sef->name()), engineMenu);
              act->setCheckable(true);
-             connect(act,&QAction::triggered,this,&VcdViewer::handleEngineSelected);
+             connect(act,&QAction::triggered,this,&WaveformViewer::handleEngineSelected);
              engineMenu->addAction(act);
              engineGroup->addAction(act);
          }
 
          act = new QAction("Set engine properties");
-         connect(act, &QAction::triggered, this, &VcdViewer::handleSetEngineProperties);
+         connect(act, &QAction::triggered, this, &WaveformViewer::handleSetEngineProperties);
          settingMenu->addAction(act);
 
          act = new QAction("Show output of engine");
-         connect(act, &QAction::triggered, this, &VcdViewer::handleShowEngineOutput);
+         connect(act, &QAction::triggered, this, &WaveformViewer::handleShowEngineOutput);
          settingMenu->addAction(act);
 
          settingMenu->addSeparator();
          act = new QAction("Refresh net names", settingMenu);
-         connect(act, &QAction::triggered, this, &VcdViewer::handleRefreshNetNames);
+         connect(act, &QAction::triggered, this, &WaveformViewer::handleRefreshNetNames);
          settingMenu->addAction(act);
 
          act = new QAction("Visualize net state by color", settingMenu);
          act->setCheckable(true);
          act->setChecked(mVisualizeNetState);
-         connect (act, &QAction::triggered, this, &VcdViewer::setVisualizeNetState);
+         connect (act, &QAction::triggered, this, &WaveformViewer::setVisualizeNetState);
          settingMenu->addAction(act);
 
          act = new QAction("Net groups: display text value in graph", settingMenu);
          act->setCheckable(true);
          act->setChecked(WaveItem::sValuesAsText);
-         connect (act, &QAction::triggered, this, &VcdViewer::setGroupValuesAsText);
+         connect (act, &QAction::triggered, this, &WaveformViewer::setGroupValuesAsText);
          settingMenu->addAction(act);
 
          settingMenu->exec(mapToGlobal(QPoint(10,3)));
     }
 
-    void VcdViewer::handleSetEngineProperties()
+    void WaveformViewer::handleSetEngineProperties()
     {
         if (!mCurrentWaveWidget) return;
         SimulationEngine* eng = mCurrentWaveWidget->controller()->get_simulation_engine();
@@ -280,7 +302,7 @@ namespace hal
 
     }
 
-    void VcdViewer::handleShowEngineOutput()
+    void WaveformViewer::handleShowEngineOutput()
     {
         if (!mCurrentWaveWidget) return;
         QString fname = QDir(QString::fromStdString(mCurrentWaveWidget->controller()->get_working_directory())).absoluteFilePath(SimulationProcessLog::sLogFilename);
@@ -295,7 +317,7 @@ namespace hal
         browser->show();
     }
 
-    void VcdViewer::handleEngineSelected(bool checked)
+    void WaveformViewer::handleEngineSelected(bool checked)
     {
         if (!checked || !mCurrentWaveWidget) return;
         const QAction* act = static_cast<const QAction*>(sender());
@@ -303,7 +325,7 @@ namespace hal
         mCurrentWaveWidget->createEngine(act->text());
     }
 
-    void VcdViewer::handleRefreshNetNames()
+    void WaveformViewer::handleRefreshNetNames()
     {
         for (int inx=0; inx<mTabWidget->count(); inx++)
         {
@@ -312,7 +334,7 @@ namespace hal
         }
     }
 
-    void VcdViewer::setVisualizeNetState(bool state)
+    void WaveformViewer::setVisualizeNetState(bool state)
     {
         if (state == mVisualizeNetState) return;
         mVisualizeNetState = state;
@@ -323,7 +345,7 @@ namespace hal
         }
     }
 
-    void VcdViewer::setGroupValuesAsText(bool state)
+    void WaveformViewer::setGroupValuesAsText(bool state)
     {
         if (state == WaveItem::sValuesAsText) return;
         WaveItem::sValuesAsText = state;
@@ -334,7 +356,7 @@ namespace hal
         }
     }
 
-    void VcdViewer::handleControllerAdded(u32 controllerId)
+    void WaveformViewer::handleControllerAdded(u32 controllerId)
     {
         NetlistSimulatorController* nsc = NetlistSimulatorControllerMap::instance()->controller(controllerId);
         if (!nsc) return;
@@ -342,7 +364,7 @@ namespace hal
         mTabWidget->addTab(ww,nsc->name());
     }
 
-    void VcdViewer::handleControllerRemoved(u32 controllerId)
+    void WaveformViewer::handleControllerRemoved(u32 controllerId)
     {
         for (int inx=0; inx<mTabWidget->count(); inx++)
         {
@@ -355,7 +377,7 @@ namespace hal
         }
     }
 
-    void VcdViewer::handleOpenInputFile()
+    void WaveformViewer::handleOpenInputFile()
     {
         if (!mCurrentWaveWidget) return;
 
@@ -370,7 +392,7 @@ namespace hal
             log_warning(mCurrentWaveWidget->controller()->get_name(), "Unknown extension, cannot parse file '{}'.", filename.toStdString());
     }
 
-    void VcdViewer::handleSaveWaveforms()
+    void WaveformViewer::handleSaveWaveforms()
     {
         if (!mCurrentWaveWidget) return;
 
@@ -380,21 +402,21 @@ namespace hal
         mCurrentWaveWidget->controller()->generate_vcd(filename.toStdString());
     }
 
-    void VcdViewer::handleRunSimulation()
+    void WaveformViewer::handleRunSimulation()
     {
         if (!mCurrentWaveWidget) return;
         connect(mCurrentWaveWidget->controller(),&NetlistSimulatorController::engineFinished,mCurrentWaveWidget,&WaveWidget::handleEngineFinished);
         mCurrentWaveWidget->controller()->run_simulation();
     }
 
-    void VcdViewer::handleAddResultWave()
+    void WaveformViewer::handleAddResultWave()
     {
         if (!mCurrentWaveWidget) return;
         mCurrentWaveWidget->addResults();
         mAddResultWaveAction->setEnabled(mCurrentWaveWidget->canImportWires());
     }
 
-    void VcdViewer::handleClockSet()
+    void WaveformViewer::handleClockSet()
     {
         if (!mCurrentWaveWidget) return;
 
@@ -418,7 +440,7 @@ namespace hal
         }
     }
 
-    void VcdViewer::handleSelectGates()
+    void WaveformViewer::handleSelectGates()
     {
         if (!mCurrentWaveWidget) return;
         GateSelectionDialog gsd(this);
@@ -427,7 +449,7 @@ namespace hal
         mCurrentWaveWidget->setGates(gsd.selectedGates());
     }
 
-    void VcdViewer::handleSelectionChanged(void* sender)
+    void WaveformViewer::handleSelectionChanged(void* sender)
     {
         Q_UNUSED(sender);
         /*

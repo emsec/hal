@@ -89,7 +89,6 @@ namespace hal {
         void startGeneratePainted(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar);
         void startLoader(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar);
         void abortLoader();
-        bool loadToMemory() const { return mData->data().size() < 100000; }
         void setState(State stat);
         void dump(QTextStream& xout) const;
         bool hasLoader() const { return mLoader != nullptr; }

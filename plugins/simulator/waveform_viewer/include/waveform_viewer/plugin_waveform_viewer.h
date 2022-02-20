@@ -27,10 +27,10 @@
 
 namespace hal
 {
-    class VcdViewer;
+    class WaveformViewer;
     class NetlistSimulator;
 
-    class PLUGIN_API VcdViewerPlugin : public BasePluginInterface
+    class PLUGIN_API WaveformViewerPlugin : public BasePluginInterface
     {
    //     VcdViewer* mVcdViewer;
     public:

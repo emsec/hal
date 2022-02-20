@@ -93,7 +93,7 @@ namespace hal {
         {
             // empty
         }
-        else if (loadToMemory())
+        else if (mData->loadToMemory())
         {
             if ((u64)mData->data().size() < mData->fileSize())
             {
