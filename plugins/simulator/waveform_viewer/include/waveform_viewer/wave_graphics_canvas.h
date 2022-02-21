@@ -26,6 +26,8 @@ namespace hal {
         WaveCursor* mCursor;
         bool mMoveCursor;
         QWidget* mDragZoom;
+    Q_SIGNALS:
+        void cursorMoved(float tCursor, int xpos);
     public Q_SLOTS:
         void updateRequest();
         void handleWaveUpdated(int iwave, int groupId);

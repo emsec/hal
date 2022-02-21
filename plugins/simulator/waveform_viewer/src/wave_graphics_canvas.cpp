@@ -67,6 +67,8 @@ namespace hal {
         {
             mTimescale->update();
             mCursor->setCursorPosition(evt->pos());
+            int xpos = evt->pos().x();
+            Q_EMIT cursorMoved(mScrollbar->tPos(xpos),xpos);
         }
         else if (mDragZoom)
         {
@@ -92,6 +94,8 @@ namespace hal {
             mTimescale->update();
             mCursor->setCursorPosition(evt->pos());
             mMoveCursor = false;
+            int xpos = evt->pos().x();
+            Q_EMIT cursorMoved(mScrollbar->tPos(xpos),xpos);
         }
         if (mDragZoom)
         {
@@ -138,6 +142,8 @@ namespace hal {
     {
         mTimescale->update();
         mCursor->setCursorPosition(evt->pos());
+        int xpos = evt->pos().x();
+        Q_EMIT cursorMoved(mScrollbar->tPos(xpos),xpos);
         mMoveCursor = false;
     }
 

@@ -496,6 +496,13 @@ namespace hal {
         recalcData();
     }
 
+    void WaveDataGroup::addWaves(const QVector<WaveData*>& wds)
+    {
+        mGroupList.append(wds.toList());
+        restoreIndex();
+        recalcData();
+    }
+
     void WaveDataGroup::updateWaveData(WaveData* wd)
     {
         int inx = childIndex(wd);
@@ -557,7 +564,7 @@ namespace hal {
 
 //--------------------------------------------
     WaveDataTimeframe::WaveDataTimeframe()
-            : mSceneMaxTime(1000), mSimulateMaxTime(0), mUserdefMaxTime(0), mUserdefMinTime(0) {;}
+            : mSceneMaxTime(sMinSceneWidth), mSimulateMaxTime(0), mUserdefMaxTime(0), mUserdefMinTime(0) {;}
 
     u64 WaveDataTimeframe::simulateMaxTime() const
     {
@@ -568,6 +575,14 @@ namespace hal {
     {
         if (hasUserTimeframe()) return mUserdefMaxTime;
         return mSceneMaxTime;
+    }
+
+    void WaveDataTimeframe::setSceneMaxTime(u64 t)
+    {
+        if (t < sMinSceneWidth)
+            mSceneMaxTime = sMinSceneWidth;
+        else
+            mSceneMaxTime = t;
     }
 
     u64 WaveDataTimeframe::sceneMinTime() const
@@ -613,7 +628,7 @@ namespace hal {
         // adjust clock settings
         bool mustUpdateClocks = (tmax > mTimeframe.mSceneMaxTime);
 
-        mTimeframe.mSceneMaxTime = tmax;
+        mTimeframe.setSceneMaxTime(tmax);
         if (mustUpdateClocks) updateClocks();
         Q_EMIT timeframeChanged(&mTimeframe);
     }

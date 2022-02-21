@@ -50,7 +50,7 @@ namespace hal {
         void handleSelectionHighlight(const QVector<const SelectionTreeItem*>& highlight);
         void handleWaveAppended(WaveData* wd);
         void handleStateChanged(NetlistSimulatorController::SimulationState state);
-        void visualizeCurrentNetState(float xpos);
+        void visualizeCurrentNetState(float tCursor, int xpos);
 
     Q_SIGNALS:
         void stateChanged(NetlistSimulatorController::SimulationState state);

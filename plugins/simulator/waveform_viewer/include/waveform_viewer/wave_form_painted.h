@@ -42,6 +42,8 @@ namespace hal {
         float x0() const;
         float x1() const;
 
+        int valueXpos(int xpos) const;
+
         const WaveFormPaintValidity& validity() const { return mValidity; }
     };
 }

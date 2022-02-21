@@ -50,6 +50,14 @@ namespace hal {
             wfp->paint(y0,painter);
     }
 
+    int WaveFormPainted::valueXpos(int xpos) const
+    {
+        for (const WaveFormPrimitive* wfp : mPrimitives)
+            if (wfp->isInRange(xpos))
+                return wfp->value();
+        return SaleaeDataTuple::sReadError;
+    }
+
     void WaveFormPainted::generate(WaveDataProvider* wdp, const WaveTransform* trans, const WaveScrollbar* sbar, bool *loop)
     {
         mValidity = WaveFormPaintValidity(trans, sbar);

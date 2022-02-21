@@ -32,7 +32,8 @@ namespace hal {
         QModelIndex mDragIndex;
         DragCommand mDragCommand;
         bool mDragIsGroup;
-        float mCursorPosition;
+        float mCursorTime;
+        int mCursorXpos;
         bool mIgnoreSignals;
         int mReorderRequestWaiting;
 
@@ -51,6 +52,8 @@ namespace hal {
         void invalidateParent(const QModelIndex& parentRow);
         void updateGroup(WaveDataGroup* grp);
         void emitReorder();
+        void addOrReplaceItem(WaveData* wd, WaveItemIndex::IndexType tp, int iwave, int parentId);
+        int valueAtCursor(const QModelIndex& index) const;
     Q_SIGNALS:
         void inserted(QModelIndex index);
         void triggerReorder();
@@ -63,9 +66,10 @@ namespace hal {
         void handleGroupAdded(int grpId);
         void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
         void handleGroupUpdated(int grpId);
-        void handleCursorMoved(float xpos);
+        void handleCursorMoved(float tCursor, int xpos);
         void forwardBeginResetModel();
         void forwardEndResetModel();
+        void handleGotCursorValue();
 
     public:
         WaveTreeModel(WaveDataList* wdlist, WaveItemHash* wHash, QObject* obj=nullptr);
@@ -95,6 +99,10 @@ namespace hal {
         WaveItemIndex hashIndex(const QModelIndex& index) const;
 
         void setGroupPosition(int ypos, const QModelIndex& index);
+        void addWaves(const QVector<WaveData*>& wds);
+
+        float cursorTime() const { return mCursorTime; }
+        float cursorXpos() const { return mCursorXpos; }
 
         QSet<int> waveDataIndexSet() const;
 

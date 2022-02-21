@@ -1,5 +1,6 @@
 #pragma once
 #include <QPolygonF>
+#include "netlist_simulator_controller/saleae_file.h"
 
 class QPainter;
 
@@ -15,6 +16,8 @@ namespace hal {
         virtual void paint(int y0, QPainter& painter) = 0;
         float x0() const { return mX0; }
         float x1() const { return mX1; }
+        bool isInRange(int x) const { return mX0 < x && x < mX1; }
+        virtual int value() const { return SaleaeDataTuple::sReadError; }
     };
 
     class WaveFormPrimitiveHline : public WaveFormPrimitive
@@ -23,6 +26,7 @@ namespace hal {
     public:
         WaveFormPrimitiveHline(float x0, float x1, int val) : WaveFormPrimitive(x0,x1), mValue(val) {;}
         void paint(int y0, QPainter& painter);
+        int value() const { return mValue; }
     };
 
     class WaveFormPrimitiveTransition : public WaveFormPrimitive
@@ -37,6 +41,7 @@ namespace hal {
     public:
         WaveFormPrimitiveUndefined(float x0, float x1) : WaveFormPrimitive(x0,x1) {;}
         void paint(int y0, QPainter& painter);
+        int value() const { return -1; }
     };
 
     class WaveFormPrimitiveFilled : public WaveFormPrimitive
@@ -53,5 +58,6 @@ namespace hal {
     public:
         WaveFormPrimitiveValue(float x0, float x1, int val);
         void paint(int y0, QPainter& painter);
+        int value() const { return mValue; }
     };
 }

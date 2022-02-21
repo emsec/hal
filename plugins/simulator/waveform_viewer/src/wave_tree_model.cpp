@@ -1,5 +1,6 @@
 #include "waveform_viewer/wave_tree_model.h"
 #include "netlist_simulator_controller/wave_data.h"
+#include "netlist_simulator_controller/saleae_file.h"
 #include <QApplication>
 #include <QFont>
 #include <QMimeData>
@@ -14,7 +15,7 @@ namespace hal {
     WaveTreeModel::WaveTreeModel(WaveDataList *wdlist, WaveItemHash *wHash, QObject *obj)
         : QAbstractItemModel(obj), mWaveDataList(wdlist), mWaveItemHash(wHash),
           mDragCommand(None), mDragIsGroup(false),
-          mCursorPosition(0), mIgnoreSignals(false),
+          mCursorTime(0), mCursorXpos(0), mIgnoreSignals(false),
           mReorderRequestWaiting(0)
     {
 
@@ -133,7 +134,13 @@ namespace hal {
         WaveDataGroup* grp = mWaveDataList->mDataGroups.value(grpId);
         if (!grp) return;
         insertGroup(createIndex(mRoot->size(),0,mRoot),grp);
-        mWaveItemHash->addOrReplace(grp, WaveItemIndex::Group, grp->id(), 0);
+        addOrReplaceItem(grp, WaveItemIndex::Group, grp->id(), 0);
+    }
+
+    void WaveTreeModel::addOrReplaceItem(WaveData* wd, WaveItemIndex::IndexType tp, int iwave, int parentId)
+    {
+        WaveItem* wi = mWaveItemHash->addOrReplace(wd,tp,iwave,parentId);
+        connect(wi,&WaveItem::gotCursorValue,this,&WaveTreeModel::handleGotCursorValue);
     }
 
     void WaveTreeModel::handleWaveAdded(int iwave)
@@ -141,7 +148,23 @@ namespace hal {
         ReorderRequest req(this);
         WaveData* wd = mWaveDataList->at(iwave);
         insertItem(mRoot->size(),createIndex(0,0,nullptr),wd);
-        mWaveItemHash->addOrReplace(wd, WaveItemIndex::Wire, iwave, 0);
+        addOrReplaceItem(wd, WaveItemIndex::Wire, iwave, 0);
+    }
+
+    void WaveTreeModel::addWaves(const QVector<WaveData*>& wds)
+    {
+        ReorderRequest req(this);
+
+        beginResetModel();
+        mRoot->addWaves(wds);
+        for (WaveData* wd : wds)
+        {
+            int iwave = mWaveDataList->waveIndexByNetId(wd->id());
+            addOrReplaceItem(wd, WaveItemIndex::Wire, iwave, 0);
+        }
+        endResetModel();
+
+        invalidateParent(createIndex(0,0,nullptr)); // update root
     }
 
     void WaveTreeModel::handleNameUpdated(int iwave)
@@ -164,7 +187,7 @@ namespace hal {
             WaveItem* wi = mWaveItemHash->value(wii);
             WaveData* wd = mWaveDataList->at(iwave);
             if (!wi)
-                mWaveItemHash->addOrReplace(wd,WaveItemIndex::Wire,iwave,grpId);
+                addOrReplaceItem(wd,WaveItemIndex::Wire,iwave,grpId);
             else
             {
                 wi->setWaveData(wd);
@@ -232,8 +255,9 @@ namespace hal {
         case Qt::BackgroundRole:
         {
             if (index.column() != 2) return QVariant();
-            WaveData* wd = item(index);
-            int v = wd->intValue(mCursorPosition);
+            int v = valueAtCursor(index);
+            if (v == SaleaeDataTuple::sReadError)
+                return QColor::fromRgb(255,255,qrand()%256);
             if (v<-1) v=-1;
             if (v>1) v=1;
             return QColor(sStateColor[v+1]);
@@ -251,7 +275,10 @@ namespace hal {
                     return QString();
                 return QString::number(wd->id());
             case 2:
-                return wd->strValue(mCursorPosition);
+                int v = valueAtCursor(index);
+                if (v == SaleaeDataTuple::sReadError)
+                    return QString();
+                return wd->strValue(v);
             }
         }
         default:
@@ -375,9 +402,15 @@ namespace hal {
         Q_EMIT inserted(index(targetRow,0,targetIndexParent));
     }
 
-    void WaveTreeModel::handleCursorMoved(float xpos)
+    void WaveTreeModel::handleCursorMoved(float tCursor, int xpos)
     {
-        mCursorPosition = xpos;
+        mCursorTime = tCursor;
+        mCursorXpos = xpos;
+        handleGotCursorValue();
+    }
+
+    void WaveTreeModel::handleGotCursorValue()
+    {
         QModelIndex i0 = createIndex(0,2,mRoot);
         QModelIndex i1 = createIndex(mRoot->size()-1,2,mRoot);
         Q_EMIT dataChanged(i0,i1);
@@ -454,7 +487,7 @@ namespace hal {
         WaveDataGroup* wdGrp = dynamic_cast<WaveDataGroup*>(wd);
         if (wdGrp)
         {
-            mWaveItemHash->addOrReplace(wd, WaveItemIndex::Group, wdGrp->id(), 0);
+            addOrReplaceItem(wd, WaveItemIndex::Group, wdGrp->id(), 0);
         }
         else
             handleWaveAddedToGroup({wd->id()},grp->id());
@@ -467,6 +500,24 @@ namespace hal {
         QModelIndex parentValueInx = createIndex(parentRow.row(),2,parentRow.internalPointer());
         Q_EMIT dataChanged(parentValueInx,parentValueInx);
     }
+
+    int WaveTreeModel::valueAtCursor(const QModelIndex& index) const
+    {
+        WaveData* wd = item(index);
+        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(wd);
+        WaveItemIndex wii;
+        if (grp) wii = WaveItemIndex(grp->id(), WaveItemIndex::Group);
+        else
+        {
+            grp = static_cast<WaveDataGroup*>(index.internalPointer());
+            int iwave = mWaveDataList->waveIndexByNetId(wd->id());
+            wii = WaveItemIndex(iwave, WaveItemIndex::Wire, grp->id());
+        }
+        WaveItem* wi = mWaveItemHash->value(wii);
+        if (!wi) return SaleaeDataTuple::sReadError;
+        return wi->cursorValue(mCursorTime,mCursorXpos);
+    }
+
 
     WaveData *WaveTreeModel::removeItem(int row, const QModelIndex &parent)
     {
@@ -528,7 +579,7 @@ namespace hal {
                 // put wave items into root unless that would cause duplicate
                 if (mRoot->hasNetId(wd->id())) continue;
                 mRoot->insert(irow,grp->childAt(i));
-                mWaveItemHash->addOrReplace(wd, WaveItemIndex::Wire, iwave,0);
+                addOrReplaceItem(wd, WaveItemIndex::Wire, iwave,0);
             }
         }
         endResetModel();

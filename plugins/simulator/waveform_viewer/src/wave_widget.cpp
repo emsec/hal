@@ -63,7 +63,7 @@ namespace hal {
 //        connect(mTreeView,&WaveTreeView::numberVisibleChanged,mGraphicsView,&WaveGraphicsView::handleNumberVisibileChanged);
 //        connect(mTreeView,&WaveTreeView::valueBaseChanged,mScene,&WaveScene::updateWaveItemValues);
 //        connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);
-//        connect(mScene,&WaveScene::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
+        connect(mGraphicsCanvas,&WaveGraphicsCanvas::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
         connect(mWaveDataList,&WaveDataList::timeframeChanged,mGraphicsCanvas,&WaveGraphicsCanvas::handleTimeframeChanged);
         connect(mWaveDataList,&WaveDataList::triggerBeginResetModel,mTreeModel,&WaveTreeModel::forwardBeginResetModel);
         connect(mWaveDataList,&WaveDataList::triggerEndResetModel,mTreeModel,&WaveTreeModel::forwardEndResetModel);
@@ -88,7 +88,6 @@ namespace hal {
 
     WaveWidget::~WaveWidget()
     {
-//        disconnect(mScene,&WaveScene::cursorMoved,this,&WaveWidget::handleCursorMoved);
     }
 
     void WaveWidget::refreshNetNames()
@@ -143,14 +142,6 @@ namespace hal {
 
     void WaveWidget::handleStateChanged(NetlistSimulatorController::SimulationState state)
     {
-        /*
-        if (mAutoAddWaves && state >= NetlistSimulatorController::SimulationRun)
-        {
-            qDebug() << "disconnect WaveDataList::waveAdded" << hex << (quintptr) mWaveDataList << (quintptr) mTreeModel;
-            disconnect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded);
-            mAutoAddWaves = false;
-        }
-*/
         Q_EMIT stateChanged(state);
         qApp->processEvents();
     }
@@ -172,7 +163,6 @@ namespace hal {
 
     void WaveWidget::setVisualizeNetState(bool state, bool activeTab)
     {
-        /* TODO visualize net state
         GroupingTableModel* gtm = gContentManager->getGroupingManagerWidget()->getModel();
         static const char* grpNames[3] = {"x state", "0 state", "1 state"};
         mVisualizeNetState = state;
@@ -189,12 +179,12 @@ namespace hal {
                 }
                 mGroupIds[i] = grp->get_id();
             }
-            visualizeCurrentNetState(mScene->cursorXposition());
-            connect(mScene,&WaveScene::cursorMoved,this,&WaveWidget::visualizeCurrentNetState);
+            visualizeCurrentNetState(mTreeModel->cursorTime(),mTreeModel->cursorXpos());
+            connect(mGraphicsCanvas,&WaveGraphicsCanvas::cursorMoved,this,&WaveWidget::visualizeCurrentNetState);
         }
         else
         {
-            disconnect(mScene,&WaveScene::cursorMoved,this,&WaveWidget::visualizeCurrentNetState);
+            disconnect(mGraphicsCanvas,&WaveGraphicsCanvas::cursorMoved,this,&WaveWidget::visualizeCurrentNetState);
             for (int i=0; i<3; i++)
             {
                 Grouping* grp = gtm->groupingByName(grpNames[i]);
@@ -202,7 +192,6 @@ namespace hal {
                 mGroupIds[i] = 0;
             }
         }
-        */
     }
 
     void WaveWidget::addResults()
@@ -221,7 +210,7 @@ namespace hal {
             else
             {
                 WaveData* wd = mWaveDataList->at(i);
-                wseMap.insert(WaveSelectionEntry(wd->id(),wd->name(),wd->data().size()),i);
+                wseMap.insert(WaveSelectionEntry(wd->id(),wd->name(),wd->fileSize()),i);
             }
         }
 
@@ -242,22 +231,28 @@ namespace hal {
         if (wsd.exec() == QDialog::Accepted)
         {
             wseMap = wsd.selectedWaves();
-
-            for (auto it = wseMap.constBegin(); it!=wseMap.constEnd(); ++it)
+            if (!wseMap.isEmpty())
             {
-                int iwave = it.value();
-                if (iwave<0 && sd)
+                QVector<WaveData*> wavesToAdd;
+                wavesToAdd.reserve(wseMap.size());
+
+                for (auto it = wseMap.constBegin(); it!=wseMap.constEnd(); ++it)
                 {
-                    iwave = mWaveDataList->size();
-                    WaveData* wd = new WaveData(it.key().id(),it.key().name());
-                    if (wd->loadSaleae(*sd, mWaveDataList->timeFrame()))
+                    int iwave = it.value();
+                    if (iwave<0 && sd)
                     {
-                        mWaveDataList->add(wd,false);
-                        mTreeModel->handleWaveAdded(iwave);
+                        iwave = mWaveDataList->size();
+                        WaveData* wd = new WaveData(it.key().id(),it.key().name());
+                        if (wd->loadSaleae(*sd, mWaveDataList->timeFrame()))
+                        {
+                            mWaveDataList->add(wd,false);
+                            wavesToAdd.append(wd);
+                        }
                     }
+                    else if (iwave >= 0)
+                        wavesToAdd.append(mWaveDataList->at(iwave));
                 }
-                else if (iwave >= 0)
-                    mTreeModel->handleWaveAdded(iwave);
+                mTreeModel->addWaves(wavesToAdd);
             }
         }
         if (sd) delete sd;
@@ -291,18 +286,21 @@ namespace hal {
             log_warning(mController->get_name(), "Cannot get simulation results");
     }
 
-    void WaveWidget::visualizeCurrentNetState(float xpos)
+    void WaveWidget::visualizeCurrentNetState(float tCursor, int xpos)
     {
         QSet<Net*> netState[3]; // x, 0, 1
-        QList<int> iwaveList = mTreeModel->waveDataIndexSet().toList();
-        for (int iwave : iwaveList)
+
+        for (auto it = mWaveItemHash->begin(); it != mWaveItemHash->end(); ++it)
         {
-            const WaveData* wd = mWaveDataList->at(iwave);
+            WaveItem* wi = it.value();
+            if (!wi) continue;
+            const WaveData* wd = wi->wavedata();
+            if (!wd) continue;
             Net* n = gNetlist->get_net_by_id(wd->id());
             if (!n) continue;
-            int tval = wd->intValue(xpos);
-            if (tval < -1 || tval > 1) continue;
-            netState[tval+1].insert(n);
+            int val = wi->cursorValue(tCursor, xpos);
+            if (val < -1 || val > 1) continue;
+            netState[val+1].insert(n);
         }
 
         for (int i=0; i<3; i++)

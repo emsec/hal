@@ -41,7 +41,7 @@ namespace hal {
         mTableView->setColumnWidth(0,36);
         mTableView->setColumnWidth(1,256);
         mTableView->setColumnWidth(2,36);
-        layout->addWidget(mTableView,1,0,1,2);
+        layout->addWidget(mTableView,1,0,1,3);
         QDialogButtonBox* dbb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
         connect(dbb, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(dbb, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -71,7 +71,6 @@ namespace hal {
             if (guiNetSel.contains(gid))
                 mTableView->selectRow(irow);
         }
-
     }
 
     void WaveSelectionDialog::handleClearSelection()

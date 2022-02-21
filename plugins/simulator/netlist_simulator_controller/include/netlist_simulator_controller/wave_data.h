@@ -25,6 +25,7 @@ namespace hal {
         u64 mSimulateMaxTime;
         u64 mUserdefMaxTime;
         u64 mUserdefMinTime;
+        static const int sMinSceneWidth = 1000;
     public:
         WaveDataTimeframe();
         u64 sceneMaxTime() const;
@@ -33,7 +34,7 @@ namespace hal {
         u64 sceneWidth() const;
         bool hasUserTimeframe() const;
         void setUserTimeframe(u64 t0=0, u64 t1=0);
-        void setSceneMaxTime(u64 t) { mSceneMaxTime = t; }
+        void setSceneMaxTime(u64 t);
         void setSimulateMaxTime(u64 t) { mSimulateMaxTime = t; }
     };
 
@@ -212,6 +213,7 @@ namespace hal {
         virtual int size() const { return mGroupList.size(); }
         void addNet(const Net* n);
         virtual void insert(int inx, WaveData* wd);
+        virtual void addWaves(const QVector<WaveData*>& wds);
         virtual void recalcData();
         virtual bool hasNetId(u32 id) const;
         virtual QList<WaveData*> children() const;

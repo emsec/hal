@@ -12,53 +12,86 @@
 
 namespace hal {
 
+/*
+class WaveValueThread : public QThread
+{
+    Q_OBJECT
+    WaveItem* mItem;
+    QDir mWorkDir;
+    float mTposition;
+    int mValue;
+public:
+    WaveValueThread(WaveItem* parentItem, const QString& workdir, float tpos);
+    void run() override;
+};
+*/
 
-    WaveLoaderThread::WaveLoaderThread(WaveItem* parentEntry, const QString &workdir,
+    WaveValueThread::WaveValueThread(WaveItem* parentItem, const QString& workdir, float tpos)
+        : QThread(parentItem), mItem(parentItem), mWorkDir(workdir), mTposition(tpos)
+    {;}
+
+    void WaveValueThread::run()
+    {
+        SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mItem->wavedata()->fileIndex())).toStdString());
+        if (sif.good())
+        {
+            SaleaeDataBuffer* sdb = sif.get_buffered_data();
+            if (!sdb->isNull())
+            {
+                int lastValue = sdb->mValueArray[0];
+                for (quint64 i=0; i<sdb->mCount; i++)
+                {
+                    if (sdb->mTimeArray[i] > mTposition) break;
+                    lastValue = sdb->mValueArray[i];
+                }
+                mItem->setCursorValue(lastValue);
+            }
+            delete sdb;
+        }
+    }
+
+//------------------------
+
+    WaveLoaderThread::WaveLoaderThread(WaveItem* parentItem, const QString &workdir,
                                        const WaveTransform* trans, const WaveScrollbar* sbar)
-        : QThread(parentEntry), mEntry(parentEntry), mWorkDir(workdir), mTransform(trans), mScrollbar(sbar)
-    {
-//        qDebug() << mEntry->mFileIndex << "construct thread" << Qt::hex << (quintptr) this << Qt::dec;
-    }
+        : QThread(parentItem), mItem(parentItem), mWorkDir(workdir), mTransform(trans), mScrollbar(sbar)
+    {;}
 
-    WaveLoaderThread::~WaveLoaderThread()
-    {
-//        qDebug() << mEntry->mFileIndex << "delete thread" << Qt::hex << (quintptr) this << Qt::dec;
-    }
 
     void WaveLoaderThread::run()
     {
-        mEntry->setState(WaveItem::Loading);
-        const WaveData* wd = mEntry->wavedata();
+        mItem->setState(WaveItem::Loading);
+        const WaveData* wd = mItem->wavedata();
         if (wd->netType() == WaveData::ClockNet)
         {
             try {
                SimulationInput::Clock clk = static_cast<const WaveDataClock*>(wd)->clock();
                WaveDataProviderClock wdpClk(clk);
-               mEntry->mPainted.generate(&wdpClk,mTransform,mScrollbar,&mEntry->mLoop);
-               mEntry->setState(WaveItem::Finished);
+               mItem->mPainted.generate(&wdpClk,mTransform,mScrollbar,&mItem->mLoop);
+               mItem->setState(WaveItem::Finished);
                } catch (...) {
-                   mEntry->setState(WaveItem::Failed);
+                   mItem->setState(WaveItem::Failed);
                }
         }
         else
         {
-            SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mEntry->wavedata()->fileIndex())).toStdString());
+            SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mItem->wavedata()->fileIndex())).toStdString());
             if (sif.good())
             {
-                if (mEntry->wavedata()->loadToMemory())
+                if (mItem->wavedata()->loadToMemory())
                 {
                     try {
 
                         if ((u64)wd->data().size() < wd->fileSize())
-                            mEntry->loadSaleae(sif);
-                        mEntry->mPainted.clearPrimitives();
-                        if (mEntry->isAborted()) return;
+                            mItem->loadSaleae(sif);
+                        mItem->mPainted.clearPrimitives();
+                        if (mItem->isAborted()) return;
                         WaveDataProviderMap wdpMap(wd->data());
                         wdpMap.setGroup(wd->netType()==WaveData::NetGroup);
-                        mEntry->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mEntry->mLoop);
-                        mEntry->setState(WaveItem::Finished);
+                        mItem->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mItem->mLoop);
+                        mItem->setState(WaveItem::Finished);
                     } catch (...) {
-                        mEntry->setState(WaveItem::Failed);
+                        mItem->setState(WaveItem::Failed);
                     }
                 }
                 else
@@ -66,15 +99,15 @@ namespace hal {
                     try {
                         WaveDataProviderFile wdpFile(sif);
                         // TODO : test group
-                        mEntry->mPainted.generate(&wdpFile,mTransform,mScrollbar,&mEntry->mLoop);
-                        mEntry->setState(WaveItem::Finished);
+                        mItem->mPainted.generate(&wdpFile,mTransform,mScrollbar,&mItem->mLoop);
+                        mItem->setState(WaveItem::Finished);
                     } catch (...) {
-                        mEntry->setState(WaveItem::Failed);
+                        mItem->setState(WaveItem::Failed);
                     }
                 }
             }
             else
-                mEntry->setState(WaveItem::Failed);
+                mItem->setState(WaveItem::Failed);
         }
     }
 
@@ -161,9 +194,7 @@ namespace hal {
         {
             if ((wree->isLoading() || wree->isThreadBusy()) && wree->mVisibleRange)
             {
-                ++wree->mLoadProgress;
-                if (wree->mLoadProgress*5 > wree->mLoadValidity.width())
-                    wree->mLoadProgress = 1;
+                wree->incrementLoadProgress();
                 needUpdate = true;
             }
         }
@@ -260,14 +291,13 @@ namespace hal {
                         else
                             wree->abortLoader();
                     }
-                    painter.fillRect(QRectF(0,y0,wree->mLoadProgress*5,14),
+                    painter.fillRect(QRectF(0,y0,wree->loadeProgress(),14),
                                      QBrush(barColor));
                 }
                 else if (wree->isPainted())
                 {
                     if (mValidity == wree->mPainted.validity() && !wree->wavedata()->isDirty() &&!wree->hasRequest(WaveItem::DataChanged))
                     {
-                        wree->mLoadProgress = 0;
                         if (wree->isVisibile())
                         {
                             if (wree->isSelected())

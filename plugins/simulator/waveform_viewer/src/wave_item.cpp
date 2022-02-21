@@ -18,11 +18,12 @@ namespace hal {
     bool WaveItem::sValuesAsText = false;
 
     WaveItem::WaveItem(WaveData *dat, QObject *parent)
-        : QObject(parent), mData(dat), mLoader(nullptr), mState(Null),
-          mLoadProgress(0), mVisibleRange(false), mLoop(false),
+        : QObject(parent), mData(dat), mLoader(nullptr), mLoadProgress(0), mState(Null),
+          mVisibleRange(false), mLoop(false),
           mYposition(-1), mRequest(0), mMinTime(0),
           mMaxTime(1000), mMaxTransition(0),
-          mVisibile(true), mSelected(false)
+          mVisibile(true), mSelected(false),
+          mCursorTime(-1), mCursorValue(-1)
     {;}
 
     WaveItem::~WaveItem()
@@ -89,6 +90,7 @@ namespace hal {
     {
         // precondition: mutex lock is set, state is Null
         mLoadProgress = 0;
+        mWorkdir = workdir;
         if (mData->fileSize() == 0)
         {
             // empty
@@ -99,7 +101,7 @@ namespace hal {
             {
                 // load map
                 setState(WaveItem::Loading);
-                startLoader(workdir, trans, sbar);
+                startLoader(mWorkdir, trans, sbar);
             }
             else
             {
@@ -115,20 +117,21 @@ namespace hal {
         {
             // graphics from file
             setState(WaveItem::Loading);
-            startLoader(workdir,trans, sbar);
+            startLoader(mWorkdir,trans, sbar);
         }
     }
 
     void WaveItem::startLoader(const QString& workdir, const WaveTransform* trans, const WaveScrollbar* sbar)
     {
+        mWorkdir = workdir;
         Q_ASSERT(mState == Loading);
         mLoadValidity = WaveFormPaintValidity(trans,sbar);
         if (mLoader)
         {
             qDebug() << mData->fileIndex() << "*** warning *** : loader already running";
         }
-        mLoader = new WaveLoaderThread(this, workdir, trans, sbar);
-        connect(mLoader, &QThread::finished, this, &WaveItem::handleLoaderFinished);
+        mLoader = new WaveLoaderThread(this, mWorkdir, trans, sbar);
+        connect(mLoader, &QThread::finished, this, &WaveItem::handleWaveLoaderFinished);
         mLoader->start();
     }
 
@@ -142,6 +145,15 @@ namespace hal {
             mLoadProgress = 0;
             mData->setDirty(false);
         }
+        if (mState == Null)
+            mLoadProgress = 0;
+    }
+
+    void WaveItem::incrementLoadProgress()
+    {
+        mLoadProgress += 5;
+        if (mLoadProgress >= mLoadValidity.width())
+            mLoadProgress = 5;
     }
 
     void WaveItem::dump(QTextStream &xout) const
@@ -153,13 +165,73 @@ namespace hal {
 
     }
 
+    int WaveItem::cursorValue(float tCursor, int xpos)
+    {
+        // can deliver stored value
+        if (tCursor == mCursorTime && mCursorValue != SaleaeDataTuple::sReadError)
+            return mCursorValue;
+
+        mCursorTime = tCursor;
+
+        // get value from memory map
+        if (mData->loadToMemory())
+        {
+            mCursorValue = mData->intValue(tCursor);
+            return mCursorValue;
+        }
+
+        // get clock value
+        if (mData->netType() == WaveData::ClockNet)
+        {
+            SimulationInput::Clock clk = static_cast<const WaveDataClock*>(mData)->clock();
+            quint64 ntrans = floor(tCursor/clk.switch_time);
+            mCursorValue = clk.start_at_zero ? ntrans % 2 : 1 - ntrans % 2;
+            return mCursorValue;
+        }
+
+        // try get from painted primitives
+        mCursorValue = mPainted.valueXpos(xpos);
+        if (mCursorValue == SaleaeDataTuple::sReadError && !mWorkdir.isEmpty())
+        {
+            bool canLoad = false;
+            if (mMutex.tryLock())
+            {
+                if (!isLoading() && !isThreadBusy())
+                {
+                    setState(Loading);
+                    canLoad = true;
+                }
+                mMutex.unlock();
+            }
+
+            // start value loader thread
+            if (canLoad)
+            {
+                mLoader = new WaveValueThread(this,mWorkdir,tCursor);
+                connect(mLoader,&QThread::finished,this,&WaveItem::handleValueLoaderFinished);
+                mLoader->start();
+            }
+        }
+        return mCursorValue;
+    }
+
     void WaveItem::abortLoader()
     {
         setState(Aborted);
         mLoop = false;
     }
 
-    void WaveItem::handleLoaderFinished()
+    void WaveItem::handleValueLoaderFinished()
+    {
+        mMutex.lock();
+        mLoader->deleteLater();
+        mLoader = nullptr;
+        setState(Painted);
+        mMutex.unlock();
+        Q_EMIT gotCursorValue();
+    }
+
+    void WaveItem::handleWaveLoaderFinished()
     {
         mMutex.lock();
         if (isAborted())
@@ -332,7 +404,7 @@ namespace hal {
         return ids.size();
     }
 
-    void WaveItemHash::addOrReplace(WaveData*wd, WaveItemIndex::IndexType tp, int inx, int parentId)
+    WaveItem *WaveItemHash::addOrReplace(WaveData*wd, WaveItemIndex::IndexType tp, int inx, int parentId)
     {
         WaveItemIndex wii(inx, tp, parentId);
         WaveItem* wi = value(wii);
@@ -344,6 +416,7 @@ namespace hal {
         }
         else
             wi->setWaveData(wd);
+        return wi;
     }
 
     void WaveItemHash::dump(const char* stub)

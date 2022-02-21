@@ -8,10 +8,9 @@
 #include "waveform_viewer/wave_form_painted.h"
 
 class QScrollBar;
+class QThread;
 
 namespace hal {
-
-    class WaveLoaderThread;
 
     class WaveItemIndex
     {
@@ -34,7 +33,6 @@ namespace hal {
 
     uint qHash(const WaveItemIndex &wii);
 
-
     class WaveItem : public QObject
     {
         Q_OBJECT
@@ -43,21 +41,19 @@ namespace hal {
         enum State { Null, Loading, Aborted, Finished, Painted, Failed };
     private:
         WaveData* mData;
-        WaveLoaderThread* mLoader;
+        QThread* mLoader;
+        int mLoadProgress;
         State mState;
 
-
     public:
-
         WaveFormPainted mPainted;
-        int mLoadProgress;
         WaveFormPaintValidity mLoadValidity;
         QMutex mMutex;
         bool mVisibleRange;
         bool mLoop;
 
         enum ColorIndex { Solid, HiLight, Dotted, Background };
-
+        QString mValueAtCursor;
 
     private:
         int   mYposition;
@@ -67,12 +63,17 @@ namespace hal {
         float mMaxTransition;
         bool mVisibile;
         bool mSelected;
+        float mCursorTime;
+        int mCursorValue;
+        QString mWorkdir;
 
     public Q_SLOTS:
-        void handleLoaderFinished();
+        void handleWaveLoaderFinished();
+        void handleValueLoaderFinished();
 
     Q_SIGNALS:
         void doneLoading();
+        void gotCursorValue();
 
     public:
         WaveItem(WaveData* dat, QObject* parent = nullptr);
@@ -108,8 +109,12 @@ namespace hal {
         void setRequest(Request rq);
         void clearRequest(Request rq);
         bool isDeleted() const;
+        int loadeProgress() const { return mLoadProgress; }
+        void incrementLoadProgress();
         static bool sValuesAsText;
         static const char* sLineColor[];
+        int cursorValue(float tCursor, int xpos);
+        void setCursorValue(int val) { mCursorValue = val; }
     };
 
     class WaveItemHash : public QHash<WaveItemIndex,WaveItem*>
@@ -119,7 +124,7 @@ namespace hal {
         int visibleEntries() const { return mVisibleEntries; }
         int importedWires() const;
         void setVisibleEntries(int ve) { mVisibleEntries = ve; }
-        void addOrReplace(WaveData*wd, WaveItemIndex::IndexType tp, int inx, int parentId);
+        WaveItem* addOrReplace(WaveData*wd, WaveItemIndex::IndexType tp, int inx, int parentId);
         void dump(const char* stub);
     };
 }

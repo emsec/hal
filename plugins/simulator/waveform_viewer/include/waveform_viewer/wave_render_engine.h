@@ -25,14 +25,25 @@ namespace hal {
     class WaveLoaderThread : public QThread
     {
         Q_OBJECT
-        WaveItem* mEntry;
+        WaveItem* mItem;
         QDir mWorkDir;
         const WaveTransform* mTransform;
         const WaveScrollbar* mScrollbar;
     public:
-        WaveLoaderThread(WaveItem* parentEntry, const QString& workdir,
+        WaveLoaderThread(WaveItem* parentItem, const QString& workdir,
                          const WaveTransform* trans, const WaveScrollbar* sbar);
-        ~WaveLoaderThread();
+        void run() override;
+    };
+
+    class WaveValueThread : public QThread
+    {
+        Q_OBJECT
+        WaveItem* mItem;
+        QDir mWorkDir;
+        float mTposition;
+        int mValue;
+    public:
+        WaveValueThread(WaveItem* parentItem, const QString& workdir, float tpos);
         void run() override;
     };
 

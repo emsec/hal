@@ -22,6 +22,8 @@ namespace hal {
 
     void WaveCursor::paintEvent(QPaintEvent *event)
     {
+        Q_UNUSED(event);
+
         QPainter paint(this);
 
 //        QBrush transparent(QColor::fromRgb(255,255,255,40));
@@ -33,6 +35,8 @@ namespace hal {
         int y0 = mPosition.y()-sLabHeight/2;
         if (y0 < sLabHeight) y0 = sLabHeight;
         if (y0 + sLabHeight + 1 > height()) y0 = height() - sLabHeight - 1;
+        mPosition.setY(y0 + sLabHeight/2);
+
         QRect rectTvalue(0,y0,sWidth,sLabHeight);
 
         paint.setBrush(Qt::black);
