@@ -22,49 +22,41 @@
 //  SOFTWARE.
 
 #pragma once
-#include "user_action.h"
-#include <QString>
+
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QComboBox>
+
+class QStringList;
 
 namespace hal
 {
-    /**
-     * @ingroup user_action
-     * @brief Renames an item.
-     *
-     * Assigns a new name to the UserActionObject's object. If the object is a pin or pingroup type the current
-     * name is used to identify the pin or group (configured by setPinOrPingroupIdentifier)
-     *
-     * Undo Action: ActionRenameObject
-     */
-    class ActionRenameObject : public UserAction
+    class ComboboxDialog : public QDialog
     {
-        QString mNewName;
-
     public:
-        /**
-         * Action constructor.
-         *
-         * @param name - The new name
-         */
-        ActionRenameObject(const QString& name=QString())
-            : mNewName(name) {;}
-        bool exec() override;
-        QString tagname() const override;
-        void writeToXml(QXmlStreamWriter& xmlOut) const override;
-        void readFromXml(QXmlStreamReader& xmlIn) override;
-        void addToHash(QCryptographicHash& cryptoHash) const override;
+        ComboboxDialog(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+        ComboboxDialog(const QString windowTitle, const QString infoText, const QStringList entries, const QString defaultSelected = "", QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
+
+        virtual void setItems(const QStringList entries);
+        void setInfoText(const QString text);
+
+        QString textValue() const;
+        int selectedIndex() const;
+
+    protected:
+        QVBoxLayout* mLayout;
+        QLabel* mInfoLabel;
+        QComboBox* mCombobox;
+        QPushButton* mOkButton;
+
+        void init();
+
+        void handleOkClicked();
+        void handleCancelClicked();
 
     };
 
-    /**
-     * @ingroup user_action
-     * @brief UserActionFactory for ActionRenameObject
-     */
-    class ActionRenameObjectFactory : public UserActionFactory
-    {
-    public:
-        ActionRenameObjectFactory();
-        UserAction* newAction() const;
-        static ActionRenameObjectFactory* sFactory;
-    };
 }
