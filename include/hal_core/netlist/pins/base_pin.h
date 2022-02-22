@@ -29,8 +29,8 @@ namespace hal
          */
         bool operator==(const BasePin& other) const
         {
-            return m_name == other.get_name() && m_direction == other.get_direction() && m_type == other.get_type() && m_group.first->get_name() == other.get_group().first->get_name()
-                   && m_group.second == other.get_group().second;
+            return m_id == other.get_id() && m_name == other.get_name() && m_direction == other.get_direction() && m_type == other.get_type()
+                   && m_group.first->get_name() == other.get_group().first->get_name() && m_group.second == other.get_group().second;
         }
 
         /**
@@ -45,6 +45,27 @@ namespace hal
         }
 
         /**
+         * TODO test, pybind
+         * Get the ID of the pin. The ID is unique within an entity, e.g., a module or a gate type.
+         * 
+         * @returns The ID of the pin.
+         */
+        u32 get_id() const
+        {
+            return m_id;
+        }
+
+        /**
+         * Set the name of the pin.
+         * 
+         * @param[in] name - The name of the pin.
+         */
+        void set_name(const std::string& name)
+        {
+            m_name = name;
+        }
+
+        /**
          * Get the name of the pin.
          * 
          * @returns The name of the pin.
@@ -55,6 +76,16 @@ namespace hal
         }
 
         /**
+         * Set the direction of the pin.
+         * 
+         * @returns The pin direction.
+         */
+        void set_direction(PinDirection direction)
+        {
+            m_direction = direction;
+        }
+
+        /**
          * Get the direction of the pin.
          * 
          * @returns The direction of the pin.
@@ -62,6 +93,16 @@ namespace hal
         PinDirection get_direction() const
         {
             return m_direction;
+        }
+
+        /**
+         * Set the type of the pin.
+         * 
+         * @returns The pin type.
+         */
+        void set_type(PinType type)
+        {
+            m_type = type;
         }
 
         /**
@@ -85,7 +126,6 @@ namespace hal
         }
 
     private:
-        friend Module;
         friend PinGroup<T>;
 
         BasePin(const BasePin&) = delete;
@@ -94,6 +134,7 @@ namespace hal
         BasePin& operator=(BasePin&&) = delete;
 
     protected:
+        u32 m_id;
         std::string m_name;
         PinDirection m_direction;
         PinType m_type;
@@ -102,11 +143,12 @@ namespace hal
         /**
          * Construct a new pin from its name, direction, and type.
          * 
+         * @param[in] id - The ID of the pin.
          * @param[in] name - The pin name.
          * @param[in] direction - The direction of the pin.
          * @param[in] type - The type of the pin.
          */
-        BasePin(const std::string& name, PinDirection direction, PinType type = PinType::none) : m_name(name), m_direction(direction), m_type(type)
+        BasePin(const u32 id, const std::string& name, PinDirection direction, PinType type = PinType::none) : m_id(id), m_name(name), m_direction(direction), m_type(type)
         {
         }
     };

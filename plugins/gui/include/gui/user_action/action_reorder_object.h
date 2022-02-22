@@ -23,48 +23,56 @@
 
 #pragma once
 #include "user_action.h"
-#include <QString>
 
 namespace hal
 {
+
     /**
      * @ingroup user_action
-     * @brief Renames an item.
+     * @brief Reorders an item within a container.
      *
-     * Assigns a new name to the UserActionObject's object. If the object is a pin or pingroup type the current
-     * name is used to identify the pin or group (configured by setPinOrPingroupIdentifier)
-     *
-     * Undo Action: ActionRenameObject
+     * Reorders an item (only pins are currently supported, pingroups are planned) to a new position.
+     * If the object's type is a pin or pingroup, the name is used to identify the object (configured
+     * by setPinOrPingroupIdentifier or correct Constructor). In this case, object's id is used
+     * to identify the corresponding module.
      */
-    class ActionRenameObject : public UserAction
+    class ActionReorderObject : public UserAction
     {
-        QString mNewName;
+        public:
+            /**
+             * Normal constructor (all purpose).
+             *
+             * @param newIndex - The new index.
+             */
+            ActionReorderObject(const int newIndex = -1);
 
-    public:
-        /**
-         * Action constructor.
-         *
-         * @param name - The new name
-         */
-        ActionRenameObject(const QString& name=QString())
-            : mNewName(name) {;}
-        bool exec() override;
-        QString tagname() const override;
-        void writeToXml(QXmlStreamWriter& xmlOut) const override;
-        void readFromXml(QXmlStreamReader& xmlIn) override;
-        void addToHash(QCryptographicHash& cryptoHash) const override;
+            /**
+             * Overwritten user_action function.
+             *
+             * @return True on success, False otherwise.
+             */
+            bool exec() override;
 
+            /**
+             * Overwritten user_action function.
+             * @return The tag.
+             */
+            QString tagname() const override;
+
+        private:
+            int mNewIndex;
     };
 
     /**
      * @ingroup user_action
-     * @brief UserActionFactory for ActionRenameObject
+     * @brief UserActionFactory for ActionReorderObject
      */
-    class ActionRenameObjectFactory : public UserActionFactory
+    class ActionReorderObjectFactory : public UserActionFactory
     {
     public:
-        ActionRenameObjectFactory();
-        UserAction* newAction() const;
-        static ActionRenameObjectFactory* sFactory;
+        ActionReorderObjectFactory();
+        UserAction * newAction() const override;
+        static ActionReorderObjectFactory* sFactory;
     };
+
 }

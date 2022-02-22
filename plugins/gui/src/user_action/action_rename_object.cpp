@@ -4,12 +4,12 @@
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_globals.h"
+#include <QDebug>
 
 namespace hal
 {
     ActionRenameObjectFactory::ActionRenameObjectFactory() : UserActionFactory("RenameObject")
     {
-        ;
     }
 
     ActionRenameObjectFactory* ActionRenameObjectFactory::sFactory = new ActionRenameObjectFactory;
@@ -31,24 +31,17 @@ namespace hal
 
     void ActionRenameObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
+        writeParentObjectToXml(xmlOut);
         xmlOut.writeTextElement("name", mNewName);
-        if (mObject.type() == UserActionObjectType::Pin && mPortType != NoPort)
-        {
-            xmlOut.writeTextElement("netid", QString::number(mNetId));
-            xmlOut.writeTextElement("porttype", mPortType == Input ? "input" : "output");
-        }
     }
 
     void ActionRenameObject::readFromXml(QXmlStreamReader& xmlIn)
     {
         while (xmlIn.readNextStartElement())
         {
+            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "name")
                 mNewName = xmlIn.readElementText();
-            if (xmlIn.name() == "netid")
-                mNetId = xmlIn.readElementText().toInt();
-            if (xmlIn.name() == "porttype")
-                mPortType = (xmlIn.readElementText() == "input") ? Input : Output;
         }
     }
 
@@ -104,39 +97,38 @@ namespace hal
                 else
                     return false;
                 break;
-            case UserActionObjectType::Pin:
-                mod = gNetlist->get_module_by_id(mObject.id());
-                net = gNetlist->get_net_by_id(mNetId);
-                if (mod && net)
-                {
-                    ModulePin* pin;
-                    switch (mPortType)
-                    {
-                        case NoPort:
-                            return false;
-                        case Input:
-                        case Output:
-                            pin     = mod->get_pin(net);
-                            oldName = QString::fromStdString(pin->get_name());
-                            mod->set_pin_name(pin, mNewName.toStdString());
-                            break;
-                    }
-                }
-                else
-                    return false;
+            case UserActionObjectType::Pin:{
+                mod = gNetlist->get_module_by_id(mParentObject.id());
+                if(!mod) return false;
+
+                auto pinResult = mod->get_pin_by_id(mObject.id());
+                if(pinResult.is_error()) return false;
+
+                oldName = QString::fromStdString(pinResult.get()->get_name());
+                auto ret = mod->set_pin_name(pinResult.get(), mNewName.toStdString());
+                if(ret.is_error()) return false;
+            }
                 break;
-            case UserActionObjectType::PinGroup:
-                // TODO @Sebastian implement
-                return false;
+        case UserActionObjectType::PinGroup:{
+                mod = gNetlist->get_module_by_id(mParentObject.id());
+                if(!mod) return false;
+
+                auto pinGroupResult = mod->get_pin_group_by_id(mObject.id());
+                if(pinGroupResult.is_error()) return false;
+
+                oldName = QString::fromStdString(pinGroupResult.get()->get_name());
+                auto ret = mod->set_pin_group_name(pinGroupResult.get(), mNewName.toStdString());
+                if(ret.is_error()) return false;
+            }
+                break;
             default:
                 return false;
         }
         ActionRenameObject* undo = new ActionRenameObject(oldName);
         undo->setObject(mObject);
-        if (mPortType != NoPort)
+        if (mObject.type() == UserActionObjectType::Pin || mObject.type() == UserActionObjectType::PinGroup)
         {
-            undo->mNetId    = mNetId;
-            undo->mPortType = mPortType;
+            undo->setParentObject(mParentObject);
         }
         mUndoAction = undo;
         return UserAction::exec();

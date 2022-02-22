@@ -22,6 +22,19 @@ namespace hal
             :rtype: bool
         )");
 
+        py_gate_base_pin.def_property_readonly("id", &BasePin<GatePin>::get_id, R"(
+            The ID of the gate pin. The ID is unique within a gate type.
+
+            :type: int
+        )");
+
+        py_gate_base_pin.def("get_id", &BasePin<GatePin>::get_id, R"(
+            Get the ID of the gate pin. The ID is unique within a gate type.
+
+            :returns: The ID of the pin.
+            :rtype: int
+        )");
+
         py_gate_base_pin.def_property_readonly("name", &BasePin<GatePin>::get_name, R"(
             The name of the pin.
 
@@ -90,6 +103,19 @@ namespace hal
 
             :returns: True if both pins are unequal, False otherwise.
             :rtype: bool
+        )");
+
+        py_module_base_pin.def_property_readonly("id", &BasePin<ModulePin>::get_id, R"(
+            The ID of the module pin. The ID is unique within a module.
+
+            :type: int
+        )");
+
+        py_module_base_pin.def("get_id", &BasePin<ModulePin>::get_id, R"(
+            Get the ID of the module pin. The ID is unique within a module.
+
+            :returns: The ID of the pin.
+            :rtype: int
         )");
 
         py_module_base_pin.def_property_readonly("name", &BasePin<ModulePin>::get_name, R"(

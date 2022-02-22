@@ -21,50 +21,23 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+
 #pragma once
-#include "user_action.h"
-#include <QString>
+
+#include "gui/input_dialog/combobox_dialog.h"
+#include "hal_core/netlist/module.h"
 
 namespace hal
 {
-    /**
-     * @ingroup user_action
-     * @brief Renames an item.
-     *
-     * Assigns a new name to the UserActionObject's object. If the object is a pin or pingroup type the current
-     * name is used to identify the pin or group (configured by setPinOrPingroupIdentifier)
-     *
-     * Undo Action: ActionRenameObject
-     */
-    class ActionRenameObject : public UserAction
-    {
-        QString mNewName;
-
-    public:
-        /**
-         * Action constructor.
-         *
-         * @param name - The new name
-         */
-        ActionRenameObject(const QString& name=QString())
-            : mNewName(name) {;}
-        bool exec() override;
-        QString tagname() const override;
-        void writeToXml(QXmlStreamWriter& xmlOut) const override;
-        void readFromXml(QXmlStreamReader& xmlIn) override;
-        void addToHash(QCryptographicHash& cryptoHash) const override;
-
-    };
-
-    /**
-     * @ingroup user_action
-     * @brief UserActionFactory for ActionRenameObject
-     */
-    class ActionRenameObjectFactory : public UserActionFactory
+    class PingroupSelectorDialog : public ComboboxDialog
     {
     public:
-        ActionRenameObjectFactory();
-        UserAction* newAction() const;
-        static ActionRenameObjectFactory* sFactory;
+        PingroupSelectorDialog(const QString windowTitle, const QString infoText, Module* m, bool showOnlyMultiPinGroups = true, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
+        int getSelectedGroupId() const;
+    private:
+        Module* mMod;
+        QList<int> mIdList;
     };
+
 }

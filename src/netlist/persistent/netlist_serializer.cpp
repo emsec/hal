@@ -52,12 +52,16 @@ namespace hal
                 {
                     struct PinInformation
                     {
+                        i32 id = -1;
                         Net* net;
                         std::string name;
                         PinType type = PinType::none;
                     };
 
+                    i32 id = -1;
                     std::string name;
+                    PinDirection direction = PinDirection::none;
+                    PinType type           = PinType::none;
                     std::vector<PinInformation> pins;
                     bool ascending  = false;
                     u32 start_index = 0;
@@ -283,13 +287,17 @@ namespace hal
                     for (const PinGroup<ModulePin>* pin_group : m->get_pin_groups())
                     {
                         rapidjson::Value json_pin_group(rapidjson::kObjectType);
+                        json_pin_group.AddMember("id", pin_group->get_id(), allocator);
                         json_pin_group.AddMember("name", pin_group->get_name(), allocator);
+                        json_pin_group.AddMember("direction", enum_to_string(pin_group->get_direction()), allocator);
+                        json_pin_group.AddMember("type", enum_to_string(pin_group->get_type()), allocator);
                         json_pin_group.AddMember("ascending", pin_group->is_ascending(), allocator);
                         json_pin_group.AddMember("start_index", pin_group->get_start_index(), allocator);
                         rapidjson::Value json_pins(rapidjson::kArrayType);
                         for (const ModulePin* pin : pin_group->get_pins())
                         {
                             rapidjson::Value json_pin(rapidjson::kObjectType);
+                            json_pin.AddMember("id", pin->get_id(), allocator);
                             json_pin.AddMember("name", pin->get_name(), allocator);
                             json_pin.AddMember("type", enum_to_string(pin->get_type()), allocator);
                             json_pin.AddMember("net_id", pin->get_net()->get_id(), allocator);
@@ -348,19 +356,19 @@ namespace hal
                     deserialize_data(sm, val["data"]);
                 }
 
-                u32 ctr = 0;
-                for (ModulePin* pin : sm->get_pins())
-                {
-                    // pin names must be unique, hence automatically generated groups may conflict with deserialized ones
-                    sm->set_pin_name(pin, "____deserialize_tmp_pin_[" + std::to_string(ctr) + "]____");
-                }
+                // u32 ctr = 0;
+                // for (ModulePin* pin : sm->get_pins())
+                // {
+                //     // pin names must be unique, hence automatically generated groups may conflict with deserialized ones
+                //     sm->set_pin_name(pin, "____deserialize_tmp_pin_[" + std::to_string(ctr) + "]____");
+                // }
 
-                ctr = 0;
-                for (PinGroup<ModulePin>* pin_group : sm->get_pin_groups())
-                {
-                    // pin group names must be unique, hence automatically generated groups may conflict with deserialized ones
-                    sm->set_pin_group_name(pin_group, "____deserialize_tmp_pin_group_[" + std::to_string(ctr) + "]____");
-                }
+                // ctr = 0;
+                // for (PinGroup<ModulePin>* pin_group : sm->get_pin_groups())
+                // {
+                //     // pin group names must be unique, hence automatically generated groups may conflict with deserialized ones
+                //     sm->set_pin_group_name(pin_group, "____deserialize_tmp_pin_group_[" + std::to_string(ctr) + "]____");
+                // }
 
                 if (val.HasMember("pin_groups"))
                 {
@@ -368,13 +376,17 @@ namespace hal
                     for (const auto& json_pin_group : val["pin_groups"].GetArray())
                     {
                         PinGroupInformation pin_group;
+                        pin_group.id          = json_pin_group["id"].GetUint();
                         pin_group.name        = json_pin_group["name"].GetString();
+                        pin_group.direction   = enum_from_string<PinDirection>(json_pin_group["direction"].GetString());
+                        pin_group.type        = enum_from_string<PinType>(json_pin_group["type"].GetString());
                         pin_group.ascending   = json_pin_group["ascending"].GetBool();
                         pin_group.start_index = json_pin_group["start_index"].GetUint();
 
                         for (const auto& pin_node : json_pin_group["pins"].GetArray())
                         {
                             PinGroupInformation::PinInformation pin;
+                            pin.id   = pin_node["id"].GetUint();
                             pin.name = pin_node["name"].GetString();
                             pin.net  = nl->get_net_by_id(pin_node["net_id"].GetUint());
                             pin.type = enum_from_string<PinType>(pin_node["type"].GetString());
@@ -426,15 +438,21 @@ namespace hal
                         std::vector<ModulePin*> pins;
                         for (const PinGroupInformation::PinInformation& p : pg.pins)
                         {
-                            ModulePin* pin = sm->assign_pin(p.name, p.net, p.type, false);
-                            if (pin == nullptr)
+                            u32 pid = (p.id > 0) ? (u32)p.id : sm->get_unique_pin_id();
+                            if (auto res = sm->create_pin(pid, p.name, p.net, p.type, false); res.is_error())
                             {
+                                log_error("netlist_persistent", "{}", res.get_error().get());
                                 return false;
                             }
-                            pins.push_back(pin);
+                            else
+                            {
+                                pins.push_back(res.get());
+                            }
                         }
-                        if (sm->create_pin_group(pg.name, pins, pg.ascending, pg.start_index) == nullptr)
+                        u32 pgid = (pg.id > 0) ? (u32)pg.id : sm->get_unique_pin_group_id();
+                        if (auto res = sm->create_pin_group(pgid, pg.name, pins, pg.direction, pg.type, pg.ascending, pg.start_index); res.is_error())
                         {
+                            log_error("netlist_persistent", "{}", res.get_error().get());
                             return false;
                         }
                     }

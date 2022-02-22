@@ -56,6 +56,13 @@ namespace hal
           */
         ~ModulePinsTreeModel();
 
+        //DRAG AND DROP THINGS!
+        Qt::ItemFlags flags(const QModelIndex& index) const override;
+        QStringList mimeTypes() const override;
+        QMimeData* mimeData(const QModelIndexList &indexes) const override;
+        bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
+
+
         /**
          *  Overwritten BaseTreeModel function.
          */
@@ -92,7 +99,16 @@ namespace hal
          * @param item - The item for which the type is requested.
          * @return The item's type.
          */
-        itemType getTypeOfItem(TreeItem* item);
+        itemType getTypeOfItem(TreeItem* item) const;
+
+        /**
+         * Returns the pin-id if the item represents a pin or the pingroup-id
+         * if the item represents a pingroup.
+         *
+         * @param item - The item.
+         * @return The pin- or pingroup-id.
+         */
+        int getIdOfItem(TreeItem* item) const;
 
         /** @name Event Handler Functions
          */
@@ -108,6 +124,7 @@ namespace hal
 
         //additional data keys
         const QString keyType = "type";
+        const QString keyId = "id";
 
     Q_SIGNALS:
         /**
@@ -120,7 +137,14 @@ namespace hal
 
     private:        
         int mModuleId;
-        QMap<std::string, TreeItem*> mPortGroupingToTreeItem;
+        //name is (hopefully) enough to identify
+        QMap<QString, TreeItem*> mNameToTreeItem;
+        QMap<int, TreeItem*> mIdToPinItem;
+        QMap<int, TreeItem*> mIdToGroupItem;
+        bool mIgnoreNextPinsChanged;
+
+        void insertItem(TreeItem* item, TreeItem* parent, int index);
+        void removeItem(TreeItem* item);
     };
 }
 

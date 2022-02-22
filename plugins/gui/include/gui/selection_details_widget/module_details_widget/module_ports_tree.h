@@ -25,11 +25,13 @@
 
 #include "gui/size_adjustable_tree_view/size_adjustable_tree_view.h"
 #include "hal_core/defines.h"
+#include <tuple>
 
 namespace hal
 {
     class Module;
     class ModulePinsTreeModel;
+    class TreeItem;
 
     /**
      * @brief A widget to display the ports of a given module.
@@ -91,6 +93,16 @@ namespace hal
         int mModuleID;
 
         void handleNumberOfPortsChanged(int newNumberPorts);
+        //helper function to add entries belonging to multiselection
+        void appendMultiSelectionEntries(QMenu &menu, int modId);
+        /**
+         * utility function to get all selected pins (as treeitems).
+         *
+         * @return The selected pins, first boolean = true if they belonged to the same group
+         * (and if yes it returns the group id, otherwise -1),
+         * second boolean = true if only pins (and no groups) were selected.
+         */
+        std::tuple<QList<TreeItem*>, std::pair<bool, int>, bool> getSelectedPins();
 
     };
 }

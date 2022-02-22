@@ -35,7 +35,7 @@ namespace hal
 
     std::vector<Gate*> GuiApi::getSelectedGates()
     {
-        std::vector<Gate*> gates(gSelectionRelay->numberSelectedGates());
+        std::vector<Gate*> gates;
         for (u32 id : gSelectionRelay->selectedGatesList())
             gates.push_back(gNetlist->get_gate_by_id(id));
         return gates;
@@ -43,7 +43,7 @@ namespace hal
 
     std::vector<Net*> GuiApi::getSelectedNets()
     {
-        std::vector<Net*> nets(gSelectionRelay->numberSelectedNets());
+        std::vector<Net*> nets;
         for (u32 id : gSelectionRelay->selectedNetsList())
             nets.push_back(gNetlist->get_net_by_id(id));
         return nets;
@@ -51,7 +51,7 @@ namespace hal
 
     std::vector<Module*> GuiApi::getSelectedModules()
     {
-        std::vector<Module*> modules(gSelectionRelay->numberSelectedModules());
+        std::vector<Module*> modules;
         for (u32 id : gSelectionRelay->selectedModulesList())
             modules.push_back(gNetlist->get_module_by_id(id));
         return modules;

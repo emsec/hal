@@ -35,6 +35,6 @@ namespace hal
          * @param[in] direction - The direction of the pin.
          * @param[in] type - The type of the pin.
          */
-        GatePin(const std::string& name, PinDirection direction, PinType type = PinType::none);
+        GatePin(const u32 id, const std::string& name, PinDirection direction, PinType type = PinType::none);
     };
 }    // namespace hal

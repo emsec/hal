@@ -20,6 +20,17 @@ namespace hal
     {
     public:
         /**
+         * Construct a new module pin from its name, net, direction and type.
+         * 
+         * @param[in] id - The pin ID.
+         * @param[in] name - The pin name.
+         * @param[in] net - The net passing through the pin.
+         * @param[in] direction - The direction of the pin.
+         * @param[in] type - The type of the pin.
+         */
+        ModulePin(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type = PinType::none);
+
+        /**
          * TODO pybind, test
          * Check whether two module pins are equal.
          *
@@ -46,23 +57,11 @@ namespace hal
         Net* get_net() const;
 
     private:
-        friend Module;
-
         Net* m_net;
 
         ModulePin(const ModulePin&) = delete;
         ModulePin(ModulePin&&)      = delete;
         ModulePin& operator=(const ModulePin&) = delete;
         ModulePin& operator=(ModulePin&&) = delete;
-
-        /**
-         * Construct a new module pin from its name, net, direction and type.
-         * 
-         * @param[in] name - The pin name.
-         * @param[in] net - The net passing through the pin.
-         * @param[in] direction - The direction of the pin.
-         * @param[in] type - The type of the pin.
-         */
-        ModulePin(const std::string& name, Net* net, PinDirection direction, PinType type = PinType::none);
     };
 }    // namespace hal

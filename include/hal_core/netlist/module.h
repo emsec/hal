@@ -32,6 +32,7 @@
 #include "hal_core/netlist/pins/module_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
 #include "hal_core/utilities/enums.h"
+#include "hal_core/utilities/result.h"
 
 #include <functional>
 #include <list>
@@ -307,9 +308,44 @@ namespace hal
          */
 
         /**
-         * Manually assign a module pin to a net.
+         * TODO test
+         * Get a spare pin ID.<br>
+         * The value of 0 is reserved and represents an invalid ID.
+         * 
+         * @returns The pin ID.
+         */
+        u32 get_unique_pin_id();
+
+        /**
+         * TODO test
+         * Get a spare pin group ID.<br>
+         * The value of 0 is reserved and represents an invalid ID.
+         * 
+         * @returns The pin group ID.
+         */
+        u32 get_unique_pin_group_id();
+
+        /**
+         * Manually create a module pin and assign it to a net.
          * Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-         * Hence, update the module nets beforehand using `Module::update_nets`.
+         * Hence, make sure to update the module nets beforehand using `Module::update_nets`.
+         * If `create_group` is set to `false`, the pin will not be added to a pin group.
+         * \warning{\b WARNING: can only be used when automatic net checks have been disabled using `Netlist::enable_automatic_net_checks`.}
+         * 
+         * @param[in] id - The ID of the pin.
+         * @param[in] name - The name of the pin.
+         * @param[in] net - The net that the pin is being assigned to.
+         * @param[in] type - The type of the pin. Defaults to `PinType::none`.
+         * @param[in] create_group - Set `true` to automatically create a pin group and assign the pin, `false` otherwise.
+         * @returns The module pin on success, an error message otherwise.
+         */
+        Result<ModulePin*> create_pin(const u32 id, const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true);
+
+        /**
+         * Manually create a module pin and assign it to a net.
+         * The ID of the pin is set automatically.
+         * Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
+         * Hence, make sure to update the module nets beforehand using `Module::update_nets`.
          * If `create_group` is set to `false`, the pin will not be added to a pin group.
          * \warning{\b WARNING: can only be used when automatic net checks have been disabled using `Netlist::enable_automatic_net_checks`.}
          * 
@@ -317,12 +353,12 @@ namespace hal
          * @param[in] net - The net that the pin is being assigned to.
          * @param[in] type - The type of the pin. Defaults to `PinType::none`.
          * @param[in] create_group - Set `true` to automatically create a pin group and assign the pin, `false` otherwise.
-         * @returns The module pin on success, a `nullptr` on failure.
+         * @returns The module pin on success, an error message otherwise.
          */
-        ModulePin* assign_pin(const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true);
+        Result<ModulePin*> create_pin(const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true);
 
         /**
-         * Get all pins of the module.
+         * Get the (ordered) pins of the module.
          * The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
          * 
          * @param[in] filter - Filter function to be evaluated on each pin.
@@ -340,87 +376,124 @@ namespace hal
         std::vector<PinGroup<ModulePin>*> get_pin_groups(const std::function<bool(PinGroup<ModulePin>*)>& filter = nullptr) const;
 
         /**
-         * Get the pin specified by the given name.
+         * Get the pin corresponding to the given ID.
          * 
-         * @param[in] name - The name of the pin.
-         * @returns The pin on success, a nullptr otherwise.
+         * @param[in] id - The ID of the pin.
+         * @returns The pin on success, an error message otherwise.
          */
-        ModulePin* get_pin(const std::string& name) const;
+        Result<ModulePin*> get_pin_by_id(const u32 id) const;
 
         /**
          * Get the pin that passes through the specified net.
          * 
          * @param[in] net - The net.
-         * @returns The pin on success, a nullptr otherwise.
+         * @returns The pin on success, an error message otherwise.
          */
-        ModulePin* get_pin(Net* net) const;
+        Result<ModulePin*> get_pin_by_net(Net* net) const;
 
         /**
-         * Get the pin group specified by the given name.
+         * Get the pin group corresponding to the given ID.
          * 
-         * @param[in] name - The name of the pin group.
-         * @returns The pin group on success, a nullptr otherwise.
+         * @param[in] id - The ID of the pin group.
+         * @returns The pin group on success, an error message otherwise.
          */
-        PinGroup<ModulePin>* get_pin_group(const std::string& name) const;
+        Result<PinGroup<ModulePin>*> get_pin_group_by_id(const u32 id) const;
 
         /**
          * Set the name of the given pin.
          * 
          * @param[in] pin - The pin.
          * @param[in] new_name - The name to be assigned to the pin.
-         * @returns True on success, false otherwise.
+         * @returns Ok on success, an error message otherwise.
          */
-        bool set_pin_name(ModulePin* pin, const std::string& new_name);
+        Result<std::monostate> set_pin_name(ModulePin* pin, const std::string& new_name);
 
         /**
          * Set the name of the given pin group.
          * 
          * @param[in] pin_group - The pin group.
          * @param[in] new_name - The name to be assigned to the pin group.
-         * @returns True on success, false otherwise.
+         * @returns Ok on success, an error message otherwise.
          */
-        bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
+        Result<std::monostate> set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
 
         /**
          * Set the type of the given pin.
-         * The pin type can only be changed this way if the pin is in a pin group of size 1.
-         * The new type will also be assigned to the pin group.
          * 
          * @param[in] pin - The pin.
          * @param[in] new_type - The type to be assigned to the pin.
-         * @returns True on success, false otherwise.
+         * @returns Ok on success, an error message otherwise.
          */
-        bool set_pin_type(ModulePin* pin, PinType new_type);
+        Result<std::monostate> set_pin_type(ModulePin* pin, PinType new_type);
 
         /**
          * Set the type of the given pin group.
-         * The new type will also be assigned to all pins of the group.
          * 
          * @param[in] pin_group - The pin group.
          * @param[in] new_type - The type to be assigned to the pin group.
-         * @returns True on success, false otherwise.
+         * @returns Ok on success, an error message otherwise.
          */
-        bool set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type);
+        Result<std::monostate> set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type);
+
+        /**
+         * Set the direction of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_direction - The direction to be assigned to the pin group.
+         * @returns Ok on success, an error message otherwise.
+         */
+        Result<std::monostate> set_pin_group_direction(PinGroup<ModulePin>* pin_group, PinDirection new_direction);
 
         /**
          * Create a new pin group with the given name.
-         * All pins to be added to the pin group must have the same direction and type.
+         * 
+         * @param[in] id - The ID of the pin group.
+         * @param[in] name - The name of the pin group.
+         * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
+         * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
+         * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] start_index - The start index of the pin group. Defaults to `0`.
+         * @param delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
+         * @returns The pin group on success, an error message otherwise.
+         */
+        Result<PinGroup<ModulePin>*> create_pin_group(const u32 id,
+                                                      const std::string& name,
+                                                      const std::vector<ModulePin*> pins = {},
+                                                      PinDirection direction             = PinDirection::none,
+                                                      PinType type                       = PinType::none,
+                                                      bool ascending                     = false,
+                                                      u32 start_index                    = 0,
+                                                      bool delete_empty_groups           = true);
+
+        /**
+         * Create a new pin group with the given name.
+         * The ID of the pin group is set automatically.
          * 
          * @param[in] name - The name of the pin group.
-         * @param[in] pins - The pins to be assigned to the pin group.
-         * @param[in] ascending - True for ascending pin order (from 0 to n-1), false otherwise (from n-1 to 0).
-         * @param[in] start_index - The start index of the pin group.
-         * @returns The pin group on success, a nullptr otherwise.
+         * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
+         * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
+         * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] start_index - The start index of the pin group. Defaults to `0`.
+         * @param delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
+         * @returns The pin group on success, an error message otherwise.
          */
-        PinGroup<ModulePin>* create_pin_group(const std::string& name, const std::vector<ModulePin*> pins, bool ascending = false, u32 start_index = 0);
+        Result<PinGroup<ModulePin>*> create_pin_group(const std::string& name,
+                                                      const std::vector<ModulePin*> pins = {},
+                                                      PinDirection direction             = PinDirection::none,
+                                                      PinType type                       = PinType::none,
+                                                      bool ascending                     = false,
+                                                      u32 start_index                    = 0,
+                                                      bool delete_empty_groups           = true);
 
         /**
          * Delete the given pin group.
          * 
          * @param[in] pin_group - The pin group to be deleted.
-         * @returns True on success, false otherwise.
+         * @returns Ok on success, an error message otherwise.
          */
-        bool delete_pin_group(PinGroup<ModulePin>* pin_group);
+        Result<std::monostate> delete_pin_group(PinGroup<ModulePin>* pin_group);
 
         /**
          * Assign a pin to a pin group.
@@ -428,9 +501,10 @@ namespace hal
          * 
          * @param[in] pin_group - The new pin group.
          * @param[in] pin - The pin to be added.
-         * @returns True on success, false otherwise.
+         * @param delete_empty_groups - Set `true` to delete groups that are empty after the pin has been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
+         * @returns Ok on success, an error message otherwise.
          */
-        bool assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin);
+        Result<std::monostate> assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
 
         /**
          * Move a pin to another index within the given pin group.
@@ -439,9 +513,9 @@ namespace hal
          * @param[in] pin_group - The pin group.
          * @param[in] pin - The pin to be moved.
          * @param[in] new_index - The index to which the pin is moved.
-         * @returns True on success, false otherwise.
+         * @returns Ok on success, an error message otherwise.
          */
-        bool move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index);
+        Result<std::monostate> move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index);
 
         /**
          * Remove a pin from a pin group.
@@ -449,9 +523,10 @@ namespace hal
          * 
          * @param[in] pin_group - The old pin group.
          * @param[in] pin - The pin to be removed.
-         * @returns True on success, false otherwise.
+         * @param delete_empty_groups - Set `true` to delete the group of it is empty after the pin has been removed, `false` to keep the empty group. Defaults to `true`.
+         * @returns Ok on success, an error message otherwise.
          */
-        bool remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin);
+        Result<std::monostate> remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
 
         /*
          * ################################################################
@@ -542,9 +617,13 @@ namespace hal
         };
 
         NetConnectivity check_net_endpoints(const Net* net) const;
-        void check_net(Net* net, bool recursive = false);
-        ModulePin* assign_pin_net(Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none, bool create_group = true);
-        bool remove_pin_net(Net* net);
+        Result<std::monostate> check_net(Net* net, bool recursive = false);
+        Result<ModulePin*> assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none);
+        Result<std::monostate> remove_pin_net(Net* net);
+        Result<ModulePin*> create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type);
+        Result<std::monostate> delete_pin_internal(ModulePin* pin);
+        Result<PinGroup<ModulePin>*> create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index);
+        Result<std::monostate> delete_pin_group_internal(PinGroup<ModulePin>* pin_group);
 
         std::string m_name;
         std::string m_type;
@@ -559,21 +638,23 @@ namespace hal
         std::unordered_map<u32, Module*> m_submodules_map;
         std::vector<Module*> m_submodules;
 
-        // ports
+        // pins
+        u32 m_next_pin_id;
+        std::set<u32> m_used_pin_ids;
+        std::set<u32> m_free_pin_ids;
+        u32 m_next_pin_group_id;
+        std::set<u32> m_used_pin_group_ids;
+        std::set<u32> m_free_pin_group_ids;
+
         u32 m_next_input_index  = 0;
         u32 m_next_inout_index  = 0;
         u32 m_next_output_index = 0;
-        // std::vector<std::unique_ptr<Port>> m_ports;
-        // std::list<Port*> m_ports_raw;
-        // std::map<std::string, Port*> m_port_names_map;
-        // std::map<std::string, Port*> m_pin_names_map;
 
-        // pins
         std::vector<std::unique_ptr<ModulePin>> m_pins;
         std::vector<std::unique_ptr<PinGroup<ModulePin>>> m_pin_groups;
         std::list<PinGroup<ModulePin>*> m_pin_groups_ordered;
-        std::unordered_map<std::string, ModulePin*> m_pin_names_map;
-        std::unordered_map<std::string, PinGroup<ModulePin>*> m_pin_group_names_map;
+        std::unordered_map<u32, ModulePin*> m_pins_map;
+        std::unordered_map<u32, PinGroup<ModulePin>*> m_pin_groups_map;
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;
