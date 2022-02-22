@@ -79,6 +79,28 @@ namespace hal
             m_result = error;
         }
 
+        template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        static Result<T> Ok(const T& value)
+        {
+            return OK(value);
+        }
+
+        template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        static Result<T> Ok(T&& value)
+        {
+            return OK(std::move(value));
+        }
+
+        bool operator==(const Result<T>& other) 
+        {
+            return this->m_result == other.m_result;
+        }
+
+        bool operator!=(const Result<T>& other) 
+        {
+            return !(*this == other);
+        }
+
         bool is_ok() const
         {
             return !is_error();
@@ -89,9 +111,16 @@ namespace hal
             return std::holds_alternative<Error>(m_result);
         }
 
+        template<typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
         const T& get() const
         {
             return std::get<T>(m_result);
+        }
+
+        template<typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
+        T&& get() 
+        {
+            return std::get<T>(std::move(m_result));
         }
 
         Error get_error() const
@@ -99,7 +128,7 @@ namespace hal
             return std::get<Error>(m_result);
         }
 
-        template<typename U>
+        template<typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
         Result<U> map(const std::function<Result<U>(const T&)>& f) const
         {
             if (this->is_ok())

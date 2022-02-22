@@ -209,12 +209,12 @@ namespace hal {
         for (const auto& [s, expected] : data) {
             auto function = BooleanFunction::from_string(s);
 
-            if (std::get_if<std::string>(&function) != nullptr) {
-                log_error("netlist", "{}", std::get<std::string>(function));   
+            if (function.is_error()) {
+                log_error("netlist", "{}", function.get_error().get());   
             }
 
-            ASSERT_NE(std::get_if<BooleanFunction>(&function), nullptr);
-            ASSERT_EQ(std::get<BooleanFunction>(function), expected);
+            ASSERT_TRUE(function.is_ok());
+            ASSERT_EQ(function.get(), expected);
         }
     }
 
@@ -408,7 +408,7 @@ namespace hal {
     {
         const auto start = std::chrono::system_clock::now();
 
-        const auto function = std::get<0>(BooleanFunction::from_string("((((((((((((((((((((((((((((((((0b0 | (((((I0 & (! I1)) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | ((((((! I0) & I1) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & I1) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & I2) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & I1) & I2) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & I3) & (! I4)) & (! I5))) | (((((I0 & I1) & (! I2)) & I3) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & I2) & I3) & (! I4)) & (! I5))) | (((((I0 & I1) & I2) & I3) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & (! I2)) & (! I3)) & I4) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & (! I3)) & I4) & (! I5))) | ((((((! I0) & (! I1)) & (! I2)) & I3) & I4) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & I3) & I4) & (! I5))) | (((((I0 & I1) & (! I2)) & I3) & I4) & (! I5))) | ((((((! I0) & I1) & I2) & I3) & I4) & (! I5))) | ((((((! I0) & I1) & (! I2)) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & I2) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & I1) & I2) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & (! I2)) & I3) & (! I4)) & I5)) | (((((I0 & (! I1)) & (! I2)) & I3) & (! I4)) & I5)) | (((((I0 & I1) & (! I2)) & I3) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & I2) & I3) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & (! I2)) & (! I3)) & I4) & I5)) | (((((I0 & (! I1)) & (! I2)) & (! I3)) & I4) & I5)) | ((((((! I0) & I1) & (! I2)) & (! I3)) & I4) & I5)) | ((((((! I0) & I1) & I2) & (! I3)) & I4) & I5)) | (((((I0 & I1) & I2) & (! I3)) & I4) & I5)) | (((((I0 & (! I1)) & (! I2)) & I3) & I4) & I5)) | ((((((! I0) & I1) & (! I2)) & I3) & I4) & I5)) | ((((((! I0) & (! I1)) & I2) & I3) & I4) & I5)) | (((((I0 & (! I1)) & I2) & I3) & I4) & I5)) | (((((I0 & I1) & I2) & I3) & I4) & I5))"));
+        const auto function = BooleanFunction::from_string("((((((((((((((((((((((((((((((((0b0 | (((((I0 & (! I1)) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | ((((((! I0) & I1) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & I1) & (! I2)) & (! I3)) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & I2) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & I1) & I2) & (! I3)) & (! I4)) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & I3) & (! I4)) & (! I5))) | (((((I0 & I1) & (! I2)) & I3) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & I2) & I3) & (! I4)) & (! I5))) | (((((I0 & I1) & I2) & I3) & (! I4)) & (! I5))) | ((((((! I0) & (! I1)) & (! I2)) & (! I3)) & I4) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & (! I3)) & I4) & (! I5))) | ((((((! I0) & (! I1)) & (! I2)) & I3) & I4) & (! I5))) | (((((I0 & (! I1)) & (! I2)) & I3) & I4) & (! I5))) | (((((I0 & I1) & (! I2)) & I3) & I4) & (! I5))) | ((((((! I0) & I1) & I2) & I3) & I4) & (! I5))) | ((((((! I0) & I1) & (! I2)) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & I2) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & I1) & I2) & (! I3)) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & (! I2)) & I3) & (! I4)) & I5)) | (((((I0 & (! I1)) & (! I2)) & I3) & (! I4)) & I5)) | (((((I0 & I1) & (! I2)) & I3) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & I2) & I3) & (! I4)) & I5)) | ((((((! I0) & (! I1)) & (! I2)) & (! I3)) & I4) & I5)) | (((((I0 & (! I1)) & (! I2)) & (! I3)) & I4) & I5)) | ((((((! I0) & I1) & (! I2)) & (! I3)) & I4) & I5)) | ((((((! I0) & I1) & I2) & (! I3)) & I4) & I5)) | (((((I0 & I1) & I2) & (! I3)) & I4) & I5)) | (((((I0 & (! I1)) & (! I2)) & I3) & I4) & I5)) | ((((((! I0) & I1) & (! I2)) & I3) & I4) & I5)) | ((((((! I0) & (! I1)) & I2) & I3) & I4) & I5)) | (((((I0 & (! I1)) & I2) & I3) & I4) & I5)) | (((((I0 & I1) & I2) & I3) & I4) & I5))").get();
         const auto simplified = function.simplify();
 
         const auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
@@ -423,10 +423,10 @@ namespace hal {
 
         EXPECT_EQ((a & b & c).substitute("C", "D"), a & b & d);
 
-        EXPECT_EQ(std::get<BooleanFunction>((a & b).substitute("B", _0)), a & _0);
-        EXPECT_EQ(std::get<BooleanFunction>((a & b).substitute("B", ~c)), a & ~c);
-        EXPECT_EQ(std::get<BooleanFunction>((a & b).substitute("B", ~c)), a & ~c);
-        EXPECT_EQ(std::get<BooleanFunction>((a & b).substitute("B", b | c | d)),  a & (b | c | d));
+        EXPECT_EQ((a & b).substitute("B", _0).get(), a & _0);
+        EXPECT_EQ((a & b).substitute("B", ~c).get(), a & ~c);
+        EXPECT_EQ((a & b).substitute("B", ~c).get(), a & ~c);
+        EXPECT_EQ((a & b).substitute("B", b | c | d).get(),  a & (b | c | d));
     }
 
     TEST(BooleanFunction, EvaluateSingleBit) {
@@ -459,10 +459,10 @@ namespace hal {
         
         for (const auto& [function, input, expected]: data) {
             auto value = function.evaluate(input);
-            if (std::get_if<std::string>(&value) != nullptr) {
-                log_error("netlist", "{}", std::get<std::string>(value));
+            if (value.is_error()) {
+                log_error("netlist", "{}", value.get_error().get());
             }
-            EXPECT_EQ(expected, std::get<Value>(value));
+            EXPECT_EQ(expected, value.get());
         }
     }
 
@@ -501,10 +501,10 @@ namespace hal {
         
         for (const auto& [function, input, expected]: data) {
             auto value = function.evaluate(input);
-            if (std::get_if<std::string>(&value) != nullptr) {
-                log_error("netlist", "{}", std::get<std::string>(value));
+            if (value.is_error()) {
+                log_error("netlist", "{}", value.get_error().get());
             }
-            EXPECT_EQ(expected, std::get<std::vector<Value>>(value));
+            EXPECT_EQ(expected, value.get());
         }
     }
 
@@ -534,8 +534,7 @@ namespace hal {
         };
 
         for (const auto& [function, expected, variable_order] : data) {
-            auto truth_table = function.compute_truth_table(variable_order);
-            ASSERT_EQ(expected, std::get<std::vector<std::vector<Value>>>(truth_table));
+            ASSERT_EQ(expected, function.compute_truth_table(variable_order).get());
         }
     }
 
@@ -550,7 +549,7 @@ namespace hal {
         };
 
         for (const auto& function: data) {
-            ASSERT_EQ(function.compute_truth_table(), function.simplify().compute_truth_table());
+            ASSERT_EQ(function.compute_truth_table().get(), function.simplify().compute_truth_table().get());
         }
     }
 
@@ -613,7 +612,7 @@ namespace hal {
                     continue;
                 }
 
-                std::variant<SMT::Result, std::string> result_var = solver.query(
+                auto result = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -621,10 +620,10 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                ASSERT_TRUE(std::get_if<SMT::Result>(&result_var) != nullptr);
-                SMT::Result result = std::get<SMT::Result>(result_var);
-                EXPECT_EQ(result.type, SMT::ResultType::Sat);
-                EXPECT_TRUE(result.model.has_value());
+                ASSERT_TRUE(result.is_ok());
+                auto solver_result = result.get();
+                EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
+                EXPECT_TRUE(solver_result.model.has_value());
             }
         }
     }
@@ -670,7 +669,7 @@ namespace hal {
                     continue;
                 }
 
-                std::variant<SMT::Result, std::string> result_var = solver.query(
+                auto result = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -678,10 +677,10 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                ASSERT_TRUE(std::get_if<SMT::Result>(&result_var) != nullptr);
-                SMT::Result result = std::get<SMT::Result>(result_var);
-                EXPECT_EQ(result.type, SMT::ResultType::UnSat);
-                EXPECT_FALSE(result.model.has_value());
+                ASSERT_TRUE(result.is_ok());
+                auto solver_result = result.get();
+                EXPECT_EQ(solver_result.type, SMT::SolverResultType::UnSat);
+                EXPECT_FALSE(solver_result.model.has_value());
             }
         }
     }
@@ -730,7 +729,7 @@ namespace hal {
                     continue;
                 }
 
-                std::variant<SMT::Result, std::string> result_var = solver.query(
+                auto result = solver.query(
                     SMT::QueryConfig()
                         .with_solver(solver_type)
                         .with_local_solver()
@@ -738,10 +737,10 @@ namespace hal {
                         .with_timeout(1000)
                 );
 
-                ASSERT_TRUE(std::get_if<SMT::Result>(&result_var) != nullptr);
-                SMT::Result result = std::get<SMT::Result>(result_var);
-                EXPECT_EQ(result.type, SMT::ResultType::Sat);
-                EXPECT_EQ(*result.model, model);
+                ASSERT_TRUE(result.is_ok());
+                auto solver_result = result.get();
+                EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
+                EXPECT_EQ(*solver_result.model, model);
             }
         }
     }

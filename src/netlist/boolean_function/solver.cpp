@@ -14,7 +14,7 @@ namespace hal
         namespace Z3
         {
             /// Checks whether a Z3 binary is available on the system.
-            std::tuple<bool, std::string> query_binary_path()
+            Result<std::string> query_binary_path()
             {
                 static const std::vector<std::string> z3_binary_paths = {
                     "/usr/bin/z3",
@@ -25,11 +25,11 @@ namespace hal
                 {
                     if (std::filesystem::exists(path))
                     {
-                        return {true, path};
+                        return OK(path);
                     }
                 }
 
-                return {false, ""};
+                return ERR("No available binary path for 'z3' solver.");
             }
 
             /**
@@ -37,19 +37,20 @@ namespace hal
 			 *
 			 * @param[in] input - SMT-LIB input.
 			 * @param[in] config - SMT query configuration.
-			 * @returns (1) status (true on success, false otherwise),  
-			 *          (2) was_killed (true in case process was killed),
-			 *          (3) stdout Stdout of Z3 process.
+			 * @returns Ok() and status with 
+             *      (0) was_killed (true in case process was killed), and 
+             *      (1) stdout Stdout of Z3 process on success, 
+             *      Err() otherwise
 			 */
-            std::tuple<bool, bool, std::string> query(std::string input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query(std::string input, const QueryConfig& config)
             {
-                auto [binary_path_ok, binary_path] = query_binary_path();
-                if (!binary_path_ok)
+                auto binary_path = query_binary_path();
+                if (binary_path.is_error())
                 {
-                    return {false, false, ""};
+                    return ERR(binary_path.get_error());
                 }
 
-                auto z3 = subprocess::Popen({binary_path,
+                auto z3 = subprocess::Popen({binary_path.get(),
                                              // read SMT2LIB formula from stdin
                                              "-in",
                                              // kill execution after a given time
@@ -62,14 +63,14 @@ namespace hal
                 // TODO:
                 // check whether process was terminated (i.e. killed) via the subprocess
                 // API to channel this to the caller
-                return {true, false, z3.communicate().first.buf.data()};
+                return OK({false, z3.communicate().first.buf.data()});
             }
         }    // namespace Z3
 
         namespace Boolector
         {
             /// Checks whether a Boolector binary is available on the system.
-            std::tuple<bool, std::string> query_binary_path()
+            Result<std::string> query_binary_path()
             {
                 static const std::vector<std::string> boolector_binary_paths = {
                     "/usr/bin/boolector",
@@ -80,11 +81,11 @@ namespace hal
                 {
                     if (std::filesystem::exists(path))
                     {
-                        return {true, path};
+                        return OK(path);
                     }
                 }
 
-                return {false, ""};
+                return ERR("No available binary path for 'Boolector' solver.");
             }
 
             /**
@@ -92,21 +93,22 @@ namespace hal
 			 *
 			 * @param[in] input - SMT-LIB input.
 			 * @param[in] config - SMT query configuration.
-			 * @returns (1) status (true on success, false otherwise),  
-			 *          (2) was_killed (true in case process was killed),
-			 *          (3) stdout Stdout of Boolector process.
+			 * @returns Ok() and status with 
+             *      (0) was_killed (true in case process was killed), and 
+             *      (1) stdout Stdout of Z3 process on success, 
+             *      Err() otherwise
 			 */
-            std::tuple<bool, bool, std::string> query(std::string input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query(std::string input, const QueryConfig& config)
             {
-                auto [binary_path_ok, binary_path] = query_binary_path();
-                if (!binary_path_ok)
+                auto binary_path = query_binary_path();
+                if (binary_path.is_error())
                 {
-                    return {false, false, ""};
+                    return ERR(binary_path.get_error());
                 }
 
                 auto boolector = subprocess::Popen(
                     {
-                        binary_path,
+                        binary_path.get(),
                         // kill execution after a given time
                         "--time=" + std::to_string(config.timeout_in_seconds),
                         // generate SMT-LIB v2 compatible output
@@ -122,7 +124,7 @@ namespace hal
                 // TODO:
                 // check whether process was terminated (i.e. killed) via the subprocess
                 // API to channel this to the caller
-                return {true, false, boolector.communicate().first.buf.data()};
+                return OK({false, boolector.communicate().first.buf.data()});
             }
         }    // namespace Boolector
 
@@ -152,56 +154,57 @@ namespace hal
 
         bool Solver::has_local_solver_for(SolverType solver)
         {
-            static const std::map<SolverType, std::function<std::tuple<bool, std::string>()>> type2query = {
+            static const std::map<SolverType, std::function<Result<std::string>()>> type2query = {
                 {SolverType::Z3, Z3::query_binary_path},
                 {SolverType::Boolector, Boolector::query_binary_path},
             };
 
             switch (auto it = type2query.find(solver); it != type2query.end())
             {
-                case true:
-                    return std::get<0>(it->second());
-                default:
-                    return false;
+                case true: return it->second().is_ok();
+                default:   return false;
             }
         }
 
-        std::variant<Result, std::string> Solver::query(const QueryConfig& config) const
+        Result<SolverResult> Solver::query(const QueryConfig& config) const
         {
             return (config.local) ? this->query_local(config) : this->query_remote(config);
         }
 
-        std::variant<Result, std::string> Solver::query_local(const QueryConfig& config) const
+        Result<SolverResult> Solver::query_local(const QueryConfig& config) const
         {
-            static const std::map<SolverType, std::function<std::tuple<bool, bool, std::string>(std::string, const QueryConfig&)>> type2query = {
+            static const std::map<SolverType, std::function<Result<std::tuple<bool, std::string>>(std::string, const QueryConfig&)>> type2query = {
                 {SolverType::Z3, Z3::query},
                 {SolverType::Boolector, Boolector::query},
             };
 
-            auto [input_ok, input] = Solver::translate_to_smt2(this->m_constraints, config);
-            if (!input_ok)
+            auto input = Solver::translate_to_smt2(this->m_constraints, config);
+            if (input.is_error())
             {
-                return "Cannot translate SMT constraints and configuration to string.";
+                return ERR("Cannot translate SMT constraints and configuration to string (= " + input.get_error().get() + ").");
             }
 
-            if (auto [output_ok, was_killed, output] = type2query.at(config.solver)(input, config); output_ok)
+            auto query = type2query.at(config.solver)(input.get(), config);
+            if (query.is_ok())
             {
+                auto [was_killed, output] = query.get();
                 return Solver::translate_from_smt2(was_killed, output, config);
             }
-            else
-            {
-                return "Cannot parse SMT result from string.";
-            }
+            return ERR("Cannot parse SMT result from string (= " + query.get_error().get() + ").");
         }
 
-        std::variant<Result, std::string> Solver::query_remote(const QueryConfig& /* config */) const
+        Result<SolverResult> Solver::query_remote(const QueryConfig& /* config */) const
         {
             // unimplemented as this is feature not required at the moment
-            return "This feature is not currently supported.";
+            return ERR("This feature is not currently supported.");
         }
 
-        std::tuple<bool, std::string> Solver::translate_to_smt2(const std::vector<Constraint>& constraints, const QueryConfig& config)
+        Result<std::string> Solver::translate_to_smt2(const std::vector<Constraint>& constraints, const QueryConfig& config)
         {
+            /// Helper to translate variable declarations to an SMT-LIB v2 string representation.
+            ///
+            /// @param[in] constraints - List of constraints to translate.
+            /// @returns List of variable declarations.
             auto translate_declarations = [](const std::vector<Constraint>& _constraints) -> std::string {
                 std::set<std::tuple<std::string, u16>> inputs;
                 for (const auto& constraint : _constraints)
@@ -220,44 +223,43 @@ namespace hal
                 });
             };
 
-            auto translate_constraints = [](const std::vector<Constraint>& _constraints) -> std::tuple<bool, std::string> {
-                return std::accumulate(_constraints.cbegin(), _constraints.cend(), std::make_tuple(true, std::string()), [](auto state, const auto& constraint) -> std::tuple<bool, std::string> {
-                    auto [ok, accumulator] = state;
-
-                    auto [lhs_ok, lhs] = Translator::translate_to_smt2(constraint.lhs);
-                    auto [rhs_ok, rhs] = Translator::translate_to_smt2(constraint.rhs);
-
-                    if (ok && lhs_ok && rhs_ok)
-                    {
-                        return {true, accumulator + "(assert (= " + lhs + " " + rhs + "))\n"};
+            /// Helper to translate constraints to an SMT-LIB v2 string representation.
+            /// 
+            /// @param[in] constraints - List of constraints to translate.
+            /// @returns Ok() and constraints as string on success, Err() otherwise.
+            auto translate_constraints = [](const std::vector<Constraint>& _constraints) -> Result<std::string> {
+                return std::accumulate(_constraints.cbegin(), _constraints.cend(), Result<std::string>::Ok({}), [](auto accumulator, const auto& constraint) -> Result<std::string> {
+                    // (1) short-hand termination in case accumulator is an error
+                    if (accumulator.is_error()) {
+                        return accumulator;
                     }
-                    else
-                    {
-                        return {false, ""};
+
+                    auto lhs = Translator::translate_to_smt2(constraint.lhs),
+                         rhs = Translator::translate_to_smt2(constraint.rhs);
+                    if (lhs.is_ok() && rhs.is_ok()) {
+                        return OK(accumulator.get() + "(assert (= " + lhs.get() + " " + rhs.get() + "))\n");
                     }
+                    return ERR("Cannot translate '" + constraint.to_string() + "' to SMT-LIB v2.");
                 });
             };
 
-            auto theory                            = std::string("(set-logic QF_ABV)");
-            auto declarations                      = translate_declarations(constraints);
-            auto [constraints_ok, constraints_str] = translate_constraints(constraints);
-            auto epilogue                          = std::string("(check-sat)") + ((config.generate_model) ? "\n(get-model)" : "");
+            auto theory          = std::string("(set-logic QF_ABV)");
+            auto declarations    = translate_declarations(constraints);
+            auto constraints_str = translate_constraints(constraints);
+            auto epilogue        = std::string("(check-sat)") + ((config.generate_model) ? "\n(get-model)" : "");
 
-            if (constraints_ok)
+            if (constraints_str.is_ok())
             {
-                return {true, theory + "\n" + declarations + "\n" + constraints_str + "\n" + epilogue};
+                return OK(theory + "\n" + declarations + "\n" + constraints_str.get() + "\n" + epilogue);
             }
-            else
-            {
-                return {false, ""};
-            }
+            return ERR("Cannot generate translate constraints (= " + constraints_str.get_error().get() + ").");
         }
 
-        std::variant<Result, std::string> Solver::translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config)
+        Result<SolverResult> Solver::translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config)
         {
             if (was_killed)
             {
-                return "Cannot parse SMT result from string as the SMT solver was killed.";
+                return ERR("Cannot parse SMT result from string as the SMT solver was killed.");
             }
 
             auto position            = stdout.find_first_of('\n');
@@ -273,32 +275,25 @@ namespace hal
             {
                 if (config.generate_model)
                 {
-                    std::variant<SMT::Model, std::string> model = Model::parse(model_str, config.solver);
-                    if (std::get_if<SMT::Model>(&model) == nullptr)
-                    {
-                        return std::get<std::string>(model);
-                    }
-                    else
-                    {
-                        return Result::Sat(std::get<SMT::Model>(model));
-                    }
+                    return Model::parse(model_str, config.solver)
+                        .map<SolverResult>([] (auto model) -> Result<SolverResult> { 
+                            return OK(SolverResult::Sat(model)); 
+                        });
                 }
-                else
-                {
-                    return Result::Sat();
-                }
+
+                return OK(SolverResult::Sat());
             }
             if (to_lowercase(result) == "unsat")
             {
-                return Result::UnSat();
+                return OK(SolverResult::UnSat());
             }
 
             if ((to_lowercase(result) == "unknown") || result.rfind("[btor>main] ALARM TRIGGERED: time limit", 0))
             {
-                return Result::Unknown();
+                return OK(SolverResult::Unknown());
             }
 
-            return "Cannot translate SMT result from string.";
+            return ERR("Cannot translate SMT result from string.");
         }
     }    // namespace SMT
 }    // namespace hal

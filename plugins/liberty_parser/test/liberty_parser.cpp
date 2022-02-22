@@ -53,7 +53,7 @@ namespace hal {
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
                 EXPECT_EQ(gt->get_boolean_functions().at("O"), BooleanFunction::Var("I"));
                 ASSERT_TRUE(gt->get_boolean_functions().find("O_undefined") != gt->get_boolean_functions().end()); // x_function
-                EXPECT_EQ(gt->get_boolean_functions().at("O_undefined"), std::get<BooleanFunction>(BooleanFunction::from_string("!I")));
+                EXPECT_EQ(gt->get_boolean_functions().at("O_undefined"), BooleanFunction::from_string("!I").get());
 
                 // Components
                 ASSERT_EQ(gt->get_components().size(), 0);
@@ -90,7 +90,7 @@ namespace hal {
                 EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
                 EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("O"), std::get<BooleanFunction>(BooleanFunction::from_string("S & R & D")));
+                EXPECT_EQ(gt->get_boolean_functions().at("O"), BooleanFunction::from_string("S & R & D").get());
                 
                 // Components
                 ASSERT_EQ(gt->get_components().size(), 2);
@@ -138,7 +138,7 @@ namespace hal {
                 EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
                 EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
-                EXPECT_EQ(gt->get_boolean_functions().at("O"), std::get<BooleanFunction>(BooleanFunction::from_string("S & R & D")));
+                EXPECT_EQ(gt->get_boolean_functions().at("O"), BooleanFunction::from_string("S & R & D").get());
 
                 // Components
                 ASSERT_EQ(gt->get_components().size(), 2);

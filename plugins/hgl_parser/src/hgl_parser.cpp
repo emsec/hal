@@ -199,11 +199,7 @@ namespace hal
         for (const auto& [f_name, func] : pin_ctx.boolean_functions)
         {
             auto function = BooleanFunction::from_string(func);
-            gt->add_boolean_function(f_name, 
-                (std::get_if<BooleanFunction>(&function) != nullptr)
-                ? std::get<BooleanFunction>(function)
-                : BooleanFunction()
-            );
+            gt->add_boolean_function(f_name, (function.is_ok()) ? function.get() : BooleanFunction());
         }
 
         return true;
@@ -389,8 +385,8 @@ namespace hal
 
         std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_ff_component(
             std::move(state_component),
-            (std::get_if<BooleanFunction>(&next_state_function) != nullptr) ? std::get<BooleanFunction>(next_state_function) : BooleanFunction(),
-            (std::get_if<BooleanFunction>(&clocked_on_function) != nullptr) ? std::get<BooleanFunction>(clocked_on_function) : BooleanFunction()
+            (next_state_function.is_ok()) ? next_state_function.get() : BooleanFunction(),
+            (clocked_on_function.is_ok()) ? clocked_on_function.get() : BooleanFunction()
         );
 
         FFComponent* ff_component = component->convert_to<FFComponent>();
@@ -399,19 +395,13 @@ namespace hal
         if (ff_config.HasMember("clear_on") && ff_config["clear_on"].IsString())
         {
             auto clear_on_function = BooleanFunction::from_string(ff_config["clear_on"].GetString());
-
-            ff_component->set_async_reset_function(
-                (std::get_if<BooleanFunction>(&clear_on_function) != nullptr) ? std::get<BooleanFunction>(clear_on_function) : BooleanFunction()
-            );
+            ff_component->set_async_reset_function((clear_on_function.is_ok()) ? clear_on_function.get() : BooleanFunction());
         }
 
         if (ff_config.HasMember("preset_on") && ff_config["preset_on"].IsString())
         {
             auto preset_on_function = BooleanFunction::from_string(ff_config["preset_on"].GetString());
-
-            ff_component->set_async_set_function(
-                (std::get_if<BooleanFunction>(&preset_on_function) != nullptr) ? std::get<BooleanFunction>(preset_on_function) : BooleanFunction()
-            );
+            ff_component->set_async_set_function((preset_on_function.is_ok()) ? preset_on_function.get() : BooleanFunction());
         }
 
         bool has_state     = ff_config.HasMember("state_clear_preset") && ff_config["state_clear_preset"].IsString();
@@ -479,14 +469,10 @@ namespace hal
         if (latch_config.HasMember("data_in") && latch_config["data_in"].IsString() && latch_config.HasMember("enable_on") && latch_config["enable_on"].IsString())
         {
             auto data_in_function = BooleanFunction::from_string(latch_config["data_in"].GetString());
-            latch_component->set_data_in_function(
-                (std::get_if<BooleanFunction>(&data_in_function) != nullptr) ? std::get<BooleanFunction>(data_in_function) : BooleanFunction()
-            );
+            latch_component->set_data_in_function((data_in_function.is_ok()) ? data_in_function.get() : BooleanFunction());
 
             auto enable_on_function = BooleanFunction::from_string(latch_config["enable_on"].GetString());
-            latch_component->set_enable_function(
-                (std::get_if<BooleanFunction>(&enable_on_function) != nullptr) ? std::get<BooleanFunction>(enable_on_function) : BooleanFunction()
-            );
+            latch_component->set_enable_function((enable_on_function.is_ok()) ? enable_on_function.get() : BooleanFunction());
         }
         else if (latch_config.HasMember("data_in") && latch_config["data_in"].IsString())
         {
@@ -502,17 +488,13 @@ namespace hal
         if (latch_config.HasMember("clear_on") && latch_config["clear_on"].IsString())
         {
             auto clear_on_function = BooleanFunction::from_string(latch_config["clear_on"].GetString());
-            latch_component->set_async_reset_function(
-                (std::get_if<BooleanFunction>(&clear_on_function) != nullptr) ? std::get<BooleanFunction>(clear_on_function) : BooleanFunction()
-            );
+            latch_component->set_async_reset_function((clear_on_function.is_ok()) ? clear_on_function.get() : BooleanFunction());
         }
 
         if (latch_config.HasMember("preset_on") && latch_config["preset_on"].IsString())
         {
             auto preset_on_function = BooleanFunction::from_string(latch_config["preset_on"].GetString());
-            latch_component->set_async_set_function(
-                (std::get_if<BooleanFunction>(&preset_on_function) != nullptr) ? std::get<BooleanFunction>(preset_on_function) : BooleanFunction()
-            );
+            latch_component->set_async_set_function((preset_on_function.is_ok()) ? preset_on_function.get() : BooleanFunction());
         }
 
         bool has_state     = latch_config.HasMember("state_clear_preset") && latch_config["state_clear_preset"].IsString();
@@ -631,8 +613,8 @@ namespace hal
                 std::move(sub_component),
                 ram_port["data_group"].GetString(),
                 ram_port["address_group"].GetString(),
-                (std::get_if<BooleanFunction>(&clocked_on_function) != nullptr) ? std::get<BooleanFunction>(clocked_on_function) : BooleanFunction(),
-                (std::get_if<BooleanFunction>(&enabled_on_function) != nullptr) ? std::get<BooleanFunction>(enabled_on_function) : BooleanFunction(),
+                (clocked_on_function.is_ok()) ? clocked_on_function.get() : BooleanFunction(),
+                (enabled_on_function.is_ok()) ? enabled_on_function.get() : BooleanFunction(),
                 ram_port["is_write"].GetBool()
             );
         }

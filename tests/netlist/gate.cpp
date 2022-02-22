@@ -226,21 +226,21 @@ namespace hal
             // Boolean functions
             Gate* nl1_g12 = nl_1->create_gate(12, gl->get_gate_type_by_name("AND2"), "gate_12");
             ASSERT_NE(nl1_g12, nullptr);
-            nl1_g12->add_boolean_function("test", std::get<BooleanFunction>(BooleanFunction::from_string("A & B")));
+            nl1_g12->add_boolean_function("test", BooleanFunction::from_string("A & B").get());
             Gate* nl2_g12 = nl_2->create_gate(12, gl->get_gate_type_by_name("AND2"), "gate_12");
             ASSERT_NE(nl2_g12, nullptr);
-            nl2_g12->add_boolean_function("test", std::get<BooleanFunction>(BooleanFunction::from_string("A & B")));
+            nl2_g12->add_boolean_function("test", BooleanFunction::from_string("A & B").get());
             Gate* nl1_g13 = nl_1->create_gate(13, gl->get_gate_type_by_name("AND2"), "gate_13");
             ASSERT_NE(nl1_g13, nullptr);
-            nl1_g13->add_boolean_function("test", std::get<BooleanFunction>(BooleanFunction::from_string("A & B")));
+            nl1_g13->add_boolean_function("test", BooleanFunction::from_string("A & B").get());
             Gate* nl2_g13 = nl_2->create_gate(13, gl->get_gate_type_by_name("AND2"), "gate_13");
             ASSERT_NE(nl2_g13, nullptr);
             Gate* nl1_g14 = nl_1->create_gate(14, gl->get_gate_type_by_name("AND2"), "gate_14");
             ASSERT_NE(nl1_g14, nullptr);
-            nl1_g14->add_boolean_function("test", std::get<BooleanFunction>(BooleanFunction::from_string("A & B")));
+            nl1_g14->add_boolean_function("test", BooleanFunction::from_string("A & B").get());
             Gate* nl2_g14 = nl_2->create_gate(14, gl->get_gate_type_by_name("AND2"), "gate_14");
             ASSERT_NE(nl2_g14, nullptr);
-            nl2_g14->add_boolean_function("test", std::get<BooleanFunction>(BooleanFunction::from_string("A | B")));
+            nl2_g14->add_boolean_function("test", BooleanFunction::from_string("A | B").get());
 
             EXPECT_TRUE(*nl1_g1 == *nl1_g1);        // identical gate pointer
             EXPECT_TRUE(*nl2_g1 == *nl2_g1); 
@@ -950,7 +950,7 @@ namespace hal
             auto nl = test_utils::create_empty_netlist();
             Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "test_gate");
             std::unordered_map<std::string, BooleanFunction> functions = test_gate->get_boolean_functions();
-            EXPECT_EQ(functions, (std::unordered_map<std::string, BooleanFunction>({{"O", std::get<BooleanFunction>(BooleanFunction::from_string("!I"))}})));
+            EXPECT_EQ(functions, (std::unordered_map<std::string, BooleanFunction>({{"O", BooleanFunction::from_string("!I").get()}})));
 
             test_gate->add_boolean_function("new_bf", BooleanFunction::Var("I"));
 
@@ -1002,12 +1002,12 @@ namespace hal
             lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i, 2));
 
             // Testing the access via the function get_boolean_function
-            EXPECT_EQ(std::get<0>(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pins()))[0], get_truth_table_from_i(i, 8));
+            EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pins()).get()[0], get_truth_table_from_i(i, 8));
 
             // Test the access via the get_boolean_functions map
             std::unordered_map<std::string, BooleanFunction> functions = lut_gate->get_boolean_functions();
             ASSERT_TRUE(functions.find("O") != functions.end());
-            EXPECT_EQ(std::get<0>(functions["O"].compute_truth_table(lut_type->get_input_pins()))[0], get_truth_table_from_i(i, 8));
+            EXPECT_EQ(functions["O"].compute_truth_table(lut_type->get_input_pins()).get()[0], get_truth_table_from_i(i, 8));
         }
         
         {
@@ -1022,7 +1022,7 @@ namespace hal
             for (int i = 0x0; i <= 0xff; i++) 
             {
                 lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i));
-                EXPECT_EQ(std::get<0>(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pins()))[0],
+                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pins()).get()[0],
                         get_truth_table_from_hex_string(i_to_hex_string(i), 8, false));
             }
         }
@@ -1041,7 +1041,7 @@ namespace hal
 
             for (int i = 0x0; i <= 0xff; i++) {
                 lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", i_to_hex_string(i));
-                EXPECT_EQ(std::get<0>(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pins()))[0],
+                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pins()).get()[0],
                         get_truth_table_from_hex_string(i_to_hex_string(i), 8, true));
             }
 
@@ -1056,7 +1056,7 @@ namespace hal
             const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
             ASSERT_NE(init_component, nullptr);
 
-            BooleanFunction lut_bf = std::get<BooleanFunction>(BooleanFunction::from_string("(I2 & (I0 & I1))"));
+            BooleanFunction lut_bf = BooleanFunction::from_string("(I2 & (I0 & I1))").get();
             lut_gate->add_boolean_function("O", lut_bf);
             EXPECT_EQ(lut_gate->get_boolean_functions().size(), 1);
             EXPECT_EQ(lut_gate->get_boolean_function("O"), lut_bf);
@@ -1073,7 +1073,7 @@ namespace hal
             ASSERT_NE(init_component, nullptr);
 
             lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", "");
-            EXPECT_EQ(std::get<0>(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pins()))[0], get_truth_table_from_i(0, 8));
+            EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pins()).get()[0], get_truth_table_from_i(0, 8));
         }
         {
             // There is invalid data at the config data path
@@ -1086,7 +1086,7 @@ namespace hal
             ASSERT_NE(init_component, nullptr);
 
             lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", "NOHx");
-            EXPECT_EQ(std::get<0>(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pins()))[0], std::vector<BooleanFunction::Value>(8, BooleanFunction::X));
+            EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pins()).get()[0], std::vector<BooleanFunction::Value>(8, BooleanFunction::X));
 
         }
         TEST_END

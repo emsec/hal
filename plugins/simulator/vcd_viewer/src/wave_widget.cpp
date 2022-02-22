@@ -68,7 +68,8 @@ namespace hal {
         connect(mTreeView,&WaveTreeView::valueBaseChanged,mScene,&WaveScene::updateWaveItemValues);
         connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);
         connect(mScene,&WaveScene::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
-        connect(mWaveDataList,&WaveDataList::maxTimeChanged,mScene,&WaveScene::handleMaxTimeChanged);
+        connect(mWaveDataList,&WaveDataList::timeframeChanged,mScene,&WaveScene::handleTimeframeChanged);
+        connect(mWaveDataList,&WaveDataList::timeframeChanged,mGraphicsView,&WaveGraphicsView::handelTimeframeChanged);
         connect(mWaveDataList,&WaveDataList::triggerBeginResetModel,mTreeModel,&WaveTreeModel::forwardBeginResetModel);
         connect(mWaveDataList,&WaveDataList::triggerEndResetModel,mTreeModel,&WaveTreeModel::forwardEndResetModel);
 
@@ -81,16 +82,6 @@ namespace hal {
 
         connect(gContentManager->getSelectionDetailsWidget(),&SelectionDetailsWidget::triggerHighlight,this,&WaveWidget::handleSelectionHighlight);
 
-        /*
-        connect(&mWaveIndex,&WaveIndex::waveAppended,this,&WaveWidget::handleWaveAppended);
-
-        connect(&mWaveIndex,&WaveIndex::waveAppended,mWaveScene,&WaveScene::handleWaveAppended);
-        connect(&mWaveIndex,&WaveIndex::waveRemoved,mWaveScene,&WaveScene::handleWaveRemoved);
-        connect(&mWaveIndex,&WaveIndex::waveDataChanged,mWaveScene,&WaveScene::handleWaveDataChanged);
-
-        connect(&mWaveIndex,&WaveIndex::waveRemoved,mWaveView,&WaveView::handleWaveRemoved);
-        connect(mWaveIndex.waveDataList(),&WaveDataList::maxTimeChanged,mWaveView,&WaveView::handleMaxTimeChanged);
-*/
         connect(mController, &NetlistSimulatorController::stateChanged, this, &WaveWidget::handleStateChanged);
         mTreeView->verticalScrollBar()->setValue(0);
         setSizes({320,880});
@@ -252,8 +243,11 @@ namespace hal {
                 {
                     iwave = mWaveDataList->size();
                     WaveData* wd = new WaveData(it.key().id(),it.key().name());
-                    if (wd->loadSaleae(*sd))
+                    if (wd->loadSaleae(*sd, mWaveDataList->timeFrame()))
+                    {
                         mWaveDataList->add(wd,false,false);
+                        mTreeModel->handleWaveAdded(iwave);
+                    }
                 }
                 else if (iwave >= 0)
                     mTreeModel->handleWaveAdded(iwave);

@@ -42,7 +42,7 @@ namespace hal
 
                 for (auto const& output_pin : output_pins_that_are_also_function_inputs)
                 {
-                    bf = std::get<BooleanFunction>(bf.substitute(output_pin, gate->get_boolean_function(output_pin)));
+                    bf = bf.substitute(output_pin, gate->get_boolean_function(output_pin)).get();
                 }
             }
 
@@ -200,7 +200,7 @@ namespace hal
 
                 for (auto const& output_pin : output_pins_that_are_also_function_inputs)
                 {
-                    bf = std::get<BooleanFunction>(bf.substitute(output_pin, gate->get_boolean_function(output_pin)));
+                    bf = bf.substitute(output_pin, gate->get_boolean_function(output_pin)).get();
                 }
             }
 

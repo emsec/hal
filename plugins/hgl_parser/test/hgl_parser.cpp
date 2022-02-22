@@ -73,11 +73,11 @@ namespace hal
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
                     ASSERT_FALSE(functions.empty());
                     EXPECT_NE(functions.find("O"), functions.end());
-                    EXPECT_EQ(functions.at("O"), std::get<BooleanFunction>(BooleanFunction::from_string("A & B")));
+                    EXPECT_EQ(functions.at("O"), BooleanFunction::from_string("A & B").get());
                     EXPECT_NE(functions.find("O_undefined"), functions.end());
-                    EXPECT_EQ(functions.at("O_undefined"), std::get<BooleanFunction>(BooleanFunction::from_string("!A & B")));
+                    EXPECT_EQ(functions.at("O_undefined"), BooleanFunction::from_string("!A & B").get());
                     EXPECT_NE(functions.find("O_tristate"), functions.end());
-                    EXPECT_EQ(functions.at("O_tristate"), std::get<BooleanFunction>(BooleanFunction::from_string("!A & !B")));
+                    EXPECT_EQ(functions.at("O_tristate"), BooleanFunction::from_string("!A & !B").get());
 
                     // Components
                     EXPECT_TRUE(gt->get_components().empty());
@@ -116,11 +116,11 @@ namespace hal
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
                     ASSERT_FALSE(functions.empty());
                     ASSERT_NE(functions.find("O"), functions.end());
-                    ASSERT_EQ(functions.at("O"), std::get<BooleanFunction>(BooleanFunction::from_string("A(1) & B(0)")));
+                    ASSERT_EQ(functions.at("O"), BooleanFunction::from_string("A(1) & B(0)").get());
                     ASSERT_NE(functions.find("O_undefined"), functions.end());
-                    ASSERT_EQ(functions.at("O_undefined"), std::get<BooleanFunction>(BooleanFunction::from_string("!A(0) & B(0)")));
+                    ASSERT_EQ(functions.at("O_undefined"), BooleanFunction::from_string("!A(0) & B(0)").get());
                     ASSERT_NE(functions.find("O_tristate"), functions.end());
-                    ASSERT_EQ(functions.at("O_tristate"), std::get<BooleanFunction>(BooleanFunction::from_string("!A(1) & !B(1)")));
+                    ASSERT_EQ(functions.at("O_tristate"), BooleanFunction::from_string("!A(1) & !B(1)").get());
 
                     // Components
                     EXPECT_TRUE(gt->get_components().empty());
@@ -239,10 +239,10 @@ namespace hal
                     ASSERT_NE(state_component, nullptr);
 
                     EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::pair(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H));
-                    EXPECT_EQ(ff_component->get_next_state_function(), std::get<BooleanFunction>(BooleanFunction::from_string("D")));
-                    EXPECT_EQ(ff_component->get_clock_function(), std::get<BooleanFunction>(BooleanFunction::from_string("CLK & EN")));
-                    EXPECT_EQ(ff_component->get_async_reset_function(), std::get<BooleanFunction>(BooleanFunction::from_string("R")));
-                    EXPECT_EQ(ff_component->get_async_set_function(), std::get<BooleanFunction>(BooleanFunction::from_string("S")));
+                    EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("D").get());
+                    EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK & EN").get());
+                    EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("R").get());
+                    EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("S").get());
                     EXPECT_EQ(state_component->get_state_identifier(), "IQ");
                     EXPECT_EQ(state_component->get_neg_state_identifier(), "IQN");
                 }
@@ -286,10 +286,10 @@ namespace hal
                     ASSERT_NE(init_component, nullptr);
 
                     EXPECT_EQ(ff_component->get_async_set_reset_behavior(), std::pair(AsyncSetResetBehavior::L, AsyncSetResetBehavior::H));
-                    EXPECT_EQ(ff_component->get_next_state_function(), std::get<BooleanFunction>(BooleanFunction::from_string("D")));
-                    EXPECT_EQ(ff_component->get_clock_function(), std::get<BooleanFunction>(BooleanFunction::from_string("CLK & EN")));
-                    EXPECT_EQ(ff_component->get_async_reset_function(), std::get<BooleanFunction>(BooleanFunction::from_string("R")));
-                    EXPECT_EQ(ff_component->get_async_set_function(), std::get<BooleanFunction>(BooleanFunction::from_string("S")));
+                    EXPECT_EQ(ff_component->get_next_state_function(), BooleanFunction::from_string("D").get());
+                    EXPECT_EQ(ff_component->get_clock_function(), BooleanFunction::from_string("CLK & EN").get());
+                    EXPECT_EQ(ff_component->get_async_reset_function(), BooleanFunction::from_string("R").get());
+                    EXPECT_EQ(ff_component->get_async_set_function(), BooleanFunction::from_string("S").get());
                     EXPECT_EQ(state_component->get_state_identifier(), "IQ");
                     EXPECT_EQ(state_component->get_neg_state_identifier(), "IQN");
                     EXPECT_EQ(init_component->get_init_category(), "generic");

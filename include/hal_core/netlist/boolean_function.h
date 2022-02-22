@@ -34,7 +34,6 @@
 #include <ostream>
 #include <set>
 #include <unordered_map>
-#include <variant>
 #include <vector>
 
 namespace hal
@@ -116,9 +115,9 @@ namespace hal
          * Builds and validates a Boolean function from a vector of nodes.
          * 
          * @param[in] nodes - Vector of Boolean function nodes.
-         * @returns The Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> build(std::vector<Node>&& nodes);
+        static Result<BooleanFunction> build(std::vector<Node>&& nodes);
 
         /**
          * Creates a Boolean function of the given bit-size comprising only a variable of the specified name.
@@ -170,9 +169,9 @@ namespace hal
          * @param[in] p0 - First Boolean function.
          * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation.
-         * @returns The joined Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the joined Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+        static Result<BooleanFunction> And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
          * Joins two Boolean functions by an 'OR' operation. 
@@ -181,9 +180,9 @@ namespace hal
          * @param[in] p0 - First Boolean function.
          * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation.
-         * @returns The joined Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the joined Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+        static Result<BooleanFunction> Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
          * Negates the given Boolean function. 
@@ -191,9 +190,9 @@ namespace hal
          * 
          * @param[in] p0 - The Boolean function to negate.
          * @param[in] size - Bit-size of the operation.
-         * @returns  The negated Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the negated Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> Not(BooleanFunction&& p0, u16 size);
+        static Result<BooleanFunction> Not(BooleanFunction&& p0, u16 size);
 
         /**
          * Joins two Boolean functions by an 'XOR' operation. 
@@ -203,9 +202,9 @@ namespace hal
          * @param[in] p0 - First Boolean function.
          * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation.
-         * @returns The joined Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the joined Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+        static Result<BooleanFunction> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
          * Slices a Boolean function based on a start and end index (inclusive) starting from 0.
@@ -214,9 +213,9 @@ namespace hal
          * @param[in] p1 - Boolean function start index at which p0 is sliced.
          * @param[in] p2 - Boolean function end index at which p0 is sliced (inclusive).
          * @param[in] size - Size of the sliced Boolean function, i.e. p0 + p1 + 1.
-         * @returns The sliced Boolean function on success, a string error message otherwise.
+         * @returns OK() and the sliced Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
+        static Result<BooleanFunction> Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
 
         /**
          * Concatenates two Boolean functions.
@@ -224,9 +223,9 @@ namespace hal
          * @param[in] p0 - Boolean function (higher-bit part)
          * @param[in] p1 - Boolean function (lower-bit part)
          * @param[in] size - Size of concatenated Boolean function.
-         * @returns The concatenated Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the concatenated Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+        static Result<BooleanFunction> Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
          * The ostream operator that forwards to_string of a boolean function.
@@ -443,15 +442,15 @@ namespace hal
          * 
          * @returns The Boolean function as a string.
          */
-        std::string to_string() const;
+        std::string to_string(std::function<Result<std::string>(const BooleanFunction::Node& node, std::vector<std::string>&& operands)>&& printer = default_printer) const;
 
         /**
          * Parses a Boolean function from a string expression.
          * 
          * @param[in] expression - Boolean function string.
-         * @returns The Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the Boolean function on success, Err() otherwise.
          */
-        static std::variant<BooleanFunction, std::string> from_string(const std::string& expression);
+        static Result<BooleanFunction> from_string(const std::string& expression);
 
         ////////////////////////////////////////////////////////////////////////
         // Interface: Simplification / Substitution / Evaluation
@@ -480,25 +479,25 @@ namespace hal
          *
          * @param[in] variable_name - The variable to substitute.
          * @param[in] function - The function replace the variable with.
-         * @returns The resulting Boolean function on success, a string error message otherwise.
+         * @returns Ok() and the resulting Boolean function on success, Err() otherwise.
          */
-        std::variant<BooleanFunction, std::string> substitute(const std::string& variable_name, const BooleanFunction& function) const;
+        Result<BooleanFunction> substitute(const std::string& variable_name, const BooleanFunction& function) const;
 
         /**
          * Evaluates a Boolean function comprising only single-bit variables using the given input values.
          * 
          * @param[in] inputs - A map from variable name to input value.
-         * @returns The resulting value on success, a string error message otherwise.
+         * @returns Ok() and the resulting value on success, Err() otherwise.
          */
-        std::variant<Value, std::string> evaluate(const std::unordered_map<std::string, Value>& inputs) const;
+        Result<Value> evaluate(const std::unordered_map<std::string, Value>& inputs) const;
 
         /**
          * Evaluates a Boolean function comprising multi-bit variables using the given input values.
          * 
          * @param[in] inputs - A map from variable name to a vector of input values.
-         * @returns The resulting value on success, a string error message otherwise.
+         * @returns Ok() and the resulting value on success, Err() otherwise.
          */
-        std::variant<std::vector<Value>, std::string> evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const;
+        Result<std::vector<Value>> evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const;
 
         /**
          * Computes the truth table outputs for a Boolean function that comprises <= 10 single-bit variables.
@@ -506,9 +505,9 @@ namespace hal
          * 
          * @param[in] ordered_variables - A vector describing the order of input variables used to generate the truth table. Defaults to an empty vector.
          * @param[in] remove_unknown_variables - Set `true` to remove variables from the truth table that are not present within the Boolean function, `false` otherwise. Defaults to `false`.
-         * @returns A vector of values representing the truth table output on success, a string error message otherwise.
+         * @returns Ok() and a vector of values representing the truth table output on success, Err() otherwise.
          */
-        std::variant<std::vector<std::vector<Value>>, std::string> compute_truth_table(const std::vector<std::string>& ordered_variables = {}, bool remove_unknown_variables = false) const;
+        Result<std::vector<std::vector<Value>>> compute_truth_table(const std::vector<std::string>& ordered_variables = {}, bool remove_unknown_variables = false) const;
 
         /**
          * Translates the Boolean function into the z3 expression representation.
@@ -562,10 +561,19 @@ namespace hal
         /// Returns the Boolean function in reverse-polish notation.
         std::string to_string_in_reverse_polish_notation() const;
 
+        /**
+         * Translate a given Boolean function node into a human-readable string.
+         *
+         * @param[in] node The node of a Boolean function.
+         * @param[in] operands The operands of the node .
+         * @returns A string on success or an error message otherwise.
+         */
+        static Result<std::string> default_printer(const BooleanFunction::Node& node, std::vector<std::string>&& operands);
+
         /// Checks whether the Boolean function is valid.
         ///
         /// @returns Validated Boolean function on success, error message string otherwise.
-        static std::variant<BooleanFunction, std::string> validate(BooleanFunction&& function);
+        static Result<BooleanFunction> validate(BooleanFunction&& function);
 
         /// Computes the coverage value of each node in the Boolean function.
         std::vector<u32> compute_node_coverage() const;

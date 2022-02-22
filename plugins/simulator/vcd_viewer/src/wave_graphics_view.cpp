@@ -2,17 +2,19 @@
 #include "vcd_viewer/wave_widget.h"
 #include "vcd_viewer/wave_timescale.h"
 #include "vcd_viewer/wave_scene.h"
+#include "netlist_simulator_controller/wave_data.h"
 #include <QScrollBar>
 #include <QWheelEvent>
 #include <QResizeEvent>
 #include <QDebug>
 #include <math.h>
+#include <stdio.h>
 
 namespace hal {
     const float WaveGraphicsView::sYmag = 14;
 
     WaveGraphicsView::WaveGraphicsView(QWidget *parent)
-        : QGraphicsView(parent), mXmag(1), mXmagMin(0.0001), mMinViewportHeight(1)
+        : QGraphicsView(parent), mXmag(1), mXmagMin(0.0001), mSceneLeft(0), mMinViewportHeight(1)
     {
         setAlignment(Qt::AlignLeft | Qt::AlignTop);
         setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -34,8 +36,15 @@ namespace hal {
         }
         if (dx)
         {
-            mTimescale->setScale(mXmag,scene()->sceneRect().width(),horizontalScrollBar()->value());
+            mSceneLeft = scene()->sceneRect().left();
+            adjustTimescale();
         }
+    }
+
+    void WaveGraphicsView::handelTimeframeChanged(const WaveDataTimeframe *tframe)
+    {
+        mSceneLeft = tframe->sceneMinTime();
+        adjustTimescale();
     }
 
     void WaveGraphicsView::setDefaultTransform()
@@ -48,7 +57,9 @@ namespace hal {
     {
         QGraphicsView::resizeEvent(event);
 //SIZE        qDebug() << "resize" << event->oldSize().height() << event->size().height() << height() << viewport()->height();
-        mTimescale->setScale(mXmag,scene()->sceneRect().width(),horizontalScrollBar()->value());
+
+        mSceneLeft = scene()->sceneRect().left();
+        adjustTimescale();
     }
 
     void WaveGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
@@ -65,6 +76,7 @@ namespace hal {
 
     void WaveGraphicsView::wheelEvent(QWheelEvent *event)
     {
+        mSceneLeft = scene()->sceneRect().left();
         int deltaY = event->angleDelta().y();
         if (abs(deltaY) < 2) return;
 
@@ -81,16 +93,14 @@ namespace hal {
 //        int ixMouseViewp = (int) floor(event->position().x()+0.25);
         float xMouseScene = mapToScene(ixMouseViewp,0).x();
 
-        setTransform(QTransform(mXmag, 0, 0, 14, 0, 0),false);
+        setTransform(QTransform(mXmag, 0, 0, 14, -mSceneLeft*mXmag, 0),false);
 
         Q_EMIT (changedXscale(mXmag));
 
 
         horizontalScrollBar()->setValue(xMouseScene*mXmag -ixMouseViewp);
 
-        mTimescale->setScale(mXmag,scene()->sceneRect().width(),horizontalScrollBar()->value());
-
-
+        adjustTimescale();
 //        restoreCursor();
     }
 
@@ -112,6 +122,35 @@ namespace hal {
                 verticalScrollBar()->setValue(scrollbarPos);
 //SIZE                qDebug() << "scrollbar" << treeViewportHeight << scrollbarMax << scrollbarPos;
             }
+            adjustTimescale();
+    }
+
+    void WaveGraphicsView::adjustTimescale()
+    {
+        int w = viewport()->width();
+        mTimescale->setScale(mXmag,w,
+                             mapToScene(QPoint(0,0)).x(),
+                             mapToScene(QPoint(w,0)).x());
+
+        /*
+        if (horizontalScrollBar()->maximum())
+        {
+            horizontalScrollBar()->setMinimum(0);
+            horizontalScrollBar()->setMaximum(floor ( scene()->sceneRect().width() * mXmag + 0.5));
+        }
+        fprintf(stderr, "Widget....%8d %8d %8d\n", geometry().x(), geometry().width(), geometry().right());
+        fprintf(stderr, "Viewport..%8d %8d %8d\n", viewport()->x(), viewport()->width(), maximumViewportSize().width());
+        fprintf(stderr, "Scene.....%8d %8d %8d\n", (int) scene()->sceneRect().x(), (int) scene()->sceneRect().width(), (int) scene()->sceneRect().right());
+        fprintf(stderr, "Scroll....%8d %8d %8d\n", horizontalScrollBar()->minimum(), horizontalScrollBar()->value(), horizontalScrollBar()->maximum());
+        fprintf(stderr, "Scaled....%8d %8d %16.8f\n", (int) floor( (horizontalScrollBar()->maximum() - horizontalScrollBar()->minimum()) / mXmag), (int) floor(horizontalScrollBar()->maximum() / mXmag), mXmag);
+        fflush(stderr);
+        //int maxw = viewport()->width();
+
+
+        horizontalScrollBar()->setMinimum(0);
+        if (horizontalScrollBar()->value() > maxw) horizontalScrollBar()->setValue(0);
+        horizontalScrollBar()->setMaximum(maxw);
+        */
     }
 
     void WaveGraphicsView::handleNumberVisibileChanged(int nVisible, int scrollbarMax, int scrollbarPos)

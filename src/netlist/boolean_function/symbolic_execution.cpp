@@ -2,12 +2,6 @@
 
 #include "hal_core/utilities/log.h"
 
-// local macro to ease error message return handling
-#define ERROR(MESSAGE)       \
-    std::stringstream error; \
-    error << MESSAGE;        \
-    return error.str()
-
 namespace hal
 {
     namespace SMT
@@ -149,7 +143,7 @@ namespace hal
         {
         }
 
-        std::variant<BooleanFunction, std::string> SymbolicExecution::evaluate(const BooleanFunction& function) const
+        Result<BooleanFunction> SymbolicExecution::evaluate(const BooleanFunction& function) const
         {
             std::vector<BooleanFunction> stack;
             for (const auto& node : function.get_nodes())
@@ -158,36 +152,31 @@ namespace hal
                 std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(parameters));
                 stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
 
-                if (auto simplified = this->simplify(node, std::move(parameters)); std::get_if<BooleanFunction>(&simplified) != nullptr)
+                if (auto simplified = this->simplify(node, std::move(parameters)); simplified.is_ok())
                 {
-                    stack.emplace_back(std::get<BooleanFunction>(simplified));
+                    stack.emplace_back(simplified.get());
                 }
                 else
                 {
-                    ERROR("Cannot simplify '" << function.to_string() << "' (= " << std::get<std::string>(simplified) << ").");
+                    return ERR(simplified.get_error());
                 }
             }
 
             switch (stack.size())
             {
-                case 1:
-                    return stack.back();
-                default:
-                    ERROR("Cannot simplify '" << function.to_string() << "' (= imbalanced stack with " << stack.size() << " remaining parts).");
+                case 1:  return OK(stack.back());
+                default: return ERR("Cannot simplify '" + function.to_string() + "' (= imbalanced stack with " + std::to_string(stack.size()) + " remaining parts).");
             }
         }
 
-        std::optional<std::string> SymbolicExecution::evaluate(const Constraint& constraint)
+        Result<std::monostate> SymbolicExecution::evaluate(const Constraint& constraint)
         {
-            if (auto rhs = this->evaluate(constraint.rhs); std::get_if<BooleanFunction>(&rhs) != nullptr)
-            {
-                this->state.set(constraint.lhs.clone(), std::get<BooleanFunction>(rhs).clone());
-                return std::nullopt;
-            }
-            else
-            {
-                return std::get<std::string>(rhs);
-            }
+            return this->evaluate(constraint.rhs).map<std::monostate>(
+                [&] (auto&& rhs) -> Result<std::monostate> {
+                    this->state.set(constraint.lhs.clone(), std::move(rhs));
+                    return OK({});
+                }
+            );
         }
 
         std::vector<BooleanFunction> SymbolicExecution::normalize(std::vector<BooleanFunction>&& p)
@@ -207,7 +196,7 @@ namespace hal
             return std::move(p);
         }
 
-        std::variant<BooleanFunction, std::string> SymbolicExecution::simplify(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p) const
+        Result<BooleanFunction> SymbolicExecution::simplify(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p) const
         {
             if (!p.empty() && std::all_of(p.begin(), p.end(), [](const auto& function) { return function.is_constant(); }))
             {
@@ -228,34 +217,34 @@ namespace hal
             switch (node.type)
             {
                 case BooleanFunction::NodeType::Constant: {
-                    return BooleanFunction::Const(node.constant);
+                    return OK(BooleanFunction::Const(node.constant));
                 }
                 case BooleanFunction::NodeType::Index: {
-                    return BooleanFunction::Index(node.index, node.size);
+                    return OK(BooleanFunction::Index(node.index, node.size));
                 }
                 case BooleanFunction::NodeType::Variable: {
-                    return this->state.get(BooleanFunction::Var(node.variable, node.size));
+                    return OK(this->state.get(BooleanFunction::Var(node.variable, node.size)));
                 }
                 case BooleanFunction::NodeType::And: {
                     // X & 0   =>   0
                     if (p[1].has_constant_value(0))
                     {
-                        return BooleanFunction::Const(0, node.size);
+                        return OK(BooleanFunction::Const(0, node.size));
                     }
                     // X & 1  =>   X
                     if (p[1] == One(node.size))
                     {
-                        return p[0];
+                        return OK(p[0]);
                     }
                     // X & X   =>   X
                     if (p[0] == p[1])
                     {
-                        return p[0];
+                        return OK(p[0]);
                     }
                     // X & ~X   =>   0
                     if (~p[0] == p[1])
                     {
-                        return BooleanFunction::Const(0, node.size);
+                        return OK(BooleanFunction::Const(0, node.size));
                     }
 
                     if (p[0].is(BooleanFunction::NodeType::Or) && p[1].is(BooleanFunction::NodeType::Or))
@@ -266,23 +255,23 @@ namespace hal
                         // (X | Y) & (X | Z)   =>   X | (Y & Z)
                         if (p0_parameter[0] == p1_parameter[0])
                         {
-                            return p0_parameter[0] | (p0_parameter[1] & p1_parameter[1]);
+                            return OK(p0_parameter[0] | (p0_parameter[1] & p1_parameter[1]));
                         }
                         // (X | Y) & (Z | X)   =>   X | (Y & Z)
                         if (p0_parameter[0] == p1_parameter[1])
                         {
-                            return p0_parameter[0] | (p0_parameter[1] & p1_parameter[0]);
+                            return OK(p0_parameter[0] | (p0_parameter[1] & p1_parameter[0]));
                         }
 
                         // (X | Y) & (Y | Z)   =>   Y | (X & Z)
                         if (p0_parameter[1] == p1_parameter[0])
                         {
-                            return p0_parameter[1] | (p0_parameter[0] & p1_parameter[1]);
+                            return OK(p0_parameter[1] | (p0_parameter[0] & p1_parameter[1]));
                         }
                         // (X | Y) & (Z | Y)   =>   Y | (X & Z)
                         if (p0_parameter[1] == p1_parameter[1])
                         {
-                            return p0_parameter[1] | (p0_parameter[0] & p1_parameter[0]);
+                            return OK(p0_parameter[1] | (p0_parameter[0] & p1_parameter[0]));
                         }
                     }
 
@@ -292,23 +281,23 @@ namespace hal
                         // X & (X & Y)   =>   (X & Y)
                         if (p[0] == p1_parameter[1])
                         {
-                            return p[1];
+                            return OK(p[1]);
                         }
                         // X & (Y & X)   =>   (Y & X)
                         if (p[0] == p1_parameter[0])
                         {
-                            return p[1];
+                            return OK(p[1]);
                         }
 
                         // X & (~X & Y)   =>   0
                         if ((~p1_parameter[0] == p[0]) || (p1_parameter[0] == ~p[0]))
                         {
-                            return BooleanFunction::Const(0, node.size);
+                            return OK(BooleanFunction::Const(0, node.size));
                         }
                         // X & (Y & ~X)   =>   0
                         if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0]))
                         {
-                            return BooleanFunction::Const(0, node.size);
+                            return OK(BooleanFunction::Const(0, node.size));
                         }
                     }
 
@@ -319,22 +308,22 @@ namespace hal
                         // X & (X | Y)   =>   X
                         if (p1_parameter[0] == p[0])
                         {
-                            return p[0];
+                            return OK(p[0]);
                         }
                         // X & (Y | X)   =>   X
                         if (p1_parameter[1] == p[0])
                         {
-                            return p[0];
+                            return OK(p[0]);
                         }
                         // X & (~X | Y)   =>  X & Y
                         if ((~p1_parameter[0] == p[0]) || (p1_parameter[0] == ~p[0]))
                         {
-                            return p[0] & p1_parameter[1];
+                            return OK(p[0] & p1_parameter[1]);
                         }
                         // X & (Y | ~X)   =>  X & Y
                         if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0]))
                         {
-                            return p[0] & p1_parameter[0];
+                            return OK(p[0] & p1_parameter[0]);
                         }
                     }
 
@@ -345,23 +334,23 @@ namespace hal
                         // (X & Y) & X   =>    X & Y
                         if (p0_parameter[0] == p[1])
                         {
-                            return p[0];
+                            return OK(p[0]);
                         }
 
                         // (Y & X) & X   =>    Y & X
                         if (p0_parameter[1] == p[1])
                         {
-                            return p[0];
+                            return OK(p[0]);
                         }
                         // (~X & Y) & X   =>   0
                         if ((~p0_parameter[0] == p[1]) || (p0_parameter[0] == ~p[1]))
                         {
-                            return BooleanFunction::Const(0, node.size);
+                            return OK(BooleanFunction::Const(0, node.size));
                         }
                         // (Y & ~X) & X   =>   0
                         if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1]))
                         {
-                            return BooleanFunction::Const(0, node.size);
+                            return OK(BooleanFunction::Const(0, node.size));
                         }
                     }
 
@@ -372,32 +361,32 @@ namespace hal
                         // (X | Y) & X    =>   X
                         if (p0_parameter[0] == p[1])
                         {
-                            return p[1];
+                            return OK(p[1]);
                         }
                         // (Y | X) & X    =>   X
                         if (p0_parameter[1] == p[1])
                         {
-                            return p[1];
+                            return OK(p[1]);
                         }
                         // (~X | Y) & X   =>   X & Y
                         if ((~p0_parameter[0] == p[1]) || (p0_parameter[0] == ~p[1]))
                         {
-                            return p[1] & p0_parameter[1];
+                            return OK(p[1] & p0_parameter[1]);
                         }
                         // (Y | ~X) & X   =>   X & Y
                         if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1]))
                         {
-                            return p[1] & p0_parameter[0];
+                            return OK(p[1] & p0_parameter[0]);
                         }
                     }
 
-                    return p[0] & p[1];
+                    return OK(p[0] & p[1]);
                 }
                 case BooleanFunction::NodeType::Not: {
                     // ~~X   =>   X
                     if (p[0].is(BooleanFunction::NodeType::Not))
                     {
-                        return p[0].get_parameters()[0];
+                        return OK(p[0].get_parameters()[0]);
                     }
 
                     // ~(~X & ~Y)   =>   X | Y
@@ -406,7 +395,7 @@ namespace hal
                         auto p0_parameter = p[0].get_parameters();
                         if (p0_parameter[0].is(BooleanFunction::NodeType::Not) && p0_parameter[1].is(BooleanFunction::NodeType::Not))
                         {
-                            return p0_parameter[0].get_parameters()[0] | p0_parameter[1].get_parameters()[0];
+                            return OK(p0_parameter[0].get_parameters()[0] | p0_parameter[1].get_parameters()[0]);
                         }
                     }
 
@@ -416,7 +405,7 @@ namespace hal
                         auto p0_parameter = p[0].get_parameters();
                         if (p0_parameter[0].is(BooleanFunction::NodeType::Not) && p0_parameter[1].is(BooleanFunction::NodeType::Not))
                         {
-                            return p0_parameter[0].get_parameters()[0] & p0_parameter[1].get_parameters()[0];
+                            return OK(p0_parameter[0].get_parameters()[0] & p0_parameter[1].get_parameters()[0]);
                         }
                     }
 
@@ -424,42 +413,42 @@ namespace hal
                     if (p[0].is(BooleanFunction::NodeType::Or))
                     {
                         auto p0_parameter = p[0].get_parameters();
-                        return (~p0_parameter[0]) & (~p0_parameter[1]);
+                        return OK((~p0_parameter[0]) & (~p0_parameter[1]));
                     }
 
                     // ~(X & Y)   =>   ~X | ~Y
                     if (p[0].is(BooleanFunction::NodeType::And))
                     {
                         auto p0_parameter = p[0].get_parameters();
-                        return (~p0_parameter[0]) | (~p0_parameter[1]);
+                        return OK((~p0_parameter[0]) | (~p0_parameter[1]));
                     }
  
-                    return ~p[0];
+                    return OK(~p[0]);
                 }
 
                 case BooleanFunction::NodeType::Or: {
                     // X | 0   =>   X
                     if (p[1].has_constant_value(0))
                     {
-                        return p[0];
+                        return OK(p[0]);
                     }
 
                     // X | 1   =>   1
                     if (p[1] == One(node.size))
                     {
-                        return p[1];
+                        return OK(p[1]);
                     }
 
                     // X | X   =>   X
                     if (p[0] == p[1])
                     {
-                        return p[0];
+                        return OK(p[0]);
                     }
 
                     // X | ~X   =>   1
                     if ((~p[0] == p[1]) || (p[0] == ~p[1]))
                     {
-                        return ~BooleanFunction::Const(0, node.size).simplify();
+                        return OK(~BooleanFunction::Const(0, node.size).simplify());
                     }
 
                     if (p[0].is(BooleanFunction::NodeType::And) && p[1].is(BooleanFunction::NodeType::And))
@@ -470,22 +459,22 @@ namespace hal
                         // (X & Y) | (X & Z)    => X & (Y | Z)
                         if (p0_parameter[0] == p1_parameter[0])
                         {
-                            return p0_parameter[0] & (p0_parameter[1] | p1_parameter[1]);
+                            return OK(p0_parameter[0] & (p0_parameter[1] | p1_parameter[1]));
                         }
                         // (X & Y) | (Z & X)    => X & (Y | Z)
                         if (p0_parameter[0] == p1_parameter[1])
                         {
-                            return p0_parameter[0] & (p0_parameter[1] | p1_parameter[0]);
+                            return OK(p0_parameter[0] & (p0_parameter[1] | p1_parameter[0]));
                         }
                         // (X & Y) | (Y & Z)    => Y & (Y | Z)
                         if (p0_parameter[1] == p1_parameter[0])
                         {
-                            return p0_parameter[1] & (p0_parameter[0] | p1_parameter[1]);
+                            return OK(p0_parameter[1] & (p0_parameter[0] | p1_parameter[1]));
                         }
                         // (X & Y) | (Z & Y)    => Y & (X | Z)
                         if (p0_parameter[1] == p1_parameter[1])
                         {
-                            return p0_parameter[1] & (p0_parameter[0] | p1_parameter[0]);
+                            return OK(p0_parameter[1] & (p0_parameter[0] | p1_parameter[0]));
                         }
                     }
 
@@ -495,24 +484,24 @@ namespace hal
                         // X | (Y & !X)   =>   X | Y
                         if ((~p1_parameter[1]) == p[0])
                         {
-                            return p[0] | p1_parameter[0];
+                            return OK(p[0] | p1_parameter[0]);
                         }
 
                         // X | (X & Y)    =>   X
                         if ((p1_parameter[0] == p[0]) || (p1_parameter[1] == p[0]))
                         {
-                            return p[0];
+                            return OK(p[0]);
                         }
 
                         // X | (~X & Y)   =>   X | Y
                         if ((~p1_parameter[0] == p[0]) || (p1_parameter[0] == ~p[0]))
                         {
-                            return p[0] | p1_parameter[1];
+                            return OK(p[0] | p1_parameter[1]);
                         }
                         // X | (Y & ~X)   =>   X | Y
                         if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0]))
                         {
-                            return p[0] | p1_parameter[0];
+                            return OK(p[0] | p1_parameter[0]);
                         }
                     }
 
@@ -523,24 +512,24 @@ namespace hal
                         // X | (X | Y)   =>   (X | Y)
                         if (p1_parameter[0] == p[0])
                         {
-                            return p[1];
+                            return OK(p[1]);
                         }
                         // X | (Y | X)   =>   (Y | X)
                         if (p1_parameter[1] == p[0])
                         {
-                            return p[1];
+                            return OK(p[1]);
                         }
 
                         // X | (~X | Y)   =>   1
                         if ((~p1_parameter[0] == p[0]) || (p1_parameter[0] == ~p[0]))
                         {
-                            return One(node.size);
+                            return OK(One(node.size));
                         }
 
                         // X | (Y | ~X)   =>   1
                         if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0]))
                         {
-                            return One(node.size);
+                            return OK(One(node.size));
                         }
                     }
 
@@ -551,24 +540,24 @@ namespace hal
                         // (X | Y) | X   =>   (X | Y)
                         if (p0_parameter[0] == p[1])
                         {
-                            return p[0];
+                            return OK(p[0]);
                         }
                         // (Y | X) | X   =>   (Y | X)
                         if (p0_parameter[1] == p[1])
                         {
-                            return p[0];
+                            return OK(p[0]);
                         }
 
                         // (~X | Y) | X   =>   1
                         if ((~p0_parameter[0] == p[1]) || (p0_parameter[0] == ~p[1]))
                         {
-                            return One(node.size);
+                            return OK(One(node.size));
                         }
 
                         // (Y | ~X) | X =>   1
                         if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1]))
                         {
-                            return One(node.size);
+                            return OK(One(node.size));
                         }
                     }
 
@@ -579,70 +568,70 @@ namespace hal
                         // (X & Y) | X    =>   X
                         if (p0_parameter[0] == p[1])
                         {
-                            return p[1];
+                            return OK(p[1]);
                         }
                         // (Y & X) | X    =>   X
                         if (p0_parameter[1] == p[1])
                         {
-                            return p[1];
+                            return OK(p[1]);
                         }
 
                         // (~X & Y) | X   =>   X | Y
                         if ((~p0_parameter[0] == p[1]) || (p0_parameter[0] == ~p[1]))
                         {
-                            return p0_parameter[1] | p[1];
+                            return OK(p0_parameter[1] | p[1]);
                         }
 
                         // (X & ~Y) | Y   =>   X | Y
                         if ((~p0_parameter[1] == p[1]) || (p0_parameter[1] == ~p[1]))
                         {
-                            return p0_parameter[0] | p[1];
+                            return OK(p0_parameter[0] | p[1]);
                         }
                     }
 
-                    return p[0] | p[1];
+                    return OK(p[0] | p[1]);
                 }
                 case BooleanFunction::NodeType::Xor: {
                     // X ^ 0   =>   x
                     if (p[1].has_constant_value(0))
                     {
-                        return p[0];
+                        return OK(p[0]);
                     }
                     // X ^ 1  =>   ~X
                     if (p[1] == One(node.size))
                     {
-                        return ~p[0];
+                        return OK(~p[0]);
                     }
                     // X ^ X   =>   0
                     if (p[0] == p[1])
                     {
-                        return BooleanFunction::Const(0, node.size);
+                        return OK(BooleanFunction::Const(0, node.size));
                     }
                     // X ^ ~X   =>   1
                     if (~p[0] == p[1])
                     {
-                        return One(node.size);
+                        return OK(One(node.size));
                     }
 
-                    return p[0] ^ p[1];
+                    return OK(p[0] ^ p[1]);
                 }
                 case BooleanFunction::NodeType::Slice: {
                     // SLICE(p, 0, 0)   =>   p (if p is 1-bit wide)
                     if ((p[0].size() == 1) && p[1].has_index_value(0) && p[2].has_index_value(0) && (node.size == 1)) {
-                        return p[0];
+                        return OK(p[0]);
                     }
                     return BooleanFunction::Slice(p[0].clone(), p[1].clone(), p[2].clone(), node.size);
                 }
                 default:
-                    return "not implemented reached";
+                    return ERR("not implemented reached");
             }
         }
 
-        std::variant<BooleanFunction, std::string> SymbolicExecution::constant_propagation(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p)
+        Result<BooleanFunction> SymbolicExecution::constant_propagation(const BooleanFunction::Node& node, std::vector<BooleanFunction>&& p)
         {
             if (node.get_arity() != p.size())
             {
-                ERROR("Arity " << node.get_arity() << " does not match number of parameters (= " << p.size() << ").");
+                return ERR("Arity " + std::to_string(node.get_arity()) + " does not match number of parameters (= " + std::to_string(p.size()) + ").");
             }
 
             std::vector<std::vector<BooleanFunction::Value>> values;
@@ -654,16 +643,15 @@ namespace hal
             switch (node.type)
             {
                 case BooleanFunction::NodeType::And:
-                    return ConstantPropagation::And(values[0], values[1]);
+                    return OK(ConstantPropagation::And(values[0], values[1]));
                 case BooleanFunction::NodeType::Or:
-                    return ConstantPropagation::Or(values[0], values[1]);
+                    return OK(ConstantPropagation::Or(values[0], values[1]));
                 case BooleanFunction::NodeType::Not:
-                    return ConstantPropagation::Not(values[0]);
+                    return OK(ConstantPropagation::Not(values[0]));
                 case BooleanFunction::NodeType::Xor:
-                    return ConstantPropagation::Xor(values[0], values[1]);
+                    return OK(ConstantPropagation::Xor(values[0], values[1]));
 
-                default:
-                    return "not implemented reached";
+                default: return ERR("not implemented reached");
             }
         }
     }    // namespace SMT

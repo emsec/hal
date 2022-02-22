@@ -38,9 +38,9 @@ namespace hal
         /**
          * Identifier for the SMT solver type.
          */
-        enum class SolverType
+        enum class SolverType : int
         {
-            Z3,        /**< Z3 SMT solver. */
+            Z3 = 0,    /**< Z3 SMT solver. */
             Boolector, /**< Boolector SMT solver. */
             Unknown,   /**< Unknown (unsupported) SMT solver. */
         };
@@ -155,12 +155,15 @@ namespace hal
              * @returns A reference to the output stream.
              */
             friend std::ostream& operator<<(std::ostream& out, const Constraint& constraint);
+
+            /// Short-hand helper to translate the SMT constraint to a string.
+            std::string to_string() const;
         };
 
         /**
          * Result type of an SMT solver query.
          */
-        enum class ResultType
+        enum class SolverResultType
         {
             Sat,     /**< The list of constraints is satisfiable. */
             UnSat,   /**< The list of constraints is not satisfiable. */
@@ -224,22 +227,22 @@ namespace hal
 			 *
 			 * @param[in] model_str - The SMT-Lib model string.
 			 * @param[in] solver - The solver that computed the model.
-			 * @returns The model on success, a string error message otherwise.
+			 * @returns Ok() and the model on success, Err() otherwise.
 			 */
-            static std::variant<Model, std::string> parse(const std::string& model_str, const SolverType& solver);
+            static Result<Model> parse(const std::string& model_str, const SolverType& solver);
         };
 
         /**
 		 * Represents the result of an SMT query.
 		 */
-        struct Result final
+        struct SolverResult final
         {
             ////////////////////////////////////////////////////////////////////////
             // Member
             ////////////////////////////////////////////////////////////////////////
 
             /// Result type of the SMT query.
-            ResultType type;
+            SolverResultType type;
             /// The (optional) model that is only available if `type == SMT::ResultType::Sat` and model generation is enabled.
             std::optional<Model> model;
 
@@ -247,27 +250,30 @@ namespace hal
             // Constructors, Destructors, Operators
             ////////////////////////////////////////////////////////////////////////
 
+            /// Default constructor (required for Result<T> initialization)
+            SolverResult() : type(SolverResultType::Unknown), model({}) {}
+
             /**
              * Creates a satisfiable result with an optional model.
              *
              * @param[in] model - Optional model for satisfiable formula.
              * @returns The result.
              */
-            static Result Sat(const std::optional<Model>& model = {});
+            static SolverResult Sat(const std::optional<Model>& model = {});
 
             /**
              * Creates an unsatisfiable result.
              *
-             * @returns Result.
+             * @returns The result.
              */
-            static Result UnSat();
+            static SolverResult UnSat();
 
             /**
              * Creates an unknown result.
              *
-             * @returns Result.
+             * @returns The result.
              */
-            static Result Unknown();
+            static SolverResult Unknown();
 
             /**
              * Checks whether the result is of a specific type.
@@ -275,7 +281,7 @@ namespace hal
              * @param[in] type - The type to check.
              * @returns `true` in case result matches the given type, `false` otherwise.
              */
-            bool is(const ResultType& type) const;
+            bool is(const SolverResultType& type) const;
 
             /**
              * Checks whether the result is satisfiable.
@@ -305,11 +311,11 @@ namespace hal
              * @param[in] result - SMT result.
              * @returns A reference to output stream.
              */
-            friend std::ostream& operator<<(std::ostream& out, const Result& result);
+            friend std::ostream& operator<<(std::ostream& out, const SolverResult& result);
 
         private:
             /// Constructor to initialize a 'Result.
-            Result(ResultType _type, std::optional<Model> _model);
+            SolverResult(SolverResultType _type, std::optional<Model> _model);
         };
 
     }    // namespace SMT
@@ -318,5 +324,5 @@ namespace hal
     std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data;
 
     template<>
-    std::map<SMT::ResultType, std::string> EnumStrings<SMT::ResultType>::data;
+    std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data;
 }    // namespace hal

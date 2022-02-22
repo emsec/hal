@@ -11,12 +11,6 @@
 #include <boost/spirit/home/x3.hpp>
 #include <chrono>
 #include <map>
-#include <variant>
-
-#define ERROR(MESSAGE)       \
-    std::stringstream error; \
-    error << MESSAGE;        \
-    return error.str();
 
 namespace hal
 {
@@ -28,12 +22,16 @@ namespace hal
 
     std::string BooleanFunction::to_string(Value v)
     {
-        switch(v)
+        switch (v)
         {
-        case ZERO: return std::string("0");
-        case ONE:  return std::string("1");
-        case X:    return std::string("X");
-        case Z:    return std::string("Z");
+            case ZERO:
+                return std::string("0");
+            case ONE:
+                return std::string("1");
+            case X:
+                return std::string("X");
+            case Z:
+                return std::string("Z");
         }
 
         return std::string("X");
@@ -213,7 +211,7 @@ namespace hal
     {
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::build(std::vector<BooleanFunction::Node>&& nodes)
+    Result<BooleanFunction> BooleanFunction::build(std::vector<BooleanFunction::Node>&& nodes)
     {
         return BooleanFunction::validate(BooleanFunction(std::move(nodes)));
     }
@@ -250,72 +248,75 @@ namespace hal
         return BooleanFunction(Node::Index(index, size));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    Result<BooleanFunction> BooleanFunction::And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
         if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            ERROR("Mismatching bit-sizes for AND operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", size = " << size << ").");
+            return ERR("Mismatching bit-sizes for AND operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", size = " + std::to_string(size) + ").");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::And, size), std::move(p0), std::move(p1));
+        return OK(BooleanFunction(Node::Operation(NodeType::And, size), std::move(p0), std::move(p1)));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    Result<BooleanFunction> BooleanFunction::Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
         if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            ERROR("Mismatching bit-sizes for Or operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", size = " << size << ").");
+            return ERR("Mismatching bit-sizes for Or operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", size = " + std::to_string(size) + ").");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::Or, size), std::move(p0), std::move(p1));
+        return OK(BooleanFunction(Node::Operation(NodeType::Or, size), std::move(p0), std::move(p1)));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::Not(BooleanFunction&& p0, u16 size)
+    Result<BooleanFunction> BooleanFunction::Not(BooleanFunction&& p0, u16 size)
     {
         if (p0.size() != size)
         {
-            ERROR("Mismatching bit-sizes for Not operation (p0 = " << p0.size() << ", size = " << size << ").");
+            return ERR("Mismatching bit-sizes for Not operation (p0 = " + std::to_string(p0.size()) + ", size = " + std::to_string(size) + ").");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::Not, size), std::move(p0));
+        return OK(BooleanFunction(Node::Operation(NodeType::Not, size), std::move(p0)));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    Result<BooleanFunction> BooleanFunction::Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
         if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            ERROR("Mismatching bit-sizes for Xor operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", size = " << size << ").");
+            return ERR("Mismatching bit-sizes for Xor operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", size = " + std::to_string(size) + ").");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::Xor, size), std::move(p0), std::move(p1));
+        return OK(BooleanFunction(Node::Operation(NodeType::Xor, size), std::move(p0), std::move(p1)));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
+    Result<BooleanFunction> BooleanFunction::Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size)
     {
-        if (!p1.is_index() || !p2.is_index()) {
-            ERROR("Mismatching function types for Slice operation (= p1 and p2 must be an 'BooleanFunctino::Index').");
+        if (!p1.is_index() || !p2.is_index())
+        {
+            return ERR("Mismatching function types for Slice operation (= p1 and p2 must be an 'BooleanFunctino::Index').");
         }
-        if ((p0.size() != p1.size()) || (p1.size() != p2.size())) {
-            ERROR("Mismatching bit-sizes for Slice operation (p0 = " << p0.size() << ", p1 = " << p1.size() << ", p2 = " << p2.size() << " - sizes must be equal).");
-        }
-        
-        auto start = p1.get_top_level_node().index,
-               end = p2.get_top_level_node().index;
-
-        if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size) {
-            ERROR("Mismatching bit-sizes for Slice operation (p0 = " << p0.size() << ", p1 = " << start << ", p2 = " << end << ").");
+        if ((p0.size() != p1.size()) || (p1.size() != p2.size()))
+        {
+            return ERR("Mismatching bit-sizes for Slice operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", p2 = " + std::to_string(p2.size()) + " - sizes must be equal).");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::Slice, size), std::move(p0), std::move(p1), std::move(p2));
+        auto start = p1.get_top_level_node().index, end = p2.get_top_level_node().index;
+
+        if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size)
+        {
+            return ERR("Mismatching bit-sizes for Slice operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(start) + ", p2 = " + std::to_string(end) + ").");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Slice, size), std::move(p0), std::move(p1), std::move(p2)));
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    Result<BooleanFunction> BooleanFunction::Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
-        if ((p0.size() + p1.size()) != size) {
-            ERROR("Mismatch function input width (p0 = " << p0.size() << "-bit, p1 = " << p1.size() << "-bit, size = " << size << ").");
+        if ((p0.size() + p1.size()) != size)
+        {
+            return ERR("Mismatch function input width (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size()) + "-bit, size = " + std::to_string(size) + ").");
         }
 
-        return BooleanFunction(Node::Operation(NodeType::Concat, size), std::move(p0), std::move(p1));
+        return OK(BooleanFunction(Node::Operation(NodeType::Concat, size), std::move(p0), std::move(p1)));
     }
 
     std::ostream& operator<<(std::ostream& os, const BooleanFunction& function)
@@ -325,39 +326,39 @@ namespace hal
 
     BooleanFunction BooleanFunction::operator&(const BooleanFunction& other) const
     {
-        return std::get<BooleanFunction>(BooleanFunction::And(this->clone(), other.clone(), this->size()));
+        return BooleanFunction::And(this->clone(), other.clone(), this->size()).get();
     }
 
     BooleanFunction& BooleanFunction::operator&=(const BooleanFunction& other)
     {
-        *this = std::get<BooleanFunction>(BooleanFunction::And(this->clone(), other.clone(), this->size()));
+        *this = BooleanFunction::And(this->clone(), other.clone(), this->size()).get();
         return *this;
     }
 
     BooleanFunction BooleanFunction::operator~() const
     {
-        return std::get<BooleanFunction>(BooleanFunction::Not(this->clone(), this->size()));
+        return BooleanFunction::Not(this->clone(), this->size()).get();
     }
 
     BooleanFunction BooleanFunction::operator|(const BooleanFunction& other) const
     {
-        return std::get<BooleanFunction>(BooleanFunction::Or(this->clone(), other.clone(), this->size()));
+        return BooleanFunction::Or(this->clone(), other.clone(), this->size()).get();
     }
 
     BooleanFunction& BooleanFunction::operator|=(const BooleanFunction& other)
     {
-        *this = std::get<BooleanFunction>(BooleanFunction::Or(this->clone(), other.clone(), this->size()));
+        *this = BooleanFunction::Or(this->clone(), other.clone(), this->size()).get();
         return *this;
     }
 
     BooleanFunction BooleanFunction::operator^(const BooleanFunction& other) const
     {
-        return std::get<BooleanFunction>(BooleanFunction::Xor(this->clone(), other.clone(), this->size()));
+        return BooleanFunction::Xor(this->clone(), other.clone(), this->size()).get();
     }
 
     BooleanFunction& BooleanFunction::operator^=(const BooleanFunction& other)
     {
-        *this = std::get<BooleanFunction>(BooleanFunction::Xor(this->clone(), other.clone(), this->size()));
+        *this = BooleanFunction::Xor(this->clone(), other.clone(), this->size()).get();
         return *this;
     }
 
@@ -450,7 +451,6 @@ namespace hal
         return (this->is_empty()) ? false : this->get_top_level_node().has_index_value(value);
     }
 
-
     const BooleanFunction::Node& BooleanFunction::get_top_level_node() const
     {
         return this->m_nodes.back();
@@ -511,51 +511,46 @@ namespace hal
         return variable_names;
     }
 
-    std::string BooleanFunction::to_string() const
+    Result<std::string> BooleanFunction::default_printer(const BooleanFunction::Node& node, std::vector<std::string>&& operands)
     {
-        /// Local function to translate a given BooleanFunction::Node to a string
-        ///
-        /// @param[in] node Node of BooleanFunction.
-        /// @param[in] p Node operands.
-        /// @returns (0) status (true on success, false otherwise),
-        ///          (1) human-readable string that represents the node
-        auto node2string = [](const auto& node, auto&& o) -> std::tuple<bool, std::string> {
-            if (node.get_arity() != o.size())
-            {
-                return {false, ""};
-            }
+        if (node.get_arity() != operands.size())
+        {
+            return ERR("node arity of " + std::to_string(node.get_arity()) + " does not match number of operands of " + std::to_string(operands.size()));
+        }
 
-            switch (node.type)
-            {
-                case BooleanFunction::NodeType::Constant:
-                case BooleanFunction::NodeType::Index:
-                case BooleanFunction::NodeType::Variable:
-                    return {true, node.to_string()};
+        switch (node.type)
+        {
+            case BooleanFunction::NodeType::Constant:
+            case BooleanFunction::NodeType::Index:
+            case BooleanFunction::NodeType::Variable:
+                return OK(node.to_string());
 
-                case BooleanFunction::NodeType::And:
-                    return {true, "(" + o[0] + " & " + o[1] + ")"};
-                case BooleanFunction::NodeType::Not:
-                    return {true, "(! " + o[0] + ")"};
-                case BooleanFunction::NodeType::Or:
-                    return {true, "(" + o[0] + " | " + o[1] + ")"};
-                case BooleanFunction::NodeType::Xor:
-                    return {true, "(" + o[0] + " ^ " + o[1] + ")"};
+            case BooleanFunction::NodeType::And:
+                return OK("(" + operands[0] + " & " + operands[1] + ")");
+            case BooleanFunction::NodeType::Not:
+                return OK("(! " + operands[0] + ")");
+            case BooleanFunction::NodeType::Or:
+                return OK("(" + operands[0] + " | " + operands[1] + ")");
+            case BooleanFunction::NodeType::Xor:
+                return OK("(" + operands[0] + " ^ " + operands[1] + ")");
 
-                case BooleanFunction::NodeType::Add:
-                    return {true, "(" + o[0] + " + " + o[1] + ")"};
+            case BooleanFunction::NodeType::Add:
+                return OK("(" + operands[0] + " + " + operands[1] + ")");
 
-                case BooleanFunction::NodeType::Concat:
-                    return {true, "(" + o[0] + " ++ " + o[1] + ")"};
-                case BooleanFunction::NodeType::Slice:
-                    return {true, "Slice(" + o[0] + ", " + o[1] + ", " + o[2] + ")"};
-                case BooleanFunction::NodeType::Zext:
-                    return {true, "Zext(" + o[0] + ", " + o[1] + ")"};
+            case BooleanFunction::NodeType::Concat:
+                return OK("(" + operands[0] + " ++ " + operands[1] + ")");
+            case BooleanFunction::NodeType::Slice:
+                return OK("Slice(" + operands[0] + ", " + operands[1] + ", " + operands[2] + ")");
+            case BooleanFunction::NodeType::Zext:
+                return OK("Zext(" + operands[0] + ", " + operands[1] + ")");
 
-                default:
-                    return {false, ""};
-            }
-        };
+            default:
+                return ERR("unsupported node type '" + std::to_string(node.type) + "'");
+        }
+    }
 
+    std::string BooleanFunction::to_string(std::function<Result<std::string>(const BooleanFunction::Node& node, std::vector<std::string>&& operands)>&& printer) const
+    {
         // (1) early termination in case the Boolean function is empty
         if (this->m_nodes.empty())
         {
@@ -577,13 +572,13 @@ namespace hal
             std::move(stack.end() - static_cast<u64>(node.get_arity()), stack.end(), std::back_inserter(operands));
             stack.erase(stack.end() - static_cast<u64>(node.get_arity()), stack.end());
 
-            if (auto [ok, reduction] = node2string(node, std::move(operands)); ok)
+            if (auto res = printer(node, std::move(operands)); res.is_ok())
             {
-                stack.emplace_back(reduction);
+                stack.emplace_back(res.get());
             }
             else
             {
-                // log_error("netlist", "Cannot translate BooleanFunction::Node '{}' to a string.", node->to_string());
+                log_error("netlist", "Cannot translate BooleanFunction::Node '{}' to a string: {}.", node.to_string(), res.get_error().get());
                 return "";
             }
         }
@@ -599,12 +594,12 @@ namespace hal
         }
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::from_string(const std::string& expression)
+    Result<BooleanFunction> BooleanFunction::from_string(const std::string& expression)
     {
         using BooleanFunctionParser::ParserType;
         using BooleanFunctionParser::Token;
 
-        static const std::vector<std::tuple<ParserType, std::function<std::variant<std::vector<Token>, std::string>(const std::string&)>>> parsers = {
+        static const std::vector<std::tuple<ParserType, std::function<Result<std::vector<Token>>(const std::string&)>>> parsers = {
             {ParserType::Standard, BooleanFunctionParser::parse_with_standard_grammar},
             {ParserType::Liberty, BooleanFunctionParser::parse_with_liberty_grammar},
         };
@@ -613,35 +608,35 @@ namespace hal
         {
             auto tokens = parser(expression);
             // (1) skip if parser cannot translate to tokens
-            if (std::get_if<std::vector<Token>>(&tokens) == nullptr)
+            if (tokens.is_error())
             {
                 continue;
             }
 
             // (2) skip if cannot translate to valid reverse-polish notation
-            tokens = BooleanFunctionParser::reverse_polish_notation(std::move(std::get<std::vector<Token>>(tokens)), expression, parser_type);
-            if (std::get_if<std::vector<Token>>(&tokens) == nullptr)
+            tokens = BooleanFunctionParser::reverse_polish_notation(tokens.get(), expression, parser_type);
+            if (tokens.is_error())
             {
                 continue;
             }
             // (3) skip if reverse-polish notation tokens are no valid Boolean function
-            auto function = BooleanFunctionParser::translate(std::move(std::get<std::vector<Token>>(tokens)), expression);
-            if (std::get_if<BooleanFunction>(&function) == nullptr)
+            auto function = BooleanFunctionParser::translate(tokens.get(), expression);
+            if (function.is_error())
             {
                 continue;
             }
-            return std::get<BooleanFunction>(function);
+            return function;
         }
-        return "No parser available to parser '" + expression + "'.";
+        return ERR("No parser available to parser '" + expression + "'.");
     }
 
     BooleanFunction BooleanFunction::simplify() const
     {
         auto simplified = Simplification::local_simplification(*this)
-            .map<BooleanFunction>([] (const auto& simplified) { return Simplification::abc_simplification(simplified); })
-            .map<BooleanFunction>([] (const auto& simplified) { return Simplification::local_simplification(simplified); });
+                              .map<BooleanFunction>([](const auto& simplified) { return Simplification::abc_simplification(simplified); })
+                              .map<BooleanFunction>([](const auto& simplified) { return Simplification::local_simplification(simplified); });
 
-        return (simplified.is_ok()) ? simplified.get() : this->clone();    
+        return (simplified.is_ok()) ? simplified.get() : this->clone();
     }
 
     BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
@@ -658,7 +653,7 @@ namespace hal
         return function;
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::substitute(const std::string& name, const BooleanFunction& replacement) const
+    Result<BooleanFunction> BooleanFunction::substitute(const std::string& name, const BooleanFunction& replacement) const
     {
         /// Helper function to substitute a variable with a Boolean function.
         ///
@@ -667,7 +662,7 @@ namespace hal
         /// @param[in] var_name - Variable name to check for replacement.
         /// @param[in] repl - Replacement Boolean function.
         /// @returns AST replacement.
-        auto substitute_variable = [](const auto& node, auto&& operands, auto var_name, auto repl) -> std::variant<BooleanFunction, std::string> {
+        auto substitute_variable = [](const auto& node, auto&& operands, auto var_name, auto repl) -> BooleanFunction {
             if (node.has_variable_name(var_name))
             {
                 return repl.clone();
@@ -682,35 +677,28 @@ namespace hal
             std::move(stack.end() - static_cast<i64>(node.get_arity()), stack.end(), std::back_inserter(operands));
             stack.erase(stack.end() - static_cast<i64>(node.get_arity()), stack.end());
 
-            auto substituted = substitute_variable(node, std::move(operands), name, replacement);
-            if (std::get_if<std::string>(&substituted) != nullptr)
-            {
-                return substituted;
-            }
-            stack.emplace_back(std::get<BooleanFunction>(substituted));
+            stack.emplace_back(substitute_variable(node, std::move(operands), name, replacement));
         }
 
         switch (stack.size())
         {
-            case 1:
-                return stack.back();
-            default:
-                return "Cannot replace '" + name + "' with '" + replacement.to_string() + "' (= validation failed, so the operations may be imbalanced).";
+            case 1:  return OK(stack.back());
+            default: return ERR("Cannot replace '" + name + "' with '" + replacement.to_string() + "' (= validation failed, so the operations may be imbalanced).");
         }
     }
 
-    std::variant<BooleanFunction::Value, std::string> BooleanFunction::evaluate(const std::unordered_map<std::string, Value>& inputs) const
+    Result<BooleanFunction::Value> BooleanFunction::evaluate(const std::unordered_map<std::string, Value>& inputs) const
     {
         // (0) workaround to preserve the API functionality
         if (this->m_nodes.empty())
         {
-            return BooleanFunction::Value::X;
+            return OK(BooleanFunction::Value::X);
         }
 
         // (1) validate whether the input sizes match the boolean function
         if (this->size() != 1)
         {
-            return "Cannot use the single-bit evaluate() on '" + this->to_string() + "' (= " + std::to_string(this->size()) + "-bit).";
+            return ERR("Cannot use the single-bit evaluate() on '" + this->to_string() + "' (= " + std::to_string(this->size()) + "-bit).");
         }
 
         // (2) translate the input to n-bit to use the generic function
@@ -721,20 +709,20 @@ namespace hal
         }
 
         auto value = this->evaluate(generic_inputs);
-        if (std::get_if<std::vector<Value>>(&value) != nullptr)
+        if (value.is_ok())
         {
-            return std::get<std::vector<Value>>(value)[0];
+            return OK(value.get()[0]);
         }
 
-        return std::get<std::string>(value);
+        return ERR(value.get_error());
     }
 
-    std::variant<std::vector<BooleanFunction::Value>, std::string> BooleanFunction::evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const
+    Result<std::vector<BooleanFunction::Value>> BooleanFunction::evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const
     {
         // (0) workaround to preserve the API functionality
         if (this->m_nodes.empty())
         {
-            return std::vector<BooleanFunction::Value>({BooleanFunction::Value::X});
+            return OK(std::vector<BooleanFunction::Value>({BooleanFunction::Value::X}));
         }
 
         // (1) validate whether the input sizes match the boolean function
@@ -744,8 +732,7 @@ namespace hal
             {
                 if (node.has_variable_name(name) && node.size != value.size())
                 {
-                    return "Cannot use evaluate() on '" + this->to_string() + " as the '" + node.to_string() + " is " + std::to_string(node.size) + "-bit vs. " + std::to_string(value.size())
-                           + "-bit in the input.";
+                    return ERR("Cannot use evaluate() on '" + this->to_string() + " as the '" + node.to_string() + " is " + std::to_string(node.size) + "-bit vs. " + std::to_string(value.size()) + "-bit in the input.");
                 }
             }
         }
@@ -760,22 +747,18 @@ namespace hal
         // (3) analyze the evaluation result and check whether the result is a
         //     constant boolean function
         auto result = symbolic_execution.evaluate(*this);
-        if (std::get_if<BooleanFunction>(&result) != nullptr)
+        if (result.is_ok())
         {
-            auto value = std::get<BooleanFunction>(result);
-            if (value.is_constant())
+            if (auto value = result.get(); value.is_constant())
             {
-                return value.get_top_level_node().constant;
+                return OK(value.get_top_level_node().constant);
             }
-            else
-            {
-                return std::vector<BooleanFunction::Value>(this->size(), BooleanFunction::Value::X);
-            }
+            return OK(std::vector<BooleanFunction::Value>(this->size(), BooleanFunction::Value::X));
         }
-        return std::get<std::string>(result);
+        return ERR(result.get_error());
     }
 
-    std::variant<std::vector<std::vector<BooleanFunction::Value>>, std::string> BooleanFunction::compute_truth_table(const std::vector<std::string>& ordered_variables,
+    Result<std::vector<std::vector<BooleanFunction::Value>>> BooleanFunction::compute_truth_table(const std::vector<std::string>& ordered_variables,
                                                                                                                      bool remove_unknown_variables) const
     {
         auto variable_names_in_function = this->get_variable_names();
@@ -786,7 +769,7 @@ namespace hal
         {
             if (node.is_variable() && node.size != 1)
             {
-                return "Cannot generate a truth-table for a Boolean function with variables of > 1-bit (e.g., = '" + node.to_string() + "').";
+                return ERR("Cannot generate a truth-table for a Boolean function with variables of > 1-bit (e.g., = '" + node.to_string() + "').");
             }
         }
 
@@ -809,13 +792,13 @@ namespace hal
         //       Boolean function with a truth-table with 'X' values
         if (this->m_nodes.empty())
         {
-            return std::vector<std::vector<Value>>(1, std::vector<Value>(1 << variables.size(), Value::X));
+            return OK(std::vector<std::vector<Value>>(1, std::vector<Value>(1 << variables.size(), Value::X)));
         }
 
         // (4.2) safety-check in case the number of variables is too large to process
         if (variables.size() > 10)
         {
-            return "Cannot generate a truth-table with > 10 variables (increase threshold or simplify expression beforehand).";
+            return ERR("Cannot generate a truth-table with > 10 variables (increase threshold or simplify expression beforehand).");
         }
 
         std::vector<std::vector<Value>> truth_table(this->size(), std::vector<Value>(1 << variables.size(), Value::ZERO));
@@ -831,18 +814,18 @@ namespace hal
                 tmp >>= 1;
             }
             auto result = this->evaluate(input);
-            if (std::get_if<std::string>(&result) != nullptr)
+            if (result.is_error())
             {
-                return std::get<std::string>(result);
+                return ERR(result.get_error());
             }
-            auto output = std::get<std::vector<Value>>(result);
+            auto output = result.get();
             for (auto index = 0u; index < truth_table.size(); index++)
             {
                 truth_table[index][value] = output[index];
             }
         }
 
-        return truth_table;
+        return OK(truth_table);
     }
 
     z3::expr BooleanFunction::to_z3(z3::context& context, const std::map<std::string, z3::expr>& var2expr) const
@@ -866,12 +849,13 @@ namespace hal
                 case BooleanFunction::NodeType::Constant: {
                     // since our constants are defined as arbitrary bit-vectors,
                     // we have to concat each bit just to be on the safe side
-                    auto constant = z3::expr(context);
-                    for (const auto& bit : node.constant)
+                    auto constant = context.bv_val(node.constant.front(), 1);
+                    for (u32 i = 1; i < node.constant.size(); i++)
                     {
+                        const auto bit = node.constant.at(i);
                         constant = z3::concat(context.bv_val(bit, 1), constant);
                     }
-                    return {false, z3::expr(context)};
+                    return {true, constant};
                 }
                 case BooleanFunction::NodeType::Variable: {
                     if (auto it = var2expr.find(node.variable); it != var2expr.end())
@@ -951,7 +935,7 @@ namespace hal
         return s;
     }
 
-    std::variant<BooleanFunction, std::string> BooleanFunction::validate(BooleanFunction&& function)
+    Result<BooleanFunction> BooleanFunction::validate(BooleanFunction&& function)
     {
         /// # Note
         /// In order to validate correctness of a Boolean function, we analyze
@@ -960,10 +944,10 @@ namespace hal
         if (auto coverage = function.compute_node_coverage(); coverage.back() != function.length())
         {
             auto str = function.to_string_in_reverse_polish_notation();
-            return "Cannot validate '" + str + "' (= imbalanced function with coverage '" + std::to_string(coverage.back()) + " != " + std::to_string(function.length()) + ").";
+            return ERR("Cannot validate '" + str + "' (= imbalanced function with coverage '" + std::to_string(coverage.back()) + " != " + std::to_string(function.length()) + ").");
         }
 
-        return std::move(function);
+        return OK(std::move(function));
     }
 
     std::vector<u32> BooleanFunction::compute_node_coverage() const
@@ -1098,7 +1082,7 @@ namespace hal
                 return "Zext";
 
             default:
-                return "not implemented for node type '" + std::to_string(this->type) + "'.";
+                return "unsupported node type '" + std::to_string(this->type) + "'.";
         }
     }
 

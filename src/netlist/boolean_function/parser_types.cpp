@@ -106,7 +106,7 @@ namespace BooleanFunctionParser {
     Token::Token(TokenType _type, std::tuple<std::string, u16> _variable, std::vector<BooleanFunction::Value> _constant)
         : type(_type), variable(_variable), constant(_constant) {}
 
-    std::variant<std::vector<Token>, std::string> reverse_polish_notation(std::vector<Token>&& tokens, const std::string& expression, const ParserType& parser) {
+    Result<std::vector<Token>> reverse_polish_notation(std::vector<Token>&& tokens, const std::string& expression, const ParserType& parser) {
         std::stack<Token> operator_stack;
         std::vector<Token> output;
 
@@ -154,16 +154,16 @@ namespace BooleanFunctionParser {
 
         while (!operator_stack.empty()) {
             if (operator_stack.top().is(TokenType::BracketOpen)) {
-                return "Cannot translate '" + expression + "' to reverse polish notation as bracket level is invalid.";
+                return ERR("Cannot translate '" + expression + "' to reverse polish notation as bracket level is invalid.");
             }
 
             output.emplace_back(operator_stack.top()); 
             operator_stack.pop();
         }
-        return output;
+        return OK(output);
     }
 
-    std::variant<BooleanFunction, std::string> translate(std::vector<Token>&& tokens, const std::string& expression) {
+    Result<BooleanFunction> translate(std::vector<Token>&& tokens, const std::string& expression) {
         using TokenType = BooleanFunctionParser::TokenType;
 
         auto nodes = std::vector<BooleanFunction::Node>(); nodes.reserve(tokens.size());
@@ -171,7 +171,7 @@ namespace BooleanFunctionParser {
         for (auto&& token : tokens) {
             if ((token.is(TokenType::And) || token.is(TokenType::Or) || token.is(TokenType::Not) || token.is(TokenType::Xor))
                 && nodes.empty()) {
-                return "Cannot translate tokens (= tokens are imbalanced, i.e. operation before operation nodes)";
+                return ERR("Cannot translate tokens (= tokens are imbalanced, i.e. operation before operation nodes)");
             }
 
             switch (token.type) {
@@ -189,7 +189,7 @@ namespace BooleanFunctionParser {
                 case TokenType::Constant:
                     nodes.emplace_back(BooleanFunction::Node::Constant(token.constant)); break;
 
-                default: return "Cannot handle '" + token.to_string() + "' in '" + expression + "'.";
+                default: return ERR("Cannot handle '" + token.to_string() + "' in '" + expression + "'.");
             }
         }
 

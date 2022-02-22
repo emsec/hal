@@ -79,14 +79,14 @@ namespace hal
                     {
                         reset_async = true;
                         function << "wire async_reset___internal___;" << std::endl;
-                        function << "assign async_reset___internal___ = " << async_reset_function.to_string() << ";" << std::endl;
+                        function << "assign async_reset___internal___ = " << async_reset_function.to_string(verilog_function_printer) << ";" << std::endl;
                         function << std::endl;
                     }
                     if (!async_set_function.is_empty())
                     {
                         set_async = true;
                         function << "wire async_set___internal___;" << std::endl;
-                        function << "assign async_set___internal___ = " << async_set_function.to_string() << ";" << std::endl;
+                        function << "assign async_set___internal___ = " << async_set_function.to_string(verilog_function_printer) << ";" << std::endl;
                         function << std::endl;
                     }
 
@@ -112,7 +112,7 @@ namespace hal
                     {
                         auto [behav_state, behave_neg_state] = ff_component->get_async_set_reset_behavior();
 
-                        function << (if_used ? "\telse if (" : "\tif (") << async_reset_function.to_string() << " & " << async_set_function << ") begin" << std::endl;
+                        function << (if_used ? "\telse if (" : "\tif (") << async_reset_function.to_string(verilog_function_printer) << " & " << async_set_function << ") begin" << std::endl;
 
                         switch (behav_state)
                         {
@@ -167,7 +167,7 @@ namespace hal
                     }
                     if (reset_async)
                     {
-                        function << (if_used ? "\telse if (" : "\tif (") << async_reset_function.to_string() << ") begin" << std::endl;
+                        function << (if_used ? "\telse if (" : "\tif (") << async_reset_function.to_string(verilog_function_printer) << ") begin" << std::endl;
                         function << "\t\t" << internal_state << " <= 1'b0;" << std::endl;
                         function << "\t\t" << internal_negated_state << " <= 1'b1;" << std::endl;
                         function << "\tend" << std::endl;
@@ -175,7 +175,7 @@ namespace hal
                     }
                     if (set_async)
                     {
-                        function << (if_used ? "\telse if (" : "\tif (") << async_set_function.to_string() << ") begin" << std::endl;
+                        function << (if_used ? "\telse if (" : "\tif (") << async_set_function.to_string(verilog_function_printer) << ") begin" << std::endl;
                         function << "\t\t" << internal_state << " <= 1'b1;" << std::endl;
                         function << "\t\t" << internal_negated_state << " <= 1'b0;" << std::endl;
                         function << "\tend" << std::endl;

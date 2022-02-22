@@ -245,6 +245,40 @@ namespace hal
                 return prologue.str();
             }
 
+            Result<std::string> verilog_function_printer(const BooleanFunction::Node& node, std::vector<std::string>&& operands)
+            {
+                if (node.get_arity() != operands.size())
+                {
+                    return ERR("node arity of " + std::to_string(node.get_arity()) + " does not match number of operands of " + std::to_string(operands.size()));
+                }
+
+                switch (node.type)
+                {
+                    case BooleanFunction::NodeType::Constant: {
+                        std::string str;
+                        for (const auto& value : node.constant)
+                        {
+                            str = enum_to_string(value) + str;
+                        }
+                        return OK(std::to_string(node.constant.size()) + "'b" + str);
+                    }
+                    case BooleanFunction::NodeType::Index:
+                        return OK(std::to_string(node.index));
+                    case BooleanFunction::NodeType::Variable:
+                        return OK(node.variable);
+                    case BooleanFunction::NodeType::And:
+                        return OK("(" + operands[0] + " & " + operands[1] + ")");
+                    case BooleanFunction::NodeType::Not:
+                        return OK("(! " + operands[0] + ")");
+                    case BooleanFunction::NodeType::Or:
+                        return OK("(" + operands[0] + " | " + operands[1] + ")");
+                    case BooleanFunction::NodeType::Xor:
+                        return OK("(" + operands[0] + " ^ " + operands[1] + ")");
+                    default:
+                        return ERR("unsupported node type '" + std::to_string(node.type) + "'");
+                }
+            }
+
             std::string get_function_for_gate(const GateType* gt)
             {
                 std::stringstream gate_description;

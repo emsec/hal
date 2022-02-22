@@ -39,11 +39,11 @@ namespace hal
                         if (std::string group = gt->get_pin_group(var); !group.empty())
                         {
                             std::string pin = group + "[" + std::to_string(gt->get_index_in_group_of_pin(group, var)) + "]";
-                            bf_copy = bf_copy.substitute(var, pin);
+                            bf_copy         = bf_copy.substitute(var, pin);
                         }
                     }
 
-                    function << " = " << bf_copy.to_string() << ";" << std::endl;
+                    function << " = " << bf_copy.to_string(verilog_function_printer) << ";" << std::endl;
                 }
 
                 return function.str();
