@@ -139,8 +139,11 @@ namespace hal {
 
     void WaveTreeModel::addOrReplaceItem(WaveData* wd, WaveItemIndex::IndexType tp, int iwave, int parentId)
     {
+        int oldCount = mWaveItemHash->size();
         WaveItem* wi = mWaveItemHash->addOrReplace(wd,tp,iwave,parentId);
         connect(wi,&WaveItem::gotCursorValue,this,&WaveTreeModel::handleGotCursorValue);
+        int count = mWaveItemHash->size();
+        if (count != oldCount) Q_EMIT numberEntriesChanged(count);
     }
 
     void WaveTreeModel::handleWaveAdded(int iwave)

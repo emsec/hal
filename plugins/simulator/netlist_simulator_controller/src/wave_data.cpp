@@ -31,7 +31,7 @@ namespace hal {
     void WaveDataClock::setMaxTime(u64 tmax)
     {
         mMaxTime = tmax;
-        mData.clear();
+        resetWave();
         dataFactory();
     }
 
@@ -64,6 +64,11 @@ namespace hal {
     WaveData::~WaveData()
     {
     //    qDebug() << "~WaveData" << mId << mName;
+    }
+
+    void WaveData::resetWave()
+    {
+        mData.clear();
     }
 
     void WaveData::setId(u32 id_)
@@ -163,7 +168,7 @@ namespace hal {
 
     bool WaveData::loadSaleae(const SaleaeDirectory& sd, const WaveDataTimeframe &tframe)
     {
-        mData.clear();
+        resetWave();
         std::filesystem::path path = sd.get_datafile(mName.toStdString(),mId);
         if (path.empty()) return false;
 
@@ -174,6 +179,7 @@ namespace hal {
 
     void WaveData::loadSaleae(SaleaeInputFile& sif, const WaveDataTimeframe& tframe)
     {
+        resetWave();
         SaleaeDataBuffer* sdb = sif.get_buffered_data();
         u64 n = sdb->mCount;
         if (!n)
@@ -448,6 +454,16 @@ namespace hal {
         return mGroupList;
     }
 
+    QList<int> WaveDataGroup::childrenWaveIndex() const
+    {
+        QList<int> retval;
+        for (const WaveData* wd : mGroupList)
+        {
+            retval.append(mWaveDataList->waveIndexByNetId(wd->id()));
+        }
+        return retval;
+    }
+
     WaveData* WaveDataGroup::childAt(int inx) const
     {
         if (inx >= mGroupList.size()) return nullptr;
@@ -509,6 +525,13 @@ namespace hal {
         if (inx < 0) return;
         mGroupList[inx] = wd;
         recalcData();
+    }
+
+    bool WaveDataGroup::isLoadable() const
+    {
+        for (const WaveData* wd : mGroupList)
+            if (!wd->isLoadable()) return false;
+        return true;
     }
 
     void WaveDataGroup::recalcData()
@@ -894,7 +917,7 @@ namespace hal {
             if (it == saleaeWaves.end()) continue;
             wd->setFileSize(it.value()->fileSize());
             wd->setFileIndex(it.value()->fileIndex());
-            if (wd->loadToMemory())
+            if (wd->isLoadable())
                 wd->loadSaleae(mSaleaeDirectory,mTimeframe);
             emitWaveUpdated(i);
             delete it.value();

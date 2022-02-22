@@ -57,6 +57,7 @@ namespace hal {
     Q_SIGNALS:
         void inserted(QModelIndex index);
         void triggerReorder();
+        void numberEntriesChanged(int count);
 
     public Q_SLOTS:
         void handleUpdateValueFormat();

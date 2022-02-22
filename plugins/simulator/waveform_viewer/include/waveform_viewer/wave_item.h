@@ -12,6 +12,8 @@ class QThread;
 
 namespace hal {
 
+    class WaveItemHash;
+
     class WaveItemIndex
     {
     public:
@@ -53,7 +55,6 @@ namespace hal {
         bool mLoop;
 
         enum ColorIndex { Solid, HiLight, Dotted, Background };
-        QString mValueAtCursor;
 
     private:
         int   mYposition;
@@ -115,6 +116,7 @@ namespace hal {
         static const char* sLineColor[];
         int cursorValue(float tCursor, int xpos);
         void setCursorValue(int val) { mCursorValue = val; }
+        bool isGroup() const { return mData->netType() == WaveData::NetGroup; }
     };
 
     class WaveItemHash : public QHash<WaveItemIndex,WaveItem*>

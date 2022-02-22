@@ -41,6 +41,8 @@ namespace hal {
         void scrollToYpos(int ypos);
         void removeGroup(u32 grpId);
         bool canImportWires() const;
+        bool isEmpty() const;
+        WaveGraphicsCanvas* graphicCanvas() { return mGraphicsCanvas; }
 
     public Q_SLOTS:
         void handleEngineFinished(bool success);
@@ -48,7 +50,7 @@ namespace hal {
     private Q_SLOTS:
 
         void handleSelectionHighlight(const QVector<const SelectionTreeItem*>& highlight);
-        void handleWaveAppended(WaveData* wd);
+        void handleNumberWaveformChanged(int count);
         void handleStateChanged(NetlistSimulatorController::SimulationState state);
         void visualizeCurrentNetState(float tCursor, int xpos);
 

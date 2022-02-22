@@ -57,6 +57,7 @@ namespace hal {
         connect(mWaveDataList,&WaveDataList::waveUpdated,mGraphicsCanvas,&WaveGraphicsCanvas::handleWaveUpdated);
         connect(mTreeModel,&WaveTreeModel::inserted,mTreeView,&WaveTreeView::handleInserted);
         connect(mTreeModel,&WaveTreeModel::triggerReorder,mTreeView,&WaveTreeView::reorder);
+        connect(mTreeModel,&WaveTreeModel::numberEntriesChanged,this,&WaveWidget::handleNumberWaveformChanged);
 //        connect(mTreeView,&WaveTreeView::viewportHeightChanged,mGraphicsView,&WaveGraphicsView::handleViewportHeightChanged);
 //        connect(mTreeView,&WaveTreeView::sizeChanged,mGraphicsView,&WaveGraphicsView::handleSizeChanged);
         connect(mTreeView,&WaveTreeView::triggerUpdateWaveItems,mGraphicsCanvas,&WaveGraphicsCanvas::updateRequest);
@@ -120,6 +121,11 @@ namespace hal {
     void WaveWidget::takeOwnership(std::unique_ptr<NetlistSimulatorController>& ctrl)
     {
         mControllerOwner = std::move(ctrl);
+    }
+
+    bool WaveWidget::isEmpty() const
+    {
+        return mWaveItemHash->isEmpty();
     }
 
     bool WaveWidget::canImportWires() const
@@ -265,10 +271,10 @@ namespace hal {
         mController->add_gates(gats);
     }
 
-    void WaveWidget::handleWaveAppended(WaveData *wd)
+    void WaveWidget::handleNumberWaveformChanged(int count)
     {
-        Q_ASSERT(wd);
-        //TODO
+        Q_UNUSED(count);
+        Q_EMIT stateChanged(mController->get_state());
     }
 
     void WaveWidget::resizeEvent(QResizeEvent* event)

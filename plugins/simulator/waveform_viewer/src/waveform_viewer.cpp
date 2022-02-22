@@ -10,6 +10,7 @@
 #include "waveform_viewer/gate_selection_dialog.h"
 #include "waveform_viewer/plugin_waveform_viewer.h"
 #include "waveform_viewer/clock_set_dialog.h"
+#include "waveform_viewer/wave_graphics_canvas.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
@@ -57,9 +58,11 @@ namespace hal
         mSaveWaveformsAction = new QAction(this);
         mRunSimulationAction = new QAction(this);
         mAddResultWaveAction = new QAction(this);
+        mToggleMaxZoomAction = new QAction(this);
 
         mCreateControlAction->setIcon(gui_utility::getStyledSvgIcon("all->#FFFFFF",":/icons/plus"));
         mAddResultWaveAction->setIcon(QIcon(":/icons/add_waveform"));
+        mToggleMaxZoomAction->setIcon(QIcon(":/icons/zoom_waveform"));
 
         mCreateControlAction->setToolTip("Create simulation controller");
         mSimulSettingsAction->setToolTip("Simulation settings");
@@ -67,6 +70,7 @@ namespace hal
         mSaveWaveformsAction->setToolTip("Save waveform data to file");
         mRunSimulationAction->setToolTip("Run simulation");
         mAddResultWaveAction->setToolTip("Add waveform net");
+        mToggleMaxZoomAction->setToolTip("Toggle max/min zoom");
 
         connect(mCreateControlAction, &QAction::triggered, this, &WaveformViewer::handleCreateControl);
         connect(mSimulSettingsAction, &QAction::triggered, this, &WaveformViewer::handleSimulSettings);
@@ -74,6 +78,7 @@ namespace hal
         connect(mSaveWaveformsAction, &QAction::triggered, this, &WaveformViewer::handleSaveWaveforms);
         connect(mRunSimulationAction, &QAction::triggered, this, &WaveformViewer::handleRunSimulation);
         connect(mAddResultWaveAction, &QAction::triggered, this, &WaveformViewer::handleAddResultWave);
+        connect(mToggleMaxZoomAction, &QAction::triggered, this, &WaveformViewer::handleToggleMaxZoom);
 
         mTabWidget = new QTabWidget(this);
         mTabWidget->setTabsClosable(true);
@@ -155,13 +160,14 @@ namespace hal
 
     void WaveformViewer::currentStateChanged(NetlistSimulatorController::SimulationState state)
     {
-        if (!mCurrentWaveWidget || state == NetlistSimulatorController::SimulationRun)
+        if (!mCurrentWaveWidget || state == NetlistSimulatorController::SimulationRun || mProgress->isVisible())
         {
             mSimulSettingsAction->setDisabled(true);
             mOpenInputfileAction->setDisabled(true);
             mSaveWaveformsAction->setDisabled(true);
             mRunSimulationAction->setDisabled(true);
             mAddResultWaveAction->setDisabled(true);
+            mToggleMaxZoomAction->setDisabled(true);
         }
         else
         {
@@ -170,6 +176,7 @@ namespace hal
                                              || state == NetlistSimulatorController::ParameterReady);
             mSaveWaveformsAction->setEnabled(state != NetlistSimulatorController::NoGatesSelected);
             mRunSimulationAction->setEnabled(state == NetlistSimulatorController::ParameterReady);
+            mToggleMaxZoomAction->setEnabled(!mCurrentWaveWidget->isEmpty());
        }
         mSimulSettingsAction->setIcon(gui_utility::getStyledSvgIcon(mSimulSettingsAction->isEnabled() ? "all->#FFFFFF" : "all->#808080",":/icons/preferences"));
         mOpenInputfileAction->setIcon(gui_utility::getStyledSvgIcon(mOpenInputfileAction->isEnabled() ? "all->#3192C5" : "all->#808080",":/icons/folder"));
@@ -210,6 +217,7 @@ namespace hal
         toolbar->addAction(mSaveWaveformsAction);
         toolbar->addAction(mRunSimulationAction);
         toolbar->addAction(mAddResultWaveAction);
+        toolbar->addAction(mToggleMaxZoomAction);
     }
 
     void WaveformViewer::handleTabClosed(int inx)
@@ -407,6 +415,12 @@ namespace hal
         if (!mCurrentWaveWidget) return;
         connect(mCurrentWaveWidget->controller(),&NetlistSimulatorController::engineFinished,mCurrentWaveWidget,&WaveWidget::handleEngineFinished);
         mCurrentWaveWidget->controller()->run_simulation();
+    }
+
+    void WaveformViewer::handleToggleMaxZoom()
+    {
+        if (!mCurrentWaveWidget) return;
+        mCurrentWaveWidget->graphicCanvas()->toggleZoom();
     }
 
     void WaveformViewer::handleAddResultWave()

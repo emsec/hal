@@ -90,6 +90,7 @@ namespace hal
         void handleSaveWaveforms();
         void handleRunSimulation();
         void handleAddResultWave();
+        void handleToggleMaxZoom();
 
         void handleSelectGates();
         void handleClockSet();
@@ -122,6 +123,7 @@ namespace hal
         QAction* mSaveWaveformsAction;
         QAction* mRunSimulationAction;
         QAction* mAddResultWaveAction;
+        QAction* mToggleMaxZoomAction;
 
         QTabWidget* mTabWidget;
         QStatusBar* mStatusBar;

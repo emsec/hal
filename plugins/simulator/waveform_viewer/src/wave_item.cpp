@@ -91,11 +91,8 @@ namespace hal {
         // precondition: mutex lock is set, state is Null
         mLoadProgress = 0;
         mWorkdir = workdir;
-        if (mData->fileSize() == 0)
-        {
-            // empty
-        }
-        else if (mData->loadToMemory())
+
+        if (mData->isLoadable())
         {
             if ((u64)mData->data().size() < mData->fileSize())
             {
@@ -107,10 +104,14 @@ namespace hal {
             {
                 // generate from existing map
                 deletePainted();
-                WaveDataProviderMap wdp(mData->data());
-                mPainted.generate(&wdp,trans,sbar,&mLoop);
-                setState(WaveItem::Painted);
-                if (mVisibleRange) Q_EMIT doneLoading();
+                if (!mData->data().isEmpty())
+                {
+                    WaveDataProviderMap wdp(mData->data());
+                    wdp.setGroup(isGroup());
+                    mPainted.generate(&wdp,trans,sbar,&mLoop);
+                    setState(WaveItem::Painted);
+                    if (mVisibleRange) Q_EMIT doneLoading();
+                }
             }
         }
         else
@@ -174,7 +175,7 @@ namespace hal {
         mCursorTime = tCursor;
 
         // get value from memory map
-        if (mData->loadToMemory())
+        if (mData->isLoadable())
         {
             mCursorValue = mData->intValue(tCursor);
             return mCursorValue;

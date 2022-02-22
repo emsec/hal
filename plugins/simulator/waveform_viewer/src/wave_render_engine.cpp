@@ -62,23 +62,47 @@ public:
     {
         mItem->setState(WaveItem::Loading);
         const WaveData* wd = mItem->wavedata();
-        if (wd->netType() == WaveData::ClockNet)
+        switch (wd->netType()) {
+        case WaveData::ClockNet:
         {
             try {
-               SimulationInput::Clock clk = static_cast<const WaveDataClock*>(wd)->clock();
-               WaveDataProviderClock wdpClk(clk);
-               mItem->mPainted.generate(&wdpClk,mTransform,mScrollbar,&mItem->mLoop);
-               mItem->setState(WaveItem::Finished);
-               } catch (...) {
-                   mItem->setState(WaveItem::Failed);
-               }
-        }
-        else
-        {
+                SimulationInput::Clock clk = static_cast<const WaveDataClock*>(wd)->clock();
+                WaveDataProviderClock wdpClk(clk);
+                mItem->mPainted.generate(&wdpClk,mTransform,mScrollbar,&mItem->mLoop);
+                mItem->setState(WaveItem::Finished);
+            } catch (...) {
+                mItem->setState(WaveItem::Failed);
+            }
+            break;
+        case WaveData::NetGroup:
+            if (wd->isLoadable())
+            {
+                try {
+                    const WaveDataGroup* grp = static_cast<const WaveDataGroup*>(wd);
+                    for (WaveData* wdChild : grp->children())
+                    {
+                        if ((u64)wdChild->data().size() < wdChild->fileSize())
+                        {
+                            mItem->setState(WaveItem::Aborted);
+                            break;
+                        }
+                    }
+                    mItem->mPainted.clearPrimitives();
+                    if (mItem->isAborted()) return;
+                    WaveDataProviderMap wdpMap(wd->data());
+                    wdpMap.setGroup(true);
+                    mItem->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mItem->mLoop);
+                    mItem->setState(WaveItem::Finished);
+                } catch (...) {
+                    mItem->setState(WaveItem::Failed);
+                }
+            }
+            break;
+       default:
             SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mItem->wavedata()->fileIndex())).toStdString());
             if (sif.good())
             {
-                if (mItem->wavedata()->loadToMemory())
+                if (mItem->wavedata()->isLoadable())
                 {
                     try {
 
@@ -87,7 +111,7 @@ public:
                         mItem->mPainted.clearPrimitives();
                         if (mItem->isAborted()) return;
                         WaveDataProviderMap wdpMap(wd->data());
-                        wdpMap.setGroup(wd->netType()==WaveData::NetGroup);
+                        wdpMap.setGroup(mItem->isGroup());
                         mItem->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mItem->mLoop);
                         mItem->setState(WaveItem::Finished);
                     } catch (...) {
@@ -108,6 +132,8 @@ public:
             }
             else
                 mItem->setState(WaveItem::Failed);
+            break;
+            }
         }
     }
 
@@ -142,14 +168,14 @@ public:
                     else
                     {
                         SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(wree->wavedata()->fileIndex())).toStdString());
-                        if (wree->wavedata()->loadToMemory())
+                        if (wree->wavedata()->isLoadable())
                         {
                             try {
                                 if ((u64)wd->data().size() < wd->fileSize())
                                     wree->loadSaleae(sif);
                                 wree->mPainted.clearPrimitives();
                                 WaveDataProviderMap wdpMap(wd->data());
-                                wdpMap.setGroup(wd->netType()==WaveData::NetGroup);
+                                wdpMap.setGroup(wree->isGroup());
                                 wree->mPainted.generate(&wdpMap,mTransform,mScrollbar,&wree->mLoop);
                                 wree->setState(WaveItem::Painted);
                             } catch (...) {
@@ -279,7 +305,10 @@ public:
                 {
                 if (wree->isNull())
                 {
-                    wree->startGeneratePainted(workdir,trans, sbar);
+                    if (wree->isGroup() && !wree->wavedata()->isLoadable())
+                        wree->mPainted.generateGroup(wree->wavedata(),mWaveItemHash);
+                    else
+                        wree->startGeneratePainted(workdir,trans, sbar);
                 }
                 else if (wree->isLoading() || wree->isThreadBusy())
                 {
@@ -313,7 +342,10 @@ public:
                     else
                     {
                         wree->deletePainted();
-                        wree->startGeneratePainted(workdir,trans,sbar);
+                        if (wree->isGroup() && !wree->wavedata()->isLoadable())
+                            wree->mPainted.generateGroup(wree->wavedata(),mWaveItemHash);
+                        else
+                            wree->startGeneratePainted(workdir,trans, sbar);
                         wree->clearRequest(WaveItem::DataChanged);
                     }
                 }
@@ -325,7 +357,7 @@ public:
 
         for (WaveItem* wree : mWaveItemHash->values())
         {
-            if (wree->isNull()) todoList.append(wree);
+            if (wree->isNull() && !wree->isGroup()) todoList.append(wree);
         }
 
         if (!todoList.isEmpty() && !mBackbone)

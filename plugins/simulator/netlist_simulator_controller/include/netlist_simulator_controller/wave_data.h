@@ -55,6 +55,7 @@ namespace hal {
         bool mDirty;
 
         QMap<u64,int>::const_iterator timeIterator(float t) const;
+        void resetWave();
     public:
         WaveData(const WaveData& other);
         WaveData(u32 id_, const QString& nam, NetType tp = RegularNet,
@@ -75,7 +76,7 @@ namespace hal {
         void setDirty(bool dty)                     { mDirty = dty; }
         void setFileIndex(int inx)                  { mFileIndex = inx; }
         void setFileSize(u64 siz)                   { mFileSize = siz; }
-        bool loadToMemory() const { return mFileSize < 100000; }
+        virtual bool isLoadable()             const { return mFileSize < 100000; }
 
         void loadSaleae(SaleaeInputFile& sif, const WaveDataTimeframe& tframe = WaveDataTimeframe());
         bool loadSaleae(const SaleaeDirectory& sd, const WaveDataTimeframe& tframe);
@@ -209,7 +210,7 @@ namespace hal {
         WaveDataGroup(WaveDataList* wdList, const QString& nam = QString());
         WaveDataGroup(WaveDataList* wdList, const WaveData* wdGrp);
         virtual ~WaveDataGroup();
-        virtual int bits() const;
+        virtual int bits() const override;
         virtual int size() const { return mGroupList.size(); }
         void addNet(const Net* n);
         virtual void insert(int inx, WaveData* wd);
@@ -217,6 +218,7 @@ namespace hal {
         virtual void recalcData();
         virtual bool hasNetId(u32 id) const;
         virtual QList<WaveData*> children() const;
+        QList<int> childrenWaveIndex() const;
         virtual WaveData* childAt(int inx) const;
         virtual WaveData* removeAt(int inx);
         virtual bool isEmpty() const { return mGroupList.isEmpty(); }
@@ -224,5 +226,6 @@ namespace hal {
         virtual int childIndex(WaveData* wd) const;
         virtual int netIndex(u32 id) const;
         virtual void replaceChild(WaveData* wd);
+        virtual bool isLoadable() const override;
     };
 }

@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QFontMetrics>
 #include <QDebug>
+#include <math.h>
 
 namespace hal {
     void WaveFormPrimitiveHline::paint(int y0, QPainter& painter)
@@ -26,11 +27,39 @@ namespace hal {
         painter.setPen(savePen);
     }
 
+    WaveFormPrimitiveFilled::WaveFormPrimitiveFilled(float x0, float x1, int val)
+        : WaveFormPrimitive(x0,x1)
+    {
+        memset(mAccumTime, 0, sizeof(mAccumTime));
+        if (0 <= val && val <= 1)
+            mAccumTime[val] = x1-x0;
+    }
+
+    void WaveFormPrimitiveFilled::add(const WaveFormPrimitiveFilled &other)
+    {
+        for (int i=0; i<2; i++)
+            mAccumTime[i] += other.mAccumTime[i];
+    }
+
     void WaveFormPrimitiveFilled::paint(int y0, QPainter& painter)
     {
         QBrush saveBrush = painter.brush();
-        QBrush fillBrush(painter.pen().color());
-        painter.setBrush(fillBrush);
+        QColor fillCol = painter.pen().color();
+        double sum = mAccumTime[0] + mAccumTime[1];
+        if (sum > 0)
+        {
+            if (mAccumTime[1] > mAccumTime[0])
+            {
+                painter.drawLine(QLineF(mX0,0,mX1,0));
+                fillCol.setAlpha(floor(55 + 400 * mAccumTime[0] / sum));
+            }
+            else
+            {
+                painter.drawLine(QLineF(mX0,14,mX1,14));
+                fillCol.setAlpha(floor(55 + 400 * mAccumTime[1] / sum));
+            }
+        }
+        painter.setBrush(QBrush(fillCol));
         painter.drawRect(QRectF(mX0,y0,mX1-mX0,14));
         painter.setBrush(saveBrush);
     }

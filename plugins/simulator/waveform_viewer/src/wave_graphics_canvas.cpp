@@ -16,15 +16,15 @@ namespace hal {
         : QAbstractScrollArea(parent), mWaveDataList(wdlist), mWaveItemHash(wHash), mMoveCursor(false), mDragZoom(nullptr)
     {
         setContentsMargins(0,0,0,0);
-        mTranform = WaveTransform(0, 3000, 1.);
+        mTransform = WaveTransform(0, 3000, 1.);
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         mRenderEngine = new WaveRenderEngine(this,mWaveDataList,mWaveItemHash,viewport());
-        mScrollbar = new WaveScrollbar(&mTranform,this);
+        mScrollbar = new WaveScrollbar(&mTransform,this);
         setHorizontalScrollBar(mScrollbar);
-        mTimescale = new WaveTimescale(&mTranform,mScrollbar,this);
+        mTimescale = new WaveTimescale(&mTransform,mScrollbar,this);
         mTimescale->show();
-        mCursor = new WaveCursor(&mTranform,mScrollbar,this);
+        mCursor = new WaveCursor(&mTransform,mScrollbar,this);
         mCursor->show();
     }
 
@@ -106,10 +106,10 @@ namespace hal {
             double dt = mScrollbar->tPos(geo.right()) - t0;
             if (dt > 0)
             {
-                mTranform.setScale(viewport()->width()/dt);
+                mTransform.setScale(viewport()->width()/dt);
                 mScrollbar->adjust(viewport()->size().width());
-                mScrollbar->setVleft(mTranform.vPos(t0));
-                qDebug() << "zoom t0 dt vpos" << t0 << dt << mTranform.vPos(t0);
+                mScrollbar->setVleft(mTransform.vPos(t0));
+                qDebug() << "zoom t0 dt vpos" << t0 << dt << mTransform.vPos(t0);
                 mTimescale->setScale(viewport()->size().width());
                 mRenderEngine->update();
             }
@@ -118,9 +118,9 @@ namespace hal {
 
     void WaveGraphicsCanvas::handleTimeframeChanged(const WaveDataTimeframe* tframe)
     {
-        if (mTranform.tMin() == tframe->sceneMinTime() && mTranform.tMax() == tframe->sceneMaxTime()) return;
-        mTranform.setTmin(tframe->sceneMinTime());
-        mTranform.setTmax(tframe->sceneMaxTime());
+        if (mTransform.tMin() == tframe->sceneMinTime() && mTransform.tMax() == tframe->sceneMaxTime()) return;
+        mTransform.setTmin(tframe->sceneMinTime());
+        mTransform.setTmax(tframe->sceneMaxTime());
         mRenderEngine->update();
     }
 
@@ -149,7 +149,7 @@ namespace hal {
 
     void WaveGraphicsCanvas::wheelEvent(QWheelEvent * evt)
     {
-        double oldScale = mTranform.scale();
+        double oldScale = mTransform.scale();
         double newScale = oldScale;
         int dz = evt->angleDelta().y();
         if (dz > 0)
@@ -159,13 +159,46 @@ namespace hal {
         else
             return;
         if (newScale >= 100) return;
-        if (newScale*mTranform.deltaT()*1.2<viewport()->width() && newScale < oldScale) return;
+        if (newScale*mTransform.deltaT()*1.2<viewport()->width() && newScale < oldScale) return;
         int xEvent = evt->pos().x();
         double tEvent = mScrollbar->tPos(xEvent);
 
-        mTranform.setScale(newScale);
+        mTransform.setScale(newScale);
         mScrollbar->updateScale(newScale-oldScale,tEvent,viewport()->width());
         mRenderEngine->update();
         mTimescale->setScale(viewport()->size().width());
     }
+
+    void  WaveGraphicsCanvas::toggleZoom()
+    {
+        // try zoom out
+        int w = viewport()->size().width();
+        double dt = mTransform.deltaT();
+        if (dt <= 0) return;
+        double newScale = w / dt;
+        double vleft = 0;
+        if (mTransform.scale() <= newScale)
+        {
+            // already zoomed out to max, try zoom in
+            TimeInterval shortest;
+            for (const WaveItem* wi : mWaveItemHash->values())
+            {
+                if (!wi->isVisibile() || ! wi->mVisibleRange) continue;
+                if (wi->mPainted.shortestToggle() < shortest) shortest = wi->mPainted.shortestToggle();
+            }
+            if (shortest.mCenterTime <= 0 || shortest.mDuration <= 0) return;
+            newScale = 6 / shortest.mDuration;
+            if (mTransform.scale() >= newScale) return;
+            mTransform.setScale(newScale);
+            vleft = mTransform.vPos(shortest.mCenterTime) - w/2;
+            if (vleft + w > mTransform.vMax()) vleft = mTransform.vMax() - w;
+            if (vleft < 0) vleft = 0;
+        }
+        else
+            mTransform.setScale(newScale);
+        mScrollbar->setVleft(vleft);
+        mRenderEngine->update();
+        mTimescale->setScale(viewport()->size().width());
+    }
+
 }

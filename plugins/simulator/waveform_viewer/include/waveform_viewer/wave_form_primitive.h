@@ -16,7 +16,7 @@ namespace hal {
         virtual void paint(int y0, QPainter& painter) = 0;
         float x0() const { return mX0; }
         float x1() const { return mX1; }
-        bool isInRange(int x) const { return mX0 < x && x < mX1; }
+        bool isInRange(int x) const { return mX0 <= x && x < mX1; }
         virtual int value() const { return SaleaeDataTuple::sReadError; }
     };
 
@@ -46,9 +46,13 @@ namespace hal {
 
     class WaveFormPrimitiveFilled : public WaveFormPrimitive
     {
+        double mAccumTime[2];
     public:
-        WaveFormPrimitiveFilled(float x0, float x1) : WaveFormPrimitive(x0,x1) {;}
+        static const int sFilledPrimitive = -96;
+        WaveFormPrimitiveFilled(float x0, float x1, int val);
         void paint(int y0, QPainter& painter);
+        void add(const WaveFormPrimitiveFilled& other);
+        int value() const { return sFilledPrimitive; }
     };
 
     class WaveFormPrimitiveValue : public WaveFormPrimitive

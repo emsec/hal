@@ -19,7 +19,7 @@ namespace hal {
         Q_OBJECT
         WaveDataList* mWaveDataList;
         WaveItemHash* mWaveItemHash;
-        WaveTransform mTranform;
+        WaveTransform mTransform;
         WaveRenderEngine* mRenderEngine;
         WaveScrollbar* mScrollbar;
         WaveTimescale* mTimescale;
@@ -42,6 +42,8 @@ namespace hal {
         void scrollContentsBy(int dx, int dy) override;
     public:
         WaveGraphicsCanvas(WaveDataList* wdlist, WaveItemHash* wHash, QWidget* parent = nullptr);
-        const WaveTransform* transform() const { return &mTranform; }
+        const WaveTransform* transform() const { return &mTransform; }
+        const WaveItemHash* waveItemHash() const { return mWaveItemHash; }
+        void toggleZoom();
     };
 }
