@@ -4,6 +4,8 @@
 #include "waveform_viewer/wave_item.h"
 #include <QAbstractItemModel>
 #include <QList>
+#include <QDir>
+#include <QThread>
 
 namespace hal {
     class WaveData;
@@ -17,6 +19,25 @@ namespace hal {
             : WaveDataGroup(wdList,0,"root") {;}
         void recalcData() override {;}
         bool moveGroupPosition(int sourceRow, int targetRow);
+    };
+
+    class WaveValueThread : public QThread
+    {
+        Q_OBJECT
+        WaveItem* mItem;
+        QDir mWorkDir;
+        float mTpos;
+        int mXpos;
+        int mValue;
+        bool mAbort;
+    Q_SIGNALS:
+        void gotValue(WaveItem* item);
+    private Q_SLOTS:
+        void handleValueThreadFinished();
+    public:
+        WaveValueThread(WaveItem* item, const QString& workdir, float tpos, int xpos, QObject* parent = nullptr);
+        void run() override;
+        void abort() { mAbort = true; }
     };
 
     class WaveTreeModel : public QAbstractItemModel
@@ -36,6 +57,7 @@ namespace hal {
         int mCursorXpos;
         bool mIgnoreSignals;
         int mReorderRequestWaiting;
+        QMap<WaveItem*,WaveValueThread*> mValueThreads;
 
         class ReorderRequest
         {
@@ -58,9 +80,10 @@ namespace hal {
         void inserted(QModelIndex index);
         void triggerReorder();
         void numberEntriesChanged(int count);
+        void triggerStartValueThread(WaveItem* item) const;
 
     public Q_SLOTS:
-        void handleUpdateValueFormat();
+        void handleUpdateValueColumn();
         void handleWaveAdded(int iwave);
         void handleNameUpdated(int iwave);
         void handleWaveAddedToGroup(const QVector<u32>& netIds, int grpId);
@@ -70,7 +93,9 @@ namespace hal {
         void handleCursorMoved(float tCursor, int xpos);
         void forwardBeginResetModel();
         void forwardEndResetModel();
-        void handleGotCursorValue();
+        void handleValueLoaderFinished();
+        void handleStartValueThread(WaveItem* item);
+        void handleEndValueThread(WaveItem* item);
 
     public:
         WaveTreeModel(WaveDataList* wdlist, WaveItemHash* wHash, QObject* obj=nullptr);

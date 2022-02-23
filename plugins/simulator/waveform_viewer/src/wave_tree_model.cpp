@@ -20,6 +20,7 @@ namespace hal {
     {
 
         mRoot = new WaveDataRoot(mWaveDataList);
+        connect(this,&WaveTreeModel::triggerStartValueThread,this,&WaveTreeModel::handleStartValueThread,Qt::QueuedConnection);
 
         /*
         for (int i=100; i<104; i++)
@@ -141,7 +142,7 @@ namespace hal {
     {
         int oldCount = mWaveItemHash->size();
         WaveItem* wi = mWaveItemHash->addOrReplace(wd,tp,iwave,parentId);
-        connect(wi,&WaveItem::gotCursorValue,this,&WaveTreeModel::handleGotCursorValue);
+        connect(wi,&WaveItem::gotCursorValue,this,&WaveTreeModel::handleUpdateValueColumn);
         int count = mWaveItemHash->size();
         if (count != oldCount) Q_EMIT numberEntriesChanged(count);
     }
@@ -193,7 +194,8 @@ namespace hal {
                 addOrReplaceItem(wd,WaveItemIndex::Wire,iwave,grpId);
             else
             {
-                wi->setWaveData(wd);
+                if (wi->wavedata() != wd)
+                    wi->setWaveData(wd);
                 wi->clearRequest(WaveItem::DeleteRequest);
                 wi->clearRequest(WaveItem::DeleteAcknowledged);
                 wi->setRequest(WaveItem::SetPosition);
@@ -407,19 +409,26 @@ namespace hal {
 
     void WaveTreeModel::handleCursorMoved(float tCursor, int xpos)
     {
+        if (tCursor == mCursorTime && xpos == mCursorXpos) return;
+        if (!mValueThreads.isEmpty())
+        {
+            for (WaveValueThread* wvt : mValueThreads.values())
+                wvt->abort();
+            mValueThreads.clear();
+        }
         mCursorTime = tCursor;
         mCursorXpos = xpos;
-        handleGotCursorValue();
+        handleUpdateValueColumn();
     }
 
-    void WaveTreeModel::handleGotCursorValue()
+    void WaveTreeModel::handleEndValueThread(WaveItem* item)
     {
-        QModelIndex i0 = createIndex(0,2,mRoot);
-        QModelIndex i1 = createIndex(mRoot->size()-1,2,mRoot);
-        Q_EMIT dataChanged(i0,i1);
+        auto it = mValueThreads.find(item);
+        if (it != mValueThreads.end()) mValueThreads.erase(it);
+        handleUpdateValueColumn();
     }
 
-    void WaveTreeModel::handleUpdateValueFormat()
+    void WaveTreeModel::handleUpdateValueColumn()
     {
         QModelIndex i0 = createIndex(0,2,mRoot);
         QModelIndex i1 = createIndex(mRoot->size()-1,2,mRoot);
@@ -504,6 +513,18 @@ namespace hal {
         Q_EMIT dataChanged(parentValueInx,parentValueInx);
     }
 
+    void WaveTreeModel::handleStartValueThread(WaveItem* item)
+    {
+        if (!mValueThreads.contains(item) && !item->isLoading() && !item->isThreadBusy())
+        {
+            QString workdir = QString::fromStdString(mWaveDataList->saleaeDirectory().get_directory());
+            WaveValueThread* wvt = new WaveValueThread(item,workdir,mCursorTime,mCursorXpos);
+            connect(wvt,&WaveValueThread::gotValue,this,&WaveTreeModel::handleEndValueThread);
+            wvt->start();
+            mValueThreads.insert(item,wvt);
+        }
+    }
+
     int WaveTreeModel::valueAtCursor(const QModelIndex& index) const
     {
         WaveData* wd = item(index);
@@ -518,7 +539,12 @@ namespace hal {
         }
         WaveItem* wi = mWaveItemHash->value(wii);
         if (!wi) return SaleaeDataTuple::sReadError;
-        return wi->cursorValue(mCursorTime,mCursorXpos);
+        int retval = wi->cursorValue(mCursorTime,mCursorXpos);
+        if (retval == SaleaeDataTuple::sReadError)
+        {
+            Q_EMIT triggerStartValueThread(wi);
+        }
+        return retval;
     }
 
 
@@ -638,5 +664,56 @@ namespace hal {
         mGroupList.insert( targetRow, grp);
         return true;
     }
+
+    //------------------------
+
+    /*
+    class WaveValueThread : public QThread
+    {
+        Q_OBJECT
+        WaveItem* mItem;
+        QDir mWorkDir;
+        float mTposition;
+        int mValue;
+    public:
+        WaveValueThread(WaveItem* parentItem, const QString& workdir, float tpos);
+        void run() override;
+    };
+    */
+
+        WaveValueThread::WaveValueThread(WaveItem* item, const QString& workdir, float tpos, int xpos, QObject *parent)
+            : QThread(parent), mItem(item), mWorkDir(workdir), mTpos(tpos), mXpos(xpos), mAbort(false)
+        {
+            connect(this,&QThread::finished,this,&WaveValueThread::handleValueThreadFinished);
+        }
+
+        void WaveValueThread::run()
+        {
+            SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mItem->wavedata()->fileIndex())).toStdString());
+            if (sif.good())
+            {
+                SaleaeDataBuffer* sdb = sif.get_buffered_data();
+                if (!sdb->isNull() && !mAbort)
+                {
+                    int lastValue = sdb->mValueArray[0];
+                    for (quint64 i=0; i<sdb->mCount; i++)
+                    {
+                        if (mAbort || sdb->mTimeArray[i] > mTpos) break;
+                        lastValue = sdb->mValueArray[i];
+                    }
+                    if (!mAbort)
+                        mItem->mPainted.setCursorValue(mTpos,mXpos,lastValue);
+                }
+                delete sdb;
+            }
+        }
+
+        void WaveValueThread::handleValueThreadFinished()
+        {
+            if (!mAbort) Q_EMIT gotValue(mItem);
+            deleteLater();
+        }
+
+    //------------------------
 
 }

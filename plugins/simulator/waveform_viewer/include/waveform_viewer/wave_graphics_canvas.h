@@ -25,6 +25,8 @@ namespace hal {
         WaveTimescale* mTimescale;
         WaveCursor* mCursor;
         bool mMoveCursor;
+        float mCursorTime;
+        int mCursorXpos;
         QWidget* mDragZoom;
     Q_SIGNALS:
         void cursorMoved(float tCursor, int xpos);
@@ -45,5 +47,6 @@ namespace hal {
         const WaveTransform* transform() const { return &mTransform; }
         const WaveItemHash* waveItemHash() const { return mWaveItemHash; }
         void toggleZoom();
+        void setCursorPosition(float tCursor, int xpos);
     };
 }

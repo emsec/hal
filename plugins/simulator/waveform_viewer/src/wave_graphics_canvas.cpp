@@ -13,7 +13,8 @@
 
 namespace hal {
     WaveGraphicsCanvas::WaveGraphicsCanvas(WaveDataList *wdlist, WaveItemHash *wHash, QWidget *parent)
-        : QAbstractScrollArea(parent), mWaveDataList(wdlist), mWaveItemHash(wHash), mMoveCursor(false), mDragZoom(nullptr)
+        : QAbstractScrollArea(parent), mWaveDataList(wdlist), mWaveItemHash(wHash), mMoveCursor(false),
+          mCursorTime(100), mCursorXpos(100), mDragZoom(nullptr)
     {
         setContentsMargins(0,0,0,0);
         mTransform = WaveTransform(0, 3000, 1.);
@@ -61,14 +62,20 @@ namespace hal {
         }
     }
 
+    void WaveGraphicsCanvas::setCursorPosition(float tCursor, int xpos)
+    {
+        if (mCursorTime == tCursor && mCursorXpos == xpos) return;
+        mCursorTime = tCursor;
+        mCursorXpos = xpos;
+        Q_EMIT cursorMoved(tCursor,xpos);
+    }
+
     void WaveGraphicsCanvas::mouseMoveEvent(QMouseEvent* evt)
     {
         if (mMoveCursor)
         {
             mTimescale->update();
             mCursor->setCursorPosition(evt->pos());
-            int xpos = evt->pos().x();
-            Q_EMIT cursorMoved(mScrollbar->tPos(xpos),xpos);
         }
         else if (mDragZoom)
         {
@@ -94,8 +101,6 @@ namespace hal {
             mTimescale->update();
             mCursor->setCursorPosition(evt->pos());
             mMoveCursor = false;
-            int xpos = evt->pos().x();
-            Q_EMIT cursorMoved(mScrollbar->tPos(xpos),xpos);
         }
         if (mDragZoom)
         {
@@ -142,8 +147,6 @@ namespace hal {
     {
         mTimescale->update();
         mCursor->setCursorPosition(evt->pos());
-        int xpos = evt->pos().x();
-        Q_EMIT cursorMoved(mScrollbar->tPos(xpos),xpos);
         mMoveCursor = false;
     }
 

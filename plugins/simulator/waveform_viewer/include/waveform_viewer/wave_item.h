@@ -64,13 +64,9 @@ namespace hal {
         float mMaxTransition;
         bool mVisibile;
         bool mSelected;
-        float mCursorTime;
-        int mCursorValue;
-        QString mWorkdir;
 
     public Q_SLOTS:
         void handleWaveLoaderFinished();
-        void handleValueLoaderFinished();
 
     Q_SIGNALS:
         void doneLoading();
@@ -114,9 +110,8 @@ namespace hal {
         void incrementLoadProgress();
         static bool sValuesAsText;
         static const char* sLineColor[];
-        int cursorValue(float tCursor, int xpos);
-        void setCursorValue(int val) { mCursorValue = val; }
         bool isGroup() const { return mData->netType() == WaveData::NetGroup; }
+        int cursorValue(float tCursor, int xpos);
     };
 
     class WaveItemHash : public QHash<WaveItemIndex,WaveItem*>

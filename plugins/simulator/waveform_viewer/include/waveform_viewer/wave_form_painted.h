@@ -1,6 +1,7 @@
 #pragma once
 #include <QList>
 #include <QMap>
+#include <QMutex>
 
 class QPainter;
 
@@ -41,6 +42,10 @@ namespace hal {
         QList<WaveFormPrimitive*> mPrimitives;
         WaveFormPaintValidity mValidity;
         TimeInterval mShortestToggle;
+        float mCursorTime;
+        int mCursorXpos;
+        int mCursorValue;
+        QMutex mMutex;
 
     public:
         WaveFormPainted();
@@ -57,11 +62,14 @@ namespace hal {
         float x0() const;
         float x1() const;
 
-        int valueXpos(int xpos) const;
+        int valueXpos(int xpos);
 
         const WaveFormPaintValidity& validity() const { return mValidity; }
         bool isEmpty() const { return mPrimitives.isEmpty(); }
-        QList<float> intervalLimits() const;
+        QList<float> intervalLimits();
         TimeInterval shortestToggle() const { return mShortestToggle; }
+        void setCursorValue(float tCursor, int xpos, int val);
+        int cursorValueStored(float tCursor, int xpos) const;
+        int cursorValuePainted(float tCursor, int xpos);
     };
 }

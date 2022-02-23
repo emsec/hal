@@ -1,5 +1,6 @@
 #include "waveform_viewer/wave_cursor.h"
 #include "waveform_viewer/wave_scrollbar.h"
+#include "waveform_viewer/wave_graphics_canvas.h"
 #include <QBrush>
 #include <QPen>
 #include <QPainter>
@@ -49,6 +50,8 @@ namespace hal {
         paint.setFont(font);
 
         double tval = mScrollbar->tPos(mPosition.x());
+        WaveGraphicsCanvas* wgc = static_cast<WaveGraphicsCanvas*>(parent());
+        if (wgc) wgc->setCursorPosition(tval,mPosition.x());
         paint.drawText(rectTvalue, QString::number(tval,'f',0), Qt::AlignHCenter | Qt::AlignVCenter);
     }
 

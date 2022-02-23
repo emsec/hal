@@ -12,45 +12,6 @@
 
 namespace hal {
 
-/*
-class WaveValueThread : public QThread
-{
-    Q_OBJECT
-    WaveItem* mItem;
-    QDir mWorkDir;
-    float mTposition;
-    int mValue;
-public:
-    WaveValueThread(WaveItem* parentItem, const QString& workdir, float tpos);
-    void run() override;
-};
-*/
-
-    WaveValueThread::WaveValueThread(WaveItem* parentItem, const QString& workdir, float tpos)
-        : QThread(parentItem), mItem(parentItem), mWorkDir(workdir), mTposition(tpos)
-    {;}
-
-    void WaveValueThread::run()
-    {
-        SaleaeInputFile sif(mWorkDir.absoluteFilePath(QString("digital_%1.bin").arg(mItem->wavedata()->fileIndex())).toStdString());
-        if (sif.good())
-        {
-            SaleaeDataBuffer* sdb = sif.get_buffered_data();
-            if (!sdb->isNull())
-            {
-                int lastValue = sdb->mValueArray[0];
-                for (quint64 i=0; i<sdb->mCount; i++)
-                {
-                    if (sdb->mTimeArray[i] > mTposition) break;
-                    lastValue = sdb->mValueArray[i];
-                }
-                mItem->setCursorValue(lastValue);
-            }
-            delete sdb;
-        }
-    }
-
-//------------------------
 
     WaveLoaderThread::WaveLoaderThread(WaveItem* parentItem, const QString &workdir,
                                        const WaveTransform* trans, const WaveScrollbar* sbar)

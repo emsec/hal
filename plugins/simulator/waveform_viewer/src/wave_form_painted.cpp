@@ -37,7 +37,8 @@ namespace hal {
         return (mWidth == 0 || mScale <= 0);
     }
 
-    WaveFormPainted::WaveFormPainted()  {;}
+    WaveFormPainted::WaveFormPainted()
+        : mCursorTime(-1), mCursorValue(SaleaeDataTuple::sReadError) {;}
 
     WaveFormPainted::~WaveFormPainted()
     {
@@ -46,6 +47,7 @@ namespace hal {
 
     void  WaveFormPainted::clearPrimitives()
     {
+        QMutexLocker lock(&mMutex);
         for (WaveFormPrimitive* wfp : mPrimitives)
             delete wfp;
         mPrimitives.clear();
@@ -55,20 +57,23 @@ namespace hal {
 
     void WaveFormPainted::paint(int y0, QPainter& painter)
     {
+        QMutexLocker lock(&mMutex);
         for (WaveFormPrimitive* wfp : mPrimitives)
             wfp->paint(y0,painter);
     }
 
-    int WaveFormPainted::valueXpos(int xpos) const
+    int WaveFormPainted::valueXpos(int xpos)
     {
+        QMutexLocker lock(&mMutex);
         for (const WaveFormPrimitive* wfp : mPrimitives)
             if (wfp->isInRange(xpos))
                 return wfp->value();
         return SaleaeDataTuple::sReadError;
     }
 
-    QList<float> WaveFormPainted::intervalLimits() const
+    QList<float> WaveFormPainted::intervalLimits()
     {
+        QMutexLocker lock(&mMutex);
         QList<float> retval;
         for (const WaveFormPrimitive* wfp : mPrimitives)
         {
@@ -82,7 +87,7 @@ namespace hal {
     void WaveFormPainted::generateGroup(const WaveData* wd, const WaveItemHash *hash)
     {
         clearPrimitives();
-        QList<const WaveFormPainted*> wirePainted;
+        QList<WaveFormPainted*> wirePainted;
         QMap<float,int> transitionPos;
         const WaveDataGroup* grp = dynamic_cast<const WaveDataGroup*>(wd);
         if (!grp) return;
@@ -90,7 +95,7 @@ namespace hal {
         {
             if (iwave<0) return;
             WaveItemIndex wii(iwave, WaveItemIndex::Wire, grp->id());
-            const WaveItem* wi = hash->value(wii);
+            WaveItem* wi = hash->value(wii);
             if (!wi || wi->mPainted.isEmpty()) return;
             wirePainted.append(&(wi->mPainted));
             for (float x : wi->mPainted.intervalLimits())
@@ -114,7 +119,7 @@ namespace hal {
             value = 0;
             lastX = nextX;
             int mask = 1;
-            for (const WaveFormPainted* wfp : wirePainted)
+            for (WaveFormPainted* wfp : wirePainted)
             {
                 int childVal = wfp->valueXpos(nextX);
                 if (childVal == WaveFormPrimitiveFilled::sFilledPrimitive)
@@ -141,6 +146,7 @@ namespace hal {
         WaveFormPrimitive* pendingTransition = nullptr;
 
         quint64 tleft = sbar->tLeftI();
+        bool refreshCursor = (mCursorTime >= tleft);
         int width = sbar->viewportWidth();
 
         int valNext = wdp->startValue(tleft);
@@ -176,6 +182,12 @@ namespace hal {
                     xNext = xMax;
                     *loop = false;
                 }
+            }
+
+            if (refreshCursor && (tNext > mCursorTime || !loop))
+            {
+                mCursorValue = valLast;
+                refreshCursor = false;
             }
 
             if (tNext > tLast)
@@ -238,5 +250,33 @@ namespace hal {
             if ((*it)->x1() > retval)
                 retval = (*it)->x1();
         return retval;
+    }
+
+    void WaveFormPainted::setCursorValue(float tCursor, int xpos, int val)
+    {
+        mCursorTime = tCursor;
+        mCursorXpos = xpos;
+        mCursorValue = val;
+    }
+
+    int WaveFormPainted::cursorValueStored(float tCursor, int xpos) const
+    {
+        // stored value not valid
+        if (tCursor != mCursorTime || xpos != mCursorXpos)
+            return SaleaeDataTuple::sReadError;
+
+        // can deliver value - might be invalid though
+        return mCursorValue;
+    }
+
+    int WaveFormPainted::cursorValuePainted(float tCursor, int xpos)
+    {
+        // try get from painted primitives
+        mCursorValue = valueXpos(xpos);
+        if (mCursorValue == WaveFormPrimitiveFilled::sFilledPrimitive)
+            mCursorValue = SaleaeDataTuple::sReadError;
+        mCursorTime = tCursor;
+        mCursorXpos = xpos;
+        return mCursorValue;
     }
 }

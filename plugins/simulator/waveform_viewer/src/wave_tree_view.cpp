@@ -203,7 +203,7 @@ namespace hal {
 
         QAction* act = static_cast<QAction*>(sender());
         grp->setValueBase(act->data().toInt());
-        wtm->handleUpdateValueFormat();
+        wtm->handleUpdateValueColumn();
         Q_EMIT valueBaseChanged();
     }
 
