@@ -78,7 +78,7 @@ namespace hal
         /**
          * Set the direction of the pin.
          * 
-         * @returns The pin direction.
+         * @param[in] direction - The pin direction.
          */
         void set_direction(PinDirection direction)
         {
@@ -98,7 +98,7 @@ namespace hal
         /**
          * Set the type of the pin.
          * 
-         * @returns The pin type.
+         * @param[in] type - The pin type.
          */
         void set_type(PinType type)
         {

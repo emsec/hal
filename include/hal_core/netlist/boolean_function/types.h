@@ -156,7 +156,11 @@ namespace hal
              */
             friend std::ostream& operator<<(std::ostream& out, const Constraint& constraint);
 
-            /// Short-hand helper to translate the SMT constraint to a string.
+            /**
+             * Translate the SMT constraint into its string representation.
+             * 
+             * @returns A string representing the SMT constraint.
+             */
             std::string to_string() const;
         };
 
@@ -251,7 +255,9 @@ namespace hal
             ////////////////////////////////////////////////////////////////////////
 
             /// Default constructor (required for Result<T> initialization)
-            SolverResult() : type(SolverResultType::Unknown), model({}) {}
+            SolverResult() : type(SolverResultType::Unknown), model({})
+            {
+            }
 
             /**
              * Creates a satisfiable result with an optional model.

@@ -48,8 +48,8 @@ namespace hal
     {                                              \
         result_constructor_type::OK(), __VA_ARGS__ \
     }
-#define ERR(message)                                     \
-    {                                                    \
+#define ERR(message)                                   \
+    {                                                  \
         result_constructor_type::ERR(), Error(message) \
     }
 
@@ -57,6 +57,7 @@ namespace hal
     class [[nodiscard]] Result final
     {
     public:
+        //// cannot be instantiated with Error type
         static_assert(!std::is_same<T, Error>(), "Cannot initialize a Result<Error>.");
 
         template<typename... Args, typename U = T, typename std::enable_if_t<std::is_same_v<U, void>, int> = 0>
@@ -79,55 +80,109 @@ namespace hal
             m_result = error;
         }
 
+        /**
+         * Construct a valid result carrying a result value.
+         * 
+         * @param[in] value - The result value.
+         * @return The result.
+         */
         template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
         static Result<T> Ok(const T& value)
         {
             return OK(value);
         }
 
+        /**
+         * @copydoc Ok(const T&)
+         */
         template<typename... Args, typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
         static Result<T> Ok(T&& value)
         {
             return OK(std::move(value));
         }
 
-        bool operator==(const Result<T>& other) 
+        /**
+         * Check whether two results are equal.
+         *
+         * @param[in] other - The result to compare against.
+         * @returns True if both results are equal, false otherwise.
+         */
+        bool operator==(const Result<T>& other)
         {
             return this->m_result == other.m_result;
         }
 
-        bool operator!=(const Result<T>& other) 
+        /**
+         * Check whether two results are unequal.
+         *
+         * @param[in] other - The result to compare against.
+         * @returns True if both results are unequal, false otherwise.
+         */
+        bool operator!=(const Result<T>& other)
         {
             return !(*this == other);
         }
 
+        /**
+         * Check whether the result is valid, i.e., not an error.
+         * 
+         * @returns `true` if the result is valid, `false` otherwise.
+         */
         bool is_ok() const
         {
             return !is_error();
         }
 
+        /**
+         * Check whether the result is an error.
+         * 
+         * @returns `true` if the result is an error, `false` otherwise.
+         */
         bool is_error() const
         {
             return std::holds_alternative<Error>(m_result);
         }
 
+        /**
+         * Get the value of the result.
+         * It is up to the user to check whether the result is valid using `Result::is_ok()` beforehand.
+         * 
+         * @tparam U - The type of the result value.
+         * @returns The result value.
+         */
         template<typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
         const T& get() const
         {
             return std::get<T>(m_result);
         }
 
+        /**
+         * @copydoc get()
+         */
         template<typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
-        T&& get() 
+        T&& get()
         {
             return std::get<T>(std::move(m_result));
         }
 
+        /**
+         * Get the error of the result.
+         * It is up to the user to check whether the result is an error using `Result::is_error()` beforehand.
+         * 
+         * @returns The error.
+         */
         Error get_error() const
         {
             return std::get<Error>(m_result);
         }
 
+        /**
+         * Map the result to a different user-defined data type using the provided mapping function.
+         * 
+         * @tparam U - The target data type.
+         * @param[in] f - The mapping function.
+         * @returns The result mapped to the target data type.
+         */
         template<typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
         Result<U> map(const std::function<Result<U>(const T&)>& f) const
         {

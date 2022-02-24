@@ -136,7 +136,7 @@ namespace hal
         /**
          * Set the direction of the pin group.
          * 
-         * @returns The direction of the pin group.
+         * @param[in] direction - The direction of the pin group.
          */
         void set_direction(PinDirection direction)
         {
@@ -157,6 +157,7 @@ namespace hal
          * Get the (ordered) pins of the pin groups.
          * The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
          * 
+         * @param[in] filter - Filter applied to the pins.
          * @returns The ordered pins.
          */
         std::vector<T*> get_pins(const std::function<bool(T*)>& filter = nullptr) const

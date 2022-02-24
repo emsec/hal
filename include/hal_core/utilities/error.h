@@ -33,13 +33,28 @@ namespace hal
         Error() = default;
         // Error(const Error&) = default;
         Error(Error&&) = default;
-        Error& operator=(const Error&)  = default;
-        Error& operator=(Error&&)  = default;
+        Error& operator=(const Error&) = default;
+        Error& operator=(Error&&) = default;
 
+        /**
+         * Construct an error from an error message.
+         * 
+         * @param[in] message - The error message.
+         */
         explicit Error(const std::string& message) : m_message(message){};
 
+        /**
+         * Construct an error from an existing one by copying its error message.
+         * 
+         * @param[in] error - The existing error.
+         */
         Error(const Error& error) : m_message(error.get()){};
 
+        /**
+         * Get the error message.
+         * 
+         * @returns The error message.
+         */
         const std::string& get() const
         {
             return m_message;

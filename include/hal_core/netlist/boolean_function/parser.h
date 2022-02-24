@@ -41,24 +41,17 @@ namespace hal
         /// TokenType refers to a token identifier for a Boolean function string.
         enum class TokenType
         {
-            /// refers to a Boolean And operation (e.g., "&")
-            And,
-            /// refers to a Boolean Not operation (e.g., "!")
-            Not,
-            /// refers to a Boolean Or operation (e.g., "|"")
-            Or,
-            /// refers to a Boolean Xor operation (e.g., "^")
-            Xor,
 
-            /// refers to a Boolean variable (e.g., "i0")
-            Variable,
-            /// refers to a Boolean constant (e.g., "0" or "1")
-            Constant,
+            And, /**< Boolean And operation (e.g., "&"). */
+            Not, /**< Boolean Not operation (e.g., "!&"). */
+            Or,  /**< Boolean Or operation (e.g., "|"). */
+            Xor, /**< Boolean Xor operation (e.g., "^"). */
 
-            /// refers to an open bracket (e.g., "(")
-            BracketOpen,
-            /// refers to a closed open bracket (e.g., "(")
-            BracketClose,
+            Variable, /**< Boolean variable (e.g., "i0"). */
+            Constant, /**< Boolean constant (e.g., "0" or "1"). */
+
+            BracketOpen,  /**< An opening bracket (e.g., "("). */
+            BracketClose, /**< A closing bracket (e.g., "("). */
         };
 
         /// Token refers to a token identifier and accompanied data.
@@ -120,6 +113,8 @@ namespace hal
             /**
              * Creates an `Variable` token.
              * 
+             * @param[in] name - The name of the variable.
+             * @param[in] size - The bit-size of the variable.  
              * @returns The `Variable` token.
              */
             static Token Variable(std::string name, u16 size);
@@ -127,6 +122,7 @@ namespace hal
             /**
              * Creates an `Constant` token.
              * 
+             * @param[in] value - The (multi-bit) value of the constant.
              * @returns The `Constant` token.
              */
             static Token Constant(std::vector<BooleanFunction::Value> value);
@@ -169,6 +165,7 @@ namespace hal
              * Outputs a token to the given output stream.
              * 
              * @param[in] os - The output stream.
+             * @param[in] token - The token to be output.
              * @returns The output stream.
              */
             friend std::ostream& operator<<(std::ostream& os, const Token& token);

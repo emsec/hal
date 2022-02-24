@@ -392,7 +392,7 @@ namespace hal
         /**
          * Checks whether the Boolean function is of type `Index` and holds a specific value.
          * 
-         * @param[in] value - The value to check for.
+         * @param[in] index - The index value to check for.
          * @returns `true` if the Boolean function is of type `Index` and holds the given value, `false` otherwise.
          */
         bool has_index_value(u16 index) const;
@@ -440,6 +440,7 @@ namespace hal
         /**
          * Translates the Boolean function into its string representation.
          * 
+         * @param[in] printer - A function a node and its operands as inputs and outputs their string representation. Allows for different grammers to be printed. Defaults to the 'default_printer'.
          * @returns The Boolean function as a string.
          */
         std::string to_string(std::function<Result<std::string>(const BooleanFunction::Node& node, std::vector<std::string>&& operands)>&& printer = default_printer) const;

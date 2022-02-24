@@ -226,8 +226,6 @@ namespace hal
          * Iterates over all nets connected to at least one gate of the module to update the nets, internal nets, input nets, and output nets of the module.
          * Has no effect on module pins. 
          * \warning{\b WARNING: can only be used when automatic net checks have been disabled using `Netlist::enable_automatic_net_checks`.}
-         * 
-         * @returns `true` on success, `false` otherwise.
          */
         void update_nets();
 
@@ -454,7 +452,7 @@ namespace hal
          * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
          * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
-         * @param delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
+         * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
          * @returns The pin group on success, an error message otherwise.
          */
         Result<PinGroup<ModulePin>*> create_pin_group(const u32 id,
@@ -476,7 +474,7 @@ namespace hal
          * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
          * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
-         * @param delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
+         * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
          * @returns The pin group on success, an error message otherwise.
          */
         Result<PinGroup<ModulePin>*> create_pin_group(const std::string& name,
@@ -501,7 +499,7 @@ namespace hal
          * 
          * @param[in] pin_group - The new pin group.
          * @param[in] pin - The pin to be added.
-         * @param delete_empty_groups - Set `true` to delete groups that are empty after the pin has been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
+         * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pin has been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
          * @returns Ok on success, an error message otherwise.
          */
         Result<std::monostate> assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
@@ -523,7 +521,7 @@ namespace hal
          * 
          * @param[in] pin_group - The old pin group.
          * @param[in] pin - The pin to be removed.
-         * @param delete_empty_groups - Set `true` to delete the group of it is empty after the pin has been removed, `false` to keep the empty group. Defaults to `true`.
+         * @param[in] delete_empty_groups - Set `true` to delete the group of it is empty after the pin has been removed, `false` to keep the empty group. Defaults to `true`.
          * @returns Ok on success, an error message otherwise.
          */
         Result<std::monostate> remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
