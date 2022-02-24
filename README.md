@@ -104,9 +104,9 @@ This also builds all tests of plugins that are built.
 
 If you do not specify `CMAKE_BUILD_TYPE`, it defaults to `Release`.
 
-#### Speed up the building process - Notes on ABC (Mandatory on M1 Macs)
+### Speed up the building process - Notes on ABC (Mandatory on M1 Macs)
 To speed up the building process of a clean build, you have the option to install ABC at a path of your choice and provide the path to CMake or put in a standard path like (`/usr/local/lib/`).
-**Important:** To ensure a problem free execution of abc, we had to modify the buffer size, since boolean functions generated in HAL, can be quite large. Check the `abc/src/base/ver/verStream.c` file, where we changed the following values:
+**Important:** To ensure correct execution of ABC from within HAL, we had to modify some buffer size since Boolean functions generated in HAL can be quite large. Hence, make sure to adjust the buffer in `abc/src/base/ver/verStream.c` as shown below:
 
 
 ```git
@@ -125,7 +125,26 @@ cd deps/abc
 make ABC_USE_PIC=1 libabc.so
 sudo cp libabc.so /usr/local/lib/
 ```
-(See [abc troubleshooting](https://github.com/berkeley-abc/abc#troubleshooting) if fails)
+(See [abc troubleshooting](https://github.com/berkeley-abc/abc#troubleshooting) on failure)
+
+## Troubleshooting
+
+### pybind11
+```
+CMake Error in src/python_bindings/CMakeLists.txt:
+  Imported target "pybind11::module" includes non-existent path
+    "/include"
+  in its INTERFACE_INCLUDE_DIRECTORIES.  Possible reasons include:
+  * The path was deleted, renamed, or moved to another location.
+  * An install or uninstall procedure did not complete successfully.
+  * The installation package was faulty and references files it does not
+  provide.
+```
+
+Try the following:
+-  Make sure you have the most recent `pybind11-dev` version installed.
+-  `-DCMAKE_PREFIX_PATH=<root_of_pybind>` can be provided as additional flag to `cmake`. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.
+
 
 <a name="quickstart"></a>
 # Quickstart Guide 

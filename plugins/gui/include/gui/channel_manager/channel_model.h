@@ -62,7 +62,7 @@ namespace hal
          * Get the singleton instance of the model.
          * @return The channel model instance.
          */
-        static ChannelModel* get_instance();
+        static ChannelModel* instance();
 
         /**
          * The destructor. Removes callback.
@@ -86,7 +86,7 @@ namespace hal
          * @param name - The name of the soon to be channel.
          * @return The created channel item.
          */
-        ChannelItem* add_channel(const QString name);
+        ChannelItem* addChannel(const QString name);
 
         /**
          * This function manages the callback from the logmanager. It is registered in the model's constructor and checks if the channel for the
@@ -110,11 +110,11 @@ namespace hal
 
     private:
         explicit ChannelModel(QObject* parent = nullptr);
+        bool channelExists(const QString& name) const;
 
         QList<QString> mChannelToIgnore;
         QList<ChannelItem*> mPermanentItems;
         QList<ChannelItem*> mTemporaryItems;
-
         u64 mGuiCallbackId;
     };
 }

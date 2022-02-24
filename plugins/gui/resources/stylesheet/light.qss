@@ -1121,6 +1121,12 @@ hal--SelectionDetailsWidget
     qproperty-toModuleIconPath: ":/icons/to_module";
 }
 
+hal--LoggerWidget
+{
+    qproperty-searchIconStyle: "all->#FFFFFF";
+    qproperty-searchIconPath: ":/icons/search";
+}
+
 hal--MainWindow
 {
     qproperty-halIconStyle: "";

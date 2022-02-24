@@ -24,6 +24,7 @@ HAL Core Documentation
    netlist
    netlist_factory
    netlist_utils
+   netlist_serializer
    netlist_writer_manager
    path
    pin_direction

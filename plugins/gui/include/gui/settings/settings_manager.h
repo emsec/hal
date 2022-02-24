@@ -27,6 +27,7 @@
 #include <QList>
 #include <QSettings>
 #include "gui/settings/settings_items/settings_item.h"
+#include "gui/logger/logger_settings.h"
 #include <QPoint>
 #include <QSize>
 
@@ -103,6 +104,12 @@ namespace hal
          * @return The value encapsulated in a QVariant.
          */
         QVariant defaultValue(const QString& tag) const;
+
+
+        LoggerSettings loggerSettings() const;
+
+        void saveLoggerSettings(const LoggerSettings& settings);
+
 
     public Q_SLOTS:
         /**
