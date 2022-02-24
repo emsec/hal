@@ -74,6 +74,28 @@ namespace hal
             }
         }
 
+        if (jsaleae.HasMember("groups"))
+        {
+            for (auto& jgrp : jsaleae["groups"].GetArray())
+            {
+                uint32_t gid = 0;
+                std::string gname;
+                if (jgrp.HasMember("id"))   gid   = jgrp["id"].GetUint();
+                if (jgrp.HasMember("name")) gname = jgrp["name"].GetString();
+                SaleaeDirectoryGroupEntry sdge(gname,gid);
+                if (jgrp.HasMember("nets"))
+                {
+                    for (auto& jgnet : jgrp["nets"].GetArray())
+                    {
+                        uint32_t nid  = jgnet["id"].GetInt();
+                        std::string nname = jgnet["name"].GetString();
+                        sdge.add_net(SaleaeDirectoryNetEntry(nname,nid));
+                    }
+                }
+                mGroupEntries.push_back(sdge);
+            }
+        }
+
         return true;
     }
 
@@ -102,6 +124,27 @@ namespace hal
             jnet.close();
         }
         jnets.close();
+        if (!mGroupEntries.empty())
+        {
+            JsonWriteArray& jgrps = jsaleae.add_array(("groups"));
+            for (const SaleaeDirectoryGroupEntry& grp : mGroupEntries)
+            {
+                JsonWriteObject& jgrp = jgrps.add_object();
+                jgrp["id"] = (int) grp.id();
+                jgrp["name"] = grp.name();
+                JsonWriteArray& jgnets = jgrp.add_array("nets");
+                for (const SaleaeDirectoryNetEntry& net : grp.get_nets())
+                {
+                    JsonWriteObject& jgnet = jgrps.add_object();
+                    jgnet["id"] = (int) net.id();
+                    jgnet["name"] = net.name();
+                    jgnet.close();
+                }
+                jgnets.close();
+                jgrp.close();
+            }
+            jgrps.close();
+        }
         jsaleae.close();
         return jwd.serialize(mDirectoryFile);
     }

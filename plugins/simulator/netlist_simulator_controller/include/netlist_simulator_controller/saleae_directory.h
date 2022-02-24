@@ -45,6 +45,21 @@ namespace hal
         int dataFileIndex() const; // TODO : time as argument
     };
 
+    class SaleaeDirectoryGroupEntry
+    {
+        friend class SaleaeDirectory;
+        uint32_t   mId;
+        std::string mName;
+        std::vector<SaleaeDirectoryNetEntry> mNetEntries;
+    public:
+        SaleaeDirectoryGroupEntry(const std::string nam, uint32_t id_=0)
+            : mId(id_), mName(nam) {;}
+        uint32_t id() const { return mId; }
+        std::string name() const { return mName; }
+        const std::vector<SaleaeDirectoryNetEntry>& get_nets() const { return mNetEntries; }
+        void add_net(const SaleaeDirectoryNetEntry& sdne) { mNetEntries.push_back(sdne); }
+    };
+
     class SaleaeDirectory
     {
     public:
@@ -58,6 +73,7 @@ namespace hal
     private:
         std::string mDirectoryFile;
         std::vector<SaleaeDirectoryNetEntry> mNetEntries;
+        std::vector<SaleaeDirectoryGroupEntry> mGroupEntries;
 
         std::unordered_map<uint32_t,int> mById;
         std::unordered_map<std::string, int> mByName;
