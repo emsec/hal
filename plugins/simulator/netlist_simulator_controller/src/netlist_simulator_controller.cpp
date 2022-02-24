@@ -146,7 +146,7 @@ namespace hal
     void NetlistSimulatorController::handleOpenInputFile(const QString &filename)
     {
         if (filename.isEmpty()) return;
-        VcdSerializer reader;
+        VcdSerializer reader(this);
         QList<const Net*> onlyNets;
         for (const Net* n : mSimulationInput->get_input_nets()) onlyNets.append(n);
         if (reader.importVcd(filename,mTempDir->path(),onlyNets))
@@ -248,9 +248,14 @@ namespace hal
         return std::vector<const Net*>();
     }
 
+    void NetlistSimulatorController::emitLoadProgress(int percent)
+    {
+        Q_EMIT loadProgress(percent);
+    }
+
     bool NetlistSimulatorController::import_vcd(const std::string& filename, FilterInputFlag filter)
     {
-        VcdSerializer reader;
+        VcdSerializer reader(this);
 
         QList<const Net*> inputNets;
         if (filter != NoFilter)
@@ -272,7 +277,7 @@ namespace hal
 
     void NetlistSimulatorController::import_csv(const std::string& filename, FilterInputFlag filter, u64 timescale)
     {
-        VcdSerializer reader;
+        VcdSerializer reader(this);
 
         QList<const Net*> inputNets;
         if (filter != NoFilter)
@@ -288,7 +293,7 @@ namespace hal
 
     void NetlistSimulatorController::import_saleae(const std::string& dirname, std::unordered_map<Net*,int> lookupTable, u64 timescale)
     {
-        VcdSerializer reader;
+        VcdSerializer reader(this);
         if (reader.importSaleae(QString::fromStdString(dirname),lookupTable,mTempDir->path(),timescale))
         {
             mWaveDataList->updateFromSaleae();
@@ -332,7 +337,7 @@ namespace hal
                 if (inx < 0) continue;
                 lookupTable.insert(std::make_pair((Net*)n,inx));
             }
-            VcdSerializer reader;
+            VcdSerializer reader(this);
             if (reader.importSaleae(QString::fromStdString(dirname),lookupTable,mTempDir->path(),timescale))
             {
                 mWaveDataList->updateFromSaleae();
@@ -568,19 +573,4 @@ namespace hal
         Q_EMIT controllerRemoved(id);
     }
 
-    /* show results
-    void NetlistSimulatorController::handleSelectionChanged(void* sender)
-    {
-        Q_UNUSED(sender);
-        for (u32 nid : gSelectionRelay->selectedNetsList())
-        {
-            Net* n = gNetlist->get_net_by_id(nid);
-            if (!n) continue;
-            const WaveData* wd = mResultMap.value(n->get_id());
-            if (!wd) continue;
-            WaveData* wdCopy = new WaveData(*wd);
-  //          mWaveDataList->addOrReplace(wdCopy);
-        }
-    }
-        */
 }    // namespace hal

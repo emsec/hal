@@ -1,4 +1,5 @@
 #include "netlist_simulator_controller/vcd_serializer.h"
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include "netlist_simulator_controller/saleae_writer.h"
 #include "netlist_simulator_controller/saleae_parser.h"
 #include "netlist_simulator_controller/saleae_file.h"
@@ -11,6 +12,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <math.h>
+#include <QCoreApplication>
 
 namespace hal {
 
@@ -69,7 +71,7 @@ namespace hal {
 
 //----------------------------------
     VcdSerializer::VcdSerializer(QObject *parent)
-        : QObject(parent), mSaleaeWriter(nullptr)
+        : QObject(parent), mSaleaeWriter(nullptr), mLastProgress(-1)
     {;}
 
 
@@ -133,7 +135,7 @@ namespace hal {
         if (!ok)
         {
             if (mErrorCount[0]++ < maxErrorMessages)
-                log_warning("vcd_viewer", "Cannot parse VCD data value '{}'", std::string(sl.at(0).data()));
+                log_warning("waveform_viewer", "Cannot parse VCD data value '{}'", std::string(sl.at(0).data()));
             val = 0;
         }
         storeValue(val, sl.at(1));
@@ -342,7 +344,7 @@ namespace hal {
         QFile ff(csvFilename);
         if (!ff.open(QIODevice::ReadOnly))
         {
-            log_warning("vcd_viewer", "Cannot open CSV input file '{}'.", csvFilename.toStdString());
+            log_warning("waveform_viewer", "Cannot open CSV input file '{}'.", csvFilename.toStdString());
             return false;
         }
 
@@ -355,10 +357,28 @@ namespace hal {
         mSaleaeWriter = nullptr;
         mSaleaeFiles.clear();
 
-        if (retval) Q_EMIT importDone();
+        if (retval) emitImportDone();
         return retval;
     }
 
+    void VcdSerializer::emitProgress(double step, double max)
+    {
+        NetlistSimulatorController* nsc = static_cast<NetlistSimulatorController*>(parent());
+        if (!nsc) return;
+        int percent = floor(step*100 / max + 0.5);
+        if (percent == mLastProgress) return;
+        nsc->emitLoadProgress(percent);
+        mLastProgress = percent;
+        qApp->processEvents();
+    }
+
+    void VcdSerializer::emitImportDone()
+    {
+        NetlistSimulatorController* nsc = static_cast<NetlistSimulatorController*>(parent());
+        if (!nsc) return;
+        nsc->emitLoadProgress(-1);
+        mLastProgress = -1;
+    }
 
     void VcdSerializer::createSaleaeDirectory()
     {
@@ -384,14 +404,14 @@ namespace hal {
             if (sizeRead >= bufsize)
             {
                 if (mErrorCount[1]++ < maxErrorMessages)
-                    log_warning("vcd_viewer", "CSV line {} exceeds buffer size {}.", dataLineIndex, bufsize);
+                    log_warning("waveform_viewer", "CSV line {} exceeds buffer size {}.", dataLineIndex, bufsize);
                 return false;
             }
 
             if (sizeRead < 0)
             {
                 if (mErrorCount[2]++ < maxErrorMessages)
-                    log_warning("vcd_viewer", "CSV parse error reading line {} from file '{}'.", dataLineIndex, ff.fileName().toStdString());
+                    log_warning("waveform_viewer", "CSV parse error reading line {} from file '{}'.", dataLineIndex, ff.fileName().toStdString());
                 return false;
             }
             if (!sizeRead) continue;
@@ -401,7 +421,7 @@ namespace hal {
                 if (!parseCsvHeader(buf))
                 {
                     if (mErrorCount[3]++ < maxErrorMessages)
-                        log_warning("vcd_viewer", "Cannot parse CSV header line '{}'.", buf);
+                        log_warning("waveform_viewer", "Cannot parse CSV header line '{}'.", buf);
                     return false;
                 }
                 parseHeader = false;
@@ -411,7 +431,7 @@ namespace hal {
                 if (!parseCsvDataline(buf,dataLineIndex++))
                 {
                     if (mErrorCount[4]++ < maxErrorMessages)
-                        log_warning("vcd_viewer", "Cannot parse CSV data line '{}'.", buf);
+                        log_warning("waveform_viewer", "Cannot parse CSV data line '{}'.", buf);
                     return false;
                 }
             }
@@ -428,7 +448,7 @@ namespace hal {
         QFile ff(vcdFilename);
         if (!ff.open(QIODevice::ReadOnly))
         {
-            log_warning("vcd_viewer", "Cannot open VCD input file '{}'.", vcdFilename.toStdString());
+            log_warning("waveform_viewer", "Cannot open VCD input file '{}'.", vcdFilename.toStdString());
             return false;
         }
 
@@ -442,7 +462,7 @@ namespace hal {
         mSaleaeFiles.clear();
         mAbbrevByName.clear();
 
-        if (retval) Q_EMIT importDone();
+        if (retval) emitImportDone();
         return retval;
     }
 
@@ -457,6 +477,9 @@ namespace hal {
         QRegularExpression reHead("\\$(\\w*) (.*)\\$end");
         QRegularExpression reWire("wire\\s+(\\d+) ([^ ]+) (.*) $");
 
+        quint64 fileSize = ff.size();
+        quint64 totalRead = 0;
+
         static const int bufsize = 4095;
         char buf[bufsize+1];
 
@@ -465,17 +488,19 @@ namespace hal {
         {
             int sizeRead = ff.readLine(buf,bufsize);
             ++iline;
+            totalRead += sizeRead;
+            emitProgress(totalRead,fileSize);
             if (sizeRead >= bufsize)
             {
                 if (mErrorCount[5]++ < maxErrorMessages)
-                    log_warning("vcd_viewer", "VCD line {} exceeds buffer size {}.", iline, bufsize);
+                    log_warning("waveform_viewer", "VCD line {} exceeds buffer size {}.", iline, bufsize);
                 return false;
             }
 
             if (sizeRead < 0)
             {
                 if (mErrorCount[6]++ < maxErrorMessages)
-                    log_warning("vcd_viewer", "VCD parse error reading line {} from file '{}'.", iline, ff.fileName().toStdString());
+                    log_warning("waveform_viewer", "VCD parse error reading line {} from file '{}'.", iline, ff.fileName().toStdString());
                 return false;
             }
             if (sizeRead > 0 && buf[sizeRead-1]=='\n') --sizeRead;
@@ -501,7 +526,7 @@ namespace hal {
                         if (mAbbrevByName.contains(wireName))
                         {
                             if (mErrorCount[7]++ < maxErrorMessages)
-                                log_warning("vcd_viewer", "Waveform duplicate for '{}' in VCD file '{}'.", wireName.toStdString(), ff.fileName().toStdString());
+                                log_warning("waveform_viewer", "Waveform duplicate for '{}' in VCD file '{}'.", wireName.toStdString(), ff.fileName().toStdString());
                             continue;
                         }
                         QString wireAbbrev = mWire.captured(2);
@@ -532,7 +557,7 @@ namespace hal {
                 if (!parseVcdDataline(buf,sizeRead))
                 {
                     if (mErrorCount[8]++ < maxErrorMessages)
-                        log_warning("vcd_viewer", "Cannot parse VCD data line '{}'.", QByteArray(buf,sizeRead));
+                        log_warning("waveform_viewer", "Cannot parse VCD data line '{}'.", QByteArray(buf,sizeRead));
                     return false;
                 }
             }
@@ -547,11 +572,16 @@ namespace hal {
         deleteFiles();
         mTime = 0;
         SaleaeParser::sTimeScaleFactor = timeScale;
+        int nstep = lookupTable.size() + 1;
+        int istep = 0;
 
+        emitProgress(istep++,nstep);
         createSaleaeDirectory();
         SaleaeDirectory sd(get_saleae_directory_filename());
         QDir sourceDir(saleaeDirecotry);
         QDir targetDir(QFileInfo(mSaleaeDirectoryFilename).path());
+        emitProgress(istep++,nstep);
+
         for (auto it = lookupTable.begin(); it != lookupTable.end(); ++it)
         {
             Q_ASSERT(it->first);
@@ -572,9 +602,10 @@ namespace hal {
             SaleaeDirectoryNetEntry sdne(it->first->get_name(), it->first->get_id());
             sdne.addIndex(SaleaeDirectoryFileIndex(inx,sif.header()->beginTime(),sif.header()->endTime(),sif.header()->numTransitions()));
             sd.add_or_replace_net(sdne);
+            emitProgress(istep++,nstep);
         }
         sd.write_json();
-        Q_EMIT importDone();
+        emitImportDone();
         return true;
     }
 }

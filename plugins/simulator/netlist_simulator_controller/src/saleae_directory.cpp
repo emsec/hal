@@ -221,10 +221,14 @@ namespace hal
         std::vector<ListEntry> retval;
         for (const SaleaeDirectoryNetEntry& sdne : mNetEntries)
         {
+            int inx = -1;
             uint64_t size = 0;
             for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes())
+            {
+                if (inx < 0) inx = sdfi.index();
                 size += sdfi.numberValues();
-            retval.push_back({sdne.id(),sdne.name(),size});
+            }
+            retval.push_back({sdne.id(),sdne.name(),inx,size});
         }
         return retval;
     }

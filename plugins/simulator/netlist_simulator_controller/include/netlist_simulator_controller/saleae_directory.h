@@ -52,6 +52,7 @@ namespace hal
         {
             uint32_t id;
             std::string name;
+            int fileIndex;
             uint64_t size;
         };
     private:

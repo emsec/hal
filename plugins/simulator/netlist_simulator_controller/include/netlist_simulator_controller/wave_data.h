@@ -14,9 +14,29 @@
 namespace hal {
 
     class WaveData;
-    class WaveDataTimeframe;
     class NetlistSimulator;
+    class SaleaeInputFile;
     class Net;
+
+    class WaveDataTimeframe
+    {
+        friend class WaveDataList;
+        u64 mSceneMaxTime;
+        u64 mSimulateMaxTime;
+        u64 mUserdefMaxTime;
+        u64 mUserdefMinTime;
+        static const int sMinSceneWidth = 1000;
+    public:
+        WaveDataTimeframe();
+        u64 sceneMaxTime() const;
+        u64 simulateMaxTime() const;
+        u64 sceneMinTime() const;
+        u64 sceneWidth() const;
+        bool hasUserTimeframe() const;
+        void setUserTimeframe(u64 t0=0, u64 t1=0);
+        void setSceneMaxTime(u64 t);
+        void setSimulateMaxTime(u64 t) { mSimulateMaxTime = t; }
+    };
 
     class WaveData
     {
@@ -24,6 +44,8 @@ namespace hal {
         enum NetType { RegularNet, InputNet, OutputNet, ClockNet, NetGroup };
     private:
         u32 mId;
+        int mFileIndex;
+        u64 mFileSize;
         QString mName;
         NetType mNetType;
         int mBits;
@@ -33,6 +55,7 @@ namespace hal {
         bool mDirty;
 
         QMap<u64,int>::const_iterator timeIterator(float t) const;
+        void resetWave();
     public:
         WaveData(const WaveData& other);
         WaveData(u32 id_, const QString& nam, NetType tp = RegularNet,
@@ -45,12 +68,19 @@ namespace hal {
         virtual int bits()                  const { return mBits; }
         bool    isDirty()                   const { return mDirty; }
         const QMap<u64,int>& data()         const { return mData; }
+        int     fileIndex()                 const { return mFileIndex; }
+        u64     fileSize()                  const { return mFileSize; }
         void setId(u32 id_);
         void setName(const QString& nam);
         void setBits(int bts);
         void setDirty(bool dty)                     { mDirty = dty; }
+        void setFileIndex(int inx)                  { mFileIndex = inx; }
+        void setFileSize(u64 siz)                   { mFileSize = siz; }
+        virtual bool isLoadable()             const { return mFileSize < 100000; }
+
+        void loadSaleae(SaleaeInputFile& sif, const WaveDataTimeframe& tframe = WaveDataTimeframe());
         bool loadSaleae(const SaleaeDirectory& sd, const WaveDataTimeframe& tframe);
-        void saveSaleae(SaleaeDirectory& sd) const;
+        void saveSaleae(SaleaeDirectory& sd);
         void setData(const QMap<u64,int>& dat);
         int  intValue(float t) const;
         int get_value_at(u64 t) const;
@@ -83,25 +113,6 @@ namespace hal {
 
     class WaveDataGroup;
 
-    class WaveDataTimeframe
-    {
-        friend class WaveDataList;
-        u64 mSceneMaxTime;
-        u64 mSimulateMaxTime;
-        u64 mUserdefMaxTime;
-        u64 mUserdefMinTime;
-    public:
-        WaveDataTimeframe();
-        u64 sceneMaxTime() const;
-        u64 simulateMaxTime() const;
-        u64 sceneMinTime() const;
-        u64 sceneWidth() const;
-        bool hasUserTimeframe() const;
-        void setUserTimeframe(u64 t0=0, u64 t1=0);
-        void setSceneMaxTime(u64 t) { mSceneMaxTime = t; }
-        void setSimulateMaxTime(u64 t) { mSimulateMaxTime = t; }
-    };
-
     class WaveDataList : public QObject, public QList<WaveData*>
     {
         friend class WaveDataGroup;
@@ -132,8 +143,8 @@ namespace hal {
         void addWavesToGroup(u32 grpId, const QVector<WaveData*>& wds);
         void removeGroup(u32 grpId);
 
-        void addOrReplace(WaveData* wd, bool silent=false);
-        void add(WaveData* wd, bool silent, bool updateSaleae);
+        void addOrReplace(WaveData* wd);
+        void add(WaveData* wd, bool updateSaleae);
         void remove(u32 id);
         void incrementSimulTime(u64 deltaT);
         void clearAll();
@@ -199,13 +210,15 @@ namespace hal {
         WaveDataGroup(WaveDataList* wdList, const QString& nam = QString());
         WaveDataGroup(WaveDataList* wdList, const WaveData* wdGrp);
         virtual ~WaveDataGroup();
-        virtual int bits() const;
+        virtual int bits() const override;
         virtual int size() const { return mGroupList.size(); }
         void addNet(const Net* n);
         virtual void insert(int inx, WaveData* wd);
+        virtual void addWaves(const QVector<WaveData*>& wds);
         virtual void recalcData();
         virtual bool hasNetId(u32 id) const;
         virtual QList<WaveData*> children() const;
+        QList<int> childrenWaveIndex() const;
         virtual WaveData* childAt(int inx) const;
         virtual WaveData* removeAt(int inx);
         virtual bool isEmpty() const { return mGroupList.isEmpty(); }
@@ -213,5 +226,6 @@ namespace hal {
         virtual int childIndex(WaveData* wd) const;
         virtual int netIndex(u32 id) const;
         virtual void replaceChild(WaveData* wd);
+        virtual bool isLoadable() const override;
     };
 }

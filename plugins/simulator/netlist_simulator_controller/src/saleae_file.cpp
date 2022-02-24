@@ -135,16 +135,17 @@ namespace hal
         // printf("<%s> %d %d %d %.7f %.7f %lu\n", mIdent, mVersion, mType, mValue, mBeginTime, mEndTime, mNumTransitions );
     }
 
-    SaleaeDataBuffer SaleaeInputFile::get_data()
+    SaleaeDataBuffer* SaleaeInputFile::get_buffered_data()
     {
-        SaleaeDataBuffer retval;
         int n = mHeader.numTransitions();
         int val = mHeader.value();
-        retval.mCount = n + 1;
-        retval.mTimeArray  = new uint64_t[retval.mCount];
-        retval.mValueArray = new int[retval.mCount];
-        retval.mTimeArray[0] = mHeader.beginTime();
-        retval.mValueArray[0] = val;
+        SaleaeDataBuffer* retval = new SaleaeDataBuffer;
+
+        retval->mCount = n + 1;
+        retval->mTimeArray  = new uint64_t[retval->mCount];
+        retval->mValueArray = new int[retval->mCount];
+        retval->mTimeArray[0] = mHeader.beginTime();
+        retval->mValueArray[0] = val;
         if (!n) return retval;
         switch (mHeader.storageFormat())
         {
@@ -155,26 +156,26 @@ namespace hal
             for (int i=0; i<n; i++)
             {
                 val = val ? 0 : 1;
-                retval.mValueArray[i+1] = val;
-                retval.mTimeArray[i+1] = floor(tmp[i] * SaleaeParser::sTimeScaleFactor + 0.5) - mHeader.beginTime();
+                retval->mValueArray[i+1] = val;
+                retval->mTimeArray[i+1] = floor(tmp[i] * SaleaeParser::sTimeScaleFactor + 0.5) - mHeader.beginTime();
             }
             delete [] tmp;
         }
             break;
         case SaleaeHeader::Uint64:
-            this->read((char*)(retval.mTimeArray+1),sizeof(uint64_t)*n);
+            this->read((char*)(retval->mTimeArray+1),sizeof(uint64_t)*n);
             for (int i=0; i<n; i++)
             {
                 val = val ? 0 : 1;
-                retval.mValueArray[i+1] = val;
+                retval->mValueArray[i+1] = val;
             }
             break;
         case SaleaeHeader::Coded:
-            this->read((char*)(retval.mTimeArray+1),sizeof(uint64_t)*n);
+            this->read((char*)(retval->mTimeArray+1),sizeof(uint64_t)*n);
             for (int i=0; i<n; i++)
             {
-                retval.mValueArray[i+1] = ((retval.mTimeArray[i+1] >> 62) & 0x3) -2;
-                retval.mTimeArray[i+1] &= 0x3fffffffffffffffull;
+                retval->mValueArray[i+1] = ((retval->mTimeArray[i+1] >> 62) & 0x3) -2;
+                retval->mTimeArray[i+1] &= 0x3fffffffffffffffull;
             }
             break;
         }
@@ -238,34 +239,35 @@ namespace hal
         mHeader.write(*this);
         flush();
         SaleaeInputFile sif(mFilename);
-        SaleaeDataBuffer sdf = sif.get_data();
+        SaleaeDataBuffer* sdf = sif.get_buffered_data();
         sif.close();
         seekp(std::ios_base::beg);
         mHeader.setStorageFormat(SaleaeHeader::Coded);
         mHeader.write(*this);
         put_data(sdf);
+        delete sdf;
     }
 
-    void SaleaeOutputFile::put_data(SaleaeDataBuffer& buf)
+    void SaleaeOutputFile::put_data(SaleaeDataBuffer *buf)
     {
-        if (!buf.mCount) return;
+        if (!buf->mCount) return;
         SaleaeHeader::StorageFormat sf = SaleaeHeader::Uint64;
-        for (uint64_t i = 0; i<buf.mCount; i++)
+        for (uint64_t i = 0; i<buf->mCount; i++)
         {
-            if (buf.mValueArray[i] < 0)
+            if (buf->mValueArray[i] < 0)
             {
                 sf = SaleaeHeader::Coded;
                 break;
             }
         }
-        uint64_t n = buf.mCount - 1;
+        uint64_t n = buf->mCount - 1;
         mHeader.setStorageFormat(sf);
-        mHeader.setValue(buf.mValueArray[0]);
-        mHeader.setEndTime(buf.mTimeArray[n]);
+        mHeader.setValue(buf->mValueArray[0]);
+        mHeader.setEndTime(buf->mTimeArray[n]);
         mHeader.setNumTransitions(n);
         if (sf == SaleaeHeader::Coded)
-            buf.convertCoded();
-        this->write((char*) (buf.mTimeArray+1), n * sizeof(uint64_t));
+            buf->convertCoded();
+        this->write((char*) (buf->mTimeArray+1), n * sizeof(uint64_t));
         // close will write header info
     }
 

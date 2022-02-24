@@ -65,15 +65,6 @@ namespace hal
         return mSaleaeDirectory.get_max_time();
     }
 
-    SaleaeDataBuffer SaleaeParser::get_waveform_by_net(const Net* net) const
-    {
-        std::string path = mSaleaeDirectory.get_datafile(net->get_name(),net->get_id());
-        if (path.empty()) return SaleaeDataBuffer();
-        SaleaeInputFile sif(path);
-        if (!sif.good()) return SaleaeDataBuffer();
-        return sif.get_data();
-    }
-
     bool SaleaeParser::register_callback(const Net *net, std::function<void(void*,uint64_t, int)> callback, void *obj)
     {
 //        std::cerr << "SaleaeParser::register_callback <" << net->get_name() << "> " << std::hex << (uintptr_t) obj << std::endl;

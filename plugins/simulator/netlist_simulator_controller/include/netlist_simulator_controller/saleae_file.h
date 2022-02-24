@@ -97,6 +97,7 @@ namespace hal
         uint64_t mTime;
         int mValue;
         bool readError() const { return mValue == sReadError; }
+        SaleaeDataTuple(uint64_t t=0, int val=sReadError) : mTime(t), mValue(val) {;}
     };
 
     class SaleaeInputFile : public std::ifstream
@@ -113,7 +114,7 @@ namespace hal
 
         SaleaeDataTuple nextValue(int lastValue);
         std::string get_last_error() const;
-        SaleaeDataBuffer get_data();
+        SaleaeDataBuffer* get_buffered_data();
 
         const SaleaeHeader* header() const { return &mHeader; }
     };
@@ -137,7 +138,7 @@ namespace hal
         void close();
         int index() const { return mIndex; }
 
-        void put_data(SaleaeDataBuffer& buf);
+        void put_data(SaleaeDataBuffer* buf);
 
         SaleaeDirectoryFileIndex fileIndex() const;
     };

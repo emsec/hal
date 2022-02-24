@@ -46,7 +46,6 @@ namespace hal
         uint64_t get_max_time() const;
         bool register_callback(const Net* net, std::function<void(void*,uint64_t, int)> callback, void* obj);
         bool next_event();
-        SaleaeDataBuffer get_waveform_by_net(const Net* net) const;
 
         SaleaeDirectory get_directory() const { return mSaleaeDirectory; }
         static uint64_t sTimeScaleFactor;

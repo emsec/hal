@@ -47,6 +47,7 @@ namespace hal {
         QVector<int> mLastValue;
         int mErrorCount[9];
         bool mSaleae;
+        int mLastProgress;
 
         bool parseVcdDataline(char* buf, int len);
         bool parseVcdDataNonDecimal(const QByteArray& line, int base);
@@ -58,9 +59,8 @@ namespace hal {
 
         void deleteFiles();
         void createSaleaeDirectory();
-
-    Q_SIGNALS:
-        void importDone();
+        void emitProgress(double step, double max);
+        void emitImportDone();
 
     public:
         std::string get_saleae_directory_filename() const { return mSaleaeDirectoryFilename.toStdString(); }
