@@ -366,7 +366,7 @@ namespace hal
                 }
                 else
                 {
-                    c_top_module->create_pin(c_input_net->get_name(), c_input_net, pin->get_type());
+                    c_top_module->create_pin(c_input_net->get_name(), c_input_net);
                 }
             }
             for (Net* c_output_net : c_top_module->get_output_nets())
@@ -381,7 +381,7 @@ namespace hal
                 }
                 else
                 {
-                    c_top_module->create_pin(c_output_net->get_name(), c_output_net, pin->get_type());
+                    c_top_module->create_pin(c_output_net->get_name(), c_output_net);
                 }
             }
 
