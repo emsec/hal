@@ -115,11 +115,21 @@ namespace hal
         return mEntries[index.row()].id;
     }
 
+    QString EndpointTableModel::getPinNameFromIndex(const QModelIndex &index)
+    {
+        return mEntries.at(index.row()).pin;
+    }
+
     QString EndpointTableModel::typeString()
     {
         if (mType == source)
-            return "Sources";
+            return "Source";
         else
-            return "Destinations";
+            return "Destination";
+    }
+
+    EndpointTableModel::Type EndpointTableModel::getType()
+    {
+        return mType;
     }
 }

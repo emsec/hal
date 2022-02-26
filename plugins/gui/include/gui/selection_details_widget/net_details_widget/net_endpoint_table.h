@@ -54,6 +54,11 @@ namespace hal
 
         EndpointTableModel* mEndpointModel;
 
+        /**
+         * Helper function that is called in handleContextMenuRequested
+         */
+        void addSourceOurDestinationToSelection(u32 gateID, QString pin, bool clearSelection = false);
+
     };
 
 }

@@ -66,10 +66,20 @@ namespace hal
             return;
 
         u32 gateID = mEndpointModel->getGateIDFromIndex(idx);
+        QString pin = mEndpointModel->getPinNameFromIndex(idx);
+        QString desc = mEndpointModel->typeString().toLower();
 
         QMenu menu;
 
         //menu.addSection("Python");
+
+        menu.addAction(QString("Overwrite selection with %1 gate").arg(desc), [this, gateID, pin](){
+            addSourceOurDestinationToSelection(gateID, pin, true);
+        });
+
+        menu.addAction(QString("Add %1 gate to selection").arg(desc), [this, gateID, pin](){
+            addSourceOurDestinationToSelection(gateID, pin);
+        });
 
         QString pythonCommandGate = PyCodeProvider::pyCodeGate(gateID);
         menu.addAction(QIcon(":/icons/python"), "Extract gate as python code",
@@ -113,5 +123,32 @@ namespace hal
         horizontalHeader()->setStretchLastSection(true);
         update();
         updateGeometry();
+    }
+
+    void NetEndpointTable::addSourceOurDestinationToSelection(u32 gateID, QString pin, bool clearSelection)
+    {
+        //setfocus action??
+        auto gate = gNetlist->get_gate_by_id(gateID);
+        if(!gate) return;
+        if(clearSelection)
+            gSelectionRelay->clear();
+        gSelectionRelay->addGate(gateID);
+        std::vector<std::string> pins;
+        SelectionRelay::Subfocus focus;
+
+        if(mEndpointModel->getType() == EndpointTableModel::Type::source)
+        {
+            pins = gate->get_type()->get_output_pins();
+            focus = SelectionRelay::Subfocus::Right;
+        }
+        else
+        {
+            pins = gate->get_type()->get_input_pins();
+            focus = SelectionRelay::Subfocus::Left;
+
+        }
+        auto index = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin.toStdString()));
+        gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, gateID, focus, index);
+        gSelectionRelay->relaySelectionChanged(this);
     }
 }
