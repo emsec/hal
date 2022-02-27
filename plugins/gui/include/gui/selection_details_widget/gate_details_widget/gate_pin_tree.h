@@ -24,6 +24,7 @@
 #pragma once
 
 #include "gui/size_adjustable_tree_view/size_adjustable_tree_view.h"
+#include "gui/gui_globals.h"
 #include "hal_core/defines.h"
 
 namespace hal
@@ -31,6 +32,7 @@ namespace hal
     class GatePinsTreeModel;
     class Gate;
     class TreeItem;
+    class GraphNavigationWidget;
 
     /**
      * @brief A widget to display the pins of a given gate.
@@ -80,12 +82,18 @@ namespace hal
         void updateText(const QString& newHeadline);
 
     private:
+        GraphNavigationWidget* mNavigationTable;
         GatePinsTreeModel* mPinModel;
         int mGateID;
+        //saves if the selection shall be cleared when "jumping" to a source/destination
+        bool mClearSelection;
 
         //helper functions
         void buildPythonMenuForPin(QMenu &menu, TreeItem* clickedPinItem);
         void buildPythonMenuForPinGroup(QMenu &menu, TreeItem* clickedPinIGrouptem);
+        void addSourceOurDestinationToSelection(int netId, bool isInputPin);
+        void handleNavigationCloseRequested();
+        void handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
 
     };
 
