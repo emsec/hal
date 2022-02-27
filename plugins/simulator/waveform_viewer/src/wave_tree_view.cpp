@@ -217,7 +217,20 @@ namespace hal {
                 QInputDialog::getText(this, "Change name in waveform list", "New name:", QLineEdit::Normal,
                                       wd->name(), &confirm);
         if (confirm && !newName.isEmpty())
-            wd->setName(newName);
+        {
+            if (wd->rename(newName))
+            {
+                SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
+                WaveDataGroup* wdg = dynamic_cast<WaveDataGroup*>(wd);
+                if (wdg)
+                {
+                    SaleaeDirectoryGroupEntry* sdge = mWaveDataList->saleaeDirectory().get_group(wdg->id());
+                    if (sdge) sdge->rename(newName.toStdString());
+                }
+                else
+                    mWaveDataList->saleaeDirectory().rename_net(wd->id(),newName.toStdString());
+            }
+        }
     }
 
     void WaveTreeView::handleEditOrBrowseItem()

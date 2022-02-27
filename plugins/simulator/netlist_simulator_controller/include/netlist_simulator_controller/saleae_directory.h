@@ -13,6 +13,18 @@ const char folderSeparator = '/';
 
 namespace hal
 {
+    class SaleaeDirectory;
+
+    class SaleaeDirectoryStoreRequest
+    {
+    private:
+        SaleaeDirectory* mSaleaeDirectory;
+        SaleaeDirectoryStoreRequest(const SaleaeDirectoryStoreRequest&) {;} // disable copy constructor
+    public:
+        SaleaeDirectoryStoreRequest(SaleaeDirectory* sd);
+        ~SaleaeDirectoryStoreRequest();
+    };
+
     class SaleaeDirectoryFileIndex
     {
         int      mIndex;
@@ -41,6 +53,7 @@ namespace hal
         std::string name() const { return mName; }
         const std::vector<SaleaeDirectoryFileIndex>& indexes() const { return mFileIndexes; }
         void addIndex(const SaleaeDirectoryFileIndex& sdfe) { mFileIndexes.push_back(sdfe); }
+        void rename(const std::string nam) { mName = nam; }
         std::string dataFilename() const; // TODO : time as argument
         int dataFileIndex() const; // TODO : time as argument
     };
@@ -56,12 +69,16 @@ namespace hal
             : mId(id_), mName(nam) {;}
         uint32_t id() const { return mId; }
         std::string name() const { return mName; }
+        std::vector<SaleaeDirectoryNetEntry>& get_nets() { return mNetEntries; }
+        void add_net(SaleaeDirectoryNetEntry sdne) { mNetEntries.push_back(sdne); }
+        void remove_net(const SaleaeDirectoryNetEntry& sdne);
+        void rename(const std::string nam) { mName = nam; }
         const std::vector<SaleaeDirectoryNetEntry>& get_nets() const { return mNetEntries; }
-        void add_net(const SaleaeDirectoryNetEntry& sdne) { mNetEntries.push_back(sdne); }
     };
 
     class SaleaeDirectory
     {
+        friend class SaleaeDirectoryStoreRequest;
     public:
         struct ListEntry
         {
@@ -81,15 +98,17 @@ namespace hal
         std::string dataFilename(const SaleaeDirectoryNetEntry& sdnep) const;
         int getIndex(const SaleaeDirectoryNetEntry& sdnep) const;
         int mNextAvailableIndex;
-    public:
-        SaleaeDirectory(const std::string& path, bool create=false);
-        bool parse_json();
+        int mStoreRequest;
 #ifndef STANDALONE_PARSER
         bool write_json() const;
 #endif
+    public:
+        SaleaeDirectory(const std::string& path, bool create=false);
+        bool parse_json();
         void add_or_replace_net(SaleaeDirectoryNetEntry& sdne);
         void dump() const;
         void update_file_indexes(std::unordered_map<int, SaleaeDirectoryFileIndex>& fileIndexes);
+        void rename_net(uint32_t id, const std::string& nam);
 
         std::string get_datafile(const std::string& nam, uint32_t id) const;
         int get_datafile_index(const std::string& nam, uint32_t id) const;
@@ -99,5 +118,10 @@ namespace hal
         std::string get_directory() const;
         std::string get_filename() const;
         std::vector<ListEntry> get_net_list() const;
+
+        void add_group(SaleaeDirectoryGroupEntry sdge);
+        void remove_group(uint32_t group_id);
+        SaleaeDirectoryGroupEntry* get_group(uint32_t group_id);
+        const std::vector<SaleaeDirectoryGroupEntry>& get_groups() const { return mGroupEntries; }
     };
 }

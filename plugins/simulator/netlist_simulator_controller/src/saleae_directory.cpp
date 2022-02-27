@@ -14,7 +14,7 @@ namespace hal
 {
 
     SaleaeDirectory::SaleaeDirectory(const std::string &path, bool create)
-        : mDirectoryFile(path), mNextAvailableIndex(0)
+        : mDirectoryFile(path), mNextAvailableIndex(0), mStoreRequest(0)
     {
         if (create) return;
         parse_json();
@@ -127,7 +127,7 @@ namespace hal
         if (!mGroupEntries.empty())
         {
             JsonWriteArray& jgrps = jsaleae.add_array(("groups"));
-            for (const SaleaeDirectoryGroupEntry& grp : mGroupEntries)
+            for (SaleaeDirectoryGroupEntry grp : mGroupEntries)
             {
                 JsonWriteObject& jgrp = jgrps.add_object();
                 jgrp["id"] = (int) grp.id();
@@ -135,7 +135,7 @@ namespace hal
                 JsonWriteArray& jgnets = jgrp.add_array("nets");
                 for (const SaleaeDirectoryNetEntry& net : grp.get_nets())
                 {
-                    JsonWriteObject& jgnet = jgrps.add_object();
+                    JsonWriteObject& jgnet = jgnets.add_object();
                     jgnet["id"] = (int) net.id();
                     jgnet["name"] = net.name();
                     jgnet.close();
@@ -259,6 +259,14 @@ namespace hal
         return retval;
     }
 
+    void SaleaeDirectory::rename_net(uint32_t id, const std::string& nam)
+    {
+        SaleaeDirectoryStoreRequest save(this);
+        auto it = mById.find(id);
+        if (it == mById.end()) return;
+        mNetEntries[it->second].rename(nam);
+    }
+
     std::vector<SaleaeDirectory::ListEntry> SaleaeDirectory::get_net_list() const
     {
         std::vector<ListEntry> retval;
@@ -300,5 +308,62 @@ namespace hal
     std::string SaleaeDirectory::get_filename() const
     {
         return mDirectoryFile;
+    }
+
+    void SaleaeDirectoryGroupEntry::remove_net(const SaleaeDirectoryNetEntry& sdne)
+    {
+        auto it = mNetEntries.begin();
+        while (it != mNetEntries.end())
+        {
+            if ((sdne.id() && sdne.id() == it->id()) || sdne.name() == it->name())
+                it = mNetEntries.erase(it);
+            else
+                ++it;
+        }
+    }
+
+    void SaleaeDirectory::add_group(SaleaeDirectoryGroupEntry sdge)
+    {
+        SaleaeDirectoryStoreRequest save(this);
+        mGroupEntries.push_back(sdge);
+    }
+
+
+    void SaleaeDirectory::remove_group(uint32_t group_id)
+    {
+        SaleaeDirectoryStoreRequest save(this);
+        auto it = mGroupEntries.begin();
+        while (it != mGroupEntries.end())
+        {
+            if (group_id == it->id())
+            {
+                mGroupEntries.erase(it);
+                return;
+            }
+            ++it;
+        }
+    }
+
+    SaleaeDirectoryGroupEntry* SaleaeDirectory::get_group(uint32_t group_id)
+    {
+        auto it = mGroupEntries.begin();
+        while (it != mGroupEntries.end())
+        {
+            if (group_id == it->id())
+                return &(*it);
+            ++it;
+        }
+        return nullptr;
+    }
+
+    SaleaeDirectoryStoreRequest::SaleaeDirectoryStoreRequest(SaleaeDirectory* sd)
+        : mSaleaeDirectory(sd)
+    {
+        ++mSaleaeDirectory->mStoreRequest;
+    }
+
+    SaleaeDirectoryStoreRequest::~SaleaeDirectoryStoreRequest()
+    {
+        if (--mSaleaeDirectory->mStoreRequest <= 0) mSaleaeDirectory->write_json();
     }
 }
