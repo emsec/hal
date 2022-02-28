@@ -65,6 +65,35 @@ namespace hal
         mPinModel->clear();
     }
 
+    void GatePinTree::mouseDoubleClickEvent(QMouseEvent *event)
+    {
+        SizeAdjustableTreeView::mouseDoubleClickEvent(event);
+
+        QModelIndex idx = indexAt(event->pos());
+        if(!idx.isValid())
+            return;
+
+        auto clickedItem = mPinModel->getItemFromIndex(idx);
+        if(mPinModel->getTypeOfItem(clickedItem) != GatePinsTreeModel::itemType::pin)
+            return;
+
+        auto netId = mPinModel->getNetIDsOfTreeItem(clickedItem).front();
+        auto clickedNet = gNetlist->get_net_by_id(netId);
+        if(clickedNet)
+        {
+            auto direction = clickedItem->getData(GatePinsTreeModel::sDirectionColumn).toString();
+            if(direction == "output" && !clickedNet->is_global_output_net())
+            {
+                mClearSelection = true;
+                addSourceOurDestinationToSelection(netId, false);
+            }else if (direction == "input" && !clickedNet->is_global_input_net())
+            {
+                mClearSelection = true;
+                addSourceOurDestinationToSelection(netId, true);
+            }
+        }
+    }
+
     void GatePinTree::handleContextMenuRequested(const QPoint &pos)
     {
         QModelIndex idx = indexAt(pos);

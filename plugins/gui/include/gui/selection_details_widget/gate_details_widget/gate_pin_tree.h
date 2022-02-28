@@ -67,6 +67,13 @@ namespace hal
          */
         void removeContent();
 
+        /**
+         * Overwritten qwidget function to handle navigation through mouseclicks.
+         *
+         * @param event - The mouseevent.
+         */
+        virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
+
         /** @name Event Handler Functions
          */
         ///@{
@@ -85,7 +92,7 @@ namespace hal
         GraphNavigationWidget* mNavigationTable;
         GatePinsTreeModel* mPinModel;
         int mGateID;
-        //saves if the selection shall be cleared when "jumping" to a source/destination
+        //saves the state if the selection shall be cleared when "jumping" to a source/destination
         bool mClearSelection;
 
         //helper functions
