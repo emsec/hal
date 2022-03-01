@@ -64,6 +64,8 @@ namespace hal {
         QTimer* mTimer;
         int mTimerTick;
         WaveLoaderBackbone* mBackbone;
+    Q_SIGNALS:
+        void updateSoon();
     private Q_SLOTS:
         void callUpdate();
         void handleTimeout();

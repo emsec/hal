@@ -55,7 +55,7 @@ namespace hal {
         void paint(int y0, QPainter& painter);
 
         void generate(WaveDataProvider* wdp, const WaveTransform* trans, const WaveScrollbar* sbar, bool* loop);
-        void generateGroup(const WaveData* wd, const WaveItemHash *hash);
+        bool generateGroup(const WaveData* wd, const WaveItemHash *hash);
 
         int numberPrimitives() const { return mPrimitives.size(); }
 
