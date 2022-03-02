@@ -306,6 +306,7 @@ namespace hal
     {
         QDir sourceDir(QString::fromStdString(dirname));
         QString sourceSaleaeLookup = sourceDir.absoluteFilePath("saleae.json");
+        SaleaeDirectory sd(sourceSaleaeLookup.toStdString());
         if (!QFileInfo(sourceSaleaeLookup).isReadable())
         {
             log_warning(get_name(), "cannot import SALEAE data from '{}', cannot read lookup table.", dirname);
@@ -329,7 +330,6 @@ namespace hal
         }
         else
         {
-            SaleaeDirectory sd(sourceSaleaeLookup.toStdString());
             std::unordered_map<Net*,int> lookupTable;
             for (const Net* n: getFilterNets(filter))
             {
@@ -344,6 +344,20 @@ namespace hal
             }
         }
         checkReadyState();
+        for (const SaleaeDirectoryGroupEntry& sdge : sd.get_groups())
+        {
+            QVector<WaveData*> wds;
+            for (const SaleaeDirectoryNetEntry& sdne : sdge.get_nets())
+            {
+                int iwave = mWaveDataList->waveIndexByNetId(sdne.id());
+                if (iwave >= 0) wds.append(mWaveDataList->at(iwave));
+            }
+            if (!wds.isEmpty() && wds.size() == (int) sdge.get_nets().size())
+            {
+                u32 grpId = mWaveDataList->createGroup(QString::fromStdString(sdge.name()));
+                mWaveDataList->addWavesToGroup(grpId, wds);
+            }
+        }
         Q_EMIT parseComplete();
     }
 

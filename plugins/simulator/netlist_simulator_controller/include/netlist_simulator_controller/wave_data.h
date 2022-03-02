@@ -71,7 +71,7 @@ namespace hal {
         int     fileIndex()                 const { return mFileIndex; }
         u64     fileSize()                  const { return mFileSize; }
         void setId(u32 id_);
-        void setName(const QString& nam);
+        bool rename(const QString& nam);
         void setBits(int bts);
         void setDirty(bool dty)                     { mDirty = dty; }
         void setFileIndex(int inx)                  { mFileIndex = inx; }
@@ -162,10 +162,11 @@ namespace hal {
         void dump() const;
         QList<const WaveData*> toList() const;
         QList<const WaveData*> partialList(u64 start_time, u64 end_time, std::set<const Net*>& nets) const;
+        void emitWaveAdded(int inx);
         void emitWaveUpdated(int inx);
         void emitGroupUpdated(int grpId);
         void updateFromSaleae();
-        const SaleaeDirectory& saleaeDirectory() const { return mSaleaeDirectory; }
+        SaleaeDirectory& saleaeDirectory() { return mSaleaeDirectory; }
         void insertBooleanValue(WaveData* wd, u64 t, BooleanFunction::Value bval);
         void setUserTimeframe(u64 t0=0, u64 t1=0);
     Q_SIGNALS:
@@ -204,7 +205,6 @@ namespace hal {
         QList<WaveData*> mGroupList;
 
         QHash<WaveDataGroupIndex,int> mIndex;
-        void restoreIndex();
     public:
         WaveDataGroup(WaveDataList* wdList, int grpId, const QString& nam);
         WaveDataGroup(WaveDataList* wdList, const QString& nam = QString());
@@ -215,6 +215,7 @@ namespace hal {
         void addNet(const Net* n);
         virtual void insert(int inx, WaveData* wd);
         virtual void addWaves(const QVector<WaveData*>& wds);
+        void restoreIndex();
         virtual void recalcData();
         virtual bool hasNetId(u32 id) const;
         virtual QList<WaveData*> children() const;

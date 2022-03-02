@@ -84,22 +84,32 @@ namespace hal {
         return retval;
     }
 
-    void WaveFormPainted::generateGroup(const WaveData* wd, const WaveItemHash *hash)
+    bool WaveFormPainted::generateGroup(const WaveData* wd, const WaveItemHash *hash)
     {
         clearPrimitives();
         QList<WaveFormPainted*> wirePainted;
         QMap<float,int> transitionPos;
         const WaveDataGroup* grp = dynamic_cast<const WaveDataGroup*>(wd);
-        if (!grp) return;
+        if (!grp) return false;
+        bool firstWave = true;
         for (int iwave : grp->childrenWaveIndex())
         {
-            if (iwave<0) return;
+            if (iwave<0) return false;
             WaveItemIndex wii(iwave, WaveItemIndex::Wire, grp->id());
             WaveItem* wi = hash->value(wii);
-            if (!wi || wi->mPainted.isEmpty()) return;
+            if (!wi || wi->mPainted.isEmpty()) return false;
             wirePainted.append(&(wi->mPainted));
             for (float x : wi->mPainted.intervalLimits())
                 transitionPos[x]++;
+            if (firstWave)
+            {
+                mValidity = wi->mPainted.validity();
+                firstWave = false;
+            }
+            else
+            {
+                if (mValidity != wi->mPainted.validity()) return false;
+            }
         }
 
         float lastX = -1;
@@ -137,6 +147,7 @@ namespace hal {
                 mask <<= 1;
             }
         }
+        return true;
     }
 
     void WaveFormPainted::generate(WaveDataProvider* wdp, const WaveTransform* trans, const WaveScrollbar* sbar, bool *loop)

@@ -77,10 +77,12 @@ namespace hal {
         mDirty = true;
     }
 
-    void WaveData::setName(const QString& nam)
+    bool WaveData::rename(const QString& nam)
     {
+        if (mName == nam) return false;
         mName  = nam;
         mDirty = true;
+        return true;
     }
 
     void WaveData::setBits(int bts)
@@ -226,6 +228,7 @@ namespace hal {
 
     void WaveData::saveSaleae(SaleaeDirectory& sd)
     {
+        SaleaeDirectoryStoreRequest save(&sd);
         mFileIndex = sd.get_datafile_index(mName.toStdString(),mId);
         if (mFileIndex < 0)
         {
@@ -237,7 +240,6 @@ namespace hal {
         SaleaeDirectoryNetEntry sdne(mName.toStdString(),mId);
         sdne.addIndex(SaleaeDirectoryFileIndex(mFileIndex,0,maxTime(),mData.size()));
         sd.add_or_replace_net(sdne);
-        sd.write_json();
 
         std::filesystem::path path = sd.get_datafile(mName.toStdString(),mId);
 
@@ -368,7 +370,7 @@ namespace hal {
     WaveDataGroup::WaveDataGroup(WaveDataList* wdList, const QString& nam)
         : WaveData(++sMaxGroupId,nam,WaveData::NetGroup), mWaveDataList(wdList)
     {
-        if (nam.isEmpty()) setName(QString("group_%1").arg(id()));
+        if (nam.isEmpty()) rename(QString("group_%1").arg(id()));
         mWaveDataList->registerGroup(this);
     }
 
@@ -427,10 +429,16 @@ namespace hal {
 
     void WaveDataGroup::restoreIndex()
     {
+        SaleaeDirectoryStoreRequest save(&mWaveDataList->saleaeDirectory());
+        SaleaeDirectoryGroupEntry* sdge = mWaveDataList->saleaeDirectory().get_group(id());
+        if (sdge) sdge->get_nets().clear();
+
         mIndex.clear();
         int inx = 0;
         for (const WaveData* wd : mGroupList)
         {
+            if (sdge)
+                sdge->add_net(SaleaeDirectoryNetEntry(wd->name().toStdString(),wd->id()));
             mIndex[WaveDataGroupIndex(wd)] = inx++;
         }
     }
@@ -552,6 +560,8 @@ namespace hal {
         {
             undef |= (1 << ibit);
             WaveData* wd = mGroupList.at(ibit);
+            if (wd->isLoadable() && wd->data().size() < (int) wd->fileSize())
+                wd->loadSaleae(mWaveDataList->saleaeDirectory(),mWaveDataList->timeFrame());
             wdArray[ibit] = wd;
             if (!wd) continue;
             for (u64 t : wd->data().keys())
@@ -747,8 +757,17 @@ namespace hal {
 
     void WaveDataList::updateWaveName(int inx, const QString& nam)
     {
-        at(inx)->setName(nam);
-        Q_EMIT nameUpdated(inx);
+        if (at(inx)->rename(nam))
+        {
+            SaleaeDirectoryStoreRequest save(&mSaleaeDirectory);
+            Q_EMIT nameUpdated(inx);
+            mSaleaeDirectory.rename_net(at(inx)->id(),nam.toStdString());
+        }
+    }
+
+    void WaveDataList::emitWaveAdded(int inx)
+    {
+        Q_EMIT waveAdded(inx);
     }
 
     void WaveDataList::emitWaveUpdated(int inx)
@@ -828,6 +847,7 @@ namespace hal {
         mDataGroups.insert(grpId,grp);
         if (grpId)
         {
+            mSaleaeDirectory.add_group(SaleaeDirectoryGroupEntry(grp->name().toStdString(),grpId));
             updateMaxTime();
             Q_EMIT groupAdded(grp->id());
         }
@@ -841,6 +861,7 @@ namespace hal {
 
     void WaveDataList::addWavesToGroup(u32 grpId, const QVector<WaveData*>& wds)
     {
+        SaleaeDirectoryStoreRequest save(&mSaleaeDirectory);
         WaveDataGroup* grp = mDataGroups.value(grpId);
         QVector<u32> netIds;
         netIds.reserve(wds.size());
@@ -851,6 +872,7 @@ namespace hal {
             netIds.append(wd->id());
             grp->insert(inx++,wd);
         }
+        grp->restoreIndex();
         grp->recalcData();
         Q_EMIT waveAddedToGroup(netIds,grpId);
     }
@@ -866,6 +888,7 @@ namespace hal {
         WaveDataGroup* grp = mDataGroups.value(grpId);
         if (!grp) return;
         Q_EMIT groupAboutToBeRemoved(grp);
+        mSaleaeDirectory.remove_group(grpId);
         delete grp;
     }
 
@@ -876,7 +899,7 @@ namespace hal {
         WaveData* wdOld = at(inx);
         Q_ASSERT(wdOld);
         Q_ASSERT(wdOld != wdNew);
-        wdNew->setName(wdOld->name());
+        wdNew->rename(wdOld->name()); // TODO : update saleae ?
         operator[](inx) = wdNew;
         for (WaveDataGroup* grp : mDataGroups.values())
             if (grp->hasNetId(wdNew->id()))

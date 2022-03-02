@@ -19,6 +19,7 @@ namespace hal
 
     SaleaeWriter::~SaleaeWriter()
     {
+        SaleaeDirectoryStoreRequest save(&mSaleaeDirectory);
         std::unordered_map<int,SaleaeDirectoryFileIndex> fileIndexes;
         for (auto it = mDataFiles.begin(); it != mDataFiles.end(); ++it)
         {
@@ -28,7 +29,6 @@ namespace hal
             delete sof;
         }
         mSaleaeDirectory.update_file_indexes(fileIndexes);
-        mSaleaeDirectory.write_json();
     }
 
     void SaleaeWriter::add_directory_entry(int inx, const std::string &name, uint32_t id)

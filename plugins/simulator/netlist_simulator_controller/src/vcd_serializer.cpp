@@ -578,6 +578,7 @@ namespace hal {
         emitProgress(istep++,nstep);
         createSaleaeDirectory();
         SaleaeDirectory sd(get_saleae_directory_filename());
+        SaleaeDirectoryStoreRequest save(&sd);
         QDir sourceDir(saleaeDirecotry);
         QDir targetDir(QFileInfo(mSaleaeDirectoryFilename).path());
         emitProgress(istep++,nstep);
@@ -604,7 +605,6 @@ namespace hal {
             sd.add_or_replace_net(sdne);
             emitProgress(istep++,nstep);
         }
-        sd.write_json();
         emitImportDone();
         return true;
     }

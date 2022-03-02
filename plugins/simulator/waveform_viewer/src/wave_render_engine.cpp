@@ -169,6 +169,7 @@ namespace hal {
         : QWidget(parent), mWaveGraphicsCanvas(wsa), mWaveDataList(wdlist), mWaveItemHash(wHash),
           mY0(0), mHeight(0), mTimerTick(0), mBackbone(nullptr)
     {
+        connect(this,&WaveRenderEngine::updateSoon,this,&WaveRenderEngine::callUpdate,Qt::QueuedConnection);
         mTimer = new QTimer(this);
         connect(mTimer,&QTimer::timeout,this,&WaveRenderEngine::handleTimeout);
         mTimer->start(50);
@@ -267,7 +268,13 @@ namespace hal {
                 if (wree->isNull())
                 {
                     if (wree->isGroup() && !wree->wavedata()->isLoadable())
-                        wree->mPainted.generateGroup(wree->wavedata(),mWaveItemHash);
+                    {
+                        if (wree->mPainted.generateGroup(wree->wavedata(),mWaveItemHash))
+                        {
+                            wree->setState(WaveItem::Painted);
+                            Q_EMIT updateSoon();
+                        }
+                    }
                     else
                         wree->startGeneratePainted(workdir,trans, sbar);
                 }
