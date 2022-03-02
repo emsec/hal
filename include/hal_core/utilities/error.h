@@ -37,18 +37,41 @@ namespace hal
         Error& operator=(Error&&) = default;
 
         /**
-         * Construct an error from an error message.
+         * Construct an error from a file path, a line number and an error message.
          * 
+         * @param[in] file - Path to the file in which the error occured.
+         * @param[in] line - Line number at which the error occured.
          * @param[in] message - The error message.
          */
-        explicit Error(const std::string& message) : m_message(message){};
+        explicit Error(const std::string& file, u32 line, const std::string& message) : m_message("[" + file + ":" + std::to_string(line) + "] " + message){};
 
         /**
-         * Construct an error from an existing one by copying its error message.
+         * Construct an error from an existing error by copying the original error message.
          * 
          * @param[in] error - The existing error.
          */
-        Error(const Error& error) : m_message(error.get()){};
+        Error(const Error& error) : m_message(error.get())
+        {
+        }
+
+        /**
+         * Construct an error from an existing error by copying the original error message and appending the current file and line number.
+         * 
+         * @param[in] file - Path to the file in which the error occured.
+         * @param[in] line - Line number at which the error occured.
+         * @param[in] error - The existing error.
+         */
+        Error(const std::string& file, u32 line, const Error& error) : m_message("[" + file + ":" + std::to_string(line) + "]\n" + error.get()){};
+
+        /**
+         * Construct an error from an existing error by copying the original error message and appending a new message as well as the current file and line number.
+         * 
+         * @param[in] file - Path to the file in which the error occured.
+         * @param[in] line - Line number at which the error occured.
+         * @param[in] error - The existing error.
+         * @param[in] message - The error message to append.
+         */
+        Error(const std::string& file, u32 line, const Error& error, const std::string& message) : m_message("[" + file + ":" + std::to_string(line) + "] " + message + "\n" + error.get()){};
 
         /**
          * Get the error message.

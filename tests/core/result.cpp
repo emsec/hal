@@ -61,27 +61,27 @@ namespace hal
             Result<u32> error_int = ERR("failed");
             EXPECT_FALSE(error_int.is_ok());
             ASSERT_TRUE(error_int.is_error());
-            EXPECT_EQ(error_int.get_error().get(), "failed");
+            EXPECT_TRUE(utils::ends_with<std::string>(error_int.get_error().get(), "failed"));
 
             Result<std::string> error_string = ERR("works on my machine");
             EXPECT_FALSE(error_string.is_ok());
             ASSERT_TRUE(error_string.is_error());
-            EXPECT_EQ(error_string.get_error().get(), "works on my machine");
+            EXPECT_TRUE(utils::ends_with<std::string>(error_string.get_error().get(), "works on my machine"));
 
             Result<std::vector<u32>> error_vector = ERR("works on my machine");
             EXPECT_FALSE(error_vector.is_ok());
             ASSERT_TRUE(error_vector.is_error());
-            EXPECT_EQ(error_vector.get_error().get(), "works on my machine");
+            EXPECT_TRUE(utils::ends_with<std::string>(error_vector.get_error().get(), "works on my machine"));
 
             Result<std::shared_ptr<u32>> error_shared = ERR("works on my machine");
             EXPECT_FALSE(error_shared.is_ok());
             ASSERT_TRUE(error_shared.is_error());
-            EXPECT_EQ(error_shared.get_error().get(), "works on my machine");
+            EXPECT_TRUE(utils::ends_with<std::string>(error_shared.get_error().get(), "works on my machine"));
 
             Result<std::unique_ptr<u32>> error_unique = ERR("works on my machine");
             EXPECT_FALSE(error_unique.is_ok());
             ASSERT_TRUE(error_unique.is_error());
-            EXPECT_EQ(error_unique.get_error().get(), "works on my machine");
+            EXPECT_TRUE(utils::ends_with<std::string>(error_unique.get_error().get(), "works on my machine"));
         }
         TEST_END
     }
@@ -99,7 +99,7 @@ namespace hal
 
             EXPECT_FALSE(g().is_ok());
             ASSERT_TRUE(g().is_error());
-            EXPECT_EQ(g().get_error().get(), "works on my machine");
+            EXPECT_TRUE(utils::ends_with<std::string>(g().get_error().get(), "works on my machine"));
         }
         TEST_END
     }
@@ -112,7 +112,12 @@ namespace hal
             auto g = []() -> Result<u32> { return ERR("works on my machine"); };
 
             auto f_map = f().map<std::string>([](auto value) -> Result<std::string> { return OK(std::to_string(value)); });
+            ASSERT_TRUE(f_map.is_ok());
             EXPECT_EQ(f_map.get(), "123");
+
+            auto g_map = g().map<std::string>([](auto value) -> Result<std::string> { return OK(std::to_string(value)); });
+            ASSERT_TRUE(g_map.is_error());
+            EXPECT_TRUE(utils::ends_with<std::string>(g_map.get_error().get(), "works on my machine"));
         }
         TEST_END
     }

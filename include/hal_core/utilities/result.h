@@ -39,7 +39,7 @@ namespace hal
         {
         };
         // Constructor type for macro: ERROR()
-        class ERR
+        class ER
         {
         };
     }    // namespace result_constructor_type
@@ -48,9 +48,13 @@ namespace hal
     {                                              \
         result_constructor_type::OK(), __VA_ARGS__ \
     }
-#define ERR(message)                                   \
-    {                                                  \
-        result_constructor_type::ERR(), Error(message) \
+#define ERR(message)                                                      \
+    {                                                                     \
+        result_constructor_type::ER(), Error(__FILE__, __LINE__, message) \
+    }
+#define ERR_APPEND(prev_error, message)                                               \
+    {                                                                                 \
+        result_constructor_type::ER(), Error(__FILE__, __LINE__, prev_error, message) \
     }
 
     template<typename T>
@@ -75,7 +79,7 @@ namespace hal
         {
         }
 
-        Result(result_constructor_type::ERR, const Error& error)
+        Result(result_constructor_type::ER, const Error& error)
         {
             m_result = error;
         }
@@ -171,9 +175,17 @@ namespace hal
          * 
          * @returns The error.
          */
-        Error get_error() const
+        const Error& get_error() const
         {
             return std::get<Error>(m_result);
+        }
+
+        /**
+         * @copydoc get_error()
+         */
+        Error&& get_error()
+        {
+            return std::get<Error>(std::move(m_result));
         }
 
         /**
