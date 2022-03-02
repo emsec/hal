@@ -1,13 +1,11 @@
 #include "hal_core/netlist/boolean_function/simplification.h"
-
 #include "hal_core/netlist/boolean_function/symbolic_execution.h"
 
-namespace hal 
+namespace hal
 {
     Result<BooleanFunction> Simplification::local_simplification(const BooleanFunction& function)
     {
-       	auto current = function.clone(),
-             before = BooleanFunction();
+        auto current = function.clone(), before = BooleanFunction();
 
         do
         {
@@ -15,11 +13,11 @@ namespace hal
             auto simplified = SMT::SymbolicExecution().evaluate(current);
             if (simplified.is_error())
             {
-                return simplified;
+                return ERR_APPEND(simplified.get_error(), "could not apply local simplification: symbolic execution failed");
             }
             current = simplified.get();
         } while (before != current);
 
         return OK(current);
     }
-}  // namespace hal
+}    // namespace hal

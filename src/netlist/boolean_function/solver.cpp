@@ -29,7 +29,7 @@ namespace hal
                     }
                 }
 
-                return ERR("No available binary path for 'z3' solver.");
+                return ERR("could not query binary path: no binary found for Z3 solver");
             }
 
             /**
@@ -47,7 +47,7 @@ namespace hal
                 auto binary_path = query_binary_path();
                 if (binary_path.is_error())
                 {
-                    return ERR(binary_path.get_error());
+                    return ERR_APPEND(binary_path.get_error(), "could not query Z3: unable to locate binary");
                 }
 
                 auto z3 = subprocess::Popen({binary_path.get(),
@@ -85,7 +85,7 @@ namespace hal
                     }
                 }
 
-                return ERR("No available binary path for 'Boolector' solver.");
+                return ERR("could not query binary path: no binary found for Boolector solver");
             }
 
             /**
@@ -103,7 +103,7 @@ namespace hal
                 auto binary_path = query_binary_path();
                 if (binary_path.is_error())
                 {
-                    return ERR(binary_path.get_error());
+                    return ERR_APPEND(binary_path.get_error(), "could not query Boolector: unable to locate binary");
                 }
 
                 auto boolector = subprocess::Popen(
@@ -161,14 +161,37 @@ namespace hal
 
             switch (auto it = type2query.find(solver); it != type2query.end())
             {
-                case true: return it->second().is_ok();
-                default:   return false;
+                case true:
+                    return it->second().is_ok();
+                default:
+                    return false;
             }
         }
 
         Result<SolverResult> Solver::query(const QueryConfig& config) const
         {
-            return (config.local) ? this->query_local(config) : this->query_remote(config);
+            if (config.local)
+            {
+                if (auto res = this->query_local(config); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "unable to query SMT solver: local query failed");
+                }
+                else
+                {
+                    return res;
+                }
+            }
+            else
+            {
+                if (auto res = this->query_remote(config); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "unable to query SMT solver: remote query failed");
+                }
+                else
+                {
+                    return res;
+                }
+            }
         }
 
         Result<SolverResult> Solver::query_local(const QueryConfig& config) const
@@ -181,7 +204,7 @@ namespace hal
             auto input = Solver::translate_to_smt2(this->m_constraints, config);
             if (input.is_error())
             {
-                return ERR("Cannot translate SMT constraints and configuration to string (= " + input.get_error().get() + ").");
+                return ERR_APPEND(input.get_error(), "could not query local SMT solver: unable to translate SMT constraints and configuration to string");
             }
 
             auto query = type2query.at(config.solver)(input.get(), config);
@@ -190,13 +213,13 @@ namespace hal
                 auto [was_killed, output] = query.get();
                 return Solver::translate_from_smt2(was_killed, output, config);
             }
-            return ERR("Cannot parse SMT result from string (= " + query.get_error().get() + ").");
+            return ERR_APPEND(query.get_error(), "could not query local SMT solver: unable to parse SMT result from string");
         }
 
         Result<SolverResult> Solver::query_remote(const QueryConfig& /* config */) const
         {
             // unimplemented as this is feature not required at the moment
-            return ERR("This feature is not currently supported.");
+            return ERR("could not query remote SMT solver: currently not supported");
         }
 
         Result<std::string> Solver::translate_to_smt2(const std::vector<Constraint>& constraints, const QueryConfig& config)
@@ -224,22 +247,23 @@ namespace hal
             };
 
             /// Helper to translate constraints to an SMT-LIB v2 string representation.
-            /// 
+            ///
             /// @param[in] constraints - List of constraints to translate.
             /// @returns Ok() and constraints as string on success, Err() otherwise.
             auto translate_constraints = [](const std::vector<Constraint>& _constraints) -> Result<std::string> {
                 return std::accumulate(_constraints.cbegin(), _constraints.cend(), Result<std::string>::Ok({}), [](auto accumulator, const auto& constraint) -> Result<std::string> {
                     // (1) short-hand termination in case accumulator is an error
-                    if (accumulator.is_error()) {
-                        return accumulator;
+                    if (accumulator.is_error())
+                    {
+                        return ERR(accumulator.get_error());
                     }
 
-                    auto lhs = Translator::translate_to_smt2(constraint.lhs),
-                         rhs = Translator::translate_to_smt2(constraint.rhs);
-                    if (lhs.is_ok() && rhs.is_ok()) {
+                    auto lhs = Translator::translate_to_smt2(constraint.lhs), rhs = Translator::translate_to_smt2(constraint.rhs);
+                    if (lhs.is_ok() && rhs.is_ok())
+                    {
                         return OK(accumulator.get() + "(assert (= " + lhs.get() + " " + rhs.get() + "))\n");
                     }
-                    return ERR("Cannot translate '" + constraint.to_string() + "' to SMT-LIB v2.");
+                    return ERR_APPEND(lhs.get_error(), "could not translate constraint to SMT-LIB v2: '" + constraint.to_string() + "'");
                 });
             };
 
@@ -252,14 +276,14 @@ namespace hal
             {
                 return OK(theory + "\n" + declarations + "\n" + constraints_str.get() + "\n" + epilogue);
             }
-            return ERR("Cannot generate translate constraints (= " + constraints_str.get_error().get() + ").");
+            return ERR_APPEND(constraints_str.get_error(), "could not translate constraint to SMT-LIB v2: unable to generate translation constraints");
         }
 
         Result<SolverResult> Solver::translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config)
         {
             if (was_killed)
             {
-                return ERR("Cannot parse SMT result from string as the SMT solver was killed.");
+                return ERR("could not parse SMT result from string: the SMT solver was killed");
             }
 
             auto position            = stdout.find_first_of('\n');
@@ -275,10 +299,14 @@ namespace hal
             {
                 if (config.generate_model)
                 {
-                    return Model::parse(model_str, config.solver)
-                        .map<SolverResult>([] (auto model) -> Result<SolverResult> { 
-                            return OK(SolverResult::Sat(model)); 
-                        });
+                    if (auto res = Model::parse(model_str, config.solver).map<SolverResult>([](auto model) -> Result<SolverResult> { return OK(SolverResult::Sat(model)); }); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not parse SMT result from string: unable to generate model");
+                    }
+                    else
+                    {
+                        return res;
+                    }
                 }
 
                 return OK(SolverResult::Sat());
@@ -293,7 +321,7 @@ namespace hal
                 return OK(SolverResult::Unknown());
             }
 
-            return ERR("Cannot translate SMT result from string.");
+            return ERR("could not parse SMT result from string: invalid result");
         }
     }    // namespace SMT
 }    // namespace hal

@@ -100,7 +100,7 @@ namespace hal
             {'X', {BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X, BooleanFunction::Value::X}},
             {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
 
-        std::vector<BooleanFunction::Value> get_binary_vector(std::string value)
+        Result<std::vector<BooleanFunction::Value>> get_binary_vector(std::string value)
         {
             value = utils::to_upper(utils::replace(value, std::string("_"), std::string("")));
 
@@ -138,8 +138,7 @@ namespace hal
                         }
                         else
                         {
-                            log_error("verilog_parser", "invalid character within binary number literal {}.", value);
-                            return {};
+                            return ERR("could not convert string to binary vector: invalid character within binary number literal '" + value + "'");
                         }
                     }
                     break;
@@ -156,8 +155,7 @@ namespace hal
                         }
                         else
                         {
-                            log_error("verilog_parser", "invalid character within octal number literal {}.", value);
-                            return {};
+                            return ERR("could not convert string to binary vector: invalid character within octal number literal '" + value + "'");
                         }
                     }
                     break;
@@ -173,8 +171,7 @@ namespace hal
                         }
                         else
                         {
-                            log_error("verilog_parser", "invalid character within decimal number literal {} in line {}.", value);
-                            return {};
+                            return ERR("could not convert string to binary vector: invalid character within decimal number literal '" + value + "'");
                         }
                     }
 
@@ -197,16 +194,14 @@ namespace hal
                         }
                         else
                         {
-                            log_error("verilog_parser", "invalid character within hexadecimal number literal {}.", value);
-                            return {};
+                            return ERR("could not convert string to binary vector: invalid character within hexadecimal number literal '" + value + "'");
                         }
                     }
                     break;
                 }
 
                 default: {
-                    log_error("verilog_parser", "invalid base '{}' within number literal {}.", prefix, value);
-                    return {};
+                    return ERR("could not convert string to binary vector: invalid base '" + prefix + "' within number literal '" + value + "'");
                 }
             }
 
@@ -232,16 +227,111 @@ namespace hal
                 }
             }
 
-            return result;
+            return OK(result);
         }
 
-        std::vector<assignment_t> parse_assignment_expression(TokenStream<std::string>&& stream)
+        Result<std::string> get_hex_from_literal(const Token<std::string>& value_token)
+        {
+            const u32 line_number   = value_token.number;
+            const std::string value = utils::to_upper(utils::replace(value_token.string, std::string("_"), std::string("")));
+
+            i32 len = -1;
+            std::string prefix;
+            std::string number;
+            u32 base;
+
+            // base specified?
+            if (value.find('\'') == std::string::npos)
+            {
+                prefix = "D";
+                number = value;
+            }
+            else
+            {
+                if (value.at(0) != '\'')
+                {
+                    len = std::stoi(value.substr(0, value.find('\'')));
+                }
+                prefix = value.substr(value.find('\'') + 1, 1);
+                number = value.substr(value.find('\'') + 2);
+            }
+
+            // select base
+            switch (prefix.at(0))
+            {
+                case 'B': {
+                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '1'); }))
+                    {
+                        return ERR("could not convert token to hexadecimal string: invalid character within binary number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                    }
+
+                    base = 2;
+                    break;
+                }
+
+                case 'O': {
+                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '7'); }))
+                    {
+                        return ERR("could not convert token to hexadecimal string: invalid character within ocatl number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                    }
+
+                    base = 8;
+                    break;
+                }
+
+                case 'D': {
+                    if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9'); }))
+                    {
+                        return ERR("could not convert token to hexadecimal string: invalid character within decimal number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                    }
+
+                    base = 10;
+                    break;
+                }
+
+                case 'H': {
+                    std::string res;
+
+                    for (const char c : number)
+                    {
+                        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
+                        {
+                            res += c;
+                        }
+                        else
+                        {
+                            return ERR("could not convert token to hexadecimal string: invalid character within hexadecimal number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                        }
+                    }
+
+                    return OK(res);
+                }
+
+                default: {
+                    return ERR("could not convert token to hexadecimal string: invalid base '" + prefix + "' within number literal '" + value + "' (line " + std::to_string(line_number) + ")");
+                }
+            }
+
+            std::stringstream ss;
+            if (len != -1)
+            {
+                // fill with '0'
+                ss << std::uppercase << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(number, 0, base);
+            }
+            else
+            {
+                ss << std::uppercase << std::hex << stoull(number, 0, base);
+            }
+            return OK(ss.str());
+        }
+
+        Result<std::vector<assignment_t>> parse_assignment_expression(TokenStream<std::string>&& stream)
         {
             std::vector<TokenStream<std::string>> parts;
 
             if (stream.size() == 0)
             {
-                return {empty_t()};
+                return ERR("could not parse assignment expression: token stream is empty");
             }
 
             if (stream.peek() == "{")
@@ -274,12 +364,14 @@ namespace hal
                 // (3) NUMBER
                 if (isdigit(signal_name[0]) || signal_name[0] == '\'')
                 {
-                    numeral_t binary_vector = get_binary_vector(signal_name_token);
-                    if (binary_vector.empty())
+                    if (auto res = get_binary_vector(signal_name_token); res.is_error())
                     {
-                        return {};
+                        return ERR_APPEND(res.get_error(), "could not parse assignment expression: unable to convert token to binary vector");
                     }
-                    result.push_back(std::move(binary_vector));
+                    else
+                    {
+                        result.push_back(std::move(res.get()));
+                    }
                 }
                 else
                 {
@@ -308,7 +400,7 @@ namespace hal
                 }
             }
 
-            return result;
+            return OK(result);
         }
 
         std::vector<std::string> expand_assignment_expression(VerilogModule* verilog_module, const std::vector<assignment_t>& vars)
@@ -350,8 +442,9 @@ namespace hal
         }
     }    // namespace
 
-    bool VerilogParser::parse(const std::filesystem::path& file_path)
+    Result<std::monostate> VerilogParser::parse(const std::filesystem::path& file_path)
     {
+        m_path = file_path;
         m_modules.clear();
         m_modules_by_name.clear();
 
@@ -360,38 +453,38 @@ namespace hal
             ifs.open(file_path.string(), std::ifstream::in);
             if (!ifs.is_open())
             {
-                log_error("verilog_parser", "unable to open '{}'.", file_path.string());
-                return false;
+                return ERR("could not parse Verilog file '" + m_path.string() + "' : unable to open file");
             }
             m_fs << ifs.rdbuf();
             ifs.close();
         }
 
         // tokenize file
-        if (!tokenize())
-        {
-            return false;
-        }
+        tokenize();
 
         // parse tokens into intermediate format
         try
         {
-            if (!parse_tokens())
+            if (auto res = parse_tokens(); res.is_error())
             {
-                return false;
+                return ERR_APPEND(res.get_error(), "could not parse Verilog file '" + file_path.string() + "': unable to parse tokens");
             }
         }
         catch (TokenStream<std::string>::TokenStreamException& e)
         {
             if (e.line_number != (u32)-1)
             {
-                log_error("verilog_parser", "{} near line {}.", e.message, e.line_number);
+                return ERR("could not parse Verilog file '" + m_path.string() + "': " + e.message + " (line " + std::to_string(e.line_number) + ")");
             }
             else
             {
-                log_error("verilog_parser", "{}.", e.message);
+                return ERR("could not parse Verilog file '" + m_path.string() + "': " + e.message);
             }
-            return false;
+        }
+
+        if (m_modules.empty())
+        {
+            return ERR("could not parse Verilog file '" + m_path.string() + "': does not contain any modules");
         }
 
         // expand module port identifiers, signals, and assignments
@@ -444,7 +537,7 @@ namespace hal
                 const std::vector<std::string> right_signals = expand_assignment_expression(verilog_module, assignment.m_assignment);
                 if (left_signals.empty() || right_signals.empty())
                 {
-                    return false;
+                    return ERR("could not parse Verilog file '" + m_path.string() + "': unable to expand assignments within module '" + verilog_module->m_name + "'");
                 }
 
                 u32 left_size  = left_signals.size();
@@ -485,14 +578,14 @@ namespace hal
                     {
                         if (!port_assignment.m_port_name.has_value())
                         {
-                            log_error("verilog_parser", "parsing of unnamed ports is not yet supported.");
-                            return false;
+                            return ERR("could not parse Verilog file '" + m_path.string() + "': parsing of unnamed ports is not yet supported");
                         }
 
                         VerilogPort* port;
                         if (const auto port_it = module_it->second->m_ports_by_identifier.find(port_assignment.m_port_name.value()); port_it == module_it->second->m_ports_by_identifier.end())
                         {
-                            return false;
+                            return ERR("could not parse Verilog file '" + m_path.string() + "': unable to assign signal to port '" + port_assignment.m_port_name.value()
+                                       + "' as it is not a port of module '" + module_it->first + "'");
                         }
                         else
                         {
@@ -503,7 +596,7 @@ namespace hal
                         const std::vector<std::string> right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);
                         if (left_port.empty())
                         {
-                            return false;
+                            return ERR("could not parse Verilog file '" + m_path.string() + "': unable to expand port assignment");
                         }
 
                         if (!right_port.empty())
@@ -535,25 +628,17 @@ namespace hal
             }
         }
 
-        return true;
+        return OK({});
     }
 
-    std::unique_ptr<Netlist> VerilogParser::instantiate(const GateLibrary* gate_library)
+    Result<std::unique_ptr<Netlist>> VerilogParser::instantiate(const GateLibrary* gate_library)
     {
         // create empty netlist
         std::unique_ptr<Netlist> result = netlist_factory::create_netlist(gate_library);
         m_netlist                       = result.get();
         if (m_netlist == nullptr)
         {
-            // error printed in subfunction
-            return nullptr;
-        }
-
-        // any entities in netlist?
-        if (m_modules.empty())
-        {
-            log_error("verilog_parser", "file did not contain any modules.");
-            return nullptr;
+            return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to create empty netlist");
         }
 
         m_gate_types.clear();
@@ -584,22 +669,22 @@ namespace hal
         m_zero_net = m_netlist->create_net("'0'");
         if (m_zero_net == nullptr)
         {
-            return nullptr;
+            return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to create zero net");
         }
         m_net_by_name[m_zero_net->get_name()] = m_zero_net;
 
         m_one_net = m_netlist->create_net("'1'");
         if (m_one_net == nullptr)
         {
-            return nullptr;
+            return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to create one net");
         }
         m_net_by_name[m_one_net->get_name()] = m_one_net;
 
         // construct the netlist with the last module being considered the top module
         VerilogModule* top_module = m_modules_by_name.at(m_last_module);
-        if (!construct_netlist(top_module))
+        if (const auto res = construct_netlist(top_module); res.is_error())
         {
-            return nullptr;
+            return ERR_APPEND(res.get_error(), "could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': unable to construct netlist");
         }
 
         // add global GND gate if required by any instance
@@ -613,12 +698,12 @@ namespace hal
 
                 if (!m_netlist->mark_gnd_gate(gnd))
                 {
-                    return nullptr;
+                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark GND gate");
                 }
 
                 if (!m_zero_net->add_source(gnd, output_pin))
                 {
-                    return nullptr;
+                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to add source to GND gate");
                 }
             }
             else
@@ -638,12 +723,12 @@ namespace hal
 
                 if (!m_netlist->mark_vcc_gate(vcc))
                 {
-                    return nullptr;
+                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark VCC gate");
                 }
 
                 if (!m_one_net->add_source(vcc, output_pin))
                 {
-                    return nullptr;
+                    return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to add source to VCC gate");
                 }
             }
             else
@@ -665,14 +750,14 @@ namespace hal
 
         m_netlist->load_gate_locations_from_data();
 
-        return result;
+        return OK(std::move(result));
     }
 
     // ###########################################################################
     // ###########          Parse HDL into Intermediate Format          ##########
     // ###########################################################################
 
-    bool VerilogParser::tokenize()
+    void VerilogParser::tokenize()
     {
         const std::string delimiters = "`,()[]{}\\#*: ;=.";
         std::string current_token;
@@ -760,40 +845,38 @@ namespace hal
         }
 
         m_token_stream = TokenStream(parsed_tokens, {"(", "["}, {")", "]"});
-        return true;
     }
 
-    bool VerilogParser::parse_tokens()
+    Result<std::monostate> VerilogParser::parse_tokens()
     {
         std::vector<VerilogDataEntry> attributes;
+        u32 line_number;
 
         while (m_token_stream.remaining() > 0)
         {
             if (m_token_stream.peek() == "(*")
             {
-                if (!parse_attribute(attributes))
-                {
-                    return false;
-                }
+                parse_attribute(attributes);
             }
             else if (m_token_stream.peek() == "`")
             {
                 m_token_stream.consume_current_line();
-                log_warning("verilog_parser", "cannot parse compiler directives.");
+                log_warning("verilog_parser", "could not parse compiler directives.");
             }
             else
             {
-                if (!parse_module(attributes))
+                line_number = m_token_stream.peek().number;
+                if (auto res = parse_module(attributes); res.is_error())
                 {
-                    return false;
+                    return ERR_APPEND(res.get_error(), "could not parse tokens: unable to parse module (line " + std::to_string(line_number) + ")");
                 }
             }
         }
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogParser::parse_module(std::vector<VerilogDataEntry>& attributes)
+    Result<std::monostate> VerilogParser::parse_module(std::vector<VerilogDataEntry>& attributes)
     {
         std::set<std::string> port_names;
         std::vector<VerilogDataEntry> internal_attributes;
@@ -805,8 +888,8 @@ namespace hal
         // verify entity name
         if (const auto it = m_modules_by_name.find(module_name); it != m_modules_by_name.end())
         {
-            log_error("verilog_parser", "a module with the name '{}' does already exist (see line {} and line {})", module_name, line_number, it->second->m_line_number);
-            return false;
+            return ERR("could not parse module '" + module_name + "' (line " + std::to_string(line_number) + "): a module with the same name already exists (line "
+                       + std::to_string(it->second->m_line_number) + ")");
         }
 
         auto verilog_module               = std::make_unique<VerilogModule>();
@@ -820,7 +903,7 @@ namespace hal
             // TODO add support for parameter parsing
             m_token_stream.consume_until(")");
             m_token_stream.consume(")", true);
-            log_warning("verilog_parser", "cannot parse parameter list provided for module '{}'.", module_name);
+            log_warning("verilog_parser", "could not parse parameter list provided for module '{}'.", module_name);
         }
 
         // parse port (declaration) list
@@ -828,17 +911,14 @@ namespace hal
         Token<std::string> next_token = m_token_stream.peek();
         if (next_token == "input" || next_token == "output" || next_token == "inout")
         {
-            if (!parse_port_declaration_list(verilog_module_raw))
+            if (auto res = parse_port_declaration_list(verilog_module_raw); res.is_error())
             {
-                return false;
+                return ERR_APPEND(res.get_error(), "could not parse module '" + module_name + "': unable to parse port declaration list (line " + std::to_string(line_number) + ")");
             }
         }
         else
         {
-            if (!parse_port_list(verilog_module_raw))
-            {
-                return false;
-            }
+            parse_port_list(verilog_module_raw);
         }
 
         m_token_stream.consume(";", true);
@@ -848,16 +928,16 @@ namespace hal
         {
             if (next_token == "input" || next_token == "output" || next_token == "inout")
             {
-                if (!parse_port_definition(verilog_module_raw, internal_attributes))
+                if (auto res = parse_port_definition(verilog_module_raw, internal_attributes); res.is_error())
                 {
-                    return false;
+                    return ERR_APPEND(res.get_error(), "could not parse module '" + module_name + "': unable to parse port definition (line " + std::to_string(line_number) + ")");
                 }
             }
             else if (next_token == "wire" || next_token == "tri")
             {
-                if (!parse_signal_definition(verilog_module_raw, internal_attributes))
+                if (auto res = parse_signal_definition(verilog_module_raw, internal_attributes); res.is_error())
                 {
-                    return false;
+                    return ERR_APPEND(res.get_error(), "could not parse module '" + module_name + "': unable to parse signal definition (line " + std::to_string(line_number) + ")");
                 }
             }
             else if (next_token == "parameter")
@@ -865,27 +945,24 @@ namespace hal
                 // TODO add support for parameter parsing
                 m_token_stream.consume_until(";");
                 m_token_stream.consume(";", true);
-                log_warning("verilog_parser", "cannot parse parameter provided for module '{}'.", module_name);
+                log_warning("verilog_parser", "could not parse parameter provided for module '{}'.", module_name);
             }
             else if (next_token == "assign")
             {
-                if (!parse_assignment(verilog_module_raw))
+                if (auto res = parse_assignment(verilog_module_raw); res.is_error())
                 {
-                    return false;
+                    return ERR_APPEND(res.get_error(), "could not parse module '" + module_name + "': unable to parse assignment (line " + std::to_string(line_number) + ")");
                 }
             }
             else if (next_token == "(*")
             {
-                if (!parse_attribute(internal_attributes))
-                {
-                    return false;
-                }
+                parse_attribute(internal_attributes);
             }
             else
             {
-                if (!parse_instance(verilog_module_raw, internal_attributes))
+                if (auto res = parse_instance(verilog_module_raw, internal_attributes); res.is_error())
                 {
-                    return false;
+                    return ERR_APPEND(res.get_error(), "could not parse module '" + module_name + "': unable to parse instance (line " + std::to_string(line_number) + ")");
                 }
             }
 
@@ -906,10 +983,10 @@ namespace hal
         m_modules_by_name[module_name] = verilog_module_raw;
         m_last_module                  = module_name;
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogParser::parse_port_list(VerilogModule* verilog_module)
+    void VerilogParser::parse_port_list(VerilogModule* verilog_module)
     {
         TokenStream<std::string> ports_stream = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
@@ -938,11 +1015,9 @@ namespace hal
 
             ports_stream.consume(",", ports_stream.remaining() > 0);
         }
-
-        return true;
     }
 
-    bool VerilogParser::parse_port_declaration_list(VerilogModule* verilog_module)
+    Result<std::monostate> VerilogParser::parse_port_declaration_list(VerilogModule* verilog_module)
     {
         TokenStream<std::string> ports_stream = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
@@ -954,8 +1029,7 @@ namespace hal
             PinDirection direction                   = enum_from_string<PinDirection>(direction_token.string, PinDirection::none);
             if (direction == PinDirection::none || direction == PinDirection::internal)
             {
-                log_error("verilog_parser", "invalid direction '{}' for port declaration in line {}", direction_token.string, direction_token.number);
-                return false;
+                return ERR("could not parse port declaration list: invalid direction '" + direction_token.string + "' (line " + std::to_string(direction_token.number) + ")");
             }
 
             // ranges
@@ -993,18 +1067,17 @@ namespace hal
             } while (ports_stream.consume(",", ports_stream.remaining() > 0));
         }
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogParser::parse_port_definition(VerilogModule* verilog_module, std::vector<VerilogDataEntry>& attributes)
+    Result<std::monostate> VerilogParser::parse_port_definition(VerilogModule* verilog_module, std::vector<VerilogDataEntry>& attributes)
     {
         // port direction
         const Token<std::string> direction_token = m_token_stream.consume();
         PinDirection direction                   = enum_from_string<PinDirection>(direction_token.string, PinDirection::none);
         if (direction == PinDirection::none || direction == PinDirection::internal)
         {
-            log_error("verilog_parser", "invalid direction '{}' for port declaration in line {}", direction_token.string, direction_token.number);
-            return false;
+            return ERR("could not parse port definition: invalid direction '" + direction_token.string + "' (line " + std::to_string(direction_token.number) + ")");
         }
 
         // ranges
@@ -1026,8 +1099,8 @@ namespace hal
             VerilogPort* port;
             if (const auto it = verilog_module->m_ports_by_expression.find(port_expression); it == verilog_module->m_ports_by_expression.end())
             {
-                log_error("verilog_parser", "a port with name '{}' does not exist for module '{}' in line {}.", port_expression, verilog_module->m_name, port_expression_token.number);
-                return false;
+                return ERR("could not parse port definition: a port with name '" + port_expression + "' does not exist for module '" + verilog_module->m_name + "' (line "
+                           + std::to_string(direction_token.number) + ")");
             }
             else
             {
@@ -1045,13 +1118,13 @@ namespace hal
         m_token_stream.consume(";", true);
         attributes.clear();
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogParser::parse_signal_definition(VerilogModule* verilog_module, std::vector<VerilogDataEntry>& attributes)
+    Result<std::monostate> VerilogParser::parse_signal_definition(VerilogModule* verilog_module, std::vector<VerilogDataEntry>& attributes)
     {
         // consume "wire" or "tri"
-        m_token_stream.consume();
+        u32 line_number = m_token_stream.consume().number;
 
         TokenStream<std::string> signal_stream = m_token_stream.extract_until(";");
         m_token_stream.consume(";", true);
@@ -1075,7 +1148,14 @@ namespace hal
                 VerilogAssignment assignment;
                 assignment.m_variable.push_back(signal_name);
                 signal_stream.consume("=", true);
-                assignment.m_assignment = parse_assignment_expression(signal_stream.extract_until(","));
+                if (auto res = parse_assignment_expression(signal_stream.extract_until(",")); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse signal definition: unable to parse assignment expression (line " + std::to_string(line_number) + ")");
+                }
+                else
+                {
+                    assignment.m_assignment = res.get();
+                }
                 verilog_module->m_assignments.push_back(std::move(assignment));
             }
 
@@ -1093,32 +1173,40 @@ namespace hal
 
         attributes.clear();
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogParser::parse_assignment(VerilogModule* verilog_module)
+    Result<std::monostate> VerilogParser::parse_assignment(VerilogModule* verilog_module)
     {
         m_token_stream.consume("assign", true);
+        u32 line_number = m_token_stream.peek().number;
         VerilogAssignment assignment;
 
-        assignment.m_variable = parse_assignment_expression(m_token_stream.extract_until("="));
-        if (assignment.m_variable.empty())
+        if (auto res = parse_assignment_expression(m_token_stream.extract_until("=")); res.is_error())
         {
-            return false;
+            return ERR_APPEND(res.get_error(), "could not parse assignment: unable to parse assignment expression (line " + std::to_string(line_number) + ")");
+        }
+        else
+        {
+            assignment.m_variable = res.get();
         }
         m_token_stream.consume("=", true);
-        assignment.m_assignment = parse_assignment_expression(m_token_stream.extract_until(";"));
-        if (assignment.m_assignment.empty())
+
+        if (auto res = parse_assignment_expression(m_token_stream.extract_until(";")); res.is_error())
         {
-            return false;
+            return ERR_APPEND(res.get_error(), "could not parse assignment: unable to parse assignment expression (line " + std::to_string(line_number) + ")");
+        }
+        else
+        {
+            assignment.m_assignment = res.get();
         }
         m_token_stream.consume(";", true);
 
         verilog_module->m_assignments.push_back(std::move(assignment));
-        return true;
+        return OK({});
     }
 
-    bool VerilogParser::parse_attribute(std::vector<VerilogDataEntry>& attributes)
+    void VerilogParser::parse_attribute(std::vector<VerilogDataEntry>& attributes)
     {
         m_token_stream.consume("(*", true);
 
@@ -1145,28 +1233,35 @@ namespace hal
         } while (m_token_stream.consume(",", false));
 
         m_token_stream.consume("*)", true);
-
-        return true;
     }
 
-    bool VerilogParser::parse_instance(VerilogModule* verilog_module, std::vector<VerilogDataEntry>& attributes)
+    Result<std::monostate> VerilogParser::parse_instance(VerilogModule* verilog_module, std::vector<VerilogDataEntry>& attributes)
     {
         auto instance    = std::make_unique<VerilogInstance>();
+        u32 line_number  = m_token_stream.peek().number;
         instance->m_type = m_token_stream.consume().string;
 
         // parse generics map
         if (m_token_stream.consume("#("))
         {
-            instance->m_parameters = parse_generic_assign();
+            if (auto res = parse_generic_assign(); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not parse instance of type '" + instance->m_type + "': unable to parse parameter assignment (line " + std::to_string(line_number) + ")");
+            }
+            else
+            {
+                instance->m_parameters = res.get();
+            }
         }
 
         // parse instance name
         instance->m_name = m_token_stream.consume().string;
 
         // parse port map
-        if (!parse_port_assign(instance.get()))
+        if (auto res = parse_port_assign(instance.get()); res.is_error())
         {
-            return false;
+            return ERR_APPEND(res.get_error(),
+                              "could not parse instance '" + instance->m_name + "' of type '" + instance->m_type + "': unable to parse port assignment (line " + std::to_string(line_number) + ")");
         }
 
         // assign attributes to instance
@@ -1176,11 +1271,12 @@ namespace hal
         verilog_module->m_instances_by_name[instance->m_name] = instance.get();
         verilog_module->m_instances.push_back(std::move(instance));
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogParser::parse_port_assign(VerilogInstance* instance)
+    Result<std::monostate> VerilogParser::parse_port_assign(VerilogInstance* instance)
     {
+        u32 line_number = m_token_stream.peek().number;
         m_token_stream.consume("(", true);
 
         do
@@ -1190,7 +1286,14 @@ namespace hal
                 VerilogPortAssignment port_assignment;
                 port_assignment.m_port_name = m_token_stream.consume().string;
                 m_token_stream.consume("(", true);
-                port_assignment.m_assignment = parse_assignment_expression(m_token_stream.extract_until(")"));
+                if (auto res = parse_assignment_expression(m_token_stream.extract_until(")")); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse port assignment: unable to parse assignment expression (line " + std::to_string(line_number) + ")");
+                }
+                else
+                {
+                    port_assignment.m_assignment = res.get();
+                }
                 m_token_stream.consume(")", true);
                 instance->m_port_assignments.push_back(std::move(port_assignment));
             }
@@ -1199,17 +1302,19 @@ namespace hal
         m_token_stream.consume(")", true);
         m_token_stream.consume(";", true);
 
-        return true;
+        return OK({});
     }
 
-    std::vector<VerilogDataEntry> VerilogParser::parse_generic_assign()
+    Result<std::vector<VerilogDataEntry>> VerilogParser::parse_generic_assign()
     {
         std::vector<VerilogDataEntry> generics;
 
+        u32 line_number;
         do
         {
             if (m_token_stream.consume(".", false))
             {
+                line_number                  = m_token_stream.peek().number;
                 const Token<std::string> lhs = m_token_stream.join_until("(", "");
                 m_token_stream.consume("(", true);
                 const Token<std::string> rhs = m_token_stream.join_until(")", "");
@@ -1234,10 +1339,13 @@ namespace hal
                 }
                 else if (isdigit(rhs.string[0]) || rhs.string[0] == '\'')
                 {
-                    value = get_hex_from_literal(rhs);
-                    if (value.empty())
+                    if (const auto res = get_hex_from_literal(rhs); res.is_error())
                     {
                         skip = true;
+                    }
+                    else
+                    {
+                        value = res.get();
                     }
 
                     if (value == "0" || value == "1")
@@ -1251,8 +1359,7 @@ namespace hal
                 }
                 else
                 {
-                    log_warning("verilog_parser", "cannot identify data type of generic map value '{}' in line {}", rhs.string, rhs.number);
-                    skip = true;
+                    return ERR("could not parse generic assignment: failed to identify data type of generic map value '" + rhs.string + "' (line " + std::to_string(line_number) + ")");
                 }
 
                 if (!skip)
@@ -1264,14 +1371,14 @@ namespace hal
 
         m_token_stream.consume(")", true);
 
-        return generics;
+        return OK(generics);
     }
 
     // ###########################################################################
     // ###########      Assemble Netlist from Intermediate Format       ##########
     // ###########################################################################
 
-    bool VerilogParser::construct_netlist(VerilogModule* top_module)
+    Result<std::monostate> VerilogParser::construct_netlist(VerilogModule* top_module)
     {
         m_netlist->set_design_name(top_module->m_name);
         m_netlist->enable_automatic_net_checks(false);
@@ -1349,8 +1456,7 @@ namespace hal
                         std::vector<std::string> left_port;
                         if (!port_assignment.m_port_name.has_value())
                         {
-                            log_error("verilog_parser", "parsing of unnamed ports is not yet supported.");
-                            return false;
+                            return ERR("could not construct netlist: parsing of unnamed ports is not yet supported");
                         }
 
                         const auto& port_name = port_assignment.m_port_name.value();
@@ -1396,8 +1502,7 @@ namespace hal
                 Net* global_port_net = m_netlist->create_net(expanded_port_identifier);
                 if (global_port_net == nullptr)
                 {
-                    log_error("verilog_parser", "could not create global port net '{}'.", expanded_port_identifier);
-                    return false;
+                    return ERR("could not construct netlist: failed to create global I/O net '" + expanded_port_identifier + "'");
                 }
 
                 m_net_by_name[expanded_port_identifier] = global_port_net;
@@ -1409,8 +1514,7 @@ namespace hal
                 {
                     if (!global_port_net->mark_global_input_net())
                     {
-                        log_error("verilog_parser", "could not mark global port net '{}' as global input.", expanded_port_identifier);
-                        return false;
+                        return ERR("could not construct netlist: failed to mark global I/O net '" + expanded_port_identifier + "' as global input");
                     }
                 }
 
@@ -1418,17 +1522,15 @@ namespace hal
                 {
                     if (!global_port_net->mark_global_output_net())
                     {
-                        log_error("verilog_parser", "could not mark global port net '{}' as global output.", expanded_port_identifier);
-                        return false;
+                        return ERR("could not construct netlist: failed to mark global I/O net '" + expanded_port_identifier + "' as global output");
                     }
                 }
             }
         }
 
-        if (!instantiate_module("top_module", top_module, nullptr, top_assignments))
+        if (auto res = instantiate_module("top_module", top_module, nullptr, top_assignments); res.is_error())
         {
-            // error printed in subfunction
-            return false;
+            return ERR_APPEND(res.get_error(), "could not construct netlist: unable to instantiate top module");
         }
 
         // merge nets without gates in between them
@@ -1531,8 +1633,7 @@ namespace hal
 
             if (!progress_made)
             {
-                log_error("verilog_parser", "cyclic dependency between signals detected, cannot parse netlist.");
-                return false;
+                return ERR("could not construct netlist: cyclic dependency between signals detected");
             }
         }
 
@@ -1545,7 +1646,13 @@ namespace hal
         // assign module pins
         for (const auto& [net, port_info] : m_module_ports)
         {
-            std::get<2>(port_info)->create_pin(std::get<1>(port_info), net);
+            Module* mod = std::get<2>(port_info);
+            if (auto res = mod->create_pin(std::get<1>(port_info), net); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(),
+                                  "could not construct netlist: failed to create pin '" + std::get<1>(port_info) + "' at net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
+                                      + "within module '" + mod->get_name() + "' with ID " + std::to_string(mod->get_id()));
+            }
         }
 
         for (Module* module : m_netlist->get_modules())
@@ -1555,23 +1662,33 @@ namespace hal
 
             if (module->get_pin_by_net(m_one_net).is_error() && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
             {
-                module->create_pin("'1'", m_one_net);
+                if (auto res = module->create_pin("'1'", m_one_net); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not construct netlist: failed to create pin '1' at net '" + m_one_net->get_name() + "' with ID " + std::to_string(m_one_net->get_id()) + "within module '"
+                                          + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                }
             }
 
             if (module->get_pin_by_net(m_zero_net).is_error() && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
             {
-                module->create_pin("'0'", m_one_net);
+                if (auto res = module->create_pin("'0'", m_zero_net); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not construct netlist: failed to create pin '0' at net '" + m_zero_net->get_name() + "' with ID " + std::to_string(m_zero_net->get_id())
+                                          + "within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
+                }
             }
         }
 
         m_netlist->enable_automatic_net_checks(true);
-        return true;
+        return OK({});
     }
 
-    Module* VerilogParser::instantiate_module(const std::string& instance_identifier,
-                                              VerilogModule* verilog_module,
-                                              Module* parent,
-                                              const std::unordered_map<std::string, std::string>& parent_module_assignments)
+    Result<Module*> VerilogParser::instantiate_module(const std::string& instance_identifier,
+                                                      VerilogModule* verilog_module,
+                                                      Module* parent,
+                                                      const std::unordered_map<std::string, std::string>& parent_module_assignments)
     {
         std::unordered_map<std::string, std::string> signal_alias;
         std::unordered_map<std::string, std::string> instance_alias;
@@ -1595,8 +1712,7 @@ namespace hal
         std::string instance_type = verilog_module->m_name;
         if (module == nullptr)
         {
-            log_error("verilog_parser", "could not instantiate instance '{}' of module '{}'.", instance_identifier, instance_type);
-            return nullptr;
+            return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to create module");
         }
         module->set_type(instance_type);
 
@@ -1648,8 +1764,7 @@ namespace hal
                 Net* signal_net = m_netlist->create_net(signal_alias.at(expanded_name));
                 if (signal_net == nullptr)
                 {
-                    log_error("verilog_parser", "could not instantiate net '{}' of instance '{}' of type '{}'.", expanded_name, instance_identifier, instance_type, instance_identifier, instance_type);
-                    return nullptr;
+                    return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to create net '" + expanded_name + "'");
                 }
 
                 m_net_by_name[signal_alias.at(expanded_name)] = signal_net;
@@ -1688,8 +1803,7 @@ namespace hal
             }
             else
             {
-                log_error("verilog_parser", "cannot find alias for net '{}' of instance '{}' of type '{}'.", a, instance_identifier, instance_type);
-                return nullptr;
+                return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find alias for net '" + a + "'");
             }
 
             if (const auto parent_it = parent_module_assignments.find(b); parent_it != parent_module_assignments.end())
@@ -1706,8 +1820,7 @@ namespace hal
             }
             else if (b != "'0'" && b != "'1'")
             {
-                log_error("verilog_parser", "cannot find alias for net '{}' of instance '{}' of type '{}'.", b, instance_identifier, instance_type);
-                return nullptr;
+                return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find alias for net '" + b + "'");
             }
 
             m_nets_to_merge[b].push_back(a);
@@ -1744,16 +1857,20 @@ namespace hal
                         }
                         else if (assignment != "'Z'" && assignment != "'X'" && assignment != "")
                         {
-                            log_error("verilog_parser", "port assignment \"{} = {}\" is invalid for instance '{}' of type '{}'.", port, assignment, instance->m_name, instance->m_type);
-                            return nullptr;
+                            return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': port assignment '" + port + " = " + assignment + "' is invalid");
                         }
                     }
                 }
 
-                container = instantiate_module(instance->m_name, module_it->second, module, instance_assignments);
-                if (container == nullptr)
+                if (auto res = instantiate_module(instance->m_name, module_it->second, module, instance_assignments); res.is_error())
                 {
-                    return nullptr;
+                    return ERR_APPEND(res.get_error(),
+                                      "could not create instance '" + instance_identifier + "' of type '" + instance_type + "': unable to create instance '" + instance->m_name + "' of type '"
+                                          + module_it->second->m_name + "'");
+                }
+                else
+                {
+                    container = res.get();
                 }
             }
             // otherwise it has to be an element from the gate library
@@ -1765,8 +1882,7 @@ namespace hal
                 Gate* new_gate = m_netlist->create_gate(gate_type_it->second, instance_alias.at(instance->m_name));
                 if (new_gate == nullptr)
                 {
-                    log_error("verilog_parser", "could not instantiate gate '{}' within instance '{}' of type '{}'.", instance->m_name, instance_identifier, instance_type);
-                    return nullptr;
+                    return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to create gate '" + instance->m_name + "'");
                 }
 
                 if (!module->is_top_module())
@@ -1779,11 +1895,13 @@ namespace hal
                 // if gate is of a GND or VCC gate type, mark it as such
                 if (m_vcc_gate_types.find(instance->m_type) != m_vcc_gate_types.end() && !new_gate->mark_vcc_gate())
                 {
-                    return nullptr;
+                    return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to mark '" + instance->m_name + "' of type '" + instance->m_type
+                               + "' as GND gate");
                 }
                 if (m_gnd_gate_types.find(instance->m_type) != m_gnd_gate_types.end() && !new_gate->mark_gnd_gate())
                 {
-                    return nullptr;
+                    return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to mark '" + instance->m_name + "' of type '" + instance->m_type
+                               + "' as VCC gate");
                 }
 
                 // cache pin directions
@@ -1812,15 +1930,15 @@ namespace hal
                     }
                     else
                     {
-                        log_error("verilog_parser", "pin assignment \"{} = {}\" is invalid for instance '{}' of type '{}'", pin, assignment, instance->m_name, instance->m_type);
-                        return nullptr;
+                        return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to assign '" + assignment + "' to pin '" + pin + "' of gate '"
+                                   + instance->m_name + "' of type '" + instance->m_type + "' as the assignment is invalid");
                     }
 
                     // get the respective net for the assignment
                     if (const auto net_it = m_net_by_name.find(signal); net_it == m_net_by_name.end())
                     {
-                        log_error("verilog_parser", "signal '{}' of instance '{}' of type '{}' has not been declared.", signal, instance->m_name, instance->m_type);
-                        return nullptr;
+                        return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to assign signal'" + signal + "' to pin '" + pin
+                                   + "' as the signal has not been declared");
                     }
                     else
                     {
@@ -1845,26 +1963,28 @@ namespace hal
 
                         if (!is_input && !is_output)
                         {
-                            log_error("verilog_parser", "undefined pin '{}' for gate '{}' of type '{}'.", pin, new_gate->get_name(), new_gate->get_type()->get_name());
-                            return nullptr;
+                            return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to assign net '" + signal + "' to pin '" + pin
+                                       + "' as it is not a pin of gate '" + new_gate->get_name() + "' of type '" + new_gate->get_type()->get_name() + "'");
                         }
 
                         if (is_output && !current_net->add_source(new_gate, pin))
                         {
-                            return nullptr;
+                            return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to add net '" + signal + "' as a source to gate '"
+                                       + new_gate->get_name() + "' via pin '" + pin + "'");
                         }
 
                         if (is_input && !current_net->add_destination(new_gate, pin))
                         {
-                            return nullptr;
+                            return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to add net '" + signal + "' as a destination to gate '"
+                                       + new_gate->get_name() + "' via pin '" + pin + "'");
                         }
                     }
                 }
             }
             else
             {
-                log_error("verilog_parser", "could not find gate type '{}' in gate library '{}'.", instance->m_type, m_netlist->get_gate_library()->get_name());
-                return nullptr;
+                return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find gate type '" + instance->m_type + "' in gate library '"
+                           + m_netlist->get_gate_library()->get_name() + "'");
             }
 
             // assign instance attributes
@@ -1901,7 +2021,7 @@ namespace hal
             }
         }
 
-        return module;
+        return OK(module);
     }
 
     // ###########################################################################
@@ -1973,106 +2093,6 @@ namespace hal
                 }
             }
         }
-    }
-
-    std::string VerilogParser::get_hex_from_literal(const Token<std::string>& value_token) const
-    {
-        const u32 line_number   = value_token.number;
-        const std::string value = utils::to_upper(utils::replace(value_token.string, std::string("_"), std::string("")));
-
-        i32 len = -1;
-        std::string prefix;
-        std::string number;
-        u32 base;
-
-        // base specified?
-        if (value.find('\'') == std::string::npos)
-        {
-            prefix = "D";
-            number = value;
-        }
-        else
-        {
-            if (value.at(0) != '\'')
-            {
-                len = std::stoi(value.substr(0, value.find('\'')));
-            }
-            prefix = value.substr(value.find('\'') + 1, 1);
-            number = value.substr(value.find('\'') + 2);
-        }
-
-        // select base
-        switch (prefix.at(0))
-        {
-            case 'B': {
-                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '1'); }))
-                {
-                    log_error("verilog_parser", "invalid character within binary number literal {} in line {}.", value, line_number);
-                    return "";
-                }
-
-                base = 2;
-                break;
-            }
-
-            case 'O': {
-                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '7'); }))
-                {
-                    log_error("verilog_parser", "invalid character within octal number literal {} in line {}.", value, line_number);
-                    return "";
-                }
-
-                base = 8;
-                break;
-            }
-
-            case 'D': {
-                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9'); }))
-                {
-                    log_error("verilog_parser", "invalid character within decimal number literal {} in line {}.", value, line_number);
-                    return "";
-                }
-
-                base = 10;
-                break;
-            }
-
-            case 'H': {
-                std::string res;
-
-                for (const char c : number)
-                {
-                    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
-                    {
-                        res += c;
-                    }
-                    else
-                    {
-                        log_error("verilog_parser", "invalid character within hexadecimal number literal {} in line {}.", value, line_number);
-                        return "";
-                    }
-                }
-
-                return res;
-            }
-
-            default: {
-                log_error("verilog_parser", "invalid base '{}' within number literal {} in line {}.", prefix, value, line_number);
-                return "";
-            }
-        }
-
-        std::stringstream ss;
-        if (len != -1)
-        {
-            // fill with '0'
-            ss << std::uppercase << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(number, 0, base);
-        }
-        else
-        {
-            ss << std::uppercase << std::hex << stoull(number, 0, base);
-        }
-        return ss.str();
     }
 
     std::string VerilogParser::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const

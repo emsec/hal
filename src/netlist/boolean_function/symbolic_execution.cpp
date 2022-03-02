@@ -158,25 +158,33 @@ namespace hal
                 }
                 else
                 {
-                    return ERR(simplified.get_error());
+                    return ERR_APPEND(simplified.get_error(), "could not evaluate Boolean function within symbolic state: simplification failed");
                 }
             }
 
             switch (stack.size())
             {
-                case 1:  return OK(stack.back());
-                default: return ERR("Cannot simplify '" + function.to_string() + "' (= imbalanced stack with " + std::to_string(stack.size()) + " remaining parts).");
+                case 1:
+                    return OK(stack.back());
+                default:
+                    return ERR("could not evaluate Boolean function within symbolic state: stack is imbalanced");
             }
         }
 
         Result<std::monostate> SymbolicExecution::evaluate(const Constraint& constraint)
         {
-            return this->evaluate(constraint.rhs).map<std::monostate>(
-                [&] (auto&& rhs) -> Result<std::monostate> {
+            if (auto res = this->evaluate(constraint.rhs).map<std::monostate>([&](auto&& rhs) -> Result<std::monostate> {
                     this->state.set(constraint.lhs.clone(), std::move(rhs));
                     return OK({});
-                }
-            );
+                });
+                res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not to evaluate equality constraint within the symbolic state: evaluation failed");
+            }
+            else
+            {
+                return res;
+            }
         }
 
         std::vector<BooleanFunction> SymbolicExecution::normalize(std::vector<BooleanFunction>&& p)
@@ -200,7 +208,14 @@ namespace hal
         {
             if (!p.empty() && std::all_of(p.begin(), p.end(), [](const auto& function) { return function.is_constant(); }))
             {
-                return SymbolicExecution::constant_propagation(node, std::move(p));
+                if (auto res = SymbolicExecution::constant_propagation(node, std::move(p)); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not simplify sub-expression in abstract syntax tree: constant propagation failed");
+                }
+                else
+                {
+                    return res;
+                }
             }
 
             if (node.is_commutative())
@@ -422,7 +437,7 @@ namespace hal
                         auto p0_parameter = p[0].get_parameters();
                         return OK((~p0_parameter[0]) | (~p0_parameter[1]));
                     }
- 
+
                     return OK(~p[0]);
                 }
 
@@ -617,13 +632,14 @@ namespace hal
                 }
                 case BooleanFunction::NodeType::Slice: {
                     // SLICE(p, 0, 0)   =>   p (if p is 1-bit wide)
-                    if ((p[0].size() == 1) && p[1].has_index_value(0) && p[2].has_index_value(0) && (node.size == 1)) {
+                    if ((p[0].size() == 1) && p[1].has_index_value(0) && p[2].has_index_value(0) && (node.size == 1))
+                    {
                         return OK(p[0]);
                     }
                     return BooleanFunction::Slice(p[0].clone(), p[1].clone(), p[2].clone(), node.size);
                 }
                 default:
-                    return ERR("not implemented reached");
+                    return ERR("could not simplify sub-expression in abstract syntax tree: not implemented for given node type");
             }
         }
 
@@ -631,7 +647,7 @@ namespace hal
         {
             if (node.get_arity() != p.size())
             {
-                return ERR("Arity " + std::to_string(node.get_arity()) + " does not match number of parameters (= " + std::to_string(p.size()) + ").");
+                return ERR("could not propagate constants: arity does not match number of parameters");
             }
 
             std::vector<std::vector<BooleanFunction::Value>> values;
@@ -651,7 +667,8 @@ namespace hal
                 case BooleanFunction::NodeType::Xor:
                     return OK(ConstantPropagation::Xor(values[0], values[1]));
 
-                default: return ERR("not implemented reached");
+                default:
+                    return ERR("could not propagate constants: not implemented for given node type");
             }
         }
     }    // namespace SMT

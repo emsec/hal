@@ -25,6 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/utilities/result.h"
 
 #include <filesystem>
 
@@ -48,7 +49,7 @@ namespace hal
          * @param[in] file_path - Path to the netlist file.
          * @returns True on success, false otherwise.
          */
-        virtual bool parse(const std::filesystem::path& file_path) = 0;
+        virtual Result<std::monostate> parse(const std::filesystem::path& file_path) = 0;
 
         /**
          * Instantiate the parsed netlist using the specified gate library.
@@ -56,7 +57,7 @@ namespace hal
          * @param[in] gate_library - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        virtual std::unique_ptr<Netlist> instantiate(const GateLibrary* gate_library) = 0;
+        virtual Result<std::unique_ptr<Netlist>> instantiate(const GateLibrary* gate_library) = 0;
 
         /**
          * Parse and instantiate a netlist using the specified gate library.
@@ -65,13 +66,16 @@ namespace hal
          * @param[in] gate_library - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        std::unique_ptr<Netlist> parse_and_instantiate(const std::filesystem::path& file_path, const GateLibrary* gate_library)
+        Result<std::unique_ptr<Netlist>> parse_and_instantiate(const std::filesystem::path& file_path, const GateLibrary* gate_library)
         {
-            if (parse(file_path))
+            if (auto res = parse(file_path); res.is_ok())
             {
                 return instantiate(gate_library);
             }
-            return nullptr;
+            else
+            {
+                return ERR(res.get_error());
+            }
         }
     };
 }    // namespace hal

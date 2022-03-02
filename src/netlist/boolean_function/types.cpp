@@ -142,7 +142,8 @@ namespace hal
             return out;
         }
 
-        std::string Constraint::to_string() const {
+        std::string Constraint::to_string() const
+        {
             std::stringstream ss;
             ss << *this;
             return ss.str();
@@ -207,7 +208,7 @@ namespace hal
             {
                 return OK(Model(ModelParser::parser_context.model));
             }
-            return ERR("Cannot parse SMT-Lib model.");
+            return ERR("could not parse SMT-Lib model");
         }
 
         SolverResult::SolverResult(SolverResultType _type, std::optional<Model> _model) : type(_type), model(_model)
@@ -271,5 +272,7 @@ namespace hal
     std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data = {{SMT::SolverType::Z3, "Z3"}, {SMT::SolverType::Boolector, "Boolector"}, {SMT::SolverType::Unknown, "Unknown"}};
 
     template<>
-    std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data = {{SMT::SolverResultType::Sat, "sat"}, {SMT::SolverResultType::UnSat, "unsat"}, {SMT::SolverResultType::Unknown, "unknown"}};
+    std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data = {{SMT::SolverResultType::Sat, "sat"},
+                                                                                             {SMT::SolverResultType::UnSat, "unsat"},
+                                                                                             {SMT::SolverResultType::Unknown, "unknown"}};
 }    // namespace hal

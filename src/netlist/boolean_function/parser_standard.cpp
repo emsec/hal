@@ -63,23 +63,24 @@ namespace hal
             const auto VariableRule      = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_"))][VariableAction];
             const auto VariableIndexRule = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("(") >> x3::int_ >> x3::char_(")"))][VariableIndexAction];
 
-            const auto ConstantRule       = x3::lexeme[x3::char_("0-1")] [ConstantAction];
+            const auto ConstantRule       = x3::lexeme[x3::char_("0-1")][ConstantAction];
             const auto ConstantPrefixRule = x3::lit("0b") >> x3::lexeme[x3::char_("0-1")][ConstantAction];
-            const auto ConstantSuffixRule = x3::lexeme[x3::char_("0-1") >> x3::lit("'b1")] [ConstantAction];
+            const auto ConstantSuffixRule = x3::lexeme[x3::char_("0-1") >> x3::lit("'b1")][ConstantAction];
 
             auto iter     = expression.begin();
-            const auto ok = x3::phrase_parse(iter,
-                                             expression.end(),
-                                             ////////////////////////////////////////////////////////////////////
-                                             // (3) Parsing Expression Grammar
-                                             ////////////////////////////////////////////////////////////////////
-                                             +(AndRule | NotRule | OrRule | XorRule | VariableIndexRule | VariableRule | ConstantSuffixRule | ConstantPrefixRule | ConstantRule | BracketOpenRule | BracketCloseRule),
-                                             x3::space    // skips any whitespace in between boolean function
+            const auto ok = x3::phrase_parse(
+                iter,
+                expression.end(),
+                ////////////////////////////////////////////////////////////////////
+                // (3) Parsing Expression Grammar
+                ////////////////////////////////////////////////////////////////////
+                +(AndRule | NotRule | OrRule | XorRule | VariableIndexRule | VariableRule | ConstantSuffixRule | ConstantPrefixRule | ConstantRule | BracketOpenRule | BracketCloseRule),
+                x3::space    // skips any whitespace in between boolean function
             );
 
             if (!ok || (iter != expression.end()))
             {
-                return ERR("Unable to parse Boolean function '" + expression + "' (= " + std::string(iter, expression.end()) + ").");
+                return ERR("could not parse Boolean function '" + expression + "': " + std::string(iter, expression.end()));
             }
 
             return OK(tokens);

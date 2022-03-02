@@ -802,7 +802,7 @@ namespace hal
         }
         else
         {
-            return ERR("net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + " is neither an output nor an input of module '" + m_name + "' with ID " + std::to_string(m_id)
+            return ERR("net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + " is neither an input nor an output of module '" + m_name + "' with ID " + std::to_string(m_id)
                        + ", could not assign pin with name '" + name + "'");
         }
 

@@ -46,7 +46,7 @@ namespace hal
         {
             if (value.size() == 0)
             {
-                return ERR("bit-vector is empty");
+                return ERR("could not convert bit-vector to binary string: bit-vector is empty");
             }
 
             std::string res = "";
@@ -65,7 +65,7 @@ namespace hal
             int bitsize = value.size();
             if (bitsize == 0)
             {
-                return ERR("bit-vector is empty");
+                return ERR("could not convert bit-vector to octal string: bit-vector is empty");
             }
 
             u8 first_bits = bitsize % 3;
@@ -112,12 +112,12 @@ namespace hal
             int bitsize = value.size();
             if (bitsize == 0)
             {
-                return ERR("bit-vector is empty");
+                return ERR("could not convert bit-vector to decimal string: bit-vector is empty");
             }
 
             if (bitsize > 64)
             {
-                return ERR("bit-vector has length " + std::to_string(bitsize) + ", but only up to 64 bits are supported for decimal conversion");
+                return ERR("could not convert bit-vector to decimal string: bit-vector has length " + std::to_string(bitsize) + ", but only up to 64 bits are supported for decimal conversion");
             }
 
             u64 tmp   = 0;
@@ -140,7 +140,7 @@ namespace hal
             int bitsize = value.size();
             if (bitsize == 0)
             {
-                return ERR("bit-vector is empty");
+                return ERR("could not convert bit-vector to hexadecimal string: bit-vector is empty");
             }
 
             u8 first_bits = bitsize & 0x3;
@@ -198,7 +198,7 @@ namespace hal
             case 16:
                 return to_hex(value);
             default:
-                return ERR("invalid value '" + std::to_string(base) + "' provided for base");
+                return ERR("could not convert bit-vector to string: invalid value '" + std::to_string(base) + "' given for base");
         }
     }
 
@@ -213,7 +213,14 @@ namespace hal
 
     Result<BooleanFunction> BooleanFunction::build(std::vector<BooleanFunction::Node>&& nodes)
     {
-        return BooleanFunction::validate(BooleanFunction(std::move(nodes)));
+        if (auto res = BooleanFunction::validate(BooleanFunction(std::move(nodes))); res.is_error())
+        {
+            return ERR_APPEND(res.get_error(), "could not build Boolean function from vector of nodes: failed to validate Boolean function");
+        }
+        else
+        {
+            return res;
+        }
     }
 
     BooleanFunction BooleanFunction::Var(const std::string& name, u16 size)
@@ -252,7 +259,8 @@ namespace hal
     {
         if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            return ERR("Mismatching bit-sizes for AND operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", size = " + std::to_string(size) + ").");
+            return ERR("could not join Boolean functions using AND operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ")");
         }
 
         return OK(BooleanFunction(Node::Operation(NodeType::And, size), std::move(p0), std::move(p1)));
@@ -262,7 +270,8 @@ namespace hal
     {
         if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            return ERR("Mismatching bit-sizes for Or operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", size = " + std::to_string(size) + ").");
+            return ERR("could not join Boolean functions using OR operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
         }
 
         return OK(BooleanFunction(Node::Operation(NodeType::Or, size), std::move(p0), std::move(p1)));
@@ -272,7 +281,7 @@ namespace hal
     {
         if (p0.size() != size)
         {
-            return ERR("Mismatching bit-sizes for Not operation (p0 = " + std::to_string(p0.size()) + ", size = " + std::to_string(size) + ").");
+            return ERR("could not invert Boolean function using NOT operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", size = " + std::to_string(size) + ").");
         }
 
         return OK(BooleanFunction(Node::Operation(NodeType::Not, size), std::move(p0)));
@@ -282,7 +291,8 @@ namespace hal
     {
         if ((p0.size() != p1.size()) || (p0.size() != size))
         {
-            return ERR("Mismatching bit-sizes for Xor operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", size = " + std::to_string(size) + ").");
+            return ERR("could not join Boolean functions using XOR operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size())
+                       + ", size = " + std::to_string(size) + ").");
         }
 
         return OK(BooleanFunction(Node::Operation(NodeType::Xor, size), std::move(p0), std::move(p1)));
@@ -292,18 +302,19 @@ namespace hal
     {
         if (!p1.is_index() || !p2.is_index())
         {
-            return ERR("Mismatching function types for Slice operation (= p1 and p2 must be an 'BooleanFunctino::Index').");
+            return ERR("could not apply slice operation: function types do not match (p1 and p2 must be of type 'BooleanFunction::Index')");
         }
         if ((p0.size() != p1.size()) || (p1.size() != p2.size()))
         {
-            return ERR("Mismatching bit-sizes for Slice operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", p2 = " + std::to_string(p2.size()) + " - sizes must be equal).");
+            return ERR("could not apply slice operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(p1.size()) + ", p2 = " + std::to_string(p2.size())
+                       + " - sizes must be equal)");
         }
 
         auto start = p1.get_top_level_node().index, end = p2.get_top_level_node().index;
 
         if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size)
         {
-            return ERR("Mismatching bit-sizes for Slice operation (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(start) + ", p2 = " + std::to_string(end) + ").");
+            return ERR("could not apply SLICE operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(start) + ", p2 = " + std::to_string(end) + ")");
         }
 
         return OK(BooleanFunction(Node::Operation(NodeType::Slice, size), std::move(p0), std::move(p1), std::move(p2)));
@@ -313,7 +324,8 @@ namespace hal
     {
         if ((p0.size() + p1.size()) != size)
         {
-            return ERR("Mismatch function input width (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size()) + "-bit, size = " + std::to_string(size) + ").");
+            return ERR("could not apply CONCAT operation: function input widths do not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
         }
 
         return OK(BooleanFunction(Node::Operation(NodeType::Concat, size), std::move(p0), std::move(p1)));
@@ -515,7 +527,7 @@ namespace hal
     {
         if (node.get_arity() != operands.size())
         {
-            return ERR("node arity of " + std::to_string(node.get_arity()) + " does not match number of operands of " + std::to_string(operands.size()));
+            return ERR("could not print Boolean function: node arity of " + std::to_string(node.get_arity()) + " does not match number of operands of " + std::to_string(operands.size()));
         }
 
         switch (node.type)
@@ -545,7 +557,7 @@ namespace hal
                 return OK("Zext(" + operands[0] + ", " + operands[1] + ")");
 
             default:
-                return ERR("unsupported node type '" + std::to_string(node.type) + "'");
+                return ERR("could not print Boolean function: unsupported node type '" + std::to_string(node.type) + "'");
         }
     }
 
@@ -627,14 +639,14 @@ namespace hal
             }
             return function;
         }
-        return ERR("No parser available to parser '" + expression + "'.");
+        return ERR("could not parse Boolean function from string: no parser available for '" + expression + "'");
     }
 
     BooleanFunction BooleanFunction::simplify() const
     {
         auto simplified = Simplification::local_simplification(*this)
-                              .map<BooleanFunction>([](const auto& simplified) { return Simplification::abc_simplification(simplified); })
-                              .map<BooleanFunction>([](const auto& simplified) { return Simplification::local_simplification(simplified); });
+                              .map<BooleanFunction>([](const auto& s) { return Simplification::abc_simplification(s); })
+                              .map<BooleanFunction>([](const auto& s) { return Simplification::local_simplification(s); });
 
         return (simplified.is_ok()) ? simplified.get() : this->clone();
     }
@@ -682,8 +694,10 @@ namespace hal
 
         switch (stack.size())
         {
-            case 1:  return OK(stack.back());
-            default: return ERR("Cannot replace '" + name + "' with '" + replacement.to_string() + "' (= validation failed, so the operations may be imbalanced).");
+            case 1:
+                return OK(stack.back());
+            default:
+                return ERR("could not replace variable '" + name + "' with Boolean function '" + replacement.to_string() + "': validation failed, the operations may be imbalanced");
         }
     }
 
@@ -698,7 +712,7 @@ namespace hal
         // (1) validate whether the input sizes match the boolean function
         if (this->size() != 1)
         {
-            return ERR("Cannot use the single-bit evaluate() on '" + this->to_string() + "' (= " + std::to_string(this->size()) + "-bit).");
+            return ERR("could not evaluate Boolean function '" + this->to_string() + "': using single-bit evaluation on a Boolean function of size " + std::to_string(this->size()) + " is illegal");
         }
 
         // (2) translate the input to n-bit to use the generic function
@@ -732,7 +746,8 @@ namespace hal
             {
                 if (node.has_variable_name(name) && node.size != value.size())
                 {
-                    return ERR("Cannot use evaluate() on '" + this->to_string() + " as the '" + node.to_string() + " is " + std::to_string(node.size) + "-bit vs. " + std::to_string(value.size()) + "-bit in the input.");
+                    return ERR("could not evaluate Boolean function '" + this->to_string() + "': as the number of variables (" + std::to_string(node.size)
+                               + ") does not match the number of provided inputs (" + std::to_string(value.size()) + ")");
                 }
             }
         }
@@ -758,8 +773,7 @@ namespace hal
         return ERR(result.get_error());
     }
 
-    Result<std::vector<std::vector<BooleanFunction::Value>>> BooleanFunction::compute_truth_table(const std::vector<std::string>& ordered_variables,
-                                                                                                                     bool remove_unknown_variables) const
+    Result<std::vector<std::vector<BooleanFunction::Value>>> BooleanFunction::compute_truth_table(const std::vector<std::string>& ordered_variables, bool remove_unknown_variables) const
     {
         auto variable_names_in_function = this->get_variable_names();
 
@@ -769,7 +783,7 @@ namespace hal
         {
             if (node.is_variable() && node.size != 1)
             {
-                return ERR("Cannot generate a truth-table for a Boolean function with variables of > 1-bit (e.g., = '" + node.to_string() + "').");
+                return ERR("could not compute truth table for Boolean function '" + this->to_string() + "': unable to generate a truth-table for Boolean function with variables of > 1-bit");
             }
         }
 
@@ -798,7 +812,7 @@ namespace hal
         // (4.2) safety-check in case the number of variables is too large to process
         if (variables.size() > 10)
         {
-            return ERR("Cannot generate a truth-table with > 10 variables (increase threshold or simplify expression beforehand).");
+            return ERR("could not compute truth table for Boolean function '" + this->to_string() + "': unable to generate truth-table with more than 10 variables");
         }
 
         std::vector<std::vector<Value>> truth_table(this->size(), std::vector<Value>(1 << variables.size(), Value::ZERO));
@@ -853,7 +867,7 @@ namespace hal
                     for (u32 i = 1; i < node.constant.size(); i++)
                     {
                         const auto bit = node.constant.at(i);
-                        constant = z3::concat(context.bv_val(bit, 1), constant);
+                        constant       = z3::concat(context.bv_val(bit, 1), constant);
                     }
                     return {true, constant};
                 }
@@ -944,7 +958,7 @@ namespace hal
         if (auto coverage = function.compute_node_coverage(); coverage.back() != function.length())
         {
             auto str = function.to_string_in_reverse_polish_notation();
-            return ERR("Cannot validate '" + str + "' (= imbalanced function with coverage '" + std::to_string(coverage.back()) + " != " + std::to_string(function.length()) + ").");
+            return ERR("could not validate '" + str + "': imbalanced function with coverage '" + std::to_string(coverage.back()) + " != " + std::to_string(function.length()));
         }
 
         return OK(std::move(function));

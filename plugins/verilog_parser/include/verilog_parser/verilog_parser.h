@@ -54,7 +54,7 @@ namespace hal
          * @param[in] file_path - Path to the Verilog netlist file.
          * @returns True on success, false otherwise.
          */
-        bool parse(const std::filesystem::path& file_path) override;
+        Result<std::monostate> parse(const std::filesystem::path& file_path) override;
 
         /**
          * Instantiate the parsed Verilog netlist using the specified gate library.
@@ -62,10 +62,11 @@ namespace hal
          * @param[in] gate_library - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        std::unique_ptr<Netlist> instantiate(const GateLibrary* gate_library) override;
+        Result<std::unique_ptr<Netlist>> instantiate(const GateLibrary* gate_library) override;
 
     private:
         std::stringstream m_fs;
+        std::filesystem::path m_path;
 
         // temporary netlist
         Netlist* m_netlist = nullptr;
@@ -95,26 +96,26 @@ namespace hal
         std::unordered_map<std::string, std::vector<std::string>> m_nets_to_merge;
 
         // parse HDL into intermediate format
-        bool tokenize();
-        bool parse_tokens();
-        bool parse_module(std::vector<VerilogDataEntry>& attributes);
-        bool parse_port_list(VerilogModule* module);
-        bool parse_port_declaration_list(VerilogModule* module);
-        bool parse_port_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
-        bool parse_signal_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
-        bool parse_assignment(VerilogModule* module);
-        bool parse_attribute(std::vector<VerilogDataEntry>& attributes);
-        bool parse_instance(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
-        bool parse_port_assign(VerilogInstance* instance);
-        std::vector<VerilogDataEntry> parse_generic_assign();
+        void tokenize();
+        Result<std::monostate> parse_tokens();
+        Result<std::monostate> parse_module(std::vector<VerilogDataEntry>& attributes);
+        void parse_port_list(VerilogModule* module);
+        Result<std::monostate> parse_port_declaration_list(VerilogModule* module);
+        Result<std::monostate> parse_port_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
+        Result<std::monostate> parse_signal_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
+        Result<std::monostate> parse_assignment(VerilogModule* module);
+        void parse_attribute(std::vector<VerilogDataEntry>& attributes);
+        Result<std::monostate> parse_instance(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
+        Result<std::monostate> parse_port_assign(VerilogInstance* instance);
+        Result<std::vector<VerilogDataEntry>> parse_generic_assign();
 
         // construct netlist from intermediate format
-        bool construct_netlist(VerilogModule* top_module);
-        Module* instantiate_module(const std::string& instance_name, VerilogModule* verilog_module, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
+        Result<std::monostate> construct_netlist(VerilogModule* top_module);
+        Result<Module*>
+            instantiate_module(const std::string& instance_name, VerilogModule* verilog_module, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
 
         // helper functions
         void remove_comments(std::string& line, bool& multi_line_comment) const;
-        std::string get_hex_from_literal(const Token<std::string>& value_token) const;
         std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
     };
 }    // namespace hal

@@ -102,7 +102,7 @@ namespace hal
 
             if (!ok || (iter != expression.end()))
             {
-                return ERR("Unable to parse Boolean function '" + expression + "' (= " + std::string(iter, expression.end()) + ").");
+                return ERR("could not to parse Boolean function '" + expression + "': " + std::string(iter, expression.end()));
             }
 
             return OK(tokens);

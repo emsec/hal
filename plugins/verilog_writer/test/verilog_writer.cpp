@@ -94,7 +94,9 @@ namespace hal
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
 
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
+                auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
+                ASSERT_TRUE(parsed_nl_res.is_ok());
+                std::unique_ptr<Netlist> parsed_nl = parsed_nl_res.get();
                 ASSERT_NE(parsed_nl, nullptr);
 
                 // prepare comparison
@@ -154,7 +156,9 @@ namespace hal
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
 
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
+                auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
+                ASSERT_TRUE(parsed_nl_res.is_ok());
+                std::unique_ptr<Netlist> parsed_nl = parsed_nl_res.get();
                 ASSERT_NE(parsed_nl, nullptr);
 
                 EXPECT_EQ(parsed_nl->get_global_input_nets().size(), 2);
@@ -229,8 +233,9 @@ namespace hal
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
 
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
-                ASSERT_NE(parsed_nl, nullptr);
+                auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
+                ASSERT_TRUE(parsed_nl_res.is_ok());
+                std::unique_ptr<Netlist> parsed_nl = parsed_nl_res.get();                ASSERT_NE(parsed_nl, nullptr);
 
                 EXPECT_EQ(parsed_nl->get_nets().size(), 11);
                 EXPECT_EQ(parsed_nl->get_global_input_nets().size(), 3);
@@ -323,7 +328,9 @@ namespace hal
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
 
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
+                auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
+                ASSERT_TRUE(parsed_nl_res.is_ok());
+                std::unique_ptr<Netlist> parsed_nl = parsed_nl_res.get();
                 ASSERT_NE(parsed_nl, nullptr);
 
                 std::vector<Gate*> gates = parsed_nl->get_gates();
@@ -398,7 +405,9 @@ namespace hal
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
 
                 VerilogParser verilog_parser;
-                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
+                auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
+                ASSERT_TRUE(parsed_nl_res.is_ok());
+                std::unique_ptr<Netlist> parsed_nl = parsed_nl_res.get();
                 ASSERT_NE(parsed_nl, nullptr);
 
                 std::vector<Gate*> gates = parsed_nl->get_gates();

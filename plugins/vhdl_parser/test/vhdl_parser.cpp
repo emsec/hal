@@ -76,7 +76,9 @@ namespace hal {
                                     "");
             std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VHDLParser vhdl_parser;
-            std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+            auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
 
             // Check if the device name is parsed correctly
@@ -178,7 +180,9 @@ namespace hal {
                                         "gate_2:gate_3_to_1 port map(I0 => net_0,I1 => net_1,O => net_global_out);end STRUCTURE;");
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // Check if the gates are parsed correctly
@@ -290,7 +294,9 @@ namespace hal {
                                         "end STRUCTURE;");
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
@@ -380,7 +386,9 @@ namespace hal {
                                         "end STRUCTURE;");
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -435,7 +443,9 @@ namespace hal {
                                         "end STRUCTURE;");
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -489,7 +499,9 @@ namespace hal {
                                         "end STRUCTURE;");
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // Check that all nets are created and connected correctly
@@ -552,7 +564,9 @@ namespace hal {
                                         "end STRUCTURE;");
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
@@ -665,7 +679,9 @@ namespace hal {
                                         "end ENT_TOP;");
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
                 // check gates
@@ -808,7 +824,9 @@ namespace hal {
                                         "end ENT_TOP;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 // Test if all modules are created and assigned correctly
                 ASSERT_NE(nl, nullptr);
@@ -918,7 +936,9 @@ namespace hal {
                                         "end STRUCTURE_TOP;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 // Test if all modules are created and assigned correctly
                 ASSERT_NE(nl, nullptr);
@@ -1058,7 +1078,9 @@ namespace hal {
                                         "end STRUCTURE_TOP;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 // Test if all modules are created and assigned correctly
                 ASSERT_NE(nl, nullptr);
@@ -1172,12 +1194,9 @@ namespace hal {
                 test_def::capture_stdout();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 EXPECT_EQ(nl->get_nets().size(), 3);    // global_in + global_out + net_master
@@ -1216,7 +1235,6 @@ namespace hal {
                                         "  port ( "
                                         "    net_global_in : in STD_LOGIC := 'X'; "
                                         "    net_global_out : out STD_LOGIC := 'X'; "
-                                        "    net_slave_1: out STD_LOGIC := 'X'; "
                                         "  ); "
                                         "end TEST_Comp; "
                                         "architecture STRUCTURE of TEST_Comp is "
@@ -1240,12 +1258,9 @@ namespace hal {
                 test_def::capture_stdout();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
 
@@ -1293,12 +1308,9 @@ namespace hal {
                 test_def::capture_stdout();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
@@ -1338,12 +1350,9 @@ namespace hal {
                 test_def::capture_stdout();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
@@ -1386,12 +1395,9 @@ namespace hal {
                 test_def::capture_stdout();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
@@ -1425,12 +1431,9 @@ namespace hal {
                 test_def::capture_stdout();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
@@ -1485,17 +1488,13 @@ namespace hal {
                 test_def::capture_stdout();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "test_gate")).size(), 1);
-                Gate*
-                    test_gate = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "test_gate")).begin();
+                Gate* test_gate = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "test_gate")).begin();
 
                 // Test that the comments did not removed other parts (all no_comment_n generics should be created)
                 for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2"})) {
@@ -1545,7 +1544,9 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
@@ -1580,7 +1581,9 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
@@ -1618,7 +1621,9 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
@@ -1662,13 +1667,10 @@ namespace hal {
                                     "end STRUCTURE;");
             test_def::capture_stdout();
             auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-            if (nl == nullptr) {
-                std::cout << test_def::get_captured_stdout();
-            } else {
-                test_def::get_captured_stdout();
-            }
+            VHDLParser vhdl_parser;
+            auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
 
             ASSERT_NE(nl, nullptr);
 
@@ -1754,8 +1756,8 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                ASSERT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // Use an unknown Gate type (not in Gate library)
@@ -1777,9 +1779,8 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // The input does not contain any entity (is empty)
@@ -1787,9 +1788,8 @@ namespace hal {
                 std::string netlist_input("");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // Create a non-used entity (should not create any problems...)
@@ -1826,7 +1826,9 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 EXPECT_NE(nl, nullptr);
             }
@@ -1859,9 +1861,8 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             if(test_utils::known_issue_tests_active())
             {
@@ -1881,8 +1882,8 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             // ------ VHDL specific tests ------
             {
@@ -1903,9 +1904,8 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // The architecture contains an invalid keyword (neither 'signal' nor 'attribute')
@@ -1926,9 +1926,8 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // Testing incorrect data_types in the "generic map" block
@@ -1951,16 +1950,15 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // Leave the 'port map' block empty (Gate is not connected)
-                NO_COUT_TEST_BLOCK;
+                // NO_COUT_TEST_BLOCK;
                 std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
-                                        "    net_global_input : in STD_LOGIC := 'X';\n"
                                         "  );\n"
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
@@ -1971,7 +1969,9 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).empty());
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
@@ -1999,7 +1999,9 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
 
                 EXPECT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
@@ -2028,9 +2030,8 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                EXPECT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // The amount of bounds does not match with the vector dimension (vhdl specific)
@@ -2051,10 +2052,12 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl != nullptr) {
-                    EXPECT_EQ(nl->get_nets().size(), 1);
-                }
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
+                // std::unique_ptr<Netlist> nl = nl_res.get();
+                // if (nl != nullptr) {
+                //     EXPECT_EQ(nl->get_nets().size(), 1);
+                // }
             }
             {
                 // The ranges of the pin vectors do not match in size
@@ -2074,17 +2077,8 @@ namespace hal {
                 test_def::capture_stdout();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-                if (nl != nullptr)
-                {
-                    std::cout << test_def::get_captured_stdout();
-                }
-                else
-                {
-                    test_def::get_captured_stdout();
-                }
-
-                ASSERT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
             {
                 // The right side of a pin assignment does no match any vector format
@@ -2103,9 +2097,8 @@ namespace hal {
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VHDLParser vhdl_parser;
-                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
-
-                ASSERT_EQ(nl, nullptr);
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
+                ASSERT_TRUE(nl_res.is_error());
             }
         TEST_END
     }
