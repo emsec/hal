@@ -127,7 +127,30 @@ public:
      */
     u32 getGateIDFromIndex(const QModelIndex& index);
 
+    /**
+     * Get the gate's pin name from the index. Index has to be valid.
+     *
+     * @param index - The index.
+     * @return The pin name.
+     */
+    QString getPinNameFromIndex(const QModelIndex& index);
+
+    /**
+     * Get the type that the endpoint-model represents
+     * (source- or destination-endpoints of a net) as
+     * a QString.
+     *
+     * @return The type.
+     */
     QString typeString();
+
+    /**
+     * Get the type that the endpoint-model represents
+     * (source- or destination-endpoints of a net).
+     *
+     * @return The type.
+     */
+    Type getType();
 
 private:
     u32 mNetId;
