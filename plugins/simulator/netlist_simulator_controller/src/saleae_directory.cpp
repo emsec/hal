@@ -99,7 +99,7 @@ namespace hal
         return true;
     }
 
-#ifdef STANDALONE_PARSER
+#ifndef STANDALONE_PARSER
     bool SaleaeDirectory::write_json() const
     {
         JsonWriteDocument jwd;
@@ -364,6 +364,8 @@ namespace hal
 
     SaleaeDirectoryStoreRequest::~SaleaeDirectoryStoreRequest()
     {
+        #ifndef STANDALONE_PARSER
         if (--mSaleaeDirectory->mStoreRequest <= 0) mSaleaeDirectory->write_json();
+        #endif
     }
 }
