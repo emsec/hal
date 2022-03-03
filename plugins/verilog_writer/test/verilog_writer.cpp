@@ -91,7 +91,7 @@ namespace hal
                 }
 
                 VerilogWriter verilog_writer;
-                ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
+                ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist).is_ok());
 
                 VerilogParser verilog_parser;
                 auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
@@ -153,7 +153,7 @@ namespace hal
 
 
                 VerilogWriter verilog_writer;
-                ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
+                ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist).is_ok());
 
                 VerilogParser verilog_parser;
                 auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
@@ -230,7 +230,7 @@ namespace hal
                 }
 
                 VerilogWriter verilog_writer;
-                ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
+                ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist).is_ok());
 
                 VerilogParser verilog_parser;
                 auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
@@ -325,7 +325,7 @@ namespace hal
                 mod->set_data("random", "test_rand_string", "string", "one_two_three");
                 
                 VerilogWriter verilog_writer;
-                ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
+                ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist).is_ok());
 
                 VerilogParser verilog_parser;
                 auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
@@ -402,7 +402,7 @@ namespace hal
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
 
                 VerilogWriter verilog_writer;
-                ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist));
+                ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist).is_ok());
 
                 VerilogParser verilog_parser;
                 auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);

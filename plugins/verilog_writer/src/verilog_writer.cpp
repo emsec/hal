@@ -12,9 +12,19 @@ namespace hal
 {
     const std::set<std::string> VerilogWriter::valid_types = {"string", "integer", "floating_point", "bit_value", "bit_vector", "bit_string"};
 
-    bool VerilogWriter::write(Netlist* netlist, const std::filesystem::path& file_path)
+    Result<std::monostate> VerilogWriter::write(Netlist* netlist, const std::filesystem::path& file_path)
     {
         std::stringstream res_stream;
+
+        if (netlist == nullptr)
+        {
+            return ERR("could not write netlist to Verilog file '" + file_path.string() + "': netlist is a 'nullptr'");
+        }
+
+        if (file_path.empty())
+        {
+            return ERR("could not write netlist to Verilog file '" + file_path.string() + "': file path is empty");
+        }
 
         // get modules in hierarchical order (bottom-up)
         std::vector<Module*> ordered_modules;
@@ -48,9 +58,9 @@ namespace hal
         std::unordered_map<std::string, u32> module_identifier_occurrences;
         for (Module* mod : ordered_modules)
         {
-            if (!write_module_declaration(res_stream, mod, module_aliases, module_identifier_occurrences))
+            if (auto res = write_module_declaration(res_stream, mod, module_aliases, module_identifier_occurrences); res.is_error())
             {
-                return false;
+                return ERR_APPEND(res.get_error(), "could not write netlist to Verilog file '" + file_path.string() + "': failed to write module declaration");
             }
             res_stream << std::endl;
         }
@@ -60,25 +70,24 @@ namespace hal
         file.open(file_path.string(), std::ofstream::out);
         if (!file.is_open())
         {
-            log_error("verilog_writer", "unable to open '{}'.", file_path.string());
-            return false;
+            return ERR("could not write netlist to Verilog file '" + file_path.string() + "': failed to open file");
         }
         file << "`timescale 1 ps/1 ps" << std::endl;
         file << res_stream.str();
         file.close();
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogWriter::write_module_declaration(std::stringstream& res_stream,
-                                                 const Module* module,
-                                                 std::unordered_map<const Module*, std::string>& module_type_aliases,
-                                                 std::unordered_map<std::string, u32>& module_type_occurrences) const
+    Result<std::monostate> VerilogWriter::write_module_declaration(std::stringstream& res_stream,
+                                                                   const Module* module,
+                                                                   std::unordered_map<const Module*, std::string>& module_type_aliases,
+                                                                   std::unordered_map<std::string, u32>& module_type_occurrences) const
     {
         // deal with empty modules
         if (module->get_gates(nullptr, true).empty() && !module->is_top_module())
         {
-            return true;
+            return OK({});
         }
 
         // deal with unspecified module type
@@ -110,10 +119,10 @@ namespace hal
 
         res_stream << "(";
         std::vector<ModulePin*> pins = module->get_pins();
-        for(auto it = pins.rbegin(); it != pins.rend(); it++)
+        for (auto it = pins.rbegin(); it != pins.rend(); it++)
         {
             const ModulePin* pin = *it;
-            Net* net = pin->get_net();
+            Net* net             = pin->get_net();
             if (first_port)
             {
                 first_port = false;
@@ -147,9 +156,10 @@ namespace hal
                 }
 
                 res_stream << "    parameter " << escape(key) << " = ";
-                if (!write_parameter_value(res_stream, type, value))
+                if (auto res = write_parameter_value(res_stream, type, value); res.is_error())
                 {
-                    return false;
+                    return ERR_APPEND(res.get_error(),
+                                      "could not write declaration of module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write parameter value");
                 }
                 res_stream << ";" << std::endl;
             }
@@ -178,9 +188,11 @@ namespace hal
         for (const Gate* gate : module->get_gates())
         {
             res_stream << std::endl;
-            if (!write_gate_instance(res_stream, gate, aliases, identifier_occurrences))
+            if (auto res = write_gate_instance(res_stream, gate, aliases, identifier_occurrences); res.is_error())
             {
-                return false;
+                return ERR_APPEND(res.get_error(),
+                                  "could not write declaration of module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write gate '" + gate->get_name()
+                                      + "' with ID " + std::to_string(gate->get_id()));
             }
         }
 
@@ -188,28 +200,30 @@ namespace hal
         for (const Module* sub_module : module->get_submodules())
         {
             res_stream << std::endl;
-            if (!write_module_instance(res_stream, sub_module, aliases, identifier_occurrences, module_type_aliases))
+            if (auto res = write_module_instance(res_stream, sub_module, aliases, identifier_occurrences, module_type_aliases); res.is_error())
             {
-                return false;
+                return ERR_APPEND(res.get_error(),
+                                  "could not write declaration of module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write sub-module '"
+                                      + sub_module->get_name() + "' with ID " + std::to_string(sub_module->get_id()));
             }
         }
 
         res_stream << "endmodule" << std::endl;
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogWriter::write_gate_instance(std::stringstream& res_stream,
-                                            const Gate* gate,
-                                            std::unordered_map<const DataContainer*, std::string>& aliases,
-                                            std::unordered_map<std::string, u32>& identifier_occurrences) const
+    Result<std::monostate> VerilogWriter::write_gate_instance(std::stringstream& res_stream,
+                                                              const Gate* gate,
+                                                              std::unordered_map<const DataContainer*, std::string>& aliases,
+                                                              std::unordered_map<std::string, u32>& identifier_occurrences) const
     {
         const GateType* gate_type = gate->get_type();
 
         res_stream << "    " << escape(gate_type->get_name());
-        if (!write_parameter_assignments(res_stream, gate))
+        if (auto res = write_parameter_assignments(res_stream, gate); res.is_error())
         {
-            return false;
+            return ERR_APPEND(res.get_error(), "could not write gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to write parameter assignments");
         }
         aliases[gate] = escape(get_unique_alias(identifier_occurrences, gate->get_name()));
         res_stream << " " << aliases.at(gate);
@@ -271,26 +285,26 @@ namespace hal
             }
         }
 
-        if (!write_pin_assignments(res_stream, pin_assignments, aliases))
+        if (auto res = write_pin_assignments(res_stream, pin_assignments, aliases); res.is_error())
         {
-            return false;
+            return ERR_APPEND(res.get_error(), "could not write gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to write pin assignments");
         }
 
         res_stream << ";" << std::endl;
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogWriter::write_module_instance(std::stringstream& res_stream,
-                                              const Module* module,
-                                              std::unordered_map<const DataContainer*, std::string>& aliases,
-                                              std::unordered_map<std::string, u32>& identifier_occurrences,
-                                              std::unordered_map<const Module*, std::string>& module_type_aliases) const
+    Result<std::monostate> VerilogWriter::write_module_instance(std::stringstream& res_stream,
+                                                                const Module* module,
+                                                                std::unordered_map<const DataContainer*, std::string>& aliases,
+                                                                std::unordered_map<std::string, u32>& identifier_occurrences,
+                                                                std::unordered_map<const Module*, std::string>& module_type_aliases) const
     {
         res_stream << "    " << escape(module_type_aliases.at(module));
-        if (!write_parameter_assignments(res_stream, module))
+        if (auto res = write_parameter_assignments(res_stream, module); res.is_error())
         {
-            return false;
+            return ERR_APPEND(res.get_error(), "could not write sub-module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write parameter assignments");
         }
         aliases[module] = escape(get_unique_alias(identifier_occurrences, module->get_name()));
         res_stream << " " << aliases.at(module);
@@ -303,17 +317,17 @@ namespace hal
             port_assignments.push_back(std::make_pair(pin->get_name(), std::vector<const Net*>({pin->get_net()})));
         }
 
-        if (!write_pin_assignments(res_stream, port_assignments, aliases))
+        if (auto res = write_pin_assignments(res_stream, port_assignments, aliases); res.is_error())
         {
-            return false;
+            return ERR_APPEND(res.get_error(), "could not write sub-module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write pin assignments");
         }
 
         res_stream << ";" << std::endl;
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogWriter::write_parameter_assignments(std::stringstream& res_stream, const DataContainer* container) const
+    Result<std::monostate> VerilogWriter::write_parameter_assignments(std::stringstream& res_stream, const DataContainer* container) const
     {
         const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data = container->get_data_map();
 
@@ -340,9 +354,9 @@ namespace hal
 
             res_stream << "        ." << escape(key) << "(";
 
-            if (!write_parameter_value(res_stream, type, value))
+            if (auto res = write_parameter_value(res_stream, type, value); res.is_error())
             {
-                return false;
+                return ERR_APPEND(res.get_error(), "could not write parameter assignments: failed to write parameter value '" + value + "' of type '" + type + "'");
             }
 
             res_stream << ")";
@@ -353,12 +367,12 @@ namespace hal
             res_stream << std::endl << "    )";
         }
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogWriter::write_pin_assignments(std::stringstream& res_stream,
-                                              const std::vector<std::pair<std::string, std::vector<const Net*>>>& pin_assignments,
-                                              std::unordered_map<const DataContainer*, std::string>& aliases) const
+    Result<std::monostate> VerilogWriter::write_pin_assignments(std::stringstream& res_stream,
+                                                                const std::vector<std::pair<std::string, std::vector<const Net*>>>& pin_assignments,
+                                                                std::unordered_map<const DataContainer*, std::string>& aliases) const
     {
         res_stream << " (" << std::endl;
         bool first_pin = true;
@@ -401,8 +415,7 @@ namespace hal
                     }
                     else
                     {
-                        log_error("verilog_writer", "no alias for net '{}' with ID {} found.", net->get_name(), net->get_id());
-                        return false;
+                        return ERR("could not write pin assignments: no alias for net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + " found");
                     }
                 }
                 else
@@ -422,10 +435,10 @@ namespace hal
 
         res_stream << std::endl << "    )";
 
-        return true;
+        return OK({});
     }
 
-    bool VerilogWriter::write_parameter_value(std::stringstream& res_stream, const std::string& type, const std::string& value) const
+    Result<std::monostate> VerilogWriter::write_parameter_value(std::stringstream& res_stream, const std::string& type, const std::string& value) const
     {
         if (type == "string")
         {
@@ -475,10 +488,10 @@ namespace hal
         }
         else
         {
-            return false;
+            return ERR("could not write parameter value '" + value + "' of type '" + type + "': invalid type");
         }
 
-        return true;
+        return OK({});
     }
 
     std::string VerilogWriter::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const

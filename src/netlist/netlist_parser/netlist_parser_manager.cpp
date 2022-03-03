@@ -31,7 +31,7 @@ namespace hal
                     return it->second.second;
                 }
 
-                log_error("netlist_parser", "no hdl parser registered for file type '{}'", extension);
+                log_error("netlist_parser", "no netlist parser registered for file type '{}'", extension);
                 return ParserFactory();
             }
 
@@ -44,7 +44,7 @@ namespace hal
 
                 if (auto res = parser->parse(file_name); res.is_error())
                 {
-                    log_error("netlist_parser", "{}", res.get_error().get());
+                    log_error("netlist_parser", "error encountered during netlist parsing:\n{}", res.get_error().get());
                     return {};
                 }
 
@@ -62,7 +62,7 @@ namespace hal
 
                     if (auto res = parser->instantiate(gate_library); res.is_error())
                     {
-                        log_error("netlist_parser", "{}", res.get_error().get());
+                        log_error("netlist_parser", "error encountered during netlist instantiation:\n{}", res.get_error().get());
                         return {};
                     }
                     else
@@ -91,7 +91,8 @@ namespace hal
 
                         if (auto res = parser->instantiate(lib_it); res.is_error())
                         {
-                            log_error("netlist_parser", "{}", res.get_error().get());
+                            log_info("netlist_parser", "failed to instantiate '{}' with gate library '{}'", file_name.string(), lib_it->get_name());
+                            log_debug("netlist_parser", "error encountered during netlist instantiation:\n{}", res.get_error().get());
                             continue;
                         }
                         else
