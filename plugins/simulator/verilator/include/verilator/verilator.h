@@ -115,10 +115,9 @@ namespace hal
             /**
              * Generates the epilogue for the gate type.
              * 
-             * @param[in] gt - The gate type to create the epilogue for.
              * @returns The epilogue for the gate for the simulation model.
              */
-            std::string get_epilogue_for_gate_type(const GateType* gt);
+            std::string get_epilogue_for_gate_type();
         }    // namespace converter
 
         class VerilatorEngine : public SimulationEngineScripted
