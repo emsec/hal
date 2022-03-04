@@ -66,7 +66,7 @@ namespace hal
                     gate_description << gate_function << std::endl;
 
                     // insert epilogue
-                    gate_description << get_epilogue_for_gate_type(gate_type) << std::endl;
+                    gate_description << get_epilogue_for_gate_type() << std::endl;
 
                     // write file
                     std::ofstream gate_file(gate_definitions_path / (gate_type->get_name() + ".v"));
@@ -220,7 +220,6 @@ namespace hal
 
                     if (std::string pin_group = gt->get_pin_group(pin); !pin_group.empty())
                     {
-                        PinDirection direction                              = gt->get_pin_direction(pin);
                         std::vector<std::pair<u32, std::string>> group_pins = gt->get_pins_of_group(pin_group);
                         prologue << " [" << std::to_string(group_pins.back().first) << ":" << std::to_string(group_pins.front().first) << "] " << pin_group << "," << std::endl;
 
@@ -306,7 +305,7 @@ namespace hal
                 return gate_description.str();
             }
 
-            std::string get_epilogue_for_gate_type(const GateType* gt)
+            std::string get_epilogue_for_gate_type()
             {
                 std::stringstream epilogue;
 
