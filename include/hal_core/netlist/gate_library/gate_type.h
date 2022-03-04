@@ -27,6 +27,8 @@
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
+#include "hal_core/netlist/pins/gate_pin.h"
+#include "hal_core/netlist/pins/pin_group.h"
 #include "hal_core/utilities/enums.h"
 
 #include <map>
@@ -61,7 +63,7 @@ namespace hal
     };
 
     template<>
-    std::map<GateTypeProperty,std::string> EnumStrings<GateTypeProperty>::data;
+    std::map<GateTypeProperty, std::string> EnumStrings<GateTypeProperty>::data;
 
     /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
@@ -241,6 +243,119 @@ namespace hal
         std::vector<std::string> get_output_pins() const;
 
         /**
+         * Get a spare pin ID.<br>
+         * The value of 0 is reserved and represents an invalid ID.
+         * 
+         * @returns The pin ID.
+         */
+        u32 get_unique_pin_id();
+
+        /**
+         * Get a spare pin group ID.<br>
+         * The value of 0 is reserved and represents an invalid ID.
+         * 
+         * @returns The pin group ID.
+         */
+        u32 get_unique_pin_group_id();
+
+        /**
+         * Create a gate pin with the specified name.
+         * 
+         * @param[in] id - The ID of the pin.
+         * @param[in] name - The name of the pin.
+         * @param[in] direction - The direction of the pin.
+         * @param[in] type - The type of the pin. Defaults to `PinType::none`.
+         * @returns The gate pin on success, an error message otherwise.
+         * 
+         */
+        Result<GatePin*> create_pin(const u32 id, const std::string& name, PinDirection direction, PinType type = PinType::none);
+
+        /**
+         * Create a gate pin with the specified name.
+         * The ID of the pin is set automatically.
+         * 
+         * @param[in] name - The name of the pin.
+         * @param[in] direction - The direction of the pin.
+         * @param[in] type - The type of the pin. Defaults to `PinType::none`.
+         * @returns The gate pin on success, an error message otherwise.
+         * 
+         */
+        Result<GatePin*> create_pin(const std::string& name, PinDirection direction, PinType type = PinType::none);
+
+        /**
+         * Get the (ordered) pins of the gate type.
+         * The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+         * 
+         * @param[in] filter - Filter function to be evaluated on each pin.
+         * @returns A vector of pins.
+         */
+        std::vector<GatePin*> get_pins_new(const std::function<bool(GatePin*)>& filter = nullptr) const;
+
+        /**
+         * Get the pin corresponding to the given ID.
+         * 
+         * @param[in] id - The ID of the pin.
+         * @returns The pin on success, an error message otherwise.
+         */
+        Result<GatePin*> get_pin_by_id(const u32 id) const;
+
+        /**
+         * Create a new pin group with the given name.
+         * 
+         * @param[in] id - The ID of the pin group.
+         * @param[in] name - The name of the pin group.
+         * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
+         * @param[in] direction - The direction of the pin group, if any.
+         * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] start_index - The start index of the pin group. Defaults to `0`.
+         * @returns The pin group on success, an error message otherwise.
+         */
+        Result<PinGroup<GatePin>*> create_pin_group(const u32 id,
+                                                    const std::string& name,
+                                                    const std::vector<GatePin*> pins = {},
+                                                    PinDirection direction           = PinDirection::none,
+                                                    PinType type                     = PinType::none,
+                                                    bool ascending                   = false,
+                                                    u32 start_index                  = 0);
+
+        /**
+         * Create a new pin group with the given name.
+         * The ID of the pin group is set automatically.
+         * 
+         * @param[in] name - The name of the pin group.
+         * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
+         * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
+         * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] start_index - The start index of the pin group. Defaults to `0`.
+         * @returns The pin group on success, an error message otherwise.
+         */
+        Result<PinGroup<GatePin>*> create_pin_group(const std::string& name,
+                                                    const std::vector<GatePin*> pins = {},
+                                                    PinDirection direction           = PinDirection::none,
+                                                    PinType type                     = PinType::none,
+                                                    bool ascending                   = false,
+                                                    u32 start_index                  = 0);
+
+        /**
+         * Get all pin groups of the gate type.
+         * The optional filter is evaluated on every pin group such that the result only contains pin groups matching the specified condition.
+         * 
+         * @param[in] filter - Filter function to be evaluated on each pin group.
+         * @returns A vector of pin groups.
+         */
+        std::vector<PinGroup<GatePin>*> get_pin_groups_new(const std::function<bool(PinGroup<GatePin>*)>& filter = nullptr) const;
+
+        /**
+         * Get the pin group corresponding to the given ID.
+         * 
+         * @param[in] id - The ID of the pin group.
+         * @returns The pin group on success, an error message otherwise.
+         */
+        Result<PinGroup<GatePin>*> get_pin_group_by_id(const u32 id) const;
+
+        /**
          * Add a pin of the specified direction and type to the gate type.
          *
          * @param[in] pin - The pin.
@@ -412,6 +527,20 @@ namespace hal
         std::string m_name;
         std::set<GateTypeProperty> m_properties;
         std::unique_ptr<GateTypeComponent> m_component;
+
+        // pins
+        u32 m_next_pin_id;
+        std::set<u32> m_used_pin_ids;
+        std::set<u32> m_free_pin_ids;
+        u32 m_next_pin_group_id;
+        std::set<u32> m_used_pin_group_ids;
+        std::set<u32> m_free_pin_group_ids;
+
+        std::vector<std::unique_ptr<GatePin>> m_pins_new;
+        std::unordered_map<u32, GatePin*> m_pins_map;
+        std::vector<std::unique_ptr<PinGroup<GatePin>>> m_pin_groups_new;
+        std::unordered_map<u32, PinGroup<GatePin>*> m_pin_groups_map;
+        std::list<PinGroup<GatePin>*> m_pin_groups_ordered;
 
         // pins
         std::vector<std::string> m_pins;

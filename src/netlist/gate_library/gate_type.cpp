@@ -167,6 +167,237 @@ namespace hal
         return res;
     }
 
+    u32 GateType::get_unique_pin_id()
+    {
+        if (!m_free_pin_ids.empty())
+        {
+            return *(m_free_pin_ids.begin());
+        }
+        while (m_used_pin_ids.find(m_next_pin_id) != m_used_pin_ids.end())
+        {
+            m_next_pin_id++;
+        }
+        return m_next_pin_id;
+    }
+
+    u32 GateType::get_unique_pin_group_id()
+    {
+        if (!m_free_pin_group_ids.empty())
+        {
+            return *(m_free_pin_group_ids.begin());
+        }
+        while (m_used_pin_group_ids.find(m_next_pin_group_id) != m_used_pin_group_ids.end())
+        {
+            m_next_pin_group_id++;
+        }
+        return m_next_pin_group_id;
+    }
+
+    Result<GatePin*> GateType::create_pin(const u32 id, const std::string& name, PinDirection direction, PinType type)
+    {
+        if (name.empty())
+        {
+            return ERR("could not create pin for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": empty string passed as name");
+        }
+        if (id == 0)
+        {
+            return ERR("could not create pin '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": ID 0 is invalid");
+        }
+        if (m_used_pin_ids.find(id) != m_used_pin_ids.end())
+        {
+            return ERR("could not create pin '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": ID " + std::to_string(id) + " is already taken");
+        }
+        if (direction == PinDirection::none || direction == PinDirection::internal)
+        {
+            return ERR("could not create pin '" + name + "' for gate type '" + m_name + "' with " + std::to_string(m_id) + ": direction '" + enum_to_string(direction) + "' is invalid");
+        }
+
+        // create pin
+        std::unique_ptr<GatePin> pin_owner(new GatePin(id, name, direction, type));
+        GatePin* pin = pin_owner.get();
+        m_pins_new.push_back(std::move(pin_owner));
+        m_pins_map[id] = pin;
+
+        // mark pin ID as used
+        if (auto free_id_it = m_free_pin_ids.find(id); free_id_it != m_free_pin_ids.end())
+        {
+            m_free_pin_ids.erase(free_id_it);
+        }
+        m_used_pin_ids.insert(id);
+
+        if (auto res = create_pin_group(name, {pin}, direction, type); res.is_error())
+        {
+            return ERR_APPEND(res.get_error(), "could not create pin '" + name + "' for gate type '" + m_name + "' with " + std::to_string(m_id) + ": failed to create pin group");
+        }
+
+        return OK(pin);
+    }
+
+    Result<GatePin*> GateType::create_pin(const std::string& name, PinDirection direction, PinType type)
+    {
+        return create_pin(get_unique_pin_id(), name, direction, type);
+    }
+
+    std::vector<GatePin*> GateType::get_pins_new(const std::function<bool(GatePin*)>& filter) const
+    {
+        std::vector<GatePin*> res;
+        if (!filter)
+        {
+            res.reserve(m_pins.size());
+            for (const auto& group : m_pin_groups_new)
+            {
+                std::vector<GatePin*> pins = group->get_pins();
+                res.insert(res.end(), pins.begin(), pins.end());
+            }
+        }
+        else
+        {
+            for (PinGroup<GatePin>* group : m_pin_groups_ordered)
+            {
+                for (GatePin* pin : group->get_pins())
+                {
+                    if (filter(pin))
+                    {
+                        res.push_back(pin);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    Result<GatePin*> GateType::get_pin_by_id(const u32 id) const
+    {
+        if (id == 0)
+        {
+            return ERR("could not get pin by ID for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": ID 0 is invalid");
+        }
+
+        if (const auto it = m_pins_map.find(id); it != m_pins_map.end())
+        {
+            return OK(it->second);
+        }
+
+        return ERR("could not get pin by ID for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": no pin with ID " + std::to_string(id) + " exists");
+    }
+
+    Result<PinGroup<GatePin>*>
+        GateType::create_pin_group(const u32 id, const std::string& name, const std::vector<GatePin*> pins, PinDirection direction, PinType type, bool ascending, u32 start_index)
+    {
+        if (name.empty())
+        {
+            return ERR("could not create pin group for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": empty string passed as name");
+        }
+        if (id == 0)
+        {
+            return ERR("could not create pin group '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": ID 0 is invalid");
+        }
+        if (m_used_pin_group_ids.find(id) != m_used_pin_group_ids.end())
+        {
+            return ERR("could not create pin group'" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": ID " + std::to_string(id) + " is already taken");
+        }
+
+        // create pin group
+        std::unique_ptr<PinGroup<GatePin>> pin_group_owner(new PinGroup<GatePin>(id, name, direction, type, ascending, start_index));
+        PinGroup<GatePin>* pin_group = pin_group_owner.get();
+        m_pin_groups_new.push_back(std::move(pin_group_owner));
+        m_pin_groups_ordered.push_back(pin_group);
+        m_pin_groups_map[id] = pin_group;
+
+        // mark pin group ID as used
+        if (auto free_id_it = m_free_pin_group_ids.find(id); free_id_it != m_free_pin_group_ids.end())
+        {
+            m_free_pin_group_ids.erase(free_id_it);
+        }
+        m_used_pin_group_ids.insert(id);
+
+        for (auto pin : pins)
+        {
+            if (pin == nullptr)
+            {
+                return ERR("could not create pin group '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": pin is a 'nullptr'");
+            }
+
+            if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
+            {
+                return ERR("could not create pin group '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": pin '" + pin->get_name() + "' with ID "
+                           + std::to_string(pin->get_id()) + " does not belong to gate type");
+            }
+
+            if (PinGroup<GatePin>* pg = pin->get_group().first; pg != nullptr)
+            {
+                // remove from old group and delete old group if empty
+                if (auto res = pg->remove_pin(pin); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not create pin group '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": unable to remove pin '" + pin->get_name()
+                                          + "' with ID " + std::to_string(pin->get_id()) + " from pin group '" + pg->get_name() + "' with ID " + std::to_string(pin->get_id()));
+                }
+
+                if (pg->empty())
+                {
+                    // erase pin group
+                    u32 del_id = pin_group->get_id();
+                    m_pin_groups_map.erase(del_id);
+                    m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group));
+                    m_pin_groups_new.erase(std::find_if(m_pin_groups_new.begin(), m_pin_groups_new.end(), [pin_group](const auto& group) { return group.get() == pin_group; }));
+
+                    // free pin group ID
+                    m_free_pin_group_ids.insert(del_id);
+                    m_used_pin_group_ids.erase(del_id);
+                }
+            }
+
+            if (auto res = pin_group->assign_pin(pin); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not create pin group '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to assign pin to pin group");
+            }
+        }
+
+        return OK(pin_group);
+    }
+
+    Result<PinGroup<GatePin>*> GateType::create_pin_group(const std::string& name, const std::vector<GatePin*> pins, PinDirection direction, PinType type, bool ascending, u32 start_index)
+    {
+        return create_pin_group(get_unique_pin_group_id(), name, pins, direction, type, ascending, start_index);
+    }
+
+    std::vector<PinGroup<GatePin>*> GateType::get_pin_groups_new(const std::function<bool(PinGroup<GatePin>*)>& filter) const
+    {
+        std::vector<PinGroup<GatePin>*> res;
+        if (!filter)
+        {
+            res.reserve(m_pin_groups_ordered.size());
+            res.insert(res.end(), m_pin_groups_ordered.begin(), m_pin_groups_ordered.end());
+        }
+        else
+        {
+            for (PinGroup<GatePin>* group : m_pin_groups_ordered)
+            {
+                if (filter(group))
+                {
+                    res.push_back(group);
+                }
+            }
+        }
+        return res;
+    }
+
+    Result<PinGroup<GatePin>*> GateType::get_pin_group_by_id(const u32 id) const
+    {
+        if (id == 0)
+        {
+            return ERR("could not get pin by ID: ID 0 is invalid");
+        }
+
+        if (const auto it = m_pin_groups_map.find(id); it != m_pin_groups_map.end())
+        {
+            return OK(it->second);
+        }
+
+        return ERR("could not get pin by ID: gate type '" + m_name + "' with ID " + std::to_string(m_id) + " contains no pin with ID " + std::to_string(id));
+    }
+
     bool GateType::add_pin(const std::string& pin, PinDirection direction, PinType pin_type)
     {
         if (m_pins_set.find(pin) != m_pins_set.end())
