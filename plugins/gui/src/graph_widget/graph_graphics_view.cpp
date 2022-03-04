@@ -1082,12 +1082,7 @@ namespace hal
 
         for (Gate* g : netlist_utils::get_next_gates(gOrigin,succ))
         {
-
-            if (g->get_id() == 137)
-            {
-                qDebug() << g->get_id();
-                selectableGates.insert(g->get_id());
-            }
+            selectableGates.insert(g->get_id());
         }
 
         GateDialog gd(mItem->id(),succ,selectableGates,this);
