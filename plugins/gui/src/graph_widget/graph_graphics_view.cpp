@@ -894,26 +894,22 @@ namespace hal
 
     void GraphGraphicsView::handleAddGateToView()
     {
-        QString prompt;
-        bool confirm;
-        int id =  QInputDialog::getInt(this, prompt, "Gate ID:", 0, 0, 100, 1, &confirm);
-        if (confirm)
+        QSet<u32> selectableGates;
+        for (Gate* g : gNetlist->get_gates())
         {
-            Gate *gate = gNetlist->get_gate_by_id(id);
-            if (gate != nullptr)
-            {
-                if (gNetlist->is_gate_in_netlist(gate))
-                {
-                    QSet<u32> gate_to_add;
-                    gate_to_add.insert(id);
-                    ActionAddItemsToObject* act = new ActionAddItemsToObject({},gate_to_add);
-                    act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
-                    act->exec();
-                }
-            }
+                selectableGates.insert(g->get_id());
+        }
+        GateDialog gd(0,true,selectableGates,this);
+        if (gd.exec() == QDialog::Accepted)
+        {
+            qDebug() << gd.selectedId();
+            QSet<u32> gate_to_add;
+            gate_to_add.insert(gd.selectedId());
+            ActionAddItemsToObject* act = new ActionAddItemsToObject({},gate_to_add);
+            act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+            act->exec();
         }
     }
-
 
     void GraphGraphicsView::handleAddSuccessorToView()
     {
@@ -1084,7 +1080,14 @@ namespace hal
         Q_ASSERT(gOrigin);
 
         for (Gate* g : netlist_utils::get_next_gates(gOrigin,succ))
-            selectableGates.insert(g->get_id());
+        {
+
+            if (g->get_id() == 137)
+            {
+                qDebug() << g->get_id();
+                selectableGates.insert(g->get_id());
+            }
+        }
 
         GateDialog gd(mItem->id(),succ,selectableGates,this);
         gd.hidePicker();
