@@ -892,17 +892,18 @@ namespace hal
         }
     }
 
+
     void GraphGraphicsView::handleAddGateToView()
     {
         QSet<u32> selectableGates;
         for (Gate* g : gNetlist->get_gates())
         {
-                selectableGates.insert(g->get_id());
+            // TODO: Only available gates
+            selectableGates.insert(g->get_id());
         }
         GateDialog gd(0,true,selectableGates,this);
         if (gd.exec() == QDialog::Accepted)
         {
-            qDebug() << gd.selectedId();
             QSet<u32> gate_to_add;
             gate_to_add.insert(gd.selectedId());
             ActionAddItemsToObject* act = new ActionAddItemsToObject({},gate_to_add);
@@ -992,7 +993,7 @@ namespace hal
                 {
                     if (gatsHandled.contains(g)) continue;
                     gatsHandled.insert(g);
-                    if (boxes.boxForGate(g)) continue; // already in view
+                    if (boxes.boxForGate(g)) continue; // by in view
                     foundList.append(g);
                 }
             }
