@@ -870,32 +870,14 @@ namespace hal
 
     void GraphGraphicsView::handleAddModuleToView()
     {
-//        QString prompt;
-//        bool confirm;
-//        u32 id =  QInputDialog::getInt(this, prompt, "Module ID:", 0, 0, 100, 1, &confirm);
-
-
-//        if (confirm)
-//        {
-//            Module *module = gNetlist->get_module_by_id(id);
-//            if (module != nullptr)
-//            {
-//                if (gNetlist->is_module_in_netlist(module))
-//                {
-//                    QSet<u32> module_to_add;
-//                    module_to_add.insert(id);
-//                    ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add,{});
-//                    act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
-//                    act->exec();
-//                }
-//            }
-//        }
-
-
-
+        /* QUESTION: module is only added to view. Is this wanted?
+         * TODO: add class CustomModuleDialog with less features
+         * CRASH: when trying to create new module
+        */
         ModuleDialog md(this);
         if (md.exec() == QDialog::Accepted)
         {
+            // TODO: only available modules
             QSet<u32> module_to_add;
             module_to_add.insert(md.selectedId());
             ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add,{});
@@ -903,17 +885,18 @@ namespace hal
             act->exec();
         }
     }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
+
 
     void GraphGraphicsView::handleAddGateToView()
     {
-        //
+        // QUESTION: gate is only added to view. Is this wanted?
         QSet<u32> selectableGates;
         for (Gate* g : gNetlist->get_gates())
         {
-            // TODO: Only available gates
+            // TODO: only available gates
             selectableGates.insert(g->get_id());
         }
+        // TODO: add class CustomGateDialog with less features like pick from graph
         GateDialog gd(0,true,selectableGates,this);
         if (gd.exec() == QDialog::Accepted)
         {
@@ -924,6 +907,7 @@ namespace hal
             act->exec();
         }
     }
+
 
     void GraphGraphicsView::handleAddSuccessorToView()
     {
