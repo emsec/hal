@@ -870,7 +870,7 @@ namespace hal
 
     void GraphGraphicsView::handleAddModuleToView()
     {
-        /* QUESTION: module is only added to view. Is this wanted?
+        /*
          * TODO: add class CustomModuleDialog with less features
          * CRASH: when trying to create new module
         */
@@ -889,14 +889,14 @@ namespace hal
 
     void GraphGraphicsView::handleAddGateToView()
     {
-        // QUESTION: gate is only added to view. Is this wanted?
         QSet<u32> selectableGates;
         for (Gate* g : gNetlist->get_gates())
         {
             // TODO: only available gates
             selectableGates.insert(g->get_id());
         }
-        /* TODO: add class CustomGateDialog with less features
+        /*
+         * TODO: add class CustomGateDialog with less features
          * CRASH: when trying to pick gate from graph
         */
         GateDialog gd(0,true,selectableGates,this);
