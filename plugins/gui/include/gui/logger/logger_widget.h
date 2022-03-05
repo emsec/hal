@@ -36,11 +36,13 @@
 #include <QWidget>
 #include <QtCore/qreadwritelock.h>
 #include <QScrollBar>
+#include <QPushButton>
 
 namespace hal
 {
     class LoggerMarshall;
     class ChannelSelector;
+    class Searchbar;
 
     /**
      * @ingroup logging
@@ -51,6 +53,8 @@ namespace hal
     class LoggerWidget : public ContentWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
+        Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
 
     public:
         /**
@@ -84,6 +88,34 @@ namespace hal
          */
         void resizeEvent(QResizeEvent* event) override;
 
+        /**
+         * Q_PROPERTY READ function for the "search"-icon path.
+         *
+         * @return The "search" icon path.
+         */
+        QString searchIconPath() const;
+
+        /**
+         * Q_PROPERTY READ function for the "search active"-icon style.
+         *
+         * @return The "search activate" icon style.
+         */
+        QString searchIconStyle() const;
+
+        /**
+         * Q_PROPERTY WRITE function for the "search"-icon path.
+         *
+         * @param path - The new path.
+         */
+        void setSearchIconPath(const QString &path);
+
+        /**
+         * Q_PROPERTY WRITE function for the "search"-icon style.
+         *
+         * @param style - The new style.
+         */
+        void setSearchIconStyle(const QString &style);
+
     public Q_SLOTS:
         /**
          * Appends the log message to the appropriate filter.
@@ -103,12 +135,26 @@ namespace hal
         void handleChannelUpdated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
 
         /**
-         * Q_SLOT to handle that the currently selected logger channel has been changed (e.g. by choosing another one
-         * in the ChannelSelector combobox).
+         * Q_SLOT to handle that the currently selected filter has been changed (e.g. by choosing another one in the
+         * the ChannelSelector combobox or by toggling a severity button).
          *
-         * @param index - The new channel index
+         * @param p - New channel index or new state of a severity button
          */
-        void handleCurrentChannelChanged(int index);
+        void handleCurrentFilterChanged(int p);
+
+        /**
+         * Q_SLOT to handle that the severity filter has been changed (e.g. by toggling a severity).
+         *
+         * @param state - New state of a severity button
+         */
+        void handleSeverityChanged(bool state);
+
+        /**
+         * Q_SLOT to handle that a new search filter has been set.
+         *
+         * @param filter - Search string to filter
+         */
+        void handleSearchChanged(QString filter);
 
         /**
          * Q_SLOT to handle interactions with the scrollbar. After the first scrollbar interaction the scrollbar wont
@@ -118,12 +164,49 @@ namespace hal
          */
         void handleFirstUserInteraction(int value);
 
+        /**
+         * Q_SLOT to handle that a new channel has been added to the ChannelSelector combobox.
+         */
+        void handleCustomChannel();
+
+        /**
+         * Toggles the visibiliy of the searchbar.
+         */
+        void toggleSearchbar();
+
     private:
+        Searchbar* mSearchbar;
+        QAction* mSearchAction;
+
+        QString mSearchIconPath;
+        QString mSearchIconStyle;
+
+        void saveSettings();
+        void restoreSettings();
+
         void scrollToBottom();
 
         QPlainTextEdit* mPlainTextEdit;
+
         ChannelSelector* mSelector;
+        QLabel* mChannelLabel;
+
+        QPushButton* mMuteButton;
+        QPushButton* mVerboseButton;
+        QPushButton* mDebugButton;
+        QPushButton* mInfoButton;
+        QPushButton* mWarningButton;
+        QPushButton* mErrorButton;
+
+        bool mInfoSeverity;
+        bool mWarningSeverity;
+        bool mErrorSeverity;
+        bool mDebugSeverity;
+
+        QString mSearchFilter;
+
         LoggerMarshall* mLogMarshall;
+        int mCurrentChannelIndex;
         std::string mCurrentChannel;
         QReadWriteLock mLock;
         QScrollBar* mPlainTextEditScrollbar;

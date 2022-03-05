@@ -307,7 +307,6 @@ namespace hal
         }
         mSearchAction->setEnabled(enable);
     }
-
     void SelectionDetailsWidget::canMoveToModule(int nodes)
     {
         QString iconStyle = nodes > 0

@@ -67,7 +67,6 @@ If you want to build HAL on Ubuntu 20.04, run the following commands:
 3. `mkdir build && cd build` to create and move to the build folder
 4. `cmake .. [OPTIONS]` to run cmake
 5. `make` to compile HAL
-6. `make install` (optionally) to install HAL
 
 We do currently not support building on any other Linux distribution.
 
@@ -102,6 +101,26 @@ This also builds all tests of plugins that are built.
 - `SANITIZE_ADDRESS`, `SANITIZE_MEMORY`, `SANITIZE_THREAD`, `SANITIZE_UNDEFINED `: builds with the respective sanitizers (recommended only for debug builds)
 
 If you do not specify `CMAKE_BUILD_TYPE`, it defaults to `Release`.
+
+### Troubleshooting
+
+#### pybind11 Trouble
+
+```
+CMake Error in src/python_bindings/CMakeLists.txt:
+  Imported target "pybind11::module" includes non-existent path
+    "/include"
+  in its INTERFACE_INCLUDE_DIRECTORIES.  Possible reasons include:
+  * The path was deleted, renamed, or moved to another location.
+  * An install or uninstall procedure did not complete successfully.
+  * The installation package was faulty and references files it does not
+  provide.
+```
+
+ 
+- Tip 1: Make sure you have the most recent `pybind11-dev` version installed.
+- Tip 2: `-DCMAKE_PREFIX_PATH=<root_of_pybind>` can be provided as additional flag to `cmake`. For some reason this variable sometimes remains empty in the pybind11 CMakeLists and results in faulty paths.
+
 
 <a name="quickstart"></a>
 # Quickstart Guide 

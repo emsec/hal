@@ -35,7 +35,7 @@ namespace hal
             {
                 return toggle(previous_output);
             }
-            log_error("netlist_simulator", "unsupported set/reset behavior {}.", behavior);
+            log_error("netlist_simulator", "unsupported set/reset behavior {}.", enum_to_string(behavior));
             return BooleanFunction::Value::X;
         }
 
