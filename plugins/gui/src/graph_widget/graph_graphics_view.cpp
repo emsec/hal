@@ -870,31 +870,44 @@ namespace hal
 
     void GraphGraphicsView::handleAddModuleToView()
     {
-        QString prompt;
-        bool confirm;
-        u32 id =  QInputDialog::getInt(this, prompt, "Module ID:", 0, 0, 100, 1, &confirm);
+//        QString prompt;
+//        bool confirm;
+//        u32 id =  QInputDialog::getInt(this, prompt, "Module ID:", 0, 0, 100, 1, &confirm);
 
 
-        if (confirm)
+//        if (confirm)
+//        {
+//            Module *module = gNetlist->get_module_by_id(id);
+//            if (module != nullptr)
+//            {
+//                if (gNetlist->is_module_in_netlist(module))
+//                {
+//                    QSet<u32> module_to_add;
+//                    module_to_add.insert(id);
+//                    ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add,{});
+//                    act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+//                    act->exec();
+//                }
+//            }
+//        }
+
+
+
+        ModuleDialog md(this);
+        if (md.exec() == QDialog::Accepted)
         {
-            Module *module = gNetlist->get_module_by_id(id);
-            if (module != nullptr)
-            {
-                if (gNetlist->is_module_in_netlist(module))
-                {
-                    QSet<u32> module_to_add;
-                    module_to_add.insert(id);
-                    ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add,{});
-                    act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
-                    act->exec();
-                }
-            }
+            QSet<u32> module_to_add;
+            module_to_add.insert(md.selectedId());
+            ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add,{});
+            act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+            act->exec();
         }
     }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
 
     void GraphGraphicsView::handleAddGateToView()
     {
+        //
         QSet<u32> selectableGates;
         for (Gate* g : gNetlist->get_gates())
         {
