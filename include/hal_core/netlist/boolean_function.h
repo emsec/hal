@@ -115,7 +115,7 @@ namespace hal
          * Builds and validates a Boolean function from a vector of nodes.
          * 
          * @param[in] nodes - Vector of Boolean function nodes.
-         * @returns Ok() and the Boolean function on success, Err() otherwise.
+         * @returns Ok() and the Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> build(std::vector<Node>&& nodes);
 
@@ -169,7 +169,7 @@ namespace hal
          * @param[in] p0 - First Boolean function.
          * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation.
-         * @returns Ok() and the joined Boolean function on success, Err() otherwise.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> And(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
@@ -180,7 +180,7 @@ namespace hal
          * @param[in] p0 - First Boolean function.
          * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation.
-         * @returns Ok() and the joined Boolean function on success, Err() otherwise.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Or(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
@@ -190,7 +190,7 @@ namespace hal
          * 
          * @param[in] p0 - The Boolean function to negate.
          * @param[in] size - Bit-size of the operation.
-         * @returns Ok() and the negated Boolean function on success, Err() otherwise.
+         * @returns Ok() and the negated Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Not(BooleanFunction&& p0, u16 size);
 
@@ -202,7 +202,7 @@ namespace hal
          * @param[in] p0 - First Boolean function.
          * @param[in] p1 - Second Boolean function.
          * @param[in] size - Bit-size of the operation.
-         * @returns Ok() and the joined Boolean function on success, Err() otherwise.
+         * @returns Ok() and the joined Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Xor(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
@@ -213,7 +213,7 @@ namespace hal
          * @param[in] p1 - Boolean function start index at which p0 is sliced.
          * @param[in] p2 - Boolean function end index at which p0 is sliced (inclusive).
          * @param[in] size - Size of the sliced Boolean function, i.e. p0 + p1 + 1.
-         * @returns OK() and the sliced Boolean function on success, Err() otherwise.
+         * @returns OK() and the sliced Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Slice(BooleanFunction&& p0, BooleanFunction&& p1, BooleanFunction&& p2, u16 size);
 
@@ -223,7 +223,7 @@ namespace hal
          * @param[in] p0 - Boolean function (higher-bit part)
          * @param[in] p1 - Boolean function (lower-bit part)
          * @param[in] size - Size of concatenated Boolean function.
-         * @returns Ok() and the concatenated Boolean function on success, Err() otherwise.
+         * @returns Ok() and the concatenated Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> Concat(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
@@ -449,7 +449,7 @@ namespace hal
          * Parses a Boolean function from a string expression.
          * 
          * @param[in] expression - Boolean function string.
-         * @returns Ok() and the Boolean function on success, Err() otherwise.
+         * @returns Ok() and the Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> from_string(const std::string& expression);
 
@@ -480,7 +480,7 @@ namespace hal
          *
          * @param[in] variable_name - The variable to substitute.
          * @param[in] function - The function replace the variable with.
-         * @returns Ok() and the resulting Boolean function on success, Err() otherwise.
+         * @returns Ok() and the resulting Boolean function on success, an error otherwise.
          */
         Result<BooleanFunction> substitute(const std::string& variable_name, const BooleanFunction& function) const;
 
@@ -488,7 +488,7 @@ namespace hal
          * Evaluates a Boolean function comprising only single-bit variables using the given input values.
          * 
          * @param[in] inputs - A map from variable name to input value.
-         * @returns Ok() and the resulting value on success, Err() otherwise.
+         * @returns Ok() and the resulting value on success, an error otherwise.
          */
         Result<Value> evaluate(const std::unordered_map<std::string, Value>& inputs) const;
 
@@ -496,7 +496,7 @@ namespace hal
          * Evaluates a Boolean function comprising multi-bit variables using the given input values.
          * 
          * @param[in] inputs - A map from variable name to a vector of input values.
-         * @returns Ok() and the resulting value on success, Err() otherwise.
+         * @returns Ok() and the resulting value on success, an error otherwise.
          */
         Result<std::vector<Value>> evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const;
 
@@ -506,7 +506,7 @@ namespace hal
          * 
          * @param[in] ordered_variables - A vector describing the order of input variables used to generate the truth table. Defaults to an empty vector.
          * @param[in] remove_unknown_variables - Set `true` to remove variables from the truth table that are not present within the Boolean function, `false` otherwise. Defaults to `false`.
-         * @returns Ok() and a vector of values representing the truth table output on success, Err() otherwise.
+         * @returns Ok() and a vector of values representing the truth table output on success, an error otherwise.
          */
         Result<std::vector<std::vector<Value>>> compute_truth_table(const std::vector<std::string>& ordered_variables = {}, bool remove_unknown_variables = false) const;
 
