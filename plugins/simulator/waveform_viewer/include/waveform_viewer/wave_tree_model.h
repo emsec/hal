@@ -6,6 +6,8 @@
 #include <QList>
 #include <QDir>
 #include <QThread>
+#include <QObject>
+#include <QMetaObject>
 
 namespace hal {
     class WaveData;
@@ -93,7 +95,7 @@ namespace hal {
         void handleCursorMoved(float tCursor, int xpos);
         void forwardBeginResetModel();
         void forwardEndResetModel();
-        void handleValueLoaderFinished();
+        //void handleValueLoaderFinished();
         void handleStartValueThread(WaveItem* item);
         void handleEndValueThread(WaveItem* item);
 
