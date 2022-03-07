@@ -23,30 +23,12 @@
 
 #pragma once
 
-#include <QComboBox>
-
-class QKeyEvent;
-
+#include <QCheckBox>
 namespace hal
 {
-    /**
-     * @ingroup logging
-     * @brief A combobox for selecting a logger channel.
-     *
-     * This class is a simple combobox that displays each channel through its underlying channel model.
-     */
-    class ChannelSelector : public QComboBox
+    class SeveritySelector : public QCheckBox
     {
-        Q_OBJECT
-
     public:
-        /**
-         * The constructor. The channel model is set here.
-         *
-         * @param parent - The parent of the widget.
-         */
-        ChannelSelector(QWidget* parent = nullptr);
-
-        void keyPressEvent(QKeyEvent *e) override;
+        SeveritySelector(QWidget* parent = nullptr);
     };
 }
