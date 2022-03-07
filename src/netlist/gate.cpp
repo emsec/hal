@@ -65,7 +65,7 @@ namespace hal
             return false;
         }
 
-        if (m_functions != other.get_boolean_functions(true))
+        if (m_functions != other.get_boolean_functions(true).get())
         {
             log_info("gate", "the gates with IDs {} and {} are not equal due to an unequal Boolean functions.", m_id, other.get_id());
             return false;
@@ -87,7 +87,7 @@ namespace hal
 
     ssize_t Gate::get_hash() const
     {
-        return (uintptr_t) this;
+        return (uintptr_t)this;
     }
 
     u32 Gate::get_id() const
@@ -181,42 +181,70 @@ namespace hal
         return m_grouping;
     }
 
-    BooleanFunction Gate::get_boolean_function(std::string name) const
+    Result<BooleanFunction> Gate::get_boolean_function(const std::string& name) const
     {
         if (name.empty())
         {
-            auto output_pins = m_type->get_output_pins();
-            if (output_pins.empty())
-            {
-                return BooleanFunction();
-            }
-            name = output_pins[0];
+            return ERR("could not get Boolean function at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": empty string provided as name");
         }
 
         if (m_type->has_component_of_type(GateTypeComponent::ComponentType::lut))
         {
-            auto lut_pins = m_type->get_pins_of_type(PinType::lut);
-            if (std::find(lut_pins.begin(), lut_pins.end(), name) != lut_pins.end())
+            auto lut_pins = m_type->get_pins([name](const GatePin* pin) { return pin->get_type() == PinType::lut && pin->get_name() == name; });
+            if (!lut_pins.empty())
             {
-                return get_lut_function(name);
+                if (auto res = get_lut_function(lut_pins.at(0)); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not get Boolean function with name '" + name + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to generate LUT function");
+                }
+                else
+                {
+                    return res;
+                }
             }
         }
 
         if (auto it = m_functions.find(name); it != m_functions.end())
         {
-            return it->second;
+            return OK(it->second);
         }
 
         auto map = m_type->get_boolean_functions();
         if (auto it = map.find(name); it != map.end())
         {
-            return it->second;
+            return OK(it->second);
         }
 
-        return BooleanFunction();
+        return ERR("could not get Boolean function with name '" + name + "'  at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": no function with that name exists");
     }
 
-    std::unordered_map<std::string, BooleanFunction> Gate::get_boolean_functions(bool only_custom_functions) const
+    Result<BooleanFunction> Gate::get_boolean_function(const GatePin* pin) const
+    {
+        if (pin == nullptr)
+        {
+            auto output_pins = m_type->get_output_pins();
+            if (output_pins.empty())
+            {
+                return ERR("could not get Boolean function of gate '" + m_name + "' with ID " + std::to_string(m_id) + ": gate type '" + m_type->get_name() + "' with ID "
+                           + std::to_string(m_type->get_id()) + " has no output pins");
+            }
+            pin = output_pins.at(0);
+        }
+
+        if (auto res = get_boolean_function(pin->get_name()); res.is_error())
+        {
+            return ERR(res.get_error());
+        }
+        else
+        {
+            return res;
+        }
+
+        return ERR("could not get Boolean function of pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": no function with that name exists");
+    }
+
+    Result<std::unordered_map<std::string, BooleanFunction>> Gate::get_boolean_functions(bool only_custom_functions) const
     {
         std::unordered_map<std::string, BooleanFunction> res;
 
@@ -232,49 +260,60 @@ namespace hal
 
         if (!only_custom_functions && m_type->has_component_of_type(GateTypeComponent::ComponentType::lut))
         {
-            for (auto pin : m_type->get_pins_of_type(PinType::lut))
+            for (auto pin : m_type->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::lut; }))
             {
-                res.emplace(pin, get_lut_function(pin));
+                if (auto lut_func = get_lut_function(pin); lut_func.is_error())
+                {
+                    return ERR_APPEND(lut_func.get_error(),
+                                      "could not get Boolean functions of gate '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to generate LUT function for pin '" + pin->get_name()
+                                          + "'");
+                }
+                else
+                {
+                    res.emplace(pin, lut_func.get());
+                }
             }
         }
 
-        return res;
+        return OK(res);
     }
 
-    BooleanFunction Gate::get_lut_function(const std::string& pin) const
+    Result<BooleanFunction> Gate::get_lut_function(const GatePin* pin) const
     {
         UNUSED(pin);
 
         LUTComponent* lut_component = m_type->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
         if (lut_component == nullptr)
         {
-            return BooleanFunction();
+            return ERR("could not generate LUT function for pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": gate type '" + m_type->get_name()
+                       + "' with ID " + std::to_string(m_type->get_id()) + " does not have a LUT component");
         }
 
         InitComponent* init_component =
             lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
         if (init_component == nullptr)
         {
-            return BooleanFunction();
+            return ERR("could not generate LUT function for pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": gate type '" + m_type->get_name()
+                       + "' with ID " + std::to_string(m_type->get_id()) + " does not have an initialization component");
         }
 
-        const std::string& category     = init_component->get_init_category();
-        const std::string& key          = init_component->get_init_identifiers().front();
-        std::string config_str          = std::get<1>(get_data(category, key));
-        auto is_ascending               = lut_component->is_init_ascending();
-        std::vector<std::string> inputs = m_type->get_input_pins();
+        const std::string& category  = init_component->get_init_category();
+        const std::string& key       = init_component->get_init_identifiers().front();
+        std::string config_str       = std::get<1>(get_data(category, key));
+        auto is_ascending            = lut_component->is_init_ascending();
+        std::vector<GatePin*> inputs = m_type->get_input_pins();
 
         auto result = BooleanFunction::Const(BooleanFunction::Value::ZERO);
 
         if (config_str.empty())
         {
-            return result;
+            return OK(result);
         }
 
         if (inputs.size() > 6)
         {
-            log_error("gate", "LUT gate '{}' with ID {} in netlist with ID {} has more than six input pins, which is currently not supported.", m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return BooleanFunction();
+            return ERR("could not generate LUT function for pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": gate type '" + m_type->get_name()
+                       + "' with ID " + std::to_string(m_type->get_id()) + " has more than 6 input pins, which is currently not supported");
         }
 
         u64 config = 0;
@@ -284,13 +323,8 @@ namespace hal
         }
         catch (std::invalid_argument& ex)
         {
-            log_error("gate",
-                      "LUT gate '{}' with ID {} in netlist with ID {} has invalid configuration string of '{}', which is not a hex value.",
-                      m_name,
-                      m_id,
-                      m_internal_manager->m_netlist->get_id(),
-                      config_str);
-            return BooleanFunction();
+            return ERR("could not generate LUT function for pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": configuration string '" + config_str
+                       + "' is invalid");
         }
 
         u32 max_config_size = 1 << inputs.size();
@@ -305,7 +339,7 @@ namespace hal
 
         if (auto it = cache.find(cache_key); it != cache.end())
         {
-            return it->second;
+            return OK(it->second);
         }
 
         u32 config_size = 0;
@@ -320,15 +354,8 @@ namespace hal
 
         if (config_size > max_config_size)
         {
-            log_error("gate",
-                      "LUT gate '{}' with ID {} in netlist with ID {} supports a configuration string of up to {} bits, but '{}' comprises {} bits instead.",
-                      m_name,
-                      m_id,
-                      m_internal_manager->m_netlist->get_id(),
-                      max_config_size,
-                      config_str,
-                      config_str.size() * 4);
-            return BooleanFunction();
+            return ERR("could not generate LUT function for pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": configuration string '" + config_str
+                       + "' is made up of " + std::to_string(config_str.size() * 4) + " bits, but " + std::to_string(max_config_size) + " bits are required");
         }
 
         for (u32 i = 0; config != 0 && i < max_config_size; i++)
@@ -337,17 +364,17 @@ namespace hal
             config >>= 1;
             if (bit == 1)
             {
-                auto conjunction = BooleanFunction::Const(1, 1);
+                auto conjunction  = BooleanFunction::Const(1, 1);
                 auto input_values = i;
                 for (auto input : inputs)
                 {
                     if ((input_values & 1) == 1)
                     {
-                        conjunction &= BooleanFunction::Var(input);
+                        conjunction &= BooleanFunction::Var(input->get_name());
                     }
                     else
                     {
-                        conjunction &= ~BooleanFunction::Var(input);
+                        conjunction &= ~BooleanFunction::Var(input->get_name());
                     }
                     input_values >>= 1;
                 }
@@ -357,11 +384,16 @@ namespace hal
 
         auto f = result.simplify();
         cache.emplace(cache_key, f);
-        return f;
+        return OK(f);
     }
 
-    void Gate::add_boolean_function(const std::string& name, const BooleanFunction& func)
+    Result<std::monostate> Gate::add_boolean_function(const std::string& name, const BooleanFunction& func)
     {
+        if (name.empty())
+        {
+            return ERR("could not add Boolean function with name to gate '" + m_name + "' with ID " + std::to_string(m_id) + ": empty string provided as name");
+        }
+
         LUTComponent* lut_component = m_type->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
         if (lut_component != nullptr)
         {
@@ -369,18 +401,19 @@ namespace hal
                 lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
             if (init_component != nullptr)
             {
-                std::vector<std::string> output_pins = m_type->get_output_pins();
-                if (!output_pins.empty() && name == output_pins[0])
+                std::vector<GatePin*> output_pins = m_type->get_output_pins();
+                if (!output_pins.empty() && name == output_pins.at(0)->get_name())
                 {
-                    auto tt = func.compute_truth_table(m_type->get_input_pins());
-                    if (tt.is_error()) {
-                        log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' wiht ID {}.", name, func.to_string(), m_name, m_id);
-                        return;
+                    auto tt = func.compute_truth_table(m_type->get_input_pin_names());
+                    if (tt.is_error())
+                    {
+                        return ERR("could not add Boolean function with name '" + name + "' to gate '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to compute truth table");
                     }
                     auto truth_table = tt.get();
-                    if (truth_table.size() > 1) {
-                        log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {} (= function is > 1-bit in output size). ", name, func.to_string(), m_name, m_id);
-                        return;
+                    if (truth_table.size() > 1)
+                    {
+                        return ERR("could not add Boolean function with name '" + name + "' to gate '" + m_name + "' with ID " + std::to_string(m_id)
+                                   + ": function has output bit-side greater than 1, which is currently not supported");
                     }
 
                     u64 config_value = 0;
@@ -392,14 +425,7 @@ namespace hal
                     {
                         if (v == BooleanFunction::X)
                         {
-                            log_error("netlist",
-                                      "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {} in netlist with ID {} as its truth table contains undefined values.",
-                                      name,
-                                      func.to_string(),
-                                      m_name,
-                                      m_id,
-                                      m_internal_manager->m_netlist->get_id());
-                            return;
+                            return ERR("could not add Boolean function with name '" + name + "' to gate '" + m_name + "' with ID " + std::to_string(m_id) + ": truth table contains undefined values");
                         }
                         config_value <<= 1;
                         config_value |= v;
@@ -417,6 +443,7 @@ namespace hal
 
         m_functions.emplace(name, func);
         m_event_handler->notify(GateEvent::event::boolean_function_changed, this);
+        return OK({});
     }
 
     bool Gate::mark_vcc_gate()
@@ -449,16 +476,6 @@ namespace hal
         return m_internal_manager->m_netlist->is_gnd_gate(this);
     }
 
-    std::vector<std::string> Gate::get_input_pins() const
-    {
-        return m_type->get_input_pins();
-    }
-
-    std::vector<std::string> Gate::get_output_pins() const
-    {
-        return m_type->get_output_pins();
-    }
-
     std::vector<Net*> Gate::get_fan_in_nets() const
     {
         return m_in_nets;
@@ -469,27 +486,32 @@ namespace hal
         return m_in_endpoints;
     }
 
-    Net* Gate::get_fan_in_net(const std::string& pin) const
+    Result<Net*> Gate::get_fan_in_net(const GatePin* pin) const
     {
-        auto ep = get_fan_in_endpoint(pin);
-        if (ep == nullptr)
+        if (auto ep = get_fan_in_endpoint(pin); ep.is_error())
         {
-            return nullptr;
+            return ERR_APPEND(ep.get_error(), "could not get fan-in net of gate '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to get fan-in endpoint");
         }
-        return ep->get_net();
+        else
+        {
+            return OK(ep.get()->get_net());
+        }
     }
 
-    Endpoint* Gate::get_fan_in_endpoint(const std::string& pin) const
+    Result<Endpoint*> Gate::get_fan_in_endpoint(const GatePin* pin) const
     {
-        auto it = std::find_if(m_in_endpoints.begin(), m_in_endpoints.end(), [&pin](auto& ep) { return ep->get_pin() == pin; });
-
-        if (it == m_in_endpoints.end())
+        if (pin == nullptr)
         {
-            log_debug("gate", "no net is connected to input pin '{}' of gate '{}' with ID {} in netlist with ID {}.", pin, m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return nullptr;
+            return ERR("could not get fan-in endpoint of gate '" + m_name + "' with ID " + std::to_string(m_id) + ": 'nullptr' given as pin");
         }
 
-        return *it;
+        auto it = std::find_if(m_in_endpoints.begin(), m_in_endpoints.end(), [&pin](auto& ep) { return ep->get_pin() == pin; });
+        if (it == m_in_endpoints.end())
+        {
+            return ERR("could not get fan-in endpoint of pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": no net is connected to pin");
+        }
+
+        return OK(*it);
     }
 
     std::vector<Net*> Gate::get_fan_out_nets() const
@@ -502,27 +524,32 @@ namespace hal
         return m_out_endpoints;
     }
 
-    Net* Gate::get_fan_out_net(const std::string& pin) const
+    Result<Net*> Gate::get_fan_out_net(const GatePin* pin) const
     {
-        auto ep = get_fan_out_endpoint(pin);
-        if (ep == nullptr)
+        if (auto ep = get_fan_out_endpoint(pin); ep.is_error())
         {
-            return nullptr;
+            return ERR_APPEND(ep.get_error(), "could not get fan-out net of gate '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to get fan-out endpoint");
         }
-        return ep->get_net();
+        else
+        {
+            return OK(ep.get()->get_net());
+        }
     }
 
-    Endpoint* Gate::get_fan_out_endpoint(const std::string& pin) const
+    Result<Endpoint*> Gate::get_fan_out_endpoint(const GatePin* pin) const
     {
-        auto it = std::find_if(m_out_endpoints.begin(), m_out_endpoints.end(), [&pin](auto& ep) { return ep->get_pin() == pin; });
-
-        if (it == m_out_endpoints.end())
+        if (pin == nullptr)
         {
-            log_debug("gate", "no net is connected to output pin '{}' of gate '{}' with ID {} in netlist with ID {}.", pin, m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return nullptr;
+            return ERR("could not get fan-out endpoint of gate '" + m_name + "' with ID " + std::to_string(m_id) + ": 'nullptr' given as pin");
         }
 
-        return *it;
+        auto it = std::find_if(m_out_endpoints.begin(), m_out_endpoints.end(), [&pin](auto& ep) { return ep->get_pin() == pin; });
+        if (it == m_out_endpoints.end())
+        {
+            return ERR("could not get fan-out endpoint of pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": no net is connected to pin");
+        }
+
+        return OK(*it);
     }
 
     std::vector<Gate*> Gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const

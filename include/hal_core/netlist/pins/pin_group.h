@@ -186,7 +186,7 @@ namespace hal
          * @param[in] index - The index of the pin within the pin group.
          * @returns The pin on success, an error message otherwise.
          */
-        Result<T*> get_pin(u32 index) const
+        Result<T*> get_pin_at_index(u32 index) const
         {
             if (index >= m_start_index && index < m_next_index)
             {

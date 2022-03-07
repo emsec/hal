@@ -187,31 +187,42 @@ namespace hal
         Grouping* get_grouping() const;
 
         /**
-         * Get the boolean function associated with a specific name.
-         * This name can for example be an output pin of the gate or a defined functionality like "reset".<br>
-         * If name is empty, the function of the first output pin is returned.<br>
-         * If there is no function for the given name, an empty function is returned.
+         * TODO pybind
+         * Get the Boolean function specified by the given name.
+         * This name can for example be an output pin of the gate or any other user-defined function name.
          *
-         * @param[in] name - The function name.
-         * @returns The boolean function.
+         * @param[in] name - The name.
+         * @returns The Boolean function on success, an error otherwise.
          */
-        BooleanFunction get_boolean_function(std::string name = "") const;
+        Result<BooleanFunction> get_boolean_function(const std::string& name) const;
+
+        /**
+         * @brief TODO pybind
+         * Get the Boolean function corresponding to the given output pin.
+         * If `pin` is a `nullptr`, the Boolean function of the first output pin is returned.
+         *
+         * @param[in] pin - The pin.
+         * @returns The Boolean function on success, an error otherwise.
+         */
+        Result<BooleanFunction> get_boolean_function(const GatePin* pin == nullptr) const;
 
         /**
          * Get a map from function name to boolean function for all boolean functions associated with this gate.
          *
          * @param[in] only_custom_functions - If true, this returns only the functions which were set via add_boolean_function.
-         * @returns A map from function name to function.
+         * @returns A map from function name to function on success, an error otherwise.
          */
-        std::unordered_map<std::string, BooleanFunction> get_boolean_functions(bool only_custom_functions = false) const;
+        Result<std::unordered_map<std::string, BooleanFunction>> get_boolean_functions(bool only_custom_functions = false) const;
 
         /**
-         * Add the boolean function with the specified name only for this gate.
+         * TODO pybind, test
+         * Add a Boolean function going by the given name to the gate.
          *
-         * @param[in] name - The function name, usually an output port.
+         * @param[in] name - The function name.
          * @param[in] func - The function.
+         * @returns Ok on success, an error otherwise. 
          */
-        void add_boolean_function(const std::string& name, const BooleanFunction& func);
+        Result<std::monostate> add_boolean_function(const std::string& name, const BooleanFunction& func);
 
         /**
          * Mark this gate as a global vcc gate.
@@ -260,24 +271,6 @@ namespace hal
          */
 
         /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Get a list of all input pin types of the gate.
-         *
-         * @returns A vector of input pin types.
-         */
-        [[deprecated("Will be removed in a future version. Use get_type()->get_input_pins() instead.")]] std::vector<std::string> get_input_pins() const;
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Get a list of all output pin types of the gate.
-         *
-         * @returns A vector of output pin types.
-         */
-        [[deprecated("Will be removed in a future version. Use get_type()->get_output_pins() instead.")]] std::vector<std::string> get_output_pins() const;
-
-        /**
          * Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
          *
          * @returns A vector of all connected input nets.
@@ -292,22 +285,22 @@ namespace hal
         std::vector<Endpoint*> get_fan_in_endpoints() const;
 
         /**
-         * Get the fan-in net which is connected to a specific input pin. <br>
-         * If the input pin type is unknown or no net is connected, a nullptr is returned.
+         * TODO pybind, test
+         * Get the fan-in net which is connected to the specified input pin.
          *
-         * @param[in] pin - The input pin type.
-         * @returns The connected input net.
+         * @param[in] pin - The input pin.
+         * @returns The connected input net on success, an error otherwise.
          */
-        Net* get_fan_in_net(const std::string& pin) const;
+        Result<Net*> get_fan_in_net(const GatePin* pin) const;
 
         /**
-         * Get the fan-in endpoint which represents a specific input pin. <br>
-         * If the input pin type is unknown or no net is connected to the respective pin, a nullptr is returned.
+         * TODO pybind, test
+         * Get the fan-in endpoint corresponding to the specified input pin.
          *
-         * @param[in] pin - The input pin type.
-         * @returns The endpoint.
+         * @param[in] pin - The input pin.
+         * @returns The endpoint on success, an error otherwise.
          */
-        Endpoint* get_fan_in_endpoint(const std::string& pin) const;
+        Result<Endpoint*> get_fan_in_endpoint(const GatePin* pin) const;
 
         /**
          * Get a list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
@@ -324,22 +317,22 @@ namespace hal
         std::vector<Endpoint*> get_fan_out_endpoints() const;
 
         /**
-         * Get the fan-out net which is connected to a specific output pin. <br>
-         * If the output pin type is unknown or no net is connected, a nullptr is returned.
+         * TODO pybind, test
+         * Get the fan-out net which is connected to the specified output pin.
          *
-         * @param[in] pin - The output pin type.
-         * @returns The connected output net.
+         * @param[in] pin - The output pin.
+         * @returns The connected output net on success, an error otherwise.
          */
-        Net* get_fan_out_net(const std::string& pin) const;
+        Result<Net*> get_fan_out_net(const GatePin* pin) const;
 
         /**
-         * Get the fan-out endpoint which represents a specific output pin. <br>
-         * If the input pin type is unknown or no net is connected to the respective pin, a nullptr is returned.
+         * TODO pybind, test
+         * Get the fan-out endpoint corresponding to the specified output pin. <br>
          *
          * @param[in] pin - The output pin type.
-         * @returns The endpoint.
+         * @returns The endpoint on success, an error otherwise.
          */
-        Endpoint* get_fan_out_endpoint(const std::string& pin) const;
+        Result<Endpoint*> get_fan_out_endpoint(const GatePin* pin) const;
 
         /**
          * Get a list of all unique predecessor gates of the gate. <br>
@@ -411,7 +404,7 @@ namespace hal
         Gate& operator=(const Gate&) = delete;
         Gate& operator=(Gate&&) = delete;
 
-        BooleanFunction get_lut_function(const std::string& pin) const;
+        Result<BooleanFunction> get_lut_function(const GatePin* pin) const;
 
         /* pointer to corresponding netlist parent */
         NetlistInternalManager* m_internal_manager;
