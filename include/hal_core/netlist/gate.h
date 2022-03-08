@@ -204,7 +204,7 @@ namespace hal
          * @param[in] pin - The pin.
          * @returns The Boolean function on success, an error otherwise.
          */
-        Result<BooleanFunction> get_boolean_function(const GatePin* pin == nullptr) const;
+        Result<BooleanFunction> get_boolean_function(const GatePin* pin = nullptr) const;
 
         /**
          * Get a map from function name to boolean function for all boolean functions associated with this gate.
@@ -327,7 +327,7 @@ namespace hal
 
         /**
          * TODO pybind, test
-         * Get the fan-out endpoint corresponding to the specified output pin. <br>
+         * Get the fan-out endpoint corresponding to the specified output pin.
          *
          * @param[in] pin - The output pin type.
          * @returns The endpoint on success, an error otherwise.
@@ -335,65 +335,64 @@ namespace hal
         Result<Endpoint*> get_fan_out_endpoint(const GatePin* pin) const;
 
         /**
-         * Get a list of all unique predecessor gates of the gate. <br>
-         * A filter can be supplied which filters out all potential values that return false.
+         * TODO pybind, test
+         * Get a list of all unique predecessor gates of the gate. 
+         * The user-defined filter is applied to all candidate tuples of destination pin and predecessor endpoint.
          *
-         * @param[in] filter - A function to filter the output, using the input pin type of the gate (1st param) and
-         *                     a connected predecessor endpoint (2nd param). Leave empty for no filtering.
+         * @param[in] filter - An (optional) filter.
          * @returns A vector of unique predecessor gates.
          */
-        std::vector<Gate*> get_unique_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
+        std::vector<Gate*> get_unique_predecessors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * Get a list of all direct predecessor endpoints of the gate,
-         * i.e. all output endpoints that are connected to an input pin of the gate. <br>
-         * A filter can be supplied which filters out all potential values that return false.
+         * TODO pybind, test
+         * Get a list of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
+         * The user-defined filter is applied to all candidate tuples of destination pin and predecessor endpoint.
          *
-         * @param[in] filter - A function to filter the output, using the input pin type of the gate (1st param) and
-         *                     a connected predecessor endpoint (2nd param). Leave empty for no filtering.
+         * @param[in] filter - An (optional) filter.
          * @returns A vector of predecessor endpoints.
          */
-        std::vector<Endpoint*> get_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
+        std::vector<Endpoint*> get_predecessors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * Get the direct predecessor endpoint of the gate connected to a specific input pin. <br>
-         * If the input pin type is unknown or there is no predecessor endpoint or there are multiple predecessor
-         * endpoints, a nullptr is returned.
+         * TODO pybind, test
+         * Get a single direct predecessor endpoint that is connected to a specific input pin of the gate.
+         * If there are no or more than one predecessors, an error is returned.
          *
-         * @param[in] which_pin - the input pin type of this gate to get the predecessor from.
-         * @returns The predecessor endpoint.
+         * @param[in] pin - The target input pin of the gate.
+         * @returns The predecessor endpoint on success, an error otherwise.
          */
-        Endpoint* get_predecessor(const std::string& which_pin) const;
+        Result<Endpoint*> get_predecessor(const GatePin* pin) const;
 
         /**
-         * Get a list of all unique successor gates of the gate. <br>
-         * A filter can be supplied which filters out all potential values that return false.
+         * TODO pybind, test
+         * Get a list of all unique successor gates of the gate. 
+         * The user-defined filter is applied to all candidate tuples of source pin and successor endpoint.
          *
-         * @param[in] filter - A function to filter the output, using the output pin type of the gate (1st param) and
-         *                     a connected successor endpoint (2nd param). Leave empty for no filtering.
+         * @param[in] filter - An (optional) filter.
          * @returns A vector of unique successor gates.
          */
-        std::vector<Gate*> get_unique_successors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
+        std::vector<Gate*> get_unique_successors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * Get a list of all direct successor endpoints of the gate. <br>
-         * A filter can be supplied which filters out all potential values that return false.
+         * TODO pybind, test
+         * Get a list of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
+         * The user-defined filter is applied to all candidate tuples of source pin and successor endpoint.
          *
-         * @param[in] filter - A function to filter the output, using the output pin type of the gate (1st param) and
-         *                     a connected successor endpoint (2nd param). Leave empty for no filtering.
+         * @param[in] filter - An (optional) filter.
          * @returns A vector of successor endpoints.
          */
-        std::vector<Endpoint*> get_successors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
+        std::vector<Endpoint*> get_successors(const std::function<bool(const GatePin* pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * Get the direct successor endpoint of the gate connected to a specific input pin. <br>
-         * If the input pin type is unknown or there is no successor endpoint or there are multiple successor
-         * endpoints, a nullptr is returned.
+         * TODO pybind, test
+         * Get a single direct successor endpoint that is connected to a specific output pin of the gate.
+         * If there are no or more than one successor, an error is returned.
          *
-         * @param[in] which_pin - The output pin type of this gate to get the successor from.
-         * @returns The successor endpoint.
+         * @param[in] pin - The target output pin of the gate.
+         * @returns The successor endpoint on success, an error otherwise.
          */
-        Endpoint* get_successor(const std::string& which_pin) const;
+        Result<Endpoint*> get_successor(const GatePin* pin) const;
 
     private:
         friend class NetlistInternalManager;

@@ -552,10 +552,10 @@ namespace hal
         return OK(*it);
     }
 
-    std::vector<Gate*> Gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
+    std::vector<Gate*> Gate::get_unique_predecessors(const std::function<bool(const GatePin* pin, Endpoint*)>& filter) const
     {
         std::unordered_set<Gate*> res;
-        auto endpoints = this->get_predecessors(filter);
+        auto endpoints = get_predecessors(filter);
         res.reserve(endpoints.size());
         for (auto ep : endpoints)
         {
@@ -564,12 +564,12 @@ namespace hal
         return std::vector<Gate*>(res.begin(), res.end());
     }
 
-    std::vector<Endpoint*> Gate::get_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
+    std::vector<Endpoint*> Gate::get_predecessors(const std::function<bool(const GatePin* pin, Endpoint*)>& filter) const
     {
         std::vector<Endpoint*> result;
         for (auto ep : m_in_endpoints)
         {
-            auto pin          = ep->get_pin();
+            auto pred_pin     = ep->get_pin();
             auto predecessors = ep->get_net()->get_sources();
             if (!filter)
             {
@@ -579,7 +579,7 @@ namespace hal
             {
                 for (auto pre : predecessors)
                 {
-                    if (!filter(pin, pre))
+                    if (!filter(pred_pin, pre))
                     {
                         continue;
                     }
@@ -590,23 +590,26 @@ namespace hal
         return result;
     }
 
-    Endpoint* Gate::get_predecessor(const std::string& input_pin) const
+    Result<Endpoint*> Gate::get_predecessor(const GatePin* pin) const
     {
-        auto predecessors = this->get_predecessors([&input_pin](auto& starting_pin, auto) -> bool { return starting_pin == input_pin; });
-        if (predecessors.size() == 0)
+        if (pin == nullptr)
         {
-            return nullptr;
+            return ERR("could not get predecessor of pin at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin is a 'nullptr'");
         }
-        if (predecessors.size() > 1)
+        auto predecessors = this->get_predecessors([pin](auto p, auto) -> bool { return p == pin; });
+        if (u32 size = predecessors.size(); size == 0)
         {
-            log_error("gate", "gate '{}' with ID {} has multiple predecessors at input pin '{}' in netlist with ID {}.", m_name, m_id, input_pin, m_internal_manager->m_netlist->get_id());
-            return nullptr;
+            return ERR("could not get predecessor of pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": no predecessors found");
+        }
+        else if (size > 1)
+        {
+            return ERR("could not get predecessor of pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": multiple predecessors found");
         }
 
-        return predecessors[0];
+        return OK(predecessors[0]);
     }
 
-    std::vector<Gate*> Gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
+    std::vector<Gate*> Gate::get_unique_successors(const std::function<bool(const GatePin* pin, Endpoint*)>& filter) const
     {
         std::unordered_set<Gate*> res;
         auto endpoints = this->get_successors(filter);
@@ -618,12 +621,12 @@ namespace hal
         return std::vector<Gate*>(res.begin(), res.end());
     }
 
-    std::vector<Endpoint*> Gate::get_successors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
+    std::vector<Endpoint*> Gate::get_successors(const std::function<bool(const GatePin* pin, Endpoint*)>& filter) const
     {
         std::vector<Endpoint*> result;
         for (auto ep : m_out_endpoints)
         {
-            auto pin        = ep->get_pin();
+            auto suc_pin    = ep->get_pin();
             auto successors = ep->get_net()->get_destinations();
             if (!filter)
             {
@@ -633,7 +636,7 @@ namespace hal
             {
                 for (auto suc : successors)
                 {
-                    if (!filter(pin, suc))
+                    if (!filter(suc_pin, suc))
                     {
                         continue;
                     }
@@ -644,19 +647,22 @@ namespace hal
         return result;
     }
 
-    Endpoint* Gate::get_successor(const std::string& output_pin) const
+    Result<Endpoint*> Gate::get_successor(const GatePin* pin) const
     {
-        auto successors = this->get_successors([&output_pin](auto& starting_pin, auto) -> bool { return starting_pin == output_pin; });
-        if (successors.size() == 0)
+        if (pin == nullptr)
         {
-            return nullptr;
+            return ERR("could not get successor of pin at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin is a 'nullptr'");
         }
-        if (successors.size() > 1)
+        auto successors = this->get_successors([pin](auto p, auto) -> bool { return p == pin; });
+        if (u32 size = successors.size(); size == 0)
         {
-            log_error("gate", "gate '{}' with ID {} has multiple successors at output pin '{}' in netlist with ID {}.", m_name, m_id, output_pin, m_internal_manager->m_netlist->get_id());
-            return nullptr;
+            return ERR("could not get successor of pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": no successors found");
+        }
+        else if (size > 1)
+        {
+            return ERR("could not get successor of pin '" + pin->get_name() + "' at gate '" + m_name + "' with ID " + std::to_string(m_id) + ": multiple successors found");
         }
 
-        return successors[0];
+        return OK(successors[0]);
     }
 }    // namespace hal

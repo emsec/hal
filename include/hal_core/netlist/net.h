@@ -116,46 +116,50 @@ namespace hal
          */
 
         /**
-         * Add a source-endpoint to this net.
+         * TODO pybind, test
+         * Add a source endpoint to the net.
          *
          * @param[in] gate - The source gate.
          * @param[in] pin - The output pin of the source gate.
-         * @returns The new endpoint or nullptr on error.
+         * @returns The endpoint on success, an error otherwise.
          */
-        Endpoint* add_source(Gate* gate, const std::string& pin);
+        Result<Endpoint*> add_source(Gate* gate, GatePin* pin);
 
         /**
-         * Remove a source-endpoint from this net.
+         * TODO pybind, test
+         * Remove a source endpoint from the net.
          *
          * @param[in] gate - The source gate.
          * @param[in] pin - The output pin of the source gate.
-         * @returns True on success.
+         * @returns Ok on success, an error otherwise.
          */
-        bool remove_source(Gate* gate, const std::string& pin);
+        Result<std::monostate> remove_source(Gate* gate, const GatePin* pin);
 
         /**
-         * Remove a source endpoint from this net. <br>
-         * If the endpoint is no source-endpoint of the net this function aborts.
+         * TODO pybind, test
+         * Remove a source endpoint from the net. <br>
          *
          * @param[in] ep - The source endpoint.
-         * @returns True on success.
+         * @returns Ok on success, an error otherwise.
          */
-        bool remove_source(Endpoint* ep);
+        Result<std::monostate> remove_source(Endpoint* ep);
 
         /**
-         * Check whether an endpoint, given by its gate and pin type, is a source-endpoint of this net.
+         * TODO pybind, test
+         * Check whether a tuple of a gate and an output pin is a source endpoint of the net.
          *
          * @param[in] gate - The source gate.
          * @param[in] pin - The source output pin.
-         * @returns True if the gate's pin is a source of this net.
+         * @returns `true` if it is a source of the net, `false` otherwise.
          */
-        bool is_a_source(Gate* gate, const std::string& pin) const;
+        bool is_a_source(Gate* gate, const GatePin* pin) const;
 
         /**
-         * Check whether an endpoint is a source-endpoint of this net.
+         * TODO pybind 
+         * Check whether an endpoint is a source of the net.
          *
          * @param[in] ep - The endpoint.
-         * @returns True if the endpoint is a source of this net.
+         * @returns `true` if is is a source of the net, `false` otherwise.
          */
         bool is_a_source(Endpoint* ep) const;
 
@@ -168,7 +172,7 @@ namespace hal
         u32 get_num_of_sources() const;
 
         /**
-         * Get a list of sources of the net. <br>
+         * Get a list of sources of the net.<br>
          * A filter can be supplied which filters out all potential values that return false.
          *
          * @param[in] filter - A filter for endpoints. Leave empty for no filtering.
@@ -176,62 +180,55 @@ namespace hal
          */
         std::vector<Endpoint*> get_sources(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
 
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Get the (first) source-endpoint of the net. <br>
-         * If there was no source assigned, the gate element of the returned endpoint is a nullptr. <br>
-         * If the net is multi-driven a warning is printed.
-         *
-         * @returns The (first) source endpoint.
-         */
-        [[deprecated("Will be removed in a future version. Use get_sources() instead.")]] Endpoint* get_source() const;
-
         /*
          *      dst specific functions
          */
 
         /**
-         * Add a destination-endpoint to this net.
+         * TODO pybind, test
+         * Add a destination endpoint to the net.
          *
          * @param[in] gate - The destination gate.
          * @param[in] pin - The input pin of the destination gate.
-         * @returns The new endpoint or nullptr on error.
+         * @returns The endpoint on success, an error otherwise.
          */
-        Endpoint* add_destination(Gate* gate, const std::string& pin);
+        Result<Endpoint*> add_destination(Gate* gate, GatePin* pin);
 
         /**
-         * Remove a destination from this net.
+         * TODO pybind, test
+         * Remove a destination endpoint from the net.
          *
          * @param[in] gate - The destination gate.
          * @param[in] pin - The input pin of the destination gate.
-         * @returns True on success.
+         * @returns Ok on success, an error otherwise.
          */
-        bool remove_destination(Gate* gate, const std::string& pin);
+        Result<std::monostate> remove_destination(Gate* gate, const GatePin* pin);
 
         /**
-         * Remove a destination-endpoint from this net. <br>
-         * If the endpoint is no destination-endpoint of the net this function aborts.
+         * TODO pybind, test
+         * Remove a destination endpoint from the net. <br>
          *
          * @param[in] ep - The destination endpoint.
-         * @returns True on success.
+         * @returns Ok on success, an error otherwise.
          */
-        bool remove_destination(Endpoint* ep);
+        Result<std::monostate> remove_destination(Endpoint* ep);
 
         /**
-         * Check whether an endpoint, given by its gate and pin type, is a destination-endpoint of this net.
+         * TODO pybind, test
+         * Check whether a tuple of a gate and an input pin is a destination endpoint of the net.
          *
          * @param[in] gate - The destination gate.
          * @param[in] pin - The destination input pin.
-         * @returns True if the gate's pin is a destination of this net.
+         * @returns `true` if it is a destination of the net, `false` otherwise.
          */
-        bool is_a_destination(Gate* gate, const std::string& pin) const;
+        bool is_a_destination(Gate* gate, const GatePin* pin) const;
 
         /**
-         * Check whether an endpoint is a destination-endpoint of this net.
+         * TODO pybind 
+         * Check whether an endpoint is a destination of the net.
          *
          * @param[in] ep - The endpoint.
-         * @returns True if the endpoint is a destination of this net.
+         * @returns `true` if is is a destination of the net, `false` otherwise.
          */
         bool is_a_destination(Endpoint* ep) const;
 

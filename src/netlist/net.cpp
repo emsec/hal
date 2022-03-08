@@ -20,7 +20,7 @@ namespace hal
         m_id               = id;
         m_name             = name;
 
-        m_event_handler    = event_handler;
+        m_event_handler = event_handler;
     }
 
     bool Net::operator==(const Net& other) const
@@ -46,7 +46,7 @@ namespace hal
         const std::vector<Endpoint*>& sources_n2 = other.get_sources();
         for (const Endpoint* ep_n1 : m_sources_raw)
         {
-            if (std::find_if(sources_n2.begin(), sources_n2.end(), [ep_n1](const Endpoint* ep_n2) { return ep_n1->get_pin() == ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
+            if (std::find_if(sources_n2.begin(), sources_n2.end(), [ep_n1](const Endpoint* ep_n2) { return *ep_n1->get_pin() == *ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
                 == sources_n2.end())
             {
                 log_info("net", "the nets with IDs {} and {} are not equal due to an unequal source endpoint.", m_id, other.get_id());
@@ -58,7 +58,7 @@ namespace hal
         for (const Endpoint* ep_n1 : m_destinations_raw)
         {
             if (std::find_if(
-                    destinations_n2.begin(), destinations_n2.end(), [ep_n1](const Endpoint* ep_n2) { return ep_n1->get_pin() == ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
+                    destinations_n2.begin(), destinations_n2.end(), [ep_n1](const Endpoint* ep_n2) { return *ep_n1->get_pin() == *ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
                 == destinations_n2.end())
             {
                 log_info("net", "the nets with IDs {} and {} are not equal due to an unequal destination endpoint.", m_id, other.get_id());
@@ -82,7 +82,7 @@ namespace hal
 
     ssize_t Net::get_hash() const
     {
-        return (uintptr_t) this;
+        return (uintptr_t)this;
     }
 
     u32 Net::get_id() const
@@ -122,32 +122,53 @@ namespace hal
         return m_grouping;
     }
 
-    Endpoint* Net::add_source(Gate* gate, const std::string& pin)
+    Result<Endpoint*> Net::add_source(Gate* gate, GatePin* pin)
     {
-        return m_internal_manager->net_add_source(this, gate, pin);
-    }
-
-    bool Net::remove_source(Gate* gate, const std::string& pin)
-    {
-        if (auto it = std::find_if(m_sources_raw.begin(), m_sources_raw.end(), [gate, &pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; }); it != m_sources_raw.end())
+        if (auto res = m_internal_manager->net_add_source(this, gate, pin); res.is_error())
         {
-            return m_internal_manager->net_remove_source(this, *it);
+            return ERR(res.get_error());
         }
-        return false;
+        else
+        {
+            return res;
+        }
     }
 
-    bool Net::remove_source(Endpoint* ep)
+    Result<std::monostate> Net::remove_source(Gate* gate, const GatePin* pin)
     {
-        if (ep == nullptr)
+        if (auto it = std::find_if(m_sources_raw.begin(), m_sources_raw.end(), [gate, pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; }); it != m_sources_raw.end())
+        {
+            if (auto res = m_internal_manager->net_remove_source(this, *it); res.is_error())
+            {
+                return ERR(res.get_error());
+            }
+            else
+            {
+                return res;
+            }
+        }
+        return ERR("could not remove source from net: failed to find endpoint matching provided gate and pin");
+    }
+
+    Result<std::monostate> Net::remove_source(Endpoint* ep)
+    {
+        if (auto res = m_internal_manager->net_remove_source(this, ep); res.is_error())
+        {
+            return ERR(res.get_error());
+        }
+        else
+        {
+            return res;
+        }
+    }
+
+    bool Net::is_a_source(Gate* gate, const GatePin* pin) const
+    {
+        if (gate == nullptr || pin == nullptr)
         {
             return false;
         }
-        return m_internal_manager->net_remove_source(this, ep);
-    }
-
-    bool Net::is_a_source(Gate* gate, const std::string& pin) const
-    {
-        return std::find_if(m_sources_raw.begin(), m_sources_raw.end(), [gate, &pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; }) != m_sources_raw.end();
+        return std::find_if(m_sources_raw.begin(), m_sources_raw.end(), [gate, pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; }) != m_sources_raw.end();
     }
 
     bool Net::is_a_source(Endpoint* ep) const
@@ -188,47 +209,54 @@ namespace hal
         return srcs;
     }
 
-    Endpoint* Net::get_source() const
+    Result<Endpoint*> Net::add_destination(Gate* gate, GatePin* pin)
     {
-        if (m_sources_raw.empty())
+        if (auto res = m_internal_manager->net_add_destination(this, gate, pin); res.is_error())
         {
-            return nullptr;
+            return ERR(res.get_error());
         }
-        if (m_sources_raw.size() > 1)
+        else
         {
-            log_warning("net", "queried only the first source of multi driven net '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
+            return res;
         }
-        return m_sources_raw.at(0);
     }
 
-    Endpoint* Net::add_destination(Gate* gate, const std::string& pin)
+    Result<std::monostate> Net::remove_destination(Gate* gate, const GatePin* pin)
     {
-        return m_internal_manager->net_add_destination(this, gate, pin);
-    }
-
-    bool Net::remove_destination(Gate* gate, const std::string& pin)
-    {
-        if (auto it = std::find_if(m_destinations_raw.begin(), m_destinations_raw.end(), [gate, &pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; });
+        if (auto it = std::find_if(m_destinations_raw.begin(), m_destinations_raw.end(), [gate, pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; });
             it != m_destinations_raw.end())
         {
-            return m_internal_manager->net_remove_destination(this, *it);
+            if (auto res = m_internal_manager->net_remove_destination(this, *it); res.is_error())
+            {
+                return ERR(res.get_error());
+            }
+            else
+            {
+                return res;
+            }
         }
-        return false;
+        return ERR("could not remove destination from net: failed to find endpoint matching provided gate and pin");
     }
 
-    bool Net::remove_destination(Endpoint* ep)
+    Result<std::monostate> Net::remove_destination(Endpoint* ep)
     {
-        if (ep == nullptr)
+        if (auto res = m_internal_manager->net_remove_destination(this, ep); res.is_error())
+        {
+            return ERR(res.get_error());
+        }
+        else
+        {
+            return res;
+        }
+    }
+
+    bool Net::is_a_destination(Gate* gate, const GatePin* pin) const
+    {
+        if (gate == nullptr || pin == nullptr)
         {
             return false;
         }
-
-        return m_internal_manager->net_remove_destination(this, ep);
-    }
-
-    bool Net::is_a_destination(Gate* gate, const std::string& pin) const
-    {
-        return std::find_if(m_destinations_raw.begin(), m_destinations_raw.end(), [gate, &pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; }) != m_destinations_raw.end();
+        return std::find_if(m_destinations_raw.begin(), m_destinations_raw.end(), [gate, pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; }) != m_destinations_raw.end();
     }
 
     bool Net::is_a_destination(Endpoint* ep) const

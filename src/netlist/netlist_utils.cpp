@@ -59,15 +59,25 @@ namespace hal
                 return std::vector<Gate*>();
             }
 
-            static BooleanFunction get_function_of_gate(const Gate* const gate, const std::string& output_pin, std::map<std::pair<u32, std::string>, BooleanFunction>& cache)
+            static Result<BooleanFunction> get_function_of_gate(const Gate* const gate, const GatePin* output_pin, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache)
             {
                 if (auto it = cache.find({gate->get_id(), output_pin}); it != cache.end())
                 {
-                    return it->second;
+                    return OK(it->second);
                 }
                 else
                 {
-                    BooleanFunction bf = gate->get_boolean_function(output_pin);
+                    BooleanFunction bf;
+                    if (auto res = gate->get_boolean_function(output_pin); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(),
+                                          "could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id())
+                                              + ": failed to get Boolean function at output pin '" + output_pin->get_name() + "'");
+                    }
+                    else
+                    {
+                        bf = res.get();
+                    }
 
                     std::vector<std::string> input_vars = utils::to_vector(bf.get_variable_names());
                     while (!input_vars.empty())
@@ -117,94 +127,127 @@ namespace hal
                 }
             }
 
-            void subgraph_function_bfs(Net* n,
-                                       BooleanFunction& result,
-                                       std::vector<Net*> stack,
-                                       const std::vector<const Gate*>& subgraph_gates,
-                                       std::map<std::pair<u32, std::string>, BooleanFunction>& cache)
+            Result<std::monostate> subgraph_function_bfs(Net* n,
+                                                         BooleanFunction& current,
+                                                         std::vector<Net*> stack,
+                                                         const std::vector<const Gate*>& subgraph_gates,
+                                                         std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache)
             {
                 if (n->get_num_of_sources() > 1)
                 {
-                    log_error("netlist_utils", "net with ID {} has more than one source, cannot expand Boolean function in this direction.", n->get_id());
-                    return;
+                    return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": number of sources is greater than 1");
                 }
                 else if (n->get_num_of_sources() == 0)
                 {
-                    return;
+                    return OK({});
                 }
 
                 if (auto it = std::find(stack.begin(), stack.end(), n); it != stack.end())
                 {
-                    log_error("netlist_utils", "subgraph contains a cycle: {} -> {}", utils::join(" -> ", it, stack.end(), [](auto nlog) { return nlog->get_name(); }), n->get_name());
-                    result = BooleanFunction();
-                    return;
+                    return ERR("could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": subgraph contains a cyclic dependency: "
+                               + utils::join(" -> ", it, stack.end(), [](auto nlog) { return nlog->get_name() + " (ID: " + std::to_string(n_log->get_id()) + ")"; }) + " -> " + n->get_name()
+                               + " (ID: " + std::to_string(n->get_id()) + ")");
                 }
 
                 stack.push_back(n);
 
-                Gate* src_gate            = n->get_sources()[0]->get_gate();
-                const std::string src_pin = n->get_sources()[0]->get_pin();
+                Gate* src_gate         = n->get_sources()[0]->get_gate();
+                const GatePin* src_pin = n->get_sources()[0]->get_pin();
 
                 if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
                 {
-                    if (auto substitution = result.substitute("net_" + std::to_string(n->get_id()), get_function_of_gate(src_gate, src_pin, cache)); substitution.is_ok())
+                    if (auto func = get_function_of_gate(src_gate, src_pin, cache); func.is_error())
                     {
-                        result = substitution.get();
+                        return ERR_APPEND(func.get_error(),
+                                          "could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()) + ": failed to get Boolean function of gate '"
+                                              + src_gate->get_name() + "' with ID " + std::to_string(src_gate->get_id()));
+                    }
+                    else
+                    {
+                        if (auto substitution = current.substitute("net_" + std::to_string(n->get_id()), func.get()); substitution.is_error())
+                        {
+                            return ERR_APPEND(substitution.get_error(),
+                                              "could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id())
+                                                  + ": failed to substitute net with Boolean function");
+                        }
+                        else
+                        {
+                            current = substitution.get();
+                        }
                     }
 
                     for (Net* sn : src_gate->get_fan_in_nets())
                     {
-                        subgraph_function_bfs(sn, result, stack, subgraph_gates, cache);
+                        if (auto res = subgraph_function_bfs(sn, current, stack, subgraph_gates, cache); res.is_error())
+                        {
+                            return ERR_APPEND(res.get_error(), "could not get subgraph function of net '" + n->get_name() + "' with ID " + std::to_string(n->get_id()));
+                        }
                     }
                 }
+                return OK({});
             }
         }    // namespace
 
-        BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, std::string>, BooleanFunction>& cache)
+        Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache)
         {
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
             {
-                log_error("netlist_utils", "no gates given to determine the Boolean function of.");
-                return BooleanFunction();
+                return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": subgraph contains no gates");
             }
             else if (std::any_of(subgraph_gates.begin(), subgraph_gates.end(), [](const Gate* g) { return g == nullptr; }))
             {
-                log_error("netlist_utils", "set of gates contains a nullptr.");
-                return BooleanFunction();
+                return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": subgraph contains a gate that is a 'nullptr'");
             }
             else if (net == nullptr)
             {
-                log_error("netlist_utils", "nullptr given for target net.");
-                return BooleanFunction();
+                return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": net is a 'nullptr'");
             }
             else if (net->get_num_of_sources() > 1)
             {
-                log_error("netlist_utils", "target net with ID {} has more than one source.", net->get_id());
-                return BooleanFunction();
+                return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": net has more than one source");
             }
             else if (net->get_num_of_sources() == 0)
             {
-                log_error("netlist_utils", "target net with ID {} has no sources.", net->get_id());
-                return BooleanFunction();
+                return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": net has no sources");
             }
 
-            const Gate* start_gate    = net->get_sources()[0]->get_gate();
-            const std::string src_pin = net->get_sources()[0]->get_pin();
-            BooleanFunction result    = get_function_of_gate(start_gate, src_pin, cache);
+            const Gate* start_gate = net->get_sources()[0]->get_gate();
+            const GatePin* src_pin = net->get_sources()[0]->get_pin();
+            BooleanFunction result;
+
+            if (auto func = get_function_of_gate(start_gate, src_pin, cache); func.is_error())
+            {
+                return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to get function of start gate '"
+                           + start_gate->get_name() + "' with ID " + std::to_string(start_gate->get_id()));
+            }
+            else
+            {
+                result = func.get();
+            }
 
             for (Net* n : start_gate->get_fan_in_nets())
             {
-                subgraph_function_bfs(n, result, {}, subgraph_gates, cache);
+                if (auto res = subgraph_function_bfs(n, result, {}, subgraph_gates, cache); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()));
+                }
             }
 
-            return result;
+            return OK(result);
         }
 
-        BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates)
+        Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates)
         {
-            std::map<std::pair<u32, std::string>, BooleanFunction> cache;
-            return get_subgraph_function(net, subgraph_gates, cache);
+            std::map<std::pair<u32, const GatePin*>, BooleanFunction> cache;
+            if (auto res = get_subgraph_function(net, subgraph_gates, cache); res.is_error())
+            {
+                return ERR(res.get_error());
+            }
+            else
+            {
+                return res;
+            }
         }
 
         std::unique_ptr<Netlist> copy_netlist(const Netlist* nl)
@@ -289,10 +332,16 @@ namespace hal
             for (const Gate* gate : subgraph_gates)
             {
                 Gate* new_gate = c_netlist->create_gate(gate->get_id(), gate->get_type(), gate->get_name(), gate->get_location_x(), gate->get_location_y());
-
-                for (const auto& [name, func] : gate->get_boolean_functions(true))
+                if (auto res = gate->get_boolean_functions(true); res.is_error())
                 {
-                    new_gate->add_boolean_function(name, func);
+                    log_error("netlist_utils", "{}", res.get_error().get());
+                }
+                else
+                {
+                    for (const auto& [name, func] : res.get())
+                    {
+                        new_gate->add_boolean_function(name, func);
+                    }
                 }
 
                 for (const Endpoint* in_point : gate->get_fan_in_endpoints())
@@ -623,42 +672,40 @@ namespace hal
             return get_path(net, get_successors, stop_properties, cache);
         }
 
-        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_inputs)
+        std::vector<Net*> get_nets_at_pins(Gate* gate, std::vector<GatePin*> pins)
         {
-            std::unordered_set<Net*> nets;
+            std::vector<Net*> nets;
 
-            if (is_inputs)
+            for (const auto& pin : pins)
             {
-                for (const auto& pin : pins)
+                if (PinDirection direction = pin->get_direction(); direction == PinDirection::input || direction == PinDirection::inout)
                 {
-                    if (Net* net = gate->get_fan_in_net(pin); net != nullptr)
+                    if (auto net = gate->get_fan_in_net(pin); net.is_ok())
                     {
-                        nets.insert(net);
+                        nets.push_back(net.get());
                     }
                     else
                     {
-                        log_error("netlist_utils", "could not retrieve fan-in net for pin '{}' of gate '{}' with ID {}.", pin, gate->get_name(), gate->get_id());
+                        log_error("netlist_utils", "{}", net.get_error().get());
                     }
                 }
-            }
-            else
-            {
-                for (const auto& pin : pins)
+                else if (PinDirection direction = pin->get_direction(); direction == PinDirection::output)
                 {
-                    if (Net* net = gate->get_fan_out_net(pin); net != nullptr)
+                    if (auto net = gate->get_fan_out_net(pin); net.is_ok())
                     {
-                        nets.insert(net);
+                        nets.push_back(net.get());
                     }
                     else
                     {
-                        log_error("netlist_utils", "could not retrieve fan-out net for pin '{}' of gate '{}' with ID {}.", pin, gate->get_name(), gate->get_id());
+                        log_error("netlist_utils", "{}", net.get_error().get());
                     }
                 }
             }
+
             return nets;
         }
 
-        void remove_buffers(Netlist* netlist, bool analyze_inputs)
+        Result<u32> remove_buffers(Netlist* netlist, bool analyze_inputs)
         {
             u32 num_gates = 0;
 
@@ -679,7 +726,15 @@ namespace hal
                     continue;
                 }
 
-                std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
+                std::unordered_map<std::string, BooleanFunction> functions;
+                if (auto res = gate->get_boolean_functions(); res.is_ok())
+                {
+                    functions = res.get();
+                }
+                else
+                {
+                    continue;
+                }
                 if (functions.size() != 1)
                 {
                     // continue if more than one Boolean function (tri-state?)
@@ -687,7 +742,7 @@ namespace hal
                 }
 
                 Endpoint* out_endpoint = *(fan_out.begin());
-                if (out_endpoint->get_pin() != (functions.begin())->first)
+                if (out_endpoint->get_pin()->get_name() != (functions.begin())->first)
                 {
                     // continue if Boolean function name does not match output pin
                     continue;
@@ -708,14 +763,14 @@ namespace hal
 
                         if (sources.front()->get_gate()->is_gnd_gate())
                         {
-                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(0, 1)); substitution.is_ok())
+                            if (auto substitution = func.substitute(ep->get_pin()->get_name(), BooleanFunction::Const(0, 1)); substitution.is_ok())
                             {
                                 func = substitution.get();
                             }
                         }
                         else if (sources.front()->get_gate()->is_vcc_gate())
                         {
-                            if (auto substitution = func.substitute(ep->get_pin(), BooleanFunction::Const(1, 1)); substitution.is_ok())
+                            if (auto substitution = func.substitute(ep->get_pin()->get_name(), BooleanFunction::Const(1, 1)); substitution.is_ok())
                             {
                                 func = substitution.get();
                             }
@@ -725,9 +780,9 @@ namespace hal
                     func = func.simplify();
                 }
 
-                std::string func_str                    = func.to_string();
-                std::unordered_set<std::string> in_pins = gt->get_pins_of_direction(PinDirection::input);
-                if (in_pins.find(func_str) != in_pins.end())
+                std::string func_str             = func.to_string();
+                std::vector<std::string> in_pins = gt->get_input_pin_names();
+                if (std::find(in_pins.begin(), in_pins.end(), func_str) != in_pins.end())
                 {
                     Net* out_net = out_endpoint->get_net();
 
@@ -736,21 +791,39 @@ namespace hal
                     {
                         Net* in_net = in_endpoint->get_net();
 
-                        if (in_endpoint->get_pin() == func_str)
+                        if (in_endpoint->get_pin()->get_name() == func_str)
                         {
                             // reconnect outputs if the input is passed through the buffer
                             for (Endpoint* dst : out_net->get_destinations())
                             {
-                                Gate* dst_gate      = dst->get_gate();
-                                std::string dst_pin = dst->get_pin();
-                                out_net->remove_destination(dst);
-                                in_net->add_destination(dst_gate, dst_pin);
+                                Gate* dst_gate   = dst->get_gate();
+                                GatePin* dst_pin = dst->get_pin();
+                                if (auto res = out_net->remove_destination(dst); res.is_error())
+                                {
+                                    return ERR_APPEND(res.get_error(),
+                                                      "could not completely remove buffers from netlist with ID " + std::to_string(netlist->get_id())
+                                                          + ": failed to remove destination from output net '" + out_net->get_name() + "' with ID " + std::to_string(out_net->get_id())
+                                                          + " of buffer gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
+                                }
+                                if (auto res = in_net->add_destination(dst_gate, dst_pin); res.is_error())
+                                {
+                                    return ERR_APPEND(res.get_error(),
+                                                      "could not completely remove buffers from netlist with ID " + std::to_string(netlist->get_id()) + ": failed to add destination to input net '"
+                                                          + in_net->get_name() + "' with ID " + std::to_string(in_net->get_id()) + " of buffer gate '" + gate->get_name() + "' with ID "
+                                                          + std::to_string(gate->get_id()));
+                                }
                             }
                         }
                         else
                         {
                             // remove the input endpoint otherwise
-                            in_net->remove_destination(gate, in_endpoint->get_pin());
+                            if (auto res = in_net->remove_destination(gate, in_endpoint->get_pin()); res.is_error())
+                            {
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not completely remove buffers from netlist with ID " + std::to_string(netlist->get_id()) + ": failed to remove destination from input net '"
+                                                      + in_net->get_name() + "' with ID " + std::to_string(in_net->get_id()) + " of buffer gate '" + gate->get_name() + "' with ID "
+                                                      + std::to_string(gate->get_id()));
+                            }
                         }
                     }
 
@@ -774,27 +847,57 @@ namespace hal
 
                     for (Endpoint* in_endpoint : fan_in)
                     {
+                        Net* in_net = in_endpoint->get_net();
+
                         // remove the input endpoint otherwise
-                        in_endpoint->get_net()->remove_destination(gate, in_endpoint->get_pin());
+                        if (auto res = in_net->remove_destination(gate, in_endpoint->get_pin()); res.is_error())
+                        {
+                            return ERR_APPEND(res.get_error(),
+                                              "could not completely remove buffers from netlist with ID " + std::to_string(netlist->get_id()) + ": failed to remove destination from input net '"
+                                                  + in_net->get_name() + "' with ID " + std::to_string(in_net->get_id()) + " of buffer gate '" + gate->get_name() + "' with ID "
+                                                  + std::to_string(gate->get_id()));
+                        }
                     }
                     if (func_str == "0")
                     {
                         for (Endpoint* dst : out_net->get_destinations())
                         {
-                            Gate* dst_gate      = dst->get_gate();
-                            std::string dst_pin = dst->get_pin();
-                            out_net->remove_destination(dst);
-                            gnd_net->add_destination(dst_gate, dst_pin);
+                            Gate* dst_gate   = dst->get_gate();
+                            GatePin* dst_pin = dst->get_pin();
+                            if (auto res = out_net->remove_destination(dst); res.is_error())
+                            {
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not completely remove buffers from netlist with ID " + std::to_string(netlist->get_id()) + ": failed to remove destination from output net '"
+                                                      + out_net->get_name() + "' with ID " + std::to_string(out_net->get_id()) + " of buffer gate '" + gate->get_name() + "' with ID "
+                                                      + std::to_string(gate->get_id()));
+                            }
+                            if (auto res = gnd_net->add_destination(dst_gate, dst_pin); res.is_error())
+                            {
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not completely remove buffers from netlist with ID " + std::to_string(netlist->get_id()) + ": failed to add destination to GND net '"
+                                                      + gnd_net->get_name() + "' with ID " + std::to_string(gnd_net->get_id()));
+                            }
                         }
                     }
                     else if (func_str == "1")
                     {
                         for (Endpoint* dst : out_net->get_destinations())
                         {
-                            Gate* dst_gate      = dst->get_gate();
-                            std::string dst_pin = dst->get_pin();
-                            out_net->remove_destination(dst);
-                            vcc_net->add_destination(dst_gate, dst_pin);
+                            Gate* dst_gate   = dst->get_gate();
+                            GatePin* dst_pin = dst->get_pin();
+                            if (auto res = out_net->remove_destination(dst); res.is_error())
+                            {
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not completely remove buffers from netlist with ID " + std::to_string(netlist->get_id()) + ": failed to remove destination from output net '"
+                                                      + out_net->get_name() + "' with ID " + std::to_string(out_net->get_id()) + " of buffer gate '" + gate->get_name() + "' with ID "
+                                                      + std::to_string(gate->get_id()));
+                            }
+                            if (auto res = vcc_net->add_destination(dst_gate, dst_pin); res.is_error())
+                            {
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not completely remove buffers from netlist with ID " + std::to_string(netlist->get_id()) + ": failed to add destination to VCC net '"
+                                                      + gnd_net->get_name() + "' with ID " + std::to_string(gnd_net->get_id()));
+                            }
                         }
                     }
 
@@ -804,11 +907,10 @@ namespace hal
                     num_gates++;
                 }
             }
-
-            log_info("netlist_utils", "removed {} buffer gates from the netlist with ID {}.", num_gates, netlist->get_id());
+            return OK(num_gates);
         }
 
-        void remove_unused_lut_endpoints(Netlist* netlist)
+        Result<u32> remove_unused_lut_endpoints(Netlist* netlist)
         {
             u32 num_eps = 0;
 
@@ -816,16 +918,25 @@ namespace hal
             const std::vector<Gate*>& gnd_gates = netlist->get_gnd_gates();
             if (gnd_gates.empty())
             {
-                log_error("netlist_utils", "cannot remove unused LUT endpoints because no GND net is available within netlist with ID {}.", netlist->get_id());
-                return;
+                return ERR("could not completely remove unused LUT endpoints from netlist with ID " + std::to_string(netlist->get_id()) + ": no GND net available within netlist");
             }
             Net* gnd_net = gnd_gates.front()->get_fan_out_nets().front();
 
             // iterate all LUT gates
             for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_property(GateTypeProperty::lut); }))
             {
-                std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
-                std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
+                std::vector<Endpoint*> fan_in = gate->get_fan_in_endpoints();
+                std::unordered_map<std::string, BooleanFunction> functions;
+                if (auto res = gate->get_boolean_functions(); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not completely remove unused LUT endpoints from netlist with ID " + std::to_string(netlist->get_id()) + ": failed to get Boolean functions of gate '"
+                                          + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
+                }
+                else
+                {
+                    functions = res.get();
+                }
 
                 // skip if more than one function
                 if (functions.size() != 1)
@@ -843,15 +954,25 @@ namespace hal
                         if (std::find(active_pins.begin(), active_pins.end(), ep->get_pin()) == active_pins.end())
                         {
                             num_eps++;
-                            std::string pin = ep->get_pin();
-                            ep->get_net()->remove_destination(gate, pin);
-                            gnd_net->add_destination(gate, pin);
+                            GatePin* pin = ep->get_pin();
+                            if (auto res = ep->get_net()->remove_destination(gate, pin); res.is_error())
+                            {
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not completely remove unused LUT endpoints from netlist with ID " + std::to_string(netlist->get_id())
+                                                      + ": failed to remove inactive endpoint from gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
+                            }
+                            if (auto res = gnd_net->add_destination(gate, pin); res.is_error())
+                            {
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not completely remove unused LUT endpoints from netlist with ID " + std::to_string(netlist->get_id())
+                                                      + ": failed to connect inactive input of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " to GND net");
+                            }
                         }
                     }
                 }
             }
 
-            log_info("netlist_utils", "removed {} unused LUT fan-in endpoints from the netlist.", num_eps);
+            return OK(num_eps);
         }
 
         std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold)
@@ -898,8 +1019,17 @@ namespace hal
             return common_inputs;
         }
 
-        bool replace_gate(Gate* gate, GateType* target_type, std::map<std::string, std::string> pin_map)
+        Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map)
         {
+            if (gate == nullptr)
+            {
+                return ERR("could not replace gate: gate is a 'nullptr'");
+            }
+            if (target_type == nullptr)
+            {
+                return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": target gate type is a 'nullptr'");
+            }
+
             Netlist* netlist                  = gate->get_netlist();
             u32 gate_id                       = gate->get_id();
             std::string gate_name             = gate->get_name();
@@ -910,8 +1040,8 @@ namespace hal
             Grouping* gate_grouping           = gate->get_grouping();
             auto gate_data                    = gate->get_data_map();
 
-            std::map<std::string, Net*> in_nets;
-            std::map<std::string, Net*> out_nets;
+            std::map<GatePin*, Net*> in_nets;
+            std::map<GatePin*, Net*> out_nets;
 
             // map new input pins to nets
             for (Endpoint* in_ep : fan_in)
@@ -931,53 +1061,36 @@ namespace hal
             }
 
             // remove old gate
-            netlist->delete_gate(gate);
+            if (netlist->delete_gate(gate) == false)
+            {
+                return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to delete old gate of type '" + gate->get_type()->get_name()
+                           + "'");
+            }
 
             // create new gate
             Gate* new_gate = netlist->create_gate(gate_id, target_type, gate_name, gate_location.first, gate_location.second);
             if (new_gate == nullptr)
             {
-                log_error("netlist_utils",
-                          "failed to replace gate '{}' with ID {} in netlist with ID {} with new gate of type '{}' after deleting the original gate.",
-                          gate_name,
-                          gate_id,
-                          netlist->get_id(),
-                          target_type->get_name());
-                return false;
+                return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to create replacement gate of type '" + target_type->get_name()
+                           + "'");
             }
 
             // reconnect nets
-            for (const auto& [in_pin, in_net] : in_nets)
+            for (auto [in_pin, in_net] : in_nets)
             {
-                if (in_net->add_destination(new_gate, in_pin) == nullptr)
+                if (auto res = in_net->add_destination(new_gate, in_pin); res.is_error())
                 {
-                    log_error("netlist_utils",
-                              "failed to reconnect input net '{}' with ID {} to pin '{}' of the replacement gate '{}' with ID {} of type '{}' in netlist with ID {}.",
-                              in_net->get_name(),
-                              in_net->get_id(),
-                              in_pin,
-                              gate_name,
-                              gate_id,
-                              target_type->get_name(),
-                              netlist->get_id());
-                    return false;
+                    return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to reconnect input net '" + in_net->get_name() + "' with ID "
+                               + std::to_string(in_net->get_id()) + " to pin '" + in_pin->get_name() + "' of the replacement gate");
                 }
             }
 
             for (const auto& [out_pin, out_net] : out_nets)
             {
-                if (out_net->add_source(new_gate, out_pin) == nullptr)
+                if (auto res = out_net->add_source(new_gate, out_pin); res.is_error())
                 {
-                    log_error("netlist_utils",
-                              "failed to reconnect output net '{}' with ID {} to pin '{}' of the replacement gate '{}' with ID {} of type '{}' in netlist with ID {}.",
-                              out_net->get_name(),
-                              out_net->get_id(),
-                              out_pin,
-                              gate_name,
-                              gate_id,
-                              target_type->get_name(),
-                              netlist->get_id());
-                    return false;
+                    return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to reconnect output net '" + out_net->get_name() + "' with ID "
+                               + std::to_string(out_net->get_id()) + " to pin '" + out_pin->get_name() + "' of the replacement gate");
                 }
             }
 
@@ -995,15 +1108,22 @@ namespace hal
                 new_gate->set_data_map(gate_data);
             }
 
-            return true;
+            return OK({});
         }
 
-        std::vector<Gate*> get_gate_chain(Gate* start_gate, const std::set<std::string>& input_pins, const std::set<std::string>& output_pins, const std::function<bool(const Gate*)>& filter)
+        Result<std::vector<Gate*>>
+            get_gate_chain(Gate* start_gate, const std::set<const GatePin*>& input_pins, const std::set<const GatePin*>& output_pins, const std::function<bool(const Gate*)>& filter)
         {
+            if (start_gate == nullptr)
+            {
+                return ERR("could not detect gate chain at start gate: start gate is a 'nullptr'");
+            }
+
             // check filter on start gate
             if (filter && !filter(start_gate))
             {
-                return {};
+                return ERR("could not detect gate chain at start gate '" + start_gate->get_name() + "' with ID " + std::to_string(start_gate->get_id())
+                           + ": filter evaluates to 'false' for start gate");
             }
 
             std::deque<Gate*> gate_chain            = {start_gate};
@@ -1018,7 +1138,7 @@ namespace hal
                 found_next_gate = false;
 
                 // check all eligable successors of current gate
-                std::vector<Endpoint*> successors = current_gate->get_successors([input_pins, output_pins, target_type, filter](const std::string& ep_pin, Endpoint* ep) {
+                std::vector<Endpoint*> successors = current_gate->get_successors([input_pins, output_pins, target_type, filter](const GatePin* ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {
                         if (output_pins.empty() || output_pins.find(ep_pin) != output_pins.end())
@@ -1068,7 +1188,7 @@ namespace hal
                 found_next_gate = false;
 
                 // check all eligable predecessors of current gate
-                std::vector<Endpoint*> predecessors = current_gate->get_predecessors([input_pins, output_pins, target_type, filter](const std::string& ep_pin, Endpoint* ep) {
+                std::vector<Endpoint*> predecessors = current_gate->get_predecessors([input_pins, output_pins, target_type, filter](const GatePin* ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {
                         if (input_pins.empty() || input_pins.find(ep_pin) != input_pins.end())
@@ -1112,18 +1232,32 @@ namespace hal
                 }
             } while (found_next_gate);
 
-            return std::vector<Gate*>(gate_chain.begin(), gate_chain.end());
+            return OK(std::vector<Gate*>(gate_chain.begin(), gate_chain.end()));
         }
 
-        std::vector<Gate*> get_complex_gate_chain(Gate* start_gate,
-                                                  const std::vector<GateType*>& chain_types,
-                                                  const std::map<GateType*, std::set<std::string>>& input_pins,
-                                                  const std::map<GateType*, std::set<std::string>>& output_pins,
-                                                  const std::function<bool(const Gate*)>& filter)
+        Result<std::vector<Gate*>> get_complex_gate_chain(Gate* start_gate,
+                                                          const std::vector<GateType*>& chain_types,
+                                                          const std::map<GateType*, std::set<const GatePin*>>& input_pins,
+                                                          const std::map<GateType*, std::set<const GatePin*>>& output_pins,
+                                                          const std::function<bool(const Gate*)>& filter)
         {
-            if (start_gate->get_type() != chain_types.at(0) || (filter && !filter(start_gate)))
+            if (start_gate == nullptr)
             {
-                return {};
+                return ERR("could not detect gate chain at start gate: start gate is a 'nullptr'");
+            }
+            if (chain_types.size() < 2)
+            {
+                return ERR("could not detect gate chain at start gate: 'chain_types' comprises less than two target gate types");
+            }
+            if (start_gate->get_type() != chain_types.at(0))
+            {
+                return ERR("could not detect gate chain at start gate '" + start_gate->get_name() + "' with ID " + std::to_string(start_gate->get_id()) + ": start gate is not of type '"
+                           + chain_types.front()->get_name() + "'");
+            }
+            if (filter && !filter(start_gate))
+            {
+                return ERR("could not detect gate chain at start gate '" + start_gate->get_name() + "' with ID " + std::to_string(start_gate->get_id())
+                           + ": filter evaluates to 'false' for start gate");
             }
 
             std::deque<Gate*> gate_chain = {start_gate};
@@ -1140,10 +1274,10 @@ namespace hal
                 found_next_gate = false;
 
                 // check all successors of current gate
-                GateType* target_type                = chain_types.at(current_index);
-                const std::set<std::string>& inputs  = input_pins.at(target_type);
-                const std::set<std::string>& outputs = output_pins.at(chain_types.at(last_index));
-                std::vector<Endpoint*> successors    = current_gate->get_successors([target_type, inputs, outputs, filter](const std::string& ep_pin, Endpoint* ep) {
+                GateType* target_type                   = chain_types.at(current_index);
+                const std::set<const GatePin*>& inputs  = input_pins.at(target_type);
+                const std::set<const GatePin*>& outputs = output_pins.at(chain_types.at(last_index));
+                std::vector<Endpoint*> successors       = current_gate->get_successors([target_type, inputs, outputs, filter](const GatePin* ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {
                         if (outputs.empty() || outputs.find(ep_pin) != outputs.end())
@@ -1205,10 +1339,10 @@ namespace hal
                 found_next_gate = false;
 
                 // check all predecessors of current gate
-                GateType* target_type                = chain_types.at(current_index);
-                const std::set<std::string>& inputs  = input_pins.at(chain_types.at(last_index));
-                const std::set<std::string>& outputs = output_pins.at(target_type);
-                std::vector<Endpoint*> predecessors  = current_gate->get_predecessors([target_type, inputs, outputs, filter](const std::string& ep_pin, Endpoint* ep) {
+                GateType* target_type                   = chain_types.at(current_index);
+                const std::set<const GatePin*>& inputs  = input_pins.at(chain_types.at(last_index));
+                const std::set<const GatePin*>& outputs = output_pins.at(target_type);
+                std::vector<Endpoint*> predecessors     = current_gate->get_predecessors([target_type, inputs, outputs, filter](const GatePin* ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {
                         if (inputs.empty() || inputs.find(ep_pin) != inputs.end())
@@ -1260,7 +1394,7 @@ namespace hal
                 last_index--;
             }
 
-            return std::vector<Gate*>(gate_chain.begin(), gate_chain.end());
+            return OK(std::vector<Gate*>(gate_chain.begin(), gate_chain.end()));
         }
     }    // namespace netlist_utils
 }    // namespace hal

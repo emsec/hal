@@ -44,9 +44,17 @@ namespace hal
         {
             Gate* c_gate = c_netlist->create_gate(gate->m_id, gate->m_type, gate->m_name, gate->m_x, gate->m_y);
 
-            for (const auto& [name, func] : gate->get_boolean_functions(true))
+            if (auto res = gate->get_boolean_functions(true); res.is_error())
             {
-                c_gate->add_boolean_function(name, func);
+                log_error("netlist", "{}", res.get_error().get());
+                return nullptr;
+            }
+            else
+            {
+                for (const auto& [name, func] : res.get())
+                {
+                    c_gate->add_boolean_function(name, func);
+                }
             }
 
             for (const Endpoint* in_point : gate->get_fan_in_endpoints())
@@ -289,7 +297,7 @@ namespace hal
 
         for (auto ep : gate->get_fan_out_endpoints())
         {
-            if (!net_remove_source(ep->get_net(), ep))
+            if (const auto res = net_remove_source(ep->get_net(), ep); res.is_error())
             {
                 return false;
             }
@@ -297,7 +305,7 @@ namespace hal
 
         for (auto ep : gate->get_fan_in_endpoints())
         {
-            if (!net_remove_destination(ep->get_net(), ep))
+            if (const auto res = net_remove_destination(ep->get_net(), ep); res.is_error())
             {
                 return false;
             }
@@ -392,7 +400,7 @@ namespace hal
         auto dsts = net->m_destinations_raw;
         for (auto dst : dsts)
         {
-            if (!this->net_remove_destination(net, dst))
+            if (const auto res = net_remove_destination(net, dst); res.is_error())
             {
                 return false;
             }
@@ -401,7 +409,7 @@ namespace hal
         auto srcs = net->m_sources_raw;
         for (auto src : srcs)
         {
-            if (!this->net_remove_source(net, src))
+            if (const auto res = net_remove_source(net, src); res.is_error())
             {
                 return false;
             }
@@ -432,49 +440,43 @@ namespace hal
         return true;
     }
 
-    Endpoint* NetlistInternalManager::net_add_source(Net* net, Gate* gate, const std::string& pin)
+    Result<Endpoint*> NetlistInternalManager::net_add_source(Net* net, Gate* gate, GatePin* pin)
     {
-        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate))
+        if (!m_netlist->is_net_in_netlist(net))
         {
-            return nullptr;
+            return ERR("could not add source to net: net is either a 'nullptr' or not part of netlist with ID " + std::to_string(m_netlist->get_id()));
         }
-
+        if (!m_netlist->is_gate_in_netlist(gate))
+        {
+            return ERR("could not add source to net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": gate is either a 'nullptr' or not part of netlist with ID "
+                       + std::to_string(m_netlist->get_id()));
+        }
+        if (pin == nullptr)
+        {
+            return ERR("could not add pin of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as source to net '" + net->get_name() + "' with ID "
+                       + std::to_string(net->get_id()) + ": pin is a 'nullptr'");
+        }
         if (net->is_a_source(gate, pin))
         {
-            log_error("net",
-                      "pin '{}' of gate '{}' with ID {} is already a source of net '{}' with ID {} in netlist with ID {}.",
-                      pin,
-                      gate->get_name(),
-                      gate->get_id(),
-                      net->get_name(),
-                      net->get_id(),
-                      m_netlist->m_netlist_id);
-            return nullptr;
+            return ERR("could not add pin '" + pin->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as source to net '" + net->get_name()
+                       + "' with ID " + std::to_string(net->get_id()) + ": is already a source of the net");
         }
 
-        // check whether pin id is valid for this gate
+        // check whether pin is valid for this gate
         auto output_pins = gate->get_type()->get_output_pins();
-
         if ((std::find(output_pins.begin(), output_pins.end(), pin) == output_pins.end()))
         {
-            log_error("net", "gate '{}' with ID {} has no output pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
-            return nullptr;
+            return ERR("could not add pin '" + pin->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as source to net '" + net->get_name()
+                       + "' with ID " + std::to_string(net->get_id()) + ": pin is not an output pin of the gate");
         }
 
         // check whether src has already an assigned net
-        if (gate->get_fan_out_net(pin) != nullptr)
+        if (auto res = gate->get_fan_out_net(pin); res.is_ok())
         {
-            log_error("net",
-                      "gate '{}' with ID {} is already connected to net '{}' with ID {} at output pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
-                      gate->get_name(),
-                      gate->get_id(),
-                      gate->get_fan_out_net(pin)->get_name(),
-                      gate->get_fan_out_net(pin)->get_id(),
-                      pin,
-                      net->get_name(),
-                      net->get_id(),
-                      m_netlist->m_netlist_id);
-            return nullptr;
+            Net* other_net = res.get();
+            return ERR("could not add pin '" + pin->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as source to net '" + net->get_name()
+                       + "' with ID " + std::to_string(net->get_id()) + ": already connected to net '" + other_net->get_name() + "' with ID " + std::to_string(other_net->get_id())
+                       + ", cannot assign to more than one net");
         }
 
         auto new_endpoint     = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, false));
@@ -489,32 +491,43 @@ namespace hal
         {
             if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
             {
-                log_error("net", "{}", res.get_error().get());
-                return nullptr;
+                return ERR_APPEND(res.get_error(),
+                                  "could not add pin '" + pin->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as source to net '" + net->get_name()
+                                      + "' with ID " + std::to_string(net->get_id()) + ": failed to update module nets and pins");
             }
 
             for (Endpoint* ep : net->get_destinations())
             {
                 if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
                 {
-                    log_error("net", "{}", res.get_error().get());
-                    return nullptr;
+                    return ERR_APPEND(res.get_error(),
+                                      "could not add pin '" + pin->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as source to net '"
+                                          + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to update module nets and pins");
                 }
             }
         }
 
         m_event_handler->notify(NetEvent::event::src_added, net, gate->get_id());
-
-        return new_endpoint_raw;
+        return OK(new_endpoint_raw);
     }
 
-    bool NetlistInternalManager::net_remove_source(Net* net, Endpoint* ep)
+    Result<std::monostate> NetlistInternalManager::net_remove_source(Net* net, Endpoint* ep)
     {
         auto gate = ep->get_gate();
 
-        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || !net->is_a_source(ep))
+        if (!m_netlist->is_net_in_netlist(net))
         {
-            return false;
+            return ERR("could not remove source from net: net is either a 'nullptr' or not part of netlist with ID " + std::to_string(m_netlist->get_id()));
+        }
+        if (!m_netlist->is_gate_in_netlist(gate))
+        {
+            return ERR("could not remove source from net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": gate is either a 'nullptr' or not part of netlist with ID "
+                       + std::to_string(m_netlist->get_id()));
+        }
+        if (!net->is_a_source(ep))
+        {
+            return ERR("could not remove pin of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as source from net '" + net->get_name() + "' with ID "
+                       + std::to_string(net->get_id()) + ": endpoint is either a 'nullptr' or not as source of the net");
         }
 
         bool removed = false;
@@ -536,6 +549,7 @@ namespace hal
 
         if (!removed)
         {
+            assert(false);    // this should not trigger
             log_warning("net",
                         "output pin '{}' of gate '{}' with ID {} is not a source of net '{}' with ID {} in netlist with ID {}",
                         ep->get_pin(),
@@ -552,67 +566,63 @@ namespace hal
             {
                 if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
                 {
-                    log_error("net", "{}", res.get_error().get());
-                    return false;
+                    return ERR_APPEND(res.get_error(),
+                                      "could not remove pin '" + ep->get_pin()->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as source from net '"
+                                          + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to update module nets and pins");
                 }
 
                 for (Endpoint* dst : net->get_destinations())
                 {
                     if (const auto res = dst->get_gate()->get_module()->check_net(net, true); res.is_error())
                     {
-                        log_error("net", "{}", res.get_error().get());
-                        return false;
+                        return ERR_APPEND(res.get_error(),
+                                          "could not remove pin '" + ep->get_pin()->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id())
+                                              + " as source from net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to update module nets and pins");
                     }
                 }
             }
         }
 
-        return true;
+        return OK({});
     }
 
-    Endpoint* NetlistInternalManager::net_add_destination(Net* net, Gate* gate, const std::string& pin)
+    Result<Endpoint*> NetlistInternalManager::net_add_destination(Net* net, Gate* gate, GatePin* pin)
     {
-        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate))
+        if (!m_netlist->is_net_in_netlist(net))
         {
-            return nullptr;
+            return ERR("could not add destination to net: net is either a 'nullptr' or not part of netlist with ID " + std::to_string(m_netlist->get_id()));
         }
-
+        if (!m_netlist->is_gate_in_netlist(gate))
+        {
+            return ERR("could not add destination to net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": gate is either a 'nullptr' or not part of netlist with ID "
+                       + std::to_string(m_netlist->get_id()));
+        }
+        if (pin == nullptr)
+        {
+            return ERR("could not add pin of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as destination to net '" + net->get_name() + "' with ID "
+                       + std::to_string(net->get_id()) + ": pin is a 'nullptr'");
+        }
         if (net->is_a_destination(gate, pin))
         {
-            log_error("net",
-                      "pin '{}' of gate '{}' with ID {} is already a destination of net '{}' with ID {} in netlist with ID {}.",
-                      pin,
-                      gate->get_name(),
-                      gate->get_id(),
-                      net->get_name(),
-                      net->get_id(),
-                      m_netlist->m_netlist_id);
-            return nullptr;
+            return ERR("could not add pin '" + pin->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as destination to net '" + net->get_name()
+                       + "' with ID " + std::to_string(net->get_id()) + ": is already a destination of the net");
         }
 
-        // check whether pin id is valid for this gate
+        // check whether pin is valid for this gate
         auto input_pins = gate->get_type()->get_input_pins();
-
         if ((std::find(input_pins.begin(), input_pins.end(), pin) == input_pins.end()))
         {
-            log_error("net", "gate '{}' with ID {} has no input pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
-            return nullptr;
+            return ERR("could not add pin '" + pin->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as destination to net '" + net->get_name()
+                       + "' with ID " + std::to_string(net->get_id()) + ": pin is not an input pin of the gate");
         }
 
         // check whether dst has already an assigned net
-        if (gate->get_fan_in_net(pin) != nullptr)
+        if (auto res = gate->get_fan_in_net(pin); res.is_ok())
         {
-            log_error("net",
-                      "gate '{}' with ID {} is already connected to net '{}' with ID {} at input pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
-                      gate->get_name(),
-                      gate->get_id(),
-                      gate->get_fan_in_net(pin)->get_name(),
-                      gate->get_fan_in_net(pin)->get_id(),
-                      pin,
-                      net->get_name(),
-                      net->get_id(),
-                      m_netlist->m_netlist_id);
-            return nullptr;
+            Net* other_net = res.get();
+            return ERR("could not add pin '" + pin->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as destination to net '" + net->get_name()
+                       + "' with ID " + std::to_string(net->get_id()) + ": already connected to net '" + other_net->get_name() + "' with ID " + std::to_string(other_net->get_id())
+                       + ", cannot assign to more than one net");
         }
 
         std::unique_ptr<Endpoint> new_endpoint = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, true));
@@ -627,31 +637,43 @@ namespace hal
         {
             if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
             {
-                log_error("net", "{}", res.get_error().get());
-                return nullptr;
+                return ERR_APPEND(res.get_error(),
+                                  "could not add pin '" + pin->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as source to net '" + net->get_name()
+                                      + "' with ID " + std::to_string(net->get_id()) + ": failed to update module nets and pins");
             }
 
             for (Endpoint* ep : net->get_sources())
             {
                 if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
                 {
-                    log_error("net", "{}", res.get_error().get());
-                    return nullptr;
+                    return ERR_APPEND(res.get_error(),
+                                      "could not add pin '" + pin->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as source to net '"
+                                          + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to update module nets and pins");
                 }
             }
         }
 
         m_event_handler->notify(NetEvent::event::dst_added, net, gate->get_id());
 
-        return new_endpoint_raw;
+        return OK(new_endpoint_raw);
     }
 
-    bool NetlistInternalManager::net_remove_destination(Net* net, Endpoint* ep)
+    Result<std::monostate> NetlistInternalManager::net_remove_destination(Net* net, Endpoint* ep)
     {
         auto gate = ep->get_gate();
-        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || !net->is_a_destination(ep))
+        if (!m_netlist->is_net_in_netlist(net))
         {
-            return false;
+            return ERR("could not remove destination from net: net is either a 'nullptr' or not part of netlist with ID " + std::to_string(m_netlist->get_id()));
+        }
+        if (!m_netlist->is_gate_in_netlist(gate))
+        {
+            return ERR("could not remove destination from net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": gate is either a 'nullptr' or not part of netlist with ID "
+                       + std::to_string(m_netlist->get_id()));
+        }
+        if (!net->is_a_destination(ep))
+        {
+            return ERR("could not remove pin of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + " as destination from net '" + net->get_name() + "' with ID "
+                       + std::to_string(net->get_id()) + ": endpoint is either a 'nullptr' or not as destination of the net");
         }
 
         bool removed = false;
@@ -673,6 +695,7 @@ namespace hal
 
         if (!removed)
         {
+            assert(false);    // should not trigger
             log_warning("net",
                         "input pin '{}' of gate '{}' with ID {} is not a destination of net '{}' with ID {} in netlist with ID {}",
                         ep->get_pin(),
@@ -688,22 +711,24 @@ namespace hal
             {
                 if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
                 {
-                    log_error("net", "{}", res.get_error().get());
-                    return false;
+                    return ERR_APPEND(res.get_error(),
+                                      "could not remove pin '" + ep->get_pin()->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id())
+                                          + " as destination from net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to update module nets and pins");
                 }
 
                 for (Endpoint* src : net->get_sources())
                 {
                     if (const auto res = src->get_gate()->get_module()->check_net(net, true); res.is_error())
                     {
-                        log_error("net", "{}", res.get_error().get());
-                        return false;
+                        return ERR_APPEND(res.get_error(),
+                                          "could not remove pin '" + ep->get_pin()->get_name() + "' of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id())
+                                              + " as destination from net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to update module nets and pins");
                     }
                 }
             }
         }
 
-        return true;
+        return OK({});
     }
 
     //######################################################################
