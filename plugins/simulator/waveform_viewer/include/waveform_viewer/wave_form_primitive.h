@@ -58,9 +58,11 @@ namespace hal {
     class WaveFormPrimitiveValue : public WaveFormPrimitive
     {
         int mValue;
+        int mBits;
+        int mBase;
         QPolygonF mPolygon;
     public:
-        WaveFormPrimitiveValue(float x0, float x1, int val);
+        WaveFormPrimitiveValue(float x0, float x1, int val, int bits, int base);
         void paint(int y0, QPainter& painter);
         int value() const { return mValue; }
     };

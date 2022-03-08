@@ -51,7 +51,7 @@ namespace hal {
                     mItem->mPainted.clearPrimitives();
                     if (mItem->isAborted()) return;
                     WaveDataProviderMap wdpMap(wd->data());
-                    wdpMap.setGroup(true);
+                    wdpMap.setGroup(true,wd->bits(),wd->valueBase());
                     mItem->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mItem->mLoop);
                     mItem->setState(WaveItem::Finished);
                 } catch (...) {
@@ -72,7 +72,7 @@ namespace hal {
                         mItem->mPainted.clearPrimitives();
                         if (mItem->isAborted()) return;
                         WaveDataProviderMap wdpMap(wd->data());
-                        wdpMap.setGroup(mItem->isGroup());
+                        wdpMap.setGroup(mItem->isGroup(),mItem->wavedata()->bits(),mItem->wavedata()->valueBase());
                         mItem->mPainted.generate(&wdpMap,mTransform,mScrollbar,&mItem->mLoop);
                         mItem->setState(WaveItem::Finished);
                     } catch (...) {
@@ -136,7 +136,7 @@ namespace hal {
                                     wree->loadSaleae(sif);
                                 wree->mPainted.clearPrimitives();
                                 WaveDataProviderMap wdpMap(wd->data());
-                                wdpMap.setGroup(wree->isGroup());
+                                wdpMap.setGroup(wree->isGroup(),wree->wavedata()->bits(),wree->wavedata()->valueBase());
                                 wree->mPainted.generate(&wdpMap,mTransform,mScrollbar,&wree->mLoop);
                                 wree->setState(WaveItem::Painted);
                             } catch (...) {
@@ -177,6 +177,7 @@ namespace hal {
 
     void WaveRenderEngine::handleTimeout()
     {
+        mWaveItemHash->emptyTrash();
         bool needUpdate = false;
         for (WaveItem* wree : mWaveItemHash->values())
         {

@@ -131,7 +131,7 @@ namespace hal
                 log_warning(get_name(), "Cannot add unkown waveform for net '{}(id={})' to group '{}'.", n->get_name(), n->get_id(), name);
                 continue;
             }
-
+            waveVector.append(wd);
         }
         u32 grpId = mWaveDataList->createGroup(QString::fromStdString(name));
         mWaveDataList->addWavesToGroup(grpId, waveVector);

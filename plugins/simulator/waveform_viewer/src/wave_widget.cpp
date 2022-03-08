@@ -62,7 +62,6 @@ namespace hal {
 //        connect(mTreeView,&WaveTreeView::sizeChanged,mGraphicsView,&WaveGraphicsView::handleSizeChanged);
         connect(mTreeView,&WaveTreeView::triggerUpdateWaveItems,mGraphicsCanvas,&WaveGraphicsCanvas::updateRequest);
 //        connect(mTreeView,&WaveTreeView::numberVisibleChanged,mGraphicsView,&WaveGraphicsView::handleNumberVisibileChanged);
-//        connect(mTreeView,&WaveTreeView::valueBaseChanged,mScene,&WaveScene::updateWaveItemValues);
 //        connect(mGraphicsView,&WaveGraphicsView::changedXscale,mScene,&WaveScene::xScaleChanged);
         connect(mGraphicsCanvas,&WaveGraphicsCanvas::cursorMoved,mTreeModel,&WaveTreeModel::handleCursorMoved);
         connect(mWaveDataList,&WaveDataList::timeframeChanged,mGraphicsCanvas,&WaveGraphicsCanvas::handleTimeframeChanged);

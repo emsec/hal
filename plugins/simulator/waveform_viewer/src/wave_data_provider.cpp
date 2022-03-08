@@ -1,6 +1,13 @@
 #include "waveform_viewer/wave_data_provider.h"
 
 namespace hal {
+    void WaveDataProvider::setGroup(bool grp, int bts, int base)
+    {
+        mGroup = grp;
+        mBits = bts;
+        mValueBase = base;
+    }
+
     int WaveDataProviderMap::startValue(u64 t)
     {
         mIter = mDataMap.lowerBound(t);

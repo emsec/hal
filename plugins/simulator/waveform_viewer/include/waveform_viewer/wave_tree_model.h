@@ -50,7 +50,7 @@ namespace hal {
         WaveDataList* mWaveDataList;
         WaveItemHash* mWaveItemHash;
         WaveDataRoot* mRoot;
-        QModelIndex mDragIndex;
+        QModelIndexList mDragIndexList;
         DragCommand mDragCommand;
         bool mDragIsGroup;
         float mCursorTime;
@@ -113,10 +113,11 @@ namespace hal {
         Qt::DropActions supportedDragActions() const override;
         bool dropMimeData(const QMimeData *mimeData, Qt::DropAction action, int row, int column, const QModelIndex &dropParent) override;
         bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const override;
-        void setDragIndex(const QModelIndex& index);
+        void setDragIndexes(const QModelIndexList& indexList);
 
         bool insertItem(int row, const QModelIndex &parent, WaveData* wd);
-        WaveData* removeItem(int row, const QModelIndex &parent);
+        void insertExisting(int row, const QModelIndex& parent, WaveItem* wi);
+        WaveItem* removeItemFromHash(int row, const QModelIndex &parent);
         void removeGroup(const QModelIndex& groupIndex);
         void insertGroup(const QModelIndex& groupIndex, WaveDataGroup *grp=nullptr);
         int waveIndex(const QModelIndex& index) const;
