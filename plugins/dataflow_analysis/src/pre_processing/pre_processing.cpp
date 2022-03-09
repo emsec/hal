@@ -1,7 +1,6 @@
 #include "dataflow_analysis/pre_processing/pre_processing.h"
 
 #include "dataflow_analysis/common/netlist_abstraction.h"
-#include "dataflow_analysis/pre_processing/counter_identification.h"
 #include "dataflow_analysis/pre_processing/register_stage_identification.h"
 #include "dataflow_analysis/utils/parallel_for_each.h"
 #include "dataflow_analysis/utils/progress_printer.h"
@@ -25,144 +24,126 @@ namespace hal
         {
             namespace
             {
-                void remove_buffers(NetlistAbstraction& netlist_abstr)
-                {
-                    auto buf_gates = netlist_abstr.nl->get_gates([](auto g) {
-                        const GateType* gt = g->get_type();
-                        return gt->get_name().find("BUF") != std::string::npos && gt->get_input_pins().size() == 1 && gt->get_output_pins().size() == 1;
-                    });
-                    log_info("dataflow", "removing {} buffers", buf_gates.size());
-                    for (const auto& g : buf_gates)
-                    {
-                        auto in_net  = *(g->get_fan_in_nets().begin());
-                        auto out_net = *(g->get_fan_out_nets().begin());
-                        auto dsts    = out_net->get_destinations();
-                        for (const auto& dst : dsts)
-                        {
-                            out_net->remove_destination(dst->get_gate(), dst->get_pin());
-                            in_net->add_destination(dst->get_gate(), dst->get_pin());
-                        }
-                        netlist_abstr.nl->delete_net(out_net);
-                        netlist_abstr.nl->delete_gate(g);
-                    }
-                }
+                // void remove_buffers(NetlistAbstraction& netlist_abstr)
+                // {
+                //     auto buf_gates = netlist_abstr.nl->get_gates([](auto g) {
+                //         const GateType* gt = g->get_type();
+                //         return gt->get_name().find("BUF") != std::string::npos && gt->get_input_pins().size() == 1 && gt->get_output_pins().size() == 1;
+                //     });
+                //     log_info("dataflow", "removing {} buffers", buf_gates.size());
+                //     for (const auto& g : buf_gates)
+                //     {
+                //         auto in_net  = *(g->get_fan_in_nets().begin());
+                //         auto out_net = *(g->get_fan_out_nets().begin());
+                //         auto dsts    = out_net->get_destinations();
+                //         for (const auto& dst : dsts)
+                //         {
+                //             out_net->remove_destination(dst->get_gate(), dst->get_pin());
+                //             in_net->add_destination(dst->get_gate(), dst->get_pin());
+                //         }
+                //         netlist_abstr.nl->delete_net(out_net);
+                //         netlist_abstr.nl->delete_gate(g);
+                //     }
+                // }
 
-                std::tuple<std::vector<std::string>, std::vector<BooleanFunction::Value>> compute_merge_characteristic_of_gate(Gate* g)
-                {
-                    auto f = g->get_boolean_function();
-                    std::vector<std::string> variables;
-                    for (const auto& pin : g->get_type()->get_input_pins())
-                    {
-                        auto n = g->get_fan_in_net(pin);
-                        if (n != nullptr)
-                        {
-                            auto var = std::to_string(n->get_id());
-                            f        = f.substitute(pin, var);
-                            variables.push_back(var);
-                        }
-                    }
-                    std::sort(variables.begin(), variables.end());
-                    return std::tuple(variables, f.compute_truth_table(variables).get()[0]);
-                }
+                // void merge_duplicated_logic_cones(NetlistAbstraction& netlist_abstr)
+                // {
+                //     measure_block_time("merge duplicated logic cones");
 
-                void merge_duplicated_logic_cones(NetlistAbstraction& netlist_abstr)
-                {
-                    measure_block_time("merge duplicated logic cones");
+                //     auto all_sequential_gates = netlist_abstr.all_sequential_gates;
+                //     auto all_gates            = netlist_abstr.nl->get_gates();
+                //     std::sort(all_gates.begin(), all_gates.end());
 
-                    auto all_sequential_gates = netlist_abstr.all_sequential_gates;
-                    auto all_gates            = netlist_abstr.nl->get_gates();
-                    std::sort(all_gates.begin(), all_gates.end());
+                //     std::vector<Gate*> all_combinational_gates;
+                //     all_combinational_gates.reserve(all_gates.size() - all_sequential_gates.size());
+                //     std::set_difference(all_gates.begin(), all_gates.end(), all_sequential_gates.begin(), all_sequential_gates.end(), std::back_inserter(all_combinational_gates));
 
-                    std::vector<Gate*> all_combinational_gates;
-                    all_combinational_gates.reserve(all_gates.size() - all_sequential_gates.size());
-                    std::set_difference(all_gates.begin(), all_gates.end(), all_sequential_gates.begin(), all_sequential_gates.end(), std::back_inserter(all_combinational_gates));
+                //     std::unordered_map<Gate*, std::tuple<std::vector<std::string>, std::vector<BooleanFunction::Value>>> characteristic_of_gate;
 
-                    std::unordered_map<Gate*, std::tuple<std::vector<std::string>, std::vector<BooleanFunction::Value>>> characteristic_of_gate;
+                //     log_info("dataflow", "computing boolean functions...");
+                //     {
+                //         measure_block_time("computing boolean functions");
 
-                    log_info("dataflow", "computing boolean functions...");
-                    {
-                        measure_block_time("computing boolean functions");
+                //         // allocate values for all the gates so that each thread can access it without changing the container
+                //         for (auto gate : all_combinational_gates)
+                //         {
+                //             characteristic_of_gate[gate] = {};
+                //         }
 
-                        // allocate values for all the gates so that each thread can access it without changing the container
-                        for (auto gate : all_combinational_gates)
-                        {
-                            characteristic_of_gate[gate] = {};
-                        }
+                //         utils::parallel_for_each(all_combinational_gates, [&characteristic_of_gate](auto& g) { characteristic_of_gate.at(g) = compute_merge_characteristic_of_gate(g); });
+                //     }
 
-                        utils::parallel_for_each(all_combinational_gates, [&characteristic_of_gate](auto& g) { characteristic_of_gate.at(g) = compute_merge_characteristic_of_gate(g); });
-                    }
+                //     log_info("dataflow", "merging gates...");
+                //     u32 gates_removed = 0;
+                //     measure_block_time("merging gates");
+                //     bool changes = true;
+                //     while (changes)
+                //     {
+                //         changes = false;
 
-                    log_info("dataflow", "merging gates...");
-                    u32 gates_removed = 0;
-                    measure_block_time("merging gates");
-                    bool changes = true;
-                    while (changes)
-                    {
-                        changes = false;
+                //         // map from gate we will keep (key) to set of gates that have exactly the same function and will be removed
+                //         std::map<std::tuple<std::vector<std::string>, std::vector<BooleanFunction::Value>>, std::unordered_set<Gate*>> duplicate_gates;
+                //         for (auto it : characteristic_of_gate)
+                //         {
+                //             duplicate_gates[it.second].insert(it.first);
+                //         }
 
-                        // map from gate we will keep (key) to set of gates that have exactly the same function and will be removed
-                        std::map<std::tuple<std::vector<std::string>, std::vector<BooleanFunction::Value>>, std::unordered_set<Gate*>> duplicate_gates;
-                        for (auto it : characteristic_of_gate)
-                        {
-                            duplicate_gates[it.second].insert(it.first);
-                        }
+                //         // delete all duplicate gates
+                //         for (const auto& [function, gate_set] : duplicate_gates)
+                //         {
+                //             if (gate_set.size() > 1)
+                //             {
+                //                 changes      = true;
+                //                 auto it      = gate_set.begin();
+                //                 Gate* gate_1 = *it;
+                //                 it++;
+                //                 std::vector<std::string> out_pins = gate_1->get_type()->get_output_pins();
 
-                        // delete all duplicate gates
-                        for (const auto& [function, gate_set] : duplicate_gates)
-                        {
-                            if (gate_set.size() > 1)
-                            {
-                                changes      = true;
-                                auto it      = gate_set.begin();
-                                Gate* gate_1 = *it;
-                                it++;
-                                std::vector<std::string> out_pins = gate_1->get_type()->get_output_pins();
+                //                 std::unordered_set<Gate*> affected_gates;
+                //                 for (; it != gate_set.end(); ++it)
+                //                 {
+                //                     auto gate_2 = *it;
 
-                                std::unordered_set<Gate*> affected_gates;
-                                for (; it != gate_set.end(); ++it)
-                                {
-                                    auto gate_2 = *it;
+                //                     for (auto out_pin : out_pins)
+                //                     {
+                //                         auto merge_net  = gate_1->get_fan_out_net(out_pin);
+                //                         auto remove_net = gate_2->get_fan_out_net(out_pin);
+                //                         if (remove_net != nullptr)
+                //                         {
+                //                             if (merge_net == nullptr)
+                //                             {
+                //                                 remove_net->remove_source(gate_2, out_pin);
+                //                                 remove_net->add_source(gate_1, out_pin);
+                //                             }
+                //                             else
+                //                             {
+                //                                 for (auto dst : remove_net->get_destinations())
+                //                                 {
+                //                                     remove_net->remove_destination(dst->get_gate(), dst->get_pin());
+                //                                     merge_net->add_destination(dst->get_gate(), dst->get_pin());
+                //                                     affected_gates.insert(dst->get_gate());
+                //                                 }
+                //                                 netlist_abstr.nl->delete_net(remove_net);
+                //                             }
+                //                         }
+                //                     }
+                //                     characteristic_of_gate.erase(gate_2);
+                //                     netlist_abstr.nl->delete_gate(gate_2);
+                //                     gates_removed++;
+                //                 }
 
-                                    for (auto out_pin : out_pins)
-                                    {
-                                        auto merge_net  = gate_1->get_fan_out_net(out_pin);
-                                        auto remove_net = gate_2->get_fan_out_net(out_pin);
-                                        if (remove_net != nullptr)
-                                        {
-                                            if (merge_net == nullptr)
-                                            {
-                                                remove_net->remove_source(gate_2, out_pin);
-                                                remove_net->add_source(gate_1, out_pin);
-                                            }
-                                            else
-                                            {
-                                                for (auto dst : remove_net->get_destinations())
-                                                {
-                                                    remove_net->remove_destination(dst->get_gate(), dst->get_pin());
-                                                    merge_net->add_destination(dst->get_gate(), dst->get_pin());
-                                                    affected_gates.insert(dst->get_gate());
-                                                }
-                                                netlist_abstr.nl->delete_net(remove_net);
-                                            }
-                                        }
-                                    }
-                                    characteristic_of_gate.erase(gate_2);
-                                    netlist_abstr.nl->delete_gate(gate_2);
-                                    gates_removed++;
-                                }
-
-                                for (auto affected_gate : affected_gates)
-                                {
-                                    if (auto char_it = characteristic_of_gate.find(affected_gate); char_it != characteristic_of_gate.end())
-                                    {
-                                        char_it->second = compute_merge_characteristic_of_gate(affected_gate);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    log_info("dataflow", "merged {} gates into others, {} gates left", gates_removed, all_gates.size() - gates_removed);
-                }
+                //                 for (auto affected_gate : affected_gates)
+                //                 {
+                //                     if (auto char_it = characteristic_of_gate.find(affected_gate); char_it != characteristic_of_gate.end())
+                //                     {
+                //                         char_it->second = compute_merge_characteristic_of_gate(affected_gate);
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }
+                //     log_info("dataflow", "merged {} gates into others, {} gates left", gates_removed, all_gates.size() - gates_removed);
+                // }
 
                 void identify_all_sequential_gates(NetlistAbstraction& netlist_abstr)
                 {
