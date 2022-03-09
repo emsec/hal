@@ -709,14 +709,7 @@ namespace hal {
                 {
                     WaveItem* wi = it.value();
                     mWaveItemHash->erase(it);
-                    if (wi)
-                    {
-                        mWaveItemHash->dispose(wi);
-                        // put wave items into root unless that would cause duplicate
-                        if (mRoot->hasNetId(wd->id())) continue;
-                        mRoot->insert(irow,grp->childAt(i));
-                        mWaveItemHash->insert(WaveItemIndex(iwave,WaveItemIndex::Wire,0),wi);
-                    }
+                    if (wi) mWaveItemHash->dispose(wi);
                 }
             }
         }
