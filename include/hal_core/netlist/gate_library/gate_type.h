@@ -307,6 +307,26 @@ namespace hal
 
         /**
          * TODO pybind, test
+         * Get the pin corresponding to the given name.
+         * Pin names may not be unique, hence if two or more pins have a matching name, an error is returned.
+         * 
+         * @param[in] name - The name of the pin.
+         * @returns The pin on success, an error message otherwise.
+         */
+        Result<GatePin*> get_pin_by_name(const std::string& name) const;
+
+        /**
+         * TODO pybind, test
+         * Get all pins corresponding to the given name.
+         * Pin names may not be unique, hence a vector of pins is returned.
+         * 
+         * @param[in] name - The name of the pins.
+         * @returns A vector of pins on success, an error message otherwise.
+         */
+        Result<std::vector<GatePin*>> get_pins_by_name(const std::string& name) const;
+
+        /**
+         * TODO pybind, test
          * Create a new pin group with the given name.
          * 
          * @param[in] id - The ID of the pin group.
