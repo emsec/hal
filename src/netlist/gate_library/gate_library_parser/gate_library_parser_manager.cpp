@@ -85,9 +85,9 @@ namespace hal
 
             auto begin_time = std::chrono::high_resolution_clock::now();
             auto gate_lib   = parser->parse(file_path);
-            if (gate_lib == nullptr)
+            if (gate_lib.is_error())
             {
-                log_error("gate_library_parser", "failed to parse gate library from file '{}'.", file_path.string());
+                log_error("gate_library_parser", "error encountered while parsing gate library from file '{}': ", file_path.string());
                 return nullptr;
             }
 

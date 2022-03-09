@@ -116,12 +116,9 @@ namespace hal
 
         if (gate_type->get_input_pins().empty() && (out_pins.size() == 1))
         {
-            auto functions = gate_type->get_boolean_functions();
-            auto it        = functions.find(out_pins[0]);
-            if (it != functions.end())
+            if (auto res = gate_type->get_boolean_function(out_pins[0]); res.is_ok())
             {
-                auto bf = it->second;
-
+                auto bf = res.get();
                 if (bf.has_constant_value(1))
                 {
                     m_vcc_gate_types.emplace(gate_type->get_name(), gate_type);
@@ -144,12 +141,9 @@ namespace hal
 
         if (gate_type->get_input_pins().empty() && (out_pins.size() == 1))
         {
-            auto functions = gate_type->get_boolean_functions();
-            auto it        = functions.find(out_pins[0]);
-            if (it != functions.end())
+            if (auto res = gate_type->get_boolean_function(out_pins[0]); res.is_ok())
             {
-                auto bf = it->second;
-
+                auto bf = res.get();
                 if (bf.has_constant_value(0))
                 {
                     m_gnd_gate_types.emplace(gate_type->get_name(), gate_type);

@@ -61,9 +61,9 @@ namespace hal
          * direction describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).
          *
          * @param[in] file_path - Path to the file containing the gate library definition.
-         * @returns The gate library or a nullptr on error.
+         * @returns The gate library on success, an error otherwise.
          */
-        std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path) override;
+        Result<std::unique_ptr<GateLibrary>> parse(const std::filesystem::path& file_path) override;
 
     private:
         struct type_group
@@ -151,17 +151,17 @@ namespace hal
         std::map<std::string, type_group> m_bus_types;
         std::set<std::string> m_cell_names;
 
-        bool tokenize();
-        bool parse_tokens();
+        void tokenize();
+        Result<std::monostate> parse_tokens();
 
-        std::optional<cell_group> parse_cell(TokenStream<std::string>& library_stream);
-        std::optional<type_group> parse_type(TokenStream<std::string>& str);
-        std::optional<pin_group> parse_pin(TokenStream<std::string>& str, cell_group& cell, PinDirection direction = PinDirection::none, const std::string& external_pin_name = "");
-        std::optional<pin_group> parse_pg_pin(TokenStream<std::string>& str, cell_group& cell);
-        std::optional<bus_group> parse_bus(TokenStream<std::string>& str, cell_group& cell);
-        std::optional<ff_group> parse_ff(TokenStream<std::string>& str);
-        std::optional<latch_group> parse_latch(TokenStream<std::string>& str);
-        bool construct_gate_type(cell_group& cell);
+        Result<cell_group> parse_cell(TokenStream<std::string>& library_stream);
+        Result<type_group> parse_type(TokenStream<std::string>& str);
+        Result<pin_group> parse_pin(TokenStream<std::string>& str, cell_group& cell, PinDirection direction = PinDirection::none, const std::string& external_pin_name = "");
+        Result<pin_group> parse_pg_pin(TokenStream<std::string>& str, cell_group& cell);
+        Result<bus_group> parse_bus(TokenStream<std::string>& str, cell_group& cell);
+        Result<ff_group> parse_ff(TokenStream<std::string>& str);
+        Result<latch_group> parse_latch(TokenStream<std::string>& str);
+        Result<std::monostate> construct_gate_type(cell_group&& cell);
 
         void remove_comments(std::string& line, bool& multi_line_comment);
         std::vector<std::string> tokenize_function(const std::string& function);

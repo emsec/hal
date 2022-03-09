@@ -16,7 +16,7 @@ namespace hal
         {
             std::map<std::filesystem::path, std::unique_ptr<GateLibrary>> m_gate_libraries;
 
-            bool prepare_library(const std::unique_ptr<GateLibrary>& lib)
+            Result<std::monostate> prepare_library(const std::unique_ptr<GateLibrary>& lib)
             {
                 auto gate_types = lib->get_gate_types();
 
@@ -37,12 +37,14 @@ namespace hal
                     std::string name = "HAL_GND";
                     if (gate_types.find(name) != gate_types.end())
                     {
-                        log_error("gate_library_manager", "no 'GND' gate type found in gate library, but gate type 'HAL_GND' already exists.");
-                        return false;
+                        return ERR("could not prepare gate library '" + lib->get_name() + "': no GND gate type found within gate library, but gate type 'HAL_GND' already exists");
                     }
 
                     GateType* gt = lib->create_gate_type(name, {GateTypeProperty::combinational, GateTypeProperty::ground});
-                    gt->add_output_pin("O");
+                    if (auto res = gt->create_pin("O", PinDirection::output, PinType::ground); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not prepare gate library '" + lib->get_name() + "': failed to create output pin 'O' for gate type 'HAL_GND'");
+                    }
                     gt->add_boolean_function("O", BooleanFunction::Const(BooleanFunction::Value::ZERO));
                     lib->mark_gnd_gate_type(gt);
                     log_info("gate_library_manager", "gate library did not contain a GND gate, auto-generated type '{}'.", name);
@@ -53,18 +55,20 @@ namespace hal
                     std::string name = "HAL_VDD";
                     if (gate_types.find(name) != gate_types.end())
                     {
-                        log_error("gate_library_manager", "no 'VDD' gate found in gate library, but gate type 'HAL_VDD' already exists.");
-                        return false;
+                        return ERR("could not prepare gate library '" + lib->get_name() + "': no VDD gate type found within gate library, but gate type 'HAL_VDD' already exists");
                     }
 
                     GateType* gt = lib->create_gate_type(name, {GateTypeProperty::combinational, GateTypeProperty::power});
-                    gt->add_output_pin("O");
+                    if (auto res = gt->create_pin("O", PinDirection::output, PinType::ground); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not prepare gate library '" + lib->get_name() + "': failed to create output pin 'O' for gate type 'HAL_VDD'");
+                    }
                     gt->add_boolean_function("O", BooleanFunction::Const(BooleanFunction::Value::ONE));
                     lib->mark_vcc_gate_type(gt);
                     log_info("gate_library_manager", "gate library did not contain a VDD gate, auto-generated type '{}'.", name);
                 }
 
-                return true;
+                return OK({});
             }
         }    // namespace
 
@@ -96,8 +100,9 @@ namespace hal
                 return nullptr;
             }
 
-            if (!prepare_library(gate_lib))
+            if (auto res = prepare_library(gate_lib); res.is_error())
             {
+                log_error("gate_library_parser", "error encountered while loading gate library:\n{}", res.get_error().get());
                 return nullptr;
             }
 
