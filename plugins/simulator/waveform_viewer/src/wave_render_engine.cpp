@@ -232,6 +232,8 @@ namespace hal {
 
         for (WaveItem* wree : mWaveItemHash->values())
         {
+            if (wree->isDeleted()) continue;
+
 //            if (wree->yPosition() < 3)
 //                qDebug() << "paint" << wree->yPosition() << wree->wavedata()->name() << wree->wavedata()->fileSize() << wree->wavedata()->data().size();
             if (wree->hasRequest(WaveItem::AddRequest))
@@ -326,7 +328,7 @@ namespace hal {
 
         for (WaveItem* wree : mWaveItemHash->values())
         {
-            if (wree->isNull() && !wree->isGroup()) todoList.append(wree);
+            if (wree->isNull() && !wree->isGroup() && !wree->isDeleted()) todoList.append(wree);
         }
 
         if (!todoList.isEmpty() && !mBackbone)

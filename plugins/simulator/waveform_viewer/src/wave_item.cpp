@@ -27,7 +27,7 @@ namespace hal {
 
     WaveItem::~WaveItem()
     {
-        qDebug() << "delete wave item" << mData->name();
+//        qDebug() << "delete wave item" << hex << (quintptr) this;
     }
 
     void WaveItem::setYposition(int pos)

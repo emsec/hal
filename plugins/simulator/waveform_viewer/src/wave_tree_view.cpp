@@ -231,8 +231,8 @@ namespace hal {
         if (mContextIndexList.size()!=1) return;
         QModelIndex inx = mContextIndexList.at(0);
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        WaveTreeModel::ReorderRequest req(wtm);
         mWaveItemHash->dispose(wtm->removeItemFromHash(inx.row(),inx.parent()));
-        reorder();
     }
 
     void WaveTreeView::handleRemoveGroup()
@@ -240,14 +240,15 @@ namespace hal {
         if (mContextIndexList.size()!=1) return;
         QModelIndex inx = mContextIndexList.at(0);
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        WaveTreeModel::ReorderRequest req(wtm);
         wtm->removeGroup(inx);
         expandAll();
-        reorder();
     }
 
     void WaveTreeView::handleRemoveMulti()
     {
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        WaveTreeModel::ReorderRequest req(wtm);
         for (const QModelIndex& inx : mContextIndexList)
         {
             if (wtm->isLeaveItem(inx))
@@ -260,7 +261,6 @@ namespace hal {
             }
         }
         expandAll();
-        reorder();
     }
 
     void WaveTreeView::handleInsertGroup()
@@ -273,14 +273,15 @@ namespace hal {
     QModelIndexList WaveTreeView::sortedSelection() const
     {
         QMap<int,QModelIndex> sortInx;
-
         for (const QModelIndex& inx : selectedIndexes())
         {
             if (inx.column()) continue;
             int sortCode = 2000000000;
             QModelIndex p = inx.parent();
-            if (p.isValid()) sortCode -= p.row() * 200000;
-            sortCode -= inx.row();
+            // subtract group unless root
+            if (p.isValid() && p.internalPointer())
+                sortCode -= (p.row()+1) * 200000;
+            sortCode -= (inx.row()+1);
             sortInx.insert(sortCode,inx);
         }
         return sortInx.values();

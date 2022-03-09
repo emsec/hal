@@ -667,8 +667,13 @@ namespace hal {
         WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(mRoot->childAt(irow));
         mWaveDataList->removeGroup(grp->id());
         WaveItemIndex wii(grp->id(), WaveItemIndex::Group);
-        WaveItem* wi = mWaveItemHash->value(wii);
-        if (wi) wi->setRequest(WaveItem::DeleteRequest);
+        auto it = mWaveItemHash->find(wii);
+        if (it != mWaveItemHash->end())
+        {
+            WaveItem* wi = it.value();
+            mWaveItemHash->erase(it);
+            if (wi) mWaveItemHash->dispose(wi);
+        }
     }
 
     void WaveTreeModel::handleGroupUpdated(int grpId)
@@ -694,12 +699,20 @@ namespace hal {
                 WaveData* wd = grp->childAt(i);
                 int iwave = mWaveDataList->waveIndexByNetId(wd->id());
                 // remove wave items from group
-                WaveItem* wi = mWaveItemHash->value(WaveItemIndex(iwave,WaveItemIndex::Wire,grp->id()));
-                if (wi) wi->setRequest(WaveItem::DeleteRequest);
-                // put wave items into root unless that would cause duplicate
-                if (mRoot->hasNetId(wd->id())) continue;
-                mRoot->insert(irow,grp->childAt(i));
-                addOrReplaceItem(wd, WaveItemIndex::Wire, iwave,0);
+                auto it = mWaveItemHash->find(WaveItemIndex(iwave,WaveItemIndex::Wire,grp->id()));
+                if (it != mWaveItemHash->end())
+                {
+                    WaveItem* wi = it.value();
+                    mWaveItemHash->erase(it);
+                    if (wi)
+                    {
+                        mWaveItemHash->dispose(wi);
+                        // put wave items into root unless that would cause duplicate
+                        if (mRoot->hasNetId(wd->id())) continue;
+                        mRoot->insert(irow,grp->childAt(i));
+                        mWaveItemHash->insert(WaveItemIndex(iwave,WaveItemIndex::Wire,0),wi);
+                    }
+                }
             }
         }
         endResetModel();

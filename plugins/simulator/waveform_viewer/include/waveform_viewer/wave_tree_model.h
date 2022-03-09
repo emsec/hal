@@ -46,6 +46,17 @@ namespace hal {
 
     public:
         enum DragCommand { None, Move, Copy };
+
+        class ReorderRequest
+        {
+            WaveTreeModel* mParent;
+        public:
+            ReorderRequest(WaveTreeModel* p) : mParent(p) { mParent->mReorderRequestWaiting++; }
+            ~ReorderRequest() {
+                if (--mParent->mReorderRequestWaiting <= 0) mParent->emitReorder();
+            }
+        };
+
     private:
         WaveDataList* mWaveDataList;
         WaveItemHash* mWaveItemHash;
@@ -58,16 +69,6 @@ namespace hal {
         bool mIgnoreSignals;
         int mReorderRequestWaiting;
         QMap<WaveItem*,WaveValueThread*> mValueThreads;
-
-        class ReorderRequest
-        {
-            WaveTreeModel* mParent;
-        public:
-            ReorderRequest(WaveTreeModel* p) : mParent(p) { mParent->mReorderRequestWaiting++; }
-            ~ReorderRequest() {
-                if (--mParent->mReorderRequestWaiting <= 0) mParent->emitReorder();
-            }
-        };
 
         bool dropGroup(const QModelIndex& parentTo, int row);
         void dropRow(const QModelIndex& parentTo, int row);
