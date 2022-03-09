@@ -70,6 +70,7 @@ namespace hal {
         const QMap<u64,int>& data()         const { return mData; }
         int     fileIndex()                 const { return mFileIndex; }
         u64     fileSize()                  const { return mFileSize; }
+        int     valueBase()                 const { return mValueBase; }
         void setId(u32 id_);
         bool rename(const QString& nam);
         void setBits(int bts);
@@ -97,6 +98,7 @@ namespace hal {
         QString strValue(const QMap<u64,int>::const_iterator& it) const;
         void setValueBase(int bas) { mValueBase = bas; }
         bool isEqual(const WaveData& other, int tolerance=0) const;
+        static QString stringValue(int val, int bits, int base);
     };
 
     class WaveDataClock : public WaveData

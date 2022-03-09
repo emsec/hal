@@ -15,6 +15,7 @@ namespace hal
 {
     class SaleaeDirectory;
 
+#ifndef STANDALONE_PARSER
     class SaleaeDirectoryStoreRequest
     {
     private:
@@ -24,6 +25,7 @@ namespace hal
         SaleaeDirectoryStoreRequest(SaleaeDirectory* sd);
         ~SaleaeDirectoryStoreRequest();
     };
+#endif
 
     class SaleaeDirectoryFileIndex
     {

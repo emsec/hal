@@ -11,13 +11,17 @@ namespace hal {
     class WaveDataProvider
     {
         bool mGroup;
+        int mBits;
+        int mValueBase;
     public:
-        WaveDataProvider() : mGroup(false) {;}
+        WaveDataProvider() : mGroup(false), mBits(1), mValueBase(16) {;}
         virtual ~WaveDataProvider() {;}
         virtual int startValue(u64 t) = 0;
         virtual SaleaeDataTuple nextPoint() = 0;
         bool isGroup() const { return mGroup; }
-        void setGroup(bool grp) { mGroup = grp; }
+        int bits() const { return mBits; }
+        int valueBase() const { return mValueBase; }
+        void setGroup(bool grp, int bts, int base);
     };
 
     class WaveDataProviderMap : public WaveDataProvider

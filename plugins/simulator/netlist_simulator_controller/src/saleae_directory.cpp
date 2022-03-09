@@ -261,7 +261,9 @@ namespace hal
 
     void SaleaeDirectory::rename_net(uint32_t id, const std::string& nam)
     {
+#ifndef STANDALONE_PARSER
         SaleaeDirectoryStoreRequest save(this);
+#endif
         auto it = mById.find(id);
         if (it == mById.end()) return;
         mNetEntries[it->second].rename(nam);
@@ -324,14 +326,18 @@ namespace hal
 
     void SaleaeDirectory::add_group(SaleaeDirectoryGroupEntry sdge)
     {
+#ifndef STANDALONE_PARSER
         SaleaeDirectoryStoreRequest save(this);
+#endif
         mGroupEntries.push_back(sdge);
     }
 
 
     void SaleaeDirectory::remove_group(uint32_t group_id)
     {
+#ifndef STANDALONE_PARSER
         SaleaeDirectoryStoreRequest save(this);
+#endif
         auto it = mGroupEntries.begin();
         while (it != mGroupEntries.end())
         {
@@ -356,6 +362,7 @@ namespace hal
         return nullptr;
     }
 
+#ifndef STANDALONE_PARSER
     SaleaeDirectoryStoreRequest::SaleaeDirectoryStoreRequest(SaleaeDirectory* sd)
         : mSaleaeDirectory(sd)
     {
@@ -364,8 +371,7 @@ namespace hal
 
     SaleaeDirectoryStoreRequest::~SaleaeDirectoryStoreRequest()
     {
-        #ifndef STANDALONE_PARSER
         if (--mSaleaeDirectory->mStoreRequest <= 0) mSaleaeDirectory->write_json();
-        #endif
     }
+#endif
 }

@@ -114,17 +114,25 @@ namespace hal {
 
         float lastX = -1;
         int value = -1;
+        bool refreshCursor = transitionPos.isEmpty() ? false : mCursorTime >= transitionPos.constBegin().key();
         for (auto it = transitionPos.constBegin(); it != transitionPos.constEnd(); ++it)
         {
             int nextX = it.key();
-            if (lastX >= 0)
+            if (lastX >= 0) // not first loop -> valid lastX value
             {
                 if (value == WaveFormPrimitiveFilled::sFilledPrimitive)
                     mPrimitives.append(new WaveFormPrimitiveFilled(lastX,nextX,0));
                 else if (value < 0)
                     mPrimitives.append(new WaveFormPrimitiveUndefined(lastX,nextX));
                 else
-                    mPrimitives.append(new WaveFormPrimitiveValue(lastX,nextX,value));
+                    mPrimitives.append(new WaveFormPrimitiveValue(lastX,nextX,value,grp->bits(),grp->valueBase()));
+
+                if (refreshCursor && nextX > mCursorTime)
+                {
+                    if (value != WaveFormPrimitiveFilled::sFilledPrimitive)
+                        mCursorValue = value;
+                    refreshCursor = false;
+                }
             }
             value = 0;
             lastX = nextX;
@@ -217,7 +225,7 @@ namespace hal {
                 if (valLast < 0)
                     mPrimitives.append(new WaveFormPrimitiveUndefined(xLast,xNext));
                 else if (wdp->isGroup())
-                    mPrimitives.append(new WaveFormPrimitiveValue(xLast,xNext,valLast));
+                    mPrimitives.append(new WaveFormPrimitiveValue(xLast,xNext,valLast,wdp->bits(),wdp->valueBase()));
                 else
                     mPrimitives.append(new WaveFormPrimitiveHline(xLast,xNext,valLast));
             }

@@ -187,32 +187,46 @@ namespace hal {
         for (u32 netId : netIds)
         {
             int iwave = mWaveDataList->waveIndexByNetId(netId);
-            WaveItemIndex wii(iwave, WaveItemIndex::Wire, grpId);
-            WaveItem* wi = mWaveItemHash->value(wii);
             WaveData* wd = mWaveDataList->at(iwave);
-            if (!wi)
-                addOrReplaceItem(wd,WaveItemIndex::Wire,iwave,grpId);
-            else
+
+            WaveItemIndex wii(iwave, WaveItemIndex::Wire, grpId);
+            WaveItem* wi = nullptr;
+
+            if (grpId)
             {
-                if (wi->wavedata() != wd)
-                    wi->setWaveData(wd);
-                wi->clearRequest(WaveItem::DeleteRequest);
-                wi->clearRequest(WaveItem::DeleteAcknowledged);
-                wi->setRequest(WaveItem::SetPosition);
+                // check whether waveform graph to be added to group is already present in root
+                int iRootInx = mRoot->netIndex(netId);
+                if (iRootInx >= 0)
+                    wi = removeItemFromHash(iRootInx,createIndex(0,0,nullptr));
             }
 
-            int iRootInx = mRoot->netIndex(netId);
-            if (iRootInx >= 0)
+            if (wi)
             {
-                removeItem(iRootInx,index(0,0));
+                wi->setRequest(WaveItem::SetPosition);
+                mWaveItemHash->insert(wii,wi);
             }
+            else
+            {
+                wi = mWaveItemHash->value(wii);
+                if (!wi)
+                    addOrReplaceItem(wd,WaveItemIndex::Wire,iwave,grpId);
+                else
+                {
+                    if (wi->wavedata() != wd)
+                        wi->setWaveData(wd);
+                    wi->clearRequest(WaveItem::DeleteRequest);
+                    wi->clearRequest(WaveItem::DeleteAcknowledged);
+                    wi->setRequest(WaveItem::SetPosition);
+                }
+            }
+
             if (mDragCommand == Move)
             {
                 for (QModelIndex inx : indexes(wd))
                 {
                     if (inx.internalPointer() == grp) continue;
                     if (inx.internalPointer() == mRoot) continue;
-                    removeItem(inx.row(),inx.parent());
+                    mWaveItemHash->dispose(removeItemFromHash(inx.row(),inx.parent()));
                 }
             }
         }
@@ -375,35 +389,79 @@ namespace hal {
         return retval;
     }
 
-    void WaveTreeModel::setDragIndex(const QModelIndex& index) {
-        mDragIndex = index;
+    void WaveTreeModel::setDragIndexes(const QModelIndexList& indexList) {
+        mDragIsGroup = true;
+        mDragIndexList.clear();
+
+
+        for (const QModelIndex& inx : indexList)
+        {
+            if (isLeaveItem(inx))
+            {
+                mDragIsGroup = false;
+                break;
+            }
+        }
+
+        if (mDragIsGroup)
+        {
+            mDragIndexList = indexList;
+        }
+        else
+        {
+            mDragIndexList.clear();
+            for (const QModelIndex& inx : indexList)
+                if (isLeaveItem(inx))
+                    mDragIndexList.append(inx);
+        }
         mDragCommand = Move;
-        mDragIsGroup = !isLeaveItem(index);
     }
 
     bool WaveTreeModel::dropGroup(const QModelIndex &parentTo, int row)
     {
         ReorderRequest req(this);
         if (row < 0) row = parentTo.row();
-        if (mDragIndex.internalPointer() != mRoot) return false;
+        bool couldDrop = false;
         beginResetModel();
-        if (!mRoot->moveGroupPosition(mDragIndex.row(),row)) return false;
+        for (const QModelIndex& inx : mDragIndexList)
+        {
+            if (inx.column()) continue;
+            if (inx.internalPointer() != mRoot) continue;
+            if (!mRoot->moveGroupPosition(inx.row(),row)) continue;
+            couldDrop = true;
+        }
         endResetModel();
-        return true;
+        return couldDrop;
     }
 
     void WaveTreeModel::dropRow(const QModelIndex& parentTo, int row)
     {
         ReorderRequest req(this);
-        QModelIndex parentFrom = mDragIndex.parent();
-        int targetRow = (parentTo == parentFrom && mDragIndex.row() < row) ? row-1 : row;
-        QModelIndex targetIndex = parentTo;
-        if (parentTo.internalPointer() == mDragIndex.internalPointer() && mDragIndex.row() < parentTo.row())
-            targetIndex = createIndex(parentTo.row()-1,0,parentTo.internalPointer());
-        WaveData* wd = removeItem(mDragIndex.row(),parentFrom);
-        if (!wd) return;
+        int targetRow = row;
+
+        WaveDataGroup* targetGrp = static_cast<WaveDataGroup*>(isLeaveItem(parentTo)
+                                                               ? parentTo.internalPointer()
+                                                               : item(parentTo));
+
+        QList<WaveItem*> wiTempList;
+
+        for (QModelIndex inxSource : mDragIndexList)
+        {
+            if (inxSource.column()) continue;
+            QModelIndex sourceParentIndex = inxSource.parent();
+            WaveDataGroup* sourceGrp = static_cast<WaveDataGroup*>(inxSource.internalPointer());
+            if (targetRow > 0 && sourceGrp == targetGrp && inxSource.row() < targetRow)
+                --targetRow; // compensate position for removed items
+            WaveItem* wi = removeItemFromHash(inxSource.row(),sourceParentIndex);
+            if (!wi) continue;
+            wiTempList.append(wi);
+        }
+
+        QModelIndex targetIndex = createIndex(targetRow,0,targetGrp);
         QModelIndex targetIndexParent = targetIndex.parent();
-        insertItem(targetRow,targetIndex,wd);
+
+        for (WaveItem* wi : wiTempList)
+            insertExisting(targetRow,targetIndexParent,wi);
         Q_EMIT inserted(index(targetRow,0,targetIndexParent));
     }
 
@@ -443,6 +501,8 @@ namespace hal {
         if (!dropParent.isValid()) return false;
         if (!mimeData->formats().contains("application/x-qabstractitemmodeldatalist")) return false;
         if (mDragIsGroup) return dropGroup(dropParent,row);
+
+        // drop on wave item, insert behind
         if (isLeaveItem(dropParent))
         {
             WaveData* wd = item(dropParent);
@@ -456,9 +516,11 @@ namespace hal {
                 }
             return false;
         }
+
+        // drop on group item
         if (dropParent.internalPointer() == mRoot)
         {
-            dropRow(dropParent,row);
+            dropRow(dropParent,0);
             return true;
         }
         return false;
@@ -481,6 +543,30 @@ namespace hal {
         WaveData* wd = item(index);
         if (!wd) return false;
         return dynamic_cast<WaveDataGroup*>(wd)==nullptr;
+    }
+
+    //TODO : unify insertExisting und insertItem
+    void WaveTreeModel::insertExisting(int row, const QModelIndex& parent, WaveItem* wi)
+    {
+        if (!parent.isValid()) return;
+        WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(item(parent));
+        if (!grp) return;
+        if (row < 0) row = 0;
+        if (row > grp->size()) row = grp->size();
+
+        int iwave = mWaveDataList->waveIndexByNetId(wi->wavedata()->id());
+        WaveData* wd = mWaveDataList->at(iwave);
+        beginResetModel();
+        grp->insert(row,wd);
+        grp->recalcData();
+        endResetModel();
+
+        WaveDataGroup* wdGrp = dynamic_cast<WaveDataGroup*>(wd);
+        WaveItemIndex wii = wdGrp
+                ? WaveItemIndex(wdGrp->id(),WaveItemIndex::Group,0)
+                : WaveItemIndex(iwave, WaveItemIndex::Wire, grp->id());
+        mWaveItemHash->insert(wii,wi);
+        invalidateParent(parent);
     }
 
     bool WaveTreeModel::insertItem(int row, const QModelIndex &parent, WaveData *wd)
@@ -548,7 +634,7 @@ namespace hal {
     }
 
 
-    WaveData *WaveTreeModel::removeItem(int row, const QModelIndex &parent)
+    WaveItem *WaveTreeModel::removeItemFromHash(int row, const QModelIndex &parent)
     {
         if (!parent.isValid()) return nullptr;
         WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(item(parent));
@@ -562,9 +648,14 @@ namespace hal {
         grp->recalcData();
         int iwave = mWaveDataList->waveIndexByNetId(wd->id());
         WaveItemIndex wii(iwave, WaveItemIndex::Wire, grp->id());
-        WaveItem* wi = mWaveItemHash->value(wii);
-        if (wi) wi->setRequest(WaveItem::DeleteRequest);
-        return mWaveDataList->at(iwave);
+        auto it = mWaveItemHash->find(wii);
+        WaveItem* retval = nullptr;
+        if (it != mWaveItemHash->end())
+        {
+            retval = it.value();
+            mWaveItemHash->erase(it);
+        }
+        return retval;
     }
 
     void WaveTreeModel::removeGroup(const QModelIndex& groupIndex)
@@ -576,8 +667,13 @@ namespace hal {
         WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(mRoot->childAt(irow));
         mWaveDataList->removeGroup(grp->id());
         WaveItemIndex wii(grp->id(), WaveItemIndex::Group);
-        WaveItem* wi = mWaveItemHash->value(wii);
-        if (wi) wi->setRequest(WaveItem::DeleteRequest);
+        auto it = mWaveItemHash->find(wii);
+        if (it != mWaveItemHash->end())
+        {
+            WaveItem* wi = it.value();
+            mWaveItemHash->erase(it);
+            if (wi) mWaveItemHash->dispose(wi);
+        }
     }
 
     void WaveTreeModel::handleGroupUpdated(int grpId)
@@ -603,12 +699,20 @@ namespace hal {
                 WaveData* wd = grp->childAt(i);
                 int iwave = mWaveDataList->waveIndexByNetId(wd->id());
                 // remove wave items from group
-                WaveItem* wi = mWaveItemHash->value(WaveItemIndex(iwave,WaveItemIndex::Wire,grp->id()));
-                if (wi) wi->setRequest(WaveItem::DeleteRequest);
-                // put wave items into root unless that would cause duplicate
-                if (mRoot->hasNetId(wd->id())) continue;
-                mRoot->insert(irow,grp->childAt(i));
-                addOrReplaceItem(wd, WaveItemIndex::Wire, iwave,0);
+                auto it = mWaveItemHash->find(WaveItemIndex(iwave,WaveItemIndex::Wire,grp->id()));
+                if (it != mWaveItemHash->end())
+                {
+                    WaveItem* wi = it.value();
+                    mWaveItemHash->erase(it);
+                    if (wi)
+                    {
+                        mWaveItemHash->dispose(wi);
+                        // put wave items into root unless that would cause duplicate
+                        if (mRoot->hasNetId(wd->id())) continue;
+                        mRoot->insert(irow,grp->childAt(i));
+                        mWaveItemHash->insert(WaveItemIndex(iwave,WaveItemIndex::Wire,0),wi);
+                    }
+                }
             }
         }
         endResetModel();

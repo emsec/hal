@@ -24,10 +24,11 @@ namespace hal {
     {
         Q_OBJECT
         QList<QModelIndex> mItemOrder;
-        QModelIndex mContextIndex;
+        QModelIndexList mContextIndexList;
         WaveDataList* mWaveDataList;
         WaveItemHash* mWaveItemHash;
-        bool mKillMode;
+
+        QModelIndexList sortedSelection() const;
 
     protected:
         void mouseDoubleClickEvent(QMouseEvent *event) override;
@@ -42,7 +43,6 @@ namespace hal {
         void sizeChanged(int viewportHeight, int scrollbarMax, int scrollbarPos);
         void numberVisibleChanged(int nVisible, int scrollbarMax, int scrollbarPos);
         void triggerUpdateWaveItems();
-        void valueBaseChanged();
 
     private Q_SLOTS:
         void handleExpandCollapse(const QModelIndex& index);
@@ -53,7 +53,7 @@ namespace hal {
         void handleRemoveGroup();
         void handleInsertGroup();
         void handleSetValueFormat();
-        void toggleKillMode();
+        void handleRemoveMulti();
 
     public Q_SLOTS:
         void handleInserted(const QModelIndex& index);
