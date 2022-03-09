@@ -115,7 +115,10 @@ namespace hal
                 if(bottomEdge)
                 {
                     insertItem(newItem, droppedParentItem, row-1);
-                    mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
+                    ActionReorderObject* reorderObj = new ActionReorderObject(desiredIndex);
+                    reorderObj->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+                    reorderObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    reorderObj->exec();
                 }
                 else
                 {
@@ -125,7 +128,10 @@ namespace hal
                     }
                     else
                         insertItem(newItem, droppedParentItem, row);
-                    mod->move_pin_within_group(droppedPin->get_group().first, droppedPin, desiredIndex);
+                    ActionReorderObject* reorderObj = new ActionReorderObject(desiredIndex);
+                    reorderObj->setObject(UserActionObject(droppedPin->get_id(), UserActionObjectType::Pin));
+                    reorderObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    reorderObj->exec();
                 }
                 return true;
             }
