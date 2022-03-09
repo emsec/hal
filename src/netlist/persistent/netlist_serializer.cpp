@@ -35,7 +35,7 @@ namespace hal
         // serializing functions
         namespace
         {
-            const int SERIALIZATION_FORMAT_VERSION = 10;
+            const int SERIALIZATION_FORMAT_VERSION = 11;
 
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
 

@@ -85,45 +85,65 @@ namespace hal
                         const std::string var = input_vars.back();
                         input_vars.pop_back();
 
-                        const PinDirection pin_dir = gate->get_type()->get_pin_direction(var);
+                        const GatePin* pin;
+                        if (auto res = gate->get_type()->get_pin_by_name(var); res.is_error())
+                        {
+                            return ERR_APPEND(res.get_error(),
+                                              "could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to get input pin '" + var
+                                                  + "' by name");
+                        }
+                        else
+                        {
+                            pin = res.get();
+                        }
 
+                        const PinDirection pin_dir = pin->get_direction();
                         if (pin_dir == PinDirection::input)
                         {
-                            const Net* const input_net = gate->get_fan_in_net(var);
-                            if (input_net == nullptr)
+                            const Net* input_net;
+                            if (auto res = gate->get_fan_in_net(pin); res.is_error())
                             {
-                                // if no net is connected, the input pin name cannot be replaced
-                                log_warning("netlist_utils", "no net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", var, gate->get_id());
-                                return bf;
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to get fan-in net at pin '"
+                                                      + pin->get_name() + "'");
                             }
-
+                            else
+                            {
+                                input_net = res.get();
+                            }
                             bf = bf.substitute(var, "net_" + std::to_string(input_net->get_id()));
                         }
                         else if ((pin_dir == PinDirection::internal) || (pin_dir == PinDirection::output))
                         {
-                            BooleanFunction bf_interal = gate->get_boolean_function(var);
-                            if (bf_interal.is_empty())
+                            BooleanFunction bf_internal;
+                            if (auto res = gate->get_boolean_function(pin); res.is_error())
                             {
-                                log_warning(
-                                    "netlist_utils", "trying to replace {} in function {} for gate {} and pin {} but cannot find boolean fucntion.", var, bf.to_string(), gate->get_id(), output_pin);
-                                return bf;
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id())
+                                                      + ": failed to get Boolean function at output pin '" + pin->get_name() + "'");
                             }
-
-                            const std::vector<std::string> internal_input_vars = utils::to_vector(bf_interal.get_variable_names());
+                            else
+                            {
+                                bf_internal = res.get();
+                            }
+                            const std::vector<std::string> internal_input_vars = utils::to_vector(bf_internal.get_variable_names());
                             input_vars.insert(input_vars.end(), internal_input_vars.begin(), internal_input_vars.end());
 
-                            auto substituted = bf.substitute(var, bf_interal);
-                            if (substituted.is_error())
+                            if (auto substituted = bf.substitute(var, bf_internal); substituted.is_error())
                             {
-                                log_error("netlist", "{}", substituted.get_error().get());
-                                return BooleanFunction();
+                                return ERR_APPEND(substituted.get_error(),
+                                                  "could not get Boolean function of gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to substitute variable '"
+                                                      + var + "' with another Boolean function");
                             }
-                            bf = substituted.get();
+                            else
+                            {
+                                bf = substituted.get();
+                            }
                         }
                     }
 
                     cache.insert({{gate->get_id(), output_pin}, bf});
-                    return bf;
+                    return OK(bf);
                 }
             }
 
