@@ -472,7 +472,6 @@ namespace hal {
         {
             for (WaveValueThread* wvt : mValueThreads.values())
                 wvt->abort();
-            mValueThreads.clear();
         }
         mCursorTime = tCursor;
         mCursorXpos = xpos;
@@ -481,9 +480,15 @@ namespace hal {
 
     void WaveTreeModel::handleEndValueThread(WaveItem* item)
     {
+        bool workDone = false;
         auto it = mValueThreads.find(item);
-        if (it != mValueThreads.end()) mValueThreads.erase(it);
-        handleUpdateValueColumn();
+        if (it != mValueThreads.end())
+        {
+            workDone = !it.value()->wasAborted();
+            mValueThreads.erase(it);
+        }
+        if (workDone)
+            handleUpdateValueColumn();
     }
 
     void WaveTreeModel::handleUpdateValueColumn()
@@ -605,7 +610,7 @@ namespace hal {
         {
             QString workdir = QString::fromStdString(mWaveDataList->saleaeDirectory().get_directory());
             WaveValueThread* wvt = new WaveValueThread(item,workdir,mCursorTime,mCursorXpos);
-            connect(wvt,&WaveValueThread::gotValue,this,&WaveTreeModel::handleEndValueThread);
+            connect(wvt,&WaveValueThread::valueThreadEnds,this,&WaveTreeModel::handleEndValueThread);
             wvt->start();
             mValueThreads.insert(item,wvt);
         }
@@ -785,6 +790,7 @@ namespace hal {
     };
     */
 
+
         WaveValueThread::WaveValueThread(WaveItem* item, const QString& workdir, float tpos, int xpos, QObject *parent)
             : QThread(parent), mItem(item), mWorkDir(workdir), mTpos(tpos), mXpos(xpos), mAbort(false)
         {
@@ -814,7 +820,7 @@ namespace hal {
 
         void WaveValueThread::handleValueThreadFinished()
         {
-            if (!mAbort) Q_EMIT gotValue(mItem);
+            Q_EMIT valueThreadEnds(mItem);
             deleteLater();
         }
 
