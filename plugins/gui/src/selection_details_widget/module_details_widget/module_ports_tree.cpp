@@ -141,7 +141,12 @@ namespace hal
                         return;
                     auto groupResult = gNetlist->get_module_by_id(modId)->get_pin_group_by_id(itemId);
                     if (groupResult.is_ok())
-                        gNetlist->get_module_by_id(modId)->set_pin_group_name(groupResult.get(), ipd.textValue().toStdString());
+                    {
+                        ActionRenameObject* renameObj = new ActionRenameObject(ipd.textValue());
+                        renameObj->setObject(UserActionObject(groupResult.get()->get_id(), UserActionObjectType::PinGroup));
+                        renameObj->setParentObject(UserActionObject(modId, UserActionObjectType::Module));
+                        renameObj->exec();
+                    }
                 }
             });
             menu.addAction("Delete pin group", [this, itemId, modId](){
@@ -179,7 +184,12 @@ namespace hal
                         return;
                     auto pinResult = gNetlist->get_module_by_id(modId)->get_pin_by_id(itemId);
                     if(pinResult.is_ok())
-                        gNetlist->get_module_by_id(modId)->set_pin_name(pinResult.get(), ipd.textValue().toStdString());
+                    {
+                        ActionRenameObject* renameObj = new ActionRenameObject(ipd.textValue());
+                        renameObj->setObject(UserActionObject(pinResult.get()->get_id(), UserActionObjectType::Pin));
+                        renameObj->setParentObject(UserActionObject(modId, UserActionObjectType::Module));
+                        renameObj->exec();
+                    }
                 }
             });
             menu.addAction("Add net to current selection", [this, n](){
