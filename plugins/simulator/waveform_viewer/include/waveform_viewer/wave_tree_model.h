@@ -33,13 +33,14 @@ namespace hal {
         int mValue;
         bool mAbort;
     Q_SIGNALS:
-        void gotValue(WaveItem* item);
+        void valueThreadEnds(WaveItem* item);
     private Q_SLOTS:
         void handleValueThreadFinished();
     public:
         WaveValueThread(WaveItem* item, const QString& workdir, float tpos, int xpos, QObject* parent = nullptr);
         void run() override;
         void abort() { mAbort = true; }
+        bool wasAborted() const { return mAbort; }
     };
 
     class WaveTreeModel : public QAbstractItemModel
