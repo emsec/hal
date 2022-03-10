@@ -34,6 +34,7 @@ namespace hal
             struct Configuration
             {
                 std::vector<u32> prioritized_sizes;
+                u32 bad_group_size;
             };
 
         }    // namespace evaluation

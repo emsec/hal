@@ -117,11 +117,14 @@ namespace hal {
     class WaveItemHash : public QHash<WaveItemIndex,WaveItem*>
     {
         int mVisibleEntries;
+        QList<WaveItem*> mTrashCan;
     public:
         int visibleEntries() const { return mVisibleEntries; }
         int importedWires() const;
         void setVisibleEntries(int ve) { mVisibleEntries = ve; }
-        WaveItem* addOrReplace(WaveData*wd, WaveItemIndex::IndexType tp, int inx, int parentId);
+        WaveItem* addOrReplace(WaveData*wd, WaveItemIndex::IndexType tp, int iwave, int parentId);
         void dump(const char* stub);
+        void dispose(WaveItem* wi);
+        void emptyTrash();
     };
 }

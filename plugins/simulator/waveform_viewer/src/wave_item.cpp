@@ -27,7 +27,7 @@ namespace hal {
 
     WaveItem::~WaveItem()
     {
-        qDebug() << "delete wave item" << mData->name();
+//        qDebug() << "delete wave item" << hex << (quintptr) this;
     }
 
     void WaveItem::setYposition(int pos)
@@ -105,7 +105,7 @@ namespace hal {
                 if (!mData->data().isEmpty())
                 {
                     WaveDataProviderMap wdp(mData->data());
-                    wdp.setGroup(isGroup());
+                    wdp.setGroup(isGroup(),mData->bits(),mData->valueBase());
                     mPainted.generate(&wdp,trans,sbar,&mLoop);
                     setState(WaveItem::Painted);
                     if (mVisibleRange) Q_EMIT doneLoading();
@@ -394,9 +394,9 @@ namespace hal {
         return ids.size();
     }
 
-    WaveItem *WaveItemHash::addOrReplace(WaveData*wd, WaveItemIndex::IndexType tp, int inx, int parentId)
+    WaveItem* WaveItemHash::addOrReplace(WaveData*wd, WaveItemIndex::IndexType tp, int iwave, int parentId)
     {
-        WaveItemIndex wii(inx, tp, parentId);
+        WaveItemIndex wii(iwave, tp, parentId);
         WaveItem* wi = value(wii);
         if (!wi)
         {
@@ -409,8 +409,42 @@ namespace hal {
         return wi;
     }
 
+    void WaveItemHash::dispose(WaveItem* wi)
+    {
+        if (!wi) return;
+        wi->setRequest(WaveItem::DeleteRequest);
+        mTrashCan.append(wi);
+    }
+
+    void WaveItemHash::emptyTrash()
+    {
+        auto it = mTrashCan.begin();
+        while (it != mTrashCan.end())
+        {
+            WaveItem* wi = *it;
+            switch (wi->state())
+            {
+            case WaveItem::Null:
+            case WaveItem::Painted:
+                wi->setRequest(WaveItem::DeleteAcknowledged);
+                it = mTrashCan.erase(it);
+                wi->deleteLater();
+                break;
+            case WaveItem::Loading:
+                if (wi->hasLoader())
+                    wi->abortLoader();
+                ++it;
+                break;
+            default:
+                ++it;
+                break;
+            }
+        }
+    }
+
     void WaveItemHash::dump(const char* stub)
     {
+        Q_UNUSED(stub);
         // TODO
     }
 }

@@ -1,4 +1,5 @@
 #include "waveform_viewer/wave_form_primitive.h"
+#include "netlist_simulator_controller/wave_data.h"
 #include <QPainter>
 #include <QFontMetrics>
 #include <QDebug>
@@ -64,8 +65,8 @@ namespace hal {
         painter.setBrush(saveBrush);
     }
 
-    WaveFormPrimitiveValue::WaveFormPrimitiveValue(float x0, float x1, int val)
-        : WaveFormPrimitive(x0,x1), mValue(val)
+    WaveFormPrimitiveValue::WaveFormPrimitiveValue(float x0, float x1, int val, int bits, int base)
+        : WaveFormPrimitive(x0,x1), mValue(val), mBits(bits), mBase(base)
     {
         QVector<QPointF> pts;
         pts.append(QPointF(x0,7));
@@ -93,13 +94,13 @@ namespace hal {
         QFont font = painter.font();
         font.setPixelSize(8);
         font.setBold(true);
-        QString txt = QString::number(mValue);
+        QString txt = WaveData::stringValue(mValue,mBits,mBase);
         QFontMetrics fm(font);
         QRectF r = fm.boundingRect(txt);
+        r.setWidth(r.width()+4*txt.size());
         float wMax = mX1 - mX0;
-        if (r.width()+8 > wMax) return;
+        if (r.width()+6 > wMax) return;
         r.setHeight(14);
-        r.setWidth(r.width()+4);
         r.moveTo(mX0 + (wMax - r.width())/2., y0-1);
         painter.drawText(r,txt);
     }

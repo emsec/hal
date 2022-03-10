@@ -15,13 +15,13 @@
 
 namespace hal {
     WaveTreeView::WaveTreeView(WaveDataList* wdList, WaveItemHash *wHash, QWidget* parent)
-        : QTreeView(parent), mWaveDataList(wdList), mWaveItemHash(wHash), mKillMode(false)
+        : QTreeView(parent), mWaveDataList(wdList), mWaveItemHash(wHash)
     {
         setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         setUniformRowHeights(true);
         setSelectionBehavior(QAbstractItemView::SelectRows);
-        setSelectionMode(QAbstractItemView::SingleSelection);
+        setSelectionMode(QAbstractItemView::ExtendedSelection);
         setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         setDragDropMode(QAbstractItemView::DragDrop);
         setDragEnabled(true);
@@ -40,31 +40,7 @@ namespace hal {
     {
         QModelIndex inx = indexAt(event->pos());
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
-        if (mKillMode)
-        {
-            QModelIndexList toDeleteInx;
-            if (selectionModel()->hasSelection())
-                toDeleteInx = selectionModel()->selectedRows(0);
-            else
-                toDeleteInx << inx;
-            auto it = toDeleteInx.begin();
-            while (it != toDeleteInx.end())
-            {
-                if (wtm->isLeaveItem(*it))
-                {
-                    wtm->removeItem(it->row(),it->parent());
-                    it = toDeleteInx.erase(it);
-                }
-                else
-                    ++it;
-            }
-            for (QModelIndex dinx : toDeleteInx)
-            {
-                WaveDataGroup* grp = dynamic_cast<WaveDataGroup*>(wtm->item(dinx));
-                if (grp) wtm->removeGroup(dinx);
-            }
-        }
-        else if (inx.isValid())
+        if (inx.isValid())
         {
             WaveData* wd = nullptr;
             int iwave = wtm->waveIndex(inx);
@@ -122,81 +98,75 @@ namespace hal {
             Q_EMIT sizeChanged(viewport()->height(), -1, -1);
     }
 
-    void WaveTreeView::toggleKillMode()
-    {
-        mKillMode = ! mKillMode;
-        if (mKillMode)
-        {
-            setCursor(QCursor(QPixmap(":/icons/kill_cursor","PNG")));
-            setSelectionMode(QAbstractItemView::MultiSelection);
-        }
-        else
-        {
-            unsetCursor();
-            setSelectionMode(QAbstractItemView::SingleSelection);
-            clearSelection();
-        }
-    }
-
     void WaveTreeView::handleContextMenuRequested(const QPoint& pos)
     {
-        if (mKillMode)
+        mContextIndexList = sortedSelection();
+        if (mContextIndexList.isEmpty())
         {
-            toggleKillMode();
-            return;
+            QModelIndex inx = indexAt(pos);
+            if (!inx.isValid()) return;
+            mContextIndexList.append(inx);
         }
-        mContextIndex = indexAt(pos);
-        if (!mContextIndex.isValid()) return;
+        bool singleSelection = mContextIndexList.size() == 1;
+
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
         QMenu* menu = new QMenu(this);
         QAction* act;
 
-        act = menu->addAction("Insert new group");
-        connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertGroup);
-
-        act = menu->addAction("Rename '" + wtm->netName(mContextIndex) + "'");
-        connect(act,&QAction::triggered,this,&WaveTreeView::handleRenameItem);
-
-        if (wtm->isLeaveItem(mContextIndex))
+        if (singleSelection)
         {
-            act = menu->addAction("Edit net wave " + wtm->netName(mContextIndex));
-            connect(act,&QAction::triggered,this,&WaveTreeView::handleEditOrBrowseItem);
+            QString selName =  wtm->netName(mContextIndexList.at(0));
+            act = menu->addAction("Insert new group");
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleInsertGroup);
 
-            act = menu->addAction("Remove net wave " + wtm->netName(mContextIndex));
-            connect(act,&QAction::triggered,this,&WaveTreeView::handleRemoveItem);
+            act = menu->addAction("Rename '" + selName + "'");
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleRenameItem);
+
+            if (wtm->isLeaveItem(mContextIndexList.at(0)))
+            {
+                act = menu->addAction("Edit net wave " + selName);
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleEditOrBrowseItem);
+
+                act = menu->addAction("Remove net wave " + selName);
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleRemoveItem);
+            }
+            else
+            {
+                act = menu->addAction("View group data " + selName);
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleEditOrBrowseItem);
+
+                act = menu->addAction("Remove group " + selName);
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleRemoveGroup);
+
+                QMenu* menuBase = menu->addMenu("Value format for " + selName);
+                act = menuBase->addAction("Binary");
+                act->setData(2);
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
+                act = menuBase->addAction("Decimal (signed)");
+                act->setData(-10);
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
+                act = menuBase->addAction("Decimal (unsigned)");
+                act->setData(10);
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
+                act = menuBase->addAction("Hexdec");
+                act->setData(16);
+                connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
+            }
         }
         else
         {
-            act = menu->addAction("View group data " + wtm->netName(mContextIndex));
-            connect(act,&QAction::triggered,this,&WaveTreeView::handleEditOrBrowseItem);
-
-            act = menu->addAction("Remove group " + wtm->netName(mContextIndex));
-            connect(act,&QAction::triggered,this,&WaveTreeView::handleRemoveGroup);
-
-            QMenu* menuBase = menu->addMenu("Value format for " + wtm->netName(mContextIndex));
-            act = menuBase->addAction("Binary");
-            act->setData(2);
-            connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
-            act = menuBase->addAction("Decimal (signed)");
-            act->setData(-10);
-            connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
-            act = menuBase->addAction("Decimal (unsigned)");
-            act->setData(10);
-            connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
-            act = menuBase->addAction("Hexdec");
-            act->setData(16);
-            connect(act,&QAction::triggered,this,&WaveTreeView::handleSetValueFormat);
+            act = menu->addAction(QString("Remove %1 selected items").arg(mContextIndexList.size()));
+            connect(act,&QAction::triggered,this,&WaveTreeView::handleRemoveMulti);
         }
-        menu->addSeparator();
-        act = menu->addAction("Remove multiple items by select & double click");
-        connect(act,&QAction::triggered,this,&WaveTreeView::toggleKillMode);
         menu->popup(viewport()->mapToGlobal(pos));
     }
 
     void WaveTreeView::handleSetValueFormat()
     {
+        if (mContextIndexList.size() != 1) return;
+        QModelIndex inx = mContextIndexList.at(0);
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
-        int grpId = wtm->groupId(mContextIndex);
+        int grpId = wtm->groupId(inx);
         if (grpId<0) return;
         WaveDataGroup* grp = mWaveDataList->mDataGroups.value(grpId);
         if (!grp) return;
@@ -204,13 +174,20 @@ namespace hal {
         QAction* act = static_cast<QAction*>(sender());
         grp->setValueBase(act->data().toInt());
         wtm->handleUpdateValueColumn();
-        Q_EMIT valueBaseChanged();
+
+        if (grpId)
+        {
+            WaveItem* wi = mWaveItemHash->value(WaveItemIndex(grpId,WaveItemIndex::Group,0));
+            if (wi) wi->setRequest(WaveItem::DataChanged);
+        }
     }
 
     void WaveTreeView::handleRenameItem()
     {
+        if (mContextIndexList.size() != 1) return;
+        QModelIndex inx = mContextIndexList.at(0);
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
-        WaveData* wd = wtm->item(mContextIndex);
+        WaveData* wd = wtm->item(inx);
         if (!wd) return;
         bool confirm;
         QString newName =
@@ -235,8 +212,10 @@ namespace hal {
 
     void WaveTreeView::handleEditOrBrowseItem()
     {
+        if (mContextIndexList.size()!=1) return;
+        QModelIndex inx = mContextIndexList.at(0);
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
-        WaveData* wd = wtm->item(mContextIndex);
+        WaveData* wd = wtm->item(inx);
         if (!wd) return;
 
         WaveEditDialog wed(wd, this);
@@ -249,30 +228,70 @@ namespace hal {
 
     void WaveTreeView::handleRemoveItem()
     {
+        if (mContextIndexList.size()!=1) return;
+        QModelIndex inx = mContextIndexList.at(0);
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
-        wtm->removeItem(mContextIndex.row(),mContextIndex.parent());
-        reorder();
+        WaveTreeModel::ReorderRequest req(wtm);
+        mWaveItemHash->dispose(wtm->removeItemFromHash(inx.row(),inx.parent()));
     }
 
     void WaveTreeView::handleRemoveGroup()
     {
+        if (mContextIndexList.size()!=1) return;
+        QModelIndex inx = mContextIndexList.at(0);
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
-        wtm->removeGroup(mContextIndex);
+        WaveTreeModel::ReorderRequest req(wtm);
+        wtm->removeGroup(inx);
         expandAll();
-        reorder();
+    }
+
+    void WaveTreeView::handleRemoveMulti()
+    {
+        WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        WaveTreeModel::ReorderRequest req(wtm);
+        for (const QModelIndex& inx : mContextIndexList)
+        {
+            if (wtm->isLeaveItem(inx))
+            {
+                mWaveItemHash->dispose(wtm->removeItemFromHash(inx.row(),inx.parent()));
+            }
+            else
+            {
+                wtm->removeGroup(inx);
+            }
+        }
+        expandAll();
     }
 
     void WaveTreeView::handleInsertGroup()
     {
+        if (mContextIndexList.size() != 1) return;
         WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
-        wtm->insertGroup(mContextIndex);
+        wtm->insertGroup(mContextIndexList.at(0));
+    }
+
+    QModelIndexList WaveTreeView::sortedSelection() const
+    {
+        QMap<int,QModelIndex> sortInx;
+        for (const QModelIndex& inx : selectedIndexes())
+        {
+            if (inx.column()) continue;
+            int sortCode = 2000000000;
+            QModelIndex p = inx.parent();
+            // subtract group unless root
+            if (p.isValid() && p.internalPointer())
+                sortCode -= (p.row()+1) * 200000;
+            sortCode -= (inx.row()+1);
+            sortInx.insert(sortCode,inx);
+        }
+        return sortInx.values();
     }
 
     void WaveTreeView::startDrag(Qt::DropActions supportedActions)
     {
-        QModelIndexList sel = selectedIndexes();
+        QModelIndexList sel = sortedSelection();
         if (sel.isEmpty()) return;
-        static_cast<WaveTreeModel*>(model())->setDragIndex(sel.at(0));
+        static_cast<WaveTreeModel*>(model())->setDragIndexes(sel);
         QAbstractItemView::startDrag(supportedActions);
     }
 

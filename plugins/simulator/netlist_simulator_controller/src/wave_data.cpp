@@ -287,33 +287,37 @@ namespace hal {
 
     QString WaveData::strValue(int val) const
     {
-        int bts = bits();
+        return stringValue(val,bits(),mValueBase);
+    }
+
+    QString WaveData::stringValue(int val, int bits, int base)
+    {
         switch (val) {
         case -2 : return "z";
         case -1 : return "x";
         }
-        if (bts <= 1 || !val)
+        if (bits <= 1 || !val)
             return QString::number(val);
-        if (mValueBase<0)
+        if (base<0)
         {
-            int mask = 1 << (bts-1);
+            int mask = 1 << (bits-1);
             if (val&mask)
-                return QString("-%1").arg((1 << bts) - val);
+                return QString("-%1").arg((1 << bits) - val);
             else
                 return QString::number(val);
         }
         int nDigits = 0;
-        switch (mValueBase)
+        switch (base)
         {
         case 2:
-            nDigits = bits();
+            nDigits = bits;
             return QString("0b%1").arg((uint)val,nDigits,2,QLatin1Char('0'));
         case 16:
-            nDigits = bits() / 4;
+            nDigits = bits / 4;
             return QString("0x%1").arg((uint)val,nDigits,16,QLatin1Char('0'));
         default: break;
         }
-        return QString::number(val,mValueBase);
+        return QString::number(val,base);
     }
 
     u64 WaveData::maxTime() const

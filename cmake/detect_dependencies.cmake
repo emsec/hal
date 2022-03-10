@@ -128,17 +128,13 @@ endif()
 #####   spdlog
 ################################
 
-find_package(spdlog 1.5.0 CONFIG)
-if(${spdlog_FOUND})
-    message(VERBOSE "Found spdlog >= 1.5.0")
-else()
-    message(STATUS "spdlog >= 1.5.0 not found, will build our provided version")
-    set(spdlog_VERSION 1.5.0)
-    add_library(spdlog::spdlog INTERFACE IMPORTED)
-    set_target_properties(spdlog::spdlog PROPERTIES
-                          INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.5.0/include"
-                          )
-endif()
+
+message(STATUS "using spdlog from deps")
+set(spdlog_VERSION 1.5.0)
+add_library(spdlog::spdlog INTERFACE IMPORTED)
+set_target_properties(spdlog::spdlog PROPERTIES
+                        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.5.0/include"
+                        )
 
 ################################
 #####   Python support
