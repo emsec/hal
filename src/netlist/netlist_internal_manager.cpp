@@ -25,9 +25,14 @@ namespace hal
     //###                      netlist                                   ###
     //######################################################################
 
-    std::unique_ptr<Netlist> NetlistInternalManager::copy_netlist(const Netlist* nl) const
+    Result<std::unique_ptr<Netlist>> NetlistInternalManager::copy_netlist(const Netlist* nl) const
     {
         std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->m_gate_library);
+        if (c_netlist == nullptr)
+        {
+            return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create netlist");
+        }
+
         c_netlist->enable_automatic_net_checks(false);
 
         // manager, netlist_id, and top_module are set in the constructor
@@ -35,7 +40,11 @@ namespace hal
         // copy nets
         for (const Net* net : nl->m_nets)
         {
-            Net* c_net    = c_netlist->create_net(net->m_id, net->m_name);
+            Net* c_net = c_netlist->create_net(net->m_id, net->m_name);
+            if (c_net == nullptr)
+            {
+                return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied net '" + net->m_name + "' with ID " + std::to_string(net->m_id));
+            }
             c_net->m_data = net->m_data;
         }
 
@@ -43,17 +52,27 @@ namespace hal
         for (const Gate* gate : nl->m_gates)
         {
             Gate* c_gate = c_netlist->create_gate(gate->m_id, gate->m_type, gate->m_name, gate->m_x, gate->m_y);
-
-            if (auto res = gate->get_boolean_functions(true); res.is_error())
+            if (c_gate == nullptr)
             {
-                log_error("netlist", "{}", res.get_error().get());
-                return nullptr;
+                return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied gate '" + gate->m_name + "' with ID " + std::to_string(gate->m_id));
+            }
+
+            if (auto funcs = gate->get_boolean_functions(true); funcs.is_error())
+            {
+                return ERR_APPEND(funcs.get_error(),
+                                  "could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to get Boolean functions of gate '" + gate->m_name + "' with ID "
+                                      + std::to_string(gate->m_id));
             }
             else
             {
-                for (const auto& [name, func] : res.get())
+                for (const auto& [name, func] : funcs.get())
                 {
-                    c_gate->add_boolean_function(name, func);
+                    if (auto res = c_gate->add_boolean_function(name, func); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(),
+                                          "could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to add Boolean function with name '" + name + "' to copied gate '"
+                                              + c_gate->m_name + "' with ID " + std::to_string(c_gate->m_id));
+                    }
                 }
             }
 
@@ -61,16 +80,34 @@ namespace hal
             {
                 const auto net_id = in_point->get_net()->m_id;
                 auto c_net        = c_netlist->get_net_by_id(net_id);
+                if (c_net == nullptr)
+                {
+                    return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to get copied net by ID " + std::to_string(net_id));
+                }
 
-                c_net->add_destination(c_gate, in_point->get_pin());
+                if (auto res = c_net->add_destination(c_gate, in_point->get_pin()); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to add destination to copied net '" + c_net->m_name + "' with ID "
+                                          + std::to_string(c_net->m_id));
+                }
             }
 
             for (const Endpoint* out_point : gate->get_fan_out_endpoints())
             {
                 const auto net_id = out_point->get_net()->m_id;
                 auto c_net        = c_netlist->get_net_by_id(net_id);
+                if (c_net == nullptr)
+                {
+                    return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to get copied net by ID " + std::to_string(net_id));
+                }
 
-                c_net->add_source(c_gate, out_point->get_pin());
+                if (auto res = c_net->add_source(c_gate, out_point->get_pin()); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to add source to copied net '" + c_net->m_name + "' with ID "
+                                          + std::to_string(c_net->m_id));
+                }
             }
 
             c_gate->m_data = gate->m_data;
@@ -92,11 +129,19 @@ namespace hal
             {
                 // find gates of module in the copied netlist by id
                 Gate* c_gate = c_netlist->get_gate_by_id(gate->m_id);
+                if (c_gate == nullptr)
+                {
+                    return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to get copied gate by ID " + std::to_string(gate->m_id));
+                }
                 c_gates.push_back(c_gate);
             }
 
             // create all modules with the top module as parent module and update later
             Module* c_module = c_netlist->create_module(module->m_id, module->m_name, c_netlist->m_top_module, c_gates);
+            if (c_module == nullptr)
+            {
+                return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied module '" + module->m_name + "' with ID " + std::to_string(module->m_id));
+            }
 
             c_module->m_data = module->m_data;
             c_module->m_type = module->m_type;
@@ -117,13 +162,22 @@ namespace hal
             Module* c_module    = c_netlist->get_module_by_id(module_id);
             Module* c_parent    = c_netlist->get_module_by_id(parent_id);
 
-            c_module->set_parent_module(c_parent);
+            if (!c_module->set_parent_module(c_parent))
+            {
+                return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to set copied module '" + c_parent->m_name + "' with ID " + std::to_string(module->m_id)
+                           + " as parent module of '" + c_module->m_name + "' with ID " + std::to_string(c_module->m_id));
+            }
         }
 
         // copy groupings
         for (const Grouping* grouping : nl->m_groupings)
         {
             Grouping* c_grouping = c_netlist->create_grouping(grouping->m_id, grouping->m_name);
+            if (c_grouping == nullptr)
+            {
+                return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied grouping '" + grouping->m_name + "' with ID "
+                           + std::to_string(grouping->m_id));
+            }
 
             for (const Module* module : grouping->m_modules)
             {
@@ -200,8 +254,9 @@ namespace hal
                 {
                     if (const auto res = c_module->create_pin(pin->get_id(), pin->get_name(), c_netlist->get_net_by_id(pin->get_net()->m_id), PinType::none, false); res.is_error())
                     {
-                        log_error("netlist", "{}", res.get_error().get());
-                        return nullptr;
+                        return ERR_APPEND(res.get_error(),
+                                          "could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied module pin '" + pin->get_name() + "' of module '"
+                                              + c_module->m_name + "' with ID " + std::to_string(c_module->m_id));
                     }
                     else
                     {
@@ -213,8 +268,9 @@ namespace hal
                         pin_group->get_id(), pin_group->get_name(), c_pins, pin_group->get_direction(), pin_group->get_type(), pin_group->is_ascending(), pin_group->get_start_index());
                     res.is_error())
                 {
-                    log_error("netlist", "{}", res.get_error().get());
-                    return nullptr;
+                    return ERR_APPEND(res.get_error(),
+                                      "could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied module pin group '" + pin_group->get_name() + "' of module '"
+                                          + c_module->m_name + "' with ID " + std::to_string(c_module->m_id));
                 }
             }
 
@@ -224,7 +280,7 @@ namespace hal
         }
 
         c_netlist->enable_automatic_net_checks(true);
-        return c_netlist;
+        return OK(c_netlist);
     }
 
     //######################################################################

@@ -25,6 +25,8 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_handler.h"
+#include "hal_core/netlist/pins/gate_pin.h"
+#include "hal_core/utilities/result.h"
 
 #include <map>
 #include <vector>
@@ -60,7 +62,7 @@ namespace hal
         ~NetlistInternalManager() = default;
 
         // netlist functions
-        std::unique_ptr<Netlist> copy_netlist(const Netlist* nl) const;
+        Result<std::unique_ptr<Netlist>> copy_netlist(const Netlist* nl) const;
 
         // gate functions
         Gate* create_gate(u32 id, GateType* gt, const std::string& name, i32 x, i32 y);

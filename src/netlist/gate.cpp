@@ -270,7 +270,7 @@ namespace hal
                 }
                 else
                 {
-                    res.emplace(pin, lut_func.get());
+                    res[pin->get_name()] = lut_func.get();
                 }
             }
         }

@@ -181,7 +181,9 @@ namespace hal
         auto type_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
         str.consume("}", true);
 
-        i32 end = -1;
+        type.start_index = 0;
+        type.width       = 1;
+        type.ascending   = true;
         while (type_str.remaining() > 0)
         {
             auto next_token = type_str.consume();
@@ -208,12 +210,11 @@ namespace hal
             else if (next_token == "bit_from")
             {
                 type_str.consume(":", true);
-                end = std::stol(type_str.consume().string);
+                type.start_index = std::stol(type_str.consume().string);
             }
             else if (next_token == "bit_to")
             {
                 type_str.consume(":", true);
-                end = std::stol(type_str.consume().string);
             }
             else if (next_token == "downto")
             {
@@ -225,7 +226,7 @@ namespace hal
                 }
                 else if (bval == "true")
                 {
-                    type.ascending = -false;
+                    type.ascending = false;
                 }
                 else
                 {
@@ -238,12 +239,6 @@ namespace hal
             }
             type_str.consume(";", true);
         }
-
-        if (end != -1)
-        {
-            type.width = (u32)(end - (type.ascending ? 1 : -1) * type.start_index);
-        }
-
         return OK(type);
     }
 

@@ -971,7 +971,7 @@ namespace hal
                 {
                     for (const auto& ep : fan_in)
                     {
-                        if (std::find(active_pins.begin(), active_pins.end(), ep->get_pin()) == active_pins.end())
+                        if (std::find(active_pins.begin(), active_pins.end(), ep->get_pin()->get_name()) == active_pins.end())
                         {
                             num_eps++;
                             GatePin* pin = ep->get_pin();

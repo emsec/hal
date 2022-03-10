@@ -28,8 +28,8 @@
 #include "converter/converter.h"
 #include "converter/cpp_converter.h"
 #include "compare_nets.h"
-#include "SubgraphFunctionGenerator.h"
-#include "z3Wrapper.h"
+#include "subgraph_function_generator.h"
+#include "z3_wrapper.h"
 
 namespace hal
 {

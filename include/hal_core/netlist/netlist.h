@@ -152,7 +152,7 @@ namespace hal
          * 
          * @returns The copy of the netlist.
          */
-        std::unique_ptr<Netlist> copy() const;
+        Result<std::unique_ptr<Netlist>> copy() const;
 
         /*
          * ################################################################

@@ -554,9 +554,9 @@ namespace hal
         {
             // (1) setup the sliced Boolean function
             if (auto res =
-                    BooleanFunction::Slice(function.clone(), BooleanFunction::Index(index, function.size()), BooleanFunction::Index(index, function.size()), 1).map<BooleanFunction>([](auto function) {
+                    BooleanFunction::Slice(function.clone(), BooleanFunction::Index(index, function.size()), BooleanFunction::Index(index, function.size()), 1).map<BooleanFunction>([](auto f) {
                         // (2) perform a local simplification in order to remove unnecessary slices
-                        return Simplification::local_simplification(function);
+                        return Simplification::local_simplification(f);
                     });
                 res.is_error())
             {

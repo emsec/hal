@@ -214,7 +214,7 @@ namespace hal
         return res;
     }
 
-    std::vector<std::string> GateType::get_pin_names(const std::function<bool(GatePin*)>& filter = nullptr) const
+    std::vector<std::string> GateType::get_pin_names(const std::function<bool(GatePin*)>& filter) const
     {
         std::vector<std::string> res;
         if (!filter)

@@ -211,7 +211,8 @@ namespace hal {
 
     void JsonWriteDocument::dump(rapidjson::Value &parent)
     {
-/*        for (rapidjson::Document::MemberIterator it = parent.MemberBegin(); it!=parent.MemberEnd(); ++it)
+        UNUSED(parent);
+        /*        for (rapidjson::Document::MemberIterator it = parent.MemberBegin(); it!=parent.MemberEnd(); ++it)
         {
             qDebug() << "x" << it->name.GetString();
             switch(it->value.GetType())

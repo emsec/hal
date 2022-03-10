@@ -1,5 +1,5 @@
 #include "plugin_z3_utils.h"
-#include "SubgraphFunctionGenerator.h"
+#include "subgraph_function_generator.h"
 
 namespace hal
 {
