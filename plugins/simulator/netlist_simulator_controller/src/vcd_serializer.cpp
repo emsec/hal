@@ -601,7 +601,7 @@ namespace hal {
             SaleaeInputFile sif(target.toStdString());
             if (!sif.header()) return false;
             SaleaeDirectoryNetEntry sdne(it->first->get_name(), it->first->get_id());
-            sdne.addIndex(SaleaeDirectoryFileIndex(inx,sif.header()->beginTime(),sif.header()->endTime(),sif.header()->numTransitions()));
+            sdne.addIndex(SaleaeDirectoryFileIndex(inx,sif.header()->beginTime(),sif.header()->endTime(),sif.header()->numTransitions()+1));
             sd.add_or_replace_net(sdne);
             emitProgress(istep++,nstep);
         }
