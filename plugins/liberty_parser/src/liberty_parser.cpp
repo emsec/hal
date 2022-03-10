@@ -173,11 +173,6 @@ namespace hal
     Result<LibertyParser::type_group> LibertyParser::parse_type(TokenStream<std::string>& str)
     {
         type_group type;
-        i32 width     = 1;
-        i32 start     = 0;
-        i32 end       = 0;
-        i32 direction = 1;
-
         type.line_number = str.peek().number;
         str.consume("(", true);
         type.name = str.consume().string;
@@ -186,6 +181,7 @@ namespace hal
         auto type_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
         str.consume("}", true);
 
+        i32 end = -1;
         while (type_str.remaining() > 0)
         {
             auto next_token = type_str.consume();
@@ -207,12 +203,12 @@ namespace hal
             else if (next_token == "bit_width")
             {
                 type_str.consume(":", true);
-                width = std::stol(type_str.consume().string);
+                type.width = std::stol(type_str.consume().string);
             }
             else if (next_token == "bit_from")
             {
                 type_str.consume(":", true);
-                start = std::stol(type_str.consume().string);
+                end = std::stol(type_str.consume().string);
             }
             else if (next_token == "bit_to")
             {
@@ -225,11 +221,11 @@ namespace hal
                 auto bval = type_str.consume();
                 if (bval == "false")
                 {
-                    direction = 1;
+                    type.ascending = true;
                 }
                 else if (bval == "true")
                 {
-                    direction = -1;
+                    type.ascending = -false;
                 }
                 else
                 {
@@ -243,14 +239,9 @@ namespace hal
             type_str.consume(";", true);
         }
 
-        if (width != (direction * (end - start)) + 1)
+        if (end != -1)
         {
-            return ERR("could not parse type '" + type.name + "': invalid 'bit_width' value of '" + std::to_string(width) + "' (line " + std::to_string(type.line_number) + ")");
-        }
-
-        for (int i = start; i != end + direction; i += direction)
-        {
-            type.range.push_back((u32)i);
+            type.width = (u32)(end - (type.ascending ? 1 : -1) * type.start_index);
         }
 
         return OK(type);
@@ -554,13 +545,20 @@ namespace hal
             {
                 bus_str.consume(":", true);
                 auto bus_type_str = bus_str.consume().string;
-                if (const auto& it = m_bus_types.find(bus_type_str); it != m_bus_types.end())
+                if (const auto& it = m_bus_types.find(bus_type_str); it == m_bus_types.end())
                 {
-                    range = it->second.range;
+                    return ERR("could not parse bus '" + bus.name + "': invalid bus type '" + bus_type_str + "' (line " + std::to_string(bus.line_number) + ")");
                 }
                 else
                 {
-                    return ERR("could not parse bus '" + bus.name + "': invalid bus type '" + bus_type_str + "' (line " + std::to_string(bus.line_number) + ")");
+                    auto& type      = it->second;
+                    bus.ascending   = type.ascending;
+                    bus.start_index = type.start_index;
+                    i32 dir         = (type.ascending ? 1 : -1);
+                    for (i32 i = type.start_index; i += dir; dir * type.width)
+                    {
+                        range.push_back(i);
+                    }
                 }
                 bus_str.consume(";", true);
             }
@@ -609,8 +607,7 @@ namespace hal
         {
             auto pin_name = bus.name + "(" + std::to_string(index) + ")";
             bus.pin_names.push_back(pin_name);
-            bus.pin_indices.push_back(std::make_pair(index, pin_name));
-            bus.index_to_pin.emplace(index, pin_name);
+            bus.index_to_pin[index] = pin_name;
         }
 
         if (bus.direction == PinDirection::none)
@@ -621,7 +618,7 @@ namespace hal
         return OK(bus);
     }
 
-    std::optional<LibertyParser::ff_group> LibertyParser::parse_ff(TokenStream<std::string>& str)
+    Result<LibertyParser::ff_group> LibertyParser::parse_ff(TokenStream<std::string>& str)
     {
         ff_group ff;
 
@@ -681,16 +678,15 @@ namespace hal
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav_str.string, behav_str.number);
-                    return std::nullopt;
+                    return ERR("could not parse 'ff' group: invalid clear_preset behavior '" + behav_str.string + "' (line " + std::to_string(behav_str.number) + ")");
                 }
             }
         } while (ff_str.remaining() > 0);
 
-        return ff;
+        return OK(ff);
     }
 
-    std::optional<LibertyParser::latch_group> LibertyParser::parse_latch(TokenStream<std::string>& str)
+    Result<LibertyParser::latch_group> LibertyParser::parse_latch(TokenStream<std::string>& str)
     {
         latch_group latch;
 
@@ -750,13 +746,12 @@ namespace hal
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav_str.string, behav_str.number);
-                    return std::nullopt;
+                    return ERR("could not parse 'latch' group: invalid clear_preset behavior '" + behav_str.string + "' (line " + std::to_string(behav_str.number) + ")");
                 }
             }
         } while (latch_str.remaining() > 0);
 
-        return latch;
+        return OK(latch);
     }
 
     Result<std::monostate> LibertyParser::construct_gate_type(cell_group&& cell)
@@ -785,7 +780,6 @@ namespace hal
         }
 
         std::unique_ptr<GateTypeComponent> parent_component = nullptr;
-        std::unordered_map<std::string, PinType> pin_types;
         if (!has_inputs && num_outputs == 1)
         {
             if (output_func == "0")
@@ -848,35 +842,20 @@ namespace hal
             {
                 if (pin.clock == true)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::clock;
-                    }
+                    pin.type = PinType::clock;
                 }
                 else if (pin.function == cell.ff->state1)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::state;
-                    }
+                    pin.type = PinType::state;
                 }
                 else if (pin.function == cell.ff->state2)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::neg_state;
-                    }
+                    pin.type = PinType::neg_state;
                 }
             }
         }
         else if (cell.latch.has_value())
         {
-            // TODO make sure this does not cause errors in latch component
-            // if (cell.latch->enable.empty() || cell.latch->data_in.empty())
-            // {
-            //     return false;
-            // }
-
             std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.latch->state1, cell.latch->state2);
             bf_vars.push_back(cell.latch->state1);
             bf_vars.push_back(cell.latch->state2);
@@ -887,21 +866,39 @@ namespace hal
 
             if (!cell.latch->data_in.empty())
             {
-                latch_component->set_data_in_function(BooleanFunction::from_string(cell.latch->data_in, bf_vars));
+                auto res = BooleanFunction::from_string(cell.latch->data_in);
+                if (res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'data_in' function from string");
+                }
+                latch_component->set_data_in_function(res.get());
             }
             if (!cell.latch->enable.empty())
-            {  
-                latch_component->set_enable_function(BooleanFunction::from_string(cell.latch->enable, bf_vars));
+            {
+                auto res = BooleanFunction::from_string(cell.latch->enable);
+                if (res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'enable' function from string");
+                }
+                latch_component->set_enable_function(res.get());
             }
             if (!cell.latch->clear.empty())
             {
-                auto clear_function = BooleanFunction::from_string(cell.latch->clear);
-                latch_component->set_async_reset_function((clear_function.is_ok()) ? clear_function.get() : BooleanFunction());
+                auto res = BooleanFunction::from_string(cell.latch->clear);
+                if (res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'clear' function from string");
+                }
+                latch_component->set_async_reset_function(res.get());
             }
             if (!cell.latch->preset.empty())
             {
-                auto preset_function = BooleanFunction::from_string(cell.latch->preset);
-                latch_component->set_async_set_function((preset_function.is_ok()) ? preset_function.get() : BooleanFunction());
+                auto res = BooleanFunction::from_string(cell.latch->preset);
+                if (res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'preset' function from string");
+                }
+                latch_component->set_async_set_function(res.get());
             }
 
             latch_component->set_async_set_reset_behavior(cell.latch->special_behavior_var1, cell.latch->special_behavior_var2);
@@ -910,24 +907,15 @@ namespace hal
             {
                 if (pin.clock == true)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::clock;
-                    }
+                    pin.type = PinType::clock;
                 }
                 else if (pin.function == cell.latch->state1)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::state;
-                    }
+                    pin.type = PinType::state;
                 }
                 else if (pin.function == cell.latch->state2)
                 {
-                    for (const auto& pin_name : pin.pin_names)
-                    {
-                        pin_types[pin_name] = PinType::neg_state;
-                    }
+                    pin.type = PinType::neg_state;
                 }
             }
         }
@@ -940,44 +928,64 @@ namespace hal
         GateType* gt = m_gate_lib->create_gate_type(cell.name, cell.properties, std::move(parent_component));
 
         // get input and output pins from pin groups
-        for (const auto& pin : cell.pins)
+        for (auto& pin : cell.pins)
         {
-            gt->add_pins(pin.pin_names, pin.direction);
-
             if (pin.power == true)
             {
-                for (const auto& pin_name : pin.pin_names)
-                {
-                    pin_types[pin_name] = PinType::power;
-                }
+                pin.type = PinType::power;
             }
 
             if (pin.ground == true)
             {
-                for (const auto& pin_name : pin.pin_names)
+                pin.type = PinType::ground;
+            }
+
+            for (const auto& pin_name : pin.pin_names)
+            {
+                GatePin* pin_inst;
+                if (auto res = gt->create_pin(pin_name, pin.direction, pin.type); res.is_error())
                 {
-                    pin_types[pin_name] = PinType::ground;
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed to create pin '" + pin_name + "'");
+                }
+                else
+                {
+                    pin_inst = res.get();
+                }
+                if (auto res = gt->create_pin_group(pin_name, {pin_inst}, pin.direction, pin.type); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed to create pin group '" + pin_name + "'");
                 }
             }
         }
 
         for (const auto& [bus_name, bus_info] : cell.buses)
         {
-            if (!gt->assign_pin_group(bus_name, bus_info.pin_indices))
+            std::vector<GatePin*> pins;
+            for (const auto& pin_name : bus_info.pin_names)
             {
-                return false;
+                if (auto res = gt->get_pin_by_name(pin_name); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed to get pin by name '" + pin_name + "'");
+                }
+                else
+                {
+                    pins.push_back(res.get());
+                }
             }
-        }
-
-        for (const auto& [pin, type] : pin_types)
-        {
-            gt->assign_pin_type(pin, type);
+            if (auto res = gt->create_pin_group(bus_name, pins, bus_info.direction, PinType::none, bus_info.ascending, bus_info.start_index); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not construct gate type '" + cell.name + "': failed to create pin group '" + bus_name + "'");
+            }
         }
 
         if (!cell.buses.empty())
         {
             auto functions = construct_bus_functions(cell, bf_vars);
-            gt->add_boolean_functions(functions);
+            if (functions.is_error())
+            {
+                return ERR_APPEND(functions.get_error(), "could not construct gate type '" + cell.name + "': failed to construct bus functions");
+            }
+            gt->add_boolean_functions(functions.get());
         }
         else
         {
@@ -988,7 +996,11 @@ namespace hal
                     for (const auto& name : pin.pin_names)
                     {
                         auto function = BooleanFunction::from_string(pin.function);
-                        gt->add_boolean_function(name, (function.is_ok()) ? function.get() : BooleanFunction());
+                        if (function.is_error())
+                        {
+                            return ERR_APPEND(function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing output function from string");
+                        }
+                        gt->add_boolean_function(name, function.get());
                     }
                 }
 
@@ -997,7 +1009,11 @@ namespace hal
                     for (const auto& name : pin.pin_names)
                     {
                         auto function = BooleanFunction::from_string(pin.x_function);
-                        gt->add_boolean_function(name + "_undefined", (function.is_ok()) ? function.get() : BooleanFunction());
+                        if (function.is_error())
+                        {
+                            return ERR_APPEND(function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing undefined function from string");
+                        }
+                        gt->add_boolean_function(name + "_undefined", function.get());
                     }
                 }
 
@@ -1006,13 +1022,17 @@ namespace hal
                     for (const auto& name : pin.pin_names)
                     {
                         auto function = BooleanFunction::from_string(pin.z_function);
-                        gt->add_boolean_function(name + "_tristate", (function.is_ok()) ? function.get() : BooleanFunction());
+                        if (function.is_error())
+                        {
+                            return ERR_APPEND(function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing tristate function from string");
+                        }
+                        gt->add_boolean_function(name + "_tristate", function.get());
                     }
                 }
             }
         }
 
-        return true;
+        return OK({});
     }
 
     void LibertyParser::remove_comments(std::string& line, bool& multi_line_comment)
@@ -1206,7 +1226,7 @@ namespace hal
         return res;
     }
 
-    std::unordered_map<std::string, BooleanFunction> LibertyParser::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
+    Result<std::unordered_map<std::string, BooleanFunction>> LibertyParser::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
     {
         std::unordered_map<std::string, BooleanFunction> res;
 
@@ -1226,7 +1246,11 @@ namespace hal
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.function))
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name, (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing output function from string");
+                        }
+                        res.emplace(pin_name, bf.get());
                     }
                 }
 
@@ -1235,7 +1259,11 @@ namespace hal
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.x_function))
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name + "_undefined", (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing undefined function from string");
+                        }
+                        res.emplace(pin_name + "_undefined", bf.get());
                     }
                 }
 
@@ -1244,7 +1272,11 @@ namespace hal
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.z_function))
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name + "_tristate", (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing tristate function from string");
+                        }
+                        res.emplace(pin_name + "_tristate", bf.get());
                     }
                 }
             }
@@ -1259,7 +1291,11 @@ namespace hal
                     for (const auto& pin_name : pin.pin_names)
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name, (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing output function from string");
+                        }
+                        res.emplace(pin_name, bf.get());
                     }
                 }
             }
@@ -1271,7 +1307,11 @@ namespace hal
                     for (const auto& pin_name : pin.pin_names)
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name + "_undefined", (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing undefined function from string");
+                        }
+                        res.emplace(pin_name + "_undefined", bf.get());
                     }
                 }
             }
@@ -1283,12 +1323,16 @@ namespace hal
                     for (const auto& pin_name : pin.pin_names)
                     {
                         auto bf = BooleanFunction::from_string(function);
-                        res.emplace(pin_name + "_tristate", (bf.is_ok()) ? bf.get() : BooleanFunction());
+                        if (bf.is_error())
+                        {
+                            return ERR_APPEND(bf.get_error(), "could not construct gate type '" + cell.name + "': failed parsing tristate function from string");
+                        }
+                        res.emplace(pin_name + "_tristate", bf.get());
                     }
                 }
             }
         }
 
-        return res;
+        return OK(res);
     }
 }    // namespace hal

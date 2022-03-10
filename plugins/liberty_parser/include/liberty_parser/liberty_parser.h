@@ -70,7 +70,9 @@ namespace hal
         {
             u32 line_number;
             std::string name;
-            std::vector<u32> range;
+            bool ascending  = false;
+            u32 start_index = 0;
+            u32 width;
         };
 
         struct pin_group
@@ -78,6 +80,7 @@ namespace hal
             u32 line_number;
             std::vector<std::string> pin_names;
             PinDirection direction = PinDirection::none;
+            PinType type           = PinType::none;
             std::string function;
             std::string x_function;
             std::string z_function;
@@ -93,7 +96,9 @@ namespace hal
             PinDirection direction = PinDirection::none;
             std::vector<std::string> pin_names;
             std::vector<pin_group> pins;
-            std::vector<std::pair<u32, std::string>> pin_indices;
+            bool ascending  = false;
+            u32 start_index = 0;
+            // std::vector<std::pair<u32, std::string>> pin_indices;
             std::unordered_map<u32, std::string> index_to_pin;
         };
 
@@ -167,6 +172,6 @@ namespace hal
         std::vector<std::string> tokenize_function(const std::string& function);
         std::map<std::string, std::string> expand_bus_function(const std::map<std::string, bus_group>& buses, const std::vector<std::string>& pin_names, const std::string& function);
         std::string prepare_pin_function(const std::map<std::string, bus_group>& buses, const std::string& function);
-        std::unordered_map<std::string, BooleanFunction> construct_bus_functions(const cell_group& cell, const std::vector<std::string>& input_pins);
+        Result<std::unordered_map<std::string, BooleanFunction>> construct_bus_functions(const cell_group& cell, const std::vector<std::string>& input_pins);
     };
 }    // namespace hal
