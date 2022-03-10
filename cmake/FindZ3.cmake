@@ -10,7 +10,7 @@ find_path (Z3_INCLUDE_DIRS z3++.h
   )
 if(NOT Z3_INCLUDE_DIRS)
     find_path (Z3_INCLUDE_DIRS z3++.h
-      PATHS /usr/local/include /usr/include /include /sw/include /usr/lib /usr/lib64 /usr/lib/x86_64-linux-gnu/ ${CMAKE_EXTRA_INCLUDES} PATH_SUFFIXES z3/ z3/include
+      PATHS /usr/local/include /usr/include /include /opt/homebrew/include /sw/include /usr/lib /usr/lib64 /usr/lib/x86_64-linux-gnu/ ${CMAKE_EXTRA_INCLUDES} PATH_SUFFIXES z3/ z3/include
       )
 endif(NOT Z3_INCLUDE_DIRS)
 
@@ -22,7 +22,7 @@ find_library (Z3_LIBRARIES NAMES z3
   )
 if(NOT Z3_LIBRARIES)
     find_library (Z3_LIBRARIES NAMES z3
-      PATHS /usr/local/lib /usr/lib /lib /sw/lib ${CMAKE_EXTRA_LIBRARIES} PATH_SUFFIXES z3/
+      PATHS /usr/local/lib /usr/lib /lib /sw/lib /opt/homebrew/lib ${CMAKE_EXTRA_LIBRARIES} PATH_SUFFIXES z3/
       )
 endif(NOT Z3_LIBRARIES)
 
