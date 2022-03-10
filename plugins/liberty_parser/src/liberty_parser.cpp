@@ -965,7 +965,7 @@ namespace hal
 
         if (!cell.buses.empty())
         {
-            auto functions = construct_bus_functions(cell, bf_vars);
+            auto functions = construct_bus_functions(cell);
             gt->add_boolean_functions(functions);
         }
         else
@@ -1195,7 +1195,7 @@ namespace hal
         return res;
     }
 
-    std::unordered_map<std::string, BooleanFunction> LibertyParser::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
+    std::unordered_map<std::string, BooleanFunction> LibertyParser::construct_bus_functions(const cell_group& cell)
     {
         std::unordered_map<std::string, BooleanFunction> res;
 
