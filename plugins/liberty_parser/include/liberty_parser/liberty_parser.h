@@ -172,6 +172,6 @@ namespace hal
         std::vector<std::string> tokenize_function(const std::string& function);
         std::map<std::string, std::string> expand_bus_function(const std::map<std::string, bus_group>& buses, const std::vector<std::string>& pin_names, const std::string& function);
         std::string prepare_pin_function(const std::map<std::string, bus_group>& buses, const std::string& function);
-        Result<std::unordered_map<std::string, BooleanFunction>> construct_bus_functions(const cell_group& cell, const std::vector<std::string>& input_pins);
+        Result<std::unordered_map<std::string, BooleanFunction>> construct_bus_functions(const cell_group& cell);
     };
 }    // namespace hal

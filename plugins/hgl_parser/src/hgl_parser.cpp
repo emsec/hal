@@ -13,7 +13,7 @@
 
 namespace hal
 {
-    std::unique_ptr<GateLibrary> HGLParser::parse(const std::filesystem::path& file_path)
+    Result<std::unique_ptr<GateLibrary>> HGLParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
 
@@ -384,10 +384,7 @@ namespace hal
         auto clocked_on_function = BooleanFunction::from_string(ff_config["clocked_on"].GetString());
 
         std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_ff_component(
-            std::move(state_component),
-            (next_state_function.is_ok()) ? next_state_function.get() : BooleanFunction(),
-            (clocked_on_function.is_ok()) ? clocked_on_function.get() : BooleanFunction()
-        );
+            std::move(state_component), (next_state_function.is_ok()) ? next_state_function.get() : BooleanFunction(), (clocked_on_function.is_ok()) ? clocked_on_function.get() : BooleanFunction());
 
         FFComponent* ff_component = component->convert_to<FFComponent>();
         assert(ff_component != nullptr);
@@ -609,14 +606,12 @@ namespace hal
             auto clocked_on_function = BooleanFunction::from_string(ram_port["clocked_on"].GetString());
             auto enabled_on_function = BooleanFunction::from_string(ram_port["enabled_on"].GetString());
 
-            sub_component = GateTypeComponent::create_ram_port_component(
-                std::move(sub_component),
-                ram_port["data_group"].GetString(),
-                ram_port["address_group"].GetString(),
-                (clocked_on_function.is_ok()) ? clocked_on_function.get() : BooleanFunction(),
-                (enabled_on_function.is_ok()) ? enabled_on_function.get() : BooleanFunction(),
-                ram_port["is_write"].GetBool()
-            );
+            sub_component = GateTypeComponent::create_ram_port_component(std::move(sub_component),
+                                                                         ram_port["data_group"].GetString(),
+                                                                         ram_port["address_group"].GetString(),
+                                                                         (clocked_on_function.is_ok()) ? clocked_on_function.get() : BooleanFunction(),
+                                                                         (enabled_on_function.is_ok()) ? enabled_on_function.get() : BooleanFunction(),
+                                                                         ram_port["is_write"].GetBool());
         }
 
         std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_ram_component(std::move(sub_component), ram_config["bit_size"].GetUint());

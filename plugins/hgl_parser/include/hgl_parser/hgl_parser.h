@@ -50,7 +50,7 @@ namespace hal
          * @param[in] file_path - Path to the file containing the gate library definition.
          * @returns The gate library or a nullptr on failure.
          */
-        std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path) override;
+        Result<std::unique_ptr<GateLibrary>> parse(const std::filesystem::path& file_path) override;
 
     private:
         struct PinCtx

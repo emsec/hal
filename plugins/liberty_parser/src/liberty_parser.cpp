@@ -760,11 +760,8 @@ namespace hal
         bool has_inputs = false;
         u32 num_outputs = 0;
         std::string output_func;
-        std::vector<std::string> bf_vars;
         for (const auto& pin : cell.pins)
         {
-            bf_vars.insert(bf_vars.end(), pin.pin_names.begin(), pin.pin_names.end());
-
             if (pin.direction == PinDirection::input || pin.direction == PinDirection::inout)
             {
                 if (!pin.power && !pin.ground)
@@ -801,8 +798,6 @@ namespace hal
             }
 
             std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.ff->state1, cell.ff->state2);
-            bf_vars.push_back(cell.ff->state1);
-            bf_vars.push_back(cell.ff->state2);
 
             auto next_state_function = BooleanFunction::from_string(cell.ff->next_state);
             if (next_state_function.is_error())
@@ -857,8 +852,6 @@ namespace hal
         else if (cell.latch.has_value())
         {
             std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.latch->state1, cell.latch->state2);
-            bf_vars.push_back(cell.latch->state1);
-            bf_vars.push_back(cell.latch->state2);
 
             parent_component                = GateTypeComponent::create_latch_component(std::move(state_component));
             LatchComponent* latch_component = parent_component->convert_to<LatchComponent>();
@@ -980,7 +973,7 @@ namespace hal
 
         if (!cell.buses.empty())
         {
-            auto functions = construct_bus_functions(cell, bf_vars);
+            auto functions = construct_bus_functions(cell);
             if (functions.is_error())
             {
                 return ERR_APPEND(functions.get_error(), "could not construct gate type '" + cell.name + "': failed to construct bus functions");
@@ -1226,7 +1219,7 @@ namespace hal
         return res;
     }
 
-    Result<std::unordered_map<std::string, BooleanFunction>> LibertyParser::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
+    Result<std::unordered_map<std::string, BooleanFunction>> LibertyParser::construct_bus_functions(const cell_group& cell)
     {
         std::unordered_map<std::string, BooleanFunction> res;
 
