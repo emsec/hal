@@ -257,7 +257,7 @@ namespace hal {
         sof.put_data(&sdb);
     }
 
-    QMap<u64,int>::const_iterator WaveData::timeIterator(float t) const
+    QMap<u64,int>::const_iterator WaveData::timeIterator(double t) const
     {
         if (t<0) return mData.constEnd();
         QMap<u64,int>::const_iterator retval = mData.upperBound((u64)floor(t));
@@ -265,14 +265,14 @@ namespace hal {
         return retval;
     }
 
-    int WaveData::intValue(float t) const
+    int WaveData::intValue(double t) const
     {
         if (mData.isEmpty()) return -1;
         QMap<u64,int>::const_iterator it = timeIterator(t);
         return it.value();
     }
 
-    QString WaveData::strValue(float t) const
+    QString WaveData::strValue(double t) const
     {
         if (mData.isEmpty()) return "x";
         QMap<u64,int>::const_iterator it = timeIterator(t);

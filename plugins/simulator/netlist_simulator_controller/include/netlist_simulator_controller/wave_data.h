@@ -54,7 +54,7 @@ namespace hal {
         QMap<u64,int> mData;
         bool mDirty;
 
-        QMap<u64,int>::const_iterator timeIterator(float t) const;
+        QMap<u64,int>::const_iterator timeIterator(double t) const;
         void resetWave();
     public:
         WaveData(const WaveData& other);
@@ -83,7 +83,7 @@ namespace hal {
         bool loadSaleae(const SaleaeDirectory& sd, const WaveDataTimeframe& tframe);
         void saveSaleae(SaleaeDirectory& sd);
         void setData(const QMap<u64,int>& dat);
-        int  intValue(float t) const;
+        int  intValue(double t) const;
         int get_value_at(u64 t) const;
         std::vector<std::pair<u64,int>> get_events() const;
         u64  maxTime() const;
@@ -94,7 +94,7 @@ namespace hal {
         void eraseAtTime(u64 t);
         bool insertToggleTime(u64 t);
         QString strValue(int val) const;
-        QString strValue(float t) const;
+        QString strValue(double t) const;
         QString strValue(const QMap<u64,int>::const_iterator& it) const;
         void setValueBase(int bas) { mValueBase = bas; }
         bool isEqual(const WaveData& other, int tolerance=0) const;

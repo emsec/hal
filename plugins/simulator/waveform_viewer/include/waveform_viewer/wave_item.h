@@ -111,7 +111,7 @@ namespace hal {
         static bool sValuesAsText;
         static const char* sLineColor[];
         bool isGroup() const { return mData->netType() == WaveData::NetGroup; }
-        int cursorValue(float tCursor, int xpos);
+        int cursorValue(double tCursor, int xpos);
     };
 
     class WaveItemHash : public QHash<WaveItemIndex,WaveItem*>

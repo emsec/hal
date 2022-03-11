@@ -271,14 +271,14 @@ namespace hal {
         return retval;
     }
 
-    void WaveFormPainted::setCursorValue(float tCursor, int xpos, int val)
+    void WaveFormPainted::setCursorValue(double tCursor, int xpos, int val)
     {
         mCursorTime = tCursor;
         mCursorXpos = xpos;
         mCursorValue = val;
     }
 
-    int WaveFormPainted::cursorValueStored(float tCursor, int xpos) const
+    int WaveFormPainted::cursorValueStored(double tCursor, int xpos) const
     {
         // stored value not valid
         if (tCursor != mCursorTime || xpos != mCursorXpos)
@@ -288,7 +288,7 @@ namespace hal {
         return mCursorValue;
     }
 
-    int WaveFormPainted::cursorValuePainted(float tCursor, int xpos)
+    int WaveFormPainted::cursorValuePainted(double tCursor, int xpos)
     {
         // try get from painted primitives
         mCursorValue = valueXpos(xpos);

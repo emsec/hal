@@ -291,7 +291,7 @@ namespace hal {
             log_warning(mController->get_name(), "Cannot get simulation results");
     }
 
-    void WaveWidget::visualizeCurrentNetState(float tCursor, int xpos)
+    void WaveWidget::visualizeCurrentNetState(double tCursor, int xpos)
     {
         QSet<Net*> netState[3]; // x, 0, 1
 

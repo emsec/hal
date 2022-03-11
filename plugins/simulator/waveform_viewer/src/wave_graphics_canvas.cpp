@@ -62,7 +62,7 @@ namespace hal {
         }
     }
 
-    void WaveGraphicsCanvas::setCursorPosition(float tCursor, int xpos)
+    void WaveGraphicsCanvas::setCursorPosition(double tCursor, int xpos)
     {
         if (mCursorTime == tCursor && mCursorXpos == xpos) return;
         mCursorTime = tCursor;
@@ -114,7 +114,7 @@ namespace hal {
                 mTransform.setScale(viewport()->width()/dt);
                 mScrollbar->adjust(viewport()->size().width());
                 mScrollbar->setVleft(mTransform.vPos(t0));
-                qDebug() << "zoom t0 dt vpos" << t0 << dt << mTransform.vPos(t0);
+//                qDebug() << "zoom t0 dt vpos" << t0 << dt << mTransform.vPos(t0);
                 mTimescale->setScale(viewport()->size().width());
                 mRenderEngine->update();
             }

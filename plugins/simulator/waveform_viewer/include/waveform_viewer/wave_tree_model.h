@@ -67,7 +67,7 @@ namespace hal {
         QModelIndexList mDragIndexList;
         DragCommand mDragCommand;
         bool mDragIsGroup;
-        float mCursorTime;
+        double mCursorTime;
         int mCursorXpos;
         bool mIgnoreSignals;
         int mReorderRequestWaiting;
@@ -94,7 +94,7 @@ namespace hal {
         void handleGroupAdded(int grpId);
         void handleGroupAboutToBeRemoved(WaveDataGroup* grp);
         void handleGroupUpdated(int grpId);
-        void handleCursorMoved(float tCursor, int xpos);
+        void handleCursorMoved(double tCursor, int xpos);
         void forwardBeginResetModel();
         void forwardEndResetModel();
         //void handleValueLoaderFinished();
@@ -132,8 +132,8 @@ namespace hal {
         void setGroupPosition(int ypos, const QModelIndex& index);
         void addWaves(const QVector<WaveData*>& wds);
 
-        float cursorTime() const { return mCursorTime; }
-        float cursorXpos() const { return mCursorXpos; }
+        double cursorTime() const { return mCursorTime; }
+        int cursorXpos() const { return mCursorXpos; }
 
         QSet<int> waveDataIndexSet() const;
 

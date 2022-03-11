@@ -42,7 +42,7 @@ namespace hal {
         QList<WaveFormPrimitive*> mPrimitives;
         WaveFormPaintValidity mValidity;
         TimeInterval mShortestToggle;
-        float mCursorTime;
+        double mCursorTime;
         int mCursorXpos;
         int mCursorValue;
         QMutex mMutex;
@@ -68,8 +68,8 @@ namespace hal {
         bool isEmpty() const { return mPrimitives.isEmpty(); }
         QList<float> intervalLimits();
         TimeInterval shortestToggle() const { return mShortestToggle; }
-        void setCursorValue(float tCursor, int xpos, int val);
-        int cursorValueStored(float tCursor, int xpos) const;
-        int cursorValuePainted(float tCursor, int xpos);
+        void setCursorValue(double tCursor, int xpos, int val);
+        int cursorValueStored(double tCursor, int xpos) const;
+        int cursorValuePainted(double tCursor, int xpos);
     };
 }

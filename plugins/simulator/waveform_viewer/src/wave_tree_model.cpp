@@ -142,7 +142,7 @@ namespace hal {
     {
         int oldCount = mWaveItemHash->size();
         WaveItem* wi = mWaveItemHash->addOrReplace(wd,tp,iwave,parentId);
-        connect(wi,&WaveItem::gotCursorValue,this,&WaveTreeModel::handleUpdateValueColumn);
+        connect(wi,&WaveItem::gotCursorValue,this,&WaveTreeModel::handleUpdateValueColumn,Qt::QueuedConnection);
         int count = mWaveItemHash->size();
         if (count != oldCount) Q_EMIT numberEntriesChanged(count);
     }
@@ -465,7 +465,7 @@ namespace hal {
         Q_EMIT inserted(index(targetRow,0,targetIndexParent));
     }
 
-    void WaveTreeModel::handleCursorMoved(float tCursor, int xpos)
+    void WaveTreeModel::handleCursorMoved(double tCursor, int xpos)
     {
         if (tCursor == mCursorTime && xpos == mCursorXpos) return;
         if (!mValueThreads.isEmpty())

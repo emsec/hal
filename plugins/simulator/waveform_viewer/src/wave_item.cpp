@@ -163,7 +163,7 @@ namespace hal {
 
     }
 
-    int WaveItem::cursorValue(float tCursor, int xpos)
+    int WaveItem::cursorValue(double tCursor, int xpos)
     {
         // can deliver stored value
         int retval = mPainted.cursorValueStored(tCursor,xpos);
@@ -176,6 +176,7 @@ namespace hal {
             quint64 ntrans = floor(tCursor/clk.switch_time);
             retval = clk.start_at_zero ? ntrans % 2 : 1 - ntrans % 2;
             mPainted.setCursorValue(tCursor,xpos,retval);
+            Q_EMIT gotCursorValue();
             return retval;
         }
 
@@ -184,6 +185,7 @@ namespace hal {
         {
             retval = mData->intValue(tCursor);
             mPainted.setCursorValue(tCursor,xpos,retval);
+            Q_EMIT gotCursorValue();
             return retval;
         }
 
