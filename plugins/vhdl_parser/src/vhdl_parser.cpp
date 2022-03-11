@@ -1657,11 +1657,11 @@ namespace hal
 
                 if (const auto inst_it = vhdl_entity.m_expanded_gate_assignments.find(inst_identifier); inst_it != vhdl_entity.m_expanded_gate_assignments.end())
                 {
-                    // cache pin directions
-                    std::unordered_map<ci_string, PinDirection> pin_to_direction;
-                    for (const auto& [pin, direction] : gate_type_it->second->get_pin_directions())
+                    // cache pin names
+                    std::unordered_map<ci_string, GatePin*> pin_names_map;
+                    for (auto* pin : gate_type_it->second->get_pins())
                     {
-                        pin_to_direction[core_strings::to<ci_string>(pin)] = direction;
+                        pin_names_map[core_strings::to<ci_string>(pin->get_name())] = pin;
                     }
 
                     // expand pin assignments
@@ -1706,14 +1706,15 @@ namespace hal
                             bool is_input  = false;
                             bool is_output = false;
 
-                            if (const auto it = pin_to_direction.find(pin); it != pin_to_direction.end())
+                            if (const auto it = pin_names_map.find(pin); it != pin_names_map.end())
                             {
-                                if (it->second == PinDirection::input || it->second == PinDirection::inout)
+                                PinDirection direction = it->second->get_direction();
+                                if (direction == PinDirection::input || direction == PinDirection::inout)
                                 {
                                     is_input = true;
                                 }
 
-                                if (it->second == PinDirection::output || it->second == PinDirection::inout)
+                                if (direction == PinDirection::output || direction == PinDirection::inout)
                                 {
                                     is_output = true;
                                 }
@@ -1726,18 +1727,26 @@ namespace hal
                                            + new_gate->get_name() + "' of type '" + new_gate->get_type()->get_name() + "'");
                             }
 
-                            if (is_output && !current_net->add_source(new_gate, core_strings::to<std::string>(pin)))
+                            if (is_output)
                             {
-                                return ERR("could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
-                                           + "': failed to add net '" + core_strings::to<std::string>(signal) + "' as a source to gate '" + new_gate->get_name() + "' via pin '"
-                                           + core_strings::to<std::string>(pin) + "'");
+                                if (auto res = current_net->add_source(new_gate, pin_names_map.at(pin)); res.is_error())
+                                {
+                                    return ERR_APPEND(res.get_error(),
+                                                      "could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
+                                                          + "': failed to add net '" + core_strings::to<std::string>(signal) + "' as a source to gate '" + new_gate->get_name() + "' via pin '"
+                                                          + core_strings::to<std::string>(pin) + "'");
+                                }
                             }
 
-                            if (is_input && !current_net->add_destination(new_gate, core_strings::to<std::string>(pin)))
+                            if (is_input)
                             {
-                                return ERR("could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
-                                           + "': failed to add net '" + core_strings::to<std::string>(signal) + "' as a destination to gate '" + new_gate->get_name() + "' via pin '"
-                                           + core_strings::to<std::string>(pin) + "'");
+                                if (auto res = current_net->add_destination(new_gate, pin_names_map.at(pin)); res.is_error())
+                                {
+                                    return ERR_APPEND(res.get_error(),
+                                                      "could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
+                                                          + "': failed to add net '" + core_strings::to<std::string>(signal) + "' as a destination to gate '" + new_gate->get_name() + "' via pin '"
+                                                          + core_strings::to<std::string>(pin) + "'");
+                                }
                             }
                         }
                     }
