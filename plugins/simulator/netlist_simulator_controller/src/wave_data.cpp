@@ -685,7 +685,7 @@ namespace hal {
         return retval;
     }
 
-    QList<const WaveData*> WaveDataList::partialList(u64 start_time, u64 end_time, std::set<const Net*> &nets) const
+    QList<const WaveData*> WaveDataList::partialList(u64 start_time, u64 end_time, const std::set<const Net*> &nets) const
     {
         QSet<u32> netIds;
         for (const Net* n : nets)

@@ -163,7 +163,7 @@ namespace hal {
         void setValueForEmpty(int val);
         void dump() const;
         QList<const WaveData*> toList() const;
-        QList<const WaveData*> partialList(u64 start_time, u64 end_time, std::set<const Net*>& nets) const;
+        QList<const WaveData*> partialList(u64 start_time, u64 end_time, const std::set<const Net*>& nets) const;
         void emitWaveAdded(int inx);
         void emitWaveUpdated(int inx);
         void emitGroupUpdated(int grpId);

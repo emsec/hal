@@ -530,6 +530,44 @@ namespace hal
         mWaveDataList->setUserTimeframe(tmin, tmax);
     }
 
+    Result<std::vector<u32>> NetlistSimulatorController::trace_value_if(const u32 group_id, const Net* trigger_net, const std::vector<Net*>& enable_nets, BooleanFunction enable_condition, u32 start_time, u32 end_time) const
+    {
+        const WaveDataGroup* const group = mWaveDataList->mDataGroups.value(group_id);
+        QList<const WaveData*> partialList = mWaveDataList->partialList(start_time, end_time, {trigger_net});
+        const auto enable_vars             = enable_condition.get_variable_names();
+        if (std::any_of(enable_nets.begin(), enable_nets.end(), [enable_vars](const Net* n) { return enable_vars.find(n->get_name()) == enable_vars.end(); }))
+        {
+            return ERR("could not record values of waveform group with ID " + std::to_string(group->id()) + ": not all variables of Boolean functions contained within provided nets");
+        }
+
+        std::map<std::string, WaveData*> enable_waves;
+        for (const auto* n : enable_nets) 
+        {
+            enable_waves[n->get_name()] = mWaveDataList->waveDataByNet(n);
+        }
+
+        std::vector<u32> trace;
+        for (auto [time, value] : partialList.at(0)->get_events())
+        {
+            UNUSED(value);
+            std::unordered_map<std::string, BooleanFunction::Value> values;
+            for (const auto& [var, wave] : enable_waves) 
+            {
+                values[var] = (BooleanFunction::Value) wave->get_value_at(time);
+            }
+            
+            if (auto res = enable_condition.evaluate(values); res.is_error()) 
+            {
+                return ERR("could not record values of waveform group with ID " + std::to_string(group->id()) + ": failed to evaluate 'enable' function");
+            } 
+            else 
+            {
+                trace.push_back((u32)group->get_value_at(time));
+            }
+        }
+        return OK(trace);
+    }
+
     void NetlistSimulatorController::initialize()
     {
     }
